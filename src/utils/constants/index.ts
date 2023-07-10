@@ -1,0 +1,6 @@
+const LAYOUT = {
+  DEFAULT_LAYOUT: 'DEFAULT_LAYOUT',
+  ERROR_LAYOUT: 'ERROR_LAYOUT',
+}
+
+export { LAYOUT }
