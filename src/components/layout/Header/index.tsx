@@ -5,7 +5,7 @@ const Header = () => {
   const trans = useTrans()
   return (
     <div>
-      <h1 className="text-5xl text-black">Location: {trans.location}</h1>
+      <h1 className="text-5xl text-black px-8">Location: {trans.location}</h1>
       <p>Header</p>
     </div>
   )
