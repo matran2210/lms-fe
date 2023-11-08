@@ -10,7 +10,7 @@ const useTrans = () => {
   const { locale = 'en' } = useRouter()
   const trans = useMemo(
     () => require(`@i18n/locales/${locale}/data.json`) || locales['default'],
-    [locale]
+    [locale],
   )
 
   return trans
