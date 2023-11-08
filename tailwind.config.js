@@ -29,7 +29,6 @@ module.exports = {
     },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
-      roboto: ['Roboto', 'sans-serif'],
     },
     container: {
       center: true,
