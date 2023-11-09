@@ -6,22 +6,32 @@ const ButtonOutlined = ({
   onClick,
   className = '',
   link,
+  size = 'small',
+  full = false,
 }: IButtonProps) => {
+  let textSizeClass =
+    size === 'small'
+      ? 'text-[0.875rem] leading-4'
+      : size === 'medium'
+      ? 'text-[1rem] leading-6'
+      : 'text-lg leading-6.5'
+  let paddingVerticalClass =
+    size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
+  let paddingHorizontalClass =
+    size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
+  let fullWidthClass = full ? 'block' : 'inline-block w-fit'
+  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} mx-0 text-bw-1 ${textSizeClass} font-semibold bg-white border border-bw-1 border-solid cursor-pointer`
+
   if (link)
     return (
-      <a href={link} className={`${className} btn btn-light`}>
-        <i className="ki-outline ki-check fs-3 d-none"></i>
-        <span className="indicator-label">{title}</span>
-        <span className="indicator-progress">
-          Please wait...
-          <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-        </span>
+      <a href={link} className={componentClass}>
+        {title}
       </a>
     )
 
   return (
-    <div className={`${className} btn btn-light me-3`} onClick={onClick}>
-      {title}
+    <div className={componentClass} onClick={onClick}>
+      <span className="">{title}</span>
     </div>
   )
 }
