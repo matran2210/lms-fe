@@ -1,5 +1,5 @@
 import React from 'react'
-import { ControllerRenderProps, FieldError } from 'react-hook-form'
+import { ControllerRenderProps } from 'react-hook-form'
 
 interface IProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
@@ -12,15 +12,9 @@ interface IProps {
   label?: string
   labelClass?: string
   tooltipIcon?: string | undefined
-  onChangeType?: () => void
-  passwordVisible?: boolean
-  showIconPassword?: boolean
-  error?: FieldError
   required?: boolean
   maxLength?: number
-  groupText?: string
   field?: ControllerRenderProps<any, string>
-  postFix?: any
 }
 
 const SAPPTextFiled = ({
@@ -32,31 +26,20 @@ const SAPPTextFiled = ({
   placeholder,
   disabled,
   label,
-  labelClass = 'd-flex align-items-center fs-6 fw-bold mb-3',
-  onChangeType,
-  passwordVisible,
-  showIconPassword,
-  error,
+  labelClass = 'text-base block font-medium mb-2',
   required,
   maxLength,
-  groupText,
   field,
-  postFix,
 }: IProps) => {
   return (
     <>
       {label && (
         <label className={labelClass}>
-          <span className={`${required ? 'required' : ''}`}>{label}</span>
+          {label} {`${required ? '*' : ''}`}
         </label>
       )}
-      <div className={`${className ?? ''} position-relative w-100`}>
-        <div className={`${groupText || postFix ? 'input-group' : ''}`}>
-          {groupText && (
-            <div className="input-group-text sapp-input-group-text justify-content-center">
-              {groupText}
-            </div>
-          )}
+      <div className={`${className ?? ''} position-relative w-full`}>
+        <div className="">
           <input
             {...field}
             type={type}
@@ -65,42 +48,12 @@ const SAPPTextFiled = ({
             onChange={onChange}
             className={`${
               className ?? ''
-            } form-control bg-transparent sapp-form-control-custom ${
-              groupText && 'rounded-end'
-            }`}
+            } form-control bg-transparent border py-3 px-4 shadow-0 focus:shadow-0 focus:outline-none text-base leading-4.5 font-medium text-bw-1 placeholder:text-base placeholder:leading-4.5  placeholder:font-medium placeholder:text-gray-1`}
             placeholder={placeholder}
             disabled={disabled}
             maxLength={maxLength}
           />
-          {postFix && (
-            <span className="input-group-text" id="basic-addon2">
-              {postFix}
-            </span>
-          )}
         </div>
-        {showIconPassword && (
-          <span
-            className={`btn btn-sm btn-icon position-absolute translate-middle top-50 ${
-              error ? 'end-15px' : 'end-0'
-            } me-n2`}
-            onClick={onChangeType}
-          >
-            {passwordVisible ? (
-              <i className="ki-duotone ki-eye-slash fs-1">
-                <span className="path1"></span>
-                <span className="path2"></span>
-                <span className="path3"></span>
-                <span className="path4"></span>
-              </i>
-            ) : (
-              <i className="ki-duotone ki-eye fs-1">
-                <span className="path1"></span>
-                <span className="path2"></span>
-                <span className="path3"></span>
-              </i>
-            )}
-          </span>
-        )}
       </div>
     </>
   )

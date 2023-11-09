@@ -1,4 +1,3 @@
-import { Typography } from 'antd'
 import { ReactNode } from 'react'
 
 interface IProps {
@@ -10,9 +9,11 @@ const ErrorMessage = ({ className = '', children }: IProps) => {
   return (
     <>
       {children && (
-        <Typography className={`${className} text-danger`}>
-          <small>{children}</small>
-        </Typography>
+        <div
+          className={`${className} text-state-error text-sm leading-4.5 font-normal mt-1 ml-4`}
+        >
+          test
+        </div>
       )}
     </>
   )

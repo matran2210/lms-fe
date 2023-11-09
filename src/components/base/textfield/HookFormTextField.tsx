@@ -2,7 +2,6 @@ import React from 'react'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SAPPTextFiled from './SAPPTextFiled'
-import GuidelineField from 'src/common/GuidelineField'
 
 interface IProps {
   name: string
@@ -15,15 +14,9 @@ interface IProps {
   disabled?: boolean
   label?: string
   labelClass?: string
-  onChangeType?: () => void
-  passwordVisible?: boolean
-  showIconPassword?: boolean
   skeleton?: boolean
   required?: boolean
   maxLength?: number
-  guideline?: Array<string> | undefined
-  groupText?: string
-  postFix?: any
 }
 
 const HookFormTextField = ({
@@ -37,15 +30,9 @@ const HookFormTextField = ({
   disabled,
   label,
   labelClass,
-  onChangeType,
-  passwordVisible,
-  showIconPassword,
   skeleton,
   required,
   maxLength,
-  guideline,
-  groupText,
-  postFix,
 }: IProps) => {
   return (
     <Controller
@@ -57,7 +44,6 @@ const HookFormTextField = ({
           {!skeleton ? (
             <>
               <SAPPTextFiled
-                groupText={groupText}
                 type={type}
                 value={field.value ?? ''}
                 defaultValue={field.value ? undefined : defaultValue}
@@ -65,24 +51,21 @@ const HookFormTextField = ({
                   field.onChange(value)
                   onChange && onChange(value)
                 }}
-                className={`${className} ${error ? 'is-invalid' : ''}`}
+                className={`${className} ${
+                  error
+                    ? 'border-error focus:border-error'
+                    : 'border-default focus:border-focus '
+                }`}
                 placeholder={placeholder}
                 disabled={disabled}
                 label={label}
                 labelClass={labelClass}
-                onChangeType={onChangeType}
-                passwordVisible={passwordVisible}
-                showIconPassword={showIconPassword}
-                error={error}
                 required={required}
                 maxLength={maxLength}
-                guideline={guideline}
                 field={field}
-                postFix={postFix}
               />{' '}
               <div>
                 <>
-                  <GuidelineField guideline={guideline} />
                   <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
                 </>
               </div>
