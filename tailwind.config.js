@@ -25,7 +25,8 @@ module.exports = {
       '2xl': ['24px', { lineHeight: '30px' }],
       xl: ['20px', { lineHeight: '25px' }],
       lg: ['18px', { lineHeight: '24px' }],
-      base: ['14px', { lineHeight: '24px' }],
+      base: ['16px', { lineHeight: '24px' }],
+      sm: ['14px', { lineHeight: '24px' }],
     },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
@@ -65,6 +66,8 @@ module.exports = {
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
+        default: '#DCDDDD',
+        focus: '#141414',
         error: '#D35563',
       },
       boxShadow: {
@@ -84,6 +87,7 @@ module.exports = {
       },
       lineHeight: {
         0: '0',
+        4.5: '17px',
         5.5: '25px',
         6.5: '27px',
         7.5: '30px',
