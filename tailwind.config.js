@@ -101,6 +101,7 @@ module.exports = {
         empty: '""',
       },
       width: {
+        12.5: '50px',
         18: '72px',
       },
       padding: {
@@ -109,6 +110,7 @@ module.exports = {
         3.8: '0.89rem', // 14.3px
       },
       height: {
+        12.5: '50px',
         26: '6.5rem',
       },
     },
