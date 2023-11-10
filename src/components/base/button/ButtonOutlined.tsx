@@ -30,7 +30,7 @@ const ButtonOutlined = ({
     )
 
   return (
-    <div className={componentClass} onClick={onClick}>
+    <div className={componentClass} role="button" onClick={onClick}>
       <span className="">{title}</span>
     </div>
   )
