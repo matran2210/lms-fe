@@ -7,6 +7,7 @@ interface IProps {
   pageSize: number
   setPageSize?: Dispatch<SetStateAction<number>>
   totalItems: number
+  type?: 'row' | 'table'
   children?: ReactNode
 }
 
@@ -16,6 +17,7 @@ const PaginationSAPP = ({
   setCurrentPage,
   setPageSize,
   totalItems,
+  type,
 }: IProps) => {
   const options = [
     { value: 10, label: '10' },
@@ -31,32 +33,39 @@ const PaginationSAPP = ({
 
   return (
     <>
-      <div className="flex items-center justify-between mt-5 flex-wrap gap-4 ">
-        <label className="flex items-center">
-          <span className="text-xsm font-semibold text-gray-5 mr-2.5">
-            Show
-          </span>
-          <select
-            onChange={(e) => {
-              const pageNumber = parseInt(e.target.value)
-              handlePageChange(pageNumber)
-            }}
-          >
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <span className="text-xsm font-semibold text-gray-5 ml-2.5">
-            of {totalItems} entries
-          </span>
-        </label>
+      <div
+        className={`flex items-center justify-center md:justify-between mt-4 flex-wrap gap-4`}
+      >
+        {type === 'table' && (
+          <label className="flex items-center">
+            <span className="text-xsm font-semibold text-gray-5 mr-2.5">
+              Show
+            </span>
+            <select
+              className="rounded-md shadow-0 border-0 bg-gray-4 py-0 px-2.5 cursor-pointer w-[70px]"
+              onChange={(e) => {
+                const pageNumber = parseInt(e.target.value)
+                handlePageChange(pageNumber)
+              }}
+            >
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <span className="text-xsm font-semibold text-gray-5 ml-2.5">
+              of {totalItems} entries
+            </span>
+          </label>
+        )}
         <Pagination
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           pageSize={Math.ceil(totalItems / pageSize)}
-          maxLength={9}
+          maxLength={`${type === 'table' ? 9 : 35}`}
+          totalItems={totalItems}
+          type={type}
         />
       </div>
     </>

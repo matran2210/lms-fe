@@ -64,6 +64,7 @@ module.exports = {
           3: '#F1F1F1',
           4: '#F9F9F9',
           5: '#7E8299',
+          6: '#D8D8E5',
         },
       },
       borderColor: {
@@ -72,6 +73,7 @@ module.exports = {
         focus: '#141414',
         error: '#D35563',
         'gray-1': '#A1A1A1',
+        'gray-2': '#F1F1F1',
         active: '#FFB800',
       },
       borderWidth: {
@@ -85,6 +87,7 @@ module.exports = {
       },
       minWidth: {
         6: '24px',
+        8: '30px',
         small: '36px',
         default: '40px',
         medium: '48px',
@@ -92,6 +95,7 @@ module.exports = {
       },
       minHeight: {
         6: '24px',
+        8: '30px',
         small: '36px',
         default: '40px',
         medium: '48px',
@@ -106,6 +110,7 @@ module.exports = {
       lineHeight: {
         0: '0',
         4.5: '17px',
+        4.8: '18px',
         5.2: '20.962px',
         6.2: '25px',
         6.5: '27px',

@@ -24,7 +24,7 @@ const Home: NextPage = () => {
   const trans = useTrans()
   const { control } = useForm()
 
-  // Pagination
+  // Pagination table
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [items, setItems] = useState<any>([])
@@ -69,6 +69,21 @@ const Home: NextPage = () => {
     setItems(data)
   }, [])
 
+  // Pagination row
+  const [currentPageRow, setCurrentPageRow] = useState<number>(1)
+  const [pageSizeRow, setPageSizeRow] = useState<number>(1)
+  const [itemsRow, setItemsRow] = useState<any>([])
+  const currentItemsRow = useMemo(() => {
+    return itemsRow.slice(
+      (currentPageRow - 1) * pageSizeRow,
+      currentPageRow * pageSizeRow,
+    )
+  }, [itemsRow, currentPageRow, currentPageRow])
+
+  useEffect(() => {
+    setItemsRow(data)
+  }, [])
+
   // Select
   const selectOptions = [
     { value: 'chocolate', label: 'Chocolate' },
@@ -106,8 +121,8 @@ const Home: NextPage = () => {
       </div>
 
       <div className="p-8">
-        <h2 className="text-3xl text-state-error mb-4">Pagination</h2>
-        <table className="table">
+        <h2 className="text-3xl text-state-error mb-4">Pagination Table</h2>
+        <table className="table mb-3">
           <thead>
             <tr className={`text-start`}>
               {headers?.map((column) => (
@@ -135,6 +150,17 @@ const Home: NextPage = () => {
           pageSize={pageSize}
           setPageSize={setPageSize}
           totalItems={items.length}
+          type={'table'}
+        ></PaginationSAPP>
+
+        <h2 className="text-3xl text-state-error mt-4">Pagination Row</h2>
+        <PaginationSAPP
+          currentPage={currentPageRow}
+          setCurrentPage={setCurrentPageRow}
+          pageSize={pageSizeRow}
+          setPageSize={setPageSizeRow}
+          totalItems={itemsRow.length}
+          type={'row'}
         ></PaginationSAPP>
       </div>
       <div className="p-8">
