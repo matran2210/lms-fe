@@ -1,0 +1,50 @@
+.select-single {
+  .select__control {
+    @apply h-12.5 border-default focus:border-focus hover:border-focus shadow-0 focus:shadow-0 focus:outline-none;
+  }
+
+  .select__value-container {
+    @apply px-4;
+  }
+
+  .select__single-value,
+  .select__placeholder {
+    @apply text-sm leading-4.5 font-medium p-0 m-0;
+  }
+
+  .select__placeholder {
+    @apply text-gray-1;
+  }
+
+  .select__menu {
+    @apply border-default;
+  }
+
+  .select__option {
+    @apply text-sm leading-4.5 font-medium text-bw-1 cursor-pointer;
+  }
+
+  .select__option.select__option--is-selected {
+    @apply bg-secondary text-primary;
+  }
+
+  .select__option:hover {
+    @apply bg-secondary text-primary;
+  }
+
+  .select__indicator {
+    @apply text-gray-1;
+  }
+
+  .select__indicator-separator {
+    @apply hidden;
+
+    svg {
+      @apply w-7 h-7;
+    }
+  }
+
+  .select__input {
+    @apply shadow-0;
+  }
+}
