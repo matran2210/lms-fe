@@ -8,8 +8,14 @@ import ButtonIcon from '@components/base/button/ButtonIcon'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import ButtonText from '@components/base/button/ButtonText'
 import ButtonOutlined from '@components/base/button/ButtonOutlined'
+import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 
 const Home: NextPage = () => {
+  const radioOptions = [
+    { value: 'Option 1', label: 'Option 1', description: 'description 1' },
+    { value: 'Option 2', label: 'Option 2', description: 'description 2' },
+    { value: 'Option 3', label: 'Option 3', description: 'description 3' },
+  ]
   const trans = useTrans()
   const { control } = useForm()
   return (
@@ -27,6 +33,51 @@ const Home: NextPage = () => {
         />
       </div>
       <div className="flex flex-col items-center px-5 py-3 mx-3 border border-4 border-bw-1 border-dashed">
+        <div>
+          <HookFormRadioGroup
+            name="HookFormRadioGroup1"
+            control={control}
+            direction="horizontal"
+            options={radioOptions}
+          />
+          <br />
+          <hr />
+          <br />
+          <HookFormRadioGroup
+            name="HookFormRadioGroup2"
+            control={control}
+            options={radioOptions}
+          />
+          <br />
+          <hr />
+          <br />
+          <HookFormRadioGroup
+            name="HookFormRadioGroup3"
+            control={control}
+            options={[
+              { value: 'Available option', label: 'Available option' },
+              { value: 'Available option 2', label: 'Available option 2' },
+              {
+                value: 'Disable option 2',
+                label: 'Disable option 2',
+                disabled: true,
+              },
+            ]}
+          />
+          <br />
+          <hr />
+          <br />
+          <HookFormRadioGroup
+            name="HookFormRadioGroup4"
+            control={control}
+            disabled={true}
+            options={[
+              { value: 'Disable option', label: 'Disable option' },
+              { value: 'Disable option 2', label: 'Disable option 2' },
+            ]}
+          />
+          <br />
+        </div>
         <div>
           <ButtonPrimary
             title="ButtonPrimary lager"
