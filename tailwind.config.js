@@ -70,14 +70,21 @@ module.exports = {
         focus: '#141414',
         error: '#D35563',
       },
+      borderWidth: {
+        1.5: '1.5px',
+      },
       boxShadow: {
         0: '0',
       },
       minHeight: {
+        6: '24px',
         small: '36px',
         default: '40px',
         medium: '48px',
         large: '56px',
+      },
+      minWidth: {
+        6: '24px',
       },
       maxWidth: {
         md: '448px',

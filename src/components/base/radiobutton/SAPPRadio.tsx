@@ -24,10 +24,10 @@ const SAPPRadio = ({
   disabled = false,
 }: IProps) => {
   return (
-    <div className={`inline-block w-6 h-6 ${className}`}>
+    <div className={`inline-block w-6 h-6 min-w-6 min-h-6 ${className}`}>
       <input
         name={name}
-        className={`block w-full h-full bg-radio-normal rounded-full border-0 border-transparent checked:bg-radio-checked outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:bg-radio-checked ${
+        className={`block w-full h-full bg-center bg-no-repeat bg-radio-normal rounded-full border-0 border-transparent checked:bg-radio-checked checked:bg-transparent checked:focus:bg-transparent checked:hover:bg-transparent outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:bg-radio-checked ${
           disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
         }`}
         type="radio"

@@ -68,7 +68,7 @@ const HookFormRadioGroup = ({
               <div key={option.label || index}>
                 <div className="flex flex-row">
                   <label
-                    className={`flex flex-row items-center ${
+                    className={`flex flex-row ${
                       (
                         option.disabled !== undefined
                           ? option.disabled
