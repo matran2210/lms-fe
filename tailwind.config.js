@@ -27,6 +27,7 @@ module.exports = {
       lg: ['18px', { lineHeight: '24px' }],
       base: ['16px', { lineHeight: '24px' }],
       sm: ['14px', { lineHeight: '24px' }],
+      xsm: ['13px', { lineHeight: '19.5px' }],
     },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
@@ -62,6 +63,8 @@ module.exports = {
           2: '#DCDDDD',
           3: '#F1F1F1',
           4: '#F9F9F9',
+          5: '#7E8299',
+          6: '#D8D8E5',
         },
       },
       borderColor: {
@@ -69,6 +72,9 @@ module.exports = {
         default: '#DCDDDD',
         focus: '#141414',
         error: '#D35563',
+        'gray-1': '#A1A1A1',
+        'gray-2': '#F1F1F1',
+        active: '#FFB800',
       },
       borderWidth: {
         1.5: '1.5px',
@@ -76,15 +82,24 @@ module.exports = {
       boxShadow: {
         0: '0',
       },
-      minHeight: {
+      height: {
+        12.5: '50px',
+      },
+      minWidth: {
         6: '24px',
+        8: '30px',
         small: '36px',
         default: '40px',
         medium: '48px',
         large: '56px',
       },
-      minWidth: {
+      minHeight: {
         6: '24px',
+        8: '30px',
+        small: '36px',
+        default: '40px',
+        medium: '48px',
+        large: '56px',
       },
       maxWidth: {
         md: '448px',
@@ -95,9 +110,12 @@ module.exports = {
       lineHeight: {
         0: '0',
         4.5: '17px',
-        5.5: '25px',
+        4.8: '18px',
+        5.2: '20.962px',
+        6.2: '25px',
         6.5: '27px',
         7.5: '30px',
+        8.5: '33px',
         11: '45px',
       },
       borderRadius: {

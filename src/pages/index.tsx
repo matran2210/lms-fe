@@ -8,6 +8,10 @@ import ButtonIcon from '@components/base/button/ButtonIcon'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import ButtonText from '@components/base/button/ButtonText'
 import ButtonOutlined from '@components/base/button/ButtonOutlined'
+import PaginationSAPP from 'src/components/base/pagination/PaginationSAPP'
+import HookFormSelect from 'src/components/base/select/HookFormSelect'
+import { useState, useEffect, useMemo } from 'react'
+import data from '../examples/data.json'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 
@@ -19,6 +23,74 @@ const Home: NextPage = () => {
   ]
   const trans = useTrans()
   const { control } = useForm()
+
+  // Pagination table
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(10)
+  const [items, setItems] = useState<any>([])
+  const [headers, setHeaders] =
+    useState<{ key: string; label: string; className?: string }[]>()
+
+  const currentItems = useMemo(() => {
+    return items.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+  }, [items, currentPage, pageSize])
+
+  useEffect(() => {
+    let partOfHeader: { key: string; label: string; className?: string }[] = []
+    const newHeaders = [
+      {
+        label: 'Id',
+        key: 'id',
+        className: '',
+      },
+      ...partOfHeader,
+      {
+        label: 'First Name',
+        key: 'fist-name',
+        className: 'w-1/4',
+      },
+      {
+        label: 'Last Name',
+        key: 'last-name',
+        className: 'w-1/4',
+      },
+      {
+        label: 'Email',
+        key: 'email',
+        className: 'w-1/4',
+      },
+      {
+        label: 'Phone',
+        key: 'phone',
+        className: 'w-1/4',
+      },
+    ]
+    setHeaders(newHeaders)
+    setItems(data)
+  }, [])
+
+  // Pagination row
+  const [currentPageRow, setCurrentPageRow] = useState<number>(1)
+  const [pageSizeRow, setPageSizeRow] = useState<number>(1)
+  const [itemsRow, setItemsRow] = useState<any>([])
+  const currentItemsRow = useMemo(() => {
+    return itemsRow.slice(
+      (currentPageRow - 1) * pageSizeRow,
+      currentPageRow * pageSizeRow,
+    )
+  }, [itemsRow, currentPageRow, currentPageRow])
+
+  useEffect(() => {
+    setItemsRow(data)
+  }, [])
+
+  // Select
+  const selectOptions = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+  ]
+
   return (
     <>
       <div className={styles.main}>HomePage</div>
@@ -33,7 +105,64 @@ const Home: NextPage = () => {
           className="w-full"
         />
       </div>
-      <div className="flex flex-col items-center px-5 py-3 mx-3 border border-4 border-bw-1 border-dashed"></div>
+      <div className="p-8">
+        <h2 className="text-3xl text-state-error mb-4">Select</h2>
+        <HookFormSelect
+          options={selectOptions}
+          defaultValue={{ value: 'vanilla', label: 'Vanilla' }}
+          className={'mb-2'}
+        ></HookFormSelect>
+        <HookFormSelect
+          options={selectOptions}
+          defaultValue={{ value: 'vanilla', label: 'Vanilla' }}
+          isMulti={true}
+          className={''}
+        ></HookFormSelect>
+      </div>
+
+      <div className="p-8">
+        <h2 className="text-3xl text-state-error mb-4">Pagination Table</h2>
+        <table className="table mb-3">
+          <thead>
+            <tr className={`text-start`}>
+              {headers?.map((column) => (
+                <th key={column.label} className={column.className}>
+                  {column.label}
+                </th>
+              ))}
+            </tr>
+            {currentItems?.map((value: any) => {
+              return (
+                <tr className={`text-start`}>
+                  <td>{value.id}</td>
+                  <td>{value.first_name}</td>
+                  <td>{value.last_name}</td>
+                  <td>{value.email}</td>
+                  <td>{value.phone}</td>
+                </tr>
+              )
+            })}
+          </thead>
+        </table>
+        <PaginationSAPP
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          totalItems={items.length}
+          type={'table'}
+        ></PaginationSAPP>
+
+        <h2 className="text-3xl text-state-error mt-4">Pagination Row</h2>
+        <PaginationSAPP
+          currentPage={currentPageRow}
+          setCurrentPage={setCurrentPageRow}
+          pageSize={pageSizeRow}
+          setPageSize={setPageSizeRow}
+          totalItems={itemsRow.length}
+          type={'row'}
+        ></PaginationSAPP>
+      </div>
       <div className="p-8">
         <h2 className="text-3xl text-state-error mb-4">Checkbox</h2>
         <div className="px-5 py-3 mx-3 border border-4 border-bw-1 border-dashed">
