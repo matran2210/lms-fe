@@ -65,6 +65,7 @@ module.exports = {
           4: '#F9F9F9',
           5: '#7E8299',
           6: '#D8D8E5',
+          900: '#181C32',
         },
       },
       borderColor: {

@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="flex flex-nowrap">
       <Sidebar
         isOpened={isOpened}
-        className="w-20 bg-white px-5 shadow-sidebar overflow-hidden"
+        className="w-20 bg-white py-2.5 px-5 shadow-sidebar h-auto"
       />
       <div className="w-full">
         <Header isOpened={isOpened} toggleDrawer={toggleDrawer} />

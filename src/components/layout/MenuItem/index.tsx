@@ -24,22 +24,29 @@ export default function MenuItem({
 
   return (
     <>
-      <div className={`${selected ? 'selected' : ''} w-7`}>
+      <div className={`${selected ? 'selected' : ''} relative sidebar-list`}>
         <Link href={url} passHref>
-          <div className="menu-item">
-            {Icon}
-            <span>{name}</span>
+          <div className="sidebar-item cursor-pointer flex items-center">
+            <ExpandIcon
+              type={Icon}
+              className={`w-6 h-6 ${isNested ? '' : 'mr-4'} text-gray-2`}
+            />
+            <span className="label hidden">{name}</span>
+            {isNested ? (
+              <ExpandIcon
+                isExpanded={isExpanded}
+                handleClick={onClick}
+                type={'ontoggle'}
+              />
+            ) : null}
           </div>
         </Link>
         {isNested ? (
-          <ExpandIcon
-            isExpanded={isExpanded}
-            handleClick={onClick}
-            type={'ontoggle'}
-          />
+          <div className="sidebar-child">
+            <MenuItemsList options={subItems} />
+          </div>
         ) : null}
       </div>
-      {isExpanded && isNested ? <MenuItemsList options={subItems} /> : null}
     </>
   )
 }

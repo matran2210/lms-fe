@@ -1,0 +1,14 @@
+.sidebar-list {
+  &:hover {
+    .sidebar-child {
+      @apply opacity-100 visible;
+    }
+  }
+}
+
+.sidebar-child {
+  @apply transition-all duration-300 absolute top-0 right-[-140px] z-20 bg-white p-10 opacity-0 invisible border border-default;
+  .sidebar-item .label {
+    @apply block;
+  }
+}

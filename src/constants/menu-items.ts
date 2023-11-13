@@ -1,54 +1,44 @@
+import { PageLink, TitleSidebar } from './index'
+
 const MENU_OPTIONS: MenuOption[] = [
+  /*{
+    name: `${TitleSidebar.DASHBOARD}`,
+    icon: 'home',
+    url: `${PageLink.DASHBOARD}`,
+  },*/
   {
-    name: 'Dashboard',
-    icon: 'Dashboard',
-    url: '/',
-  },
-  {
-    name: 'Orders',
-    icon: 'ShoppingCart',
-    url: '/orders',
+    name: `${TitleSidebar.COURSES}`,
+    icon: 'grid',
+    url: `${PageLink.COURSES}`,
     subItems: [
       {
-        name: 'New',
-        icon: 'AddShoppingCart',
-        url: '/new-orders',
+        name: `${TitleSidebar.COURSE_NEW}`,
+        icon: 'dot',
+        url: `${PageLink.COURSE_NEW}`,
       },
       {
-        name: 'Completed',
-        icon: 'Done',
-        url: '/completed-orders',
+        name: `${TitleSidebar.COURSE_LIST}`,
+        icon: 'dot',
+        url: `${PageLink.COURSES}`,
       },
     ],
   },
   {
-    name: 'Customers',
-    icon: 'People',
-    url: '/customers',
+    name: `${TitleSidebar.TOPICS}`,
+    icon: 'document',
+    url: `${PageLink.TOPICS}`,
     subItems: [
       {
-        name: 'Corporate',
-        icon: 'Business',
-        url: '/corporate',
+        name: `${TitleSidebar.TOPICS_LIST}`,
+        icon: 'dot',
+        url: `${PageLink.TOPICS}`,
       },
       {
-        name: 'SMB',
-        icon: 'HomeWork',
-        url: '/smb',
-        subItems: [
-          {
-            name: 'Retail',
-            icon: 'Person',
-            url: '/retail',
-          },
-        ],
+        name: `${TitleSidebar.CASE_STUDY}`,
+        icon: 'dot',
+        url: `${PageLink.CASE_STUDY}`,
       },
     ],
-  },
-  {
-    name: 'Inventory',
-    icon: 'AttachMoney',
-    url: '/inventory',
   },
 ]
 
