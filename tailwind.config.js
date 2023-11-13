@@ -81,6 +81,8 @@ module.exports = {
       },
       boxShadow: {
         0: '0',
+        sidebar:
+          '0px 2px 4px 0px rgba(0, 0, 0, 0.08), 0px 0px 6px 0px rgba(0, 0, 0, 0.02)',
       },
       height: {
         12.5: '50px',
