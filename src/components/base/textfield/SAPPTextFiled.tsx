@@ -46,9 +46,7 @@ const SAPPTextFiled = ({
             value={value ?? ''}
             defaultValue={value ? defaultValue : undefined}
             onChange={onChange}
-            className={`${
-              className ?? ''
-            } form-control bg-transparent border py-3 px-4 shadow-0 focus:shadow-0 focus:outline-none text-base leading-4.5 font-medium text-bw-1 placeholder:text-base placeholder:leading-4.5  placeholder:font-medium placeholder:text-gray-1`}
+            className="form-control w-full bg-transparent border py-3 px-4 shadow-0 focus:shadow-0 focus:outline-none text-base leading-4.5 font-medium text-bw-1 placeholder:text-base placeholder:leading-4.5  placeholder:font-medium placeholder:text-gray-1"
             placeholder={placeholder}
             disabled={disabled}
             maxLength={maxLength}

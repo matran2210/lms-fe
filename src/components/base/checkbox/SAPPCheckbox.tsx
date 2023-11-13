@@ -19,10 +19,13 @@ const SAPPCheckbox = ({
   onChange,
   className,
 }: IProps) => {
+  if (!className?.includes('min-w-')) className += ' min-w-6'
+  if (!className?.includes('min-h-')) className += ' min-h-6'
+
   return (
-    <div className={`inline-block ${className}`}>
+    <div className={`${className} inline-block`}>
       <input
-        className={`block w-6 h-6 min-w-6 min-h-6 border-1.5 border-gray-1 outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
+        className={`block w-full h-full border-1.5 border-gray-1 outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
           isWrong
             ? 'checked:bg-state-error checked:hover:bg-state-error checked:focus:bg-state-error'
             : 'checked:bg-state-success checked:hover:bg-state-success checked:focus:bg-state-success'

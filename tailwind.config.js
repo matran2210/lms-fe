@@ -27,6 +27,7 @@ module.exports = {
       lg: ['18px', { lineHeight: '24px' }],
       base: ['16px', { lineHeight: '24px' }],
       sm: ['14px', { lineHeight: '24px' }],
+      'medium-sm': ['14px', { lineHeight: '16.9px' }],
       xsm: ['13px', { lineHeight: '19.5px' }],
     },
     fontFamily: {
@@ -81,11 +82,13 @@ module.exports = {
       },
       boxShadow: {
         0: '0',
+        'single-dialog': '0px 4px 62px 0px rgba(0, 0, 0, 0.07)',
       },
       height: {
         12.5: '50px',
       },
       minWidth: {
+        4: '16px',
         6: '24px',
         8: '30px',
         small: '36px',
@@ -94,6 +97,7 @@ module.exports = {
         large: '56px',
       },
       minHeight: {
+        4: '16px',
         6: '24px',
         8: '30px',
         small: '36px',
@@ -131,8 +135,14 @@ module.exports = {
       },
       padding: {
         1.8: '0.47rem', // 7.5px
+        2.75: '0.688rem', // 11px
         2.8: '0.72rem', // 11.5px
         3.8: '0.89rem', // 14.3px
+        17.5: '4.375rem', // 70px
+        19: '4.75rem', // 76px
+      },
+      margin: {
+        15: '3.75rem', // 60px
       },
       height: {
         12.5: '50px',

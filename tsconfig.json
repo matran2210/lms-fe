@@ -30,7 +30,10 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "public/locales/vi/common.json"
+    "public/locales/vi/common.json",
+    "src/components/base/checkbox/HookFormCheckBox.tsx_",
+    "src/components/base/radiobutton/HookFormRadioGroup.tsx_",
+    "src/components/base/radiobutton/HookFormRadioTextFieldGroup.tsx_"
   ],
   "exclude": ["node_modules"]
 }
