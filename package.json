@@ -20,6 +20,7 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
     "next": "^12.1.6",
     "next-i18next": "^13.2.2",
     "postcss-flexbugs-fixes": "^5.0.2",
@@ -29,7 +30,8 @@
     "react-hook-form": "^7.48.2",
     "react-select": "^5.8.0",
     "sass": "^1.53.0",
-    "sharp": "^0.30.7"
+    "sharp": "^0.30.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
