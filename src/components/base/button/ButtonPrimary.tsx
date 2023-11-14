@@ -8,6 +8,8 @@ const ButtonPrimary = ({
   link,
   size = 'small',
   full = false,
+  disabled = false,
+  type,
 }: IButtonProps) => {
   let textSizeClass =
     size === 'small'
@@ -20,19 +22,27 @@ const ButtonPrimary = ({
   let paddingHorizontalClass =
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-white ${textSizeClass} font-semibold bg-primary hover:bg-white hover:text-primary cursor-pointer`
+  let disabledClass = disabled
+    ? 'cursor-not-allowed'
+    : 'text-white cursor-pointer'
+  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-primary hover:bg-white hover:text-primary`
 
   if (link)
     return (
-      <a href={link} className={componentClass}>
+      <a href={link} className={componentClass} aria-disabled={disabled}>
         {title}
       </a>
     )
 
   return (
-    <div className={componentClass} role="button" onClick={onClick}>
-      <span className="">{title}</span>
-    </div>
+    <button
+      className={componentClass}
+      type={type ?? 'button'}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {title}
+    </button>
   )
 }
 

@@ -39,7 +39,7 @@ const HookFormCheckBox = ({
       render={({ field, fieldState: { error } }) => (
         <>
           <label
-            className={`flex justify-center w-fit ${
+            className={`flex justify-center items-center w-fit ${
               disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
             }`}
           >

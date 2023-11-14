@@ -19,8 +19,8 @@ const SAPPCheckbox = ({
   onChange,
   className,
 }: IProps) => {
-  if (!className?.includes('min-w-')) className += ' min-w-6'
-  if (!className?.includes('min-h-')) className += ' min-h-6'
+  if (!className?.includes('min-w-')) className += ' w-6 min-w-6'
+  if (!className?.includes('min-h-')) className += ' h-6 min-h-6'
 
   return (
     <div className={`${className} inline-block`}>
