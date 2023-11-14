@@ -66,7 +66,7 @@ const PageLink = ({
           ? 'min-w-8 min-h-8 text-xsm leading-4.8 font-semibold rounded-md'
           : 'min-w-default min-h-default text-sm leading-8.5 font-normal border'
       } relative p-0.5 cursor-pointer flex items-center justify-center
-      ${isViewed ? 'bg-gray-3 !border-gray-2' : ''} 
+      ${isViewed && type === 'row' ? 'bg-gray-3 !border-gray-2' : ''} 
       ${
         active
           ? 'bg-primary text-white border-active'

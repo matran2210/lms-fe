@@ -58,6 +58,7 @@ module.exports = {
           1: '#141414',
           2: '#404041',
           3: '#FFFFFF',
+          4: '#111424',
         },
         gray: {
           1: '#A1A1A1',
@@ -66,6 +67,10 @@ module.exports = {
           4: '#F9F9F9',
           5: '#7E8299',
           6: '#D8D8E5',
+          900: '#181C32',
+        },
+        overlay: {
+          dark: 'rgba(0,0,0,0.5)',
         },
       },
       borderColor: {
@@ -76,12 +81,15 @@ module.exports = {
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
         active: '#FFB800',
+        dark: '#1C2039',
       },
       borderWidth: {
         1.5: '1.5px',
       },
       boxShadow: {
         0: '0',
+        sidebar:
+          '0px 2px 4px 0px rgba(0, 0, 0, 0.08), 0px 0px 6px 0px rgba(0, 0, 0, 0.02)',
         'single-dialog': '0px 4px 62px 0px rgba(0, 0, 0, 0.07)',
       },
       height: {
