@@ -10,7 +10,9 @@ export default function Header({ isOpened, toggleDrawer }: HeaderProps) {
   const trans = useTrans()
   return (
     <div>
-      <div onClick={toggleDrawer}>{isOpened ? 'show' : 'hidden'}</div>
+      <div className="block md:hidden" onClick={toggleDrawer}>
+        {isOpened ? 'Show Sidebar' : 'Hidden SideBar'}
+      </div>
       <h1 className="text-5xl text-black">Location: {trans.location}</h1>
       <div>Header</div>
     </div>

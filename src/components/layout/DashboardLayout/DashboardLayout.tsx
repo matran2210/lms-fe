@@ -4,10 +4,14 @@ import Header from '../Header'
 import Sidebar from '../Sidebar'
 
 type DashboardLayoutProps = {
+  mode: 'student' | 'teacher'
   children: React.ReactNode
 }
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default function DashboardLayout({
+  mode,
+  children,
+}: DashboardLayoutProps) {
   const [isOpened, setOpened] = useState(false)
   const toggleDrawer = () => {
     setOpened((prev) => !prev)
@@ -17,9 +21,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="flex flex-nowrap">
       <Sidebar
         isOpened={isOpened}
-        className="w-20 bg-white py-2.5 px-5 shadow-sidebar h-auto"
+        mode={mode}
+        toggleDrawer={toggleDrawer}
+        className={`fixed top-0 md:left-0 h-screen z-30 transition-all duration-200 ${
+          mode === 'student'
+            ? 'bg-white shadow-sidebar w-20 py-2.5'
+            : 'bg-bw-4 border-r border-dark w-[82px] pt-8 pb-10'
+        }`}
       />
-      <div className="w-full">
+      <div className="w-full md:pl-20">
         <Header isOpened={isOpened} toggleDrawer={toggleDrawer} />
         <div>
           <div>{children}</div>

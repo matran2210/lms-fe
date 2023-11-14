@@ -1,19 +1,53 @@
-import { MENU_ITEMS } from '../../../constants/menu-items'
+import { MENU_ITEMS, MENU_BOTTOM } from '../../../constants/menu-items'
 import MenuItemsList from '../MenuItemsList'
 import ExpandIcon from '../ExpandIcon'
 
 type SidebarProps = {
   isOpened: boolean
   className: string
+  toggleDrawer: () => void
+  mode: string
 }
 
-export default function Sidebar({ isOpened, className }: SidebarProps) {
+export default function Sidebar({
+  isOpened,
+  className,
+  toggleDrawer,
+  mode,
+}: SidebarProps) {
   return (
-    <div className={`${className} ${isOpened ? 'opacity-100' : 'opacity-0'}`}>
-      <div className="logo">
-        <ExpandIcon type={'logo-default'} />
+    <>
+      <div className={`${className} ${isOpened ? 'left-0' : '-left-full'}`}>
+        <div className="flex justify-center text-center mx-auto pb-8">
+          {mode === 'student' ? (
+            <ExpandIcon type={'logo-default'} />
+          ) : (
+            <ExpandIcon type={'logo-teacher'} />
+          )}
+        </div>
+        {mode === 'student' && (
+          <div className="h-px w-8 bg-gray-2 text-center mx-auto mb-6"></div>
+        )}
+        <MenuItemsList
+          mode={mode}
+          options={mode === 'student' ? MENU_ITEMS : MENU_ITEMS}
+        />
+        <div className="absolute bottom-6 w-full">
+          {mode === 'student' && (
+            <div className="h-px w-8 bg-gray-2 text-center mx-auto mb-6"></div>
+          )}
+          <MenuItemsList
+            mode={mode}
+            options={mode === 'student' ? MENU_BOTTOM : MENU_BOTTOM}
+          />
+        </div>
       </div>
-      <MenuItemsList options={MENU_ITEMS} />
-    </div>
+      <div
+        onClick={toggleDrawer}
+        className={`sidebar-overlay ${
+          isOpened ? 'block md:hidden' : 'hidden'
+        } fixed top-0 left-0 bottom-0 right-0 bg-overlay-dark w-full h-ful z-20 cursor-pointer`}
+      ></div>
+    </>
   )
 }

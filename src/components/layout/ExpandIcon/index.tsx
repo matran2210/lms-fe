@@ -149,7 +149,9 @@ export default function ExpandIcon({
           xmlns="http://www.w3.org/2000/svg"
           data-name="Layer 1"
           viewBox="0 0 512 512"
-          className={`${className}`}
+          width="40"
+          height="40"
+          className={`!w-10 !h-10 ${className}`}
         >
           <path
             fill="currentColor"
@@ -165,7 +167,7 @@ export default function ExpandIcon({
           version="1.1"
           viewBox="0 0 31.955 31.955"
           xmlSpace="preserve"
-          className={`!w-1 !h-1 ${className}`}
+          className={`!min-w-[4px] !min-h-[4px] ${className}`}
         >
           <g fill="#181C32">
             <path d="M27.25 4.655c-6.254-6.226-16.37-6.201-22.594.051-6.227 6.254-6.204 16.37.049 22.594 6.256 6.226 16.374 6.203 22.597-.051 6.224-6.254 6.203-16.371-.052-22.594z"></path>

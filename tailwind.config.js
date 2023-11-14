@@ -57,6 +57,7 @@ module.exports = {
           1: '#141414',
           2: '#404041',
           3: '#FFFFFF',
+          4: '#111424',
         },
         gray: {
           1: '#A1A1A1',
@@ -67,6 +68,9 @@ module.exports = {
           6: '#D8D8E5',
           900: '#181C32',
         },
+        overlay: {
+          dark: 'rgba(0,0,0,0.5)',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -76,6 +80,7 @@ module.exports = {
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
         active: '#FFB800',
+        dark: '#1C2039',
       },
       borderWidth: {
         1.5: '1.5px',

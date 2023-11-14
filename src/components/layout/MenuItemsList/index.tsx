@@ -3,13 +3,14 @@ import MenuItem from '../MenuItem'
 
 type MenuItemsListProps = {
   options: MenuItemType[]
+  mode: string
 }
 
-export default function MenuItemsList({ options }: MenuItemsListProps) {
+export default function MenuItemsList({ options, mode }: MenuItemsListProps) {
   return (
-    <div className="block">
+    <div className="menu-items-list">
       {options.map((option) => (
-        <MenuItem menuItem={option} key={option.id} />
+        <MenuItem mode={mode} menuItem={option} key={option.id} />
       ))}
     </div>
   )

@@ -4,6 +4,7 @@ export const PageLink = {
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
   CASE_STUDY: '/casestudy',
+  TEACHER: '/teacher',
 }
 
 export const TitleSidebar = {
@@ -14,4 +15,5 @@ export const TitleSidebar = {
   CASE_STUDY: 'Case Study',
   TOPICS: 'Topics',
   TOPICS_LIST: 'Topics list',
+  TEACHER: 'Teacher',
 }
