@@ -169,7 +169,7 @@ const Home: NextPage = () => {
           <HookFormCheckBox
             title="Right"
             required
-            name="name"
+            name="right"
             control={control}
             checked={true}
           />
@@ -177,7 +177,7 @@ const Home: NextPage = () => {
           <HookFormCheckBox
             title="Wrong"
             required
-            name="name"
+            name="wrong"
             control={control}
             checked={true}
             isWrong={true}
@@ -186,14 +186,14 @@ const Home: NextPage = () => {
           <HookFormCheckBox
             title="Default"
             required
-            name="name"
+            name="default"
             control={control}
           />
           <br />
           <HookFormCheckBox
             title="Disable"
             required
-            name="name"
+            name="disable"
             control={control}
             checked={true}
             disabled={true}

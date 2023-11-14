@@ -11,6 +11,7 @@ import {
 } from '@utils/constants'
 import Image from 'next/image'
 // import { useState } from 'react'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -81,12 +82,9 @@ const LoginPage = () => {
             title="Keep me logged in"
             classNameTitle="medium-sm text-gray-1"
           />
-          <a
-            href="javascript:void(0)"
-            className="medium-sm text-gray-1 hover:underline"
-          >
-            Forgot Password
-          </a>
+          <span className="medium-sm text-gray-1 hover:underline">
+            <Link href="/forgot-password">Forgot Password</Link>
+          </span>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex gap-3 h-12.5">
