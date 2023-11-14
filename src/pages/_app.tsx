@@ -1,4 +1,5 @@
 import Layout from '@components/layout'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 import '@styles/globals.scss'
 import { LAYOUT } from '@utils/constants'
 import type { AppProps } from 'next/app'
@@ -17,6 +18,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   switch (layout) {
     case LAYOUT.ERROR_LAYOUT:
       content = <Component {...pageProps} />
+      break
+    case LAYOUT.SINGLE_DIALOG_LAYOUT:
+      content = (
+        <SingleDialogLayout>
+          <Component {...pageProps} />
+        </SingleDialogLayout>
+      )
       break
     default:
       content = (

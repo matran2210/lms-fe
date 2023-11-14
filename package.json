@@ -16,10 +16,10 @@
     "run:prod": "COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.prod.yml build --parallel && docker-compose -f docker-compose.prod.yml up -d",
     "stop-all-running-containers": "docker kill $(docker ps -q) && docker rm $(docker ps -a -q)",
     "free-space": "docker system prune -af --volumes",
-    "postbuild": "next-sitemap",
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
     "next": "^12.1.6",
     "next-i18next": "^13.2.2",
     "postcss-flexbugs-fixes": "^5.0.2",
@@ -29,7 +29,8 @@
     "react-hook-form": "^7.48.2",
     "react-select": "^5.8.0",
     "sass": "^1.53.0",
-    "sharp": "^0.30.7"
+    "sharp": "^0.30.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
