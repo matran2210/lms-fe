@@ -6,4 +6,6 @@ export interface IButtonProps {
   disabled?: boolean
   size?: 'small' | 'medium' | 'lager'
   full?: boolean
+  name?: string
+  type?: 'button' | 'reset' | 'submit'
 }
