@@ -39,9 +39,6 @@ export const changePassword = createAsyncThunk(
   async (body: ChangePasswordReq, thunkAPI) => {
     try {
       const res: ChangePasswordRes = await loginApi.changePassword(body)
-      if (res.code !== 200) {
-        toast.error(res.message)
-      }
       return { ...res }
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
@@ -72,12 +69,12 @@ export const loginSlice = createSlice({
     builder.addCase(getLoginUser.fulfilled, (state, action) => {
       state.loading = false
       state.changePass = false
-      if (action?.payload?.data && action?.payload?.data['auth-token']) {
-        const token = action?.payload?.data['auth-token']
-        state.accessToken = token
-        window.localStorage.setItem('accessToken', token)
-        window.localStorage.setItem('refreshToken', token)
-      }
+      // if (action?.payload?.data && action?.payload?.data['auth-token']) {
+      //   const token = action?.payload?.data['auth-token']
+      //   state.accessToken = token
+      //   window.localStorage.setItem('accessToken', token)
+      //   window.localStorage.setItem('refreshToken', token)
+      // }
       // navigate(ScreenNames.Inspection as never,{} as never)
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {

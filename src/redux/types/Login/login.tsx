@@ -3,7 +3,7 @@ export interface ILoginData {
   password: string
 }
 export interface LoginReq {
-  userid: string
+  username: string
   password: string
 }
 
