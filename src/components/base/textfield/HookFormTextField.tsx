@@ -14,6 +14,10 @@ interface IProps {
   disabled?: boolean
   label?: string
   labelClass?: string
+  onChangeType?: () => void
+  passwordVisible?: boolean
+  showIconPassword?: boolean
+  guideline?: Array<string> | undefined
   skeleton?: boolean
   required?: boolean
   maxLength?: number
