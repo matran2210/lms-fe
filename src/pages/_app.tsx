@@ -4,6 +4,7 @@ import '@styles/globals.scss'
 import { LAYOUT } from '@utils/constants'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { wrapper } from '../redux/store'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -46,4 +47,4 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   )
 }
 
-export default MyApp
+export default wrapper.withRedux(MyApp)
