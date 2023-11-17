@@ -8,4 +8,10 @@ export interface IButtonProps {
   full?: boolean
   name?: string
   type?: 'button' | 'reset' | 'submit'
+  isPaddingHorizontal?: boolean
+}
+export type IButtonCancelSubmitProps = {
+  submit: IButtonProps
+  cancel: IButtonProps
+  className?: string
 }

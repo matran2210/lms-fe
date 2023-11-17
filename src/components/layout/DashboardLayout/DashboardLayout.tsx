@@ -32,7 +32,7 @@ export default function DashboardLayout({
       <div className="w-full md:pl-20">
         <Header isOpened={isOpened} toggleDrawer={toggleDrawer} />
         <div>
-          <div>{children}</div>
+          <div className="bg-gray-4">{children}</div>
         </div>
         <Footer />
       </div>
