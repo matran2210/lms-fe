@@ -4,7 +4,8 @@ import '@styles/globals.scss'
 import { LAYOUT } from '@utils/constants'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import { wrapper } from '../redux/store'
+import { store, wrapper } from '../redux/store'
+import { injectStore } from 'src/redux/services/httpService'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -15,6 +16,7 @@ type MyAppProps = AppProps & {
 function MyApp({ Component, pageProps }: MyAppProps) {
   let content = null
   const { layout = LAYOUT.DEFAULT_LAYOUT } = (Component as any) || {}
+  injectStore(store)
 
   switch (layout) {
     case LAYOUT.ERROR_LAYOUT:

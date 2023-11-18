@@ -1,3 +1,4 @@
+import { IResponse } from 'src/redux/types'
 import {
   LoginReq,
   LoginRes,
@@ -8,9 +9,9 @@ import { httpService } from '../../httpService'
 import url from './url'
 
 const handleLogin = {
-  login: (request: LoginReq) => {
+  login: (request: LoginReq): Promise<IResponse<LoginRes>> => {
     const uri = url.login
-    return httpService.POST<LoginReq, LoginRes>({
+    return httpService.POST<LoginReq, IResponse<LoginRes>>({
       uri,
       request,
     })

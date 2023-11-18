@@ -5,7 +5,7 @@ import getConfig from 'next/config'
 const { publicRuntimeConfig } = getConfig()
 const { apiURL } = publicRuntimeConfig
 
-// const BASE_URL = process.env.REACT_APP_API_PUBLIC
+const BASE_URL = process.env.REACT_APP_API_PUBLIC
 
 const TIME_OUT = 5000
 
@@ -53,7 +53,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
     return response.data.object.tokens.access.token
   } catch (error) {
     store.dispatch(logout())
-    window.location.href = '/auth/login'
+    window.location.href = '/login'
     // If there is an error, return null
     return null
   }

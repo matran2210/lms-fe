@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../redux/hook'
 import { getLoginUser, loginReducer } from '../../redux/slice/Login/Login'
+import { useRouter } from 'next/router'
 
 interface IInputProps {
   username: string
@@ -28,8 +29,10 @@ const SocialLogos = [
 ]
 
 const LoginPage = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const userLogin = useAppSelector(loginReducer)
+
   // Validate for input
   const validationSchema = z.object({
     username: z
@@ -54,7 +57,10 @@ const LoginPage = () => {
         username,
         password,
       }),
-    )
+    ).then(() => {
+      // router.back()
+      router.push('/')
+    })
     // return data
   }
 
@@ -89,6 +95,7 @@ const LoginPage = () => {
           full={true}
           className="py-2.75 mb-6"
           onClick={handleSubmit(onSubmit)}
+          loading={userLogin.loading}
         />
         <div className="flex justify-between mb-15">
           <HookFormCheckBox
@@ -104,18 +111,15 @@ const LoginPage = () => {
         </div>
         <div className="flex justify-between items-center">
           <div className="flex gap-3 h-12.5">
-            {SocialLogos.map((img) => (
-              <a href="javascript:void(0)" key={img.url}>
+            {SocialLogos.map((img, i) => (
+              <a key={i}>
                 <Image src={img.url} alt={img.alt} width={50} height={50} />
               </a>
             ))}
           </div>
           <p className="medium-sm text-gray-1">
             Don&#39;t have an account?{' '}
-            <a
-              href="javascript:void(0)"
-              className="medium-sm text-state-info hover:underline"
-            >
+            <a className="medium-sm text-state-info hover:underline">
               Register
             </a>
           </p>

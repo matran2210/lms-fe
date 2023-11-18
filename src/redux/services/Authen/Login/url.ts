@@ -1,5 +1,5 @@
 const url = {
-  login: '/login',
+  login: '/auth/login',
   refreshtoken: '/refreshtoken',
   changePassword: '/changepassword',
 }

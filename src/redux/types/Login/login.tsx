@@ -22,9 +22,14 @@ export interface data {
 }
 
 export interface LoginRes {
-  message: string
-  code: number
-  data: data
+  user: {
+    email: string
+    username: string
+  }
+  tokens: {
+    act: string
+    rft: string
+  }
 }
 
 export interface LoginState {
@@ -32,6 +37,10 @@ export interface LoginState {
   loading: boolean
   errors: object
   changePass: boolean
+  user: {
+    email: string
+    username: string
+  }
 }
 
 export interface ErrorLogin {
