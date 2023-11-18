@@ -1,8 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { logout } from '../slice/Login/Login'
+import getConfig from 'next/config'
+const { publicRuntimeConfig } = getConfig()
+const { apiURL } = publicRuntimeConfig
 
-const BASE_URL = process.env.REACT_APP_API_PUBLIC
+// const BASE_URL = process.env.REACT_APP_API_PUBLIC
 
 const TIME_OUT = 5000
 
@@ -18,7 +21,7 @@ export const injectStore = (_store: any) => {
   store = _store
 }
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: apiURL,
 })
 
 let isRefreshing = false
@@ -27,7 +30,7 @@ let refreshSubscribers: any[] = []
 const refreshAccessToken = async (): Promise<string | null> => {
   try {
     const refreshToken = await AsyncStorage.getItem('refreshToken')
-    const response = await axios.post(`${BASE_URL}/rotate`)
+    const response = await axios.post(`${apiURL}/rotate`)
     // Save the new access token to the AsyncStorage
     await AsyncStorage.setItem(
       'accessToken',
