@@ -26,6 +26,7 @@ const HookFormSelect = ({
         defaultValue={defaultValue}
         className={`select-single ${className}`}
         classNamePrefix="select"
+        instanceId="selectInstanceId"
       />
     </div>
   )

@@ -14,6 +14,7 @@ import {
   LoginReq,
   LoginState,
 } from '../../types/Login/login'
+import { getUser } from '../User/User'
 
 const initialState: LoginState = {
   accessToken: '',

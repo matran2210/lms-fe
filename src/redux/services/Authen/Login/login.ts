@@ -6,7 +6,7 @@ import {
   ChangePasswordRes,
 } from '../../../types/Login/login'
 import { httpService } from '../../httpService'
-import url from './url'
+import url from '../url'
 
 const handleLogin = {
   login: (request: LoginReq): Promise<IResponse<LoginRes>> => {

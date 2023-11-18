@@ -57,11 +57,11 @@ const LoginPage = () => {
         username,
         password,
       }),
-    ).then(() => {
-      // router.back()
-      router.push('/')
-    })
-    // return data
+    )
+      .unwrap()
+      .then((e) => {
+        router.push('/')
+      })
   }
 
   // const [passwordVisible, setPasswordVisible] = useState(false)

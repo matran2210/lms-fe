@@ -1,11 +1,22 @@
 import { PROFILE_PAGES } from '@utils/constants/Profile'
 import Link from 'next/link'
-import React from 'react'
+import { useRouter } from 'next/router'
+import { useAppDispatch } from 'src/redux/hook'
+import { logout } from 'src/redux/slice/Login/Login'
+
 import { IProfilePages } from 'src/type/Profile'
 interface IProps {
   page: IProfilePages
 }
 const ProfileSideBar = ({ page }: IProps) => {
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    dispatch(logout())
+    router.push('/login')
+  }
+
   return (
     <div className="md:w-96 w-100">
       <ul className="px-3 py-4 cursor-pointer bg-white">
@@ -28,7 +39,10 @@ const ProfileSideBar = ({ page }: IProps) => {
           )
         })}
 
-        <li className="p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary">
+        <li
+          className="p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary"
+          onClick={handleLogout}
+        >
           <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>
           <div>Logout</div>
         </li>
