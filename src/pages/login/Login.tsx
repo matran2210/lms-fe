@@ -32,7 +32,7 @@ const LoginPage = () => {
   const userLogin = useAppSelector(loginReducer)
   // Validate for input
   const validationSchema = z.object({
-    authentication_info: z
+    username: z
       .string({ required_error: VALIDATION_FILED })
       .min(5, { message: VALIDATE_FILED_MIN_LENGTH('Username or Email', 5) }),
     password: z
@@ -69,9 +69,9 @@ const LoginPage = () => {
       <h1 className="medium-sm text-gray-1 mb-10">
         Login to Continue Learning
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         <HookFormTextField
-          name="authentication_info"
+          name="username"
           control={control}
           placeholder="Username or Email"
           type="text"
@@ -84,7 +84,12 @@ const LoginPage = () => {
           type="password"
           className="mb-10"
         />
-        <ButtonPrimary title="Log In" full={true} className="py-2.75 mb-6" />
+        <ButtonPrimary
+          title="Log In"
+          full={true}
+          className="py-2.75 mb-6"
+          onClick={handleSubmit(onSubmit)}
+        />
         <div className="flex justify-between mb-15">
           <HookFormCheckBox
             control={control}
