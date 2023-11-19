@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { changePassword, loginReducer } from '../../../redux/slice/Login/Login'
 import { useState } from 'react'
 import AuthApi from 'src/redux/services/Authen'
+import { display422Errors } from '@utils/helpers/form'
 
 interface IInputProps {
   password: string
@@ -26,8 +27,6 @@ interface IInputProps {
 
 const ChangePasswordPage = () => {
   const router = useRouter()
-  const dispatch = useAppDispatch()
-  const userLogin = useAppSelector(loginReducer)
   const [loading, setLoading] = useState<boolean>(false)
 
   // Validate for input
@@ -55,7 +54,7 @@ const ChangePasswordPage = () => {
     })
 
   // Using validate for input
-  const { control, handleSubmit } = useForm<IInputProps>({
+  const { control, handleSubmit, setError } = useForm<IInputProps>({
     resolver: zodResolver(validationSchema),
     mode: 'onChange',
   })
@@ -67,10 +66,11 @@ const ChangePasswordPage = () => {
       const response = await AuthApi.resetPassword({ new_password: password })
       if (response.success) {
         setTimeout(() => {
-          router.push(PageLink.AUTH_LOGIN)
+          router.push(PageLink.AUTH_CHANGE_PASSWORD_SUCCESS)
         }, 500)
       }
     } catch (error) {
+      display422Errors(error, setError)
     } finally {
       setLoading(false)
     }

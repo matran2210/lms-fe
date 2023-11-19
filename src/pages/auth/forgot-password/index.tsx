@@ -3,6 +3,7 @@ import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import { display422Errors } from '@utils/helpers/form'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
@@ -11,30 +12,39 @@ import AuthApi from 'src/redux/services/Authen'
 import { z } from 'zod'
 
 const schema = z.object({
-  email: z.string({ required_error: VALIDATE_REQUIRED }).email(),
+  email: z
+    .string({ required_error: VALIDATE_REQUIRED })
+    .email()
+    .refine((e) => e),
 })
 const ForgotPasswordPage = () => {
   const router = useRouter()
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<{ email: string }>({
     resolver: zodResolver(schema),
   })
 
   const onSubmit = async ({ email }: { email: string }) => {
-    const response = await AuthApi.sendEmail({ email })
-    if (response.success) {
-      router.push(
-        {
-          pathname: `${PageLink.AUTH_FORGOT_PASSWORD}/recover`,
-          query: { email: email, token: response.data?.token },
-        },
-        `${PageLink.AUTH_FORGOT_PASSWORD}/recover`,
-      )
+    try {
+      const response = await AuthApi.sendEmail({ email })
+      if (response.success) {
+        router.push(
+          {
+            pathname: `${PageLink.AUTH_FORGOT_PASSWORD}/recover`,
+            query: { email: email, token: response.data?.token },
+          },
+          `${PageLink.AUTH_FORGOT_PASSWORD}/recover`,
+        )
+      }
+    } catch (error: any) {
+      display422Errors(error, setError)
     }
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="font-bold text-bw-1 mb-2 text-4xl">Forgot Password</div>
@@ -45,6 +55,7 @@ const ForgotPasswordPage = () => {
       <div className="mt-15">
         <HookFormTextField name="email" control={control}></HookFormTextField>
       </div>
+      {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
       <ButtonPrimary
         title="Send"
         size="lager"
