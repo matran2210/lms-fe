@@ -5,6 +5,9 @@ export const PageLink = {
   TOPICS: '/topics',
   CASE_STUDY: '/casestudy',
   TEACHER: '/teacher',
+  AUTH_LOGIN: '/auth/login',
+  AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
+  AUTH_CHANGE_PASSWORD: '/auth/change-password',
 }
 
 export const TitleSidebar = {
@@ -17,3 +20,7 @@ export const TitleSidebar = {
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
 }
+
+export const GUIDELINE_PASSWORD = [
+  'Tối thiểu 8 ký tự, ít nhất 1 ký tự hoa, 1 ký tự số',
+]

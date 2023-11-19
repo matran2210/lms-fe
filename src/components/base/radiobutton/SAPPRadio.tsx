@@ -2,7 +2,6 @@ import React from 'react'
 
 interface IProps {
   name: string
-  key?: string
   value?: string | boolean
   ktCheck?: boolean
   checkTarget?: string
@@ -14,7 +13,6 @@ interface IProps {
 
 const SAPPRadio = ({
   name,
-  key,
   value,
   ktCheck,
   checkTarget,
@@ -36,7 +34,6 @@ const SAPPRadio = ({
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        key={key}
         value={value?.toString()}
       />
     </div>

@@ -2,10 +2,11 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { logout } from '../slice/Login/Login'
 import getConfig from 'next/config'
+import { PageLink } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
 const { apiURL } = publicRuntimeConfig
 
-// const BASE_URL = process.env.REACT_APP_API_PUBLIC
+const BASE_URL = process.env.REACT_APP_API_PUBLIC
 
 const TIME_OUT = 5000
 
@@ -53,7 +54,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
     return response.data.object.tokens.access.token
   } catch (error) {
     store.dispatch(logout())
-    window.location.href = '/auth/login'
+    window.location.href = PageLink.AUTH_LOGIN
     // If there is an error, return null
     return null
   }
@@ -117,7 +118,7 @@ axiosInstance.interceptors.response.use(
     }
     if (error.response && error.response.status === 404) {
       store.dispatch(logout())
-      window.location.href = '/auth/login'
+      window.location.href = PageLink.AUTH_LOGIN
     }
     // If the error is an authentication error and the refresh flag is false, set the refresh flag and refresh the access token
     if (error.response && error.response.status === 401 && !isRefreshing) {

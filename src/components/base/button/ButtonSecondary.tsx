@@ -1,5 +1,6 @@
 import React from 'react'
 import { IButtonProps } from 'src/type'
+import SpinIcon from './SpinIcon'
 
 const ButtonSecondary = ({
   title,
@@ -8,6 +9,8 @@ const ButtonSecondary = ({
   link,
   size = 'small',
   full = false,
+  loading = false,
+  disabled = false,
 }: IButtonProps) => {
   let textSizeClass =
     size === 'small'
@@ -20,7 +23,7 @@ const ButtonSecondary = ({
   let paddingHorizontalClass =
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-semibold bg-gray-3 hover:bg-bw-1 hover:text-gray-3 cursor-pointer`
+  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-semibold bg-gray-3 hover:bg-gray-4 cursor-pointer`
 
   if (link)
     return (
@@ -30,9 +33,19 @@ const ButtonSecondary = ({
     )
 
   return (
-    <div className={componentClass} role="button" onClick={onClick}>
-      <span className="">{title}</span>
-    </div>
+    <button
+      className={componentClass}
+      onClick={onClick}
+      disabled={disabled || loading}
+    >
+      {!loading ? (
+        title
+      ) : (
+        <>
+          <SpinIcon /> Loading...
+        </>
+      )}
+    </button>
   )
 }
 

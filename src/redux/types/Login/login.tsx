@@ -17,14 +17,30 @@ export interface ChangePasswordRes {
   code: number
 }
 
+export interface SendEmailReq {
+  email: string
+}
+export interface VerifyOtpReq {
+  code: string
+  token: string
+}
+export interface ResetPassword {
+  new_password: string
+}
+
 export interface data {
   'auth-token': string
 }
 
 export interface LoginRes {
-  message: string
-  code: number
-  data: data
+  user: {
+    email: string
+    username: string
+  }
+  tokens: {
+    act: string
+    rft: string
+  }
 }
 
 export interface LoginState {
@@ -32,6 +48,10 @@ export interface LoginState {
   loading: boolean
   errors: object
   changePass: boolean
+  user: {
+    email: string
+    username: string
+  }
 }
 
 export interface ErrorLogin {

@@ -125,15 +125,15 @@ const Home: NextPage = () => {
         <table className="table mb-3">
           <thead>
             <tr className={`text-start`}>
-              {headers?.map((column) => (
-                <th key={column.label} className={column.className}>
+              {headers?.map((column, i) => (
+                <th key={i} className={column.className}>
                   {column.label}
                 </th>
               ))}
             </tr>
             {currentItems?.map((value: any) => {
               return (
-                <tr className={`text-start`}>
+                <tr className={`text-start`} key={value.id}>
                   <td>{value.id}</td>
                   <td>{value.first_name}</td>
                   <td>{value.last_name}</td>

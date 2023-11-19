@@ -1,30 +1,39 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-hot-toast'
-import { RootState } from '../../store'
 import {
-  ErrorLogin,
-  LoginReq,
-  LoginRes,
-  LoginState,
+  removeJwtToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@utils/helpers/authen'
+import { toast } from 'react-hot-toast'
+import loginApi from '../../services/Authen'
+import { RootState } from '../../store'
+
+import {
   ChangePasswordReq,
   ChangePasswordRes,
+  LoginReq,
+  LoginState,
 } from '../../types/Login/login'
-import loginApi from '../../services/Authen/Login/login'
 
 const initialState: LoginState = {
   accessToken: '',
   loading: false,
   changePass: false,
   errors: {},
+  user: {
+    email: '',
+    username: '',
+  },
 }
 
 export const getLoginUser = createAsyncThunk(
   'loginReducer/handleLogin',
   async (body: LoginReq, thunkAPI) => {
     try {
-      const res: LoginRes = await loginApi.login(body)
-      if (res.code !== 200) {
-        toast.error(res.message)
+      const res = await loginApi.login(body)
+      if (!res.success) {
+        toast.error(res.error.message)
+        return
       }
       return { ...res }
     } catch (error: any) {
@@ -48,7 +57,6 @@ export const changePassword = createAsyncThunk(
 
 export const loginSlice = createSlice({
   name: 'loginReducer',
-
   initialState,
   reducers: {
     resetLoginState: (state: LoginState) => {
@@ -57,9 +65,8 @@ export const loginSlice = createSlice({
     },
     resetAuthUserState: (state: LoginState, action) => {},
     logout: (state: LoginState) => {
-      state.accessToken = ''
-      window.localStorage.removeItem('accessToken')
-      window.localStorage.removeItem('refreshToken')
+      state = { ...initialState }
+      removeJwtToken()
     },
   },
   extraReducers: (builder) => {
@@ -69,13 +76,15 @@ export const loginSlice = createSlice({
     builder.addCase(getLoginUser.fulfilled, (state, action) => {
       state.loading = false
       state.changePass = false
-      // if (action?.payload?.data && action?.payload?.data['auth-token']) {
-      //   const token = action?.payload?.data['auth-token']
-      //   state.accessToken = token
-      //   window.localStorage.setItem('accessToken', token)
-      //   window.localStorage.setItem('refreshToken', token)
-      // }
-      // navigate(ScreenNames.Inspection as never,{} as never)
+
+      if (action?.payload?.data?.tokens?.act) {
+        const accessToken = action.payload?.data.tokens.act
+        const refreshToken = action.payload?.data.tokens.rft
+        state.accessToken = accessToken
+        state.user = action.payload.data.user
+        setAccessToken(accessToken)
+        setRefreshToken(refreshToken)
+      }
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {
       state.loading = false
