@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 function useCountdown(
   minutes: number,
   seconds: number = 0,
-): [string, Function] {
+): [string, Function, number] {
   const [time, setTime] = useState(minutes * 60 + seconds)
 
   const resetTime = useCallback(
@@ -31,7 +31,7 @@ function useCountdown(
       .padStart(2, '0')}`
   }
 
-  return [formatTime(), resetTime]
+  return [formatTime(), resetTime, time]
 }
 
 export default useCountdown

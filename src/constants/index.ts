@@ -5,7 +5,9 @@ export const PageLink = {
   TOPICS: '/topics',
   CASE_STUDY: '/casestudy',
   TEACHER: '/teacher',
-  AUTH_LOGIN: '/login',
+  AUTH_LOGIN: '/auth/login',
+  AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
+  AUTH_CHANGE_PASSWORD: '/auth/change-password',
 }
 
 export const TitleSidebar = {

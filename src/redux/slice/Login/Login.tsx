@@ -5,7 +5,7 @@ import {
   setRefreshToken,
 } from '@utils/helpers/authen'
 import { toast } from 'react-hot-toast'
-import loginApi from '../../services/Authen/Login/login'
+import loginApi from '../../services/Authen'
 import { RootState } from '../../store'
 
 import {
@@ -14,7 +14,6 @@ import {
   LoginReq,
   LoginState,
 } from '../../types/Login/login'
-import { getUser } from '../User/User'
 
 const initialState: LoginState = {
   accessToken: '',

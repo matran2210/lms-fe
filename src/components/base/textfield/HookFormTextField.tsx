@@ -46,7 +46,7 @@ const HookFormTextField = ({
       render={({ field, fieldState: { error } }) => (
         <>
           {!skeleton ? (
-            <>
+            <div>
               <SAPPTextFiled
                 type={type}
                 value={field.value ?? ''}
@@ -73,9 +73,9 @@ const HookFormTextField = ({
                   <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
                 </>
               </div>
-            </>
+            </div>
           ) : (
-            <div>Loading...</div>
+            <div className="flex items-center">Loading...</div>
           )}
         </>
       )}

@@ -1,5 +1,6 @@
 const url = {
-  getUser: '/users/profile',
+  me: '/me',
+  user: '/users',
 }
 
 export default url

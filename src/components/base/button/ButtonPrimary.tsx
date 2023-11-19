@@ -25,9 +25,9 @@ const ButtonPrimary = ({
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let disabledClass = disabled
-    ? 'cursor-not-allowed'
-    : 'text-white cursor-pointer'
-  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-primary hover:bg-white hover:text-primary`
+    ? 'cursor-not-allowed opacity-60 bg-primary-2'
+    : 'cursor-pointer'
+  let componentClass = `${className} text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-primary hover:bg-primary-2`
 
   if (link)
     return (

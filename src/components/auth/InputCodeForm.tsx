@@ -3,27 +3,40 @@ import ButtonText from '@components/base/button/ButtonText'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
 import { createRef, useEffect, useState } from 'react'
 import useCountdown from './Countdown'
+import AuthApi from 'src/redux/services/Authen'
+import { setAccessToken } from '@utils/helpers/authen'
+import { useRouter } from 'next/router'
+import { PageLink } from 'src/constants'
 
 interface IInputCodeFormProps {
   error?: string
-  // onVerify
+  email: string
+  token: string
 }
 
-const InputCodeForm = ({ error = '' }: IInputCodeFormProps) => {
+const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
+  const router = useRouter()
   const [code, setCode] = useState(Array(6).join('.').split('.'))
-  const [canResend, setCanResend] = useState(true)
+  const [canResend, setCanResend] = useState(false)
   const [codeSent, setCodeSent] = useState(false)
-  const [timeCountDown, setTimeCountDown] = useCountdown(0)
+  const [timeCountDown, setTimeCountDown, time] = useCountdown(30)
   const [errorMessage, setErrorMessage] = useState(error)
   const inputRefs = Array(6)
     .fill(0)
     .map(() => createRef<HTMLInputElement>())
 
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const [currentToken, setCurrentToken] = useState(token)
+
   // Handle countdown timeout
   useEffect(() => {
+    if (time < 1740 && canResend === false) {
+      setCanResend(true)
+    }
+
     if (timeCountDown === '00:00' && codeSent) {
       setErrorMessage('OTP expired. Please generate a new OTP and try again!')
-      setCanResend(true)
     }
   }, [timeCountDown, codeSent])
 
@@ -50,11 +63,43 @@ const InputCodeForm = ({ error = '' }: IInputCodeFormProps) => {
   }
 
   // Handle on click resend button
-  const onResendCode = () => {
-    !codeSent && setCodeSent(true)
-    setErrorMessage('')
-    setCanResend(false)
-    setTimeCountDown(0, 5)
+  const onResendCode = async () => {
+    setLoading(true)
+    try {
+      const response = await AuthApi.sendEmail({ email })
+      if (!response.success) {
+        setErrorMessage('Resend code failed. Please try again')
+        return
+      }
+      !codeSent && setCodeSent(true)
+      setErrorMessage('')
+      setCanResend(false)
+      setTimeCountDown(30)
+      setCurrentToken(response.data.token)
+    } catch (error) {
+      setErrorMessage('Resend code failed. Please try again')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleVerifyCode = async () => {
+    try {
+      setLoading(true)
+      const response = await AuthApi.verifyOtp({
+        code: code?.join(''),
+        token: currentToken,
+      })
+      if (response.success && response.data.success) {
+        setAccessToken(response.data.act)
+        setTimeout(() => {
+          router.push(PageLink.AUTH_CHANGE_PASSWORD)
+        }, 1000)
+      }
+    } catch (error: any) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -88,7 +133,11 @@ const InputCodeForm = ({ error = '' }: IInputCodeFormProps) => {
       <ButtonPrimary
         title="Verify Code"
         full={true}
-        className="pt-2.5 pb-3.25 mb-3"
+        className="mb-3"
+        size="lager"
+        loading={loading}
+        onClick={handleVerifyCode}
+        disabled={code.some((e) => e === '')}
       />
       <ButtonText
         title="Resend Code"
@@ -96,6 +145,7 @@ const InputCodeForm = ({ error = '' }: IInputCodeFormProps) => {
         disabled={!canResend}
         onClick={onResendCode}
         className="no-underline pt-2.5 pb-3.25"
+        loading={loading}
       />
     </>
   )

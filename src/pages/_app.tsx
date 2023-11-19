@@ -4,8 +4,8 @@ import '@styles/globals.scss'
 import { LAYOUT } from '@utils/constants'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import { store, wrapper } from '../redux/store'
 import { injectStore } from 'src/redux/services/httpService'
+import { store, wrapper } from '../redux/store'
 
 type MyAppProps = AppProps & {
   Component: {

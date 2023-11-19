@@ -17,6 +17,17 @@ export interface ChangePasswordRes {
   code: number
 }
 
+export interface SendEmailReq {
+  email: string
+}
+export interface VerifyOtpReq {
+  code: string
+  token: string
+}
+export interface ResetPassword {
+  new_password: string
+}
+
 export interface data {
   'auth-token': string
 }

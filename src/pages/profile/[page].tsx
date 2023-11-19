@@ -1,19 +1,24 @@
 import ProfileContent from '@components/features/profile/ProfileContent'
 import ProfileHeader from '@components/features/profile/ProfileHeader'
 import ProfileSideBar from '@components/features/profile/ProfileSideBar'
-import { PROFILE_PAGES } from '@utils/constants/Profile'
-import { getAccessToken } from '@utils/helpers/authen'
+import { PROFILE_PAGES } from '@utils/constants/User'
 import { GetServerSideProps } from 'next'
 import { useEffect } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
-import { getUser } from 'src/redux/slice/User/User'
+import { getMe } from 'src/redux/slice/User/User'
 import { IProfilePages } from 'src/type/Profile'
 
 interface IProps {
   page: IProfilePages
 }
 
-const details = ({ page }: IProps) => {
+const ProfilePage = ({ page }: IProps) => {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getMe())
+  }, [])
+
   return (
     <div className="container">
       <div className="max-w-[69.625rem] my-0 mx-auto">
@@ -47,4 +52,4 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
     props: { page: params?.page as IProfilePages },
   }
 }
-export default details
+export default ProfilePage

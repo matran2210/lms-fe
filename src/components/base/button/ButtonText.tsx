@@ -11,6 +11,7 @@ const ButtonText = ({
   disabled = false,
   type,
   isPaddingHorizontal = true,
+  loading = false,
 }: IButtonProps) => {
   let textSizeClass =
     size === 'small'
@@ -45,7 +46,7 @@ const ButtonText = ({
       className={componentClass}
       type={type ?? 'button'}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
       {title}
     </button>

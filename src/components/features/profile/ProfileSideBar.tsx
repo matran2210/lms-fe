@@ -1,6 +1,7 @@
-import { PROFILE_PAGES } from '@utils/constants/Profile'
+import { PROFILE_PAGES } from '@utils/constants/User'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { PageLink } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { logout } from 'src/redux/slice/Login/Login'
 
@@ -14,7 +15,7 @@ const ProfileSideBar = ({ page }: IProps) => {
 
   const handleLogout = () => {
     dispatch(logout())
-    router.push('/login')
+    router.push(PageLink.AUTH_LOGIN)
   }
 
   return (

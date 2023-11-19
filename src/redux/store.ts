@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
 import loginReducer from './slice/Login/Login'
+import userReducer from './slice/User/User'
 
 export const store = configureStore({
   reducer: {
     loginReducer,
+    userReducer,
   },
 })
 
