@@ -163,13 +163,13 @@ const MyProfile = () => {
             <div className="text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%]">
               Status
             </div>
-            <div
-              className={`flex-auto max-w-[300px] font-medium text-state-${
-                USER_STATUS[user.status].color
-              }`}
-            >
+            <div className={`flex-auto max-w-[300px] font-medium`}>
               <TextSkeleton loading={loading && !isEdit} height="4">
-                {USER_STATUS[user.status]?.label}
+                <span
+                  className={`text-state-${USER_STATUS[user.status].color}`}
+                >
+                  {USER_STATUS[user.status]?.label}
+                </span>
               </TextSkeleton>
             </div>
           </li>

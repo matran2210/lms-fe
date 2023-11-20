@@ -10,7 +10,7 @@ const ProfileHeader = () => {
 
   const srcset = `${user.detail.avatar['40x40']} 40w, ${user.detail.avatar['50x50']} 50w, ${user.detail.avatar['150x150']} 150w, ${user.detail.avatar['160x160']} 160w`
   return (
-    <div className="block pr-8.25 py-10 pl-10 shadow-none bg-white mb-6">
+    <div className="shadow-box  block pr-8.25 py-10 pl-10 bg-white mb-6">
       <div className="lg:flex block justify-start items-center gap-7.5">
         <div className="w-30 pt-29.2 rounded-full border-2 w border-primary relative shrink mb-6 lg:mb-0 ">
           <div
