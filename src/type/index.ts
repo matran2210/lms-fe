@@ -11,6 +11,12 @@ export interface IButtonProps {
   type?: 'button' | 'reset' | 'submit'
   isPaddingHorizontal?: boolean
 }
+
+export interface ITabs {
+  link: string
+  title: string
+}
+
 export type IButtonCancelSubmitProps = {
   submit: IButtonProps
   cancel: IButtonProps
