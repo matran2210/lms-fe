@@ -40,14 +40,14 @@ const Courses: React.FC<CoursesProps> = ({ courses }) => {
               {course.name}
             </Link>
           </div>
-          {course.showInfo && (
-            <div className="flex justify-between items-center">
-              <div className="name-class text-medium-sm text-gray-1">
-                Class:
-                <span className="ml-1 text-bw-1 font-medium">
-                  {course.className}
-                </span>
-              </div>
+          <div className="flex justify-between items-center">
+            <div className="name-class text-medium-sm text-gray-1">
+              Class:
+              <span className="ml-1 text-bw-1 font-medium">
+                {course.className}
+              </span>
+            </div>
+            {course.showInfo && (
               <div className="time-class text-medium-sm text-gray-1">
                 {course.time == 0 ? (
                   <span>
@@ -62,8 +62,8 @@ const Courses: React.FC<CoursesProps> = ({ courses }) => {
                   </span>
                 )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
           <div className="des mt-6 mb-8">
             <p
               className={`text-base ${

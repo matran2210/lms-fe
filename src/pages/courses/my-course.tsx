@@ -33,7 +33,7 @@ const courses = [
   {
     name: 'Financial Reporting (FR) - Lập báo cáo tài chính..',
     active: false,
-    showInfo: false,
+    showInfo: true,
     path: 'course2',
     className: 'CMA342023',
     time: 0,
@@ -61,7 +61,7 @@ const courses = [
   {
     name: '[Học thử] CFA online 2023 - Chương trình bổ trợ...',
     active: false,
-    showInfo: true,
+    showInfo: false,
     path: 'course4',
     className: 'CMA342023',
     time: 0,
