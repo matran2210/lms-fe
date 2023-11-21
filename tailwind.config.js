@@ -119,6 +119,7 @@ module.exports = {
         md: '448px',
         lg: '512px',
         xl: '576px',
+        xxl: '1144px',
         '8xl': '1920px',
       },
       lineHeight: {
