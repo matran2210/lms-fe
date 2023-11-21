@@ -57,10 +57,10 @@ const HookFormRadioGroup = ({
                 justify === 'between'
                   ? 'justify-between'
                   : justify == 'center'
-                  ? 'justify-center'
-                  : justify === 'start'
-                  ? 'justify-start'
-                  : 'justify-end'
+                    ? 'justify-center'
+                    : justify === 'start'
+                      ? 'justify-start'
+                      : 'justify-end'
               }`
             }
           >
