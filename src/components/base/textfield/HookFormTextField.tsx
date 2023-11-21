@@ -44,7 +44,7 @@ const HookFormTextField = ({
       control={control}
       defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => (
-        <>
+        <div className="w-full">
           {!skeleton ? (
             <div>
               <SAPPTextFiled
@@ -77,7 +77,7 @@ const HookFormTextField = ({
           ) : (
             <div className="flex items-center">Loading...</div>
           )}
-        </>
+        </div>
       )}
     />
   )

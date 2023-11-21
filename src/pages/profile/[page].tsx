@@ -21,7 +21,7 @@ const ProfilePage = ({ page }: IProps) => {
 
   return (
     <div className="container">
-      <div className="max-w-[69.625rem] my-0 mx-auto">
+      <div className="max-w-[71.5rem] my-0 mx-auto">
         <ProfileHeader></ProfileHeader>
         <div className="flex sm:flex-row flex-col justify-between gap-6">
           <ProfileSideBar page={page}></ProfileSideBar>

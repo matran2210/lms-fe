@@ -64,12 +64,18 @@ const MyProfile = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="text-xl font-bold mb-12 text-bw-1">My Profile</div>
+      <form onSubmit={handleSubmit(onSubmit)} className="block min-h-[40.3rem]">
+        <div className="text-xl font-bold mb-12 text-bw-1">
+          {`${isEdit ? 'Edit' : 'My'}`} Profile
+        </div>
         <ul>
           {/* start:: Code*/}
-          <li className="md:flex block gap-6 pb-2.5">
-            <div className="text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%]">
+          <li
+            className={`md:flex block gap-[1.4rem] ${
+              !isEdit ? 'mb-2.5' : 'mb-[1.6rem]'
+            } `}
+          >
+            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
               Code
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
@@ -81,9 +87,13 @@ const MyProfile = () => {
           {/* end:: Code*/}
 
           {/* start:: Full Name*/}
-          <li className={`md:flex block gap-6 ${isEdit ? '' : 'py-2.5'}`}>
+          <li
+            className={`md:flex block  ${
+              !isEdit ? 'py-2.5 gap-[1.4rem]' : 'pb-[1.2rem] gap-y-6 gap-2 '
+            }`}
+          >
             <div
-              className={`text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%] ${
+              className={`text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%] ${
                 isEdit ? 'py-2.5' : ''
               }`}
             >
@@ -95,6 +105,7 @@ const MyProfile = () => {
                 control={control}
                 name="full_name"
                 skeleton={loadingEditName}
+                className="w-full flex-1"
               ></HookFormTextField>
             ) : (
               <div className="flex-auto max-w-[300px] font-medium text-bw-1">
@@ -104,11 +115,14 @@ const MyProfile = () => {
               </div>
             )}
           </li>
-          {/* end:: Full Name*/}
 
           {/* start:: Username*/}
-          <li className="md:flex block gap-6 py-2.5">
-            <div className="text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%]">
+          <li
+            className={`md:flex block gap-[1.4rem] ${
+              !isEdit ? 'py-2.5' : 'pb-8'
+            }`}
+          >
+            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
               Username
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
@@ -120,8 +134,12 @@ const MyProfile = () => {
           {/* end:: Username*/}
 
           {/* start:: Email*/}
-          <li className="md:flex block gap-6 py-2.5">
-            <div className="text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%]">
+          <li
+            className={`md:flex block gap-[1.4rem] ${
+              !isEdit ? 'py-2.5' : 'pb-[2rem]'
+            }`}
+          >
+            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
               Email
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
@@ -133,8 +151,12 @@ const MyProfile = () => {
           {/* end:: Email*/}
 
           {/* start:: Phone Number*/}
-          <li className="md:flex block gap-6 py-2.5">
-            <div className="text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%]">
+          <li
+            className={`md:flex block gap-[1.4rem] ${
+              !isEdit ? 'py-2.5' : 'pb-[2rem]'
+            }`}
+          >
+            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
               Phone Number
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
@@ -146,8 +168,12 @@ const MyProfile = () => {
           {/* end:: Phone Number*/}
 
           {/* start:: Role*/}
-          <li className="md:flex block gap-6 py-2.5">
-            <div className="text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%]">
+          <li
+            className={`md:flex block gap-[1.4rem] ${
+              !isEdit ? 'py-2.5' : 'pb-[1.8rem]'
+            }`}
+          >
+            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
               Role
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
@@ -159,8 +185,12 @@ const MyProfile = () => {
           {/* end:: Role*/}
 
           {/* start:: Status*/}
-          <li className="md:flex block gap-6 py-2.5">
-            <div className="text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%]">
+          <li
+            className={`md:flex block gap-[1.4rem] ${
+              !isEdit ? 'py-2.5' : 'pb-[1.8rem]'
+            }`}
+          >
+            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
               Status
             </div>
             <div className={`flex-auto max-w-[300px] font-medium`}>
@@ -176,19 +206,21 @@ const MyProfile = () => {
           {/* end:: Status*/}
 
           {/* start:: Updated At*/}
-          <li className="md:flex block gap-6 py-2.5">
-            <div className="text-gray-1 flex-none w-[300px] max-w-[200px] lg:max-w-[50%]">
-              Updated At
-            </div>
-            <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-              <TextSkeleton loading={loading && !isEdit} height="4">
-                {formatDate(user.updated_at)}
-              </TextSkeleton>
-            </div>
-          </li>
+          {!isEdit && (
+            <li className={`md:flex block gap-[1.4rem] py-2.5`}>
+              <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
+                Updated At
+              </div>
+              <div className="flex-auto max-w-[300px] font-medium text-bw-1">
+                <TextSkeleton loading={loading && !isEdit} height="4">
+                  {formatDate(user.updated_at)}
+                </TextSkeleton>
+              </div>
+            </li>
+          )}
           {/* end:: Updated At*/}
         </ul>
-        <div className="mt-10">
+        <div className={`${isEdit ? ' mt-[0.9rem]' : ' mt-[1.9rem]'}`}>
           {!isEdit ? (
             <ButtonPrimary
               onClick={handleChangeToEditForm}
@@ -210,7 +242,7 @@ const MyProfile = () => {
                 title: 'Save',
                 // onClick: () => setIsEdit(false),
                 size: 'medium',
-                className: 'min-w-fit px-0 text-sm',
+                className: 'min-w-fit px-0 text-sm w-30',
                 type: 'submit',
                 loading: loading || loadingEditName,
               }}

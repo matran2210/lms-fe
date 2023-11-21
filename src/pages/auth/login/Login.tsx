@@ -81,13 +81,13 @@ const LoginPage = () => {
           control={control}
           placeholder="Username or Email"
           type="text"
-          className="mb-6"
         />
         <HookFormTextField
           name="password"
           control={control}
           placeholder="Password"
           type="password"
+          className="mt-6"
         />
         <div className="mt-10">
           <ButtonPrimary
