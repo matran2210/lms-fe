@@ -31,7 +31,7 @@ let refreshSubscribers: any[] = []
 const refreshAccessToken = async (): Promise<string | null> => {
   try {
     const refreshToken = await AsyncStorage.getItem('refreshToken')
-    const response = await axios.post(`${apiURL}/rotate`)
+    const response = await axios.post(`${apiURL}/auth/rotate`)
     // Save the new access token to the AsyncStorage
     await AsyncStorage.setItem(
       'accessToken',

@@ -6,7 +6,7 @@ interface IProps {
 }
 const ProfileContent = ({ page }: IProps) => {
   return (
-    <div className="bg-white p-6 flex-1">
+    <div className="bg-white p-6 flex-1 shadow-box">
       {page === 'my_profile' && <MyProfile></MyProfile>}
     </div>
   )
