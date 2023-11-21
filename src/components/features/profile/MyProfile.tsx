@@ -71,8 +71,8 @@ const MyProfile = () => {
         <ul>
           {/* start:: Code*/}
           <li
-            className={`md:flex block gap-[1.4rem] ${
-              !isEdit ? 'mb-2.5' : 'mb-[1.6rem]'
+            className={`md:flex block gap-[1.4rem] transition-[margin] ${
+              !isEdit ? 'mb-[1.2rem]' : 'mb-[1.6rem]'
             } `}
           >
             <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
@@ -88,8 +88,10 @@ const MyProfile = () => {
 
           {/* start:: Full Name*/}
           <li
-            className={`md:flex block  ${
-              !isEdit ? 'py-2.5 gap-[1.4rem]' : 'pb-[1.2rem] gap-y-6 gap-2 '
+            className={`md:flex block transition-[margin] ${
+              !isEdit
+                ? 'mb-[1.2rem] gap-[1.4rem]'
+                : 'mb-[1.2rem] gap-y-6 gap-2 '
             }`}
           >
             <div
@@ -118,8 +120,8 @@ const MyProfile = () => {
 
           {/* start:: Username*/}
           <li
-            className={`md:flex block gap-[1.4rem] ${
-              !isEdit ? 'py-2.5' : 'pb-8'
+            className={`md:flex block gap-[1.4rem] transition-[margin] ${
+              !isEdit ? 'mb-[1.2rem]' : 'mb-8'
             }`}
           >
             <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
@@ -135,8 +137,8 @@ const MyProfile = () => {
 
           {/* start:: Email*/}
           <li
-            className={`md:flex block gap-[1.4rem] ${
-              !isEdit ? 'py-2.5' : 'pb-[2rem]'
+            className={`md:flex block gap-[1.4rem] transition-[margin] ${
+              !isEdit ? 'mb-[1.3rem]' : 'mb-[2rem]'
             }`}
           >
             <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
@@ -152,8 +154,8 @@ const MyProfile = () => {
 
           {/* start:: Phone Number*/}
           <li
-            className={`md:flex block gap-[1.4rem] ${
-              !isEdit ? 'py-2.5' : 'pb-[2rem]'
+            className={`md:flex block gap-[1.4rem] transition-[margin] ${
+              !isEdit ? 'mb-[1.3rem]' : 'mb-[2rem]'
             }`}
           >
             <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
@@ -170,7 +172,7 @@ const MyProfile = () => {
           {/* start:: Role*/}
           <li
             className={`md:flex block gap-[1.4rem] ${
-              !isEdit ? 'py-2.5' : 'pb-[1.8rem]'
+              !isEdit ? 'mb-[1.3rem]' : 'mb-[1.8rem] transition-[margin]'
             }`}
           >
             <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
@@ -187,7 +189,7 @@ const MyProfile = () => {
           {/* start:: Status*/}
           <li
             className={`md:flex block gap-[1.4rem] ${
-              !isEdit ? 'py-2.5' : 'pb-[1.8rem]'
+              !isEdit ? 'mb-[1.2rem]' : ''
             }`}
           >
             <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
@@ -207,7 +209,7 @@ const MyProfile = () => {
 
           {/* start:: Updated At*/}
           {!isEdit && (
-            <li className={`md:flex block gap-[1.4rem] py-2.5`}>
+            <li className={`md:flex block gap-[1.4rem]`}>
               <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
                 Updated At
               </div>
@@ -220,7 +222,7 @@ const MyProfile = () => {
           )}
           {/* end:: Updated At*/}
         </ul>
-        <div className={`${isEdit ? ' mt-[0.9rem]' : ' mt-[1.9rem]'}`}>
+        <div className={`${isEdit ? 'mt-11' : 'mt-10'}`}>
           {!isEdit ? (
             <ButtonPrimary
               onClick={handleChangeToEditForm}
