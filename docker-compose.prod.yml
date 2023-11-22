@@ -2,7 +2,7 @@ version: '3'
 
 services:
   next-app:
-    container_name: lms-app
+    container_name: lms-fe-app
     build:
       context: ./
       dockerfile: prod.Dockerfile
