@@ -6,6 +6,25 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
+const securityHeaders = [
+  {
+    key: 'X-DNS-Prefetch-Control',
+    value: 'on',
+  },
+  {
+    key: 'X-XSS-Protection',
+    value: '1; mode=block',
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN',
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+]
+
 module.exports = withBundleAnalyzer({
   i18n,
   reactStrictMode: true,
@@ -15,17 +34,31 @@ module.exports = withBundleAnalyzer({
   },
   output: 'standalone',
   publicRuntimeConfig: {
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-    token: process.env.NEXT_PUBLIC_TOKEN,
-    nextAuthUrl: process.env.NEXTAUTH_URL,
-    hostURL: process.env.NEXT_PUBLIC_HOST_URL,
-    GA_TRACK_ID: process.env.NEXT_PUBLIC_GA_TRACK_ID,
-    s3URL: process.env.NEXT_PUBLIC_S3_URL,
     apiURL: process.env.REACT_APP_API_PUBLIC,
   },
   images: {
     minimumCacheTTL: 43200,
     domains: ['d3s1adm34w18qs.cloudfront.net'],
+  },
+  compiler: {
+    removeConsole: {
+      exclude: ['error'],
+    },
+  },
+  swcMinify: true,
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ]
+  },
+  poweredByHeader: false,
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
   },
   experimental: { optimizeCss: true, forceSwcTransforms: true },
 })

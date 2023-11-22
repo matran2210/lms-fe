@@ -17,8 +17,8 @@ COPY next-sitemap.config.js .
 COPY tsconfig.json .
 COPY next-seo.config.js .
 COPY .env .
-# COPY postcss.config.js .
-# COPY tailwind.config.js .
+COPY postcss.config.js .
+COPY tailwind.config.js .
 
 # Environment variables must be present at build time
 # https://github.com/vercel/next.js/discussions/14030
@@ -31,7 +31,7 @@ COPY .env .
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN yarn build
-RUN yarn postbuild
+# RUN yarn postbuild
 
 # Step 2. Production image, copy all the files and run next
 FROM node:14-alpine AS runner
@@ -58,24 +58,14 @@ COPY --from=builder /app/.env .
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder /app/public/assets/css ./.next/assets/css
+# COPY --from=builder /app/public/assets/css ./.next/assets/css
 
 # Environment variables must be redefined at run time
 ARG PORT
 ENV PORT=${PORT}
 
-ARG NEXTAUTH_URL
-ENV NEXTAUTH_URL=${NEXTAUTH_URL}
-
-ARG NEXT_PUBLIC_BASE_URL
-ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
-
-ARG NEXT_PUBLIC_TOKEN
-ENV NEXT_PUBLIC_TOKEN=${NEXT_PUBLIC_TOKEN}
-
-# ARG NEXTAUTH_SECRET
-# ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-
+ARG REACT_APP_API_PUBLIC
+ENV REACT_APP_API_PUBLIC=${REACT_APP_API_PUBLIC}
 # Uncomment the following line to disable telemetry at run time
 # ENV NEXT_TELEMETRY_DISABLED 1
 
