@@ -47,5 +47,5 @@ export const RouteGuard = ({ children }: IProps) => {
     }
   }
 
-  return authorized && children
+  return authorized ? children : <></>
 }
