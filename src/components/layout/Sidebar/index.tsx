@@ -1,6 +1,10 @@
 import { MENU_ITEMS, MENU_BOTTOM } from '../../../constants/menu-items'
 import MenuItemsList from '../MenuItemsList'
 import ExpandIcon from '../ExpandIcon'
+import { useEffect } from 'react'
+import { useAppDispatch } from 'src/redux/hook'
+import { getMe } from 'src/redux/slice/User/User'
+import MenuItem from '../MenuItem'
 
 type SidebarProps = {
   isOpened: boolean
@@ -15,6 +19,10 @@ export default function Sidebar({
   toggleDrawer,
   mode,
 }: SidebarProps) {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(getMe())
+  }, [])
   return (
     <>
       <div className={`${className} ${isOpened ? 'left-0' : '-left-full'}`}>

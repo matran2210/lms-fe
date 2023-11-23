@@ -1,9 +1,13 @@
+import blankAvatar from '@assets/images/blank_avatar.webp'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { MenuItem as MenuItemType } from '../../../constants/menu-items'
-import MenuItemsList from '../MenuItemsList'
-import ExpandIcon from '../ExpandIcon'
 import { useState } from 'react'
+import { useAppSelector } from 'src/redux/hook'
+import { userReducer } from 'src/redux/slice/User/User'
+import { MenuItem as MenuItemType } from '../../../constants/menu-items'
+import ExpandIcon from '../ExpandIcon'
+import MenuItemsList from '../MenuItemsList'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -15,7 +19,7 @@ export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
 }: MenuItemProps) {
   const [isExpanded, toggleExpanded] = useState(false)
-
+  const { user } = useAppSelector(userReducer)
   const router = useRouter()
   const selected = router.asPath === url
   const isNested = subItems && subItems?.length > 0
@@ -33,17 +37,29 @@ export default function MenuItem({
           mode === 'student' ? 'mb-4 last:mb-0' : 'mb-7 last:mb-0'
         }`}
       >
-        <div className="sidebar-item cursor-pointer flex items-center justify-center group">
+        <div className="sidebar-item flex items-center justify-center group">
           <Link href={url} passHref>
             <div className="flex items-center">
-              <ExpandIcon
-                type={Icon}
-                className={`before-icon min-w-6 min-h-6 ${
-                  type == 'level-1' ? '' : 'mr-4'
-                } text-gray-2 ${
-                  selected ? 'text-primary' : ''
-                } group-hover:text-primary`}
-              />
+              {Icon === 'avatar' ? (
+                <div className="w-10 h-10">
+                  <Image
+                    src={user.detail.avatar['40x40'] || blankAvatar}
+                    alt="avatar"
+                    className="rounded-full"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+              ) : (
+                <ExpandIcon
+                  type={Icon}
+                  className={`before-icon min-w-6 min-h-6 ${
+                    type == 'level-1' ? '' : 'mr-4'
+                  } text-gray-2 ${
+                    selected ? 'text-primary' : ''
+                  } group-hover:text-primary`}
+                />
+              )}
               <span
                 className={`label hidden ${
                   selected ? 'text-primary' : ''

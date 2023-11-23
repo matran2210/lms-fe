@@ -3,7 +3,7 @@ import ProfileHeader from '@components/features/profile/ProfileHeader'
 import ProfileSideBar from '@components/features/profile/ProfileSideBar'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { GetServerSideProps } from 'next'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
 import { getMe } from 'src/redux/slice/User/User'
 import { IProfilePages } from 'src/type/Profile'
@@ -13,19 +13,24 @@ interface IProps {
 }
 
 const ProfilePage = ({ page }: IProps) => {
+  const [isEdit, setIsEdit] = useState<boolean>(false)
+  const [avatar, setAvatar] = useState<File>()
   const dispatch = useAppDispatch()
-
   useEffect(() => {
     dispatch(getMe())
   }, [])
-
   return (
     <div className="container">
       <div className="max-w-[71.5rem] my-0 mx-auto">
-        <ProfileHeader></ProfileHeader>
+        <ProfileHeader setAvatar={setAvatar} isEdit={isEdit}></ProfileHeader>
         <div className="flex sm:flex-row flex-col justify-between gap-6">
           <ProfileSideBar page={page}></ProfileSideBar>
-          <ProfileContent page={page}></ProfileContent>
+          <ProfileContent
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            page={'my_profile'}
+            avatar={avatar}
+          ></ProfileContent>
         </div>
       </div>
     </div>

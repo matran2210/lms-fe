@@ -69,6 +69,7 @@ interface IUserDetail {
 export interface UserState {
   loading: boolean
   loadingEditName: boolean
+  loadingEditAvatar: boolean
   errors: object
   user: IUser
 }
