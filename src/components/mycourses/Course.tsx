@@ -57,7 +57,7 @@ const Courses: React.FC<CoursesProps> = ({ courses }) => {
                   <span>
                     <span className="font-semibold text-bw-1">
                       {course.time}
-                    </span>{' '}
+                    </span>
                     days left
                   </span>
                 )}
