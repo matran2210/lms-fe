@@ -8,6 +8,7 @@ import { IUserStatus, IUserType, UserState } from 'src/redux/types/User/urser'
 const initialState: UserState = {
   loading: false,
   loadingEditName: false,
+  loadingEditAvatar: false,
   errors: {},
   user: {
     id: '',
@@ -106,6 +107,26 @@ export const updateUserName = createAsyncThunk(
   },
 )
 
+export const updateUserAvatar = createAsyncThunk(
+  'userReducer/updateUserAvatar',
+  async (avatar: File, thunkAPI) => {
+    try {
+      const res = await UserApi.updateUserAvatar(avatar)
+      if (!res) {
+        return
+      }
+      if (res?.data?.message) {
+        toast.success(res.data.message)
+      }
+
+      return { avatar }
+    } catch (error: any) {
+      toast.error(error.message)
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 export const userSlice = createSlice({
   name: 'userReducer',
   initialState,
@@ -135,6 +156,15 @@ export const userSlice = createSlice({
     })
     builder.addCase(updateUserName.rejected, (state, action) => {
       state.loadingEditName = false
+    })
+    builder.addCase(updateUserAvatar.pending, (state) => {
+      state.loadingEditAvatar = true
+    })
+    builder.addCase(updateUserAvatar.fulfilled, (state, action) => {
+      state.loadingEditAvatar = false
+    })
+    builder.addCase(updateUserAvatar.rejected, (state, action) => {
+      state.loadingEditAvatar = false
     })
   },
 })

@@ -10,11 +10,21 @@ import {
   VALIDATE_MIN,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { getMe, updateUserName, userReducer } from 'src/redux/slice/User/User'
+import {
+  getMe,
+  updateUserAvatar,
+  updateUserName,
+  userReducer,
+} from 'src/redux/slice/User/User'
 import { z } from 'zod'
+
+interface IProps {
+  isEdit: boolean
+  setIsEdit: (edit: boolean) => void
+  avatar: File | undefined
+}
 
 const schema = z.object({
   full_name: z
@@ -23,10 +33,13 @@ const schema = z.object({
     .max(100, { message: VALIDATE_MAX('Fullname', 100) }),
 })
 
-const MyProfile = () => {
-  const [isEdit, setIsEdit] = useState<boolean>(false)
+const MyProfile = ({ isEdit, setIsEdit, avatar }: IProps) => {
   const dispatch = useAppDispatch()
-  const { user, loading, loadingEditName } = useAppSelector(userReducer)
+  const {
+    user,
+    loading,
+    loadingEditName: loadingEditName,
+  } = useAppSelector(userReducer)
   const { control, setValue, handleSubmit, reset } = useForm<{
     full_name: string
   }>({
@@ -54,12 +67,13 @@ const MyProfile = () => {
     )
   }
 
-  const onSubmit = ({ full_name }: { full_name: string }) => {
-    dispatch(updateUserName(full_name))
-      .unwrap()
-      .then(() => {
-        setIsEdit(false)
-      })
+  const onSubmit = async ({ full_name }: { full_name: string }) => {
+    await dispatch(updateUserName(full_name)).unwrap()
+    if (avatar) {
+      await dispatch(updateUserAvatar(avatar)).unwrap()
+      dispatch(getMe())
+    }
+    setIsEdit(false)
   }
 
   return (

@@ -22,6 +22,16 @@ const UserApi = {
       request: { full_name },
     })
   },
+
+  updateUserAvatar: (avatar: File) => {
+    const uri = url.userAvatar
+    const formData = new FormData()
+    formData.append('avatar', avatar)
+    return httpService.POST_FORM_DATA<any, any>({
+      uri,
+      request: formData,
+    })
+  },
 }
 
 export default UserApi

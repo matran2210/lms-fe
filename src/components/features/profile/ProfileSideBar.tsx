@@ -20,7 +20,7 @@ const ProfileSideBar = ({ page }: IProps) => {
 
   return (
     <div className="md:w-[22.8rem] w-100 shadow-box">
-      <ul className="px-3 py-4 cursor-pointer bg-white h-full">
+      <ul className="px-3 py-4 bg-white h-full">
         {Object.entries(PROFILE_PAGES).map(([key, value]) => {
           const urlPage = key.toLowerCase()
           const isActive = page === urlPage
@@ -30,9 +30,9 @@ const ProfileSideBar = ({ page }: IProps) => {
             className = 'bg-secondary font-bold text-primary'
           }
           return (
-            <li className={className} key={key}>
+            <li className={`${className} cursor-pointer relative`} key={key}>
               <Link href={`/profile/${urlPage}/`} passHref scroll={false}>
-                <button className="p-5 block w-full text-left">
+                <button className="p-5 block w-full text-left ">
                   {value.label}
                 </button>
               </Link>

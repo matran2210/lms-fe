@@ -38,7 +38,7 @@ module.exports = withBundleAnalyzer({
   },
   images: {
     minimumCacheTTL: 43200,
-    domains: ['d3s1adm34w18qs.cloudfront.net'],
+    domains: ['d3s1adm34w18qs.cloudfront.net', 'cdn-dev.sapp.edu.vn'],
   },
   compiler: {
     removeConsole: {
