@@ -5,7 +5,6 @@ import {
   setRefreshToken,
 } from '@utils/helpers/authen'
 import { toast } from 'react-hot-toast'
-import loginApi from '../../services/Authen'
 import { RootState } from '../../store'
 
 import {
@@ -14,6 +13,7 @@ import {
   LoginReq,
   LoginState,
 } from '../../types/Login/login'
+import AuthApi from '../../services/Authen'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -30,7 +30,23 @@ export const getLoginUser = createAsyncThunk(
   'loginReducer/handleLogin',
   async (body: LoginReq, thunkAPI) => {
     try {
-      const res = await loginApi.login(body)
+      const res = await AuthApi.login(body)
+      if (!res.success) {
+        toast.error(res.error.message)
+        return
+      }
+      return { ...res }
+    } catch (error: any) {
+      toast.error(error.message)
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+export const getLogoutUser = createAsyncThunk(
+  'loginReducer/handleLogout',
+  async ({}, thunkAPI) => {
+    try {
+      const res = await AuthApi.logout()
       if (!res.success) {
         toast.error(res.error.message)
         return
@@ -47,7 +63,7 @@ export const changePassword = createAsyncThunk(
   'loginReducer/changePassword',
   async (body: ChangePasswordReq, thunkAPI) => {
     try {
-      const res: ChangePasswordRes = await loginApi.changePassword(body)
+      const res: ChangePasswordRes = await AuthApi.changePassword(body)
       return { ...res }
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
@@ -64,10 +80,6 @@ export const loginSlice = createSlice({
       state.loading = false
     },
     resetAuthUserState: (state: LoginState, action) => {},
-    logout: (state: LoginState) => {
-      state = { ...initialState }
-      removeJwtToken()
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(getLoginUser.pending, (state) => {
@@ -90,6 +102,20 @@ export const loginSlice = createSlice({
       state.loading = false
       state.accessToken = ''
     })
+
+    builder.addCase(getLogoutUser.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(getLogoutUser.fulfilled, (state, action) => {
+      state.loading = false
+      state = { ...initialState }
+      removeJwtToken()
+    })
+    builder.addCase(getLogoutUser.rejected, (state, action) => {
+      state.loading = false
+      state.accessToken = ''
+    })
+
     builder.addCase(changePassword.pending, (state) => {
       state.loading = true
     })
@@ -106,9 +132,6 @@ export const loginSlice = createSlice({
     })
   },
 })
-
-export const { logout } = loginSlice.actions
-
 // export const selectAuthUser = (state: RootState) => state.loginReducer.authUser;
 export const loginReducer = (state: RootState) => state.loginReducer
 

@@ -1,8 +1,9 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { logout } from '../slice/Login/Login'
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import getConfig from 'next/config'
 import { PageLink } from 'src/constants'
+import { getLogoutUser } from '../slice/Login/Login'
+
 const { publicRuntimeConfig } = getConfig()
 const { apiURL } = publicRuntimeConfig
 
@@ -57,7 +58,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
     // Return the new access token
     return response.data.object.tokens.access.token
   } catch (error) {
-    store.dispatch(logout())
+    store.dispatch(getLogoutUser())
     window.location.href = PageLink.AUTH_LOGIN
     // If there is an error, return null
     return null
@@ -67,7 +68,6 @@ const refreshAccessToken = async (): Promise<string | null> => {
 const setAuthorizationHeader = async (config: any) => {
   // Get the access token from the AsyncStorage
   const accessToken = await AsyncStorage.getItem('accessToken')
-
   // If there is an access token, set the authorization header
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
@@ -121,7 +121,7 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error)
     }
     if (error.response && error.response.status === 404) {
-      store.dispatch(logout())
+      store.dispatch(getLogoutUser())
       window.location.href = PageLink.AUTH_LOGIN
     }
     // If the error is an authentication error and the refresh flag is false, set the refresh flag and refresh the access token

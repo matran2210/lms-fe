@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
-import { logout } from 'src/redux/slice/Login/Login'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
 
 import { IProfilePages } from 'src/type/Profile'
 interface IProps {
@@ -13,9 +13,11 @@ const ProfileSideBar = ({ page }: IProps) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
 
-  const handleLogout = () => {
-    dispatch(logout())
-    router.push(PageLink.AUTH_LOGIN)
+  const handleLogout = async () => {
+    try {
+      await dispatch(getLogoutUser())
+      router.push(PageLink.AUTH_LOGIN)
+    } catch (error) {}
   }
 
   return (

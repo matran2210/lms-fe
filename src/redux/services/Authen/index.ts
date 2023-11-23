@@ -19,6 +19,12 @@ const AuthApi = {
       request,
     })
   },
+  logout: (): Promise<IResponse<LoginRes>> => {
+    const uri = url.logout
+    return httpService.POST<any, any>({
+      uri,
+    })
+  },
   changePassword: (request: ChangePasswordReq) => {
     const uri = url.changePassword
     return httpService.POST<ChangePasswordReq, ChangePasswordRes>({
