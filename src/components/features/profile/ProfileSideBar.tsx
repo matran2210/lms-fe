@@ -36,6 +36,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                   {value.label}
                 </button>
               </Link>
+              <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>
             </li>
           )
         })}
