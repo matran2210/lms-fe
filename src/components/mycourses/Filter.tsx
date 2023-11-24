@@ -12,19 +12,16 @@ const Filter: React.FC = () => {
   ]
 
   return (
-    <div className="flex justify-between py-6">
-      <h2 className="text-medium-sm font-semibold text-bw-1">My Course</h2>
-      <div className="result filter flex">
-        <div className="result pr-6 border-r border-gray-1">
-          <p className="text-medium-sm font-normal text-gray-1">5 results</p>
-        </div>
-        <div className="filter pl-6">
-          <HookFormSelect
-            options={selectOptions}
-            defaultValue={{ value: 'vanilla', label: 'Vanilla' }}
-            className={'text-medium-sm font-normal text-gray-1 h-[17px]'}
-          ></HookFormSelect>
-        </div>
+    <div className="result filter flex">
+      <div className="result pr-6 border-r border-gray-1">
+        <p className="text-medium-sm font-normal text-gray-1">5 results</p>
+      </div>
+      <div className="filter pl-6">
+        <HookFormSelect
+          options={selectOptions}
+          defaultValue={{ value: 'vanilla', label: 'Vanilla' }}
+          className={'text-medium-sm font-normal text-gray-1 h-[17px]'}
+        ></HookFormSelect>
       </div>
     </div>
   )

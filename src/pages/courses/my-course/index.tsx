@@ -1,4 +1,5 @@
 import Courses from '@components/mycourses/Course'
+import CoursesList from '@components/mycourses/CoursesList'
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
@@ -25,7 +26,6 @@ const courses = [
     des: 'An introduction to supply-and-demand analysis for customers and firms. Concepts include market structures, macroeconomics, the business cycle, and monetary and fiscal policies.',
     progressText: 'Completed',
     progressIconType: 'check',
-    progress: 'Completed',
     percentage: 100,
     changeExam: 'Change exam',
     buttonText: 'Review',
@@ -108,17 +108,27 @@ const MyCourse = () => {
       <div className="header bg-white border-b border-default">
         <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
           <Tabs tabs={tabs} />
-          <SearchForm />
+          <SearchForm
+            placeholder="Enter name of course..."
+            formStyle="w-full ml-12 flex items-center"
+          />
         </div>
       </div>
       <div className="main max-w-xxl my-0 mx-auto">
-        <Filter />
+        <div className="flex justify-between py-6">
+          <h2 className="text-medium-sm font-semibold text-bw-1">My Course</h2>
+          <Filter />
+        </div>
       </div>
       <div className="heading bg-white max-w-xxl my-0 mx-auto flex">
-        <Heading />
+        <Heading
+          greeting="Welcome to"
+          title="My Course"
+          des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
+        />
       </div>
       <div className="pt-6 max-w-xxl my-0 mx-auto">
-        <Courses courses={courses} />
+        <CoursesList courses={courses} />
       </div>
     </>
   )
