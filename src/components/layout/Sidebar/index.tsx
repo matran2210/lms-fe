@@ -21,8 +21,10 @@ export default function Sidebar({
 }: SidebarProps) {
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(getMe())
-  }, [])
+    try {
+      dispatch(getMe())
+    } catch (error) {}
+  }, [dispatch])
   return (
     <>
       <div className={`${className} ${isOpened ? 'left-0' : '-left-full'}`}>

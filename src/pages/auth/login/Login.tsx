@@ -36,7 +36,6 @@ const LoginPage = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const userLogin = useAppSelector(loginReducer)
-
   // Validate for input
   const validationSchema = z.object({
     username: z
@@ -55,18 +54,18 @@ const LoginPage = () => {
   })
 
   // Call API when submit
-  const onSubmit = (data: IInputProps) => {
+  const onSubmit = async (data: IInputProps) => {
     const { username, password } = data
-    dispatch(
-      getLoginUser({
-        username,
-        password,
-      }),
-    )
-      .unwrap()
-      .then((e) => {
-        router.push('/')
-      })
+    try {
+      await dispatch(
+        getLoginUser({
+          username,
+          password,
+        }),
+      ).unwrap()
+
+      router.push('/')
+    } catch (error) {}
   }
 
   return (
@@ -75,7 +74,7 @@ const LoginPage = () => {
       <div className="medium-sm text-gray-1 mb-10">
         Login to Continue Learning
       </div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <HookFormTextField
           name="username"
           control={control}
@@ -95,8 +94,8 @@ const LoginPage = () => {
             full={true}
             className="mb-6"
             size="lager"
-            onClick={handleSubmit(onSubmit)}
             loading={userLogin.loading}
+            type="submit"
           />
         </div>
         <div className="flex justify-between mb-15">

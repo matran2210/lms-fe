@@ -1,6 +1,6 @@
 export interface IButtonProps {
   title: string
-  onClick?: () => void
+  onClick?: (e: any) => void
   className?: string
   link?: string
   disabled?: boolean

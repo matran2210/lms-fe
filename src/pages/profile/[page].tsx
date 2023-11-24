@@ -17,7 +17,9 @@ const ProfilePage = ({ page }: IProps) => {
   const [avatar, setAvatar] = useState<File>()
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(getMe())
+    try {
+      dispatch(getMe())
+    } catch (error) {}
   }, [])
   return (
     <div className="container">

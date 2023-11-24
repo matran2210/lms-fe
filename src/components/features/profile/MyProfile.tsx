@@ -68,12 +68,14 @@ const MyProfile = ({ isEdit, setIsEdit, avatar }: IProps) => {
   }
 
   const onSubmit = async ({ full_name }: { full_name: string }) => {
-    await dispatch(updateUserName(full_name)).unwrap()
-    if (avatar) {
-      await dispatch(updateUserAvatar(avatar)).unwrap()
-      dispatch(getMe())
-    }
-    setIsEdit(false)
+    try {
+      await dispatch(updateUserName(full_name)).unwrap()
+      if (avatar) {
+        await dispatch(updateUserAvatar(avatar)).unwrap()
+        dispatch(getMe())
+      }
+      setIsEdit(false)
+    } catch (error) {}
   }
 
   return (
