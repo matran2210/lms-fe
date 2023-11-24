@@ -1,0 +1,54 @@
+import { LAYOUT } from '@utils/constants'
+import React from 'react'
+import ButtonPrimary from 'src/components/base/button/ButtonPrimary'
+import { PageLink } from 'src/constants'
+import SAPP_PasswordSuccess from '@assets/images/sapp_password_success.svg'
+import Image from 'next/image'
+
+const ChangePasswordSuccess = () => {
+  return (
+    <div className="d-flex flex-column flex-root sapp-height-layout--login justify-content-center">
+      <div className="d-flex flex-column  flex-lg-row justify-content-center">
+        <div className="d-flex flex-lg-row-auto justify-content-center justify-content-lg-end">
+          <div className="bg-body d-flex flex-column align-items-stretch flex-center">
+            <div className="d-flex flex-center flex-column  px-lg-10">
+              {/* Start Form Login */}
+              <div className="form w-100">
+                <div className="swal2-icon swal2-success swal2-icon-show d-flex mb-6 text-center">
+                  <Image
+                    src={SAPP_PasswordSuccess}
+                    alt="SAPP Logo"
+                    width={164}
+                    height={164}
+                  />
+                </div>
+                <div className="text-center mb-16">
+                  <h1 className="text-bw-1 fw-bolder font-bold mb-4 text-4xl">
+                    Successfully
+                  </h1>
+                  <div className="text-gray-1 text-medium-sm font-normal not-italic">
+                    Your password has been reset successfully
+                  </div>
+                </div>
+
+                {/* Start Button Login */}
+                <div className="d-grid">
+                  <ButtonPrimary
+                    className="w-full h-12.5 flex items-center justify-center bg-primary"
+                    title="Login"
+                    link={PageLink.AUTH_LOGIN}
+                  />
+                </div>
+                {/* End Button Login */}
+              </div>
+              {/* End Form Login */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default ChangePasswordSuccess
+ChangePasswordSuccess.layout = LAYOUT.SINGLE_DIALOG_LAYOUT

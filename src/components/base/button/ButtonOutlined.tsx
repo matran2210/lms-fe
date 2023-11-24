@@ -20,7 +20,7 @@ const ButtonOutlined = ({
   let paddingHorizontalClass =
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-semibold bg-white border border-bw-1 border-solid cursor-pointer`
+  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-semibold bg-white border border-bw-1 border-solid cursor-pointer hover:border-gray-1 hover:text-gray-1`
 
   if (link)
     return (

@@ -1,5 +1,6 @@
 import React from 'react'
 import { IButtonProps } from 'src/type'
+import SpinIcon from './SpinIcon'
 
 const ButtonPrimary = ({
   title,
@@ -8,6 +9,9 @@ const ButtonPrimary = ({
   link,
   size = 'small',
   full = false,
+  disabled = false,
+  loading = false,
+  type,
 }: IButtonProps) => {
   let textSizeClass =
     size === 'small'
@@ -19,20 +23,34 @@ const ButtonPrimary = ({
     size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
   let paddingHorizontalClass =
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
-  let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-white ${textSizeClass} font-semibold bg-primary hover:bg-white hover:text-primary cursor-pointer`
+  let fullWidthClass = full ? 'block w-full' : 'inline-block'
+  let disabledClass = disabled
+    ? 'cursor-not-allowed opacity-60 bg-primary-2'
+    : 'cursor-pointer'
+  let componentClass = `${className} text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-primary hover:bg-primary-2`
 
   if (link)
     return (
-      <a href={link} className={componentClass}>
+      <a href={link} className={componentClass} aria-disabled={disabled}>
         {title}
       </a>
     )
 
   return (
-    <div className={componentClass} role="button" onClick={onClick}>
-      <span className="">{title}</span>
-    </div>
+    <button
+      className={componentClass}
+      type={type ?? 'button'}
+      onClick={onClick}
+      disabled={disabled || loading}
+    >
+      {!loading ? (
+        title
+      ) : (
+        <>
+          <SpinIcon /> Loading...
+        </>
+      )}
+    </button>
   )
 }
 

@@ -31,7 +31,7 @@ const Pagination = ({
 
   useEffect(() => {
     setPageNums(getPaginationItems(currentPage, pageSize, maxLength))
-  }, [pageSize])
+  }, [pageSize, currentPage, maxLength])
 
   return (
     <ul

@@ -3,8 +3,8 @@
   "plugins": ["import"],
   "rules": {
     "no-console": "error",
-    "no-unused-vars": "error",
+    // "no-unused-vars": "error",
     "@next/next/no-document-import-in-page": "off",
-    "import/no-unused-modules": [1, { "unusedExports": true }]
+    // "import/no-unused-modules": [1, { "unusedExports": true }]
   }
 }

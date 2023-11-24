@@ -14,6 +14,10 @@ interface IProps {
   disabled?: boolean
   label?: string
   labelClass?: string
+  onChangeType?: () => void
+  passwordVisible?: boolean
+  showIconPassword?: boolean
+  guideline?: Array<string> | undefined
   skeleton?: boolean
   required?: boolean
   maxLength?: number
@@ -40,9 +44,9 @@ const HookFormTextField = ({
       control={control}
       defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => (
-        <>
+        <div className="w-full">
           {!skeleton ? (
-            <>
+            <div>
               <SAPPTextFiled
                 type={type}
                 value={field.value ?? ''}
@@ -69,11 +73,11 @@ const HookFormTextField = ({
                   <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
                 </>
               </div>
-            </>
+            </div>
           ) : (
-            <div>Loading...</div>
+            <div className="flex items-center">Loading...</div>
           )}
-        </>
+        </div>
       )}
     />
   )

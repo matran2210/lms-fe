@@ -23,9 +23,9 @@ const ArrowIcon = ({ className = '', iconType, right }: Props) => {
           <path
             d="M14.5301 6.08L8.6001 12L14.5301 17.92"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       )}
@@ -41,7 +41,7 @@ const ArrowIcon = ({ className = '', iconType, right }: Props) => {
           <path
             d="M7.06508 22.4001L0.998413 12.0001L7.06508 1.6001"
             stroke="currentColor"
-            stroke-linecap="square"
+            strokeLinecap="square"
           />
         </svg>
       )}

@@ -4,18 +4,26 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  LAYOUT,
-  VALIDATE_FILED_MIN_LENGTH,
-  VALIDATION_FILED,
-} from '@utils/constants'
+import { LAYOUT } from '@utils/constants'
 import Image from 'next/image'
 // import { useState } from 'react'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useAppDispatch, useAppSelector } from '../../../redux/hook'
+import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
+import { useRouter } from 'next/router'
+import { PageLink } from 'src/constants'
+import {
+  VALIDATE_MIN,
+  VALIDATE_MIN_LENGTH,
+  VALIDATE_PASSWORD_REGEX_MSG,
+  VALIDATE_REQUIRED,
+} from '@utils/helpers/ValidateMessage'
+import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 
 interface IInputProps {
-  authentication_info: string
+  username: string
   password: string
 }
 
@@ -25,14 +33,18 @@ const SocialLogos = [
 ]
 
 const LoginPage = () => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const userLogin = useAppSelector(loginReducer)
   // Validate for input
   const validationSchema = z.object({
-    authentication_info: z
-      .string({ required_error: VALIDATION_FILED })
-      .min(5, { message: VALIDATE_FILED_MIN_LENGTH('Username or Email', 5) }),
+    username: z
+      .string({ required_error: VALIDATE_REQUIRED })
+      .min(5, { message: VALIDATE_MIN_LENGTH('Username or Email', 5) }),
     password: z
-      .string({ required_error: VALIDATION_FILED })
-      .min(8, { message: VALIDATE_FILED_MIN_LENGTH('Password', 8) }),
+      .string({ required_error: VALIDATE_REQUIRED })
+      .min(8, { message: VALIDATE_MIN_LENGTH('Password', 8) })
+      .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
   })
 
   // Using validate for input
@@ -42,37 +54,50 @@ const LoginPage = () => {
   })
 
   // Call API when submit
-  const onSubmit = (data: IInputProps) => {
-    return data
-  }
+  const onSubmit = async (data: IInputProps) => {
+    const { username, password } = data
+    try {
+      await dispatch(
+        getLoginUser({
+          username,
+          password,
+        }),
+      ).unwrap()
 
-  // const [passwordVisible, setPasswordVisible] = useState(false)
-  // const toggleChangeType = () => {
-  //   setPasswordVisible(!passwordVisible)
-  // }
+      router.push('/')
+    } catch (error) {}
+  }
 
   return (
     <>
-      <h1 className="4xl font-bold text-bw-1 mb-2">Log In</h1>
-      <h1 className="medium-sm text-gray-1 mb-10">
+      <div className="text-4xl font-bold text-bw-1 mb-2">Log In</div>
+      <div className="medium-sm text-gray-1 mb-10">
         Login to Continue Learning
-      </h1>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <HookFormTextField
-          name="authentication_info"
+          name="username"
           control={control}
           placeholder="Username or Email"
           type="text"
-          className="mb-6"
         />
         <HookFormTextField
           name="password"
           control={control}
           placeholder="Password"
           type="password"
-          className="mb-10"
+          className="mt-6"
         />
-        <ButtonPrimary title="Log In" full={true} className="py-2.75 mb-6" />
+        <div className="mt-10">
+          <ButtonPrimary
+            title="Log In"
+            full={true}
+            className="mb-6"
+            size="lager"
+            loading={userLogin.loading}
+            type="submit"
+          />
+        </div>
         <div className="flex justify-between mb-15">
           <HookFormCheckBox
             control={control}
@@ -81,27 +106,21 @@ const LoginPage = () => {
             title="Keep me logged in"
             classNameTitle="medium-sm text-gray-1"
           />
-          <a
-            href="javascript:void(0)"
-            className="medium-sm text-gray-1 hover:underline"
-          >
-            Forgot Password
-          </a>
+          <span className="medium-sm text-gray-1 hover:underline">
+            <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
+          </span>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex gap-3 h-12.5">
-            {SocialLogos.map((img) => (
-              <a href="javascript:void(0)" key={img.url}>
+            {SocialLogos.map((img, i) => (
+              <a key={i}>
                 <Image src={img.url} alt={img.alt} width={50} height={50} />
               </a>
             ))}
           </div>
           <p className="medium-sm text-gray-1">
             Don&#39;t have an account?{' '}
-            <a
-              href="javascript:void(0)"
-              className="medium-sm text-state-info hover:underline"
-            >
+            <a className="medium-sm text-state-info hover:underline">
               Register
             </a>
           </p>
