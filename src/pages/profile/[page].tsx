@@ -3,9 +3,7 @@ import ProfileHeader from '@components/features/profile/ProfileHeader'
 import ProfileSideBar from '@components/features/profile/ProfileSideBar'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { GetServerSideProps } from 'next'
-import { useEffect, useState } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
-import { getMe } from 'src/redux/slice/User/User'
+import { useRef, useState } from 'react'
 import { IProfilePages } from 'src/type/Profile'
 
 interface IProps {
@@ -15,25 +13,35 @@ interface IProps {
 const ProfilePage = ({ page }: IProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    try {
-      dispatch(getMe())
-    } catch (error) {}
-  }, [])
+  const inputFileRef = useRef<HTMLInputElement | null>(null)
+
+  const handleSetAvatar = (avatar: File | undefined) => {
+    setAvatar(avatar)
+  }
+  const handleSetIsEdit = (isEdit: boolean) => {
+    if (!isEdit && inputFileRef.current) {
+      inputFileRef.current.value = ''
+    }
+    setIsEdit(isEdit)
+  }
   return (
-    <div className="container">
-      <div className="max-w-[71.5rem] my-0 mx-auto">
-        <ProfileHeader setAvatar={setAvatar} isEdit={isEdit}></ProfileHeader>
-        <div className="flex sm:flex-row flex-col justify-between gap-6">
-          <ProfileSideBar page={page}></ProfileSideBar>
-          <ProfileContent
-            isEdit={isEdit}
-            setIsEdit={setIsEdit}
-            page={'my_profile'}
-            avatar={avatar}
-          ></ProfileContent>
-        </div>
+    <div className="max-w-xxl my-0 mx-auto w-full">
+      <div className="relative">
+        <ProfileHeader
+          setAvatar={handleSetAvatar}
+          isEdit={isEdit}
+          inputFileRef={inputFileRef}
+        ></ProfileHeader>
+      </div>
+      <div className="flex sm:flex-row flex-col justify-between gap-6">
+        <ProfileSideBar page={page}></ProfileSideBar>
+        <ProfileContent
+          isEdit={isEdit}
+          setIsEdit={handleSetIsEdit}
+          page={page}
+          avatar={avatar}
+          handleSetAvatar={handleSetAvatar}
+        ></ProfileContent>
       </div>
     </div>
   )

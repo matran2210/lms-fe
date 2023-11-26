@@ -178,6 +178,30 @@ module.exports = {
       gap: {
         7.5: '1.875rem', // 30px
       },
+      keyframes: {
+        'jump-in': {
+          '0%': { transform: 'scale(0.5)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        'jump-out': {
+          '0%': { transform: 'scale(1)' },
+          '100%': { transform: 'scale(0.5)' },
+        },
+        'fade-in-overlay': {
+          '0%': { opacity: '0.1' },
+          '100%': { opacity: '0.4' },
+        },
+        'fade-out-overlay': {
+          '0%': { opacity: '0.4' },
+          '100%': { opacity: '0.1' },
+        },
+      },
+      animation: {
+        'jump-in': 'jump-in 0.2s ease-in-out',
+        'jump-out': 'jump-out 0.2s ease-in-out',
+        'fade-in-overlay': 'fade-in-overlay 0.2s ease-in-out',
+        'fade-out-overlay': 'fade-out-overlay 0.2s ease-in-out',
+      },
     },
   },
   plugins: [

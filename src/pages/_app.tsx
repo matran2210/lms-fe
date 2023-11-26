@@ -1,16 +1,14 @@
+import { RouteGuard } from '@components/auth/RouteGuard'
+import ConfirmDialogContainer from '@components/common/confirm-dialog/ConfirmDialogContainer'
 import Layout from '@components/layout'
 import SingleDialogLayout from '@components/layout/SingleDialog'
 import '@styles/globals.scss'
 import { LAYOUT } from '@utils/constants'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { Toaster } from 'react-hot-toast'
 import { injectStore } from 'src/redux/services/httpService'
 import { store, wrapper } from '../redux/store'
-import { RouteGuard } from '@components/auth/RouteGuard'
-import { useEffect } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
-import { getMe } from 'src/redux/slice/User/User'
-import { Toaster } from 'react-hot-toast'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -51,6 +49,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       </Head>
       <main>
         <Toaster />
+        <ConfirmDialogContainer />
         <RouteGuard>{content}</RouteGuard>
       </main>
     </>
