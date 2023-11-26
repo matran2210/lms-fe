@@ -10,7 +10,7 @@ import {
 } from '../../../redux/slice/ConfirmDialog/ConfirmDialogSlice'
 
 // component
-import ConfirmDialog from './ConfirmDialog'
+import SappConfirmDialog from './SappConfirmDialog'
 
 // define the props from the state
 const mapStateToProps = (state: any) => {
@@ -27,9 +27,9 @@ const connector = connect(mapStateToProps, confirmDialogActions)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 // create the container component
-const ConfirmDialogContainer: FC<PropsFromRedux> = (props: any) => {
+const SappConfirmDialogContainer: FC<PropsFromRedux> = (props: any) => {
   // render the confirm dialog component with the props from the state and dispatch
-  return <ConfirmDialog {...props} />
+  return <SappConfirmDialog {...props} />
 }
 
-export default connector(ConfirmDialogContainer)
+export default connector(SappConfirmDialogContainer)

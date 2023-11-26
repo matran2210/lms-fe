@@ -12,7 +12,7 @@ import {
 } from '@utils/helpers/ValidateMessage'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import confirmDialogThunk from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
   getMe,
   updateUserAvatar,
@@ -60,7 +60,7 @@ const MyProfile = ({ isEdit, setIsEdit, avatar, handleSetAvatar }: IProps) => {
   const handleChangeToPreview = () => {
     // Gọi hành động thunk open của confirmDialogThunk và chờ kết quả
     dispatch(
-      confirmDialogThunk.open({
+      confirmDialog.open({
         // Nội dung của hộp thoại xác nhận
         message: 'Bạn có chắc chắn muốn hủy không?',
         // Hàm thực thi khi người dùng xác nhận hành động

@@ -1,5 +1,5 @@
 import { RouteGuard } from '@components/auth/RouteGuard'
-import ConfirmDialogContainer from '@components/common/confirm-dialog/ConfirmDialogContainer'
+import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import Layout from '@components/layout'
 import SingleDialogLayout from '@components/layout/SingleDialog'
 import '@styles/globals.scss'
@@ -9,6 +9,7 @@ import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 import { injectStore } from 'src/redux/services/httpService'
 import { store, wrapper } from '../redux/store'
+// import 'antd/dist/antd.css'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -49,7 +50,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       </Head>
       <main>
         <Toaster />
-        <ConfirmDialogContainer />
+        <SappConfirmDialogContainer />
         <RouteGuard>{content}</RouteGuard>
       </main>
     </>

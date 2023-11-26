@@ -44,7 +44,7 @@ const ProfileSideBar = ({ page }: IProps) => {
         })}
 
         <li
-          className="p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary"
+          className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary"
           onClick={handleLogout}
         >
           <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>

@@ -5,7 +5,6 @@ type ConfirmDialogState = {
   open?: boolean
   title?: string
   message: string
-  loading?: boolean
   cancelButtonTitle?: string
   okButtonTitle?: string
   onCancel: () => void
@@ -16,7 +15,6 @@ const initialState: ConfirmDialogState = {
   open: false,
   title: '',
   message: '',
-  loading: false,
   cancelButtonTitle: 'No',
   okButtonTitle: 'Yes',
   onCancel: () => {},
@@ -41,10 +39,6 @@ const confirmDialogSlice = createSlice({
         okButtonTitle,
         cancelButtonTitle,
       } = action.payload
-      const scrollbarWidth = window.innerWidth - document.body.clientWidth
-      document.body.classList.add('overflow-y-hidden')
-      document.body.style.paddingRight = scrollbarWidth + 'px'
-
       state.open = true
       state.title = title
       state.message = message
@@ -57,8 +51,6 @@ const confirmDialogSlice = createSlice({
      * Một action để đóng hộp thoại xác nhận và khôi phục trạng thái ban đầu
      */
     closeConfirmation: () => {
-      document.body.classList.remove('overflow-y-hidden')
-      document.body.style.removeProperty('padding-right')
       return initialState
     },
     /**
@@ -66,7 +58,7 @@ const confirmDialogSlice = createSlice({
      * @param {ConfirmDialogState} state - Trạng thái hiện tại của hộp thoại xác nhận
      */
     setLoadingTrue: (state) => {
-      return { ...state, loading: true }
+      return { ...state }
     },
   },
 })

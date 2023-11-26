@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { confirmDialogActions } from './ConfirmDialogSlice'
 
 // định nghĩa các hành động thunk cho hộp thoại xác nhận
-const confirmDialogThunk = {
+const confirmDialog = {
   /**
    * Một hàm tạo ra một thunk trả về một promise giải quyết thành một giá trị boolean
    * cho biết người dùng đã xác nhận hay hủy bỏ hành động
@@ -35,17 +35,10 @@ const confirmDialogThunk = {
             message,
             // Hàm này được gọi khi người dùng nhấn nút hủy
             onCancel: async () => {
-              if (onCancel && onCancel.constructor.name === 'AsyncFunction') {
-                dispatch(confirmDialogActions.setLoadingTrue())
-                await onCancel()
-              }
+              onCancel && (await onCancel())
             },
             // Hàm này được gọi khi người dùng nhấn nút xác nhận
             onConfirm: async () => {
-              if (onConfirm.constructor.name === 'AsyncFunction') {
-                dispatch(confirmDialogActions.setLoadingTrue())
-              }
-
               await onConfirm()
             },
           }),
@@ -59,4 +52,4 @@ const confirmDialogThunk = {
   ),
 }
 
-export default confirmDialogThunk
+export default confirmDialog
