@@ -143,9 +143,10 @@ const SappModal: React.FC<IProps> = ({
         focusTriggerAfterClose
         centered
         classNames={{
-          content: 'flex flex-col max-h-screen max-h-[calc(100vh-4rem)]',
+          content: 'flex flex-col max-h-[calc(100vh-4rem)]',
           body: 'overflow-y-scroll snap-y -mr-5 flex-1',
         }}
+        wrapClassName="top-10"
         width={width}
         footer={
           <>
