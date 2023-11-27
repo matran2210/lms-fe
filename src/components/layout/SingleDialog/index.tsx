@@ -14,9 +14,7 @@ export default function SingleDialogLayout(props: LayoutProps): ReactElement {
       <div className="block max-w-[14rem] mb-20 mx-auto">
         <Image src={SAPP_Logo} alt="SAPP Logo" />
       </div>
-      <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
-        {children}
-      </div>
+      <div className="content">{children}</div>
     </div>
   )
 }

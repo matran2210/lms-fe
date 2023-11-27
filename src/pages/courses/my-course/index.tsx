@@ -1,10 +1,12 @@
+import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
+import SappModal from '@components/base/modal/SappModal'
 import Courses from '@components/mycourses/Course'
 import CoursesList from '@components/mycourses/CoursesList'
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import Tabs from '@components/mycourses/Tabs'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // Config Tabs
 const tabs = [

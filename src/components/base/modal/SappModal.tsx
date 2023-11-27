@@ -9,6 +9,7 @@ import React, {
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+import Icon from '@components/icons'
 
 interface IProps {
   open?: boolean
@@ -32,7 +33,9 @@ interface IProps {
 
   confirmOnclose?: boolean | string[]
   size?: string
-
+  refClass?: string
+  childClass?: string
+  parentChildClass?: string
   footerButtonClassName?: string
   footerButtonState?: 'primary' | 'danger'
 }
@@ -75,7 +78,9 @@ const SappModal: React.FC<IProps> = ({
 
   confirmOnclose,
   size = 'max-w-lg',
-
+  refClass = '',
+  childClass = '',
+  parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex',
   footerButtonState,
 }) => {
@@ -180,7 +185,7 @@ const SappModal: React.FC<IProps> = ({
         {open && (
           // add an onClick handler to the outer div to close the popup when clicking outside
           <div
-            className="sapp-custom-modal fixed z-[1000] w-screen flex justify-center"
+            className="sapp-custom-modal fixed z-[1000] w-screen flex justify-center inset-0"
             role="dialog"
             aria-modal="true"
           >
@@ -190,12 +195,9 @@ const SappModal: React.FC<IProps> = ({
               className="animate-fade-in-overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
             ></div>
             <div
-              className={`w-full ${size} min-h-full m-4 text-center sm:items-start`}
+              className={`w-full ${size} min-h-full text-center sm:items-start`}
             >
-              <div
-                ref={confirmDialogRef}
-                className="md:p-8 p-5 flex flex-col max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8"
-              >
+              <div ref={confirmDialogRef} className={`${refClass}`}>
                 {showHeader && (
                   <div className="bg-white md:pb-8 pb-5">
                     <div className="flex">
@@ -227,8 +229,8 @@ const SappModal: React.FC<IProps> = ({
                   </div>
                 )}
 
-                <div className="overflow-y-scroll snap-y  flex-1 bg-white md:px-8 px-5">
-                  <div className="-mr-4">{children}</div>
+                <div className={`${parentChildClass}`}>
+                  <div className={`${childClass}`}>{children}</div>
                 </div>
 
                 {showFooter && (
