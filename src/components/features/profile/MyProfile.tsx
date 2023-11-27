@@ -90,7 +90,11 @@ const MyProfile = ({ isEdit, setIsEdit, avatar, handleSetAvatar }: IProps) => {
    * @param {{full_name: string}} data - Đối tượng chứa dữ liệu của form
    * @returns {Promise<void>} Một promise không có giá trị trả về
    */
-  const onSubmit = async ({ full_name }: { full_name: string }) => {
+  const onSubmit = async ({
+    full_name,
+  }: {
+    full_name: string
+  }): Promise<void> => {
     try {
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
@@ -111,8 +115,8 @@ const MyProfile = ({ isEdit, setIsEdit, avatar, handleSetAvatar }: IProps) => {
         // Đặt lại giá trị của avatar
         handleSetAvatar(undefined)
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch(getMe())
       }
+      dispatch(getMe())
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
     } catch (error) {}

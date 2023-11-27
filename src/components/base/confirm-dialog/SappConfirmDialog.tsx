@@ -1,7 +1,7 @@
 // ConfirmDialog.tsx
+import router from 'next/router'
 import { FC, useEffect } from 'react'
 import SappModal from '../modal/SappModal'
-import router from 'next/router'
 
 // define the props for the confirm dialog component
 export type SappConfirmDialogProps = {
@@ -29,17 +29,16 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
 }) => {
   const handleCancel = async () => {
     onCancel && (await onCancel())
-    closeConfirmation()
   }
   const handleConfirm = async () => {
     await onConfirm()
-    closeConfirmation()
   }
-
   useEffect(() => {
     // on route change start - hide dialog
     if (open) {
       router.events.on('routeChangeComplete', closeConfirmation)
+    } else {
+      router.events.off('routeChangeComplete', closeConfirmation)
     }
     // unsubscribe from events in useEffect return function
     return () => {
@@ -55,10 +54,10 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         cancelButtonCaption={cancelButtonTitle || 'No'}
         handleCancel={handleCancel}
         handleSubmit={handleConfirm}
-        title={''}
+        setOpen={closeConfirmation}
       >
-        <div className="sm:flex sm:items-start">
-          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+        <div className="">
+          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
             <svg
               className="h-6 w-6 text-state-error"
               fill="none"
@@ -74,7 +73,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
               />
             </svg>
           </div>
-          <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+          <div className="mt-3 text-center">
             <h3
               className="text-base font-semibold leading-6 text-gray-900"
               id="modal-title"

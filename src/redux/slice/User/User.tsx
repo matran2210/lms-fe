@@ -147,29 +147,26 @@ export const userSlice = createSlice({
         state.user = action.payload
       }
     })
-    builder.addCase(getMe.rejected, (state, action) => {
+    builder.addCase(getMe.rejected, (state) => {
       state.loading = false
     })
 
     builder.addCase(updateUser.pending, (state) => {
       state.loadingEditName = true
     })
-    builder.addCase(updateUser.fulfilled, (state, action) => {
+    builder.addCase(updateUser.fulfilled, (state) => {
       state.loadingEditName = false
-      if (action.payload?.full_name) {
-        state.user.detail.full_name = action.payload?.full_name
-      }
     })
-    builder.addCase(updateUser.rejected, (state, action) => {
+    builder.addCase(updateUser.rejected, (state) => {
       state.loadingEditName = false
     })
     builder.addCase(updateUserAvatar.pending, (state) => {
       state.loadingEditAvatar = true
     })
-    builder.addCase(updateUserAvatar.fulfilled, (state, action) => {
+    builder.addCase(updateUserAvatar.fulfilled, (state) => {
       state.loadingEditAvatar = false
     })
-    builder.addCase(updateUserAvatar.rejected, (state, action) => {
+    builder.addCase(updateUserAvatar.rejected, (state) => {
       state.loadingEditAvatar = false
     })
   },

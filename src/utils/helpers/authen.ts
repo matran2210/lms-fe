@@ -1,27 +1,23 @@
-export const getAccessToken = (): string => {
-  return localStorage.getItem('accessToken') || ''
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+export const getAccessToken = async (): Promise<string> => {
+  return (await AsyncStorage.getItem('accessToken')) || ''
 }
 
-export const getRefreshToken = (): string => {
-  return localStorage.getItem('refreshToken') || ''
+export const getRefreshToken = async (): Promise<string> => {
+  return (await AsyncStorage.getItem('refreshToken')) || ''
 }
 
 export const setAccessToken = (accToken: string) => {
-  localStorage.setItem('accessToken', accToken)
+  AsyncStorage.setItem('accessToken', accToken)
 }
 
 export const setRefreshToken = (refreshToken: string) => {
-  localStorage.setItem('refreshToken', refreshToken)
-}
-export const setUserInfo = (user: any) => {
-  localStorage.setItem('userInfo', user)
-}
-export const userInfo = () => {
-  return localStorage.getItem('userInfo')
+  AsyncStorage.setItem('refreshToken', refreshToken)
 }
 
 export const removeJwtToken = () => {
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('refreshToken')
-  localStorage.removeItem('userInfo')
+  AsyncStorage.removeItem('accessToken')
+  AsyncStorage.removeItem('refreshToken')
+  AsyncStorage.removeItem('userInfo')
 }

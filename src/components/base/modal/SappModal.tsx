@@ -1,8 +1,15 @@
-import { Modal } from 'antd'
-import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import React, {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+import router from 'next/router'
 
 interface IProps {
   open?: boolean
@@ -17,15 +24,15 @@ interface IProps {
 
   disabled?: boolean
 
-  title: string
-  showTitle?: boolean
-  customTitle?: ReactNode
+  title?: string
+  showHeader?: boolean
+  customHeader?: ReactNode
 
   showFooter?: boolean
   customFooter?: ReactNode
 
   confirmOnclose?: boolean | string[]
-  width?: number
+  size?: number
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -58,17 +65,35 @@ const SappModal: React.FC<IProps> = ({
   disabled,
 
   title,
-  showTitle = true,
-  customTitle,
+  showHeader = true,
+  customHeader,
 
   showFooter = true,
   customFooter,
 
   confirmOnclose,
-  width,
+  size = 'max-w-lg',
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
+
+  const confirmDialogRef = useRef<HTMLDivElement>(null)
+  const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (open) {
+      const scrollBarWidth = window.innerWidth - document.body.clientWidth
+
+      document.body.style.paddingRight = scrollBarWidth + 'px'
+      document.body.classList.add('overflow-hidden')
+    } else {
+      const customModal = document.querySelectorAll('.sapp-custom-modal')
+      if (!customModal?.length) {
+        document.body.style.removeProperty('padding-right')
+        document.body.classList.remove('overflow-hidden')
+      }
+    }
+  }, [open])
 
   /**
    * Hàm này xử lý khi người dùng nhấn nút xác nhận
@@ -80,14 +105,14 @@ const SappModal: React.FC<IProps> = ({
       setLoading(true)
       await handleSubmit()
       setLoading(false)
-      setOpen && setOpen(false)
+      handleClose()
       return
     }
     // Nếu handleSubmit là một hàm thường, thì gọi hàm đó
     else if (handleSubmit) {
       handleSubmit()
     }
-    setOpen && setOpen(false)
+    handleClose()
   }
 
   /**
@@ -105,7 +130,7 @@ const SappModal: React.FC<IProps> = ({
         setLoading(true)
         await handleCancel()
         setLoading(false)
-        setOpen && setOpen(false)
+        handleClose()
         return
       }
       // Nếu handleCancel là một hàm thường, thì gọi hàm đó
@@ -128,52 +153,106 @@ const SappModal: React.FC<IProps> = ({
       // Nếu confirmOnclose là false, thì không cần xác nhận
       // Gọi hàm callHandleCancel
       callHandleCancel()
-      setOpen && setOpen(false)
+      handleClose()
     }
+  }
+
+  const handleClose = () => {
+    if (confirmDialogRef.current) {
+      confirmDialogRef.current.classList.add('animate-jump-out')
+    }
+    if (confirmDialogOverLayRef.current) {
+      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
+    }
+    setTimeout(() => {
+      setOpen && setOpen(false)
+    }, 50)
   }
 
   return (
     <>
-      <Modal
-        open={open}
-        title={showTitle ? customTitle || title || <> &nbsp;</> : <> &nbsp;</>}
-        onOk={onOk}
-        onCancel={onCancel}
-        destroyOnClose
-        focusTriggerAfterClose
-        centered
-        classNames={{
-          content: 'flex flex-col max-h-[calc(100vh-4rem)]',
-          body: 'overflow-y-scroll snap-y -mr-5 flex-1',
-        }}
-        wrapClassName="top-10"
-        width={width}
-        footer={
-          <>
-            {showFooter &&
-              (customFooter || (
-                <ButtonCancelSubmit
-                  className="justify-center sm:justify-end flex"
-                  submit={{
-                    title: okButtonCaption,
-                    size: 'medium',
-                    loading: loading,
-                    disabled: disabled,
-                    onClick: onOk,
-                  }}
-                  cancel={{
-                    title: cancelButtonCaption,
-                    size: 'medium',
-                    onClick: onCancel,
-                    loading: loading,
-                  }}
-                ></ButtonCancelSubmit>
-              ))}
-          </>
-        }
-      >
-        <div className="pr-6.5">{children}</div>
-      </Modal>
+      <React.Fragment>
+        {open && (
+          // add an onClick handler to the outer div to close the popup when clicking outside
+          <div
+            className="sapp-custom-modal fixed z-[1000] w-screen flex justify-center"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div
+              ref={confirmDialogOverLayRef}
+              onClick={onCancel}
+              className="animate-fade-in-overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            ></div>
+            <div
+              className={`w-full ${size} min-h-full m-4 text-center sm:items-start`}
+            >
+              <div
+                ref={confirmDialogRef}
+                className="flex flex-col max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8"
+              >
+                {showHeader && (
+                  <div className="bg-white px-4 py-3 sm:px-6">
+                    <div className="flex">
+                      {customHeader || (
+                        <div className="text-l font-bold text-bw-1">
+                          {title}
+                        </div>
+                      )}
+                      <div
+                        onClick={onCancel}
+                        className="ml-auto cursor-pointer text-bw-1 hover:text-primary translate-x-3"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          className="w-5 h-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="overflow-y-scroll snap-y  flex-1 bg-white p-5">
+                  <div className="-mr-4">{children}</div>
+                </div>
+
+                {showFooter && (
+                  <div className="bg-gray-50 px-4 py-3 sm:px-5">
+                    {customFooter || (
+                      <ButtonCancelSubmit
+                        className="justify-center sm:justify-end flex"
+                        submit={{
+                          title: okButtonCaption,
+                          size: 'medium',
+                          loading: loading,
+                          disabled: disabled,
+                          onClick: onOk,
+                        }}
+                        cancel={{
+                          title: cancelButtonCaption,
+                          size: 'medium',
+                          onClick: onCancel,
+                          loading: loading,
+                        }}
+                      ></ButtonCancelSubmit>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </React.Fragment>
     </>
   )
 }
