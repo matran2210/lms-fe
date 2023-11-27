@@ -18,6 +18,7 @@ const CourseParts = ({ courseParts }: CoursesPartsProps) => {
             <Part
               key={index}
               name={coursePart.name}
+              path={coursePart.path}
               des={coursePart.des}
               progressText={coursePart.progressText}
               progressTimeStatus={coursePart.progressTimeStatus}
@@ -30,6 +31,7 @@ const CourseParts = ({ courseParts }: CoursesPartsProps) => {
             <PartFailed
               key={index}
               name={coursePart.name}
+              path={coursePart.path}
               timeAllow={coursePart.timeAllow}
               attempType={coursePart.attempType}
               buttonText={coursePart.buttonText}

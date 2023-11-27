@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
+import Link from 'next/link'
 
 interface IProps {
   name: string
+  path: string
   timeAllow: string
   attempType: string
   buttonText: string
@@ -12,6 +14,7 @@ interface IProps {
 
 const PartFailed = ({
   name,
+  path,
   timeAllow,
   attempType,
   buttonText,
@@ -22,7 +25,7 @@ const PartFailed = ({
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
-        <h2>{name}</h2>
+        <Link href={`/courses/my-course/course-detail/${path}`}>{name}</Link>
       </div>
       <div className="info mt-6">
         <div className="time-allow flex justify-between pb-4 border-b border-gray-2">

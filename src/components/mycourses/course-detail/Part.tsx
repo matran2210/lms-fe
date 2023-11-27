@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
+import Link from 'next/link'
 
 interface IProps {
   name: string
+  path: string
   des: string
   progressText?: string
   progressTimeStatus?: string
@@ -15,6 +17,7 @@ interface IProps {
 
 const Part = ({
   name,
+  path,
   des,
   progressText,
   progressTimeStatus,
@@ -26,7 +29,7 @@ const Part = ({
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
-        <h2>{name}</h2>
+        <Link href={`/courses/my-course/course-detail/${path}`}>{name}</Link>
       </div>
       <div className="des mt-6 mb-15">
         <p className={`text-base`}>{des}</p>
