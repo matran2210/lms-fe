@@ -9,7 +9,6 @@ import React, {
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
-import router from 'next/router'
 
 interface IProps {
   open?: boolean
@@ -32,7 +31,10 @@ interface IProps {
   customFooter?: ReactNode
 
   confirmOnclose?: boolean | string[]
-  size?: number
+  size?: string
+
+  footerButtonClassName?: string
+  footerButtonState?: 'primary' | 'danger'
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -73,6 +75,9 @@ const SappModal: React.FC<IProps> = ({
 
   confirmOnclose,
   size = 'max-w-lg',
+
+  footerButtonClassName = 'justify-center sm:justify-end flex',
+  footerButtonState,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -189,10 +194,10 @@ const SappModal: React.FC<IProps> = ({
             >
               <div
                 ref={confirmDialogRef}
-                className="flex flex-col max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8"
+                className="md:p-8 p-5 flex flex-col max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8"
               >
                 {showHeader && (
-                  <div className="bg-white px-4 py-3 sm:px-6">
+                  <div className="bg-white md:pb-8 pb-5">
                     <div className="flex">
                       {customHeader || (
                         <div className="text-l font-bold text-bw-1">
@@ -222,15 +227,16 @@ const SappModal: React.FC<IProps> = ({
                   </div>
                 )}
 
-                <div className="overflow-y-scroll snap-y  flex-1 bg-white p-5">
+                <div className="overflow-y-scroll snap-y  flex-1 bg-white md:px-8 px-5">
                   <div className="-mr-4">{children}</div>
                 </div>
 
                 {showFooter && (
-                  <div className="bg-gray-50 px-4 py-3 sm:px-5">
+                  <div className="md:pt-8 pt-5">
                     {customFooter || (
                       <ButtonCancelSubmit
-                        className="justify-center sm:justify-end flex"
+                        className={footerButtonClassName}
+                        state={footerButtonState}
                         submit={{
                           title: okButtonCaption,
                           size: 'medium',

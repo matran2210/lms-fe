@@ -3,7 +3,6 @@ import { RootState } from 'src/redux/store'
 
 type ConfirmDialogState = {
   open?: boolean
-  title?: string
   message: string
   cancelButtonTitle?: string
   okButtonTitle?: string
@@ -13,7 +12,6 @@ type ConfirmDialogState = {
 
 const initialState: ConfirmDialogState = {
   open: false,
-  title: '',
   message: '',
   cancelButtonTitle: 'No',
   okButtonTitle: 'Yes',
@@ -31,16 +29,9 @@ const confirmDialogSlice = createSlice({
      * @param {PayloadAction<ConfirmDialogState>} action - Hành động có chứa các thông tin cần thiết cho hộp thoại xác nhận
      */
     requestConfirmation: (state, action: PayloadAction<ConfirmDialogState>) => {
-      const {
-        title,
-        message,
-        onCancel,
-        onConfirm,
-        okButtonTitle,
-        cancelButtonTitle,
-      } = action.payload
+      const { message, onCancel, onConfirm, okButtonTitle, cancelButtonTitle } =
+        action.payload
       state.open = true
-      state.title = title
       state.message = message
       state.cancelButtonTitle = cancelButtonTitle
       state.okButtonTitle = okButtonTitle

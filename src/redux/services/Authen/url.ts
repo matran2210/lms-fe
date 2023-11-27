@@ -1,7 +1,7 @@
 const url = {
   login: '/auth/login',
   logout: '/auth/logout',
-  refreshtoken: '/refreshtoken',
+  refreshToken: '/auth/rotate',
   changePassword: '/changepassword',
   sendEmail: '/auth/forgot-password',
   verifyOtp: '/auth/forgot-password/verify-otp',

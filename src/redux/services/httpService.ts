@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import getConfig from 'next/config'
 import { PageLink } from 'src/constants'
 import { getLogoutUser } from '../slice/Login/Login'
+import url from './Authen/url'
 
 const { publicRuntimeConfig } = getConfig()
 const { apiURL } = publicRuntimeConfig
@@ -82,7 +83,7 @@ axiosInstance.interceptors.request.use(
     await setAuthorizationHeader(config)
 
     // If the request is a refresh token request, return the config
-    if (config.url === '/refresh-tokens') {
+    if (config.url === url.refreshToken) {
       return config
     }
 

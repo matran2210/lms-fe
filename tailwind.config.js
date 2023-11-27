@@ -50,6 +50,10 @@ module.exports = {
         secondary: {
           DEFAULT: '#FFFAF0',
         },
+        danger: {
+          DEFAULT: '#D35563',
+          2: '#dd4339',
+        },
         state: {
           info: '#3964EA',
           success: '#008000',

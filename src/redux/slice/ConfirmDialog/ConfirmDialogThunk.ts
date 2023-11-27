@@ -16,7 +16,6 @@ const confirmDialog = {
   open: createAsyncThunk<
     boolean,
     {
-      title?: string
       message: string
       onConfirm: () => Promise<void> | void
       onCancel?: () => Promise<void> | void
@@ -25,13 +24,12 @@ const confirmDialog = {
   >(
     'confirmDialog/open',
     async (
-      { title, message, onConfirm, onCancel },
+      { message, onConfirm, onCancel },
       { dispatch, rejectWithValue, fulfillWithValue },
     ) => {
       try {
         dispatch(
           confirmDialogActions.requestConfirmation({
-            title,
             message,
             // Hàm này được gọi khi người dùng nhấn nút hủy
             onCancel: async () => {
