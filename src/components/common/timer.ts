@@ -20,5 +20,9 @@ export const formatTime = (input?: string | number) => {
   const formattedMinutes = String(minutes).padStart(2, '0')
   const formattedSeconds = String(finalSeconds).padStart(2, '0')
 
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+  if (hours < 1) {
+    return `${formattedMinutes}:${formattedSeconds}`
+  } else {
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+  }
 }

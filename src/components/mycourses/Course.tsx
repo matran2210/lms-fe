@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
+import ResultRowsModal from '@components/learning/ResultRowsModal'
 interface CourseProps {
   name: string
   active: boolean
@@ -31,6 +32,11 @@ const Course = ({
   changeExam,
   buttonText,
 }: CourseProps) => {
+  const [open, setOpen] = useState<boolean>(false)
+  const handleOnClick = () => {
+    setOpen(true)
+  }
+
   return (
     <>
       <div
@@ -101,10 +107,12 @@ const Course = ({
               full={false}
               size={'small'}
               className="hover:bg-primary hover:text-white ml-auto"
+              onClick={handleOnClick}
             />
           )}
         </div>
       </div>
+      <ResultRowsModal open={open} setOpen={setOpen} />
     </>
   )
 }

@@ -70,62 +70,64 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="text-4xl font-bold text-bw-1 mb-2">Log In</div>
-      <div className="medium-sm text-gray-1 mb-10">
-        Login to Continue Learning
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <HookFormTextField
-          name="username"
-          control={control}
-          placeholder="Username or Email"
-          type="text"
-        />
-        <HookFormTextField
-          name="password"
-          control={control}
-          placeholder="Password"
-          type="password"
-          className="mt-6"
-        />
-        <div className="mt-10">
-          <ButtonPrimary
-            title="Log In"
-            full={true}
-            className="mb-6"
-            size="lager"
-            loading={userLogin.loading}
-            type="submit"
-          />
+      <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
+        <div className="text-4xl font-bold text-bw-1 mb-2">Log In</div>
+        <div className="medium-sm text-gray-1 mb-10">
+          Login to Continue Learning
         </div>
-        <div className="flex justify-between mb-15">
-          <HookFormCheckBox
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <HookFormTextField
+            name="username"
             control={control}
-            name="remember"
-            className="min-w-4 min-h-4 h-4"
-            title="Keep me logged in"
-            classNameTitle="medium-sm text-gray-1"
+            placeholder="Username or Email"
+            type="text"
           />
-          <span className="medium-sm text-gray-1 hover:underline">
-            <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
-          </span>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="flex gap-3 h-12.5">
-            {SocialLogos.map((img, i) => (
-              <a key={i}>
-                <Image src={img.url} alt={img.alt} width={50} height={50} />
-              </a>
-            ))}
+          <HookFormTextField
+            name="password"
+            control={control}
+            placeholder="Password"
+            type="password"
+            className="mt-6"
+          />
+          <div className="mt-10">
+            <ButtonPrimary
+              title="Log In"
+              full={true}
+              className="mb-6"
+              size="lager"
+              loading={userLogin.loading}
+              type="submit"
+            />
           </div>
-          <p className="medium-sm text-gray-1">
-            Don&#39;t have an account?{' '}
-            <a className="medium-sm text-state-info hover:underline">
-              Register
-            </a>
-          </p>
-        </div>
-      </form>
+          <div className="flex justify-between mb-15">
+            <HookFormCheckBox
+              control={control}
+              name="remember"
+              className="min-w-4 min-h-4 h-4"
+              title="Keep me logged in"
+              classNameTitle="medium-sm text-gray-1"
+            />
+            <span className="medium-sm text-gray-1 hover:underline">
+              <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-3 h-12.5">
+              {SocialLogos.map((img, i) => (
+                <a key={i}>
+                  <Image src={img.url} alt={img.alt} width={50} height={50} />
+                </a>
+              ))}
+            </div>
+            <p className="medium-sm text-gray-1">
+              Don&#39;t have an account?{' '}
+              <a className="medium-sm text-state-info hover:underline">
+                Register
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
     </>
   )
 }
