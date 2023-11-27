@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import getConfig from 'next/config'
 import { PageLink } from 'src/constants'
 import { getLogoutUser } from '../slice/Login/Login'
+import url from './Authen/url'
 
 const { publicRuntimeConfig } = getConfig()
 const { apiURL } = publicRuntimeConfig
@@ -32,31 +33,32 @@ let refreshSubscribers: any[] = []
 const refreshAccessToken = async (): Promise<string | null> => {
   try {
     const refreshToken = await AsyncStorage.getItem('refreshToken')
-    const response = await axios.post(`${apiURL}/auth/rotate`, {
-      headers: {
-        Authorization: 'Bearer ' + refreshToken,
+
+    const response = await axios.post(
+      `${apiURL}/auth/rotate`,
+      {},
+      {
+        headers: {
+          Authorization: 'Bearer ' + refreshToken,
+        },
       },
-    })
+    )
+
+    const userInfo = response?.data?.data?.tokens
+    const act = userInfo?.act
+    const rft = userInfo?.rft
     // Save the new access token to the AsyncStorage
-    await AsyncStorage.setItem(
-      'accessToken',
-      response.data.object.tokens.access.token,
-    )
-    await AsyncStorage.setItem(
-      'refreshToken',
-      response.data.object.tokens.refresh.token,
-    )
+    await AsyncStorage.setItem('accessToken', act)
+    await AsyncStorage.setItem('refreshToken', rft)
     // Resolve all the subscribers with the new access token
-    refreshSubscribers.forEach((callback) =>
-      callback(response.data.object.tokens.access.token),
-    )
+    refreshSubscribers.forEach((callback) => callback(act))
 
     // Reset the refresh flag and subscribers array
     isRefreshing = false
     refreshSubscribers = []
 
     // Return the new access token
-    return response.data.object.tokens.access.token
+    return act
   } catch (error) {
     store.dispatch(getLogoutUser())
     window.location.href = PageLink.AUTH_LOGIN
@@ -81,7 +83,7 @@ axiosInstance.interceptors.request.use(
     await setAuthorizationHeader(config)
 
     // If the request is a refresh token request, return the config
-    if (config.url === '/refresh-tokens') {
+    if (config.url === url.refreshToken) {
       return config
     }
 

@@ -21,4 +21,5 @@ export type IButtonCancelSubmitProps = {
   submit: IButtonProps
   cancel: IButtonProps
   className?: string
+  state?: 'primary' | 'danger'
 }

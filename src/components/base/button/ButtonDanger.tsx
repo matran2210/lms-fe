@@ -1,6 +1,6 @@
 import { IButtonProps } from 'src/type'
 
-const ButtonPrimary = ({
+const ButtonDanger = ({
   title,
   onClick,
   className = '',
@@ -24,9 +24,9 @@ const ButtonPrimary = ({
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
   let disabledClass =
     disabled || loading
-      ? 'cursor-not-allowed opacity-60 bg-primary-2'
+      ? 'cursor-not-allowed opacity-60 bg-danger'
       : 'cursor-pointer'
-  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-primary hover:bg-primary-2`
+  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-danger hover:bg-danger-2`
   if (link)
     return (
       <a href={link} className={componentClass} aria-disabled={disabled}>
@@ -53,4 +53,4 @@ const ButtonPrimary = ({
   )
 }
 
-export default ButtonPrimary
+export default ButtonDanger

@@ -12,10 +12,11 @@ import {
 } from '@utils/helpers/ValidateMessage'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
   getMe,
   updateUserAvatar,
-  updateUserName,
+  updateUser as updateUser,
   userReducer,
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
@@ -24,6 +25,7 @@ interface IProps {
   isEdit: boolean
   setIsEdit: (edit: boolean) => void
   avatar: File | undefined
+  handleSetAvatar: (avatar: File | undefined) => void
 }
 
 const schema = z.object({
@@ -33,47 +35,89 @@ const schema = z.object({
     .max(100, { message: VALIDATE_MAX('Fullname', 100) }),
 })
 
-const MyProfile = ({ isEdit, setIsEdit, avatar }: IProps) => {
+const MyProfile = ({ isEdit, setIsEdit, avatar, handleSetAvatar }: IProps) => {
   const dispatch = useAppDispatch()
-  const {
-    user,
-    loading,
-    loadingEditName: loadingEditName,
-  } = useAppSelector(userReducer)
+  const { user, loading, loadingEditName } = useAppSelector(userReducer)
+  // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
   const { control, setValue, handleSubmit, reset } = useForm<{
     full_name: string
   }>({
     resolver: zodResolver(schema),
   })
 
+  /**
+   * Hàm để chuyển sang chế độ chỉnh sửa form
+   */
   const handleChangeToEditForm = () => {
+    // Đặt giá trị cho trường full_name bằng tên hiện tại của người dùng
     setValue('full_name', user.detail.full_name)
+    // Đặt trạng thái isEdit thành true
     setIsEdit(true)
   }
+  /**
+   * Hàm để chuyển sang chế độ view
+   */
   const handleChangeToPreview = () => {
-    setIsEdit(false)
-
-    reset(
-      {
-        full_name: user.detail.full_name,
-      },
-      {
-        keepDirty: false,
-        keepErrors: false,
-        keepDirtyValues: false,
-        keepIsValid: false,
-        keepTouched: false,
-      },
+    // Gọi hành động thunk open của confirmDialogThunk và chờ kết quả
+    dispatch(
+      confirmDialog.open({
+        // Nội dung của hộp thoại xác nhận
+        message: 'Bạn có chắc chắn muốn hủy không?',
+        // Hàm thực thi khi người dùng xác nhận hành động
+        onConfirm: async () => {
+          // Đặt trạng thái isEdit thành false
+          setIsEdit(false)
+          // Đặt lại giá trị của form về ban đầu
+          reset(
+            {
+              full_name: user.detail.full_name,
+            },
+            {
+              keepDirty: false,
+              keepErrors: false,
+              keepDirtyValues: false,
+              keepIsValid: false,
+              keepTouched: false,
+            },
+          )
+        },
+      }),
     )
   }
 
-  const onSubmit = async ({ full_name }: { full_name: string }) => {
+  /**
+   * Hàm để xử lý khi người dùng submit form
+   * @param {{full_name: string}} data - Đối tượng chứa dữ liệu của form
+   * @returns {Promise<void>} Một promise không có giá trị trả về
+   */
+  const onSubmit = async ({
+    full_name,
+  }: {
+    full_name: string
+  }): Promise<void> => {
     try {
-      await dispatch(updateUserName(full_name)).unwrap()
-      if (avatar) {
-        await dispatch(updateUserAvatar(avatar)).unwrap()
+      // Nếu không có avatar và người dùng có avatar hiện tại
+      if (!avatar && user?.detail?.avatar) {
+        // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
+        await dispatch(updateUser({ full_name, avatar: null })).unwrap()
+        // Gọi hành động thunk getMe để lấy lại thông tin người dùng
         dispatch(getMe())
+        // Đặt trạng thái isEdit thành false
+        setIsEdit(false)
+        return
       }
+      // Gọi hành động thunk updateUser để cập nhật tên của người dùng
+      await dispatch(updateUser({ full_name })).unwrap()
+      // Nếu có avatar
+      if (avatar) {
+        // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
+        await dispatch(updateUserAvatar(avatar)).unwrap()
+        // Đặt lại giá trị của avatar
+        handleSetAvatar(undefined)
+        // Gọi hành động thunk getMe để lấy lại thông tin người dùng
+      }
+      dispatch(getMe())
+      // Đặt trạng thái isEdit thành false
       setIsEdit(false)
     } catch (error) {}
   }
@@ -81,8 +125,11 @@ const MyProfile = ({ isEdit, setIsEdit, avatar }: IProps) => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="block min-h-[40.3rem]">
-        <div className="text-xl font-bold mb-12 text-bw-1">
-          {`${isEdit ? 'Edit' : 'My'}`} Profile
+        <div className="relative">
+          <div className="text-xl font-bold pb-6 mb-6 text-bw-1">
+            {`${isEdit ? 'Edit' : 'My'}`} Profile
+          </div>
+          <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>
         </div>
         <ul>
           {/* start:: Code*/}
@@ -205,13 +252,11 @@ const MyProfile = ({ isEdit, setIsEdit, avatar }: IProps) => {
             <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
               Status
             </div>
-            <div
-              className={`flex-auto max-w-[300px] font-medium text-state-${
-                USER_STATUS[user.status].color
-              }`}
-            >
+            <div className={`flex-auto max-w-[300px] font-medium`}>
               <TextSkeleton loading={loading && !isEdit} height="4">
-                <span>{USER_STATUS[user.status]?.label}</span>
+                <span className={`${USER_STATUS[user.status].color}`}>
+                  {USER_STATUS[user.status]?.label}
+                </span>
               </TextSkeleton>
             </div>
           </li>
@@ -252,7 +297,6 @@ const MyProfile = ({ isEdit, setIsEdit, avatar }: IProps) => {
               }}
               submit={{
                 title: 'Save',
-                // onClick: () => setIsEdit(false),
                 size: 'medium',
                 className: 'min-w-fit px-0 text-sm w-30',
                 type: 'submit',

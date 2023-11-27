@@ -43,7 +43,11 @@ export default function MenuItem({
               {Icon === 'avatar' ? (
                 <div className="w-10 h-10">
                   <Image
-                    src={user.detail.avatar['40x40'] || blankAvatar}
+                    src={
+                      user.detail.avatar['40x40'] ||
+                      user.detail.avatar['ORIGIN'] ||
+                      blankAvatar
+                    }
                     alt="avatar"
                     className="rounded-full"
                     width={40}

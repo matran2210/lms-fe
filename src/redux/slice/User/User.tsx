@@ -86,17 +86,23 @@ export const getMe = createAsyncThunk(
     }
   },
 )
-export const updateUserName = createAsyncThunk(
-  'userReducer/updateUserName',
-  async (full_name: string, thunkAPI) => {
+export const updateUser = createAsyncThunk(
+  'userReducer/updateUser',
+  async (
+    {
+      full_name,
+      avatar,
+    }: { full_name: string; avatar?: { [key: string]: string } | null },
+    thunkAPI,
+  ) => {
     try {
-      const res = await UserApi.updateUserName(full_name)
+      const res = await UserApi.updateUser(full_name, avatar)
       if (!res) {
         // toast.error(res.error.message)
         return
       }
       if (res?.data?.message) {
-        toast.success(res.data.message)
+        toast.success(res.data.message, { id: 'update_user_toast' })
       }
 
       return { full_name }
@@ -116,7 +122,7 @@ export const updateUserAvatar = createAsyncThunk(
         return
       }
       if (res?.data?.message) {
-        toast.success(res.data.message)
+        toast.success(res.data.message, { id: 'update_user_toast' })
       }
 
       return { avatar }
@@ -141,29 +147,26 @@ export const userSlice = createSlice({
         state.user = action.payload
       }
     })
-    builder.addCase(getMe.rejected, (state, action) => {
+    builder.addCase(getMe.rejected, (state) => {
       state.loading = false
     })
 
-    builder.addCase(updateUserName.pending, (state) => {
+    builder.addCase(updateUser.pending, (state) => {
       state.loadingEditName = true
     })
-    builder.addCase(updateUserName.fulfilled, (state, action) => {
+    builder.addCase(updateUser.fulfilled, (state) => {
       state.loadingEditName = false
-      if (action.payload?.full_name) {
-        state.user.detail.full_name = action.payload?.full_name
-      }
     })
-    builder.addCase(updateUserName.rejected, (state, action) => {
+    builder.addCase(updateUser.rejected, (state) => {
       state.loadingEditName = false
     })
     builder.addCase(updateUserAvatar.pending, (state) => {
       state.loadingEditAvatar = true
     })
-    builder.addCase(updateUserAvatar.fulfilled, (state, action) => {
+    builder.addCase(updateUserAvatar.fulfilled, (state) => {
       state.loadingEditAvatar = false
     })
-    builder.addCase(updateUserAvatar.rejected, (state, action) => {
+    builder.addCase(updateUserAvatar.rejected, (state) => {
       state.loadingEditAvatar = false
     })
   },
