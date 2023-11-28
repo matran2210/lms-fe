@@ -32,12 +32,10 @@ export const getLoginUser = createAsyncThunk(
     try {
       const res = await AuthApi.login(body)
       if (!res.success) {
-        toast.error(res.error.message)
         return
       }
       return { ...res }
     } catch (error: any) {
-      toast.error(error.message)
       return thunkAPI.rejectWithValue(error)
     }
   },

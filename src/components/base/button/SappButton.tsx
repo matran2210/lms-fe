@@ -44,7 +44,7 @@ const SappButton = ({
   color = 'primary',
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `${className} relative text-center cursor-pointer disabled:cursor-default font-semibold  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass}`
+  let componentClass = `${className} relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-semibold  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass}`
 
   if (link)
     return (

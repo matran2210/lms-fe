@@ -96,7 +96,7 @@ export const updateUser = createAsyncThunk(
     thunkAPI,
   ) => {
     try {
-      const res = await UserApi.updateUser(full_name, avatar)
+      const res = await UserApi.updateUser(full_name?.trim(), avatar)
       if (!res) {
         // toast.error(res.error.message)
         return
@@ -107,7 +107,6 @@ export const updateUser = createAsyncThunk(
 
       return { full_name }
     } catch (error: any) {
-      toast.error(error.message)
       return thunkAPI.rejectWithValue(error)
     }
   },
@@ -127,7 +126,6 @@ export const updateUserAvatar = createAsyncThunk(
 
       return { avatar }
     } catch (error: any) {
-      toast.error(error.message)
       return thunkAPI.rejectWithValue(error)
     }
   },
