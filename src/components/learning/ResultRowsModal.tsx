@@ -17,20 +17,22 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[62px]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[5.5%]',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold pl-[45px]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold pl-[45px] w-[18.7%]',
   },
   {
     label: 'Part',
-    className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
+    className:
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[35.6%]',
   },
   {
     label: 'Chapter',
-    className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
+    className:
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[16.8%]',
   },
   {
     label: 'Result',
@@ -39,7 +41,7 @@ const headers = [
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[78px]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[6.9%]',
   },
 ]
 
@@ -215,6 +217,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         footerButtonClassName="justify-center flex flex-row-reverse"
         footerButtonState="danger"
         showHeader={false}
+        showFooter={false}
       >
         <h2 className="text-xl font-bold text-bw-1 py-6">Your Score Details</h2>
         <div
@@ -232,7 +235,9 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
           isCheckedAll={false}
           hasCheck={false}
           hasCheckAll={false}
-          classTable="w-full ml-3"
+          classTable="w-full ml-3 block"
+          theadClass="block w-full"
+          tbodyClass="block w-full max-h-[calc(100vh-102px)] overflow-y-auto"
           onChange={() => {}}
         >
           <ResultTableRows resultTablerows={listResults} />
