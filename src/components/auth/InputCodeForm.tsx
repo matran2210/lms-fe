@@ -75,7 +75,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       !codeSent && setCodeSent(true)
       setErrorMessage('')
       setCanResend(false)
-      setTimeCountDown(15)
+      setTimeCountDown(5)
       setCurrentToken(response.data.token)
       setCode(Array(6).join('.').split('.'))
     } catch (error) {
