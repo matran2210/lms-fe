@@ -185,7 +185,7 @@ const SappModal: React.FC<IProps> = ({
         {open && (
           // add an onClick handler to the outer div to close the popup when clicking outside
           <div
-            className="sapp-custom-modal fixed z-[1000] w-screen flex justify-center inset-0"
+            className="sapp-custom-modal fixed z-[1000] w-full flex justify-center inset-0"
             role="dialog"
             aria-modal="true"
           >

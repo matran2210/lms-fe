@@ -12,7 +12,10 @@ interface IProps {
   hasCheck?: boolean
   showHeader?: boolean
   showHashtag?: boolean
+  classTableRes?: string
   classTable?: string
+  theadClass?: string
+  tbodyClass?: string
   classString?: string
 }
 
@@ -27,14 +30,17 @@ const SappTable = ({
   hasCheck = true,
   showHeader = true,
   showHashtag = false,
+  classTableRes,
   classTable = 'table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer',
+  theadClass,
+  tbodyClass,
   classString,
 }: IProps) => {
   return (
-    <div className="table-responsive">
+    <div className={`table-responsive overflow-x-auto ${classTableRes}`}>
       <table className={classTable}>
         {showHeader && (
-          <thead>
+          <thead className={`${theadClass}`}>
             <tr
               className={`text-start text-muted fw-bolder fs-7 text-uppercase gs-0 ${classString}`}
             >
@@ -65,7 +71,9 @@ const SappTable = ({
             </tr>
           </thead>
         )}
-        <tbody className="text-gray-600 fw-semibold">{children}</tbody>
+        <tbody className={`text-gray-600 fw-semibold ${tbodyClass}`}>
+          {children}
+        </tbody>
       </table>
     </div>
   )
