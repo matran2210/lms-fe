@@ -17,31 +17,32 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[5.5%]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-6 min-w-62px',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold pl-[45px] w-[18.7%]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold pl-11 w-18 min-w-165px',
   },
   {
     label: 'Part',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[35.6%]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-36 min-w-400px',
   },
   {
     label: 'Chapter',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[16.8%]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-17 min-w-190px',
   },
   {
     label: 'Result',
-    className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
+    className:
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-132px',
   },
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-[6.9%]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-7 min-w-78px',
   },
 ]
 
@@ -173,7 +174,7 @@ const listResults = [
     chapter: 'Time value',
     correctStatus: true,
     status: 'Submitted',
-    statusPercentage: 14,
+    statusPercentage: 0,
     statusIcon: 'global',
     time: 94,
   },
@@ -213,7 +214,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         size="max-w-full"
         refClass="max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all"
         childClass=""
-        parentChildClass="max-w-xxl mx-auto"
+        parentChildClass="max-w-xxl mx-auto px-6 2xl:px-0"
         footerButtonClassName="justify-center flex flex-row-reverse"
         footerButtonState="danger"
         showHeader={false}
@@ -235,9 +236,9 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
           isCheckedAll={false}
           hasCheck={false}
           hasCheckAll={false}
-          classTable="w-full ml-3 block"
-          theadClass="block w-full"
-          tbodyClass="block w-full max-h-[calc(100vh-102px)] overflow-y-auto"
+          theadClass=""
+          tbodyClass=""
+          classTableRes="max-h-[calc(100vh-73px)]"
           onChange={() => {}}
         >
           <ResultTableRows resultTablerows={listResults} />
