@@ -27,16 +27,16 @@ const ResultRow = ({
 
   return (
     <>
-      <td className="text-base text-bw-1 pl-[45px] py-5 border-b border-default border-dashed">
+      <td className="text-base text-bw-1 w-[18.7%] pl-[45px] py-5 border-b border-default border-dashed">
         {type}
       </td>
-      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-[34.5%]">
+      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-[35.6%]">
         {partName}
       </td>
-      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-[16%]">
+      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-[16.8%]">
         {chapter}
       </td>
-      <td className="text-base text-bw-1 flex justify-between pr-[42px] py-5 border-b border-default border-dashed">
+      <td className="text-base text-bw-1 flex justify-between pr-[54px] py-5 border-b border-default border-dashed">
         <div className="flex justify-between gap-1 w-full">
           <span>
             {correctStatus ? (
@@ -51,7 +51,7 @@ const ResultRow = ({
           </span>
         </div>
       </td>
-      <td className="text-base text-bw-1 text-center py-5 border-b border-default border-dashed">
+      <td className="text-base text-bw-1 text-center py-5 border-b border-default border-dashed w-[6.9%]">
         {formattedTime}
       </td>
     </>

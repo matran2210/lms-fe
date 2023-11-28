@@ -211,14 +211,14 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         size="max-w-full"
         refClass="max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all"
         childClass=""
-        parentChildClass="max-w-6xl mx-auto"
+        parentChildClass="max-w-xxl mx-auto"
         footerButtonClassName="justify-center flex flex-row-reverse"
         footerButtonState="danger"
         showHeader={false}
       >
         <h2 className="text-xl font-bold text-bw-1 py-6">Your Score Details</h2>
         <div
-          className="absolute right-6 top-4 p-2 cursor-pointer"
+          className="absolute right-4 top-2.5 p-2 cursor-pointer"
           onClick={() => {
             handleOnClick()
           }}
@@ -232,7 +232,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
           isCheckedAll={false}
           hasCheck={false}
           hasCheckAll={false}
-          classTable="w-full"
+          classTable="w-full ml-3"
           onChange={() => {}}
         >
           <ResultTableRows resultTablerows={listResults} />
