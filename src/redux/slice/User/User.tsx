@@ -96,7 +96,7 @@ export const updateUser = createAsyncThunk(
     thunkAPI,
   ) => {
     try {
-      const res = await UserApi.updateUser(full_name, avatar)
+      const res = await UserApi.updateUser(full_name?.trim(), avatar)
       if (!res) {
         // toast.error(res.error.message)
         return
