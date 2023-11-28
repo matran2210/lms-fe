@@ -104,7 +104,7 @@ const ChangePasswordPage = () => {
             <SappButton
               title="Submit"
               full={true}
-              className="mb-6"
+              className="mb-8"
               size="lager"
               onClick={handleSubmit(onSubmit)}
               loading={loading}

@@ -12,7 +12,7 @@ const ChangePasswordSuccess = () => {
           <div className="bg-body d-flex flex-column align-items-stretch flex-center">
             <div className="d-flex flex-center flex-column  px-lg-10">
               {/* Start Form Login */}
-              <div className="form w-100">
+              <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
                 <div className="swal2-icon swal2-success swal2-icon-show d-flex mb-6 text-center">
                   <Image
                     src={SAPP_PasswordSuccess}
