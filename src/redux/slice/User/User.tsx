@@ -107,7 +107,6 @@ export const updateUser = createAsyncThunk(
 
       return { full_name }
     } catch (error: any) {
-      toast.error(error.message)
       return thunkAPI.rejectWithValue(error)
     }
   },
@@ -127,7 +126,6 @@ export const updateUserAvatar = createAsyncThunk(
 
       return { avatar }
     } catch (error: any) {
-      toast.error(error.message)
       return thunkAPI.rejectWithValue(error)
     }
   },

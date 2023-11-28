@@ -5,6 +5,9 @@ import { PageLink } from 'src/constants'
 import { getLogoutUser } from '../slice/Login/Login'
 import url from './Authen/url'
 
+import toast from 'react-hot-toast'
+import { exceptions } from './en.exceptions'
+
 const { publicRuntimeConfig } = getConfig()
 const { apiURL } = publicRuntimeConfig
 
@@ -119,9 +122,23 @@ axiosInstance.interceptors.response.use(
 
   async (error: any) => {
     // If the error is not an authentication error, return the Promise.reject() method
-    if (error.response && error.response.status !== 401) {
+    const errorCode: string = error?.response?.data?.error?.code
+    const errorMessage = exceptions[errorCode as keyof typeof exceptions]
+    if (
+      (error.response && error.response.status !== 401) ||
+      error.response?.data?.error?.code === '401|0000'
+    ) {
+      if (error?.response?.status !== 422) {
+        toast.error(
+          errorMessage ||
+            error?.response?.statusText ||
+            error?.message ||
+            'Unknown error!',
+        )
+      }
       return Promise.reject(error)
     }
+
     if (error.response && error.response.status === 404) {
       store.dispatch(getLogoutUser())
       window.location.href = PageLink.AUTH_LOGIN
