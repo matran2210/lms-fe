@@ -1,5 +1,5 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import SappButton from '@components/base/button/SappButton'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Image, { StaticImageData } from 'next/image'
 import { MutableRefObject, useState } from 'react'
@@ -263,10 +263,7 @@ const ProfileHeader = ({ isEdit, setAvatar, inputFileRef }: IProps) => {
           </div>
         </div>
         <div>
-          <ButtonPrimary
-            size="lager"
-            title={'Enroll New Course'}
-          ></ButtonPrimary>
+          <SappButton size="lager" title={'Enroll New Course'}></SappButton>
         </div>
       </div>
     </div>

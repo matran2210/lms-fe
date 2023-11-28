@@ -58,7 +58,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         childClass="-mr-4"
         parentChildClass="overflow-y-scroll snap-y  flex-1 bg-white md:px-8 px-5"
         footerButtonClassName="justify-center flex flex-row-reverse"
-        footerButtonState="danger"
+        color="danger"
         showHeader={false}
       >
         <div className="">

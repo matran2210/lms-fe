@@ -19,6 +19,7 @@ import { changePassword, loginReducer } from '../../../redux/slice/Login/Login'
 import { useState } from 'react'
 import AuthApi from 'src/redux/services/Authen'
 import { display422Errors } from '@utils/helpers/form'
+import SappButton from '@components/base/button/SappButton'
 
 interface IInputProps {
   password: string
@@ -79,7 +80,7 @@ const ChangePasswordPage = () => {
   return (
     <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
       <div className="text-4xl font-bold text-bw-1 mb-2">New Password</div>
-      <div className="medium-sm text-gray-1 mb-10">
+      <div className="text-medium-sm text-gray-1 mb-10">
         Set the new password for your account.
       </div>
       <div>
@@ -87,8 +88,9 @@ const ChangePasswordPage = () => {
           <HookFormTextField
             name="password"
             control={control}
-            placeholder="Password"
+            placeholder="New password"
             type="password"
+            textSize="sm"
           />
           <HookFormTextField
             name="confirmPassword"
@@ -96,9 +98,10 @@ const ChangePasswordPage = () => {
             placeholder="Confirm Password"
             type="password"
             className="mt-6"
+            textSize="sm"
           />
           <div className="mt-10">
-            <ButtonPrimary
+            <SappButton
               title="Submit"
               full={true}
               className="mb-6"

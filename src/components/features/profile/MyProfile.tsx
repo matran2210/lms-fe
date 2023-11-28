@@ -1,5 +1,5 @@
+import SappButton from '@components/base/button/SappButton'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,8 +15,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
   getMe,
+  updateUser,
   updateUserAvatar,
-  updateUser as updateUser,
   userReducer,
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
@@ -279,13 +279,13 @@ const MyProfile = ({ isEdit, setIsEdit, avatar, handleSetAvatar }: IProps) => {
         </ul>
         <div className={`${isEdit ? 'mt-11' : 'mt-10'}`}>
           {!isEdit ? (
-            <ButtonPrimary
+            <SappButton
               onClick={handleChangeToEditForm}
               size="medium"
               title={'Edit'}
               className="min-w-[120px] text-sm"
               loading={loading && !isEdit}
-            ></ButtonPrimary>
+            ></SappButton>
           ) : (
             <ButtonCancelSubmit
               cancel={{
