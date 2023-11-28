@@ -64,7 +64,6 @@ const refreshAccessToken = async (): Promise<string | null> => {
     return act
   } catch (error) {
     store.dispatch(getLogoutUser())
-    window.location.href = PageLink.AUTH_LOGIN
     // If there is an error, return null
     return null
   }
@@ -124,6 +123,46 @@ axiosInstance.interceptors.response.use(
     // If the error is not an authentication error, return the Promise.reject() method
     const errorCode: string = error?.response?.data?.error?.code
     const errorMessage = exceptions[errorCode as keyof typeof exceptions]
+
+    const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
+
+    if (error.response && error.response.status === 404) {
+      store.dispatch(getLogoutUser())
+      window.location.href = PageLink.AUTH_LOGIN
+    }
+    // If the error is an authentication error and the refresh flag is false, set the refresh flag and refresh the access token
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !isRefreshing &&
+      !isLoginPage
+    ) {
+      isRefreshing = true
+      const accessToken = await refreshAccessToken()
+
+      // If the access token is refreshed, retry the original request
+      if (accessToken) {
+        const originalRequest = error.config
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`
+        return axiosInstance(originalRequest)
+      }
+    }
+
+    // If the error is an authentication error and the refresh flag is true, block the request and add it to the subscribers array
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      isRefreshing &&
+      !isLoginPage
+    ) {
+      return new Promise((resolve) => {
+        refreshSubscribers.push((accessToken: string) => {
+          error.config.headers.Authorization = `Bearer ${accessToken}`
+          resolve(axiosInstance(error.config))
+        })
+      })
+    }
+
     if (
       (error.response && error.response.status !== 401) ||
       error.response?.data?.error?.code === '401|0000'
@@ -139,34 +178,6 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error)
     }
 
-    if (error.response && error.response.status === 404) {
-      store.dispatch(getLogoutUser())
-      window.location.href = PageLink.AUTH_LOGIN
-    }
-    // If the error is an authentication error and the refresh flag is false, set the refresh flag and refresh the access token
-    if (error.response && error.response.status === 401 && !isRefreshing) {
-      isRefreshing = true
-
-      const accessToken = await refreshAccessToken()
-
-      // If the access token is refreshed, retry the original request
-      if (accessToken) {
-        const originalRequest = error.config
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`
-        return axiosInstance(originalRequest)
-      }
-    }
-
-    // If the error is an authentication error and the refresh flag is true, block the request and add it to the subscribers array
-    if (error.response && error.response.status === 401 && isRefreshing) {
-      return new Promise((resolve) => {
-        refreshSubscribers.push((accessToken: string) => {
-          error.config.headers.Authorization = `Bearer ${accessToken}`
-          resolve(axiosInstance(error.config))
-        })
-      })
-    }
-
     // If there is an error that is not related to authentication, return the Promise.reject() method
     return Promise.reject(error)
   },
@@ -180,7 +191,7 @@ export const httpService = {
         params,
         ...rest,
       })
-      return res.data
+      return res?.data
     } catch (error) {
       throw error
     }
