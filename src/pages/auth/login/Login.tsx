@@ -20,6 +20,7 @@ import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
+import toast from 'react-hot-toast'
 
 interface IInputProps {
   username: string
@@ -52,6 +53,11 @@ const LoginPage = () => {
   const { control, handleSubmit } = useForm<IInputProps>({
     resolver: zodResolver(validationSchema),
     mode: 'onChange',
+    defaultValues: {
+      username: '',
+      password: '',
+      remember_me: false,
+    },
   })
 
   // Call API when submit
@@ -69,7 +75,9 @@ const LoginPage = () => {
       router.push('/')
     } catch (error) {}
   }
-
+  const socialLogin = () => {
+    toast.error('Chức năng này sẽ được update vào version sau!')
+  }
   return (
     <>
       <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
@@ -118,7 +126,7 @@ const LoginPage = () => {
           <div className="flex justify-between items-center">
             <div className="flex gap-3 h-12.5">
               {SocialLogos.map((img, i) => (
-                <a key={i}>
+                <a key={i} onClick={socialLogin}>
                   <Image src={img.url} alt={img.alt} width={50} height={50} />
                 </a>
               ))}

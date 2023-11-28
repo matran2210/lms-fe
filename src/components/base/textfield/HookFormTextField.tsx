@@ -45,43 +45,49 @@ const HookFormTextField = ({
       name={name}
       control={control}
       defaultValue={defaultValue}
-      render={({ field, fieldState: { error } }) => (
-        <div className="w-full">
-          {!skeleton ? (
-            <div>
-              <SAPPTextFiled
-                type={type}
-                textSize={textSize}
-                value={field.value ?? ''}
-                defaultValue={field.value ? undefined : defaultValue}
-                onChange={(value) => {
-                  field.onChange(value)
-                  onChange && onChange(value)
-                }}
-                className={`${className} ${
-                  error
-                    ? 'border-error focus:border-error'
-                    : 'border-default focus:border-focus '
-                }`}
-                placeholder={placeholder}
-                disabled={disabled}
-                label={label}
-                labelClass={labelClass}
-                required={required}
-                maxLength={maxLength}
-                field={field}
-              />{' '}
+      render={({ field, fieldState: { error } }) => {
+        return (
+          <div className="w-full">
+            {!skeleton ? (
               <div>
+                <SAPPTextFiled
+                  type={type}
+                  textSize={textSize}
+                  value={field.value ?? ''}
+                  defaultValue={field.value ? undefined : defaultValue}
+                  onChange={(value) => {
+                    field.onChange(value)
+                    onChange && onChange(value)
+                  }}
+                  className={`${className} ${
+                    error
+                      ? 'border-error focus:border-error'
+                      : 'border-default focus:border-focus '
+                  }`}
+                  placeholder={placeholder}
+                  disabled={disabled}
+                  label={label}
+                  labelClass={labelClass}
+                  required={required}
+                  maxLength={maxLength}
+                  field={field}
+                  isError={!!error?.message}
+                />
+
                 <>
-                  <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                  {error?.message && (
+                    <div>
+                      <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                    </div>
+                  )}
                 </>
               </div>
-            </div>
-          ) : (
-            <div className="flex items-center">Loading...</div>
-          )}
-        </div>
-      )}
+            ) : (
+              <div className="flex items-center">Loading...</div>
+            )}
+          </div>
+        )
+      }}
     />
   )
 }

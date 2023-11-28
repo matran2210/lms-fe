@@ -1,13 +1,12 @@
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
-import { createRef, useEffect, useState } from 'react'
-import useCountdown from './Countdown'
-import AuthApi from 'src/redux/services/Authen'
 import { setAccessToken } from '@utils/helpers/authen'
 import { useRouter } from 'next/router'
+import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
-import toast from 'react-hot-toast'
+import AuthApi from 'src/redux/services/Authen'
+import useCountdown from './Countdown'
 
 interface IInputCodeFormProps {
   error?: string
@@ -32,7 +31,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
 
   // Handle countdown timeout
   useEffect(() => {
-    if (time < 1740 && canResend === false) {
+    if (time < 1785 && canResend === false) {
       setCanResend(true)
     }
 
@@ -79,7 +78,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       setCurrentToken(response.data.token)
       setCode(Array(6).join('.').split('.'))
     } catch (error) {
-      setErrorMessage('Resend code failed. Please try again')
+      setErrorMessage('Invalid OTP. Please try again!')
     } finally {
       setLoading(false)
     }
@@ -100,7 +99,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       }
     } catch (error: any) {
       if (error.response.data.error.code === '400|2001') {
-        toast.error('Invalid OTP')
+        setErrorMessage('Resend code failed. Please try again')
       }
     } finally {
       setLoading(false)
@@ -138,7 +137,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       <ButtonPrimary
         title="Verify Code"
         full={true}
-        className="mb-3"
+        className="mb-5"
         size="lager"
         loading={loading}
         onClick={handleVerifyCode}
@@ -149,7 +148,8 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         full={true}
         disabled={!canResend}
         onClick={onResendCode}
-        className="no-underline pt-2.5 pb-3.25"
+        className="no-underline pt-3 pb-3.25"
+        size="lager"
         loading={loading}
       />
     </>

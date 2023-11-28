@@ -18,6 +18,7 @@ interface IProps {
   maxLength?: number
   field?: ControllerRenderProps<any, string>
   textSize?: 'base' | 'sm'
+  isError?: boolean
 }
 
 const TEXT_SIZES = {
@@ -41,6 +42,7 @@ const SAPPTextFiled = ({
   maxLength,
   field,
   textSize = 'base',
+  isError,
 }: IProps) => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -62,7 +64,9 @@ const SAPPTextFiled = ({
             value={value ?? ''}
             defaultValue={value ? defaultValue : undefined}
             onChange={onChange}
-            className={`${inputClassName} ${TEXT_SIZES[textSize]} form-control w-full bg-transparent border py-3 px-4 shadow-0 focus:shadow-0 focus:outline-none font-medium text-bw-1 placeholder:font-medium placeholder:text-gray-1`}
+            className={`${inputClassName} ${TEXT_SIZES[textSize]} ${
+              isError ? 'border-error' : ''
+            } form-control w-full bg-transparent border py-3 px-4 shadow-0 focus:shadow-0 focus:outline-none font-medium text-bw-1 placeholder:font-medium placeholder:text-gray-1`}
             placeholder={placeholder}
             disabled={disabled}
             maxLength={maxLength}
