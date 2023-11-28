@@ -1,4 +1,4 @@
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import SappButton from '@components/base/button/SappButton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
@@ -49,20 +49,24 @@ const ForgotPasswordPage = () => {
     <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="font-bold text-bw-1 mb-2 text-4xl">Forgot Password</div>
-        <span className="medium-sm text-gray-1 mb-10">
+        <span className="text-medium-sm text-gray-1 mb-10">
           Enter the email you used to create your account so we can send you 6
           digits code to reset your password.
         </span>
         <div className="mt-15">
-          <HookFormTextField name="email" control={control}></HookFormTextField>
+          <HookFormTextField
+            name="email"
+            control={control}
+            textSize="sm"
+          ></HookFormTextField>
         </div>
         {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
-        <ButtonPrimary
+        <SappButton
           title="Send"
           size="lager"
           type="submit"
           className="w-full mt-12"
-        ></ButtonPrimary>
+        ></SappButton>
         <div className="mt-8">
           <Link href={PageLink.AUTH_LOGIN} passHref>
             <div className="text-lg font-semibold text-center leading-7 cursor-pointer w-full">

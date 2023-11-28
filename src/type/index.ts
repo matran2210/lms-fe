@@ -1,3 +1,13 @@
+export type IButtonColors =
+  | 'primary'
+  | 'info'
+  | 'success'
+  | 'secondary'
+  | 'danger'
+  | 'warning'
+  | 'light'
+  | 'dark'
+  | 'outline'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void
@@ -10,6 +20,7 @@ export interface IButtonProps {
   name?: string
   type?: 'button' | 'reset' | 'submit'
   isPaddingHorizontal?: boolean
+  color?: IButtonColors
 }
 
 export interface ITabs {
@@ -21,5 +32,5 @@ export type IButtonCancelSubmitProps = {
   submit: IButtonProps
   cancel: IButtonProps
   className?: string
-  state?: 'primary' | 'danger'
+  color?: IButtonColors
 }

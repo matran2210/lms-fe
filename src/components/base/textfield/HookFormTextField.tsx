@@ -21,6 +21,7 @@ interface IProps {
   skeleton?: boolean
   required?: boolean
   maxLength?: number
+  textSize?: 'base' | 'sm'
 }
 
 const HookFormTextField = ({
@@ -37,6 +38,7 @@ const HookFormTextField = ({
   skeleton,
   required,
   maxLength,
+  textSize,
 }: IProps) => {
   return (
     <Controller
@@ -49,6 +51,7 @@ const HookFormTextField = ({
             <div>
               <SAPPTextFiled
                 type={type}
+                textSize={textSize}
                 value={field.value ?? ''}
                 defaultValue={field.value ? undefined : defaultValue}
                 onChange={(value) => {

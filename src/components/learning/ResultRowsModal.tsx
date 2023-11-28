@@ -216,7 +216,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         childClass=""
         parentChildClass="max-w-xxl mx-auto px-6 2xl:px-0"
         footerButtonClassName="justify-center flex flex-row-reverse"
-        footerButtonState="danger"
+        color="danger"
         showHeader={false}
         showFooter={false}
       >
