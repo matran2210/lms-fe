@@ -7,6 +7,7 @@ import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
 import AuthApi from 'src/redux/services/Authen'
 import useCountdown from './Countdown'
+import SappButton from '@components/base/button/SappButton'
 
 interface IInputCodeFormProps {
   error?: string
@@ -19,7 +20,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
   const [codeSent, setCodeSent] = useState(false)
-  const [timeCountDown, setTimeCountDown, time] = useCountdown(30)
+  const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
   const [errorMessage, setErrorMessage] = useState(error)
   const inputRefs = Array(6)
     .fill(0)
@@ -31,7 +32,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
 
   // Handle countdown timeout
   useEffect(() => {
-    if (time < 1785 && canResend === false) {
+    if (time < 285 && canResend === false) {
       setCanResend(true)
     }
 
@@ -74,7 +75,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       !codeSent && setCodeSent(true)
       setErrorMessage('')
       setCanResend(false)
-      setTimeCountDown(30)
+      setTimeCountDown(15)
       setCurrentToken(response.data.token)
       setCode(Array(6).join('.').split('.'))
     } catch (error) {
@@ -134,7 +135,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
           {timeCountDown}
         </span>
       </div>
-      <ButtonPrimary
+      <SappButton
         title="Verify Code"
         full={true}
         className="mb-5"
