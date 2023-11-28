@@ -41,11 +41,18 @@ export const RouteGuard = ({ children }: IProps) => {
     const accessToken = await AsyncStorage.getItem('accessToken')
     const refreshToken = await AsyncStorage.getItem('refreshToken')
 
-    if ((!accessToken || !refreshToken) && !PUBLIC_PATHS[path]) {
+    if (!accessToken && !refreshToken && !PUBLIC_PATHS[path]) {
       setAuthorized(false)
       router.push(PageLink.AUTH_LOGIN)
     } else {
       setAuthorized(true)
+    }
+
+    // Chặn vào login page khi đã đăng nhập
+    const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
+
+    if ((accessToken || refreshToken) && isLoginPage) {
+      router.push(PageLink.DASHBOARD)
     }
   }
 

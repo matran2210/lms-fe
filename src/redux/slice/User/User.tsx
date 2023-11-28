@@ -81,7 +81,6 @@ export const getMe = createAsyncThunk(
       }
       return { ...res }
     } catch (error: any) {
-      toast.error(error.message)
       return thunkAPI.rejectWithValue(error)
     }
   },

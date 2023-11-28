@@ -16,11 +16,11 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
-import toast from 'react-hot-toast'
 
 interface IInputProps {
   username: string
@@ -37,6 +37,7 @@ const LoginPage = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const userLogin = useAppSelector(loginReducer)
+
   // Validate for input
   const validationSchema = z.object({
     username: z
@@ -85,7 +86,7 @@ const LoginPage = () => {
         <div className="text-medium-sm text-gray-1 mb-10">
           Login to Continue Learning
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
           <HookFormTextField
             name="username"
             control={control}
