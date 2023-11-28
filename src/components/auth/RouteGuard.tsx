@@ -9,11 +9,12 @@ interface IProps {
 
 export const RouteGuard = ({ children }: IProps) => {
   const router = useRouter()
+
   const [authorized, setAuthorized] = useState(false)
 
   useEffect(() => {
     // on initial load - run auth check
-    authCheck(router.asPath)
+    authCheck(router.pathname)
 
     // on route change start - hide page content by setting
     // authorized to false
@@ -38,8 +39,9 @@ export const RouteGuard = ({ children }: IProps) => {
 
     const path = url?.split('?')?.[0]
     const accessToken = await AsyncStorage.getItem('accessToken')
+    const refreshToken = await AsyncStorage.getItem('refreshToken')
 
-    if (!accessToken && !PUBLIC_PATHS[path]) {
+    if ((!accessToken || !refreshToken) && !PUBLIC_PATHS[path]) {
       setAuthorized(false)
       router.push(PageLink.AUTH_LOGIN)
     } else {

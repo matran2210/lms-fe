@@ -7,24 +7,24 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 import Image from 'next/image'
 // import { useState } from 'react'
-import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { useAppDispatch, useAppSelector } from '../../../redux/hook'
-import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
-import { useRouter } from 'next/router'
-import { PageLink } from 'src/constants'
+import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
-  VALIDATE_MIN,
   VALIDATE_MIN_LENGTH,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
-import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+import { PageLink } from 'src/constants'
+import { z } from 'zod'
+import { useAppDispatch, useAppSelector } from '../../../redux/hook'
+import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 
 interface IInputProps {
   username: string
   password: string
+  remember_me: boolean
 }
 
 const SocialLogos = [
@@ -45,6 +45,7 @@ const LoginPage = () => {
       .string({ required_error: VALIDATE_REQUIRED })
       .min(8, { message: VALIDATE_MIN_LENGTH('Password', 8) })
       .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
+    remember_me: z.boolean().default(false),
   })
 
   // Using validate for input
@@ -55,12 +56,13 @@ const LoginPage = () => {
 
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
-    const { username, password } = data
+    const { username, password, remember_me } = data
     try {
       await dispatch(
         getLoginUser({
           username,
           password,
+          remember_me: remember_me ? remember_me : false,
         }),
       ).unwrap()
 
@@ -75,7 +77,7 @@ const LoginPage = () => {
         <div className="medium-sm text-gray-1 mb-10">
           Login to Continue Learning
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <HookFormTextField
             name="username"
             control={control}
@@ -102,7 +104,7 @@ const LoginPage = () => {
           <div className="flex justify-between mb-15">
             <HookFormCheckBox
               control={control}
-              name="remember"
+              name="remember_me"
               className="min-w-4 min-h-4 h-4"
               title="Keep me logged in"
               classNameTitle="medium-sm text-gray-1"
