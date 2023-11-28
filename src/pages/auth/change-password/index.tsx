@@ -77,44 +77,46 @@ const ChangePasswordPage = () => {
   }
 
   return (
-    <>
+    <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
       <div className="text-4xl font-bold text-bw-1 mb-2">New Password</div>
       <div className="medium-sm text-gray-1 mb-10">
         Set the new password for your account.
       </div>
-      <form>
-        <HookFormTextField
-          name="password"
-          control={control}
-          placeholder="Password"
-          type="password"
-        />
-        <HookFormTextField
-          name="confirmPassword"
-          control={control}
-          placeholder="Confirm Password"
-          type="password"
-          className="mt-6"
-        />
-        <div className="mt-10">
-          <ButtonPrimary
-            title="Submit"
-            full={true}
-            className="mb-6"
-            size="lager"
-            onClick={handleSubmit(onSubmit)}
-            loading={loading}
+      <div>
+        <form>
+          <HookFormTextField
+            name="password"
+            control={control}
+            placeholder="Password"
+            type="password"
           />
-          <div className="mt-8">
-            <Link href={PageLink.AUTH_LOGIN} passHref>
-              <div className="text-lg font-semibold text-center leading-7 cursor-pointer w-full">
-                Cancel
-              </div>
-            </Link>
+          <HookFormTextField
+            name="confirmPassword"
+            control={control}
+            placeholder="Confirm Password"
+            type="password"
+            className="mt-6"
+          />
+          <div className="mt-10">
+            <ButtonPrimary
+              title="Submit"
+              full={true}
+              className="mb-6"
+              size="lager"
+              onClick={handleSubmit(onSubmit)}
+              loading={loading}
+            />
+            <div className="mt-8">
+              <Link href={PageLink.AUTH_LOGIN} passHref>
+                <div className="text-lg font-semibold text-center leading-7 cursor-pointer w-full">
+                  Cancel
+                </div>
+              </Link>
+            </div>
           </div>
-        </div>
-      </form>
-    </>
+        </form>
+      </div>
+    </div>
   )
 }
 

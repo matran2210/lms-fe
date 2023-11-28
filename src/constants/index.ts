@@ -7,6 +7,7 @@ export const PageLink = {
   TEACHER: '/teacher',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
+  AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
   AUTH_CHANGE_PASSWORD: '/auth/change-password',
   AUTH_CHANGE_PASSWORD_SUCCESS: '/auth/change-password/change-password-success',
 }
@@ -29,4 +30,5 @@ export const GUIDELINE_PASSWORD = [
 export const PUBLIC_PATHS: { [key: string]: boolean } = {
   [PageLink.AUTH_LOGIN]: true,
   [PageLink.AUTH_FORGOT_PASSWORD]: true,
+  [PageLink.AUTH_FORGOT_PASSWORD_RECOVER]: true,
 }

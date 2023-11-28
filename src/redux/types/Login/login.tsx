@@ -5,6 +5,7 @@ export interface ILoginData {
 export interface LoginReq {
   username: string
   password: string
+  remember_me: boolean
 }
 
 export interface ChangePasswordReq {
