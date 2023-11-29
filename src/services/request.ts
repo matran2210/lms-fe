@@ -1,7 +1,13 @@
-import axios, {AxiosRequestConfig, CancelTokenSource} from 'axios'
-import {PageLink} from 'src/constants'
+import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios'
+import { PageLink } from 'src/constants'
 
-import {getActToken, getRefreshToken, removeJwtToken, setCookieActToken, setCookieRefreshToken} from 'src/utils'
+import {
+  getActToken,
+  getRefreshToken,
+  removeJwtToken,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from 'src/utils'
 // import {toast} from 'react-hot-toast'
 
 // Variable to track whether the refresh token API has been called
@@ -35,7 +41,7 @@ request.interceptors.request.use(
   (error) => {
     // Handle request error
     return Promise.reject(error)
-  }
+  },
 )
 
 request.interceptors.request.use((config: any) => {
@@ -79,7 +85,8 @@ request.interceptors.response.use(
             setCookieRefreshToken(userInfo?.rft)
 
             // update new token to axios
-            request.defaults.headers.common['Authorization'] = `Bearer ${getActToken()}`
+            request.defaults.headers.common['Authorization'] =
+              `Bearer ${getActToken()}`
 
             // Callback to unauth API calls
             refreshSubscribers.forEach((callback) => callback(getActToken()))
@@ -104,7 +111,7 @@ request.interceptors.response.use(
       return retryOriginalRequest
     }
     return Promise.reject(error)
-  }
+  },
 )
 
 request.interceptors.response.use(
@@ -113,5 +120,5 @@ request.interceptors.response.use(
   },
   function (error: any) {
     return Promise.reject(error)
-  }
+  },
 )

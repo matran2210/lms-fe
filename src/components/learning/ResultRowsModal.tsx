@@ -27,7 +27,7 @@ const headers = [
   {
     label: 'Part',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-36 min-w-400px',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-3.6 min-w-400px',
   },
   {
     label: 'Chapter',

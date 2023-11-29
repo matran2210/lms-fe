@@ -46,7 +46,12 @@ body * ::-webkit-scrollbar-thumb {
 body * ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
-
+.menu-sub-dropdown {
+  @apply hidden;
+}
+.active + .menu-sub-dropdown {
+  @apply block;
+}
 .table-responsive tr:last-child td {
   @apply border-b-0;
 }
