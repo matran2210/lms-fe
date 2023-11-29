@@ -97,6 +97,7 @@ module.exports = {
           '0px 2px 4px 0px rgba(0, 0, 0, 0.08), 0px 0px 6px 0px rgba(0, 0, 0, 0.02)',
         'single-dialog': '0px 4px 62px 0px rgba(0, 0, 0, 0.07)',
         box: '0px 2px 4px 0px #00000014, 0px 0px 6px 0px #00000005',
+        notify: '0px 0px 50px 0px rgba(152, 151, 147, 0.15)',
       },
       height: {
         12.5: '50px',
@@ -158,6 +159,7 @@ module.exports = {
         3.25: '0.813rem', // 13px
         3.8: '0.89rem', // 14.3px
         3.8: '0.89rem', // 14.3px
+        4.5: '1.125rem',
         5.25: '1.313rem', // 21px
         8.25: '2.0625rem', // 33px
         17.5: '4.375rem', // 70px

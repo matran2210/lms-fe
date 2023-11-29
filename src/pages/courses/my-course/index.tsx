@@ -109,7 +109,15 @@ const MyCourse = () => {
     <>
       <div className="header bg-white border-b border-default">
         <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
-          <Tabs tabs={tabs} />
+          <Tabs
+            tabs={tabs}
+            classUl="tab-buttons d-flex flex border-r border-gray-1 items-center py-[4.5px]"
+            currentClass="activecolor w-full left-0 absolute bottom-0 h-2.5 bg-primary opacity-[0.15]"
+            tabClass="item relative uppercase text-base w-full flex justify-center cursor-pointer"
+            liClass="mr-12 min-w-[80px]"
+            tabCurrentClass="active text-primary font-semibold capitalize"
+            tabNotCurrentClass="text-gray-1"
+          />
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full ml-12 flex items-center"
