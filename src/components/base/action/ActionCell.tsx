@@ -25,7 +25,7 @@ const ActionCell = ({ children, customWidth }: actionCellProps) => {
   useClickOutside({ ref: wrapperRef, callback: () => setIsActive(false) })
 
   return (
-    <div className={'container'} ref={wrapperRef}>
+    <div className={'containers'} ref={wrapperRef}>
       <div
         className={`cursor-pointer ${isActive ? 'active' : ''}`}
         onClick={handleClick}
