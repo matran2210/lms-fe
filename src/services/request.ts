@@ -85,8 +85,9 @@ request.interceptors.response.use(
             setCookieRefreshToken(userInfo?.rft)
 
             // update new token to axios
-            request.defaults.headers.common['Authorization'] =
-              `Bearer ${getActToken()}`
+            request.defaults.headers.common[
+              'Authorization'
+            ] = `Bearer ${getActToken()}`
 
             // Callback to unauth API calls
             refreshSubscribers.forEach((callback) => callback(getActToken()))
