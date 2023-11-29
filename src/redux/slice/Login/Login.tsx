@@ -14,6 +14,7 @@ import {
   LoginState,
 } from '../../types/Login/login'
 import AuthApi from '../../services/Authen'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -94,6 +95,8 @@ export const loginSlice = createSlice({
         state.user = action.payload.data.user
         setAccessToken(accessToken)
         setRefreshToken(refreshToken)
+        setCookieActToken(accessToken)
+        setCookieRefreshToken(accessToken)
       }
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {
