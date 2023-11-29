@@ -27,17 +27,17 @@ const ResultRow = ({
 
   return (
     <>
-      <td className="text-base text-bw-1 pl-[45px] py-5 border-b border-default border-dashed">
+      <td className="text-base text-bw-1 w-18 pl-11 py-5 border-b border-default border-dashed min-w-165px">
         {type}
       </td>
-      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-[34.5%]">
+      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-3.6 min-w-400px">
         {partName}
       </td>
-      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-[16%]">
+      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-17 min-w-190px">
         {chapter}
       </td>
-      <td className="text-base text-bw-1 flex justify-between pr-[42px] py-5 border-b border-default border-dashed">
-        <div className="flex justify-between gap-1 w-full">
+      <td className="text-base text-bw-1 flex justify-between pr-14 py-5 border-b border-default border-dashed min-w-132px">
+        <div className="flex justify-between gap-x-5 w-full">
           <span>
             {correctStatus ? (
               <span className="text-state-success">{status}</span>
@@ -45,13 +45,15 @@ const ResultRow = ({
               <span className="text-state-error">{status}</span>
             )}
           </span>
-          <span className="flex gap-1 text-base text-gray-1 items-center">
-            <Icon type={statusIcon} />
-            {statusPercentage}%
-          </span>
+          {statusPercentage != 0 && (
+            <span className="flex gap-1 text-base text-gray-1 items-center">
+              <Icon type={statusIcon} />
+              {statusPercentage}%
+            </span>
+          )}
         </div>
       </td>
-      <td className="text-base text-bw-1 text-center py-5 border-b border-default border-dashed">
+      <td className="text-base text-bw-1 text-center py-5 border-b border-default border-dashed w-7 min-w-78px">
         {formattedTime}
       </td>
     </>

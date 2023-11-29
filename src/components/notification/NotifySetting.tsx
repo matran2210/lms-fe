@@ -7,11 +7,7 @@ interface NotifySettingProps {
 }
 
 const NotifySetting = ({ message }: NotifySettingProps) => {
-  return (
-    <div className="py-3 border-b border-gray-2 last:border-0 text-medium-sm text-bw-1">
-      {message}
-    </div>
-  )
+  return <>{message}</>
 }
 
 export default NotifySetting

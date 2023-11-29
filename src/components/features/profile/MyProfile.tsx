@@ -1,5 +1,5 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import SappButton from '@components/base/button/SappButton'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,13 +10,14 @@ import {
   VALIDATE_MIN,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
+import { StaticImageData } from 'next/image'
+import { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
   getMe,
+  updateUser,
   updateUserAvatar,
-  updateUser as updateUser,
   userReducer,
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
@@ -26,6 +27,9 @@ interface IProps {
   setIsEdit: (edit: boolean) => void
   avatar: File | undefined
   handleSetAvatar: (avatar: File | undefined) => void
+  setReViewImageSrc: Dispatch<
+    SetStateAction<string | StaticImageData | undefined>
+  >
 }
 
 const schema = z.object({
@@ -35,7 +39,13 @@ const schema = z.object({
     .max(100, { message: VALIDATE_MAX('Fullname', 100) }),
 })
 
-const MyProfile = ({ isEdit, setIsEdit, avatar, handleSetAvatar }: IProps) => {
+const MyProfile = ({
+  isEdit,
+  setIsEdit,
+  avatar,
+  handleSetAvatar,
+  setReViewImageSrc,
+}: IProps) => {
   const dispatch = useAppDispatch()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)
   // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
@@ -59,29 +69,21 @@ const MyProfile = ({ isEdit, setIsEdit, avatar, handleSetAvatar }: IProps) => {
    */
   const handleChangeToPreview = () => {
     // Gọi hành động thunk open của confirmDialogThunk và chờ kết quả
-    dispatch(
-      confirmDialog.open({
-        // Nội dung của hộp thoại xác nhận
-        message: 'Bạn có chắc chắn muốn hủy không?',
-        // Hàm thực thi khi người dùng xác nhận hành động
-        onConfirm: async () => {
-          // Đặt trạng thái isEdit thành false
-          setIsEdit(false)
-          // Đặt lại giá trị của form về ban đầu
-          reset(
-            {
-              full_name: user.detail.full_name,
-            },
-            {
-              keepDirty: false,
-              keepErrors: false,
-              keepDirtyValues: false,
-              keepIsValid: false,
-              keepTouched: false,
-            },
-          )
-        },
-      }),
+    setIsEdit(false)
+    // Đặt lại giá trị của form về ban đầu
+    handleSetAvatar(undefined)
+    setReViewImageSrc(undefined)
+    reset(
+      {
+        full_name: user.detail.full_name,
+      },
+      {
+        keepDirty: false,
+        keepErrors: false,
+        keepDirtyValues: false,
+        keepIsValid: false,
+        keepTouched: false,
+      },
     )
   }
 
@@ -279,13 +281,13 @@ const MyProfile = ({ isEdit, setIsEdit, avatar, handleSetAvatar }: IProps) => {
         </ul>
         <div className={`${isEdit ? 'mt-11' : 'mt-10'}`}>
           {!isEdit ? (
-            <ButtonPrimary
+            <SappButton
               onClick={handleChangeToEditForm}
               size="medium"
               title={'Edit'}
               className="min-w-[120px] text-sm"
               loading={loading && !isEdit}
-            ></ButtonPrimary>
+            ></SappButton>
           ) : (
             <ButtonCancelSubmit
               cancel={{

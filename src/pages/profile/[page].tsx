@@ -3,6 +3,7 @@ import ProfileHeader from '@components/features/profile/ProfileHeader'
 import ProfileSideBar from '@components/features/profile/ProfileSideBar'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { GetServerSideProps } from 'next'
+import { StaticImageData } from 'next/image'
 import { useRef, useState } from 'react'
 import { IProfilePages } from 'src/type/Profile'
 
@@ -14,6 +15,10 @@ const ProfilePage = ({ page }: IProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
   const inputFileRef = useRef<HTMLInputElement | null>(null)
+
+  const [reViewImageSrc, setReViewImageSrc] = useState<
+    string | StaticImageData
+  >()
 
   const handleSetAvatar = (avatar: File | undefined) => {
     setAvatar(avatar)
@@ -28,6 +33,8 @@ const ProfilePage = ({ page }: IProps) => {
     <div className="max-w-xxl my-0 mx-auto w-full">
       <div className="relative">
         <ProfileHeader
+          reViewImageSrc={reViewImageSrc}
+          setReViewImageSrc={setReViewImageSrc}
           setAvatar={handleSetAvatar}
           isEdit={isEdit}
           inputFileRef={inputFileRef}
@@ -36,6 +43,7 @@ const ProfilePage = ({ page }: IProps) => {
       <div className="flex sm:flex-row flex-col justify-between gap-6">
         <ProfileSideBar page={page}></ProfileSideBar>
         <ProfileContent
+          setReViewImageSrc={setReViewImageSrc}
           isEdit={isEdit}
           setIsEdit={handleSetIsEdit}
           page={page}

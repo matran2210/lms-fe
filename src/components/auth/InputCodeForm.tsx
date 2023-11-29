@@ -1,12 +1,13 @@
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
-import { createRef, useEffect, useState } from 'react'
-import useCountdown from './Countdown'
-import AuthApi from 'src/redux/services/Authen'
 import { setAccessToken } from '@utils/helpers/authen'
 import { useRouter } from 'next/router'
+import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
+import AuthApi from 'src/redux/services/Authen'
+import useCountdown from './Countdown'
+import SappButton from '@components/base/button/SappButton'
 
 interface IInputCodeFormProps {
   error?: string
@@ -19,7 +20,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
   const [codeSent, setCodeSent] = useState(false)
-  const [timeCountDown, setTimeCountDown, time] = useCountdown(30)
+  const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
   const [errorMessage, setErrorMessage] = useState(error)
   const inputRefs = Array(6)
     .fill(0)
@@ -31,7 +32,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
 
   // Handle countdown timeout
   useEffect(() => {
-    if (time < 1740 && canResend === false) {
+    if (time < 285 && canResend === false) {
       setCanResend(true)
     }
 
@@ -74,10 +75,11 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       !codeSent && setCodeSent(true)
       setErrorMessage('')
       setCanResend(false)
-      setTimeCountDown(30)
+      setTimeCountDown(5)
       setCurrentToken(response.data.token)
+      setCode(Array(6).join('.').split('.'))
     } catch (error) {
-      setErrorMessage('Resend code failed. Please try again')
+      setErrorMessage('Invalid OTP. Please try again!')
     } finally {
       setLoading(false)
     }
@@ -97,6 +99,9 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         }, 1000)
       }
     } catch (error: any) {
+      if (error.response.data.error.code === '400|2001') {
+        setErrorMessage('Resend code failed. Please try again')
+      }
     } finally {
       setLoading(false)
     }
@@ -130,10 +135,10 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
           {timeCountDown}
         </span>
       </div>
-      <ButtonPrimary
+      <SappButton
         title="Verify Code"
         full={true}
-        className="mb-3"
+        className="mb-5"
         size="lager"
         loading={loading}
         onClick={handleVerifyCode}
@@ -144,7 +149,8 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         full={true}
         disabled={!canResend}
         onClick={onResendCode}
-        className="no-underline pt-2.5 pb-3.25"
+        className="no-underline pt-3 pb-3.25"
+        size="lager"
         loading={loading}
       />
     </>

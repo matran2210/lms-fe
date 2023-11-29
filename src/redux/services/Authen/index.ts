@@ -16,7 +16,11 @@ const AuthApi = {
     const uri = url.login
     return httpService.POST<LoginReq, IResponse<LoginRes>>({
       uri,
-      request,
+      request: {
+        login: request.login?.trim(),
+        password: request.password?.trim(),
+        remember_me: request.remember_me,
+      },
     })
   },
   logout: (): Promise<IResponse<LoginRes>> => {
@@ -36,7 +40,9 @@ const AuthApi = {
     const uri = url.sendEmail
     return httpService.POST<SendEmailReq, IResponse<{ token: string }>>({
       uri,
-      request,
+      request: {
+        email: request.email?.trim(),
+      },
     })
   },
   verifyOtp: (request: VerifyOtpReq) => {
@@ -53,7 +59,9 @@ const AuthApi = {
     const uri = url.resetPassword
     return httpService.POST<ResetPassword, IResponse<any>>({
       uri,
-      request,
+      request: {
+        new_password: request.new_password?.trim(),
+      },
     })
   },
 }

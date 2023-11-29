@@ -52,3 +52,6 @@ body * ::-webkit-scrollbar-thumb:hover {
 .active + .menu-sub-dropdown {
   @apply block;
 }
+.table-responsive tr:last-child td {
+  @apply border-b-0;
+}

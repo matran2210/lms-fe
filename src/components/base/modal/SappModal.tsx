@@ -10,6 +10,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import Icon from '@components/icons'
+import { IButtonColors } from 'src/type'
 
 interface IProps {
   open?: boolean
@@ -37,7 +38,7 @@ interface IProps {
   childClass?: string
   parentChildClass?: string
   footerButtonClassName?: string
-  footerButtonState?: 'primary' | 'danger'
+  color?: IButtonColors
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -82,7 +83,7 @@ const SappModal: React.FC<IProps> = ({
   childClass = '',
   parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex',
-  footerButtonState,
+  color,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -185,7 +186,7 @@ const SappModal: React.FC<IProps> = ({
         {open && (
           // add an onClick handler to the outer div to close the popup when clicking outside
           <div
-            className="sapp-custom-modal fixed z-[1000] w-screen flex justify-center inset-0"
+            className="sapp-custom-modal fixed z-[1000] w-full flex justify-center inset-0"
             role="dialog"
             aria-modal="true"
           >
@@ -238,7 +239,7 @@ const SappModal: React.FC<IProps> = ({
                     {customFooter || (
                       <ButtonCancelSubmit
                         className={footerButtonClassName}
-                        state={footerButtonState}
+                        color={color}
                         submit={{
                           title: okButtonCaption,
                           size: 'medium',

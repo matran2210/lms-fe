@@ -1,30 +1,31 @@
 import Google_Logo from '@assets/images/google_logo.svg'
 import Microsoft_Logo from '@assets/images/microsoft_logo.svg'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 import Image from 'next/image'
 // import { useState } from 'react'
-import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { useAppDispatch, useAppSelector } from '../../../redux/hook'
-import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
-import { useRouter } from 'next/router'
-import { PageLink } from 'src/constants'
+import SappButton from '@components/base/button/SappButton'
+import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
-  VALIDATE_MIN,
   VALIDATE_MIN_LENGTH,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
-import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { PageLink } from 'src/constants'
+import { z } from 'zod'
+import { useAppDispatch, useAppSelector } from '../../../redux/hook'
+import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 
 interface IInputProps {
-  username: string
+  login: string
   password: string
+  remember_me: boolean
 }
 
 const SocialLogos = [
@@ -36,51 +37,62 @@ const LoginPage = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const userLogin = useAppSelector(loginReducer)
+
   // Validate for input
   const validationSchema = z.object({
-    username: z
+    login: z
       .string({ required_error: VALIDATE_REQUIRED })
       .min(5, { message: VALIDATE_MIN_LENGTH('Username or Email', 5) }),
     password: z
       .string({ required_error: VALIDATE_REQUIRED })
       .min(8, { message: VALIDATE_MIN_LENGTH('Password', 8) })
       .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
+    remember_me: z.boolean().default(false),
   })
 
   // Using validate for input
   const { control, handleSubmit } = useForm<IInputProps>({
     resolver: zodResolver(validationSchema),
     mode: 'onChange',
+    defaultValues: {
+      login: '',
+      password: '',
+      remember_me: false,
+    },
   })
 
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
-    const { username, password } = data
+    const { login, password, remember_me } = data
     try {
       await dispatch(
         getLoginUser({
-          username,
+          login,
           password,
+          remember_me: remember_me ? remember_me : false,
         }),
       ).unwrap()
 
       router.push('/')
     } catch (error) {}
   }
-
+  const socialLogin = () => {
+    toast.error('Chức năng này sẽ được update vào version sau!')
+  }
   return (
     <>
       <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
         <div className="text-4xl font-bold text-bw-1 mb-2">Log In</div>
-        <div className="medium-sm text-gray-1 mb-10">
+        <div className="text-medium-sm text-gray-1 mb-10">
           Login to Continue Learning
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
           <HookFormTextField
-            name="username"
+            name="login"
             control={control}
             placeholder="Username or Email"
             type="text"
+            textSize="sm"
           />
           <HookFormTextField
             name="password"
@@ -88,9 +100,10 @@ const LoginPage = () => {
             placeholder="Password"
             type="password"
             className="mt-6"
+            textSize="sm"
           />
           <div className="mt-10">
-            <ButtonPrimary
+            <SappButton
               title="Log In"
               full={true}
               className="mb-6"
@@ -102,26 +115,26 @@ const LoginPage = () => {
           <div className="flex justify-between mb-15">
             <HookFormCheckBox
               control={control}
-              name="remember"
+              name="remember_me"
               className="min-w-4 min-h-4 h-4"
               title="Keep me logged in"
-              classNameTitle="medium-sm text-gray-1"
+              classNameTitle="text-medium-sm text-gray-1"
             />
-            <span className="medium-sm text-gray-1 hover:underline">
+            <span className="text-medium-sm text-gray-1 hover:underline">
               <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
             </span>
           </div>
           <div className="flex justify-between items-center">
             <div className="flex gap-3 h-12.5">
               {SocialLogos.map((img, i) => (
-                <a key={i}>
+                <a key={i} onClick={socialLogin}>
                   <Image src={img.url} alt={img.alt} width={50} height={50} />
                 </a>
               ))}
             </div>
-            <p className="medium-sm text-gray-1">
+            <p className="text-medium-sm text-gray-1">
               Don&#39;t have an account?{' '}
-              <a className="medium-sm text-state-info hover:underline">
+              <a className="text-medium-sm text-state-info hover:underline">
                 Register
               </a>
             </p>

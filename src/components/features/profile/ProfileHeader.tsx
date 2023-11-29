@@ -1,8 +1,8 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import SappButton from '@components/base/button/SappButton'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Image, { StaticImageData } from 'next/image'
-import { MutableRefObject, useState } from 'react'
+import { Dispatch, MutableRefObject, SetStateAction } from 'react'
 import toast from 'react-hot-toast'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
@@ -11,16 +11,23 @@ interface IProps {
   isEdit: boolean
   setAvatar: (avatar?: File) => void
   inputFileRef: MutableRefObject<HTMLInputElement | null>
+  reViewImageSrc: string | StaticImageData | undefined
+  setReViewImageSrc: Dispatch<
+    SetStateAction<string | StaticImageData | undefined>
+  >
 }
-const ProfileHeader = ({ isEdit, setAvatar, inputFileRef }: IProps) => {
+const ProfileHeader = ({
+  isEdit,
+  setAvatar,
+  inputFileRef,
+  reViewImageSrc,
+  setReViewImageSrc,
+}: IProps) => {
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
     useAppSelector(userReducer)
 
   // Sử dụng state để lưu giá trị của hình ảnh xem trước
-  const [reViewImageSrc, setReViewImageSrc] = useState<
-    string | StaticImageData
-  >()
 
   /**
    * Một hàm để xử lý khi người dùng thay đổi file ảnh tải lên
@@ -263,10 +270,7 @@ const ProfileHeader = ({ isEdit, setAvatar, inputFileRef }: IProps) => {
           </div>
         </div>
         <div>
-          <ButtonPrimary
-            size="lager"
-            title={'Enroll New Course'}
-          ></ButtonPrimary>
+          <SappButton size="lager" title={'Enroll New Course'}></SappButton>
         </div>
       </div>
     </div>
