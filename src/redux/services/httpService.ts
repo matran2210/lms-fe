@@ -163,10 +163,19 @@ axiosInstance.interceptors.response.use(
       })
     }
 
-    if (
-      (error.response && error.response.status !== 401) ||
-      error.response?.data?.error?.code === '401|0000'
-    ) {
+    if (isLoginPage && error.response?.config?.url !== '/me') {
+      if (error?.response?.status !== 422) {
+        toast.error(
+          errorMessage ||
+            error?.response?.statusText ||
+            error?.message ||
+            'Unknown error!',
+        )
+      }
+      return Promise.reject(error)
+    }
+
+    if (error.response && error.response.status !== 401) {
       if (error?.response?.status !== 422) {
         toast.error(
           errorMessage ||

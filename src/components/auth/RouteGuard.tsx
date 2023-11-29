@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PUBLIC_PATHS, PageLink } from 'src/constants'
+import { useAppDispatch } from 'src/redux/hook'
+import { getMe } from 'src/redux/slice/User/User'
 
 interface IProps {
   children: JSX.Element
@@ -11,6 +13,7 @@ export const RouteGuard = ({ children }: IProps) => {
   const router = useRouter()
 
   const [authorized, setAuthorized] = useState(false)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     // on initial load - run auth check
@@ -50,9 +53,11 @@ export const RouteGuard = ({ children }: IProps) => {
 
     // Chặn vào login page khi đã đăng nhập
     const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
-
-    if ((accessToken || refreshToken) && isLoginPage) {
-      router.push(PageLink.DASHBOARD)
+    if (isLoginPage) {
+      try {
+        await dispatch(getMe()).unwrap()
+        router.push(PageLink.DASHBOARD)
+      } catch (error) {}
     }
   }
 
