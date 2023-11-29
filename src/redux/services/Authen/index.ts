@@ -17,7 +17,7 @@ const AuthApi = {
     return httpService.POST<LoginReq, IResponse<LoginRes>>({
       uri,
       request: {
-        username: request.username?.trim(),
+        login: request.login?.trim(),
         password: request.password?.trim(),
         remember_me: request.remember_me,
       },

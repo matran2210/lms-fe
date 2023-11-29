@@ -23,7 +23,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 
 interface IInputProps {
-  username: string
+  login: string
   password: string
   remember_me: boolean
 }
@@ -40,7 +40,7 @@ const LoginPage = () => {
 
   // Validate for input
   const validationSchema = z.object({
-    username: z
+    login: z
       .string({ required_error: VALIDATE_REQUIRED })
       .min(5, { message: VALIDATE_MIN_LENGTH('Username or Email', 5) }),
     password: z
@@ -55,7 +55,7 @@ const LoginPage = () => {
     resolver: zodResolver(validationSchema),
     mode: 'onChange',
     defaultValues: {
-      username: '',
+      login: '',
       password: '',
       remember_me: false,
     },
@@ -63,11 +63,11 @@ const LoginPage = () => {
 
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
-    const { username, password, remember_me } = data
+    const { login, password, remember_me } = data
     try {
       await dispatch(
         getLoginUser({
-          username,
+          login,
           password,
           remember_me: remember_me ? remember_me : false,
         }),
@@ -88,7 +88,7 @@ const LoginPage = () => {
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
           <HookFormTextField
-            name="username"
+            name="login"
             control={control}
             placeholder="Username or Email"
             type="text"
