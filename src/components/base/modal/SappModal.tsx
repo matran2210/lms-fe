@@ -40,6 +40,7 @@ interface IProps {
   footerButtonClassName?: string
   color?: IButtonColors
   position?: 'center' | 'top' | 'bottom'
+  fullWidthBtn?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -86,6 +87,7 @@ const SappModal: React.FC<IProps> = ({
   footerButtonClassName = 'justify-center sm:justify-end flex',
   color,
   position = 'top',
+  fullWidthBtn = false,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -251,12 +253,14 @@ const SappModal: React.FC<IProps> = ({
                           loading: loading,
                           disabled: disabled,
                           onClick: onOk,
+                          full: fullWidthBtn,
                         }}
                         cancel={{
                           title: cancelButtonCaption,
                           size: 'medium',
                           onClick: onCancel,
                           loading: loading,
+                          full: fullWidthBtn,
                         }}
                       ></ButtonCancelSubmit>
                     )}
