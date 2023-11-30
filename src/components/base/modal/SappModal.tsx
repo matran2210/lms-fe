@@ -195,9 +195,7 @@ const SappModal: React.FC<IProps> = ({
               onClick={onCancel}
               className="animate-fade-in-overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
             ></div>
-            <div
-              className={`w-full ${size} min-h-full text-center sm:items-start`}
-            >
+            <div className={`${size} min-h-full text-center sm:items-start`}>
               <div ref={confirmDialogRef} className={`${refClass}`}>
                 {showHeader && (
                   <div className="bg-white md:pb-8 pb-5">
