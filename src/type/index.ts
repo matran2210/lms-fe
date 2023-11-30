@@ -8,6 +8,7 @@ export type IButtonColors =
   | 'light'
   | 'dark'
   | 'outline'
+  | 'text'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void
@@ -19,8 +20,9 @@ export interface IButtonProps {
   full?: boolean
   name?: string
   type?: 'button' | 'reset' | 'submit'
-  isPaddingHorizontal?: boolean
+  isPadding?: boolean
   color?: IButtonColors
+  isUnderLine?: boolean
 }
 
 export interface ITabs {

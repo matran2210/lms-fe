@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { display422Errors } from '@utils/helpers/form'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
@@ -14,6 +13,7 @@ import { z } from 'zod'
 const schema = z.object({
   email: z
     .string({ required_error: VALIDATE_REQUIRED })
+    .trim()
     .email()
     .refine((e) => e),
 })
@@ -44,6 +44,11 @@ const ForgotPasswordPage = () => {
       display422Errors(error, setError)
     }
   }
+  const redirectLogin = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    router.push(PageLink.AUTH_LOGIN)
+  }
 
   return (
     <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
@@ -58,6 +63,7 @@ const ForgotPasswordPage = () => {
             name="email"
             control={control}
             textSize="sm"
+            placeholder="Email"
           ></HookFormTextField>
         </div>
         {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
@@ -68,11 +74,16 @@ const ForgotPasswordPage = () => {
           className="w-full mt-12"
         ></SappButton>
         <div className="mt-8">
-          <Link href={PageLink.AUTH_LOGIN} passHref>
-            <div className="text-lg font-semibold text-center leading-7 cursor-pointer w-full">
-              Back to Login
-            </div>
-          </Link>
+          <SappButton
+            title="Back to Login"
+            size="lager"
+            type="submit"
+            className="w-full mt-8"
+            color="text"
+            isUnderLine={false}
+            isPadding={false}
+            onClick={redirectLogin}
+          ></SappButton>
         </div>
       </form>
     </div>
