@@ -21,6 +21,7 @@ export interface IButtonProps {
   name?: string
   type?: 'button' | 'reset' | 'submit'
   isPadding?: boolean
+  isPaddingHorizontal?: boolean
   color?: IButtonColors
   isUnderLine?: boolean
 }
