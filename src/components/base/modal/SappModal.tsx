@@ -39,6 +39,8 @@ interface IProps {
   parentChildClass?: string
   footerButtonClassName?: string
   color?: IButtonColors
+  position?: 'center' | 'top' | 'bottom'
+  fullWidthBtn?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -79,11 +81,13 @@ const SappModal: React.FC<IProps> = ({
 
   confirmOnclose,
   size = 'max-w-lg',
-  refClass = '',
+  refClass = 'md:p-8 p-5 flex flex-col animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all',
   childClass = '',
   parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex',
   color,
+  position = 'top',
+  fullWidthBtn = false,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -186,7 +190,7 @@ const SappModal: React.FC<IProps> = ({
         {open && (
           // add an onClick handler to the outer div to close the popup when clicking outside
           <div
-            className="sapp-custom-modal fixed z-[1000] w-full flex justify-center inset-0"
+            className={`sapp-custom-modal fixed z-[1000] w-full flex justify-center inset-0 items-${position}`}
             role="dialog"
             aria-modal="true"
           >
@@ -195,8 +199,11 @@ const SappModal: React.FC<IProps> = ({
               onClick={onCancel}
               className="animate-fade-in-overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
             ></div>
-            <div className={`${size} min-h-full text-center sm:items-start`}>
-              <div ref={confirmDialogRef} className={`${refClass}`}>
+            <div className={`${size} text-center`}>
+              <div
+                ref={confirmDialogRef}
+                className={` w-full h-full ${refClass}`}
+              >
                 {showHeader && (
                   <div className="bg-white md:pb-8 pb-5">
                     <div className="flex">
@@ -228,7 +235,9 @@ const SappModal: React.FC<IProps> = ({
                   </div>
                 )}
 
-                <div className={`${parentChildClass}`}>
+                <div
+                  className={`${parentChildClass} snap-y flex-1 overflow-y-scroll  bg-white md:px-8 px-5`}
+                >
                   <div className={`${childClass}`}>{children}</div>
                 </div>
 
@@ -244,12 +253,14 @@ const SappModal: React.FC<IProps> = ({
                           loading: loading,
                           disabled: disabled,
                           onClick: onOk,
+                          full: fullWidthBtn,
                         }}
                         cancel={{
                           title: cancelButtonCaption,
                           size: 'medium',
                           onClick: onCancel,
                           loading: loading,
+                          full: fullWidthBtn,
                         }}
                       ></ButtonCancelSubmit>
                     )}

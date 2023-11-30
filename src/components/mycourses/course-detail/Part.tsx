@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import Link from 'next/link'
-import EntrancePopup from '@components/entrance-test/EntrancePopup'
 import SolutionModal from '../solution/SolutionModal'
+import SappModal from '@components/base/modal/SappModal'
+import TestModal from 'src/pages/courses/test'
 
 interface IProps {
   name: string
@@ -28,11 +29,7 @@ const Part = ({
   buttonText,
   pass,
 }: IProps) => {
-  const [open, setOpen] = useState<boolean>(false)
-  const handleOnClick = () => {
-    setOpen(true)
-  }
-
+  const [open, setOpen] = useState(false)
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
@@ -73,12 +70,14 @@ const Part = ({
               full={false}
               size={'small'}
               className="hover:bg-primary hover:text-white ml-auto"
-              onClick={handleOnClick}
+              onClick={() => setOpen(true)}
             />
           )}
         </div>
       </div>
-      <SolutionModal open={open} setOpen={setOpen} />
+      {/* Solution test modal */}
+      {/* <SolutionModal open={open} setOpen={setOpen} /> */}
+      <TestModal open={open} setOpen={setOpen} title={name} />
     </>
   )
 }
