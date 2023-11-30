@@ -40,6 +40,7 @@ const ChangePasswordPage = () => {
         }),
       confirmPassword: z
         .string({ required_error: VALIDATE_REQUIRED })
+        .trim()
         .min(1, { message: VALIDATE_REQUIRED })
         .min(8, { message: VALIDATE_MIN_LENGTH('Confirm password', 8) })
         .regex(VALIDATE_PASSWORD, {
