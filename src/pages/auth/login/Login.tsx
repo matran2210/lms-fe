@@ -42,9 +42,11 @@ const LoginPage = () => {
   const validationSchema = z.object({
     login: z
       .string({ required_error: VALIDATE_REQUIRED })
+      .trim()
       .min(5, { message: VALIDATE_MIN_LENGTH('Username or Email', 5) }),
     password: z
       .string({ required_error: VALIDATE_REQUIRED })
+      .trim()
       .min(8, { message: VALIDATE_MIN_LENGTH('Password', 8) })
       .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
     remember_me: z.boolean().default(false),
