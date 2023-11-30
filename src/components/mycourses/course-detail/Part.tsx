@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import Link from 'next/link'
+import EntrancePopup from '@components/entrance-test/EntrancePopup'
+import SolutionModal from '../solution/SolutionModal'
 
 interface IProps {
   name: string
@@ -26,6 +28,11 @@ const Part = ({
   buttonText,
   pass,
 }: IProps) => {
+  const [open, setOpen] = useState<boolean>(false)
+  const handleOnClick = () => {
+    setOpen(true)
+  }
+
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
@@ -66,10 +73,12 @@ const Part = ({
               full={false}
               size={'small'}
               className="hover:bg-primary hover:text-white ml-auto"
+              onClick={handleOnClick}
             />
           )}
         </div>
       </div>
+      <SolutionModal open={open} setOpen={setOpen} />
     </>
   )
 }

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
+import EntrancePopup from '@components/entrance-test/EntrancePopup'
 interface CourseProps {
   name: string
   active: boolean
@@ -97,7 +98,10 @@ const Course = ({
         )}
         <div className="action flex items-center jusity-between relative">
           {changeExam && (
-            <a className="underline capitalize block text-bw-1 text-medium-sm font-semibold">
+            <a
+              className="underline capitalize block text-bw-1 text-medium-sm font-semibold"
+              onClick={handleOnClick}
+            >
               {changeExam}
             </a>
           )}
