@@ -71,7 +71,7 @@ const ForgotPasswordPage = () => {
           title="Send"
           size="lager"
           type="submit"
-          className="w-full mt-12"
+          className="w-full mt-[31px]"
         ></SappButton>
         <div className="mt-8">
           <SappButton

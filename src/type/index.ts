@@ -7,6 +7,7 @@ export type IButtonColors =
   | 'warning'
   | 'light'
   | 'dark'
+  | 'white'
   | 'outline'
   | 'text'
 export interface IButtonProps {

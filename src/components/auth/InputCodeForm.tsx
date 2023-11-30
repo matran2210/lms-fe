@@ -78,7 +78,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       settimeCountDownResent(() => time - 15)
       setCurrentToken(response.data.token)
     } catch (error) {
-      setErrorMessage('Invalid OTP. Please try again!')
+      setErrorMessage('Resend code failed. Please try again')
     } finally {
       setLoading(false)
     }
@@ -100,7 +100,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       setTimeCountDown(5)
     } catch (error: any) {
       if (error.response.data.error.code === '400|2001') {
-        setErrorMessage('Resend code failed. Please try again')
+        setErrorMessage('Invalid OTP. Please try again!')
       }
     } finally {
       setLoading(false)
