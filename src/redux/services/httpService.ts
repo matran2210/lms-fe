@@ -175,6 +175,10 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error)
     }
 
+    if (error.response && errorCode === '400|2001') {
+      return Promise.reject(error)
+    }
+
     if (error.response && error.response.status !== 401) {
       if (error?.response?.status !== 422) {
         toast.error(

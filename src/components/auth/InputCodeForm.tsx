@@ -1,5 +1,5 @@
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
+import SappButton from '@components/base/button/SappButton'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
 import { setAccessToken } from '@utils/helpers/authen'
 import { useRouter } from 'next/router'
@@ -7,7 +7,6 @@ import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
 import AuthApi from 'src/redux/services/Authen'
 import useCountdown from './Countdown'
-import SappButton from '@components/base/button/SappButton'
 
 interface IInputCodeFormProps {
   error?: string
@@ -21,6 +20,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const [canResend, setCanResend] = useState(false)
   const [codeSent, setCodeSent] = useState(false)
   const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
+  const [timeCountDownResent, settimeCountDownResent] = useState<number>(285)
   const [errorMessage, setErrorMessage] = useState(error)
   const inputRefs = Array(6)
     .fill(0)
@@ -32,7 +32,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
 
   // Handle countdown timeout
   useEffect(() => {
-    if (time < 285 && canResend === false) {
+    if (time < timeCountDownResent && canResend === false) {
       setCanResend(true)
     }
 
@@ -75,9 +75,8 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       !codeSent && setCodeSent(true)
       setErrorMessage('')
       setCanResend(false)
-      setTimeCountDown(5)
+      settimeCountDownResent(() => time - 15)
       setCurrentToken(response.data.token)
-      setCode(Array(6).join('.').split('.'))
     } catch (error) {
       setErrorMessage('Invalid OTP. Please try again!')
     } finally {
@@ -98,6 +97,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
           router.push(PageLink.AUTH_CHANGE_PASSWORD)
         }, 1000)
       }
+      setTimeCountDown(5)
     } catch (error: any) {
       if (error.response.data.error.code === '400|2001') {
         setErrorMessage('Resend code failed. Please try again')

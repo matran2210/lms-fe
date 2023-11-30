@@ -6,7 +6,7 @@ export const LANG_SIGNIN = {
   orWithEmail: 'Or with email',
   email: 'Email',
   password: 'Password',
-  forgotPassword: 'Forgot Password ?',
+  forgotPassword: 'Forgot password ?',
   notMember: 'Not a Member yet?',
   signUp: 'Sign up',
   english: 'English',

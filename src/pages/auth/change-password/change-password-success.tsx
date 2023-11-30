@@ -2,9 +2,16 @@ import SAPP_PasswordSuccess from '@assets/images/sapp_password_success.svg'
 import SappButton from '@components/base/button/SappButton'
 import { LAYOUT } from '@utils/constants'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants'
 
 const ChangePasswordSuccess = () => {
+  const router = useRouter()
+  const redirectLogin = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    router.push(PageLink.AUTH_LOGIN)
+  }
   return (
     <div className="d-flex flex-column flex-root sapp-height-layout--login justify-content-center">
       <div className="d-flex flex-column  flex-lg-row justify-content-center">
@@ -33,9 +40,10 @@ const ChangePasswordSuccess = () => {
                 {/* Start Button Login */}
                 <div className="d-grid">
                   <SappButton
-                    className="w-full h-12.5 flex items-center justify-center bg-primary"
+                    size="lager"
+                    full
                     title="Login"
-                    link={PageLink.AUTH_LOGIN}
+                    onClick={redirectLogin}
                   />
                 </div>
                 {/* End Button Login */}

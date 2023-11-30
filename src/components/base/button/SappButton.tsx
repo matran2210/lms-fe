@@ -1,9 +1,10 @@
+import React from 'react'
 import { IButtonProps } from 'src/type'
 
 const SIZES = {
-  small: 'text-[0.875rem] leading-4 py-2 px-7',
-  medium: 'text-[1rem] leading-6 py-2 px-8',
-  lager: 'text-lg leading-6.5 py-2.8 px-9',
+  small: 'text-[0.875rem] leading-4',
+  medium: 'text-[1rem] leading-6',
+  lager: 'text-lg leading-6.5',
 }
 
 const COLORS = {
@@ -17,6 +18,14 @@ const COLORS = {
   dark: 'bg-dark hover:bg-dark-2 disabled:bg-dark-2 text-white',
   outline:
     'bg-white border-bw-1 hover:border-gray-1 hover:text-gray-1 text-bw-1',
+  text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2', // Add a new color for ButtonText
+}
+
+const PADDINGS = {
+  small: 'px-7 py-2',
+  medium: 'px-8 py-2',
+  lager: 'px-9 py-2.8',
+  none: '',
 }
 
 const COLOR_LOADING = {
@@ -29,6 +38,7 @@ const COLOR_LOADING = {
   light: 'bg-white',
   dark: 'bg-white',
   outline: 'bg-gray-1',
+  text: 'bg-none',
 }
 
 const SappButton = ({
@@ -42,15 +52,19 @@ const SappButton = ({
   loading = false,
   type,
   color = 'primary',
+  isUnderLine,
+  isPadding = true,
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `${className} relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-semibold  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass}`
+  let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
+  let componentClass = `${className} relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-semibold  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
+
+  isUnderLine = isUnderLine ?? color === 'text'
+  componentClass += ` ${isUnderLine ? 'underline' : ''}`
 
   if (link)
     return (
-      <a href={link} className={componentClass} aria-disabled={disabled}>
-        {title}
-      </a>
+      <a href={link} className={componentClass} aria-disabled={disabled}></a>
     )
   return (
     <button
