@@ -29,6 +29,7 @@ module.exports = {
       sm: ['14px', { lineHeight: '24px' }],
       'medium-sm': ['14px', { lineHeight: '16.9px' }],
       xsm: ['13px', { lineHeight: '19.5px' }],
+      ssm: ['12px', { lineHeight: '20px' }],
     },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
@@ -98,6 +99,7 @@ module.exports = {
         'single-dialog': '0px 4px 62px 0px rgba(0, 0, 0, 0.07)',
         box: '0px 2px 4px 0px #00000014, 0px 0px 6px 0px #00000005',
         notify: '0px 0px 50px 0px rgba(152, 151, 147, 0.15)',
+        solution: '0px 2px 7px 0px rgba(0, 0, 0, 0.13)',
       },
       height: {
         12.5: '50px',
@@ -131,6 +133,7 @@ module.exports = {
         md: '448px',
         lg: '512px',
         xl: '576px',
+        dl: '950px',
         xxl: '1144px',
         '8xl': '1920px',
       },

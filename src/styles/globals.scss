@@ -55,3 +55,6 @@ body * ::-webkit-scrollbar-thumb:hover {
 .table-responsive tr:last-child td {
   @apply border-b-0;
 }
+.solution .topic p {
+  @apply mb-6;
+}

@@ -97,7 +97,10 @@ const Course = ({
         )}
         <div className="action flex items-center jusity-between relative">
           {changeExam && (
-            <a className="underline capitalize block text-bw-1 text-medium-sm font-semibold">
+            <a
+              className="underline capitalize block text-bw-1 text-medium-sm font-semibold"
+              onClick={handleOnClick}
+            >
               {changeExam}
             </a>
           )}

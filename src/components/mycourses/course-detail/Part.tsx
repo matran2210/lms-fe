@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import Link from 'next/link'
+import SolutionModal from '../solution/SolutionModal'
 import SappModal from '@components/base/modal/SappModal'
 import TestModal from 'src/pages/courses/test'
 
@@ -74,6 +75,8 @@ const Part = ({
           )}
         </div>
       </div>
+      {/* Solution test modal */}
+      {/* <SolutionModal open={open} setOpen={setOpen} /> */}
       <TestModal open={open} setOpen={setOpen} title={name} />
     </>
   )
