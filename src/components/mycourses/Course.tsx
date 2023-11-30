@@ -3,7 +3,6 @@ import Link from 'next/link'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
-import EntrancePopup from '@components/entrance-test/EntrancePopup'
 interface CourseProps {
   name: string
   active: boolean

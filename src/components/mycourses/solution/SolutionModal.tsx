@@ -1,9 +1,6 @@
-// ConfirmDialog.tsx
-import SappTable from '@components/base/SappTable'
 import SappModal from '@components/base/modal/SappModal'
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import Icon from '@components/icons'
-import EntrancePopupContent from '@components/entrance-test/EntrancePopupContent'
 import HeadingSolution from './HeadingSolution'
 import SolutionModalContent from './SolutionModalContent'
 

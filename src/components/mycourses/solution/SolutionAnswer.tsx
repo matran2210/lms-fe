@@ -1,9 +1,5 @@
-// components/SearchForm.tsx
-
 import React, { useState } from 'react'
 import Icon from '@components/icons'
-import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
-
 interface SolutionAnswerProps {
   message: string
   isYourAnswer: boolean

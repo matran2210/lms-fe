@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Icon from '@components/icons'
 import SolutionListAnswer from './SolutionListAnswer'
 
 interface SolutionModalContentProps {
