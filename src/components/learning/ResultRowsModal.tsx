@@ -211,7 +211,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
       <SappModal
         open={open}
         setOpen={setOpen}
-        size="max-w-full"
+        size="max-w-full w-full"
         refClass="max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all"
         childClass=""
         parentChildClass="max-w-xxl mx-auto px-6 2xl:px-0"

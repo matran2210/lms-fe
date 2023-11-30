@@ -22,10 +22,6 @@ const EntrancePopupContent = ({
   status,
 }: EntrancePopupContentProps) => {
   const [open, setOpen] = useState<boolean>(false)
-  const handleOnClick = () => {
-    setOpen(true)
-  }
-
   const timeAllowFormatted = formatTime(timeAllow)
 
   return (
@@ -54,20 +50,9 @@ const EntrancePopupContent = ({
           </div>
         </div>
         <div className="action flex items-center justify-between relative mt-10">
-          <Link
-            href=""
-            passHref
-            className="underline text-bw-1 text-lg leading-[27]"
-          >
+          <div className="underline text-bw-1 text-lg leading-6.5 font-semibold">
             Cancel
-          </Link>
-          <ButtonSecondary
-            title="Cancel"
-            full={false}
-            size={'small'}
-            className="bg-transparent px-0 underline"
-            onClick={handleOnClick}
-          />
+          </div>
           <ButtonPrimary
             title="Start"
             full={false}
