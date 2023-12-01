@@ -9,6 +9,7 @@ interface IProps {
   totalItems: number
   type?: 'row' | 'table'
   children?: ReactNode
+  optionShowAll?: ReactNode
 }
 
 const PaginationSAPP = ({
@@ -18,6 +19,7 @@ const PaginationSAPP = ({
   setPageSize,
   totalItems,
   type,
+  optionShowAll,
 }: IProps) => {
   const options = [
     { value: 10, label: '10' },
@@ -25,7 +27,6 @@ const PaginationSAPP = ({
     { value: 50, label: '50' },
     { value: 100, label: '100' },
   ]
-
   const handlePageChange = (size: number) => {
     setCurrentPage && setCurrentPage(1)
     setPageSize && setPageSize(size)
@@ -34,7 +35,7 @@ const PaginationSAPP = ({
   return (
     <>
       <div
-        className={`flex items-center justify-center md:justify-between mt-4 flex-wrap gap-4 overflow-hidden`}
+        className={`flex items-center justify-center md:justify-between flex-wrap gap-4 overflow-hidden`}
       >
         {type === 'table' && (
           <label className="flex items-center">
@@ -63,9 +64,10 @@ const PaginationSAPP = ({
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           pageSize={Math.ceil(totalItems / pageSize)}
-          maxLength={`${type === 'table' ? 9 : 35}`}
+          maxLength={`${type === 'table' ? 9 : totalItems}`}
           totalItems={totalItems}
           type={type}
+          optionShowAll={optionShowAll}
         />
       </div>
     </>

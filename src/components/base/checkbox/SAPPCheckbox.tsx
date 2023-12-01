@@ -8,6 +8,8 @@ interface IProps {
   disabled?: boolean
   onChange: React.ChangeEventHandler<HTMLInputElement>
   className?: string
+  name: string
+  value?: string | boolean
 }
 
 const SAPPCheckbox = ({
@@ -18,6 +20,8 @@ const SAPPCheckbox = ({
   disabled,
   onChange,
   className,
+  name,
+  value,
 }: IProps) => {
   if (!className?.includes('min-w-')) className += ' w-6 min-w-6'
   if (!className?.includes('min-h-')) className += ' h-6 min-h-6'
@@ -25,6 +29,7 @@ const SAPPCheckbox = ({
   return (
     <div className={`${className} inline-block`}>
       <input
+        name={name}
         className={`block w-full h-full border-1.5 border-gray-1 outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
           isWrong
             ? 'checked:bg-state-error checked:hover:bg-state-error checked:focus:bg-state-error'
@@ -36,6 +41,7 @@ const SAPPCheckbox = ({
         checked={checked}
         onChange={onChange}
         disabled={disabled}
+        value={value?.toString()}
       />
     </div>
   )
