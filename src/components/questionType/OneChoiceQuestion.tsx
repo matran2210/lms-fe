@@ -17,7 +17,7 @@ const OneChoiceQuestion = ({ data, control }: IPreviewProp) => {
   return (
     <div>
       <div
-        className="questions"
+        className="sapp-questions"
         dangerouslySetInnerHTML={{ __html: data?.question_content }}
       ></div>
       <div
