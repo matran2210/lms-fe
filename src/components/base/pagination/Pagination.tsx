@@ -1,6 +1,6 @@
 import { getPaginationItems } from '../../common/pagination'
 import PageLink from './PageLink'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, ReactNode, SetStateAction, useRef } from 'react'
 import ArrowIcon from './ArrowIcon'
 import { useState, useEffect } from 'react'
 
@@ -11,6 +11,7 @@ interface Props {
   setCurrentPage?: Dispatch<SetStateAction<number>>
   totalItems: number
   type: any
+  optionShowAll?: ReactNode
 }
 
 const Pagination = ({
@@ -20,7 +21,10 @@ const Pagination = ({
   setCurrentPage,
   totalItems,
   type,
+  optionShowAll,
 }: Props) => {
+  const elementRef = useRef(null)
+
   const [pageNums, setPageNums] = useState<any>([])
   const [activeShowAll, setActiveShowAll] = useState<boolean>(true)
   const getPagination = getPaginationItems(currentPage, pageSize, maxLength)
@@ -28,7 +32,26 @@ const Pagination = ({
   for (let i = 1; i <= totalItems; i++) {
     arrPage.push(i)
   }
-
+  const handleHorizantalScroll = (
+    element: any,
+    speed: any,
+    distance: any,
+    step: any,
+  ) => {
+    let scrollAmount = 0
+    const slideTimer = setInterval(() => {
+      element.scrollLeft += step
+      scrollAmount += Math.abs(step)
+      if (scrollAmount >= distance) {
+        clearInterval(slideTimer)
+      }
+      // if (element.scrollLeft === 0) {
+      //   setArrowDisable(true);
+      // } else {
+      //   setArrowDisable(false);
+      // }
+    }, speed)
+  }
   useEffect(() => {
     setPageNums(getPaginationItems(currentPage, pageSize, maxLength))
   }, [pageSize, currentPage, maxLength])
@@ -44,7 +67,7 @@ const Pagination = ({
         className={`${
           type === 'row' && activeShowAll
             ? 'relative w-[calc(100%-141px)] mx-7'
-            : ' flex items-center gap-3'
+            : ' flex items-center gap-6'
         }`}
       >
         <div
@@ -55,10 +78,12 @@ const Pagination = ({
           }`}
         >
           <PageLink
-            disabled={currentPage === 1}
+            disabled={type !== 'row' && currentPage === 1}
             arrow={true}
             onClick={() => {
-              if (setCurrentPage !== undefined) {
+              if (type === 'row') {
+                handleHorizantalScroll(elementRef.current, 25, 200, -20)
+              } else if (setCurrentPage !== undefined) {
                 setCurrentPage(currentPage - 1)
               }
             }}
@@ -72,9 +97,10 @@ const Pagination = ({
         <div
           className={`${
             type === 'row' && activeShowAll
-              ? 'flex gap-2  overflow-auto w-full'
+              ? 'flex gap-2 overflow-hidden w-full'
               : 'flex items-center gap-2 flex-wrap'
           }`}
+          ref={elementRef}
         >
           {pageNums.map((pageNum: number, idx: any) => (
             <PageLink
@@ -100,10 +126,12 @@ const Pagination = ({
           }`}
         >
           <PageLink
-            disabled={currentPage === pageSize}
+            disabled={type !== 'row' && currentPage === pageSize}
             arrow={true}
             onClick={() => {
-              if (setCurrentPage !== undefined) {
+              if (type === 'row') {
+                handleHorizantalScroll(elementRef.current, 25, 200, 20)
+              } else if (setCurrentPage !== undefined) {
                 setCurrentPage(currentPage + 1)
               }
             }}
@@ -116,18 +144,11 @@ const Pagination = ({
           </PageLink>
         </div>
         {type === 'row' && (
-          <div className="flex">
-            {!activeShowAll && (
-              <div>
-                <div>asdadasad</div>
-                <div>a</div>
-                <div>a</div>
-                <div>a</div>
-              </div>
-            )}
+          <div className="flex items-center">
+            {!activeShowAll && optionShowAll}
             <div
-              className={`ml-6 text-sm leading-4.5 text-bw-1 underline font-semibold cursor-pointer ${
-                activeShowAll && 'absolute -right-28 top-0 translate-y-1/2'
+              className={`ml-6 text-sm leading-4.5 text-bw-1 underline font-semibold cursor-pointer w-max ${
+                activeShowAll && 'absolute -right-28 top-0 translate-y-1/2 '
               }`}
               onClick={() => {
                 setPageNums(activeShowAll ? arrPage : getPagination)

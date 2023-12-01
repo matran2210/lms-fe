@@ -32,3 +32,21 @@ export const PUBLIC_PATHS: { [key: string]: boolean } = {
   [PageLink.AUTH_FORGOT_PASSWORD]: true,
   [PageLink.AUTH_FORGOT_PASSWORD_RECOVER]: true,
 }
+export enum QUESTION_TYPES {
+  TRUE_FALSE = 'TRUE_FALSE',
+  ONE_CHOICE = 'ONE_CHOICE',
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+  MATCHING = 'MATCHING',
+  SELECT_WORD = 'SELECT_WORD',
+  FILL_WORD = 'FILL_WORD',
+  DRAG_DROP = 'DRAG_DROP',
+  ESSAY = 'ESSAY',
+}
+export enum DISPLAY_TYPE {
+  VERTICAL = 'VERTICAL',
+  HORIZONTAL = 'HORIZONTAL',
+}
+export enum RESPONSE_OPTION {
+  WORD = 'WORD',
+  SHEET = 'SHEET',
+}

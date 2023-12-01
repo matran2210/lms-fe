@@ -9,9 +9,5 @@ interface LayoutProps {
 // eslint-disable-next-line import/no-unused-modules
 export default function FullScreenLayout(props: LayoutProps): ReactElement {
   const { children } = props
-  return (
-    <div className="min-h-screen bg-gray-3">
-      <div className="content">{children}</div>
-    </div>
-  )
+  return <div className="min-h-screen bg-gray-3">{children}</div>
 }
