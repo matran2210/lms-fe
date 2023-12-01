@@ -9,6 +9,7 @@ import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 import { injectStore } from 'src/redux/services/httpService'
 import { store, wrapper } from '../redux/store'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 // import 'antd/dist/antd.css'
 
 type MyAppProps = AppProps & {
@@ -31,6 +32,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <SingleDialogLayout>
           <Component {...pageProps} />
         </SingleDialogLayout>
+      )
+      break
+    case LAYOUT.FULLSCREEN_LAYOUT:
+      content = (
+        <FullScreenLayout>
+          <Component {...pageProps} />
+        </FullScreenLayout>
       )
       break
     default:

@@ -34,7 +34,7 @@ const PaginationSAPP = ({
   return (
     <>
       <div
-        className={`flex items-center justify-center md:justify-between mt-4 flex-wrap gap-4`}
+        className={`flex items-center justify-center md:justify-between mt-4 flex-wrap gap-4 overflow-hidden`}
       >
         {type === 'table' && (
           <label className="flex items-center">

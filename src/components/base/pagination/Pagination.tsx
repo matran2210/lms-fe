@@ -36,65 +36,109 @@ const Pagination = ({
   return (
     <ul
       className={`pagination flex items-center flex-wrap ${
-        type === 'table' ? 'gap-5' : 'gap-3'
-      }`}
+        type === 'row' && 'w-full'
+      } ${type === 'table' ? 'gap-5' : 'gap-3'}`}
       aria-label="Pagination"
     >
-      <PageLink
-        disabled={currentPage === 1}
-        arrow={true}
-        onClick={() => {
-          if (setCurrentPage !== undefined) {
-            setCurrentPage(currentPage - 1)
-          }
-        }}
-        type={type}
+      <div
+        className={`${
+          type === 'row' && activeShowAll
+            ? 'relative w-[calc(100%-141px)] mx-7'
+            : ' flex items-center gap-3'
+        }`}
       >
-        <ArrowIcon
-          iconType={`${type === 'table' ? 'chervon' : 'teeny'}`}
-        ></ArrowIcon>
-      </PageLink>
-      {pageNums.map((pageNum: number, idx: any) => (
-        <PageLink
-          key={idx}
-          active={currentPage === pageNum}
-          disabled={isNaN(pageNum)}
-          onClick={() => {
-            if (setCurrentPage !== undefined) {
-              setCurrentPage(pageNum)
-            }
-          }}
-          type={type}
+        <div
+          className={`${
+            type === 'row' &&
+            activeShowAll &&
+            'absolute top-0.5 -left-3 -translate-x-full'
+          }`}
         >
-          {!isNaN(pageNum) ? pageNum : type === 'table' ? '...' : '|'}
-        </PageLink>
-      ))}
-      <PageLink
-        disabled={currentPage === pageSize}
-        arrow={true}
-        onClick={() => {
-          if (setCurrentPage !== undefined) {
-            setCurrentPage(currentPage + 1)
-          }
-        }}
-        type={type}
-      >
-        <ArrowIcon
-          iconType={`${type === 'table' ? 'chervon' : 'teeny'}`}
-          right={true}
-        ></ArrowIcon>
-      </PageLink>
-      {type === 'row' && (
-        <li
-          className="ml-6 text-sm leading-4.5 text-bw-1 underline font-semibold cursor-pointer"
-          onClick={() => {
-            setPageNums(activeShowAll ? arrPage : getPagination)
-            setActiveShowAll(!activeShowAll)
-          }}
+          <PageLink
+            disabled={currentPage === 1}
+            arrow={true}
+            onClick={() => {
+              if (setCurrentPage !== undefined) {
+                setCurrentPage(currentPage - 1)
+              }
+            }}
+            type={type}
+          >
+            <ArrowIcon
+              iconType={`${type === 'table' ? 'chervon' : 'teeny'}`}
+            ></ArrowIcon>
+          </PageLink>
+        </div>
+        <div
+          className={`${
+            type === 'row' && activeShowAll
+              ? 'flex gap-2  overflow-auto w-full'
+              : 'flex items-center gap-2 flex-wrap'
+          }`}
         >
-          {activeShowAll ? 'Show All' : 'Show Less'}
-        </li>
-      )}
+          {pageNums.map((pageNum: number, idx: any) => (
+            <PageLink
+              key={idx}
+              active={currentPage === pageNum}
+              disabled={isNaN(pageNum)}
+              onClick={() => {
+                if (setCurrentPage !== undefined) {
+                  setCurrentPage(pageNum)
+                }
+              }}
+              type={type}
+            >
+              {!isNaN(pageNum) ? pageNum : type === 'table' ? '...' : '|'}
+            </PageLink>
+          ))}
+        </div>
+        <div
+          className={`${
+            type === 'row' &&
+            activeShowAll &&
+            'absolute top-0.5 -right-3 translate-x-full'
+          }`}
+        >
+          <PageLink
+            disabled={currentPage === pageSize}
+            arrow={true}
+            onClick={() => {
+              if (setCurrentPage !== undefined) {
+                setCurrentPage(currentPage + 1)
+              }
+            }}
+            type={type}
+          >
+            <ArrowIcon
+              iconType={`${type === 'table' ? 'chervon' : 'teeny'}`}
+              right={true}
+            ></ArrowIcon>
+          </PageLink>
+        </div>
+        {type === 'row' && (
+          <div className="flex">
+            {!activeShowAll && (
+              <div>
+                <div>asdadasad</div>
+                <div>a</div>
+                <div>a</div>
+                <div>a</div>
+              </div>
+            )}
+            <div
+              className={`ml-6 text-sm leading-4.5 text-bw-1 underline font-semibold cursor-pointer ${
+                activeShowAll && 'absolute -right-28 top-0 translate-y-1/2'
+              }`}
+              onClick={() => {
+                setPageNums(activeShowAll ? arrPage : getPagination)
+                setActiveShowAll(!activeShowAll)
+              }}
+            >
+              {activeShowAll ? 'Show All' : 'Show Less'}
+            </div>
+          </div>
+        )}
+      </div>
     </ul>
   )
 }
