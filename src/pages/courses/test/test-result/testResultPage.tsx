@@ -25,11 +25,11 @@ const datamulti = [
 
 const TestResultPage = () => {
   return (
-    <div className="grid grid-rows-3 grid-flow-col gap-4 m-[64px] overflow-y-auto">
+    <div className="grid grid-flow-col gap-4 m-[64px] overflow-y-auto">
       <div className="col-span-2 ">
         <YourScore />
       </div>
-      <div className="row-span-2 col-span-2">
+      <div className="row-span-2 col-span-2 max-h-[700px]">
         <YourScoreDetail />
       </div>
       <div className="row-span-3 ">
