@@ -1,43 +1,53 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ITabs } from 'src/type'
 
-const SappBreadCrumbs = ({
-  breadcrumbs,
-}: {
-  breadcrumbs: ITabs[] | undefined
-}) => {
-  const count_items = breadcrumbs && breadcrumbs.length - 1
+interface BreadcrumbProps {
+  tabs: ITabs[]
+  currentPage: string
+}
 
+const Breadcrumb: React.FC<BreadcrumbProps> = ({ tabs, currentPage }) => {
   return (
-    <ul className="breadcrumb breadcrumb-separatorless fw-semibold fs-base my-1">
-      {breadcrumbs &&
-        breadcrumbs.map((breadcrumb, index) => (
-          <div key={index} className="d-flex">
-            <li
-              className="breadcrumb-item text-gray-500"
-              key={breadcrumb.title}
-            >
-              <Link
-                to={index !== count_items ? breadcrumb.link : '#'}
-                className={`${
-                  index !== count_items
-                    ? 'text-gray-500 text-hover-primary'
-                    : 'sapp-btn-color bg-transparent'
-                } `}
+    <nav className="breadcrumb" aria-label="breadcrumbs">
+      <ul className="breadcrumb flex flex-row ml-[64px] pl-[20px] mt-6 font-semibold">
+        {tabs.map((tab, index) => (
+          <li key={index}>
+            {index !== tabs.length - 1 ? (
+              <>
+                {tab.link ? (
+                  <Link href={tab.link}>
+                    <a
+                      className={
+                        currentPage === tab.title
+                          ? 'text-[#141414] font-bold'
+                          : 'text-[#A1A1A1]'
+                      }
+                    >
+                      {tab.title}
+                    </a>
+                  </Link>
+                ) : (
+                  <span>{tab.title}</span>
+                )}
+                <span className="text-[#A1A1A1]"> {' / '} </span>
+              </>
+            ) : (
+              <span
+                className={
+                  currentPage === tab.title
+                    ? 'text-[#141414]'
+                    : 'text-[#A1A1A1]'
+                }
               >
-                {breadcrumb.title}
-              </Link>
-            </li>
-            {index !== count_items && (
-              <li className="breadcrumb-item" style={{ marginRight: '5px' }}>
-                <span className="text-gray-500">/</span>
-              </li>
+                {tab.title}
+              </span>
             )}
-          </div>
+          </li>
         ))}
-    </ul>
+      </ul>
+    </nav>
   )
 }
 
-export default SappBreadCrumbs
+export default Breadcrumb

@@ -10,29 +10,30 @@ import MultipleQuestion from './multipleQues'
 interface CoursesProps {
   courses: any[]
 }
+const datamulti = [
+  {
+    id: 1,
+    status: 'true',
+    type: 'Multiple Question',
+  },
+  {
+    id: 2,
+    status: 'false',
+    type: 'Constructed Questions',
+  },
+]
 
-const TestResultPage: React.FC = () => {
+const TestResultPage = () => {
   return (
-    // <div>
-    //     <div>
-    //         <YourScore/>
-    //     </div>
-    //     <div>
-    //         <YourScoreDetail/>
-    //     </div>
-    //     <div>
-    //         <MultipleQuestion/>
-    //     </div>
-    // </div>
-    <div className="grid grid-rows-3 grid-flow-col gap-4">
+    <div className="grid grid-rows-3 grid-flow-col gap-4 m-[64px] overflow-y-auto">
       <div className="col-span-2 ">
         <YourScore />
       </div>
-      <div className="row-span-2 col-span-2 max-h-[300px]">
+      <div className="row-span-2 col-span-2">
         <YourScoreDetail />
       </div>
       <div className="row-span-3 ">
-        <MultipleQuestion />
+        <MultipleQuestion data={datamulti} />
       </div>
     </div>
   )
