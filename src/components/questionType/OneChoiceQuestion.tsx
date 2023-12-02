@@ -21,7 +21,7 @@ const OneChoiceQuestion = ({ data, control }: IPreviewProp) => {
         dangerouslySetInnerHTML={{ __html: data?.question_content }}
       ></div>
       <div
-        className="answer-wrapper"
+        className="sapp-answer-wrapper"
         style={{
           flexDirection: 'column',
         }}

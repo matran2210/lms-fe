@@ -23,6 +23,7 @@ interface IHookFormCheckBoxProps {
   direction?: 'horizontal' | 'vertical'
   gap?: string
   justify?: 'between' | 'start' | 'center' | 'end'
+  multiple?: boolean
 }
 
 const HookFormCheckBoxGroup = ({
@@ -42,6 +43,7 @@ const HookFormCheckBoxGroup = ({
   direction = 'vertical',
   gap,
   justify,
+  multiple = false,
 }: IHookFormCheckBoxProps) => {
   gap = gap ? gap : direction === 'horizontal' ? 'gap-6' : 'gap-4'
 
@@ -80,12 +82,34 @@ const HookFormCheckBoxGroup = ({
                   key={option.label}
                 >
                   <SAPPCheckbox
-                    name={field.name}
                     className={`me-2 ${className}`}
-                    checked={option.value.toString() === field.value}
+                    checked={
+                      multiple
+                        ? field.value.includes(option.value.toString())
+                        : option.value.toString() === field.value
+                    }
                     onChange={(event: React.ChangeEvent<any>) => {
-                      field.onChange(event.target.value)
-                      onChange && onChange(event.target.value)
+                      if (multiple) {
+                        let arr = [] as any
+                        if (field.value?.length > 0) {
+                          arr = [...field.value]
+                          if (arr.includes(event.target.value)) {
+                            const newArr = arr.filter(
+                              (e: any) => e !== event.target.value,
+                            )
+                            arr = [...newArr]
+                          } else {
+                            arr.push(event.target.value)
+                          }
+                        } else {
+                          arr.push(event.target.value)
+                        }
+                        field.onChange(arr)
+                        onChange && onChange(arr)
+                      } else {
+                        field.onChange(event.target.value)
+                        onChange && onChange(event.target.value)
+                      }
                     }}
                     disabled={disabled}
                     isWrong={isWrong}
