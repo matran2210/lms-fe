@@ -4,6 +4,7 @@ import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGro
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import { formatTime } from '@components/common/timer'
 import AddWordPreview from '@components/questionType/FillText'
+import MultiChociceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import { LAYOUT } from '@utils/constants'
 import React, { useState } from 'react'
@@ -17,6 +18,7 @@ const Test = () => {
     return (
       <div className="w-max">
         <HookFormCheckBoxGroup
+          multiple
           control={control}
           name={'filter'}
           options={[
@@ -90,7 +92,7 @@ const Test = () => {
     question_content:
       '<p><strong>Điền từ ( fill up)</strong></p>\n<p>C&acirc;u 5: Here is a wonderful opportunity at a&nbsp;<span id="c977455f-2f02-4149-848f-d4b9193062b7" class="question-content-tag" contenteditable="false">[_______]</span> cost to visit the truly remarkable island of Cuba. We have <span id="6f30b7e8-2bac-45a2-b55d-95d2849b7cc3" class="question-content-tag" contenteditable="false">[_______]</span> rooms at some of the finest hotels for periods of 7 and 14 nights. You may <span id="b0c7f96b-b563-4626-8b2e-091b37b4ab1f" class="question-content-tag" contenteditable="false">[_______]</span> your time between relaxing and exploring this beautiful country by taking advantage of our extensive excursion programme.</p>',
     level: 'ADVANCED',
-    qType: 'FILL_WORD',
+    qType: 'MULTIPLE_CHOICE',
     assignment_type: 'TEXT',
     response_option: null,
     question_files: null,
@@ -139,8 +141,8 @@ const Test = () => {
         return <OneChoiceQuestion data={data} control={control} />
       case QUESTION_TYPES.ONE_CHOICE:
         return <OneChoiceQuestion data={data} control={control} />
-      // case QUESTION_TYPES.MULTIPLE_CHOICE:
-      //   return <MultiQuestionPreview data={data} />;
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        return <MultiChociceQuestion data={data} control={control} />
       // case QUESTION_TYPES.MATCHING:
       //   return <MatchingPreview data={data} />;
       case QUESTION_TYPES.FILL_WORD:

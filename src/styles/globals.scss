@@ -58,7 +58,7 @@ body * ::-webkit-scrollbar-thumb:hover {
 .solution .topic p {
   @apply mb-6;
 }
-.answer-wrapper {
+.sapp-answer-wrapper {
   @apply flex pt-2 gap-y-6 flex-wrap;
   .answer {
     @apply flex gap-x-3 items-start break-words;
