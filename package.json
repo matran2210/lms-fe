@@ -19,6 +19,7 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
+    "@cloudflare/stream-react": "^1.8.0",
     "@hookform/resolvers": "^3.3.2",
     "@react-native-async-storage/async-storage": "^1.19.5",
     "@reduxjs/toolkit": "^1.9.7",

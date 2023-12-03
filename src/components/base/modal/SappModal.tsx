@@ -11,6 +11,7 @@ import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import Icon from '@components/icons'
 import { IButtonColors } from 'src/type'
+import FadeInOut from 'src/common/FadeInOut'
 
 interface IProps {
   open?: boolean
@@ -39,8 +40,11 @@ interface IProps {
   parentChildClass?: string
   footerButtonClassName?: string
   color?: IButtonColors
-  position?: 'center' | 'top' | 'bottom'
+  position?: 'center' | 'start' | 'end'
   fullWidthBtn?: boolean
+
+  isFullScreen?: boolean
+  isContentFull?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -62,7 +66,6 @@ interface IProps {
  */
 const SappModal: React.FC<IProps> = ({
   open,
-  setOpen,
   children,
   cancelButtonCaption = 'Cancel',
   okButtonCaption = 'Submit',
@@ -81,13 +84,16 @@ const SappModal: React.FC<IProps> = ({
 
   confirmOnclose,
   size = 'max-w-lg',
-  refClass = 'md:p-8 p-5 flex flex-col animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all',
+  refClass = 'md:p-8 p-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
   childClass = '',
   parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex',
   color,
-  position = 'top',
+  position = 'start',
   fullWidthBtn = false,
+
+  isFullScreen = false,
+  isContentFull = true,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -150,7 +156,7 @@ const SappModal: React.FC<IProps> = ({
       }
       // Nếu handleCancel là một hàm thường, thì gọi hàm đó
       else if (handleCancel) {
-        handleCancel()
+        handleClose()
       }
     }
     // Nếu confirmOnclose là true, thì mở một hộp thoại xác nhận
@@ -168,19 +174,20 @@ const SappModal: React.FC<IProps> = ({
       // Nếu confirmOnclose là false, thì không cần xác nhận
       // Gọi hàm callHandleCancel
       callHandleCancel()
-      handleClose()
     }
   }
 
   const handleClose = () => {
     if (confirmDialogRef.current) {
       confirmDialogRef.current.classList.add('animate-jump-out')
+      confirmDialogRef.current.classList.add('pointer-events-none')
     }
     if (confirmDialogOverLayRef.current) {
       confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
+      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
     }
     setTimeout(() => {
-      setOpen && setOpen(false)
+      handleCancel && handleCancel()
     }, 50)
   }
 
@@ -190,7 +197,7 @@ const SappModal: React.FC<IProps> = ({
         {open && (
           // add an onClick handler to the outer div to close the popup when clicking outside
           <div
-            className={`sapp-custom-modal fixed z-[1000] w-full flex justify-center inset-0 items-${position}`}
+            className={`sapp-custom-modal max-h-screen fixed z-[1000] w-full flex justify-center inset-0 items-center`}
             role="dialog"
             aria-modal="true"
           >
@@ -199,10 +206,16 @@ const SappModal: React.FC<IProps> = ({
               onClick={onCancel}
               className="animate-fade-in-overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
             ></div>
-            <div className={`${size} text-center`}>
+            <div
+              className={`${
+                isFullScreen || `${size} p-4`
+              }  w-full text-center h-full flex justify-center inset-0 items-${position}`}
+            >
               <div
                 ref={confirmDialogRef}
-                className={` w-full h-full ${refClass}`}
+                className={`w-fit max-h-full max-w-full 
+                ${isContentFull ? 'w-full' : 'w-fit'}
+                ${isFullScreen ? '' : 'rounded-lg'} ${refClass}`}
               >
                 {showHeader && (
                   <div className="bg-white md:pb-8 pb-5">
@@ -236,7 +249,7 @@ const SappModal: React.FC<IProps> = ({
                 )}
 
                 <div
-                  className={`${parentChildClass} snap-y flex-1 overflow-y-scroll  bg-white md:px-8 px-5`}
+                  className={`${parentChildClass} snap-y flex-1 overflow-y-scroll bg-white -mr-4.5`}
                 >
                   <div className={`${childClass}`}>{children}</div>
                 </div>
