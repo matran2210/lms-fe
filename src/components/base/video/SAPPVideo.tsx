@@ -1,12 +1,15 @@
 import { Stream, StreamPlayerApi, StreamProps } from '@cloudflare/stream-react'
 import styles from '@styles/components/SappVideo.module.scss'
-import { useRef } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react'
 interface IProp {
   options: StreamProps
   pauseOnSeek?: boolean
+  streamRef?: MutableRefObject<StreamPlayerApi | undefined>
 }
-const SAPPVideo = ({ options, pauseOnSeek = false }: IProp) => {
-  const streamRef = useRef<StreamPlayerApi>()
+const SAPPVideo = ({ options, pauseOnSeek = false, streamRef }: IProp) => {
+  const innerStreamRef = useRef<StreamPlayerApi>()
+
+  streamRef = streamRef || innerStreamRef
 
   return (
     <div className={`group ${styles.wrapper}`}>
@@ -18,7 +21,7 @@ const SAPPVideo = ({ options, pauseOnSeek = false }: IProp) => {
         responsive={false}
         className={`${styles.content}`}
         onSeeking={() => {
-          if (streamRef.current && pauseOnSeek) {
+          if (streamRef?.current && pauseOnSeek) {
             streamRef.current.pause()
           }
         }}

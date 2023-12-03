@@ -8,18 +8,19 @@ import React, {
 } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
-import Icon from '@components/icons'
 import { IButtonColors } from 'src/type'
-import FadeInOut from 'src/common/FadeInOut'
+import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 
 interface IProps {
   open?: boolean
   setOpen?: Dispatch<SetStateAction<boolean>>
   children: ReactNode
 
-  cancelButtonCaption?: string | undefined
-  okButtonCaption?: string | undefined
+  cancelButtonCaption?: string
+  okButtonCaption?: string
+  okButtonClass?: string | undefined
+  cancelButtonClass?: string | undefined
+  buttonSize?: 'small' | 'medium' | 'lager'
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void
@@ -27,6 +28,7 @@ interface IProps {
   disabled?: boolean
 
   title?: string
+  customTitle?: ReactNode
   showHeader?: boolean
   customHeader?: ReactNode
 
@@ -45,6 +47,8 @@ interface IProps {
 
   isFullScreen?: boolean
   isContentFull?: boolean
+  isInner?: boolean
+  isBordered?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -69,6 +73,9 @@ const SappModal: React.FC<IProps> = ({
   children,
   cancelButtonCaption = 'Cancel',
   okButtonCaption = 'Submit',
+  okButtonClass,
+  cancelButtonClass,
+  buttonSize = 'medium',
 
   handleCancel,
   handleSubmit,
@@ -76,6 +83,7 @@ const SappModal: React.FC<IProps> = ({
   disabled,
 
   title,
+  customTitle,
   showHeader = true,
   customHeader,
 
@@ -84,16 +92,18 @@ const SappModal: React.FC<IProps> = ({
 
   confirmOnclose,
   size = 'max-w-lg',
-  refClass = 'md:p-8 p-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
+  refClass = 'md:px-6 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
   childClass = '',
   parentChildClass = '',
-  footerButtonClassName = 'justify-center sm:justify-end flex',
+  footerButtonClassName = 'justify-center sm:justify-end flex gap-3',
   color,
   position = 'start',
   fullWidthBtn = false,
 
   isFullScreen = false,
   isContentFull = true,
+  isInner = false,
+  isBordered = false,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -102,16 +112,20 @@ const SappModal: React.FC<IProps> = ({
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (open) {
-      const scrollBarWidth = window.innerWidth - document.body.clientWidth
+    if (!isInner) {
+      if (open) {
+        const scrollBarWidth = window.innerWidth - document.body.clientWidth
 
-      document.body.style.paddingRight = scrollBarWidth + 'px'
-      document.body.classList.add('overflow-hidden')
-    } else {
-      const customModal = document.querySelectorAll('.sapp-custom-modal')
-      if (!customModal?.length) {
-        document.body.style.removeProperty('padding-right')
-        document.body.classList.remove('overflow-hidden')
+        document.body.style.paddingRight = scrollBarWidth + 'px'
+        document.body.classList.add('overflow-hidden')
+      } else {
+        const customModal = document.querySelectorAll(
+          '.sapp-custom-modal:not(.sapp-custom-modal-inner)',
+        )
+        if (!customModal?.length) {
+          document.body.style.removeProperty('padding-right')
+          document.body.classList.remove('overflow-hidden')
+        }
       }
     }
   }, [open])
@@ -197,56 +211,47 @@ const SappModal: React.FC<IProps> = ({
         {open && (
           // add an onClick handler to the outer div to close the popup when clicking outside
           <div
-            className={`sapp-custom-modal max-h-screen fixed z-[1000] w-full flex justify-center inset-0 items-center`}
+            className={`sapp-custom-modal ${
+              isInner
+                ? 'max-h-full absolute z-10 sapp-custom-modal-inner'
+                : 'max-h-screen fixed z-[1000]'
+            } w-full flex justify-center inset-0 items-center`}
             role="dialog"
             aria-modal="true"
           >
             <div
               ref={confirmDialogOverLayRef}
               onClick={onCancel}
-              className="animate-fade-in-overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              className={`${
+                isInner ? 'absolute' : 'fixed'
+              } animate-fade-in-overlay  inset-0 bg-black opacity-80 transition-opacity`}
             ></div>
             <div
               className={`${
-                isFullScreen || `${size} p-4`
+                isFullScreen || `${size} p-4 xl:py-11`
               }  w-full text-center h-full flex justify-center inset-0 items-${position}`}
             >
               <div
                 ref={confirmDialogRef}
                 className={`w-fit max-h-full max-w-full 
                 ${isContentFull ? 'w-full' : 'w-fit'}
-                ${isFullScreen ? '' : 'rounded-lg'} ${refClass}`}
+                ${refClass}`}
               >
-                {showHeader && (
-                  <div className="bg-white md:pb-8 pb-5">
-                    <div className="flex">
-                      {customHeader || (
-                        <div className="text-l font-bold text-bw-1">
-                          {title}
-                        </div>
-                      )}
-                      <div
-                        onClick={onCancel}
-                        className="ml-auto cursor-pointer text-bw-1 hover:text-primary translate-x-3"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
+                {showHeader &&
+                  (customHeader || (
+                    <div className="bg-white md:pb-5 pb-5 relative">
+                      <div className="flex">
+                        {customTitle || (
+                          <div className="text-xl font-bold text-bw-1">
+                            {title}
+                          </div>
+                        )}
                       </div>
+                      {isBordered && (
+                        <div className="absolute inset-0 border-b border-gray-2 bottom-0 -mx-6"></div>
+                      )}
                     </div>
-                  </div>
-                )}
+                  ))}
 
                 <div
                   className={`${parentChildClass} snap-y flex-1 overflow-y-scroll bg-white -mr-4.5`}
@@ -255,25 +260,31 @@ const SappModal: React.FC<IProps> = ({
                 </div>
 
                 {showFooter && (
-                  <div className="md:pt-8 pt-5">
+                  <div className="md:pt-5 pt-5 relative">
+                    {isBordered && (
+                      <div className="absolute left-0 right-0 border-b border-gray-2 top-0 -mx-6"></div>
+                    )}
                     {customFooter || (
                       <ButtonCancelSubmit
                         className={footerButtonClassName}
                         color={color}
+                        colorCancel={'secondary'}
                         submit={{
                           title: okButtonCaption,
-                          size: 'medium',
+                          size: buttonSize,
                           loading: loading,
                           disabled: disabled,
                           onClick: onOk,
                           full: fullWidthBtn,
+                          className: okButtonClass,
                         }}
                         cancel={{
                           title: cancelButtonCaption,
-                          size: 'medium',
+                          size: buttonSize,
                           onClick: onCancel,
                           loading: loading,
                           full: fullWidthBtn,
+                          className: cancelButtonClass,
                         }}
                       ></ButtonCancelSubmit>
                     )}
