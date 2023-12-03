@@ -1,10 +1,6 @@
-import React, { SetStateAction, useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import { format } from 'date-fns'
 import SappTable from '@components/base/SappTable'
 import { Dispatch } from '@reduxjs/toolkit'
+import { SetStateAction } from 'react'
 
 interface IProps {
   currentPage?: number
@@ -139,8 +135,8 @@ const YourScoreDetail = () => {
                         e.result === 'Correct'
                           ? '#008000'
                           : e.result === 'Incorrect'
-                          ? '#D35563'
-                          : '#D35563',
+                            ? '#D35563'
+                            : '#D35563',
                     }}
                   >
                     {e?.result ?? '-'}

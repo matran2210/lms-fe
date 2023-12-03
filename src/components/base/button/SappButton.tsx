@@ -16,7 +16,8 @@ const COLORS = {
   warning: 'bg-warning hover:bg-warning-2 disabled:bg-warning-2 text-white',
   light: 'bg-light hover:bg-light-2 disabled:bg-light-2 text-white',
   dark: 'bg-dark hover:bg-dark-2 disabled:bg-dark-2 text-white',
-  white: 'bg-white hover:bg-primary-2 disabled:bg-white text-gray-1',
+  white:
+    'bg-white hover:bg-primary-2 disabled:bg-white text-gray-1 hover:text-white',
   outline:
     'bg-white border-bw-1 hover:border-gray-1 hover:text-gray-1 text-bw-1',
   text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2', // Add a new color for ButtonText

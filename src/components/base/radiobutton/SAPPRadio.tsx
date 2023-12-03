@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface IProps {
-  name: string
+  name?: string
   value?: string | boolean
   ktCheck?: boolean
   checkTarget?: string
@@ -9,6 +9,23 @@ interface IProps {
   onChange: React.ChangeEventHandler<HTMLInputElement>
   className?: string
   disabled?: boolean
+  state?: 'default' | 'error' | 'success'
+  size?: 'small' | 'medium' | 'lager'
+}
+
+const STATE = {
+  success:
+    'checked:bg-radio-success-checked checked:text-transparent checked:hover:bg-radio-success-checked checked:focus:bg-radio-success-checked',
+  error:
+    'checked:bg-radio-error-checked checked:text-transparent checked:hover:bg-radio-error-checked checked:focus:bg-radio-error-checked',
+  default:
+    'checked:bg-radio-default-checked checked:text-transparent checked:hover:bg-radio-default-checked checked:focus:bg-radio-default-checked',
+}
+
+const SIZES = {
+  small: 'w-4.5 h-4.5',
+  medium: 'w-[24px] h-[24px]',
+  lager: 'w-[30px] h-[30px]',
 }
 
 const SAPPRadio = ({
@@ -20,12 +37,16 @@ const SAPPRadio = ({
   onChange,
   className = '',
   disabled = false,
+  state = 'default',
+  size = 'medium',
 }: IProps) => {
   return (
-    <div className={`inline-block w-6 h-6 min-w-6 min-h-6 ${className}`}>
+    <div className={`inline-block ${SIZES[size]} ${className}`}>
       <input
         name={name}
-        className={`block w-full h-full bg-center bg-no-repeat bg-radio-normal rounded-full border-0 border-transparent checked:bg-radio-checked checked:bg-transparent checked:focus:bg-transparent checked:hover:bg-transparent outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:bg-radio-checked ${
+        className={`${
+          STATE[state]
+        } block w-full h-full bg-center bg-no-repeat bg-radio-normal rounded-full border-0 border-transparent  outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
           disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
         }`}
         type="radio"
