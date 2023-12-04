@@ -295,7 +295,7 @@ const Test = () => {
   }
   const getAnswerMatching = () => {
     let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-notched-container') as any
+    const inputs = document.querySelectorAll('.sapp-match-result') as any
     for (let e of inputs) {
       value.push(e.innerText)
     }
