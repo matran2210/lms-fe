@@ -9,8 +9,8 @@ interface IProps {
   isMulti?: boolean
   children?: ReactNode
   placeholder?: string
-  onChange?: any
-  value?: any
+  onChange?: (select: any) => void
+  value?: string | null | undefined
 }
 
 const HookFormSelect = ({
