@@ -6,6 +6,7 @@ import { formatTime } from '@components/common/timer'
 import AddWordPreview from '@components/questionType/FillText'
 import MultiChociceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
+import SelectWord from '@components/questionType/SelectWordQuestion'
 import { LAYOUT } from '@utils/constants'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -90,9 +91,9 @@ const Test = () => {
     question_filter_id: null,
     question_topic_id: '721625a5-0c8b-4fe8-a88b-932782386a6c',
     question_content:
-      '<p><strong>Điền từ ( fill up)</strong></p>\n<p>C&acirc;u 5: Here is a wonderful opportunity at a&nbsp;<span id="c977455f-2f02-4149-848f-d4b9193062b7" class="question-content-tag" contenteditable="false">[_______]</span> cost to visit the truly remarkable island of Cuba. We have <span id="6f30b7e8-2bac-45a2-b55d-95d2849b7cc3" class="question-content-tag" contenteditable="false">[_______]</span> rooms at some of the finest hotels for periods of 7 and 14 nights. You may <span id="b0c7f96b-b563-4626-8b2e-091b37b4ab1f" class="question-content-tag" contenteditable="false">[_______]</span> your time between relaxing and exploring this beautiful country by taking advantage of our extensive excursion programme.</p>',
+      '<p>type Chọn từ &nbsp;<span id="42876136-c187-4bf3-aac4-1951acdf7abf" class="question-content-tag" contenteditable="false">[_______]</span></p>',
     level: 'ADVANCED',
-    qType: 'MULTIPLE_CHOICE',
+    qType: 'SELECT_WORD',
     assignment_type: 'TEXT',
     response_option: null,
     question_files: null,
@@ -103,30 +104,31 @@ const Test = () => {
     files: [],
     answers: [
       {
-        id: '748aeeb6-d3a6-4e7e-b5ab-da53ec52eb11',
-        created_at: '2023-11-20T04:35:42.394Z',
-        updated_at: '2023-11-20T04:35:42.394Z',
+        id: 'f8adb697-047d-412b-b233-ebc5f2339870',
+        created_at: '2023-11-22T08:58:26.725Z',
+        updated_at: '2023-11-22T08:58:26.725Z',
         deleted_at: null,
-        question_id: '260b9ac9-a0ce-42eb-bf3f-38e0fdb83ead',
-        answer: '1',
+        question_id: '90847727-fe45-4748-a86b-13629cdf5ed3',
+        answer: '232',
         is_correct: false,
         feedback: null,
         active: null,
         answer_position: 1,
       },
       {
-        id: 'f031b23b-d006-4c57-b157-c6973493b69e',
-        created_at: '2023-11-20T04:35:42.394Z',
-        updated_at: '2023-11-20T04:35:42.394Z',
+        id: 'df662286-8e37-4596-b2b4-ed041254c10a',
+        created_at: '2023-11-22T08:58:26.725Z',
+        updated_at: '2023-11-22T08:58:26.725Z',
         deleted_at: null,
-        question_id: '260b9ac9-a0ce-42eb-bf3f-38e0fdb83ead',
-        answer: '22',
+        question_id: '90847727-fe45-4748-a86b-13629cdf5ed3',
+        answer: '34',
         is_correct: true,
         feedback: null,
         active: null,
-        answer_position: 2,
+        answer_position: 1,
       },
     ],
+
     question_filter: null,
     exhibits: [],
     requirements: [],
@@ -146,11 +148,11 @@ const Test = () => {
       // case QUESTION_TYPES.MATCHING:
       //   return <MatchingPreview data={data} />;
       case QUESTION_TYPES.FILL_WORD:
-        return <AddWordPreview data={data} action={getValue} />
+        return <AddWordPreview data={data} action={getValueFillText} />
       // case QUESTION_TYPES.DRAG_DROP:
       //   return <DragNDropPreivew data={data} />;
-      // case QUESTION_TYPES.SELECT_WORD:
-      //   return <SelectWord data={data} />;
+      case QUESTION_TYPES.SELECT_WORD:
+        return <SelectWord data={data} action={getValueSelectText} />
       // case QUESTION_TYPES.ESSAY:
       //   return (
       //     <EssayQuestionPreview
@@ -164,9 +166,20 @@ const Test = () => {
         return <div></div>
     }
   }
-  const getValue = () => {
+  const getValueFillText = () => {
     let value = []
     const inputs = document.querySelectorAll('input[stringHTML="true"]') as any
+    for (let e of inputs) {
+      value.push(e.value)
+    }
+    return value
+  }
+  const getValueSelectText = () => {
+    let value = [] as any
+    const inputs = document.querySelectorAll(
+      'select.sapp-select--selectword-preview',
+    ) as any
+
     for (let e of inputs) {
       value.push(e.value)
     }
