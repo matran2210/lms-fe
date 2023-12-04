@@ -54,7 +54,7 @@ const MatchingQuestion = ({ data, action }: IProps) => {
               <QuestionCard value={e?.content} />
               <div
                 id={e?.id}
-                className="sapp-notched-container"
+                className="flex-1 sapp-match-result"
                 onDrop={() => drop(event)}
                 onDragOver={() => allowDrop(event)}
               ></div>
@@ -62,7 +62,7 @@ const MatchingQuestion = ({ data, action }: IProps) => {
           )
         })}
         <div
-          className="border min-h-large sapp-store"
+          className="border min-h-large sapp-store flex flex-wrap gap-5 p-5"
           onDrop={handleStorage}
           onDragOver={allowDrop}
           id="storage"
@@ -70,9 +70,9 @@ const MatchingQuestion = ({ data, action }: IProps) => {
           {data?.question_matchings.map((e: any) => {
             return (
               <div
-                className="w-fit"
+                // className="w-fit"
                 key={e?.answer?.id}
-                // className="sapp-notched-container"
+                className="sapp-notched-container min-w-132px"
                 id={e?.answer?.id}
                 draggable="true"
                 onDragStart={drag}
@@ -85,6 +85,7 @@ const MatchingQuestion = ({ data, action }: IProps) => {
           })}
         </div>
       </div>
+      {/* <button onClick={action}>Check Answer</button> */}
     </div>
   )
 }
