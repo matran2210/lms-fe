@@ -33,7 +33,7 @@ const MyCourse = ({ courses }: any) => {
       <div className="main max-w-xxl my-0 mx-auto">
         <div className="flex justify-between py-6">
           <h2 className="text-medium-sm font-semibold text-bw-1">My Course</h2>
-          <Filter courses={courses}/>
+          <Filter courses={courses} />
         </div>
       </div>
       <div className="heading bg-white max-w-xxl my-0 mx-auto flex">
@@ -53,55 +53,69 @@ const MyCourse = ({ courses }: any) => {
 export default MyCourse
 
 export async function getServerSideProps(context: any) {
-  const { req, res, query } = context;
-  const accessToken = req.cookies.accessToken;
+  const { req, res, query } = context
+  const accessToken = req.cookies.accessToken
 
   try {
-    const apiResponse = await axios.get(`${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const apiResponse = await axios.get(
+      `${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    )
 
-    const courses = apiResponse.data?.data;
+    const courses = apiResponse.data?.data
 
     return {
       props: {
         courses,
       },
-    };
+    }
   } catch (error: any) {
     if (error.response && error.response.status === 401) {
-      const refreshToken = req.cookies.refreshToken;
+      const refreshToken = req.cookies.refreshToken
 
       try {
-        const refreshResponse = await axios.post(`${apiURL}/auth/rotate`, {}, {
-          headers: {
-            Authorization: `Bearer ${refreshToken}`
-          }
-        });
-
-        res.setHeader('Set-Cookie', `accessToken=${refreshResponse.data.accessToken}; HttpOnly`);
-
-        const newApiResponse = await axios.get(`${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type}`, {
-          headers: {
-            Authorization: `Bearer ${refreshResponse.data.accessToken}`,
+        const refreshResponse = await axios.post(
+          `${apiURL}/auth/rotate`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${refreshToken}`,
+            },
           },
-        });
+        )
+
+        res.setHeader(
+          'Set-Cookie',
+          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
+        )
+
+        const newApiResponse = await axios.get(
+          `${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type}`,
+          {
+            headers: {
+              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
+            },
+          },
+        )
 
         return {
           props: {
             courses: newApiResponse.data?.data,
           },
-        };
+        }
       } catch (refreshError) {}
-    } else {}
+    } else {
+    }
 
     return {
       redirect: {
         destination: '/auth/login',
         permanent: false,
       },
-    };
+    }
   }
 }

@@ -21,7 +21,7 @@ const HookFormSelect = ({
   isMulti = false,
   onChange,
   placeholder,
-  value
+  value,
 }: IProps) => {
   return (
     <div className="select-options">

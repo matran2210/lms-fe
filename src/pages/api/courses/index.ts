@@ -9,5 +9,7 @@ export const getCoursePartDetail = (id: string | undefined) => {
 }
 
 export const getCourseLearningOutcome = (id: string | undefined) => {
-  return fetcher(`https://lms-sapp.merket.io/api/v1/course_learning_outcomes/${id}`)
+  return fetcher(
+    `https://lms-sapp.merket.io/api/v1/course_learning_outcomes/${id}`,
+  )
 }

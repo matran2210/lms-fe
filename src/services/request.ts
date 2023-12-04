@@ -1,6 +1,10 @@
-import { removeJwtToken, setAccessToken, setRefreshToken } from '@utils/helpers/authen'
-import axios, {AxiosRequestConfig} from 'axios'
-import {PageLink} from 'src/constants'
+import {
+  removeJwtToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@utils/helpers/authen'
+import axios, { AxiosRequestConfig } from 'axios'
+import { PageLink } from 'src/constants'
 import { apiURL } from 'src/redux/services/httpService'
 
 // Variable to track whether the refresh token API has been called
@@ -37,10 +41,10 @@ request.interceptors.request.use(
   (error) => {
     // Handle request error
     return Promise.reject(error)
-  }
+  },
 )
 
-request.interceptors.request.use((config:any) => {
+request.interceptors.request.use((config: any) => {
   config.headers = {
     Authorization: 'Bearer ' + `${getActToken}`,
     ...config.headers,
@@ -69,11 +73,16 @@ request.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true
 
-        axios.post(`${apiURL}/auth/rotate`, {} ,{
-          headers: {
-            Authorization: 'Bearer ' + `${getRefreshToken}`,
-          }
-        })
+        axios
+          .post(
+            `${apiURL}/auth/rotate`,
+            {},
+            {
+              headers: {
+                Authorization: 'Bearer ' + `${getRefreshToken}`,
+              },
+            },
+          )
           .then((res: any) => {
             const userInfo = res?.data?.data?.tokens
             localStorage.setItem('accessToken', userInfo?.act)
@@ -82,10 +91,14 @@ request.interceptors.response.use(
             setRefreshToken(userInfo?.rft)
 
             // update new token to axios
-            request.defaults.headers.common['Authorization'] = `Bearer ${getActToken as string}`
+            request.defaults.headers.common['Authorization'] = `Bearer ${
+              getActToken as string
+            }`
 
             // Callback to unauth API calls
-            refreshSubscribers.forEach((callback) => callback(getActToken as string))
+            refreshSubscribers.forEach((callback) =>
+              callback(getActToken as string),
+            )
             refreshSubscribers = []
             isRefreshing = false
           })
@@ -107,7 +120,7 @@ request.interceptors.response.use(
       return retryOriginalRequest
     }
     return Promise.reject(error)
-  }
+  },
 )
 
 request.interceptors.response.use(
@@ -116,7 +129,5 @@ request.interceptors.response.use(
   },
   function (error: any) {
     return Promise.reject(error)
-  }
+  },
 )
-
-
