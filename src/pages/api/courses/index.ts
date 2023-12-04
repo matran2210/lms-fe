@@ -1,15 +1,18 @@
-import { fetcher } from 'src/services/request'
+import { httpService } from 'src/redux/services/httpService'
 
-export const getCourse = () => {
-  return fetcher(`courses?page_index=1&page_size=10`)
+const CourseAPI = {
+  getCourseLearningOutcome: async (id: string): Promise<any> => {
+    const response = await httpService.GET<any, any>({
+      uri: `course_learning_outcomes/${id}`,
+    })
+    return response
+  },
+  getCoursePartDetail: async (id: string | undefined): Promise<any> => {
+    const response = await httpService.GET<any, any>({
+      uri: `course-sections/${id}`,
+    })
+    return response
+  }
 }
 
-export const getCoursePartDetail = (id: string | undefined) => {
-  return fetcher(`https://lms-sapp.merket.io/api/v1/course-sections/${id}`)
-}
-
-export const getCourseLearningOutcome = (id: string | undefined) => {
-  return fetcher(
-    `https://lms-sapp.merket.io/api/v1/course_learning_outcomes/${id}`,
-  )
-}
+export default CourseAPI

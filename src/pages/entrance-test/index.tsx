@@ -1,10 +1,8 @@
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import Tabs from '@components/mycourses/Tabs'
 import React from 'react'
 import { parse } from 'cookie'
-import { getCourse } from '../api/courses'
 import EntranceTestList from '@components/entrance-test/EntranceTestList'
 
 // Config entrance test lists
