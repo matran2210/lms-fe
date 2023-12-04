@@ -1,14 +1,7 @@
-import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios'
-import { PageLink } from 'src/constants'
-
-import {
-  getActToken,
-  getRefreshToken,
-  removeJwtToken,
-  setCookieActToken,
-  setCookieRefreshToken,
-} from 'src/utils'
-// import {toast} from 'react-hot-toast'
+import { removeJwtToken, setAccessToken, setRefreshToken } from '@utils/helpers/authen'
+import axios, {AxiosRequestConfig} from 'axios'
+import {PageLink} from 'src/constants'
+import { apiURL } from 'src/redux/services/httpService'
 
 // Variable to track whether the refresh token API has been called
 let isRefreshing = false
@@ -16,11 +9,14 @@ let refreshSubscribers: ((token: string) => void)[] = []
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
-    return process.env.REACT_APP_API_PUBLIC
+    return apiURL
   }
 
-  return process.env.REACT_APP_API_PUBLIC
+  return apiURL
 }
+
+const getActToken = localStorage.getItem('accessToken')
+const getRefreshToken = localStorage.getItem('refreshToken')
 
 export const request = axios.create({
   baseURL: getBaseUrl(),
@@ -41,12 +37,12 @@ request.interceptors.request.use(
   (error) => {
     // Handle request error
     return Promise.reject(error)
-  },
+  }
 )
 
-request.interceptors.request.use((config: any) => {
+request.interceptors.request.use((config:any) => {
   config.headers = {
-    Authorization: 'Bearer ' + getActToken(),
+    Authorization: 'Bearer ' + `${getActToken}`,
     ...config.headers,
   }
 
@@ -73,24 +69,23 @@ request.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true
 
-        axios(`${process.env.REACT_APP_API_PUBLIC}/auth/rotate`, {
-          method: 'POST',
+        axios.post(`${apiURL}/auth/rotate`, {} ,{
           headers: {
-            Authorization: 'Bearer ' + getRefreshToken(),
-          },
+            Authorization: 'Bearer ' + `${getRefreshToken}`,
+          }
         })
           .then((res: any) => {
             const userInfo = res?.data?.data?.tokens
-            setCookieActToken(userInfo?.act)
-            setCookieRefreshToken(userInfo?.rft)
+            localStorage.setItem('accessToken', userInfo?.act)
+            localStorage.setItem('refreshToken', userInfo?.rft)
+            setAccessToken(userInfo?.act)
+            setRefreshToken(userInfo?.rft)
 
             // update new token to axios
-            request.defaults.headers.common[
-              'Authorization'
-            ] = `Bearer ${getActToken()}`
+            request.defaults.headers.common['Authorization'] = `Bearer ${getActToken as string}`
 
             // Callback to unauth API calls
-            refreshSubscribers.forEach((callback) => callback(getActToken()))
+            refreshSubscribers.forEach((callback) => callback(getActToken as string))
             refreshSubscribers = []
             isRefreshing = false
           })
@@ -112,7 +107,7 @@ request.interceptors.response.use(
       return retryOriginalRequest
     }
     return Promise.reject(error)
-  },
+  }
 )
 
 request.interceptors.response.use(
@@ -121,5 +116,7 @@ request.interceptors.response.use(
   },
   function (error: any) {
     return Promise.reject(error)
-  },
+  }
 )
+
+
