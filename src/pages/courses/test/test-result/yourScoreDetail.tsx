@@ -135,8 +135,8 @@ const YourScoreDetail = () => {
                         e.result === 'Correct'
                           ? '#008000'
                           : e.result === 'Incorrect'
-                            ? '#D35563'
-                            : '#D35563',
+                          ? '#D35563'
+                          : '#D35563',
                     }}
                   >
                     {e?.result ?? '-'}

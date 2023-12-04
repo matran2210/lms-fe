@@ -45,8 +45,12 @@ const CourseActivityApi = {
     })
     return response
   },
-  getQuizById: async (id: string): Promise<IResponse<IQuestion>> => {
-    const response = await httpService.GET<any, any>({ uri: `question/${id}` })
+  getQuiz: async (
+    id: string,
+  ): Promise<IResponse<{ questions: IQuestion[] }>> => {
+    const response = await httpService.GET<any, any>({
+      uri: `quiz/${id}/questions?page_index=1&page_size=99999 `,
+    })
     return response
   },
 }
