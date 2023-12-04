@@ -96,7 +96,7 @@ export const loginSlice = createSlice({
         setAccessToken(accessToken)
         setRefreshToken(refreshToken)
         setCookieActToken(accessToken)
-        setCookieRefreshToken(accessToken)
+        setCookieRefreshToken(refreshToken)
       }
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {

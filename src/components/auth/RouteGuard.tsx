@@ -21,7 +21,7 @@ export const RouteGuard = ({ children }: IProps) => {
 
     // on route change start - hide page content by setting
     // authorized to false
-    const hideContent = () => setAuthorized(false)
+    const hideContent = () => setAuthorized(true)
     router.events.on('routeChangeStart', hideContent)
 
     // on route change complete - run auth check

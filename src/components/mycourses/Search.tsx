@@ -17,7 +17,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     e.preventDefault()
 
     // Redirect to the search results page with the query as a query parameter
-    router.push(`/search?q=${encodeURIComponent(query)}`)
+    router.push(`courses?name=${encodeURIComponent(query)}&type=${router.query.type}`)
   }
 
   return (

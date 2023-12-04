@@ -8,6 +8,9 @@ interface IProps {
   options?: any
   isMulti?: boolean
   children?: ReactNode
+  placeholder?: string
+  onChange?: (select: any) => void
+  value?: string | null | undefined
 }
 
 const HookFormSelect = ({
@@ -16,6 +19,9 @@ const HookFormSelect = ({
   required = false,
   options,
   isMulti = false,
+  onChange,
+  placeholder,
+  value
 }: IProps) => {
   return (
     <div className="select-options">
@@ -27,6 +33,9 @@ const HookFormSelect = ({
         className={`select-single ${className}`}
         classNamePrefix="select"
         instanceId="selectInstanceId"
+        placeholder={placeholder}
+        onChange={onChange}
+        value={value}
       />
     </div>
   )

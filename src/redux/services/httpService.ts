@@ -7,9 +7,10 @@ import url from './Authen/url'
 
 import toast from 'react-hot-toast'
 import { exceptions } from './en.exceptions'
+import { setCookieActToken } from '@utils/index'
 
 const { publicRuntimeConfig } = getConfig()
-const { apiURL } = publicRuntimeConfig
+export const { apiURL } = publicRuntimeConfig
 
 const BASE_URL = process.env.REACT_APP_API_PUBLIC
 
@@ -53,6 +54,8 @@ const refreshAccessToken = async (): Promise<string | null> => {
     // Save the new access token to the AsyncStorage
     await AsyncStorage.setItem('accessToken', act)
     await AsyncStorage.setItem('refreshToken', rft)
+    setCookieActToken(act)
+    setCookieActToken(rft)
     // Resolve all the subscribers with the new access token
     refreshSubscribers.forEach((callback) => callback(act))
 
