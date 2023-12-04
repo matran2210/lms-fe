@@ -87,3 +87,6 @@ body * ::-webkit-scrollbar-thumb:hover {
   // border-radius: 4px;
   // margin-bottom: 5px;
 }
+.sapp-select--selectword-preview {
+  @apply min-w-78px rounded;
+}
