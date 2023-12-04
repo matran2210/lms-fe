@@ -57,10 +57,10 @@ const HookFormRadioGroup = ({
                 justify === 'between'
                   ? 'justify-between'
                   : justify == 'center'
-                    ? 'justify-center'
-                    : justify === 'start'
-                      ? 'justify-start'
-                      : 'justify-end'
+                  ? 'justify-center'
+                  : justify === 'start'
+                  ? 'justify-start'
+                  : 'justify-end'
               }`
             }
           >
@@ -92,9 +92,10 @@ const HookFormRadioGroup = ({
                       key={option.label}
                       value={option.value.toString()}
                       checked={option.value.toString() === field.value}
-                      className="me-2"
+                      className="me-2 flex-none"
+                      size="medium"
                     />
-                    <span>
+                    <span className="flex-1">
                       <div
                         className={`${
                           option.value === field.value
@@ -106,7 +107,7 @@ const HookFormRadioGroup = ({
                             : `text-black ${
                                 labelClass ? labelClass : 'fw-bold fs-6'
                               }`
-                        }`}
+                        } flex-1`}
                       >
                         {option.label}
                       </div>

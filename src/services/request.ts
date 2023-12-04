@@ -19,8 +19,10 @@ export const getBaseUrl = () => {
   return apiURL
 }
 
-const getActToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : ''
-const getRefreshToken =typeof window !== 'undefined' ? localStorage.getItem('refreshToken') :''
+const getActToken =
+  typeof window !== 'undefined' ? localStorage.getItem('accessToken') : ''
+const getRefreshToken =
+  typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : ''
 
 export const request = axios.create({
   baseURL: getBaseUrl(),

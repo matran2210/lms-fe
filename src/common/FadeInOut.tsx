@@ -1,50 +1,56 @@
-import React, { Component, ReactNode } from 'react'
+import React, { Component } from 'react'
 
-// Các trạng thái của component
-const UNMOUNTED = 'unmounted'
-const EXITED = 'exited'
-const ENTERING = 'entering'
-const ENTERED = 'entered'
-const EXITING = 'exiting'
+// Định nghĩa các trạng thái của component
+enum Status {
+  UNMOUNTED = 'unmounted',
+  EXITED = 'exited',
+  ENTERING = 'entering',
+  ENTERED = 'entered',
+  EXITING = 'exiting',
+}
 
-// Định nghĩa kiểu liên minh cho các trạng thái
-type Status =
-  | typeof UNMOUNTED
-  | typeof EXITED
-  | typeof ENTERING
-  | typeof ENTERED
-  | typeof EXITING
+// Định nghĩa kiểu dữ liệu cho props của component
+interface FadeInOutProps {
+  // Biến boolean để quyết định có hiển thị component hay không
+  show: boolean
+  // Thời gian chuyển đổi trạng thái của component (tính bằng mili giây)
+  duration: number
+  // Tên lớp CSS của component
+  className?: string
+  // Đối tượng style của component
+  style?: React.CSSProperties
+  // Nội dung của component
+  children: React.ReactNode
+}
 
-// Các kiểu chuyển đổi cho các trạng thái
+// Định nghĩa kiểu dữ liệu cho state của component
+interface FadeInOutState {
+  // Trạng thái hiện tại của component
+  status: Status
+}
+
+// Định nghĩa các style cho các trạng thái khác nhau của component
 const transitionStyles: Record<Status, React.CSSProperties> = {
+  [Status.UNMOUNTED]: { opacity: 0 }, // Thêm style cho trạng thái UNMOUNTED
   entering: { opacity: 0 },
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
   exited: { opacity: 0 },
-  unmounted: {},
 }
 
-// Định nghĩa kiểu cho các props của component
-interface FadeInOutProps {
-  show: boolean // Biến quyết định hiển thị hay ẩn component
-  duration: number // Thời gian chuyển đổi (ms)
-  className?: string // Tên lớp CSS cho component
-  style?: React.CSSProperties // Kiểu CSS cho component
-  children?: ReactNode // Các phần tử con của component
-}
-
-// Định nghĩa kiểu cho các state của component
-interface FadeInOutState {
-  status: Status // Trạng thái hiện tại của component
-}
-
-// Component FadeInOut dùng để hiển thị hoặc ẩn các phần tử con theo hiệu ứng mờ dần
+// Component FadeInOut sử dụng hiệu ứng fade in và fade out khi thay đổi trạng thái
 class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
-  static defaultProps: { show: boolean; duration: number }
+  static defaultProps: FadeInOutProps // Thêm khai báo kiểu dữ liệu cho defaultProps
+
+  private coverRef: React.RefObject<HTMLDivElement> | null = null
+  private elementRef: React.RefObject<HTMLDivElement> | null = null
+
   constructor(props: FadeInOutProps) {
     super(props)
+    this.state = { status: Status.UNMOUNTED }
 
-    this.state = { status: UNMOUNTED }
+    this.coverRef = React.createRef()
+    this.elementRef = React.createRef()
   }
 
   componentDidMount() {
@@ -59,12 +65,12 @@ class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
     if (prevProps !== this.props) {
       const { status } = this.state
       if (this.props.show) {
-        if (status !== ENTERING && status !== ENTERED) {
-          nextStatus = ENTERING
+        if (status !== Status.ENTERING && status !== Status.ENTERED) {
+          nextStatus = Status.ENTERING
         }
       } else {
-        if (status === ENTERING || status === ENTERED) {
-          nextStatus = EXITING
+        if (status === Status.ENTERING || status === Status.ENTERED) {
+          nextStatus = Status.EXITING
         }
       }
     }
@@ -73,60 +79,66 @@ class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
 
   updateStatus(nextStatus: Status | null) {
     if (nextStatus !== null) {
-      if (nextStatus === ENTERING) {
+      if (nextStatus === Status.ENTERING) {
         this.performEnter()
       } else {
         this.performExit()
       }
-    } else if (this.state.status === EXITED) {
-      this.setState({ status: UNMOUNTED })
+    } else if (this.state.status === Status.EXITED) {
+      this.setState({ status: Status.UNMOUNTED })
     }
   }
 
   performEnter() {
-    this.setState({ status: ENTERING }, () => {
+    this.setState({ status: Status.ENTERING }, () => {
       setTimeout(() => {
-        this.setState({ status: ENTERED }, () => {})
-      }, 0)
+        this.setState({ status: Status.ENTERED }, () => {})
+      }, 100)
     })
   }
 
   performExit() {
-    const { duration } = this.props
-    this.setState({ status: EXITING }, () => {
+    if (this.elementRef?.current && this.coverRef?.current) {
+      const height = this.elementRef.current?.offsetHeight
+      this.coverRef.current.style.minHeight = height + 'px'
+    }
+    this.setState({ status: Status.EXITING }, () => {
       setTimeout(() => {
-        this.setState({ status: EXITED }, () => {})
-      }, duration)
+        this.setState({ status: Status.EXITED }, () => {})
+      }, 0)
     })
   }
 
   render() {
     const { status } = this.state
-    if (status === UNMOUNTED) {
-      return null
-    }
-
     const { children, duration, className, style } = this.props
     return (
-      <div
-        className={className}
-        style={{
-          ...style,
-          transition: `opacity ${duration}ms ease-in-out`,
-          opacity: 0.1,
-          ...transitionStyles[status],
-        }}
-      >
-        {children}
+      <div className="relative">
+        <div
+          ref={this.coverRef}
+          className={`absolute inset-0 z-50 w-full h-full bg-black opacity-50 ease-in-out transition-all ${
+            status !== Status.ENTERED ? '' : 'hidden'
+          }`}
+        ></div>
+        <div
+          ref={this.elementRef}
+          className={className}
+          style={{
+            ...style,
+            transition: `opacity ${duration}ms ease-in-out`,
+          }}
+        >
+          {children}
+        </div>
       </div>
     )
   }
 }
 
-// Các giá trị mặc định cho các props
 FadeInOut.defaultProps = {
   show: false,
   duration: 300,
+  children: <></>, // Thêm giá trị cho thuộc tính children
 }
 
 export default FadeInOut

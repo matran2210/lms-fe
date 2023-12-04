@@ -3,7 +3,10 @@ import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import SappModal from '@components/base/modal/SappModal'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
+import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 
 type Props = {
@@ -14,9 +17,13 @@ const VideoDocument = ({ videos }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
   const currentTimeRef = useRef(-1)
-  const [markers, setMarkers] = useState<string[]>()
-  const [currentListQuiz, setCurrentListQuiz] = useState<IQuestion[]>([])
-  const [playerRef, setPlayerRef] = useState<any>()
+  const [currentListQuestion, setCurrentListQuestion] = useState<IQuestion[]>(
+    [],
+  )
+  const [shuffleQuiz, setShuffleQuiz] = useState<IQuestion[]>([])
+  const [activeQuestion, setActiveQuestion] = useState<IQuestion>()
+
+  const { control: controlAnswer, handleSubmit } = useForm()
 
   useEffect(() => {
     if (videos?.[0]) {
@@ -24,7 +31,15 @@ const VideoDocument = ({ videos }: Props) => {
     }
   }, [videos])
 
-  const handleSetCurrentVideo = (v: IVideo) => {
+  const handleSetCurrentVideo = async (v: IVideo) => {
+    try {
+      if (v.quiz?.id) {
+        const shuffleQuiz = await CourseActivityApi.getQuiz(v.quiz?.id)
+        if (shuffleQuiz.success) {
+          setShuffleQuiz(shuffleQuiz.data.questions)
+        }
+      }
+    } catch (error) {}
     setCurrentVideo(v)
     quizTimed.current = [
       ...(v?.quiz?.constructed_questions || []),
@@ -41,26 +56,27 @@ const VideoDocument = ({ videos }: Props) => {
       },
       {} as { [key: string]: IQuestion[] },
     )
-    setMarkers(Object.keys(quizTimed.current || {}))
   }
   const streamRef = useRef<StreamPlayerApi>()
 
   const handleOpenModalQuestions = async ({
     id,
-    listQuiz,
+    listQuestion,
   }: {
     id: string
     open: boolean
-    listQuiz: any[]
+    listQuestion: any[]
   }) => {
-    // const newCurrentQuiz = await handleSetActiveQuiz(id)
-    // if (newCurrentQuiz) {
-    //   // setActiveQuiz(newCurrentQuiz)
-    //   setCurrentListQuiz(listQuiz)
-    // } else {
-    //   // setActiveQuiz(undefined)
-    //   setCurrentListQuiz([])
-    // }
+    try {
+      const newCurrentQuiz = shuffleQuiz.find((e) => e.id === id)
+      if (newCurrentQuiz) {
+        setActiveQuestion(newCurrentQuiz)
+        setCurrentListQuestion(listQuestion)
+      } else {
+        setActiveQuestion(undefined)
+        setCurrentListQuestion([])
+      }
+    } catch (error) {}
   }
 
   const handleTrackTime = (time: number) => {
@@ -68,12 +84,13 @@ const VideoDocument = ({ videos }: Props) => {
       handleOpenModalQuestions({
         id: quizTimed.current?.[time][0].id || '',
         open: true,
-        listQuiz: quizTimed.current?.[time],
+        listQuestion: quizTimed.current?.[time],
       })
-      setCurrentListQuiz(quizTimed.current?.[time])
+      streamRef.current?.pause()
+      setCurrentListQuestion(quizTimed.current?.[time])
       return true
     }
-    setCurrentListQuiz([])
+    setCurrentListQuestion([])
     return false
   }
 
@@ -84,6 +101,46 @@ const VideoDocument = ({ videos }: Props) => {
       handleTrackTime(currentTime)
     }
   }
+
+  const handleClose = ({
+    quizId,
+    listQuestion,
+  }: {
+    quizId?: string
+    listQuestion: IQuestion[]
+  }) => {
+    if (quizId) {
+      var elementPos = listQuestion
+        ?.map(function (x) {
+          return x.id
+        })
+        .indexOf(quizId)
+      const nextQuestionId = listQuestion[elementPos + 1]?.id
+      if (nextQuestionId) {
+        handleOpenModalQuestions({
+          id: '',
+          open: false,
+          listQuestion: [],
+        })
+        setTimeout(() => {
+          handleOpenModalQuestions({
+            id: nextQuestionId,
+            open: true,
+            listQuestion,
+          })
+        }, 500)
+        return
+      }
+    }
+
+    handleOpenModalQuestions({
+      id: '',
+      open: false,
+      listQuestion: [],
+    })
+  }
+
+  const onSubmit = (data: any) => {}
 
   return (
     <div className="mb-6">
@@ -111,7 +168,7 @@ const VideoDocument = ({ videos }: Props) => {
       <div className="relative">
         <div>
           <SappModal
-            open={true}
+            open={!!activeQuestion}
             customTitle={
               <div className="text-xl font-bold text-bw-1">Question</div>
             }
@@ -124,86 +181,21 @@ const VideoDocument = ({ videos }: Props) => {
             isBordered={true}
             okButtonClass="!w-20 h-8.5 !px-0"
             cancelButtonClass="!w-20 h-8.5 !px-0"
+            handleSubmit={handleSubmit(onSubmit)}
+            handleCancel={() =>
+              handleClose({
+                quizId: activeQuestion?.id,
+                listQuestion: currentListQuestion,
+              })
+            }
+            colorCancel="secondary"
+            confirmOnclose
           >
             <div className="py-5">
-              Question Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Magni adipisci numquam voluptatum est odio recusandae omnis
-              incidunt ducimus, et sequi commodi, suscipit quas soluta. Atque
-              cupiditate quos eius vel deserunt. Question Lorem ipsum dolor sit
-              amet consectetur, adipisicing elit. Magni adipisci numquam
-              voluptatum est odio recusandae omnis incidunt ducimus, et sequi
-              commodi, suscipit quas soluta. Atque cupiditate quos eius vel
-              deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt. Question Lorem ipsum dolor sit amet consectetur,
-              adipisicing elit. Magni adipisci numquam voluptatum est odio
-              recusandae omnis incidunt ducimus, et sequi commodi, suscipit quas
-              soluta. Atque cupiditate quos eius vel deserunt. Question Lorem
-              ipsum dolor sit amet consectetur, adipisicing elit. Magni adipisci
-              numquam voluptatum est odio recusandae omnis incidunt ducimus, et
-              sequi commodi, suscipit quas soluta. Atque cupiditate quos eius
-              vel deserunt.
+              <OneChoiceQuestion
+                data={activeQuestion}
+                control={controlAnswer}
+              ></OneChoiceQuestion>
             </div>
           </SappModal>
         </div>

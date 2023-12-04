@@ -23,6 +23,7 @@ export interface IFile {
 export interface IVideo {
   file: IFile
   quiz?: {
+    id: string
     constructed_questions: IQuestion[]
     multiple_choice_questions: IQuestion[]
   }

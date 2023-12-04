@@ -75,8 +75,16 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       !codeSent && setCodeSent(true)
       setErrorMessage('')
       setCanResend(false)
-      settimeCountDownResent(() => time - 15)
+      settimeCountDownResent(() => {
+        if (time <= 0) {
+          setTimeCountDown(5)
+          return 285
+        }
+        return time - 15
+      })
       setCurrentToken(response.data.token)
+
+      setCode(Array(6).join('.').split('.'))
     } catch (error) {
       setErrorMessage('Resend code failed. Please try again')
     } finally {

@@ -42,6 +42,7 @@ interface IProps {
   parentChildClass?: string
   footerButtonClassName?: string
   color?: IButtonColors
+  colorCancel?: IButtonColors
   position?: 'center' | 'start' | 'end'
   fullWidthBtn?: boolean
 
@@ -97,6 +98,7 @@ const SappModal: React.FC<IProps> = ({
   parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex gap-3',
   color,
+  colorCancel = 'text',
   position = 'start',
   fullWidthBtn = false,
 
@@ -115,9 +117,10 @@ const SappModal: React.FC<IProps> = ({
     if (!isInner) {
       if (open) {
         const scrollBarWidth = window.innerWidth - document.body.clientWidth
-
-        document.body.style.paddingRight = scrollBarWidth + 'px'
-        document.body.classList.add('overflow-hidden')
+        setTimeout(() => {
+          document.body.style.paddingRight = scrollBarWidth + 'px'
+          document.body.classList.add('overflow-hidden')
+        })
       } else {
         const customModal = document.querySelectorAll(
           '.sapp-custom-modal:not(.sapp-custom-modal-inner)',
@@ -268,7 +271,7 @@ const SappModal: React.FC<IProps> = ({
                       <ButtonCancelSubmit
                         className={footerButtonClassName}
                         color={color}
-                        colorCancel={'secondary'}
+                        colorCancel={colorCancel}
                         submit={{
                           title: okButtonCaption,
                           size: buttonSize,

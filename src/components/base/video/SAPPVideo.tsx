@@ -12,22 +12,26 @@ const SAPPVideo = ({ options, pauseOnSeek = false, streamRef }: IProp) => {
   streamRef = streamRef || innerStreamRef
 
   return (
-    <div className={`group ${styles.wrapper}`}>
-      <Stream
-        {...options}
-        key={options.src}
-        streamRef={streamRef}
-        controls
-        responsive={false}
-        className={`${styles.content}`}
-        onSeeking={() => {
-          if (streamRef?.current && pauseOnSeek) {
-            streamRef.current.pause()
-          }
-        }}
-        autoplay={false}
-      ></Stream>
-    </div>
+    <>
+      {options.src && (
+        <div className={`group ${styles.wrapper}`}>
+          <Stream
+            {...options}
+            key={options.src}
+            streamRef={streamRef}
+            controls
+            responsive={false}
+            className={`${styles.content}`}
+            onSeeking={() => {
+              if (streamRef?.current && pauseOnSeek) {
+                streamRef.current.pause()
+              }
+            }}
+            autoplay={false}
+          ></Stream>
+        </div>
+      )}
+    </>
   )
 }
 

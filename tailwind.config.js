@@ -211,17 +211,17 @@ module.exports = {
         },
         'fade-in-overlay': {
           '0%': { opacity: '0' },
-          '100%': { opacity: '0.4' },
+          '100%': { opacity: '0.' },
         },
         'fade-out-overlay': {
-          '0%': { opacity: '0.4' },
+          '0%': { opacity: '0.8' },
           '100%': { opacity: '0' },
         },
       },
       animation: {
         'jump-in': 'jump-in 0.1s ease-in-out',
         'jump-out': 'jump-out 0.1s ease-in-out',
-        'fade-in-overlay': 'fade-in-overlay 0.1s ease-in-out',
+        'fade-in-overlay': 'fade-in-overlay 0.2s ease-in-out',
         'fade-out-overlay': 'fade-out-overlay 0.1s ease-out',
       },
     },
