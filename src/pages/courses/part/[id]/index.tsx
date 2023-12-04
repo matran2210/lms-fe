@@ -77,7 +77,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         isOpen={openLearningOutcome}
         onClose={handleCancel}
         title={learningOutcome?.name}
-        message='Bạn có chắc chắn muốn hủy không?'        
+        message="Bạn có chắc chắn muốn hủy không?"
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
@@ -110,11 +110,14 @@ export async function getServerSideProps(context: any) {
 
   try {
     // Thực hiện yêu cầu API với accessToken
-    const apiResponse = await axios.get(`${apiURL}/course-sections/${query.id}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const apiResponse = await axios.get(
+      `${apiURL}/course-sections/${query.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    })
+    )
 
     // Xử lý dữ liệu từ API
     const nodeList = apiResponse?.data?.data
@@ -124,7 +127,7 @@ export async function getServerSideProps(context: any) {
     // Trả về props cho trang
     return {
       props: {
-        previewPart:previewPart||{},
+        previewPart: previewPart || {},
       },
     }
   } catch (error: any) {
@@ -145,14 +148,20 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        res.setHeader('Set-Cookie', `accessToken=${refreshResponse.data.accessToken}; HttpOnly`);
+        res.setHeader(
+          'Set-Cookie',
+          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
+        )
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const newApiResponse = await axios.get(`${apiURL}/course-sections/${query.id}`, {
-          headers: {
-            Authorization: `Bearer ${refreshResponse.data.accessToken}`,
+        const newApiResponse = await axios.get(
+          `${apiURL}/course-sections/${query.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
+            },
           },
-        })
+        )
 
         // Xử lý dữ liệu từ API
         const nodeList = newApiResponse?.data?.data
@@ -162,7 +171,7 @@ export async function getServerSideProps(context: any) {
         // Trả về props cho trang
         return {
           props: {
-            previewPart:previewPart||{},
+            previewPart: previewPart || {},
           },
         }
       } catch (refreshError) {

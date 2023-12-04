@@ -90,3 +90,58 @@ body * ::-webkit-scrollbar-thumb:hover {
 .sapp-select--selectword-preview {
   @apply min-w-78px rounded;
 }
+.sapp-notched-container {
+  word-break: break-word;
+  flex: 1;
+  position: relative;
+  background-color: #f0f0f0;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  padding-left: 50px;
+  border: 1px dashed rgb(224, 221, 227);
+}
+
+.sapp-notched-container:before {
+  z-index: 0;
+  border: 1px dashed rgb(224, 221, 227);
+  background-color: white;
+  content: '';
+  position: absolute;
+  left: -1.2px;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+}
+
+.sapp-arrowed-container {
+  word-break: break-word;
+  flex: 1;
+  position: relative;
+  background-color: #f0f0f0;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  padding-left: 50px;
+  border: 1px dashed rgb(224, 221, 227);
+}
+
+.sapp-arrowed-container:before {
+  z-index: 0;
+  border: 1px dashed rgb(224, 221, 227);
+  background-color: #f0f0f0;
+  content: '';
+  position: absolute;
+  right: 0;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+}

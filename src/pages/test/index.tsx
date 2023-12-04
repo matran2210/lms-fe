@@ -4,6 +4,7 @@ import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGro
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import { formatTime } from '@components/common/timer'
 import AddWordPreview from '@components/questionType/FillText'
+import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChociceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
@@ -93,7 +94,7 @@ const Test = () => {
     question_content:
       '<p>type Chọn từ &nbsp;<span id="42876136-c187-4bf3-aac4-1951acdf7abf" class="question-content-tag" contenteditable="false">[_______]</span></p>',
     level: 'ADVANCED',
-    qType: 'SELECT_WORD',
+    qType: 'MATCHING',
     assignment_type: 'TEXT',
     response_option: null,
     question_files: null,
@@ -132,8 +133,115 @@ const Test = () => {
     question_filter: null,
     exhibits: [],
     requirements: [],
-    question_matchings: [],
+    // question_matchings: [],
     tags: [],
+    question_matchings: [
+      {
+        id: '91ab656b-a675-4bec-99a0-9778445887cc',
+        created_at: '2023-12-04T02:55:33.045Z',
+        updated_at: '2023-12-04T02:55:33.045Z',
+        deleted_at: null,
+        question_id: '0217283d-f8c7-489f-9588-5814a864201b',
+        content: 'as',
+        answer_id: '1ea7e8dd-03d0-4cfc-b0c5-2b4ae7756669',
+        answer: {
+          id: '1ea7e8dd-03d0-4cfc-b0c5-2b4ae7756669',
+          created_at: '2023-12-04T02:55:33.045Z',
+          updated_at: '2023-12-04T02:55:33.045Z',
+          deleted_at: null,
+          question_id: null,
+          answer: 'aa',
+          is_correct: true,
+          feedback: null,
+          active: null,
+          answer_position: 1,
+        },
+      },
+      {
+        id: 'f2a73692-04c0-4368-917b-944894e4ef34',
+        created_at: '2023-12-04T02:55:33.045Z',
+        updated_at: '2023-12-04T02:55:33.045Z',
+        deleted_at: null,
+        question_id: '0217283d-f8c7-489f-9588-5814a864201b',
+        content: 'dd',
+        answer_id: '3bf1d2a9-add9-43de-91a8-d2951f452571',
+        answer: {
+          id: '3bf1d2a9-add9-43de-91a8-d2951f452571',
+          created_at: '2023-12-04T02:55:33.045Z',
+          updated_at: '2023-12-04T02:55:33.045Z',
+          deleted_at: null,
+          question_id: null,
+          answer: 'qq',
+          is_correct: true,
+          feedback: null,
+          active: null,
+          answer_position: 2,
+        },
+      },
+      {
+        id: 'f2a73692-04c0-4368-917b-944894e4ef35',
+        created_at: '2023-12-04T02:55:33.045Z',
+        updated_at: '2023-12-04T02:55:33.045Z',
+        deleted_at: null,
+        question_id: '0217283d-f8c7-489f-9588-5814a864201b',
+        content: 'dd',
+        answer_id: '3bf1d2a9-add9-43de-91a8-d2951f452571',
+        answer: {
+          id: '3bf1d2a9-add9-43de-91a8-d2951f4525711',
+          created_at: '2023-12-04T02:55:33.045Z',
+          updated_at: '2023-12-04T02:55:33.045Z',
+          deleted_at: null,
+          question_id: null,
+          answer: 'qq',
+          is_correct: true,
+          feedback: null,
+          active: null,
+          answer_position: 2,
+        },
+      },
+      {
+        id: 'f2a73692-04c0-4368-917b-944894e4ef342',
+        created_at: '2023-12-04T02:55:33.045Z',
+        updated_at: '2023-12-04T02:55:33.045Z',
+        deleted_at: null,
+        question_id: '0217283d-f8c7-489f-9588-5814a864201b',
+        content: 'dd',
+        answer_id: '3bf1d2a9-add9-43de-91a8-d2951f452571',
+        answer: {
+          id: '3bf1d2a9-add9-43de-91a8-d2951f4525713',
+          created_at: '2023-12-04T02:55:33.045Z',
+          updated_at: '2023-12-04T02:55:33.045Z',
+          deleted_at: null,
+          question_id: null,
+          answer: 'qq',
+          is_correct: true,
+          feedback: null,
+          active: null,
+          answer_position: 2,
+        },
+      },
+      {
+        id: 'f2a73692-04c0-4368-917b-944894e4ef341',
+        created_at: '2023-12-04T02:55:33.045Z',
+        updated_at: '2023-12-04T02:55:33.045Z',
+        deleted_at: null,
+        question_id: '0217283d-f8c7-489f-9588-5814a864201b',
+        content: 'dd',
+        answer_id: '3bf1d2a9-add9-43de-91a8-d2951f452571',
+        answer: {
+          id: '3bf1d2a9-add9-43de-91a8-d2951f45257111',
+          created_at: '2023-12-04T02:55:33.045Z',
+          updated_at: '2023-12-04T02:55:33.045Z',
+          deleted_at: null,
+          question_id: null,
+          answer: 'qq',
+          is_correct: true,
+          feedback: null,
+          active: null,
+          answer_position: 2,
+        },
+      },
+    ],
   } as any
   const topicDescription =
     '<p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p>'
@@ -145,8 +253,8 @@ const Test = () => {
         return <OneChoiceQuestion data={data} control={control} />
       case QUESTION_TYPES.MULTIPLE_CHOICE:
         return <MultiChociceQuestion data={data} control={control} />
-      // case QUESTION_TYPES.MATCHING:
-      //   return <MatchingPreview data={data} />;
+      case QUESTION_TYPES.MATCHING:
+        return <MatchingQuestion data={data} action={getAnswerMatching} />
       case QUESTION_TYPES.FILL_WORD:
         return <AddWordPreview data={data} action={getValueFillText} />
       // case QUESTION_TYPES.DRAG_DROP:
@@ -182,6 +290,14 @@ const Test = () => {
 
     for (let e of inputs) {
       value.push(e.value)
+    }
+    return value
+  }
+  const getAnswerMatching = () => {
+    let value = [] as any
+    const inputs = document.querySelectorAll('.sapp-notched-container') as any
+    for (let e of inputs) {
+      value.push(e.innerText)
     }
     return value
   }
