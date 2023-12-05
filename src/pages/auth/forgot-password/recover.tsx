@@ -10,15 +10,15 @@ type IProps = {
 
 const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
   return (
-    <>
+    <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
       <div className="font-bold text-bw-1 mb-2 text-4xl">Forgot Password</div>
-      <span className="medium-sm text-gray-1 mb-10">
+      <span className="text-medium-sm text-gray-1 mb-10">
         Enter your 6 digits code that you received on your email.
       </span>
       <div className="mt-12">
         <InputCodeForm email={email} token={token} />
       </div>
-    </>
+    </div>
   )
 }
 

@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PUBLIC_PATHS, PageLink } from 'src/constants'
+import { useAppDispatch } from 'src/redux/hook'
+import { getMe } from 'src/redux/slice/User/User'
 
 interface IProps {
   children: JSX.Element
@@ -9,15 +11,17 @@ interface IProps {
 
 export const RouteGuard = ({ children }: IProps) => {
   const router = useRouter()
+
   const [authorized, setAuthorized] = useState(false)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     // on initial load - run auth check
-    authCheck(router.asPath)
+    authCheck(router.pathname)
 
     // on route change start - hide page content by setting
     // authorized to false
-    const hideContent = () => setAuthorized(false)
+    const hideContent = () => setAuthorized(true)
     router.events.on('routeChangeStart', hideContent)
 
     // on route change complete - run auth check
@@ -38,12 +42,22 @@ export const RouteGuard = ({ children }: IProps) => {
 
     const path = url?.split('?')?.[0]
     const accessToken = await AsyncStorage.getItem('accessToken')
+    const refreshToken = await AsyncStorage.getItem('refreshToken')
 
-    if (!accessToken && !PUBLIC_PATHS[path]) {
+    if (!accessToken && !refreshToken && !PUBLIC_PATHS[path]) {
       setAuthorized(false)
       router.push(PageLink.AUTH_LOGIN)
     } else {
       setAuthorized(true)
+    }
+
+    // Chặn vào login page khi đã đăng nhập
+    const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
+    if (isLoginPage) {
+      try {
+        await dispatch(getMe()).unwrap()
+        router.push(PageLink.DASHBOARD)
+      } catch (error) {}
     }
   }
 

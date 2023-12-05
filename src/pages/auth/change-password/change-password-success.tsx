@@ -1,11 +1,17 @@
-import { LAYOUT } from '@utils/constants'
-import React from 'react'
-import ButtonPrimary from 'src/components/base/button/ButtonPrimary'
-import { PageLink } from 'src/constants'
 import SAPP_PasswordSuccess from '@assets/images/sapp_password_success.svg'
+import SappButton from '@components/base/button/SappButton'
+import { LAYOUT } from '@utils/constants'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { PageLink } from 'src/constants'
 
 const ChangePasswordSuccess = () => {
+  const router = useRouter()
+  const redirectLogin = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    router.push(PageLink.AUTH_LOGIN)
+  }
   return (
     <div className="d-flex flex-column flex-root sapp-height-layout--login justify-content-center">
       <div className="d-flex flex-column  flex-lg-row justify-content-center">
@@ -13,7 +19,7 @@ const ChangePasswordSuccess = () => {
           <div className="bg-body d-flex flex-column align-items-stretch flex-center">
             <div className="d-flex flex-center flex-column  px-lg-10">
               {/* Start Form Login */}
-              <div className="form w-100">
+              <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
                 <div className="swal2-icon swal2-success swal2-icon-show d-flex mb-6 text-center">
                   <Image
                     src={SAPP_PasswordSuccess}
@@ -33,10 +39,11 @@ const ChangePasswordSuccess = () => {
 
                 {/* Start Button Login */}
                 <div className="d-grid">
-                  <ButtonPrimary
-                    className="w-full h-12.5 flex items-center justify-center bg-primary"
+                  <SappButton
+                    size="lager"
+                    full
                     title="Login"
-                    link={PageLink.AUTH_LOGIN}
+                    onClick={redirectLogin}
                   />
                 </div>
                 {/* End Button Login */}

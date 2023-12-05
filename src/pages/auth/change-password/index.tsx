@@ -1,24 +1,22 @@
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 // import { useState } from 'react'
+import ButtonText from '@components/base/button/ButtonText'
+import SappButton from '@components/base/button/SappButton'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
   VALIDATE_MIN_LENGTH,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
-import Link from 'next/link'
+import { display422Errors } from '@utils/helpers/form'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
-import { z } from 'zod'
-import { useAppDispatch, useAppSelector } from '../../../redux/hook'
-import { changePassword, loginReducer } from '../../../redux/slice/Login/Login'
-import { useState } from 'react'
 import AuthApi from 'src/redux/services/Authen'
-import { display422Errors } from '@utils/helpers/form'
+import { z } from 'zod'
 
 interface IInputProps {
   password: string
@@ -42,8 +40,9 @@ const ChangePasswordPage = () => {
         }),
       confirmPassword: z
         .string({ required_error: VALIDATE_REQUIRED })
+        .trim()
         .min(1, { message: VALIDATE_REQUIRED })
-        .min(8, { message: VALIDATE_MIN_LENGTH('Confirm Password', 8) })
+        .min(8, { message: VALIDATE_MIN_LENGTH('Confirm password', 8) })
         .regex(VALIDATE_PASSWORD, {
           message: VALIDATE_PASSWORD_REGEX_MSG,
         }),
@@ -75,46 +74,58 @@ const ChangePasswordPage = () => {
       setLoading(false)
     }
   }
+  const redirectLogin = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    router.push(PageLink.AUTH_LOGIN)
+  }
 
   return (
-    <>
-      <div className="text-4xl font-bold text-bw-1 mb-2">New Password</div>
-      <div className="medium-sm text-gray-1 mb-10">
+    <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
+      <div className="text-4xl font-bold text-bw-1 mb-2">New password</div>
+      <div className="text-medium-sm text-gray-1 mb-10">
         Set the new password for your account.
       </div>
-      <form>
-        <HookFormTextField
-          name="password"
-          control={control}
-          placeholder="Password"
-          type="password"
-        />
-        <HookFormTextField
-          name="confirmPassword"
-          control={control}
-          placeholder="Confirm Password"
-          type="password"
-          className="mt-6"
-        />
-        <div className="mt-10">
-          <ButtonPrimary
-            title="Submit"
-            full={true}
-            className="mb-6"
-            size="lager"
-            onClick={handleSubmit(onSubmit)}
-            loading={loading}
+      <div>
+        <form>
+          <HookFormTextField
+            name="password"
+            control={control}
+            placeholder="New Password"
+            type="password"
+            textSize="sm"
           />
-          <div className="mt-8">
-            <Link href={PageLink.AUTH_LOGIN} passHref>
-              <div className="text-lg font-semibold text-center leading-7 cursor-pointer w-full">
-                Cancel
-              </div>
-            </Link>
+          <HookFormTextField
+            name="confirmPassword"
+            control={control}
+            placeholder="Confirm Password"
+            type="password"
+            className="mt-6"
+            textSize="sm"
+          />
+          <div className="mt-10">
+            <SappButton
+              title="Submit"
+              full={true}
+              className="mb-8"
+              size="lager"
+              onClick={handleSubmit(onSubmit)}
+              loading={loading}
+            />
+            <div className="text-center">
+              <SappButton
+                title="Cancel"
+                size="lager"
+                onClick={redirectLogin}
+                isUnderLine={false}
+                isPadding={false}
+                color="text"
+              ></SappButton>
+            </div>
           </div>
-        </div>
-      </form>
-    </>
+        </form>
+      </div>
+    </div>
   )
 }
 

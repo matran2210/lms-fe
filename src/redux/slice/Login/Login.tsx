@@ -14,6 +14,7 @@ import {
   LoginState,
 } from '../../types/Login/login'
 import AuthApi from '../../services/Authen'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -32,12 +33,10 @@ export const getLoginUser = createAsyncThunk(
     try {
       const res = await AuthApi.login(body)
       if (!res.success) {
-        toast.error(res.error.message)
         return
       }
       return { ...res }
     } catch (error: any) {
-      toast.error(error.message)
       return thunkAPI.rejectWithValue(error)
     }
   },
@@ -96,6 +95,8 @@ export const loginSlice = createSlice({
         state.user = action.payload.data.user
         setAccessToken(accessToken)
         setRefreshToken(refreshToken)
+        setCookieActToken(accessToken)
+        setCookieRefreshToken(refreshToken)
       }
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {
@@ -107,13 +108,26 @@ export const loginSlice = createSlice({
       state.loading = true
     })
     builder.addCase(getLogoutUser.fulfilled, (state, action) => {
+      state.accessToken = ''
       state.loading = false
-      state = { ...initialState }
+      state.changePass = false
+      state.errors = {}
+      state.user = {
+        email: '',
+        username: '',
+      }
       removeJwtToken()
     })
     builder.addCase(getLogoutUser.rejected, (state, action) => {
-      state.loading = false
       state.accessToken = ''
+      state.loading = false
+      state.changePass = false
+      state.errors = {}
+      state.user = {
+        email: '',
+        username: '',
+      }
+      removeJwtToken()
     })
 
     builder.addCase(changePassword.pending, (state) => {

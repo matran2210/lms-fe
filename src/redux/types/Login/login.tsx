@@ -3,8 +3,9 @@ export interface ILoginData {
   password: string
 }
 export interface LoginReq {
-  username: string
+  login: string
   password: string
+  remember_me: boolean
 }
 
 export interface ChangePasswordReq {

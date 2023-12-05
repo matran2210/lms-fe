@@ -5,15 +5,29 @@ import { useRouter } from 'next/router'
 interface Tab {
   label: string
   path: string
-  total: number
+  total?: number
   current: boolean
 }
 
 interface TabsProps {
   tabs: Tab[]
+  classUl?: string
+  currentClass?: string
+  tabClass?: string
+  liClass?: string
+  tabCurrentClass?: string
+  tabNotCurrentClass?: string
 }
 
-const Tabs: React.FC<TabsProps> = ({ tabs }) => {
+const Tabs: React.FC<TabsProps> = ({
+  tabs,
+  classUl,
+  currentClass,
+  tabClass,
+  liClass,
+  tabCurrentClass,
+  tabNotCurrentClass,
+}) => {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<number>(
     tabs.findIndex((tab) => tab.path === router.pathname),
@@ -24,24 +38,20 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
   }
 
   return (
-    <ul className="tab-buttons d-flex flex border-r border-gray-1 items-center py-[4.5px]">
+    <ul className={classUl}>
       {tabs.map((tab, index) => (
         <Link href={`/courses/my-course#${tab.path}`} key={index}>
-          <li className="mr-12 min-w-[80px]">
+          <li className={liClass}>
             <a
               onClick={() => handleTabClick(index)}
-              className={`item relative uppercase text-base w-full flex justify-center cursor-pointer ${
-                tab.current
-                  ? 'active text-primary font-semibold capitalize'
-                  : 'text-gray-1'
+              className={`${tabClass} ${
+                tab.current ? `${tabCurrentClass}` : `${tabNotCurrentClass}`
               }`}
               aria-current={tab.current ? 'page' : undefined}
             >
               {tab.label}
-              <span className="ml-1">({tab.total})</span>
-              {tab.current && (
-                <span className="activecolor w-full left-0 absolute bottom-0 h-2.5 bg-primary opacity-[0.15]"></span>
-              )}
+              {tab.total && <span className="ml-1">({tab.total})</span>}
+              {tab.current && <span className={currentClass}></span>}
             </a>
           </li>
         </Link>

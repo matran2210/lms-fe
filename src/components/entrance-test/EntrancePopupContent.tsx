@@ -1,0 +1,69 @@
+import React, { useState } from 'react'
+import Link from 'next/link'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import Icon from '@components/icons'
+import ResultRowsModal from '@components/learning/ResultRowsModal'
+import { formatTime } from '@components/common/timer'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+
+interface EntrancePopupContentProps {
+  name: string
+  score: number
+  timeAllow: number
+  attemps: string
+  status: string
+}
+
+const EntrancePopupContent = ({
+  name,
+  score,
+  timeAllow,
+  attemps,
+  status,
+}: EntrancePopupContentProps) => {
+  const [open, setOpen] = useState<boolean>(false)
+  const timeAllowFormatted = formatTime(timeAllow)
+
+  return (
+    <>
+      <div className="content">
+        <div className="info">
+          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+            <p>Name:</p>
+            <p className="text-bw-1">{name}</p>
+          </div>
+          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+            <p>Score:</p>
+            <p className="text-bw-1">--</p>
+          </div>
+          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+            <p>Time Allowed:</p>
+            <p className="text-bw-1">{timeAllowFormatted}</p>
+          </div>
+          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+            <p>No of Attempts:</p>
+            <p className="text-bw-1">{attemps}</p>
+          </div>
+          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+            <p>Status:</p>
+            <p className="text-state-error">{status}</p>
+          </div>
+        </div>
+        <div className="action flex items-center justify-between relative mt-10">
+          <div className="underline text-bw-1 text-lg leading-6.5 font-semibold">
+            Cancel
+          </div>
+          <ButtonPrimary
+            title="Start"
+            full={false}
+            size={'lager'}
+            className="hover:bg-primary hover:text-white"
+          />
+        </div>
+      </div>
+      <ResultRowsModal open={open} setOpen={setOpen} />
+    </>
+  )
+}
+
+export default EntrancePopupContent

@@ -25,3 +25,29 @@
 .name-course + .des {
   @apply pt-[17px];
 }
+
+.sapp-drawer .ant-drawer-wrapper-body .ant-drawer-body {
+  padding: 0;
+}
+
+.modal-body {
+  display: none;
+}
+
+.sapp-btn-close-modal {
+  display: none;
+}
+
+.download,.delete path {
+  stroke: #A1A1A1;
+  transition: stroke 0.3s ease;
+}
+
+/* Hover styling */
+.download:hover path {
+  stroke: #FFB800; /* Red color on hover */
+}
+
+.delete:hover path {
+  stroke: #D35563; /* Red color on hover */
+}

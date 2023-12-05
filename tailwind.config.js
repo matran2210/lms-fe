@@ -29,6 +29,7 @@ module.exports = {
       sm: ['14px', { lineHeight: '24px' }],
       'medium-sm': ['14px', { lineHeight: '16.9px' }],
       xsm: ['13px', { lineHeight: '19.5px' }],
+      ssm: ['12px', { lineHeight: '20px' }],
     },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
@@ -49,6 +50,10 @@ module.exports = {
         },
         secondary: {
           DEFAULT: '#FFFAF0',
+        },
+        danger: {
+          DEFAULT: '#D35563',
+          2: '#dd4339',
         },
         state: {
           info: '#3964EA',
@@ -93,6 +98,8 @@ module.exports = {
           '0px 2px 4px 0px rgba(0, 0, 0, 0.08), 0px 0px 6px 0px rgba(0, 0, 0, 0.02)',
         'single-dialog': '0px 4px 62px 0px rgba(0, 0, 0, 0.07)',
         box: '0px 2px 4px 0px #00000014, 0px 0px 6px 0px #00000005',
+        notify: '0px 0px 50px 0px rgba(152, 151, 147, 0.15)',
+        solution: '0px 2px 7px 0px rgba(0, 0, 0, 0.13)',
       },
       height: {
         12.5: '50px',
@@ -106,6 +113,12 @@ module.exports = {
         default: '40px',
         medium: '48px',
         large: '56px',
+        '62px': '62px',
+        '78px': '78px',
+        '132px': '132px',
+        '165px': '165px',
+        '190px': '190px',
+        '400px': '400px',
       },
       minHeight: {
         4: '16px',
@@ -120,6 +133,7 @@ module.exports = {
         md: '448px',
         lg: '512px',
         xl: '576px',
+        dl: '950px',
         xxl: '1144px',
         '8xl': '1920px',
       },
@@ -145,7 +159,12 @@ module.exports = {
         12.5: '50px',
         16.75: '4.188rem',
         18: '72px',
-        30: '7.5rem', // 120px
+        30: '7.5rem',
+        6: '6%',
+        7: '7%',
+        18: '18%',
+        3.6: '36%',
+        17: '17%',
       },
       padding: {
         1.8: '0.47rem', // 7.5px
@@ -153,7 +172,7 @@ module.exports = {
         2.8: '0.71875rem', // 11.5px
         3.25: '0.813rem', // 13px
         3.8: '0.89rem', // 14.3px
-        3.8: '0.89rem', // 14.3px
+        4.5: '1.125rem', // 18px
         5.25: '1.313rem', // 21px
         8.25: '2.0625rem', // 33px
         17.5: '4.375rem', // 70px
@@ -177,6 +196,30 @@ module.exports = {
       },
       gap: {
         7.5: '1.875rem', // 30px
+      },
+      keyframes: {
+        'jump-in': {
+          '0%': { transform: 'scale(0.5)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        'jump-out': {
+          '0%': { transform: 'scale(1)' },
+          '100%': { transform: 'scale(0.5)' },
+        },
+        'fade-in-overlay': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '0.4' },
+        },
+        'fade-out-overlay': {
+          '0%': { opacity: '0.4' },
+          '100%': { opacity: '0' },
+        },
+      },
+      animation: {
+        'jump-in': 'jump-in 0.1s ease-in-out',
+        'jump-out': 'jump-out 0.1s ease-in-out',
+        'fade-in-overlay': 'fade-in-overlay 0.1s ease-in-out',
+        'fade-out-overlay': 'fade-out-overlay 0.1s ease-out',
       },
     },
   },

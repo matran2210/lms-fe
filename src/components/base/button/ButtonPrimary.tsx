@@ -1,6 +1,4 @@
-import React from 'react'
 import { IButtonProps } from 'src/type'
-import SpinIcon from './SpinIcon'
 
 const ButtonPrimary = ({
   title,
@@ -24,18 +22,17 @@ const ButtonPrimary = ({
   let paddingHorizontalClass =
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
-  let disabledClass = disabled
-    ? 'cursor-not-allowed opacity-60 bg-primary-2'
-    : 'cursor-pointer'
-  let componentClass = `${className} text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-primary hover:bg-primary-2`
-
+  let disabledClass =
+    disabled || loading
+      ? 'cursor-not-allowed opacity-60 bg-primary-2'
+      : 'cursor-pointer'
+  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-primary hover:bg-primary-2`
   if (link)
     return (
       <a href={link} className={componentClass} aria-disabled={disabled}>
         {title}
       </a>
     )
-
   return (
     <button
       className={componentClass}
@@ -43,12 +40,14 @@ const ButtonPrimary = ({
       onClick={onClick}
       disabled={disabled || loading}
     >
-      {!loading ? (
-        title
-      ) : (
-        <>
-          <SpinIcon /> Loading...
-        </>
+      <span className={loading ? 'invisible' : ''}> {title}</span>
+      {loading && (
+        <div className="absolute w-100 h-100 top-0 left-0 right-0 bottom-0 flex space-x-2 justify-center items-center bg-none dark:invert">
+          <span className="sr-only">Loading...</span>
+          <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+          <div className="h-2 w-2 bg-white rounded-full animate-bounce"></div>
+        </div>
       )}
     </button>
   )

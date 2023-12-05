@@ -29,12 +29,14 @@ export default function DashboardLayout({
             : 'bg-bw-4 border-r border-dark w-[82px] pt-8 pb-10'
         }`}
       />
-      <div className="w-full md:pl-20">
-        <Header isOpened={isOpened} toggleDrawer={toggleDrawer} />
-        <div>
-          <div className="bg-gray-4 md:-ml-20">{children}</div>
+      <div className="w-full min-h-screen">
+        {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}
+        {/* <div> */}
+        <div className="bg-gray-4 min-h-full ">
+          <div className="-ml-20 lg:ml-0">{children}</div>
         </div>
-        <Footer />
+        {/* </div> */}
+        {/* <Footer /> */}
       </div>
     </div>
   )

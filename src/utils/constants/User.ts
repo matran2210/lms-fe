@@ -30,5 +30,5 @@ export const USER_TYPE = {
   TEACHER: { key: 'TEACHER', label: 'Giáo viên' },
 }
 export const USER_STATUS = {
-  ACTIVE: { key: 'ACTIVE', label: 'Active', color: 'success' },
+  ACTIVE: { key: 'ACTIVE', label: 'Active', color: 'text-state-success' },
 }
