@@ -3,10 +3,7 @@ import ExampleComponent from 'preview-part'
 import 'preview-part/dist/index.css'
 import { parse } from 'cookie'
 import { TreeHelper } from 'src/helper/tree'
-import {
-  getCourseLearningOutcome,
-  getCoursePartDetail,
-} from 'src/pages/api/courses'
+import CourseAPI, {} from 'src/pages/api/courses'
 import { ILearningOutcome } from 'src/type/courses'
 import SappDrawer from '@components/base/SappDrawer'
 import axios from 'axios'
@@ -21,7 +18,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const fetchChapterDetail = async (id: string | undefined) => {
     setLoadingChapter(true)
     try {
-      const res = await getCoursePartDetail(id)
+      const res = await CourseAPI.getCoursePartDetail(id)
       const nodeList = res?.data
       const tree = TreeHelper.convertFromArray(nodeList)
       const detail = tree[0]
@@ -39,7 +36,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
 
   async function getLearningOutcome() {
     try {
-      const res = await getCourseLearningOutcome(
+      const res = await CourseAPI.getCourseLearningOutcome(
         chapterDetail?.course_learning_outcome?.id,
       )
       setLearningOutcome(res?.data)
