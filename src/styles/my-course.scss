@@ -37,3 +37,17 @@
 .sapp-btn-close-modal {
   display: none;
 }
+
+svg path {
+  stroke: #A1A1A1;
+  transition: stroke 0.3s ease;
+}
+
+/* Hover styling */
+.download:hover path {
+  stroke: #FFB800; /* Red color on hover */
+}
+
+.delete:hover path {
+  stroke: #D35563; /* Red color on hover */
+}

@@ -75,6 +75,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         onClose={handleCancel}
         title={learningOutcome?.name}
         message="Bạn có chắc chắn muốn hủy không?"
+        widthDrawer='w-6/12'
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
