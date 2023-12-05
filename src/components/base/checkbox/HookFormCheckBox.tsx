@@ -10,11 +10,12 @@ interface IHookFormCheckBoxProps {
   className?: string
   onChange?: React.ChangeEventHandler<any>
   checked?: string | boolean
-  isWrong?: boolean
   label?: string | undefined
   required?: boolean
   disabled?: boolean
   classNameTitle?: string
+  state?: 'default' | 'error' | 'success' // Thêm prop state
+  size?: 'small' | 'medium' | 'lager' // Thêm prop size
 }
 
 const HookFormCheckBox = ({
@@ -25,11 +26,12 @@ const HookFormCheckBox = ({
   className = '',
   onChange,
   checked,
-  isWrong,
   // label,
   // required,
   disabled,
   classNameTitle,
+  size = 'small',
+  state,
 }: IHookFormCheckBoxProps) => {
   return (
     <Controller
@@ -51,7 +53,8 @@ const HookFormCheckBox = ({
                 onChange && onChange(event.target.checked)
               }}
               disabled={disabled}
-              isWrong={isWrong}
+              size={size}
+              state={state}
             />
             <span
               className={`${classNameTitle ?? ''} form-check-label fw-semibold`}

@@ -18,7 +18,7 @@ const LearningExplanation = () => {
           </span>
           <Image src={next} alt="" />
         </div>
-        <div className='me-7'>
+        <div className="me-7">
           <Image src={arrows} alt="" />
         </div>
       </div>

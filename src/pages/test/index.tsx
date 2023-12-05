@@ -5,7 +5,7 @@ import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import { formatTime } from '@components/common/timer'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
-import MultiChociceQuestion from '@components/questionType/MultipleChoiceQuestion'
+import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import { LAYOUT } from '@utils/constants'
@@ -252,7 +252,7 @@ const Test = () => {
       case QUESTION_TYPES.ONE_CHOICE:
         return <OneChoiceQuestion data={data} control={control} />
       case QUESTION_TYPES.MULTIPLE_CHOICE:
-        return <MultiChociceQuestion data={data} control={control} />
+        return <MultiChoiceQuestion data={data} control={control} />
       case QUESTION_TYPES.MATCHING:
         return <MatchingQuestion data={data} action={getAnswerMatching} />
       case QUESTION_TYPES.FILL_WORD:

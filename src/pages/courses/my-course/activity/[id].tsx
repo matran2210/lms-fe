@@ -149,6 +149,7 @@ export async function getServerSideProps(context: any) {
 
     // Parse cookies from the request headers
     const cookies = parse(req.headers.cookie || '')
+
     if (!context?.query?.id) {
       return {
         notFound: true,
@@ -158,6 +159,7 @@ export async function getServerSideProps(context: any) {
       context?.query?.id,
       cookies.accessToken,
     )
+
     return {
       props: { activity },
     }

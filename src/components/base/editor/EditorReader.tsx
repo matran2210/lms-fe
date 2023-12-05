@@ -4,9 +4,10 @@ import SappModalImage from '../modal/SappModalImage'
 
 type Props = {
   text_editor_content?: string
+  className?: string
 }
 
-const EditorReader = ({ text_editor_content }: Props) => {
+const EditorReader = ({ text_editor_content, className }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
@@ -47,7 +48,7 @@ const EditorReader = ({ text_editor_content }: Props) => {
   }
   return (
     <>
-      <div className="mb-32px editor-wrap">
+      <div className={`${className} mb-32px editor-wrap`}>
         <div
           ref={refDocument}
           dangerouslySetInnerHTML={{ __html: text_editor_content || '' }}

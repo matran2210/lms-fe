@@ -1,18 +1,20 @@
 import { StreamPlayerApi } from '@cloudflare/stream-react'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import SappModal from '@components/base/modal/SappModal'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
-import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion, IVideo } from 'src/type/course/Question'
+import QuizComponent from './QuizComponent'
 
 type Props = {
   videos?: IVideo[]
 }
 
+interface IQuestionRef {
+  onSubmit: (data: any) => Promise<void>
+}
 const VideoDocument = ({ videos }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
@@ -23,7 +25,15 @@ const VideoDocument = ({ videos }: Props) => {
   const [shuffleQuiz, setShuffleQuiz] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<IQuestion>()
 
-  const { control: controlAnswer, handleSubmit } = useForm()
+  const { control: controlAnswer, handleSubmit, reset } = useForm()
+
+  const questionRef = useRef<IQuestionRef | null>(null)
+  const streamRef = useRef<StreamPlayerApi>()
+
+  const [results, setResults] = useState<{
+    results: IQuestion
+    corrects?: { [key: string]: boolean }
+  }>()
 
   useEffect(() => {
     if (videos?.[0]) {
@@ -34,9 +44,9 @@ const VideoDocument = ({ videos }: Props) => {
   const handleSetCurrentVideo = async (v: IVideo) => {
     try {
       if (v.quiz?.id) {
-        const shuffleQuiz = await CourseActivityApi.getQuiz(v.quiz?.id)
-        if (shuffleQuiz.success) {
-          setShuffleQuiz(shuffleQuiz.data.questions)
+        const question = await CourseActivityApi.getQuestions(v.quiz?.id)
+        if (question.success) {
+          setShuffleQuiz(question.data.questions)
         }
       }
     } catch (error) {}
@@ -57,7 +67,6 @@ const VideoDocument = ({ videos }: Props) => {
       {} as { [key: string]: IQuestion[] },
     )
   }
-  const streamRef = useRef<StreamPlayerApi>()
 
   const handleOpenModalQuestions = async ({
     id,
@@ -138,9 +147,13 @@ const VideoDocument = ({ videos }: Props) => {
       open: false,
       listQuestion: [],
     })
+    setResults(undefined)
+    reset()
   }
 
-  const onSubmit = (data: any) => {}
+  const onSubmit = async (data: any) => {
+    questionRef.current?.onSubmit(data)
+  }
 
   return (
     <div className="mb-6">
@@ -172,8 +185,18 @@ const VideoDocument = ({ videos }: Props) => {
             customTitle={
               <div className="text-xl font-bold text-bw-1">Question</div>
             }
-            okButtonCaption={'Submit'}
-            cancelButtonCaption={'Skip'}
+            okButtonCaption="Submit"
+            {...(results
+              ? {
+                  cancelButtonCaption: 'Close',
+                  confirmOnclose: false,
+                  showOkButton: false,
+                }
+              : {
+                  confirmOnclose: true,
+                  showOkButton: true,
+                  closeAfterSubmit: false,
+                })}
             buttonSize="small"
             size="max-w-[750px]"
             position="center"
@@ -189,13 +212,15 @@ const VideoDocument = ({ videos }: Props) => {
               })
             }
             colorCancel="secondary"
-            confirmOnclose
           >
             <div className="py-5">
-              <OneChoiceQuestion
-                data={activeQuestion}
-                control={controlAnswer}
-              ></OneChoiceQuestion>
+              <QuizComponent
+                ref={questionRef}
+                activeQuestion={activeQuestion}
+                controlAnswer={controlAnswer}
+                {...results}
+                setResults={setResults}
+              ></QuizComponent>
             </div>
           </SappModal>
         </div>

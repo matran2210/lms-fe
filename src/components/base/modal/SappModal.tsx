@@ -50,6 +50,9 @@ interface IProps {
   isContentFull?: boolean
   isInner?: boolean
   isBordered?: boolean
+  closeAfterSubmit?: boolean
+  showOkButton?: boolean
+  showCancelButton?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -106,6 +109,9 @@ const SappModal: React.FC<IProps> = ({
   isContentFull = true,
   isInner = false,
   isBordered = false,
+  closeAfterSubmit = true,
+  showOkButton = true,
+  showCancelButton = true,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -143,14 +149,19 @@ const SappModal: React.FC<IProps> = ({
       setLoading(true)
       await handleSubmit()
       setLoading(false)
-      handleClose()
+      if (closeAfterSubmit) {
+        handleClose()
+      }
+
       return
     }
     // Nếu handleSubmit là một hàm thường, thì gọi hàm đó
     else if (handleSubmit) {
       handleSubmit()
     }
-    handleClose()
+    if (closeAfterSubmit) {
+      handleClose()
+    }
   }
 
   /**
@@ -272,6 +283,8 @@ const SappModal: React.FC<IProps> = ({
                         className={footerButtonClassName}
                         color={color}
                         colorCancel={colorCancel}
+                        showOkButton={showOkButton}
+                        showCancelButton={showCancelButton}
                         submit={{
                           title: okButtonCaption,
                           size: buttonSize,

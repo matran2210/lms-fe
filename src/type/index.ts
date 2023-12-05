@@ -38,4 +38,6 @@ export type IButtonCancelSubmitProps = {
   className?: string
   color?: IButtonColors
   colorCancel?: IButtonColors
+  showOkButton?: boolean
+  showCancelButton?: boolean
 }

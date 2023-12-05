@@ -54,6 +54,7 @@ export enum QUESTION_TYPES {
 }
 
 export interface IQuestionAnswer {
+  id: any
   is_correct: boolean
   answer: string
   answer_position: number

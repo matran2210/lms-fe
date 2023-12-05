@@ -83,6 +83,7 @@ module.exports = {
         DEFAULT: '#DCDDDD',
         default: '#DCDDDD',
         focus: '#141414',
+        success: '#008000',
         error: '#D35563',
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
@@ -118,12 +119,16 @@ module.exports = {
       },
       minHeight: {
         4: '16px',
+        5.5: '22px',
         6: '24px',
         8: '30px',
         small: '36px',
         default: '40px',
         medium: '48px',
         large: '56px',
+      },
+      maxHeight: {
+        5.5: '22px',
       },
       maxWidth: {
         md: '448px',
