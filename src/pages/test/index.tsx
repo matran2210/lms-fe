@@ -3,6 +3,7 @@ import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import { formatTime } from '@components/common/timer'
+import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
@@ -243,6 +244,130 @@ const Test = () => {
       },
     ],
   } as any
+  const dataDragNDrop = {
+    id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+    created_at: '2023-11-07T07:59:11.323Z',
+    updated_at: '2023-12-01T09:38:17.079Z',
+    deleted_at: null,
+    key: 'QN000326',
+    question_filter_id: null,
+    question_topic_id: '7cac653a-d91d-4c7f-a324-cc7ede66da7e',
+    question_content:
+      '<p><strong>Drag- Drop</strong></p>\n<p><strong>c&acirc;u 6</strong>:&nbsp; ho&agrave;n th&agrave;nh đoạn sau:</p>\n<p dir="ltr">tatesmen define a family as &ldquo;a group of individuals having a common dwelling and related by blood, adoption or marriage, <span id="3908eb7b-ce32-44f5-b9ed-3d220a14103f" class="question-content-tag" contenteditable="false">[_______]</span> includes common-law relationships.&rdquo; Most people are born into one of these groups and <span id="299f4b5b-79cc-4e57-a306-f47bb4a3364d" class="question-content-tag" contenteditable="false">[_______]</span> live their lives as a family in such a group.</p>\n<p dir="ltr">Although the definition of a family may not change, <span id="ec251658-90af-468c-830b-46080b411082" class="question-content-tag" contenteditable="false">[_______]</span>.relationship of people to each other within the family group changes as society changes. More and more wives are&nbsp;<span id="f71b5419-ac10-49cd-b27b-07b2a4eb45f4" class="question-content-tag" contenteditable="false">[_______]</span>paying jobs<span id="0340aa86-2985-4841-8f70-59d7412ed8c6" class="question-content-tag" contenteditable="false">[_______]</span></p>',
+    level: 'FUNDAMENTAL',
+    qType: 'DRAG_DROP',
+    assignment_type: 'TEXT',
+    response_option: null,
+    question_files: null,
+    display_type: 'VERTICAL',
+    solution: '<p>sol;ution</p>',
+    status: 'PUBLISH',
+    hint: '',
+    files: [],
+    answers: [
+      {
+        id: '5fd73cc0-4f05-4990-97d8-7850d2359065',
+        created_at: '2023-12-01T09:38:17.079Z',
+        updated_at: '2023-12-01T09:38:17.079Z',
+        deleted_at: null,
+        question_id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+        answer: 'which   group of individuals having a common dwelling',
+        is_correct: true,
+        feedback: null,
+        active: null,
+        answer_position: 1,
+      },
+      {
+        id: '579604c8-fc61-4157-9f4e-f1f616dea3e6',
+        created_at: '2023-12-01T09:38:17.079Z',
+        updated_at: '2023-12-01T09:38:17.079Z',
+        deleted_at: null,
+        question_id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+        answer: 'that',
+        is_correct: true,
+        feedback: null,
+        active: null,
+        answer_position: 2,
+      },
+      {
+        id: '40e2d088-e7f8-41eb-9703-cc673f6b2ca7',
+        created_at: '2023-12-01T09:38:17.079Z',
+        updated_at: '2023-12-01T09:38:17.079Z',
+        deleted_at: null,
+        question_id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+        answer: 'what',
+        is_correct: true,
+        feedback: null,
+        active: null,
+        answer_position: 3,
+      },
+      {
+        id: '39e0d9f6-0be3-4efd-9bd0-86d1aeba14cc',
+        created_at: '2023-12-01T09:38:17.079Z',
+        updated_at: '2023-12-01T09:38:17.079Z',
+        deleted_at: null,
+        question_id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+        answer: 'must',
+        is_correct: true,
+        feedback: null,
+        active: null,
+        answer_position: 4,
+      },
+      {
+        id: '02ee0d51-ef09-4657-a5b3-c793e87c8fd7',
+        created_at: '2023-12-01T09:38:17.079Z',
+        updated_at: '2023-12-01T09:38:17.079Z',
+        deleted_at: null,
+        question_id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+        answer: 'need',
+        is_correct: true,
+        feedback: null,
+        active: null,
+        answer_position: 5,
+      },
+      {
+        id: '6e84ab95-59df-48bb-8c23-ca1b382a1fc1',
+        created_at: '2023-12-01T09:38:17.079Z',
+        updated_at: '2023-12-01T09:38:17.079Z',
+        deleted_at: null,
+        question_id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+        answer: 'some',
+        is_correct: true,
+        feedback: null,
+        active: null,
+        answer_position: 6,
+      },
+      {
+        id: '3adb283f-0df7-4a13-9fc0-e604b7d8534a',
+        created_at: '2023-12-01T09:38:17.079Z',
+        updated_at: '2023-12-01T09:38:17.079Z',
+        deleted_at: null,
+        question_id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+        answer: 'hope',
+        is_correct: true,
+        feedback: null,
+        active: null,
+        answer_position: 7,
+      },
+      {
+        id: '7d290190-e322-476b-8241-af23743f38cb',
+        created_at: '2023-12-01T09:38:17.079Z',
+        updated_at: '2023-12-01T09:38:17.079Z',
+        deleted_at: null,
+        question_id: '8f49e49b-c48e-481d-81c0-a5a5b73c8241',
+        answer: 'fly',
+        is_correct: true,
+        feedback: null,
+        active: null,
+        answer_position: 8,
+      },
+    ],
+    question_filter: null,
+    exhibits: [],
+    requirements: [],
+    question_matchings: [],
+    tags: [],
+  }
   const topicDescription =
     '<p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p><p><video width="300" height="150" poster="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/thumbnails/thumbnail.jpg" id="c13d87be-b6e7-46e5-9dde-db5fa983c6b6" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848">\n        <source src="https://customer-qf43f9e6huohhr1o.cloudflarestream.com/eyJhbGciOiJSUzI1NiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIn0.eyJzdWIiOiJhYzlhMGVlNWYxMjUzZGJkYjM0MGMwMGRkY2U0YTUxYiIsImtpZCI6IjFjNDk4MmYzMzEyYjZmODI0YzVjZDc5NTFhOWE5YTEwIiwiZXhwIjoiMTcwMTQxOTAwOCIsIm5iZiI6IjE3MDEzNzIyMDkiLCJkb3dubG9hZGFibGUiOnRydWV9.KX6r8p6VTqIFt29YjOD7CJw0fh2u0NsL-7evUyupYoQcQEgNAaS3G-GC-EzQdNgWfi_X3hmRxuk9_JvTdQUGBeVI6xRhr4ktEaELprXErcOqTA2qDEo9xuNlHngYsCwzwZvB4cORgmtXG4gO7mAEpmxfPQ7mpXP-3Xb2V66NbbDzrRCBqUorkHyl6YuHi_IYkmpr1_cBj2vEACQ-AHHrRdhL4Jz0xo1qdNgjr8w8j8UCMfrIQajAcj1XKlLkNYv_JmNoN4K9yr4_3_J6HDwV-FtveLT6T2gReNHL6RRl8aPNa8SJl-mQ0njo0rgJAa2wcgjUIPiyngDCCBPV3jQAiA/manifest/video.m3u8" id="124f7da6-09a3-4d8a-887f-0689e6a3bda0" resource_id="851d2549-5673-42e4-bbba-9c3d1d5de848" resource_status="READY_TO_STREAM">\n      </video>Topic Name</p>\n<p><img id="9b9cd785-047b-4380-9ba0-d1ef164d6084" resource_id="fe119bdc-c5db-49fa-ba0b-00ebbec6d121" title="buon-anh-meo-khoc-cute.jpg" src="https://cdn-dev.sapp.edu.vn/topic/1700217686841_buon-anh-meo-khoc-cute.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=YR49Y7YONQ082E4HT8O6%2F20231117%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20231117T104127Z&amp;X-Amz-Expires=3600&amp;X-Amz-Signature=e65393371bd23625716d04155c5a72f12c95852c04043be776cda897c906db5e&amp;X-Amz-SignedHeaders=host&amp;x-id=GetObject" width="200"></p>'
   const checkType = (data: any, type: string) => {
@@ -257,8 +382,8 @@ const Test = () => {
         return <MatchingQuestion data={data} action={getAnswerMatching} />
       case QUESTION_TYPES.FILL_WORD:
         return <AddWordPreview data={data} action={getValueFillText} />
-      // case QUESTION_TYPES.DRAG_DROP:
-      //   return <DragNDropPreivew data={data} />;
+      case QUESTION_TYPES.DRAG_DROP:
+        return <DragNDropPreivew data={data} action={getAnswerDragNDrop} />
       case QUESTION_TYPES.SELECT_WORD:
         return <SelectWord data={data} action={getValueSelectText} />
       // case QUESTION_TYPES.ESSAY:
@@ -298,6 +423,18 @@ const Test = () => {
     const inputs = document.querySelectorAll('.sapp-match-result') as any
     for (let e of inputs) {
       value.push(e.innerText)
+    }
+    return value
+  }
+  const getAnswerDragNDrop = () => {
+    let value = [] as any
+    const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
+    for (let e of inputs) {
+      const idDiv = e.querySelector('span')
+
+      // console.log(idDiv?.id);
+
+      value.push({ id: e.id, value: e.innerText, idDiv: idDiv?.id })
     }
     return value
   }
@@ -345,7 +482,7 @@ const Test = () => {
         </div>
       </div>
       {/* <div className=''> */}
-      {data2?.display_type === DISPLAY_TYPE.VERTICAL ? (
+      {dataDragNDrop?.display_type === DISPLAY_TYPE.VERTICAL ? (
         <div
           // onDoubleClick={(e) => {
           //   const element = e.target as any;
@@ -368,7 +505,7 @@ const Test = () => {
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
             <div className="px-6">
               {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-              {checkType(data2, data2.qType)}
+              {checkType(dataDragNDrop, dataDragNDrop.qType)}
               {/* ) : (
                   <EssayQuestionPreview
                     data={essayData?.req}
@@ -404,7 +541,7 @@ const Test = () => {
           </div>
 
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-          {checkType(data2, data2.qType)}
+          {checkType(dataDragNDrop, dataDragNDrop.qType)}
           {/* ) : (
               <EssayQuestionPreview
                 data={essayData?.req}
