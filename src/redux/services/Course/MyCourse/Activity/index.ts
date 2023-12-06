@@ -1,9 +1,15 @@
-import { fetcher } from '@services/request'
-import { IResponse } from 'src/redux/types'
+import axios from 'axios'
+import { IResponse, IResponseMeta } from 'src/redux/types'
+import {
+  ICreateDiscussionRepReact,
+  ICreateDiscussionRequest,
+  ICreateDiscussionResReact,
+  IDiscussion,
+} from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IQuestion } from 'src/type/course/Question'
 import { IActivity, ITab } from 'src/type/course/my-course/Activity'
 import { apiURL, httpService } from '../../../httpService'
-import axios from 'axios'
+import url from './url'
 
 const CourseActivityApi = {
   getActivityById: async (
@@ -60,6 +66,48 @@ const CourseActivityApi = {
   getQuestionResults: async (id: string): Promise<IResponse<IQuestion[]>> => {
     const response = await httpService.GET<any, any>({
       uri: `question/results?question_ids=${id}`,
+    })
+    return response
+  },
+  getDiscussion: async (
+    id: string,
+  ): Promise<IResponseMeta<IDiscussion, 'discussions'>> => {
+    const uri = url.createDiscussion + `/${id}`
+    const response = await httpService.GET<
+      {},
+      IResponseMeta<IDiscussion, 'discussions'>
+    >({
+      uri,
+      params: {
+        page_index: 1,
+        page_size: 9999,
+      },
+    })
+    return response
+  },
+  createDiscussion: async (
+    request: ICreateDiscussionRequest,
+  ): Promise<IResponse<IDiscussion>> => {
+    const uri = url.createDiscussion
+    const response = await httpService.POST<
+      ICreateDiscussionRequest,
+      IResponse<IDiscussion>
+    >({
+      uri, // Add a comma here
+      request, // Assuming data is the request payload
+    })
+    return response
+  },
+  reactDiscussion: async (
+    request: ICreateDiscussionResReact,
+  ): Promise<IResponse<ICreateDiscussionRepReact>> => {
+    const uri = url.reactDiscussion
+    const response = await httpService.POST<
+      ICreateDiscussionResReact,
+      IResponse<ICreateDiscussionRepReact>
+    >({
+      uri, // Add a comma here
+      request, // Assuming data is the request payload
     })
     return response
   },

@@ -1,0 +1,56 @@
+export interface ICreateDiscussionRequest {
+  course_section_id: string
+  parent_id?: string
+  content: string
+}
+
+interface ICourseSection {
+  id: string
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
+  name: string
+  code: string
+  description: string | null
+  status: string
+  is_public: boolean
+  duration: number
+  is_peer_review: boolean
+  is_graded: boolean
+  course_section_type: string
+  activity_type: string | null
+  position: number | null
+  display_icon: string
+  quiz_id: string | null
+}
+
+export interface IDiscussion {
+  id: string
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
+  content: string
+  course_section_id: string
+  user_id: string
+  course_section: ICourseSection
+  parent_id: string | null
+
+  username: string
+  avatar: { [key: string]: string }
+  is_like: boolean
+  children: IDiscussion[]
+}
+
+export interface ICreateDiscussionResReact {
+  course_discussion_id: string
+  is_like: boolean
+}
+export interface ICreateDiscussionRepReact {
+  is_like: boolean
+  course_discussion_id: string
+  user_id: string
+  deleted_at: null
+  id: string
+  created_at: string
+  updated_at: string
+}

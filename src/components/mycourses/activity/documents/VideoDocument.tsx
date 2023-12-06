@@ -156,7 +156,7 @@ const VideoDocument = ({ videos }: Props) => {
   }
 
   return (
-    <div className="mb-6">
+    <div>
       <div className="mb-3 flex items-center gap-x-10 gap-y-2 flex-wrap">
         {videos?.map((v, i) => {
           return (

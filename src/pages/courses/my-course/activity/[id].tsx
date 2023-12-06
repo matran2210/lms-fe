@@ -1,10 +1,11 @@
 import SappButton from '@components/base/button/SappButton'
+import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import axios from 'axios'
 import { parse } from 'cookie'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import FadeInOut from 'src/common/FadeInOut'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -14,6 +15,7 @@ import {
   courseActivityAction,
   courseActivityReducer,
   getCourseActivityTapById,
+  getDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 
 type Props = {
@@ -26,7 +28,12 @@ const ActivityPage = ({ activity }: Props) => {
   const [activeButtonId, setActiveButtonId] = useState<string>()
 
   useEffect(() => {
-    dispatch(courseActivityAction.setActivityState(activity))
+    if (activity) {
+      try {
+        dispatch(courseActivityAction.setActivityState(activity?.data))
+        dispatch(getDiscussion(activity?.data?.id))
+      } catch (error) {}
+    }
   }, [])
 
   const handleChangeTab = (id: string) => {
@@ -45,6 +52,11 @@ const ActivityPage = ({ activity }: Props) => {
     }
     return id === currentTabId ? 'primary' : 'white'
   }
+
+  const course_tab_documents = useMemo(() => {
+    return selector.tabs?.find((e) => e.id === selector.currentTabId)
+      ?.course_tab_documents
+  }, [selector.tabs])
 
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
@@ -91,35 +103,43 @@ const ActivityPage = ({ activity }: Props) => {
         </div>
       </div>
       <FadeInOut show={!selector.loading}>
-        <div className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6 relative`}>
-          <div className="tab-content">
-            {selector.tabs
-              ?.find((e) => e.id === selector.currentTabId)
-              ?.course_tab_documents?.map((e) => {
+        <div className="bg-white mb-6">
+          <div
+            className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6 relative`}
+          >
+            <div className="tab-content">
+              {course_tab_documents?.map((e, i) => {
+                const marginBottom =
+                  i < course_tab_documents?.length - 1 ? 'mb-6' : ''
                 if (e.type === 'QUIZ') {
                   return (
-                    <div className="mb-8" key={e.id}>
+                    <div className={marginBottom} key={e.id}>
                       <QuizDocument></QuizDocument>
                     </div>
                   )
                 }
                 if (e.type === 'TEXT') {
                   return (
-                    <TextDocument
-                      key={e.id}
-                      text_editor_content={e.text_editor_content}
-                    ></TextDocument>
+                    <div className={marginBottom} key={e.id}>
+                      <TextDocument
+                        text_editor_content={e.text_editor_content}
+                      ></TextDocument>
+                    </div>
                   )
                 }
                 if (e.type === 'VIDEO') {
                   return (
-                    <VideoDocument videos={e.videos} key={e.id}></VideoDocument>
+                    <div className={marginBottom} key={e.id}>
+                      <VideoDocument videos={e.videos}></VideoDocument>
+                    </div>
                   )
                 }
                 return null
               })}
+            </div>
           </div>
         </div>
+        <Discussion />
       </FadeInOut>
     </div>
   )

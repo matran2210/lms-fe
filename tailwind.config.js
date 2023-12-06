@@ -128,6 +128,7 @@ module.exports = {
         large: '56px',
       },
       maxHeight: {
+        0: 0,
         5.5: '22px',
       },
       maxWidth: {
@@ -184,6 +185,7 @@ module.exports = {
       margin: {
         4.5: '1.125rem', // 18px
         8.25: '2.0625rem', // 33px
+        13: '3.25rem', // 52px
         15: '3.75rem', // 60px
       },
       height: {
