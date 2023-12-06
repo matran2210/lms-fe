@@ -50,3 +50,9 @@ export enum RESPONSE_OPTION {
   WORD = 'WORD',
   SHEET = 'SHEET',
 }
+export const MAX_UPLOAD_SIZE = 20 * 1024 * 1024
+export const MAX_UPLOAD_VIDEO_SIZE = 20 * 1024 * 1024 * 1024
+export const VALID_UPLOAD_EDITOR = [
+  { type: 'image/*', size: MAX_UPLOAD_SIZE },
+  { type: 'video/*', size: MAX_UPLOAD_VIDEO_SIZE },
+]

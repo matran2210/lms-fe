@@ -49,6 +49,10 @@ class MyDocument extends Document {
           `,
             }}
           />
+          <script
+            src="https://cdn.tiny.cloud/1/tyfr3hvp7v3mt24gzu3jtbbm3nvr01hquem04a4oei6ui86j/tinymce/6/tinymce.min.js"
+            referrerPolicy="origin"
+          ></script>
         </Head>
         <body>
           <img
