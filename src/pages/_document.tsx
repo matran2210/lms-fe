@@ -23,10 +23,10 @@ class MyDocument extends Document {
             function allowDrop(ev) {
               const slotId = ev.target.id
               const slotElement = document.getElementById(slotId)
-              if (slotElement?.children.length > 0 || !ev.target.classList.contains("dropable")) {
-                return
-              } else{
+              if (slotElement?.children.length === 0 && ev.target.classList.contains("dropable")) {
                 ev.preventDefault();
+              } else{
+                return
               }
             }
 
@@ -37,7 +37,14 @@ class MyDocument extends Document {
             function drop(ev) {
               ev.preventDefault();
               var data = ev.dataTransfer.getData('text')
-              ev.target.appendChild(document.getElementById(data))
+              const slotId = ev.target.id
+              const slotElement = document.getElementById(slotId)
+              if (slotElement?.children.length === 0 && ev.target.classList.contains("dropable")) {
+                ev.target.appendChild(document.getElementById(data))
+              }
+              else {
+                return
+              }
             }
           `,
             }}

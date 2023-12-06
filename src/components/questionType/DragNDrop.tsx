@@ -9,12 +9,12 @@ const DragNDropPreivew = ({ data, action }: IProps) => {
     {
       id: '3908eb7b-ce32-44f5-b9ed-3d220a14103f',
       value: 'which group of individuals having a common dwelling',
-      idDiv: '5fd73cc0-4f05-4990-97d8-7850d2359065',
+      idAnswer: '5fd73cc0-4f05-4990-97d8-7850d2359065',
     },
     {
       id: '299f4b5b-79cc-4e57-a306-f47bb4a3364d',
       value: 'must',
-      idDiv: '39e0d9f6-0be3-4efd-9bd0-86d1aeba14cc',
+      idAnswer: '39e0d9f6-0be3-4efd-9bd0-86d1aeba14cc',
     },
     {
       id: 'ec251658-90af-468c-830b-46080b411082',
@@ -27,7 +27,7 @@ const DragNDropPreivew = ({ data, action }: IProps) => {
     {
       id: '0340aa86-2985-4841-8f70-59d7412ed8c6',
       value: 'some',
-      idDiv: '6e84ab95-59df-48bb-8c23-ca1b382a1fc1',
+      idAnswer: '6e84ab95-59df-48bb-8c23-ca1b382a1fc1',
     },
   ])
   const ref = useRef(null) as any
@@ -61,7 +61,7 @@ const DragNDropPreivew = ({ data, action }: IProps) => {
       elements.forEach((element: any, index: number) => {
         if (answered[index].value !== '') {
           element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event)" ondragover="allowDrop(event)">
-                <span class="answer-box" draggable="true" ondragstart="drag(event)" id="${answered[index].idDiv}">${answered[index].value}</span>
+                <span class="answer-box" draggable="true" ondragstart="drag(event)" id="${answered[index].idAnswer}">${answered[index].value}</span>
                 </span>`
         } else {
           element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event)" ondragover="allowDrop(event)"> </span>`
@@ -89,7 +89,7 @@ const DragNDropPreivew = ({ data, action }: IProps) => {
         >
           {data?.answers?.map((e: any) => {
             for (let as of answered) {
-              if (as.idDiv === e.id) {
+              if (as.idAnswer === e.id) {
                 return <></>
               }
             }

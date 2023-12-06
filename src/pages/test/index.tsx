@@ -430,11 +430,11 @@ const Test = () => {
     let value = [] as any
     const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
     for (let e of inputs) {
-      const idDiv = e.querySelector('span')
+      const idAnswer = e.querySelector('span')
 
       // console.log(idDiv?.id);
 
-      value.push({ id: e.id, value: e.innerText, idDiv: idDiv?.id })
+      value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
     }
     return value
   }
