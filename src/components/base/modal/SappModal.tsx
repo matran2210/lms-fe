@@ -53,6 +53,7 @@ interface IProps {
   closeAfterSubmit?: boolean
   showOkButton?: boolean
   showCancelButton?: boolean
+  zIndex?: string
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -112,6 +113,7 @@ const SappModal: React.FC<IProps> = ({
   closeAfterSubmit = true,
   showOkButton = true,
   showCancelButton = true,
+  zIndex = 'z-[1000]',
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -227,9 +229,9 @@ const SappModal: React.FC<IProps> = ({
           <div
             className={`sapp-custom-modal ${
               isInner
-                ? 'max-h-full absolute z-10 sapp-custom-modal-inner'
-                : 'max-h-screen fixed z-[1000]'
-            } w-full flex justify-center inset-0 items-center`}
+                ? 'max-h-full absolute sapp-custom-modal-inner'
+                : `max-h-screen fixed`
+            } w-full flex justify-center inset-0 items-center ${zIndex}`}
             role="dialog"
             aria-modal="true"
           >

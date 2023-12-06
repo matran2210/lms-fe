@@ -57,6 +57,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         footerButtonClassName="justify-center flex flex-row-reverse"
         color="danger"
         showHeader={false}
+        zIndex="z-[9999999]"
       >
         <div className="">
           <div className="mx-auto mb-7 flex h-18 w-18 flex-shrink-0 items-center justify-center rounded-full bg-red-100">

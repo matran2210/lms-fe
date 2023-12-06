@@ -102,7 +102,7 @@ const ActivityPage = ({ activity }: Props) => {
           })}
         </div>
       </div>
-      <FadeInOut show={!selector.loading}>
+      <FadeInOut show={!selector.loading && !!course_tab_documents?.length}>
         <div className="bg-white mb-6">
           <div
             className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6 relative`}

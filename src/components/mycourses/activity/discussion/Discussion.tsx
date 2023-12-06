@@ -17,11 +17,13 @@ import {
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import DiscussionElement from './DiscussionElement'
 import { userReducer } from 'src/redux/slice/User/User'
+import SappIcon from 'src/common/SappIcon'
+import SappModal from '@components/base/modal/SappModal'
 
 type Props = {}
 
 /**
- * Component chức năng đại diện cho phần thảo luận.
+ * Component chức năng đại diện cho phần discussion.
  * @param {Props} props - Props của component.
  */
 const Discussion = (props: Props) => {
@@ -34,8 +36,8 @@ const Discussion = (props: Props) => {
   const selector = useAppSelector(courseActivityReducer)
   const [idReply, setIdReply] = useState<string>()
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
-  const { user, loading, loadingEditName, loadingEditAvatar } =
-    useAppSelector(userReducer)
+  const { user } = useAppSelector(userReducer)
+  const [stream, setStream] = useState<MediaStream | null>(null)
 
   /**
    * Xử lý sự thay đổi của ID phản hồi và đặt lại biểu mẫu.
@@ -47,7 +49,7 @@ const Discussion = (props: Props) => {
   }
 
   /**
-   * Gửi bình luận thảo luận và cập nhật luồng thảo luận.
+   * Gửi bình luận discussion và cập nhật luồng discussion.
    * @param {{ comment: string }} data - Dữ liệu bình luận cần gửi.
    */
   const onSubmit = async (
@@ -81,7 +83,7 @@ const Discussion = (props: Props) => {
   }
 
   /**
-   * React vào một bình luận thảo luận và cập nhật luồng thảo luận.
+   * React vào một bình luận discussion và cập nhật luồng discussion.
    * @param {ICreateDiscussionResReact} data - Dữ liệu react cần gửi.
    */
   const onReact = async (data: ICreateDiscussionResReact) => {
@@ -106,18 +108,30 @@ const Discussion = (props: Props) => {
     }, 1000)
   }
 
+  /**
+   * Tìm kiếm một discussion trong danh sách dựa trên ID.
+   *
+   * @param idToFind - ID của discussion cần tìm kiếm.
+   * @param data - Danh sách discussion để tìm kiếm trong đó.
+   * @returns - discussion có ID tương ứng hoặc null nếu không tìm thấy.
+   */
   const findDiscussionById = (
     idToFind: string,
     data?: IDiscussion[],
   ): IDiscussion | null => {
+    // Nếu không có dữ liệu, trả về null ngay lập tức
     if (!data) {
       return null
     }
+
+    // Duyệt qua danh sách discussion
     for (const item of data) {
+      // Nếu ID trùng khớp, trả về discussion
       if (item.id === idToFind) {
         return item
       }
 
+      // Nếu có discussion con, đệ quy để tìm trong discussion con
       if (item.children && item.children.length > 0) {
         const childResult = findDiscussionById(idToFind, item.children)
         if (childResult) {
@@ -126,7 +140,34 @@ const Discussion = (props: Props) => {
       }
     }
 
+    // Nếu không tìm thấy, trả về null
     return null
+  }
+
+  /**
+   * Hàm mở camera và cập nhật state với video stream.
+   */
+  const openCamera = async () => {
+    try {
+      const cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      })
+      setStream(cameraStream)
+    } catch (error) {}
+  }
+
+  /**
+   * Hàm đóng camera và cập nhật state với video stream.
+   */
+  const closeCamera = () => {
+    if (stream) {
+      // Stop the media stream tracks
+      stream.getTracks().forEach((track) => {
+        track.stop()
+      })
+      // Set the stream state to null
+      setStream(null)
+    }
   }
 
   return (
@@ -184,7 +225,7 @@ const Discussion = (props: Props) => {
               </div>
               <form
                 onSubmit={handleSubmit((e) => onSubmit(e))}
-                className="flex-1"
+                className="flex-1 relative"
               >
                 <HookFormTextField
                   control={control}
@@ -193,6 +234,12 @@ const Discussion = (props: Props) => {
                   inputClassName={'max-h-10'}
                   placeholder="Your comment..."
                 ></HookFormTextField>
+                <div
+                  onClick={openCamera}
+                  className="absolute top-1/2 right-3 -mt-1 -translate-y-1/2 cursor-pointer"
+                >
+                  <SappIcon icon="camera"></SappIcon>
+                </div>
                 <button type="submit" className="hidden"></button>
               </form>
             </div>
@@ -218,7 +265,7 @@ const Discussion = (props: Props) => {
         </div>
         <form
           onSubmit={handleSubmit((e) => onSubmit(e, true))}
-          className="flex-1"
+          className="flex-1 relative"
         >
           <HookFormTextField
             control={control}
@@ -228,8 +275,25 @@ const Discussion = (props: Props) => {
             placeholder="Your comment..."
           ></HookFormTextField>
           <button type="submit" className="hidden"></button>
+          <div
+            onClick={openCamera}
+            className="absolute top-1/2 right-3 -mt-1 -translate-y-1/2 cursor-pointer"
+          >
+            <SappIcon icon="camera"></SappIcon>
+          </div>
         </form>
       </div>
+      <SappModal
+        open={!!stream}
+        confirmOnclose
+        handleSubmit={closeCamera}
+        handleCancel={closeCamera}
+      >
+        <video
+          ref={(videoRef) => videoRef && (videoRef.srcObject = stream)}
+          autoPlay
+        />
+      </SappModal>
     </div>
   )
 }
