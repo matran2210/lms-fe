@@ -127,16 +127,12 @@ export const courseActivitySlice = createSlice({
     })
     builder.addCase(getCourseActivityTapById.fulfilled, (state, action) => {
       state.loading = false
-      return (state = {
-        ...state,
-        loading: false,
-        currentTabId: action.payload?.id,
-        tabs: state.tabs?.map((e) => {
-          if (e.id === action.payload?.id) {
-            return action.payload
-          }
-          return e
-        }),
+      state.currentTabId = action.payload?.id
+      state.tabs = state.tabs?.map((e) => {
+        if (e.id === action.payload?.id) {
+          return action.payload
+        }
+        return e
       })
     })
     builder.addCase(getCourseActivityTapById.rejected, (state) => {

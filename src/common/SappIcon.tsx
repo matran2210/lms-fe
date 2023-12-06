@@ -1,9 +1,13 @@
 import React from 'react'
 
-const iconType = 'camera'
+type iconType =
+  | 'camera'
+  | 'course_text'
+  | 'course_video'
+  | 'course_video_timeline'
 
 type SAPP_ICONS_TYPE = {
-  [key in typeof iconType]: React.ReactNode
+  [key in iconType]: React.ReactNode
 }
 
 type Props = {
@@ -28,6 +32,63 @@ const SappIcon = ({ icon }: Props) => {
             <path fill="#fff" d="M0 0h16v16H0z" />
           </clipPath>
         </defs>
+      </svg>
+    ),
+    course_text: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={16}
+        height={16}
+        fill="none"
+      >
+        <rect
+          width={15}
+          height={15}
+          x={0.5}
+          y={0.5}
+          stroke="#A1A1A1"
+          rx={1.5}
+        />
+        <path
+          fill="#A1A1A1"
+          d="M3.333 4.2c0-.11.09-.2.2-.2h8.934c.11 0 .2.09.2.2v.6a.2.2 0 0 1-.2.2H3.533a.2.2 0 0 1-.2-.2v-.6ZM3.333 6.533c0-.11.09-.2.2-.2h8.934c.11 0 .2.09.2.2v.6a.2.2 0 0 1-.2.2H3.533a.2.2 0 0 1-.2-.2v-.6ZM3.333 8.867c0-.11.09-.2.2-.2h8.934c.11 0 .2.09.2.2v.6a.2.2 0 0 1-.2.2H3.533a.2.2 0 0 1-.2-.2v-.6ZM3.333 11.2c0-.11.09-.2.2-.2H9.8c.11 0 .2.09.2.2v.6a.2.2 0 0 1-.2.2H3.533a.2.2 0 0 1-.2-.2v-.6Z"
+        />
+      </svg>
+    ),
+    course_video: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={16}
+        height={16}
+        fill="none"
+      >
+        <rect
+          width={15}
+          height={15}
+          x={0.5}
+          y={0.5}
+          stroke="#A1A1A1"
+          rx={1.5}
+        />
+        <path
+          stroke="#A1A1A1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6 10.403V5.466a.469.469 0 0 1 .709-.4l4.228 2.457a.468.468 0 0 1 0 .812L6.71 10.803a.469.469 0 0 1-.709-.4Z"
+        />
+      </svg>
+    ),
+    course_video_timeline: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={18}
+        height={18}
+        fill="none"
+      >
+        <path
+          fill="#FFB800"
+          d="M17.438 4.219H.563v1.687h16.875V4.22ZM14.625 8.156H3.375v1.688h11.25V8.156ZM11.25 12.094h-4.5v1.687h4.5v-1.687Z"
+        />
       </svg>
     ),
   }

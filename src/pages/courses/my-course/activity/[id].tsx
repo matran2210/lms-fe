@@ -6,8 +6,8 @@ import VideoDocument from '@components/mycourses/activity/documents/VideoDocumen
 import axios from 'axios'
 import { parse } from 'cookie'
 import { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import FadeInOut from 'src/common/FadeInOut'
+import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { apiURL } from 'src/redux/services/httpService'
@@ -30,7 +30,7 @@ const ActivityPage = ({ activity }: Props) => {
   useEffect(() => {
     if (activity) {
       try {
-        dispatch(courseActivityAction.setActivityState(activity?.data))
+        dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion(activity?.data?.id))
       } catch (error) {}
     }
@@ -102,45 +102,73 @@ const ActivityPage = ({ activity }: Props) => {
           })}
         </div>
       </div>
-      <FadeInOut show={!selector.loading && !!course_tab_documents?.length}>
-        <div className="bg-white mb-6">
-          <div
-            className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6 relative`}
-          >
-            <div className="tab-content">
-              {course_tab_documents?.map((e, i) => {
-                const marginBottom =
-                  i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                if (e.type === 'QUIZ') {
-                  return (
-                    <div className={marginBottom} key={e.id}>
-                      <QuizDocument></QuizDocument>
-                    </div>
-                  )
-                }
-                if (e.type === 'TEXT') {
-                  return (
-                    <div className={marginBottom} key={e.id}>
-                      <TextDocument
-                        text_editor_content={e.text_editor_content}
-                      ></TextDocument>
-                    </div>
-                  )
-                }
-                if (e.type === 'VIDEO') {
-                  return (
-                    <div className={marginBottom} key={e.id}>
-                      <VideoDocument videos={e.videos}></VideoDocument>
-                    </div>
-                  )
-                }
-                return null
-              })}
+      <FadeInOut show={!selector.loading}>
+        {!!course_tab_documents?.length && (
+          <div className="bg-white pb-6 mb-6">
+            <div
+              className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6 relative`}
+            >
+              <div className="tab-content">
+                {course_tab_documents?.map((e, i) => {
+                  const marginBottom =
+                    i < course_tab_documents?.length - 1 ? 'mb-6' : ''
+                  if (e.type === 'QUIZ') {
+                    return (
+                      <div className={marginBottom} key={e.id}>
+                        <QuizDocument></QuizDocument>
+                      </div>
+                    )
+                  }
+                  if (e.type === 'TEXT') {
+                    return (
+                      <div className={marginBottom} key={e.id}>
+                        <TextDocument
+                          text_editor_content={e.text_editor_content}
+                        ></TextDocument>
+                      </div>
+                    )
+                  }
+                  if (e.type === 'VIDEO') {
+                    return (
+                      <div className={marginBottom} key={e.id}>
+                        <VideoDocument videos={e.videos}></VideoDocument>
+                      </div>
+                    )
+                  }
+                  return null
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+      </FadeInOut>
+      <div className="bg-white px-6 py-3 mb-6 relative">
+        <div className="flex justify-between flex-wrap gap-5">
+          <div className="w-full sm:w-auto">
+            <div className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary">
+              Previous Activity
+            </div>
+            <div className="text-medium-sm text-gray-1 flex">
+              <SappIcon icon="course_text"></SappIcon>
+              <span className="ml-2">Interest Rates: Interpretation</span>
+            </div>
+          </div>
+          <div className="w-full sm:w-auto">
+            <div className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right">
+              Previous Activity
+            </div>
+            <div className="text-medium-sm text-gray-1 flex justify-end">
+              <span className="mr-2">
+                The Future Value of a Single Cash Flow/a Series of Cash Flows
+              </span>
+              <SappIcon icon="course_video"></SappIcon>
             </div>
           </div>
         </div>
-        <Discussion />
-      </FadeInOut>
+
+        <div className="absolute bottom-0 left-0 right-0 border-2 border-primary"></div>
+      </div>
+      <Discussion />
     </div>
   )
 }
@@ -179,7 +207,6 @@ export async function getServerSideProps(context: any) {
       context?.query?.id,
       cookies.accessToken,
     )
-
     return {
       props: { activity },
     }

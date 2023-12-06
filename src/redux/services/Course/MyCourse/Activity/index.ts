@@ -20,12 +20,12 @@ const CourseActivityApi = {
       Authorization: 'Bearer ' + accessToken,
     }
 
-    const responseActivity = await axios.get<{}, IResponse<IActivity>>(
-      `${apiURL}/course-sections/activity/${id}`,
-      {
-        headers,
-      },
-    )
+    const responseActivity = await axios.get<
+      {},
+      IResponse<{ data: IActivity }>
+    >(`${apiURL}/course-sections/activity/${id}`, {
+      headers,
+    })
 
     const responseTabs = await axios.get<{}, IResponse<{ data: ITab[] }>>(
       `${apiURL}/course-sections/activity/${id}/tabs`,
@@ -34,20 +34,21 @@ const CourseActivityApi = {
       },
     )
 
-    if (responseActivity.data && responseTabs.data?.data?.[0]) {
-      responseActivity.data.tabs = responseTabs.data.data
+    if (responseActivity.data && responseTabs?.data.data?.[0]) {
+      responseActivity.data.data.tabs = responseTabs.data.data
 
       const responseTab = await axios.get<{}, IResponse<{ data: ITab }>>(
-        `${apiURL}/course-sections/tab/${responseTabs.data.data?.[0].id}`,
+        `${apiURL}/course-sections/tab/${responseTabs.data?.data?.[0].id}`,
         {
           headers,
         },
       )
-      if (responseTab.data) {
-        responseActivity.data.tabs[0] = responseTab.data.data
+
+      if (responseTab.data?.data) {
+        responseActivity.data.data.tabs[0] = responseTab.data.data
       }
     }
-    return responseActivity.data
+    return responseActivity.data.data
   },
   getCourseActivityTapById: async (id: string): Promise<IResponse<ITab>> => {
     const response = await httpService.GET<any, any>({

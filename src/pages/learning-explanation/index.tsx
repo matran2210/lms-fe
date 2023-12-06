@@ -45,21 +45,21 @@ const LearningExplanation = () => {
           equivalent to receiving $105 in one year.
         </div>
         <div className="mt-4 flex items-center">
-          <SAPPCheckbox isWrong onChange={() => {}} checked={true} />
+          <SAPPCheckbox state="error" onChange={() => {}} checked={true} />
           <div className="ms-3  text-state-error font-normal text-base">
             Cash flows in the future must be discounted at appropriate interest
             rates to find the equivalent.
           </div>
         </div>
         <div className="mt-4 flex items-center">
-          <SAPPCheckbox isWrong onChange={() => {}} checked={false} />
+          <SAPPCheckbox state="error" onChange={() => {}} checked={false} />
           <div className="ms-3  text-bw-1 font-normal text-base">
             Cash flows in the future must be discounted at appropriate interest
             rates to find the equivalent.
           </div>
         </div>
         <div className="mt-4 flex items-center">
-          <SAPPCheckbox isWrong={false} onChange={() => {}} checked={true} />
+          <SAPPCheckbox state="success" onChange={() => {}} checked={true} />
           <div className="ms-3  text-state-success font-normal text-base">
             Cash flows in the future must be discounted at appropriate interest
             rates to find the equivalent.
