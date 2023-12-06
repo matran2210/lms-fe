@@ -17,6 +17,31 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
             rel="stylesheet"
           />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            function allowDrop(ev) {
+              const slotId = ev.target.id
+              const slotElement = document.getElementById(slotId)
+              if (slotElement?.children.length > 0 || !ev.target.classList.contains("dropable")) {
+                return
+              } else{
+                ev.preventDefault();
+              }
+            }
+
+            function drag(ev) {
+              ev.dataTransfer.setData("text", ev.target.id);
+            }
+
+            function drop(ev) {
+              ev.preventDefault();
+              var data = ev.dataTransfer.getData('text')
+              ev.target.appendChild(document.getElementById(data))
+            }
+          `,
+            }}
+          />
         </Head>
         <body>
           <img
