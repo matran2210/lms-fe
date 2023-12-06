@@ -3,7 +3,7 @@ import ExampleComponent from 'preview-part'
 import 'preview-part/dist/index.css'
 import { parse } from 'cookie'
 import { TreeHelper } from 'src/helper/tree'
-import CourseAPI, {} from 'src/pages/api/courses'
+import CourseAPI from 'src/pages/api/courses'
 import { ILearningOutcome } from 'src/type/courses'
 import SappDrawer from '@components/base/SappDrawer'
 import axios from 'axios'
@@ -75,7 +75,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         onClose={handleCancel}
         title={learningOutcome?.name}
         message="Bạn có chắc chắn muốn hủy không?"
-        widthDrawer='w-6/12'
+        widthDrawer="w-6/12"
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}

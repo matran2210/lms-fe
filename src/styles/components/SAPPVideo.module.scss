@@ -1,0 +1,11 @@
+.wrapper {
+  @apply w-full relative;
+  padding-top: calc((9 / 16) * 100%);
+  iframe {
+    @apply w-full h-full;
+  }
+}
+
+.content {
+  @apply w-full h-full absolute top-0 left-0 right-0 bottom-0;
+}

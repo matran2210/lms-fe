@@ -19,6 +19,7 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
+    "@cloudflare/stream-react": "^1.8.0",
     "@hookform/resolvers": "^3.3.2",
     "@react-native-async-storage/async-storage": "^1.19.5",
     "@reduxjs/toolkit": "^1.9.7",
@@ -55,6 +56,7 @@
     "@tailwindcss/forms": "^0.5.6",
     "@types/node": "^18.0.0",
     "@types/react": "^18.0.14",
+    "@types/react-dom": "^18.2.17",
     "autoprefixer": "^10.4.16",
     "critters": "^0.0.19",
     "eslint": "7.32.0",

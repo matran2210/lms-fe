@@ -37,4 +37,7 @@ export type IButtonCancelSubmitProps = {
   cancel: IButtonProps
   className?: string
   color?: IButtonColors
+  colorCancel?: IButtonColors
+  showOkButton?: boolean
+  showCancelButton?: boolean
 }

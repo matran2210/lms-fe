@@ -19,14 +19,19 @@ export const getBaseUrl = () => {
   return apiURL
 }
 
-const getActToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : ''
-const getRefreshToken =typeof window !== 'undefined' ? localStorage.getItem('refreshToken') :''
+const getActToken =
+  typeof window !== 'undefined' ? localStorage.getItem('accessToken') : ''
+const getRefreshToken =
+  typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : ''
 
 export const request = axios.create({
   baseURL: getBaseUrl(),
 })
 
-export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
+export const fetcher = <T>(
+  url: string,
+  config: AxiosRequestConfig = {},
+): Promise<T> =>
   request(url, config)
     .then((res) => res?.data)
     .catch((err) => {
@@ -104,7 +109,7 @@ request.interceptors.response.use(
           })
           .catch(() => {
             removeJwtToken()
-            window.location.href = PageLink.AUTH_LOGIN
+            // window.location.href = PageLink.AUTH_LOGIN
           })
       }
 
