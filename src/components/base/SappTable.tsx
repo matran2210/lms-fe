@@ -47,11 +47,7 @@ const SappTable = ({
               {hasCheck && (
                 <th className="w-50px pe-5">
                   {hasCheckAll && (
-                    <SAPPCheckbox
-                      checked={isCheckedAll}
-                      ktCheck={isCheckedAll}
-                      onChange={onChange}
-                    />
+                    <SAPPCheckbox checked={isCheckedAll} onChange={onChange} />
                   )}
                 </th>
               )}

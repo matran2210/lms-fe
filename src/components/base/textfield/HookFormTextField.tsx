@@ -22,6 +22,7 @@ interface IProps {
   required?: boolean
   maxLength?: number
   textSize?: 'base' | 'sm'
+  inputClassName?: string
 }
 
 const HookFormTextField = ({
@@ -39,6 +40,7 @@ const HookFormTextField = ({
   required,
   maxLength,
   textSize,
+  inputClassName,
 }: IProps) => {
   return (
     <Controller
@@ -62,7 +64,7 @@ const HookFormTextField = ({
                   className={`${className} ${
                     error
                       ? 'border-error focus:border-error'
-                      : 'border-default focus:border-focus '
+                      : '!border-gray-2 focus:border-focus '
                   }`}
                   placeholder={placeholder}
                   disabled={disabled}
@@ -72,6 +74,7 @@ const HookFormTextField = ({
                   maxLength={maxLength}
                   field={field}
                   isError={!!error?.message}
+                  inputClassName={inputClassName}
                 />
 
                 <>

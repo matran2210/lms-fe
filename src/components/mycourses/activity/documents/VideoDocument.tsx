@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent from './QuizComponent'
+import SappIcon from 'src/common/SappIcon'
 
 type Props = {
   videos?: IVideo[]
@@ -156,12 +157,12 @@ const VideoDocument = ({ videos }: Props) => {
   }
 
   return (
-    <div className="mb-6">
-      <div className="mb-3 flex items-center gap-x-10 gap-y-2 flex-wrap">
+    <div>
+      <div className="mb-3 flex items-center justify-between text-primary gap-x-10 gap-y-2 flex-wrap">
         {videos?.map((v, i) => {
           return (
             <label
-              className=" flex items-center gap-2 cursor-pointer"
+              className=" flex items-center gap-2 select-none cursor-pointer"
               key={v.file.id}
             >
               <SAPPRadio
@@ -177,6 +178,10 @@ const VideoDocument = ({ videos }: Props) => {
             </label>
           )
         })}
+        <div className="flex items-center select-none cursor-pointer">
+          <span className="mr-2">Timeline</span>
+          <SappIcon icon="course_video_timeline"></SappIcon>
+        </div>
       </div>
       <div className="relative">
         <div>
