@@ -286,9 +286,6 @@ const TinyEditor = ({
           }
           `,
             setup: function (editor) {
-              tinymce.ScriptLoader.load(
-                'https://unpkg.com/video.js/dist/video.min.js',
-              )
               // var scriptLoader = new tinymce.dom.ScriptLoader()
               // scriptLoader.add('https://unpkg.com/video.js/dist/video-js.min.css')
               // scriptLoader.loadQueue()

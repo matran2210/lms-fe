@@ -12,7 +12,7 @@ interface CoursesProps {
 const CoursesList: React.FC<CoursesProps> = ({ courses }) => {
   return (
     <div className="grid grid-cols-3 gap-6">
-      {courses?.courses.map((course: any, index: any) => (
+      {courses?.courses?.map((course: any, index: any) => (
         <div
           key={index}
           className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}

@@ -1,6 +1,8 @@
 import React from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 import HookFormEditor from '@components/base/editor/HookFormEditor'
+// import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
+import dynamic from 'next/dynamic'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -15,6 +17,9 @@ const EssayQuestionPreview = ({
   question_data,
   control,
 }: IPreviewProp) => {
+  // const DynamicBundledEditor = dynamic(() => import('../base/spreadSheet/SpreadSheetEditor'), {
+  //   ssr: false,
+  // })
   //   const { control } = useForm()
   if (data) {
     return (
@@ -67,7 +72,7 @@ const EssayQuestionPreview = ({
                 height={500}
               />
             ) : (
-              // <SpreadsheetEditor />
+              // <DynamicBundledEditor />
               <></>
             )}
           </div>

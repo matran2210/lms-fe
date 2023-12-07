@@ -49,7 +49,7 @@ const HookFormTextField = ({
       defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => {
         return (
-          <div className="w-full">
+          <div className="w-full h-full">
             {!skeleton ? (
               <div>
                 <SAPPTextFiled
