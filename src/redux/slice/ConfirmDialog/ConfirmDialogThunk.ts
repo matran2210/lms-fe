@@ -34,10 +34,12 @@ const confirmDialog = {
             // Hàm này được gọi khi người dùng nhấn nút hủy
             onCancel: async () => {
               onCancel && (await onCancel())
+              dispatch(confirmDialogActions.closeConfirmation())
             },
             // Hàm này được gọi khi người dùng nhấn nút xác nhận
             onConfirm: async () => {
               await onConfirm()
+              dispatch(confirmDialogActions.closeConfirmation())
             },
           }),
         )

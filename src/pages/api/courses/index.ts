@@ -12,7 +12,7 @@ const CourseAPI = {
       uri: `course-sections/${id}`,
     })
     return response
-  }
+  },
 }
 
 export default CourseAPI

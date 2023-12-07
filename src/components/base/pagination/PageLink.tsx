@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 interface Props {
   active?: boolean
@@ -7,6 +7,7 @@ interface Props {
   onClick?: () => void
   arrow?: boolean
   type?: string
+  isViewedProp?: boolean
 }
 
 const PageLink = ({
@@ -15,11 +16,16 @@ const PageLink = ({
   arrow,
   type,
   children,
+  isViewedProp,
   ...otherProps
 }: Props) => {
   const [isFlagged, setIsFlagged] = useState<boolean>(false)
   const [isViewed, setIsViewed] = useState<boolean>(false)
-
+  useEffect(() => {
+    if (isViewedProp !== undefined) {
+      setIsViewed(isViewedProp)
+    }
+  }, [isViewedProp])
   if (arrow && disabled) {
     return (
       <li

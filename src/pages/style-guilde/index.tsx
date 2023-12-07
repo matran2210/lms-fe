@@ -180,7 +180,7 @@ const StyleGuide: NextPage = () => {
             name="wrong"
             control={control}
             checked={true}
-            isWrong={true}
+            state={'error'}
           />
           <br />
           <HookFormCheckBox

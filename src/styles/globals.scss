@@ -43,25 +43,33 @@ body * ::-webkit-scrollbar-thumb {
   border: 6px solid transparent;
   background-clip: content-box;
 }
+
 body * ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
+
 .menu-sub-dropdown {
   @apply hidden;
 }
+
 .active + .menu-sub-dropdown {
   @apply block;
 }
+
 .table-responsive tr:last-child td {
   @apply border-b-0;
 }
+
 .solution .topic p {
   @apply mb-6;
 }
+
 .sapp-answer-wrapper {
   @apply flex pt-2 gap-y-6 flex-wrap;
+
   .answer {
     @apply flex gap-x-3 items-start break-words;
+
     .desciption {
       @apply flex-1;
     }
@@ -70,6 +78,7 @@ body * ::-webkit-scrollbar-thumb:hover {
 
 .sapp-questions {
   @apply mb-4;
+
   p {
     @apply break-words mb-2;
   }
@@ -80,6 +89,7 @@ body * ::-webkit-scrollbar-thumb:hover {
     @apply break-words mb-2;
   }
 }
+
 .sapp-questions .sapp-input-preview {
   @apply w-24 h-7 rounded-md mb-1;
   // width: 100px;
@@ -87,62 +97,130 @@ body * ::-webkit-scrollbar-thumb:hover {
   // border-radius: 4px;
   // margin-bottom: 5px;
 }
+
 .sapp-select--selectword-preview {
   @apply min-w-78px rounded;
 }
+
 .sapp-notched-container {
-  word-break: break-word;
-  flex: 1;
-  position: relative;
-  background-color: #f0f0f0;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  padding-left: 50px;
-  border: 1px dashed rgb(224, 221, 227);
+  @apply break-words flex-1 relative bg-gray-3 h-auto flex items-center justify-center p-5 border-dashed border;
 }
 
 .sapp-notched-container:before {
-  z-index: 0;
-  border: 1px dashed rgb(224, 221, 227);
-  background-color: white;
   content: '';
-  position: absolute;
   left: -1.2px;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-dashed bg-white absolute border;
 }
 
 .sapp-arrowed-container {
-  word-break: break-word;
-  // flex: 1;
-  width: 50%;
-  position: relative;
-  background-color: #f0f0f0;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  padding-left: 50px;
-  border: 1px dashed rgb(224, 221, 227);
+  @apply break-words relative bg-gray-3 h-auto flex items-center justify-center p-5 border-dashed border w-[48%];
 }
 
 .sapp-arrowed-container:before {
-  z-index: 0;
   border: 1px dashed rgb(224, 221, 227);
-  background-color: #f0f0f0;
   content: '';
-  position: absolute;
   right: 0;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-dashed bg-gray-3 absolute border right-0;
+}
+
+.answer-area {
+  @apply flex flex-wrap gap-5 mt-15;
+
+  .answer-box {
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(243, 243, 243);
+    @apply p-2;
+  }
+}
+
+.sapp-input-dragNDrop {
+  @apply inline-block min-w-[100px] border-b border-gray-500 border-0;
+}
+
+.sapp-questions-essay {
+  line-height: 33px;
+  @apply font-semibold text-base font-sans text-bw-1 mb-4;
+}
+
+.sapp-seprate-line-preview {
+  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3;
+}
+
+.sapp-upload-file-preview {
+  @apply flex gap-3 py-5 px-0;
+}
+
+.sapp-upload-button-preview {
+  @apply cursor-pointer flex justify-evenly gap-2 w-max items-center px-2 py-0 border;
+}
+
+.tox-tinymce {
+  border: none !important;
+}
+
+.resizable {
+  @apply bg-white absolute top-[100px] left-[100px] cursor-move;
+}
+
+.resizable .resizers {
+  display: none;
+  @apply w-full h-full box-border z-[500];
+}
+
+.resizable.enable .resizers {
+  display: block;
+  // border: 2px solid #7e8299;
+  @apply border-2 border-gray-900;
+}
+
+.resizable .resizers .resizer {
+  box-shadow:
+    0px 0px 0px 1px rgba(43, 59, 74, 0.3),
+    0px 0px 4px 1px rgba(57, 76, 96, 0.15);
+  @apply w-[12px] h-[12px] rounded-full bg-white absolute z-[500];
+}
+
+.resizable .resizers .resizer.top-left {
+  @apply -left-[5px] -top-[5px] cursor-nwse-resize;
+}
+
+.resizable .resizers .resizer.top-right {
+  @apply -right-[5px] -top-[5px] cursor-nesw-resize;
+}
+
+.resizable .resizers .resizer.bottom-left {
+  @apply -left-[5px] -bottom-[5px] cursor-nesw-resize;
+}
+
+.resizable .resizers .resizer.bottom-right {
+  @apply -right-[5px] -bottom-[5px] cursor-nwse-resize;
+}
+
+.resizable .resizers .resizer.right {
+  @apply rounded-[3px] w-[6px] h-[18px] -right-[2.5px] top-1/2 cursor-col-resize -translate-y-1/2;
+}
+
+.resizable .resizers .resizer.left {
+  @apply rounded-[3px] w-[6px] h-[18px] -left-[2.5px] top-1/2 cursor-col-resize -translate-y-1/2;
+}
+
+.sapp-opacity-bg-border {
+  background-color: transparent;
+  border: none;
+  resize: none;
+}
+
+.sapp-text-area {
+  resize: none;
+  border: none;
 }

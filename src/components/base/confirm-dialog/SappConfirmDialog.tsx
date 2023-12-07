@@ -53,18 +53,16 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         handleCancel={handleCancel}
         handleSubmit={handleConfirm}
         setOpen={closeConfirmation}
-        size="max-w-md m-4 h-56"
         // refClass="md:p-8 p-5 flex flex-col animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8"
-        childClass="-mr-4"
-        parentChildClass="overflow-y-scroll snap-y  bg-white md:px-8 px-5"
-        footerButtonClassName="justify-center flex flex-row-reverse"
+        footerButtonClassName="justify-center flex flex-row-reverse gap-4"
         color="danger"
         showHeader={false}
+        zIndex="z-[9999999]"
       >
         <div className="">
-          <div className="mx-auto mb-7 flex h-18 w-18 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+          <div className="mx-auto mb-7 flex w-fit h-fit flex-shrink-0 items-center justify-center rounded-full bg-red-100">
             <svg
-              className="h-18 w-18 text-state-error"
+              className="h-[100px] w-[100px] text-state-error"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="1.5"

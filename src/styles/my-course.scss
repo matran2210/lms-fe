@@ -38,16 +38,17 @@
   display: none;
 }
 
-.download,.delete path {
-  stroke: #A1A1A1;
+.download,
+.delete path {
+  stroke: #a1a1a1;
   transition: stroke 0.3s ease;
 }
 
 /* Hover styling */
 .download:hover path {
-  stroke: #FFB800; /* Red color on hover */
+  stroke: #ffb800; /* Red color on hover */
 }
 
 .delete:hover path {
-  stroke: #D35563; /* Red color on hover */
+  stroke: #d35563; /* Red color on hover */
 }

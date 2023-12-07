@@ -17,6 +17,42 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
             rel="stylesheet"
           />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            function allowDrop(ev) {
+              const slotId = ev.target.id
+              const slotElement = document.getElementById(slotId)
+              if (slotElement?.children.length === 0 && ev.target.classList.contains("dropable")) {
+                ev.preventDefault();
+              } else{
+                return
+              }
+            }
+
+            function drag(ev) {
+              ev.dataTransfer.setData("text", ev.target.id);
+            }
+
+            function drop(ev) {
+              ev.preventDefault();
+              var data = ev.dataTransfer.getData('text')
+              const slotId = ev.target.id
+              const slotElement = document.getElementById(slotId)
+              if (slotElement?.children.length === 0 && ev.target.classList.contains("dropable")) {
+                ev.target.appendChild(document.getElementById(data))
+              }
+              else {
+                return
+              }
+            }
+          `,
+            }}
+          />
+          <script
+            src="https://cdn.tiny.cloud/1/tyfr3hvp7v3mt24gzu3jtbbm3nvr01hquem04a4oei6ui86j/tinymce/6/tinymce.min.js"
+            referrerPolicy="origin"
+          ></script>
         </Head>
         <body>
           <img
