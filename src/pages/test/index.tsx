@@ -1,5 +1,6 @@
 import {
   CloseIcon,
+  FlagIcon,
   HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
@@ -455,18 +456,62 @@ const dataConstructed = {
   question_matchings: [],
   tags: [],
 }
+const fakeTabs = [
+  {
+    id: 1,
+    viewed: false,
+    flaged: false,
+    done: false,
+  },
+  {
+    id: 2,
+    viewed: false,
+    flaged: false,
+    done: false,
+  },
+  {
+    id: 3,
+    viewed: false,
+    flaged: false,
+    done: false,
+  },
+  {
+    id: 4,
+    viewed: false,
+    flaged: false,
+    done: false,
+  },
+  {
+    id: 5,
+    viewed: false,
+    flaged: false,
+    done: false,
+  },
+]
 const Test = () => {
-  const [currentPage, setCurrentPage] = useState<any>(1)
+  const [currentPage, setCurrentPage] = useState<any>(fakeTabs[0].id)
   const { control, handleSubmit } = useForm()
   const { control: controlFilter } = useForm()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [tabs, setTabs] = useState(fakeTabs)
   const handleOpenScratchPad = () => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       arr.push(uniqueId('scratchPad'))
       return arr
+    })
+  }
+  const handleFlagQuestion = (tab: any) => {
+    setTabs((prev) => {
+      const newData = prev.map((item: any) => {
+        if (tab === item.id) {
+          return { ...item, flaged: true }
+        }
+        return item
+      })
+      return newData
     })
   }
   const handleCloseScratchPad = (pad: string) => {
@@ -476,6 +521,17 @@ const Test = () => {
       return newArr
     })
   }
+  useEffect(() => {
+    setTabs((prev) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          return { ...item, viewed: true }
+        }
+        return item
+      })
+      return newData
+    })
+  }, [currentPage])
   const OptionShowAll = () => {
     return (
       <div className="w-max">
@@ -557,9 +613,6 @@ const Test = () => {
     const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
     for (let e of inputs) {
       const idAnswer = e.querySelector('span')
-
-      // console.log(idDiv?.id);
-
       value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
     }
     return value
@@ -610,10 +663,7 @@ const Test = () => {
             optionShowAll={<OptionShowAll />}
           /> */}
           <TabSlide
-            data={[
-              1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-              20, 21, 22, 23, 24, 25, 26, 27, 28,
-            ]}
+            data={tabs}
             currentTab={currentPage}
             setCurrentTab={setCurrentPage}
             optionShowAll={<OptionShowAll />}
@@ -731,25 +781,38 @@ const Test = () => {
       })}
 
       {/* </div> */}
-      <div className=" bg-gray-3 flex items-center h-full">
-        <button className="h-full">
-          <div className="flex items-center gap-3 ps-6 ">
-            <HelpIcon />
-            <div className="font-normal text-sm pe-6 border-r">Help</div>
-          </div>
-        </button>
-        <button className="h-full">
-          <div className="flex items-center gap-3 ps-6 ">
-            <HighlightIcon />
-            <div className="font-normal text-sm pe-6 border-r">Highlight</div>
-          </div>
-        </button>
-        <button className="h-full" onClick={handleOpenScratchPad}>
-          <div className="flex items-center gap-3 ps-6 ">
-            <ScratchPadIcon />
-            <div className="font-normal text-sm pe-6 border-r">Scratch Pad</div>
-          </div>
-        </button>
+      <div className=" bg-gray-3 flex items-center h-full justify-between">
+        <div className="flex items-center h-full">
+          <button className="h-full">
+            <div className="flex items-center gap-3 ps-6 ">
+              <HelpIcon />
+              <div className="font-normal text-sm pe-6 border-r">Help</div>
+            </div>
+          </button>
+          <button className="h-full">
+            <div className="flex items-center gap-3 ps-6 ">
+              <HighlightIcon />
+              <div className="font-normal text-sm pe-6 border-r">Highlight</div>
+            </div>
+          </button>
+          <button className="h-full" onClick={handleOpenScratchPad}>
+            <div className="flex items-center gap-3 ps-6 ">
+              <ScratchPadIcon />
+              <div className="font-normal text-sm pe-6 border-r">
+                Scratch Pad
+              </div>
+            </div>
+          </button>
+        </div>
+        <div className="flex items-center h-full py-4 pe-6 ">
+          <button
+            className="flex items-center gap-3 border border-gray-1 h-full justify-center px-3"
+            onClick={() => handleFlagQuestion(currentPage)}
+          >
+            <FlagIcon />
+            <div className="font-normal text-sm">Flag to Review</div>
+          </button>
+        </div>
       </div>
     </div>
   )

@@ -4,10 +4,10 @@ import PageLink from '../pagination/PageLink'
 import ArrowIcon from '../pagination/ArrowIcon'
 
 interface IProps {
-  data: any
+  data: Array<any>
   setCurrentTab?: any
   optionShowAll?: ReactNode
-  currentTab: number
+  currentTab: string
   handleChangeTab?: any
 }
 
@@ -19,11 +19,6 @@ const TabSlide = ({
   handleChangeTab,
 }: IProps) => {
   const [activeShowAll, setActiveShowAll] = useState<boolean>(true)
-
-  //   const handleChangeTab = (e: string) => {
-  //     setCurrentTab(e)
-  //   }
-  // return <Pagination currentPage={currentTab} setCurrentPage={setCurrentTab} maxLength={data.length} pageSize={100} totalItems={100} type={'row'} optionShowAll={optionShowAll}/>
   return (
     <ul
       className={`pagination flex items-center flex-wrap w-full gap-3`}
@@ -42,11 +37,12 @@ const TabSlide = ({
           }`}
         >
           <PageLink
-            disabled={currentTab === 1}
+            disabled={data.findIndex((e) => e.id === currentTab) === 0}
             arrow={true}
             onClick={() => {
               if (setCurrentTab !== undefined) {
-                handleChangeTab(currentTab - 1)
+                const index = data.findIndex((e) => e.id === currentTab)
+                handleChangeTab(data[index - 1].id)
               }
             }}
             // type={type}
@@ -62,19 +58,21 @@ const TabSlide = ({
           }`}
           //   ref={elementRef}
         >
-          {data.map((pageNum: number, idx: any) => (
+          {data.map((pageNum: any, idx: any) => (
             <PageLink
               key={idx}
-              active={currentTab === pageNum}
-              disabled={isNaN(pageNum)}
+              active={currentTab === pageNum.id}
+              // disabled={isNaN(pageNum)}
               onClick={() => {
                 if (setCurrentTab !== undefined) {
-                  handleChangeTab(pageNum)
+                  handleChangeTab(pageNum.id)
                 }
               }}
+              isViewedProp={pageNum.viewed}
+              isFlagedProp={pageNum.flaged}
               //   type={type}
             >
-              {!isNaN(pageNum) ? pageNum : '|'}
+              {!isNaN(pageNum.id) ? pageNum.id : '|'}
             </PageLink>
           ))}
         </div>
@@ -84,11 +82,14 @@ const TabSlide = ({
           }`}
         >
           <PageLink
-            disabled={currentTab === data.length}
+            disabled={
+              data.findIndex((e) => e.id === currentTab) === data.length - 1
+            }
             arrow={true}
             onClick={() => {
               if (setCurrentTab !== undefined) {
-                handleChangeTab(currentTab + 1)
+                const index = data.findIndex((e) => e.id === currentTab)
+                handleChangeTab(data[index + 1].id)
               }
             }}
             // type={type}

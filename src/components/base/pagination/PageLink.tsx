@@ -8,6 +8,7 @@ interface Props {
   arrow?: boolean
   type?: string
   isViewedProp?: boolean
+  isFlagedProp?: boolean
 }
 
 const PageLink = ({
@@ -17,9 +18,9 @@ const PageLink = ({
   type,
   children,
   isViewedProp,
+  isFlagedProp,
   ...otherProps
 }: Props) => {
-  const [isFlagged, setIsFlagged] = useState<boolean>(false)
   const [isViewed, setIsViewed] = useState<boolean>(false)
   useEffect(() => {
     if (isViewedProp !== undefined) {
@@ -91,7 +92,7 @@ const PageLink = ({
       >
         {children}
       </span>
-      {isFlagged && type === 'row' && (
+      {isFlagedProp && (
         <i className="absolute top-1 right-1 w-2 h-2 bg-gray-1 rounded-full"></i>
       )}
     </li>

@@ -30,7 +30,7 @@ const TestModal = ({ open, setOpen, title }: IProps) => {
       showHeader={false}
       // size="max-w-1/2"
       footerButtonClassName="justify-between flex"
-      childClass="-mr-4"
+      childClass=""
       parentChildClass=""
       position="center"
     >
