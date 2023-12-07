@@ -263,3 +263,29 @@ export const CloseIcon = () => {
     </svg>
   )
 }
+export const FlagIcon = () => {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="report 1" clip-path="url(#clip0_4_6066)">
+        <g id="Group">
+          <path
+            id="Vector"
+            d="M7.98447 1.43344L7.98449 1.43345C10.1175 2.65214 12.3969 2.66105 14.5312 1.45997V9.85677C13.4544 10.469 12.3621 10.767 11.2812 10.767C10.1947 10.767 9.09749 10.4662 8.01556 9.84783L8.01552 9.84781C5.95129 8.66836 3.7497 8.63307 1.674 9.72181L1.46875 9.82946V1.39686L2.11195 1.10654C4.05001 0.23176 6.05308 0.329828 7.98447 1.43344Z"
+            stroke="#141414"
+          />
+        </g>
+      </g>
+      <defs>
+        <clipPath id="clip0_4_6066">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  )
+}
