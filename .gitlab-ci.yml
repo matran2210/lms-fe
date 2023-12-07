@@ -1,0 +1,12 @@
+default:
+  image: node:18
+
+deploy_uat:
+  stage: deploy
+  only:
+    - staging
+  script:
+    - yarn global add vercel
+    - yarn install
+    - vercel deploy --prod --token=$VERCEL_TOKEN
+  environment: staging
