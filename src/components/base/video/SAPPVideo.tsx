@@ -1,6 +1,6 @@
 import { Stream, StreamPlayerApi, StreamProps } from '@cloudflare/stream-react'
-import styles from '@styles/components/SappVideo.module.scss'
-import { MutableRefObject, useEffect, useRef } from 'react'
+import styles from '@styles/components/SAPPVideo.module.scss'
+import { MutableRefObject, useRef } from 'react'
 interface IProp {
   options: StreamProps
   pauseOnSeek?: boolean
