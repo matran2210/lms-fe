@@ -103,114 +103,124 @@ body * ::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-notched-container {
-  word-break: break-word;
-  flex: 1;
-  position: relative;
-  background-color: #f0f0f0;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  padding-left: 50px;
-  border: 1px dashed rgb(224, 221, 227);
+  @apply break-words flex-1 relative bg-gray-3 h-auto flex items-center justify-center p-5 border-dashed border;
 }
 
 .sapp-notched-container:before {
-  z-index: 0;
-  border: 1px dashed rgb(224, 221, 227);
-  background-color: white;
   content: '';
-  position: absolute;
   left: -1.2px;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-dashed bg-white absolute border;
 }
 
 .sapp-arrowed-container {
-  word-break: break-word;
-  // flex: 1;
-  width: 50%;
-  position: relative;
-  background-color: #f0f0f0;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  padding-left: 50px;
-  border: 1px dashed rgb(224, 221, 227);
+  @apply break-words relative bg-gray-3 h-auto flex items-center justify-center p-5 border-dashed border w-[48%];
 }
 
 .sapp-arrowed-container:before {
-  z-index: 0;
   border: 1px dashed rgb(224, 221, 227);
-  background-color: #f0f0f0;
   content: '';
-  position: absolute;
   right: 0;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-dashed bg-gray-3 absolute border right-0;
 }
 
 .answer-area {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 60px;
+  @apply flex flex-wrap gap-5 mt-15;
 
   .answer-box {
-    padding: 10px;
     border: 1px solid rgb(204, 204, 204);
     background: rgb(243, 243, 243);
+    @apply p-2;
   }
 }
 
 .sapp-input-dragNDrop {
-  display: inline-block;
-  min-width: 100px;
-  // height: 30px;
-  border: none;
-  border-bottom: 2px solid rgb(80, 80, 80, 0.5);
+  @apply inline-block min-w-[100px] border-b border-gray-500 border-0;
 }
+
 .sapp-questions-essay {
-  margin-bottom: 16px;
-  color: #141414;
-  font-family: 'Inter';
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
   line-height: 33px;
+  @apply font-semibold text-base font-sans text-bw-1 mb-4;
 }
+
 .sapp-seprate-line-preview {
-  width: calc(100% + 24px);
-  margin-left: -24px;
-  height: 10px;
-  background: #f2f2f2;
+  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3;
 }
+
 .sapp-upload-file-preview {
-  display: flex;
-  /* justify-content: space-evenly; */
-  gap: 12px;
-  /* border-bottom: 4px solid #F2F2F2; */
-  padding: 20px 0 20px 0;
+  @apply flex gap-3 py-5 px-0;
 }
+
 .sapp-upload-button-preview {
-  display: flex;
-  justify-content: space-evenly;
-  gap: 8px;
-  width: max-content;
-  align-items: center;
-  padding: 0 8px 0 8px;
-  border: 1px solid #d9d9d9;
-  cursor: pointer;
+  @apply cursor-pointer flex justify-evenly gap-2 w-max items-center px-2 py-0 border;
 }
+
 .tox-tinymce {
   border: none !important;
+}
+
+.resizable {
+  @apply bg-white absolute top-[100px] left-[100px] cursor-move;
+}
+
+.resizable .resizers {
+  display: none;
+  @apply w-full h-full box-border z-[500];
+}
+
+.resizable.enable .resizers {
+  display: block;
+  // border: 2px solid #7e8299;
+  @apply border-2 border-gray-900;
+}
+
+.resizable .resizers .resizer {
+  box-shadow:
+    0px 0px 0px 1px rgba(43, 59, 74, 0.3),
+    0px 0px 4px 1px rgba(57, 76, 96, 0.15);
+  @apply w-[12px] h-[12px] rounded-full bg-white absolute z-[500];
+}
+
+.resizable .resizers .resizer.top-left {
+  @apply -left-[5px] -top-[5px] cursor-nwse-resize;
+}
+
+.resizable .resizers .resizer.top-right {
+  @apply -right-[5px] -top-[5px] cursor-nesw-resize;
+}
+
+.resizable .resizers .resizer.bottom-left {
+  @apply -left-[5px] -bottom-[5px] cursor-nesw-resize;
+}
+
+.resizable .resizers .resizer.bottom-right {
+  @apply -right-[5px] -bottom-[5px] cursor-nwse-resize;
+}
+
+.resizable .resizers .resizer.right {
+  @apply rounded-[3px] w-[6px] h-[18px] -right-[2.5px] top-1/2 cursor-col-resize -translate-y-1/2;
+}
+
+.resizable .resizers .resizer.left {
+  @apply rounded-[3px] w-[6px] h-[18px] -left-[2.5px] top-1/2 cursor-col-resize -translate-y-1/2;
+}
+
+.sapp-opacity-bg-border {
+  background-color: transparent;
+  border: none;
+  resize: none;
+}
+
+.sapp-text-area {
+  resize: none;
+  border: none;
 }
