@@ -18,7 +18,6 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const router = useRouter()
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
-  const [codeSent, setCodeSent] = useState(false)
   const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
   const [timeCountDownResent, settimeCountDownResent] = useState<number>(285)
   const [errorMessage, setErrorMessage] = useState(error)
@@ -36,10 +35,11 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       setCanResend(true)
     }
 
-    if (timeCountDown === '00:00' && codeSent) {
+    if (time <= 0) {
       setErrorMessage('OTP expired. Please generate a new OTP and try again!')
+      setCanResend(true)
     }
-  }, [timeCountDown, codeSent])
+  }, [timeCountDown])
 
   // Handling when entering code into the input cell
   const onEnterDigit = (
@@ -72,7 +72,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         setErrorMessage('Resend code failed. Please try again')
         return
       }
-      !codeSent && setCodeSent(true)
+
       setErrorMessage('')
       setCanResend(false)
       settimeCountDownResent(() => {
@@ -135,9 +135,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         <span className="text-medium-sm text-state-error">{errorMessage}</span>
         <span
           className={`min-w-fit text-right text-medium-sm ${
-            timeCountDown === '00:00' && codeSent
-              ? 'text-state-error'
-              : 'text-bw-1'
+            timeCountDown === '00:00' ? 'text-state-error' : 'text-bw-1'
           }`}
         >
           {timeCountDown}
@@ -150,7 +148,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         size="lager"
         loading={loading}
         onClick={handleVerifyCode}
-        disabled={code.some((e) => e === '')}
+        disabled={code.some((e) => e === '') || time <= 0}
       />
       <ButtonText
         title="Resend Code"
