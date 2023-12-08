@@ -5,6 +5,8 @@ type iconType =
   | 'course_text'
   | 'course_video'
   | 'course_video_timeline'
+  | 'arrow_left'
+  | 'arrow_right'
 
 type SAPP_ICONS_TYPE = {
   [key in iconType]: React.ReactNode
@@ -12,9 +14,10 @@ type SAPP_ICONS_TYPE = {
 
 type Props = {
   icon: keyof SAPP_ICONS_TYPE
+  className?: string
 }
 
-const SappIcon = ({ icon }: Props) => {
+const SappIcon = ({ icon, className }: Props) => {
   const SAPP_ICONS: SAPP_ICONS_TYPE = {
     camera: (
       <svg
@@ -22,6 +25,7 @@ const SappIcon = ({ icon }: Props) => {
         width={16}
         height={16}
         fill="none"
+        className={className}
       >
         <g fill="#A1A1A1" clipPath="url(#a)">
           <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6ZM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2Z" />
@@ -40,6 +44,7 @@ const SappIcon = ({ icon }: Props) => {
         width={16}
         height={16}
         fill="none"
+        className={className}
       >
         <rect
           width={15}
@@ -61,6 +66,7 @@ const SappIcon = ({ icon }: Props) => {
         width={16}
         height={16}
         fill="none"
+        className={className}
       >
         <rect
           width={15}
@@ -84,10 +90,39 @@ const SappIcon = ({ icon }: Props) => {
         width={18}
         height={18}
         fill="none"
+        className={className}
       >
         <path
           fill="#FFB800"
           d="M17.438 4.219H.563v1.687h16.875V4.22ZM14.625 8.156H3.375v1.688h11.25V8.156ZM11.25 12.094h-4.5v1.687h4.5v-1.687Z"
+        />
+      </svg>
+    ),
+    arrow_left: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={16}
+        height={16}
+        fill="none"
+        className={className}
+      >
+        <path
+          fill="#141414"
+          d="M11.313 3.411V2.203a.125.125 0 0 0-.202-.098L4.067 7.606a.498.498 0 0 0 0 .786l7.044 5.502a.124.124 0 0 0 .201-.099v-1.207a.253.253 0 0 0-.095-.197L5.592 8l5.625-4.392a.253.253 0 0 0 .095-.197Z"
+        />
+      </svg>
+    ),
+    arrow_right: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={16}
+        height={16}
+        fill="none"
+        className={className}
+      >
+        <path
+          fill="#141414"
+          d="M4.688 12.59v1.207c0 .105.12.162.201.098l7.044-5.501a.497.497 0 0 0 0-.786L4.889 2.106a.124.124 0 0 0-.201.099v1.207c0 .077.035.15.095.197L10.408 8l-5.625 4.392a.253.253 0 0 0-.095.197Z"
         />
       </svg>
     ),
