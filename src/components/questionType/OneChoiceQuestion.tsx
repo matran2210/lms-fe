@@ -1,12 +1,25 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 export type IPreviewProp = {
   data: any
   control: any
+  name?: string
   corrects?: { [key: string]: boolean }
+  defaultValues?: any
+  setValue?: any
 }
-const OneChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
+const OneChoiceQuestion = ({
+  data,
+  control,
+  corrects,
+  name,
+  defaultValues,
+  setValue,
+}: IPreviewProp) => {
+  useEffect(() => {
+    setValue(name, defaultValues)
+  }, [defaultValues])
   const convertAnswer = useMemo(() => {
     let answers = []
     if (data?.answers) {
@@ -16,7 +29,6 @@ const OneChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
     }
     return answers
   }, [data])
-
   return (
     <div>
       <EditorReader
@@ -32,8 +44,9 @@ const OneChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
         <HookFormRadioGroup
           options={convertAnswer || []}
           control={control}
-          name="answer"
+          name={name || 'answer'}
           corrects={corrects}
+          defaultValue={defaultValues}
         />
       </div>
     </div>
