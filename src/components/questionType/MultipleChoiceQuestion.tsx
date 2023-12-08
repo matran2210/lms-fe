@@ -1,10 +1,17 @@
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import EditorReader from '@components/base/editor/EditorReader'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { IPreviewProp } from './OneChoiceQuestion'
 // import {IPreviewProp} from '../true-false-question'
 
-const MultiChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
+const MultiChoiceQuestion = ({
+  data,
+  control,
+  corrects,
+  name,
+  defaultValues,
+  setValue,
+}: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
     if (data?.answers) {
@@ -14,7 +21,9 @@ const MultiChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
     }
     return answers
   }, [data])
-
+  useEffect(() => {
+    setValue(name, defaultValues)
+  }, [defaultValues])
   return (
     <div>
       <EditorReader
@@ -30,9 +39,10 @@ const MultiChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
         <HookFormCheckBoxGroup
           options={convertAnswer || []}
           control={control}
-          name="multiple"
+          name={name || 'multiples'}
           multiple
           corrects={corrects}
+          defaultValue={defaultValues}
         />
       </div>
     </div>

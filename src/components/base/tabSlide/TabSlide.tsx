@@ -72,7 +72,7 @@ const TabSlide = ({
               isFlagedProp={pageNum.flaged}
               //   type={type}
             >
-              {!isNaN(pageNum.id) ? pageNum.id : '|'}
+              {idx + 1}
             </PageLink>
           ))}
         </div>
@@ -102,7 +102,7 @@ const TabSlide = ({
           {!activeShowAll && optionShowAll}
           <div
             className={`ml-6 text-sm leading-4.5 text-bw-1 underline font-semibold cursor-pointer w-max ${
-              activeShowAll && 'absolute -right-28 top-0 translate-y-1/2 '
+              activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2 '
             }`}
             onClick={() => {
               // setPageNums(activeShowAll ? arrPage : getPagination)
