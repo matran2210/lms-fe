@@ -256,7 +256,7 @@ const MyProfile = ({
             </div>
             <div className={`flex-auto max-w-[300px] font-medium`}>
               <TextSkeleton loading={loading && !isEdit} height="4">
-                <span className={`${USER_STATUS[user.status].color}`}>
+                <span className={`${USER_STATUS[user.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
                 </span>
               </TextSkeleton>
@@ -296,6 +296,7 @@ const MyProfile = ({
                 size: 'medium',
                 isPaddingHorizontal: false,
                 disabled: loading || loadingEditName,
+                className: 'min-w-fit !px-0 text-base w-30',
               }}
               submit={{
                 title: 'Save',
