@@ -8,7 +8,6 @@ import TestModal from 'src/pages/courses/test'
 
 interface IProps {
   name: string
-  path: string
   des: string
   progressText?: string
   progressTimeStatus?: string
@@ -20,7 +19,6 @@ interface IProps {
 
 const Part = ({
   name,
-  path,
   des,
   progressText,
   progressTimeStatus,
@@ -33,7 +31,7 @@ const Part = ({
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
-        <Link href={`/courses/my-course/course-detail/${path}`}>{name}</Link>
+        {name}
       </div>
       <div className="des mt-6 mb-15">
         <p className={`text-base`}>{des}</p>
@@ -42,9 +40,9 @@ const Part = ({
         <div className="progress mb-6">
           <div className="info flex justify-between mb-2">
             <div className="text flex items-baseline">
-              <Icon type={progressIconType} className="relative top-0.5" />
+              <Icon type={'hour'} className="relative top-0.5" />
               <p className="text-medium-sm font-medium text-bw-1 pl-1 ml-px">
-                {progressText}
+                progressText
               </p>
               <span className="text-medium-sm font-medium text-gray-1 pl-1 ml-px">
                 {progressTimeStatus}
@@ -52,14 +50,14 @@ const Part = ({
             </div>
             <div className="number">
               <p className="text-medium-sm font-medium text-bw-1">
-                {percentage}%
+                23%
               </p>
             </div>
           </div>
           <div className="progressbar bg-gray-3 h-1.5">
             <div
               className="progress-percentage bg-primary h-1.5"
-              style={{ width: `${percentage}%` }}
+              style={{ width: `10%` }}
             ></div>
           </div>
         </div>
