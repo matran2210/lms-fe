@@ -1,5 +1,5 @@
 import SearchForm from '@components/mycourses/Search'
-import Tabs from '@components/mycourses/Tabs'
+import NotifyTab from '@components/notification/NotifyTab'
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import ActionCell from '@components/base/action/ActionCell'
 import NotifyList from '@components/notification/NotifyList'
@@ -91,12 +91,11 @@ const Notifications = () => {
         </h2>
       </div>
       <div className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between">
-        <Tabs
+        <NotifyTab
           tabs={tabs}
           classUl="tab-buttons d-flex flex gap-10"
           currentClass="activecolor text-bw-1 absolute w-full h-px bg-primary bottom-0 left-0"
           tabClass="item text-base relative py-4.5 block"
-          liClass=""
           tabCurrentClass="text-bw-1"
           tabNotCurrentClass="text-gray-1"
         />

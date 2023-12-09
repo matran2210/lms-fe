@@ -10,6 +10,7 @@ export const PageLink = {
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
   AUTH_CHANGE_PASSWORD: '/auth/change-password',
   AUTH_CHANGE_PASSWORD_SUCCESS: '/auth/change-password/change-password-success',
+  NOTIFICATION: '/notification',
 }
 
 export const TitleSidebar = {

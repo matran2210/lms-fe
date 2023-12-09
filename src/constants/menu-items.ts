@@ -66,7 +66,7 @@ const MENU_OPTIONS_BOTTOM: MenuOption[] = [
   {
     name: `${TitleSidebar.COURSES}`,
     icon: 'notification',
-    url: `${PageLink.DASHBOARD}`,
+    url: `${PageLink.NOTIFICATION}`,
     type: 'level-1',
   },
   {

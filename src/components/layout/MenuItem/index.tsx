@@ -31,8 +31,8 @@ export default function MenuItem({
   return (
     <>
       <div
-        className={`${
-          selected && type === 'level-1' ? 'border-l-4 border-active' : ''
+        className={`cursor-pointer ${
+          selected && type === 'level-1' ? 'border-l-4 pr-1 border-active' : ''
         } relative sidebar-list-items py-2 ${
           mode === 'student' ? 'mb-4 last:mb-0' : 'mb-7 last:mb-0'
         }`}
