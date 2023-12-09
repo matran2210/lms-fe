@@ -1,22 +1,28 @@
-import React, { useState } from 'react'
-import NotifyItem from './NotifyItem'
+import React, { useState, Dispatch, SetStateAction } from 'react'
 import Icon from '@components/icons'
 
-interface NotifyLists {
+interface IProps {
   notifyLists: any[]
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const NotifyList: React.FC<NotifyLists> = ({ notifyLists }) => {
+const NotifyList = ({ notifyLists, open, setOpen }: IProps) => {
+  const handleOpen = () => {
+    setOpen(!open)
+  }
+
   return (
     <>
       {notifyLists.map((notifyItem, index) => {
-        const readStatus = notifyItem?.readStatus
+        const readStatus = notifyItem?.notification_user_instances?.is_read
         return (
           <div
-            key={index}
+            key={notifyItem?.id}
             className={`w-full p-6 pb-5 cursor-pointer relative ${
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
+            onClick={() => handleOpen()}
           >
             {!readStatus && (
               <Icon
@@ -26,10 +32,10 @@ const NotifyList: React.FC<NotifyLists> = ({ notifyLists }) => {
             )}
             <h4
               className="text-base text-bw-1 mb-1"
-              dangerouslySetInnerHTML={{ __html: notifyItem?.message }}
+              dangerouslySetInnerHTML={{ __html: notifyItem?.title }}
             ></h4>
             <p className="text-gray-1 text-medium-sm text-left">
-              {notifyItem?.time} mins ago
+              {notifyItem?.updated_at} mins ago
             </p>
           </div>
         )

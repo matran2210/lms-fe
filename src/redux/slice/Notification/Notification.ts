@@ -11,11 +11,22 @@ import { IActivity } from 'src/type/course/my-course/Activity'
 // Tạo một đối tượng Notification với giá trị mặc định
 export interface NotificationState {
   loading: boolean
+  list_notifications: any[]
+  created_at?: Date | null
+  updated_at?: Date | null
+  deleted_at?: Date | null
+  title?: string
+  notification_user_instances?: Object
 }
 
 const initialState: NotificationState = {
   loading: false,
-  status: false,
+  list_notifications: [],
+  created_at: null,
+  updated_at: null,
+  deleted_at: null,
+  title: '',
+  notification_user_instances: {},
 }
 
 export const getCountUnRead = createAsyncThunk(
@@ -28,13 +39,13 @@ export const getCountUnRead = createAsyncThunk(
       }
       return { ...res.data }
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error)
+      return false
     }
   },
 )
 
 export const getNotification = createAsyncThunk(
-  'notificationReducer/getNotifications',
+  'notificationReducer/getNotification',
   async (params: Object, thunkAPI) => {
     try {
       const res = await NotificationApi.getNotification(params)
@@ -51,7 +62,14 @@ export const getNotification = createAsyncThunk(
 export const notificationSlice = createSlice({
   name: 'notificationReducer',
   initialState,
-  reducers: {},
+  reducers: {
+    setState: (state, action: PayloadAction<any>) => {
+      return {
+        ...state,
+        ...action.payload,
+      }
+    },
+  },
 
   extraReducers: (builder) => {
     builder.addCase(getCountUnRead.pending, (state) => {
@@ -68,8 +86,7 @@ export const notificationSlice = createSlice({
     })
     builder.addCase(getNotification.fulfilled, (state, action) => {
       state.loading = false
-      /*return {...action.payload || {}, loading: false}*/
-      state.status = action.payload?.status
+      state.list_notifications = action.payload?.notifications
     })
     builder.addCase(getNotification.rejected, (state) => {
       state.loading = false

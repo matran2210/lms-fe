@@ -4,7 +4,7 @@ interface NotifyListSettings {
   notifyListsSettings: any[]
 }
 
-const NotifyListSetting: React.FC<NotifyListSettings> = ({
+const NotifyActions: React.FC<NotifyListSettings> = ({
   notifyListsSettings,
 }) => {
   return (
@@ -21,4 +21,4 @@ const NotifyListSetting: React.FC<NotifyListSettings> = ({
   )
 }
 
-export default NotifyListSetting
+export default NotifyActions

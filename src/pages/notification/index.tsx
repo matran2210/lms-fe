@@ -3,7 +3,13 @@ import NotifyTab from '@components/notification/NotifyTab'
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import ActionCell from '@components/base/action/ActionCell'
 import NotifyList from '@components/notification/NotifyList'
-import NotifyListSetting from '@components/notification/NotifyListSetting'
+import NotifyActions from '@components/notification/NotifyActions'
+import {
+  notificationReducer,
+  getNotification,
+} from 'src/redux/slice/Notification/Notification'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import SappModelSidebar from '@components/base/modal/SappModelSidebar'
 
 // Config Tabs
 const tabs = [
@@ -12,68 +18,30 @@ const tabs = [
 ]
 
 // Config NotifyListSettings
-const notifyListSettings = [
-  { message: 'Mark all as read' },
-  { message: 'Settings' },
-]
-
-// Config Tabs
-const notifyLists = [
-  {
-    message:
-      '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <strong>Duy Anh</strong> has been the industrys standard dummy text ever since the 1500s.</p>',
-    readStatus: false,
-    time: 35,
-  },
-  {
-    message:
-      '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <strong>Duy Anh</strong> has been the industrys standard dummy text ever since the 1500s.</p>',
-    readStatus: true,
-    time: 35,
-  },
-  {
-    message:
-      '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <strong>Duy Anh</strong> has been the industrys standard dummy text ever since the 1500s.</p>',
-    readStatus: true,
-    time: 35,
-  },
-  {
-    message:
-      '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <strong>Duy Anh</strong> has been the industrys standard dummy text ever since the 1500s.</p>',
-    readStatus: false,
-    time: 35,
-  },
-  {
-    message:
-      '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <strong>Duy Anh</strong> has been the industrys standard dummy text ever since the 1500s.</p>',
-    readStatus: false,
-    time: 35,
-  },
-  {
-    message:
-      '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <strong>Duy Anh</strong> has been the industrys standard dummy text ever since the 1500s.</p>',
-    readStatus: false,
-    time: 35,
-  },
-  {
-    message:
-      '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <strong>Duy Anh</strong> has been the industrys standard dummy text ever since the 1500s.</p>',
-    readStatus: true,
-    time: 35,
-  },
-  {
-    message:
-      '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <strong>Duy Anh</strong> has been the industrys standard dummy text ever since the 1500s.</p>',
-    readStatus: false,
-    time: 35,
-  },
-]
+const notifyListSettings = [{ message: 'Mark all as read' }]
 
 const Notifications = () => {
+  const [openModel, setOpenModel] = useState<boolean>(true)
   const [open, setOpen] = useState<boolean>(false)
   const showTooltip = () => {
     setOpen(true)
   }
+  const dispatch = useAppDispatch()
+  const notifyLists = useAppSelector(
+    (state) => state.notificationReducer.list_notifications,
+  )
+
+  const getNotifications = async (params: Object) => {
+    try {
+      await dispatch(getNotification(params))
+    } catch (error) {}
+  }
+  useEffect(() => {
+    getNotifications({
+      page_index: 1,
+      page_size: 10,
+    })
+  }, [])
 
   return (
     <>
@@ -104,13 +72,20 @@ const Notifications = () => {
           onClick={showTooltip}
         >
           <ActionCell>
-            <NotifyListSetting notifyListsSettings={notifyListSettings} />
+            <NotifyActions notifyListsSettings={notifyListSettings} />
           </ActionCell>
         </div>
       </div>
       <div className="max-w-xxl my-0 mx-auto">
-        <NotifyList notifyLists={notifyLists} />
+        <NotifyList
+          notifyLists={notifyLists}
+          open={openModel}
+          setOpen={setOpenModel}
+        />
       </div>
+      <SappModelSidebar open={openModel} setOpen={setOpenModel}>
+        <div>TEST</div>
+      </SappModelSidebar>
     </>
   )
 }
