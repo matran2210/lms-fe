@@ -77,6 +77,7 @@ module.exports = {
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
+          'dark-sidebar': 'rgba(0, 0, 0, 0.8)',
         },
       },
       borderColor: {
@@ -224,12 +225,22 @@ module.exports = {
           '0%': { opacity: '0.8' },
           '100%': { opacity: '0' },
         },
+        'fade-in-sidebar': {
+          '0%': { right: '-100%' },
+          '100%': { right: '0' },
+        },
+        'fade-out-sidebar': {
+          '0%': { right: '0' },
+          '100%': { right: '-100%' },
+        },
       },
       animation: {
         'jump-in': 'jump-in 0.1s ease-in-out',
         'jump-out': 'jump-out 0.1s ease-in-out',
         'fade-in-overlay': 'fade-in-overlay 0.2s ease-in-out',
         'fade-out-overlay': 'fade-out-overlay 0.1s ease-out',
+        'fade-in-sidebar': 'fade-in-sidebar 0.4s ease-in-out',
+        'fade-out-sidebar': 'fade-out-sidebar 0.3s ease-in-out',
       },
     },
   },

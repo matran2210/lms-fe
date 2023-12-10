@@ -40,7 +40,7 @@ const NotifyTab: React.FC<TabsProps> = ({
   return (
     <ul className={classUl}>
       {tabs.map((tab, index) => (
-        <Link href={`/notification#${tab.path}`} key={index}>
+        <Link href={`/notifications#${tab.path}`} key={index}>
           <li className={`cursor-pointer ${liClass}`}>
             <a
               onClick={() => handleTabClick(index)}
