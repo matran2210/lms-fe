@@ -6,7 +6,6 @@ interface Tab {
   label: string
   path: string
   total?: number
-  current: boolean
 }
 
 interface TabsProps {
@@ -21,17 +20,15 @@ interface TabsProps {
 
 const NotifyTab: React.FC<TabsProps> = ({
   tabs,
-  classUl,
-  currentClass,
-  tabClass,
+  classUl = 'tab-buttons d-flex flex gap-10',
+  currentClass = 'activecolor text-bw-1 absolute w-full h-px bg-primary bottom-0 left-0',
+  tabClass = 'item text-base relative py-4.5 block',
   liClass,
-  tabCurrentClass,
-  tabNotCurrentClass,
+  tabCurrentClass = 'text-bw-1',
+  tabNotCurrentClass = 'text-gray-1',
 }) => {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<number>(
-    tabs.findIndex((tab) => tab.path === router.pathname),
-  )
+  const [activeTab, setActiveTab] = useState<number>(0)
 
   const handleTabClick = (index: number) => {
     setActiveTab(index)
@@ -40,18 +37,25 @@ const NotifyTab: React.FC<TabsProps> = ({
   return (
     <ul className={classUl}>
       {tabs.map((tab, index) => (
-        <Link href={`/notifications#${tab.path}`} key={index}>
+        <Link href={`/notifications?${tab.path}`} key={index}>
           <li className={`cursor-pointer ${liClass}`}>
             <a
               onClick={() => handleTabClick(index)}
               className={`${tabClass} ${
-                tab.current ? `${tabCurrentClass}` : `${tabNotCurrentClass}`
+                router.asPath.includes(tab.path) ||
+                (activeTab == 0 && tab.label == 'All')
+                  ? `${tabCurrentClass}`
+                  : `${tabNotCurrentClass}`
               }`}
-              aria-current={tab.current ? 'page' : undefined}
             >
               {tab.label}
               {tab.total && <span className="ml-1">({tab.total})</span>}
-              {tab.current && <span className={currentClass}></span>}
+              {router.asPath.includes(tab.path) ||
+              (activeTab == 0 && tab.label == 'All') ? (
+                <span className={currentClass}></span>
+              ) : (
+                <></>
+              )}
             </a>
           </li>
         </Link>

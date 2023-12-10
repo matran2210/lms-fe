@@ -1,22 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, Dispatch, SetStateAction } from 'react'
 
-interface NotifyListSettings {
-  notifyListsSettings: any[]
+interface IProps {
+  handleMarkAll: () => void
 }
 
-const NotifyActions: React.FC<NotifyListSettings> = ({
-  notifyListsSettings,
-}) => {
+const NotifyActions = ({ handleMarkAll }: IProps) => {
   return (
     <>
-      {notifyListsSettings.map((notifyListItem, index) => (
-        <div
-          key={index}
-          className="py-3 border-b border-gray-2 last:border-0 text-medium-sm text-bw-1"
-        >
-          <div>{notifyListItem.message}</div>
-        </div>
-      ))}
+      <div
+        className="py-3 border-b border-gray-2 last:border-0 text-medium-sm text-bw-1"
+        onClick={handleMarkAll}
+      >
+        <div className="cursor-pointer">Mark all as read</div>
+      </div>
     </>
   )
 }

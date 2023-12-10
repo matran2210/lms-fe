@@ -21,7 +21,7 @@ export default function MenuItem({
   const [isExpanded, toggleExpanded] = useState(false)
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const selected = router.asPath === url
+  const selected = router.pathname === url
   const isNested = subItems && subItems?.length > 0
 
   const onClick = () => {

@@ -83,7 +83,7 @@ function SappModelSidebar({
           <>
             <div
               ref={confirmDialogRef}
-              className={`animate-fade-in-sidebar max-h-screen transition-all duration-300 fixed top-0 h-screen bg-white w-1/2 z-50 right-0 ${refClass}`}
+              className={`animate-fade-in-sidebar max-h-screen overflow-y-auto transition-all duration-300 fixed top-0 h-screen bg-white w-full md:w-1/2 z-50 right-0 ${refClass}`}
               role="dialog"
               aria-modal="true"
             >
@@ -93,7 +93,7 @@ function SappModelSidebar({
                     {title}
                   </div>
                   <div
-                    className="absolute right-8 top-1/2 -translate-y-2/4 p-2 cursor-pointer"
+                    className="absolute right-8 top-1/2 -translate-y-2/4 cursor-pointer"
                     onClick={handleClose}
                   >
                     <Icon type="cross" className="text-white" />

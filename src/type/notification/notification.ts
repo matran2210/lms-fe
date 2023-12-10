@@ -10,20 +10,21 @@ export interface INotifications {
   title: string
   notification_user_instances: Object
   notifications: any
+  meta: Object
 }
 
 export interface INotificationDetail {
-  id: string
-  created_at: Date
-  updated_at: Date
-  deleted_at?: Date
+  id: string | number
+  created_at: string
+  updated_at: string
+  deleted_at?: null
   title: string
   type: string
   mode: string
   status: string
   action: string
   content: string
-  send_time?: Date
+  send_time?: string
   created_by: any
   created_from: any
   files: any

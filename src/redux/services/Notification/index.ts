@@ -25,10 +25,17 @@ const NotificationApi = {
     })
     return response
   },
-  getDetail: async (id: string): Promise<IResponse<INotificationDetail[]>> => {
+  getDetail: async (id: string): Promise<IResponse<INotificationDetail>> => {
     const uri = url.getNotifications
     const response = await httpService.GET<any, any>({
       uri: `${uri}/${id}`,
+    })
+    return response
+  },
+  markAll: async (): Promise<IResponse<any>> => {
+    const uri = url.markAll
+    const response = await httpService.POST<any, any>({
+      uri,
     })
     return response
   },
