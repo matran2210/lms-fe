@@ -7,10 +7,7 @@ interface IProps {
   attempType: string
 }
 
-const PartFailed = ({
-  timeAllow,
-  attempType,
-}: IProps) => {
+const PartFailed = ({ timeAllow, attempType }: IProps) => {
   const formattedTime = formatTime(timeAllow)
 
   return (

@@ -102,6 +102,8 @@ module.exports = {
         box: '0px 2px 4px 0px #00000014, 0px 0px 6px 0px #00000005',
         notify: '0px 0px 50px 0px rgba(152, 151, 147, 0.15)',
         solution: '0px 2px 7px 0px rgba(0, 0, 0, 0.13)',
+        'questions-exhibits': '5px -6px 10px -4px rgba(0, 0, 0, 0.15)',
+        'question-footer': '0px -2px 7px 0px rgba(0, 0, 0, 0.13)',
       },
       minWidth: {
         4: '16px',

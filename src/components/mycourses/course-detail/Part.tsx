@@ -9,9 +9,7 @@ interface IProps {
   courses: any
 }
 
-const Part = ({
-  courses
-}: IProps) => {
+const Part = ({ courses }: IProps) => {
   const [open, setOpen] = useState(false)
   const [daysDifference, setDaysDifference] = useState(0)
 
@@ -32,15 +30,13 @@ const Part = ({
   const percentProgress = round(
     (courses?.learning_progress?.total_course_sections_completed /
       courses?.learning_progress?.total_course_sections) *
-    100,
+      100,
     2,
   )
 
   return (
     <>
-      <div className={`name-part text-2xl font-semibold`}>
-        {'name'}
-      </div>
+      <div className={`name-part text-2xl font-semibold`}>{'name'}</div>
       <div className="des mt-6 mb-15">
         <p className={`text-base`}>{'description'}</p>
       </div>
@@ -71,7 +67,13 @@ const Part = ({
         </div>
         <div className="action flex items-center jusity-end relative">
           <ButtonSecondary
-            title={percentProgress === 0 ? 'Begin' : percentProgress === 100 ? 'Review' : 'Resume'}
+            title={
+              percentProgress === 0
+                ? 'Begin'
+                : percentProgress === 100
+                ? 'Review'
+                : 'Resume'
+            }
             full={false}
             size={'small'}
             className="hover:bg-primary hover:text-white ml-auto"

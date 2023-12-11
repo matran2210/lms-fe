@@ -272,7 +272,7 @@ export const FlagIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g id="report 1" clip-path="url(#clip0_4_6066)">
+      <g id="report 1" clipPath="url(#clip0_4_6066)">
         <g id="Group">
           <path
             id="Vector"
@@ -388,6 +388,54 @@ export const CalculatorIcon = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  )
+}
+export const ArrowUpIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="10"
+      height="7"
+      viewBox="0 0 10 7"
+      fill="none"
+    >
+      <path
+        d="M0.667317 5.33343L5.00065 1.6001L9.33398 5.33343"
+        stroke="#141414"
+        strokeLinecap="square"
+      />
+    </svg>
+  )
+}
+export const ExhibitsIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <g clipPath="url(#clip0_4_9790)">
+        <path
+          d="M11.4294 0.571533H1.71512C1.08394 0.571533 0.572266 1.08321 0.572266 1.71439V11.4287C0.572266 12.0599 1.08394 12.5715 1.71512 12.5715H11.4294C12.0606 12.5715 12.5723 12.0599 12.5723 11.4287V1.71439C12.5723 1.08321 12.0606 0.571533 11.4294 0.571533Z"
+          stroke="#141414"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M15.4286 4V14.2857C15.4286 14.5888 15.3081 14.8795 15.0938 15.0938C14.8795 15.3081 14.5888 15.4286 14.2857 15.4286H4"
+          stroke="#141414"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_4_9790">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
     </svg>
   )
 }
