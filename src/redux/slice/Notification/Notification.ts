@@ -22,6 +22,7 @@ export interface NotificationState {
   created_from: any
   files: any
   total_records: number
+  notification_status: boolean
 }
 
 const initialState: NotificationState = {
@@ -47,6 +48,7 @@ const initialState: NotificationState = {
   created_from: null,
   files: [],
   total_records: 0,
+  notification_status: false,
 }
 
 export const getCountUnRead = createAsyncThunk(
@@ -124,6 +126,21 @@ export const markAllNotifications = createAsyncThunk(
   },
 )
 
+export const getDeviceToken = createAsyncThunk(
+  'notificationReducer/getDeviceToken',
+  async (thunkAPI) => {
+    try {
+      const res = await NotificationApi.createDevice()
+      if (!res?.data) {
+        return
+      }
+      return { ...res.data }
+    } catch (error: any) {
+      return false
+    }
+  },
+)
+
 export const notificationSlice = createSlice({
   name: 'notificationReducer',
   initialState,
@@ -152,6 +169,9 @@ export const notificationSlice = createSlice({
         return { ...e, notification_user_instances: obj }
       })
       state.list_notifications = [...new_list_notifications]
+    },
+    showNotification: (state) => {
+      state.notification_status = true
     },
   },
 
@@ -224,10 +244,20 @@ export const notificationSlice = createSlice({
     builder.addCase(markAllNotifications.rejected, (state) => {
       state.loading = false
     })
+    builder.addCase(getDeviceToken.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(getDeviceToken.fulfilled, (state, action) => {
+      state.loading = false
+    })
+    builder.addCase(getDeviceToken.rejected, (state) => {
+      state.loading = false
+    })
   },
 })
 
-export const { updateStatus, updateStatusAll } = notificationSlice.actions
+export const { updateStatus, updateStatusAll, showNotification } =
+  notificationSlice.actions
 export const notificationReducer = (state: RootState) =>
   state.notificationReducer
 
