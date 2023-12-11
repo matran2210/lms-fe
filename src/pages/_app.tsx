@@ -74,7 +74,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {getStatusNoti ? <div>test ok </div> : <div>not ok</div>}
         <Toaster />
         <SappConfirmDialogContainer />
         <RouteGuard>{content}</RouteGuard>
