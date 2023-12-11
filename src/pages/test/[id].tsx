@@ -1,4 +1,5 @@
 import {
+  CalculatorIcon,
   CloseIcon,
   FlagIcon,
   HelpIcon,
@@ -10,6 +11,7 @@ import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGro
 import TabSlide from '@components/base/tabSlide/TabSlide'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
+import Calculator from '@components/calculator'
 import { formatTime } from '@components/common/timer'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
@@ -97,6 +99,8 @@ const TestDetail = ({ questions }: any) => {
   const { control: controlFilter } = useForm()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+  const [openCalculator, setOpenCalculator] = useState<boolean>(false)
+
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [tabs, setTabs] = useState<any>([])
 
@@ -106,6 +110,9 @@ const TestDetail = ({ questions }: any) => {
       arr.push(uniqueId('scratchPad'))
       return arr
     })
+  }
+  const handleOpenCalculator = () => {
+    setOpenCalculator(true)
   }
   const handleFlagQuestion = (tab: any) => {
     setTabs((prev: any) => {
@@ -382,7 +389,9 @@ const TestDetail = ({ questions }: any) => {
             key={e}
             onClick={() => setOnFocusingPad(e)}
             zIndex={
-              onFocusingPad === e ? openScratchPad.length + 10 : index + 10
+              onFocusingPad === e
+                ? openScratchPad.length + 10 + Number(openCalculator) * 100
+                : index + 10
             }
           >
             <div className="absolute h-full w-full  top-0 left-0 border">
@@ -405,7 +414,31 @@ const TestDetail = ({ questions }: any) => {
           </MovableWindow>
         )
       })}
-
+      {openCalculator && (
+        <MovableWindow
+          position={{
+            width: '400px',
+            height: '300px',
+            top: 'calc(50% - 150px)',
+            left: 'calc(50% - 200px)',
+          }}
+          // key={e}
+          // onClick={() => setOnFocusingPad(e)}
+          zIndex={100}
+        >
+          <div className="absolute h-full w-full  top-0 left-0 border">
+            <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+              <div>Calculator</div>
+              <button onClick={() => setOpenCalculator(false)}>
+                <CloseIcon />
+              </button>
+            </div>
+            {/* <div className='flex flex-'> */}
+            <Calculator />
+            {/* </div> */}
+          </div>
+        </MovableWindow>
+      )}
       {/* </div> */}
       <div className=" bg-gray-3 flex items-center flex-1 justify-between">
         <div className="flex items-center h-full">
@@ -426,6 +459,14 @@ const TestDetail = ({ questions }: any) => {
               <ScratchPadIcon />
               <div className="font-normal text-sm pe-6 border-r">
                 Scratch Pad
+              </div>
+            </div>
+          </button>
+          <button className="h-full" onClick={handleOpenCalculator}>
+            <div className="flex items-center gap-3 ps-6 ">
+              <CalculatorIcon />
+              <div className="font-normal text-sm pe-6 border-r">
+                Calculator
               </div>
             </div>
           </button>

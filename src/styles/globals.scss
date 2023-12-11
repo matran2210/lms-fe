@@ -224,3 +224,22 @@ body * ::-webkit-scrollbar-thumb:hover {
   resize: none;
   border: none;
 }
+.result {
+  height: 60px;
+  width: 100%;
+  @apply bg-gray-2;
+}
+
+.result p {
+  font-size: 40px;
+  margin: 5px;
+}
+
+.calculator-body {
+  @apply w-full h-[calc(100%-40px)] flex flex-col;
+}
+
+.button {
+  display: block;
+  @apply flex-1 bg-gray-2;
+}
