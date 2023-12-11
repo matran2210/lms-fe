@@ -14,9 +14,7 @@ const BreadcrumbFilter = ({ name }: { name: string }) => {
           </Link>
         </li>
         <li className="breadcrumbs__item current-course text-bw-1 ml-1">
-          <span>
-            / {name}
-          </span>
+          <span>/ {name}</span>
         </li>
       </ol>
     </nav>

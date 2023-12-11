@@ -18,22 +18,22 @@ const Filter = ({ courses, totalResult }: any) => {
   return (
     <div className="filter flex">
       <div className="pr-6 border-r border-gray-1">
-        {
-          totalResult ? (
-            <div className='font-normal text-sm text-gray-1'>{totalResult} result</div>
-          ) : (
-            <HookFormSelect
-              options={courses?.total?.map((category: any) => ({
-                label: category?.categoryName,
-                value: category?.categoryName,
-              }))}
-              className={'text-medium-sm font-normal text-gray-1 h-[17px]'}
-              placeholder="Status"
-              onChange={handleChange}
-              defaultValue={selectedOption} // Set the default value based on the state
-            />
-          )
-        }
+        {totalResult ? (
+          <div className="font-normal text-sm text-gray-1">
+            {totalResult} result
+          </div>
+        ) : (
+          <HookFormSelect
+            options={courses?.total?.map((category: any) => ({
+              label: category?.categoryName,
+              value: category?.categoryName,
+            }))}
+            className={'text-medium-sm font-normal text-gray-1 h-[17px]'}
+            placeholder="Status"
+            onChange={handleChange}
+            defaultValue={selectedOption} // Set the default value based on the state
+          />
+        )}
       </div>
       <div className="filter pl-6 flex self-center">
         <HookFormSelect

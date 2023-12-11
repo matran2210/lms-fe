@@ -1,6 +1,8 @@
 import {
+  ArrowUpIcon,
   CalculatorIcon,
   CloseIcon,
+  ExhibitsIcon,
   FlagIcon,
   HelpIcon,
   HighlightIcon,
@@ -8,6 +10,8 @@ import {
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
+import useClickOutside from '@components/base/clickoutside/HookClick'
+import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
@@ -24,7 +28,7 @@ import { LAYOUT } from '@utils/constants'
 import axios from 'axios'
 import { parse } from 'cookie'
 import { uniqueId } from 'lodash'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES } from 'src/constants'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
@@ -97,22 +101,47 @@ const TestDetail = ({ questions }: any) => {
   const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control, handleSubmit, getValues, setValue } = useForm()
   const { control: controlFilter } = useForm()
+  const {
+    control: controlExhibits,
+    getValues: getValuesExhibits,
+    setValue: setValueExhibits,
+    watch,
+  } = useForm()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-  const [openCalculator, setOpenCalculator] = useState<boolean>(false)
-
+  const [openExhibits, setOpenExhibits] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [tabs, setTabs] = useState<any>([])
+  const [showListExhibits, setShowListExhibits] = useState(false)
+  const [showListRequirement, setShowLisRequirement] = useState(false)
+  const dropUpRef = useRef(null)
+  const dropUpRequire = useRef(null)
+  useClickOutside({
+    ref: dropUpRef,
+    callback: () => setShowListExhibits(false),
+  })
+  useClickOutside({
+    ref: dropUpRequire,
+    callback: () => setShowLisRequirement(false),
+  })
 
-  const handleOpenScratchPad = () => {
+  const handleOpenScratchPad = (type: string) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      arr.push(uniqueId('scratchPad'))
+      if (type === 'scratch_pad') {
+        arr.push({ id: uniqueId('scratchPad'), type: type })
+      } else if (type === 'calculator') {
+        for (let e of arr) {
+          if (e.type === 'calculator') {
+            return arr
+          }
+        }
+        // if (!arr.includes('calculator')) {
+        arr.push({ id: 'calculator', type: 'calculator' })
+        // }
+      }
       return arr
     })
-  }
-  const handleOpenCalculator = () => {
-    setOpenCalculator(true)
   }
   const handleFlagQuestion = (tab: any) => {
     setTabs((prev: any) => {
@@ -125,10 +154,16 @@ const TestDetail = ({ questions }: any) => {
       return newData
     })
   }
-  const handleCloseScratchPad = (pad: string) => {
+  const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      const newArr = arr.filter((e) => e !== pad)
+      const newArr = arr.filter((e) => e.id !== pad.id)
+      if (pad.type === 'exhibits') {
+        setValueExhibits(
+          'exhibits',
+          getValuesExhibits('exhibits').filter((e: string) => e !== pad.id),
+        )
+      }
       return newArr
     })
   }
@@ -253,7 +288,30 @@ const TestDetail = ({ questions }: any) => {
       getDetail()
     }
   }, [currentPage])
-
+  const exhibits = useMemo(() => {
+    let exhibitsOptions = []
+    for (let e in currentTabContent?.data?.exhibits) {
+      exhibitsOptions.push({
+        label: `Exhibits ${e + 1}`,
+        value: currentTabContent?.data?.exhibits[e].id,
+      })
+    }
+    return exhibitsOptions
+  }, [currentTabContent])
+  useEffect(() => {
+    if (watch('exhibits')) {
+      setOpenScratchPad((prev) => {
+        let arr = [...prev]
+        const newArr = arr.filter((e) => {
+          return e.type !== 'exhibits'
+        })
+        for (let e of watch('exhibits')) {
+          newArr.push({ id: e, type: 'exhibits' })
+        }
+        return newArr
+      })
+    }
+  }, [watch('exhibits')])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
@@ -380,67 +438,111 @@ const TestDetail = ({ questions }: any) => {
         </div>
       )}
       {openScratchPad.map((e, index: number) => {
-        return (
-          <MovableWindow
-            position={{
-              width: '400px',
-              height: '300px',
-            }}
-            key={e}
-            onClick={() => setOnFocusingPad(e)}
-            zIndex={
-              onFocusingPad === e
-                ? openScratchPad.length + 10 + Number(openCalculator) * 100
-                : index + 10
-            }
-          >
-            <div className="absolute h-full w-full  top-0 left-0 border">
-              <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
-                <div>Scratch Pad</div>
-                {/* <CloseIcon */}
-                <button onClick={() => handleCloseScratchPad(e)}>
-                  <CloseIcon />
-                </button>
+        if (e.type === 'calculator') {
+          return (
+            <MovableWindow
+              position={{
+                width: '400px',
+                height: '300px',
+                top: 'calc(50% - 150px)',
+                left: 'calc(50% - 200px)',
+              }}
+              key={e.id}
+              onClick={() => setOnFocusingPad(e.id)}
+              zIndex={
+                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+              }
+            >
+              <div className="absolute h-full w-full  top-0 left-0 border">
+                <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+                  <div>Calculator</div>
+                  <button onClick={() => handleCloseScratchPad(e)}>
+                    <CloseIcon />
+                  </button>
+                </div>
+                {/* <div className='flex flex-'> */}
+                <Calculator />
+                {/* </div> */}
               </div>
-              {/* <div className='flex flex-'> */}
-              <HookFormTextArea
-                placeholder="Take a note..."
-                control={control}
-                name={e}
-                className="w-full h-[calc(100%-40px)] sapp-text-area"
-              />
-              {/* </div> */}
-            </div>
-          </MovableWindow>
-        )
+            </MovableWindow>
+          )
+        } else if (e.type === 'scratch_pad') {
+          return (
+            <MovableWindow
+              position={{
+                width: '400px',
+                height: '300px',
+                top: 'calc(50% - 150px)',
+                left: 'calc(50% - 200px)',
+              }}
+              key={e.id}
+              onClick={() => setOnFocusingPad(e.id)}
+              zIndex={
+                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+              }
+            >
+              <div className="absolute h-full w-full  top-0 left-0 border">
+                <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+                  <div>Scratch Pad</div>
+                  {/* <CloseIcon */}
+                  <button onClick={() => handleCloseScratchPad(e)}>
+                    <CloseIcon />
+                  </button>
+                </div>
+                {/* <div className='flex flex-'> */}
+                <HookFormTextArea
+                  placeholder="Take a note..."
+                  control={control}
+                  name={e.id}
+                  className="w-full h-[calc(100%-40px)] sapp-text-area"
+                />
+                {/* </div> */}
+              </div>
+            </MovableWindow>
+          )
+        } else if (e.type === 'exhibits') {
+          const exhibitsDes = currentTabContent?.data?.exhibits?.find(
+            (el: any) => el.id === e.id,
+          )
+          return (
+            <MovableWindow
+              position={{
+                width: '400px',
+                height: '300px',
+                top: 'calc(50% - 150px)',
+                left: 'calc(50% - 200px)',
+              }}
+              key={e.id}
+              onClick={() => setOnFocusingPad(e.id)}
+              zIndex={
+                onFocusingPad === e ? openScratchPad.length + 10 : index + 10
+              }
+            >
+              <div className="absolute h-full w-full  top-0 left-0 border">
+                <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+                  <div>Exhibit</div>
+                  <button onClick={() => handleCloseScratchPad(e)}>
+                    <CloseIcon />
+                  </button>
+                </div>
+                {/* <div className='flex flex-'> */}
+                {/* <div
+                  className="bg-white h-[calc(100%-40px)] w-full overflow-auto"
+                  id={'preview-question'}
+                  dangerouslySetInnerHTML={{ __html: exhibitsDes?.description }}
+                ></div>{' '} */}
+                {/* </div> */}
+                <EditorReader
+                  text_editor_content={exhibitsDes?.description}
+                  className="bg-white h-[calc(100%-40px)] w-full overflow-auto"
+                />
+              </div>
+            </MovableWindow>
+          )
+        }
       })}
-      {openCalculator && (
-        <MovableWindow
-          position={{
-            width: '400px',
-            height: '300px',
-            top: 'calc(50% - 150px)',
-            left: 'calc(50% - 200px)',
-          }}
-          // key={e}
-          // onClick={() => setOnFocusingPad(e)}
-          zIndex={100}
-        >
-          <div className="absolute h-full w-full  top-0 left-0 border">
-            <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
-              <div>Calculator</div>
-              <button onClick={() => setOpenCalculator(false)}>
-                <CloseIcon />
-              </button>
-            </div>
-            {/* <div className='flex flex-'> */}
-            <Calculator />
-            {/* </div> */}
-          </div>
-        </MovableWindow>
-      )}
       {/* </div> */}
-      <div className=" bg-gray-3 flex items-center flex-1 justify-between">
+      <div className=" bg-gray-3 flex items-center flex-1 justify-between shadow-question-footer">
         <div className="flex items-center h-full">
           <button className="h-full">
             <div className="flex items-center gap-3 ps-6 ">
@@ -454,7 +556,10 @@ const TestDetail = ({ questions }: any) => {
               <div className="font-normal text-sm pe-6 border-r">Highlight</div>
             </div>
           </button>
-          <button className="h-full" onClick={handleOpenScratchPad}>
+          <button
+            className="h-full"
+            onClick={() => handleOpenScratchPad('scratch_pad')}
+          >
             <div className="flex items-center gap-3 ps-6 ">
               <ScratchPadIcon />
               <div className="font-normal text-sm pe-6 border-r">
@@ -462,7 +567,10 @@ const TestDetail = ({ questions }: any) => {
               </div>
             </div>
           </button>
-          <button className="h-full" onClick={handleOpenCalculator}>
+          <button
+            className="h-full"
+            onClick={() => handleOpenScratchPad('calculator')}
+          >
             <div className="flex items-center gap-3 ps-6 ">
               <CalculatorIcon />
               <div className="font-normal text-sm pe-6 border-r">
@@ -470,6 +578,65 @@ const TestDetail = ({ questions }: any) => {
               </div>
             </div>
           </button>
+          {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+            <button className="h-full relative" ref={dropUpRef}>
+              <div
+                className="flex items-center gap-3 ps-6 "
+                onClick={() => {
+                  setShowListExhibits(!showListExhibits)
+                }}
+              >
+                <ExhibitsIcon />
+                <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
+                  {`Exhibits (${currentTabContent?.data?.exhibits?.length})`}
+                  <ArrowUpIcon />
+                </div>
+              </div>
+              {showListExhibits && (
+                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits p-4 justify-center">
+                  <HookFormCheckBoxGroup
+                    control={controlExhibits}
+                    name="exhibits"
+                    options={exhibits}
+                    multiple
+                  />
+                </div>
+              )}
+            </button>
+          )}
+          {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+            <button className="h-full relative" ref={dropUpRequire}>
+              <div
+                className="flex items-center gap-3 ps-6 "
+                onClick={() => {
+                  setShowLisRequirement(!showListRequirement)
+                }}
+              >
+                <ExhibitsIcon />
+                <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
+                  {`Requirement (${currentTabContent?.data?.requirements?.length})`}
+                  <ArrowUpIcon />
+                </div>
+              </div>
+              {showListRequirement && (
+                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits  justify-center">
+                  {currentTabContent?.data?.requirements?.map(
+                    (e: any, index: number) => {
+                      return (
+                        <button
+                          key={e.id}
+                          className="p-3"
+                          onClick={() => {
+                            setEssayData({ req: e, index: index })
+                          }}
+                        >{`Requirement (${index + 1})`}</button>
+                      )
+                    },
+                  )}
+                </div>
+              )}
+            </button>
+          )}
         </div>
         <div className="flex items-center h-full gap-3 pe-6">
           <button

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { IPreviewProp } from './OneChoiceQuestion'
+import EditorReader from '@components/base/editor/EditorReader'
 
 interface IProps {
   data: any
@@ -14,11 +15,11 @@ const AddWordPreview = ({ data, action }: IProps) => {
     element.outerHTML = `<span> </span><input type="text" class="sapp-input-preview" id="${element.id}" stringHTML="true"/><span> </span>`
   })
   return (
-    <div
+    <EditorReader
       className="sapp-questions"
-      dangerouslySetInnerHTML={{
-        __html: doc.documentElement.querySelector('body')?.innerHTML || '',
-      }}
+      text_editor_content={
+        doc.documentElement.querySelector('body')?.innerHTML || ''
+      }
     />
   )
 }

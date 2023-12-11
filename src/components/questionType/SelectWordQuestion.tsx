@@ -1,3 +1,4 @@
+import EditorReader from '@components/base/editor/EditorReader'
 import React from 'react'
 interface IProps {
   data: any
@@ -37,12 +38,12 @@ const SelectWord = ({ data, action }: IProps) => {
 
   return (
     <div className="body-modal-blue">
-      <div
+      <EditorReader
         className="questions"
         // style={{borderBottom: '1px solid  white'}}
-        dangerouslySetInnerHTML={{
-          __html: doc.documentElement.querySelector('body')?.innerHTML || '',
-        }}
+        text_editor_content={
+          doc.documentElement.querySelector('body')?.innerHTML || ''
+        }
       />
     </div>
   )

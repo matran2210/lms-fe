@@ -3,6 +3,7 @@ import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 import HookFormEditor from '@components/base/editor/HookFormEditor'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import dynamic from 'next/dynamic'
+import EditorReader from '@components/base/editor/EditorReader'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -25,18 +26,18 @@ const EssayQuestionPreview = ({
     return (
       <React.Fragment>
         <div style={{ background: 'white' }}>
-          <div
+          <EditorReader
             className="sapp-questions"
-            dangerouslySetInnerHTML={{ __html: question_content }}
-          ></div>
+            text_editor_content={question_content}
+          />
           <div>
             <div className="sapp-questions-essay">{`Requirement : ${data.name}`}</div>
-            <div
+            <EditorReader
               className="editor-wrap"
               // className="questions"
               // style={{ borderBottom: "4px solid #F2F2F2" }}
-              dangerouslySetInnerHTML={{ __html: data.description }}
-            ></div>
+              text_editor_content={data.description}
+            />
           </div>
           {question_data.display_type === DISPLAY_TYPE.VERTICAL && (
             <div className="sapp-seprate-line-preview"></div>

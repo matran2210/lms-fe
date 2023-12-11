@@ -21,15 +21,14 @@ const CourseDetail = ({ courses }: { courses: ICourseDetail }) => {
       </div>
       <div className="main max-w-xxl my-0 mx-auto">
         <div className="flex justify-between py-6">
-          <BreadcrumbFilter name={courses?.name}/>
-          <Filter totalResult={courses?.course_sections_with_progress?.length} />
+          <BreadcrumbFilter name={courses?.name} />
+          <Filter
+            totalResult={courses?.course_sections_with_progress?.length}
+          />
         </div>
       </div>
       <div className="heading bg-white max-w-xxl my-0 mx-auto flex">
-        <Heading
-          greeting="Welcome to"
-          title={courses?.name}
-        />
+        <Heading greeting="Welcome to" title={courses?.name} />
       </div>
       <div className="pt-6 max-w-xxl my-0 mx-auto">
         <CourseParts courses={courses?.course_sections_with_progress} />

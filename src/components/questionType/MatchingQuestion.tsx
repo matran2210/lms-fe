@@ -1,3 +1,4 @@
+import EditorReader from '@components/base/editor/EditorReader'
 import React, {
   ForwardedRef,
   forwardRef,
@@ -61,9 +62,9 @@ const MatchingQuestion = forwardRef(
     }
     return (
       <div key={key}>
-        <div
+        <EditorReader
           className="sapp-questions"
-          dangerouslySetInnerHTML={{ __html: data?.question_content }}
+          text_editor_content={data?.question_content}
         />
         <div className="flex flex-col gap-y-5">
           {data?.question_matchings.map((e: any) => {
