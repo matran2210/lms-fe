@@ -3,13 +3,12 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/messaging'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyD6V1jz40e43S3XXsyAB6yRggWF2MLfRZE',
-  authDomain: 'test-firebase-nextjs-757d9.firebaseapp.com',
-  projectId: 'test-firebase-nextjs-757d9',
-  storageBucket: 'test-firebase-nextjs-757d9.appspot.com',
-  messagingSenderId: '1031037155239',
-  appId: '1:1031037155239:web:3563522d906214e37fe882',
-  measurementId: 'G-WZYVQG9D24',
+  apiKey: 'AIzaSyB12OZbgQA8VpCSAYrgytTJkUexafwiN74',
+  authDomain: 'sapp-develop.firebaseapp.com',
+  projectId: 'sapp-develop',
+  storageBucket: 'sapp-develop.appspot.com',
+  messagingSenderId: '579391570124',
+  appId: '1:579391570124:web:ed5e7c72474edf434bc269',
 }
 
 if (!firebase.apps.length) {
@@ -32,7 +31,7 @@ export const getMessagingToken = async () => {
   try {
     currentToken = await messaging.getToken({
       vapidKey:
-        'BFOWmcR7ehImSiN5dhRBNoaa_WF4kaQf6H8SZInatY0PqBUE4D0KJ5rk0rcTT-j3A4E5vjF1ZxqtQ515Oyl0gjc',
+        'BANlYjHJCUf-jXUtrRR8zXl2QytADlfN9vVUP_N_3dd3nGgH7tcIAgOcTGHRr8pyCNujwHdpVZ7DSg5SsViq5u0',
     })
   } catch (error) {}
   return currentToken
