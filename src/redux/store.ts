@@ -4,6 +4,7 @@ import loginReducer from './slice/Login/Login'
 import userReducer from './slice/User/User'
 import confirmDialogReducer from './slice/ConfirmDialog/ConfirmDialogSlice'
 import courseActivityReducer from './slice/Course/MyCourse/Activity/Activity'
+import notificationReducer from './slice/Notification/Notification'
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     userReducer,
     confirmDialogReducer,
     courseActivityReducer,
+    notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

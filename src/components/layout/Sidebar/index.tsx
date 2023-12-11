@@ -4,7 +4,6 @@ import ExpandIcon from '../ExpandIcon'
 import { useEffect } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
 import { getMe } from 'src/redux/slice/User/User'
-import MenuItem from '../MenuItem'
 
 type SidebarProps = {
   isOpened: boolean
