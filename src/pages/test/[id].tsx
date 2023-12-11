@@ -515,7 +515,7 @@ const TestDetail = ({ questions }: any) => {
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
-                onFocusingPad === e ? openScratchPad.length + 10 : index + 10
+                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
