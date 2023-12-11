@@ -84,7 +84,7 @@ const HookFormRadioGroup = ({
                 return (
                   <div
                     key={index}
-                    className={`${corrects && 'pointer-events-none'}`}
+                    className={`${!!corrects && 'pointer-events-none'}`}
                   >
                     <div className="flex flex-row">
                       <label

@@ -31,7 +31,7 @@ const ActivityPage = ({ activity }: Props) => {
     if (activity) {
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion(activity?.data?.id))
+        dispatch(getDiscussion(activity?.id))
       } catch (error) {}
     }
   }, [])
@@ -115,7 +115,15 @@ const ActivityPage = ({ activity }: Props) => {
                   if (e.type === 'QUIZ') {
                     return (
                       <div className={marginBottom} key={e.id}>
-                        <QuizDocument></QuizDocument>
+                        <QuizDocument
+                          questions={[
+                            ...(e.quiz?.multiple_choice_questions || []),
+                            ...(e.quiz?.constructed_questions || []),
+                          ]}
+                          activityId={activity.id}
+                          tabId={selector.currentTabId || ''}
+                          quizId={e.id}
+                        ></QuizDocument>
                       </div>
                     )
                   }
@@ -131,7 +139,12 @@ const ActivityPage = ({ activity }: Props) => {
                   if (e.type === 'VIDEO') {
                     return (
                       <div className={marginBottom} key={e.id}>
-                        <VideoDocument videos={e.videos}></VideoDocument>
+                        <VideoDocument
+                          videos={e.videos}
+                          activityId={activity.id}
+                          tabId={selector.currentTabId || ''}
+                          quizId={e.id}
+                        ></VideoDocument>
                       </div>
                     )
                   }
@@ -155,7 +168,7 @@ const ActivityPage = ({ activity }: Props) => {
           </div>
           <div className="w-full sm:w-auto">
             <div className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right">
-              Previous Activity
+              Next Activity
             </div>
             <div className="text-medium-sm text-gray-1 flex justify-end">
               <span className="mr-2">

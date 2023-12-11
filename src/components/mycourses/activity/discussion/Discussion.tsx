@@ -236,7 +236,7 @@ const Discussion = (props: Props) => {
                 ></HookFormTextField>
                 <div
                   onClick={openCamera}
-                  className="absolute top-1/2 right-3 -mt-1 -translate-y-1/2 cursor-pointer"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
                 >
                   <SappIcon icon="camera"></SappIcon>
                 </div>
@@ -277,7 +277,7 @@ const Discussion = (props: Props) => {
           <button type="submit" className="hidden"></button>
           <div
             onClick={openCamera}
-            className="absolute top-1/2 right-3 -mt-1 -translate-y-1/2 cursor-pointer"
+            className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
           >
             <SappIcon icon="camera"></SappIcon>
           </div>

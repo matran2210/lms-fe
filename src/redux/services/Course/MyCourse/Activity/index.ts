@@ -11,7 +11,18 @@ import { IActivity, ITab } from 'src/type/course/my-course/Activity'
 import { apiURL, httpService } from '../../../httpService'
 import url from './url'
 
+/**
+ * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.
+ * @namespace CourseActivityApi
+ */
 const CourseActivityApi = {
+  /**
+   * @description Lấy thông tin hoạt động bằng ID.
+   * @async
+   * @param {string} id - ID của hoạt động.
+   * @param {string} accessToken - Token truy cập của người dùng.
+   * @returns {Promise<IActivity>} - Dữ liệu hoạt động.
+   */
   getActivityById: async (
     id: string,
     accessToken: string,
@@ -50,12 +61,26 @@ const CourseActivityApi = {
     }
     return responseActivity.data.data
   },
+
+  /**
+   * @description Lấy thông tin tab hoạt động theo ID.
+   * @async
+   * @param {string} id - ID của tab.
+   * @returns {Promise<IResponse<ITab>>} - Dữ liệu tab.
+   */
   getCourseActivityTapById: async (id: string): Promise<IResponse<ITab>> => {
     const response = await httpService.GET<any, any>({
       uri: `course-sections/tab/${id}`,
     })
     return response
   },
+
+  /**
+   * @description Lấy danh sách câu hỏi của một bài kiểm tra.
+   * @async
+   * @param {string} id - ID của bài kiểm tra.
+   * @returns {Promise<IResponse<{ questions: IQuestion[] }>>} - Dữ liệu câu hỏi.
+   */
   getQuestions: async (
     id: string,
   ): Promise<IResponse<{ questions: IQuestion[] }>> => {
@@ -64,12 +89,41 @@ const CourseActivityApi = {
     })
     return response
   },
+
+  /**
+   * @description Lấy thông tin câu hỏi theo ID.
+   * @async
+   * @param {string[]} question_ids - Mảng chứa các ID của câu hỏi.
+   * @returns {Promise<IResponse<IQuestion[]>>} - Dữ liệu câu hỏi.
+   */
+  getQuestionsById: async (
+    question_ids: string[],
+  ): Promise<IResponse<IQuestion[]>> => {
+    const response = await httpService.GET<any, any>({
+      uri: `question?question_ids=${question_ids?.join(',')}`,
+    })
+    return response
+  },
+
+  /**
+   * @description Lấy kết quả câu hỏi theo ID.
+   * @async
+   * @param {string} id - ID của câu hỏi.
+   * @returns {Promise<IResponse<IQuestion[]>>} - Dữ liệu kết quả câu hỏi.
+   */
   getQuestionResults: async (id: string): Promise<IResponse<IQuestion[]>> => {
     const response = await httpService.GET<any, any>({
       uri: `question/results?question_ids=${id}`,
     })
     return response
   },
+
+  /**
+   * @description Lấy thông tin cuộc thảo luận theo ID.
+   * @async
+   * @param {string} id - ID của cuộc thảo luận.
+   * @returns {Promise<IResponseMeta<IDiscussion, 'discussions'>>} - Dữ liệu cuộc thảo luận.
+   */
   getDiscussion: async (
     id: string,
   ): Promise<IResponseMeta<IDiscussion, 'discussions'>> => {
@@ -86,6 +140,13 @@ const CourseActivityApi = {
     })
     return response
   },
+
+  /**
+   * @description Tạo mới một cuộc thảo luận.
+   * @async
+   * @param {ICreateDiscussionRequest} request - Dữ liệu yêu cầu tạo cuộc thảo luận.
+   * @returns {Promise<IResponse<IDiscussion>>} - Dữ liệu cuộc thảo luận đã tạo.
+   */
   createDiscussion: async (
     request: ICreateDiscussionRequest,
   ): Promise<IResponse<IDiscussion>> => {
@@ -94,11 +155,18 @@ const CourseActivityApi = {
       ICreateDiscussionRequest,
       IResponse<IDiscussion>
     >({
-      uri, // Add a comma here
-      request, // Assuming data is the request payload
+      uri,
+      request,
     })
     return response
   },
+
+  /**
+   * @description Phản ứng vào một cuộc thảo luận.
+   * @async
+   * @param {ICreateDiscussionResReact} request - Dữ liệu yêu cầu phản ứng.
+   * @returns {Promise<IResponse<ICreateDiscussionRepReact>>} - Dữ liệu phản ứng.
+   */
   reactDiscussion: async (
     request: ICreateDiscussionResReact,
   ): Promise<IResponse<ICreateDiscussionRepReact>> => {
@@ -107,8 +175,8 @@ const CourseActivityApi = {
       ICreateDiscussionResReact,
       IResponse<ICreateDiscussionRepReact>
     >({
-      uri, // Add a comma here
-      request, // Assuming data is the request payload
+      uri,
+      request,
     })
     return response
   },
