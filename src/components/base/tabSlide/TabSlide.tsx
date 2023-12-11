@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import Pagination from '../pagination/Pagination'
 import PageLink from '../pagination/PageLink'
 import ArrowIcon from '../pagination/ArrowIcon'
@@ -18,7 +18,21 @@ const TabSlide = ({
   currentTab,
   handleChangeTab,
 }: IProps) => {
+  const elementRef = useRef(null) as any
+
   const [activeShowAll, setActiveShowAll] = useState<boolean>(true)
+  useEffect(() => {
+    if (elementRef?.current) {
+      elementRef.current.scrollTo(
+        elementRef?.current.offsetWidth *
+          Math.floor(
+            (49 * data.findIndex((e: any) => e.id === currentTab)) /
+              elementRef?.current.offsetWidth,
+          ),
+        0,
+      )
+    }
+  }, [currentTab, elementRef?.current])
   return (
     <ul
       className={`pagination flex items-center flex-wrap w-full gap-3`}
@@ -56,7 +70,7 @@ const TabSlide = ({
               ? 'flex gap-2 overflow-auto w-full'
               : 'flex items-center gap-2 flex-wrap'
           }`}
-          //   ref={elementRef}
+          ref={elementRef}
         >
           {data.map((pageNum: any, idx: any) => (
             <PageLink
