@@ -11,7 +11,7 @@ const Filter = ({ courses, totalResult }: any) => {
   const handleChange = (selected: any) => {
     setSelectedOption(selected)
     router.push(
-      `/courses?name=${router.query.name ?? ''}&type=${selected.label}`,
+      `/courses?name=${router.query.name ?? ''}&type=${selected.label ?? ''}`,
     )
   }
 

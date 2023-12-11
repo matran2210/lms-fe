@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import TestModal from 'src/pages/courses/test'
-import { differenceInDays, parseISO } from 'date-fns'
 import { round } from 'lodash'
+import { useRouter } from 'next/router'
 
 interface IProps {
   courses: any
@@ -11,21 +11,7 @@ interface IProps {
 
 const Part = ({ courses }: IProps) => {
   const [open, setOpen] = useState(false)
-  const [daysDifference, setDaysDifference] = useState(0)
-
-  useEffect(() => {
-    // Current date
-    const currentDate = new Date()
-
-    // Parse the specific date string to a Date object
-    const parsedSpecificDate = parseISO(courses?.finished_at as any)
-
-    // Calculate the difference in days
-    const difference = differenceInDays(parsedSpecificDate, currentDate) as any
-
-    // Update state with the difference
-    setDaysDifference(difference)
-  }, [])
+  const router = useRouter()
 
   const percentProgress = round(
     (courses?.learning_progress?.total_course_sections_completed /
@@ -34,8 +20,12 @@ const Part = ({ courses }: IProps) => {
     2,
   )
 
+  const onClickPart = (id: string) => {
+    router.push(`/courses/${router.query.courseId}/section/${id}`)
+  }
+
   return (
-    <>
+    <div onClick={() => onClickPart(courses?.id)} className='cursor-pointer'>
       <div className={`name-part text-2xl font-semibold`}>{'name'}</div>
       <div className="des mt-6 mb-15">
         <p className={`text-base`}>{'description'}</p>
@@ -84,7 +74,7 @@ const Part = ({ courses }: IProps) => {
       {/* Solution test modal */}
       {/* <SolutionModal open={open} setOpen={setOpen} /> */}
       <TestModal open={open} setOpen={setOpen} title={''} />
-    </>
+    </div>
   )
 }
 
