@@ -1,31 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
-import Link from 'next/link'
 
 interface IProps {
-  name: string
-  path: string
   timeAllow: string
   attempType: string
-  buttonText: string
-  pass: boolean
 }
 
 const PartFailed = ({
-  name,
-  path,
   timeAllow,
   attempType,
-  buttonText,
-  pass,
 }: IProps) => {
   const formattedTime = formatTime(timeAllow)
 
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
-        <Link href={`/courses/my-course/course-detail/${path}`}>{name}</Link>
+        <div>{'name'}</div>
       </div>
       <div className="info mt-6">
         <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
@@ -39,14 +30,12 @@ const PartFailed = ({
       </div>
       <div className="mt-auto">
         <div className="action flex items-center jusity-end relative">
-          {buttonText && (
-            <ButtonSecondary
-              title={buttonText}
-              full={false}
-              size={'small'}
-              className="hover:bg-primary hover:text-white ml-auto"
-            />
-          )}
+          <ButtonSecondary
+            title={'Retake'}
+            full={false}
+            size={'small'}
+            className="hover:bg-primary hover:text-white ml-auto"
+          />
         </div>
       </div>
     </>

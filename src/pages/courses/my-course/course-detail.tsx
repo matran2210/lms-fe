@@ -86,7 +86,7 @@ const CourseDetail = () => {
       </div>
       <div className="main max-w-xxl my-0 mx-auto">
         <div className="flex justify-between py-6">
-          <BreadcrumbFilter />
+          <BreadcrumbFilter name={''} />
           <Filter />
         </div>
       </div>
@@ -97,7 +97,7 @@ const CourseDetail = () => {
         />
       </div>
       <div className="pt-6 max-w-xxl my-0 mx-auto">
-        <CourseParts courseParts={courseParts} />
+        <CourseParts courses={courseParts} />
       </div>
     </>
   )
