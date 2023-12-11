@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
+  confirmQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
@@ -14,6 +15,7 @@ import { debounce } from '@utils/helpers'
 import SappIcon from 'src/common/SappIcon'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent from './QuizComponent'
+import { formatTime, htmlToRaw } from '@components/common/timer'
 
 type Props = {
   videos?: IVideo[]
@@ -37,14 +39,19 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
   )
   const [activeQuestion, setActiveQuestion] = useState<IQuestion>()
 
-  const { control: controlAnswer, handleSubmit, reset, setValue } = useForm()
+  const selector = useAppSelector(courseActivityQuizReducer)
+
+  const {
+    control: controlAnswer,
+    handleSubmit,
+    reset,
+    setValue,
+    getValues,
+  } = useForm()
 
   const streamRef = useRef<StreamPlayerApi>()
 
   const dispatch = useAppDispatch()
-  const selector = useAppSelector(courseActivityQuizReducer)
-  const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
-
   const [results, setResults] = useState<{
     results: IQuestion
     corrects?: { [key: string]: boolean }
@@ -100,6 +107,10 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
     listQuestion: any[]
   }) => {
     try {
+      if (!id) {
+        setActiveQuestion(undefined)
+        setCurrentListQuestion([])
+      }
       try {
         if (listQuestion?.[0]) {
           dispatch(
@@ -107,7 +118,7 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
-              questionId: listQuestion?.[0].id || '',
+              questionId: id,
             }),
           ).then((e: any) => {
             if (e.payload.question) {
@@ -126,19 +137,29 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
   /**
    * Tracks the time of the video and opens the modal for quiz questions if necessary.
    * @param {number} time - The current time of the video.
+   * @param {string} questionId - The ID of the quiz question to find.
    * @returns {boolean} - Returns true if a quiz question is opened; otherwise, false.
    */
-  const handleTrackTime = (time: number) => {
-    if (quizTimed.current?.[time]?.[0]?.id) {
-      handleOpenModalQuestions({
-        id: quizTimed.current?.[time][0].id || '',
-        open: true,
-        listQuestion: quizTimed.current?.[time],
-      })
-      streamRef.current?.pause()
-      setCurrentListQuestion(quizTimed.current?.[time])
-      return true
+  const handleTrackTime = (time: number, questionId?: string) => {
+    const quizAtTime = quizTimed.current?.[time]
+
+    if (quizAtTime && quizAtTime.length > 0) {
+      const foundQuestion = questionId
+        ? quizAtTime.find((question) => question.id === questionId)
+        : quizAtTime[0]
+
+      if (foundQuestion) {
+        handleOpenModalQuestions({
+          id: foundQuestion.id || '',
+          open: true,
+          listQuestion: questionId ? [foundQuestion] : quizAtTime,
+        })
+        streamRef.current?.pause()
+        setCurrentListQuestion(quizAtTime)
+        return true
+      }
     }
+
     setCurrentListQuestion([])
     return false
   }
@@ -205,16 +226,32 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
    * @param {Object} data - Form data.
    */
   const onSubmit = async (data: any) => {
-    // questionRef.current?.onSubmit(data)
+    if (activeQuestion?.id) {
+      dispatch(
+        confirmQuestion({
+          activityId: activityId,
+          tabId: tabId,
+          quizId: quizId,
+          questionId: activeQuestion?.id,
+          myAnswers: getValues(),
+        }),
+      ).then((e: any) => {
+        setActiveQuestion(e.payload.question)
+        // handleClose({
+        //   quizId: activeQuestion?.id,
+        //   listQuestion: currentListQuestion,
+        // })
+      })
+    }
   }
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between text-primary gap-x-10 gap-y-2 flex-wrap">
+      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 flex-wrap">
         {videos?.map((v, i) => {
           return (
             <label
-              className=" flex items-center gap-2 select-none cursor-pointer"
+              className=" flex items-center gap-2 select-none cursor-pointer mb-3"
               key={v.file.id}
             >
               {/* Radio button for video selection */}
@@ -231,10 +268,44 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
             </label>
           )
         })}
-        <div className="flex items-center select-none cursor-pointer">
+        <div className="flex items-center select-none cursor-pointer relative z-[9999] group">
           <span className="mr-2">Timeline</span>
           {/* Icon for course video timeline */}
           <SappIcon icon="course_video_timeline"></SappIcon>
+          <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100$]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
+            <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
+              {[
+                ...(currentVideo?.quiz?.constructed_questions || []),
+                ...(currentVideo?.quiz?.multiple_choice_questions || []),
+              ]
+                .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0))
+                .map((e) => {
+                  return (
+                    <div
+                      key={e.id}
+                      className="gap-3 text-medium-sm flex px-6 py-3 hover:bg-primary-2"
+                      onClick={() => {
+                        handleOpenModalQuestions({
+                          id: '',
+                          open: false,
+                          listQuestion: [],
+                        })
+                        setTimeout(() => {
+                          handleTrackTime(Number(e.time), e.id)
+                        }, 500)
+                      }}
+                    >
+                      <div className="text-state-info flex-none">
+                        {formatTime(e.time)}
+                      </div>
+                      <div className="text-bw-1 line-clamp-2 ">
+                        {htmlToRaw(e.question_content)}
+                      </div>
+                    </div>
+                  )
+                })}
+            </div>
+          </div>
         </div>
       </div>
       <div className="relative">

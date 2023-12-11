@@ -139,7 +139,12 @@ const ActivityPage = ({ activity }: Props) => {
                   if (e.type === 'VIDEO') {
                     return (
                       <div className={marginBottom} key={e.id}>
-                        <VideoDocument videos={e.videos}></VideoDocument>
+                        <VideoDocument
+                          videos={e.videos}
+                          activityId={activity.id}
+                          tabId={selector.currentTabId || ''}
+                          quizId={e.id}
+                        ></VideoDocument>
                       </div>
                     )
                   }
