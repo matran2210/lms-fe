@@ -6,16 +6,6 @@ import axios from 'axios'
 import { apiURL } from 'src/redux/services/httpService'
 import CoursesList from '@components/mycourses/CoursesList'
 
-// Config Tabs
-const tabs = [
-  { label: 'All', path: 'tab1', total: 23, current: true },
-  { label: 'Cfa', path: 'tab2', total: 9, current: false },
-  { label: 'Acca', path: 'tab3', total: 18, current: false },
-  { label: 'Cma', path: 'tab4', total: 8, current: false },
-]
-
-// Config Courses
-
 const MyCourse = ({ courses }: any) => {
   return (
     <>
@@ -55,9 +45,7 @@ export async function getServerSideProps(context: any) {
 
   try {
     const apiResponse = await axios.get(
-      `${apiURL}/courses?page_index=1&page_size=10&name=${
-        query.name ?? ''
-      }&type=${query.type ?? ''}`,
+      `${apiURL}/courses?page_index=1&page_size=100&name=${query.name ?? ''}&type=${query.type ?? ''}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
