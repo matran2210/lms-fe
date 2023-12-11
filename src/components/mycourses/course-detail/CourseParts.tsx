@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Part from './Part'
-import PartFailed from './PartFailed'
+import PartMiddleTest from './PartFailed'
 
 interface CoursesPartsProps {
   courses: any[]
@@ -9,24 +9,24 @@ interface CoursesPartsProps {
 const CourseParts = ({ courses }: CoursesPartsProps) => {
   return (
     <div className="grid grid-cols-3 gap-6">
-      {courses.map((coursePart, index) => (
-        <div
-          key={index}
-          className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
-        >
-          <Part
+      {courses?.map((coursePart, index) => {
+        return (
+          <div
             key={index}
-            name={coursePart.name}
-            des={coursePart.des}
-            progressText={coursePart.progressText}
-            progressTimeStatus={coursePart.progressTimeStatus}
-            progressIconType={coursePart.progressIconType}
-            buttonText={coursePart.buttonText}
-            percentage={coursePart.percentage}
-            pass={true}
-          />
-        </div>
-      ))}
+            className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
+          >
+            {coursePart?.course_section_type === 'MID_TERM_TEST' ? (
+              <PartMiddleTest
+                key={index}
+                timeAllow={coursePart.timeAllow}
+                attempType={coursePart.attempType}
+              />
+            ) : (
+              <Part key={index} courses={coursePart} />
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }

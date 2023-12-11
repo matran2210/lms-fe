@@ -41,7 +41,7 @@ const Course = ({ course }: { course: any }) => {
       <div
         className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] text-bw-1`}
       >
-        <Link href={`/courses/${course.id}`}>
+        <Link href={`/courses/my-course/${course.id}`}>
           {truncateString(course?.name, 40)}
         </Link>
       </div>

@@ -1,40 +1,48 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
-import Link from 'next/link'
-import SolutionModal from '../solution/SolutionModal'
-import SappModal from '@components/base/modal/SappModal'
 import TestModal from 'src/pages/courses/test'
+import { differenceInDays, parseISO } from 'date-fns'
+import { round } from 'lodash'
 
 interface IProps {
-  name: string
-  des: string
-  progressText?: string
-  progressTimeStatus?: string
-  progressIconType?: string
-  percentage?: number
-  buttonText: string
-  pass: boolean
+  courses: any
 }
 
 const Part = ({
-  name,
-  des,
-  progressText,
-  progressTimeStatus,
-  progressIconType,
-  percentage,
-  buttonText,
-  pass,
+  courses
 }: IProps) => {
   const [open, setOpen] = useState(false)
+  const [daysDifference, setDaysDifference] = useState(0)
+
+  useEffect(() => {
+    // Current date
+    const currentDate = new Date()
+
+    // Parse the specific date string to a Date object
+    const parsedSpecificDate = parseISO(courses?.finished_at as any)
+
+    // Calculate the difference in days
+    const difference = differenceInDays(parsedSpecificDate, currentDate) as any
+
+    // Update state with the difference
+    setDaysDifference(difference)
+  }, [])
+
+  const percentProgress = round(
+    (courses?.learning_progress?.total_course_sections_completed /
+      courses?.learning_progress?.total_course_sections) *
+    100,
+    2,
+  )
+
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
-        {name}
+        {'name'}
       </div>
       <div className="des mt-6 mb-15">
-        <p className={`text-base`}>{des}</p>
+        <p className={`text-base`}>{'description'}</p>
       </div>
       <div className="mt-auto">
         <div className="progress mb-6">
@@ -42,40 +50,38 @@ const Part = ({
             <div className="text flex items-baseline">
               <Icon type={'hour'} className="relative top-0.5" />
               <p className="text-medium-sm font-medium text-bw-1 pl-1 ml-px">
-                progressText
+                In Progress
               </p>
               <span className="text-medium-sm font-medium text-gray-1 pl-1 ml-px">
-                {progressTimeStatus}
+                16h15m left
               </span>
             </div>
             <div className="number">
               <p className="text-medium-sm font-medium text-bw-1">
-                23%
+                {percentProgress}%
               </p>
             </div>
           </div>
           <div className="progressbar bg-gray-3 h-1.5">
             <div
               className="progress-percentage bg-primary h-1.5"
-              style={{ width: `10%` }}
+              style={{ width: `${percentProgress}%` }}
             ></div>
           </div>
         </div>
         <div className="action flex items-center jusity-end relative">
-          {buttonText && (
-            <ButtonSecondary
-              title={buttonText}
-              full={false}
-              size={'small'}
-              className="hover:bg-primary hover:text-white ml-auto"
-              onClick={() => setOpen(true)}
-            />
-          )}
+          <ButtonSecondary
+            title={percentProgress === 0 ? 'Begin' : percentProgress === 100 ? 'Review' : 'Resume'}
+            full={false}
+            size={'small'}
+            className="hover:bg-primary hover:text-white ml-auto"
+            onClick={() => setOpen(true)}
+          />
         </div>
       </div>
       {/* Solution test modal */}
       {/* <SolutionModal open={open} setOpen={setOpen} /> */}
-      <TestModal open={open} setOpen={setOpen} title={name} />
+      <TestModal open={open} setOpen={setOpen} title={''} />
     </>
   )
 }
