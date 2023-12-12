@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import SappModal from 'src/components/base/modal/SappModal'
 import SappButton from '@components/base/button/SappButton'
 import ButtonText from '@components/base/button/ButtonText'
@@ -8,8 +8,11 @@ type Props = {
   content: string
   index: number
   total: number
-  handleNext: () => void
+  handleNext?: () => void
+  handleCancel?: () => void
   showCancel?: boolean
+  className?: string
+  titleButtonNext?: string
 }
 
 const PopupStep = ({
@@ -17,25 +20,28 @@ const PopupStep = ({
   index,
   total,
   handleNext,
+  handleCancel,
   showCancel = true,
+  className = 'top-0 left-0',
+  titleButtonNext,
 }: Props) => {
+  const confirmDialogRef = useRef<HTMLDivElement>(null)
+
+  const handleClose = () => {
+    if (confirmDialogRef.current) {
+      confirmDialogRef.current.classList.add('animate-jump-out')
+      confirmDialogRef.current.classList.add('pointer-events-none')
+    }
+    setTimeout(() => {
+      handleCancel && handleCancel()
+    }, 50)
+  }
+
   return (
     <>
-      <SappModal
-        open={true}
-        okButtonCaption={'Yes'}
-        cancelButtonCaption={'No'}
-        size="max-w-sm"
-        position="center"
-        showHeader={false}
-        showFooter={false}
-        childClass={'text-start'}
-        overlayClass={'!opacity-55'}
-        isContentFull={true}
-        refClass={
-          'p-7 flex flex-col animate-jump-in relative transform overflow-hidden bg-primary text-left shadow-xl transition-all'
-        }
-        parentChildClass={'!bg-primary'}
+      <div
+        ref={confirmDialogRef}
+        className={`animate-jump-in bg-primary p-7.5 absolute z-50 max-w-sm ${className}`}
       >
         <span className="text-base font-normal text-white">{content}</span>
         <div className="flex items-center justify-between mt-5">
@@ -43,16 +49,18 @@ const PopupStep = ({
             {index}/{total}
           </div>
           <div className="flex">
+            {showCancel && (
+              <SappButton
+                title={'Exit'}
+                className="px-5 py-2"
+                size="small"
+                isPadding={false}
+                childClass="text-medium-sm"
+                onClick={handleClose}
+              />
+            )}
             <SappButton
-              title={'Exit'}
-              className="px-5 py-2"
-              size="small"
-              isPadding={false}
-              childClass="text-medium-sm"
-              onClick={handleNext}
-            />
-            <SappButton
-              title={'Next'}
+              title={titleButtonNext ? titleButtonNext : 'Next'}
               className="bg-primary-3 px-5 py-2 ml-3"
               size="small"
               isPadding={false}
@@ -61,7 +69,7 @@ const PopupStep = ({
             />
           </div>
         </div>
-      </SappModal>
+      </div>
     </>
   )
 }

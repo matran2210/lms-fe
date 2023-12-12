@@ -23,10 +23,10 @@ export default function DashboardLayout({
         isOpened={isOpened}
         mode={mode}
         toggleDrawer={toggleDrawer}
-        className={`fixed top-0 md:left-0 h-screen z-30 transition-all duration-200 ${
+        className={`fixed top-0 md:left-0 h-screen transition-all duration-200 ${
           mode === 'student'
-            ? 'bg-white shadow-sidebar w-20 py-2.5'
-            : 'bg-bw-4 border-r border-dark w-[82px] pt-8 pb-10'
+            ? 'bg-white shadow-sidebar w-20'
+            : 'bg-bw-4 border-r border-dark w-[82px]'
         }`}
       />
       <div className="w-full min-h-screen">

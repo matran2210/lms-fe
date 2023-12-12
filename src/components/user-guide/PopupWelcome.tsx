@@ -3,10 +3,17 @@ import SappModal from 'src/components/base/modal/SappModal'
 import Icon from 'src/components/icons'
 import SappButton from '@components/base/button/SappButton'
 import { UserGuide } from 'src/constants'
+import { useAppDispatch } from 'src/redux/hook'
+import { increment } from 'src/redux/slice/Course/UserGuide'
 
 type Props = {}
 
 const PopupWelcome = ({}: Props) => {
+  const dispatch = useAppDispatch()
+  const handleNextStep = () => {
+    dispatch(increment())
+  }
+
   return (
     <>
       <SappModal
@@ -18,7 +25,7 @@ const PopupWelcome = ({}: Props) => {
         showHeader={false}
         showFooter={false}
         childClass={'text-center py-12 px-14'}
-        overlayClass={'!opacity-55'}
+        overlayClass={'!hidden'}
         isContentFull={true}
       >
         <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
@@ -35,7 +42,7 @@ const PopupWelcome = ({}: Props) => {
           full={true}
           className="mt-16"
           size="lager"
-          onClick={() => {}}
+          onClick={() => handleNextStep()}
         />
       </SappModal>
     </>
