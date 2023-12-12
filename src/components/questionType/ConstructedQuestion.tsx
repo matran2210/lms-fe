@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 import HookFormEditor from '@components/base/editor/HookFormEditor'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import dynamic from 'next/dynamic'
 import EditorReader from '@components/base/editor/EditorReader'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
 export type IPreviewProp = {
   data: any
   question_content: string
   index: number
   question_data: any
   control: any
+  handleSaveHighLight?: any
+  highlighted?: any
+  removeHighlight?: any
+  allowHighLight?: boolean
 }
 const EssayQuestionPreview = ({
   data,
@@ -17,15 +22,30 @@ const EssayQuestionPreview = ({
   index,
   question_data,
   control,
+  handleSaveHighLight,
+  highlighted,
+  removeHighlight,
+  allowHighLight,
 }: IPreviewProp) => {
   // const DynamicBundledEditor = dynamic(() => import('../base/spreadSheet/SpreadSheetEditor'), {
   //   ssr: false,
   // })
   //   const { control } = useForm()
+  useEffect(() => {
+    if (question_data) {
+      DeserializeHighlight(highlighted)
+    }
+  }, [question_data, question_content, data])
   if (data) {
     return (
       <React.Fragment>
-        <div style={{ background: 'white' }}>
+        <div
+          style={{ background: 'white' }}
+          id="hightlight_area"
+          onMouseUp={() =>
+            runHighlight(handleSaveHighLight, allowHighLight || false)
+          }
+        >
           <EditorReader
             className="sapp-questions"
             text_editor_content={question_content}

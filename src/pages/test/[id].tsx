@@ -1,4 +1,8 @@
 import {
+  removeHighlights,
+  serializeHighlights,
+} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import {
   ArrowUpIcon,
   CalculatorIcon,
   CloseIcon,
@@ -40,6 +44,7 @@ const TestDetail = ({ questions }: any) => {
     currentTabID: string,
     defaultValue: any,
     corrects?: any,
+    highlighted?: any,
   ) => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -51,6 +56,10 @@ const TestDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -62,6 +71,10 @@ const TestDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -72,20 +85,58 @@ const TestDetail = ({ questions }: any) => {
             name={`${currentTabID}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
           />
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchingQuestion data={data} action={getAnswerMatching} ref={ref} />
+          <MatchingQuestion
+            data={data}
+            action={getAnswerMatching}
+            ref={ref}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+          />
         )
       case QUESTION_TYPES.FILL_WORD:
-        return <AddWordPreview data={data} action={getValueFillText} />
+        return (
+          <AddWordPreview
+            data={data}
+            action={getValueFillText}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+          />
+        )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreivew data={data} action={getAnswerDragNDrop} ref={ref} />
+          <DragNDropPreivew
+            data={data}
+            action={getAnswerDragNDrop}
+            ref={ref}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+          />
         )
       case QUESTION_TYPES.SELECT_WORD:
-        return <SelectWord data={data} action={getValueSelectText} />
+        return (
+          <SelectWord
+            data={data}
+            action={getValueSelectText}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+          />
+        )
       case QUESTION_TYPES.ESSAY:
         return (
           <EssayQuestionPreview
@@ -94,6 +145,10 @@ const TestDetail = ({ questions }: any) => {
             index={essayData?.index}
             question_data={currentTabContent?.data}
             control={control}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
           />
         )
       default:
@@ -117,6 +172,7 @@ const TestDetail = ({ questions }: any) => {
   const [tabs, setTabs] = useState<any>([])
   const [showListExhibits, setShowListExhibits] = useState(false)
   const [showListRequirement, setShowLisRequirement] = useState(false)
+  const [allowHighLight, setAllowHighLight] = useState(false)
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   useClickOutside({
@@ -170,7 +226,11 @@ const TestDetail = ({ questions }: any) => {
       return newArr
     })
   }
-
+  function removeHighlight() {
+    const domEle = document.getElementById('hightlight_area')
+    removeHighlights(domEle as any)
+    handleSaveHighLight(serializeHighlights(domEle))
+  }
   const OptionShowAll = () => {
     return (
       <div className="w-max">
@@ -251,6 +311,7 @@ const TestDetail = ({ questions }: any) => {
     handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage)
     setCurrentPage(e)
     setOpenScratchPad([])
+    setAllowHighLight(false)
   }
   const handleSaveAnswer = (data: any, tabId: any) => {
     setTabs((prev: any) => {
@@ -271,7 +332,19 @@ const TestDetail = ({ questions }: any) => {
       ref.current?.handleReset()
     }
   }
+  const handleSaveHighLight = (e: any) => {
+    setTabs((prev: any) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          setCurrentTabContent({ ...item, hightlight: e })
 
+          return { ...item, hightlight: e }
+        }
+        return item
+      })
+      return newData
+    })
+  }
   useEffect(() => {
     if (currentTabContent?.data?.requirements) {
       setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })
@@ -410,6 +483,7 @@ const TestDetail = ({ questions }: any) => {
                 currentTabContent?.id,
                 currentTabContent?.answer,
                 currentTabContent?.corrects,
+                currentTabContent?.hightlight,
               )}
               {/* ) : (
                     <EssayQuestionPreview
@@ -452,6 +526,7 @@ const TestDetail = ({ questions }: any) => {
             currentTabContent?.id,
             currentTabContent?.answer,
             currentTabContent?.corrects,
+            currentTabContent?.hightlight,
           )}
           {/* ) : (
                 <EssayQuestionPreview
@@ -577,7 +652,10 @@ const TestDetail = ({ questions }: any) => {
               <div className="font-normal text-sm pe-6 border-r">Help</div>
             </div>
           </button>
-          <button className="h-full">
+          <button
+            className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+            onClick={() => setAllowHighLight(!allowHighLight)}
+          >
             <div className="flex items-center gap-3 ps-6 ">
               <HighlightIcon />
               <div className="font-normal text-sm pe-6 border-r">Highlight</div>
