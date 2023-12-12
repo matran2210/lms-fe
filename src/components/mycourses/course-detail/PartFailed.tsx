@@ -1,19 +1,15 @@
 import React from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
+import { ICourseSection } from 'src/type/courses'
 
-interface IProps {
-  timeAllow: string
-  attempType: string
-}
-
-const PartFailed = ({ timeAllow, attempType }: IProps) => {
-  const formattedTime = formatTime(timeAllow)
+const PartFailed = ({ coursePart }: {coursePart: ICourseSection}) => {
+  const formattedTime = formatTime(coursePart?.quiz?.limit_count  || 0)
 
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
-        <div>{'name'}</div>
+        <div>{coursePart?.name}</div>
       </div>
       <div className="info mt-6">
         <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
@@ -22,7 +18,7 @@ const PartFailed = ({ timeAllow, attempType }: IProps) => {
         </div>
         <div className="time-allow flex justify-between pt-4">
           <p className="text-base text-gray-1">Attempt:</p>
-          <p className="text-base text-bw-1 font-semibold">{attempType}</p>
+          <p className="text-base text-bw-1 font-semibold">{!coursePart?.quiz?.quiz_timed ? '' : coursePart?.quiz.quiz_timed}</p>
         </div>
       </div>
       <div className="mt-auto">

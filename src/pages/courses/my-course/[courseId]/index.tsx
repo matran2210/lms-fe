@@ -50,11 +50,11 @@ export async function getServerSideProps(context: any) {
       },
     })
 
-    const courses = apiResponse.data?.data
+    const courses = apiResponse?.data?.data
 
     return {
       props: {
-        courses,
+        courses: courses || {},
       },
     }
   } catch (error: any) {
@@ -88,16 +88,23 @@ export async function getServerSideProps(context: any) {
 
         return {
           props: {
-            courses: newApiResponse.data?.data,
+            courses: newApiResponse?.data?.data || {},
           },
         }
-      } catch (refreshError) {}
+      } catch (refreshError) {
+        
+        return {
+          redirect: {
+            destination: '/',
+            permanent: false,
+          },
+        }
+      }
     } else {
     }
-
     return {
       redirect: {
-        destination: '/auth/login',
+        destination: '/',
         permanent: false,
       },
     }

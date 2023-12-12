@@ -1,25 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
 
-interface CoursesPartsProps {
-  courses: any[]
-}
-
-const CourseParts = ({ courses }: CoursesPartsProps) => {
+const CourseParts = ({ courses }: {courses: any}) => {
   return (
-    <div className="grid grid-cols-3 gap-6">
-      {courses?.map((coursePart, index) => {
+    <div className="grid grid-cols-3 gap-6 mb-10">
+      {courses?.map((coursePart: any, index: number) => {
         return (
           <div
             key={index}
             className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
           >
-            {coursePart?.course_section_type === 'MID_TERM_TEST' ? (
+            {['MID_TERM_TEST','FINAL_TEST'].includes(coursePart?.course_section_type) ? (
               <PartMiddleTest
                 key={index}
-                timeAllow={coursePart.timeAllow}
-                attempType={coursePart.attempType}
+                coursePart={coursePart}
               />
             ) : (
               <Part key={index} courses={coursePart} />

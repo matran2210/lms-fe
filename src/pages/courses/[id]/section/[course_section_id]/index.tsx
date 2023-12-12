@@ -15,6 +15,9 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
   const [learningOutcome, setLearningOutcome] = useState<ILearningOutcome>()
   const router = useRouter()
+  
+  const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
+  const partDetail = tree[0] as any
 
   const fetchChapterDetail = async (
     id: string | undefined,
@@ -23,7 +26,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
     setLoadingChapter(true)
     try {
       const res = await CourseAPI.getCoursePartDetail(id, course_section_id)
-      const nodeList = res?.data
+      const nodeList = res?.data?.course_section_tree
       const tree = TreeHelper.convertFromArray(nodeList)
       const detail = tree[0]
       setChapterDetail(detail)
@@ -57,16 +60,19 @@ const CoursePartDetail = ({ previewPart }: any) => {
     <div className="main max-w-xxl my-0 mx-auto">
       <div className="main max-w-xxl my-0 mx-auto">
         <div className="flex pt-6 pb-1 items-center">
-          <h2 className="text-medium-sm font-semibold text-gray-1">
+          <p onClick={() => router.push('/courses')} className="text-medium-sm font-semibold text-gray-1 cursor-pointer">
             My Course
-          </h2>
+          </p>
+          <p className="text-medium-sm font-semibold text-gray-1 ms-1 cursor-pointer" onClick={() => router.push(`/courses/my-course/${router.query.id}`)}>
+            / {previewPart?.name} /
+          </p>
           <p className="text-medium-sm font-semibold text-bw-1 ms-1">
-            / {previewPart?.name}
+            {partDetail?.name}
           </p>
         </div>
       </div>
       <PreviewPartDetail
-        chapterMenu={previewPart}
+        chapterMenu={partDetail}
         fetchChapterDetail={fetchChapterDetail}
         chapterDetail={chapterDetail}
         loading={false}
@@ -126,13 +132,13 @@ export async function getServerSideProps(context: any) {
 
     // Xử lý dữ liệu từ API
     const nodeList = apiResponse?.data?.data
-    const tree = TreeHelper.convertFromArray(nodeList)
-    const previewPart = tree[0]
+    // const tree = TreeHelper.convertFromArray(nodeList)
+    // const previewPart = tree[0]
 
     // Trả về props cho trang
     return {
       props: {
-        previewPart: previewPart || {},
+        previewPart: nodeList || null,
       },
     }
   } catch (error: any) {
@@ -170,20 +176,20 @@ export async function getServerSideProps(context: any) {
 
         // Xử lý dữ liệu từ API
         const nodeList = newApiResponse?.data?.data
-        const tree = TreeHelper.convertFromArray(nodeList)
-        const previewPart = tree[0]
+        // const tree = TreeHelper.convertFromArray(nodeList)
+        // const previewPart = tree[0]
 
         // Trả về props cho trang
         return {
           props: {
-            previewPart: previewPart || {},
+            previewPart: nodeList || {},
           },
         }
       } catch (refreshError) {
         // Chuyển hướng đến trang đăng nhập
         return {
           redirect: {
-            destination: '/auth/login',
+            destination: '/',
             permanent: false,
           },
         }
@@ -192,7 +198,7 @@ export async function getServerSideProps(context: any) {
       // Chuyển hướng đến trang đăng nhập
       return {
         redirect: {
-          destination: '/auth/login',
+          destination: '/',
           permanent: false,
         },
       }

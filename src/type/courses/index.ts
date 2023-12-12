@@ -19,11 +19,21 @@ export interface ILearningOutcome {
 export interface ICourseSection {
   course_section_type: string
   id: string
-  quiz: null
+  name: string
+  quiz: {
+    attempts: Array<any>
+    id: string
+    limit_count: number
+    name: string
+    quiz_timed: boolean
+    quiz_type: string
+  }
   learning_progress: {
     total_course_sections: number
     total_course_sections_completed: number
   }
+  remaining_time: number
+  description: string
 }
 
 export interface ICourseDetail {
