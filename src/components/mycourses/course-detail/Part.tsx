@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { countWords, formatTime } from '@utils/index'
 import { ICourseSection } from 'src/type/courses'
 
-const Part = ({ courses }: {courses: ICourseSection}) => {
+const Part = ({ courses }: { courses: ICourseSection }) => {
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
@@ -25,16 +25,29 @@ const Part = ({ courses }: {courses: ICourseSection}) => {
   const formattedTime = formatTime(courses?.remaining_time || 0)
 
   return (
-    <div onClick={() => courses?.course_section_type === 'PART' ?  onClickPart(courses?.id) : {}} className='cursor-pointer'>
+    <div
+      onClick={() =>
+        courses?.course_section_type === 'PART' ? onClickPart(courses?.id) : {}
+      }
+      className="cursor-pointer"
+    >
       <div className={`name-part text-2xl font-semibold`}>{courses?.name}</div>
       <div className="des mt-6 mb-15">
-        <div dangerouslySetInnerHTML={{__html: courses?.description}} className={`text-base ${countWords(courses?.name) > 3 ? 'h-32' : 'h-40'}`} />
+        <div
+          dangerouslySetInnerHTML={{ __html: courses?.description }}
+          className={`text-base ${
+            countWords(courses?.name) > 3 ? 'h-32' : 'h-40'
+          }`}
+        />
       </div>
       <div className="mt-auto">
         <div className="progress mb-6">
           <div className="info flex justify-between mb-2">
             <div className="text flex items-baseline">
-              <Icon type={`${percentProgress === 0 ? 'like' : 'hour'}`} className="relative top-0.5" />
+              <Icon
+                type={`${percentProgress === 0 ? 'like' : 'hour'}`}
+                className="relative top-0.5"
+              />
               <p className="text-medium-sm font-medium text-bw-1 pl-1 ml-px">
                 {percentProgress === 0 ? 'Ready To Learn' : 'In Progress'}
               </p>
@@ -67,7 +80,13 @@ const Part = ({ courses }: {courses: ICourseSection}) => {
             full={false}
             size={'small'}
             className="hover:bg-primary hover:text-white ml-auto"
-            onClick={() => courses?.course_section_type === 'PART' ? router.push(`/courses/${router.query.courseId}/section/${courses.id}`)  : setOpen(true)}
+            onClick={() =>
+              courses?.course_section_type === 'PART'
+                ? router.push(
+                    `/courses/${router.query.courseId}/section/${courses.id}`,
+                  )
+                : setOpen(true)
+            }
           />
         </div>
       </div>

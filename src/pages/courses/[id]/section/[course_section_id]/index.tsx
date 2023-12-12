@@ -15,7 +15,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
   const [learningOutcome, setLearningOutcome] = useState<ILearningOutcome>()
   const router = useRouter()
-  
+
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
 
@@ -60,10 +60,16 @@ const CoursePartDetail = ({ previewPart }: any) => {
     <div className="main max-w-xxl my-0 mx-auto">
       <div className="main max-w-xxl my-0 mx-auto">
         <div className="flex pt-6 pb-1 items-center">
-          <p onClick={() => router.push('/courses')} className="text-medium-sm font-semibold text-gray-1 cursor-pointer">
+          <p
+            onClick={() => router.push('/courses')}
+            className="text-medium-sm font-semibold text-gray-1 cursor-pointer"
+          >
             My Course
           </p>
-          <p className="text-medium-sm font-semibold text-gray-1 ms-1 cursor-pointer" onClick={() => router.push(`/courses/my-course/${router.query.id}`)}>
+          <p
+            className="text-medium-sm font-semibold text-gray-1 ms-1 cursor-pointer"
+            onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
+          >
             / {previewPart?.name} /
           </p>
           <p className="text-medium-sm font-semibold text-bw-1 ms-1">

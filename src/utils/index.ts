@@ -55,16 +55,16 @@ export function DeserializeHighlight(highlighted: any) {
 }
 
 export const formatTime = (minutes: number) => {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+  const hours = Math.floor(minutes / 60)
+  const remainingMinutes = minutes % 60
 
-  const formattedHours = hours > 0 ? `${hours}h` : '';
-  const formattedMinutes = remainingMinutes > 0 ? `${remainingMinutes}m` : '';
+  const formattedHours = hours > 0 ? `${hours}h` : ''
+  const formattedMinutes = remainingMinutes > 0 ? `${remainingMinutes}m` : ''
 
-  return formattedHours + formattedMinutes || '0h0m';
-};
+  return formattedHours + formattedMinutes || '0h0m'
+}
 
 export const countWords = (text: string) => {
-  const words = text.trim().split(/\s+/);
-  return words.length;
-};
+  const words = text.trim().split(/\s+/)
+  return words.length
+}

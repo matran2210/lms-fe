@@ -101,6 +101,7 @@ const TestDetail = ({ questions }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            defaultAnswer={defaultValue}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -124,6 +125,7 @@ const TestDetail = ({ questions }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            defaultAnswer={defaultValue}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -273,7 +275,8 @@ const TestDetail = ({ questions }: any) => {
     let value = [] as any
     const inputs = document.querySelectorAll('.sapp-match-result') as any
     for (let e of inputs) {
-      value.push(e.innerText)
+      const childId = e.querySelector('.sapp-notched-container')
+      value.push({ question_id: e.id, answer_id: childId?.id })
     }
     return value
   }
@@ -309,7 +312,17 @@ const TestDetail = ({ questions }: any) => {
     })
   }
   const handleChangeTab = (e: any) => {
-    handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage)
+    if (
+      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage)
+    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+      handleSaveAnswer(getAnswerMatching(), currentPage)
+    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      handleSaveAnswer(getAnswerDragNDrop(), currentPage)
+    }
     setCurrentPage(e)
     setOpenScratchPad([])
     setAllowHighLight(false)
@@ -324,6 +337,47 @@ const TestDetail = ({ questions }: any) => {
       })
       return newData
     })
+  }
+
+  const handleSubmitQuestion = () => {
+    let quiz_position_mapping = []
+    let answers = []
+    for (let e of tabs) {
+      if (e.answer) {
+        if (
+          e.qType === QUESTION_TYPES.ONE_CHOICE ||
+          e.qType === QUESTION_TYPES.TRUE_FALSE
+        ) {
+          answers.push({ question_id: e.id, question_answer_id: e.answer })
+        } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+          let answer = []
+          for (let el of e.answer) {
+            answer.push({ answer_id: el })
+          }
+          answers.push({ question_id: e.id, answer })
+        } else if (e.qType === QUESTION_TYPES.MATCHING) {
+          answers.push({ question_id: e.id, answer: e.answer })
+        } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
+          let answer = []
+          for (let i in e.answer) {
+            if (e.answer[i].idAnswer) {
+              answer.push({
+                answer_id: e.answer[i].idAnswer,
+                answer_position: +i + 1,
+              })
+            }
+          }
+          answers.push({ question_id: e.id, answer })
+        }
+      }
+      quiz_position_mapping.push({
+        question_id: e.id,
+        answers: e.data?.answers,
+      })
+    }
+    // console.log({ answers:answers, quiz_position_mapping:quiz_position_mapping });
+
+    return { answers: answers, quiz_position_mapping: quiz_position_mapping }
   }
   const handleClearSelection = (data: any) => {
     if (
@@ -434,7 +488,9 @@ const TestDetail = ({ questions }: any) => {
               size: 'medium',
               loading: false,
               disabled: false,
-              onClick: () => {},
+              onClick: () => {
+                handleSubmitQuestion()
+              },
               //   full: fullWidthBtn,
             }}
             cancel={{

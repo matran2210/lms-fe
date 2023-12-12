@@ -39,14 +39,12 @@ const Course = ({ course }: { course: any }) => {
   )
 
   return (
-    <div className='cursor-pointer'>
+    <div className="cursor-pointer">
       <div
         className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] text-bw-1`}
         onClick={() => router.push(`/courses/my-course/${course.id}`)}
       >
-        <div>
-          {truncateString(course?.name, 40)}
-        </div>
+        <div>{truncateString(course?.name, 40)}</div>
       </div>
       <div className="flex justify-between items-center">
         <div className="name-class text-medium-sm text-gray-1">
