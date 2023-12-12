@@ -1,10 +1,22 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import React from 'react'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
+import React, { useEffect } from 'react'
 interface IProps {
   data: any
   action?: any
+  handleSaveHighLight?: any
+  highlighted?: any
+  removeHighlight?: any
+  allowHighLight?: boolean
 }
-const SelectWord = ({ data, action }: IProps) => {
+const SelectWord = ({
+  data,
+  action,
+  handleSaveHighLight,
+  highlighted,
+  removeHighlight,
+  allowHighLight,
+}: IProps) => {
   const str = data?.question_content
   const formatAnswer = (data: any) => {
     let objAnswer: any = {}
@@ -35,9 +47,18 @@ const SelectWord = ({ data, action }: IProps) => {
       </select>
       `
   })
-
+  useEffect(() => {
+    if (data) {
+      DeserializeHighlight(highlighted)
+    }
+  }, [data])
   return (
-    <div className="body-modal-blue">
+    <div
+      id="hightlight_area"
+      onMouseUp={() =>
+        runHighlight(handleSaveHighLight, allowHighLight || false)
+      }
+    >
       <EditorReader
         className="questions"
         // style={{borderBottom: '1px solid  white'}}

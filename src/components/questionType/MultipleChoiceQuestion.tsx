@@ -2,6 +2,7 @@ import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGro
 import EditorReader from '@components/base/editor/EditorReader'
 import { useEffect, useMemo } from 'react'
 import { IPreviewProp } from './OneChoiceQuestion'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
 // import {IPreviewProp} from '../true-false-question'
 
 const MultiChoiceQuestion = ({
@@ -11,6 +12,10 @@ const MultiChoiceQuestion = ({
   name,
   defaultValues,
   setValue,
+  handleSaveHighLight,
+  highlighted,
+  removeHighlight,
+  allowHighLight,
 }: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
@@ -24,12 +29,24 @@ const MultiChoiceQuestion = ({
   useEffect(() => {
     setValue(name, defaultValues)
   }, [defaultValues])
+  useEffect(() => {
+    if (data) {
+      DeserializeHighlight(highlighted)
+    }
+  }, [data])
   return (
     <div>
-      <EditorReader
-        text_editor_content={data?.question_content}
-        className="sapp-questions"
-      />
+      <div
+        id="hightlight_area"
+        onMouseUp={() =>
+          runHighlight(handleSaveHighLight, allowHighLight || false)
+        }
+      >
+        <EditorReader
+          text_editor_content={data?.question_content}
+          className="sapp-questions"
+        />
+      </div>
       <div
         className="sapp-answer-wrapper"
         style={{
