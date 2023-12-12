@@ -45,7 +45,9 @@ export async function getServerSideProps(context: any) {
 
   try {
     const apiResponse = await axios.get(
-      `${apiURL}/courses?page_index=1&page_size=100&name=${query.name ?? ''}&type=${query.type ?? ''}`,
+      `${apiURL}/courses?page_index=1&page_size=100&name=${
+        query.name ?? ''
+      }&type=${query.type ?? ''}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

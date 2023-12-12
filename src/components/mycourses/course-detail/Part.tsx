@@ -25,7 +25,7 @@ const Part = ({ courses }: IProps) => {
   }
 
   return (
-    <div onClick={() => onClickPart(courses?.id)} className='cursor-pointer'>
+    <div onClick={() => onClickPart(courses?.id)} className="cursor-pointer">
       <div className={`name-part text-2xl font-semibold`}>{'name'}</div>
       <div className="des mt-6 mb-15">
         <p className={`text-base`}>{'description'}</p>

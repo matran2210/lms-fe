@@ -16,7 +16,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [learningOutcome, setLearningOutcome] = useState<ILearningOutcome>()
   const router = useRouter()
 
-  const fetchChapterDetail = async (id: string | undefined, course_section_id: string | undefined) => {
+  const fetchChapterDetail = async (
+    id: string | undefined,
+    course_section_id: string | undefined,
+  ) => {
     setLoadingChapter(true)
     try {
       const res = await CourseAPI.getCoursePartDetail(id, course_section_id)
@@ -73,7 +76,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         course_id={router.query.id as any}
         course_section_id={router.query.course_section_id as any}
       />
-  
+
       <SappDrawer
         isOpen={openLearningOutcome}
         onClose={handleCancel}

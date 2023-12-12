@@ -39,6 +39,7 @@ const TestDetail = ({ questions }: any) => {
     type: string,
     currentTabID: string,
     defaultValue: any,
+    corrects?: any,
   ) => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -49,6 +50,7 @@ const TestDetail = ({ questions }: any) => {
             name={`${currentTabID}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
+            corrects={corrects}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -59,6 +61,7 @@ const TestDetail = ({ questions }: any) => {
             name={`${currentTabID}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
+            corrects={corrects}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -222,6 +225,28 @@ const TestDetail = ({ questions }: any) => {
     }
     return value
   }
+  const getResult = async () => {
+    const res = await CourseTestApi.getQuestionAnswer(currentPage)
+    const corrects = res.data[0].answers?.reduce(
+      (previousValue: any, currentValue: any) => {
+        return {
+          ...previousValue,
+          [currentValue.id]: currentValue.is_correct,
+        }
+      },
+      {} as { [key: string]: boolean },
+    )
+    setTabs((prev: any) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          setCurrentTabContent({ ...item, done: true, corrects: corrects })
+          return { ...item, done: true, corrects: corrects }
+        }
+        return item
+      })
+      return newData
+    })
+  }
   const handleChangeTab = (e: any) => {
     handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage)
     setCurrentPage(e)
@@ -384,6 +409,7 @@ const TestDetail = ({ questions }: any) => {
                 currentTabContent?.data?.qType,
                 currentTabContent?.id,
                 currentTabContent?.answer,
+                currentTabContent?.corrects,
               )}
               {/* ) : (
                     <EssayQuestionPreview
@@ -425,6 +451,7 @@ const TestDetail = ({ questions }: any) => {
             currentTabContent?.data?.qType,
             currentTabContent?.id,
             currentTabContent?.answer,
+            currentTabContent?.corrects,
           )}
           {/* ) : (
                 <EssayQuestionPreview
@@ -652,6 +679,14 @@ const TestDetail = ({ questions }: any) => {
           >
             <div className="font-normal text-sm">Clear Selection</div>
           </button>
+          <button
+            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
+            onClick={() => {
+              getResult()
+            }}
+          >
+            <div className="font-normal text-sm">Confirm Answer</div>
+          </button>
         </div>
       </div>
     </div>
@@ -722,7 +757,9 @@ export async function getServerSideProps(context: any) {
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const newApiResponse = await axios.get(
-          `${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type ?? ''}`,
+          `${apiURL}/courses?page_index=1&page_size=10&name=${
+            query.name
+          }&type=${query.type ?? ''}`,
           {
             headers: {
               Authorization: `Bearer ${refreshResponse.data.accessToken}`,
