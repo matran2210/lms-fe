@@ -7,6 +7,8 @@ import courseActivityReducer from './slice/Course/MyCourse/Activity/Activity'
 import notificationReducer from './slice/Notification/Notification'
 import courseActivityQuizReducer from './slice/Course/MyCourse/Activity/ActivityQuiz'
 
+import { useDispatch } from 'react-redux'
+
 export const store = configureStore({
   reducer: {
     loginReducer,

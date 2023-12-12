@@ -37,7 +37,7 @@ const NotifyTab: React.FC<TabsProps> = ({
   return (
     <ul className={classUl}>
       {tabs.map((tab, index) => (
-        <Link href={`/notifications?${tab.path}`} key={index}>
+        <Link href={`/notifications?status=${tab.path}`} key={index}>
           <li className={`cursor-pointer ${liClass}`}>
             <a
               onClick={() => handleTabClick(index)}
@@ -49,7 +49,9 @@ const NotifyTab: React.FC<TabsProps> = ({
               }`}
             >
               {tab.label}
-              {tab.total && <span className="ml-1">({tab.total})</span>}
+              {tab.total !== undefined && (
+                <span className="ml-1">{`(${tab.total})`}</span>
+              )}
               {router.asPath.includes(tab.path) ||
               (activeTab == 0 && tab.label == 'All') ? (
                 <span className={currentClass}></span>

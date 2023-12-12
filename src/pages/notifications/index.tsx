@@ -10,7 +10,10 @@ import {
   getNotification,
   getCountUnRead,
   getNotificationDetail,
-  MarkAllNotifications,
+  markAllNotifications,
+  loadMoreNotification,
+  updateStatus,
+  updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModelSidebar from '@components/base/modal/SappModelSidebar'
@@ -21,20 +24,30 @@ const Notifications = () => {
   const [openToolTip, setOpenToolTip] = useState<boolean>(false)
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const loading = useAppSelector((state) => state.notificationReducer.loading)
 
   const notifyLists = useAppSelector(
     (state) => state.notificationReducer.list_notifications,
   )
+
   const notifyDetail = useAppSelector((state) => state.notificationReducer)
   const getTotal = useAppSelector(
     (state) => state.notificationReducer.total_records,
   )
+
+  const pagination = useAppSelector((state) => state.notificationReducer.meta)
 
   // Config Tabs
   const tabs = [
     { label: 'All', path: 'all' },
     { label: 'Unread', path: 'unread', total: getTotal },
   ]
+
+  const coutNotificationsUnRead = async () => {
+    try {
+      await dispatch(getCountUnRead())
+    } catch (error) {}
+  }
 
   const getNotifications = async (params: Object) => {
     try {
@@ -43,28 +56,26 @@ const Notifications = () => {
     } catch (error) {}
   }
 
-  const coutNotificationsUnRead = async () => {
+  const loadMore = async (params: Object) => {
     try {
-      await dispatch(getCountUnRead())
+      await dispatch(loadMoreNotification(params))
+      await coutNotificationsUnRead()
     } catch (error) {}
   }
 
   const getApiNotificationDetail = async (id: string) => {
     try {
       await dispatch(getNotificationDetail(id))
+      await coutNotificationsUnRead()
+      dispatch(updateStatus({ id: id }))
     } catch (error) {}
   }
 
   const markAllRead = async () => {
     try {
-      await dispatch(MarkAllNotifications())
-      getNotifications({
-        page_index: 1,
-        page_size: 10,
-        ...(router.asPath.includes('unread') && {
-          is_read: false,
-        }),
-      })
+      await dispatch(markAllNotifications())
+      await coutNotificationsUnRead()
+      dispatch(updateStatusAll())
     } catch (error) {}
   }
 
@@ -72,6 +83,32 @@ const Notifications = () => {
     setOpenToolTip(false)
     markAllRead()
   }
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    ) {
+      return
+    }
+    const totalPages = pagination?.total_pages
+    const pageIndex = pagination?.page_index
+    const pageSize = pagination?.page_size
+    if (totalPages && pageIndex < totalPages) {
+      loadMore({
+        page_index: pageIndex + 1,
+        page_size: pageSize,
+        ...(router.asPath.includes('unread') && {
+          is_read: false,
+        }),
+      })
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [pagination])
 
   useEffect(() => {
     getNotifications({
@@ -90,6 +127,7 @@ const Notifications = () => {
           <SearchForm
             placeholder="Find..."
             formStyle="w-full flex items-center"
+            getNotifications={getNotifications}
           />
         </div>
       </div>

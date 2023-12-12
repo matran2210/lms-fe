@@ -22,11 +22,16 @@ export interface NotificationState {
   created_from: any
   files: any
   total_records: number
+  notification_status: boolean
 }
 
 const initialState: NotificationState = {
   loading: false,
-  meta: {},
+  meta: {
+    total_pages: 1,
+    page_index: 1,
+    page_size: 10,
+  },
   list_notifications: [],
   id: '',
   created_at: '',
@@ -43,6 +48,7 @@ const initialState: NotificationState = {
   created_from: null,
   files: [],
   total_records: 0,
+  notification_status: false,
 }
 
 export const getCountUnRead = createAsyncThunk(
@@ -75,6 +81,21 @@ export const getNotification = createAsyncThunk(
   },
 )
 
+export const loadMoreNotification = createAsyncThunk(
+  'notificationReducer/loadMoreNotification',
+  async (params: Object, thunkAPI) => {
+    try {
+      const res = await NotificationApi.getNotification(params)
+      if (!res?.data) {
+        return
+      }
+      return { ...res.data }
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 export const getNotificationDetail = createAsyncThunk(
   'courseActivityReducer/getNotificationDetail',
   async (id: string, thunkAPI) => {
@@ -90,11 +111,26 @@ export const getNotificationDetail = createAsyncThunk(
   },
 )
 
-export const MarkAllNotifications = createAsyncThunk(
+export const markAllNotifications = createAsyncThunk(
   'notificationReducer/markAll',
   async (thunkAPI) => {
     try {
       const res = await NotificationApi.markAll()
+      if (!res?.data) {
+        return
+      }
+      return { ...res.data }
+    } catch (error: any) {
+      return false
+    }
+  },
+)
+
+export const getDeviceToken = createAsyncThunk(
+  'notificationReducer/getDeviceToken',
+  async (thunkAPI) => {
+    try {
+      const res = await NotificationApi.createDevice()
       if (!res?.data) {
         return
       }
@@ -114,6 +150,28 @@ export const notificationSlice = createSlice({
         ...state,
         ...action.payload,
       }
+    },
+    updateStatus: (state, action: PayloadAction<any>) => {
+      let new_list_notifications = []
+      new_list_notifications = state.list_notifications.map((e) => {
+        if (e.id == action.payload.id) {
+          const obj = { ...e.notification_user_instances, is_read: true }
+          return { ...e, notification_user_instances: obj }
+        }
+        return { ...e }
+      })
+      state.list_notifications = [...new_list_notifications]
+    },
+    updateStatusAll: (state) => {
+      let new_list_notifications = []
+      new_list_notifications = state.list_notifications.map((e) => {
+        const obj = { ...e.notification_user_instances, is_read: true }
+        return { ...e, notification_user_instances: obj }
+      })
+      state.list_notifications = [...new_list_notifications]
+    },
+    showNotification: (state) => {
+      state.notification_status = true
     },
   },
 
@@ -138,7 +196,18 @@ export const notificationSlice = createSlice({
       state.meta = action.payload?.meta
       state.list_notifications = action.payload?.notifications
     })
-    builder.addCase(getNotification.rejected, (state) => {
+    builder.addCase(loadMoreNotification.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(loadMoreNotification.fulfilled, (state, action) => {
+      state.loading = false
+      state.meta = action.payload?.meta
+      state.list_notifications = [
+        ...state.list_notifications,
+        ...(action.payload?.notifications || []),
+      ]
+    })
+    builder.addCase(loadMoreNotification.rejected, (state) => {
       state.loading = false
     })
     builder.addCase(getNotificationDetail.pending, (state) => {
@@ -166,19 +235,29 @@ export const notificationSlice = createSlice({
     builder.addCase(getNotificationDetail.rejected, (state) => {
       state.loading = false
     })
-    builder.addCase(MarkAllNotifications.pending, (state) => {
+    builder.addCase(markAllNotifications.pending, (state) => {
       state.loading = true
     })
-    builder.addCase(MarkAllNotifications.fulfilled, (state, action) => {
+    builder.addCase(markAllNotifications.fulfilled, (state, action) => {
       state.loading = false
     })
-    builder.addCase(MarkAllNotifications.rejected, (state) => {
+    builder.addCase(markAllNotifications.rejected, (state) => {
+      state.loading = false
+    })
+    builder.addCase(getDeviceToken.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(getDeviceToken.fulfilled, (state, action) => {
+      state.loading = false
+    })
+    builder.addCase(getDeviceToken.rejected, (state) => {
       state.loading = false
     })
   },
 })
 
-// export const selectAuthUser = (state: RootState) => state.loginReducer.authUser;
+export const { updateStatus, updateStatusAll, showNotification } =
+  notificationSlice.actions
 export const notificationReducer = (state: RootState) =>
   state.notificationReducer
 

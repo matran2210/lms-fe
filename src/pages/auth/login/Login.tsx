@@ -21,6 +21,7 @@ import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
+import { getDeviceToken } from 'src/redux/slice/Notification/Notification'
 
 interface IInputProps {
   login: string
@@ -63,18 +64,24 @@ const LoginPage = () => {
     },
   })
 
+  const handleDeviceToken = async () => {
+    try {
+      await dispatch(getDeviceToken())
+    } catch (error) {}
+  }
+
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
     try {
-      await dispatch(
+      const loginUserResult = await dispatch(
         getLoginUser({
           login,
           password,
           remember_me: remember_me ? remember_me : false,
         }),
       ).unwrap()
-
+      await handleDeviceToken()
       router.push('/')
     } catch (error) {}
   }

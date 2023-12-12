@@ -10,6 +10,11 @@ import { Toaster } from 'react-hot-toast'
 import { injectStore } from 'src/redux/services/httpService'
 import { store, wrapper } from '../redux/store'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { onMessageListener } from 'src/utils/firebase'
+import { showNotification } from 'src/redux/slice/Notification/Notification'
+
 // import 'antd/dist/antd.css'
 
 type MyAppProps = AppProps & {
@@ -22,6 +27,18 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   let content = null
   const { layout = LAYOUT.DEFAULT_LAYOUT } = (Component as any) || {}
   injectStore(store)
+  const [show, setShow] = useState(false)
+
+  const dispatch = useAppDispatch()
+  const getStatusNoti = useAppSelector(
+    (state) => state.notificationReducer.notification_status,
+  )
+
+  useEffect(() => {
+    onMessageListener().then((data: any) => {
+      dispatch(showNotification())
+    })
+  })
 
   switch (layout) {
     case LAYOUT.ERROR_LAYOUT:
