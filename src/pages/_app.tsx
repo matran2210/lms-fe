@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   const dispatch = useAppDispatch()
   const getStatusNoti = useAppSelector(
-    (state) => state.notificationReducer.notification_status,
+    (state) => state.notificationReducer?.notification_status,
   )
 
   useEffect(() => {

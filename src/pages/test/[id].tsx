@@ -1,4 +1,8 @@
 import {
+  removeHighlights,
+  serializeHighlights,
+} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import {
   ArrowUpIcon,
   CalculatorIcon,
   CloseIcon,
@@ -40,6 +44,7 @@ const TestDetail = ({ questions }: any) => {
     currentTabID: string,
     defaultValue: any,
     corrects?: any,
+    highlighted?: any,
   ) => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -51,6 +56,10 @@ const TestDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -62,6 +71,10 @@ const TestDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -72,20 +85,58 @@ const TestDetail = ({ questions }: any) => {
             name={`${currentTabID}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
           />
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchingQuestion data={data} action={getAnswerMatching} ref={ref} />
+          <MatchingQuestion
+            data={data}
+            action={getAnswerMatching}
+            ref={ref}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+          />
         )
       case QUESTION_TYPES.FILL_WORD:
-        return <AddWordPreview data={data} action={getValueFillText} />
+        return (
+          <AddWordPreview
+            data={data}
+            action={getValueFillText}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+          />
+        )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreivew data={data} action={getAnswerDragNDrop} ref={ref} />
+          <DragNDropPreivew
+            data={data}
+            action={getAnswerDragNDrop}
+            ref={ref}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+          />
         )
       case QUESTION_TYPES.SELECT_WORD:
-        return <SelectWord data={data} action={getValueSelectText} />
+        return (
+          <SelectWord
+            data={data}
+            action={getValueSelectText}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+          />
+        )
       case QUESTION_TYPES.ESSAY:
         return (
           <EssayQuestionPreview
@@ -94,12 +145,17 @@ const TestDetail = ({ questions }: any) => {
             index={essayData?.index}
             question_data={currentTabContent?.data}
             control={control}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
           />
         )
       default:
         return <div></div>
     }
   }
+  const [topicDescription, setTopicDescription] = useState<any>()
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control, handleSubmit, getValues, setValue } = useForm()
@@ -117,6 +173,7 @@ const TestDetail = ({ questions }: any) => {
   const [tabs, setTabs] = useState<any>([])
   const [showListExhibits, setShowListExhibits] = useState(false)
   const [showListRequirement, setShowLisRequirement] = useState(false)
+  const [allowHighLight, setAllowHighLight] = useState(false)
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   useClickOutside({
@@ -170,7 +227,11 @@ const TestDetail = ({ questions }: any) => {
       return newArr
     })
   }
-
+  function removeHighlight() {
+    const domEle = document.getElementById('hightlight_area')
+    removeHighlights(domEle as any)
+    handleSaveHighLight(serializeHighlights(domEle))
+  }
   const OptionShowAll = () => {
     return (
       <div className="w-max">
@@ -251,6 +312,7 @@ const TestDetail = ({ questions }: any) => {
     handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage)
     setCurrentPage(e)
     setOpenScratchPad([])
+    setAllowHighLight(false)
   }
   const handleSaveAnswer = (data: any, tabId: any) => {
     setTabs((prev: any) => {
@@ -271,7 +333,19 @@ const TestDetail = ({ questions }: any) => {
       ref.current?.handleReset()
     }
   }
+  const handleSaveHighLight = (e: any) => {
+    setTabs((prev: any) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          setCurrentTabContent({ ...item, hightlight: e })
 
+          return { ...item, hightlight: e }
+        }
+        return item
+      })
+      return newData
+    })
+  }
   useEffect(() => {
     if (currentTabContent?.data?.requirements) {
       setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })
@@ -290,6 +364,11 @@ const TestDetail = ({ questions }: any) => {
   useEffect(() => {
     async function getDetail() {
       const res = await CourseTestApi.getQuestionsDetail(currentPage)
+      const topicDescription = await CourseTestApi.getTopicDescription(
+        questions[questions.findIndex((e: any) => e.id === currentPage)]
+          .question_topic_id,
+      )
+      setTopicDescription(topicDescription.data)
       setTabs((prev: any) => {
         const newData = prev.map((item: any) => {
           if (currentPage === item.id) {
@@ -309,6 +388,7 @@ const TestDetail = ({ questions }: any) => {
         return newData
       })
     }
+
     if (currentPage) {
       getDetail()
     }
@@ -383,23 +463,14 @@ const TestDetail = ({ questions }: any) => {
       {/* <div className=''> */}
       {currentTabContent?.data === DISPLAY_TYPE.VERTICAL ? (
         <div
-          // onDoubleClick={(e) => {
-          //   const element = e.target as any;
-          //   if (element.localName === "video") {
-          //     const content = element.currentSrc;
-          //     if (content) {
-          //       setOpenVideo({ status: true, src: content });
-          //     }
-          //   }
-          // }}
           className="flex gap-5 h-[calc(100%-240px)] bg-gray-3"
           id={'preview-question'}
         >
           <div className="w-1/2 h-full overflow-auto bg-white p-6">
-            <div
+            <EditorReader
               className="editor-wrap"
-              dangerouslySetInnerHTML={{ __html: 'topicDescription' || '' }}
-            ></div>
+              text_editor_content={topicDescription?.description}
+            />
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
             <div className="px-6">
@@ -410,6 +481,7 @@ const TestDetail = ({ questions }: any) => {
                 currentTabContent?.id,
                 currentTabContent?.answer,
                 currentTabContent?.corrects,
+                currentTabContent?.hightlight,
               )}
               {/* ) : (
                     <EssayQuestionPreview
@@ -425,24 +497,14 @@ const TestDetail = ({ questions }: any) => {
         </div>
       ) : (
         <div
-          // style={{ maxWidth: "948px", width: "100%", margin: "auto" }}
-          // onDoubleClick={(e) => {
-          //   const element = e.target as any;
-          //   if (element.localName === "video") {
-          //     const content = element.currentSrc;
-          //     if (content) {
-          //       setOpenVideo({ status: true, src: content });
-          //     }
-          //   }
-          // }}
           className="max-w-screen-2md w-full m-auto h-[calc(100%-240px)] overflow-auto py-6 px-6"
           id={'preview-question'}
         >
           <div>
-            <div
+            <EditorReader
               className="editor-wrap"
-              dangerouslySetInnerHTML={{ __html: 'topicDescription' || '' }}
-            ></div>
+              text_editor_content={topicDescription?.description}
+            />
           </div>
 
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
@@ -452,6 +514,7 @@ const TestDetail = ({ questions }: any) => {
             currentTabContent?.id,
             currentTabContent?.answer,
             currentTabContent?.corrects,
+            currentTabContent?.hightlight,
           )}
           {/* ) : (
                 <EssayQuestionPreview
@@ -577,7 +640,10 @@ const TestDetail = ({ questions }: any) => {
               <div className="font-normal text-sm pe-6 border-r">Help</div>
             </div>
           </button>
-          <button className="h-full">
+          <button
+            className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+            onClick={() => setAllowHighLight(!allowHighLight)}
+          >
             <div className="flex items-center gap-3 ps-6 ">
               <HighlightIcon />
               <div className="font-normal text-sm pe-6 border-r">Highlight</div>
@@ -725,10 +791,11 @@ export async function getServerSideProps(context: any) {
         notFound: true,
       }
     }
-    const questions = await CourseTestApi.getQuestionTabsById(
+    const questions = (await CourseTestApi.getQuestionTabsById(
       context?.query?.id,
       cookies.accessToken,
-    )
+    )) as any
+
     return {
       props: { questions },
     }
@@ -756,26 +823,23 @@ export async function getServerSideProps(context: any) {
         )
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const newApiResponse = await axios.get(
-          `${apiURL}/courses?page_index=1&page_size=10&name=${
-            query.name
-          }&type=${query.type ?? ''}`,
-          {
-            headers: {
-              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
-            },
-          },
-        )
+        // const questions = await CourseTestApi.getQuestionTabsById(
+        //   context?.query?.id,
+        //   refreshResponse.data.accessToken,
+        // )
+        // return {
+        //   props: { questions },
+        // }
 
         // Xử lý dữ liệu từ API
-        const courses = newApiResponse.data?.data
+        // const courses = newApiResponse.data?.data
 
         // Trả về props cho trang
-        return {
-          props: {
-            courses: courses,
-          },
-        }
+        // return {
+        //   props: {
+        //     courses: courses,
+        //   },
+        // }
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập

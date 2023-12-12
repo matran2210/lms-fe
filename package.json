@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@cloudflare/stream-react": "^1.8.0",
+    "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.3.2",
     "@react-native-async-storage/async-storage": "^1.19.5",
     "@reduxjs/toolkit": "^1.9.7",
@@ -41,7 +42,7 @@
     "next-with-less": "^3.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^9.3.0",
-    "preview-part": "^1.1.48",
+    "preview-part": "^1.1.58",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",

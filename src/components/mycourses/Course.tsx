@@ -6,12 +6,14 @@ import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { truncateString } from '@utils/index'
 import { parseISO, differenceInDays } from 'date-fns'
 import { round } from 'lodash'
+import { Router, useRouter } from 'next/router'
 
 const Course = ({ course }: { course: any }) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleOnClick = () => {
     setOpen(true)
   }
+  const router = useRouter()
 
   const [daysDifference, setDaysDifference] = useState(0)
 
@@ -37,13 +39,12 @@ const Course = ({ course }: { course: any }) => {
   )
 
   return (
-    <>
+    <div className="cursor-pointer">
       <div
         className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] text-bw-1`}
+        onClick={() => router.push(`/courses/my-course/${course.id}`)}
       >
-        <Link href={`/courses/my-course/${course.id}`}>
-          {truncateString(course?.name, 40)}
-        </Link>
+        <div>{truncateString(course?.name, 40)}</div>
       </div>
       <div className="flex justify-between items-center">
         <div className="name-class text-medium-sm text-gray-1">
@@ -105,13 +106,13 @@ const Course = ({ course }: { course: any }) => {
             full={false}
             size={'small'}
             className="hover:bg-primary hover:text-white ml-auto"
-            onClick={handleOnClick}
+            onClick={() => router.push(`/courses/my-course/${course.id}`)}
           />
           {/* )} */}
         </div>
       </div>
       <ResultRowsModal open={open} setOpen={setOpen} />
-    </>
+    </div>
   )
 }
 

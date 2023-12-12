@@ -1,7 +1,9 @@
 import EditorReader from '@components/base/editor/EditorReader'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
 import React, {
   ForwardedRef,
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useState,
 } from 'react'
@@ -9,13 +11,27 @@ import React, {
 interface IProps {
   data: any
   action?: any
+  handleSaveHighLight?: any
+  highlighted?: any
+  removeHighlight?: any
+  allowHighLight?: boolean
 }
 type IProp = {
   value: string
 }
 
 const MatchingQuestion = forwardRef(
-  ({ data, action }: IProps, ref: ForwardedRef<any>) => {
+  (
+    {
+      data,
+      action,
+      handleSaveHighLight,
+      highlighted,
+      removeHighlight,
+      allowHighLight,
+    }: IProps,
+    ref: ForwardedRef<any>,
+  ) => {
     function allowDrop(ev: any) {
       ev.preventDefault()
     }
@@ -60,12 +76,24 @@ const MatchingQuestion = forwardRef(
     const QuestionCard = ({ value }: IProp) => {
       return <div className="sapp-arrowed-container">{value}</div>
     }
+    useEffect(() => {
+      if (data) {
+        DeserializeHighlight(highlighted)
+      }
+    }, [data])
     return (
       <div key={key}>
-        <EditorReader
-          className="sapp-questions"
-          text_editor_content={data?.question_content}
-        />
+        <div
+          id="hightlight_area"
+          onMouseUp={() =>
+            runHighlight(handleSaveHighLight, allowHighLight || false)
+          }
+        >
+          <EditorReader
+            className="sapp-questions"
+            text_editor_content={data?.question_content}
+          />
+        </div>
         <div className="flex flex-col gap-y-5">
           {data?.question_matchings.map((e: any) => {
             return (

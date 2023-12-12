@@ -1,3 +1,4 @@
+import { DeserializeHighlight, runHighlight } from '@utils/index'
 import {
   ForwardedRef,
   forwardRef,
@@ -10,11 +11,26 @@ import {
 interface IProps {
   data?: any
   action?: any
+  handleSaveHighLight?: any
+  highlighted?: any
+  removeHighlight?: any
+  allowHighLight?: boolean
 }
 const DragNDropPreivew = forwardRef(
-  ({ data, action }: IProps, ref: ForwardedRef<any>) => {
+  (
+    {
+      data,
+      action,
+      handleSaveHighLight,
+      highlighted,
+      removeHighlight,
+      allowHighLight,
+    }: IProps,
+    ref: ForwardedRef<any>,
+  ) => {
     const [answered, setAnswered] = useState<any>([])
     const refContent = useRef(null) as any
+
     function allowDrop(ev: any) {
       ev.preventDefault()
     }
@@ -50,8 +66,9 @@ const DragNDropPreivew = forwardRef(
         // setAnswered()
       },
     }))
-    // console.log(key)
-
+    useEffect(() => {
+      DeserializeHighlight(highlighted)
+    }, [questionContent])
     useEffect(() => {
       const doc = parser.parseFromString(str, 'text/html')
       // if (refContent?.current) {
@@ -87,6 +104,10 @@ const DragNDropPreivew = forwardRef(
                   questionContent?.documentElement.querySelector('body')
                     ?.innerHTML || '',
               }}
+              id="hightlight_area"
+              onMouseUp={() =>
+                runHighlight(handleSaveHighLight, allowHighLight || false)
+              }
             />
             <div className="answer-area">
               <div
