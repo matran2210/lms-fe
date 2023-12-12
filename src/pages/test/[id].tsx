@@ -155,6 +155,7 @@ const TestDetail = ({ questions }: any) => {
         return <div></div>
     }
   }
+  const [topicDescription, setTopicDescription] = useState<any>()
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control, handleSubmit, getValues, setValue } = useForm()
@@ -363,6 +364,11 @@ const TestDetail = ({ questions }: any) => {
   useEffect(() => {
     async function getDetail() {
       const res = await CourseTestApi.getQuestionsDetail(currentPage)
+      const topicDescription = await CourseTestApi.getTopicDescription(
+        questions[questions.findIndex((e: any) => e.id === currentPage)]
+          .question_topic_id,
+      )
+      setTopicDescription(topicDescription.data)
       setTabs((prev: any) => {
         const newData = prev.map((item: any) => {
           if (currentPage === item.id) {
@@ -382,6 +388,7 @@ const TestDetail = ({ questions }: any) => {
         return newData
       })
     }
+
     if (currentPage) {
       getDetail()
     }
@@ -456,23 +463,14 @@ const TestDetail = ({ questions }: any) => {
       {/* <div className=''> */}
       {currentTabContent?.data === DISPLAY_TYPE.VERTICAL ? (
         <div
-          // onDoubleClick={(e) => {
-          //   const element = e.target as any;
-          //   if (element.localName === "video") {
-          //     const content = element.currentSrc;
-          //     if (content) {
-          //       setOpenVideo({ status: true, src: content });
-          //     }
-          //   }
-          // }}
           className="flex gap-5 h-[calc(100%-240px)] bg-gray-3"
           id={'preview-question'}
         >
           <div className="w-1/2 h-full overflow-auto bg-white p-6">
-            <div
+            <EditorReader
               className="editor-wrap"
-              dangerouslySetInnerHTML={{ __html: 'topicDescription' || '' }}
-            ></div>
+              text_editor_content={topicDescription?.description}
+            />
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
             <div className="px-6">
@@ -499,24 +497,14 @@ const TestDetail = ({ questions }: any) => {
         </div>
       ) : (
         <div
-          // style={{ maxWidth: "948px", width: "100%", margin: "auto" }}
-          // onDoubleClick={(e) => {
-          //   const element = e.target as any;
-          //   if (element.localName === "video") {
-          //     const content = element.currentSrc;
-          //     if (content) {
-          //       setOpenVideo({ status: true, src: content });
-          //     }
-          //   }
-          // }}
           className="max-w-screen-2md w-full m-auto h-[calc(100%-240px)] overflow-auto py-6 px-6"
           id={'preview-question'}
         >
           <div>
-            <div
+            <EditorReader
               className="editor-wrap"
-              dangerouslySetInnerHTML={{ __html: 'topicDescription' || '' }}
-            ></div>
+              text_editor_content={topicDescription?.description}
+            />
           </div>
 
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
@@ -803,10 +791,11 @@ export async function getServerSideProps(context: any) {
         notFound: true,
       }
     }
-    const questions = await CourseTestApi.getQuestionTabsById(
+    const questions = (await CourseTestApi.getQuestionTabsById(
       context?.query?.id,
       cookies.accessToken,
-    )
+    )) as any
+
     return {
       props: { questions },
     }
@@ -834,26 +823,23 @@ export async function getServerSideProps(context: any) {
         )
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const newApiResponse = await axios.get(
-          `${apiURL}/courses?page_index=1&page_size=10&name=${
-            query.name
-          }&type=${query.type ?? ''}`,
-          {
-            headers: {
-              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
-            },
-          },
-        )
+        // const questions = await CourseTestApi.getQuestionTabsById(
+        //   context?.query?.id,
+        //   refreshResponse.data.accessToken,
+        // )
+        // return {
+        //   props: { questions },
+        // }
 
         // Xử lý dữ liệu từ API
-        const courses = newApiResponse.data?.data
+        // const courses = newApiResponse.data?.data
 
         // Trả về props cho trang
-        return {
-          props: {
-            courses: courses,
-          },
-        }
+        // return {
+        //   props: {
+        //     courses: courses,
+        //   },
+        // }
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập
