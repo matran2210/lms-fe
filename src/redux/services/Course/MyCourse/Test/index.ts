@@ -39,6 +39,13 @@ const CourseTestApi = {
     })
     return response
   },
+  getTopicDescription: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.getTopicDescription + `/${id}`
+    const response = await httpService.GET<any, any>({
+      uri,
+    })
+    return response
+  },
 }
 
 export default CourseTestApi
