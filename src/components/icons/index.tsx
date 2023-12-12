@@ -317,6 +317,23 @@ export default function Icon({ type, className }: IconsPros) {
           />
         </svg>
       )}
+      {type === 'play-circle-sharp' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100"
+          height="100"
+          fill="none"
+          viewBox="0 0 100 100"
+          className={`${className}`}
+        >
+          <g>
+            <path
+              fill="currentColor"
+              d="M50 9.375C27.6 9.375 9.375 27.6 9.375 50S27.6 90.625 50 90.625 90.625 72.4 90.625 50 72.4 9.375 50 9.375zM39.062 67.188V32.812L67.189 50 39.061 67.188z"
+            ></path>
+          </g>
+        </svg>
+      )}
     </>
   )
 }

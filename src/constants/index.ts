@@ -57,3 +57,9 @@ export const VALID_UPLOAD_EDITOR = [
   { type: 'image/*', size: MAX_UPLOAD_SIZE },
   { type: 'video/*', size: MAX_UPLOAD_VIDEO_SIZE },
 ]
+
+export const UserGuide = {
+  TITLE_WELCOME: 'Welcome to SAPP LMS',
+  CONTENT_WELCOME: 'Let’s start with a quick product tour!',
+  CONTENT_BUTTON: 'Start Tour',
+}

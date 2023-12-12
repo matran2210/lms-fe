@@ -18,6 +18,8 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModelSidebar from '@components/base/modal/SappModelSidebar'
 import { useRouter } from 'next/router'
+import PopupWelcome from '@components/user-guide/PopupWelcome'
+import PopupStep from '@components/user-guide/PopupStep'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -161,6 +163,8 @@ const Notifications = () => {
           <NotifyDetail notifyDetail={notifyDetail} />
         </SappModelSidebar>
       </div>
+      {/*<PopupWelcome />*/}
+      <PopupStep content="xyz" index={1} total={6} handleNext={() => {}} />
     </>
   )
 }
