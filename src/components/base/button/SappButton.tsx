@@ -57,6 +57,7 @@ const SappButton = ({
   color = 'primary',
   isUnderLine,
   isPadding = true,
+  childClass = '',
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
@@ -76,7 +77,10 @@ const SappButton = ({
       onClick={onClick}
       disabled={disabled || loading}
     >
-      <span className={loading ? 'invisible' : ''}> {title}</span>
+      <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
+        {' '}
+        {title}
+      </span>
       {loading && (
         <div className="absolute w-100 h-100 top-0 left-0 right-0 bottom-0 flex space-x-2 justify-center items-center bg-none dark:invert">
           <span className="sr-only">Loading...</span>

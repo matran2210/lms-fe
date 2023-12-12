@@ -164,7 +164,12 @@ const Notifications = () => {
         </SappModelSidebar>
       </div>
       {/*<PopupWelcome />*/}
-      <PopupStep content="xyz" index={1} total={6} handleNext={() => {}} />
+      {/*<PopupStep
+        content='The left menu bar is divided into two sections. The upper section consists of the SAPP logo, dashboard, your enrolled courses, and the entrance test you have registered for.'
+        index={1}
+        total={6}
+        handleNext={() => {}}
+      />*/}
     </>
   )
 }

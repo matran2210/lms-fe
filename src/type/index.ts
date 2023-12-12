@@ -25,6 +25,7 @@ export interface IButtonProps {
   isPaddingHorizontal?: boolean
   color?: IButtonColors
   isUnderLine?: boolean
+  childClass?: string
 }
 
 export interface ITabs {
