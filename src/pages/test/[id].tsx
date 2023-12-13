@@ -32,6 +32,7 @@ import { LAYOUT } from '@utils/constants'
 import axios from 'axios'
 import { parse } from 'cookie'
 import { uniqueId } from 'lodash'
+import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES } from 'src/constants'
@@ -45,6 +46,7 @@ const TestDetail = ({ questions }: any) => {
     defaultValue: any,
     corrects?: any,
     highlighted?: any,
+    solution?: any,
   ) => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -60,6 +62,7 @@ const TestDetail = ({ questions }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -113,6 +116,7 @@ const TestDetail = ({ questions }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            defaultAnswer={defaultValue}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -137,6 +141,7 @@ const TestDetail = ({ questions }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            defaultAnswer={defaultValue}
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -157,6 +162,8 @@ const TestDetail = ({ questions }: any) => {
         return <div></div>
     }
   }
+  const router = useRouter()
+
   const [topicDescription, setTopicDescription] = useState<any>()
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const [currentTabContent, setCurrentTabContent] = useState<any>()
@@ -303,46 +310,82 @@ const TestDetail = ({ questions }: any) => {
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
         if (currentPage === item.id) {
-          setCurrentTabContent({ ...item, done: true, corrects: corrects })
-          return { ...item, done: true, corrects: corrects }
+          setCurrentTabContent({
+            ...item,
+            done: true,
+            corrects: corrects,
+            solution: res.data[0].solution,
+          })
+          return {
+            ...item,
+            done: true,
+            corrects: corrects,
+            solution: res.data[0].solution,
+          }
         }
         return item
       })
       return newData
     })
   }
-  const handleChangeTab = (e: any) => {
+  const handleSaveCurrentAnswer = () => {
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
       currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
     ) {
-      handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage)
+      setTabs(handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage))
     } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      handleSaveAnswer(getAnswerMatching(), currentPage)
+      setTabs(handleSaveAnswer(getAnswerMatching(), currentPage))
     } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      handleSaveAnswer(getAnswerDragNDrop(), currentPage)
+      setTabs(handleSaveAnswer(getAnswerDragNDrop(), currentPage))
+    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
+      setTabs(handleSaveAnswer(getValueSelectText(), currentPage))
+    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
+      setTabs(handleSaveAnswer(getValueFillText(), currentPage))
     }
+  }
+  const handleChangeTab = (e: any) => {
+    handleSaveCurrentAnswer()
     setCurrentPage(e)
     setOpenScratchPad([])
     setAllowHighLight(false)
   }
   const handleSaveAnswer = (data: any, tabId: any) => {
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
-        if (tabId === item.id) {
-          return { ...item, answer: data }
-        }
-        return item
-      })
-      return newData
+    // setTabs((prev: any) => {
+    const newData = tabs.map((item: any) => {
+      if (tabId === item.id) {
+        return { ...item, answer: data }
+      }
+      return item
     })
+    return newData
+    // })
   }
 
-  const handleSubmitQuestion = () => {
+  const handleSubmitQuestion = async () => {
+    let allQuest = [...tabs]
+    if (
+      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      allQuest = handleSaveAnswer(
+        getValues(`${currentPage}_answer`),
+        currentPage,
+      )
+    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+      allQuest = handleSaveAnswer(getAnswerMatching(), currentPage)
+    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      allQuest = handleSaveAnswer(getAnswerDragNDrop(), currentPage)
+    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
+      allQuest = handleSaveAnswer(getValueSelectText(), currentPage)
+    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
+      allQuest = handleSaveAnswer(getValueFillText(), currentPage)
+    }
     let quiz_position_mapping = []
     let answers = []
-    for (let e of tabs) {
+    for (let e of allQuest) {
       if (e.answer) {
         if (
           e.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -368,6 +411,20 @@ const TestDetail = ({ questions }: any) => {
             }
           }
           answers.push({ question_id: e.id, answer })
+        } else if (
+          e.qType === QUESTION_TYPES.SELECT_WORD ||
+          e.qType === QUESTION_TYPES.FILL_WORD
+        ) {
+          let answer = []
+          for (let i in e.answer) {
+            if (e.answer[i] && e.answer[i] !== '') {
+              answer.push({
+                answer_id: e.answer[i],
+                answer_position: +i + 1,
+              })
+            }
+          }
+          answers.push({ question_id: e.id, answer })
         }
       }
       quiz_position_mapping.push({
@@ -375,9 +432,11 @@ const TestDetail = ({ questions }: any) => {
         answers: e.data?.answers,
       })
     }
-    // console.log({ answers:answers, quiz_position_mapping:quiz_position_mapping });
-
-    return { answers: answers, quiz_position_mapping: quiz_position_mapping }
+    await CourseTestApi.submitQuestion(router.query?.id as string, {
+      answers: answers,
+      quiz_position_mapping: quiz_position_mapping,
+    })
+    return
   }
   const handleClearSelection = (data: any) => {
     if (
@@ -538,6 +597,7 @@ const TestDetail = ({ questions }: any) => {
                 currentTabContent?.answer,
                 currentTabContent?.corrects,
                 currentTabContent?.hightlight,
+                currentTabContent?.solution,
               )}
               {/* ) : (
                     <EssayQuestionPreview
@@ -571,6 +631,7 @@ const TestDetail = ({ questions }: any) => {
             currentTabContent?.answer,
             currentTabContent?.corrects,
             currentTabContent?.hightlight,
+            currentTabContent?.solution,
           )}
           {/* ) : (
                 <EssayQuestionPreview

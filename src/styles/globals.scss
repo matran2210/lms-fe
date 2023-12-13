@@ -88,6 +88,20 @@ body * ::-webkit-scrollbar-thumb:hover {
   p {
     @apply break-words mb-2;
   }
+
+  thead,
+  tbody,
+  tfoot,
+  td,
+  th {
+    border-width: 1px;
+    border-style: inherit;
+  }
+
+  tr {
+    border-style: initial;
+    border-width: initial;
+  }
 }
 
 .sapp-questions .sapp-input-preview {
@@ -224,6 +238,7 @@ body * ::-webkit-scrollbar-thumb:hover {
   resize: none;
   border: none;
 }
+
 .result {
   height: 60px;
   width: 100%;

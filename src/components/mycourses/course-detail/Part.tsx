@@ -74,8 +74,8 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
               percentProgress === 0
                 ? 'Begin'
                 : percentProgress === 100
-                  ? 'Review'
-                  : 'Resume'
+                ? 'Review'
+                : 'Resume'
             }
             full={false}
             size={'small'}
