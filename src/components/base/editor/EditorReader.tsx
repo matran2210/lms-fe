@@ -5,19 +5,32 @@ import SappModalImage from '../modal/SappModalImage'
 type Props = {
   text_editor_content?: string
   className?: string
+  extenalRef?: any
 }
 
-const EditorReader = ({ text_editor_content, className }: Props) => {
+const EditorReader = ({
+  text_editor_content,
+  className,
+  extenalRef,
+}: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   useEffect(() => {
-    refDocument.current?.addEventListener('click', handleOnclick)
+    if (extenalRef) {
+      extenalRef.current?.addEventListener('click', handleOnclick)
 
-    return () => {
-      refDocument.current?.removeEventListener('click', handleOnclick)
+      return () => {
+        extenalRef.current?.removeEventListener('click', handleOnclick)
+      }
+    } else {
+      refDocument.current?.addEventListener('click', handleOnclick)
+
+      return () => {
+        refDocument.current?.removeEventListener('click', handleOnclick)
+      }
     }
-  }, [refDocument])
+  }, [refDocument, extenalRef])
 
   const handleOnclick = (e: MouseEvent) => {
     const target = e.target as HTMLElement
@@ -50,7 +63,7 @@ const EditorReader = ({ text_editor_content, className }: Props) => {
     <>
       <div className={`${className} mb-32px editor-wrap`}>
         <div
-          ref={refDocument}
+          ref={extenalRef || refDocument}
           dangerouslySetInnerHTML={{ __html: text_editor_content || '' }}
         ></div>
       </div>

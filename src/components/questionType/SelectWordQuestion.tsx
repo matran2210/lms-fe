@@ -1,6 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 interface IProps {
   data: any
   action?: any
@@ -8,6 +8,7 @@ interface IProps {
   highlighted?: any
   removeHighlight?: any
   allowHighLight?: boolean
+  defaultAnswer?: any
 }
 const SelectWord = ({
   data,
@@ -16,7 +17,10 @@ const SelectWord = ({
   highlighted,
   removeHighlight,
   allowHighLight,
+  defaultAnswer,
 }: IProps) => {
+  const ref = useRef(null) as any
+  const [questionContent, setQuestionContent] = useState<any>()
   const str = data?.question_content
   const formatAnswer = (data: any) => {
     let objAnswer: any = {}
@@ -26,7 +30,7 @@ const SelectWord = ({
       }
       objAnswer[e.answer_position].push({
         label: e.answer,
-        value: e.answer,
+        value: e.id,
         result: e.is_correct,
       })
     }
@@ -35,18 +39,24 @@ const SelectWord = ({
   const answerObj = formatAnswer(data)
 
   const parser = new DOMParser()
-  const doc = parser.parseFromString(str, 'text/html')
-  const elements = doc.querySelectorAll('.question-content-tag')
-  elements.forEach((element, index) => {
-    element.outerHTML = `
-      <select class="sapp-select--selectword-preview">
+
+  useEffect(() => {
+    const doc = parser.parseFromString(str, 'text/html')
+    const elements = doc.querySelectorAll('.question-content-tag')
+    elements.forEach((element, index) => {
+      element.outerHTML = `
+      <select class="sapp-select--selectword-preview" id="${element.id}">
       <option value="">Choose...</options>
       ${answerObj[+index + 1].map((e: any) => {
-        return `<option value=${e.value}>${e.label}</option>`
+        return `<option value=${e.value} ${
+          e.value === defaultAnswer?.[index] ? 'selected' : ''
+        }>${e.label}</option>`
       })}
       </select>
       `
-  })
+    })
+    setQuestionContent(doc)
+  }, [defaultAnswer])
   useEffect(() => {
     if (data) {
       DeserializeHighlight(highlighted)
@@ -60,10 +70,12 @@ const SelectWord = ({
       }
     >
       <EditorReader
+        extenalRef={ref}
         className="questions"
         // style={{borderBottom: '1px solid  white'}}
         text_editor_content={
-          doc.documentElement.querySelector('body')?.innerHTML || ''
+          questionContent?.documentElement.querySelector('body')?.innerHTML ||
+          ''
         }
       />
     </div>
