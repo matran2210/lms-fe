@@ -3,12 +3,12 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/messaging'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB12OZbgQA8VpCSAYrgytTJkUexafwiN74',
-  authDomain: 'sapp-develop.firebaseapp.com',
-  projectId: 'sapp-develop',
-  storageBucket: 'sapp-develop.appspot.com',
-  messagingSenderId: '579391570124',
-  appId: '1:579391570124:web:ed5e7c72474edf434bc269',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
 if (!firebase.apps.length) {
@@ -30,8 +30,7 @@ export const getMessagingToken = async () => {
   if (!messaging) return
   try {
     currentToken = await messaging.getToken({
-      vapidKey:
-        'BANlYjHJCUf-jXUtrRR8zXl2QytADlfN9vVUP_N_3dd3nGgH7tcIAgOcTGHRr8pyCNujwHdpVZ7DSg5SsViq5u0',
+      vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPIDKEY,
     })
   } catch (error) {}
   return currentToken
