@@ -3,6 +3,7 @@ import { DeserializeHighlight, runHighlight } from '@utils/index'
 import React, {
   ForwardedRef,
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useState,
@@ -15,6 +16,7 @@ interface IProps {
   highlighted?: any
   removeHighlight?: any
   allowHighLight?: boolean
+  defaultAnswer?: any
 }
 type IProp = {
   value: string
@@ -29,9 +31,12 @@ const MatchingQuestion = forwardRef(
       highlighted,
       removeHighlight,
       allowHighLight,
+      defaultAnswer,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
+    const [defaultValue, setDefaultValue] = useState<any>()
+    const [answers, setAnswers] = useState<any>()
     function allowDrop(ev: any) {
       ev.preventDefault()
     }
@@ -81,6 +86,28 @@ const MatchingQuestion = forwardRef(
         DeserializeHighlight(highlighted)
       }
     }, [data])
+    useEffect(() => {
+      let obj = {} as any
+      let arr = []
+      for (let quest of data?.question_matchings) {
+        arr.push(quest.answer)
+        if (defaultAnswer) {
+          obj[quest.id] = data?.question_matchings.find(
+            (el: any) =>
+              el.answer?.id ===
+              defaultAnswer.find((e: any) => e.question_id === quest.id)
+                ?.answer_id,
+          )
+        }
+      }
+      if (defaultAnswer) {
+        for (let e of defaultAnswer) {
+          arr = arr.filter((el) => el.id !== e.answer_id)
+        }
+      }
+      setAnswers(arr)
+      setDefaultValue(obj)
+    }, [defaultAnswer])
     return (
       <div key={key}>
         <div
@@ -107,7 +134,21 @@ const MatchingQuestion = forwardRef(
                   className="flex-1 sapp-match-result"
                   onDrop={() => drop(event)}
                   onDragOver={() => allowDrop(event)}
-                ></div>
+                >
+                  {defaultValue?.[e?.id]?.id && (
+                    <div
+                      // className="w-fit"
+                      className="sapp-notched-container min-w-132px"
+                      id={defaultValue[e?.id]?.answer.id}
+                      draggable="true"
+                      onDragStart={drag}
+                      onDrop={() => {}}
+                      onDragOver={() => {}}
+                    >
+                      {defaultValue[e?.id].answer?.answer}
+                    </div>
+                  )}
+                </div>
               </div>
             )
           })}
@@ -117,19 +158,19 @@ const MatchingQuestion = forwardRef(
             onDragOver={allowDrop}
             id="storage"
           >
-            {data?.question_matchings.map((e: any) => {
+            {answers?.map((answer: any) => {
               return (
                 <div
                   // className="w-fit"
-                  key={e?.answer?.id}
+                  key={answer?.id}
                   className="sapp-notched-container min-w-132px"
-                  id={e?.answer?.id}
+                  id={answer?.id}
                   draggable="true"
                   onDragStart={drag}
                   onDrop={() => {}}
                   onDragOver={() => {}}
                 >
-                  {e?.answer?.answer}
+                  {answer?.answer}
                 </div>
               )
             })}

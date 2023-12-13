@@ -92,7 +92,6 @@ export async function getServerSideProps(context: any) {
           },
         }
       } catch (refreshError) {
-        
         return {
           redirect: {
             destination: '/',

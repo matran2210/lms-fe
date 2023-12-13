@@ -3,8 +3,8 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { ICourseSection } from 'src/type/courses'
 
-const PartFailed = ({ coursePart }: {coursePart: ICourseSection}) => {
-  const formattedTime = formatTime(coursePart?.quiz?.limit_count  || 0)
+const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
+  const formattedTime = formatTime(coursePart?.quiz?.limit_count || 0)
 
   return (
     <>
@@ -18,7 +18,9 @@ const PartFailed = ({ coursePart }: {coursePart: ICourseSection}) => {
         </div>
         <div className="time-allow flex justify-between pt-4">
           <p className="text-base text-gray-1">Attempt:</p>
-          <p className="text-base text-bw-1 font-semibold">{!coursePart?.quiz?.quiz_timed ? '' : coursePart?.quiz.quiz_timed}</p>
+          <p className="text-base text-bw-1 font-semibold">
+            {!coursePart?.quiz?.quiz_timed ? '' : coursePart?.quiz.quiz_timed}
+          </p>
         </div>
       </div>
       <div className="mt-auto">

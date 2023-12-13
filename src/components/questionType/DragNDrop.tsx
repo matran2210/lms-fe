@@ -15,6 +15,7 @@ interface IProps {
   highlighted?: any
   removeHighlight?: any
   allowHighLight?: boolean
+  defaultAnswer?: any
 }
 const DragNDropPreivew = forwardRef(
   (
@@ -25,12 +26,17 @@ const DragNDropPreivew = forwardRef(
       highlighted,
       removeHighlight,
       allowHighLight,
+      defaultAnswer,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
     const [answered, setAnswered] = useState<any>([])
     const refContent = useRef(null) as any
-
+    useEffect(() => {
+      if (defaultAnswer) {
+        setAnswered(defaultAnswer)
+      }
+    }, [defaultAnswer])
     function allowDrop(ev: any) {
       ev.preventDefault()
     }
@@ -58,12 +64,10 @@ const DragNDropPreivew = forwardRef(
     const [key, setKey] = useState(1)
     useImperativeHandle(ref, () => ({
       handleReset() {
-        setAnswered([])
         setKey((prev) => {
           const newKey = prev + 1
           return newKey
         })
-        // setAnswered()
       },
     }))
     useEffect(() => {
@@ -74,10 +78,10 @@ const DragNDropPreivew = forwardRef(
       // if (refContent?.current) {
       const elements = doc.querySelectorAll('.question-content-tag')
       elements.forEach((element: any, index: number) => {
-        if (answered.length > 0) {
-          if (answered[index].value !== '') {
+        if (defaultAnswer?.length > 0) {
+          if (defaultAnswer[index].value !== '') {
             element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <span class="answer-box" draggable="true" ondragstart="drag(event)" id="${answered[index].idAnswer}">${answered[index].value}</span>
+            <span class="answer-box" draggable="true" ondragstart="drag(event)" id="${defaultAnswer[index].idAnswer}">${defaultAnswer[index].value}</span>
             </span>`
           } else {
             element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event)" ondragover="allowDrop(event)"> </span>`
@@ -90,7 +94,7 @@ const DragNDropPreivew = forwardRef(
       })
       setQuestionContent(doc)
       // }
-    }, [answered, refContent?.current])
+    }, [defaultAnswer, refContent?.current])
 
     return (
       <div className="body-modal-white" key={key}>
@@ -117,9 +121,11 @@ const DragNDropPreivew = forwardRef(
                 id="storage"
               >
                 {data?.answers?.map((e: any) => {
-                  for (let as of answered) {
-                    if (as.idAnswer === e.id) {
-                      return <></>
+                  if (answered) {
+                    for (let as of answered) {
+                      if (as.idAnswer === e.id) {
+                        return null
+                      }
                     }
                   }
                   return (
