@@ -17,7 +17,7 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-6 min-w-62px',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-6-percent min-w-62px',
   },
   {
     label: 'Type',
@@ -42,7 +42,7 @@ const headers = [
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-7 min-w-78px',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-7-percent min-w-78px',
   },
 ]
 

@@ -53,7 +53,7 @@ const ResultRow = ({
           )}
         </div>
       </td>
-      <td className="text-base text-bw-1 text-center py-5 border-b border-default border-dashed w-7 min-w-78px">
+      <td className="text-base text-bw-1 text-center py-5 border-b border-default border-dashed w-7-percent min-w-78px">
         {formattedTime}
       </td>
     </>

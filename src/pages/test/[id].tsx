@@ -600,7 +600,7 @@ const TestDetail = ({ questions }: any) => {
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+                <div className="flex w-6-percent items-center bg-gray-2 w-full h-[40px] justify-between px-5">
                   <div>Calculator</div>
                   <button onClick={() => handleCloseScratchPad(e)}>
                     <CloseIcon />
@@ -628,7 +628,7 @@ const TestDetail = ({ questions }: any) => {
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+                <div className="flex w-6-percent items-center bg-gray-2 w-full h-[40px] justify-between px-5">
                   <div>Scratch Pad</div>
                   {/* <CloseIcon */}
                   <button onClick={() => handleCloseScratchPad(e)}>
@@ -665,7 +665,7 @@ const TestDetail = ({ questions }: any) => {
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6 items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+                <div className="flex w-6-percent items-center bg-gray-2 w-full h-[40px] justify-between px-5">
                   <div>Exhibit</div>
                   <button onClick={() => handleCloseScratchPad(e)}>
                     <CloseIcon />

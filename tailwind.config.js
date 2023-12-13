@@ -47,6 +47,7 @@ module.exports = {
         primary: {
           DEFAULT: '#FFB800',
           2: '#FFC83A',
+          3: '#E5A600',
         },
         secondary: {
           DEFAULT: '#FFFAF0',
@@ -138,7 +139,8 @@ module.exports = {
         md: '448px',
         lg: '512px',
         xl: '576px',
-        dl: '950px',
+        dl: '646px',
+        '2dl': '950px',
         xxl: '1144px',
         '8xl': '1920px',
       },
@@ -166,8 +168,8 @@ module.exports = {
         18: '72px',
         30: '7.5rem',
         4.5: '1.125rem',
-        6: '6%',
-        7: '7%',
+        '6-percent': '6%',
+        '7-percent': '7%',
         18: '18%',
         3.6: '36%',
         17: '17%',
@@ -180,6 +182,7 @@ module.exports = {
         3.8: '0.89rem', // 14.3px
         4.5: '1.125rem', // 18px
         5.25: '1.313rem', // 21px
+        7.5: '1.875rem', // 30px
         8.25: '2.0625rem', // 33px
         17.5: '4.375rem', // 70px
         19: '4.75rem', // 76px
@@ -198,6 +201,9 @@ module.exports = {
         16.75: '4.188rem',
         26: '6.5rem',
         30: '7.5rem', // 120px
+      },
+      opacity: {
+        55: '0.55',
       },
       backgroundImage: {
         'radio-normal': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23A1A1A1' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3C/svg%3E")`,

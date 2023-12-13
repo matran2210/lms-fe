@@ -82,7 +82,7 @@ const LoginPage = () => {
         }),
       ).unwrap()
       await handleDeviceToken()
-      router.push('/')
+      router.push(PageLink.COURSES)
     } catch (error) {}
   }
   const socialLogin = () => {
