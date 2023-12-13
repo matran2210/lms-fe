@@ -1,8 +1,12 @@
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/messaging'
 // Scripts for firebase and firebase messaging
 // eslint-disable-next-line no-undef
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js')
+const self = (typeof window !== 'undefined' ? window : {}) as any;
+
+self.importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js')
 // eslint-disable-next-line no-undef
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js')
+self.importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js')
 
 // Initialize the Firebase app in the service worker by passing the generated config
 const firebaseConfig = {
@@ -20,14 +24,3 @@ firebase.initializeApp(firebaseConfig)
 // Retrieve firebase messaging
 // eslint-disable-next-line no-undef
 const messaging = firebase.messaging()
-
-messaging.onBackgroundMessage(function(payload) {
-  const notificationTitle = payload.notification.title
-  const notificationOptions = {
-    body: payload.notification.body,
-  };
-
-  // eslint-disable-next-line no-restricted-globals
-  self.registration.showNotification(notificationTitle,
-    notificationOptions);
-})
