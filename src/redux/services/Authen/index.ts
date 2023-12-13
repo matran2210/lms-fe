@@ -20,6 +20,7 @@ const AuthApi = {
         login: request.login?.trim(),
         password: request.password?.trim(),
         remember_me: request.remember_me,
+        device_id: request?.device_id,
       },
     })
   },

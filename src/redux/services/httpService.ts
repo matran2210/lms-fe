@@ -8,6 +8,7 @@ import url from './Authen/url'
 import toast from 'react-hot-toast'
 import { exceptions } from './en.exceptions'
 import { setCookieActToken } from '@utils/index'
+import { removeJwtToken } from '@utils/helpers/authen'
 
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -66,7 +67,8 @@ const refreshAccessToken = async (): Promise<string | null> => {
     // Return the new access token
     return act
   } catch (error) {
-    store.dispatch(getLogoutUser())
+    // store.dispatch(getLogoutUser())
+    removeJwtToken()
     // If there is an error, return null
     return null
   }
