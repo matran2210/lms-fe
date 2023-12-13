@@ -59,7 +59,7 @@ const MultiChoiceQuestion = ({
           name={name || 'multiples'}
           multiple
           corrects={corrects}
-          defaultValue={defaultValues}
+          defaultValue={defaultValues || ''}
         />
       </div>
     </div>

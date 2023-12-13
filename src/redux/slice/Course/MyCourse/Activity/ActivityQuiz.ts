@@ -5,6 +5,7 @@ import {
   createSlice,
 } from '@reduxjs/toolkit'
 import { FieldValues } from 'react-hook-form'
+import { QUESTION_TYPES } from 'src/constants'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { RootState } from 'src/redux/store'
 import { IQuestion } from 'src/type/course/Question'
@@ -15,7 +16,8 @@ import { IQuestion } from 'src/type/course/Question'
  */
 export interface IActivityStateQuestion extends IQuestion {
   confirmed?: boolean
-  myAnswers?: FieldValues
+  myAnswers?: any
+  corrects?: any
 }
 
 /**
@@ -196,9 +198,8 @@ const quizSlice: Slice = createSlice({
             tabId: string
             quizId: string
             question: IActivityStateQuestion
-            myAnswers: FieldValues
+            myAnswers: any
           }
-
           const questions =
             state[payload.activityId]?.[payload.tabId]?.[payload.quizId]
               ?.questions
@@ -210,8 +211,82 @@ const quizSlice: Slice = createSlice({
 
             if (questionToUpdate) {
               questionToUpdate.confirmed = true
-              questionToUpdate.answers = payload.question.answers
-              questionToUpdate.myAnswers = payload.myAnswers
+              questionToUpdate.solution = payload.question.solution
+
+              switch (payload.question.qType as QUESTION_TYPES) {
+                case QUESTION_TYPES.ONE_CHOICE:
+                case QUESTION_TYPES.TRUE_FALSE:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers || []),
+                    {
+                      question_id: payload.question.id,
+                      question_answer_id: payload.myAnswers,
+                    },
+                  ]
+
+                  questionToUpdate.corrects = Object.fromEntries(
+                    (payload.question.answers || []).map((originalAnswer) => [
+                      originalAnswer.id,
+                      originalAnswer.is_correct,
+                    ]),
+                  )
+
+                  break
+
+                case QUESTION_TYPES.MULTIPLE_CHOICE:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers || []),
+                    {
+                      question_id: payload.question.id,
+                      answer: payload.myAnswers?.map((e: string) => ({
+                        answer_id: e,
+                      })),
+                    },
+                  ]
+
+                  questionToUpdate.corrects = Object.fromEntries(
+                    (payload.question.answers || []).map((originalAnswer) => [
+                      originalAnswer.id,
+                      originalAnswer.is_correct,
+                    ]),
+                  )
+                  break
+
+                case QUESTION_TYPES.FILL_WORD:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers || []),
+                    {
+                      question_id: payload.question.id,
+                      answer: payload.myAnswers?.map(
+                        (e: string, i: number) => ({
+                          answer_text: e,
+                          answer_position: i + 1,
+                        }),
+                      ),
+                    },
+                  ]
+                  questionToUpdate.corrects = payload.question.answers
+                  break
+
+                case QUESTION_TYPES.SELECT_WORD:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers || []),
+                    {
+                      question_id: payload.question.id,
+                      answer: payload.myAnswers?.map(
+                        (e: string, i: number) => ({
+                          answer_id: e,
+                          answer_position: i + 1,
+                        }),
+                      ),
+                    },
+                  ]
+                  questionToUpdate.corrects = payload.question.answers
+                  break
+
+                default:
+                  break
+              }
             }
           }
         },

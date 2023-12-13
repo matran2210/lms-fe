@@ -345,12 +345,7 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
             colorCancel="secondary"
           >
             <div className="py-5">
-              {/* Quiz component for displaying and interacting with quiz questions */}
-              <QuizComponent
-                activeQuestion={activeQuestion}
-                controlAnswer={controlAnswer}
-                setValue={setValue}
-              ></QuizComponent>
+              <QuizComponent activeQuestion={activeQuestion}></QuizComponent>
             </div>
           </SappModal>
         </div>
