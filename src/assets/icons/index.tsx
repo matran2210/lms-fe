@@ -439,3 +439,40 @@ export const ExhibitsIcon = () => {
     </svg>
   )
 }
+export const TextSquareIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <g clip-path="url(#clip0_4_9802)">
+        <path
+          d="M5.14369 14.2858L0.572266 15.4287L1.71512 12.0001V1.71439C1.71512 1.41128 1.83553 1.1206 2.04985 0.906268C2.26419 0.691941 2.55487 0.571533 2.85798 0.571533H14.2866C14.5896 0.571533 14.8804 0.691941 15.0947 0.906268C15.309 1.1206 15.4294 1.41128 15.4294 1.71439V13.143C15.4294 13.446 15.309 13.7368 15.0947 13.9511C14.8804 14.1654 14.5896 14.2858 14.2866 14.2858H5.14369Z"
+          stroke="#141414"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M5.14453 5.71436H12.0017"
+          stroke="#141414"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M5.14453 9.14307H9.71596"
+          stroke="#141414"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_4_9802">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  )
+}

@@ -9,7 +9,7 @@ interface IHookFormCheckBoxProps {
   defaultValue?: string | boolean
   title?: string
   className?: string
-  onChange?: React.ChangeEventHandler<any>
+  onChange?: (e: any) => void
   checked?: string | boolean
   isWrong?: boolean
   label?: string | undefined
@@ -28,6 +28,7 @@ interface IHookFormCheckBoxProps {
   state?: 'default' | 'error' | 'success' // Thêm prop state
   size?: 'small' | 'medium' | 'lager' // Thêm prop size
   corrects?: { [key: string]: boolean }
+  toggle?: boolean
 }
 
 const HookFormCheckBoxGroup = ({
@@ -51,6 +52,7 @@ const HookFormCheckBoxGroup = ({
   size = 'small',
   state,
   corrects,
+  toggle = false,
 }: IHookFormCheckBoxProps) => {
   gap = gap ? gap : direction === 'horizontal' ? 'gap-6' : 'gap-4'
 
@@ -132,8 +134,18 @@ const HookFormCheckBoxGroup = ({
                           field.onChange(arr)
                           onChange && onChange(arr)
                         } else {
-                          field.onChange(event.target.value)
-                          onChange && onChange(event.target.value)
+                          if (toggle) {
+                            if (event.target.value === field.value) {
+                              field.onChange(undefined)
+                              onChange && onChange(undefined as any)
+                            } else {
+                              field.onChange(event.target.value)
+                              onChange && onChange(event.target.value)
+                            }
+                          } else {
+                            field.onChange(event.target.value)
+                            onChange && onChange(event.target.value)
+                          }
                         }
                       }}
                       disabled={disabled}

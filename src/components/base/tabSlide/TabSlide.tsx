@@ -35,46 +35,52 @@ const TabSlide = ({
   }, [currentTab, elementRef?.current])
   return (
     <ul
-      className={`pagination flex items-center flex-wrap w-full gap-3`}
+      className={`pagination flex items-center flex-wrap w-full gap-3 min-h-[40px]`}
       aria-label="Pagination"
     >
       <div
         className={`${
           activeShowAll
             ? 'relative w-[calc(100%-141px)] mx-7'
-            : ' flex items-center gap-6'
+            : ' flex items-center gap-6 w-full'
         }`}
       >
-        <div
-          className={`${
-            activeShowAll && 'absolute top-0.5 -left-3 -translate-x-full'
-          }`}
-        >
-          <PageLink
-            disabled={data.findIndex((e) => e.id === currentTab) === 0}
-            arrow={true}
-            onClick={() => {
-              if (setCurrentTab !== undefined) {
-                const index = data.findIndex((e) => e.id === currentTab)
-                handleChangeTab(data[index - 1].id)
-              }
-            }}
-            // type={type}
+        {data.length > 0 && (
+          <div
+            className={`${
+              activeShowAll && 'absolute top-0.5 -left-3 -translate-x-full'
+            }`}
           >
-            <ArrowIcon iconType={'teeny'}></ArrowIcon>
-          </PageLink>
-        </div>
+            <PageLink
+              disabled={
+                (data.length > 0 &&
+                  data.findIndex((e) => e.id === currentTab) === 0) ||
+                data.length === 0
+              }
+              arrow={true}
+              onClick={() => {
+                if (setCurrentTab !== undefined) {
+                  const index = data.findIndex((e) => e.id === currentTab)
+                  handleChangeTab(data[index - 1].id)
+                }
+              }}
+              // type={type}
+            >
+              <ArrowIcon iconType={'teeny'}></ArrowIcon>
+            </PageLink>
+          </div>
+        )}
         <div
           className={`${
             activeShowAll
               ? 'flex gap-2 overflow-auto w-full'
-              : 'flex items-center gap-2 flex-wrap'
+              : 'flex items-center gap-2 flex-wrap flex-1'
           }`}
           ref={elementRef}
         >
           {data.map((pageNum: any, idx: any) => (
             <PageLink
-              key={idx}
+              key={pageNum.id}
               active={currentTab === pageNum.id}
               // disabled={isNaN(pageNum)}
               onClick={() => {
@@ -86,31 +92,33 @@ const TabSlide = ({
               isFlagedProp={pageNum.flaged}
               //   type={type}
             >
-              {idx + 1}
+              {pageNum.index + 1}
             </PageLink>
           ))}
         </div>
-        <div
-          className={`${
-            activeShowAll && 'absolute top-0.5 -right-3 translate-x-full'
-          }`}
-        >
-          <PageLink
-            disabled={
-              data.findIndex((e) => e.id === currentTab) === data.length - 1
-            }
-            arrow={true}
-            onClick={() => {
-              if (setCurrentTab !== undefined) {
-                const index = data.findIndex((e) => e.id === currentTab)
-                handleChangeTab(data[index + 1].id)
-              }
-            }}
-            // type={type}
+        {data.length > 0 && (
+          <div
+            className={`${
+              activeShowAll && 'absolute top-0.5 -right-3 translate-x-full'
+            }`}
           >
-            <ArrowIcon iconType={'teeny'} right={true}></ArrowIcon>
-          </PageLink>
-        </div>
+            <PageLink
+              disabled={
+                data.findIndex((e) => e.id === currentTab) === data.length - 1
+              }
+              arrow={true}
+              onClick={() => {
+                if (setCurrentTab !== undefined) {
+                  const index = data.findIndex((e) => e.id === currentTab)
+                  handleChangeTab(data[index + 1].id)
+                }
+              }}
+              // type={type}
+            >
+              <ArrowIcon iconType={'teeny'} right={true}></ArrowIcon>
+            </PageLink>
+          </div>
+        )}
 
         <div className="flex items-center">
           {!activeShowAll && optionShowAll}
