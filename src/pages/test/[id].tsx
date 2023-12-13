@@ -11,6 +11,7 @@ import {
   HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
+  TextSquareIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
@@ -166,14 +167,16 @@ const TestDetail = ({ questions }: any) => {
 
   const [topicDescription, setTopicDescription] = useState<any>()
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
+  const [filteredTabs, setFilterdTabs] = useState<any>([])
   const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control, handleSubmit, getValues, setValue } = useForm()
-  const { control: controlFilter } = useForm()
+  const { control: controlFilter, watch: watchFilter } = useForm()
   const {
     control: controlExhibits,
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
+    reset,
   } = useForm()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -245,7 +248,7 @@ const TestDetail = ({ questions }: any) => {
     return (
       <div className="w-max">
         <HookFormCheckBoxGroup
-          multiple
+          toggle
           control={controlFilter}
           name={'filter'}
           options={[
@@ -257,6 +260,18 @@ const TestDetail = ({ questions }: any) => {
       </div>
     )
   }
+  useEffect(() => {
+    setFilterdTabs((prev: any) => {
+      const filter = watchFilter('filter')
+      if (filter === 'attempted') {
+        return tabs.filter((e: any) => e.viewed === true)
+      } else if (filter === 'unattempted') {
+        return tabs.filter((e: any) => e.viewed === false)
+      } else if (filter === 'flag') {
+        return tabs.filter((e: any) => e.flaged === true)
+      } else return tabs
+    })
+  }, [tabs, watchFilter('filter')])
   const ref = useRef(null) as any
 
   const getValueFillText = () => {
@@ -350,6 +365,7 @@ const TestDetail = ({ questions }: any) => {
     setCurrentPage(e)
     setOpenScratchPad([])
     setAllowHighLight(false)
+    reset()
   }
   const handleSaveAnswer = (data: any, tabId: any) => {
     // setTabs((prev: any) => {
@@ -467,8 +483,14 @@ const TestDetail = ({ questions }: any) => {
   useEffect(() => {
     if (questions?.length > 0) {
       const arr = []
-      for (let e of questions) {
-        arr.push({ ...e, viewed: false, flaged: false, done: false })
+      for (let i in questions) {
+        arr.push({
+          ...questions[i],
+          viewed: false,
+          flaged: false,
+          done: false,
+          index: +i,
+        })
       }
       setTabs(arr)
     }
@@ -486,18 +508,15 @@ const TestDetail = ({ questions }: any) => {
         const newData = prev.map((item: any) => {
           if (currentPage === item.id) {
             if (item.viewed) {
+              setCurrentTabContent({ ...item })
               return { ...item }
             } else {
+              setCurrentTabContent({ ...item, viewed: true, data: res.data[0] })
               return { ...item, viewed: true, data: res.data[0] }
             }
           }
           return item
         })
-        // const currentTabContent =
-
-        setCurrentTabContent(
-          newData[newData.findIndex((e: any) => e.id === currentPage)],
-        )
         return newData
       })
     }
@@ -506,11 +525,12 @@ const TestDetail = ({ questions }: any) => {
       getDetail()
     }
   }, [currentPage])
+
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
     for (let e in currentTabContent?.data?.exhibits) {
       exhibitsOptions.push({
-        label: `Exhibits ${e + 1}`,
+        label: `Exhibit ${+e + 1}`,
         value: currentTabContent?.data?.exhibits[e].id,
       })
     }
@@ -564,7 +584,7 @@ const TestDetail = ({ questions }: any) => {
         {/* End Header */}
         <div className="px-6 bg-gray-4 shadow-solution py-4 relative">
           <TabSlide
-            data={tabs}
+            data={filteredTabs}
             currentTab={currentPage}
             setCurrentTab={setCurrentPage}
             optionShowAll={<OptionShowAll />}
@@ -708,9 +728,10 @@ const TestDetail = ({ questions }: any) => {
             </MovableWindow>
           )
         } else if (e.type === 'exhibits') {
-          const exhibitsDes = currentTabContent?.data?.exhibits?.find(
+          const i = currentTabContent?.data?.exhibits?.findIndex(
             (el: any) => el.id === e.id,
           )
+          const exhibitsDes = currentTabContent?.data?.exhibits?.[i]
           return (
             <MovableWindow
               position={{
@@ -726,8 +747,13 @@ const TestDetail = ({ questions }: any) => {
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-gray-2 w-full h-[40px] justify-between px-5">
-                  <div>Exhibit</div>
+                <div className="flex w-6-percent items-center bg-white w-full h-[40px] justify-between px-5">
+                  <div>
+                    <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                      i + 1
+                    }: `}</span>
+                    {exhibitsDes?.name}
+                  </div>
                   <button onClick={() => handleCloseScratchPad(e)}>
                     <CloseIcon />
                   </button>
@@ -741,7 +767,7 @@ const TestDetail = ({ questions }: any) => {
                 {/* </div> */}
                 <EditorReader
                   text_editor_content={exhibitsDes?.description}
-                  className="bg-white h-[calc(100%-40px)] w-full overflow-auto"
+                  className="bg-white h-[calc(100%-40px)] w-full overflow-auto p-5"
                 />
               </div>
             </MovableWindow>
@@ -803,7 +829,7 @@ const TestDetail = ({ questions }: any) => {
                 </div>
               </div>
               {showListExhibits && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits p-4 justify-center">
+                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits p-4 justify-center z-[1400]">
                   <HookFormCheckBoxGroup
                     control={controlExhibits}
                     name="exhibits"
@@ -822,7 +848,7 @@ const TestDetail = ({ questions }: any) => {
                   setShowLisRequirement(!showListRequirement)
                 }}
               >
-                <ExhibitsIcon />
+                <TextSquareIcon />
                 <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
                   {`Requirement (${currentTabContent?.data?.requirements?.length})`}
                   <ArrowUpIcon />
