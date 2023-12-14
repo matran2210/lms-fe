@@ -127,7 +127,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             case QUESTION_TYPES.SELECT_WORD:
               const myAnswers = activeQuestion?.myAnswers
                 ?.find((e: any) => e.question_id === activeQuestion.id)
-                ?.answer?.map((e: any) => e.answer_id)
+                ?.answer?.map((e: any) => e.id)
               setDefaultAnswer(myAnswers)
               break
             default:
@@ -167,6 +167,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             break
           case QUESTION_TYPES.FILL_WORD:
             myAnswers = getValueFillText()
+          case QUESTION_TYPES.SELECT_WORD:
+            myAnswers = getValueSelectText()
           default:
             break
         }
@@ -225,7 +227,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getValueSelectText}
               defaultAnswer={defaultAnswer}
-              // corrects={activeQuestion.corrects}
+              corrects={activeQuestion.corrects}
             />
           ) : activeQuestion?.qType === QUESTION_TYPES.ESSAY ? (
             <>ESSAY</>
