@@ -11,11 +11,25 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { UserGuide } from 'src/constants'
+import CourseAPI from '../api/courses'
+import { useRouter } from 'next/router'
+
+const DEFAULT_PAGESIZE = 9
+
+const fetchData = async (page: number, pageSize: number, token: string, name?: string, type?: string, status?: string) => {
+  const apiResponse = await axios.get(`${apiURL}/courses?page_index=${page}&page_size=${pageSize}&name=${name ?? ''}&type=${type ?? ''}&status=${status ?? ''}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return apiResponse?.data?.data
+};
 
 const MyCourse = ({ courses }: any) => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
+  const router = useRouter()
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
 
@@ -42,12 +56,41 @@ const MyCourse = ({ courses }: any) => {
     })
   }, [])
 
+  const [data, setData] = useState<any>(courses || []);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const loadMore = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const newData = await CourseAPI.getCourse(page + 1, DEFAULT_PAGESIZE, router.query.name, router.query.type); // Increase pageSize by 3
+      setData([...data, ...newData?.data?.data?.course_sections_with_progress]);
+      setPage(page + 1);
+    } catch (error) {} finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        loadMore();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [loading, page]);
+
   return (
     <>
       <div className="header bg-white border-b border-default">
         <div
-          className={`max-w-xxl my-0 mx-auto flex py-[18px] px-5 relative 
-          ${guideStatus && guideStep === 1 ? 'bg-white z-50' : ''}`}
+          className={`max-w-xxl my-0 mx-auto flex py-[18px] xl-max:mx-6 relative 
+          ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
         >
           <SearchForm
             placeholder="Enter name of course..."
@@ -66,7 +109,7 @@ const MyCourse = ({ courses }: any) => {
         </div>
       </div>
       <div className="main max-w-xxl my-0 mx-auto">
-        <div className="flex justify-between">
+        <div className="flex justify-between xl-max:mx-6">
           <h2 className="text-medium-sm font-semibold text-bw-1 py-6">
             My Course
           </h2>
@@ -91,7 +134,7 @@ const MyCourse = ({ courses }: any) => {
         </div>
       </div>
       <div
-        className={`heading bg-white max-w-xxl my-0 mx-auto flex relative
+        className={`heading bg-white max-w-xxl my-0 mx-auto flex relative xl-max:mx-6
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
       >
@@ -146,22 +189,11 @@ export async function getServerSideProps(context: any) {
   const accessToken = req.cookies.accessToken
 
   try {
-    const apiResponse = await axios.get(
-      `${apiURL}/courses?page_index=1&page_size=100&name=${
-        query.name ?? ''
-      }&type=${query.type ?? ''}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    )
-
-    const courses = apiResponse.data?.data
+    const courses = await fetchData(1, DEFAULT_PAGESIZE, accessToken, query.name, query.type, query.status);
 
     return {
       props: {
-        courses,
+        courses: courses,
       },
     }
   } catch (error: any) {
@@ -184,23 +216,14 @@ export async function getServerSideProps(context: any) {
           `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
         )
 
-        const newApiResponse = await axios.get(
-          `${apiURL}/courses?page_index=1&page_size=10&name=${
-            query.name ?? ''
-          }&type=${query.type ?? ''}`,
-          {
-            headers: {
-              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
-            },
-          },
-        )
+        const courses = await fetchData(1, DEFAULT_PAGESIZE, accessToken, query.name, query.type, query.status);
 
         return {
           props: {
-            courses: newApiResponse.data?.data,
+            courses: courses,
           },
         }
-      } catch (refreshError) {}
+      } catch (refreshError) { }
     } else {
     }
 
