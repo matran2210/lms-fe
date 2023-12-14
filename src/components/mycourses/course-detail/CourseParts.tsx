@@ -4,11 +4,11 @@ import PartMiddleTest from './PartFailed'
 
 const CourseParts = ({ courses }: { courses: any }) => {
   return (
-    <div className="grid grid-cols-3 gap-6 mb-10">
+    <div className="grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-10">
       {courses?.map((coursePart: any, index: number) => {
         return (
           <div
-            key={index}
+            key={coursePart?.id}
             className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
           >
             {['MID_TERM_TEST', 'FINAL_TEST'].includes(

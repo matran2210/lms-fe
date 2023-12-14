@@ -7,7 +7,7 @@ interface CoursesProps {
 
 const CoursesList: React.FC<CoursesProps> = ({ courses }) => {
   return (
-    <div className="grid grid-cols-3 gap-6">
+    <div className="grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-6 xl-max:px-6">
       {courses?.courses?.map((course: any, index: number) => (
         <div
           key={index}

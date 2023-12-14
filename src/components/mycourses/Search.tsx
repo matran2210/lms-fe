@@ -1,6 +1,6 @@
 // components/SearchForm.tsx
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Icon from '@components/icons'
 
@@ -13,19 +13,38 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
   const router = useRouter()
   const [query, setQuery] = useState('')
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  useEffect(() => {
+    let timerId: any;
 
-    // Redirect to the search results page with the query as a query parameter
-    router.push(
-      `courses?name=${encodeURIComponent(query)}&type=${
-        router.query.type ?? ''
-      }`,
-    )
-  }
+    // Use useEffect to set up a timer to make the API call after 3 seconds
+    if (query.length > 2) {
+      timerId = setTimeout(() => {
+        router.push(
+          `/courses?name=${encodeURIComponent(query)}&type=${
+            router.query.type ?? ''
+          }&status=${router.query.status ?? ''}`,
+        )
+      }, 2000);
+    }
+
+    // Clean up the timer when the component unmounts or when the input value changes
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [query]);
+
+  useEffect(() => {
+    if(query.length === 0 && router.pathname === '/courses') {
+      router.push(
+        `/courses?name=&type=${
+          router.query.type ?? ''
+        }&status=${router.query.status ?? ''}`,
+      )
+    }
+  }, [query])
 
   return (
-    <form onSubmit={handleSubmit} className={formStyle}>
+    <div className={formStyle}>
       <button type="submit" className="flex">
         <Icon type="search" className="text-primary" />
       </button>
@@ -36,7 +55,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-    </form>
+    </div>
   )
 }
 

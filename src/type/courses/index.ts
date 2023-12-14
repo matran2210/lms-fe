@@ -44,3 +44,22 @@ export interface ICourseDetail {
   status: string
   course_sections_with_progress: ICourseSection[]
 }
+
+export interface IMeta {
+  page_index: number
+  page_size: number
+  total_pages: number
+  total_records: number
+}
+
+export interface ICourseDetailAll {
+  data: ICourseDetail
+  metadata: IMeta
+}
+
+export enum CLASS_USER_STATUS {
+  READY_TO_LEARN = 'READY_TO_LEARN', // 1
+  IN_PROGRESS = 'IN_PROGRESS', // 2
+  COMPLETED = 'COMPLETED', // 3
+  CANCELED = 'CANCELED' // 4 
+}

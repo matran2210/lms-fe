@@ -16,6 +16,28 @@ const CourseAPI = {
     })
     return response
   },
+
+  getCourseDetail: async (
+    id: string | string[] | undefined,
+    page_index: number,
+    page_size: number,
+  ): Promise<any> => {
+    const response = await httpService.GET<any, any>({
+      uri: `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
+    })
+    return response
+  },
+  getCourse: async (
+    page_index: number,
+    page_size: number,
+    name?: string | string[] | undefined,
+    type?: string | string[] | undefined
+  ): Promise<any> => {
+    const response = await httpService.GET<any, any>({
+      uri: `courses?page_index=${page_index}&page_size=${page_size}&name=${name}&type=${type}`,
+    })
+    return response
+  },
 }
 
 export default CourseAPI

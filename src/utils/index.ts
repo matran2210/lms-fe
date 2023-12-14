@@ -68,3 +68,12 @@ export const countWords = (text: string) => {
   const words = text.trim().split(/\s+/)
   return words.length
 }
+
+export const convertSnakeCaseToHumanReadable = (str: string) => {
+  const words = str
+    .toLowerCase()
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+
+  return words.join(' ');
+}
