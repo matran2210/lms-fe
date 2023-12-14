@@ -58,20 +58,29 @@ const SelectWord = ({
 
       const defaultAnswerValue = defaultAnswer?.[index] || ''
 
+      let optionClass = ''
+
+      if (corrects) {
+        const isCorrect = corrects?.some(
+          (correct) =>
+            correct.answer_position === index + 1 &&
+            correct.id === defaultAnswerValue &&
+            correct.is_correct,
+        )
+        optionClass = isCorrect ? 'border-success' : 'border-danger'
+
+        selectElement.classList.add(optionClass)
+        selectElement.setAttribute('disabled', 'true')
+      }
+
       selectElement.innerHTML = `
         <option value="">Choose...</option>
         ${answerObj[+index + 1].map((e: any) => {
           const isSelected = e.value === defaultAnswerValue
-          const isCorrect = corrects?.some(
-            (correct) =>
-              correct.answer_position === index + 1 &&
-              correct.answer === e.value,
-          )
-          const optionClass = isCorrect ? 'correct-answer' : ''
 
-          return `<option value="${e.value}" ${
-            isSelected ? 'selected' : ''
-          } class="${optionClass}">${e.label}</option>`
+          return `<option value="${e.value}" ${isSelected ? 'selected' : ''} >${
+            e.label
+          }</option>`
         })}
       `
 
