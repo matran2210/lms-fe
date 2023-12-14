@@ -14,7 +14,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
   const [query, setQuery] = useState('')
 
   useEffect(() => {
-    let timerId: any;
+    let timerId: any
 
     // Use useEffect to set up a timer to make the API call after 3 seconds
     if (query.length > 2) {
@@ -24,21 +24,21 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
             router.query.type ?? ''
           }&status=${router.query.status ?? ''}`,
         )
-      }, 2000);
+      }, 2000)
     }
 
     // Clean up the timer when the component unmounts or when the input value changes
     return () => {
-      clearTimeout(timerId);
-    };
-  }, [query]);
+      clearTimeout(timerId)
+    }
+  }, [query])
 
   useEffect(() => {
-    if(query.length === 0 && router.pathname === '/courses') {
+    if (query.length === 0 && router.pathname === '/courses') {
       router.push(
-        `/courses?name=&type=${
-          router.query.type ?? ''
-        }&status=${router.query.status ?? ''}`,
+        `/courses?name=&type=${router.query.type ?? ''}&status=${
+          router.query.status ?? ''
+        }`,
       )
     }
   }, [query])
