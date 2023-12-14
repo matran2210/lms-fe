@@ -73,7 +73,7 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
   const words = str
     .toLowerCase()
     .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 
-  return words.join(' ');
+  return words.join(' ')
 }

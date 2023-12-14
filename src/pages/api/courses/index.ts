@@ -31,7 +31,7 @@ const CourseAPI = {
     page_index: number,
     page_size: number,
     name?: string | string[] | undefined,
-    type?: string | string[] | undefined
+    type?: string | string[] | undefined,
   ): Promise<any> => {
     const response = await httpService.GET<any, any>({
       uri: `courses?page_index=${page_index}&page_size=${page_size}&name=${name}&type=${type}`,

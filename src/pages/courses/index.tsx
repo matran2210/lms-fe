@@ -16,14 +16,26 @@ import { useRouter } from 'next/router'
 
 const DEFAULT_PAGESIZE = 9
 
-const fetchData = async (page: number, pageSize: number, token: string, name?: string, type?: string, status?: string) => {
-  const apiResponse = await axios.get(`${apiURL}/courses?page_index=${page}&page_size=${pageSize}&name=${name ?? ''}&type=${type ?? ''}&status=${status ?? ''}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+const fetchData = async (
+  page: number,
+  pageSize: number,
+  token: string,
+  name?: string,
+  type?: string,
+  status?: string,
+) => {
+  const apiResponse = await axios.get(
+    `${apiURL}/courses?page_index=${page}&page_size=${pageSize}&name=${
+      name ?? ''
+    }&type=${type ?? ''}&status=${status ?? ''}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  })
+  )
   return apiResponse?.data?.data
-};
+}
 
 const MyCourse = ({ courses }: any) => {
   const dispatch = useAppDispatch()
@@ -56,20 +68,26 @@ const MyCourse = ({ courses }: any) => {
     })
   }, [])
 
-  const [data, setData] = useState<any>(courses || []);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<any>(courses || [])
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
   const loadMore = async () => {
-    if (loading) return;
-    setLoading(true);
+    if (loading) return
+    setLoading(true)
     try {
-      const newData = await CourseAPI.getCourse(page + 1, DEFAULT_PAGESIZE, router.query.name, router.query.type); // Increase pageSize by 3
-      setData([...data, ...newData?.data?.data?.course_sections_with_progress]);
-      setPage(page + 1);
-    } catch (error) {} finally {
-      setLoading(false);
+      const newData = await CourseAPI.getCourse(
+        page + 1,
+        DEFAULT_PAGESIZE,
+        router.query.name,
+        router.query.type,
+      ) // Increase pageSize by 3
+      setData([...data, ...newData?.data?.data?.course_sections_with_progress])
+      setPage(page + 1)
+    } catch (error) {
+    } finally {
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,13 +95,13 @@ const MyCourse = ({ courses }: any) => {
         window.innerHeight + document.documentElement.scrollTop ===
         document.documentElement.offsetHeight
       ) {
-        loadMore();
+        loadMore()
       }
-    };
+    }
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [loading, page]);
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [loading, page])
 
   return (
     <>
@@ -189,7 +207,14 @@ export async function getServerSideProps(context: any) {
   const accessToken = req.cookies.accessToken
 
   try {
-    const courses = await fetchData(1, DEFAULT_PAGESIZE, accessToken, query.name, query.type, query.status);
+    const courses = await fetchData(
+      1,
+      DEFAULT_PAGESIZE,
+      accessToken,
+      query.name,
+      query.type,
+      query.status,
+    )
 
     return {
       props: {
@@ -216,14 +241,21 @@ export async function getServerSideProps(context: any) {
           `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
         )
 
-        const courses = await fetchData(1, DEFAULT_PAGESIZE, accessToken, query.name, query.type, query.status);
+        const courses = await fetchData(
+          1,
+          DEFAULT_PAGESIZE,
+          accessToken,
+          query.name,
+          query.type,
+          query.status,
+        )
 
         return {
           props: {
             courses: courses,
           },
         }
-      } catch (refreshError) { }
+      } catch (refreshError) {}
     } else {
     }
 

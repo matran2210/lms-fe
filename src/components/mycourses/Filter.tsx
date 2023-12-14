@@ -13,34 +13,43 @@ const Filter = ({ courses, totalResult }: any) => {
   const handleChange = (selected: any) => {
     setSelectedCategory(selected)
     router.push(
-      `/courses?name=${router.query.name ?? ''}&type=${selected.value ?? ''}&status=${router.query.status ?? ''}`,
+      `/courses?name=${router.query.name ?? ''}&type=${
+        selected.value ?? ''
+      }&status=${router.query.status ?? ''}`,
     )
   }
 
   const handleChangeStatus = (selected: any) => {
     setSelectedStatus(selected)
     router.push(
-      `/courses?name=${router.query.name ?? ''}&type=${router.query.type ?? ''}&status=${selected.value}`,
+      `/courses?name=${router.query.name ?? ''}&type=${
+        router.query.type ?? ''
+      }&status=${selected.value}`,
     )
   }
 
   const defaultCategory = [
     {
       label: 'All',
-      value: ''
-    }
+      value: '',
+    },
   ]
 
   useEffect(() => {
     // Check if router.query.status is an empty string
     if (router.query.status === undefined) {
-      setSelectedStatus(null);
+      setSelectedStatus(null)
     }
 
     if (router.query.type === undefined) {
-      setSelectedCategory(null);
+      setSelectedCategory(null)
     }
-  }, [router.query.status, setSelectedStatus, router.query.type, selectCategory]);
+  }, [
+    router.query.status,
+    setSelectedStatus,
+    router.query.type,
+    selectCategory,
+  ])
 
   return (
     <div className="filter flex">
@@ -51,10 +60,12 @@ const Filter = ({ courses, totalResult }: any) => {
           </div>
         ) : (
           <HookFormSelect
-            options={defaultCategory.concat(courses?.total?.map((category: any) => ({
-              label: category?.categoryName,
-              value: category?.categoryName,
-            })))}
+            options={defaultCategory.concat(
+              courses?.total?.map((category: any) => ({
+                label: category?.categoryName,
+                value: category?.categoryName,
+              })),
+            )}
             className={'text-medium-sm font-normal text-gray-1 h-[17px]'}
             placeholder="Category"
             onChange={handleChange}
@@ -64,10 +75,12 @@ const Filter = ({ courses, totalResult }: any) => {
       </div>
       <div className="filter pl-6 flex self-center">
         <HookFormSelect
-          options={defaultCategory.concat(courses?.status?.map((status: any) => ({
-            label: convertSnakeCaseToHumanReadable(status?.status),
-            value: status?.status,
-          })))}
+          options={defaultCategory.concat(
+            courses?.status?.map((status: any) => ({
+              label: convertSnakeCaseToHumanReadable(status?.status),
+              value: status?.status,
+            })),
+          )}
           className={'text-medium-sm font-normal text-gray-1 h-[17px]'}
           placeholder="Status"
           value={selectedStatus}
