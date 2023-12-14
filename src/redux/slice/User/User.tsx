@@ -67,6 +67,7 @@ const initialState: UserState = {
       company_rank: '',
       settings: null,
     },
+    user_contacts: []
   },
 }
 
