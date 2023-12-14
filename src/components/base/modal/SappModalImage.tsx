@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
-import SappModal from './SappModal'
-import SAPPVideo from '../video/SAPPVideo'
 import Image from 'next/image'
+import React from 'react'
+import SappModal from './SappModal'
 
 type Props = {
   src?: string

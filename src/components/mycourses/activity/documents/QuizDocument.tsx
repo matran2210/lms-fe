@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useEffect, useRef, useState } from 'react'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
-  confirmQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import { IQuestion } from 'src/type/course/Question'
-import QuizComponent from './QuizComponent'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 
 type Props = {
   questions: IQuestion[]
@@ -27,7 +25,7 @@ const QuizDocument = ({
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
-  const { control: controlAnswer, setValue, reset, getValues } = useForm()
+  const questionRef = useRef<QuizComponentRef>(null)
 
   const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
 
@@ -66,7 +64,7 @@ const QuizDocument = ({
         )
       }
 
-      reset()
+      questionRef.current?.reset()
     }
   }
 
@@ -87,21 +85,17 @@ const QuizDocument = ({
         )
       }
 
-      reset()
+      questionRef.current?.reset()
     }
   }
 
   const handleConfirmQuestion = () => {
     if (activeQuestion) {
-      dispatch(
-        confirmQuestion({
-          activityId: activityId,
-          tabId: tabId,
-          quizId: quizId,
-          questionId: activeQuestion.id || '',
-          myAnswers: getValues(),
-        }),
-      )
+      questionRef.current?.onSubmit({
+        activityId: activityId,
+        tabId: tabId,
+        quizId: quizId,
+      })
     }
   }
 
@@ -109,11 +103,7 @@ const QuizDocument = ({
     <div>
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
-          <QuizComponent
-            setValue={setValue}
-            activeQuestion={activeQuestion}
-            controlAnswer={controlAnswer}
-          />
+          <QuizComponent activeQuestion={activeQuestion} ref={questionRef} />
         )}
       </div>
 
@@ -152,9 +142,7 @@ const QuizDocument = ({
         )}
         {!isQuestionConfirmed && (
           <div
-            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2 ${
-              isLastQuestion ? 'opacity-50' : ''
-            }`}
+            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
             onClick={handleConfirmQuestion}
           >
             Confirm

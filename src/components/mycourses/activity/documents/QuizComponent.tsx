@@ -1,44 +1,53 @@
-import React, {
-  forwardRef,
-  useEffect,
-  useRef,
-  useState,
-  useImperativeHandle,
-} from 'react'
 import EditorReader from '@components/base/editor/EditorReader'
+import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
-import { Control, FieldValues, UseFormSetValue } from 'react-hook-form'
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
+import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
 import { QUESTION_TYPES } from 'src/constants'
-import { IActivityStateQuestion } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import { useAppDispatch } from 'src/redux/hook'
+import {
+  IActivityStateQuestion,
+  confirmQuestion,
+} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 
-type QuizComponentRef = {
-  onSubmit: () => void
+export type QuizComponentRef = {
+  onSubmit: ({
+    activityId,
+    tabId,
+    quizId,
+  }: {
+    activityId: string
+    tabId: string
+    quizId: string
+  }) => void
+  reset: UseFormReset<FieldValues>
 }
 
 type Props = {
   activeQuestion?: IActivityStateQuestion
-  controlAnswer: Control<FieldValues, any>
-  setValue: UseFormSetValue<FieldValues>
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
-  ({ activeQuestion, controlAnswer, setValue }: Props, ref) => {
+  ({ activeQuestion }: Props, ref) => {
     const questionRef = useRef<HTMLDivElement>(null)
-    const [corrects, setCorrects] = useState<{ [key: string]: boolean }>()
 
-    useEffect(() => {
-      if (corrects) {
-        setCorrects(undefined)
-      }
-    }, [activeQuestion])
+    const [defaultAnswer, setDefaultAnswer] = useState<any>()
+    const dispatch = useAppDispatch()
+    const { control: controlAnswer, setValue, reset, getValues } = useForm({})
 
     const getValueFillText = () => {
       let value = []
-      const inputs = questionRef.current?.querySelectorAll(
+      const inputs = document.querySelectorAll(
         'input[stringHTML="true"]',
       ) as any
       for (let e of inputs) {
@@ -61,15 +70,22 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const getAnswerMatching = () => {
       let value = [] as any
-      const inputs = questionRef.current?.querySelectorAll(
-        '.sapp-match-result',
-      ) as any
+      const inputs = document.querySelectorAll('.sapp-match-result') as any
       for (let e of inputs) {
-        value.push(e.innerText)
+        const childId = e.querySelector('.sapp-notched-container')
+        value.push({ question_id: e.id, answer_id: childId?.id })
       }
       return value
     }
-
+    const getAnswerDragNDrop = () => {
+      let value = [] as any
+      const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
+      for (let e of inputs) {
+        const idAnswer = e.querySelector('span')
+        value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
+      }
+      return value
+    }
     useEffect(() => {
       const handleResponseResults = () => {
         if (activeQuestion) {
@@ -78,58 +94,41 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           }
           switch (activeQuestion?.qType) {
             case QUESTION_TYPES.ONE_CHOICE:
-            case QUESTION_TYPES.TRUE_FALSE:
+            case QUESTION_TYPES.TRUE_FALSE: {
+              setValue &&
+                setValue(
+                  'answer',
+                  activeQuestion.myAnswers?.find(
+                    (e: any) => e.question_id === activeQuestion.id,
+                  )?.question_answer_id,
+                )
+
+              break
+            }
+
             case QUESTION_TYPES.MULTIPLE_CHOICE: {
               setValue &&
-                setValue('answer', activeQuestion.myAnswers?.['answer'])
-              const corrects = activeQuestion.answers?.reduce(
-                (previousValue, currentValue) => {
-                  return {
-                    ...previousValue,
-                    [currentValue.id]: currentValue.is_correct,
-                  }
-                },
-                {} as { [key: string]: boolean },
-              )
-              if (corrects) {
-                setCorrects(corrects)
-              } else {
-                setCorrects(undefined)
-              }
+                setValue(
+                  'multiples',
+                  activeQuestion.myAnswers
+                    ?.find((e: any) => e.question_id === activeQuestion.id)
+                    ?.answer?.map((e: { answer_id: string }) => e.answer_id),
+                )
               break
             }
 
             case QUESTION_TYPES.FILL_WORD: {
-              const data = getValueFillText()
-              const answerMap = Object.fromEntries(
-                activeQuestion?.answers?.map((item) => [
-                  `${item.answer_position}:${item.answer?.trim()}`,
-                  item.is_correct,
-                ]) || [],
-              )
-              const arr3 = data?.map(
-                (element) => answerMap[`${1}:${element?.trim()}`] || false,
-              )
-
-              const corrects = questionRef?.current?.querySelectorAll(
-                '.sapp-input-preview',
-              )
-
-              if (corrects) {
-                corrects.forEach((element, index) => {
-                  const isCorrect = arr3?.[index]
-                  if (element instanceof HTMLElement) {
-                    element.classList.add(
-                      isCorrect ? 'border-success' : 'border-error',
-                    )
-                  }
-                  element.classList.add('pointer-events-none')
-                })
-              }
-              setCorrects(undefined)
+              const myAnswers = activeQuestion?.myAnswers
+                ?.find((e: any) => e.question_id === activeQuestion.id)
+                ?.answer?.map((e: any) => e.answer_id)
+              setDefaultAnswer(myAnswers)
               break
             }
             case QUESTION_TYPES.SELECT_WORD:
+              const myAnswers = activeQuestion?.myAnswers
+                ?.find((e: any) => e.question_id === activeQuestion.id)
+                ?.answer?.map((e: any) => e.answer_id)
+              setDefaultAnswer(myAnswers)
               break
             default:
               break
@@ -144,10 +143,44 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
       onSubmit: onSubmit,
+      reset: reset,
     }))
 
-    const onSubmit = () => {
-      // Your onSubmit logic here
+    const onSubmit = ({
+      activityId,
+      tabId,
+      quizId,
+    }: {
+      activityId: string
+      tabId: string
+      quizId: string
+    }) => {
+      if (activeQuestion) {
+        let myAnswers
+        switch (activeQuestion.qType as QUESTION_TYPES) {
+          case QUESTION_TYPES.ONE_CHOICE:
+          case QUESTION_TYPES.TRUE_FALSE:
+            myAnswers = getValues('answer')
+            break
+          case QUESTION_TYPES.MULTIPLE_CHOICE:
+            myAnswers = getValues('multiples')
+            break
+          case QUESTION_TYPES.FILL_WORD:
+            myAnswers = getValueFillText()
+          default:
+            break
+        }
+
+        dispatch(
+          confirmQuestion({
+            activityId: activityId,
+            tabId: tabId,
+            quizId: quizId,
+            questionId: activeQuestion.id || '',
+            myAnswers,
+          }),
+        )
+      }
     }
 
     return (
@@ -158,14 +191,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             <OneChoiceQuestion
               data={activeQuestion}
               control={controlAnswer}
-              corrects={corrects}
+              corrects={activeQuestion.corrects}
               setValue={setValue}
             />
           ) : activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE ? (
             <MultiChoiceQuestion
               data={activeQuestion}
               control={controlAnswer}
-              corrects={corrects}
+              corrects={activeQuestion.corrects}
+              setValue={setValue}
             />
           ) : activeQuestion?.qType === QUESTION_TYPES.MATCHING ? (
             <MatchingQuestion
@@ -173,11 +207,26 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               action={getAnswerMatching}
             />
           ) : activeQuestion?.qType === QUESTION_TYPES.FILL_WORD ? (
-            <AddWordPreview data={activeQuestion} action={getValueFillText} />
+            <AddWordPreview
+              data={activeQuestion}
+              action={getValueFillText}
+              defaultAnswer={defaultAnswer}
+              corrects={activeQuestion.corrects}
+            />
           ) : activeQuestion?.qType === QUESTION_TYPES.DRAG_DROP ? (
-            <>DRAG_DROP</>
+            <DragNDropPreivew
+              data={activeQuestion}
+              action={getAnswerDragNDrop}
+              defaultAnswer={defaultAnswer}
+              // corrects={activeQuestion.corrects}
+            />
           ) : activeQuestion?.qType === QUESTION_TYPES.SELECT_WORD ? (
-            <SelectWord data={activeQuestion} action={getValueSelectText} />
+            <SelectWord
+              data={activeQuestion}
+              action={getValueSelectText}
+              defaultAnswer={defaultAnswer}
+              // corrects={activeQuestion.corrects}
+            />
           ) : activeQuestion?.qType === QUESTION_TYPES.ESSAY ? (
             <>ESSAY</>
           ) : (
@@ -185,8 +234,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           )}
         </div>
         {activeQuestion?.confirmed && (
-          <div className="p-4 font-semibold mt-8 bg-gray-4">
-            <div>Solution</div>
+          <div className="p-4 mt-8 bg-gray-4">
+            <div className="font-semibold">Solution</div>
             {activeQuestion?.solution && (
               <EditorReader
                 text_editor_content={activeQuestion?.solution}

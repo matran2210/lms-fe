@@ -9,6 +9,12 @@ interface IProps {
   removeHighlight?: any
   allowHighLight?: boolean
   defaultAnswer?: any
+  corrects?: {
+    id: string
+    answer: string
+    is_correct: boolean
+    answer_position: number
+  }[]
 }
 const SelectWord = ({
   data,
@@ -18,6 +24,7 @@ const SelectWord = ({
   removeHighlight,
   allowHighLight,
   defaultAnswer,
+  corrects,
 }: IProps) => {
   const ref = useRef(null) as any
   const [questionContent, setQuestionContent] = useState<any>()
@@ -43,20 +50,37 @@ const SelectWord = ({
   useEffect(() => {
     const doc = parser.parseFromString(str, 'text/html')
     const elements = doc.querySelectorAll('.question-content-tag')
+
     elements.forEach((element, index) => {
-      element.outerHTML = `
-      <select class="sapp-select--selectword-preview" id="${element.id}">
-      <option value="">Choose...</options>
-      ${answerObj[+index + 1].map((e: any) => {
-        return `<option value=${e.value} ${
-          e.value === defaultAnswer?.[index] ? 'selected' : ''
-        }>${e.label}</option>`
-      })}
-      </select>
+      const selectElement = document.createElement('select')
+      selectElement.classList.add('sapp-select--selectword-preview')
+      selectElement.id = element.id
+
+      const defaultAnswerValue = defaultAnswer?.[index] || ''
+
+      selectElement.innerHTML = `
+        <option value="">Choose...</option>
+        ${answerObj[+index + 1].map((e: any) => {
+          const isSelected = e.value === defaultAnswerValue
+          const isCorrect = corrects?.some(
+            (correct) =>
+              correct.answer_position === index + 1 &&
+              correct.answer === e.value,
+          )
+          const optionClass = isCorrect ? 'correct-answer' : ''
+
+          return `<option value="${e.value}" ${
+            isSelected ? 'selected' : ''
+          } class="${optionClass}">${e.label}</option>`
+        })}
       `
+
+      element.replaceWith(selectElement)
     })
+
     setQuestionContent(doc)
   }, [defaultAnswer])
+
   useEffect(() => {
     if (data) {
       DeserializeHighlight(highlighted)
