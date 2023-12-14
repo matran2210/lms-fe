@@ -37,10 +37,12 @@ interface IProps {
 
   confirmOnclose?: boolean | string[]
   size?: string
+  modelClassname?: string
   refClass?: string
   childClass?: string
   parentChildClass?: string
   footerButtonClassName?: string
+  overlayClass?: string
   color?: IButtonColors
   colorCancel?: IButtonColors
   position?: 'center' | 'start' | 'end'
@@ -97,10 +99,12 @@ const SappModal: React.FC<IProps> = ({
 
   confirmOnclose,
   size = 'max-w-lg',
+  modelClassname = '',
   refClass = 'md:px-6 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
   childClass = '',
   parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex gap-3',
+  overlayClass = '',
   color,
   colorCancel = 'text',
   position = 'start',
@@ -231,7 +235,7 @@ const SappModal: React.FC<IProps> = ({
               isInner
                 ? 'max-h-full absolute sapp-custom-modal-inner'
                 : `max-h-screen fixed`
-            } w-full flex justify-center inset-0 items-center ${zIndex}`}
+            } w-full flex justify-center inset-0 items-center ${zIndex} ${modelClassname}`}
             role="dialog"
             aria-modal="true"
           >
@@ -240,7 +244,7 @@ const SappModal: React.FC<IProps> = ({
               onClick={onCancel}
               className={`${
                 isInner ? 'absolute' : 'fixed'
-              } animate-fade-in-overlay  inset-0 bg-black opacity-80 transition-opacity`}
+              } animate-fade-in-overlay  inset-0 bg-black opacity-80 transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${

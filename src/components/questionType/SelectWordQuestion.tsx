@@ -1,9 +1,33 @@
-import React from 'react'
+import EditorReader from '@components/base/editor/EditorReader'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
+import React, { useEffect, useRef, useState } from 'react'
 interface IProps {
   data: any
   action?: any
+  handleSaveHighLight?: any
+  highlighted?: any
+  removeHighlight?: any
+  allowHighLight?: boolean
+  defaultAnswer?: any
+  corrects?: {
+    id: string
+    answer: string
+    is_correct: boolean
+    answer_position: number
+  }[]
 }
-const SelectWord = ({ data, action }: IProps) => {
+const SelectWord = ({
+  data,
+  action,
+  handleSaveHighLight,
+  highlighted,
+  removeHighlight,
+  allowHighLight,
+  defaultAnswer,
+  corrects,
+}: IProps) => {
+  const ref = useRef(null) as any
+  const [questionContent, setQuestionContent] = useState<any>()
   const str = data?.question_content
   const formatAnswer = (data: any) => {
     let objAnswer: any = {}
@@ -13,7 +37,7 @@ const SelectWord = ({ data, action }: IProps) => {
       }
       objAnswer[e.answer_position].push({
         label: e.answer,
-        value: e.answer,
+        value: e.id,
         result: e.is_correct,
       })
     }
@@ -22,27 +46,70 @@ const SelectWord = ({ data, action }: IProps) => {
   const answerObj = formatAnswer(data)
 
   const parser = new DOMParser()
-  const doc = parser.parseFromString(str, 'text/html')
-  const elements = doc.querySelectorAll('.question-content-tag')
-  elements.forEach((element, index) => {
-    element.outerHTML = `
-      <select class="sapp-select--selectword-preview">
-      <option value="">Choose...</options>
-      ${answerObj[+index + 1].map((e: any) => {
-        return `<option value=${e.value}>${e.label}</option>`
-      })}
-      </select>
-      `
-  })
 
+  useEffect(() => {
+    const doc = parser.parseFromString(str, 'text/html')
+    const elements = doc.querySelectorAll('.question-content-tag')
+
+    elements.forEach((element, index) => {
+      const selectElement = document.createElement('select')
+      selectElement.classList.add('sapp-select--selectword-preview')
+      selectElement.id = element.id
+
+      const defaultAnswerValue = defaultAnswer?.[index] || ''
+
+      let optionClass = ''
+
+      if (corrects) {
+        const isCorrect = corrects?.some(
+          (correct) =>
+            correct.answer_position === index + 1 &&
+            correct.id === defaultAnswerValue &&
+            correct.is_correct,
+        )
+        optionClass = isCorrect ? 'border-success' : 'border-danger'
+
+        selectElement.classList.add(optionClass)
+        selectElement.setAttribute('disabled', 'true')
+      }
+
+      selectElement.innerHTML = `
+        <option value="">Choose...</option>
+        ${answerObj[+index + 1].map((e: any) => {
+          const isSelected = e.value === defaultAnswerValue
+
+          return `<option value="${e.value}" ${isSelected ? 'selected' : ''} >${
+            e.label
+          }</option>`
+        })}
+      `
+
+      element.replaceWith(selectElement)
+    })
+
+    setQuestionContent(doc)
+  }, [defaultAnswer])
+
+  useEffect(() => {
+    if (data) {
+      DeserializeHighlight(highlighted)
+    }
+  }, [data])
   return (
-    <div className="body-modal-blue">
-      <div
+    <div
+      id="hightlight_area"
+      onMouseUp={() =>
+        runHighlight(handleSaveHighLight, allowHighLight || false)
+      }
+    >
+      <EditorReader
+        extenalRef={ref}
         className="questions"
         // style={{borderBottom: '1px solid  white'}}
-        dangerouslySetInnerHTML={{
-          __html: doc.documentElement.querySelector('body')?.innerHTML || '',
-        }}
+        text_editor_content={
+          questionContent?.documentElement.querySelector('body')?.innerHTML ||
+          ''
+        }
       />
     </div>
   )

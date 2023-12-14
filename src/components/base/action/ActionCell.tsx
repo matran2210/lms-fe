@@ -12,27 +12,32 @@ import useClickOutside from '../clickoutside/HookClick'
 interface actionCellProps {
   children: ReactNode
   customWidth?: string
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const ActionCell = ({ children, customWidth }: actionCellProps) => {
-  const [isActive, setIsActive] = useState(false)
-
+const ActionCell = ({
+  children,
+  customWidth,
+  open,
+  setOpen,
+}: actionCellProps) => {
   const handleClick = () => {
-    setIsActive(!isActive)
+    setOpen(!open)
   }
 
   const wrapperRef = useRef<HTMLDivElement>(null)
-  useClickOutside({ ref: wrapperRef, callback: () => setIsActive(false) })
+  useClickOutside({ ref: wrapperRef, callback: () => setOpen(false) })
 
   return (
     <div className={'containers'} ref={wrapperRef}>
       <div
-        className={`cursor-pointer ${isActive ? 'active' : ''}`}
+        className={`cursor-pointer ${open ? 'active' : ''}`}
         onClick={handleClick}
       >
         <Icon type="pencil" />
       </div>
-      {isActive && (
+      {open && (
         <div
           className={`${
             customWidth ?? 'w-200px'

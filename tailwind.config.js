@@ -47,6 +47,7 @@ module.exports = {
         primary: {
           DEFAULT: '#FFB800',
           2: '#FFC83A',
+          3: '#E5A600',
         },
         secondary: {
           DEFAULT: '#FFFAF0',
@@ -77,6 +78,7 @@ module.exports = {
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
+          'dark-sidebar': 'rgba(0, 0, 0, 0.8)',
         },
       },
       borderColor: {
@@ -101,6 +103,8 @@ module.exports = {
         box: '0px 2px 4px 0px #00000014, 0px 0px 6px 0px #00000005',
         notify: '0px 0px 50px 0px rgba(152, 151, 147, 0.15)',
         solution: '0px 2px 7px 0px rgba(0, 0, 0, 0.13)',
+        'questions-exhibits': '5px -6px 10px -4px rgba(0, 0, 0, 0.15)',
+        'question-footer': '0px -2px 7px 0px rgba(0, 0, 0, 0.13)',
       },
       minWidth: {
         4: '16px',
@@ -135,7 +139,8 @@ module.exports = {
         md: '448px',
         lg: '512px',
         xl: '576px',
-        dl: '950px',
+        dl: '646px',
+        '2dl': '950px',
         xxl: '1144px',
         '8xl': '1920px',
       },
@@ -163,8 +168,8 @@ module.exports = {
         18: '72px',
         30: '7.5rem',
         4.5: '1.125rem',
-        6: '6%',
-        7: '7%',
+        '6-percent': '6%',
+        '7-percent': '7%',
         18: '18%',
         3.6: '36%',
         17: '17%',
@@ -177,6 +182,7 @@ module.exports = {
         3.8: '0.89rem', // 14.3px
         4.5: '1.125rem', // 18px
         5.25: '1.313rem', // 21px
+        7.5: '1.875rem', // 30px
         8.25: '2.0625rem', // 33px
         17.5: '4.375rem', // 70px
         19: '4.75rem', // 76px
@@ -195,6 +201,9 @@ module.exports = {
         16.75: '4.188rem',
         26: '6.5rem',
         30: '7.5rem', // 120px
+      },
+      opacity: {
+        55: '0.55',
       },
       backgroundImage: {
         'radio-normal': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23A1A1A1' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3C/svg%3E")`,
@@ -224,12 +233,22 @@ module.exports = {
           '0%': { opacity: '0.8' },
           '100%': { opacity: '0' },
         },
+        'fade-in-sidebar': {
+          '0%': { right: '-100%' },
+          '100%': { right: '0' },
+        },
+        'fade-out-sidebar': {
+          '0%': { right: '0' },
+          '100%': { right: '-100%' },
+        },
       },
       animation: {
         'jump-in': 'jump-in 0.1s ease-in-out',
         'jump-out': 'jump-out 0.1s ease-in-out',
         'fade-in-overlay': 'fade-in-overlay 0.2s ease-in-out',
         'fade-out-overlay': 'fade-out-overlay 0.1s ease-out',
+        'fade-in-sidebar': 'fade-in-sidebar 0.3s ease-in-out',
+        'fade-out-sidebar': 'fade-out-sidebar 0.2s ease-in-out',
       },
     },
   },

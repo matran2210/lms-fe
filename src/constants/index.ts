@@ -10,6 +10,7 @@ export const PageLink = {
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
   AUTH_CHANGE_PASSWORD: '/auth/change-password',
   AUTH_CHANGE_PASSWORD_SUCCESS: '/auth/change-password/change-password-success',
+  NOTIFICATION: '/notifications',
 }
 
 export const TitleSidebar = {
@@ -56,3 +57,21 @@ export const VALID_UPLOAD_EDITOR = [
   { type: 'image/*', size: MAX_UPLOAD_SIZE },
   { type: 'video/*', size: MAX_UPLOAD_VIDEO_SIZE },
 ]
+
+export const UserGuide = {
+  TITLE_WELCOME: 'Welcome to SAPP LMS',
+  CONTENT_WELCOME: 'Let’s start with a quick product tour!',
+  CONTENT_BUTTON: 'Start Tour',
+  CONTENT_STEP_1:
+    'The search box is located in the upper corner of the website. Simply enter the course name and press Enter to search.',
+  CONTENT_STEP_2:
+    'The left menu bar is divided into two sections. The upper section consists of the SAPP logo, dashboard, your enrolled courses, and the entrance test you have registered for.',
+  CONTENT_STEP_3:
+    'The lower section of the menu consists of notifications and your profile, which includes personal information, certificates, settings, and the option to log out.',
+  CONTENT_STEP_4:
+    'This is the welcome section! You will find information about your location here, and take a moment to familiarize yourself with the features and possibilities that await you on this page.',
+  CONTENT_STEP_5:
+    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
+  CONTENT_STEP_6:
+    'The filter section allows you to filter courses by curriculum and course status.',
+}

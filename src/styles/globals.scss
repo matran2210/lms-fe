@@ -88,6 +88,20 @@ body * ::-webkit-scrollbar-thumb:hover {
   p {
     @apply break-words mb-2;
   }
+
+  thead,
+  tbody,
+  tfoot,
+  td,
+  th {
+    border-width: 1px;
+    border-style: inherit;
+  }
+
+  tr {
+    border-style: initial;
+    border-width: initial;
+  }
 }
 
 .sapp-questions .sapp-input-preview {
@@ -223,4 +237,24 @@ body * ::-webkit-scrollbar-thumb:hover {
 .sapp-text-area {
   resize: none;
   border: none;
+}
+
+.result {
+  height: 60px;
+  width: 100%;
+  @apply bg-gray-2;
+}
+
+.result p {
+  font-size: 40px;
+  margin: 5px;
+}
+
+.calculator-body {
+  @apply w-full h-[calc(100%-40px)] flex flex-col;
+}
+
+.button {
+  display: block;
+  @apply flex-1 bg-gray-2;
 }

@@ -52,3 +52,7 @@
 .delete:hover path {
   stroke: #d35563; /* Red color on hover */
 }
+
+.sapp-active-item-guide .item:first-child {
+  @apply bg-white z-50;
+}

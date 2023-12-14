@@ -1,36 +1,58 @@
+import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import {
+  confirmQuestion,
+  courseActivityQuizReducer,
+  fetchQuestionById,
+} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
+
 import { StreamPlayerApi } from '@cloudflare/stream-react'
 import SappModal from '@components/base/modal/SappModal'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
-import { useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { IQuestion, IVideo } from 'src/type/course/Question'
-import QuizComponent from './QuizComponent'
+import { debounce } from '@utils/helpers'
 import SappIcon from 'src/common/SappIcon'
+import { IQuestion, IVideo } from 'src/type/course/Question'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import { formatTime, htmlToRaw } from '@components/common/timer'
 
 type Props = {
   videos?: IVideo[]
+  activityId: string
+  tabId: string
+  quizId: string
 }
 
-interface IQuestionRef {
-  onSubmit: (data: any) => Promise<void>
-}
-const VideoDocument = ({ videos }: Props) => {
+/**
+ * VideoDocument component for displaying and interacting with videos and quiz questions.
+ * @component
+ * @param {Props} props - The properties of the component.
+ * @param {IVideo[]} props.videos - List of videos to be displayed.
+ */
+const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
   const currentTimeRef = useRef(-1)
   const [currentListQuestion, setCurrentListQuestion] = useState<IQuestion[]>(
     [],
   )
-  const [shuffleQuiz, setShuffleQuiz] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<IQuestion>()
 
-  const { control: controlAnswer, handleSubmit, reset } = useForm()
+  const selector = useAppSelector(courseActivityQuizReducer)
+  const questionRef = useRef<QuizComponentRef>(null)
 
-  const questionRef = useRef<IQuestionRef | null>(null)
+  const {
+    control: controlAnswer,
+    handleSubmit,
+    reset,
+    setValue,
+    getValues,
+  } = useForm()
+
   const streamRef = useRef<StreamPlayerApi>()
 
+  const dispatch = useAppDispatch()
   const [results, setResults] = useState<{
     results: IQuestion
     corrects?: { [key: string]: boolean }
@@ -38,24 +60,22 @@ const VideoDocument = ({ videos }: Props) => {
 
   useEffect(() => {
     if (videos?.[0]) {
-      handleSetCurrentVideo(videos?.[0])
+      debouncedHandleSetCurrentVideo?.current(videos?.[0])
     }
-  }, [videos])
+  }, [])
 
-  const handleSetCurrentVideo = async (v: IVideo) => {
-    try {
-      if (v.quiz?.id) {
-        const question = await CourseActivityApi.getQuestions(v.quiz?.id)
-        if (question.success) {
-          setShuffleQuiz(question.data.questions)
-        }
-      }
-    } catch (error) {}
-    setCurrentVideo(v)
-    quizTimed.current = [
+  /**
+   * Handles setting the current video and fetching quiz questions.
+   * @param {IVideo} v - The selected video.
+   * @returns {Promise<void>} - A Promise that resolves when the operation is complete.
+   */
+  const handleSetCurrentVideo = async (v: IVideo): Promise<void> => {
+    const listQuestion = [
       ...(v?.quiz?.constructed_questions || []),
       ...(v?.quiz?.multiple_choice_questions || []),
-    ].reduce(
+    ]
+    setCurrentVideo(v)
+    quizTimed.current = listQuestion.reduce(
       (obj, e) => {
         if (e.time && e.id) {
           if (!obj[e.time]) {
@@ -68,7 +88,17 @@ const VideoDocument = ({ videos }: Props) => {
       {} as { [key: string]: IQuestion[] },
     )
   }
+  const debouncedHandleSetCurrentVideo = useRef(
+    debounce(handleSetCurrentVideo, 500),
+  )
 
+  /**
+   * Opens the modal with quiz questions based on the provided parameters.
+   * @param {Object} params - Parameters for opening the modal.
+   * @param {string} params.id - The ID of the quiz.
+   * @param {boolean} params.open - Flag to open or close the modal.
+   * @param {IQuestion[]} params.listQuestion - List of quiz questions.
+   */
   const handleOpenModalQuestions = async ({
     id,
     listQuestion,
@@ -78,32 +108,66 @@ const VideoDocument = ({ videos }: Props) => {
     listQuestion: any[]
   }) => {
     try {
-      const newCurrentQuiz = shuffleQuiz.find((e) => e.id === id)
-      if (newCurrentQuiz) {
-        setActiveQuestion(newCurrentQuiz)
-        setCurrentListQuestion(listQuestion)
-      } else {
+      if (!id) {
         setActiveQuestion(undefined)
         setCurrentListQuestion([])
       }
+      try {
+        if (listQuestion?.[0]) {
+          dispatch(
+            fetchQuestionById({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: id,
+            }),
+          ).then((e: any) => {
+            if (e.payload.question) {
+              setActiveQuestion(e.payload.question)
+              setCurrentListQuestion(listQuestion)
+            } else {
+              setActiveQuestion(undefined)
+              setCurrentListQuestion([])
+            }
+          })
+        }
+      } catch (error) {}
     } catch (error) {}
   }
 
-  const handleTrackTime = (time: number) => {
-    if (quizTimed.current?.[time]?.[0]?.id) {
-      handleOpenModalQuestions({
-        id: quizTimed.current?.[time][0].id || '',
-        open: true,
-        listQuestion: quizTimed.current?.[time],
-      })
-      streamRef.current?.pause()
-      setCurrentListQuestion(quizTimed.current?.[time])
-      return true
+  /**
+   * Tracks the time of the video and opens the modal for quiz questions if necessary.
+   * @param {number} time - The current time of the video.
+   * @param {string} questionId - The ID of the quiz question to find.
+   * @returns {boolean} - Returns true if a quiz question is opened; otherwise, false.
+   */
+  const handleTrackTime = (time: number, questionId?: string) => {
+    const quizAtTime = quizTimed.current?.[time]
+
+    if (quizAtTime && quizAtTime.length > 0) {
+      const foundQuestion = questionId
+        ? quizAtTime.find((question) => question.id === questionId)
+        : quizAtTime[0]
+
+      if (foundQuestion) {
+        handleOpenModalQuestions({
+          id: foundQuestion.id || '',
+          open: true,
+          listQuestion: questionId ? [foundQuestion] : quizAtTime,
+        })
+        streamRef.current?.pause()
+        setCurrentListQuestion(quizAtTime)
+        return true
+      }
     }
+
     setCurrentListQuestion([])
     return false
   }
 
+  /**
+   * Handles the time update event of the video.
+   */
   const handleOnTimeUpdate = () => {
     const currentTime = Math.floor(streamRef.current?.currentTime || 0)
     if (currentTimeRef.current !== currentTime) {
@@ -112,6 +176,12 @@ const VideoDocument = ({ videos }: Props) => {
     }
   }
 
+  /**
+   * Closes the modal and performs necessary actions based on the parameters.
+   * @param {Object} params - Parameters for closing the modal.
+   * @param {string} [params.quizId] - The ID of the quiz.
+   * @param {IQuestion[]} params.listQuestion - List of quiz questions.
+   */
   const handleClose = ({
     quizId,
     listQuestion,
@@ -152,21 +222,50 @@ const VideoDocument = ({ videos }: Props) => {
     reset()
   }
 
+  /**
+   * Handles form submission.
+   * @param {Object} data - Form data.
+   */
   const onSubmit = async (data: any) => {
-    questionRef.current?.onSubmit(data)
+    // if (activeQuestion?.id) {
+    //   dispatch(
+    //     confirmQuestion({
+    //       activityId: activityId,
+    //       tabId: tabId,
+    //       quizId: quizId,
+    //       questionId: activeQuestion?.id,
+    //       myAnswers: getValues(),
+    //     }),
+    //   ).then((e: any) => {
+    //     setActiveQuestion(e.payload.question)
+    //     if (activeQuestion) {
+    //       questionRef.current?.onSubmit({
+    //         activityId: activityId,
+    //         tabId: tabId,
+    //         quizId: quizId,
+    //       })
+    //     }
+    //   })
+    // }
+    questionRef.current?.onSubmit({
+      activityId: activityId,
+      tabId: tabId,
+      quizId: quizId,
+    })
   }
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between text-primary gap-x-10 gap-y-2 flex-wrap">
+      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 flex-wrap">
         {videos?.map((v, i) => {
           return (
             <label
-              className=" flex items-center gap-2 select-none cursor-pointer"
+              className=" flex items-center gap-2 select-none cursor-pointer mb-3"
               key={v.file.id}
             >
+              {/* Radio button for video selection */}
               <SAPPRadio
-                onChange={() => handleSetCurrentVideo(v)}
+                onChange={() => debouncedHandleSetCurrentVideo.current(v)}
                 {...(v.file.id === currentVideo?.file.id
                   ? {
                       checked: true,
@@ -178,13 +277,49 @@ const VideoDocument = ({ videos }: Props) => {
             </label>
           )
         })}
-        <div className="flex items-center select-none cursor-pointer">
+        <div className="flex items-center select-none cursor-pointer relative z-[9999] group">
           <span className="mr-2">Timeline</span>
+          {/* Icon for course video timeline */}
           <SappIcon icon="course_video_timeline"></SappIcon>
+          <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100$]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
+            <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
+              {[
+                ...(currentVideo?.quiz?.constructed_questions || []),
+                ...(currentVideo?.quiz?.multiple_choice_questions || []),
+              ]
+                .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0))
+                .map((e) => {
+                  return (
+                    <div
+                      key={e.id}
+                      className="gap-3 text-medium-sm flex px-6 py-3 hover:bg-primary-2"
+                      onClick={() => {
+                        handleOpenModalQuestions({
+                          id: '',
+                          open: false,
+                          listQuestion: [],
+                        })
+                        setTimeout(() => {
+                          handleTrackTime(Number(e.time), e.id)
+                        }, 500)
+                      }}
+                    >
+                      <div className="text-state-info flex-none">
+                        {formatTime(e.time)}
+                      </div>
+                      <div className="text-bw-1 line-clamp-2 ">
+                        {htmlToRaw(e.question_content)}
+                      </div>
+                    </div>
+                  )
+                })}
+            </div>
+          </div>
         </div>
       </div>
       <div className="relative">
         <div>
+          {/* Modal for quiz questions */}
           <SappModal
             open={!!activeQuestion}
             customTitle={
@@ -219,16 +354,11 @@ const VideoDocument = ({ videos }: Props) => {
             colorCancel="secondary"
           >
             <div className="py-5">
-              <QuizComponent
-                ref={questionRef}
-                activeQuestion={activeQuestion}
-                controlAnswer={controlAnswer}
-                {...results}
-                setResults={setResults}
-              ></QuizComponent>
+              <QuizComponent activeQuestion={activeQuestion}></QuizComponent>
             </div>
           </SappModal>
         </div>
+        {/* Video player component */}
         <SAPPVideo
           streamRef={streamRef}
           options={{

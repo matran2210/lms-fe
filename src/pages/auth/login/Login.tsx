@@ -21,11 +21,14 @@ import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
+import { getMessagingToken } from 'src/utils/firebase'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface IInputProps {
   login: string
   password: string
   remember_me: boolean
+  device_id: string
 }
 
 const SocialLogos = [
@@ -60,22 +63,44 @@ const LoginPage = () => {
       login: '',
       password: '',
       remember_me: false,
+      device_id: '',
     },
   })
+
+  const handleDeviceToken = async () => {
+    try {
+      const accessDeviceToken = await AsyncStorage.getItem(
+        'firebaseDeviceToken',
+      )
+      if (accessDeviceToken) {
+        return accessDeviceToken
+      }
+      const token = await getMessagingToken()
+      if (token) {
+        AsyncStorage.setItem('firebaseDeviceToken', token)
+      }
+      return token
+    } catch (error) {
+      return null
+    }
+  }
 
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
     try {
-      await dispatch(
-        getLoginUser({
-          login,
-          password,
-          remember_me: remember_me ? remember_me : false,
-        }),
-      ).unwrap()
-
-      router.push('/')
+      const getFireBaseToken = await handleDeviceToken()
+      if (getFireBaseToken) {
+        const loginUserResult = await dispatch(
+          getLoginUser({
+            login,
+            password,
+            remember_me: remember_me ? remember_me : false,
+            device_id: getFireBaseToken,
+          }),
+        ).unwrap()
+      }
+      router.push(PageLink.COURSES)
     } catch (error) {}
   }
   const socialLogin = () => {

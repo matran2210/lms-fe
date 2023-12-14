@@ -21,7 +21,7 @@ export default function MenuItem({
   const [isExpanded, toggleExpanded] = useState(false)
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const selected = router.asPath === url
+  const selected = router.pathname === url
   const isNested = subItems && subItems?.length > 0
 
   const onClick = () => {
@@ -31,8 +31,8 @@ export default function MenuItem({
   return (
     <>
       <div
-        className={`${
-          selected && type === 'level-1' ? 'border-l-4 border-active' : ''
+        className={`cursor-pointer ${
+          selected && type === 'level-1' ? 'border-l-4 pr-1 border-active' : ''
         } relative sidebar-list-items py-2 ${
           mode === 'student' ? 'mb-4 last:mb-0' : 'mb-7 last:mb-0'
         }`}

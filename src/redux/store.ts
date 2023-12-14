@@ -4,6 +4,11 @@ import loginReducer from './slice/Login/Login'
 import userReducer from './slice/User/User'
 import confirmDialogReducer from './slice/ConfirmDialog/ConfirmDialogSlice'
 import courseActivityReducer from './slice/Course/MyCourse/Activity/Activity'
+import notificationReducer from './slice/Notification/Notification'
+import courseActivityQuizReducer from './slice/Course/MyCourse/Activity/ActivityQuiz'
+import userGuideReducer from './slice/Course/UserGuide'
+
+import { useDispatch } from 'react-redux'
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +16,9 @@ export const store = configureStore({
     userReducer,
     confirmDialogReducer,
     courseActivityReducer,
+    notificationReducer,
+    courseActivityQuizReducer,
+    userGuideReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,12 +1,36 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
-import { useMemo } from 'react'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { useEffect, useMemo } from 'react'
 export type IPreviewProp = {
   data: any
   control: any
+  name?: string
   corrects?: { [key: string]: boolean }
+  defaultValues?: any
+  setValue?: any
+  handleSaveHighLight?: any
+  highlighted?: any
+  removeHighlight?: any
+  allowHighLight?: boolean
+  solution?: any
 }
-const OneChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
+const OneChoiceQuestion = ({
+  data,
+  control,
+  corrects,
+  name,
+  defaultValues,
+  setValue,
+  handleSaveHighLight,
+  highlighted,
+  removeHighlight,
+  allowHighLight,
+  solution,
+}: IPreviewProp) => {
+  useEffect(() => {
+    setValue(name, defaultValues)
+  }, [defaultValues])
   const convertAnswer = useMemo(() => {
     let answers = []
     if (data?.answers) {
@@ -16,13 +40,24 @@ const OneChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
     }
     return answers
   }, [data])
-
+  useEffect(() => {
+    if (data) {
+      DeserializeHighlight(highlighted)
+    }
+  }, [data])
   return (
     <div>
-      <EditorReader
-        text_editor_content={data?.question_content}
-        className="sapp-questions"
-      />
+      <div
+        id="hightlight_area"
+        onMouseUp={() =>
+          runHighlight(handleSaveHighLight, allowHighLight || false)
+        }
+      >
+        <EditorReader
+          text_editor_content={data?.question_content}
+          className="sapp-questions"
+        />
+      </div>
       <div
         className="sapp-answer-wrapper"
         style={{
@@ -32,10 +67,17 @@ const OneChoiceQuestion = ({ data, control, corrects }: IPreviewProp) => {
         <HookFormRadioGroup
           options={convertAnswer || []}
           control={control}
-          name="answer"
+          name={name || 'answer'}
           corrects={corrects}
+          defaultValue={defaultValues}
         />
       </div>
+      {solution && (
+        <div className="bg-gray-4 mt-6 p-6">
+          <div className="font-semibold text-base text-bw-1 ">Solution</div>
+          <EditorReader className="mt-4" text_editor_content={solution} />
+        </div>
+      )}
     </div>
   )
 }

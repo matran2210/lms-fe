@@ -55,7 +55,7 @@ function DiscussionElement({
         )}
 
         <div className="flex gap-y-1 gap-x-6 font-semibold text-medium-sm">
-          <div className="relative ">
+          {/* <div className="relative ">
             <input
               type="checkbox"
               className="peer absolute inset-0 w-full h-full cursor-pointer opacity-0"
@@ -71,7 +71,7 @@ function DiscussionElement({
             <div role="button" className="peer-checked:text-primary">
               Like
             </div>
-          </div>
+          </div> */}
           {rank < 1 && (
             <div
               role="button"

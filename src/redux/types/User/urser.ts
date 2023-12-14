@@ -16,6 +16,28 @@ export interface IUser {
   confirmation_status: null | string
   detail_id: string
   detail: IUserDetail
+  user_contacts: IUserContact[]
+}
+interface IUserContact {
+  id: string
+  created_at: string
+  updated_at: string
+  deleted_at: string
+  is_default: boolean
+  email: string
+  phone: string
+  country_code: string
+  provinceCode: string
+  districtCode: string
+  wardCode: string
+  address: string
+  permanent_address: string
+  company_type: string
+  company_position: string
+  company_rank: string
+  province: string
+  district: string
+  ward: string
 }
 
 export enum IUserType {

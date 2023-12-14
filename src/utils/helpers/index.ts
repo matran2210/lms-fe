@@ -109,21 +109,32 @@ export const calculateTimeAgo = (date: string): string => {
   }
 
   const daysAgo = Math.floor(hoursAgo / 24)
-  if (daysAgo === 1) {
+  if (daysAgo >= 1) {
     const formatter = new Intl.DateTimeFormat('en-US', {
       day: 'numeric',
       month: 'numeric',
       year: 'numeric',
     })
-    return `yesterday at ${formatter.format(updatedDateTime)}`
-  } else {
-    const formatter = new Intl.DateTimeFormat('en-US', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    })
-    return formatter.format(updatedDateTime)
+    return `${formatter.format(updatedDateTime)}`
+  }
+  return ''
+}
+
+/**
+ * Hàm debounce giúp trì hoãn thực thi một hàm cho đến khi không có lời gọi mới sau một khoảng thời gian.
+ *
+ * @template T Loại hàm cần debounce.
+ * @param {T} func Hàm cần được debounce.
+ * @param {number} delay Thời gian trễ (milliseconds) trước khi hàm được thực thi sau lời gọi cuối cùng.
+ * @returns {(...args: Parameters<T>) => void} Hàm debounce đã được tạo ra.
+ */
+export const debounce = <T extends (...args: any[]) => void>(
+  func: T,
+  delay: number,
+) => {
+  let timeoutId: NodeJS.Timeout
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => func(...args), delay)
   }
 }

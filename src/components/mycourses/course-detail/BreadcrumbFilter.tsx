@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import Link from 'next/link'
 
-const BreadcrumbFilter: React.FC = () => {
+const BreadcrumbFilter = ({ name }: { name: string }) => {
   return (
     <nav className="breadcrumbs" role="navigation" aria-label="breadcrumbs">
       <ol className="breadcrumbs__list flex flex-wrap text-medium-sm font-semibold">
@@ -14,9 +14,7 @@ const BreadcrumbFilter: React.FC = () => {
           </Link>
         </li>
         <li className="breadcrumbs__item current-course text-bw-1 ml-1">
-          <span>
-            / Audit & Assurance (AA) - Kiểm toán và dịch vụ đảm bảo (F8)
-          </span>
+          <span>/ {name}</span>
         </li>
       </ol>
     </nav>

@@ -6,6 +6,7 @@ export interface LoginReq {
   login: string
   password: string
   remember_me: boolean
+  device_id: string
 }
 
 export interface ChangePasswordReq {
