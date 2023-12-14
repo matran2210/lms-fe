@@ -1,9 +1,4 @@
-import {
-  AsyncThunk,
-  Slice,
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit'
+import { Slice, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { FieldValues } from 'react-hook-form'
 import { QUESTION_TYPES } from 'src/constants'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
@@ -283,7 +278,10 @@ const quizSlice: Slice = createSlice({
                   ]
                   questionToUpdate.corrects = payload.question.answers
                   break
-
+                case QUESTION_TYPES.DRAG_DROP:
+                  break
+                case QUESTION_TYPES.MATCHING:
+                  break
                 default:
                   break
               }

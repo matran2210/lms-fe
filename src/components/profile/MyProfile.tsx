@@ -209,7 +209,7 @@ const MyProfile = ({
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit} height="4">
-                {user.detail.email}
+                {user.user_contacts?.[0]?.email}
               </TextSkeleton>
             </div>
           </li>
@@ -226,7 +226,7 @@ const MyProfile = ({
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit} height="4">
-                {formatPhoneNumber(user.detail.phone)}
+                {formatPhoneNumber(user.user_contacts?.[0]?.phone)}
               </TextSkeleton>
             </div>
           </li>

@@ -1,4 +1,5 @@
 import EditorReader from '@components/base/editor/EditorReader'
+import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
@@ -69,15 +70,22 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const getAnswerMatching = () => {
       let value = [] as any
-      const inputs = questionRef.current?.querySelectorAll(
-        '.sapp-match-result',
-      ) as any
+      const inputs = document.querySelectorAll('.sapp-match-result') as any
       for (let e of inputs) {
-        value.push(e.innerText)
+        const childId = e.querySelector('.sapp-notched-container')
+        value.push({ question_id: e.id, answer_id: childId?.id })
       }
       return value
     }
-
+    const getAnswerDragNDrop = () => {
+      let value = [] as any
+      const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
+      for (let e of inputs) {
+        const idAnswer = e.querySelector('span')
+        value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
+      }
+      return value
+    }
     useEffect(() => {
       const handleResponseResults = () => {
         if (activeQuestion) {
@@ -117,6 +125,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               break
             }
             case QUESTION_TYPES.SELECT_WORD:
+              const myAnswers = activeQuestion?.myAnswers
+                ?.find((e: any) => e.question_id === activeQuestion.id)
+                ?.answer?.map((e: any) => e.answer_id)
+              setDefaultAnswer(myAnswers)
               break
             default:
               break
@@ -202,7 +214,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={activeQuestion.corrects}
             />
           ) : activeQuestion?.qType === QUESTION_TYPES.DRAG_DROP ? (
-            <>DRAG_DROP</>
+            <DragNDropPreivew
+              data={activeQuestion}
+              action={getAnswerDragNDrop}
+              defaultAnswer={defaultAnswer}
+              // corrects={activeQuestion.corrects}
+            />
           ) : activeQuestion?.qType === QUESTION_TYPES.SELECT_WORD ? (
             <SelectWord
               data={activeQuestion}

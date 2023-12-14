@@ -14,7 +14,7 @@ import SAPPVideo from '@components/base/video/SAPPVideo'
 import { debounce } from '@utils/helpers'
 import SappIcon from 'src/common/SappIcon'
 import { IQuestion, IVideo } from 'src/type/course/Question'
-import QuizComponent from './QuizComponent'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 
 type Props = {
@@ -40,6 +40,7 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
   const [activeQuestion, setActiveQuestion] = useState<IQuestion>()
 
   const selector = useAppSelector(courseActivityQuizReducer)
+  const questionRef = useRef<QuizComponentRef>(null)
 
   const {
     control: controlAnswer,
@@ -226,23 +227,31 @@ const VideoDocument = ({ videos, activityId, tabId, quizId }: Props) => {
    * @param {Object} data - Form data.
    */
   const onSubmit = async (data: any) => {
-    if (activeQuestion?.id) {
-      dispatch(
-        confirmQuestion({
-          activityId: activityId,
-          tabId: tabId,
-          quizId: quizId,
-          questionId: activeQuestion?.id,
-          myAnswers: getValues(),
-        }),
-      ).then((e: any) => {
-        setActiveQuestion(e.payload.question)
-        // handleClose({
-        //   quizId: activeQuestion?.id,
-        //   listQuestion: currentListQuestion,
-        // })
-      })
-    }
+    // if (activeQuestion?.id) {
+    //   dispatch(
+    //     confirmQuestion({
+    //       activityId: activityId,
+    //       tabId: tabId,
+    //       quizId: quizId,
+    //       questionId: activeQuestion?.id,
+    //       myAnswers: getValues(),
+    //     }),
+    //   ).then((e: any) => {
+    //     setActiveQuestion(e.payload.question)
+    //     if (activeQuestion) {
+    //       questionRef.current?.onSubmit({
+    //         activityId: activityId,
+    //         tabId: tabId,
+    //         quizId: quizId,
+    //       })
+    //     }
+    //   })
+    // }
+    questionRef.current?.onSubmit({
+      activityId: activityId,
+      tabId: tabId,
+      quizId: quizId,
+    })
   }
 
   return (
