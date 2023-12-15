@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
   forwardRef,
@@ -17,6 +18,7 @@ interface IProps {
   removeHighlight?: any
   allowHighLight?: boolean
   defaultAnswer?: any
+  done?: boolean
 }
 type IProp = {
   value: string
@@ -32,13 +34,31 @@ const MatchingQuestion = forwardRef(
       removeHighlight,
       allowHighLight,
       defaultAnswer,
+      done,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
     const [defaultValue, setDefaultValue] = useState<any>()
     const [answers, setAnswers] = useState<any>()
     function allowDrop(ev: any) {
-      ev.preventDefault()
+      const slotId = ev.target.id
+      const slotElement = document.getElementById(slotId)
+
+      if (
+        slotElement?.children.length === 0 &&
+        ev.target.classList.contains('dropable')
+      ) {
+        ev.preventDefault()
+      } else {
+        return
+      }
+    }
+    function allowDropStorage(ev: any) {
+      if (ev.target.classList.contains('dropable')) {
+        ev.preventDefault()
+      } else {
+        return
+      }
     }
 
     function drag(ev: any) {
@@ -50,9 +70,14 @@ const MatchingQuestion = forwardRef(
       const slotId = ev.target.id
       const slotElement = document.getElementById(slotId)
       var data = ev.dataTransfer.getData('text')
-      if (slotElement?.children.length === 0) {
+      if (
+        slotElement?.children.length === 0 &&
+        ev.target.classList.contains('dropable')
+      ) {
         ev.target.appendChild(document.getElementById(data))
-      } else return
+      } else {
+        return
+      }
     }
     const handleStorage = (event: any) => {
       // prevent the default behavior of the drop event
@@ -66,13 +91,13 @@ const MatchingQuestion = forwardRef(
         storage?.appendChild(document.getElementById(pieceId) as any)
       } else return
     }
-    const [key, setKey] = useState(1)
+    const [key, setKey] = useState<string>('1')
 
     useImperativeHandle(ref, () => ({
       handleReset() {
         // setAnswered([])
         setKey((prev) => {
-          const newKey = prev + 1
+          const newKey = uniqueId('key')
           return newKey
         })
         // setAnswered()
@@ -107,20 +132,28 @@ const MatchingQuestion = forwardRef(
       }
       setAnswers(arr)
       setDefaultValue(obj)
-    }, [defaultAnswer])
+    }, [defaultAnswer, data.question_matchings])
     return (
       <div key={key}>
         <div
           id="hightlight_area"
-          onMouseUp={() =>
-            runHighlight(handleSaveHighLight, allowHighLight || false)
-          }
+          onMouseUp={(e: any) => {
+            if (
+              e.target.tagName.charAt(0) !== 'm' &&
+              e.target.firstChild.tagName !== 'math'
+            ) {
+              // if(e){
+              runHighlight(handleSaveHighLight, allowHighLight || false)
+              // }
+            }
+          }}
         >
           <EditorReader
             className="sapp-questions"
             text_editor_content={data?.question_content}
           />
         </div>
+        {/* {!done && ( */}
         <div className="flex flex-col gap-y-5">
           {data?.question_matchings.map((e: any) => {
             return (
@@ -131,7 +164,7 @@ const MatchingQuestion = forwardRef(
                 <QuestionCard value={e?.content} />
                 <div
                   id={e?.id}
-                  className="flex-1 sapp-match-result"
+                  className="flex-1 sapp-match-result dropable"
                   onDrop={() => drop(event)}
                   onDragOver={() => allowDrop(event)}
                 >
@@ -153,9 +186,9 @@ const MatchingQuestion = forwardRef(
             )
           })}
           <div
-            className="border min-h-large sapp-store flex flex-wrap gap-5 p-5"
+            className="border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable"
             onDrop={handleStorage}
-            onDragOver={allowDrop}
+            onDragOver={allowDropStorage}
             id="storage"
           >
             {answers?.map((answer: any) => {
@@ -176,6 +209,7 @@ const MatchingQuestion = forwardRef(
             })}
           </div>
         </div>
+        {/* )} */}
         {/* <button onClick={action}>Check Answer</button> */}
       </div>
     )
