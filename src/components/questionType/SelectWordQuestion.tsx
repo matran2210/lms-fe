@@ -98,9 +98,16 @@ const SelectWord = ({
   return (
     <div
       id="hightlight_area"
-      onMouseUp={() =>
-        runHighlight(handleSaveHighLight, allowHighLight || false)
-      }
+      onMouseUp={(e: any) => {
+        if (
+          e.target.tagName.charAt(0) !== 'm' &&
+          e.target.firstChild.tagName !== 'math'
+        ) {
+          if (e) {
+            runHighlight(handleSaveHighLight, allowHighLight || false)
+          }
+        }
+      }}
     >
       <EditorReader
         extenalRef={ref}

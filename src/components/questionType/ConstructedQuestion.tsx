@@ -1,8 +1,7 @@
+import HookFormEditor from '@components/base/editor/HookFormEditor'
 import React, { useEffect } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
-import HookFormEditor from '@components/base/editor/HookFormEditor'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
-import dynamic from 'next/dynamic'
 import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
 export type IPreviewProp = {
@@ -42,9 +41,16 @@ const EssayQuestionPreview = ({
         <div
           style={{ background: 'white' }}
           id="hightlight_area"
-          onMouseUp={() =>
-            runHighlight(handleSaveHighLight, allowHighLight || false)
-          }
+          onMouseUp={(e: any) => {
+            if (
+              e.target.tagName.charAt(0) !== 'm' &&
+              e.target.firstChild.tagName !== 'math'
+            ) {
+              if (e) {
+                runHighlight(handleSaveHighLight, allowHighLight || false)
+              }
+            }
+          }}
         >
           <EditorReader
             className="sapp-questions"

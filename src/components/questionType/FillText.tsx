@@ -31,15 +31,11 @@ const AddWordPreview = ({
   const [questionContent, setQuestionContent] = useState<any>()
   const str = data?.question_content
   const parser = new DOMParser()
-
   useEffect(() => {
     if (data) {
       DeserializeHighlight(highlighted)
     }
   }, [data])
-
-  // console.log('data', data)
-
   useEffect(() => {
     const doc = parser.parseFromString(str, 'text/html')
     const elements = doc.querySelectorAll('.question-content-tag')
@@ -54,7 +50,9 @@ const AddWordPreview = ({
           (ans: any) =>
             ans.answer_position === index + 1 && ans.answer === inputValue,
         )
-        inputClass = correctAnswer ? 'border-success' : 'border-danger'
+        inputClass = correctAnswer
+          ? 'border-success text-state-success'
+          : 'border-danger text-danger'
       }
 
       element.outerHTML = `
@@ -100,9 +98,16 @@ const AddWordPreview = ({
   return (
     <div
       id="hightlight_area"
-      onMouseUp={() =>
-        runHighlight(handleSaveHighLight, allowHighLight || false)
-      }
+      onMouseUp={(e: any) => {
+        if (
+          e.target.tagName.charAt(0) !== 'm' &&
+          e.target.firstChild?.tagName !== 'math'
+        ) {
+          if (e) {
+            runHighlight(handleSaveHighLight, allowHighLight || false)
+          }
+        }
+      }}
     >
       <EditorReader
         extenalRef={ref}

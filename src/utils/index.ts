@@ -37,19 +37,23 @@ export function truncateString(str: string, maxLength: number) {
 export function runHighlight(
   handleSaveHighLight: any,
   allowHighLight: boolean,
+  elementID = 'hightlight_area',
 ) {
   // run mobile a bit
-  const domEle = document.getElementById('hightlight_area')
+  const domEle = document.getElementById(elementID)
 
   const options: optionsImpl = {}
   if (domEle && allowHighLight) {
-    const highlightMade = doHighlight(domEle, true, options)
+    doHighlight(domEle, false, options)
     handleSaveHighLight(serializeHighlights(domEle))
   }
 }
 
-export function DeserializeHighlight(highlighted: any) {
-  const domEle = document.getElementById('hightlight_area')
+export function DeserializeHighlight(
+  highlighted: any,
+  elementID = 'hightlight_area',
+) {
+  const domEle = document.getElementById(elementID)
   removeHighlights(domEle as any)
   deserializeHighlights(domEle as any, highlighted)
 }
