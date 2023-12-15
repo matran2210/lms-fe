@@ -53,7 +53,7 @@ export const RouteGuard = ({ children }: IProps) => {
 
     // Chặn vào login page khi đã đăng nhập
     const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
-    if (isLoginPage) {
+    if (isLoginPage && accessToken) {
       try {
         await dispatch(getMe()).unwrap()
         router.push(PageLink.DASHBOARD)
