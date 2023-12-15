@@ -28,11 +28,9 @@ if (typeof window !== 'undefined') {
 export const getMessagingToken = async () => {
   let currentToken = ''
   if (!messaging) return
-  try {
-    currentToken = await messaging.getToken({
-      vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPIDKEY,
-    })
-  } catch (error) {}
+  currentToken = await messaging.getToken({
+    vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPIDKEY,
+  })
   return currentToken
 }
 

@@ -32,6 +32,7 @@ module.exports = withBundleAnalyzer({
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
+  optimizeFonts: false,
   output: 'standalone',
   publicRuntimeConfig: {
     apiURL: process.env.REACT_APP_API_PUBLIC,

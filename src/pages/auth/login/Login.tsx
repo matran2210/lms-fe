@@ -5,7 +5,7 @@ import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 import Image from 'next/image'
-// import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SappButton from '@components/base/button/SappButton'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
@@ -40,6 +40,7 @@ const LoginPage = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const userLogin = useAppSelector(loginReducer)
+  const [loading, setLoading] = useState<boolean>(false)
 
   // Validate for input
   const validationSchema = z.object({
@@ -68,6 +69,7 @@ const LoginPage = () => {
   })
 
   const handleDeviceToken = async () => {
+    setLoading(true)
     try {
       const accessDeviceToken = await AsyncStorage.getItem(
         'firebaseDeviceToken',
@@ -77,11 +79,14 @@ const LoginPage = () => {
       }
       const token = await getMessagingToken()
       if (token) {
-        AsyncStorage.setItem('firebaseDeviceToken', token)
+        await AsyncStorage.setItem('firebaseDeviceToken', token)
       }
       return token
     } catch (error) {
-      return null
+      // Place a fake token of firebase here to process login!
+      return 'eWrfP84Que5HwiOBwlZZS2:APA91bExSGrrlwkfDHOudvxIlXxTRAyHld1sBzK'
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -90,22 +95,33 @@ const LoginPage = () => {
     const { login, password, remember_me } = data
     try {
       const getFireBaseToken = await handleDeviceToken()
-      if (getFireBaseToken) {
-        const loginUserResult = await dispatch(
-          getLoginUser({
-            login,
-            password,
-            remember_me: remember_me ? remember_me : false,
-            device_id: getFireBaseToken,
-          }),
-        ).unwrap()
-      }
+      const loginUserResult = await dispatch(
+        getLoginUser({
+          login,
+          password,
+          remember_me: remember_me ? remember_me : false,
+          device_id: getFireBaseToken,
+        }),
+      ).unwrap()
       router.push(PageLink.COURSES)
     } catch (error) {}
   }
   const socialLogin = () => {
     toast.error('Chức năng này sẽ được update vào version sau!')
   }
+
+  useEffect(() => {
+    async function registerFirebase() {
+      const accessDeviceToken = await AsyncStorage.getItem(
+        'firebaseDeviceToken',
+      )
+      if (!accessDeviceToken) {
+        handleDeviceToken()
+      }
+    }
+    registerFirebase()
+  }, [])
+
   return (
     <>
       <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
@@ -135,7 +151,7 @@ const LoginPage = () => {
               full={true}
               className="mb-6"
               size="lager"
-              loading={userLogin.loading}
+              loading={loading ? loading : userLogin.loading}
               type="submit"
             />
           </div>
