@@ -95,7 +95,7 @@ export const calculateTimeAgo = (date: string): string => {
 
   const secondsAgo = Math.floor(timeDifference / 1000)
   if (secondsAgo < 60) {
-    return secondsAgo === 0 ? 'just now' : `${secondsAgo} seconds ago`
+    return secondsAgo <= 0 ? 'just now' : `${secondsAgo} seconds ago`
   }
 
   const minutesAgo = Math.floor(secondsAgo / 60)

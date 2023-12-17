@@ -182,75 +182,81 @@ const Discussion = (props: Props) => {
               idReply={idReply}
               handleChangeIdReply={handleChangeIdReply}
             />
-            {e.children?.[0] && (
-              <div className="relative ml-13 pl-5 mt-6 overflow-hidden">
-                {/* <div className="relative"> */}
-                <div
-                  className="absolute left-0 top-0 bottom-0 w-[2px] -mt-1 bg-size-100-30"
-                  style={{
-                    background:
-                      'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
-                  }}
-                ></div>
-                {/* </div> */}
-
-                {e.children.map((f) => {
-                  return (
-                    <div className="mt-5" key={f.id}>
-                      <DiscussionElement
-                        rank={2}
-                        discussion={f}
-                        onReact={onReact}
-                      />
-                    </div>
-                  )
-                })}
-              </div>
-            )}
             <div
-              className={`ml-13 pl-5 flex gap-3 overflow-hidden transition-max-height duration-300 ${
-                idReply === e.id ? 'max-h-96 mt-6' : 'max-h-0'
-              }`}
+              className={`${
+                e.children?.[0] ? 'mt-6' : ''
+              } ' relative ml-13 pl-5 overflow-hidden`}
             >
-              <div className="flex-none leading-0">
-                <Image
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                  src={
-                    e?.avatar?.['50x50'] || e?.avatar?.['ORIGIN'] || blankAvatar
-                  }
-                  loading="eager"
-                ></Image>
-              </div>
-              <form
-                onSubmit={handleSubmit((e) => onSubmit(e))}
-                className="flex-1 relative"
-              >
-                <HookFormTextField
-                  control={control}
-                  name={idReply === e.id ? 'comment' : ''}
-                  textSize="sm"
-                  inputClassName={'max-h-10'}
-                  placeholder="Your comment..."
-                ></HookFormTextField>
-                <div
-                  onClick={openCamera}
-                  className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
-                >
-                  <SappIcon icon="camera"></SappIcon>
+              {e.children?.[0] && (
+                <div>
+                  <div
+                    className="absolute left-0 top-0 bottom-0 w-[2px] -mt-1 bg-size-100-30"
+                    style={{
+                      background:
+                        'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
+                    }}
+                  ></div>
+                  {e.children.map((f, index) => {
+                    return (
+                      <div className={index === 0 ? '' : 'mt-5'} key={f.id}>
+                        <DiscussionElement
+                          rank={2}
+                          discussion={f}
+                          onReact={onReact}
+                        />
+                      </div>
+                    )
+                  })}
                 </div>
-                <button type="submit" className="hidden"></button>
-              </form>
+              )}
+              <div
+                className={`flex items-center gap-3 overflow-hidden transition-max-height duration-300 ${
+                  idReply === e.id ? `max-h-96 mt-6` : 'max-h-0'
+                }`}
+              >
+                <div className="flex-none leading-0">
+                  <Image
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                    src={
+                      e?.avatar?.['50x50'] ||
+                      e?.avatar?.['ORIGIN'] ||
+                      blankAvatar
+                    }
+                    loading="eager"
+                  ></Image>
+                </div>
+                <form
+                  onSubmit={handleSubmit((e) => onSubmit(e))}
+                  className="flex-1 relative"
+                >
+                  <HookFormTextField
+                    control={control}
+                    name={idReply === e.id ? 'comment' : ''}
+                    textSize="sm"
+                    inputClassName={'max-h-10'}
+                    placeholder="Your comment..."
+                  ></HookFormTextField>
+                  <div
+                    onClick={openCamera}
+                    className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+                  >
+                    <SappIcon icon="camera"></SappIcon>
+                  </div>
+                  <button type="submit" className="hidden"></button>
+                </form>
+              </div>
             </div>
+
             {/* {idReply === e.id && ( */}
           </div>
         )
       })}
       <div
-        className={`mt-6 flex gap-3 overflow-hidden transition-max-height duration-300`}
+        className={`mt-6 flex items-center gap-3 overflow-hidden transition-max-height duration-300`}
       >
-        <div className="flex-none">
+        <div className="flex-none leading-0">
           <Image
             width={40}
             height={40}
@@ -273,6 +279,7 @@ const Discussion = (props: Props) => {
             textSize="sm"
             inputClassName={'max-h-10'}
             placeholder="Your comment..."
+            className="h-fit"
           ></HookFormTextField>
           <button type="submit" className="hidden"></button>
           <div

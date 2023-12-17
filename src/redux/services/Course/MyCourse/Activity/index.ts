@@ -180,6 +180,15 @@ const CourseActivityApi = {
     })
     return response
   },
+
+  submitQuestion: async (id: string, data: any): Promise<IResponse<any>> => {
+    const uri = url.submitQuestion + `/${id}` + '/submit'
+    const response = await httpService.POST<any, any>({
+      uri,
+      request: data,
+    })
+    return response
+  },
 }
 
 export default CourseActivityApi

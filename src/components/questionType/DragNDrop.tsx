@@ -36,7 +36,7 @@ const DragNDropPreivew = forwardRef(
       if (defaultAnswer) {
         setAnswered(defaultAnswer)
       }
-    }, [defaultAnswer])
+    }, [])
     function allowDrop(ev: any) {
       ev.preventDefault()
     }

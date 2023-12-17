@@ -67,6 +67,7 @@ export interface ITab {
     files?: IFile[]
     videos?: IVideo[]
     quiz?: {
+      id?: string
       constructed_questions: IQuestion[]
       multiple_choice_questions: IQuestion[]
     }

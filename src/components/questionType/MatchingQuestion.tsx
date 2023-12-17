@@ -111,6 +111,7 @@ const MatchingQuestion = forwardRef(
         DeserializeHighlight(highlighted)
       }
     }, [data])
+
     useEffect(() => {
       let obj = {} as any
       let arr = []
