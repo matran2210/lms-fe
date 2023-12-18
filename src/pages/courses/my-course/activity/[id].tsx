@@ -6,7 +6,6 @@ import VideoDocument from '@components/mycourses/activity/documents/VideoDocumen
 import axios from 'axios'
 import { parse } from 'cookie'
 import { useEffect, useMemo, useState } from 'react'
-import FadeInOut from 'src/common/FadeInOut'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
@@ -102,59 +101,58 @@ const ActivityPage = ({ activity }: Props) => {
           })}
         </div>
       </div>
-      <FadeInOut show={!selector.loading}>
-        {!!course_tab_documents?.length && (
-          <div className="bg-white pb-6 mb-6">
-            <div
-              className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6 relative`}
-            >
-              <div className="tab-content">
-                {course_tab_documents?.map((e, i) => {
-                  const marginBottom =
-                    i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                  if (e.type === 'QUIZ') {
-                    return (
-                      <div className={marginBottom} key={e.id}>
-                        <QuizDocument
-                          questions={[
-                            ...(e.quiz?.multiple_choice_questions || []),
-                            ...(e.quiz?.constructed_questions || []),
-                          ]}
-                          activityId={activity.id}
-                          tabId={selector.currentTabId || ''}
-                          quizId={e.id}
-                        ></QuizDocument>
-                      </div>
-                    )
-                  }
-                  if (e.type === 'TEXT') {
-                    return (
-                      <div className={marginBottom} key={e.id}>
-                        <TextDocument
-                          text_editor_content={e.text_editor_content}
-                        ></TextDocument>
-                      </div>
-                    )
-                  }
-                  if (e.type === 'VIDEO') {
-                    return (
-                      <div className={marginBottom} key={e.id}>
-                        <VideoDocument
-                          videos={e.videos}
-                          activityId={activity.id}
-                          tabId={selector.currentTabId || ''}
-                          quizId={e.id}
-                        ></VideoDocument>
-                      </div>
-                    )
-                  }
-                  return null
-                })}
-              </div>
+      {/* <FadeInOut show={!selector.loading}> */}
+      {!!course_tab_documents?.length && (
+        <div className="bg-white pb-6 mb-6">
+          <div
+            className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6 relative`}
+          >
+            <div className="tab-content">
+              {course_tab_documents?.map((e, i) => {
+                const marginBottom =
+                  i < course_tab_documents?.length - 1 ? 'mb-6' : ''
+                if (e.type === 'QUIZ') {
+                  return (
+                    <div className={marginBottom} key={e.id}>
+                      <QuizDocument
+                        questions={[
+                          ...(e.quiz?.multiple_choice_questions || []),
+                          ...(e.quiz?.constructed_questions || []),
+                        ]}
+                        activityId={activity.id}
+                        tabId={selector.currentTabId || ''}
+                        quizId={e.quiz?.id || ''}
+                      ></QuizDocument>
+                    </div>
+                  )
+                }
+                if (e.type === 'TEXT') {
+                  return (
+                    <div className={marginBottom} key={e.id}>
+                      <TextDocument
+                        text_editor_content={e.text_editor_content}
+                      ></TextDocument>
+                    </div>
+                  )
+                }
+                if (e.type === 'VIDEO') {
+                  return (
+                    <div className={marginBottom} key={e.id}>
+                      <VideoDocument
+                        videos={e.videos}
+                        activityId={activity.id}
+                        tabId={selector.currentTabId || ''}
+                      ></VideoDocument>
+                    </div>
+                  )
+                }
+                return null
+              })}
             </div>
           </div>
-        )}
-      </FadeInOut>
+        </div>
+      )}
+      {/* </FadeInOut> */}
       <div className="bg-white px-6 py-3 mb-6 relative">
         <div className="flex justify-between flex-wrap gap-5">
           <div className="w-full sm:w-auto">
