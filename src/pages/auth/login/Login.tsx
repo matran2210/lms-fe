@@ -83,8 +83,7 @@ const LoginPage = () => {
       }
       return token
     } catch (error) {
-      // Place a fake token of firebase here to process login!
-      return 'eWrfP84Que5HwiOBwlZZS2:APA91bExSGrrlwkfDHOudvxIlXxTRAyHld1sBzK'
+      return ''
     } finally {
       setLoading(false)
     }
