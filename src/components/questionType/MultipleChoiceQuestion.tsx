@@ -41,7 +41,7 @@ const MultiChoiceQuestion = ({
         onMouseUp={(e: any) => {
           if (
             e.target.tagName.charAt(0) !== 'm' &&
-            e.target.firstChild.tagName !== 'math'
+            e.target.firstChild?.tagName !== 'math'
           ) {
             if (e) {
               runHighlight(handleSaveHighLight, allowHighLight || false)
