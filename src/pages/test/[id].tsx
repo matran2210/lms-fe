@@ -203,7 +203,9 @@ const TestDetail = ({ questions }: any) => {
     callback: () => setShowLisRequirement(false),
   })
   const currentTabContent = useMemo(() => {
-    return tabs.find((e: any) => e.id === currentPage)
+    if (tabs && tabs.length > 0) {
+      return tabs.find((e: any) => e.id === currentPage)
+    }
   }, [currentPage, tabs])
   const handleOpenScratchPad = (type: string) => {
     setOpenScratchPad((prev) => {
@@ -416,7 +418,7 @@ const TestDetail = ({ questions }: any) => {
         return handleSaveAnswer(getValueSelectText(), currentPage, tabs)
       } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
         return handleSaveAnswer(getValueFillText(), currentPage, tabs)
-      }
+      } else return tabs
     } else {
       return tabs
     }
@@ -439,12 +441,16 @@ const TestDetail = ({ questions }: any) => {
     }
   }
   async function getDetail(currentPage: string) {
-    const topicDescription = await CourseTestApi.getTopicDescription(
-      questions[questions.findIndex((e: any) => e.id === currentPage)]
-        .question_topic_id,
-    )
-    const res = await CourseTestApi.getQuestionsDetail(currentPage)
-    return { topicDescription, res }
+    try {
+      const topicDescription = await CourseTestApi.getTopicDescription(
+        questions[questions.findIndex((e: any) => e.id === currentPage)]
+          .question_topic_id,
+      )
+      const res = await CourseTestApi.getQuestionsDetail(currentPage)
+      return { topicDescription, res }
+    } catch (err) {
+      return { topicDescription: { data: {} }, res: { data: [] } }
+    }
   }
   const handleChangeTab = async (currentTab: any) => {
     const currentContent = tabs.find((e: any) => e.id === currentTab)
@@ -677,7 +683,6 @@ const TestDetail = ({ questions }: any) => {
   // useEffect(() => {
 
   // }, [currentPage])
-
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
     for (let e in currentTabContent?.data?.exhibits) {
@@ -759,7 +764,7 @@ const TestDetail = ({ questions }: any) => {
             onMouseUp={(e: any) => {
               if (
                 e.target.tagName.charAt(0) !== 'm' &&
-                e.target.firstChild.tagName !== 'math'
+                e.target.firstChild?.tagName !== 'math'
               ) {
                 if (e) {
                   runHighlight(
@@ -813,7 +818,7 @@ const TestDetail = ({ questions }: any) => {
             onMouseUp={(e: any) => {
               if (
                 e.target.tagName.charAt(0) !== 'm' &&
-                e.target.firstChild.tagName !== 'math'
+                e.target.firstChild?.tagName !== 'math'
               ) {
                 if (e) {
                   runHighlight(

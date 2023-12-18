@@ -1,27 +1,20 @@
 import {
-  removeHighlights,
-  serializeHighlights,
-} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
-import {
-  ArrowUpIcon,
   CalculatorIcon,
-  CloseIcon,
-  ExhibitsIcon,
-  FlagIcon,
   HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
-  TextSquareIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
-import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
-import TabSlide from '@components/base/tabSlide/TabSlide'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import MovableWindow from '@components/base/window'
-import Calculator from '@components/calculator'
 import { formatTime } from '@components/common/timer'
+import { LAYOUT } from '@utils/constants'
+import { parse } from 'cookie'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+import { createRef, useEffect, useMemo, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { QUESTION_TYPES } from 'src/constants'
+import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -29,18 +22,11 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
-import { LAYOUT } from '@utils/constants'
-import axios from 'axios'
-import { parse } from 'cookie'
-import { uniqueId } from 'lodash'
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { DISPLAY_TYPE, QUESTION_TYPES } from 'src/constants'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
+import axios from 'axios'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
+    e: any,
     data: any,
     type: string,
     currentTabID: string,
@@ -48,7 +34,53 @@ const CaseStudyDetail = ({ questions }: any) => {
     corrects?: any,
     highlighted?: any,
     solution?: any,
+    done?: boolean,
+    requirement?: any,
+    question_content?: any,
   ) => {
+    // const OneChoiceQuestion = dynamic(()=>import())
+    // const OneChoiceQuestion = dynamic(
+    //   () => import('@components/questionType/OneChoiceQuestion'),
+    //   {
+    //     loading: () => <p>Loading...</p>,
+    //   },
+    // )
+    // const MultiChoiceQuestion = dynamic(
+    //   () => import('@components/questionType/MultipleChoiceQuestion'),
+    //   {
+    //     loading: () => <p>Loading...</p>,
+    //   },
+    // )
+    // const MatchingQuestion = dynamic(
+    //   () => import('@components/questionType/MatchingQuestion'),
+    //   {
+    //     loading: () => <p>Loading...</p>,
+    //   },
+    // )
+    // const AddWordPreview = dynamic(
+    //   () => import('@components/questionType/FillText'),
+    //   {
+    //     loading: () => <p>Loading...</p>,
+    //   },
+    // )
+    // const SelectWord = dynamic(
+    //   () => import('@components/questionType/SelectWordQuestion'),
+    //   {
+    //     loading: () => <p>Loading...</p>,
+    //   },
+    // )
+    // const EssayQuestionPreview = dynamic(
+    //   () => import('@components/questionType/ConstructedQuestion'),
+    //   {
+    //     loading: () => <p>Loading...</p>,
+    //   },
+    // )
+    // const DragNDropPreivew = dynamic(
+    //   () => import('@components/questionType/DragNDrop'),
+    //   {
+    //     loading: () => <p>Loading...</p>,
+    //   },
+    // )
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
         return (
@@ -59,10 +91,10 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
+            // handleSaveHighLight={handleSaveHighLight}
+            // highlighted={highlighted}
+            // removeHighlight={removeHighlight}
+            // allowHighLight={allowHighLight}
             solution={solution}
           />
         )
@@ -75,10 +107,10 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
+            // handleSaveHighLight={handleSaveHighLight}
+            // highlighted={highlighted}
+            // removeHighlight={removeHighlight}
+            // allowHighLight={allowHighLight}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -89,47 +121,50 @@ const CaseStudyDetail = ({ questions }: any) => {
             name={`${currentTabID}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
+            // handleSaveHighLight={handleSaveHighLight}
+            // highlighted={highlighted}
+            // removeHighlight={removeHighlight}
+            // allowHighLight={allowHighLight}
+            corrects={corrects}
           />
         )
       case QUESTION_TYPES.MATCHING:
         return (
           <MatchingQuestion
             data={data}
-            action={getAnswerMatching}
-            ref={ref}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
+            // action={getAnswerMatching}
+            // ref={ref}
+            // handleSaveHighLight={handleSaveHighLight}
+            // highlighted={highlighted}
+            // removeHighlight={removeHighlight}
+            // allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            done={done}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
           <AddWordPreview
             data={data}
-            action={getValueFillText}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
+            // action={getValueFillText}
+            // handleSaveHighLight={handleSaveHighLight}
+            // highlighted={highlighted}
+            // removeHighlight={removeHighlight}
+            // allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
           <DragNDropPreivew
             data={data}
-            action={getAnswerDragNDrop}
-            ref={ref}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
+            // action={getAnswerDragNDrop}
+            // ref={ref}
+            // handleSaveHighLight={handleSaveHighLight}
+            // highlighted={highlighted}
+            // removeHighlight={removeHighlight}
+            // allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
           />
         )
@@ -137,26 +172,27 @@ const CaseStudyDetail = ({ questions }: any) => {
         return (
           <SelectWord
             data={data}
-            action={getValueSelectText}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
+            // action={getValueSelectText}
+            // handleSaveHighLight={handleSaveHighLight}
+            // highlighted={highlighted}
+            // removeHighlight={removeHighlight}
+            // allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
           />
         )
       case QUESTION_TYPES.ESSAY:
         return (
           <EssayQuestionPreview
-            data={essayData?.req}
-            question_content={currentTabContent?.data?.question_content}
-            index={essayData?.index}
-            question_data={currentTabContent?.data}
+            data={requirement}
+            question_content={question_content}
+            index={1}
+            question_data={data}
             control={control}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
+            // handleSaveHighLight={handleSaveHighLight}
+            // highlighted={highlighted}
+            // removeHighlight={removeHighlight}
+            // allowHighLight={allowHighLight}
           />
         )
       default:
@@ -164,351 +200,124 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
   }
   const router = useRouter()
-
-  const [topicDescription, setTopicDescription] = useState<any>()
-  const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const [filteredTabs, setFilterdTabs] = useState<any>([])
-  const [currentTabContent, setCurrentTabContent] = useState<any>()
-  const { control, handleSubmit, getValues, setValue } = useForm()
-  const { control: controlFilter, watch: watchFilter } = useForm()
-  const {
-    control: controlExhibits,
-    getValues: getValuesExhibits,
-    setValue: setValueExhibits,
-    watch,
-    reset,
-  } = useForm()
+  const [currentTopicQuestions, setCurrentTopicQuestions] = useState(
+    questions[0]?.questions,
+  )
   const [essayData, setEssayData] = useState<any>()
-  const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-  const [openExhibits, setOpenExhibits] = useState<Array<any>>([])
-  const [onFocusingPad, setOnFocusingPad] = useState('')
-  const [tabs, setTabs] = useState<any>([])
-  const [showListExhibits, setShowListExhibits] = useState(false)
-  const [showListRequirement, setShowLisRequirement] = useState(false)
-  const [allowHighLight, setAllowHighLight] = useState(false)
-  const dropUpRef = useRef(null)
-  const dropUpRequire = useRef(null)
-  useClickOutside({
-    ref: dropUpRef,
-    callback: () => setShowListExhibits(false),
-  })
-  useClickOutside({
-    ref: dropUpRequire,
-    callback: () => setShowLisRequirement(false),
-  })
+  const inputRef = useRef<any>([])
+  const { control, handleSubmit, getValues, setValue } = useForm()
 
-  const handleOpenScratchPad = (type: string) => {
-    setOpenScratchPad((prev) => {
-      let arr = [...prev]
-      if (type === 'scratch_pad') {
-        arr.push({ id: uniqueId('scratchPad'), type: type })
-      } else if (type === 'calculator') {
-        for (let e of arr) {
-          if (e.type === 'calculator') {
-            return arr
-          }
-        }
-        // if (!arr.includes('calculator')) {
-        arr.push({ id: 'calculator', type: 'calculator' })
+  const [topics, setTopics] = useState<any>([])
+  const [topicItems, setTopicItems] = useState<any>([])
+  const [listQuestions, setListQuestions] = useState<any>([])
+  const [listFullQuestions, setListFullQuestions] = useState<any>([])
+  const [index, setIndex] = useState(0)
+  const [pageTopic, setPageTopic] = useState(1)
+  useEffect(() => {
+    if (questions) {
+      let arr = [] as any
+      let arr2 = [] as any
+      for (let i in questions.topics) {
+        // if (+i <= 5) {
+        arr.push({ topicData: questions.topics[i] })
         // }
-      }
-      return arr
-    })
-  }
-  const handleFlagQuestion = (tab: any) => {
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
-        if (tab === item.id) {
-          return { ...item, flaged: true }
+        for (let j = 0; j < questions.topics[i].questions.length; j++) {
+          // if (i <= 5) {
+          arr2.push(questions.topics[i].questions[j])
+          // }
         }
-        return item
+      }
+
+      setListFullQuestions(arr2)
+      setListQuestions(arr2.slice(0, 25))
+      setTopics(() => {
+        // setTopicItems({ ...arr[0], viewed: true })
+
+        return arr
       })
-      return newData
-    })
-  }
-  const handleCloseScratchPad = (pad: any) => {
-    setOpenScratchPad((prev) => {
-      let arr = [...prev]
-      const newArr = arr.filter((e) => e.id !== pad.id)
-      if (pad.type === 'exhibits') {
-        setValueExhibits(
-          'exhibits',
-          getValuesExhibits('exhibits').filter((e: string) => e !== pad.id),
-        )
-      }
-      return newArr
-    })
-  }
-  function removeHighlight() {
-    const domEle = document.getElementById('hightlight_area')
-    removeHighlights(domEle as any)
-    handleSaveHighLight(serializeHighlights(domEle))
-  }
-  const OptionShowAll = () => {
-    return (
-      <div className="w-max">
-        <HookFormCheckBoxGroup
-          toggle
-          control={controlFilter}
-          name={'filter'}
-          options={[
-            { label: 'Unattempted', value: 'unattempted' },
-            { label: 'Attempted', value: 'attempted' },
-            { label: 'Flag to Review', value: 'flag' },
-          ]}
-        />
-      </div>
-    )
-  }
-  useEffect(() => {
-    setFilterdTabs((prev: any) => {
-      const filter = watchFilter('filter')
-      if (filter === 'attempted') {
-        return tabs.filter((e: any) => e.viewed === true)
-      } else if (filter === 'unattempted') {
-        return tabs.filter((e: any) => e.viewed === false)
-      } else if (filter === 'flag') {
-        return tabs.filter((e: any) => e.flaged === true)
-      } else return tabs
-    })
-  }, [tabs, watchFilter('filter')])
-  const ref = useRef(null) as any
+    }
+  }, [])
+  // useEffect(())
 
-  const getValueFillText = () => {
-    let value = []
-    const inputs = document.querySelectorAll('input[stringHTML="true"]') as any
-    for (let e of inputs) {
-      value.push(e.value)
-    }
-    return value
-  }
-  const getValueSelectText = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll(
-      'select.sapp-select--selectword-preview',
-    ) as any
-
-    for (let e of inputs) {
-      value.push(e.value)
-    }
-    return value
-  }
-  const getAnswerMatching = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-match-result') as any
-    for (let e of inputs) {
-      const childId = e.querySelector('.sapp-notched-container')
-      value.push({ question_id: e.id, answer_id: childId?.id })
-    }
-    return value
-  }
-  const getAnswerDragNDrop = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
-    for (let e of inputs) {
-      const idAnswer = e.querySelector('span')
-      value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
-    }
-    return value
-  }
-  const getResult = async () => {
-    const res = await CourseTestApi.getQuestionAnswer(currentPage)
-    const corrects = res.data[0].answers?.reduce(
-      (previousValue: any, currentValue: any) => {
-        return {
-          ...previousValue,
-          [currentValue.id]: currentValue.is_correct,
+  const handleLoadMoreQuestion = () => {
+    if (listQuestions.length < listFullQuestions.length) {
+      const arr = [...listQuestions]
+      // const last_index = topicItems.topicData.questions.findIndex(
+      //   (e: any) => e.id === arr[arr.length - 1].id,
+      // )
+      for (let j = listQuestions.length; j < listFullQuestions.length; j++) {
+        if (j <= 5 + listQuestions.length) {
+          arr.push(listFullQuestions[j])
         }
-      },
-      {} as { [key: string]: boolean },
-    )
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
-        if (currentPage === item.id) {
-          setCurrentTabContent({
-            ...item,
-            done: true,
-            corrects: corrects,
-            solution: res.data[0].solution,
-          })
-          return {
-            ...item,
-            done: true,
-            corrects: corrects,
-            solution: res.data[0].solution,
-          }
-        }
-        return item
-      })
-      return newData
-    })
-  }
-  const handleSaveCurrentAnswer = () => {
-    if (
-      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-    ) {
-      setTabs(handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage))
-    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      setTabs(handleSaveAnswer(getAnswerMatching(), currentPage))
-    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      setTabs(handleSaveAnswer(getAnswerDragNDrop(), currentPage))
-    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      setTabs(handleSaveAnswer(getValueSelectText(), currentPage))
-    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
-      setTabs(handleSaveAnswer(getValueFillText(), currentPage))
+      }
+      setListQuestions([...arr])
     }
   }
-  const handleChangeTab = (e: any) => {
-    handleSaveCurrentAnswer()
-    setCurrentPage(e)
-    setOpenScratchPad([])
-    setAllowHighLight(false)
-    reset()
-  }
-  const handleSaveAnswer = (data: any, tabId: any) => {
-    // setTabs((prev: any) => {
-    const newData = tabs.map((item: any) => {
-      if (tabId === item.id) {
-        return { ...item, answer: data }
-      }
-      return item
-    })
-    return newData
-    // })
-  }
-
-  const handleSubmitQuestion = async () => {
-    let allQuest = [...tabs]
-    if (
-      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+  const handleChangeTopic = (index: number) => {
+    setIndex(index)
+    const arr = [...listQuestions]
+    // for (let i = 0; i < topics.length; i++) {
+    // if (topicItems[i].viewed) {
+    const last_index = topicItems.topicData.questions.findIndex(
+      (e: any) => e.id === arr[arr.length - 1].id,
+    )
+    for (
+      let j = last_index;
+      j < topicItems.topicData.questions.length - 1;
+      j++
     ) {
-      allQuest = handleSaveAnswer(
-        getValues(`${currentPage}_answer`),
-        currentPage,
+      // if () {
+      arr.push(topicItems.topicData.questions[j + 1])
+      // }
+    }
+    // }
+    // }
+    for (let i = 0; i < topics[index].topicData.questions.length; i++) {
+      if (i <= 5) {
+        arr.push(topics[index].topicData.questions[i])
+      } else {
+        break
+      }
+    }
+    setListQuestions([...arr])
+    setTopicItems((prev: any) => {
+      return topics[index]
+    })
+  }
+  const handleLoadMoreTopic = async (page: number) => {
+    if (router.query.id && page <= questions.meta.total_pages) {
+      setPageTopic(page)
+      const res = await CourseTestApi.getQuestionCaseStudiesById(
+        router.query.id as string,
+        page,
+        5,
       )
-    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      allQuest = handleSaveAnswer(getAnswerMatching(), currentPage)
-    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      allQuest = handleSaveAnswer(getAnswerDragNDrop(), currentPage)
-    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      allQuest = handleSaveAnswer(getValueSelectText(), currentPage)
-    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
-      allQuest = handleSaveAnswer(getValueFillText(), currentPage)
-    }
-    let quiz_position_mapping = []
-    let answers = []
-    for (let e of allQuest) {
-      if (e.answer) {
-        if (
-          e.qType === QUESTION_TYPES.ONE_CHOICE ||
-          e.qType === QUESTION_TYPES.TRUE_FALSE
-        ) {
-          answers.push({ question_id: e.id, question_answer_id: e.answer })
-        } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-          let answer = []
-          for (let el of e.answer) {
-            answer.push({ answer_id: el })
-          }
-          answers.push({ question_id: e.id, answer })
-        } else if (e.qType === QUESTION_TYPES.MATCHING) {
-          answers.push({ question_id: e.id, answer: e.answer })
-        } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
-          let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i].idAnswer) {
-              answer.push({
-                answer_id: e.answer[i].idAnswer,
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({ question_id: e.id, answer })
-        } else if (
-          e.qType === QUESTION_TYPES.SELECT_WORD ||
-          e.qType === QUESTION_TYPES.FILL_WORD
-        ) {
-          let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i] && e.answer[i] !== '') {
-              answer.push({
-                answer_id: e.answer[i],
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({ question_id: e.id, answer })
-        }
+      const arr = [...topics]
+      const arrQuest = [...listFullQuestions]
+      let arr2 = []
+      for (let e of res.data.topics) {
+        arr2 = [...arr2]
+        arr.push({ topicData: e })
+        arr2 = arrQuest.concat(e.questions)
       }
-      quiz_position_mapping.push({
-        question_id: e.id,
-        answers: e.data?.answers,
-      })
+      setListFullQuestions(arr2)
+      setTopics(arr)
     }
-    await CourseTestApi.submitQuestion(router.query?.id as string, {
-      answers: answers,
-      quiz_position_mapping: quiz_position_mapping,
-    })
-    return
-  }
-  const handleClearSelection = (data: any) => {
-    if (
-      data.qType === QUESTION_TYPES.DRAG_DROP ||
-      data.qType === QUESTION_TYPES.MATCHING
-    ) {
-      ref.current?.handleReset()
-    }
-  }
-  const handleSaveHighLight = (e: any) => {
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
-        if (currentPage === item.id) {
-          setCurrentTabContent({ ...item, hightlight: e })
 
-          return { ...item, hightlight: e }
-        }
-        return item
-      })
-      return newData
-    })
+    // let arr = [...topics] as any
+    // for (let i = arr.length; i < questions.topics.data.length; i++) {
+    //   if (i <= page * 5) {
+    //     arr.push({ topicData: fake_data.data[i] })
+    //   }
+    // }
+    // setTopics(arr)
   }
-  useEffect(() => {
-    if (currentTabContent?.data?.requirements) {
-      setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })
-    }
-  }, [currentTabContent])
+  useEffect(() => {}, [inputRef?.current?.[0]])
 
-  const exhibits = useMemo(() => {
-    let exhibitsOptions = []
-    for (let e in currentTabContent?.data?.exhibits) {
-      exhibitsOptions.push({
-        label: `Exhibit ${+e + 1}`,
-        value: currentTabContent?.data?.exhibits[e].id,
-      })
-    }
-    return exhibitsOptions
-  }, [currentTabContent])
-  useEffect(() => {
-    if (watch('exhibits')) {
-      setOpenScratchPad((prev) => {
-        let arr = [...prev]
-        const newArr = arr.filter((e) => {
-          return e.type !== 'exhibits'
-        })
-        for (let e of watch('exhibits')) {
-          newArr.push({ id: e, type: 'exhibits' })
-        }
-        return newArr
-      })
-    }
-  }, [watch('exhibits')])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
-      <div>
+      <div className="h-full">
         <div className="flex justify-between py-4 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">Name</div>
           <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
@@ -523,7 +332,9 @@ const CaseStudyDetail = ({ questions }: any) => {
               loading: false,
               disabled: false,
               onClick: () => {
-                handleSubmitQuestion()
+                if (index < topics.length - 1) {
+                  handleChangeTopic(index + 1)
+                }
               },
               //   full: fullWidthBtn,
             }}
@@ -537,280 +348,134 @@ const CaseStudyDetail = ({ questions }: any) => {
           ></ButtonCancelSubmit>
         </div>
         {/* End Header */}
-      </div>
-      {/* <div className=''> */}
-      {tabs.map((e: any) => {
-        return (
+        <div
+          className="flex gap-5 h-[calc(100%-168px)] bg-gray-3"
+          id={'preview-question'}
+        >
           <div
-            className="flex gap-5 h-[calc(100%-240px)] bg-gray-3"
-            id={'preview-question'}
-            key={e.id}
-          >
-            <div className="w-1/2 h-full overflow-auto bg-white p-6">
-              <EditorReader
-                className="editor-wrap"
-                text_editor_content={topicDescription?.description}
-              />
-            </div>
-            <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
-              <div className="px-6">
-                {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-                {checkType(
-                  e?.data,
-                  e?.data?.qType,
-                  e?.id,
-                  e?.answer,
-                  e?.corrects,
-                  e?.hightlight,
-                  e?.solution,
-                )}
-                {/* ) : (
-                      <EssayQuestionPreview
-                        data={essayData?.req}
-                        question_content={data.question_content}
-                        index={essayData?.index}
-                        question_data={data}
-                      />
-                    )} */}
-                {/* <OneChoiceQuestion data={data} control={control} /> */}
-              </div>
-            </div>
-          </div>
-        )
-      })}
+            className="w-1/2 h-full overflow-auto bg-white p-6"
+            id="hightlight_area_topic"
+            onScroll={(e) => {
+              const { target } = e
+              // console.log(inputRef.current?.[0]?.getBoundingClientRect())
 
-      {openScratchPad.map((e, index: number) => {
-        if (e.type === 'calculator') {
-          return (
-            <MovableWindow
-              position={{
-                width: '400px',
-                height: '300px',
-                top: 'calc(50% - 150px)',
-                left: 'calc(50% - 200px)',
-              }}
-              key={e.id}
-              onClick={() => setOnFocusingPad(e.id)}
-              zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+              if (
+                (target as any).scrollTop + (target as any).offsetHeight ===
+                (target as any).scrollHeight
+              ) {
+                handleLoadMoreTopic(pageTopic + 1)
               }
-            >
-              <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-gray-2 w-full h-[40px] justify-between px-5">
-                  <div>Calculator</div>
-                  <button onClick={() => handleCloseScratchPad(e)}>
-                    <CloseIcon />
-                  </button>
-                </div>
-                {/* <div className='flex flex-'> */}
-                <Calculator />
-                {/* </div> */}
-              </div>
-            </MovableWindow>
-          )
-        } else if (e.type === 'scratch_pad') {
-          return (
-            <MovableWindow
-              position={{
-                width: '400px',
-                height: '300px',
-                top: 'calc(50% - 150px)',
-                left: 'calc(50% - 200px)',
-              }}
-              key={e.id}
-              onClick={() => setOnFocusingPad(e.id)}
-              zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
-              }
-            >
-              <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-gray-2 w-full h-[40px] justify-between px-5">
-                  <div>Scratch Pad</div>
-                  {/* <CloseIcon */}
-                  <button onClick={() => handleCloseScratchPad(e)}>
-                    <CloseIcon />
-                  </button>
-                </div>
-                {/* <div className='flex flex-'> */}
-                <HookFormTextArea
-                  placeholder="Take a note..."
-                  control={control}
-                  name={e.id}
-                  className="w-full h-[calc(100%-40px)] sapp-text-area"
-                />
-                {/* </div> */}
-              </div>
-            </MovableWindow>
-          )
-        } else if (e.type === 'exhibits') {
-          const i = currentTabContent?.data?.exhibits?.findIndex(
-            (el: any) => el.id === e.id,
-          )
-          const exhibitsDes = currentTabContent?.data?.exhibits?.[i]
-          return (
-            <MovableWindow
-              position={{
-                width: '400px',
-                height: '300px',
-                top: 'calc(50% - 150px)',
-                left: 'calc(50% - 200px)',
-              }}
-              key={e.id}
-              onClick={() => setOnFocusingPad(e.id)}
-              zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
-              }
-            >
-              <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-white w-full h-[40px] justify-between px-5">
-                  <div>
-                    <span className="font-semibold text-base text-bw-1">{`Exhibit ${
-                      i + 1
-                    }: `}</span>
-                    {exhibitsDes?.name}
-                  </div>
-                  <button onClick={() => handleCloseScratchPad(e)}>
-                    <CloseIcon />
-                  </button>
-                </div>
-                {/* <div className='flex flex-'> */}
-                {/* <div
-                    className="bg-white h-[calc(100%-40px)] w-full overflow-auto"
-                    id={'preview-question'}
-                    dangerouslySetInnerHTML={{ __html: exhibitsDes?.description }}
-                  ></div>{' '} */}
-                {/* </div> */}
-                <EditorReader
-                  text_editor_content={exhibitsDes?.description}
-                  className="bg-white h-[calc(100%-40px)] w-full overflow-auto p-5"
-                />
-              </div>
-            </MovableWindow>
-          )
-        }
-      })}
-      {/* </div> */}
-      <div className=" bg-gray-3 flex items-center flex-1 justify-between shadow-question-footer">
-        <div className="flex items-center h-full">
-          <button className="h-full">
-            <div className="flex items-center gap-3 ps-6 ">
-              <HelpIcon />
-              <div className="font-normal text-sm pe-6 border-r">Help</div>
-            </div>
-          </button>
-          <button
-            className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
-            onClick={() => setAllowHighLight(!allowHighLight)}
-          >
-            <div className="flex items-center gap-3 ps-6 ">
-              <HighlightIcon />
-              <div className="font-normal text-sm pe-6 border-r">Highlight</div>
-            </div>
-          </button>
-          <button
-            className="h-full"
-            onClick={() => handleOpenScratchPad('scratch_pad')}
-          >
-            <div className="flex items-center gap-3 ps-6 ">
-              <ScratchPadIcon />
-              <div className="font-normal text-sm pe-6 border-r">
-                Scratch Pad
-              </div>
-            </div>
-          </button>
-          <button
-            className="h-full"
-            onClick={() => handleOpenScratchPad('calculator')}
-          >
-            <div className="flex items-center gap-3 ps-6 ">
-              <CalculatorIcon />
-              <div className="font-normal text-sm pe-6 border-r">
-                Calculator
-              </div>
-            </div>
-          </button>
-          {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-            <button className="h-full relative" ref={dropUpRef}>
-              <div
-                className="flex items-center gap-3 ps-6 "
-                onClick={() => {
-                  setShowListExhibits(!showListExhibits)
-                }}
-              >
-                <ExhibitsIcon />
-                <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
-                  {`Exhibits (${currentTabContent?.data?.exhibits?.length})`}
-                  <ArrowUpIcon />
-                </div>
-              </div>
-              {showListExhibits && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits p-4 justify-center z-[1400]">
-                  <HookFormCheckBoxGroup
-                    control={controlExhibits}
-                    name="exhibits"
-                    options={exhibits}
-                    multiple
-                  />
-                </div>
-              )}
-            </button>
-          )}
-          {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-            <button className="h-full relative" ref={dropUpRequire}>
-              <div
-                className="flex items-center gap-3 ps-6 "
-                onClick={() => {
-                  setShowLisRequirement(!showListRequirement)
-                }}
-              >
-                <TextSquareIcon />
-                <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
-                  {`Requirement (${currentTabContent?.data?.requirements?.length})`}
-                  <ArrowUpIcon />
-                </div>
-              </div>
-              {showListRequirement && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits  justify-center">
-                  {currentTabContent?.data?.requirements?.map(
-                    (e: any, index: number) => {
-                      return (
-                        <button
-                          key={e.id}
-                          className="p-3"
-                          onClick={() => {
-                            setEssayData({ req: e, index: index })
-                          }}
-                        >{`Requirement (${index + 1})`}</button>
-                      )
-                    },
-                  )}
-                </div>
-              )}
-            </button>
-          )}
-        </div>
-        <div className="flex items-center h-full gap-3 pe-6">
-          <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
-            onClick={() => handleFlagQuestion(currentPage)}
-          >
-            <FlagIcon />
-            <div className="font-normal text-sm">Flag to Review</div>
-          </button>
-          <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
-            onClick={() => handleClearSelection(currentTabContent?.data)}
-          >
-            <div className="font-normal text-sm">Clear Selection</div>
-          </button>
-          <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
-            onClick={() => {
-              getResult()
             }}
           >
-            <div className="font-normal text-sm">Confirm Answer</div>
-          </button>
+            {/* {topics} */}
+            {topics?.map((e: any, index: number) => {
+              return (
+                <div
+                  key={e?.topicData?.question_topic?.id}
+                  ref={(el: any) => (inputRef.current[index] = el)}
+                >
+                  <EditorReader
+                    // extenalRef={(el: any) => (inputRef.current[index] = el)}
+                    className="editor-wrap"
+                    text_editor_content={
+                      e?.topicData?.question_topic?.description
+                    }
+                  />
+                </div>
+              )
+            })}
+          </div>
+
+          <div
+            className="w-1/2 h-full overflow-auto bg-white py-6 "
+            onScroll={(e) => {
+              const { target } = e
+              if (
+                (target as any).scrollTop + (target as any).offsetHeight ===
+                (target as any).scrollHeight
+              ) {
+                handleLoadMoreQuestion()
+              }
+            }}
+          >
+            <div className="px-6">
+              {/* {topics.map((el: any) => { */}
+              {listQuestions.map((e: any, index: number) => {
+                return (
+                  <div key={e?.id + index}>
+                    <div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>
+
+                    {checkType(
+                      e,
+                      e,
+                      e?.qType,
+                      e?.id,
+                      undefined,
+                      undefined,
+                      undefined,
+                      undefined,
+                      undefined,
+                      e?.requirements?.[0],
+                      undefined,
+                    )}
+                  </div>
+                )
+              })}
+              {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
+
+              {/* ) : (
+                    <EssayQuestionPreview
+                      data={essayData?.req}
+                      question_content={data.question_content}
+                      index={essayData?.index}
+                      question_data={data}
+                    />
+                  )} */}
+              {/* <OneChoiceQuestion data={data} control={control} /> */}
+            </div>
+          </div>
+        </div>
+        <div className=" bg-gray-3 flex items-center justify-between shadow-question-footer h-[96px] relative">
+          <div className="flex items-center h-full">
+            <button className="h-full">
+              <div className="flex items-center gap-3 ps-6 ">
+                <HelpIcon />
+                <div className="font-normal text-sm pe-6 border-r">Help</div>
+              </div>
+            </button>
+            <button className={`h-full `} onClick={() => {}}>
+              <div className="flex items-center gap-3 ps-6 ">
+                <HighlightIcon />
+                <div className="font-normal text-sm pe-6 border-r">
+                  Highlight
+                </div>
+              </div>
+            </button>
+            <button className="h-full" onClick={() => {}}>
+              <div className="flex items-center gap-3 ps-6 ">
+                <ScratchPadIcon />
+                <div className="font-normal text-sm pe-6 border-r">
+                  Scratch Pad
+                </div>
+              </div>
+            </button>
+            <button className="h-full" onClick={() => {}}>
+              <div className="flex items-center gap-3 ps-6 ">
+                <CalculatorIcon />
+                <div className="font-normal text-sm pe-6 border-r">
+                  Calculator
+                </div>
+              </div>
+            </button>
+          </div>
+          <div className="flex items-center h-full gap-3 pe-6">
+            <button
+              className="flex items-center gap-3 border border-gray-1 justify-center p-3"
+              onClick={() => {}}
+            >
+              <div className="font-normal text-sm">Confirm Answer</div>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -849,20 +514,14 @@ export async function getServerSideProps(context: any) {
         notFound: true,
       }
     }
-    const questions = (await CourseTestApi.getQuestionTabsById(
+    const topic = (await CourseTestApi.getQuestionCaseStudiesByIdServerSide(
       context?.query?.id,
       cookies.accessToken,
+      1,
+      5,
     )) as any
-    const questionDetail = [] as any
-    for (let e of questions) {
-      const detail = await CourseTestApi.getQuestionsDetailServerSide(
-        e.id,
-        cookies.accessToken,
-      )
-      questionDetail.push({ ...e, flaged: false, done: false, data: detail })
-    }
     return {
-      props: { questions: questionDetail },
+      props: { questions: topic },
     }
   } catch (error: any) {
     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không

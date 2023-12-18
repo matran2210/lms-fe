@@ -1,9 +1,11 @@
 export const url = {
   getQuestionTabs: '/quiz',
+  getCaseStudyQuizes: '/quiz/case-study',
   getQuestionDetail: '/question',
   getQuestionResult: '/question/results',
   getTopicDescription: '/question-topic',
   submitQuestion: '/quiz',
+  getResource: '/resource',
 }
 
 export default url

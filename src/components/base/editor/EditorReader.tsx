@@ -1,6 +1,7 @@
 import SappModalVideo from '@components/base/modal/SappModalVideo'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
+import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 
 type Props = {
   text_editor_content?: string
@@ -32,15 +33,21 @@ const EditorReader = ({
     }
   }, [refDocument, extenalRef])
 
-  const handleOnclick = (e: MouseEvent) => {
+  const handleOnclick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement
     if (target.tagName === 'VIDEO') {
       setType('VIDEO')
-      const source_src = target.querySelector('source')?.getAttribute('src')
-
-      if (source_src) {
+      // const source_src = target.querySelector('source')?.getAttribute('src')
+      const resource_id = target
+        .querySelector('source')
+        ?.getAttribute('resource_id')
+      let url = ''
+      if (resource_id) {
+        url = (await CourseTestApi.getResource(resource_id || '')).data.url
+      }
+      if (url) {
         const src =
-          source_src
+          url
             .replace(
               'https://customer-qf43f9e6huohhr1o.cloudflarestream.com/',
               '',

@@ -2,6 +2,7 @@ import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SAPPCheckbox from './SAPPCheckbox'
 import YourAnswer from '../tags/YourAnswer'
+import { uniqueId } from 'lodash'
 
 interface IHookFormCheckBoxProps {
   name: string
@@ -106,7 +107,7 @@ const HookFormCheckBoxGroup = ({
                         ? 'opacity-60 cursor-not-allowed'
                         : 'cursor-pointer'
                     } ${corrects && 'pointer-events-none'}`}
-                    key={option.label}
+                    key={uniqueId(option.label)}
                   >
                     <SAPPCheckbox
                       className={`me-2 ${className} `}
