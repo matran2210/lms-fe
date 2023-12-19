@@ -40,6 +40,8 @@ const MatchingQuestion = forwardRef(
   ) => {
     const [defaultValue, setDefaultValue] = useState<any>()
     const [answers, setAnswers] = useState<any>()
+    const storageId = uniqueId('storage')
+
     function allowDrop(ev: any) {
       const slotId = ev.target.id
       const slotElement = document.getElementById(slotId)
@@ -63,31 +65,36 @@ const MatchingQuestion = forwardRef(
 
     function drag(ev: any) {
       ev.dataTransfer.setData('text', ev.target.id)
+      ev.dataTransfer.setData('questionId', data.id)
     }
 
-    function drop(ev: any) {
+    function drop(ev: any, dropId: string) {
       ev.preventDefault()
       const slotId = ev.target.id
       const slotElement = document.getElementById(slotId)
-      var data = ev.dataTransfer.getData('text')
-      if (
-        slotElement?.children.length === 0 &&
-        ev.target.classList.contains('dropable')
-      ) {
-        ev.target.appendChild(document.getElementById(data))
-      } else {
-        return
-      }
+      const questionId = ev.dataTransfer.getData('questionId')
+      if (questionId === dropId) {
+        var data = ev.dataTransfer.getData('text')
+        if (
+          slotElement?.children.length === 0 &&
+          ev.target.classList.contains('dropable')
+        ) {
+          ev.target.appendChild(document.getElementById(data))
+        } else {
+          return
+        }
+      } else return
     }
-    const handleStorage = (event: any) => {
+    const handleStorage = (event: any, id: string) => {
       // prevent the default behavior of the drop event
       event.preventDefault()
       // get the id of the dragged piece from the dataTransfer object
       const pieceId = event.dataTransfer.getData('text')
+      const questId = event.dataTransfer.getData('questionId')
       // get the storage element from the DOM
-      const storage = document.querySelector('.sapp-store')
+      const storage = document.querySelector(`.${storageId}`)
       // append the piece element to the storage element
-      if (event.target === storage) {
+      if (event.target === storage && questId === id) {
         storage?.appendChild(document.getElementById(pieceId) as any)
       } else return
     }
@@ -166,7 +173,7 @@ const MatchingQuestion = forwardRef(
                 <div
                   id={e?.id}
                   className="flex-1 sapp-match-result dropable"
-                  onDrop={() => drop(event)}
+                  onDrop={() => drop(event, data.id)}
                   onDragOver={() => allowDrop(event)}
                 >
                   {defaultValue?.[e?.id]?.id && (
@@ -187,8 +194,8 @@ const MatchingQuestion = forwardRef(
             )
           })}
           <div
-            className="border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable"
-            onDrop={handleStorage}
+            className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable ${storageId}`}
+            onDrop={(ev) => handleStorage(ev, data?.id)}
             onDragOver={allowDropStorage}
             id="storage"
           >
