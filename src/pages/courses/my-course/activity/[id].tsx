@@ -16,9 +16,10 @@ import {
   getCourseActivityTapById,
   getDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { IActivity } from 'src/type/course/my-course/Activity'
 
 type Props = {
-  activity: any
+  activity: IActivity
 }
 
 const ActivityPage = ({ activity }: Props) => {
@@ -61,26 +62,26 @@ const ActivityPage = ({ activity }: Props) => {
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <div className="bg-gray-3 pb-10 px-6 ">
         <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
-          <div className="font-semibold text-2xl ">
-            Activity 4: Introduction to professional ethics and fundamental
-            principles
-          </div>
+          <div className="font-semibold text-2xl ">{activity.name}</div>
           <div className="text-base text-gray-1 whitespace-nowrap">
-            30 min estimated
+            {activity?.duration || 0} min estimated
           </div>
         </div>
 
         <div className="py-6">
           <div className="font-semibold text-base mb-2">Learning Outcome:</div>
           <ul className="list-disc text-base">
-            <li className="ml-4 mb-3">
-              Now this is a story all about how, my life got flipped-turned
-              upside down
-            </li>
-            <li className="ml-4">
-              Now this is a story all about how, my life got flipped-turned
-              upside down
-            </li>
+            {activity?.course_outcomes?.map((e) => {
+              return (
+                <li className="ml-4" key={e.id}>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: e.description,
+                    }}
+                  ></span>
+                </li>
+              )
+            })}
           </ul>
         </div>
       </div>
