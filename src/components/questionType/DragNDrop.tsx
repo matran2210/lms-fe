@@ -1,4 +1,5 @@
 import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
   forwardRef,
@@ -30,6 +31,7 @@ const DragNDropPreivew = forwardRef(
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
+    const storageId = uniqueId('storage')
     const [answered, setAnswered] = useState<any>([])
     const refContent = useRef(null) as any
     useEffect(() => {
@@ -43,17 +45,20 @@ const DragNDropPreivew = forwardRef(
 
     function drag(ev: any) {
       ev.dataTransfer.setData('text', ev.target.id)
+      ev.dataTransfer.setData('questionId', data.id)
     }
 
-    const handleStorage = (event: any) => {
+    const handleStorage = (event: any, id: string) => {
       // prevent the default behavior of the drop event
       event.preventDefault()
       // get the id of the dragged piece from the dataTransfer object
       const pieceId = event.dataTransfer.getData('text')
+      const questId = event.dataTransfer.getData('questionId')
+
       // get the storage element from the DOM
-      const storage = document.querySelector('.sapp-store')
+      const storage = document.querySelector(`.${storageId}`)
       // append the piece element to the storage element
-      if (event.target === storage) {
+      if (event.target === storage && questId === id) {
         storage?.appendChild(document.getElementById(pieceId) as any)
       } else return
     }
@@ -80,15 +85,15 @@ const DragNDropPreivew = forwardRef(
       elements.forEach((element: any, index: number) => {
         if (defaultAnswer?.length > 0) {
           if (defaultAnswer[index].value !== '') {
-            element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <span class="answer-box" draggable="true" ondragstart="drag(event)" id="${defaultAnswer[index].idAnswer}">${defaultAnswer[index].value}</span>
+            element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')">
+            <span class="answer-box" draggable="true" ondragstart="drag(event, '${data.id}')" id="${defaultAnswer[index].idAnswer}">${defaultAnswer[index].value}</span>
             </span>`
           } else {
-            element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event)" ondragover="allowDrop(event)"> </span>`
+            element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
             //   })
           }
         } else {
-          element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event)" ondragover="allowDrop(event)"> </span>`
+          element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
           //   })
         }
       })
@@ -122,8 +127,8 @@ const DragNDropPreivew = forwardRef(
             />
             <div className="answer-area">
               <div
-                className="border min-h-large sapp-store flex flex-wrap gap-5 p-5 w-full"
-                onDrop={handleStorage}
+                className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 w-full ${storageId}`}
+                onDrop={(ev) => handleStorage(ev, data?.id)}
                 onDragOver={allowDrop}
                 id="storage"
               >
@@ -137,7 +142,7 @@ const DragNDropPreivew = forwardRef(
                   }
                   return (
                     <span
-                      className="answer-box"
+                      className={`answer-box`}
                       key={e?.id}
                       id={e?.id}
                       draggable="true"

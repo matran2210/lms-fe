@@ -223,7 +223,10 @@ const CaseStudyDetail = ({ questions }: any) => {
         // }
         for (let j = 0; j < questions.topics[i].questions.length; j++) {
           // if (i <= 5) {
-          arr2.push(questions.topics[i].questions[j])
+          arr2.push({
+            [questions.topics[i].question_topic.id]:
+              questions.topics[i].questions[j],
+          })
           // }
         }
       }
@@ -294,13 +297,21 @@ const CaseStudyDetail = ({ questions }: any) => {
       )
       const arr = [...topics]
       const arrQuest = [...listFullQuestions]
-      let arr2 = []
+      let arr2 = [] as any
+      let listQuestNew = [] as any
       for (let e of res.data.topics) {
         arr2 = [...arr2]
         arr.push({ topicData: e })
         arr2 = arrQuest.concat(e.questions)
+        listQuestNew.push(e.questions)
       }
       setListFullQuestions(arr2)
+      // if (listQuestions.length === listFullQuestions.length) {
+      setListQuestions((prev: any) => {
+        const newArr = listFullQuestions.concat(listQuestNew.slice(0, 5))
+        return newArr
+      })
+      // }
       setTopics(arr)
     }
 
@@ -360,7 +371,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               // console.log(inputRef.current?.[0]?.getBoundingClientRect())
 
               if (
-                (target as any).scrollTop + (target as any).offsetHeight ===
+                (target as any).scrollTop + (target as any).offsetHeight >=
                 (target as any).scrollHeight
               ) {
                 handleLoadMoreTopic(pageTopic + 1)
@@ -391,7 +402,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             onScroll={(e) => {
               const { target } = e
               if (
-                (target as any).scrollTop + (target as any).offsetHeight ===
+                (target as any).scrollTop + (target as any).offsetHeight >=
                 (target as any).scrollHeight
               ) {
                 handleLoadMoreQuestion()
@@ -401,21 +412,22 @@ const CaseStudyDetail = ({ questions }: any) => {
             <div className="px-6">
               {/* {topics.map((el: any) => { */}
               {listQuestions.map((e: any, index: number) => {
+                const question = Object.values(e)[0] as any
                 return (
-                  <div key={e?.id + index}>
+                  <div key={question?.id + index}>
                     <div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>
 
                     {checkType(
-                      e,
-                      e,
-                      e?.qType,
-                      e?.id,
+                      question,
+                      question,
+                      question?.qType,
+                      question?.id,
                       undefined,
                       undefined,
                       undefined,
                       undefined,
                       undefined,
-                      e?.requirements?.[0],
+                      question?.requirements?.[0],
                       undefined,
                     )}
                   </div>

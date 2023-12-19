@@ -20,31 +20,37 @@ class MyDocument extends Document {
           <script
             dangerouslySetInnerHTML={{
               __html: `
-            function allowDrop(ev) {
+            function allowDrop(ev, id) {
               const slotId = ev.target.id
               const slotElement = document.getElementById(slotId)
-              if (slotElement?.children.length === 0 && ev.target.classList.contains("dropable")) {
-                ev.preventDefault();
-              } else{
-                return
-              }
+              const questionId = ev.dataTransfer.getData('questionId')
+                if (slotElement?.children.length === 0 && ev.target.classList.contains("dropable")) {
+                  ev.preventDefault();
+                } else{
+                  return
+                }
             }
 
-            function drag(ev) {
+            function drag(ev, dropId) {
+              ev.dataTransfer.setData('questionId', dropId)
               ev.dataTransfer.setData("text", ev.target.id);
             }
 
-            function drop(ev) {
+            function drop(ev, dropId) {
               ev.preventDefault();
               var data = ev.dataTransfer.getData('text')
               const slotId = ev.target.id
               const slotElement = document.getElementById(slotId)
-              if (slotElement?.children.length === 0 && ev.target.classList.contains("dropable")) {
-                ev.target.appendChild(document.getElementById(data))
+              const questionId = ev.dataTransfer.getData('questionId')
+              if(questionId===dropId){
+                if (slotElement?.children.length === 0 && ev.target.classList.contains("dropable")) {
+                  ev.target.appendChild(document.getElementById(data))
+                }
+                else {
+                  return
+                }
               }
-              else {
-                return
-              }
+              else return
             }
           `,
             }}
