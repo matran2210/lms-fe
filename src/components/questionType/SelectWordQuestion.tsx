@@ -15,6 +15,7 @@ interface IProps {
     is_correct: boolean
     answer_position: number
   }[]
+  extenalRef?: any
 }
 const SelectWord = ({
   data,
@@ -25,6 +26,7 @@ const SelectWord = ({
   allowHighLight,
   defaultAnswer,
   corrects,
+  extenalRef,
 }: IProps) => {
   const ref = useRef(null) as any
   const [questionContent, setQuestionContent] = useState<any>()
@@ -108,6 +110,7 @@ const SelectWord = ({
           }
         }
       }}
+      ref={extenalRef || null}
     >
       <EditorReader
         extenalRef={ref}

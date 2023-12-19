@@ -43,6 +43,7 @@ import { apiURL } from 'src/redux/services/httpService'
 const TestDetail = ({ questions }: any) => {
   const checkType = (
     data: any,
+    topicId: string,
     type: string,
     currentTabID: string,
     defaultValue: any,
@@ -110,6 +111,7 @@ const TestDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             done={done}
+            topicId={topicId}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -171,7 +173,6 @@ const TestDetail = ({ questions }: any) => {
   }
   const router = useRouter()
 
-  const [topicDescription, setTopicDescription] = useState<any>()
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
@@ -788,6 +789,7 @@ const TestDetail = ({ questions }: any) => {
               {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
               {checkType(
                 currentTabContent?.data,
+                currentTabContent?.topicDescription?.id,
                 currentTabContent?.data?.qType,
                 currentTabContent?.id,
                 currentTabContent?.answer,
@@ -841,6 +843,7 @@ const TestDetail = ({ questions }: any) => {
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
           {checkType(
             currentTabContent?.data,
+            currentTabContent?.topicDescription?.id,
             currentTabContent?.data?.qType,
             currentTabContent?.id,
             currentTabContent?.answer,
