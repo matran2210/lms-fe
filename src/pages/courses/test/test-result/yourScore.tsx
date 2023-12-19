@@ -20,7 +20,7 @@ const TopicArea = [
 const YourScore: React.FC = () => {
   const highestValue = Math.max(...TopicArea.map((item) => item.value))
   return (
-    <div className="bg-white flex flex-col justify-center gap-10 max-w-full items-start px-24 py-6">
+    <div className="bg-white flex flex-col justify-center gap-10 max-w-full items-start px-4 lg:px-24 py-6">
       <div className="flex flex-row justify-between ml-px w-full items-start">
         <div className="flex flex-col gap-6 w-1/6 items-start">
           <div className="text-xl font-bold leading-6.2 text-bw-1">

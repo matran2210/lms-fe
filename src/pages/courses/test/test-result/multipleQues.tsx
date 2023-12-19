@@ -15,7 +15,7 @@ const MultipleQuestion: React.FC<MultipleQuestionProps> = ({ data }) => {
 
     const renderBoxItems = filteredData.map((item) => {
       let className =
-        'text-center font-sans font-medium leading-8.5 border-solid flex flex-row justify-center pt-3 w-16 h-16 items-start border'
+        'border border-solid flex items-center flex-row justify-center w-10 h-10 text-sm font-medium leading-8.5 cursor-pointer'
 
       if (item.status === 'true') {
         className += ' text-state-success border-success'
@@ -33,7 +33,7 @@ const MultipleQuestion: React.FC<MultipleQuestionProps> = ({ data }) => {
     return (
       <div className="w-full">
         <div className="text-xl font-bold mb-4">{type}</div>
-        <div className="flex flex-col gap-3 w-full items-start">
+        <div className="flex flex-row flex-wrap gap-3 w-full items-start">
           {renderBoxItems}
         </div>
       </div>
