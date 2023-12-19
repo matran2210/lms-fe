@@ -13,7 +13,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
       {entranceTestLists.map((entranceTestList, index) => (
         <div
           key={index}
-          className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
+          className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
         >
           <EntranceTest
             name={entranceTestList.name}

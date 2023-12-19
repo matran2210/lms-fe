@@ -190,7 +190,7 @@ const Discussion = (props: Props) => {
               {e.children?.[0] && (
                 <div>
                   <div
-                    className="absolute left-0 top-0 bottom-0 w-[2px] -mt-1 bg-size-100-30"
+                    className="absolute left-0 top-0 bottom-0 w-0.5 -mt-1 bg-size-100-30"
                     style={{
                       background:
                         'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',

@@ -123,7 +123,7 @@ const Notifications = () => {
   return (
     <>
       <div className="header bg-white border-b border-default px-4 lg:px-20">
-        <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
+        <div className="max-w-xxl my-0 mx-auto flex py-4.5">
           <SearchForm
             placeholder="Find..."
             formStyle="w-full flex items-center"

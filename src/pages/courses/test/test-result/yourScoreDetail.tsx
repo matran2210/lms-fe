@@ -100,7 +100,7 @@ const Data = [
 
 const YourScoreDetail = () => {
   return (
-    <div className="bg-white px-24 py-6 max-w-[1144px] max-h-[700px]">
+    <div className="bg-white px-24 py-6 max-w-full max-h-full">
       <div className="">
         <SappTable
           headers={headers}

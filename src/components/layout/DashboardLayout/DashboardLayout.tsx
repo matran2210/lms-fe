@@ -31,7 +31,7 @@ export default function DashboardLayout({
         {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}
         {/* <div> */}
         <div className="bg-gray-4 min-h-full ">
-          <div className="ml-0 md:ml-20 xl-max:ml-20">{children}</div>
+          <div className="ml-0 md:ml-20">{children}</div>
         </div>
         {/* </div> */}
         {/* <Footer /> */}

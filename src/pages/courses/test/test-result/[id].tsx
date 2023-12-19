@@ -23,18 +23,17 @@ const breadcrumbs: ITabs[] = [
   },
 ]
 
-const MyCourse = () => {
+const TestResultDetail = () => {
   return (
     <>
-      <div className="main pl-6 -mb-10 ">
+      <div className="main px-4 lg:px-16">
         <Breadcrumb tabs={breadcrumbs} currentPage={'TestResults'} />
       </div>
-      <div className="heading bg-white my-0 mx-auto flex"></div>
-      <div className="mx-auto">
+      <div className="mx-auto mx-4 lg:mx-16 mb-6">
         <TestResultPage />
       </div>
     </>
   )
 }
 
-export default MyCourse
+export default TestResultDetail

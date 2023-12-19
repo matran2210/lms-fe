@@ -15,12 +15,12 @@ const MultipleQuestion: React.FC<MultipleQuestionProps> = ({ data }) => {
 
     const renderBoxItems = filteredData.map((item) => {
       let className =
-        'text-center font-["Inter"] font-medium leading-[33px] border-solid flex flex-row justify-center pt-3 w-16 h-16 items-start border'
+        'text-center font-sans font-medium leading-8.5 border-solid flex flex-row justify-center pt-3 w-16 h-16 items-start border'
 
       if (item.status === 'true') {
-        className += ' text-[#008000] border-[#008000]'
+        className += ' text-state-success border-success'
       } else {
-        className += ' text-[#d35563] border-[#d35563]'
+        className += ' text-danger border-error'
       }
 
       return (
@@ -50,14 +50,14 @@ const MultipleQuestion: React.FC<MultipleQuestionProps> = ({ data }) => {
       </div>
       <div className="flex justify-between mt-auto w-full">
         <div className="mr-4 w-[200px]">
-          <div className="inline-block h-4 w-4 rounded-full bg-[#008000] mr-1"></div>
-          <span className="text-[#008000] font-light">Correct</span>
+          <div className="inline-block h-4 w-4 rounded-full bg-success mr-1"></div>
+          <span className="text-state-success font-light">Correct</span>
         </div>
         <div className="mr-4 w-[200px]">
-          <div className="inline-block h-4 w-4 rounded-full bg-[#d35563] mr-1 "></div>
-          <span className="text-[#d35563] font-light">Incorrect</span>
+          <div className="inline-block h-4 w-4 rounded-full bg-error mr-1 "></div>
+          <span className="text-danger font-light">Incorrect</span>
         </div>
-        <div className="flex justify-end mt-auto w-full pr-[27px]">
+        <div className="flex justify-end mt-auto w-full pr-7">
           <ButtonPrimary title={'Quit'} />
         </div>
       </div>

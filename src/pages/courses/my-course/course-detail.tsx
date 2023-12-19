@@ -77,7 +77,7 @@ const CourseDetail = () => {
   return (
     <>
       <div className="header bg-white border-b border-default">
-        <div className="max-w-xxl my-0 mx-auto flex py-[23px]">
+        <div className="max-w-xxl my-0 mx-auto flex py-6">
           <SearchForm
             placeholder="Enter name of part..."
             formStyle="w-full flex items-center"
