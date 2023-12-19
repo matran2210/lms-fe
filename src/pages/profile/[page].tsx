@@ -29,6 +29,7 @@ const ProfilePage = ({ page }: IProps) => {
     }
     setIsEdit(isEdit)
   }
+
   return (
     <div className="max-w-xxl my-0 mx-auto w-full">
       <div className="relative">

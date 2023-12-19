@@ -11,9 +11,12 @@ import {
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import { StaticImageData } from 'next/image'
+import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
+import { PageLink } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
   updateUser,
@@ -47,6 +50,7 @@ const MyProfile = ({
   setReViewImageSrc,
 }: IProps) => {
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)
   // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
   const { control, setValue, handleSubmit, reset } = useForm<{
@@ -121,7 +125,14 @@ const MyProfile = ({
       dispatch(getMe())
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
-    } catch (error) {}
+    } catch (error: any) {
+      setIsEdit(false)
+      setReViewImageSrc(undefined)
+      if (error?.response?.data?.error?.code === '403|1002') {
+        await dispatch(getLogoutUser())
+        router.push(PageLink.AUTH_LOGIN)
+      }  
+    }
   }
 
   return (
@@ -145,7 +156,7 @@ const MyProfile = ({
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit} height="4">
-                {user.code?.toString()}
+                {user.code?.toString() ?? user.key?.toString()}
               </TextSkeleton>
             </div>
           </li>
