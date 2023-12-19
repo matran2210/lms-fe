@@ -56,6 +56,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
     }
   }, [openLearningOutcome])
 
+  const handleRouterActivity = (id: string) => {
+    router.push(`/courses/my-course/activity/${id}`)
+  }
+
   return (
     <div className="main max-w-xxl my-0 mx-auto">
       <div className="main max-w-xxl my-0 mx-auto">
@@ -87,6 +91,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         setOpenLearningOutcome={setOpenLearningOutcome}
         course_id={router.query.id as any}
         course_section_id={router.query.course_section_id as any}
+        handleRouterActivity={handleRouterActivity}
       />
 
       <SappDrawer
