@@ -27,6 +27,8 @@ import axios from 'axios'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
+    index: number,
+    topicId: string,
     data: any,
     type: string,
     currentTabID: string,
@@ -37,6 +39,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     done?: boolean,
     requirement?: any,
     question_content?: any,
+    ref?: any,
   ) => {
     // const OneChoiceQuestion = dynamic(()=>import())
     // const OneChoiceQuestion = dynamic(
@@ -87,7 +90,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           <OneChoiceQuestion
             data={data}
             control={control}
-            name={`${currentTabID}_answer`}
+            name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
@@ -103,7 +106,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           <OneChoiceQuestion
             data={data}
             control={control}
-            name={`${currentTabID}_answer`}
+            name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
@@ -118,7 +121,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           <MultiChoiceQuestion
             data={data}
             control={control}
-            name={`${currentTabID}_answer`}
+            name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
             // handleSaveHighLight={handleSaveHighLight}
@@ -140,6 +143,8 @@ const CaseStudyDetail = ({ questions }: any) => {
             // allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             done={done}
+            topicId={topicId}
+            extenalRef={(el: any) => (ref.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -153,6 +158,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
+            extenalRef={(el: any) => (ref.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -166,6 +172,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // removeHighlight={removeHighlight}
             // allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            extenalRef={(el: any) => (ref.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -179,6 +186,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
+            extenalRef={(el: any) => (ref.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -205,6 +213,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   )
   const [essayData, setEssayData] = useState<any>()
   const inputRef = useRef<any>([])
+  const valueRef = useRef<any>([])
   const { control, handleSubmit, getValues, setValue } = useForm()
 
   const [topics, setTopics] = useState<any>([])
@@ -213,6 +222,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [listFullQuestions, setListFullQuestions] = useState<any>([])
   const [index, setIndex] = useState(0)
   const [pageTopic, setPageTopic] = useState(1)
+
   useEffect(() => {
     if (questions) {
       let arr = [] as any
@@ -256,37 +266,6 @@ const CaseStudyDetail = ({ questions }: any) => {
       setListQuestions([...arr])
     }
   }
-  const handleChangeTopic = (index: number) => {
-    setIndex(index)
-    const arr = [...listQuestions]
-    // for (let i = 0; i < topics.length; i++) {
-    // if (topicItems[i].viewed) {
-    const last_index = topicItems.topicData.questions.findIndex(
-      (e: any) => e.id === arr[arr.length - 1].id,
-    )
-    for (
-      let j = last_index;
-      j < topicItems.topicData.questions.length - 1;
-      j++
-    ) {
-      // if () {
-      arr.push(topicItems.topicData.questions[j + 1])
-      // }
-    }
-    // }
-    // }
-    for (let i = 0; i < topics[index].topicData.questions.length; i++) {
-      if (i <= 5) {
-        arr.push(topics[index].topicData.questions[i])
-      } else {
-        break
-      }
-    }
-    setListQuestions([...arr])
-    setTopicItems((prev: any) => {
-      return topics[index]
-    })
-  }
   const handleLoadMoreTopic = async (page: number) => {
     if (router.query.id && page <= questions.meta.total_pages) {
       setPageTopic(page)
@@ -323,8 +302,95 @@ const CaseStudyDetail = ({ questions }: any) => {
     // }
     // setTopics(arr)
   }
-  useEffect(() => {}, [inputRef?.current?.[0]])
 
+  const getValueFillText = (index: number) => {
+    let value = []
+    if (valueRef.current[index]) {
+      const inputs = valueRef.current[index].querySelectorAll(
+        'input[stringHTML="true"]',
+      ) as any
+      for (let e of inputs) {
+        value.push(e.value)
+      }
+    } else {
+      value.push('')
+    }
+    return value
+  }
+  const getValueSelectText = (index: number) => {
+    let value = [] as any
+    if (valueRef.current[index]) {
+      const inputs = valueRef.current[index].querySelectorAll(
+        'select.sapp-select--selectword-preview',
+      ) as any
+
+      for (let e of inputs) {
+        value.push(e.value)
+      }
+    } else {
+      value.push('')
+    }
+    return value
+  }
+  const getAnswerMatching = (index: number) => {
+    let value = [] as any
+    if (valueRef.current[index]) {
+      const inputs = valueRef.current[index].querySelectorAll(
+        '.sapp-match-result',
+      ) as any
+      for (let e of inputs) {
+        const childId = e.querySelector('.sapp-notched-container')
+        value.push({ question_id: e.id, answer_id: childId?.id || undefined })
+      }
+    } else {
+      value.push({
+        question_id: listFullQuestions[index].id,
+        answer_id: '' || undefined,
+      })
+    }
+
+    return value
+  }
+  const getAnswerDragNDrop = (index: number) => {
+    let value = [] as any
+    if (valueRef.current[index]) {
+      const inputs = valueRef.current[index].querySelectorAll(
+        '.sapp-input-dragNDrop',
+      ) as any
+      for (let e of inputs) {
+        const idAnswer = e.querySelector('span')
+        value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
+      }
+    } else {
+      value.push({
+        id: listFullQuestions[index].id,
+        value: '',
+        idAnswer: '',
+      })
+    }
+    return value
+  }
+  const getAllValue = () => {
+    let arrAnswer = []
+    for (let i = 0; i < listFullQuestions.length; i++) {
+      const question = Object.values(listFullQuestions[i])[0] as any
+      if (
+        question.qType === QUESTION_TYPES.ONE_CHOICE ||
+        question.qType === QUESTION_TYPES.TRUE_FALSE ||
+        question.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+      ) {
+        arrAnswer.push(getValues(`${i}_answer`))
+      } else if (question.qType === QUESTION_TYPES.MATCHING) {
+        arrAnswer.push(getAnswerMatching(i))
+      } else if (question.qType === QUESTION_TYPES.DRAG_DROP) {
+        arrAnswer.push(getAnswerDragNDrop(i))
+      } else if (question.qType === QUESTION_TYPES.SELECT_WORD) {
+        arrAnswer.push(getValueSelectText(i))
+      } else if (question.qType === QUESTION_TYPES.FILL_WORD) {
+        arrAnswer.push(getValueFillText(i))
+      }
+    }
+  }
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
@@ -343,9 +409,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               loading: false,
               disabled: false,
               onClick: () => {
-                if (index < topics.length - 1) {
-                  handleChangeTopic(index + 1)
-                }
+                getAllValue()
               },
               //   full: fullWidthBtn,
             }}
@@ -413,12 +477,15 @@ const CaseStudyDetail = ({ questions }: any) => {
               {/* {topics.map((el: any) => { */}
               {listQuestions.map((e: any, index: number) => {
                 const question = Object.values(e)[0] as any
+                const topicId = Object.keys(e)[0] as any
                 return (
                   <div key={question?.id + index}>
                     <div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>
 
                     {checkType(
                       question,
+                      index,
+                      topicId,
                       question,
                       question?.qType,
                       question?.id,
@@ -429,6 +496,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       undefined,
                       question?.requirements?.[0],
                       undefined,
+                      valueRef,
                     )}
                   </div>
                 )

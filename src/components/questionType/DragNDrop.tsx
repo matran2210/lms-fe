@@ -17,6 +17,7 @@ interface IProps {
   removeHighlight?: any
   allowHighLight?: boolean
   defaultAnswer?: any
+  extenalRef?: any
 }
 const DragNDropPreivew = forwardRef(
   (
@@ -28,6 +29,7 @@ const DragNDropPreivew = forwardRef(
       removeHighlight,
       allowHighLight,
       defaultAnswer,
+      extenalRef,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -102,7 +104,7 @@ const DragNDropPreivew = forwardRef(
     }, [defaultAnswer, refContent?.current])
 
     return (
-      <div className="body-modal-white" key={key}>
+      <div className="body-modal-white" key={key} ref={extenalRef || null}>
         {questionContent && (
           <>
             <div

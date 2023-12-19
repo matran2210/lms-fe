@@ -12,6 +12,7 @@ import React, {
 
 interface IProps {
   data: any
+  topicId: string
   action?: any
   handleSaveHighLight?: any
   highlighted?: any
@@ -19,6 +20,8 @@ interface IProps {
   allowHighLight?: boolean
   defaultAnswer?: any
   done?: boolean
+  extenalRef?: any
+  index?: number
 }
 type IProp = {
   value: string
@@ -35,6 +38,8 @@ const MatchingQuestion = forwardRef(
       allowHighLight,
       defaultAnswer,
       done,
+      topicId,
+      extenalRef,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -109,6 +114,9 @@ const MatchingQuestion = forwardRef(
         })
         // setAnswered()
       },
+      handleGetResult() {
+        // action()
+      },
     }))
     const QuestionCard = ({ value }: IProp) => {
       return <div className="sapp-arrowed-container">{value}</div>
@@ -142,7 +150,7 @@ const MatchingQuestion = forwardRef(
       setDefaultValue(obj)
     }, [defaultAnswer, data.question_matchings])
     return (
-      <div key={key}>
+      <div key={key} ref={extenalRef}>
         <div
           id="hightlight_area"
           onMouseUp={(e: any) => {
@@ -217,8 +225,6 @@ const MatchingQuestion = forwardRef(
             })}
           </div>
         </div>
-        {/* )} */}
-        {/* <button onClick={action}>Check Answer</button> */}
       </div>
     )
   },

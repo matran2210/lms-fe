@@ -16,6 +16,7 @@ interface IProps {
     is_correct: boolean
     answer_position: number
   }[]
+  extenalRef?: any
 }
 const AddWordPreview = ({
   data,
@@ -26,6 +27,7 @@ const AddWordPreview = ({
   allowHighLight,
   defaultAnswer,
   corrects,
+  extenalRef,
 }: IProps) => {
   const ref = useRef(null) as any
   const [questionContent, setQuestionContent] = useState<any>()
@@ -98,6 +100,7 @@ const AddWordPreview = ({
   return (
     <div
       id="hightlight_area"
+      ref={extenalRef || null}
       onMouseUp={(e: any) => {
         if (
           e.target.tagName.charAt(0) !== 'm' &&
