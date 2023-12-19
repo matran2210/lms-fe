@@ -50,10 +50,10 @@ const SappDrawer = ({
           widthDrawer ?? 'w-[960px]'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
-        } transition-transform duration-300 ease-in-out overflow-y-auto h-[100vh]`}
+        } transition-transform duration-300 ease-in-out overflow-y-auto h-screen`}
       >
         <div className="flex flex-col h-screenl justify-between">
-          <div className="w-100 justify-between bg-[#404041] h-[80px] text-[24px] leading-[30px] font-semibold items-center flex px-[32px] text-white">
+          <div className="w-100 justify-between bg-bw-1 h-[80px] text-2xl font-semibold items-center flex px-8 text-white">
             {title}
             <Image
               src={cross}
@@ -63,14 +63,11 @@ const SappDrawer = ({
             />
           </div>
         </div>
-        <div className="flex- mt-[24px] mx-[32px] overflow-y-auto h-[80vh]">
+        <div className="flex mt-6 mx-8 overflow-y-auto h-[80vh]">
           {children}
         </div>
         {footer && (
-          <div
-            className="flex justify-between h-[82px] items-center"
-            style={{ borderTop: '1px solid #DCDDDD' }}
-          >
+          <div className="flex justify-between h-[82px] items-center border-t border-default">
             <ButtonText
               title="Cancel"
               className="ms-[4px]"

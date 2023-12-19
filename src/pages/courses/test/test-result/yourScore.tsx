@@ -20,13 +20,13 @@ const TopicArea = [
 const YourScore: React.FC = () => {
   const highestValue = Math.max(...TopicArea.map((item) => item.value))
   return (
-    <div className="bg-white flex flex-col justify-center gap-10 max-w-[1144px] items-start px-24 py-6">
+    <div className="bg-white flex flex-col justify-center gap-10 max-w-full items-start px-4 lg:px-24 py-6">
       <div className="flex flex-row justify-between ml-px w-full items-start">
         <div className="flex flex-col gap-6 w-1/6 items-start">
-          <div className="text-xl font-['Inter'] font-bold leading-[25px] text-[#141414]">
+          <div className="text-xl font-bold leading-6.2 text-bw-1">
             Your Score
           </div>
-          <div className="text-[64px] font-['Inter'] font-bold leading-[76.8px] text-[#ffb800]">
+          <div className="text-[64px] font-bold leading-[76.8px] text-primary">
             {highestValue}%
           </div>
         </div>
@@ -37,20 +37,20 @@ const YourScore: React.FC = () => {
             id="Globe"
             className="w-4"
           />
-          <div className="font-['Inter'] leading-[19.2px] text-[#a1a1a1] text-[14px] mt-px">
+          <div className="leading-[19.2px] text-gray-1 text-sm mt-px">
             Global Average 79%
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-6 max-w-[950px] items-start">
-        <div className="text-xl font-['Inter'] font-bold leading-[25px] text-[#141414] ml-px">
+        <div className="text-xl font-bold eading-6.2 text-bw-1 ml-px">
           Your Performance by Topic Area
         </div>
         <div className="p-4">
           <Chart data={TopicArea} />
         </div>
         <div>
-          <div className="bg-[#f9f9f9] px-6 py-3  ">
+          <div className="bg-gray-4 px-6 py-3  ">
             <div className="flex flex-row gap-8">
               <div className="flex flex-col gap-8">
                 <div className="min-w-[86px] text-sm text-center mt-6">
@@ -62,7 +62,7 @@ const YourScore: React.FC = () => {
               </div>
               {TopicArea.map((item) => (
                 <div key={item.id} className="flex flex-col w-1/4 items-start">
-                  <div className="mr-10 ml-10 my-6 text-[#141414] font-medium">
+                  <div className="mr-10 ml-10 my-6 text-bw-1 font-medium">
                     {item.title}
                   </div>
                   <div className="mx-11 my-6 text-gray-400 font-normal">

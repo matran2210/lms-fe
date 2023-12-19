@@ -46,7 +46,7 @@ const NotifyList = ({
             )}
 
             <Image
-              src={blankAvatar}
+              src={notifyItem?.avatar?.ORIGIN ?? blankAvatar}
               alt="avatar"
               className="rounded-full"
               width={56}

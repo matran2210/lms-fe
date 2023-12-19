@@ -108,7 +108,7 @@ const MyCourse = () => {
   return (
     <>
       <div className="header bg-white border-b border-default">
-        <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
+        <div className="max-w-xxl my-0 mx-auto flex py-4.5">
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full ml-12 flex items-center"

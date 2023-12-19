@@ -25,7 +25,7 @@ const datamulti = [
 
 const TestResultPage = () => {
   return (
-    <div className="grid grid-flow-col gap-4 m-[64px] overflow-y-auto">
+    <div className="grid grid-flow-col gap-4 overflow-y-auto">
       <div className="col-span-2 ">
         <YourScore />
       </div>

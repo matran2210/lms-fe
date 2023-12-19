@@ -6,6 +6,7 @@ export const url = {
   getTopicDescription: '/question-topic',
   submitQuestion: '/quiz',
   getResource: '/resource',
+  getQuizAttempts: '/quiz-attempts',
 }
 
 export default url
