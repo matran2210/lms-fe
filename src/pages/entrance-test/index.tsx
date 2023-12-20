@@ -1,4 +1,4 @@
-import Filter from '@components/mycourses/Filter'
+// import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import React from 'react'
@@ -67,7 +67,7 @@ const EntranceTest = ({ courses }: any) => {
           <h2 className="text-medium-sm font-semibold text-bw-1">
             Entrance Test
           </h2>
-          <Filter />
+          {/* <Filter /> */}
         </div>
       </div>
       <div className="heading bg-white max-w-xxl my-0 mx-auto flex">
