@@ -11,8 +11,10 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { UserGuide } from 'src/constants'
-import CourseAPI from '../api/courses'
 import { useRouter } from 'next/router'
+import { buildQueryString } from '@utils/index'
+import { ICourseAll } from 'src/type/courses'
+import CourseAPI from '../api/courses'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -20,14 +22,10 @@ const fetchData = async (
   page: number,
   pageSize: number,
   token: string,
-  name?: string,
-  type?: string,
-  status?: string,
+  queryString?: string,
 ) => {
   const apiResponse = await axios.get(
-    `${apiURL}/courses?page_index=${page}&page_size=${pageSize}&name=${
-      name ?? ''
-    }&type=${type ?? ''}&status=${status ?? ''}`,
+    `${apiURL}/courses?page_index=${page}&page_size=${pageSize}${queryString}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -37,7 +35,7 @@ const fetchData = async (
   return apiResponse?.data?.data
 }
 
-const MyCourse = ({ courses }: any) => {
+const MyCourse = ({ courses }: {courses: ICourseAll}) => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
@@ -68,21 +66,25 @@ const MyCourse = ({ courses }: any) => {
     })
   }, [])
 
-  const [data, setData] = useState<any>(courses || [])
-  const [page, setPage] = useState(1)
+  const [data, setData] = useState<ICourseAll>(courses || [])
+  const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
+  const queryString = buildQueryString({
+    name: router.query.name || '',
+    status: router.query.status || '',
+    type: router.query.type || '',
+  })
+
   const loadMore = async () => {
     if (loading) return
     setLoading(true)
     try {
       const newData = await CourseAPI.getCourse(
-        page + 1,
-        DEFAULT_PAGESIZE,
-        router.query.name,
-        router.query.type,
-      ) // Increase pageSize by 3
-      setData([...data, ...newData?.data?.data?.course_sections_with_progress])
-      setPage(page + 1)
+        page + DEFAULT_PAGESIZE,
+        queryString,
+      )
+      setData(newData?.data)
+      setPage(page + DEFAULT_PAGESIZE)
     } catch (error) {
     } finally {
       setLoading(false)
@@ -101,7 +103,12 @@ const MyCourse = ({ courses }: any) => {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [loading, page])
+  }, [loading,router.query.name,router.query.type,router.query.status])
+
+  useEffect(() => {
+    // Update data when courses?.data?.course_sections_with_progress changes
+    setData(courses || [])
+  }, [courses])
 
   return (
     <>
@@ -136,7 +143,7 @@ const MyCourse = ({ courses }: any) => {
             ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''}
           `}
           >
-            <Filter courses={courses} />
+            <Filter courses={data}/>
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}
@@ -187,7 +194,7 @@ const MyCourse = ({ courses }: any) => {
             handleCancel={closeUserGuide}
           />
         )}
-        <CoursesList courses={courses} />
+        <CoursesList courses={data} />
       </div>
       {guideStatus && guideStep == 0 && <PopupWelcome />}
       {guideStatus && (
@@ -205,15 +212,17 @@ export default MyCourse
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
   const accessToken = req.cookies.accessToken
-
+  const queryString = buildQueryString({
+    name: query.name || '',
+    status: query.status || '',
+    type: query.type || '',
+  })
   try {
     const courses = await fetchData(
       1,
       DEFAULT_PAGESIZE,
       accessToken,
-      query.name,
-      query.type,
-      query.status,
+      queryString,
     )
 
     return {
@@ -245,9 +254,7 @@ export async function getServerSideProps(context: any) {
           1,
           DEFAULT_PAGESIZE,
           accessToken,
-          query.name,
-          query.type,
-          query.status,
+          queryString,
         )
 
         return {

@@ -1,41 +1,45 @@
 import Filter from '@components/mycourses/Filter'
+import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
+import { buildQueryString } from '@utils/index'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import CourseAPI from 'src/pages/api/courses'
 import { apiURL } from 'src/redux/services/httpService'
-import { ICourseDetailAll } from 'src/type/courses'
+import { ICourseDetailAll, ICourseSection } from 'src/type/courses'
 
 const DEFAULT_PAGESIZE = 18
 
 const fetchData = async (
   id: string | string[] | undefined,
-  page: number,
   pageSize: number,
   token: string,
+  queryString?: string,
 ) => {
   const apiResponse = await axios.get(
-    `${apiURL}/courses/${id}?page_index=${page}&page_size=${pageSize}`,
+    `${apiURL}/courses/${id}?page_index=1&page_size=${pageSize}${queryString}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
-      },
+      }
     },
   )
   return apiResponse?.data?.data
 }
 
 const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
-  const [data, setData] = useState<any>(
+  const [data, setData] = useState<ICourseSection[]>(
     courses?.data?.course_sections_with_progress || [],
   )
-  const [page, setPage] = useState(1)
+
+  const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const queryString = buildQueryString({user_section_learning_status: router.query.user_section_learning_status||''});
 
   const loadMore = async () => {
     if (loading) return
@@ -43,11 +47,11 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
     try {
       const newData = await CourseAPI.getCourseDetail(
         router.query.courseId,
-        page + 1,
-        DEFAULT_PAGESIZE,
-      ) // Increase pageSize by 3
-      setData([...data, ...newData?.data?.data?.course_sections_with_progress])
-      setPage(page + 1)
+        page + DEFAULT_PAGESIZE,
+        queryString,
+      )
+      setData(newData?.data?.data?.course_sections_with_progress)
+      setPage(page + DEFAULT_PAGESIZE)
     } catch (error) {
     } finally {
       setLoading(false)
@@ -66,7 +70,12 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [loading])
+  }, [loading,router.query.user_section_learning_status])
+
+  useEffect(() => {
+    // Update data when courses?.data?.course_sections_with_progress changes
+    setData(courses?.data?.course_sections_with_progress || [])
+  }, [courses?.data?.course_sections_with_progress])
 
   return (
     <>
@@ -81,16 +90,14 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
       <div className="main max-w-xxl my-0 mx-auto xl-max:container">
         <div className="flex justify-between py-6">
           <BreadcrumbFilter name={courses?.data?.name} />
-          <Filter
-            totalResult={courses?.data?.course_sections_with_progress?.length}
-          />
+          <FilterCourseDetail totalResult={data?.length} />
         </div>
       </div>
       <div className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6">
         <Heading greeting="Welcome to" title={courses?.data?.name} />
       </div>
       <div className="pt-6 max-w-xxl my-0 mx-auto xl-max:container">
-        <CourseParts courses={courses?.data?.course_sections_with_progress} />
+        <CourseParts courses={data} />
       </div>
     </>
   )
@@ -101,13 +108,14 @@ export default CourseDetail
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
   const accessToken = req.cookies.accessToken
+  const queryString = buildQueryString({user_section_learning_status: query.user_section_learning_status||''});
 
   try {
     const courses = await fetchData(
       query.courseId,
-      1,
       DEFAULT_PAGESIZE,
       accessToken,
+      queryString,
     )
 
     return {
@@ -137,9 +145,9 @@ export async function getServerSideProps(context: any) {
 
         const courses = await fetchData(
           query.courseId,
-          1,
           DEFAULT_PAGESIZE,
           refreshResponse.data.accessToken,
+          queryString,
         )
 
         return {

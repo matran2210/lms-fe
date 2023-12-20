@@ -19,7 +19,7 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
         <div className="time-allow flex justify-between pt-4">
           <p className="text-base text-gray-1">Attempt:</p>
           <p className="text-base text-bw-1 font-semibold">
-            {!coursePart?.quiz?.quiz_timed ? '' : coursePart?.quiz.quiz_timed}
+            {coursePart?.quiz?.quiz_timed ? coursePart?.quiz?.quiz_timed : 'Unlimited'}
           </p>
         </div>
       </div>

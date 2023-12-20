@@ -63,3 +63,33 @@ export enum CLASS_USER_STATUS {
   COMPLETED = 'COMPLETED', // 3
   CANCELED = 'CANCELED', // 4
 }
+
+export interface ICourse {
+  certificate_id: string
+  class: string
+  code: string
+  course_categories: Array<any>
+  course_difficulty: number
+  course_image: string | null
+  course_type: string
+  created_at: Date
+  created_by: Date
+  created_from: Date
+  deleted_at: Date
+  description: string
+  duration: number
+  finished_at: Date | null
+  id: string
+  learning_progress: number
+  total_course_sections_completed: number
+
+  status: string
+  template: number
+  updated_at: Date
+}
+export interface ICourseAll {
+  courses: ICourse[]
+  metadata: IMeta
+  status: Array<{ count: number; status: string }>
+  total: Array<{ categoryName: string; count: number }>
+}
