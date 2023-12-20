@@ -25,7 +25,8 @@ export const moveAndResizeElement = (
   const minimum_size = 20
 
   let enable = false
-  element.addEventListener('dblclick', function (e: MouseEvent) {
+
+  function handleDoubleClick(e: MouseEvent) {
     enable = true
     const resizable = document.body.querySelectorAll('.resizable.enable')
     resizable.forEach((e) => {
@@ -36,9 +37,106 @@ export const moveAndResizeElement = (
       target = target.closest('.resizable') as HTMLDivElement
     }
     target.classList.add('enable')
-  })
+  }
+  function handleMoveMouse(e: MouseEvent) {
+    // if (!enable) {
+    //   return
+    // }
+    e.preventDefault()
+    if (isDown) {
+      mousePosition = {
+        x: e.clientX,
+        y: e.clientY,
+      }
+      if (!currentResizer) {
+        element.style.left = mousePosition.x + offset[0] + 'px'
+        element.style.top = mousePosition.y + offset[1] + 'px'
+        return
+      }
 
-  document.addEventListener('click', function (e: MouseEvent) {
+      switch (currentResizer) {
+        case 'bottom-right':
+          {
+            const width = original_width + (e.pageX - original_mouse_x)
+            const height = original_height + (e.pageY - original_mouse_y)
+            if (width > minimum_size) {
+              element.style.width = width + 'px'
+            }
+            if (height > minimum_size) {
+              element.style.height = height + 'px'
+            }
+          }
+          break
+        case 'bottom-left':
+          {
+            const height = original_height + (e.pageY - original_mouse_y)
+            const width = original_width - (e.pageX - original_mouse_x)
+            if (height > minimum_size) {
+              element.style.height = height + 'px'
+            }
+            if (width > minimum_size) {
+              element.style.width = width + 'px'
+              element.style.left =
+                original_x + (e.pageX - original_mouse_x) + 'px'
+            }
+          }
+          break
+        case 'top-right':
+          {
+            const width = original_width + (e.pageX - original_mouse_x)
+            const height = original_height - (e.pageY - original_mouse_y)
+            if (width > minimum_size) {
+              element.style.width = width + 'px'
+            }
+            if (height > minimum_size) {
+              element.style.height = height + 'px'
+              element.style.top =
+                original_y + (e.pageY - original_mouse_y) + 'px'
+            }
+          }
+          break
+        case 'top-left':
+          {
+            const width = original_width - (e.pageX - original_mouse_x)
+            const height = original_height - (e.pageY - original_mouse_y)
+            if (width > minimum_size) {
+              element.style.width = width + 'px'
+              element.style.left =
+                original_x + (e.pageX - original_mouse_x) + 'px'
+            }
+            if (height > minimum_size) {
+              element.style.height = height + 'px'
+              element.style.top =
+                original_y + (e.pageY - original_mouse_y) + 'px'
+            }
+          }
+          break
+        case 'right':
+          {
+            const width = original_width + (e.pageX - original_mouse_x)
+            if (width > minimum_size) {
+              element.style.width = width + 'px'
+            }
+          }
+          break
+        case 'left':
+          {
+            const width = original_width - (e.pageX - original_mouse_x)
+            if (width > minimum_size) {
+              element.style.width = width + 'px'
+              element.style.left =
+                original_x + (e.pageX - original_mouse_x) + 'px'
+            }
+          }
+          break
+        default:
+          break
+      }
+    }
+  }
+  element.addEventListener('dblclick', (e) => handleDoubleClick(e))
+
+  element.addEventListener('click', function (e: MouseEvent) {
     if (enable && !(e.target as HTMLElement).closest('.resizers')) {
       enable = false
       const resizable = document.body.querySelectorAll('.resizable.enable')
@@ -73,7 +171,7 @@ export const moveAndResizeElement = (
     },
     true,
   )
-  document.body.addEventListener(
+  element.addEventListener(
     'mouseup',
     function () {
       isDown = false
@@ -89,104 +187,5 @@ export const moveAndResizeElement = (
     },
     true,
   )
-  document.body.addEventListener(
-    'mousemove',
-    function (e: MouseEvent) {
-      // if (!enable) {
-      //   return
-      // }
-      e.preventDefault()
-      if (isDown) {
-        mousePosition = {
-          x: e.clientX,
-          y: e.clientY,
-        }
-        if (!currentResizer) {
-          element.style.left = mousePosition.x + offset[0] + 'px'
-          element.style.top = mousePosition.y + offset[1] + 'px'
-          return
-        }
-
-        switch (currentResizer) {
-          case 'bottom-right':
-            {
-              const width = original_width + (e.pageX - original_mouse_x)
-              const height = original_height + (e.pageY - original_mouse_y)
-              if (width > minimum_size) {
-                element.style.width = width + 'px'
-              }
-              if (height > minimum_size) {
-                element.style.height = height + 'px'
-              }
-            }
-            break
-          case 'bottom-left':
-            {
-              const height = original_height + (e.pageY - original_mouse_y)
-              const width = original_width - (e.pageX - original_mouse_x)
-              if (height > minimum_size) {
-                element.style.height = height + 'px'
-              }
-              if (width > minimum_size) {
-                element.style.width = width + 'px'
-                element.style.left =
-                  original_x + (e.pageX - original_mouse_x) + 'px'
-              }
-            }
-            break
-          case 'top-right':
-            {
-              const width = original_width + (e.pageX - original_mouse_x)
-              const height = original_height - (e.pageY - original_mouse_y)
-              if (width > minimum_size) {
-                element.style.width = width + 'px'
-              }
-              if (height > minimum_size) {
-                element.style.height = height + 'px'
-                element.style.top =
-                  original_y + (e.pageY - original_mouse_y) + 'px'
-              }
-            }
-            break
-          case 'top-left':
-            {
-              const width = original_width - (e.pageX - original_mouse_x)
-              const height = original_height - (e.pageY - original_mouse_y)
-              if (width > minimum_size) {
-                element.style.width = width + 'px'
-                element.style.left =
-                  original_x + (e.pageX - original_mouse_x) + 'px'
-              }
-              if (height > minimum_size) {
-                element.style.height = height + 'px'
-                element.style.top =
-                  original_y + (e.pageY - original_mouse_y) + 'px'
-              }
-            }
-            break
-          case 'right':
-            {
-              const width = original_width + (e.pageX - original_mouse_x)
-              if (width > minimum_size) {
-                element.style.width = width + 'px'
-              }
-            }
-            break
-          case 'left':
-            {
-              const width = original_width - (e.pageX - original_mouse_x)
-              if (width > minimum_size) {
-                element.style.width = width + 'px'
-                element.style.left =
-                  original_x + (e.pageX - original_mouse_x) + 'px'
-              }
-            }
-            break
-          default:
-            break
-        }
-      }
-    },
-    true,
-  )
+  element.addEventListener('mousemove', (e) => handleMoveMouse(e), true)
 }

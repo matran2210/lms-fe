@@ -11,20 +11,20 @@ export const mergeImageToEditor = async (data: string) => {
     const src = element.getAttribute('resource_id')
     if (src && element.tagName === 'VIDEO') {
       const res = await CourseTestApi.getResource(src)
-
-      if (element.hasAttribute('src')) {
-        element.setAttribute('src', res.data.url || '')
-      } else if (element.hasAttribute('poster')) {
-        element.setAttribute('poster', res.data.thumbnail || '')
-      }
-
       const source = element.querySelector('source')
-      source?.setAttribute('resource_status', res.data?.status || '')
-      if (source?.hasAttribute('src')) {
-        source?.setAttribute('src', res.data.url || '')
-      } else if (source?.hasAttribute('poster')) {
-        source?.setAttribute('poster', res.data.thumbnail || '')
-      }
+      const linkVideo = source?.getAttribute('src')
+      var iframe = document.createElement('iframe')
+      iframe.src = res.data.url.replace(
+        '/manifest/video.m3u8',
+        `/iframe?poster:${res.data.thumbnail}`,
+      )
+      iframe.id = element.id
+      iframe.className = element.className
+      iframe.style.cssText = element.style.cssText
+      iframe.allow =
+        'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;'
+      iframe.allowFullscreen = true
+      element?.parentNode?.replaceChild(iframe, element)
     }
   }
   return div.innerHTML
