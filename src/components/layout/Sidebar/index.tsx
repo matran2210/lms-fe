@@ -1,11 +1,11 @@
 import { MENU_ITEMS, MENU_BOTTOM } from '../../../constants/menu-items'
 import MenuItemsList from '../MenuItemsList'
 import ExpandIcon from '../ExpandIcon'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getMe } from 'src/redux/slice/User/User'
 import PopupStep from '@components/user-guide/PopupStep'
-import { increment, reset } from 'src/redux/slice/Course/UserGuide'
+import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { UserGuide } from 'src/constants'
 
 type SidebarProps = {
@@ -13,7 +13,6 @@ type SidebarProps = {
   className: string
   toggleDrawer: () => void
   mode: string
-  setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
 export default function Sidebar({
@@ -21,7 +20,6 @@ export default function Sidebar({
   className,
   toggleDrawer,
   mode,
-  setOpenResource
 }: SidebarProps) {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
@@ -67,7 +65,6 @@ export default function Sidebar({
           <MenuItemsList
             mode={mode}
             options={mode === 'student' ? MENU_ITEMS : MENU_ITEMS}
-            setOpenResource={setOpenResource}
           />
           {guideStatus && guideStep == 2 && (
             <PopupStep
@@ -91,7 +88,6 @@ export default function Sidebar({
           <MenuItemsList
             mode={mode}
             options={mode === 'student' ? MENU_BOTTOM : MENU_BOTTOM}
-            setOpenResource={setOpenResource}
           />
           {guideStatus && guideStep == 3 && (
             <PopupStep

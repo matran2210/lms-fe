@@ -14,8 +14,6 @@ import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { onMessageListener } from 'src/utils/firebase'
 import { showNotification } from 'src/redux/slice/Notification/Notification'
-import { useRouter } from 'next/router'
-import LearningResource from '@components/mycourses/LearningResource'
 
 // import 'antd/dist/antd.css'
 
@@ -30,8 +28,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const { layout = LAYOUT.DEFAULT_LAYOUT } = (Component as any) || {}
   injectStore(store)
   const [show, setShow] = useState(false)
-  const router = useRouter()
-  const [openResource, setOpenResource] = useState(false)
 
   const dispatch = useAppDispatch()
   const getStatusNoti = useAppSelector(
@@ -64,19 +60,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       break
     default:
       content = (
-        <Layout setOpenResource={setOpenResource}>
+        <Layout>
           <Component {...pageProps} />
         </Layout>
       )
   }
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      if(window.localStorage.getItem('accessToken') === ''){
-        setOpenResource(false)
-      }
-    }
-  }, [router.pathname])
 
   return (
     <>
@@ -88,12 +76,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Toaster />
         <SappConfirmDialogContainer />
-        <RouteGuard>
-          <>
-            {content}
-            <LearningResource open={openResource} setOpenResource={setOpenResource} />
-          </>
-        </RouteGuard>
+        <RouteGuard>{content}</RouteGuard>
       </main>
     </>
   )

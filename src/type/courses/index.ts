@@ -93,36 +93,3 @@ export interface ICourseAll {
   status: Array<{ count: number; status: string }>
   total: Array<{ categoryName: string; count: number }>
 }
-
-export interface IResource {
-  created_at: Date
-  file_key: string
-  id: string
-  is_default: boolean
-  location: string
-  name: string
-  resource_type: string
-  size: number
-  status: string
-  suffix_type: string
-  thumbnail: string
-  updated_at: string
-}
-export interface IResouceDetail {
-  meta: IMeta
-  resources: IResource[]
-}
-
-export interface ISection {
-  course_id: string
-  course_section_type: string
-  created_at: Date
-  id: string
-  name: string
-  updated_at: Date
-}
-
-export interface ISectionDetail {
-  meta: IMeta
-  sections: ISection[]
-}

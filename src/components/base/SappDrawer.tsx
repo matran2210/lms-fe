@@ -63,7 +63,7 @@ const SappDrawer = ({
             />
           </div>
         </div>
-        <div className="mt-6 mx-8 overflow-y-auto h-[80vh]" id="sapp-drawer">
+        <div className="flex mt-6 mx-8 overflow-y-auto h-[80vh]">
           {children}
         </div>
         {footer && (

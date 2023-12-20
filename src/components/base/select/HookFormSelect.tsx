@@ -11,8 +11,6 @@ interface IProps {
   placeholder?: string
   onChange?: (select: any) => void
   value?: string | null | undefined
-  isDisabled?: boolean
-  onMenuScrollToBottom?: any
 }
 
 const HookFormSelect = ({
@@ -24,8 +22,6 @@ const HookFormSelect = ({
   onChange,
   placeholder,
   value,
-  isDisabled,
-  onMenuScrollToBottom
 }: IProps) => {
   return (
     <div className="select-options">
@@ -40,8 +36,6 @@ const HookFormSelect = ({
         placeholder={placeholder}
         onChange={onChange}
         value={value}
-        isDisabled={isDisabled}
-        onMenuScrollToBottom={onMenuScrollToBottom}
       />
     </div>
   )

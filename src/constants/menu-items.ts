@@ -60,12 +60,6 @@ const MENU_OPTIONS: MenuOption[] = [
       },
     ],
   },
-  {
-    name: 'Resource',
-    icon: 'learning-resource',
-    url: '#',
-    type: 'level-1',
-  },
 ]
 
 const MENU_OPTIONS_BOTTOM: MenuOption[] = [
