@@ -1,32 +1,15 @@
 // components/SearchForm.tsx
 
-import React, { useEffect, useState } from 'react'
-import HookFormSelect from '@components/base/select/HookFormSelect'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { convertSnakeCaseToHumanReadable } from '@utils/index'
+import { buildQueryString, convertSnakeCaseToHumanReadable } from '@utils/index'
+import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
+import { useForm } from 'react-hook-form'
+import { ICourseAll } from 'src/type/courses'
 
-const Filter = ({ courses, totalResult }: any) => {
+const Filter = ({ courses }: {courses: ICourseAll}) => {
   const router = useRouter()
-  const [selectCategory, setSelectedCategory] = useState<any>(null)
-  const [selectedStatus, setSelectedStatus] = useState<any>(null)
-
-  const handleChange = (selected: any) => {
-    setSelectedCategory(selected)
-    router.push(
-      `/courses?name=${router.query.name ?? ''}&type=${
-        selected.value ?? ''
-      }&status=${router.query.status ?? ''}`,
-    )
-  }
-
-  const handleChangeStatus = (selected: any) => {
-    setSelectedStatus(selected)
-    router.push(
-      `/courses?name=${router.query.name ?? ''}&type=${
-        router.query.type ?? ''
-      }&status=${selected.value}`,
-    )
-  }
+  const { control, watch } = useForm()
 
   const defaultCategory = [
     {
@@ -35,56 +18,52 @@ const Filter = ({ courses, totalResult }: any) => {
     },
   ]
 
-  useEffect(() => {
-    // Check if router.query.status is an empty string
-    if (router.query.status === undefined) {
-      setSelectedStatus(null)
-    }
+  let apiUrl = `/courses`
 
-    if (router.query.type === undefined) {
-      setSelectedCategory(null)
+  const queryString = buildQueryString({
+    status: watch('status')?.value || '',
+    type: watch('type')?.value || '',
+  })
+
+  useEffect(() => {
+    const userSectionLearningType = watch('type')?.value;
+    const userSectionLearningStatus = watch('status')?.value;
+  
+    if (userSectionLearningType !== undefined || userSectionLearningStatus !== undefined) {
+      router.push(
+        userSectionLearningStatus !== '' || userSectionLearningType !== ''
+          ? `${apiUrl}?name=${router.query.name || ''}${queryString}`
+          : apiUrl
+      );
     }
-  }, [
-    router.query.status,
-    setSelectedStatus,
-    router.query.type,
-    selectCategory,
-  ])
+  }, [apiUrl, queryString, watch('status'),watch('type')]);
 
   return (
     <div className="filter flex">
       <div className="pr-6 border-r border-gray-1">
-        {totalResult ? (
-          <div className="font-normal text-sm text-gray-1">
-            {totalResult} result
-          </div>
-        ) : (
-          <HookFormSelect
-            options={defaultCategory.concat(
-              courses?.total?.map((category: any) => ({
-                label: category?.categoryName,
-                value: category?.categoryName,
-              })),
-            )}
-            className={'text-medium-sm font-normal text-gray-1 h-[17px]'}
-            placeholder="Category"
-            onChange={handleChange}
-            value={selectCategory}
-          />
-        )}
+        <SappHookFormSelect
+          control={control}
+          name="type"
+          options={defaultCategory.concat(
+            courses?.total?.map((category: any) => ({
+              label: category?.categoryName,
+              value: category?.categoryName,
+            })),
+          )}
+          placeholder='Categoty'
+        />
       </div>
       <div className="filter pl-6 flex self-center">
-        <HookFormSelect
+        <SappHookFormSelect
+          control={control}
+          name="status"
           options={defaultCategory.concat(
             courses?.status?.map((status: any) => ({
               label: convertSnakeCaseToHumanReadable(status?.status),
               value: status?.status,
             })),
           )}
-          className={'text-medium-sm font-normal text-gray-1 h-[17px]'}
-          placeholder="Status"
-          value={selectedStatus}
-          onChange={handleChangeStatus}
+          placeholder='Status'
         />
       </div>
     </div>

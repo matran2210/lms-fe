@@ -75,3 +75,26 @@ export const UserGuide = {
   CONTENT_STEP_6:
     'The filter section allows you to filter courses by curriculum and course status.',
 }
+
+export const defaultStatusDetail = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
+  },
+  {
+    label: 'READY_TO_LEARN',
+    value: 'READY_TO_LEARN',
+  },
+  {
+    label: 'COMPLETED',
+    value: 'COMPLETED',
+  },
+  {
+    label: 'CANCELED',
+    value: 'CANCELED',
+  },
+]

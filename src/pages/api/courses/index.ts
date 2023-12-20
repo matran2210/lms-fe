@@ -19,22 +19,20 @@ const CourseAPI = {
 
   getCourseDetail: async (
     id: string | string[] | undefined,
-    page_index: number,
     page_size: number,
+    queryString?: string
   ): Promise<any> => {
     const response = await httpService.GET<any, any>({
-      uri: `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
+      uri: `courses/${id}?page_index=1&page_size=${page_size}${queryString}`,
     })
     return response
   },
   getCourse: async (
-    page_index: number,
     page_size: number,
-    name?: string | string[] | undefined,
-    type?: string | string[] | undefined,
+    queryString?: string
   ): Promise<any> => {
     const response = await httpService.GET<any, any>({
-      uri: `courses?page_index=${page_index}&page_size=${page_size}&name=${name}&type=${type}`,
+      uri: `courses?page_index=1&page_size=${page_size}${queryString}`,
     })
     return response
   },
