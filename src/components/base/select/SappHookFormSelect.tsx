@@ -7,7 +7,7 @@ interface IProps {
   control: Control<any>
   required?: boolean
   className?: string
-  options?: Array<{label: string, value: string}>
+  options?: Array<{ label: string; value: string }>
   isMulti?: boolean
   children?: ReactNode
   placeholder?: string
@@ -27,7 +27,6 @@ const SappHookFormSelect = ({
   placeholder,
 }: IProps) => {
   return (
-
     <Controller
       name={name}
       control={control}

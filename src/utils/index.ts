@@ -82,11 +82,14 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
   return words.join(' ')
 }
 
-export const buildQueryString = (params:Object) => {
+export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
     .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-    .join('&');
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+    )
+    .join('&')
 
-  return queryParams ? `&${queryParams}` : '';
-};
+  return queryParams ? `&${queryParams}` : ''
+}

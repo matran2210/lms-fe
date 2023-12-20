@@ -1,8 +1,8 @@
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import EditorReader from '@components/base/editor/EditorReader'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
 import { IPreviewProp } from './OneChoiceQuestion'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
 // import {IPreviewProp} from '../true-false-question'
 
 const MultiChoiceQuestion = ({
@@ -20,7 +20,11 @@ const MultiChoiceQuestion = ({
   const convertAnswer = useMemo(() => {
     let answers = []
     if (data?.answers) {
-      for (let e of data?.answers) {
+      const oldData = [...data?.answers]
+      const sorted = oldData.sort(
+        (a: any, b: any) => a.answer_position - b.answer_position,
+      )
+      for (let e of sorted) {
         answers.push({ label: e.answer, value: e.id })
       }
     }

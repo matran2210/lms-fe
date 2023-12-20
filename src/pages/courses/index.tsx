@@ -35,7 +35,7 @@ const fetchData = async (
   return apiResponse?.data?.data
 }
 
-const MyCourse = ({ courses }: {courses: ICourseAll}) => {
+const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
@@ -103,7 +103,7 @@ const MyCourse = ({ courses }: {courses: ICourseAll}) => {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [loading,router.query.name,router.query.type,router.query.status])
+  }, [loading, router.query.name, router.query.type, router.query.status])
 
   useEffect(() => {
     // Update data when courses?.data?.course_sections_with_progress changes
@@ -143,7 +143,7 @@ const MyCourse = ({ courses }: {courses: ICourseAll}) => {
             ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''}
           `}
           >
-            <Filter courses={data}/>
+            <Filter courses={data} />
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}

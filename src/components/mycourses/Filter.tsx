@@ -7,7 +7,7 @@ import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useForm } from 'react-hook-form'
 import { ICourseAll } from 'src/type/courses'
 
-const Filter = ({ courses }: {courses: ICourseAll}) => {
+const Filter = ({ courses }: { courses: ICourseAll }) => {
   const router = useRouter()
   const { control, watch } = useForm()
 
@@ -26,17 +26,20 @@ const Filter = ({ courses }: {courses: ICourseAll}) => {
   })
 
   useEffect(() => {
-    const userSectionLearningType = watch('type')?.value;
-    const userSectionLearningStatus = watch('status')?.value;
-  
-    if (userSectionLearningType !== undefined || userSectionLearningStatus !== undefined) {
+    const userSectionLearningType = watch('type')?.value
+    const userSectionLearningStatus = watch('status')?.value
+
+    if (
+      userSectionLearningType !== undefined ||
+      userSectionLearningStatus !== undefined
+    ) {
       router.push(
         userSectionLearningStatus !== '' || userSectionLearningType !== ''
           ? `${apiUrl}?name=${router.query.name || ''}${queryString}`
-          : apiUrl
-      );
+          : apiUrl,
+      )
     }
-  }, [apiUrl, queryString, watch('status'),watch('type')]);
+  }, [apiUrl, queryString, watch('status'), watch('type')])
 
   return (
     <div className="filter flex">
@@ -50,7 +53,7 @@ const Filter = ({ courses }: {courses: ICourseAll}) => {
               value: category?.categoryName,
             })),
           )}
-          placeholder='Categoty'
+          placeholder="Categoty"
         />
       </div>
       <div className="filter pl-6 flex self-center">
@@ -63,7 +66,7 @@ const Filter = ({ courses }: {courses: ICourseAll}) => {
               value: status?.status,
             })),
           )}
-          placeholder='Status'
+          placeholder="Status"
         />
       </div>
     </div>

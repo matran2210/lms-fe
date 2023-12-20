@@ -7,14 +7,6 @@ import {
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import EditorReader from '@components/base/editor/EditorReader'
 import { formatTime } from '@components/common/timer'
-import { LAYOUT } from '@utils/constants'
-import { parse } from 'cookie'
-import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
-import { createRef, useEffect, useMemo, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { QUESTION_TYPES } from 'src/constants'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -22,13 +14,23 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
-import { apiURL } from 'src/redux/services/httpService'
-import axios from 'axios'
+import { LAYOUT } from '@utils/constants'
+import { runHighlight } from '@utils/index'
+import { useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { QUESTION_TYPES } from 'src/constants'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import {
+  getTopicsCaseStudy,
+  loadMoreQuestion,
+  loadMoreTopic,
+} from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
+
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
     index: number,
-    topicId: string,
     data: any,
     type: string,
     currentTabID: string,
@@ -41,49 +43,6 @@ const CaseStudyDetail = ({ questions }: any) => {
     question_content?: any,
     ref?: any,
   ) => {
-    // const OneChoiceQuestion = dynamic(()=>import())
-    // const OneChoiceQuestion = dynamic(
-    //   () => import('@components/questionType/OneChoiceQuestion'),
-    //   {
-    //     loading: () => <p>Loading...</p>,
-    //   },
-    // )
-    // const MultiChoiceQuestion = dynamic(
-    //   () => import('@components/questionType/MultipleChoiceQuestion'),
-    //   {
-    //     loading: () => <p>Loading...</p>,
-    //   },
-    // )
-    // const MatchingQuestion = dynamic(
-    //   () => import('@components/questionType/MatchingQuestion'),
-    //   {
-    //     loading: () => <p>Loading...</p>,
-    //   },
-    // )
-    // const AddWordPreview = dynamic(
-    //   () => import('@components/questionType/FillText'),
-    //   {
-    //     loading: () => <p>Loading...</p>,
-    //   },
-    // )
-    // const SelectWord = dynamic(
-    //   () => import('@components/questionType/SelectWordQuestion'),
-    //   {
-    //     loading: () => <p>Loading...</p>,
-    //   },
-    // )
-    // const EssayQuestionPreview = dynamic(
-    //   () => import('@components/questionType/ConstructedQuestion'),
-    //   {
-    //     loading: () => <p>Loading...</p>,
-    //   },
-    // )
-    // const DragNDropPreivew = dynamic(
-    //   () => import('@components/questionType/DragNDrop'),
-    //   {
-    //     loading: () => <p>Loading...</p>,
-    //   },
-    // )
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
         return (
@@ -94,11 +53,11 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            // handleSaveHighLight={handleSaveHighLight}
-            // highlighted={highlighted}
+            handleSaveHighLight={() => {}}
+            highlighted={highlighted}
             // removeHighlight={removeHighlight}
-            // allowHighLight={allowHighLight}
-            solution={solution}
+            allowHighLight={allowHighLight}
+            // solution={solution}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -110,10 +69,10 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            // handleSaveHighLight={handleSaveHighLight}
+            handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
-            // allowHighLight={allowHighLight}
+            allowHighLight={allowHighLight}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -124,10 +83,10 @@ const CaseStudyDetail = ({ questions }: any) => {
             name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
-            // handleSaveHighLight={handleSaveHighLight}
+            handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
-            // allowHighLight={allowHighLight}
+            allowHighLight={allowHighLight}
             corrects={corrects}
           />
         )
@@ -137,13 +96,12 @@ const CaseStudyDetail = ({ questions }: any) => {
             data={data}
             // action={getAnswerMatching}
             // ref={ref}
-            // handleSaveHighLight={handleSaveHighLight}
+            handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
-            // allowHighLight={allowHighLight}
+            allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             done={done}
-            topicId={topicId}
             extenalRef={(el: any) => (ref.current[index || 0] = el)}
           />
         )
@@ -152,10 +110,10 @@ const CaseStudyDetail = ({ questions }: any) => {
           <AddWordPreview
             data={data}
             // action={getValueFillText}
-            // handleSaveHighLight={handleSaveHighLight}
+            handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
-            // allowHighLight={allowHighLight}
+            allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             extenalRef={(el: any) => (ref.current[index || 0] = el)}
@@ -167,10 +125,10 @@ const CaseStudyDetail = ({ questions }: any) => {
             data={data}
             // action={getAnswerDragNDrop}
             // ref={ref}
-            // handleSaveHighLight={handleSaveHighLight}
+            handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
-            // allowHighLight={allowHighLight}
+            allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             extenalRef={(el: any) => (ref.current[index || 0] = el)}
           />
@@ -180,10 +138,10 @@ const CaseStudyDetail = ({ questions }: any) => {
           <SelectWord
             data={data}
             // action={getValueSelectText}
-            // handleSaveHighLight={handleSaveHighLight}
+            handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
-            // allowHighLight={allowHighLight}
+            allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             extenalRef={(el: any) => (ref.current[index || 0] = el)}
@@ -197,10 +155,10 @@ const CaseStudyDetail = ({ questions }: any) => {
             index={1}
             question_data={data}
             control={control}
-            // handleSaveHighLight={handleSaveHighLight}
+            handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
-            // allowHighLight={allowHighLight}
+            allowHighLight={allowHighLight}
           />
         )
       default:
@@ -208,99 +166,40 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
   }
   const router = useRouter()
-  const [currentTopicQuestions, setCurrentTopicQuestions] = useState(
-    questions[0]?.questions,
-  )
-  const [essayData, setEssayData] = useState<any>()
   const inputRef = useRef<any>([])
   const valueRef = useRef<any>([])
   const { control, handleSubmit, getValues, setValue } = useForm()
-
-  const [topics, setTopics] = useState<any>([])
   const [topicItems, setTopicItems] = useState<any>([])
-  const [listQuestions, setListQuestions] = useState<any>([])
-  const [listFullQuestions, setListFullQuestions] = useState<any>([])
-  const [index, setIndex] = useState(0)
-  const [pageTopic, setPageTopic] = useState(1)
+  const [allowHighLight, setAllowHighLight] = useState(false)
+  const dispatch = useAppDispatch()
+  const {
+    topics,
+    listFullQuestions,
+    listQuestions,
+    meta,
+    pageIndex,
+    page_size,
+    loading,
+  } = useAppSelector((state) => state.caseStudyTestReducer)
 
   useEffect(() => {
-    if (questions) {
-      let arr = [] as any
-      let arr2 = [] as any
-      for (let i in questions.topics) {
-        // if (+i <= 5) {
-        arr.push({ topicData: questions.topics[i] })
-        // }
-        for (let j = 0; j < questions.topics[i].questions.length; j++) {
-          // if (i <= 5) {
-          arr2.push({
-            [questions.topics[i].question_topic.id]:
-              questions.topics[i].questions[j],
-          })
-          // }
-        }
-      }
-
-      setListFullQuestions(arr2)
-      setListQuestions(arr2.slice(0, 25))
-      setTopics(() => {
-        // setTopicItems({ ...arr[0], viewed: true })
-
-        return arr
-      })
-    }
-  }, [])
-  // useEffect(())
-
-  const handleLoadMoreQuestion = () => {
-    if (listQuestions.length < listFullQuestions.length) {
-      const arr = [...listQuestions]
-      // const last_index = topicItems.topicData.questions.findIndex(
-      //   (e: any) => e.id === arr[arr.length - 1].id,
-      // )
-      for (let j = listQuestions.length; j < listFullQuestions.length; j++) {
-        if (j <= 5 + listQuestions.length) {
-          arr.push(listFullQuestions[j])
-        }
-      }
-      setListQuestions([...arr])
-    }
-  }
-  const handleLoadMoreTopic = async (page: number) => {
-    if (router.query.id && page <= questions.meta.total_pages) {
-      setPageTopic(page)
-      const res = await CourseTestApi.getQuestionCaseStudiesById(
-        router.query.id as string,
-        page,
-        5,
+    if (router.query.id) {
+      dispatch(
+        getTopicsCaseStudy({
+          id: router.query.id,
+          page_index: 1,
+          page_size: 5,
+        }),
       )
-      const arr = [...topics]
-      const arrQuest = [...listFullQuestions]
-      let arr2 = [] as any
-      let listQuestNew = [] as any
-      for (let e of res.data.topics) {
-        arr2 = [...arr2]
-        arr.push({ topicData: e })
-        arr2 = arrQuest.concat(e.questions)
-        listQuestNew.push(e.questions)
-      }
-      setListFullQuestions(arr2)
-      // if (listQuestions.length === listFullQuestions.length) {
-      setListQuestions((prev: any) => {
-        const newArr = listFullQuestions.concat(listQuestNew.slice(0, 5))
-        return newArr
-      })
-      // }
-      setTopics(arr)
     }
+  }, [router.query.id])
 
-    // let arr = [...topics] as any
-    // for (let i = arr.length; i < questions.topics.data.length; i++) {
-    //   if (i <= page * 5) {
-    //     arr.push({ topicData: fake_data.data[i] })
-    //   }
-    // }
-    // setTopics(arr)
+  const handleLoadMoreTopic = async (page: number) => {
+    if (router.query.id && page <= meta.total_pages) {
+      dispatch(
+        loadMoreTopic({ id: router.query.id, page_index: page, page_size }),
+      )
+    }
   }
 
   const getValueFillText = (index: number) => {
@@ -372,27 +271,144 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const getAllValue = () => {
     let arrAnswer = []
-    for (let i = 0; i < listFullQuestions.length; i++) {
-      const question = Object.values(listFullQuestions[i])[0] as any
+    for (let i = 0; i < listQuestions.length; i++) {
+      const question = Object.values(listQuestions[i])[0] as any
       if (
         question.qType === QUESTION_TYPES.ONE_CHOICE ||
         question.qType === QUESTION_TYPES.TRUE_FALSE ||
         question.qType === QUESTION_TYPES.MULTIPLE_CHOICE
       ) {
-        arrAnswer.push(getValues(`${i}_answer`))
+        arrAnswer.push({
+          qType: question.qType,
+          answer: getValues(`${i}_answer`),
+          id: question.id,
+          answers: question.answers,
+        })
       } else if (question.qType === QUESTION_TYPES.MATCHING) {
-        arrAnswer.push(getAnswerMatching(i))
+        arrAnswer.push({
+          qType: question.qType,
+          answer: getAnswerMatching(i),
+          id: question.id,
+          answers: question.answers,
+        })
       } else if (question.qType === QUESTION_TYPES.DRAG_DROP) {
-        arrAnswer.push(getAnswerDragNDrop(i))
+        arrAnswer.push({
+          qType: question.qType,
+          answer: getAnswerDragNDrop(i),
+          id: question.id,
+          answers: question.answers,
+        })
       } else if (question.qType === QUESTION_TYPES.SELECT_WORD) {
-        arrAnswer.push(getValueSelectText(i))
+        arrAnswer.push({
+          qType: question.qType,
+          answer: getValueSelectText(i),
+          id: question.id,
+          answers: question.answers,
+        })
       } else if (question.qType === QUESTION_TYPES.FILL_WORD) {
-        arrAnswer.push(getValueFillText(i))
+        arrAnswer.push({
+          qType: question.qType,
+          answer: getValueFillText(i),
+          id: question.id,
+          answers: question.answers,
+        })
+      } else if (question.qType == QUESTION_TYPES.ESSAY) {
+        arrAnswer.push({
+          qType: question.qType,
+          answer: '',
+          id: question.id,
+          answers: [],
+        })
       }
     }
+
+    return arrAnswer
+  }
+  const handleSubmitQuestion = async () => {
+    let allQuest = getAllValue()
+    let quiz_position_mapping = []
+    let answers = []
+    let reformTabs: any[] = []
+    for (let e of allQuest) {
+      reformTabs.push({ ...e, done: true })
+      // if (e.answer || e.answer === '') {
+      if (
+        e.qType === QUESTION_TYPES.ONE_CHOICE ||
+        e.qType === QUESTION_TYPES.TRUE_FALSE
+      ) {
+        answers.push({
+          question_id: e.id,
+          question_answer_id: e.answer || '',
+        })
+      } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+        let answer = []
+        if (e.answer) {
+          for (let el of e.answer) {
+            answer.push({ answer_id: el })
+          }
+        } else {
+          answer.push({ answer_id: '' })
+        }
+        answers.push({ question_id: e.id, answer })
+      } else if (e.qType === QUESTION_TYPES.MATCHING) {
+        answers.push({ question_id: e.id, answer: e.answer })
+      } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
+        let answer = []
+        for (let i in e.answer) {
+          if (e.answer[i].idAnswer) {
+            answer.push({
+              answer_id: e.answer[i].idAnswer,
+              answer_position: +i + 1,
+            })
+          }
+        }
+        answers.push({ question_id: e.id, answer })
+      } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
+        let answer = []
+        for (let i in e.answer) {
+          if (e.answer[i] && e.answer[i] !== '') {
+            answer.push({
+              answer_id: e.answer[i],
+              answer_position: +i + 1,
+            })
+          }
+        }
+        answers.push({ question_id: e.id, answer })
+      } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
+        let answer = []
+        for (let i in e.answer) {
+          if (e.answer[i] && e.answer[i] !== '') {
+            answer.push({
+              answer_text: e.answer[i],
+              answer_position: +i + 1,
+            })
+          }
+        }
+        answers.push({ question_id: e.id, answer })
+      } else if (e.qType === QUESTION_TYPES.ESSAY) {
+        answers.push({ question_id: e.id, answers: e.answer || '' })
+      }
+      // }
+      quiz_position_mapping.push({
+        question_id: e.id,
+        answers: e?.answers,
+      })
+    }
+    // await CourseTestApi.submitQuestion(router.query?.id as string, {
+    //   answers: answers,
+    //   quiz_position_mapping: quiz_position_mapping,
+    // })
+    // console.log(answers, quiz_position_mapping)
+
+    return
   }
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
+      {loading && (
+        <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
+          Loading
+        </div>
+      )}
       {/* Header */}
       <div className="h-full">
         <div className="flex justify-between py-4 px-6 items-center bg-gray-3 ">
@@ -409,16 +425,14 @@ const CaseStudyDetail = ({ questions }: any) => {
               loading: false,
               disabled: false,
               onClick: () => {
-                getAllValue()
+                handleSubmitQuestion()
               },
-              //   full: fullWidthBtn,
             }}
             cancel={{
               title: 'Quit',
               size: 'medium',
               onClick: () => {},
               loading: false,
-              //   full: fullWidthBtn,
             }}
           ></ButtonCancelSubmit>
         </div>
@@ -430,6 +444,20 @@ const CaseStudyDetail = ({ questions }: any) => {
           <div
             className="w-1/2 h-full overflow-auto bg-white p-6"
             id="hightlight_area_topic"
+            onMouseUp={(e: any) => {
+              if (
+                e.target.tagName.charAt(0) !== 'm' &&
+                e.target.firstChild?.tagName !== 'math'
+              ) {
+                if (e) {
+                  runHighlight(
+                    () => {},
+                    allowHighLight || false,
+                    'hightlight_area_topic',
+                  )
+                }
+              }
+            }}
             onScroll={(e) => {
               const { target } = e
               // console.log(inputRef.current?.[0]?.getBoundingClientRect())
@@ -438,7 +466,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 (target as any).scrollTop + (target as any).offsetHeight >=
                 (target as any).scrollHeight
               ) {
-                handleLoadMoreTopic(pageTopic + 1)
+                handleLoadMoreTopic(pageIndex + 1)
               }
             }}
           >
@@ -446,15 +474,13 @@ const CaseStudyDetail = ({ questions }: any) => {
             {topics?.map((e: any, index: number) => {
               return (
                 <div
-                  key={e?.topicData?.question_topic?.id}
+                  key={e?.question_topic?.id}
                   ref={(el: any) => (inputRef.current[index] = el)}
                 >
                   <EditorReader
                     // extenalRef={(el: any) => (inputRef.current[index] = el)}
                     className="editor-wrap"
-                    text_editor_content={
-                      e?.topicData?.question_topic?.description
-                    }
+                    text_editor_content={e?.question_topic?.description}
                   />
                 </div>
               )
@@ -469,13 +495,30 @@ const CaseStudyDetail = ({ questions }: any) => {
                 (target as any).scrollTop + (target as any).offsetHeight >=
                 (target as any).scrollHeight
               ) {
-                handleLoadMoreQuestion()
+                dispatch(loadMoreQuestion(''))
               }
             }}
           >
-            <div className="px-6">
+            <div
+              className="px-6"
+              id="hightlight_area"
+              onMouseUp={(e: any) => {
+                if (
+                  e.target.tagName.charAt(0) !== 'm' &&
+                  e.target.firstChild?.tagName !== 'math'
+                ) {
+                  if (e) {
+                    runHighlight(
+                      () => {},
+                      allowHighLight || false,
+                      'hightlight_area',
+                    )
+                  }
+                }
+              }}
+            >
               {/* {topics.map((el: any) => { */}
-              {listQuestions.map((e: any, index: number) => {
+              {listQuestions?.map((e: any, index: number) => {
                 const question = Object.values(e)[0] as any
                 const topicId = Object.keys(e)[0] as any
                 return (
@@ -485,7 +528,6 @@ const CaseStudyDetail = ({ questions }: any) => {
                     {checkType(
                       question,
                       index,
-                      topicId,
                       question,
                       question?.qType,
                       question?.id,
@@ -501,17 +543,6 @@ const CaseStudyDetail = ({ questions }: any) => {
                   </div>
                 )
               })}
-              {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-
-              {/* ) : (
-                    <EssayQuestionPreview
-                      data={essayData?.req}
-                      question_content={data.question_content}
-                      index={essayData?.index}
-                      question_data={data}
-                    />
-                  )} */}
-              {/* <OneChoiceQuestion data={data} control={control} /> */}
             </div>
           </div>
         </div>
@@ -523,7 +554,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                 <div className="font-normal text-sm pe-6 border-r">Help</div>
               </div>
             </button>
-            <button className={`h-full `} onClick={() => {}}>
+            <button
+              className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+              onClick={() => setAllowHighLight(!allowHighLight)}
+            >
               <div className="flex items-center gap-3 ps-6 ">
                 <HighlightIcon />
                 <div className="font-normal text-sm pe-6 border-r">
@@ -566,111 +600,107 @@ const CaseStudyDetail = ({ questions }: any) => {
 export default CaseStudyDetail
 CaseStudyDetail.layout = LAYOUT.FULLSCREEN_LAYOUT
 
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
+// export async function getServerSideProps(context: any) {
+//   const { req, res, query } = context
 
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
+//   // Lấy accessToken từ cookie
+//   const accessToken = req.cookies.accessToken
 
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+//   // Kiểm tra accessToken
+//   if (!accessToken) {
+//     // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
+//     return {
+//       redirect: {
+//         destination: '/auth/login',
+//         permanent: false,
+//       },
+//     }
+//   }
 
-  try {
-    const { req } = context
+//   try {
+//     const { req } = context
 
-    // Parse cookies from the request headers
-    const cookies = parse(req.headers.cookie || '')
+//     // Parse cookies from the request headers
+//     const cookies = parse(req.headers.cookie || '')
+//     console.log(context?.query?.id);
 
-    if (!context?.query?.id) {
-      return {
-        notFound: true,
-      }
-    }
-    const topic = (await CourseTestApi.getQuestionCaseStudiesByIdServerSide(
-      context?.query?.id,
-      cookies.accessToken,
-      1,
-      5,
-    )) as any
-    return {
-      props: { questions: topic },
-    }
-  } catch (error: any) {
-    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-    if (error.response && error.response.status === 401) {
-      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-      const refreshToken = req.cookies.refreshToken
+//     if (!context?.query?.id) {
+//       return {
+//         notFound: true,
+//       }
+//     } else {
+//       const topic = (await CourseTestApi.getQuestionCaseStudiesByIdServerSide(
+//         context?.query?.id,
+//         cookies.accessToken,
+//         1,
+//         5,
+//       )) as any
+//       return {
+//         props: { questions: topic },
+//       }
+//     }
+//   } catch (error: any) {
+//     // console.log(error)
 
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
+//     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
+//     if (error.response && error.response.status === 401) {
+//       // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
+//       const refreshToken = req.cookies.refreshToken
 
-        // Lưu accessToken mới vào cookie
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
+//       try {
+//         const refreshResponse = await axios.post(
+//           `${apiURL}/auth/rotate`,
+//           {},
+//           {
+//             headers: {
+//               Authorization: `Bearer ${refreshToken}`,
+//             },
+//           },
+//         )
 
-        // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        // const questions = await CourseTestApi.getQuestionTabsById(
-        //   context?.query?.id,
-        //   refreshResponse.data.accessToken,
-        // )
-        // return {
-        //   props: { questions },
-        // }
+//         // Lưu accessToken mới vào cookie
+//         res.setHeader(
+//           'Set-Cookie',
+//           `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
+//         )
 
-        // Xử lý dữ liệu từ API
-        // const courses = newApiResponse.data?.data
-
-        // Trả về props cho trang
-        // return {
-        //   props: {
-        //     courses: courses,
-        //   },
-        // }
-      } catch (refreshError) {
-        // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-        // Chuyển hướng đến trang đăng nhập
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      }
-    } else {
-      // Xử lý lỗi khác khi sử dụng accessToken
-      if (error.response && error.response.status === 403) {
-        // Chuyển hướng đến trang đăng nhập
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      } else
-        return {
-          redirect: {
-            destination: '/404',
-            permanent: false,
-          },
-        }
-    }
-  }
-}
+//         // Tiếp tục thực hiện yêu cầu API với accessToken mới
+//         const topic = (await CourseTestApi.getQuestionCaseStudiesByIdServerSide(
+//           context?.query?.id,
+//           refreshResponse.data.accessToken,
+//           1,
+//           5,
+//         )) as any
+//         return {
+//           props: { questions: topic },
+//         }
+//       } catch (refreshError) {
+//         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
+//         // Chuyển hướng đến trang đăng nhập
+//         return {
+//           redirect: {
+//             destination: '/auth/login',
+//             permanent: false,
+//           },
+//         }
+//       }
+//     } else {
+//       // Xử lý lỗi khác khi sử dụng accessToken
+//       if (error.response && error.response.status === 403) {
+//         // Chuyển hướng đến trang đăng nhập
+//         return {
+//           redirect: {
+//             destination: '/auth/login',
+//             permanent: false,
+//           },
+//         }
+//       } else
+//         return {
+//           redirect: {
+//             destination: '/404',
+//             permanent: false,
+//           },
+//         }
+//     }
+//   }
+// }

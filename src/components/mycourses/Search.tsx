@@ -25,7 +25,9 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     // Use useEffect to set up a timer to make the API call after 3 seconds
     if (query.length > 2) {
       timerId = setTimeout(() => {
-        router.push(`/courses?name=${encodeURIComponent(query) ?? ''}${queryString}`)
+        router.push(
+          `/courses?name=${encodeURIComponent(query) ?? ''}${queryString}`,
+        )
       }, 2000)
     }
 
@@ -36,7 +38,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
   }, [query])
 
   useEffect(() => {
-    if(router.pathname === '/courses'){
+    if (router.pathname === '/courses') {
       router.push(`/courses`)
     }
   }, [])
@@ -45,9 +47,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     e.preventDefault()
 
     // Redirect to the search results page with the query as a query parameter
-    router.push(
-      `courses?${queryString}`,
-    )
+    router.push(`courses?${queryString}`)
   }
 
   return (

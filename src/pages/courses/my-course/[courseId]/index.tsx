@@ -25,7 +25,7 @@ const fetchData = async (
     {
       headers: {
         Authorization: `Bearer ${token}`,
-      }
+      },
     },
   )
   return apiResponse?.data?.data
@@ -39,7 +39,10 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const queryString = buildQueryString({user_section_learning_status: router.query.user_section_learning_status||''});
+  const queryString = buildQueryString({
+    user_section_learning_status:
+      router.query.user_section_learning_status || '',
+  })
 
   const loadMore = async () => {
     if (loading) return
@@ -70,7 +73,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [loading,router.query.user_section_learning_status])
+  }, [loading, router.query.user_section_learning_status])
 
   useEffect(() => {
     // Update data when courses?.data?.course_sections_with_progress changes
@@ -108,7 +111,9 @@ export default CourseDetail
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
   const accessToken = req.cookies.accessToken
-  const queryString = buildQueryString({user_section_learning_status: query.user_section_learning_status||''});
+  const queryString = buildQueryString({
+    user_section_learning_status: query.user_section_learning_status || '',
+  })
 
   try {
     const courses = await fetchData(
