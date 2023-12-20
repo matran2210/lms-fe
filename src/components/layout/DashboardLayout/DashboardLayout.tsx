@@ -1,14 +1,16 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import Sidebar from '../Sidebar'
 
 type DashboardLayoutProps = {
   mode: 'student' | 'teacher'
   children: React.ReactNode
+  setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
 export default function DashboardLayout({
   mode,
   children,
+  setOpenResource
 }: DashboardLayoutProps) {
   const [isOpened, setOpened] = useState(false)
   const toggleDrawer = () => {
@@ -26,6 +28,7 @@ export default function DashboardLayout({
             ? 'bg-white shadow-sidebar w-20'
             : 'bg-bw-4 border-r border-dark w-[82px]'
         }`}
+        setOpenResource={setOpenResource}
       />
       <div className="w-full min-h-screen">
         {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}
