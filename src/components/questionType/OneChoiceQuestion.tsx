@@ -92,4 +92,4 @@ const OneChoiceQuestion = ({
     </div>
   )
 }
-export default memo(OneChoiceQuestion)
+export default OneChoiceQuestion

@@ -1,10 +1,9 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
-import React, {
+import {
   ForwardedRef,
   forwardRef,
-  useCallback,
   useEffect,
   useImperativeHandle,
   useState,
@@ -12,7 +11,6 @@ import React, {
 
 interface IProps {
   data: any
-  topicId: string
   action?: any
   handleSaveHighLight?: any
   highlighted?: any
@@ -38,7 +36,6 @@ const MatchingQuestion = forwardRef(
       allowHighLight,
       defaultAnswer,
       done,
-      topicId,
       extenalRef,
     }: IProps,
     ref: ForwardedRef<any>,

@@ -43,7 +43,6 @@ import { apiURL } from 'src/redux/services/httpService'
 const TestDetail = ({ questions }: any) => {
   const checkType = (
     data: any,
-    topicId: string,
     type: string,
     currentTabID: string,
     defaultValue: any,
@@ -111,7 +110,6 @@ const TestDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             done={done}
-            topicId={topicId}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -789,7 +787,6 @@ const TestDetail = ({ questions }: any) => {
               {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
               {checkType(
                 currentTabContent?.data,
-                currentTabContent?.topicDescription?.id,
                 currentTabContent?.data?.qType,
                 currentTabContent?.id,
                 currentTabContent?.answer,
@@ -843,7 +840,6 @@ const TestDetail = ({ questions }: any) => {
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
           {checkType(
             currentTabContent?.data,
-            currentTabContent?.topicDescription?.id,
             currentTabContent?.data?.qType,
             currentTabContent?.id,
             currentTabContent?.answer,
@@ -1165,23 +1161,14 @@ export async function getServerSideProps(context: any) {
         )
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        // const questions = await CourseTestApi.getQuestionTabsById(
-        //   context?.query?.id,
-        //   refreshResponse.data.accessToken,
-        // )
-        // return {
-        //   props: { questions },
-        // }
+        const questions = (await CourseTestApi.getQuestionTabsById(
+          context?.query?.id,
+          refreshResponse.data.accessToken,
+        )) as any
 
-        // Xử lý dữ liệu từ API
-        // const courses = newApiResponse.data?.data
-
-        // Trả về props cho trang
-        // return {
-        //   props: {
-        //     courses: courses,
-        //   },
-        // }
+        return {
+          props: { questions },
+        }
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập
