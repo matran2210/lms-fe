@@ -32,7 +32,7 @@ const useDynamicLoading = (getData: (page: number) => void, pageSize: number) =>
       if(router.query.courseId || router.query.id) {
         loadMoreOptions();
       }
-    }, [router.query.courseId, router.query.id]);
+    }, []);
   
     return { isLoading, handleMenuScrollToBottom , setPage};
   };
