@@ -41,7 +41,7 @@ const SappDrawer = ({
     <>
       {isOpen && (
         <div
-          className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50"
+          className="fixed top-0 left-0 w-full h-full bg-bw-5 bg-opacity-50"
           onClick={handleMaskClick}
         ></div>
       )}
@@ -63,7 +63,7 @@ const SappDrawer = ({
             />
           </div>
         </div>
-        <div className="flex mt-6 mx-8 overflow-y-auto h-[80vh]">
+        <div className="mt-6 mx-8 overflow-y-auto h-[80vh]" id="sapp-drawer">
           {children}
         </div>
         {footer && (
