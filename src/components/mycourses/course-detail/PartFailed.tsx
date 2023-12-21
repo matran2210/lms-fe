@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { ICourseSection } from 'src/type/courses'
+import TestModal from 'src/pages/courses/test'
 
 const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
   const formattedTime = formatTime(coursePart?.quiz?.limit_count || 0)
-
+  const [open, setOpen] = useState(false)
   return (
     <>
       <div className={`name-part text-2xl font-semibold`}>
@@ -32,9 +33,16 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
             full={false}
             size={'small'}
             className="hover:bg-primary hover:text-white ml-auto"
+            onClick={() => setOpen(true)}
           />
         </div>
       </div>
+      <TestModal
+        open={open}
+        setOpen={setOpen}
+        title={coursePart?.name}
+        data={coursePart}
+      />
     </>
   )
 }

@@ -7,6 +7,7 @@ export const url = {
   submitQuestion: '/quiz',
   getResource: '/resource',
   getQuizAttempts: '/quiz-attempts',
+  createQuizAttemp: '/quiz/quiz-attempt',
 }
 
 export default url
