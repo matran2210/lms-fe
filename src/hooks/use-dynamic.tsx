@@ -1,6 +1,8 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const useDynamicLoading = (getData: (page: number) => void, pageSize: number) => {
+    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState<number>(pageSize);
   
@@ -27,8 +29,10 @@ const useDynamicLoading = (getData: (page: number) => void, pageSize: number) =>
   
     useEffect(() => {
       // Load initial options when the component mounts
-      loadMoreOptions();
-    }, []);
+      if(router.query.courseId || router.query.id) {
+        loadMoreOptions();
+      }
+    }, [router.query.courseId, router.query.id]);
   
     return { isLoading, handleMenuScrollToBottom , setPage};
   };

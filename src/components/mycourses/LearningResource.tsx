@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import CourseAPI from 'src/pages/api/courses'
-import { IResourceDetail, ISection, ISectionDetail } from 'src/type/courses'
+import { IResourceDetail, ISection } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -55,6 +55,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     setSelectedUnit(null)
     setSelectedActivity(null)
     setSelectedSection(null)
+    const pageStateVariables = [ setPageSection, setPageSubsection, setPageUnit, setPageActivity,];
+    pageStateVariables.forEach((setPageVariable) => {
+      setPageVariable(DEFAULT_PAGESIZE * 2);
+    });
   }
 
   const [sections, setSections] = useState<ISection[]>([])
@@ -167,7 +171,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     const handleScroll = () => {
       if (
         containerDiv &&
-        containerDiv.clientHeight + containerDiv.scrollTop === containerDiv.scrollHeight && router.query.courseId
+        containerDiv.clientHeight + containerDiv.scrollTop === containerDiv.scrollHeight && (router.query.courseId || router.query.id)
       ) {
         fetchData(params);
       }
@@ -191,16 +195,20 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToSections,
+    setPage: setPageSection
   } = useDynamicLoading(getCourseSections, DEFAULT_PAGESIZE);
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToSubsections,
+    setPage: setPageSubsection
   } = useDynamicLoading(getCourseSubsections, DEFAULT_PAGESIZE);
   const {
     handleMenuScrollToBottom: handleMenuScrollToUnit,
+    setPage: setPageUnit
   } = useDynamicLoading(getCourseUnit, DEFAULT_PAGESIZE);
   const {
     handleMenuScrollToBottom: handleMenuScrollToActivity,
+    setPage: setPageActivity
   } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE);
 
   return (
