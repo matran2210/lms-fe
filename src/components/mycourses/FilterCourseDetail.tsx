@@ -12,18 +12,14 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
   let apiUrl = `/courses/my-course/${router.query.courseId}`
 
   const { control, watch } = useForm()
+  const userSectionLearningStatus = watch('user_section_learning_status')?.value
 
   useEffect(() => {
-    const userSectionLearningStatus = watch('user_section_learning_status')
-      ?.value
-
-    if (userSectionLearningStatus !== undefined) {
-      router.push(
-        userSectionLearningStatus !== ''
-          ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
-          : apiUrl,
-      )
-    }
+    router.push(
+      userSectionLearningStatus !== undefined
+        ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
+        : apiUrl,
+    )
   }, [watch('user_section_learning_status')])
 
   return (

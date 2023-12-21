@@ -2,7 +2,7 @@ import blankAvatar from '@assets/images/blank_avatar.webp'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { MenuItem as MenuItemType } from '../../../constants/menu-items'
@@ -12,11 +12,13 @@ import MenuItemsList from '../MenuItemsList'
 type MenuItemProps = {
   menuItem: MenuItemType
   mode: string
+  setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
 export default function MenuItem({
   mode,
   menuItem: { name, icon: Icon, url, type, subItems },
+  setOpenResource
 }: MenuItemProps) {
   const [isExpanded, toggleExpanded] = useState(false)
   const { user } = useAppSelector(userReducer)
@@ -27,6 +29,13 @@ export default function MenuItem({
   const onClick = () => {
     toggleExpanded((prev) => !prev)
   }
+
+  const handleOpenResource = () => {
+    setOpenResource(true)
+    document.body.style.overflow = 'hidden';
+  }
+
+  const handleActiveResource = (name === 'Resource' && (router?.query?.courseId || router.query.id)) ? handleOpenResource : () => {};
 
   return (
     <>
@@ -39,7 +48,7 @@ export default function MenuItem({
       >
         <div className="sidebar-item flex items-center justify-center group">
           <Link href={url} passHref>
-            <div className="flex items-center">
+            <div className="flex items-center" onClick={handleActiveResource}>
               {Icon === 'avatar' ? (
                 <div className="w-10 h-10">
                   <Image
@@ -90,7 +99,7 @@ export default function MenuItem({
               isExpanded && type === 'level-2' ? 'active' : ''
             }`}
           >
-            <MenuItemsList options={subItems} mode={mode} />
+            <MenuItemsList options={subItems} mode={mode} setOpenResource={setOpenResource} />
           </div>
         ) : null}
       </div>
