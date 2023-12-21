@@ -110,6 +110,7 @@ const TestDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             done={done}
+            corrects={corrects?.corrects}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -343,6 +344,12 @@ const TestDetail = ({ questions }: any) => {
       currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
     ) {
       corrects = { corrects: [...res.data[0].answers] }
+    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+      const correct = [] as any
+      res.data[0].question_matchings.map((e: any) => {
+        correct.push({ answer_id: e.answer.id, question_id: e.id })
+      })
+      corrects = { corrects: [...res.data[0].question_matchings] }
     }
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
@@ -597,12 +604,21 @@ const TestDetail = ({ questions }: any) => {
     })
     return
   }
-  const handleClearSelection = (data: any) => {
-    if (
-      data.qType === QUESTION_TYPES.DRAG_DROP ||
-      data.qType === QUESTION_TYPES.MATCHING
-    ) {
-      ref.current?.handleReset()
+  const handleClearSelection = (currentTabContent: any) => {
+    const data = currentTabContent.data
+    if (!currentTabContent.done) {
+      setTabs((prev: any) => {
+        const arr = [...prev]
+        const currentIndex = arr.findIndex((e) => e.id === data.id)
+        arr[currentIndex] = { ...arr[currentIndex], answer: undefined }
+        return arr
+      })
+      if (
+        data.qType === QUESTION_TYPES.DRAG_DROP ||
+        data.qType === QUESTION_TYPES.MATCHING
+      ) {
+        ref.current?.handleReset()
+      }
     }
   }
   const handleSaveHighLight = (e: any) => {
@@ -1079,7 +1095,7 @@ const TestDetail = ({ questions }: any) => {
           </button>
           <button
             className="flex items-center gap-3 border border-gray-1 justify-center p-3"
-            onClick={() => handleClearSelection(currentTabContent?.data)}
+            onClick={() => handleClearSelection(currentTabContent)}
           >
             <div className="font-normal text-sm">Clear Selection</div>
           </button>
