@@ -44,16 +44,17 @@ const NotifyList = ({
                 className="text-primary absolute left-2 top-1/2"
               />
             )}
-
-            <Image
-              src={notifyItem?.avatar?.ORIGIN ?? blankAvatar}
-              alt="avatar"
-              className="rounded-full"
-              width={56}
-              height={56}
-              layout="fixed"
-              objectFit={'cover'}
-            />
+            <div className="shrink-0">
+              <Image
+                src={notifyItem?.avatar?.ORIGIN ?? blankAvatar}
+                alt="avatar"
+                className="rounded-full"
+                width={56}
+                height={56}
+                layout="fixed"
+                objectFit={'cover'}
+              />
+            </div>
             <div className="block">
               <h4
                 className="text-base text-bw-1 mb-1"
