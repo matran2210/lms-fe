@@ -210,13 +210,13 @@ export async function getServerSideProps(context: any) {
     // Parse cookies from the request headers
     const cookies = parse(req.headers.cookie || '')
 
-    if (!context?.query?.id) {
+    if (!context?.query?.activityId) {
       return {
         notFound: true,
       }
     }
     const activity = await CourseActivityApi.getActivityById(
-      context?.query?.id,
+      context?.query?.activityId,
       cookies.accessToken,
     )
     return {
