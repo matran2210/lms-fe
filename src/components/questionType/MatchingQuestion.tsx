@@ -20,9 +20,11 @@ interface IProps {
   done?: boolean
   extenalRef?: any
   index?: number
+  corrects?: any
 }
 type IProp = {
   value: string
+  className?: string
 }
 
 const MatchingQuestion = forwardRef(
@@ -37,11 +39,13 @@ const MatchingQuestion = forwardRef(
       defaultAnswer,
       done,
       extenalRef,
+      corrects,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
     const [defaultValue, setDefaultValue] = useState<any>()
     const [answers, setAnswers] = useState<any>()
+    const [correctAnswer, setCorrectAnswer] = useState<any>()
     const storageId = uniqueId('storage')
 
     function allowDrop(ev: any) {
@@ -115,8 +119,11 @@ const MatchingQuestion = forwardRef(
         // action()
       },
     }))
-    const QuestionCard = ({ value }: IProp) => {
-      return <div className="sapp-arrowed-container">{value}</div>
+    const QuestionCard = ({
+      value,
+      className = 'sapp-arrowed-container',
+    }: IProp) => {
+      return <div className={`${className}`}>{value}</div>
     }
     useEffect(() => {
       if (data) {
@@ -126,6 +133,7 @@ const MatchingQuestion = forwardRef(
 
     useEffect(() => {
       let obj = {} as any
+      let objCorrect = {} as any
       let arr = []
       for (let quest of data?.question_matchings) {
         arr.push(quest.answer)
@@ -138,6 +146,15 @@ const MatchingQuestion = forwardRef(
           )
         }
       }
+      if (corrects) {
+        for (let correct of corrects) {
+          if (defaultAnswer) {
+            objCorrect[correct.id] = correct.answer
+          }
+        }
+        setCorrectAnswer(objCorrect)
+      }
+
       if (defaultAnswer) {
         for (let e of defaultAnswer) {
           arr = arr.filter((el) => el.id !== e.answer_id)
@@ -166,62 +183,150 @@ const MatchingQuestion = forwardRef(
             text_editor_content={data?.question_content}
           />
         </div>
-        {/* {!done && ( */}
-        <div className="flex flex-col gap-y-5">
-          {data?.question_matchings.map((e: any) => {
-            return (
-              <div
-                className="flex flex-wrap gap-x-8 justify-between"
-                key={e?.id}
-              >
-                <QuestionCard value={e?.content} />
-                <div
-                  id={e?.id}
-                  className="flex-1 sapp-match-result dropable"
-                  onDrop={() => drop(event, data.id)}
-                  onDragOver={() => allowDrop(event)}
-                >
-                  {defaultValue?.[e?.id]?.id && (
-                    <div
-                      // className="w-fit"
-                      className="sapp-notched-container min-w-132px"
-                      id={defaultValue[e?.id]?.answer.id}
-                      draggable="true"
-                      onDragStart={drag}
-                      onDrop={() => {}}
-                      onDragOver={() => {}}
-                    >
-                      {defaultValue[e?.id].answer?.answer}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )
-          })}
-          <div
-            className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable ${storageId}`}
-            onDrop={(ev) => handleStorage(ev, data?.id)}
-            onDragOver={allowDropStorage}
-            id="storage"
-          >
-            {answers?.map((answer: any) => {
+        {!corrects ? (
+          <div className="flex flex-col gap-y-5">
+            {data?.question_matchings.map((e: any) => {
               return (
                 <div
-                  // className="w-fit"
-                  key={answer?.id}
-                  className="sapp-notched-container min-w-132px"
-                  id={answer?.id}
-                  draggable="true"
-                  onDragStart={drag}
-                  onDrop={() => {}}
-                  onDragOver={() => {}}
+                  className="flex flex-wrap gap-x-8 justify-between"
+                  key={e?.id}
                 >
-                  {answer?.answer}
+                  <QuestionCard value={e?.content} />
+                  <div
+                    id={e?.id}
+                    className="flex-1 sapp-match-result dropable"
+                    onDrop={() => drop(event, data.id)}
+                    onDragOver={() => allowDrop(event)}
+                  >
+                    {defaultValue?.[e?.id]?.id && (
+                      <div
+                        // className="w-fit"
+                        className="sapp-notched-container min-w-132px"
+                        id={defaultValue[e?.id]?.answer.id}
+                        draggable="true"
+                        onDragStart={drag}
+                        onDrop={() => {}}
+                        onDragOver={() => {}}
+                      >
+                        {defaultValue[e?.id].answer?.answer}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )
             })}
+            <div
+              className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable ${storageId}`}
+              onDrop={(ev) => handleStorage(ev, data?.id)}
+              onDragOver={allowDropStorage}
+              id="storage"
+            >
+              {answers?.map((answer: any) => {
+                return (
+                  <div
+                    // className="w-fit"
+                    key={answer?.id}
+                    className="sapp-notched-container min-w-132px"
+                    id={answer?.id}
+                    draggable="true"
+                    onDragStart={drag}
+                    onDrop={() => {}}
+                    onDragOver={() => {}}
+                  >
+                    {answer?.answer}
+                  </div>
+                )
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="flex flex-col gap-y-5">
+              {data?.question_matchings.map((e: any, index: number) => {
+                return (
+                  <div
+                    className="flex flex-wrap gap-x-8 justify-between"
+                    key={index}
+                  >
+                    {defaultValue?.[e?.id]?.answer?.id ===
+                    correctAnswer?.[e?.id]?.id ? (
+                      <>
+                        <QuestionCard
+                          value={e?.content}
+                          className="sapp-arrowed-container "
+                        />
+                        <div
+                          // id={e?.id}
+                          className="flex-1 sapp-match-result"
+                        >
+                          {defaultValue?.[e?.id]?.id && (
+                            <div
+                              // className="w-fit"
+                              className="sapp-notched-container min-w-132px"
+                              // id={defaultValue[e?.id]?.answer.id}
+                            >
+                              {defaultValue[e?.id]?.answer?.answer}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <QuestionCard
+                          value={e?.content}
+                          className="sapp-arrowed-container-incorrects text-state-error"
+                        />
+                        <div
+                          // id={e?.id}
+                          className="flex-1 sapp-match-result"
+                        >
+                          {defaultValue?.[e?.id]?.id && (
+                            <div
+                              // className="w-fit"
+                              className="sapp-notched-container-incorrects min-w-132px text-state-error"
+                              // id={defaultValue[e?.id]?.answer.id}
+                            >
+                              {defaultValue[e?.id].answer?.answer}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+            <div className="flex flex-col gap-y-5 mt-28">
+              <div className="text-bw-1 font-semibold text-2xl">
+                Correct Answer
+              </div>
+
+              {data?.question_matchings.map((e: any, index: number) => {
+                return (
+                  <div
+                    className="flex flex-wrap gap-x-8 justify-between"
+                    key={index}
+                  >
+                    <QuestionCard
+                      value={e?.content}
+                      className="sapp-arrowed-container-corrects text-state-success"
+                    />
+                    <div className="flex-1 sapp-match-result">
+                      {correctAnswer?.[e?.id]?.id && (
+                        <div
+                          // className="w-fit"
+                          className="sapp-notched-container-corrects min-w-132px text-state-success"
+                        >
+                          {correctAnswer[e?.id].answer}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </>
+        )}
       </div>
     )
   },
