@@ -12,7 +12,7 @@ export default function DashboardLayout({
   mode,
   children,
   setOpenResource,
-  openDrawer
+  openDrawer,
 }: DashboardLayoutProps) {
   const [isOpened, setOpened] = useState(false)
   const toggleDrawer = () => {
@@ -25,7 +25,9 @@ export default function DashboardLayout({
         isOpened={isOpened}
         mode={mode}
         toggleDrawer={toggleDrawer}
-        className={`fixed top-0 md:left-0 h-screen transition-all duration-200 ${openDrawer ? 'opacity-5' : ''} ${
+        className={`fixed top-0 md:left-0 h-screen transition-all duration-200 ${
+          openDrawer ? 'opacity-5' : ''
+        } ${
           mode === 'student'
             ? 'bg-white shadow-sidebar w-20'
             : 'bg-bw-4 border-r border-dark w-[82px]'

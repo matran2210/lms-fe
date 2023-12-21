@@ -347,7 +347,11 @@ export default function Icon({ type, className }: IconsPros) {
             fill="#DCDDDD"
             className="group-resource"
           />
-          <path d="M7.5 11.25H1.5V12.75H7.5V11.25Z" fill="#DCDDDD" className="group-resource"/>
+          <path
+            d="M7.5 11.25H1.5V12.75H7.5V11.25Z"
+            fill="#DCDDDD"
+            className="group-resource"
+          />
         </svg>
       )}
     </>

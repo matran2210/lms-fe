@@ -149,6 +149,7 @@ export const moveAndResizeElement = (
   element.addEventListener(
     'mousedown',
     function (e: MouseEvent) {
+      document.addEventListener('mousemove', handleMoveMouse, true)
       isDown = true
       offset = [element.offsetLeft - e.clientX, element.offsetTop - e.clientY]
       if ((e.target as HTMLElement).classList.contains('resizer')) {
@@ -174,6 +175,7 @@ export const moveAndResizeElement = (
   element.addEventListener(
     'mouseup',
     function () {
+      document.removeEventListener('mousemove', handleMoveMouse, true)
       isDown = false
       currentResizer = null
       if (element.classList.contains('enable')) {
@@ -187,5 +189,4 @@ export const moveAndResizeElement = (
     },
     true,
   )
-  element.addEventListener('mousemove', (e) => handleMoveMouse(e), true)
 }

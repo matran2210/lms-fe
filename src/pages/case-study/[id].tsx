@@ -172,14 +172,17 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const router = useRouter()
   const inputRef = useRef<any>([])
+  const questionRef = useRef<any>([])
   const valueRef = useRef<any>([])
+  const containerRef = useRef<any>(null)
   const { control, handleSubmit, getValues, setValue } = useForm()
   const { control: controlScratch } = useForm()
-  const [topicItems, setTopicItems] = useState<any>([])
+  const [topicItems, setTopicItems] = useState<any>('')
+  const [topicShouldView, setTopicShouldView] = useState<any>('')
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
-
+  const [isInViewport, setIsInViewport] = useState([]) as any
   const dispatch = useAppDispatch()
   const {
     topics,
@@ -434,6 +437,57 @@ const CaseStudyDetail = ({ questions }: any) => {
       return arr
     })
   }
+  const checkPositionTopic = () => {
+    for (let i in inputRef.current) {
+      if (
+        inputRef.current[i]?.getBoundingClientRect()?.top >= 96 &&
+        inputRef.current[i]?.getBoundingClientRect()?.top <=
+          containerRef.current.clientHeight - 100
+      ) {
+        for (let e of questionRef.current) {
+          if (
+            e.getAttribute('topic-key') ===
+            inputRef.current[i].getAttribute('data-key')
+          ) {
+            e.scrollIntoView({
+              top: 0,
+              // block: "nearest",
+              // inline: "center",
+              behavior: 'auto',
+              // alignToTop: true
+            })
+            break
+          }
+        }
+        break
+      }
+    }
+  }
+  const checkPositionQuestion = () => {
+    for (let i in questionRef.current) {
+      if (
+        questionRef.current[i]?.getBoundingClientRect()?.top >= 96 &&
+        questionRef.current[i]?.getBoundingClientRect()?.top <= 200
+      ) {
+        for (let e of inputRef.current) {
+          if (
+            e.getAttribute('data-key') ===
+            questionRef.current[i].getAttribute('topic-key')
+          ) {
+            e.scrollIntoView({
+              top: 0,
+              // block: "nearest",
+              // inline: "center",
+              behavior: 'auto',
+              // alignToTop: true
+            })
+            break
+          }
+        }
+        break
+      }
+    }
+  }
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {loading && (
@@ -441,8 +495,12 @@ const CaseStudyDetail = ({ questions }: any) => {
           Loading
         </div>
       )}
+      {/* <div
+        className={`absolute w-full bg-black h-[200px]`}
+        style={{ top: 96 }}
+      ></div> */}
       {/* Header */}
-      <div className="h-full">
+      <div className="h-full" ref={containerRef}>
         <div className="flex justify-between py-4 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">Name</div>
           <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
@@ -492,7 +550,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             }}
             onScroll={(e) => {
               const { target } = e
-              // console.log(inputRef.current?.[0]?.getBoundingClientRect())
+              checkPositionTopic()
 
               if (
                 (target as any).scrollTop + (target as any).offsetHeight >=
@@ -504,10 +562,14 @@ const CaseStudyDetail = ({ questions }: any) => {
           >
             {/* {topics} */}
             {topics?.map((e: any, index: number) => {
+              // if(index === 0){
+
               return (
                 <div
                   key={e?.question_topic?.id}
+                  data-key={e?.question_topic?.id}
                   ref={(el: any) => (inputRef.current[index] = el)}
+                  className="min-h-[calc(100vh-168px)]"
                 >
                   <EditorReader
                     // extenalRef={(el: any) => (inputRef.current[index] = el)}
@@ -516,6 +578,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   />
                 </div>
               )
+              // }
             })}
           </div>
 
@@ -529,6 +592,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               ) {
                 dispatch(loadMoreQuestion(''))
               }
+              checkPositionQuestion()
             }}
           >
             <div
@@ -554,7 +618,11 @@ const CaseStudyDetail = ({ questions }: any) => {
                 const question = Object.values(e)[0] as any
                 const topicId = Object.keys(e)[0] as any
                 return (
-                  <div key={question?.id + index}>
+                  <div
+                    key={question?.id + index}
+                    topic-key={topicId}
+                    ref={(el: any) => (questionRef.current[index] = el)}
+                  >
                     <div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>
 
                     {checkType(

@@ -35,7 +35,7 @@ const CourseAPI = {
   },
   getCourseSectionList: async (
     id: string | string[] | undefined,
-    page_size: number
+    page_size: number,
   ): Promise<any> => {
     const response = await httpService.GET<any, any>({
       uri: `course-sections/short/list?page_index=1&page_size=${page_size}&courseId=${id}&type=PART`,
@@ -43,13 +43,14 @@ const CourseAPI = {
     return response
   },
   getCourseSubsectionList: async (
-
     page_size: number,
     type: 'CHAPTER' | 'UNIT' | 'ACTIVITY',
     parentId?: string,
   ): Promise<any> => {
     const response = await httpService.GET<any, any>({
-      uri: `/course-sections/short/list?page_index=1&page_size=${page_size || 10}&type=${type}&parentId=${parentId ?? ''}`,
+      uri: `/course-sections/short/list?page_index=1&page_size=${
+        page_size || 10
+      }&type=${type}&parentId=${parentId ?? ''}`,
     })
     return response
   },

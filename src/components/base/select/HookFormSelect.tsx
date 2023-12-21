@@ -25,7 +25,7 @@ const HookFormSelect = ({
   placeholder,
   value,
   isDisabled,
-  onMenuScrollToBottom
+  onMenuScrollToBottom,
 }: IProps) => {
   return (
     <div className="select-options">

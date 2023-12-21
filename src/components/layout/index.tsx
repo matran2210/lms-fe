@@ -16,7 +16,13 @@ export default function Layout(props: LayoutProps): ReactElement {
   const { children, setOpenResource, openDrawer } = props
   return (
     <>
-      <DashboardLayout mode={selectMode} setOpenResource={setOpenResource} openDrawer={openDrawer}>{children}</DashboardLayout>
+      <DashboardLayout
+        mode={selectMode}
+        setOpenResource={setOpenResource}
+        openDrawer={openDrawer}
+      >
+        {children}
+      </DashboardLayout>
     </>
   )
 }
