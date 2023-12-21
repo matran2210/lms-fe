@@ -95,11 +95,13 @@ export const buildQueryString = (params: Object) => {
 }
 
 export const bytesToKilobyte = (bytes: number) => {
-  return `${(bytes / 1024).toFixed(2)}Kb`; // 1 kilobyte = 1024 bytes
+  return `${(bytes / 1024).toFixed(2)}Kb` // 1 kilobyte = 1024 bytes
 }
 
 export const cleanParamsAPI = (params: Object) => {
   return Object.fromEntries(
-    Object.entries(params).filter(([_, value]) => value !== null && value !== '')
+    Object.entries(params).filter(
+      ([_, value]) => value !== null && value !== '',
+    ),
   )
 }

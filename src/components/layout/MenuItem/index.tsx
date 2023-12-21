@@ -18,7 +18,7 @@ type MenuItemProps = {
 export default function MenuItem({
   mode,
   menuItem: { name, icon: Icon, url, type, subItems },
-  setOpenResource
+  setOpenResource,
 }: MenuItemProps) {
   const [isExpanded, toggleExpanded] = useState(false)
   const { user } = useAppSelector(userReducer)
@@ -32,10 +32,13 @@ export default function MenuItem({
 
   const handleOpenResource = () => {
     setOpenResource(true)
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'
   }
 
-  const handleActiveResource = (name === 'Resource' && (router?.query?.courseId || router.query.id)) ? handleOpenResource : () => {};
+  const handleActiveResource =
+    name === 'Resource' && (router?.query?.courseId || router.query.id)
+      ? handleOpenResource
+      : () => {}
 
   return (
     <>
@@ -99,7 +102,11 @@ export default function MenuItem({
               isExpanded && type === 'level-2' ? 'active' : ''
             }`}
           >
-            <MenuItemsList options={subItems} mode={mode} setOpenResource={setOpenResource} />
+            <MenuItemsList
+              options={subItems}
+              mode={mode}
+              setOpenResource={setOpenResource}
+            />
           </div>
         ) : null}
       </div>

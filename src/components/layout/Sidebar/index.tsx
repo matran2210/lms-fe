@@ -21,7 +21,7 @@ export default function Sidebar({
   className,
   toggleDrawer,
   mode,
-  setOpenResource
+  setOpenResource,
 }: SidebarProps) {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)

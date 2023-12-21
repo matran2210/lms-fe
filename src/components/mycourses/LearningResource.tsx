@@ -55,17 +55,25 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     setSelectedUnit(null)
     setSelectedActivity(null)
     setSelectedSection(null)
-    const pageStateVariables = [ setPageSection, setPageSubsection, setPageUnit, setPageActivity,];
+    const pageStateVariables = [
+      setPageSection,
+      setPageSubsection,
+      setPageUnit,
+      setPageActivity,
+    ]
     pageStateVariables.forEach((setPageVariable) => {
-      setPageVariable(DEFAULT_PAGESIZE * 2);
-    });
+      setPageVariable(DEFAULT_PAGESIZE * 2)
+    })
   }
 
   const [sections, setSections] = useState<ISection[]>([])
 
   async function getCourseSections(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSectionList(router.query.courseId || router.query.id, page_size || DEFAULT_PAGESIZE)
+      const res = await CourseAPI.getCourseSectionList(
+        router.query.courseId || router.query.id,
+        page_size || DEFAULT_PAGESIZE,
+      )
       setSections(res?.data?.sections)
       setSelectedSubsection(null)
       setSelectedUnit(null)
@@ -74,7 +82,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    if((router.query.courseId || router.query.id) && open){
+    if ((router.query.courseId || router.query.id) && open) {
       getCourseSections(DEFAULT_PAGESIZE)
     }
   }, [open])
@@ -95,7 +103,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    if(selectedSection?.value !== '') {
+    if (selectedSection?.value !== '') {
       getCourseSubsections(DEFAULT_PAGESIZE)
     }
   }, [selectedSection])
@@ -142,74 +150,90 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       selectedSubsection?.value ||
       selectedSection?.value ||
       '',
-  });
+  })
 
   useEffect(() => {
     if (open && (router.query.courseId || router.query.id)) {
-      CourseAPI.getCourseResource(router.query.courseId || router.query.id, DEFAULT_PAGESIZE, params).then((res) =>
-        setResources(res?.data),
-      )
+      CourseAPI.getCourseResource(
+        router.query.courseId || router.query.id,
+        DEFAULT_PAGESIZE,
+        params,
+      ).then((res) => setResources(res?.data))
     }
-  }, [open, selectedSection?.value, selectedSubsection?.value, selectedUnit?.value, selectedActivity?.value])
+  }, [
+    open,
+    selectedSection?.value,
+    selectedSubsection?.value,
+    selectedUnit?.value,
+    selectedActivity?.value,
+  ])
 
-  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE);
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
 
   const fetchData = async (params?: Object) => {
     try {
-      const res = await CourseAPI.getCourseResource(router.query.courseId || router.query.id, pageIndex, params);
-      setResources(res?.data);
-      setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE);
+      const res = await CourseAPI.getCourseResource(
+        router.query.courseId || router.query.id,
+        pageIndex,
+        params,
+      )
+      setResources(res?.data)
+      setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } catch (error) {
       // Handle error if needed
     }
-  };
-  
+  }
+
   // Attach a scroll event listener to fetch more data when scrolling to the bottom
   useEffect(() => {
-    const containerDiv:any = document.getElementById('sapp-drawer'); // Replace 'your-container-id' with the actual ID of your container div
-  
+    const containerDiv: any = document.getElementById('sapp-drawer') // Replace 'your-container-id' with the actual ID of your container div
+
     const handleScroll = () => {
       if (
         containerDiv &&
-        containerDiv.clientHeight + containerDiv.scrollTop === containerDiv.scrollHeight && (router.query.courseId || router.query.id)
+        containerDiv.clientHeight + containerDiv.scrollTop ===
+          containerDiv.scrollHeight &&
+        (router.query.courseId || router.query.id)
       ) {
-        fetchData(params);
+        fetchData(params)
       }
-    };
-  
-    containerDiv?.addEventListener('scroll', handleScroll);
-  
-    return () => containerDiv?.removeEventListener('scroll', handleScroll);
-  }, [pageIndex]);
+    }
 
-  const DEFAULT_SELECT = [{label: 'All', value: ''}]
+    containerDiv?.addEventListener('scroll', handleScroll)
+
+    return () => containerDiv?.removeEventListener('scroll', handleScroll)
+  }, [pageIndex])
+
+  const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
   const download = async (name: string, file_key: string) => {
-    await CourseAPI.downloadResource({files: [
-    {
-      name: name,
-      file_key: file_key
-    }
-  ]})
+    await CourseAPI.downloadResource({
+      files: [
+        {
+          name: name,
+          file_key: file_key,
+        },
+      ],
+    })
   }
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToSections,
-    setPage: setPageSection
-  } = useDynamicLoading(getCourseSections, DEFAULT_PAGESIZE);
+    setPage: setPageSection,
+  } = useDynamicLoading(getCourseSections, DEFAULT_PAGESIZE)
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToSubsections,
-    setPage: setPageSubsection
-  } = useDynamicLoading(getCourseSubsections, DEFAULT_PAGESIZE);
+    setPage: setPageSubsection,
+  } = useDynamicLoading(getCourseSubsections, DEFAULT_PAGESIZE)
   const {
     handleMenuScrollToBottom: handleMenuScrollToUnit,
-    setPage: setPageUnit
-  } = useDynamicLoading(getCourseUnit, DEFAULT_PAGESIZE);
+    setPage: setPageUnit,
+  } = useDynamicLoading(getCourseUnit, DEFAULT_PAGESIZE)
   const {
     handleMenuScrollToBottom: handleMenuScrollToActivity,
-    setPage: setPageActivity
-  } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE);
+    setPage: setPageActivity,
+  } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE)
 
   return (
     <SappDrawer
@@ -231,10 +255,15 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
               setSelectedSubsection,
             )
           }
-          options={sections && DEFAULT_SELECT.concat(sections?.map((section) => ({
-            label: section.name,
-            value: section.id,
-          })))}
+          options={
+            sections &&
+            DEFAULT_SELECT.concat(
+              sections?.map((section) => ({
+                label: section.name,
+                value: section.id,
+              })),
+            )
+          }
           onMenuScrollToBottom={handleMenuScrollToSections}
         />
         <HookFormSelect
@@ -313,7 +342,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                   {bytesToKilobyte(resource?.size)}
                 </div>
               </div>
-              <a className="cursor-pointer" onClick={() => download(resource.name, resource.file_key)}>
+              <a
+                className="cursor-pointer"
+                onClick={() => download(resource.name, resource.file_key)}
+              >
                 <DownloadIcon />
               </a>
             </div>

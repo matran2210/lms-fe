@@ -8,11 +8,20 @@ type MenuItemsListProps = {
   setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
-export default function MenuItemsList({ options, mode, setOpenResource }: MenuItemsListProps) {
+export default function MenuItemsList({
+  options,
+  mode,
+  setOpenResource,
+}: MenuItemsListProps) {
   return (
     <div className="menu-items-list">
       {options.map((option) => (
-        <MenuItem mode={mode} menuItem={option} key={option.id} setOpenResource={setOpenResource} />
+        <MenuItem
+          mode={mode}
+          menuItem={option}
+          key={option.id}
+          setOpenResource={setOpenResource}
+        />
       ))}
     </div>
   )

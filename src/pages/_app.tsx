@@ -71,8 +71,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if(window.localStorage.getItem('accessToken') === ''){
+    if (typeof window !== 'undefined') {
+      if (window.localStorage.getItem('accessToken') === '') {
         setOpenResource(false)
       }
     }
@@ -91,7 +91,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <RouteGuard>
           <>
             {content}
-            <LearningResource open={openResource} setOpenResource={setOpenResource} />
+            <LearningResource
+              open={openResource}
+              setOpenResource={setOpenResource}
+            />
           </>
         </RouteGuard>
       </main>
