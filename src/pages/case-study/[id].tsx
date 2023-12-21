@@ -1,11 +1,15 @@
 import {
   CalculatorIcon,
+  CloseIcon,
   HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import EditorReader from '@components/base/editor/EditorReader'
+import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import MovableWindow from '@components/base/window'
+import Calculator from '@components/calculator'
 import { formatTime } from '@components/common/timer'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
@@ -16,6 +20,7 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import { LAYOUT } from '@utils/constants'
 import { runHighlight } from '@utils/index'
+import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -169,8 +174,12 @@ const CaseStudyDetail = ({ questions }: any) => {
   const inputRef = useRef<any>([])
   const valueRef = useRef<any>([])
   const { control, handleSubmit, getValues, setValue } = useForm()
+  const { control: controlScratch } = useForm()
   const [topicItems, setTopicItems] = useState<any>([])
   const [allowHighLight, setAllowHighLight] = useState(false)
+  const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+  const [onFocusingPad, setOnFocusingPad] = useState('')
+
   const dispatch = useAppDispatch()
   const {
     topics,
@@ -402,6 +411,29 @@ const CaseStudyDetail = ({ questions }: any) => {
 
     return
   }
+  const handleCloseScratchPad = (pad: any) => {
+    setOpenScratchPad((prev) => {
+      let arr = [...prev]
+      const newArr = arr.filter((e) => e.id !== pad.id)
+      return newArr
+    })
+  }
+  const handleOpenScratchPad = (type: string) => {
+    setOpenScratchPad((prev) => {
+      let arr = [...prev]
+      if (type === 'scratch_pad') {
+        arr.push({ id: uniqueId('scratchPad'), type: type })
+      } else if (type === 'calculator') {
+        for (let e of arr) {
+          if (e.type === 'calculator') {
+            return arr
+          }
+        }
+        arr.push({ id: 'calculator', type: 'calculator' })
+      }
+      return arr
+    })
+  }
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {loading && (
@@ -546,6 +578,75 @@ const CaseStudyDetail = ({ questions }: any) => {
             </div>
           </div>
         </div>
+        {openScratchPad.map((e, index: number) => {
+          if (e.type === 'calculator') {
+            return (
+              <MovableWindow
+                position={{
+                  width: '400px',
+                  height: '300px',
+                  top: 'calc(50% - 150px)',
+                  left: 'calc(50% - 200px)',
+                }}
+                key={e.id}
+                onClick={() => setOnFocusingPad(e.id)}
+                zIndex={
+                  onFocusingPad === e.id
+                    ? openScratchPad.length + 10
+                    : index + 10
+                }
+              >
+                <div className="absolute h-full w-full  top-0 left-0 border">
+                  <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div>Calculator</div>
+                    <button onClick={() => handleCloseScratchPad(e)}>
+                      <CloseIcon />
+                    </button>
+                  </div>
+                  {/* <div className='flex flex-'> */}
+                  <Calculator />
+                  {/* </div> */}
+                </div>
+              </MovableWindow>
+            )
+          } else if (e.type === 'scratch_pad') {
+            return (
+              <MovableWindow
+                position={{
+                  width: '400px',
+                  height: '300px',
+                  top: 'calc(50% - 150px)',
+                  left: 'calc(50% - 200px)',
+                }}
+                key={e.id}
+                onClick={() => setOnFocusingPad(e.id)}
+                zIndex={
+                  onFocusingPad === e.id
+                    ? openScratchPad.length + 10
+                    : index + 10
+                }
+              >
+                <div className="absolute h-full w-full  top-0 left-0 border">
+                  <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div>Scratch Pad</div>
+                    {/* <CloseIcon */}
+                    <button onClick={() => handleCloseScratchPad(e)}>
+                      <CloseIcon />
+                    </button>
+                  </div>
+                  {/* <div className='flex flex-'> */}
+                  <HookFormTextArea
+                    placeholder="Take a note..."
+                    control={controlScratch}
+                    name={e.id}
+                    className="w-full h-[calc(100%-40px)] sapp-text-area"
+                  />
+                  {/* </div> */}
+                </div>
+              </MovableWindow>
+            )
+          }
+        })}
         <div className=" bg-gray-3 flex items-center justify-between shadow-question-footer h-[96px] relative">
           <div className="flex items-center h-full">
             <button className="h-full">
@@ -565,7 +666,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                 </div>
               </div>
             </button>
-            <button className="h-full" onClick={() => {}}>
+            <button
+              className="h-full"
+              onClick={() => handleOpenScratchPad('scratch_pad')}
+            >
               <div className="flex items-center gap-3 ps-6 ">
                 <ScratchPadIcon />
                 <div className="font-normal text-sm pe-6 border-r">
@@ -573,7 +677,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                 </div>
               </div>
             </button>
-            <button className="h-full" onClick={() => {}}>
+            <button
+              className="h-full"
+              onClick={() => handleOpenScratchPad('calculator')}
+            >
               <div className="flex items-center gap-3 ps-6 ">
                 <CalculatorIcon />
                 <div className="font-normal text-sm pe-6 border-r">
