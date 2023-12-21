@@ -152,6 +152,16 @@ const CourseTestApi = {
     )
     return response.data?.data
   },
+  createQuizAttempt: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.createQuizAttemp
+    const response = await httpService.POST<any, any>({
+      uri,
+      request: {
+        quiz_id: id,
+      },
+    })
+    return response
+  },
 }
 
 export default CourseTestApi

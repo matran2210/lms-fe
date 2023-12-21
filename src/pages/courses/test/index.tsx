@@ -1,4 +1,5 @@
 import SappModal from '@components/base/modal/SappModal'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
@@ -6,8 +7,11 @@ interface IProps {
   open: boolean
   setOpen: any
   title: string
+  data: any
 }
-const TestModal = ({ open, setOpen, title }: IProps) => {
+const TestModal = ({ open, setOpen, title, data }: IProps) => {
+  const router = useRouter()
+
   const dispatch = useAppDispatch()
   // const {} = useAppSelector()
   //to do: call api to get datail
@@ -16,6 +20,7 @@ const TestModal = ({ open, setOpen, title }: IProps) => {
   }, [])
   const onSubmit = () => {
     //to do: start test
+    router.push(`/test/${data.quiz.id}`)
   }
   return (
     <SappModal
@@ -37,7 +42,7 @@ const TestModal = ({ open, setOpen, title }: IProps) => {
       <div className="text-bw-1 text-4xl font-bold mb-4">{title}</div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Name:</div>
-        <div className="text-bw-1">Final Test Course F8</div>
+        <div className="text-bw-1">{data?.name}</div>
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Pass Mark:</div>

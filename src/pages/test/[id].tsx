@@ -194,6 +194,7 @@ const TestDetail = ({ questions }: any) => {
   const [allowHighLight, setAllowHighLight] = useState(false)
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
+  const [quizAttempId, setQuizAttempId] = useState('')
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -598,7 +599,7 @@ const TestDetail = ({ questions }: any) => {
       handleChangeTab(tabs[0].id)
       return reformTabs
     })
-    await CourseTestApi.submitQuestion(router.query?.id as string, {
+    await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
     })
@@ -722,6 +723,17 @@ const TestDetail = ({ questions }: any) => {
       })
     }
   }, [watch('exhibits')])
+  useEffect(() => {
+    async function createQuizAttempt() {
+      const res = await CourseTestApi.createQuizAttempt(
+        router.query.id as string,
+      )
+      setQuizAttempId(res.data.id)
+    }
+    if (router.query.id) {
+      createQuizAttempt()
+    }
+  }, [router.query.id])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
