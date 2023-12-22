@@ -198,7 +198,8 @@ const TestDetail = ({ questions }: any) => {
   const [quizAttempId, setQuizAttempId] = useState('')
   const [currentTime, setCurrentTime] = useState(Date.now())
   const [startTime, setStartTime] = useState(Date.now())
-  const [startTest, setStartTest] = useState(false)
+  const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
+
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -772,7 +773,7 @@ const TestDetail = ({ questions }: any) => {
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
       <div>
-        <div className="flex justify-between py-4 px-6 items-center bg-gray-3 ">
+        <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">Name</div>
           <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
             {formatTime(0)}
@@ -800,7 +801,7 @@ const TestDetail = ({ questions }: any) => {
           ></ButtonCancelSubmit>
         </div>
         {/* End Header */}
-        <div className="px-6 bg-gray-4 shadow-solution py-4 relative">
+        <div className="px-6 bg-gray-4 shadow-solution py-4 absolute w-full">
           <TabSlide
             data={filteredTabs}
             currentTab={currentPage}
@@ -809,6 +810,8 @@ const TestDetail = ({ questions }: any) => {
             handleChangeTab={(e: any) => {
               handleChangeTab(e)
             }}
+            activeShowAll={activeShowAll}
+            setActiveShowAll={setActiveShowAll}
           />
           {/* </div> */}
         </div>
@@ -816,7 +819,7 @@ const TestDetail = ({ questions }: any) => {
       {/* <div className=''> */}
       {currentTabContent?.data === DISPLAY_TYPE.VERTICAL ? (
         <div
-          className="flex gap-5 h-[calc(100%-240px)] bg-gray-3"
+          className="flex gap-5 h-[calc(100%-176px)] bg-gray-3 mt-[72px]"
           id={'preview-question'}
         >
           <div
@@ -871,7 +874,7 @@ const TestDetail = ({ questions }: any) => {
         </div>
       ) : (
         <div
-          className="max-w-screen-2md w-full m-auto h-[calc(100%-240px)] overflow-auto py-6 px-6"
+          className="max-w-screen-2md w-full m-auto h-[calc(100%-176px)] overflow-auto py-6 px-6 mt-[72px]"
           id={'preview-question'}
         >
           <div
@@ -1032,7 +1035,7 @@ const TestDetail = ({ questions }: any) => {
         }
       })}
       {/* </div> */}
-      <div className=" bg-gray-3 flex items-center flex-1 justify-between shadow-question-footer min-h-[96px]">
+      <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px]">
         <div className="flex items-center h-full">
           <button className="h-full">
             <div className="flex items-center gap-3 ps-6 ">
@@ -1133,20 +1136,20 @@ const TestDetail = ({ questions }: any) => {
         </div>
         <div className="flex items-center h-full gap-3 pe-6">
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
+            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
             onClick={() => handleFlagQuestion(currentPage)}
           >
             <FlagIcon />
             <div className="font-normal text-sm">Flag to Review</div>
           </button>
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
+            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
             onClick={() => handleClearSelection(currentTabContent)}
           >
             <div className="font-normal text-sm">Clear Selection</div>
           </button>
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
+            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
             onClick={() => {
               getResult(currentTabContent)
             }}

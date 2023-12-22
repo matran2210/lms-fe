@@ -501,7 +501,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       ></div> */}
       {/* Header */}
       <div className="h-full" ref={containerRef}>
-        <div className="flex justify-between py-4 px-6 items-center bg-gray-3 ">
+        <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">Name</div>
           <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
             {formatTime(0)}
@@ -528,7 +528,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         </div>
         {/* End Header */}
         <div
-          className="flex gap-5 h-[calc(100%-168px)] bg-gray-3"
+          className="flex gap-5 h-[calc(100%-104px)] bg-gray-3"
           id={'preview-question'}
         >
           <div
@@ -569,7 +569,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   key={e?.question_topic?.id}
                   data-key={e?.question_topic?.id}
                   ref={(el: any) => (inputRef.current[index] = el)}
-                  className="min-h-[calc(100vh-168px)]"
+                  className="min-h-[calc(100vh-104px)]"
                 >
                   <EditorReader
                     // extenalRef={(el: any) => (inputRef.current[index] = el)}
@@ -715,7 +715,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             )
           }
         })}
-        <div className=" bg-gray-3 flex items-center justify-between shadow-question-footer h-[96px] relative">
+        <div className=" bg-gray-3 flex items-center justify-between shadow-question-footer h-[48px] relative">
           <div className="flex items-center h-full">
             <button className="h-full">
               <div className="flex items-center gap-3 ps-6 ">
@@ -759,7 +759,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           </div>
           <div className="flex items-center h-full gap-3 pe-6">
             <button
-              className="flex items-center gap-3 border border-gray-1 justify-center p-3"
+              className="flex items-center gap-3 border border-gray-1 justify-center p-1"
               onClick={() => {}}
             >
               <div className="font-normal text-sm">Confirm Answer</div>
