@@ -137,6 +137,7 @@ const TestDetail = ({ questions }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -346,11 +347,15 @@ const TestDetail = ({ questions }: any) => {
     ) {
       corrects = { corrects: [...res.data[0].answers] }
     } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      const correct = [] as any
-      res.data[0].question_matchings.map((e: any) => {
-        correct.push({ answer_id: e.answer.id, question_id: e.id })
-      })
       corrects = { corrects: [...res.data[0].question_matchings] }
+    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      corrects = {
+        corrects: [
+          ...res.data[0].answers.sort(
+            (a: any, b: any) => a.answer_position - b.answer_position,
+          ),
+        ],
+      }
     }
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
