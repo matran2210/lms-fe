@@ -8,6 +8,7 @@ export const url = {
   getResource: '/resource',
   getQuizAttempts: '/quiz-attempts',
   createQuizAttemp: '/quiz/quiz-attempt',
+  getQuizAttemptsTable: '/quiz-attempts/table',
 }
 
 export default url
