@@ -7,7 +7,7 @@ interface IProps {
   open: boolean
   setOpen: any
   title: string
-  data: any
+  data?: any
 }
 const TestModal = ({ open, setOpen, title, data }: IProps) => {
   const router = useRouter()

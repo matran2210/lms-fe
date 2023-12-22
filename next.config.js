@@ -27,7 +27,7 @@ const securityHeaders = [
 
 module.exports = withBundleAnalyzer({
   i18n,
-  reactStrictMode: true,
+  reactStrictMode: false,
   productionBrowserSourceMaps: true,
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
