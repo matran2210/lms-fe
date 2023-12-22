@@ -1,3 +1,4 @@
+import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import {
@@ -18,6 +19,7 @@ interface IProps {
   allowHighLight?: boolean
   defaultAnswer?: any
   extenalRef?: any
+  corrects?: any
 }
 const DragNDropPreivew = forwardRef(
   (
@@ -30,17 +32,15 @@ const DragNDropPreivew = forwardRef(
       allowHighLight,
       defaultAnswer,
       extenalRef,
+      corrects,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
     const storageId = uniqueId('storage')
     const [answered, setAnswered] = useState<any>([])
-    const refContent = useRef(null) as any
     useEffect(() => {
-      if (defaultAnswer) {
-        setAnswered(defaultAnswer)
-      }
-    }, [])
+      setAnswered(defaultAnswer)
+    }, [defaultAnswer])
     function allowDrop(ev: any) {
       ev.preventDefault()
     }
@@ -68,6 +68,7 @@ const DragNDropPreivew = forwardRef(
     const parser = new DOMParser()
 
     const [questionContent, setQuestionContent] = useState<any>()
+    const [answerContent, setAnswerContent] = useState<any>()
     const [key, setKey] = useState(1)
     useImperativeHandle(ref, () => ({
       handleReset() {
@@ -82,39 +83,70 @@ const DragNDropPreivew = forwardRef(
     }, [questionContent])
     useEffect(() => {
       const doc = parser.parseFromString(str, 'text/html')
+      const doc2 = parser.parseFromString(str, 'text/html')
       // if (refContent?.current) {
       const elements = doc.querySelectorAll('.question-content-tag')
-      elements.forEach((element: any, index: number) => {
-        if (defaultAnswer?.length > 0) {
-          if (defaultAnswer[index].value !== '') {
-            element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')">
-            <span class="answer-box" draggable="true" ondragstart="drag(event, '${data.id}')" id="${defaultAnswer[index].idAnswer}">${defaultAnswer[index].value}</span>
+      const elementsCorrects = doc2.querySelectorAll('.question-content-tag')
+
+      if (corrects) {
+        elementsCorrects.forEach((element: any, index: number) => {
+          element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop-answer corrects">
+          <span class="answer-box" id="${corrects[index].id}">${corrects[index].answer}</span>
+          </span>`
+        })
+        elements.forEach((element: any, index: number) => {
+          if (defaultAnswer?.length > 0) {
+            if (defaultAnswer[index].value !== '') {
+              element.outerHTML = `<span type="text" id="${
+                element.id
+              }" class="sapp-input-dragNDrop-answer ${
+                defaultAnswer[index].idAnswer === corrects[index].id
+                  ? 'corrects'
+                  : 'wrongs'
+              }">
+              <span class="answer-box"  id="${defaultAnswer[index].idAnswer}">${
+                defaultAnswer[index].value
+              }</span>
+              </span>`
+            } else {
+              element.outerHTML = `<span type="text" id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs"> 
+                <span class="sapp-input-dragNDrop-empty"></span>
+              </span>`
+              //   })
+            }
+          } else {
+            element.outerHTML = `<span type="text" id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs"> 
+              <span class="sapp-input-dragNDrop-empty"></span>
             </span>`
+          }
+        })
+        setAnswerContent(doc2)
+        setQuestionContent(doc)
+      } else {
+        elements.forEach((element: any, index: number) => {
+          if (defaultAnswer?.length > 0) {
+            if (defaultAnswer[index].value !== '') {
+              element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')">
+              <span class="answer-box" draggable="true" ondragstart="drag(event, '${data.id}')" id="${defaultAnswer[index].idAnswer}">${defaultAnswer[index].value}</span>
+              </span>`
+            } else {
+              element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
+              //   })
+            }
           } else {
             element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
             //   })
           }
-        } else {
-          element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
-          //   })
-        }
-      })
-      setQuestionContent(doc)
+        })
+        setQuestionContent(doc)
+      }
       // }
-    }, [defaultAnswer, refContent?.current])
-
+    }, [defaultAnswer, corrects])
     return (
       <div className="body-modal-white" key={key} ref={extenalRef || null}>
         {questionContent && (
           <>
             <div
-              className="questions"
-              ref={refContent}
-              dangerouslySetInnerHTML={{
-                __html:
-                  questionContent?.documentElement.querySelector('body')
-                    ?.innerHTML || '',
-              }}
               id="hightlight_area"
               onMouseUp={(e: any) => {
                 if (
@@ -126,40 +158,60 @@ const DragNDropPreivew = forwardRef(
                   }
                 }
               }}
-            />
-            <div className="answer-area">
-              <div
-                className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 w-full ${storageId}`}
-                onDrop={(ev) => handleStorage(ev, data?.id)}
-                onDragOver={allowDrop}
-                id="storage"
-              >
-                {data?.answers?.map((e: any) => {
-                  if (answered) {
-                    for (let as of answered) {
-                      if (as.idAnswer === e.id) {
-                        return null
+            >
+              <EditorReader
+                className="questions"
+                text_editor_content={
+                  questionContent?.documentElement.querySelector('body')
+                    ?.innerHTML || ''
+                }
+              />
+            </div>
+            {!corrects && (
+              <div className="answer-area">
+                <div
+                  className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 w-full ${storageId}`}
+                  onDrop={(ev) => handleStorage(ev, data?.id)}
+                  onDragOver={allowDrop}
+                  id="storage"
+                >
+                  {data?.answers?.map((e: any) => {
+                    if (answered) {
+                      for (let as of answered) {
+                        if (as.idAnswer === e.id) {
+                          return null
+                        }
                       }
                     }
-                  }
-                  return (
-                    <span
-                      className={`answer-box`}
-                      key={e?.id}
-                      id={e?.id}
-                      draggable="true"
-                      onDragStart={drag}
-                    >
-                      {e.answer}
-                    </span>
-                  )
-                })}
+                    return (
+                      <span
+                        className={`answer-box`}
+                        key={e?.id}
+                        id={e?.id}
+                        draggable="true"
+                        onDragStart={drag}
+                      >
+                        {e.answer}
+                      </span>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </>
         )}
-
-        {/* <button onClick={()=>{setKey(Math.random())}}>Check Answer</button> */}
+        {answerContent && (
+          <>
+            <div className="font-semibold text-xl mt-5">Correct Answer:</div>
+            <EditorReader
+              className="questions mt-2"
+              text_editor_content={
+                answerContent?.documentElement.querySelector('body')
+                  ?.innerHTML || ''
+              }
+            />
+          </>
+        )}
       </div>
     )
   },

@@ -222,6 +222,18 @@ body * ::-webkit-scrollbar-thumb:hover {
 .sapp-input-dragNDrop {
   @apply inline-block min-w-[100px] border-b border-gray-500 border-0;
 }
+.sapp-input-dragNDrop-answer {
+  @apply inline-block min-w-[100px] border border-gray-500 border text-center p-1 m-1 bg-gray-4;
+  &.corrects {
+    @apply border-success text-state-success;
+  }
+  &.wrongs {
+    @apply border-error text-state-error;
+  }
+}
+.sapp-input-dragNDrop-empty {
+  @apply inline-block min-w-[100px] border-0  text-center;
+}
 
 .sapp-questions-essay {
   line-height: 33px;
