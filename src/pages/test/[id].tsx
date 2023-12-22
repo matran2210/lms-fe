@@ -196,6 +196,9 @@ const TestDetail = ({ questions }: any) => {
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [quizAttempId, setQuizAttempId] = useState('')
+  const [currentTime, setCurrentTime] = useState(Date.now())
+  const [startTime, setStartTime] = useState(Date.now())
+  const [startTest, setStartTest] = useState(false)
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -358,6 +361,7 @@ const TestDetail = ({ questions }: any) => {
       }
     }
     setTabs((prev: any) => {
+      setStartTime(Date.now())
       const newData = prev.map((item: any) => {
         if (currentPage === item.id) {
           // setCurrentTabContent({
@@ -373,6 +377,9 @@ const TestDetail = ({ questions }: any) => {
             done: true,
             corrects: corrects,
             solution: res.data[0].solution,
+            timeSpent: item.timeSpent
+              ? currentTime - startTime + item.timeSpent
+              : currentTime - startTime,
           }
         }
         return item
@@ -470,18 +477,13 @@ const TestDetail = ({ questions }: any) => {
       const { topicDescription, res } = await getDetail(currentTab)
 
       setTabs((prev: any) => {
+        setStartTime(Date.now())
         const newData = prev.map((item: any) => {
           if (currentTab === item.id) {
             if (item.viewed) {
               // setCurrentTabContent({ ...item })
               return { ...item }
             } else {
-              // setCurrentTabContent({
-              //   ...item,
-              //   viewed: true,
-              //   data: res.data[0],
-              //   topicDescription: topicDescription.data,
-              // })
               return {
                 ...item,
                 viewed: true,
@@ -529,9 +531,18 @@ const TestDetail = ({ questions }: any) => {
   }
   const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
     // setTabs((prev: any) => {
+    setStartTime(Date.now())
     const newData = tabs.map((item: any) => {
       if (tabId === item.id) {
-        return { ...item, answer: data }
+        return {
+          ...item,
+          answer: data,
+          timeSpent: !item.done
+            ? item.timeSpent
+              ? currentTime - startTime + item.timeSpent
+              : currentTime - startTime
+            : item.timeSpent,
+        }
       }
       return item
     })
@@ -551,15 +562,23 @@ const TestDetail = ({ questions }: any) => {
           e.qType === QUESTION_TYPES.ONE_CHOICE ||
           e.qType === QUESTION_TYPES.TRUE_FALSE
         ) {
-          answers.push({ question_id: e.id, question_answer_id: e.answer })
+          answers.push({
+            question_id: e.id,
+            question_answer_id: e.answer,
+            time_spent: e.timeSpent,
+          })
         } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
           let answer = []
           for (let el of e.answer) {
             answer.push({ answer_id: el })
           }
-          answers.push({ question_id: e.id, answer })
+          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
         } else if (e.qType === QUESTION_TYPES.MATCHING) {
-          answers.push({ question_id: e.id, answer: e.answer })
+          answers.push({
+            question_id: e.id,
+            answer: e.answer,
+            time_spent: e.timeSpent,
+          })
         } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
           let answer = []
           for (let i in e.answer) {
@@ -570,7 +589,7 @@ const TestDetail = ({ questions }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer })
+          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
         } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
           let answer = []
           for (let i in e.answer) {
@@ -581,7 +600,7 @@ const TestDetail = ({ questions }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer })
+          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
         } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
           let answer = []
           for (let i in e.answer) {
@@ -592,7 +611,7 @@ const TestDetail = ({ questions }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer })
+          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
         }
       }
       quiz_position_mapping.push({
@@ -739,6 +758,16 @@ const TestDetail = ({ questions }: any) => {
       createQuizAttempt()
     }
   }, [router.query.id])
+  useEffect(() => {
+    // Create an interval that updates the current time every second
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now())
+    }, 1000)
+    // Return a function that clears the interval
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
