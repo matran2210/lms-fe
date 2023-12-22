@@ -7,33 +7,21 @@ import YourScore from './yourScore'
 import YourScoreDetail from './yourScoreDetail'
 import MultipleQuestion from './multipleQues'
 
-interface CoursesProps {
-  courses: any[]
+interface IProps {
+  questions: Object
 }
-const datamulti = [
-  {
-    id: 1,
-    status: 'true',
-    type: 'Multiple Question',
-  },
-  {
-    id: 2,
-    status: 'false',
-    type: 'Constructed Questions',
-  },
-]
 
-const TestResultPage = () => {
+const TestResultPage = ({ questions }: IProps) => {
   return (
     <div className="grid grid-flow-col gap-4 overflow-y-auto">
       <div className="col-span-2 ">
         <YourScore />
       </div>
-      <div className="row-span-2 col-span-2 max-h-[700px]">
+      <div className="row-span-2 col-span-2 max-h-full">
         <YourScoreDetail />
       </div>
       <div className="row-span-3 ">
-        <MultipleQuestion data={datamulti} />
+        <MultipleQuestion questions={questions} />
       </div>
     </div>
   )

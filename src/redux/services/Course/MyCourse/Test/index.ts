@@ -130,13 +130,19 @@ const CourseTestApi = {
     })
     return response
   },
-  /*getQuizAttempts: async (id: string): Promise<IResponse<any>> => {
-    const uri = url.getQuizAttempts + `/${id}`
+  getQuizAttemptsTable: async (
+    id: string,
+    page_index: number,
+    page_size: number,
+  ): Promise<IResponse<any>> => {
+    const uri =
+      url.getQuizAttemptsTable +
+      `/${id}?page_index=${page_index}&page_size=${page_size}`
     const response = await httpService.GET<any, any>({
       uri,
     })
     return response
-  },*/
+  },
   getQuizAttempts: async (
     id: string,
     accessToken: string,

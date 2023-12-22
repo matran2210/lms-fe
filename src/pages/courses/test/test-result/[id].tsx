@@ -34,7 +34,7 @@ const TestResultDetail = (questions: any) => {
         <Breadcrumb tabs={breadcrumbs} currentPage={'Results'} />
       </div>
       <div className="mx-auto mx-4 lg:mx-16 mb-6">
-        <TestResultPage />
+        <TestResultPage questions={questions?.questions} />
       </div>
     </>
   )
@@ -112,17 +112,14 @@ export async function getServerSideProps(context: any) {
             permanent: false,
           },
         }
-      }
-      //return {
-      //redirect: {
-      //destination: '/404',
-      //permanent: false,
-      //},
-      //}
-      else
+      } else {
         return {
-          props: { questions: '' },
+          redirect: {
+            destination: '/auth/login',
+            permanent: false,
+          },
         }
+      }
     }
   }
 }
