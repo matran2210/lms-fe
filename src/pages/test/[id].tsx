@@ -1147,8 +1147,6 @@ export async function getServerSideProps(context: any) {
   }
 
   try {
-    const { req } = context
-
     // Parse cookies from the request headers
     const cookies = parse(req.headers.cookie || '')
 
