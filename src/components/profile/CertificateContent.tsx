@@ -6,14 +6,11 @@ import Certificate from './Certificate'
 
 interface IProps {
   page: IProfilePages
-  className: any
 }
-const CertificateContent = ({ page, className }: IProps) => {
+const CertificateContent = ({ page }: IProps) => {
   return (
     <div className="bg-white p-6 flex-1 shadow-box">
-      {page === 'certificates' && (
-        <Certificate className={className}></Certificate>
-      )}
+      {page === 'certificates' && <Certificate></Certificate>}
     </div>
   )
 }

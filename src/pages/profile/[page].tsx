@@ -44,7 +44,7 @@ const ProfilePage = ({ page }: IProps) => {
       />
     )
   } else if (page === 'certificates') {
-    selectedContent = <CertificateContent page={page} className={''} />
+    selectedContent = <CertificateContent page={page} />
   } else {
     selectedContent = <div>Page not found</div>
   }
