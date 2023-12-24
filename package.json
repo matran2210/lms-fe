@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@cloudflare/stream-react": "^1.8.0",
+    "@fortune-sheet/react": "^0.19.1",
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.3.2",
     "@react-native-async-storage/async-storage": "^1.19.5",

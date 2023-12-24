@@ -42,3 +42,8 @@ export type IButtonCancelSubmitProps = {
   showOkButton?: boolean
   showCancelButton?: boolean
 }
+declare global {
+  interface Window {
+    luckysheet: any
+  }
+}

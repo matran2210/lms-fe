@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 @import 'variables.scss';
 @import 'fonts.scss';
 @import 'select.scss';
@@ -17,7 +18,17 @@
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-
+* .sheet,
+* .iconfont::before,
+.sheet *,
+* .sheet,
+.sheet *::before {
+  font-family: unset;
+}
+* .fa,
+* .fa::before {
+  font-family: 'Font Awesome 5 Free';
+}
 html {
   font-size: 100%;
 }
@@ -331,4 +342,44 @@ body * ::-webkit-scrollbar-thumb:hover {
 .button {
   display: block;
   @apply flex-1 bg-gray-2;
+}
+.stream-player__progress-bar {
+  /* Set the position to relative */
+  position: relative;
+}
+
+/* Add a point before the progress bar */
+.stream-player__progress-bar::before {
+  /* Set the position to absolute */
+  position: absolute;
+  /* Set the content to a circle icon */
+  content: '\25cf';
+  /* Set the font size to 12px */
+  font-size: 12px;
+  /* Set the color to white */
+  color: white;
+  /* Set the left position to 10% of the progress bar width */
+  left: 10%;
+  /* Set the top position to 50% of the progress bar height */
+  top: 50%;
+  /* Adjust the position with transform */
+  transform: translate(-50%, -50%);
+}
+
+/* Add another point after the progress bar */
+.stream-player__progress-bar::after {
+  /* Set the position to absolute */
+  position: absolute;
+  /* Set the content to a star icon */
+  content: '\2605';
+  /* Set the font size to 12px */
+  font-size: 12px;
+  /* Set the color to yellow */
+  color: yellow;
+  /* Set the right position to 20% of the progress bar width */
+  right: 20%;
+  /* Set the top position to 50% of the progress bar height */
+  top: 50%;
+  /* Adjust the position with transform */
+  transform: translate(50%, -50%);
 }

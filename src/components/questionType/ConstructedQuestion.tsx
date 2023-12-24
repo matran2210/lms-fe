@@ -4,6 +4,8 @@ import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { Workbook } from '@fortune-sheet/react'
+import '@fortune-sheet/react/dist/index.css'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -100,7 +102,38 @@ const EssayQuestionPreview = ({
               />
             ) : (
               // <DynamicBundledEditor />
-              <></>
+              <div className="w-full, h-[500px]">
+                {/* <Luckysheet id={'luckySheet' + index}/> */}
+                <Workbook
+                  data={[
+                    {
+                      name: 'Sheet1',
+                      celldata: [
+                        {
+                          r: 0,
+                          c: 0,
+                          v: {
+                            ct: { fa: 'General', t: 'g' },
+                            m: 'value1',
+                            v: 'value1',
+                          },
+                        },
+                        {
+                          r: 0,
+                          c: 1,
+                          v: {
+                            ct: { fa: 'General', t: 'g' },
+                            m: 'value2',
+                            v: 'value2',
+                          },
+                        },
+                      ],
+                    },
+                  ]}
+                  // onChange={(e) => console.log(e)}
+                />
+                ,
+              </div>
             )}
           </div>
         </div>
