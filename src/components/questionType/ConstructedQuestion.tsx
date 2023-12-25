@@ -108,26 +108,26 @@ const EssayQuestionPreview = ({
                   data={[
                     {
                       name: 'Sheet1',
-                      celldata: [
-                        {
-                          r: 0,
-                          c: 0,
-                          v: {
-                            ct: { fa: 'General', t: 'g' },
-                            m: 'value1',
-                            v: 'value1',
-                          },
-                        },
-                        {
-                          r: 0,
-                          c: 1,
-                          v: {
-                            ct: { fa: 'General', t: 'g' },
-                            m: 'value2',
-                            v: 'value2',
-                          },
-                        },
-                      ],
+                      // celldata: [
+                      //   {
+                      //     r: 0,
+                      //     c: 0,
+                      //     v: {
+                      //       ct: { fa: 'General', t: 'g' },
+                      //       m: 'value1',
+                      //       v: 'value1',
+                      //     },
+                      //   },
+                      //   {
+                      //     r: 0,
+                      //     c: 1,
+                      //     v: {
+                      //       ct: { fa: 'General', t: 'g' },
+                      //       m: 'value2',
+                      //       v: 'value2',
+                      //     },
+                      //   },
+                      // ],
                     },
                   ]}
                   // onChange={(e) => console.log(e)}

@@ -55,7 +55,6 @@
     "react-select": "^5.8.0",
     "sass": "^1.53.0",
     "sharp": "^0.30.7",
-    "x-data-spreadsheet": "^1.1.9",
     "zod": "^3.22.4"
   },
   "devDependencies": {
