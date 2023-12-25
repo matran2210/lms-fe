@@ -1,3 +1,4 @@
+import CertificateContent from '@components/profile/CertificateContent'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
@@ -29,6 +30,24 @@ const ProfilePage = ({ page }: IProps) => {
     }
     setIsEdit(isEdit)
   }
+  let selectedContent: JSX.Element | null = null
+
+  if (page === 'my_profile') {
+    selectedContent = (
+      <ProfileContent
+        setReViewImageSrc={setReViewImageSrc}
+        isEdit={isEdit}
+        setIsEdit={handleSetIsEdit}
+        page={page}
+        avatar={avatar}
+        handleSetAvatar={handleSetAvatar}
+      />
+    )
+  } else if (page === 'certificates') {
+    selectedContent = <CertificateContent page={page} />
+  } else {
+    selectedContent = <div>Page not found</div>
+  }
 
   return (
     <div className="max-w-xxl my-0 mx-auto w-full">
@@ -43,14 +62,7 @@ const ProfilePage = ({ page }: IProps) => {
       </div>
       <div className="flex sm:flex-row flex-col justify-between gap-6">
         <ProfileSideBar page={page}></ProfileSideBar>
-        <ProfileContent
-          setReViewImageSrc={setReViewImageSrc}
-          isEdit={isEdit}
-          setIsEdit={handleSetIsEdit}
-          page={page}
-          avatar={avatar}
-          handleSetAvatar={handleSetAvatar}
-        ></ProfileContent>
+        {selectedContent}
       </div>
     </div>
   )
