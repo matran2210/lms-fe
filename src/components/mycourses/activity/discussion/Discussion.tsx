@@ -56,7 +56,7 @@ const Discussion = (props: Props) => {
     { comment, commentRoot }: { comment: string; commentRoot: string },
     isRoot?: boolean,
   ) => {
-    if (router.query.id) {
+    if (router.query.activityId) {
       let parent_id = idReply
       let content = comment
       if (isRoot) {
@@ -66,7 +66,7 @@ const Discussion = (props: Props) => {
       try {
         await dispatch(
           createDiscussion({
-            course_section_id: router.query.id as string,
+            course_section_id: router.query.activityId as string,
             content: content?.trim(),
             parent_id,
           }),
@@ -77,7 +77,7 @@ const Discussion = (props: Props) => {
         } else {
           reset({ comment: '' })
         }
-        await dispatch(getDiscussion(router.query.id as string))
+        await dispatch(getDiscussion(router.query.activityId as string))
       } catch (error) {}
     }
   }
@@ -103,7 +103,7 @@ const Discussion = (props: Props) => {
         await dispatch(reactDiscussion(data))
       } catch (error) {
       } finally {
-        await dispatch(getDiscussion(router.query.id as string))
+        await dispatch(getDiscussion(router.query.activityId as string))
       }
     }, 1000)
   }
