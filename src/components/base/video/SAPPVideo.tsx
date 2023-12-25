@@ -19,9 +19,9 @@ const SAPPVideo = ({ options, pauseOnSeek = false, streamRef }: IProp) => {
             {...options}
             key={options.src}
             streamRef={streamRef}
-            controls
+            controls={false}
             responsive={false}
-            className={`${styles.content}`}
+            className={`${styles.content} relative`}
             onSeeking={() => {
               if (streamRef?.current && pauseOnSeek) {
                 streamRef.current.pause()
@@ -29,6 +29,7 @@ const SAPPVideo = ({ options, pauseOnSeek = false, streamRef }: IProp) => {
             }}
             autoplay={false}
           ></Stream>
+          <div className="absolute w-full h-4 bg-bw-1 z-[99999999999999999999999999999] bottom-[64px]"></div>
         </div>
       )}
     </>
