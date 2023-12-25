@@ -794,7 +794,39 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
     }
   }, [quizDetail])
+  useEffect(() => {
+    const handleBeforeUnload = async (event: any) => {
+      event.preventDefault()
+      await handleSubmitQuestion()
+    }
 
+    // Thêm lắng nghe sự kiện beforeunload
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    // Cleanup khi component bị unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [currentTabContent, quizAttempId])
+  useEffect(() => {
+    router.beforePopState(({ as }) => {
+      if (as !== router.asPath) {
+        try {
+          handleSubmitQuestion()
+          return true
+        } catch (err) {
+          return true
+        }
+        // Will run when leaving the current page; on back/forward actions
+        // Add your logic here, like toggling the modal state
+      }
+      return true
+    })
+
+    return () => {
+      router.beforePopState(() => true)
+    }
+  }, [currentTabContent, quizAttempId, router])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
@@ -803,7 +835,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
             {quizDetail.name}
           </div>
-          {remainTime && (
+          {quizDetail.quiz_timed && (
             <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
               {formatTime(remainTime)}
             </div>
