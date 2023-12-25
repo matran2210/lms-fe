@@ -1,9 +1,11 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
+import SappModal from '@components/base/modal/SappModal'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   courseActivityReducer,
@@ -11,14 +13,12 @@ import {
   getDiscussion,
   reactDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { userReducer } from 'src/redux/slice/User/User'
 import {
   ICreateDiscussionResReact,
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import DiscussionElement from './DiscussionElement'
-import { userReducer } from 'src/redux/slice/User/User'
-import SappIcon from 'src/common/SappIcon'
-import SappModal from '@components/base/modal/SappModal'
 
 type Props = {}
 
@@ -220,8 +220,8 @@ const Discussion = (props: Props) => {
                     height={40}
                     className="rounded-full"
                     src={
-                      e?.avatar?.['50x50'] ||
-                      e?.avatar?.['ORIGIN'] ||
+                      user.detail.avatar['50x50'] ||
+                      user.detail.avatar['ORIGIN'] ||
                       blankAvatar
                     }
                     loading="eager"
