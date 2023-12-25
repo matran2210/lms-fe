@@ -487,6 +487,39 @@ const CaseStudyDetail = ({ questions }: any) => {
       }
     }
   }
+  useEffect(() => {
+    const handleBeforeUnload = async (event: any) => {
+      event.preventDefault()
+      await handleSubmitQuestion()
+    }
+
+    // Thêm lắng nghe sự kiện beforeunload
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    // Cleanup khi component bị unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [listQuestions])
+  useEffect(() => {
+    router.beforePopState(({ as }) => {
+      if (as !== router.asPath) {
+        try {
+          handleSubmitQuestion()
+          return true
+        } catch (err) {
+          return true
+        }
+        // Will run when leaving the current page; on back/forward actions
+        // Add your logic here, like toggling the modal state
+      }
+      return true
+    })
+
+    return () => {
+      router.beforePopState(() => true)
+    }
+  }, [listQuestions, router])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {loading && (

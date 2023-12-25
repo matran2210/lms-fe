@@ -1,4 +1,5 @@
 import SappModal from '@components/base/modal/SappModal'
+import { formatTime } from '@components/common/timer'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -11,7 +12,6 @@ interface IProps {
 }
 const TestModal = ({ open, setOpen, title, data }: IProps) => {
   const router = useRouter()
-
   const dispatch = useAppDispatch()
   // const {} = useAppSelector()
   //to do: call api to get datail
@@ -50,11 +50,15 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Time Allowed:</div>
-        <div className="text-bw-1">00:00:00</div>
+        <div className="text-bw-1">
+          {data?.quiz?.quiz_timed
+            ? formatTime(data?.quiz?.quiz_timed)
+            : 'Unlimited'}
+        </div>
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">No of Attempts:</div>
-        <div className="text-bw-1">1/Unlimited</div>
+        <div className="text-bw-1">{data?.quiz?.attempts?.length}</div>
       </div>
       <div className="flex justify-between py-6 gap-8">
         <div className="text-gray-1">Status:</div>
