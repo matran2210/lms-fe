@@ -181,6 +181,13 @@ const CourseActivityApi = {
     return response
   },
 
+  /**
+   * Submit câu hỏi.
+   *
+   * @param {string} id - id câu hỏi.
+   * @param {any} data - Dữ liệu sẽ được gửi kèm theo câu hỏi.
+   * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi từ máy chủ.
+   */
   submitQuestion: async (id: string, data: any): Promise<IResponse<any>> => {
     const uri = url.submitQuestion + `/${id}` + '/submit'
     const response = await httpService.POST<any, any>({
@@ -188,6 +195,47 @@ const CourseActivityApi = {
       request: data,
     })
     return response
+  },
+
+  /**
+   * Bắt đầu tiến độ cho một phần của khóa học cụ thể.
+   *
+   * @param {string} courseId - id của khóa học.
+   * @param {string} sectionId - id của section.
+   * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi về tiến độ.
+   */
+  startCourseSectionProgress: async (
+    courseId: string,
+    sectionId: string,
+  ): Promise<IResponse<any> | undefined> => {
+    const uri = `${url.courseSections}/${courseId}/section/${sectionId}/progress`
+    try {
+      const response = await httpService.GET<any, any>({
+        uri,
+      })
+      return response
+    } catch (error) {}
+  },
+
+  /**
+   * Kết thúc tiến độ cho một phần của khóa học cụ thể.
+   *
+   * @param {string} courseId - id của khóa học.
+   * @param {string} sectionId - id của section.
+   * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi về tiến độ.
+   */
+  finishedCourseSectionProgress: async (
+    courseId: string,
+    sectionId: string,
+  ): Promise<IResponse<any> | undefined> => {
+    const uri = `${url.courseSections}/${courseId}/section/${sectionId}/progress`
+    try {
+      const response = await httpService.PUT<any, any>({
+        uri,
+        request: { status: 'FINISHED' },
+      })
+      return response
+    } catch (error) {}
   },
 }
 

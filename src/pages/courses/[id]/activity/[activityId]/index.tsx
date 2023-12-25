@@ -5,7 +5,7 @@ import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import axios from 'axios'
 import { parse } from 'cookie'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
@@ -17,25 +17,178 @@ import {
   getDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { IActivity } from 'src/type/course/my-course/Activity'
+import _debounce from 'lodash/debounce'
 
 type Props = {
   activity: IActivity
+  courseId: string
+  sectionId: string
 }
 
-const ActivityPage = ({ activity }: Props) => {
+enum ACTIVITY_TYPE {
+  BOTH = 'BOTH',
+  ONLY_VIDEO = 'ONLY_VIDEO',
+  ONLY_QUIZ = 'ONLY_QUIZ',
+  NONE = 'NONE',
+}
+
+const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
   const [activeButtonId, setActiveButtonId] = useState<string>()
+  const endActivityRef = useRef<HTMLDivElement>(null)
+  const quizDocumentRef = useRef<HTMLDivElement>(null)
+  const videoDocumentRef = useRef<HTMLDivElement>(null)
+  const observerRef = useRef<IntersectionObserver>()
+  const isFinishRef = useRef<boolean>(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (activity) {
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion(activity?.id))
+        ;(async () => {
+          await CourseActivityApi.startCourseSectionProgress(
+            courseId,
+            sectionId,
+          )
+        })()
       } catch (error) {}
     }
   }, [])
 
+  useEffect(() => {
+    finishedCourseSectionProgress()
+  }, [
+    endActivityRef.current,
+    quizDocumentRef.current,
+    videoDocumentRef.current,
+    observerRef.current,
+  ])
+
+  /**
+   * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
+   */
+  const finishedCourseSectionProgress = () => {
+    // Xác định loại hoạt động của phần hiện tại
+    const activityType = getActivityType(activity)
+
+    // Xử lý khi chỉ có video và tham chiếu đến videoDocumentRef hiện tại
+    if (activityType === ACTIVITY_TYPE.ONLY_VIDEO && videoDocumentRef.current) {
+      videoDocumentRef.current.onclick = async () => {
+        await handleFinishedCourseSectionProgress()
+      }
+      return
+    }
+    // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
+    else if (
+      activityType === ACTIVITY_TYPE.ONLY_QUIZ &&
+      quizDocumentRef.current
+    ) {
+      quizDocumentRef.current.onclick = async () => {
+        await handleFinishedCourseSectionProgress()
+      }
+      return
+    }
+
+    // Xử lý khi có tham chiếu đến endActivityRef hiện tại
+    if (endActivityRef.current) {
+      // Hủy theo dõi nếu đã có observerRef.current
+      if (observerRef.current) {
+        observerRef.current?.unobserve(endActivityRef.current)
+      }
+
+      // Thiết lập các tùy chọn cho IntersectionObserver
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      }
+
+      // Hàm xử lý khi có sự giao thoa
+      const handleIntersection = async (
+        entries: IntersectionObserverEntry[],
+      ) => {
+        const isVisible = entries[0].isIntersecting
+
+        // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
+        if (isVisible && endActivityRef.current) {
+          observerRef.current?.unobserve(endActivityRef.current)
+          await handleFinishedCourseSectionProgress()
+        }
+      }
+
+      // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
+      observerRef.current = new IntersectionObserver(
+        handleIntersection,
+        options,
+      )
+
+      // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
+      if (endActivityRef.current) {
+        observerRef.current?.observe(endActivityRef.current)
+      }
+
+      // Trả về hàm cleanup
+      return () => {
+        if (endActivityRef.current) {
+          observerRef.current?.unobserve(endActivityRef.current)
+        }
+      }
+    }
+  }
+
+  /**
+   * Hàm xử lý khi kết thúc tiến trình phần của khóa học.
+   */
+  const handleFinishedCourseSectionProgress = async () => {
+    if (!isFinishRef.current) {
+      await CourseActivityApi.finishedCourseSectionProgress(courseId, sectionId)
+      isFinishRef.current = true
+    }
+  }
+
+  /**
+   * Hàm để lấy ActivityType dựa trên document type.
+   * @param {IActivity} activityReducer - activity.
+   * @returns {string} - ActivityType.
+   */
+  function getActivityType(activityReducer: IActivity): string {
+    const tabs = activityReducer.tabs
+    let hasVideo = false
+    let hasQuiz = false
+    if (!tabs?.[0]) {
+      return ACTIVITY_TYPE.NONE
+    }
+    for (const tab of tabs) {
+      const documents = tab.course_tab_documents
+
+      if (documents) {
+        for (const document of documents) {
+          if (document.type === 'QUIZ') {
+            hasQuiz = true
+          } else if (document.type === 'VIDEO') {
+            hasVideo = true
+          }
+        }
+      }
+    }
+
+    if (hasVideo && hasQuiz) {
+      return ACTIVITY_TYPE.BOTH
+    } else if (hasVideo) {
+      return ACTIVITY_TYPE.ONLY_VIDEO
+    } else if (hasQuiz) {
+      return ACTIVITY_TYPE.ONLY_QUIZ
+    } else {
+      return ACTIVITY_TYPE.NONE
+    }
+  }
+
+  /**
+   * Hàm xử lý khi thay đổi tab.
+   * @param {string} id - ID của tab.
+   */
   const handleChangeTab = (id: string) => {
     try {
       dispatch(getCourseActivityTapById({ id }))
@@ -43,6 +196,11 @@ const ActivityPage = ({ activity }: Props) => {
     } catch (error) {}
   }
 
+  /**
+   * Hàm để xác định màu tab active.
+   * @param {string} id - ID của tab.
+   * @returns {string} - Màu tab.
+   */
   const tabButtonColor = (id: string) => {
     let currentTabId
     if (selector.loading) {
@@ -53,6 +211,9 @@ const ActivityPage = ({ activity }: Props) => {
     return id === currentTabId ? 'primary' : 'white'
   }
 
+  /**
+   * Giá trị được memoized cho course_tab_documents.
+   */
   const course_tab_documents = useMemo(() => {
     return selector.tabs?.find((e) => e.id === selector.currentTabId)
       ?.course_tab_documents
@@ -114,7 +275,11 @@ const ActivityPage = ({ activity }: Props) => {
                   i < course_tab_documents?.length - 1 ? 'mb-6' : ''
                 if (e.type === 'QUIZ') {
                   return (
-                    <div className={marginBottom} key={e.id}>
+                    <div
+                      className={marginBottom}
+                      key={e.id}
+                      ref={quizDocumentRef}
+                    >
                       <QuizDocument
                         questions={[
                           ...(e.quiz?.multiple_choice_questions || []),
@@ -138,7 +303,11 @@ const ActivityPage = ({ activity }: Props) => {
                 }
                 if (e.type === 'VIDEO') {
                   return (
-                    <div className={marginBottom} key={e.id}>
+                    <div
+                      className={marginBottom}
+                      key={e.id}
+                      ref={videoDocumentRef}
+                    >
                       <VideoDocument
                         videos={e.videos}
                         activityId={activity.id}
@@ -180,13 +349,21 @@ const ActivityPage = ({ activity }: Props) => {
 
         <div className="absolute bottom-0 left-0 right-0 border-2 border-primary"></div>
       </div>
-      <Discussion />
+      <div ref={endActivityRef}></div>
+      <div>
+        <Discussion />
+      </div>
     </div>
   )
 }
 
 export default ActivityPage
 
+/**
+ * Hàm props phía máy chủ cho thành phần ActivityPage.
+ * @param {Object} context - Đối tượng context phía máy chủ.
+ * @returns {Object} - Props phía máy chủ.
+ */
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
 
@@ -219,8 +396,13 @@ export async function getServerSideProps(context: any) {
       context?.query?.activityId,
       cookies.accessToken,
     )
+
     return {
-      props: { activity },
+      props: {
+        activity,
+        courseId: context.query?.id,
+        sectionId: context.query?.activityId,
+      },
     }
   } catch (error: any) {
     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
