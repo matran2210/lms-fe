@@ -55,6 +55,13 @@ const UserApi = {
       request: formData,
     })
   },
+
+  makeContactDefault: (id: string): Promise<any> => {
+    const uri = `${url.makeContactDefault}/${id}/make-this-default`
+    return httpService.POST<{}, IResponse<{ message: string }>>({
+      uri,
+    })
+  },
 }
 
 export default UserApi

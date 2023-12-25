@@ -14,6 +14,8 @@ interface IProps {
   message: string
   footer?: boolean
   widthDrawer?: string
+  btnSubmitTile?: string
+  handleSubmit?: any
 }
 
 const SappDrawer = ({
@@ -24,6 +26,8 @@ const SappDrawer = ({
   message,
   footer = true,
   widthDrawer,
+  btnSubmitTile = 'Next Lesson',
+  handleSubmit = () => {},
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -74,9 +78,9 @@ const SappDrawer = ({
               onClick={handleMaskClick}
             />
             <ButtonPrimary
-              title="Next Lesson"
+              title={btnSubmitTile}
               className="h-10 me-[32px]"
-              onClick={() => {}}
+              onClick={handleSubmit}
             />
           </div>
         )}

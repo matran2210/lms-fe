@@ -131,6 +131,22 @@ export const updateUserAvatar = createAsyncThunk(
   },
 )
 
+export const makeContactDefault = createAsyncThunk(
+  'userReducer/makeContactDefault',
+  async (id: string, thunkAPI) => {
+    try {
+      const res = await UserApi.makeContactDefault(id)
+      if (!res) {
+        return
+      }
+      toast.success('Cập nhật liên hệ mặc định thành công!')
+      return {}
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 export const userSlice = createSlice({
   name: 'userReducer',
   initialState,
@@ -166,6 +182,16 @@ export const userSlice = createSlice({
     })
     builder.addCase(updateUserAvatar.rejected, (state) => {
       state.loadingEditAvatar = false
+    })
+
+    builder.addCase(makeContactDefault.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(makeContactDefault.fulfilled, (state) => {
+      state.loading = false
+    })
+    builder.addCase(makeContactDefault.rejected, (state) => {
+      state.loading = false
     })
   },
 })
