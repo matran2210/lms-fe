@@ -173,6 +173,21 @@ const CourseTestApi = {
     )
     return response.data?.data
   },
+  getQuizAttemptsChartData: async (
+    id: string,
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.getQuizAttemptsChartData}/${id}`,
+      {
+        headers,
+      },
+    )
+    return response.data?.data
+  },
   createQuizAttempt: async (id: string): Promise<IResponse<any>> => {
     const uri = url.createQuizAttemp
     const response = await httpService.POST<any, any>({

@@ -1,78 +1,74 @@
-import { useEffect, useRef } from 'react'
-
 interface DataItem {
-  id: number
+  question_topic_id: string
   title: string
-  value: number
+  total_correct_answers: number
+  total_questions: number
 }
 
-interface Props {
+interface IProps {
   data: DataItem[]
 }
 
-const Chart: React.FC<Props> = ({ data }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    const width = canvas.width
-    const height = canvas.height
-
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height)
-
-    const columnWidth = width / (data.length + 1) // +1 để dành một phần để vẽ trục hoành
-
-    // Margin từ border đến biểu đồ
-    const yAxisMargin = 30 // Margin bên trái cho trục hoành
-    const xAxisMargin = 10 // Margin bên dưới cho trục tung
-
-    ctx.beginPath()
-    ctx.moveTo(yAxisMargin, 0)
-    ctx.lineTo(yAxisMargin, height - xAxisMargin)
-    ctx.stroke()
-    ctx.fillStyle = '#141414'
-
-    for (let i = 0; i <= 100; i += 10) {
-      const yPos = height - (i / 100) * (height - xAxisMargin) + 5
-      ctx.fillText(`${i}`, 5, yPos)
-    }
-
-    const yPositions = [50, 70] // Các mốc giá trị trục tung
-    yPositions.forEach((pos) => {
-      const yPos = height - (pos / 100) * (height - xAxisMargin)
-      ctx.beginPath()
-      ctx.moveTo(yAxisMargin, yPos)
-      ctx.lineTo(width, yPos)
-      ctx.strokeStyle = '#141414' // Màu đỏ cho thanh ngang
-      ctx.stroke()
-    })
-
-    // Vẽ trục hoành (title)
-    data.forEach((item, index) => {
-      const xPos = columnWidth * (index + 1) + yAxisMargin
-
-      const yPos = height - (item.value / 100) * (height - xAxisMargin)
-
-      // Vẽ thanh ngang
-      ctx.fillStyle = '#FFB800'
-      ctx.fillRect(xPos - 25, yPos, 50, 5)
-    })
-  }, [data])
-
+const ChartScore = ({ data }: IProps) => {
   return (
-    <canvas
-      ref={canvasRef}
-      width={950}
-      height={400}
-      style={{ margin: '20px' }}
-    />
+    <div className="block">
+      <div className="flex w-full relative mb-4 overflow-hidden">
+        <div className="absolute top-[43%] -translate-y-1/2 -left-9 text-medium-sm text-bw-1 font-normal -rotate-90 shrink-0">
+          Available Points
+        </div>
+        <div className="absolute top-1/2 -translate-y-1/2 left-27 w-0.5 h-full border-r border-gray-1"></div>
+        <div className="h-40 w-full ml-9">
+          <div className="flex items-center w-full mt-10">
+            <span className="text-medium-sm text-bw-1 font-normal pr-7">
+              70%
+            </span>
+            <div className="w-full border-b border-gray-1"></div>
+          </div>
+          <div className="flex items-center w-full mt-4">
+            <span className="text-medium-sm text-bw-1 font-normal pr-7">
+              50%
+            </span>
+            <div className="w-full border-b border-gray-1"></div>
+          </div>
+        </div>
+        {data.map((item, index) => (
+          <div
+            key={item?.question_topic_id}
+            className="w-16 h-1 bg-primary absolute"
+            style={{
+              left: `${14.2 * (index + 1)}%`,
+              bottom: `${
+                (item?.total_correct_answers / item.total_questions) * 100
+              }%`,
+            }}
+          ></div>
+        ))}
+      </div>
+      <div className="flex flex-row gap-6">
+        <div className="flex flex-col shrink-0 justify-between my-3">
+          <div className="text-medium-sm">Topic Area</div>
+          <div className="text-medium-sm">Topic Weight</div>
+        </div>
+        <div className="bg-gray-4 px-6 py-3 w-full overflow-x-auto">
+          <div className="flex flex-row gap-6 flex-start">
+            {data?.map((item: any) => (
+              <div
+                key={item?.id}
+                className="flex flex-col w-full max-w-27 justify-between shrink-0 items-start gap-1"
+              >
+                <div className="text-bw-1 font-medium">{item?.title}</div>
+                <div className="text-medium-sm text-gray-1 font-normal">
+                  {`${
+                    (item?.total_correct_answers / item?.total_questions) * 100
+                  }%`}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
-export default Chart
+export default ChartScore

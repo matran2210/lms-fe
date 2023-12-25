@@ -168,15 +168,8 @@ const YourScoreDetail = () => {
                   <td className="text-start m-6 pr-4">
                     <div>
                       {(() => {
-                        if (
-                          typeof e?.timespent !== 'undefined' &&
-                          e?.timespent !== ''
-                        ) {
-                          const hours = Math.floor(Number(e.timespent) / 60)
-                          const minutes = Number(e.timespent) % 60
-                          return `${hours.toString().padStart(2, '0')}:${minutes
-                            .toString()
-                            .padStart(2, '0')}`
+                        if (e?.time_spent !== null) {
+                          return e?.time_spent
                         } else {
                           return '---'
                         }

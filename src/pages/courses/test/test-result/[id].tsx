@@ -27,14 +27,14 @@ const breadcrumbs: ITabs[] = [
   },
 ]
 
-const TestResultDetail = (questions: any) => {
+const TestResultDetail = ({ questions, chartData }: any) => {
   return (
     <>
       <div className="main px-4 lg:px-16">
         <Breadcrumb tabs={breadcrumbs} currentPage={'Results'} />
       </div>
       <div className="mx-auto mx-4 lg:mx-16 mb-6">
-        <TestResultPage questions={questions?.questions} />
+        <TestResultPage questions={questions} chartData={chartData} />
       </div>
     </>
   )
@@ -73,8 +73,16 @@ export async function getServerSideProps(context: any) {
       cookies.accessToken,
     )) as any
 
+    const chartData = (await CourseTestApi.getQuizAttemptsChartData(
+      context?.query?.id,
+      cookies.accessToken,
+    )) as any
+
     return {
-      props: { questions: questions },
+      props: {
+        questions: questions,
+        chartData: chartData,
+      },
     }
   } catch (error: any) {
     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
