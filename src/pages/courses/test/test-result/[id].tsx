@@ -33,8 +33,12 @@ const TestResultDetail = ({ questions, chartData }: any) => {
       <div className="main px-4 lg:px-16">
         <Breadcrumb tabs={breadcrumbs} currentPage={'Results'} />
       </div>
-      <div className="mx-auto mx-4 lg:mx-16 mb-6">
-        <TestResultPage questions={questions} chartData={chartData} />
+      <div className="px-4 lg:px-0 mx-auto lg:mx-16 mb-6">
+        <TestResultPage
+          questions={questions}
+          type={questions?.course?.course_categories[0]?.name}
+          chartData={chartData}
+        />
       </div>
     </>
   )
@@ -123,7 +127,7 @@ export async function getServerSideProps(context: any) {
       } else {
         return {
           redirect: {
-            destination: '/auth/login',
+            destination: '/',
             permanent: false,
           },
         }

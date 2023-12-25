@@ -3,9 +3,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
-import YourScore from './yourScore'
+import YourScore from './cfa/yourScore'
 import YourScoreDetail from './yourScoreDetail'
 import MultipleQuestion from './multipleQues'
+import ChartACCAScore from './acca/chartACCAScore'
+import TotalScore from '@components/mycourses/test/TotalScore'
 
 interface DataItem {
   chart_data: any
@@ -16,22 +18,50 @@ interface DataItem {
 
 interface IProps {
   questions: Object
+  type: string
   chartData: DataItem
 }
 
-const TestResultPage = ({ questions, chartData }: IProps) => {
+const TestResultPage = ({ questions, type, chartData }: IProps) => {
+  const highestValue =
+    (chartData?.correct_answer / chartData?.total_question) * 100
   return (
-    <div className="grid grid-flow-col gap-4 overflow-y-auto">
-      <div className="col-span-2 ">
-        <YourScore chartData={chartData} />
-      </div>
-      <div className="row-span-2 col-span-2 max-h-full">
-        <YourScoreDetail />
-      </div>
-      <div className="row-span-3 ">
-        <MultipleQuestion questions={questions} />
-      </div>
-    </div>
+    <>
+      {type === 'CFA' && (
+        <div className="flex gap-6 overflow-y-auto">
+          <div className="max-h-full">
+            <YourScore chartData={chartData} />
+            <YourScoreDetail />
+          </div>
+          <MultipleQuestion questions={questions} className={'h-[991px]'} />
+        </div>
+      )}
+      {type === 'ACCA' && (
+        <div className="flex gap-6 overflow-y-auto flex-wrap">
+          <div className="max-h-full w-full max-w-smd">
+            <TotalScore
+              score={highestValue}
+              className="px-7 pt-6 pb-4 mb-5 shadow-sidebar"
+              classScore="pt-2"
+              classGlobal="mt-0 mb-3 !items-end"
+            />
+            <MultipleQuestion questions={questions} className={'h-[815px]'} />
+          </div>
+          <div className="max-h-full">
+            <ChartACCAScore data={chartData?.chart_data} />
+            <YourScoreDetail />
+          </div>
+        </div>
+      )}
+      {type !== 'CFA' && type !== 'ACCA' && (
+        <div className="flex gap-6 overflow-y-auto flex-wrap">
+          <MultipleQuestion questions={questions} className={'h-[991px]'} />
+          <div className="max-h-full">
+            <YourScoreDetail />
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 

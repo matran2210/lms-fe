@@ -9,11 +9,14 @@ interface IProps {
   data: DataItem[]
 }
 
-const ChartScore = ({ data }: IProps) => {
+const ChartCFAScore = ({ data }: IProps) => {
   return (
     <div className="block">
+      <div className="text-xl font-bold text-bw-1 mb-6">
+        Your Performance by Topic Area
+      </div>
       <div className="flex w-full relative mb-4 overflow-hidden">
-        <div className="absolute top-[43%] -translate-y-1/2 -left-9 text-medium-sm text-bw-1 font-normal -rotate-90 shrink-0">
+        <div className="absolute top-[43%] -translate-y-1/2 -left-11 text-medium-sm text-bw-1 font-normal -rotate-90 shrink-0">
           Available Points
         </div>
         <div className="absolute top-1/2 -translate-y-1/2 left-27 w-0.5 h-full border-r border-gray-1"></div>
@@ -71,4 +74,4 @@ const ChartScore = ({ data }: IProps) => {
   )
 }
 
-export default ChartScore
+export default ChartCFAScore
