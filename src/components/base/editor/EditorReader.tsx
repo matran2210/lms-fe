@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import SappModalImage from '../modal/SappModalImage'
-import SappModalVideo from '../modal/SappModalVideo'
 
 type Props = {
   text_editor_content?: string
@@ -40,27 +39,21 @@ const EditorReader = ({
   const handleOnclick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement
     if (target.tagName === 'VIDEO') {
-      setType('VIDEO')
-      // const source_src = target.querySelector('source')?.getAttribute('src')
-      const resource_id = target
-        .querySelector('source')
-        ?.getAttribute('resource_id')
-      let url = ''
-      if (resource_id) {
-        url = (await CourseTestApi.getResource(resource_id || '')).data.url
-      }
-      if (url) {
-        const src =
-          url
-            .replace(
-              'https://customer-qf43f9e6huohhr1o.cloudflarestream.com/',
-              '',
-            )
-            .replace('/manifest/video.m3u8', '') || ''
-
-        setSrc(src)
-      } else {
-        setSrc(undefined)
+      const src = target.getAttribute('resource_id')
+      if (src && target.tagName === 'VIDEO') {
+        const res = await CourseTestApi.getResource(src)
+        var iframe = document.createElement('iframe')
+        iframe.src = res.data.url.replace(
+          '/manifest/video.m3u8',
+          '/iframe?autoplay=true',
+        )
+        iframe.id = target.id
+        iframe.className = target.className
+        iframe.style.cssText = target.style.cssText
+        iframe.allow =
+          'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;'
+        iframe.allowFullscreen = true
+        target?.parentNode?.replaceChild(iframe, target)
       }
     } else if (target.tagName === 'IMG') {
       setType('IMG')
@@ -78,9 +71,6 @@ const EditorReader = ({
           dangerouslySetInnerHTML={{ __html: text_editor_content || '' }}
         ></div>
       </div>
-      {type === 'VIDEO' && (
-        <SappModalVideo src={src} setSrc={setSrc}></SappModalVideo>
-      )}
       {type === 'IMG' && (
         <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
       )}

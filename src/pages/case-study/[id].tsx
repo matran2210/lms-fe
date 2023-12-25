@@ -410,7 +410,6 @@ const CaseStudyDetail = ({ questions }: any) => {
     //   answers: answers,
     //   quiz_position_mapping: quiz_position_mapping,
     // })
-    // console.log(answers, quiz_position_mapping)
 
     return
   }

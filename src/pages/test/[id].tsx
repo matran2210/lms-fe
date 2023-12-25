@@ -17,7 +17,6 @@ import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
-import Luckysheet from '@components/base/spreadSheet/Luckysheet'
 import TabSlide from '@components/base/tabSlide/TabSlide'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
@@ -41,7 +40,8 @@ import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES } from 'src/constants'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
-const TestDetail = ({ questions }: any) => {
+import TestTimeOutModal from '../courses/test/test-timeout'
+const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
     type: string,
@@ -201,7 +201,10 @@ const TestDetail = ({ questions }: any) => {
   const [currentTime, setCurrentTime] = useState(Date.now())
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
-
+  const [remainTime, setRemainTime] = useState<number>(
+    quizDetail.quiz_timed * 60,
+  )
+  const [openTimeOut, setOpenTimeOut] = useState(false)
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -771,15 +774,40 @@ const TestDetail = ({ questions }: any) => {
       clearInterval(interval)
     }
   }, [])
+  useEffect(() => {
+    if (quizDetail.quiz_timed) {
+      const interval = setInterval(() => {
+        setRemainTime((prev) => {
+          if (prev === 1) {
+            clearInterval(interval)
+            setOpenTimeOut(true)
+            // handleSubmitQuestion()
+          }
+          return prev - 1
+        })
+      }, 1000)
+
+      // Return a function that clears the interval
+
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  }, [quizDetail])
+
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
       <div>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
-          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">Name</div>
-          <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
-            {formatTime(0)}
+          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
+            {quizDetail.name}
           </div>
+          {remainTime && (
+            <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
+              {formatTime(remainTime)}
+            </div>
+          )}
           <ButtonCancelSubmit
             className={'flex gap-4 flex-row-reverse w-1/3'}
             // color={color}
@@ -796,7 +824,9 @@ const TestDetail = ({ questions }: any) => {
             cancel={{
               title: 'Quit',
               size: 'medium',
-              onClick: () => {},
+              onClick: () => {
+                router.back()
+              },
               loading: false,
               //   full: fullWidthBtn,
             }}
@@ -1160,6 +1190,12 @@ const TestDetail = ({ questions }: any) => {
           </button>
         </div>
       </div>
+      <TestTimeOutModal
+        open={openTimeOut}
+        setOpen={setOpenTimeOut}
+        handleSubmit={handleSubmitQuestion}
+        handleQuit={() => router.back()}
+      />
     </div>
   )
 }
@@ -1198,9 +1234,12 @@ export async function getServerSideProps(context: any) {
       context?.query?.id,
       cookies.accessToken,
     )) as any
-
+    const quizDetail = (await CourseTestApi.getDetailQuizById(
+      context?.query?.id,
+      cookies.accessToken,
+    )) as any
     return {
-      props: { questions },
+      props: { questions, quizDetail },
     }
   } catch (error: any) {
     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
