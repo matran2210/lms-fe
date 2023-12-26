@@ -31,5 +31,13 @@ const EntranceApi = {
     })
     return res
   },
+  putLevel: async (data: any): Promise<IResponse<any>> => {
+    const uri = url.putLevel
+    const res = await httpService.PUT<any, any>({
+      uri,
+      request: data,
+    })
+    return res
+  },
 }
 export default EntranceApi
