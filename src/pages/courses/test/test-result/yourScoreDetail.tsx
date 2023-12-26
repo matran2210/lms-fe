@@ -39,7 +39,7 @@ const headers = [
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-62px',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[95px]',
   },
 ]
 
@@ -100,8 +100,9 @@ const YourScoreDetail = () => {
   }, [router])
 
   return (
-    <div className="bg-white px-24 py-6 max-w-full max-h-full">
-      <div className="">
+    <div className="bg-white px-6 xl:px-24 py-6 max-w-[1144px] max-h-full shadow-sidebar">
+      <div className="text-xl font-bold text-bw-1 mb-6">Your Score Details</div>
+      <div className="block">
         <SappTable
           headers={headers}
           loading={true}
@@ -141,42 +142,20 @@ const YourScoreDetail = () => {
                     {e?.is_correct ? 'Correct' : 'Incorrect'}
                   </td>
                   <td className="text-start m-6 text-gray-1 pr-4">
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginLeft: '5px',
-                      }}
-                    >
-                      {e?.result === 'Correct' && (
-                        <img
-                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                          alt="Correct"
-                          className="w-4 text-state-success mr-1"
-                        />
-                      )}
-                      {e?.result === 'Incorrect' && (
-                        <img
-                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                          alt="Incorrect"
-                          className="w-4 text-state-error mr-1"
-                        />
-                      )}
-                      {e?.progress}
+                    <div className="flex items-center ml-1">
+                      <img
+                        src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                        alt="Correct"
+                        className="w-4 text-state-success mr-1"
+                      />
+                      29%
                     </div>
                   </td>
                   <td className="text-start m-6 pr-4">
                     <div>
                       {(() => {
-                        if (
-                          typeof e?.timespent !== 'undefined' &&
-                          e?.timespent !== ''
-                        ) {
-                          const hours = Math.floor(Number(e.timespent) / 60)
-                          const minutes = Number(e.timespent) % 60
-                          return `${hours.toString().padStart(2, '0')}:${minutes
-                            .toString()
-                            .padStart(2, '0')}`
+                        if (e?.time_spent !== null) {
+                          return e?.time_spent
                         } else {
                           return '---'
                         }

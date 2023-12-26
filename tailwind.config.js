@@ -19,6 +19,7 @@ module.exports = {
       '4xl': '1920px',
     },
     fontSize: {
+      '6px': ['64px', { lineHeight: '76.8px ' }],
       '5xl': ['40px', { lineHeight: '50px' }],
       '4xl': ['36px', { lineHeight: '45px' }],
       '3xl': ['32px', { lineHeight: '40px' }],
@@ -139,6 +140,9 @@ module.exports = {
         5.5: '22px',
       },
       maxWidth: {
+        27: '110px',
+        78: '304px',
+        smd: '402px',
         md: '448px',
         lg: '512px',
         xl: '576px',
@@ -151,6 +155,7 @@ module.exports = {
         0: '0',
         4.5: '17px',
         4.8: '18px',
+        4.9: '19.2px',
         5.2: '20.962px',
         6.2: '25px',
         6.5: '27px',
@@ -197,6 +202,9 @@ module.exports = {
         8.25: '2.0625rem', // 33px
         13: '3.25rem', // 52px
         15: '3.75rem', // 60px
+      },
+      inset: {
+        27: '108px',
       },
       height: {
         4.5: '1.125rem', // 18px

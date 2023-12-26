@@ -5,9 +5,10 @@ import Link from 'next/link'
 
 interface MultipleQuestionProps {
   questions: any
+  className?: string
 }
 
-const MultipleQuestion = ({ questions }: MultipleQuestionProps) => {
+const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
   const renderBoxes = (type: string, data: any) => {
     const renderBoxItems = data?.map((item: any, index: number) => {
       return (
@@ -37,7 +38,9 @@ const MultipleQuestion = ({ questions }: MultipleQuestionProps) => {
   }
 
   return (
-    <div className="bg-white flex flex-col justify-between max-w-[420px] h-[991px] items-start px-6 py-6">
+    <div
+      className={`${className} bg-white flex flex-col justify-between w-full max-w-smd items-start px-6 py-6 overflow-y-auto shadow-sidebar`}
+    >
       <div className="flex flex-col gap-10 w-full items-start">
         <div className="flex flex-col gap-6 w-full items-start">
           {renderBoxes('Multiple Question', questions?.selectedResponseAnswers)}

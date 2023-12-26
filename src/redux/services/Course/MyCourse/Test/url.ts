@@ -9,6 +9,7 @@ export const url = {
   getQuizAttempts: '/quiz-attempts',
   createQuizAttemp: '/quiz/quiz-attempt',
   getQuizAttemptsTable: '/quiz-attempts/table',
+  getQuizAttemptsChartData: '/quiz-attempts/chart-data',
 }
 
 export default url
