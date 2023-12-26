@@ -153,8 +153,12 @@ const SappModal: React.FC<IProps> = ({
     // Nếu handleSubmit là một hàm bất đồng bộ, thì gọi hàm đó và đợi kết quả
     if (handleSubmit && handleSubmit.constructor.name === 'AsyncFunction') {
       setLoading(true)
-      await handleSubmit()
-      setLoading(false)
+      try {
+        await handleSubmit()
+      } catch (err) {
+      } finally {
+        setLoading(false)
+      }
       if (closeAfterSubmit) {
         handleClose()
       }

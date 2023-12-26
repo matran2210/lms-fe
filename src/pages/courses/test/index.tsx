@@ -1,7 +1,7 @@
 import SappModal from '@components/base/modal/SappModal'
 import { formatTime } from '@components/common/timer'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 interface IProps {
@@ -22,6 +22,17 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
     //to do: start test
     router.push(`/test/${data.quiz.id}`)
   }
+  const checkFinished = useMemo(() => {
+    if (data?.quiz?.attempts.lenght === 0) {
+      return true
+    }
+    for (let i in data?.quiz?.attempts) {
+      if (data?.quiz?.attempts[i].status === 'SUBMITTED') {
+        return true
+      }
+    }
+    return false
+  }, [data?.quiz?.attempts])
   return (
     <SappModal
       open={open}
@@ -58,11 +69,18 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">No of Attempts:</div>
-        <div className="text-bw-1">{data?.quiz?.attempts?.length}</div>
+        <div className="text-bw-1">
+          {data?.quiz?.attempts?.length}/
+          {data?.quiz?.is_limited ? data?.quiz?.is_limited : 'Unlimited'}
+        </div>
       </div>
       <div className="flex justify-between py-6 gap-8">
         <div className="text-gray-1">Status:</div>
-        <div className="text-danger">Unfinish</div>
+        <div
+          className={`${checkFinished ? 'text-state-success' : 'text-danger'}`}
+        >
+          {checkFinished ? 'Finished' : 'Unfinished'}
+        </div>
       </div>
     </SappModal>
   )

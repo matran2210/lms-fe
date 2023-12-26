@@ -94,6 +94,14 @@ const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
     reset()
     setOpen && setOpen(false)
   }
+  const onSubmit = async (dataValue: any) => {
+    const res = await EntranceApi.putLevel({
+      university_program_id: dataValue.univers_program_id.value,
+      major_id: dataValue.majors_id.value,
+      english_level_id: dataValue.englishLevel_id.value,
+      university_id: dataValue.univers_id.value,
+    })
+  }
   const {
     control,
     handleSubmit,
@@ -113,7 +121,7 @@ const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
       cancelButtonCaption="Cancel"
       okButtonCaption="Start"
       handleCancel={handleOnClick}
-      handleSubmit={handleSubmit((e) => {})}
+      handleSubmit={handleSubmit(onSubmit)}
       showHeader={false}
       refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
       size="max-w-screen-sm"
@@ -121,7 +129,7 @@ const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
       childClass=""
       parentChildClass=""
       position="center"
-      closeAfterSubmit={false}
+      // closeAfterSubmit={false}
     >
       <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
         {' '}
