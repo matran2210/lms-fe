@@ -125,6 +125,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
+            ref={ref}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -152,6 +153,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
+            ref={ref}
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -546,7 +548,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           timeSpent: !item.done
             ? item.timeSpent
               ? currentTime - startTime + item.timeSpent
-              : currentTime - startTime
+              : currentTime - startTime <= 0
+                ? 0
+                : currentTime - startTime
             : item.timeSpent,
         }
       }
@@ -644,9 +648,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         arr[currentIndex] = { ...arr[currentIndex], answer: undefined }
         return arr
       })
+      setValue(`${currentTabContent?.id}_answer`, undefined)
       if (
         data.qType === QUESTION_TYPES.DRAG_DROP ||
-        data.qType === QUESTION_TYPES.MATCHING
+        data.qType === QUESTION_TYPES.MATCHING ||
+        data.qType === QUESTION_TYPES.FILL_WORD ||
+        data.qType === QUESTION_TYPES.SELECT_WORD
       ) {
         ref.current?.handleReset()
       }
@@ -794,39 +801,39 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
     }
   }, [quizDetail])
-  useEffect(() => {
-    const handleBeforeUnload = async (event: any) => {
-      event.preventDefault()
-      await handleSubmitQuestion()
-    }
+  // useEffect(() => {
+  //   const handleBeforeUnload = async (event: any) => {
+  //     event.preventDefault()
+  //     await handleSubmitQuestion()
+  //   }
 
-    // Thêm lắng nghe sự kiện beforeunload
-    window.addEventListener('beforeunload', handleBeforeUnload)
+  //   // Thêm lắng nghe sự kiện beforeunload
+  //   window.addEventListener('beforeunload', handleBeforeUnload)
 
-    // Cleanup khi component bị unmount
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-  }, [currentTabContent, quizAttempId])
-  useEffect(() => {
-    router.beforePopState(({ as }) => {
-      if (as !== router.asPath) {
-        try {
-          handleSubmitQuestion()
-          return true
-        } catch (err) {
-          return true
-        }
-        // Will run when leaving the current page; on back/forward actions
-        // Add your logic here, like toggling the modal state
-      }
-      return true
-    })
+  //   // Cleanup khi component bị unmount
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload)
+  //   }
+  // }, [currentTabContent, quizAttempId])
+  // useEffect(() => {
+  //   router.beforePopState(({ as }) => {
+  //     if (as !== router.asPath) {
+  //       try {
+  //         handleSubmitQuestion()
+  //         return true
+  //       } catch (err) {
+  //         return true
+  //       }
+  //       // Will run when leaving the current page; on back/forward actions
+  //       // Add your logic here, like toggling the modal state
+  //     }
+  //     return true
+  //   })
 
-    return () => {
-      router.beforePopState(() => true)
-    }
-  }, [currentTabContent, quizAttempId, router])
+  //   return () => {
+  //     router.beforePopState(() => true)
+  //   }
+  // }, [currentTabContent, quizAttempId, router])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
