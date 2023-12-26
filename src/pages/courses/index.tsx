@@ -124,7 +124,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
           {guideStatus && guideStep === 1 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_1}
-              className="top-full w-full left-0 mt-3"
+              className="top-full w-full max-w-[365px] left-0 mt-3"
               index={1}
               total={6}
               handleNext={nextStep}
@@ -147,7 +147,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}
-                className="w-screen top-full right-full mt-3"
+                className="w-screen max-w-365px top-full right-full mt-3"
                 index={6}
                 total={6}
                 handleNext={closeUserGuide}
@@ -171,7 +171,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
         {guideStatus && guideStep === 4 && (
           <PopupStep
             content={UserGuide.CONTENT_STEP_4}
-            className="top-full w-full left-0 mt-3"
+            className="top-full w-full max-w-365px left-0 mt-3"
             index={4}
             total={6}
             handleNext={nextStep}
@@ -187,7 +187,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
         {guideStatus && guideStep === 5 && (
           <PopupStep
             content={UserGuide.CONTENT_STEP_5}
-            className="w-full top-0 left-1/3 mt-6"
+            className="w-full max-w-[362px] top-0 left-[33%] mt-6"
             index={5}
             total={6}
             handleNext={nextStep}

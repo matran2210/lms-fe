@@ -72,7 +72,7 @@ export default function Sidebar({
           {guideStatus && guideStep == 2 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_2}
-              className="top-full left-full mt-3 ml-3 w-screen"
+              className="top-full left-full max-w-365px mt-3 ml-3 w-screen"
               index={2}
               total={6}
               handleNext={nextStep}
@@ -96,7 +96,7 @@ export default function Sidebar({
           {guideStatus && guideStep == 3 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_3}
-              className="bottom-full left-full mb-3 ml-3 w-screen"
+              className="max-w-365px bottom-full left-full mb-3 ml-3 w-screen"
               index={3}
               total={6}
               handleNext={nextStep}

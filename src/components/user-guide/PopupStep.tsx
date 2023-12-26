@@ -41,7 +41,7 @@ const PopupStep = ({
     <>
       <div
         ref={confirmDialogRef}
-        className={`animate-jump-in bg-primary p-7.5 absolute z-50 max-w-sm ${className}`}
+        className={`animate-jump-in bg-primary p-7.5 absolute z-50 ${className}`}
       >
         <span className="text-base font-normal text-white">{content}</span>
         <div className="flex items-center justify-between mt-5">
