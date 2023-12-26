@@ -12,6 +12,7 @@ interface EntranceTestProps {
   timeTaken: number
   timeAllow: number
   result: string
+  id: string
 }
 
 const EntranceTest = ({
@@ -20,6 +21,7 @@ const EntranceTest = ({
   timeTaken,
   timeAllow,
   result,
+  id,
 }: EntranceTestProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleOnClick = () => {
@@ -27,7 +29,7 @@ const EntranceTest = ({
   }
 
   const timeTakenFormatted = formatTime(timeTaken)
-  const timeAllowFormatted = formatTime(timeAllow)
+  const timeAllowFormatted = timeAllow ? formatTime(timeAllow) : 'Unlimited'
 
   return (
     <>
@@ -80,7 +82,11 @@ const EntranceTest = ({
           )}
         </div>
       </div>
-      <EntrancePopup open={open} setOpen={setOpen} />
+      <EntrancePopup
+        open={open}
+        setOpen={setOpen}
+        entrancePopupContent={{ id }}
+      />
     </>
   )
 }

@@ -19,9 +19,7 @@ const ButtonCancelSubmit = ({
           isPadding={false}
         ></SappButton>
       )}
-      {showOkButton && (
-        <SappButton color={color} {...submit} size="extra"></SappButton>
-      )}
+      {showOkButton && <SappButton color={color} {...submit}></SappButton>}
     </div>
   )
 }

@@ -34,6 +34,7 @@ const CourseTestApi = {
     )
     return response.data?.data
   },
+
   getQuestionCaseStudiesById: async (
     id: string,
     page_index: number,
@@ -110,6 +111,13 @@ const CourseTestApi = {
       params: {
         question_ids: id,
       },
+    })
+    return response
+  },
+  getQuizDetail: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.getQuestionTabs + `/${id}`
+    const response = await httpService.GET<any, any>({
+      uri,
     })
     return response
   },

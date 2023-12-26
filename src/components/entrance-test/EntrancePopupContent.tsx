@@ -11,7 +11,7 @@ interface EntrancePopupContentProps {
   score: number
   timeAllow: number
   attemps: string
-  status: string
+  status: boolean
 }
 
 const EntrancePopupContent = ({
@@ -22,7 +22,7 @@ const EntrancePopupContent = ({
   status,
 }: EntrancePopupContentProps) => {
   const [open, setOpen] = useState<boolean>(false)
-  const timeAllowFormatted = formatTime(timeAllow)
+  const timeAllowFormatted = timeAllow ? formatTime(timeAllow) : 'Unlimited'
 
   return (
     <>
@@ -46,7 +46,9 @@ const EntrancePopupContent = ({
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Status:</p>
-            <p className="text-state-error">{status}</p>
+            <div className={`${status ? 'text-state-success' : 'text-danger'}`}>
+              {status ? 'Finished' : 'Unfinished'}
+            </div>
           </div>
         </div>
       </div>
