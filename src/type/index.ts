@@ -17,7 +17,7 @@ export interface IButtonProps {
   link?: string
   disabled?: boolean
   loading?: boolean
-  size?: 'small' | 'medium' | 'lager'
+  size?: 'small' | 'medium' | 'lager' | 'extra'
   full?: boolean
   name?: string
   type?: 'button' | 'reset' | 'submit'

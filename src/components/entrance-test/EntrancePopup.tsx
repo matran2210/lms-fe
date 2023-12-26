@@ -4,6 +4,9 @@ import SappModal from '@components/base/modal/SappModal'
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import Icon from '@components/icons'
 import EntrancePopupContent from './EntrancePopupContent'
+import EntranceTestFillForm from './EntranceTestFillForm'
+import { useAppSelector } from 'src/redux/hook'
+import { userReducer } from 'src/redux/slice/User/User'
 
 // define the props for the confirm dialog component
 export type EntrancePopupProps = {
@@ -21,31 +24,36 @@ const EntrancePopup: FC<EntrancePopupProps> = ({ open, setOpen }) => {
     attemps: 'Unlimited',
     status: 'Unfinish',
   }
+  const { user } = useAppSelector(userReducer)
 
   const handleOnClick = () => {
     setOpen && setOpen(false)
+    // setOpenFillForm(true)
   }
-
+  const [openFillForn, setOpenFillForm] = useState(false)
   return (
     <>
       <SappModal
         open={open}
         setOpen={setOpen}
-        size="w-[614px]"
-        refClass="max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all top-1/2 -translate-y-1/2"
-        childClass=""
-        parentChildClass="py-17.5 px-19"
-        footerButtonClassName="justify-center flex flex-row-reverse"
-        color="danger"
+        cancelButtonCaption="Cancel"
+        okButtonCaption="Start"
+        handleCancel={handleOnClick}
+        handleSubmit={() => setOpenFillForm(true)}
         showHeader={false}
-        showFooter={false}
+        // size="max-w-1/2"
+        footerButtonClassName="justify-between flex"
+        childClass=""
+        parentChildClass=""
+        position="center"
+        closeAfterSubmit={false}
       >
         <h2 className="text-xl font-bold text-bw-1 mb-4">Entrance Test</h2>
         <div
           className="cursor-pointer"
-          onClick={() => {
-            handleOnClick()
-          }}
+          // onClick={() => {
+          //   handleOnClick()
+          // }}
         >
           <EntrancePopupContent
             name={entrancePopupContent.name}
@@ -56,6 +64,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({ open, setOpen }) => {
           />
         </div>
       </SappModal>
+      <EntranceTestFillForm open={openFillForn} setOpen={setOpenFillForm} />
     </>
   )
 }

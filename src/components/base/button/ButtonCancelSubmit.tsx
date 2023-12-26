@@ -13,9 +13,15 @@ const ButtonCancelSubmit = ({
   return (
     <div className={className}>
       {showCancelButton && (
-        <SappButton color={colorCancel} {...cancel}></SappButton>
+        <SappButton
+          color={colorCancel}
+          {...cancel}
+          isPadding={false}
+        ></SappButton>
       )}
-      {showOkButton && <SappButton color={color} {...submit}></SappButton>}
+      {showOkButton && (
+        <SappButton color={color} {...submit} size="extra"></SappButton>
+      )}
     </div>
   )
 }

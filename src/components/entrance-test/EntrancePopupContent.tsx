@@ -49,17 +49,6 @@ const EntrancePopupContent = ({
             <p className="text-state-error">{status}</p>
           </div>
         </div>
-        <div className="action flex items-center justify-between relative mt-10">
-          <div className="underline text-bw-1 text-lg leading-6.5 font-semibold">
-            Cancel
-          </div>
-          <ButtonPrimary
-            title="Start"
-            full={false}
-            size={'lager'}
-            className="hover:bg-primary hover:text-white"
-          />
-        </div>
       </div>
       <ResultRowsModal open={open} setOpen={setOpen} />
     </>

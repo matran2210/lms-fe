@@ -1,0 +1,175 @@
+import SappModal from '@components/base/modal/SappModal'
+import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import EntranceApi from 'src/redux/services/EntranceTest'
+import { z } from 'zod'
+import { EntrancePopupProps } from './EntrancePopup'
+import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
+  const [listUnivers, setListUnivers] = useState<any>()
+  const [listUniverPrograms, setListUniverPrograms] = useState<any>()
+  const [listMajors, setListMajors] = useState<any>()
+  const [listEngLevel, setListEngLevel] = useState<any>()
+
+  const schema = z.object({
+    univers_id: z
+      .object({
+        label: z.string().optional(),
+        value: z.string().optional(),
+      })
+      .optional()
+      .refine((data) => data?.value && data?.label, VALIDATE_REQUIRED),
+    univers_program_id: z
+      .object({
+        label: z.string().optional(),
+        value: z.string().optional(),
+      })
+      .optional()
+      .refine((data) => data?.value && data?.label, VALIDATE_REQUIRED),
+    majors_id: z
+      .object({
+        label: z.string().optional(),
+        value: z.string().optional(),
+      })
+      .optional()
+      .refine((data) => data?.value && data?.label, VALIDATE_REQUIRED),
+    englishLevel_id: z
+      .object({
+        label: z.string().optional(),
+        value: z.string().optional(),
+      })
+      .optional()
+      .refine((data) => data?.value && data?.label, VALIDATE_REQUIRED),
+  })
+  const getListUniversities = async () => {
+    const res = await EntranceApi.getListUnivers()
+    let optionUnivers = []
+    for (let e of res.data) {
+      optionUnivers.push({ value: e.code, label: e.description })
+    }
+    setListUnivers(optionUnivers)
+    // return res?.data?.[0]
+  }
+  const getListUniverPrograms = async () => {
+    const res = await EntranceApi.getListUniversProgram()
+    let optionUniverProgram = []
+    for (let e of res.data) {
+      optionUniverProgram.push({ value: e.id, label: e.name })
+    }
+    setListUniverPrograms(optionUniverProgram)
+    // return res?.data?.[0]
+  }
+  const getListMajors = async () => {
+    const res = await EntranceApi.getListMajors()
+    let optionMajors = []
+    for (let e of res.data) {
+      optionMajors.push({ value: e.id, label: e.name })
+    }
+    setListMajors(optionMajors)
+    // return res?.data?.[0]
+  }
+  const getListEngLevel = async () => {
+    const res = await EntranceApi.getListEngLevel()
+    let optionEngLevel = []
+    for (let e of res.data) {
+      optionEngLevel.push({ value: e.id, label: e.name })
+    }
+    setListEngLevel(optionEngLevel)
+    // return res?.data?.[0]
+  }
+  useEffect(() => {
+    if (open) {
+      getListUniversities()
+      getListEngLevel()
+      getListMajors()
+      getListUniverPrograms()
+    }
+  }, [open])
+  // console.log(listUnivers)
+
+  const handleOnClick = () => {
+    reset()
+    setOpen && setOpen(false)
+  }
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    setValue,
+    reset,
+    watch,
+    getFieldState,
+  } = useForm<any>({
+    resolver: zodResolver(schema),
+    mode: 'onSubmit',
+  })
+  return (
+    <SappModal
+      open={open}
+      setOpen={setOpen}
+      cancelButtonCaption="Cancel"
+      okButtonCaption="Start"
+      handleCancel={handleOnClick}
+      handleSubmit={handleSubmit((e) => {})}
+      showHeader={false}
+      refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
+      size="max-w-screen-sm"
+      footerButtonClassName="justify-between flex"
+      childClass=""
+      parentChildClass=""
+      position="center"
+      closeAfterSubmit={false}
+    >
+      <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
+        {' '}
+        Fill this form
+      </h2>
+      <div className="mt-10">
+        <SappHookFormSelect
+          control={control}
+          name="univers_id"
+          label="Trường đại học"
+          required
+          placeholder="Chọn 1 lựa chọn"
+          options={listUnivers}
+        />
+      </div>
+      <div className="flex gap-6 mt-10">
+        <div className="flex-1">
+          <SappHookFormSelect
+            control={control}
+            name="univers_program_id"
+            label="Hệ đã/ đang theo học"
+            required
+            placeholder="Chọn 1 lựa chọn"
+            options={listUniverPrograms}
+          />
+        </div>
+        <div className="flex-1">
+          <SappHookFormSelect
+            control={control}
+            name="majors_id"
+            label="Chuyên ngành học"
+            required
+            placeholder="Chọn 1 lựa chọn"
+            options={listMajors}
+          />
+        </div>
+      </div>
+      <div className="mt-10 mb-10">
+        <SappHookFormSelect
+          control={control}
+          name="englishLevel_id"
+          label="Trình độ tiếng Anh"
+          required
+          placeholder="Chọn 1 lựa chọn"
+          options={listEngLevel}
+        />
+      </div>
+    </SappModal>
+  )
+}
+export default EntranceTestFillForm
