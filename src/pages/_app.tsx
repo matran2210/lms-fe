@@ -13,9 +13,13 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { onMessageListener } from 'src/utils/firebase'
-import { showNotification } from 'src/redux/slice/Notification/Notification'
+import {
+  showNotification,
+  hideNotification,
+} from 'src/redux/slice/Notification/Notification'
 import { useRouter } from 'next/router'
 import LearningResource from '@components/mycourses/LearningResource'
+import { getCountUnRead } from 'src/redux/slice/Notification/Notification'
 
 // import 'antd/dist/antd.css'
 
@@ -34,14 +38,31 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const [openResource, setOpenResource] = useState(false)
 
   const dispatch = useAppDispatch()
-  const getStatusNoti = useAppSelector(
-    (state) => state.notificationReducer?.notification_status,
+  const getNotiUnread = useAppSelector(
+    (state) => state.notificationReducer?.total_records,
   )
+
+  const coutNotificationsUnRead = async () => {
+    try {
+      await dispatch(getCountUnRead())
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    coutNotificationsUnRead()
+  }, [])
 
   useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
     })
+
+    // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
+    if (getNotiUnread > 0) {
+      dispatch(showNotification())
+    } else {
+      dispatch(hideNotification())
+    }
   })
 
   switch (layout) {
