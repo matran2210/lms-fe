@@ -273,9 +273,7 @@ const SappModal: React.FC<IProps> = ({
                     </div>
                   ))}
 
-                <div
-                  className={`${parentChildClass} snap-y flex-1 overflow-y-scroll bg-white -mr-4.5`}
-                >
+                <div className={`${parentChildClass} `}>
                   <div className={`${childClass}`}>{children}</div>
                 </div>
 

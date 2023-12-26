@@ -66,6 +66,7 @@ const EntranceTest = ({
               title="Detail"
               full={false}
               size={'small'}
+              onClick={handleOnClick}
               className="hover:bg-primary hover:text-white ml-auto"
             />
           ) : (
