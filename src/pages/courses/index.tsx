@@ -187,7 +187,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
         {guideStatus && guideStep === 5 && (
           <PopupStep
             content={UserGuide.CONTENT_STEP_5}
-            className="w-full max-w-[362px] top-0 left-1/3 mt-6"
+            className="w-full max-w-[362px] top-0 left-[33%] mt-6"
             index={5}
             total={6}
             handleNext={nextStep}
