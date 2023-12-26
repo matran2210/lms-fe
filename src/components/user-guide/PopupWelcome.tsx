@@ -28,7 +28,7 @@ const PopupWelcome = ({}: Props) => {
         overlayClass={'!hidden'}
         isContentFull={true}
         refClass={
-          'md:px-6 py-8 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all'
+          'md:px-6 py-6.5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all'
         }
       >
         <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
