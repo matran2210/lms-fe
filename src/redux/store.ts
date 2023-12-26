@@ -8,6 +8,7 @@ import notificationReducer from './slice/Notification/Notification'
 import courseActivityQuizReducer from './slice/Course/MyCourse/Activity/ActivityQuiz'
 import userGuideReducer from './slice/Course/UserGuide'
 import caseStudyTestReducer from './slice/Course/MyCourse/Case-study/CaseStudy'
+import entranceTestReducer from './slice/EntranceTest/EntranceTest'
 import { useDispatch } from 'react-redux'
 
 export const store = configureStore({
@@ -20,6 +21,7 @@ export const store = configureStore({
     courseActivityQuizReducer,
     userGuideReducer,
     caseStudyTestReducer,
+    entranceTestReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
