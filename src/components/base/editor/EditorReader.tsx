@@ -1,17 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import SappModalImage from '../modal/SappModalImage'
+import { DeserializeHighlight } from '@utils/index'
 
 type Props = {
   text_editor_content?: string
   className?: string
   extenalRef?: any
+  id?: string
+  onMouseUp?: any
+  highlighted?: string
 }
 
 const EditorReader = ({
   text_editor_content,
   className,
   extenalRef,
+  id,
+  onMouseUp,
+  highlighted,
 }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
@@ -32,6 +39,11 @@ const EditorReader = ({
       }
     }
   }, [refDocument, extenalRef])
+  useEffect(() => {
+    if (highlighted) {
+      DeserializeHighlight(highlighted)
+    }
+  }, [text_editor_content, highlighted])
   // useEffect(() => {
   //   setContent(text_editor_content)
   // }, [text_editor_content])
@@ -65,7 +77,11 @@ const EditorReader = ({
   }
   return (
     <>
-      <div className={`${className} mb-32px editor-wrap`}>
+      <div
+        className={`${className} mb-32px editor-wrap`}
+        id={id || ''}
+        onMouseUp={onMouseUp ? onMouseUp : () => {}}
+      >
         <div
           ref={extenalRef || refDocument}
           dangerouslySetInnerHTML={{ __html: text_editor_content || '' }}
