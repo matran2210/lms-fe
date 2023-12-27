@@ -11,6 +11,7 @@ export const PageLink = {
   AUTH_CHANGE_PASSWORD: '/auth/change-password',
   AUTH_CHANGE_PASSWORD_SUCCESS: '/auth/change-password/change-password-success',
   NOTIFICATION: '/notifications',
+  ENTRANCE_TEST: '/entrance-test',
 }
 
 export const TitleSidebar = {
