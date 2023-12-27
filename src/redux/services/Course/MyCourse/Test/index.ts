@@ -50,6 +50,27 @@ const CourseTestApi = {
     })
     return response
   },
+  getTopicQuiz: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.getTopicQuiz + `/${id}`
+    const response = await httpService.GET<any, any>({
+      uri,
+    })
+    return response
+  },
+  createTopicAttempt: async (
+    quiz_id: string,
+    question_topic_id: string,
+  ): Promise<IResponse<any>> => {
+    const uri = url.createTopicAttempt
+    const response = await httpService.POST<any, any>({
+      uri,
+      request: {
+        quiz_id,
+        question_topic_id,
+      },
+    })
+    return response
+  },
   getQuestionCaseStudiesByIdServerSide: async (
     id: string,
     accessToken: string,

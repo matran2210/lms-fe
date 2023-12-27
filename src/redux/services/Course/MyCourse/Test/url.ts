@@ -1,6 +1,7 @@
 export const url = {
   getQuestionTabs: '/quiz',
   getCaseStudyQuizes: '/quiz/case-study',
+  getTopicQuiz: '/question-topic',
   getQuestionDetail: '/question',
   getQuestionResult: '/question/results',
   getTopicDescription: '/question-topic',
@@ -10,6 +11,7 @@ export const url = {
   createQuizAttemp: '/quiz/quiz-attempt',
   getQuizAttemptsTable: '/quiz-attempts/table',
   getQuizAttemptsChartData: '/quiz-attempts/chart-data',
+  createTopicAttempt: '/case-study/topic-attempt',
 }
 
 export default url
