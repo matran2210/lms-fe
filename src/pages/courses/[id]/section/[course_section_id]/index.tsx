@@ -59,7 +59,12 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const handleRouterActivity = (id: string) => {
     router.push(`/courses/${router.query.id}/activity/${id}`)
   }
-
+  const handleRouterCaseStudy = (quizId: string, topicId: string) => {
+    router.push({
+      pathname: `/case-study/${topicId}`,
+      query: { quiz_id: quizId },
+    })
+  }
   return (
     <div className="main max-w-xxl my-0 mx-auto">
       <div className="main max-w-xxl my-0 mx-auto">
@@ -92,6 +97,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         course_id={router.query.id as any}
         course_section_id={router.query.course_section_id as any}
         handleRouterActivity={handleRouterActivity}
+        handleRouterCaseStudy={handleRouterCaseStudy}
       />
 
       <SappDrawer
