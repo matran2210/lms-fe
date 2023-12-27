@@ -17,6 +17,10 @@ export interface IUser {
   detail_id: string
   detail: IUserDetail
   user_contacts: IUserContact[]
+  university?: any
+  university_program?: any
+  major?: any
+  english_level?: any
 }
 interface IUserContact {
   id: string

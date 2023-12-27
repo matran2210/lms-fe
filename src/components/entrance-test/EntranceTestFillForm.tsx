@@ -7,13 +7,21 @@ import { z } from 'zod'
 import { EntrancePopupProps } from './EntrancePopup'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAppSelector } from 'src/redux/hook'
+import { userReducer } from 'src/redux/slice/User/User'
+import { useRouter } from 'next/router'
 
-const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
+const EntranceTestFillForm = ({
+  open,
+  setOpen,
+  entrancePopupContent,
+}: EntrancePopupProps) => {
   const [listUnivers, setListUnivers] = useState<any>()
   const [listUniverPrograms, setListUniverPrograms] = useState<any>()
   const [listMajors, setListMajors] = useState<any>()
   const [listEngLevel, setListEngLevel] = useState<any>()
-
+  const { user } = useAppSelector(userReducer)
+  const router = useRouter()
   const schema = z.object({
     univers_id: z
       .object({
@@ -80,28 +88,6 @@ const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
     setListEngLevel(optionEngLevel)
     // return res?.data?.[0]
   }
-  useEffect(() => {
-    if (open) {
-      getListUniversities()
-      getListEngLevel()
-      getListMajors()
-      getListUniverPrograms()
-    }
-  }, [open])
-  // console.log(listUnivers)
-
-  const handleOnClick = () => {
-    reset()
-    setOpen && setOpen(false)
-  }
-  const onSubmit = async (dataValue: any) => {
-    const res = await EntranceApi.putLevel({
-      university_program_id: dataValue.univers_program_id.value,
-      major_id: dataValue.majors_id.value,
-      english_level_id: dataValue.englishLevel_id.value,
-      university_id: dataValue.univers_id.value,
-    })
-  }
   const {
     control,
     handleSubmit,
@@ -114,6 +100,54 @@ const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
     resolver: zodResolver(schema),
     mode: 'onSubmit',
   })
+  useEffect(() => {
+    if (open) {
+      getListUniversities()
+      getListEngLevel()
+      getListMajors()
+      getListUniverPrograms()
+    }
+  }, [open])
+  useEffect(() => {
+    if (user && open) {
+      setValue('univers_id', {
+        value: user.university.code,
+        label: user.university.description,
+      })
+      setValue('univers_program_id', {
+        value: user.university_program.id,
+        label: user.university_program.name,
+      })
+      setValue('majors_id', { value: user.major.id, label: user.major.name })
+      setValue('englishLevel_id', {
+        value: user.english_level.id,
+        label: user.english_level.name,
+      })
+    }
+  }, [user, open])
+
+  const handleOnClick = () => {
+    reset()
+    setOpen && setOpen(false)
+  }
+  const onSubmit = async (dataValue: any) => {
+    if (
+      user.major &&
+      user.university &&
+      user.english_level &&
+      user.university_program
+    ) {
+    } else {
+      await EntranceApi.putLevel({
+        university_program_id: dataValue.univers_program_id.value,
+        major_id: dataValue.majors_id.value,
+        english_level_id: dataValue.englishLevel_id.value,
+        university_id: dataValue.univers_id.value,
+      })
+    }
+    router.push(`/test/${entrancePopupContent.id}`)
+  }
+
   return (
     <SappModal
       open={open}
@@ -133,7 +167,6 @@ const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
       // closeAfterSubmit={false}
     >
       <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
-        {' '}
         Fill this form
       </h2>
       <div className="mt-10">

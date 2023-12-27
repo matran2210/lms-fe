@@ -888,7 +888,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
       </div>
       {/* <div className=''> */}
-      {currentTabContent?.data === DISPLAY_TYPE.VERTICAL ? (
+      {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
         <div
           className="flex gap-5 h-[calc(100%-176px)] bg-gray-3 mt-[72px]"
           id={'preview-question'}
