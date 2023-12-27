@@ -41,6 +41,7 @@ export type IButtonCancelSubmitProps = {
   colorCancel?: IButtonColors
   showOkButton?: boolean
   showCancelButton?: boolean
+  size?: 'small' | 'medium' | 'lager' | 'extra'
 }
 declare global {
   interface Window {

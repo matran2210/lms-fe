@@ -4,6 +4,9 @@ import SearchForm from '@components/mycourses/Search'
 import React from 'react'
 import { parse } from 'cookie'
 import EntranceTestList from '@components/entrance-test/EntranceTestList'
+import EntranceApi from 'src/redux/services/EntranceTest'
+import axios from 'axios'
+import { apiURL } from '@components/mycourses/LearningResource'
 
 // Config entrance test lists
 const entranceTestLists = [
@@ -51,7 +54,7 @@ const entranceTestLists = [
   },
 ]
 
-const EntranceTest = ({ courses }: any) => {
+const EntranceTest = ({ entranceTestLists }: any) => {
   return (
     <>
       <div className="header bg-white border-b border-default">
@@ -85,3 +88,92 @@ const EntranceTest = ({ courses }: any) => {
 }
 
 export default EntranceTest
+export async function getServerSideProps(context: any) {
+  const { req, res, query } = context
+
+  // Lấy accessToken từ cookie
+  const accessToken = req.cookies.accessToken
+
+  // Kiểm tra accessToken
+  if (!accessToken) {
+    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  }
+
+  try {
+    // Parse cookies from the request headers
+    const cookies = parse(req.headers.cookie || '')
+
+    const entranceTestLists = (await EntranceApi.getListEntranceTest(
+      cookies.accessToken,
+    )) as any
+
+    return {
+      props: { entranceTestLists },
+    }
+  } catch (error: any) {
+    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
+    if (error.response && error.response.status === 401) {
+      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
+      const refreshToken = req.cookies.refreshToken
+
+      try {
+        const refreshResponse = await axios.post(
+          `${apiURL}/auth/rotate`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${refreshToken}`,
+            },
+          },
+        )
+
+        // Lưu accessToken mới vào cookie
+        res.setHeader(
+          'Set-Cookie',
+          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
+        )
+
+        // Tiếp tục thực hiện yêu cầu API với accessToken mới
+        const entranceTestLists = (await EntranceApi.getListEntranceTest(
+          refreshResponse.data.accessToken,
+        )) as any
+
+        return {
+          props: { entranceTestLists },
+        }
+      } catch (refreshError) {
+        // Xử lý lỗi khi cập nhật accessToken từ refreshToken
+        // Chuyển hướng đến trang đăng nhập
+        return {
+          redirect: {
+            destination: '/auth/login',
+            permanent: false,
+          },
+        }
+      }
+    } else {
+      // Xử lý lỗi khác khi sử dụng accessToken
+      if (error.response && error.response.status === 403) {
+        // Chuyển hướng đến trang đăng nhập
+        return {
+          redirect: {
+            destination: '/auth/login',
+            permanent: false,
+          },
+        }
+      } else
+        return {
+          redirect: {
+            destination: '/test',
+            permanent: false,
+          },
+        }
+    }
+  }
+}

@@ -20,7 +20,7 @@ interface IProps {
   okButtonCaption?: string
   okButtonClass?: string | undefined
   cancelButtonClass?: string | undefined
-  buttonSize?: 'small' | 'medium' | 'lager'
+  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void

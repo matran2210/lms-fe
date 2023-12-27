@@ -129,6 +129,7 @@ const EntranceTestFillForm = ({ open, setOpen }: EntrancePopupProps) => {
       childClass=""
       parentChildClass=""
       position="center"
+      buttonSize="extra"
       // closeAfterSubmit={false}
     >
       <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">

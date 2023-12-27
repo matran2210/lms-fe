@@ -1,6 +1,7 @@
 import { IResponse } from 'src/redux/types'
 import url from './url'
-import { httpService } from '../httpService'
+import { apiURL, httpService } from '../httpService'
+import axios from 'axios'
 
 const EntranceApi = {
   getListUnivers: async (): Promise<IResponse<any>> => {
@@ -38,6 +39,18 @@ const EntranceApi = {
       request: data,
     })
     return res
+  },
+  getListEntranceTest: async (accessToken: string): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.getListEntranceTest}`,
+      {
+        headers,
+      },
+    )
+    return response?.data?.data
   },
 }
 export default EntranceApi

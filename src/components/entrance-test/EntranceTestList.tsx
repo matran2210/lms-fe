@@ -17,10 +17,12 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
         >
           <EntranceTest
             name={entranceTestList.name}
-            startStatus={entranceTestList.startStatus}
-            timeTaken={entranceTestList.timeTaken}
+            startStatus={entranceTestList.is_attempt}
+            timeTaken={entranceTestList.total_attempt_time || 0}
             timeAllow={entranceTestList.timeAllow}
-            result={entranceTestList.result}
+            result={`${entranceTestList.total_correct_answer?.toString()} /
+              ${entranceTestList.total_question?.toString()}`}
+            id={entranceTestList.id}
           />
         </div>
       ))}

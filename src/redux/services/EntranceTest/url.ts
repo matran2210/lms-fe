@@ -4,6 +4,7 @@ export const url = {
   getListMajors: '/majors',
   getListEngLevel: '/english-levels',
   putLevel: '/users/input-level',
+  getListEntranceTest: '/entrance-test',
 }
 
 export default url
