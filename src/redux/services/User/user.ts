@@ -1,7 +1,8 @@
 import { IUser } from 'src/redux/types/User/urser'
-import { httpService } from '../httpService'
+import { apiURL, httpService } from '../httpService'
 import url from './url'
 import { IResponse } from 'src/redux/types'
+import axios from 'axios'
 
 const UserApi = {
   /**
@@ -61,6 +62,27 @@ const UserApi = {
     return httpService.POST<{}, IResponse<{ message: string }>>({
       uri,
     })
+  },
+  getListDevicesServerSide: async (
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.devices}`,
+      {
+        headers,
+      },
+    )
+    return response.data?.data
+  },
+  getListDevices: async (): Promise<IResponse<any>> => {
+    const uri = url.devices
+    const res = httpService.GET<any, any>({
+      uri,
+    })
+    return res
   },
 }
 

@@ -1,12 +1,30 @@
 export const PROFILE_PAGES = {
   MY_PROFILE: {
     label: 'My Profile',
+    children: [],
   },
   CERTIFICATES: {
     label: 'Certificates',
+    children: [],
   },
   SETTINGS: {
     label: 'Settings',
+    children: [],
+  },
+  SECURITY: {
+    label: 'Security',
+    children: [
+      {
+        DEVICES: {
+          label: 'Devices',
+        },
+      },
+      {
+        LOGIN_HISTORY: {
+          label: 'Login History',
+        },
+      },
+    ],
   },
 }
 
