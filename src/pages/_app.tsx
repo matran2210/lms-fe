@@ -49,15 +49,12 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }
 
   useEffect(() => {
-    coutNotificationsUnRead()
-  }, [])
-
-  useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
     })
 
     // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
+    coutNotificationsUnRead()
     if (getNotiUnread > 0) {
       dispatch(showNotification())
     } else {
