@@ -1,4 +1,5 @@
 import CertificateContent from '@components/profile/CertificateContent'
+import Devices from '@components/profile/Devices'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
@@ -20,7 +21,6 @@ const ProfilePage = ({ page }: IProps) => {
   const [reViewImageSrc, setReViewImageSrc] = useState<
     string | StaticImageData
   >()
-
   const handleSetAvatar = (avatar: File | undefined) => {
     setAvatar(avatar)
   }
@@ -45,6 +45,8 @@ const ProfilePage = ({ page }: IProps) => {
     )
   } else if (page === 'certificates') {
     selectedContent = <CertificateContent page={page} />
+  } else if (page === 'devices') {
+    selectedContent = <Devices />
   } else {
     selectedContent = <div>Page not found</div>
   }
@@ -74,10 +76,11 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
   const params = context.params
   if (
     !params?.page ||
-    typeof params?.page !== 'string' ||
-    !PROFILE_PAGES[
-      (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
-    ]
+    typeof params?.page !== 'string'
+    // ||
+    // !PROFILE_PAGES[
+    //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
+    // ]
   ) {
     return {
       notFound: true,

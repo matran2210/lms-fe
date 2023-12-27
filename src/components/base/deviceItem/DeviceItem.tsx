@@ -1,0 +1,46 @@
+import { AppleLogo, WinDowLogo } from '@assets/icons'
+import { useMemo } from 'react'
+import { format } from 'date-fns'
+const DeviceItem = ({ data }: any) => {
+  const chooseLogo = useMemo(() => {
+    if (data?.user_agent?.osName) {
+      switch (data.user_agent.osName) {
+        case 'Windows':
+          return <WinDowLogo />
+        case 'Mac OS':
+          return <AppleLogo />
+      }
+    }
+  }, [data?.user_agent?.osName])
+  return (
+    <div className="flex items-center py-5 px-6 hover:bg-secondary sapp-hover-device-item gap-4">
+      <div className="border border-gray-1 flex p-3 sapp-logo">
+        {chooseLogo}
+      </div>
+      <div>
+        <div className="flex gap-2 items-center">
+          <div className="text-bw-1 text-base">
+            {`${data.user_agent.browserName} ${data.user_agent.browserVersion} (${data.user_agent.osName})`}
+          </div>
+          {data.is_current && (
+            <div className="bg-blue-50 h-fit px-2">
+              <div className="text-state-info text-xsm">This Devices</div>
+            </div>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="text-xsm text-gray-1">
+            {format(data.created_at, 'hh:mm:ss dd/MM/yyyy')}
+          </div>
+          <div className="bg-gray-1 rounded-full w-[4px] h-[4px]"></div>
+          <div className="text-xsm text-gray-1">{data.ip}</div>
+          {data.location && (
+            <div className="bg-gray-1 rounded-full w-[4px] h-[4px]"></div>
+          )}
+          <div>{data.location || ''}</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+export default DeviceItem

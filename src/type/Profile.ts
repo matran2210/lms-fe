@@ -3,3 +3,4 @@ export type IProfilePages =
   | 'certificates'
   | 'settings'
   | 'logout'
+  | 'devices'
