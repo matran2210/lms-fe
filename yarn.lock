@@ -5126,10 +5126,10 @@ pretty-bytes@^5.3.0:
   resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-5.6.0.tgz#356256f643804773c82f64723fe78c92c62beaeb"
   integrity sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==
 
-preview-part@^1.1.61:
-  version "1.1.61"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.1.61.tgz#53e3a3f962dbf766b9615ae6ec2bc724e533c031"
-  integrity sha512-XWa5ExKsUTKa46IpKqWO2VDXAHRzDttAMwrSjm8mxFs8hbsC2D7C4WMfHPCWeAzjcK6lFWAyNHMbW/y5w3Sc3Q==
+preview-part@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.3.tgz#7ccc649cfe37546a2c6de50ff027dfff5c398001"
+  integrity sha512-QgrVOkyWtO3r95NOpWc0FgjsIA+mc+P2oSf26FrDlf8kdaMeQKfB1U5VGgbGUx4zJOqiFTbKcGlUPTlPHoiWIQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/lodash" "^4.14.202"

@@ -183,7 +183,8 @@ const CaseStudyDetail = ({ questions }: any) => {
   const { topics, listFullQuestions, listQuestions, loading } = useAppSelector(
     (state) => state.caseStudyTestReducer,
   )
-
+  const [quizAttempId, setQuizAttempId] = useState('')
+  const [loadCreateAttempt, setLoadCreateAttempt] = useState(true)
   useEffect(() => {
     // async function createTopicAttempt() {
     //   const res = await CourseTestApi.createTopicAttempt(
@@ -199,7 +200,15 @@ const CaseStudyDetail = ({ questions }: any) => {
       )
     }
   }, [router.query.id])
-
+  async function createAttempts(quiz_id: string, id: string) {
+    const res = await CourseTestApi.createTopicAttempt(quiz_id, id)
+    setQuizAttempId(res.data.id)
+  }
+  useEffect(() => {
+    if (router.query.quiz_id && router.query.id) {
+      createAttempts(router.query.quiz_id as string, router.query.id as string)
+    }
+  }, [router.query.id, router.query.quiz_id])
   const getValueFillText = (index: number) => {
     let value = []
     if (valueRef.current[index]) {

@@ -73,7 +73,7 @@ export const caseStudyTestSlice = createSlice({
       state.listQuestions = action.payload?.listQuestions
     })
     builder.addCase(getTopicsCaseStudy.rejected, (state) => {
-      state.loading = true
+      state.loading = false
     })
   },
 })
