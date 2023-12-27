@@ -16,6 +16,7 @@ export type IPreviewProp = {
   highlighted?: any
   removeHighlight?: any
   allowHighLight?: boolean
+  forCaseStudy?: boolean
 }
 const EssayQuestionPreview = ({
   data,
@@ -27,6 +28,7 @@ const EssayQuestionPreview = ({
   highlighted,
   removeHighlight,
   allowHighLight,
+  forCaseStudy = false,
 }: IPreviewProp) => {
   // const DynamicBundledEditor = dynamic(() => import('../base/spreadSheet/SpreadSheetEditor'), {
   //   ssr: false,
@@ -67,9 +69,8 @@ const EssayQuestionPreview = ({
               text_editor_content={data.description}
             />
           </div>
-          {question_data.display_type === DISPLAY_TYPE.VERTICAL && (
-            <div className="sapp-seprate-line-preview"></div>
-          )}
+          {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+            forCaseStudy) && <div className="sapp-seprate-line-preview"></div>}
           {question_data.assignment_type !== 'TEXT' && (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
@@ -81,14 +82,16 @@ const EssayQuestionPreview = ({
                   <div className="title-btn-preview">Choose file to upload</div>
                 </div>
               </div>
-              {question_data.display_type === DISPLAY_TYPE.VERTICAL && (
+              {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+                forCaseStudy) && (
                 <div className="sapp-seprate-line-preview"></div>
               )}
             </React.Fragment>
           )}
           <div
             style={
-              question_data.display_type === DISPLAY_TYPE.VERTICAL
+              question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+              forCaseStudy
                 ? { width: 'calc(100% + 20px)', marginLeft: '-20px' }
                 : { width: '100%', marginTop: '10px' }
             }

@@ -26,10 +26,10 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import {
   getTopicsCaseStudy,
   loadMoreQuestion,
-  loadMoreTopic,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 
 const CaseStudyDetail = ({ questions }: any) => {
@@ -164,6 +164,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            forCaseStudy={true}
           />
         )
       default:
@@ -171,48 +172,33 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
   }
   const router = useRouter()
-  const inputRef = useRef<any>([])
-  const questionRef = useRef<any>([])
   const valueRef = useRef<any>([])
   const containerRef = useRef<any>(null)
   const { control, handleSubmit, getValues, setValue } = useForm()
   const { control: controlScratch } = useForm()
-  const [topicItems, setTopicItems] = useState<any>('')
-  const [topicShouldView, setTopicShouldView] = useState<any>('')
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
-  const [isInViewport, setIsInViewport] = useState([]) as any
   const dispatch = useAppDispatch()
-  const {
-    topics,
-    listFullQuestions,
-    listQuestions,
-    meta,
-    pageIndex,
-    page_size,
-    loading,
-  } = useAppSelector((state) => state.caseStudyTestReducer)
+  const { topics, listFullQuestions, listQuestions, loading } = useAppSelector(
+    (state) => state.caseStudyTestReducer,
+  )
 
   useEffect(() => {
+    // async function createTopicAttempt() {
+    //   const res = await CourseTestApi.createTopicAttempt(
+    //     router.query.id as string,
+    //   )
+    //   setQuizAttempId(res.data.id)
+    // }
     if (router.query.id) {
       dispatch(
         getTopicsCaseStudy({
           id: router.query.id,
-          page_index: 1,
-          page_size: 5,
         }),
       )
     }
   }, [router.query.id])
-
-  const handleLoadMoreTopic = async (page: number) => {
-    if (router.query.id && page <= meta.total_pages) {
-      dispatch(
-        loadMoreTopic({ id: router.query.id, page_index: page, page_size }),
-      )
-    }
-  }
 
   const getValueFillText = (index: number) => {
     let value = []
@@ -410,6 +396,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     //   answers: answers,
     //   quiz_position_mapping: quiz_position_mapping,
     // })
+    // console.log({answers, quiz_position_mapping});
 
     return
   }
@@ -436,57 +423,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       return arr
     })
   }
-  const checkPositionTopic = () => {
-    for (let i in inputRef.current) {
-      if (
-        inputRef.current[i]?.getBoundingClientRect()?.top >= 96 &&
-        inputRef.current[i]?.getBoundingClientRect()?.top <=
-          containerRef.current.clientHeight - 100
-      ) {
-        for (let e of questionRef.current) {
-          if (
-            e.getAttribute('topic-key') ===
-            inputRef.current[i].getAttribute('data-key')
-          ) {
-            e.scrollIntoView({
-              top: 0,
-              // block: "nearest",
-              // inline: "center",
-              behavior: 'auto',
-              // alignToTop: true
-            })
-            break
-          }
-        }
-        break
-      }
-    }
-  }
-  const checkPositionQuestion = () => {
-    for (let i in questionRef.current) {
-      if (
-        questionRef.current[i]?.getBoundingClientRect()?.top >= 96 &&
-        questionRef.current[i]?.getBoundingClientRect()?.top <= 200
-      ) {
-        for (let e of inputRef.current) {
-          if (
-            e.getAttribute('data-key') ===
-            questionRef.current[i].getAttribute('topic-key')
-          ) {
-            e.scrollIntoView({
-              top: 0,
-              // block: "nearest",
-              // inline: "center",
-              behavior: 'auto',
-              // alignToTop: true
-            })
-            break
-          }
-        }
-        break
-      }
-    }
-  }
+
   useEffect(() => {
     const handleBeforeUnload = async (event: any) => {
       event.preventDefault()
@@ -553,7 +490,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             cancel={{
               title: 'Quit',
               size: 'medium',
-              onClick: () => {},
+              onClick: () => {
+                router.back()
+              },
               loading: false,
             }}
           ></ButtonCancelSubmit>
@@ -580,38 +519,19 @@ const CaseStudyDetail = ({ questions }: any) => {
                 }
               }
             }}
-            onScroll={(e) => {
-              const { target } = e
-              checkPositionTopic()
-
-              if (
-                (target as any).scrollTop + (target as any).offsetHeight >=
-                (target as any).scrollHeight
-              ) {
-                handleLoadMoreTopic(pageIndex + 1)
-              }
-            }}
           >
             {/* {topics} */}
-            {topics?.map((e: any, index: number) => {
-              // if(index === 0){
 
-              return (
-                <div
-                  key={e?.question_topic?.id}
-                  data-key={e?.question_topic?.id}
-                  ref={(el: any) => (inputRef.current[index] = el)}
-                  className="min-h-[calc(100vh-104px)]"
-                >
-                  <EditorReader
-                    // extenalRef={(el: any) => (inputRef.current[index] = el)}
-                    className="editor-wrap"
-                    text_editor_content={e?.question_topic?.description}
-                  />
-                </div>
-              )
-              // }
-            })}
+            <div
+              key={topics?.id}
+              data-key={topics?.id}
+              // className="min-h-[calc(100vh-104px)]"
+            >
+              <EditorReader
+                className="editor-wrap"
+                text_editor_content={topics?.description}
+              />
+            </div>
           </div>
 
           <div
@@ -624,7 +544,6 @@ const CaseStudyDetail = ({ questions }: any) => {
               ) {
                 dispatch(loadMoreQuestion(''))
               }
-              checkPositionQuestion()
             }}
           >
             <div
@@ -650,11 +569,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 const question = Object.values(e)[0] as any
                 const topicId = Object.keys(e)[0] as any
                 return (
-                  <div
-                    key={question?.id + index}
-                    topic-key={topicId}
-                    ref={(el: any) => (questionRef.current[index] = el)}
-                  >
+                  <div key={question?.id + index} topic-key={topicId}>
                     <div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>
 
                     {checkType(

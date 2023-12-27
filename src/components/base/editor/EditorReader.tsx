@@ -51,11 +51,10 @@ const EditorReader = ({
   const handleOnclick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement
     if (target.tagName === 'VIDEO') {
-      const src = target.getAttribute('resource_id')
+      const src = target.querySelector('source')?.getAttribute('src')
       if (src && target.tagName === 'VIDEO') {
-        const res = await CourseTestApi.getResource(src)
         var iframe = document.createElement('iframe')
-        iframe.src = res.data.url.replace(
+        iframe.src = src.replace(
           '/manifest/video.m3u8',
           '/iframe?autoplay=true',
         )
