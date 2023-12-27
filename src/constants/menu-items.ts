@@ -66,6 +66,12 @@ const MENU_OPTIONS: MenuOption[] = [
     url: '#',
     type: 'level-1',
   },
+  {
+    name: 'Entrance Test',
+    icon: 'document',
+    url: `${PageLink.ENTRANCE_TEST}`,
+    type: 'level-1',
+  },
 ]
 
 const MENU_OPTIONS_BOTTOM: MenuOption[] = [
