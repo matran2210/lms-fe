@@ -167,6 +167,14 @@ const CourseTestApi = {
     })
     return response
   },
+  submitCaseStudy: async (id: string, data: any): Promise<IResponse<any>> => {
+    const uri = url.submitCaseStudy + `/${id}` + '/submit'
+    const response = await httpService.POST<any, any>({
+      uri,
+      request: data,
+    })
+    return response
+  },
   getResource: async (id: string): Promise<IResponse<any>> => {
     const uri = url.getResource + `/${id}`
     const response = await httpService.GET<any, any>({
