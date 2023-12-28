@@ -18,7 +18,7 @@ const Course = ({ course }: { course: ICourse }) => {
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
-    if (course?.finished_at) {
+    if (course?.classes?.[0].finished_at) {
       // Current date
       const currentDate = new Date()
 
