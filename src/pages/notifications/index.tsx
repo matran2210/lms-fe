@@ -17,7 +17,7 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModelSidebar from '@components/base/modal/SappModelSidebar'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -65,9 +65,13 @@ const Notifications = () => {
 
   const getApiNotificationDetail = async (id: string) => {
     try {
-      await dispatch(getNotificationDetail(id))
-      await coutNotificationsUnRead()
-      dispatch(updateStatus({ id: id }))
+      const res = await dispatch(getNotificationDetail(id))
+      if (res) {
+        await coutNotificationsUnRead()
+        dispatch(updateStatus({ id: id }))
+        notifyDetail?.created_by !== null &&
+          Router.push(`${notifyDetail?.content}`)
+      }
     } catch (error) {}
   }
 

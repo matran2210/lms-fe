@@ -19,9 +19,10 @@ const NotifyList = ({
   getApiNotificationDetail,
 }: IProps) => {
   const dispatch = useAppDispatch()
-  const handleOpen = async (id: string) => {
-    setOpen(!open)
+
+  const handleOpen = async (id: string, redirect: string | null) => {
     await getApiNotificationDetail(id)
+    redirect === null && setOpen(!open)
   }
 
   return (
@@ -35,7 +36,7 @@ const NotifyList = ({
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
             onClick={() => {
-              handleOpen(notifyItem?.id)
+              handleOpen(notifyItem?.id, notifyItem?.created_by)
             }}
           >
             {!readStatus && (
