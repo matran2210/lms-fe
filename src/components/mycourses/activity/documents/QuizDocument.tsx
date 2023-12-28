@@ -35,6 +35,8 @@ const QuizDocument = ({
   const isLastQuestion = activeQuestionIndex === questions.length - 1
   const isQuestionConfirmed = activeQuestion?.confirmed
 
+  const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
+
   useEffect(() => {
     if (questions?.[0]) {
       // Load the first question when the component mounts
@@ -132,6 +134,7 @@ const QuizDocument = ({
         .unwrap()
         .then(() => {
           toast.success('Nộp bài thành công!')
+          setIsFinish({ [quizId]: true })
         })
     } catch (error) {}
   }
@@ -167,15 +170,19 @@ const QuizDocument = ({
             <SappIcon icon="arrow_right" />
           </div>
         </div>
-        {!!isQuestionConfirmed && (
+        {(!!isQuestionConfirmed || isFinish?.[quizId]) && (
           <div
             className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
-            onClick={isLastQuestion ? handleFinishQuiz : handleNextQuestion}
+            onClick={
+              isLastQuestion && !isFinish?.[quizId]
+                ? handleFinishQuiz
+                : handleNextQuestion
+            }
           >
-            {isLastQuestion ? 'Finish' : 'Next'}
+            {isLastQuestion && !isFinish?.[quizId] ? 'Finish' : 'Next'}
           </div>
         )}
-        {!isQuestionConfirmed && (
+        {!isQuestionConfirmed && !isFinish?.[quizId] && (
           <div
             className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
             onClick={handleConfirmQuestion}

@@ -10,6 +10,7 @@ import { IQuestion } from 'src/type/course/Question'
 import { IActivity, ITab } from 'src/type/course/my-course/Activity'
 import { apiURL, httpService } from '../../../httpService'
 import url from './url'
+import CourseTestApi from '../Test'
 
 /**
  * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.
@@ -37,7 +38,6 @@ const CourseActivityApi = {
     >(`${apiURL}/course-sections/activity/${id}`, {
       headers,
     })
-
     const responseTabs = await axios.get<{}, IResponse<{ data: ITab[] }>>(
       `${apiURL}/course-sections/activity/${id}/tabs`,
       {
@@ -191,13 +191,19 @@ const CourseActivityApi = {
    * @param {any} data - Dữ liệu sẽ được gửi kèm theo câu hỏi.
    * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi từ máy chủ.
    */
-  submitQuestion: async (id: string, data: any): Promise<IResponse<any>> => {
-    const uri = url.submitQuestion + `/${id}` + '/submit'
-    const response = await httpService.POST<any, any>({
-      uri,
-      request: data,
-    })
-    return response
+  submitQuiz: async (id: string, data: any): Promise<IResponse<any>> => {
+    const quizAttemptResponse = await CourseTestApi.createQuizAttempt(id)
+
+    const quizAttemptId = quizAttemptResponse.data?.id
+    if (quizAttemptId) {
+      const uri = url.submitQuiz + `/${quizAttemptId}` + '/submit'
+      const response = await httpService.POST<any, any>({
+        uri,
+        request: data,
+      })
+      return response
+    }
+    throw new Error('')
   },
 
   /**

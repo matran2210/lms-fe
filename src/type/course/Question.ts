@@ -86,12 +86,14 @@ export interface IQuestion {
   question_category_id?: string
   question_topic_id?: string
   requirements?: {
+    id: string
     name: string
     type?: 'TEXT' | 'FILE'
     description: string
     files?: IFile[]
   }[]
   exhibits?: {
+    id: string
     name: string
     type?: 'TEXT' | 'FILE'
     description: string
