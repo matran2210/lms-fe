@@ -184,14 +184,8 @@ const CaseStudyDetail = ({ questions }: any) => {
     (state) => state.caseStudyTestReducer,
   )
   const [quizAttempId, setQuizAttempId] = useState('')
-  const [loadCreateAttempt, setLoadCreateAttempt] = useState(true)
+  const [startTime, setStartTime] = useState(Date.now())
   useEffect(() => {
-    // async function createTopicAttempt() {
-    //   const res = await CourseTestApi.createTopicAttempt(
-    //     router.query.id as string,
-    //   )
-    //   setQuizAttempId(res.data.id)
-    // }
     if (router.query.id) {
       dispatch(
         getTopicsCaseStudy({
@@ -401,12 +395,14 @@ const CaseStudyDetail = ({ questions }: any) => {
         answers: e?.answers,
       })
     }
-    // await CourseTestApi.submitQuestion(router.query?.id as string, {
-    //   answers: answers,
-    //   quiz_position_mapping: quiz_position_mapping,
-    // })
-    // console.log({answers, quiz_position_mapping});
-
+    const total_attempt_time = Date.now() - startTime
+    if (quizAttempId) {
+      await CourseTestApi.submitCaseStudy(quizAttempId as string, {
+        answers: answers,
+        quiz_position_mapping: quiz_position_mapping,
+        total_attempt_time: total_attempt_time,
+      })
+    }
     return
   }
   const handleCloseScratchPad = (pad: any) => {
