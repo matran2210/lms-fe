@@ -332,64 +332,64 @@ const CaseStudyDetail = ({ questions }: any) => {
     let reformTabs: any[] = []
     for (let e of allQuest) {
       reformTabs.push({ ...e, done: true })
-      // if (e.answer || e.answer === '') {
-      if (
-        e.qType === QUESTION_TYPES.ONE_CHOICE ||
-        e.qType === QUESTION_TYPES.TRUE_FALSE
-      ) {
-        answers.push({
-          question_id: e.id,
-          question_answer_id: e.answer || '',
-        })
-      } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-        let answer = []
-        if (e.answer) {
-          for (let el of e.answer) {
-            answer.push({ answer_id: el })
+      if (e.answer || e.answer !== '') {
+        if (
+          e.qType === QUESTION_TYPES.ONE_CHOICE ||
+          e.qType === QUESTION_TYPES.TRUE_FALSE
+        ) {
+          answers.push({
+            question_id: e.id,
+            question_answer_id: e.answer || '',
+          })
+        } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+          let answer = []
+          if (e.answer) {
+            for (let el of e.answer) {
+              answer.push({ answer_id: el })
+            }
+          } else {
+            answer.push({ answer_id: '' })
           }
-        } else {
-          answer.push({ answer_id: '' })
-        }
-        answers.push({ question_id: e.id, answer })
-      } else if (e.qType === QUESTION_TYPES.MATCHING) {
-        answers.push({ question_id: e.id, answer: e.answer })
-      } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
-        let answer = []
-        for (let i in e.answer) {
-          if (e.answer[i].idAnswer) {
-            answer.push({
-              answer_id: e.answer[i].idAnswer,
-              answer_position: +i + 1,
-            })
+          answers.push({ question_id: e.id, answer })
+        } else if (e.qType === QUESTION_TYPES.MATCHING) {
+          answers.push({ question_id: e.id, answer: e.answer })
+        } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
+          let answer = []
+          for (let i in e.answer) {
+            if (e.answer[i].idAnswer) {
+              answer.push({
+                answer_id: e.answer[i].idAnswer,
+                answer_position: +i + 1,
+              })
+            }
           }
-        }
-        answers.push({ question_id: e.id, answer })
-      } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
-        let answer = []
-        for (let i in e.answer) {
-          if (e.answer[i] && e.answer[i] !== '') {
-            answer.push({
-              answer_id: e.answer[i],
-              answer_position: +i + 1,
-            })
+          answers.push({ question_id: e.id, answer })
+        } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
+          let answer = []
+          for (let i in e.answer) {
+            if (e.answer[i] && e.answer[i] !== '') {
+              answer.push({
+                answer_id: e.answer[i],
+                answer_position: +i + 1,
+              })
+            }
           }
-        }
-        answers.push({ question_id: e.id, answer })
-      } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
-        let answer = []
-        for (let i in e.answer) {
-          if (e.answer[i] && e.answer[i] !== '') {
-            answer.push({
-              answer_text: e.answer[i],
-              answer_position: +i + 1,
-            })
+          answers.push({ question_id: e.id, answer })
+        } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
+          let answer = []
+          for (let i in e.answer) {
+            if (e.answer[i] && e.answer[i] !== '') {
+              answer.push({
+                answer_text: e.answer[i],
+                answer_position: +i + 1,
+              })
+            }
           }
+          answers.push({ question_id: e.id, answer })
+        } else if (e.qType === QUESTION_TYPES.ESSAY) {
+          answers.push({ question_id: e.id, answers: e.answer || '' })
         }
-        answers.push({ question_id: e.id, answer })
-      } else if (e.qType === QUESTION_TYPES.ESSAY) {
-        answers.push({ question_id: e.id, answers: e.answer || '' })
       }
-      // }
       quiz_position_mapping.push({
         question_id: e.id,
         answers: e?.answers,
@@ -476,9 +476,8 @@ const CaseStudyDetail = ({ questions }: any) => {
       {/* Header */}
       <div className="h-full" ref={containerRef}>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
-          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">Name</div>
-          <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
-            {formatTime(0)}
+          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
+            {topics.name}
           </div>
           <ButtonCancelSubmit
             className={'flex gap-4 flex-row-reverse w-1/3'}
