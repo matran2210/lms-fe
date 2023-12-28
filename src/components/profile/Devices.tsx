@@ -28,7 +28,7 @@ const Devices = ({}: any) => {
           </div>
         )
       })}
-      <div className="bg-gray-4 flex p-4 items-center gap-3 mx-6">
+      <div className="bg-gray-4 flex p-4 items-center gap-3 mx-6 mt-3">
         <div>
           <SecurityIcon />
         </div>

@@ -98,4 +98,6 @@ export interface UserState {
   loadingEditAvatar: boolean
   errors: object
   user: IUser
+  loginHistory: any
+  loadHistory: boolean
 }
