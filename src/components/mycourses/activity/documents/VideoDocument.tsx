@@ -64,6 +64,13 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
    * @returns {Promise<void>} - A Promise that resolves when the operation is complete.
    */
   const handleSetCurrentVideo = async (v: IVideo): Promise<void> => {
+    handleOpenModalQuestions({
+      id: '',
+      open: false,
+      listQuestion: [],
+    })
+    setModalOpen(false)
+
     const listQuestion = [
       ...(v?.quiz?.constructed_questions || []),
       ...(v?.quiz?.multiple_choice_questions || []),
@@ -294,27 +301,29 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
 
   return (
     <div>
-      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 flex-wrap">
-        {videos?.map((v, i) => {
-          return (
-            <label
-              className=" flex items-center gap-2 select-none cursor-pointer mb-3"
-              key={v.file.id}
-            >
-              {/* Radio button for video selection */}
-              <SAPPRadio
-                onChange={() => debouncedHandleSetCurrentVideo.current(v)}
-                {...(v.file.id === currentVideo?.file.id
-                  ? {
-                      checked: true,
-                    }
-                  : { checked: false })}
-                size={'small'}
-              ></SAPPRadio>
-              <span className="radio-item-label">Video {i + 1}</span>
-            </label>
-          )
-        })}
+      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
+        <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
+          {videos?.map((v, i) => {
+            return (
+              <label
+                className=" flex items-center gap-2 select-none cursor-pointer"
+                key={v.file.id}
+              >
+                {/* Radio button for video selection */}
+                <SAPPRadio
+                  onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                  {...(v.file.id === currentVideo?.file.id
+                    ? {
+                        checked: true,
+                      }
+                    : { checked: false })}
+                  size={'small'}
+                ></SAPPRadio>
+                <span className="radio-item-label">Video {i + 1}</span>
+              </label>
+            )
+          })}
+        </div>
         <div className="flex items-center select-none cursor-pointer relative z-[9999] group">
           <span className="mr-2">Timeline</span>
           {/* Icon for course video timeline */}

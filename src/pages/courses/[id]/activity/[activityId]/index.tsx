@@ -322,6 +322,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           </div>
         </div>
       )}
+      <div className="border border-gray-2 my-8"></div>
       {/* </FadeInOut> */}
       <div className="bg-white px-6 py-3 mb-6 relative">
         <div className="flex justify-between flex-wrap gap-5">
@@ -346,8 +347,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-0 left-0 right-0 border-2 border-primary"></div>
       </div>
       <div ref={endActivityRef}></div>
       <div>

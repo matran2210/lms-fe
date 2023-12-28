@@ -149,7 +149,7 @@ const submitQuestion = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const result = await CourseActivityApi.submitQuestion(id, data)
+      const result = await CourseActivityApi.submitQuiz(id, data)
       if (result.success) {
         return { ...result }
       }
