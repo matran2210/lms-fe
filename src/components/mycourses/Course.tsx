@@ -6,9 +6,9 @@ import { truncateString } from '@utils/index'
 import { parseISO, differenceInDays } from 'date-fns'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import { CLASS_USER_STATUS } from 'src/type/courses'
+import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 
-const Course = ({ course }: { course: any }) => {
+const Course = ({ course }: { course: ICourse }) => {
   const [open, setOpen] = useState<boolean>(false)
   // const handleOnClick = () => {
   //   setOpen(true)
@@ -23,7 +23,9 @@ const Course = ({ course }: { course: any }) => {
       const currentDate = new Date()
 
       // Parse the specific date string to a Date object
-      const parsedSpecificDate = parseISO(course?.finished_at as any)
+      const parsedSpecificDate = parseISO(
+        course?.classes?.[0]?.finished_at as any,
+      )
 
       // Calculate the difference in days
       const difference = differenceInDays(
@@ -37,39 +39,41 @@ const Course = ({ course }: { course: any }) => {
   }, [])
 
   const percentProgress = round(
-    (course?.learning_progress?.total_course_sections_completed /
-      course?.learning_progress?.total_course_sections) *
+    (course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress
+      ?.total_course_sections_completed /
+      course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress
+        ?.total_course_sections) *
       100,
     2,
   )
 
-  const showStatus =
-    course?.status === CLASS_USER_STATUS.READY_TO_LEARN
-      ? 'Ready to learn'
-      : course?.status === CLASS_USER_STATUS.COMPLETED
-        ? 'Completed'
-        : course?.status === CLASS_USER_STATUS.IN_PROGRESS
-          ? 'In progress'
-          : 'Expired'
-  const showTextButton =
-    course?.status === CLASS_USER_STATUS.READY_TO_LEARN
-      ? 'Active'
-      : course?.status === CLASS_USER_STATUS.COMPLETED
-        ? 'Review'
-        : course?.status === CLASS_USER_STATUS.IN_PROGRESS
-          ? 'Resume'
-          : course?.status === CLASS_USER_STATUS.CANCELED &&
-              course?.course_type === 'TRIAL_COURSE'
-            ? 'Extend'
-            : ''
+  // const showStatus =
+  //   course?.classes?.[0]?.class_user_instances?.[0]?.status === CLASS_USER_STATUS.READY_TO_LEARN
+  //     ? 'Ready to learn'
+  //     : course?.classes?.[0]?.class_user_instances?.[0]?.status === CLASS_USER_STATUS.COMPLETED
+  //       ? 'Completed'
+  //       : course?.classes?.[0]?.class_user_instances?.[0]?.status === CLASS_USER_STATUS.IN_PROGRESS
+  //         ? 'In progress'
+  //         : 'Expired'
+
+  const statusMap = {
+    [CLASS_USER_STATUS.READY_TO_LEARN]: 'Ready to learn',
+    [CLASS_USER_STATUS.COMPLETED]: 'Completed',
+    [CLASS_USER_STATUS.IN_PROGRESS]: 'In progress',
+    [CLASS_USER_STATUS.CANCELED]: '',
+  } as any
+
+  const classUserStatus =
+    course?.classes?.[0]?.class_user_instances?.[0]?.status
+  const showStatus = statusMap[classUserStatus]
+
+  const enableCourse = classUserStatus !== CLASS_USER_STATUS.CANCELED
 
   return (
     <div className="cursor-pointer">
       <div
         className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${
-          course?.status === CLASS_USER_STATUS.CANCELED
-            ? 'text-gray-2'
-            : 'text-bw-1'
+          !enableCourse ? 'text-gray-2' : 'text-bw-1'
         }`}
         onClick={() =>
           course.status !== CLASS_USER_STATUS.CANCELED
@@ -80,11 +84,11 @@ const Course = ({ course }: { course: any }) => {
         <div>{truncateString(course?.name, 40)}</div>
       </div>
       <div className="flex justify-between items-center">
-        {course?.status !== CLASS_USER_STATUS.CANCELED ? (
+        {enableCourse ? (
           <div className="name-class text-medium-sm text-gray-1">
             Class:
             <span className="ml-1 text-bw-1 font-medium">
-              {truncateString(course?.class, 15)}
+              {truncateString(course?.classes?.[0]?.name, 15)}
             </span>
           </div>
         ) : (
@@ -104,25 +108,23 @@ const Course = ({ course }: { course: any }) => {
       <div className="des mt-6 mb-8">
         <p
           dangerouslySetInnerHTML={{
-            __html: truncateString(course?.description, 70),
+            __html: truncateString(course?.description, 150),
           }}
-          className={`text-bas h-20  ${
-            course?.status !== CLASS_USER_STATUS.CANCELED
-              ? 'text-bw-1'
-              : 'text-gray-1 '
+          className={`text-bas h-24 ${
+            enableCourse ? 'text-bw-1' : 'text-gray-1 '
           }`}
         />
       </div>
       <div className="mt-auto">
-        {course.status !== CLASS_USER_STATUS.CANCELED ? (
+        {enableCourse ? (
           <div className="progress mb-6 h-8">
             <div className="info flex justify-between mb-2">
               <div className="text flex items-baseline">
                 <Icon
                   type={
-                    course?.status === CLASS_USER_STATUS.READY_TO_LEARN
+                    classUserStatus === CLASS_USER_STATUS.READY_TO_LEARN
                       ? 'like'
-                      : course.status === CLASS_USER_STATUS.IN_PROGRESS
+                      : classUserStatus === CLASS_USER_STATUS.IN_PROGRESS
                         ? 'hour'
                         : ''
                   }
@@ -156,7 +158,7 @@ const Course = ({ course }: { course: any }) => {
           )} */}
           {/* {'buttonText' && ( */}
           <ButtonSecondary
-            title={showTextButton}
+            title={'Begin'}
             full={false}
             size={'small'}
             className="hover:bg-primary hover:text-white ml-auto"
