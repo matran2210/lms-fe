@@ -30,6 +30,7 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import { LAYOUT } from '@utils/constants'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
 import { uniqueId } from 'lodash'
@@ -39,7 +40,8 @@ import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES } from 'src/constants'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
-const TestDetail = ({ questions }: any) => {
+import TestTimeOutModal from '../courses/test/test-timeout'
+const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
     type: string,
@@ -48,6 +50,7 @@ const TestDetail = ({ questions }: any) => {
     corrects?: any,
     highlighted?: any,
     solution?: any,
+    done?: boolean,
   ) => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -93,6 +96,7 @@ const TestDetail = ({ questions }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            corrects={corrects}
           />
         )
       case QUESTION_TYPES.MATCHING:
@@ -106,6 +110,8 @@ const TestDetail = ({ questions }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            done={done}
+            corrects={corrects?.corrects}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -118,6 +124,8 @@ const TestDetail = ({ questions }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
+            ref={ref}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -131,6 +139,7 @@ const TestDetail = ({ questions }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -143,6 +152,8 @@ const TestDetail = ({ questions }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
+            ref={ref}
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -158,6 +169,7 @@ const TestDetail = ({ questions }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
           />
+          // <Luckysheet/>
         )
       default:
         return <div></div>
@@ -165,10 +177,9 @@ const TestDetail = ({ questions }: any) => {
   }
   const router = useRouter()
 
-  const [topicDescription, setTopicDescription] = useState<any>()
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const [filteredTabs, setFilterdTabs] = useState<any>([])
-  const [currentTabContent, setCurrentTabContent] = useState<any>()
+  // const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control, handleSubmit, getValues, setValue } = useForm()
   const { control: controlFilter, watch: watchFilter } = useForm()
   const {
@@ -188,6 +199,14 @@ const TestDetail = ({ questions }: any) => {
   const [allowHighLight, setAllowHighLight] = useState(false)
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
+  const [quizAttempId, setQuizAttempId] = useState('')
+  const [currentTime, setCurrentTime] = useState(Date.now())
+  const [startTime, setStartTime] = useState(Date.now())
+  const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
+  const [remainTime, setRemainTime] = useState<number>(
+    quizDetail.quiz_timed * 60,
+  )
+  const [openTimeOut, setOpenTimeOut] = useState(false)
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -196,7 +215,11 @@ const TestDetail = ({ questions }: any) => {
     ref: dropUpRequire,
     callback: () => setShowLisRequirement(false),
   })
-
+  const currentTabContent = useMemo(() => {
+    if (tabs && tabs.length > 0) {
+      return tabs.find((e: any) => e.id === currentPage)
+    }
+  }, [currentPage, tabs])
   const handleOpenScratchPad = (type: string) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
@@ -298,8 +321,9 @@ const TestDetail = ({ questions }: any) => {
     const inputs = document.querySelectorAll('.sapp-match-result') as any
     for (let e of inputs) {
       const childId = e.querySelector('.sapp-notched-container')
-      value.push({ question_id: e.id, answer_id: childId?.id })
+      value.push({ question_id: e.id, answer_id: childId?.id || undefined })
     }
+
     return value
   }
   const getAnswerDragNDrop = () => {
@@ -311,67 +335,224 @@ const TestDetail = ({ questions }: any) => {
     }
     return value
   }
-  const getResult = async () => {
-    const res = await CourseTestApi.getQuestionAnswer(currentPage)
-    const corrects = res.data[0].answers?.reduce(
-      (previousValue: any, currentValue: any) => {
-        return {
-          ...previousValue,
-          [currentValue.id]: currentValue.is_correct,
-        }
-      },
-      {} as { [key: string]: boolean },
-    )
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
-        if (currentPage === item.id) {
-          setCurrentTabContent({
-            ...item,
-            done: true,
-            corrects: corrects,
-            solution: res.data[0].solution,
-          })
-          return {
-            ...item,
-            done: true,
-            corrects: corrects,
-            solution: res.data[0].solution,
-          }
-        }
-        return item
-      })
-      return newData
-    })
-  }
-  const handleSaveCurrentAnswer = () => {
+  const getResult = async (currentTabContent: any) => {
+    const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
+    let corrects = {} as any
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
       currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
     ) {
-      setTabs(handleSaveAnswer(getValues(`${currentPage}_answer`), currentPage))
+      corrects = res.data[0].answers?.reduce(
+        (previousValue: any, currentValue: any) => {
+          return {
+            ...previousValue,
+            [currentValue.id]: currentValue.is_correct,
+          }
+        },
+        {} as { [key: string]: boolean },
+      )
+    } else if (
+      currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
+      currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
+    ) {
+      corrects = { corrects: [...res.data[0].answers] }
     } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      setTabs(handleSaveAnswer(getAnswerMatching(), currentPage))
+      corrects = { corrects: [...res.data[0].question_matchings] }
     } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      setTabs(handleSaveAnswer(getAnswerDragNDrop(), currentPage))
-    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      setTabs(handleSaveAnswer(getValueSelectText(), currentPage))
-    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
-      setTabs(handleSaveAnswer(getValueFillText(), currentPage))
+      corrects = {
+        corrects: [
+          ...res.data[0].answers.sort(
+            (a: any, b: any) => a.answer_position - b.answer_position,
+          ),
+        ],
+      }
+    }
+    setTabs((prev: any) => {
+      setStartTime(Date.now())
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          // setCurrentTabContent({
+          //   ...item,
+          //   done: true,
+          //   corrects: corrects,
+          //   solution: res.data[0].solution,
+          //   answer: getCurrentAnswer(item),
+          // })
+          ref.current?.handleReset()
+          return {
+            ...item,
+            done: true,
+            corrects: corrects,
+            solution: res.data[0].solution,
+            timeSpent: item.timeSpent
+              ? currentTime - startTime + item.timeSpent
+              : currentTime - startTime,
+          }
+        }
+        return item
+      })
+      return handleSaveCurrentAnswer(newData, currentTabContent)
+    })
+  }
+  const getResultAll = async (currentTabContent: any) => {
+    const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
+    let corrects = {} as any
+    if (
+      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      corrects = res.data[0].answers?.reduce(
+        (previousValue: any, currentValue: any) => {
+          return {
+            ...previousValue,
+            [currentValue.id]: currentValue.is_correct,
+          }
+        },
+        {} as { [key: string]: boolean },
+      )
+    } else if (
+      currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
+      currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
+    ) {
+      corrects = { corrects: [...res.data[0].answers] }
+    }
+    return {
+      ...currentTabContent,
+      done: true,
+      corrects: corrects,
+      solution: res.data[0].solution,
     }
   }
-  const handleChangeTab = (e: any) => {
-    handleSaveCurrentAnswer()
-    setCurrentPage(e)
-    setOpenScratchPad([])
-    setAllowHighLight(false)
-    reset()
+  const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
+    if (!currentContent.done) {
+      if (
+        currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+        currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+        currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+      ) {
+        return handleSaveAnswer(
+          getValues(`${currentPage}_answer`),
+          currentPage,
+          tabs,
+        )
+      } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
+        return handleSaveAnswer(getAnswerMatching(), currentPage, tabs)
+      } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
+        return handleSaveAnswer(getAnswerDragNDrop(), currentPage, tabs)
+      } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
+        return handleSaveAnswer(getValueSelectText(), currentPage, tabs)
+      } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
+        return handleSaveAnswer(getValueFillText(), currentPage, tabs)
+      } else return tabs
+    } else {
+      return tabs
+    }
   }
-  const handleSaveAnswer = (data: any, tabId: any) => {
+  const getCurrentAnswer = (currentTabContent: any) => {
+    if (
+      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      return getValues(`${currentPage}_answer`)
+    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+      return getAnswerMatching()
+    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      return getAnswerDragNDrop()
+    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
+      return getValueSelectText()
+    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
+      return getValueFillText()
+    }
+  }
+  async function getDetail(currentPage: string) {
+    try {
+      const topicDescription = await CourseTestApi.getTopicDescription(
+        questions[questions.findIndex((e: any) => e.id === currentPage)]
+          .question_topic_id,
+      )
+      const res = await CourseTestApi.getQuestionsDetail(currentPage)
+      return { topicDescription, res }
+    } catch (err) {
+      return { topicDescription: { data: {} }, res: { data: [] } }
+    }
+  }
+  const handleChangeTab = async (currentTab: any) => {
+    const currentContent = tabs.find((e: any) => e.id === currentTab)
+    if (!currentContent?.viewed) {
+      const { topicDescription, res } = await getDetail(currentTab)
+
+      setTabs((prev: any) => {
+        setStartTime(Date.now())
+        const newData = prev.map((item: any) => {
+          if (currentTab === item.id) {
+            if (item.viewed) {
+              // setCurrentTabContent({ ...item })
+              return { ...item }
+            } else {
+              return {
+                ...item,
+                viewed: true,
+                data: res.data[0],
+                topicDescription: topicDescription.data,
+              }
+            }
+          }
+          return item
+        })
+        ref.current?.handleReset()
+        const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
+        setCurrentPage(currentTab)
+        setOpenScratchPad([])
+        setAllowHighLight(false)
+        // reset()
+        return savedAnswer
+      })
+    } else {
+      setTabs((prev: any) => {
+        // for (let e of prev) {
+        //   if (currentTab === e.id) {
+        //     setCurrentTabContent(() => {
+        //       ref.current?.handleReset()
+        //       return e
+        //     })
+        //   }
+        // }
+        ref.current?.handleReset()
+        const savedAnswer = handleSaveCurrentAnswer(prev, currentTabContent)
+        setCurrentPage(currentTab)
+        setOpenScratchPad([])
+        setAllowHighLight(false)
+        // reset()
+        return savedAnswer
+      })
+    }
+
+    // if (currentPage) {
+    //   getDetail()
+    // }
     // setTabs((prev: any) => {
+    //   return handleSaveCurrentAnswer(tabs)
+    // })
+  }
+  const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
+    // setTabs((prev: any) => {
+    setStartTime(Date.now())
     const newData = tabs.map((item: any) => {
       if (tabId === item.id) {
-        return { ...item, answer: data }
+        return {
+          ...item,
+          answer: data,
+          timeSpent: !item.done
+            ? item.timeSpent
+              ? currentTime - startTime + item.timeSpent
+              : currentTime - startTime <= 0
+                ? 0
+                : currentTime - startTime
+            : item.timeSpent,
+        }
       }
       return item
     })
@@ -380,42 +561,34 @@ const TestDetail = ({ questions }: any) => {
   }
 
   const handleSubmitQuestion = async () => {
-    let allQuest = [...tabs]
-    if (
-      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-    ) {
-      allQuest = handleSaveAnswer(
-        getValues(`${currentPage}_answer`),
-        currentPage,
-      )
-    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      allQuest = handleSaveAnswer(getAnswerMatching(), currentPage)
-    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      allQuest = handleSaveAnswer(getAnswerDragNDrop(), currentPage)
-    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      allQuest = handleSaveAnswer(getValueSelectText(), currentPage)
-    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
-      allQuest = handleSaveAnswer(getValueFillText(), currentPage)
-    }
+    let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
     let answers = []
+    let reformTabs: any[] = []
     for (let e of allQuest) {
+      reformTabs.push({ ...e, done: true })
       if (e.answer) {
         if (
           e.qType === QUESTION_TYPES.ONE_CHOICE ||
           e.qType === QUESTION_TYPES.TRUE_FALSE
         ) {
-          answers.push({ question_id: e.id, question_answer_id: e.answer })
+          answers.push({
+            question_id: e.id,
+            question_answer_id: e.answer,
+            time_spent: e.timeSpent,
+          })
         } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
           let answer = []
           for (let el of e.answer) {
             answer.push({ answer_id: el })
           }
-          answers.push({ question_id: e.id, answer })
+          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
         } else if (e.qType === QUESTION_TYPES.MATCHING) {
-          answers.push({ question_id: e.id, answer: e.answer })
+          answers.push({
+            question_id: e.id,
+            answer: e.answer,
+            time_spent: e.timeSpent,
+          })
         } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
           let answer = []
           for (let i in e.answer) {
@@ -426,11 +599,8 @@ const TestDetail = ({ questions }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer })
-        } else if (
-          e.qType === QUESTION_TYPES.SELECT_WORD ||
-          e.qType === QUESTION_TYPES.FILL_WORD
-        ) {
+          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+        } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
           let answer = []
           for (let i in e.answer) {
             if (e.answer[i] && e.answer[i] !== '') {
@@ -440,7 +610,18 @@ const TestDetail = ({ questions }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer })
+          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+        } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
+          let answer = []
+          for (let i in e.answer) {
+            if (e.answer[i] && e.answer[i] !== '') {
+              answer.push({
+                answer_text: e.answer[i],
+                answer_position: +i + 1,
+              })
+            }
+          }
+          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
         }
       }
       quiz_position_mapping.push({
@@ -448,27 +629,56 @@ const TestDetail = ({ questions }: any) => {
         answers: e.data?.answers,
       })
     }
-    await CourseTestApi.submitQuestion(router.query?.id as string, {
+    setTabs(() => {
+      handleChangeTab(tabs[0].id)
+      return reformTabs
+    })
+    await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
     })
     return
   }
-  const handleClearSelection = (data: any) => {
-    if (
-      data.qType === QUESTION_TYPES.DRAG_DROP ||
-      data.qType === QUESTION_TYPES.MATCHING
-    ) {
-      ref.current?.handleReset()
+  const handleClearSelection = (currentTabContent: any) => {
+    const data = currentTabContent.data
+    if (!currentTabContent.done) {
+      setTabs((prev: any) => {
+        const arr = [...prev]
+        const currentIndex = arr.findIndex((e) => e.id === data.id)
+        arr[currentIndex] = { ...arr[currentIndex], answer: undefined }
+        return arr
+      })
+      setValue(`${currentTabContent?.id}_answer`, undefined)
+      if (
+        data.qType === QUESTION_TYPES.DRAG_DROP ||
+        data.qType === QUESTION_TYPES.MATCHING ||
+        data.qType === QUESTION_TYPES.FILL_WORD ||
+        data.qType === QUESTION_TYPES.SELECT_WORD
+      ) {
+        ref.current?.handleReset()
+      }
     }
   }
   const handleSaveHighLight = (e: any) => {
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
         if (currentPage === item.id) {
-          setCurrentTabContent({ ...item, hightlight: e })
+          // setCurrentTabContent({ ...item, hightlight: e })
 
           return { ...item, hightlight: e }
+        }
+        return item
+      })
+      return newData
+    })
+  }
+  const handleSaveHighLightTopic = (e: any) => {
+    setTabs((prev: any) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          // setCurrentTabContent({ ...item, hightlightTopic: e })
+
+          return { ...item, hightlightTopic: e }
         }
         return item
       })
@@ -479,53 +689,53 @@ const TestDetail = ({ questions }: any) => {
     if (currentTabContent?.data?.requirements) {
       setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })
     }
+    if (currentTabContent?.hightlightTopic) {
+      DeserializeHighlight(
+        currentTabContent?.hightlightTopic,
+        'hightlight_area_topic',
+      )
+    }
   }, [currentTabContent])
   useEffect(() => {
-    if (questions?.length > 0) {
-      const arr = []
-      for (let i in questions) {
-        arr.push({
-          ...questions[i],
-          viewed: false,
-          flaged: false,
-          done: false,
-          index: +i,
-        })
-      }
-      setTabs(arr)
-    }
-    setCurrentPage(questions?.[0]?.id)
-  }, [questions])
-  useEffect(() => {
-    async function getDetail() {
-      const res = await CourseTestApi.getQuestionsDetail(currentPage)
-      const topicDescription = await CourseTestApi.getTopicDescription(
-        questions[questions.findIndex((e: any) => e.id === currentPage)]
-          .question_topic_id,
-      )
-      setTopicDescription(topicDescription.data)
-      setTabs((prev: any) => {
-        const newData = prev.map((item: any) => {
-          if (currentPage === item.id) {
-            if (item.viewed) {
-              setCurrentTabContent({ ...item })
-              return { ...item }
-            } else {
-              setCurrentTabContent({ ...item, viewed: true, data: res.data[0] })
-              return { ...item, viewed: true, data: res.data[0] }
-            }
+    async function fetchTabs() {
+      if (questions?.length > 0) {
+        const arr = []
+
+        for (let i in questions) {
+          if (+i === 0) {
+            const { topicDescription, res } = await getDetail(questions[0].id)
+            arr.push({
+              ...questions[i],
+              viewed: true,
+              flaged: false,
+              done: false,
+              index: +i,
+              data: res.data[0],
+              topicDescription: topicDescription.data,
+            })
+          } else {
+            arr.push({
+              ...questions[i],
+              viewed: false,
+              flaged: false,
+              done: false,
+              index: +i,
+            })
           }
-          return item
-        })
-        return newData
-      })
+        }
+        // setCurrentTabContent(arr[0])
+        setTabs(arr)
+      }
+      setCurrentPage(questions?.[0]?.id)
     }
-
-    if (currentPage) {
-      getDetail()
+    if (questions) {
+      fetchTabs()
     }
-  }, [currentPage])
+  }, [questions])
 
+  // useEffect(() => {
+
+  // }, [currentPage])
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
     for (let e in currentTabContent?.data?.exhibits) {
@@ -550,15 +760,93 @@ const TestDetail = ({ questions }: any) => {
       })
     }
   }, [watch('exhibits')])
+  useEffect(() => {
+    async function createQuizAttempt() {
+      const res = await CourseTestApi.createQuizAttempt(
+        router.query.id as string,
+      )
+      setQuizAttempId(res.data.id)
+    }
+    if (router.query.id) {
+      createQuizAttempt()
+    }
+  }, [router.query.id])
+  useEffect(() => {
+    // Create an interval that updates the current time every second
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now())
+    }, 1000)
+    // Return a function that clears the interval
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+  useEffect(() => {
+    if (quizDetail.quiz_timed) {
+      const interval = setInterval(() => {
+        setRemainTime((prev) => {
+          if (prev === 1) {
+            clearInterval(interval)
+            setOpenTimeOut(true)
+            // handleSubmitQuestion()
+          }
+          return prev - 1
+        })
+      }, 1000)
+
+      // Return a function that clears the interval
+
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  }, [quizDetail])
+  // useEffect(() => {
+  //   const handleBeforeUnload = async (event: any) => {
+  //     event.preventDefault()
+  //     await handleSubmitQuestion()
+  //   }
+
+  //   // Thêm lắng nghe sự kiện beforeunload
+  //   window.addEventListener('beforeunload', handleBeforeUnload)
+
+  //   // Cleanup khi component bị unmount
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload)
+  //   }
+  // }, [currentTabContent, quizAttempId])
+  // useEffect(() => {
+  //   router.beforePopState(({ as }) => {
+  //     if (as !== router.asPath) {
+  //       try {
+  //         handleSubmitQuestion()
+  //         return true
+  //       } catch (err) {
+  //         return true
+  //       }
+  //       // Will run when leaving the current page; on back/forward actions
+  //       // Add your logic here, like toggling the modal state
+  //     }
+  //     return true
+  //   })
+
+  //   return () => {
+  //     router.beforePopState(() => true)
+  //   }
+  // }, [currentTabContent, quizAttempId, router])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
       <div>
-        <div className="flex justify-between py-4 px-6 items-center bg-gray-3 ">
-          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">Name</div>
-          <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
-            {formatTime(0)}
+        <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
+          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
+            {quizDetail.name}
           </div>
+          {quizDetail.quiz_timed && (
+            <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
+              {formatTime(remainTime)}
+            </div>
+          )}
           <ButtonCancelSubmit
             className={'flex gap-4 flex-row-reverse w-1/3'}
             // color={color}
@@ -575,14 +863,16 @@ const TestDetail = ({ questions }: any) => {
             cancel={{
               title: 'Quit',
               size: 'medium',
-              onClick: () => {},
+              onClick: () => {
+                router.back()
+              },
               loading: false,
               //   full: fullWidthBtn,
             }}
           ></ButtonCancelSubmit>
         </div>
         {/* End Header */}
-        <div className="px-6 bg-gray-4 shadow-solution py-4 relative">
+        <div className="px-6 bg-gray-4 shadow-solution py-4 absolute w-full">
           <TabSlide
             data={filteredTabs}
             currentTab={currentPage}
@@ -591,20 +881,41 @@ const TestDetail = ({ questions }: any) => {
             handleChangeTab={(e: any) => {
               handleChangeTab(e)
             }}
+            activeShowAll={activeShowAll}
+            setActiveShowAll={setActiveShowAll}
           />
           {/* </div> */}
         </div>
       </div>
       {/* <div className=''> */}
-      {currentTabContent?.data === DISPLAY_TYPE.VERTICAL ? (
+      {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
         <div
-          className="flex gap-5 h-[calc(100%-240px)] bg-gray-3"
+          className="flex gap-5 h-[calc(100%-176px)] bg-gray-3 mt-[72px]"
           id={'preview-question'}
         >
-          <div className="w-1/2 h-full overflow-auto bg-white p-6">
+          <div
+            className="w-1/2 h-full overflow-auto bg-white p-6"
+            id="hightlight_area_topic"
+            onMouseUp={(e: any) => {
+              if (
+                e.target.tagName.charAt(0) !== 'm' &&
+                e.target.firstChild?.tagName !== 'math'
+              ) {
+                if (e) {
+                  runHighlight(
+                    handleSaveHighLightTopic,
+                    allowHighLight || false,
+                    'hightlight_area_topic',
+                  )
+                }
+              }
+            }}
+          >
             <EditorReader
               className="editor-wrap"
-              text_editor_content={topicDescription?.description}
+              text_editor_content={
+                currentTabContent?.topicDescription?.description
+              }
             />
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
@@ -618,6 +929,7 @@ const TestDetail = ({ questions }: any) => {
                 currentTabContent?.corrects,
                 currentTabContent?.hightlight,
                 currentTabContent?.solution,
+                currentTabContent?.done,
               )}
               {/* ) : (
                     <EssayQuestionPreview
@@ -633,13 +945,31 @@ const TestDetail = ({ questions }: any) => {
         </div>
       ) : (
         <div
-          className="max-w-screen-2md w-full m-auto h-[calc(100%-240px)] overflow-auto py-6 px-6"
+          className="max-w-screen-2md w-full m-auto h-[calc(100%-176px)] overflow-auto py-6 px-6 mt-[72px]"
           id={'preview-question'}
         >
-          <div>
+          <div
+            id="hightlight_area_topic"
+            onMouseUp={(e: any) => {
+              if (
+                e.target.tagName.charAt(0) !== 'm' &&
+                e.target.firstChild?.tagName !== 'math'
+              ) {
+                if (e) {
+                  runHighlight(
+                    handleSaveHighLightTopic,
+                    allowHighLight || false,
+                    'hightlight_area_topic',
+                  )
+                }
+              }
+            }}
+          >
             <EditorReader
-              className="editor-wrap"
-              text_editor_content={topicDescription?.description}
+              className="editor-wrap mb-3"
+              text_editor_content={
+                currentTabContent?.topicDescription?.description
+              }
             />
           </div>
 
@@ -652,6 +982,7 @@ const TestDetail = ({ questions }: any) => {
             currentTabContent?.corrects,
             currentTabContent?.hightlight,
             currentTabContent?.solution,
+            currentTabContent?.done,
           )}
           {/* ) : (
                 <EssayQuestionPreview
@@ -681,7 +1012,7 @@ const TestDetail = ({ questions }: any) => {
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+                <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
                   <div>Calculator</div>
                   <button onClick={() => handleCloseScratchPad(e)}>
                     <CloseIcon />
@@ -709,7 +1040,7 @@ const TestDetail = ({ questions }: any) => {
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-gray-2 w-full h-[40px] justify-between px-5">
+                <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
                   <div>Scratch Pad</div>
                   {/* <CloseIcon */}
                   <button onClick={() => handleCloseScratchPad(e)}>
@@ -747,7 +1078,7 @@ const TestDetail = ({ questions }: any) => {
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-white w-full h-[40px] justify-between px-5">
+                <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
                   <div>
                     <span className="font-semibold text-base text-bw-1">{`Exhibit ${
                       i + 1
@@ -775,7 +1106,7 @@ const TestDetail = ({ questions }: any) => {
         }
       })}
       {/* </div> */}
-      <div className=" bg-gray-3 flex items-center flex-1 justify-between shadow-question-footer">
+      <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px]">
         <div className="flex items-center h-full">
           <button className="h-full">
             <div className="flex items-center gap-3 ps-6 ">
@@ -876,28 +1207,34 @@ const TestDetail = ({ questions }: any) => {
         </div>
         <div className="flex items-center h-full gap-3 pe-6">
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
+            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
             onClick={() => handleFlagQuestion(currentPage)}
           >
             <FlagIcon />
             <div className="font-normal text-sm">Flag to Review</div>
           </button>
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
-            onClick={() => handleClearSelection(currentTabContent?.data)}
+            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+            onClick={() => handleClearSelection(currentTabContent)}
           >
             <div className="font-normal text-sm">Clear Selection</div>
           </button>
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-3"
+            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
             onClick={() => {
-              getResult()
+              getResult(currentTabContent)
             }}
           >
             <div className="font-normal text-sm">Confirm Answer</div>
           </button>
         </div>
       </div>
+      <TestTimeOutModal
+        open={openTimeOut}
+        setOpen={setOpenTimeOut}
+        handleSubmit={handleSubmitQuestion}
+        handleQuit={() => router.back()}
+      />
     </div>
   )
 }
@@ -924,8 +1261,6 @@ export async function getServerSideProps(context: any) {
   }
 
   try {
-    const { req } = context
-
     // Parse cookies from the request headers
     const cookies = parse(req.headers.cookie || '')
 
@@ -938,9 +1273,12 @@ export async function getServerSideProps(context: any) {
       context?.query?.id,
       cookies.accessToken,
     )) as any
-
+    const quizDetail = (await CourseTestApi.getDetailQuizById(
+      context?.query?.id,
+      cookies.accessToken,
+    )) as any
     return {
-      props: { questions },
+      props: { questions, quizDetail },
     }
   } catch (error: any) {
     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
@@ -966,23 +1304,14 @@ export async function getServerSideProps(context: any) {
         )
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        // const questions = await CourseTestApi.getQuestionTabsById(
-        //   context?.query?.id,
-        //   refreshResponse.data.accessToken,
-        // )
-        // return {
-        //   props: { questions },
-        // }
+        const questions = (await CourseTestApi.getQuestionTabsById(
+          context?.query?.id,
+          refreshResponse.data.accessToken,
+        )) as any
 
-        // Xử lý dữ liệu từ API
-        // const courses = newApiResponse.data?.data
-
-        // Trả về props cho trang
-        // return {
-        //   props: {
-        //     courses: courses,
-        //   },
-        // }
+        return {
+          props: { questions },
+        }
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập

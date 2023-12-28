@@ -1,3 +1,6 @@
+import CertificateContent from '@components/profile/CertificateContent'
+import Devices from '@components/profile/Devices'
+import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
@@ -19,7 +22,6 @@ const ProfilePage = ({ page }: IProps) => {
   const [reViewImageSrc, setReViewImageSrc] = useState<
     string | StaticImageData
   >()
-
   const handleSetAvatar = (avatar: File | undefined) => {
     setAvatar(avatar)
   }
@@ -29,6 +31,29 @@ const ProfilePage = ({ page }: IProps) => {
     }
     setIsEdit(isEdit)
   }
+  let selectedContent: JSX.Element | null = null
+
+  if (page === 'my_profile') {
+    selectedContent = (
+      <ProfileContent
+        setReViewImageSrc={setReViewImageSrc}
+        isEdit={isEdit}
+        setIsEdit={handleSetIsEdit}
+        page={page}
+        avatar={avatar}
+        handleSetAvatar={handleSetAvatar}
+      />
+    )
+  } else if (page === 'certificates') {
+    selectedContent = <CertificateContent page={page} />
+  } else if (page === 'devices') {
+    selectedContent = <Devices />
+  } else if (page === 'login_history') {
+    selectedContent = <LoginHistory />
+  } else {
+    selectedContent = <div>Page not found</div>
+  }
+
   return (
     <div className="max-w-xxl my-0 mx-auto w-full">
       <div className="relative">
@@ -42,14 +67,7 @@ const ProfilePage = ({ page }: IProps) => {
       </div>
       <div className="flex sm:flex-row flex-col justify-between gap-6">
         <ProfileSideBar page={page}></ProfileSideBar>
-        <ProfileContent
-          setReViewImageSrc={setReViewImageSrc}
-          isEdit={isEdit}
-          setIsEdit={handleSetIsEdit}
-          page={page}
-          avatar={avatar}
-          handleSetAvatar={handleSetAvatar}
-        ></ProfileContent>
+        {selectedContent}
       </div>
     </div>
   )
@@ -61,10 +79,11 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
   const params = context.params
   if (
     !params?.page ||
-    typeof params?.page !== 'string' ||
-    !PROFILE_PAGES[
-      (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
-    ]
+    typeof params?.page !== 'string'
+    // ||
+    // !PROFILE_PAGES[
+    //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
+    // ]
   ) {
     return {
       notFound: true,

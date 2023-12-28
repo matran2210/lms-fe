@@ -5,6 +5,7 @@ const SIZES = {
   small: 'text-[0.875rem] leading-4',
   medium: 'text-[1rem] leading-6',
   lager: 'text-lg leading-6.5',
+  extra: 'text-lg leading-6.5',
 }
 
 const COLORS = {
@@ -27,6 +28,7 @@ const PADDINGS = {
   small: 'px-7 py-2',
   medium: 'px-8 py-2',
   lager: 'px-9 py-2.8',
+  extra: 'px-17.5 py-2.8',
   none: '',
 }
 

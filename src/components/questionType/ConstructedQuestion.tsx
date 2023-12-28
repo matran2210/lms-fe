@@ -1,10 +1,11 @@
+import HookFormEditor from '@components/base/editor/HookFormEditor'
 import React, { useEffect } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
-import HookFormEditor from '@components/base/editor/HookFormEditor'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
-import dynamic from 'next/dynamic'
 import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { Workbook } from '@fortune-sheet/react'
+import '@fortune-sheet/react/dist/index.css'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -15,6 +16,7 @@ export type IPreviewProp = {
   highlighted?: any
   removeHighlight?: any
   allowHighLight?: boolean
+  forCaseStudy?: boolean
 }
 const EssayQuestionPreview = ({
   data,
@@ -26,6 +28,7 @@ const EssayQuestionPreview = ({
   highlighted,
   removeHighlight,
   allowHighLight,
+  forCaseStudy = false,
 }: IPreviewProp) => {
   // const DynamicBundledEditor = dynamic(() => import('../base/spreadSheet/SpreadSheetEditor'), {
   //   ssr: false,
@@ -42,9 +45,16 @@ const EssayQuestionPreview = ({
         <div
           style={{ background: 'white' }}
           id="hightlight_area"
-          onMouseUp={() =>
-            runHighlight(handleSaveHighLight, allowHighLight || false)
-          }
+          onMouseUp={(e: any) => {
+            if (
+              e.target.tagName.charAt(0) !== 'm' &&
+              e.target.firstChild?.tagName !== 'math'
+            ) {
+              if (e) {
+                runHighlight(handleSaveHighLight, allowHighLight || false)
+              }
+            }
+          }}
         >
           <EditorReader
             className="sapp-questions"
@@ -59,9 +69,8 @@ const EssayQuestionPreview = ({
               text_editor_content={data.description}
             />
           </div>
-          {question_data.display_type === DISPLAY_TYPE.VERTICAL && (
-            <div className="sapp-seprate-line-preview"></div>
-          )}
+          {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+            forCaseStudy) && <div className="sapp-seprate-line-preview"></div>}
           {question_data.assignment_type !== 'TEXT' && (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
@@ -73,14 +82,16 @@ const EssayQuestionPreview = ({
                   <div className="title-btn-preview">Choose file to upload</div>
                 </div>
               </div>
-              {question_data.display_type === DISPLAY_TYPE.VERTICAL && (
+              {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+                forCaseStudy) && (
                 <div className="sapp-seprate-line-preview"></div>
               )}
             </React.Fragment>
           )}
           <div
             style={
-              question_data.display_type === DISPLAY_TYPE.VERTICAL
+              question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+              forCaseStudy
                 ? { width: 'calc(100% + 20px)', marginLeft: '-20px' }
                 : { width: '100%', marginTop: '10px' }
             }
@@ -94,7 +105,38 @@ const EssayQuestionPreview = ({
               />
             ) : (
               // <DynamicBundledEditor />
-              <></>
+              <div className="w-full, h-[500px]">
+                {/* <Luckysheet id={'luckySheet' + index}/> */}
+                <Workbook
+                  data={[
+                    {
+                      name: 'Sheet1',
+                      // celldata: [
+                      //   {
+                      //     r: 0,
+                      //     c: 0,
+                      //     v: {
+                      //       ct: { fa: 'General', t: 'g' },
+                      //       m: 'value1',
+                      //       v: 'value1',
+                      //     },
+                      //   },
+                      //   {
+                      //     r: 0,
+                      //     c: 1,
+                      //     v: {
+                      //       ct: { fa: 'General', t: 'g' },
+                      //       m: 'value2',
+                      //       v: 'value2',
+                      //     },
+                      //   },
+                      // ],
+                    },
+                  ]}
+                  // onChange={(e) => console.log(e)}
+                />
+                ,
+              </div>
             )}
           </div>
         </div>

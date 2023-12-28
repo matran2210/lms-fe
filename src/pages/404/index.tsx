@@ -1,6 +1,5 @@
-import { LAYOUT } from '@utils/constants'
-import React from 'react'
 import SappButton from '@components/base/button/SappButton'
+import { LAYOUT } from '@utils/constants'
 import Link from 'next/link'
 import { PageLink } from 'src/constants'
 
@@ -33,6 +32,7 @@ const ErrorPage = () => {
           />
         </div>
       </Link>
+      {/* <Luckysheet/> */}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
-import { useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 export type IPreviewProp = {
   data: any
   control: any
@@ -29,7 +29,11 @@ const OneChoiceQuestion = ({
   solution,
 }: IPreviewProp) => {
   useEffect(() => {
-    setValue(name, defaultValues)
+    if (defaultValues) {
+      setValue(name, defaultValues)
+    } else {
+      setValue(name, '')
+    }
   }, [defaultValues])
   const convertAnswer = useMemo(() => {
     let answers = []
@@ -49,9 +53,16 @@ const OneChoiceQuestion = ({
     <div>
       <div
         id="hightlight_area"
-        onMouseUp={() =>
-          runHighlight(handleSaveHighLight, allowHighLight || false)
-        }
+        onMouseUp={(e: any) => {
+          if (
+            e.target.tagName.charAt(0) !== 'm' &&
+            e.target.firstChild?.tagName !== 'math'
+          ) {
+            if (e) {
+              runHighlight(handleSaveHighLight, allowHighLight || false)
+            }
+          }
+        }}
       >
         <EditorReader
           text_editor_content={data?.question_content}

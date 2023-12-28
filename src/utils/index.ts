@@ -28,28 +28,32 @@ export const removeJwtToken = () => {
 }
 
 export function truncateString(str: string, maxLength: number) {
-  if (str.length <= maxLength) {
+  if (str?.length <= maxLength) {
     return str
   } else {
-    return str.slice(0, maxLength) + ' ...' // Add ellipsis to indicate truncation
+    return str?.slice(0, maxLength) + ' ...' // Add ellipsis to indicate truncation
   }
 }
 export function runHighlight(
   handleSaveHighLight: any,
   allowHighLight: boolean,
+  elementID = 'hightlight_area',
 ) {
   // run mobile a bit
-  const domEle = document.getElementById('hightlight_area')
+  const domEle = document.getElementById(elementID)
 
   const options: optionsImpl = {}
   if (domEle && allowHighLight) {
-    const highlightMade = doHighlight(domEle, true, options)
+    doHighlight(domEle, false, options)
     handleSaveHighLight(serializeHighlights(domEle))
   }
 }
 
-export function DeserializeHighlight(highlighted: any) {
-  const domEle = document.getElementById('hightlight_area')
+export function DeserializeHighlight(
+  highlighted: any,
+  elementID = 'hightlight_area',
+) {
+  const domEle = document.getElementById(elementID)
   removeHighlights(domEle as any)
   deserializeHighlights(domEle as any, highlighted)
 }
@@ -76,4 +80,28 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 
   return words.join(' ')
+}
+
+export const buildQueryString = (params: Object) => {
+  const queryParams = Object.entries(params)
+    .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+    )
+    .join('&')
+
+  return queryParams ? `&${queryParams}` : ''
+}
+
+export const bytesToKilobyte = (bytes: number) => {
+  return `${(bytes / 1024).toFixed(2)}Kb` // 1 kilobyte = 1024 bytes
+}
+
+export const cleanParamsAPI = (params: Object) => {
+  return Object.fromEntries(
+    Object.entries(params).filter(
+      ([_, value]) => value !== null && value !== '',
+    ),
+  )
 }

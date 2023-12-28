@@ -6,6 +6,7 @@ import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { countWords, formatTime } from '@utils/index'
 import { ICourseSection } from 'src/type/courses'
+import { useForm } from 'react-hook-form'
 
 const Part = ({ courses }: { courses: ICourseSection }) => {
   const [open, setOpen] = useState(false)

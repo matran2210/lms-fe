@@ -19,6 +19,112 @@ const CourseTestApi = {
     )
     return response.data?.data
   },
+  getDetailQuizById: async (
+    id: string,
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.getQuestionTabs}/${id}`,
+      {
+        headers,
+      },
+    )
+    return response.data?.data
+  },
+
+  getQuestionCaseStudiesById: async (
+    id: string,
+    page_index: number,
+    page_size: number,
+  ): Promise<IResponse<any>> => {
+    const uri = url.getCaseStudyQuizes + `/${id}` + '/shuffle'
+    const response = await httpService.GET<any, any>({
+      uri,
+      params: {
+        page_index,
+        page_size,
+      },
+    })
+    return response
+  },
+  getTopicQuiz: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.getTopicQuiz + `/${id}`
+    const response = await httpService.GET<any, any>({
+      uri,
+    })
+    return response
+  },
+  createTopicAttempt: async (
+    quiz_id: string,
+    question_topic_id: string,
+  ): Promise<IResponse<any>> => {
+    const uri = url.createTopicAttempt
+    const response = await httpService.POST<any, any>({
+      uri,
+      request: {
+        quiz_id,
+        question_topic_id,
+      },
+    })
+    return response
+  },
+  getQuestionCaseStudiesByIdServerSide: async (
+    id: string,
+    accessToken: string,
+    page_index: number,
+    page_size: number,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.getCaseStudyQuizes}/${id}/shuffle`,
+      {
+        headers,
+        params: {
+          page_index,
+          page_size,
+        },
+      },
+    )
+    return response?.data?.data
+  },
+  getQuestionsDetailServerSide: async (
+    id: string,
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.getQuestionDetail}`,
+      {
+        headers,
+        params: {
+          question_ids: id,
+        },
+      },
+    )
+    return response.data?.data
+  },
+  getTopicDescriptionServerSide: async (
+    id: string,
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      apiURL + url.getTopicDescription + `/${id}`,
+      {
+        headers,
+      },
+    )
+    return response.data?.data
+  },
   getQuestionsDetail: async (id: string): Promise<IResponse<any>> => {
     const uri = url.getQuestionDetail
     const response = await httpService.GET<any, any>({
@@ -26,6 +132,13 @@ const CourseTestApi = {
       params: {
         question_ids: id,
       },
+    })
+    return response
+  },
+  getQuizDetail: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.getQuestionTabs + `/${id}`
+    const response = await httpService.GET<any, any>({
+      uri,
     })
     return response
   },
@@ -51,6 +164,74 @@ const CourseTestApi = {
     const response = await httpService.POST<any, any>({
       uri,
       request: data,
+    })
+    return response
+  },
+  submitCaseStudy: async (id: string, data: any): Promise<IResponse<any>> => {
+    const uri = url.submitCaseStudy + `/${id}` + '/submit'
+    const response = await httpService.POST<any, any>({
+      uri,
+      request: data,
+    })
+    return response
+  },
+  getResource: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.getResource + `/${id}`
+    const response = await httpService.GET<any, any>({
+      uri,
+    })
+    return response
+  },
+  getQuizAttemptsTable: async (
+    id: string,
+    page_index: number,
+    page_size: number,
+  ): Promise<IResponse<any>> => {
+    const uri =
+      url.getQuizAttemptsTable +
+      `/${id}?page_index=${page_index}&page_size=${page_size}`
+    const response = await httpService.GET<any, any>({
+      uri,
+    })
+    return response
+  },
+  getQuizAttempts: async (
+    id: string,
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.getQuizAttempts}/${id}`,
+      {
+        headers,
+      },
+    )
+    return response.data?.data
+  },
+  getQuizAttemptsChartData: async (
+    id: string,
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.getQuizAttemptsChartData}/${id}`,
+      {
+        headers,
+      },
+    )
+    return response.data?.data
+  },
+  createQuizAttempt: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.createQuizAttemp
+    const response = await httpService.POST<any, any>({
+      uri,
+      request: {
+        quiz_id: id,
+      },
     })
     return response
   },

@@ -83,8 +83,7 @@ const LoginPage = () => {
       }
       return token
     } catch (error) {
-      // Place a fake token of firebase here to process login!
-      return 'eWrfP84Que5HwiOBwlZZS2:APA91bExSGrrlwkfDHOudvxIlXxTRAyHld1sBzK'
+      return ''
     } finally {
       setLoading(false)
     }
@@ -124,7 +123,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
+      <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog max-h-[515px]">
         <div className="text-4xl font-bold text-bw-1 mb-2">Log In</div>
         <div className="text-medium-sm text-gray-1 mb-10">
           Login to Continue Learning
@@ -167,7 +166,7 @@ const LoginPage = () => {
               <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
             </span>
           </div>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <div className="flex gap-3 h-12.5">
               {SocialLogos.map((img, i) => (
                 <a key={i} onClick={socialLogin}>
@@ -181,7 +180,7 @@ const LoginPage = () => {
                 Register
               </a>
             </p>
-          </div>
+          </div> */}
         </form>
       </div>
     </>

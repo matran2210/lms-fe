@@ -5,19 +5,19 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
-import {
+import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
 } from 'react'
 import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
 import { QUESTION_TYPES } from 'src/constants'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
   confirmQuestion,
+  courseActivityQuizReducer,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 
 export type QuizComponentRef = {
@@ -25,10 +25,12 @@ export type QuizComponentRef = {
     activityId,
     tabId,
     quizId,
+    then,
   }: {
     activityId: string
     tabId: string
     quizId: string
+    then?: (e: any) => void
   }) => void
   reset: UseFormReset<FieldValues>
 }
@@ -41,7 +43,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
   ({ activeQuestion }: Props, ref) => {
     const questionRef = useRef<HTMLDivElement>(null)
 
-    const [defaultAnswer, setDefaultAnswer] = useState<any>()
     const dispatch = useAppDispatch()
     const { control: controlAnswer, setValue, reset, getValues } = useForm({})
 
@@ -70,7 +71,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const getAnswerMatching = () => {
       let value = [] as any
-      const inputs = document.querySelectorAll('.sapp-match-result') as any
+      const inputs = questionRef.current?.querySelectorAll(
+        '.sapp-match-result',
+      ) as any
       for (let e of inputs) {
         const childId = e.querySelector('.sapp-notched-container')
         value.push({ question_id: e.id, answer_id: childId?.id })
@@ -79,66 +82,45 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }
     const getAnswerDragNDrop = () => {
       let value = [] as any
-      const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
+      const inputs = questionRef.current?.querySelectorAll(
+        '.sapp-input-dragNDrop',
+      ) as any
       for (let e of inputs) {
         const idAnswer = e.querySelector('span')
         value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
       }
       return value
     }
+
     useEffect(() => {
-      const handleResponseResults = () => {
-        if (activeQuestion) {
-          if (!activeQuestion.confirmed) {
-            return
+      if (
+        activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
+        activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+        activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+      ) {
+        handleResponseResults()
+      }
+    }, [activeQuestion])
+
+    const handleResponseResults = () => {
+      if (activeQuestion) {
+        if (!activeQuestion.confirmed) {
+          return
+        }
+        switch (activeQuestion?.qType) {
+          case QUESTION_TYPES.ONE_CHOICE:
+          case QUESTION_TYPES.TRUE_FALSE: {
+            setValue && setValue('answer', activeQuestion.defaultValue)
+            break
           }
-          switch (activeQuestion?.qType) {
-            case QUESTION_TYPES.ONE_CHOICE:
-            case QUESTION_TYPES.TRUE_FALSE: {
-              setValue &&
-                setValue(
-                  'answer',
-                  activeQuestion.myAnswers?.find(
-                    (e: any) => e.question_id === activeQuestion.id,
-                  )?.question_answer_id,
-                )
 
-              break
-            }
-
-            case QUESTION_TYPES.MULTIPLE_CHOICE: {
-              setValue &&
-                setValue(
-                  'multiples',
-                  activeQuestion.myAnswers
-                    ?.find((e: any) => e.question_id === activeQuestion.id)
-                    ?.answer?.map((e: { answer_id: string }) => e.answer_id),
-                )
-              break
-            }
-
-            case QUESTION_TYPES.FILL_WORD: {
-              const myAnswers = activeQuestion?.myAnswers
-                ?.find((e: any) => e.question_id === activeQuestion.id)
-                ?.answer?.map((e: any) => e.answer_id)
-              setDefaultAnswer(myAnswers)
-              break
-            }
-            case QUESTION_TYPES.SELECT_WORD:
-              const myAnswers = activeQuestion?.myAnswers
-                ?.find((e: any) => e.question_id === activeQuestion.id)
-                ?.answer?.map((e: any) => e.id)
-              setDefaultAnswer(myAnswers)
-              break
-            default:
-              break
+          case QUESTION_TYPES.MULTIPLE_CHOICE: {
+            setValue && setValue('multiples', activeQuestion.defaultValue)
+            break
           }
         }
       }
-
-      // Gọi handleResponseResults khi results thay đổi
-      handleResponseResults()
-    }, [activeQuestion])
+    }
 
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
@@ -150,10 +132,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       activityId,
       tabId,
       quizId,
+      then,
     }: {
       activityId: string
       tabId: string
       quizId: string
+      then?: (e: any) => void
     }) => {
       if (activeQuestion) {
         let myAnswers
@@ -167,12 +151,19 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             break
           case QUESTION_TYPES.FILL_WORD:
             myAnswers = getValueFillText()
+            break
           case QUESTION_TYPES.SELECT_WORD:
             myAnswers = getValueSelectText()
+            break
+          case QUESTION_TYPES.MATCHING:
+            myAnswers = getAnswerMatching()
+            break
+          case QUESTION_TYPES.DRAG_DROP:
+            myAnswers = getAnswerDragNDrop()
+            break
           default:
             break
         }
-
         dispatch(
           confirmQuestion({
             activityId: activityId,
@@ -182,58 +173,86 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             myAnswers,
           }),
         )
+          .unwrap()
+          .then((e: any) => {
+            then && then(e)
+          })
       }
     }
 
-    return (
-      <div ref={questionRef}>
-        <div>
-          {activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
-          activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ? (
+    const renderQuestion = () => {
+      switch (activeQuestion?.qType) {
+        case QUESTION_TYPES.ONE_CHOICE:
+        case QUESTION_TYPES.TRUE_FALSE:
+          return (
             <OneChoiceQuestion
               data={activeQuestion}
               control={controlAnswer}
               corrects={activeQuestion.corrects}
               setValue={setValue}
             />
-          ) : activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE ? (
+          )
+
+        case QUESTION_TYPES.MULTIPLE_CHOICE:
+          return (
             <MultiChoiceQuestion
               data={activeQuestion}
               control={controlAnswer}
               corrects={activeQuestion.corrects}
               setValue={setValue}
             />
-          ) : activeQuestion?.qType === QUESTION_TYPES.MATCHING ? (
+          )
+
+        case QUESTION_TYPES.MATCHING:
+          return (
             <MatchingQuestion
               data={activeQuestion}
               action={getAnswerMatching}
+              defaultAnswer={activeQuestion?.defaultValue}
             />
-          ) : activeQuestion?.qType === QUESTION_TYPES.FILL_WORD ? (
+          )
+
+        case QUESTION_TYPES.FILL_WORD:
+          return (
             <AddWordPreview
               data={activeQuestion}
               action={getValueFillText}
-              defaultAnswer={defaultAnswer}
+              defaultAnswer={activeQuestion?.defaultValue}
               corrects={activeQuestion.corrects}
             />
-          ) : activeQuestion?.qType === QUESTION_TYPES.DRAG_DROP ? (
+          )
+
+        case QUESTION_TYPES.DRAG_DROP:
+          return (
             <DragNDropPreivew
               data={activeQuestion}
               action={getAnswerDragNDrop}
-              defaultAnswer={defaultAnswer}
-              // corrects={activeQuestion.corrects}
+              defaultAnswer={activeQuestion?.defaultValue}
             />
-          ) : activeQuestion?.qType === QUESTION_TYPES.SELECT_WORD ? (
+          )
+
+        case QUESTION_TYPES.SELECT_WORD:
+          return (
             <SelectWord
               data={activeQuestion}
               action={getValueSelectText}
-              defaultAnswer={defaultAnswer}
+              defaultAnswer={activeQuestion?.defaultValue}
               corrects={activeQuestion.corrects}
             />
-          ) : activeQuestion?.qType === QUESTION_TYPES.ESSAY ? (
-            <>ESSAY</>
-          ) : (
-            <div></div>
-          )}
+          )
+
+        case QUESTION_TYPES.ESSAY:
+          return <>ESSAY</>
+
+        default:
+          return <div></div>
+      }
+    }
+
+    return (
+      <div>
+        <div ref={questionRef}>
+          <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
         {activeQuestion?.confirmed && (
           <div className="p-4 mt-8 bg-gray-4">

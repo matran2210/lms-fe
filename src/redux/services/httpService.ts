@@ -131,10 +131,10 @@ axiosInstance.interceptors.response.use(
 
     const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
 
-    if (error.response && error.response.status === 404) {
-      store.dispatch(getLogoutUser())
-      window.location.href = PageLink.AUTH_LOGIN
-    }
+    // if (error.response && error.response.status === 404) {
+    //   store.dispatch(getLogoutUser())
+    //   window.location.href = PageLink.AUTH_LOGIN
+    // }
     // If the error is an authentication error and the refresh flag is false, set the refresh flag and refresh the access token
     if (
       error.response &&

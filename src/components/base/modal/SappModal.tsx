@@ -20,7 +20,7 @@ interface IProps {
   okButtonCaption?: string
   okButtonClass?: string | undefined
   cancelButtonClass?: string | undefined
-  buttonSize?: 'small' | 'medium' | 'lager'
+  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void
@@ -153,8 +153,12 @@ const SappModal: React.FC<IProps> = ({
     // Nếu handleSubmit là một hàm bất đồng bộ, thì gọi hàm đó và đợi kết quả
     if (handleSubmit && handleSubmit.constructor.name === 'AsyncFunction') {
       setLoading(true)
-      await handleSubmit()
-      setLoading(false)
+      try {
+        await handleSubmit()
+      } catch (err) {
+      } finally {
+        setLoading(false)
+      }
       if (closeAfterSubmit) {
         handleClose()
       }
@@ -273,9 +277,7 @@ const SappModal: React.FC<IProps> = ({
                     </div>
                   ))}
 
-                <div
-                  className={`${parentChildClass} snap-y flex-1 overflow-y-scroll bg-white -mr-4.5`}
-                >
+                <div className={`${parentChildClass} `}>
                   <div className={`${childClass}`}>{children}</div>
                 </div>
 

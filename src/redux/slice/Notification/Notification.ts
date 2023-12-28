@@ -173,6 +173,9 @@ export const notificationSlice = createSlice({
     showNotification: (state) => {
       state.notification_status = true
     },
+    hideNotification: (state) => {
+      state.notification_status = false
+    },
   },
 
   extraReducers: (builder) => {
@@ -256,8 +259,12 @@ export const notificationSlice = createSlice({
   },
 })
 
-export const { updateStatus, updateStatusAll, showNotification } =
-  notificationSlice.actions
+export const {
+  updateStatus,
+  updateStatusAll,
+  showNotification,
+  hideNotification,
+} = notificationSlice.actions
 export const notificationReducer = (state: RootState) =>
   state.notificationReducer
 

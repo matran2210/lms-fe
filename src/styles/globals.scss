@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 @import 'variables.scss';
 @import 'fonts.scss';
 @import 'select.scss';
@@ -8,13 +9,27 @@
 @tailwind components;
 @tailwind utilities;
 
-*,
-*::after,
-*::before {
+*:not(math, math *),
+*:not(math, math *)::after,
+*:not(math, math *)::before {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* .sheet,
+* .iconfont::before,
+.sheet *,
+* .sheet,
+.sheet *::before {
+  font-family: unset;
+}
+
+* .fa,
+* .fa::before {
+  font-family: 'Font Awesome 5 Free';
 }
 
 html {
@@ -96,13 +111,17 @@ body * ::-webkit-scrollbar-thumb:hover {
   td,
   th {
     border-width: 1px;
-    border-style: inherit;
+    border-style: inset;
   }
 
   tr {
     border-style: initial;
     border-width: initial;
   }
+
+  // math, mroot, msqrt,mfrac, msub {
+  //   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  // }
 }
 
 .sapp-questions .sapp-input-preview {
@@ -118,7 +137,7 @@ body * ::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-notched-container {
-  @apply break-words flex-1 relative bg-gray-3 h-auto flex items-center justify-center p-5 border-dashed border;
+  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-center p-5 border-dashed border border-bw-7;
 }
 
 .sapp-notched-container:before {
@@ -129,11 +148,11 @@ body * ::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-dashed bg-white absolute border;
+  @apply z-0 border-dashed bg-white absolute border border-bw-7;
 }
 
 .sapp-arrowed-container {
-  @apply break-words relative bg-gray-3 h-auto flex items-center justify-center p-5 border-dashed border w-[48%];
+  @apply break-words relative bg-bw-6 h-auto flex items-center justify-center p-5 border-dashed border w-[48%] border-bw-7;
 }
 
 .sapp-arrowed-container:before {
@@ -145,7 +164,69 @@ body * ::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-dashed bg-gray-3 absolute border right-0;
+  @apply z-0 border-dashed bg-bw-6 absolute border right-0 border-bw-7;
+}
+
+.sapp-arrowed-container-corrects {
+  @apply break-words relative bg-bw-6 h-auto flex items-center justify-center p-5 border-solid border w-[48%] border-success;
+}
+
+.sapp-arrowed-container-corrects:before {
+  border: 1px dashed rgb(224, 221, 227);
+  content: '';
+  right: 0;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-solid bg-bw-6 absolute border right-0 border-success;
+}
+
+.sapp-notched-container-corrects {
+  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-center p-5 border-solid border border-success;
+}
+
+.sapp-notched-container-corrects:before {
+  content: '';
+  left: -1.2px;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-solid bg-white absolute border border-success;
+}
+
+.sapp-arrowed-container-incorrects {
+  @apply break-words relative bg-bw-6 h-auto flex items-center justify-center p-5 border-solid border w-[48%] border-error;
+}
+
+.sapp-arrowed-container-incorrects:before {
+  border: 1px dashed rgb(224, 221, 227);
+  content: '';
+  right: 0;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-solid bg-bw-6 absolute border right-0 border-error;
+}
+
+.sapp-notched-container-incorrects {
+  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-center p-5 border-solid border border-error;
+}
+
+.sapp-notched-container-incorrects:before {
+  content: '';
+  left: -1.2px;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-solid bg-white absolute border border-error;
 }
 
 .answer-area {
@@ -160,6 +241,22 @@ body * ::-webkit-scrollbar-thumb:hover {
 
 .sapp-input-dragNDrop {
   @apply inline-block min-w-[100px] border-b border-gray-500 border-0;
+}
+
+.sapp-input-dragNDrop-answer {
+  @apply inline-block min-w-[100px] border border-gray-500 border text-center p-1 m-1 bg-gray-4;
+
+  &.corrects {
+    @apply border-success text-state-success;
+  }
+
+  &.wrongs {
+    @apply border-error text-state-error;
+  }
+}
+
+.sapp-input-dragNDrop-empty {
+  @apply inline-block min-w-[100px] border-0 text-center;
 }
 
 .sapp-questions-essay {
@@ -258,4 +355,64 @@ body * ::-webkit-scrollbar-thumb:hover {
 .button {
   display: block;
   @apply flex-1 bg-gray-2;
+}
+
+.stream-player__progress-bar {
+  /* Set the position to relative */
+  position: relative;
+}
+
+/* Add a point before the progress bar */
+.stream-player__progress-bar::before {
+  /* Set the position to absolute */
+  position: absolute;
+  /* Set the content to a circle icon */
+  content: '\25cf';
+  /* Set the font size to 12px */
+  font-size: 12px;
+  /* Set the color to white */
+  color: white;
+  /* Set the left position to 10% of the progress bar width */
+  left: 10%;
+  /* Set the top position to 50% of the progress bar height */
+  top: 50%;
+  /* Adjust the position with transform */
+  transform: translate(-50%, -50%);
+}
+
+/* Add another point after the progress bar */
+.stream-player__progress-bar::after {
+  /* Set the position to absolute */
+  position: absolute;
+  /* Set the content to a star icon */
+  content: '\2605';
+  /* Set the font size to 12px */
+  font-size: 12px;
+  /* Set the color to yellow */
+  color: yellow;
+  /* Set the right position to 20% of the progress bar width */
+  right: 20%;
+  /* Set the top position to 50% of the progress bar height */
+  top: 50%;
+  /* Adjust the position with transform */
+  transform: translate(50%, -50%);
+}
+
+.required {
+  &:after {
+    content: '*';
+    position: relative;
+    font-size: inherit;
+    color: #d35563;
+    padding-left: 0.25rem;
+    font-weight: 700;
+  }
+}
+.sapp-hover-device-item:hover {
+  .sapp-logo {
+    @apply border-primary bg-secondary;
+  }
+  .logo {
+    fill: #ffb800;
+  }
 }

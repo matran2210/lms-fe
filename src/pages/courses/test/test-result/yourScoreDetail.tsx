@@ -1,28 +1,10 @@
 import SappTable from '@components/base/SappTable'
 import { Dispatch } from '@reduxjs/toolkit'
 import { SetStateAction } from 'react'
+import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 
-interface IProps {
-  currentPage?: number
-  setCurrentPage?: Dispatch<SetStateAction<any>>
-  DetailScoreList: any
-  loading: boolean
-  setLoading?: Dispatch<SetStateAction<any>>
-  handleChangeParams?: (currenPage: number, size: number) => void
-  fetchClassList?: (
-    currentPage: number,
-    pageSize: number,
-    params?: Object,
-  ) => void
-  filterParams?: Object
-  pageSize?: number
-  getParams?: any
-  queryParams?: any
-  checkedList?: any
-  toggleCheck?: any
-  toggleCheckAll?: any
-  isCheckedAll?: boolean
-}
 const headers = [
   {
     label: '#',
@@ -35,7 +17,7 @@ const headers = [
       'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
   },
   {
-    label: 'Section',
+    label: 'Topic',
     className:
       'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
   },
@@ -57,129 +39,123 @@ const headers = [
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-62px',
-  },
-]
-
-// Config ListResults
-
-const Data = [
-  {
-    id: '1',
-    question: 'Quantitative methods',
-    type: 'Multiple Choice',
-    section: 'EU',
-    result: 'Correct',
-    progress: '23%',
-    timespent: 120,
-    page_index: 1,
-    page_size: 10,
-  },
-  {
-    id: '2',
-    question: 'Quantitative methods',
-    type: 'Multiple Choice',
-    section: 'EU',
-    result: 'Incorrect',
-    progress: '23%',
-    timespent: 142,
-    page_index: 2,
-    page_size: 10,
-  },
-  {
-    id: '2',
-    question: 'Quantitative methods',
-    type: 'Multiple Choice',
-    section: 'EU',
-    result: 'Unfinished',
-    timespent: '',
-    page_index: 2,
-    page_size: 10,
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[95px]',
   },
 ]
 
 const YourScoreDetail = () => {
+  const [scoreDetail, setScoreDetail] = useState<any>({
+    answers: [],
+    meta: {},
+  })
+  const router = useRouter()
+
+  const fetchScoreDetail = async (page_index: number, page_size: number) => {
+    try {
+      const res = await CourseTestApi.getQuizAttemptsTable(
+        router.query.id as string,
+        page_index,
+        page_size,
+      )
+      return res
+    } catch (error) {}
+  }
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    ) {
+      return
+    }
+    handlNextPage()
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [scoreDetail])
+
+  const handlNextPage = async () => {
+    const totalPages = scoreDetail?.meta?.total_pages
+    const pageIndex = scoreDetail?.meta?.page_index
+    const pageSize = scoreDetail?.meta?.page_size
+    if (totalPages && pageIndex < totalPages) {
+      const res = await fetchScoreDetail(pageIndex + 1, pageSize)
+      const results = scoreDetail?.answers?.concat(res?.data?.answers)
+      setScoreDetail({
+        meta: res?.data?.meta,
+        answers: results,
+      })
+    }
+  }
+
+  const getScoreDetail = async () => {
+    const res = await fetchScoreDetail(1, 4)
+    setScoreDetail(res?.data)
+  }
+
+  useEffect(() => {
+    getScoreDetail()
+  }, [router])
+
   return (
-    <div className="bg-white px-24 py-6 max-w-[1144px] max-h-[700px]">
-      <div className="">
+    <div className="bg-white px-6 xl:px-24 py-6 max-w-[1144px] max-h-full shadow-sidebar">
+      <div className="text-xl font-bold text-bw-1 mb-6">Your Score Details</div>
+      <div className="block">
         <SappTable
           headers={headers}
           loading={true}
-          data={Data}
+          data={scoreDetail?.answers}
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}
         >
           <>
-            {Data?.map((e: any, index: number) => {
-              //const isChecked = checkedList.includes(e.id)
+            {scoreDetail.answers?.map((e: any, index: number) => {
               return (
-                <tr key={e.id}>
-                  <td className="text-start m-6">{e.id}</td>
-                  {/* <td>
-                    {index + 1 + (Data.page_index - 1) * Data.page_size}
-                  </td> */}
-                  <td className="text-start m-6">
-                    <div className="text-gray-600 sapp-text-truncate-1">
-                      {e?.question}
-                    </div>
+                <tr key={e?.id}>
+                  <td className="pr-1">{index + 1}</td>
+                  <td className="text-start m-6 pr-4">
+                    <div
+                      className="text-gray-600 sapp-text-truncate-1"
+                      dangerouslySetInnerHTML={{
+                        __html: String(e?.question?.question_content),
+                      }}
+                    ></div>
                   </td>
-                  <td className="text-start m-6">{e.section}</td>
-                  <td className="text-start m-6">
-                    <div className="mt-6 mr-6 mb-6">{e.type}</div>
+                  <td className="text-start m-6 pr-4">
+                    {e?.question?.question_topic?.name}
+                  </td>
+                  <td className="text-start m-6 pr-4">
+                    <div className="mt-6 mr-6 mb-6">{e?.question?.qType}</div>
                   </td>
                   <td
-                    className="text-start m-6"
-                    style={{
-                      color:
-                        e.result === 'Correct'
-                          ? '#008000'
-                          : e.result === 'Incorrect'
-                            ? '#D35563'
-                            : '#D35563',
-                    }}
+                    className={`text-start m-6 pr-1
+                      ${
+                        e?.is_correct
+                          ? ' text-state-success'
+                          : ' text-state-error'
+                      }
+                    `}
                   >
-                    {e?.result ?? '-'}
+                    {e?.is_correct ? 'Correct' : 'Incorrect'}
                   </td>
-                  <td className="text-start m-6 text-gray-1">
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginLeft: '5px',
-                      }}
-                    >
-                      {e.result === 'Correct' && (
-                        <img
-                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                          alt="Correct"
-                          className="w-4"
-                          style={{ color: '#008000', marginRight: '5px' }}
-                        />
-                      )}
-                      {e.result === 'Incorrect' && (
-                        <img
-                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                          alt="Incorrect"
-                          className="w-4"
-                          style={{ color: '#D35563', marginRight: '5px' }}
-                        />
-                      )}
-                      {e.progress}
+                  <td className="text-start m-6 text-gray-1 pr-4">
+                    <div className="flex items-center ml-1">
+                      <img
+                        src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                        alt="Correct"
+                        className="w-4 text-state-success mr-1"
+                      />
+                      29%
                     </div>
                   </td>
-                  <td className="text-start m-6">
+                  <td className="text-start m-6 pr-4">
                     <div>
                       {(() => {
-                        if (
-                          typeof e.timespent !== 'undefined' &&
-                          e.timespent !== ''
-                        ) {
-                          const hours = Math.floor(Number(e.timespent) / 60)
-                          const minutes = Number(e.timespent) % 60
-                          return `${hours.toString().padStart(2, '0')}:${minutes
-                            .toString()
-                            .padStart(2, '0')}`
+                        if (e?.time_spent !== null) {
+                          return e?.time_spent
                         } else {
                           return '---'
                         }

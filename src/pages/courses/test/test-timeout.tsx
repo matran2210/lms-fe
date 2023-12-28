@@ -1,15 +1,20 @@
-import SappButton from '@components/base/button/SappButton'
 import SappModal from '@components/base/modal/SappModal'
 import { TimeIcon } from '@components/icons'
-import { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useEffect } from 'react'
+import { useAppDispatch } from 'src/redux/hook'
 
 interface IProps {
   open: boolean
   setOpen: any
-  title: string
+  handleSubmit: any
+  handleQuit: any
 }
-const TestTimeOutModal = ({ open, setOpen, title }: IProps) => {
+const TestTimeOutModal = ({
+  open,
+  setOpen,
+  handleSubmit,
+  handleQuit,
+}: IProps) => {
   const dispatch = useAppDispatch()
   // const {} = useAppSelector()
   //to do: call api to get datail
@@ -17,7 +22,12 @@ const TestTimeOutModal = ({ open, setOpen, title }: IProps) => {
     //dispatch(getDetailTest)
   }, [])
   const onSubmit = () => {
+    handleSubmit()
     //to do: start test
+  }
+  const onCancel = () => {
+    setOpen(false)
+    handleQuit()
   }
   return (
     <SappModal
@@ -25,17 +35,16 @@ const TestTimeOutModal = ({ open, setOpen, title }: IProps) => {
       setOpen={setOpen}
       cancelButtonCaption="Quit"
       okButtonCaption="Submit"
-      //   handleCancel={() => {
-      //     setOpen(false)
-      //   }}
+      handleCancel={onCancel}
       handleSubmit={onSubmit}
       showHeader={false}
       size="w-max"
       footerButtonClassName="flex flex-col-reverse gap-6"
-      childClass="-mr-4 flex flex-col justify-center items-center"
+      childClass="flex flex-col justify-center items-center"
       parentChildClass=""
       position="center"
       fullWidthBtn={true}
+      closeAfterSubmit={true}
     >
       <TimeIcon />
       <div className="text-bw-1 text-4xl font-bold mt-6">Time Out</div>

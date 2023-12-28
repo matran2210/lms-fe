@@ -4,10 +4,12 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   courseActivityQuizReducer,
   fetchQuestionById,
+  submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import { IQuestion } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import toast from 'react-hot-toast'
 
 type Props = {
   questions: IQuestion[]
@@ -99,6 +101,41 @@ const QuizDocument = ({
     }
   }
 
+  const handleFinishQuiz = () => {
+    const {
+      answers,
+      quiz_position_mapping,
+    }: { answers: any[]; quiz_position_mapping: any[] } = questionsList.reduce(
+      (acc: any, obj: any) => {
+        if (obj?.myAnswers) {
+          acc.answers = acc.answers.concat(obj.myAnswers)
+        }
+
+        if (obj?.quiz_position_mapping) {
+          acc.quiz_position_mapping = acc.quiz_position_mapping.concat(
+            obj.quiz_position_mapping,
+          )
+        }
+
+        return acc
+      },
+      { answers: [] as any[], quiz_position_mapping: [] as any[] },
+    )
+
+    try {
+      dispatch(
+        submitQuestion({
+          id: quizId,
+          data: { answers, quiz_position_mapping },
+        }),
+      )
+        .unwrap()
+        .then(() => {
+          toast.success('Nộp bài thành công!')
+        })
+    } catch (error) {}
+  }
+
   return (
     <div>
       <div className="border border-gray-3 p-6">
@@ -132,12 +169,10 @@ const QuizDocument = ({
         </div>
         {!!isQuestionConfirmed && (
           <div
-            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2 ${
-              isLastQuestion ? 'opacity-50' : ''
-            }`}
-            onClick={handleNextQuestion}
+            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
+            onClick={isLastQuestion ? handleFinishQuiz : handleNextQuestion}
           >
-            Next
+            {isLastQuestion ? 'Finish' : 'Next'}
           </div>
         )}
         {!isQuestionConfirmed && (

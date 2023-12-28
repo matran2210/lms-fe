@@ -28,17 +28,68 @@ const ProfileSideBar = ({ page }: IProps) => {
           const isActive = page === urlPage
           let className =
             'text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary'
+          if (value?.children?.length > 0) {
+            return (
+              <li className={`${className} cursor-pointer relative`} key={key}>
+                <div>
+                  <a className="p-5 block w-full text-left">{value.label}</a>
+                </div>
+                <div>
+                  {value?.children?.map((e: any) => {
+                    return Object.entries(e).map(([k, v]: any) => {
+                      const urlPage = k.toLowerCase()
+                      return (
+                        <div
+                          className={`${className} cursor-pointer relative ms-4`}
+                          key={key}
+                        >
+                          <Link
+                            href={`/profile/${urlPage}/`}
+                            passHref
+                            scroll={false}
+                          >
+                            <a className="p-5 block w-full text-left">
+                              {v.label}
+                            </a>
+                          </Link>
+                          <div className="absolute bottom-0">
+                            <Link
+                              href={`/profile/${urlPage}/`}
+                              passHref
+                              scroll={false}
+                            >
+                              <a className="p-5 block w-full text-left">
+                                {v.label}
+                              </a>
+                            </Link>
+                          </div>
+                        </div>
+                      )
+                    })
+                  })}
+                </div>
+                <div className=" border-b border-gray-3"></div>
+
+                {/* <Link href={`/profile/${urlPage}/`} passHref scroll={false}>
+                  <a className="p-5 block w-full text-left">{value.label}</a>
+                </Link> */}
+              </li>
+            )
+          }
+
           if (isActive) {
             className = 'bg-secondary font-bold text-primary'
           }
           return (
             <li className={`${className} cursor-pointer relative`} key={key}>
               <Link href={`/profile/${urlPage}/`} passHref scroll={false}>
-                <button className="p-5 block w-full text-left ">
-                  {value.label}
-                </button>
+                <a className="p-5 block w-full text-left">{value.label}</a>
               </Link>
-              <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>
+              <div className="absolute inset-0 border-b border-gray-3 bottom-0">
+                <Link href={`/profile/${urlPage}/`} passHref scroll={false}>
+                  <a className="p-5 block w-full text-left">{value.label}</a>
+                </Link>
+              </div>
             </li>
           )
         })}

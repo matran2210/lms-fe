@@ -1,9 +1,11 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
+import SappModal from '@components/base/modal/SappModal'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   courseActivityReducer,
@@ -11,14 +13,12 @@ import {
   getDiscussion,
   reactDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { userReducer } from 'src/redux/slice/User/User'
 import {
   ICreateDiscussionResReact,
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import DiscussionElement from './DiscussionElement'
-import { userReducer } from 'src/redux/slice/User/User'
-import SappIcon from 'src/common/SappIcon'
-import SappModal from '@components/base/modal/SappModal'
 
 type Props = {}
 
@@ -56,7 +56,7 @@ const Discussion = (props: Props) => {
     { comment, commentRoot }: { comment: string; commentRoot: string },
     isRoot?: boolean,
   ) => {
-    if (router.query.id) {
+    if (router.query.activityId) {
       let parent_id = idReply
       let content = comment
       if (isRoot) {
@@ -66,7 +66,7 @@ const Discussion = (props: Props) => {
       try {
         await dispatch(
           createDiscussion({
-            course_section_id: router.query.id as string,
+            course_section_id: router.query.activityId as string,
             content: content?.trim(),
             parent_id,
           }),
@@ -77,7 +77,7 @@ const Discussion = (props: Props) => {
         } else {
           reset({ comment: '' })
         }
-        await dispatch(getDiscussion(router.query.id as string))
+        await dispatch(getDiscussion(router.query.activityId as string))
       } catch (error) {}
     }
   }
@@ -103,7 +103,7 @@ const Discussion = (props: Props) => {
         await dispatch(reactDiscussion(data))
       } catch (error) {
       } finally {
-        await dispatch(getDiscussion(router.query.id as string))
+        await dispatch(getDiscussion(router.query.activityId as string))
       }
     }, 1000)
   }
@@ -182,75 +182,81 @@ const Discussion = (props: Props) => {
               idReply={idReply}
               handleChangeIdReply={handleChangeIdReply}
             />
-            {e.children?.[0] && (
-              <div className="relative ml-13 pl-5 mt-6 overflow-hidden">
-                {/* <div className="relative"> */}
-                <div
-                  className="absolute left-0 top-0 bottom-0 w-[2px] -mt-1 bg-size-100-30"
-                  style={{
-                    background:
-                      'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
-                  }}
-                ></div>
-                {/* </div> */}
-
-                {e.children.map((f) => {
-                  return (
-                    <div className="mt-5" key={f.id}>
-                      <DiscussionElement
-                        rank={2}
-                        discussion={f}
-                        onReact={onReact}
-                      />
-                    </div>
-                  )
-                })}
-              </div>
-            )}
             <div
-              className={`ml-13 pl-5 flex gap-3 overflow-hidden transition-max-height duration-300 ${
-                idReply === e.id ? 'max-h-96 mt-6' : 'max-h-0'
-              }`}
+              className={`${
+                e.children?.[0] ? 'mt-6' : ''
+              } ' relative ml-13 pl-5 overflow-hidden`}
             >
-              <div className="flex-none leading-0">
-                <Image
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                  src={
-                    e?.avatar?.['50x50'] || e?.avatar?.['ORIGIN'] || blankAvatar
-                  }
-                  loading="eager"
-                ></Image>
-              </div>
-              <form
-                onSubmit={handleSubmit((e) => onSubmit(e))}
-                className="flex-1 relative"
-              >
-                <HookFormTextField
-                  control={control}
-                  name={idReply === e.id ? 'comment' : ''}
-                  textSize="sm"
-                  inputClassName={'max-h-10'}
-                  placeholder="Your comment..."
-                ></HookFormTextField>
-                <div
-                  onClick={openCamera}
-                  className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
-                >
-                  <SappIcon icon="camera"></SappIcon>
+              {e.children?.[0] && (
+                <div>
+                  <div
+                    className="absolute left-0 top-0 bottom-0 w-0.5 -mt-1 bg-size-100-30"
+                    style={{
+                      background:
+                        'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
+                    }}
+                  ></div>
+                  {e.children.map((f, index) => {
+                    return (
+                      <div className={index === 0 ? '' : 'mt-5'} key={f.id}>
+                        <DiscussionElement
+                          rank={2}
+                          discussion={f}
+                          onReact={onReact}
+                        />
+                      </div>
+                    )
+                  })}
                 </div>
-                <button type="submit" className="hidden"></button>
-              </form>
+              )}
+              <div
+                className={`flex items-center gap-3 overflow-hidden transition-max-height duration-300 ${
+                  idReply === e.id ? `max-h-96 mt-6` : 'max-h-0'
+                }`}
+              >
+                <div className="flex-none leading-0">
+                  <Image
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                    src={
+                      user.detail.avatar['50x50'] ||
+                      user.detail.avatar['ORIGIN'] ||
+                      blankAvatar
+                    }
+                    loading="eager"
+                  ></Image>
+                </div>
+                <form
+                  onSubmit={handleSubmit((e) => onSubmit(e))}
+                  className="flex-1 relative"
+                >
+                  <HookFormTextField
+                    control={control}
+                    name={idReply === e.id ? 'comment' : ''}
+                    textSize="sm"
+                    inputClassName={'max-h-10'}
+                    placeholder="Your comment..."
+                  ></HookFormTextField>
+                  <div
+                    onClick={openCamera}
+                    className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+                  >
+                    <SappIcon icon="camera"></SappIcon>
+                  </div>
+                  <button type="submit" className="hidden"></button>
+                </form>
+              </div>
             </div>
+
             {/* {idReply === e.id && ( */}
           </div>
         )
       })}
       <div
-        className={`mt-6 flex gap-3 overflow-hidden transition-max-height duration-300`}
+        className={`mt-6 flex items-center gap-3 overflow-hidden transition-max-height duration-300`}
       >
-        <div className="flex-none">
+        <div className="flex-none leading-0">
           <Image
             width={40}
             height={40}
@@ -273,6 +279,7 @@ const Discussion = (props: Props) => {
             textSize="sm"
             inputClassName={'max-h-10'}
             placeholder="Your comment..."
+            className="h-fit"
           ></HookFormTextField>
           <button type="submit" className="hidden"></button>
           <div

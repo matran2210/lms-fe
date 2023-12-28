@@ -10,7 +10,7 @@ interface BreadcrumbProps {
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ tabs, currentPage }) => {
   return (
     <nav className="breadcrumb" aria-label="breadcrumbs">
-      <ul className="breadcrumb flex flex-row ml-[64px] pl-[20px] mt-6 font-semibold">
+      <ul className="breadcrumb flex flex-row py-6 font-semibold">
         {tabs.map((tab, index) => (
           <li key={index}>
             {index !== tabs.length - 1 ? (
@@ -20,8 +20,8 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ tabs, currentPage }) => {
                     <a
                       className={
                         currentPage === tab.title
-                          ? 'text-[#141414] font-bold'
-                          : 'text-[#A1A1A1]'
+                          ? 'text-bw-1 font-bold'
+                          : 'text-gray-1'
                       }
                     >
                       {tab.title}
@@ -30,14 +30,20 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ tabs, currentPage }) => {
                 ) : (
                   <span>{tab.title}</span>
                 )}
-                <span className="text-[#A1A1A1]"> {' / '} </span>
+                <span
+                  className={`${
+                    currentPage === tab.title
+                      ? 'text-bw-1 font-bold'
+                      : 'text-gray-1'
+                  } pr-1`}
+                >
+                  {' / '}
+                </span>
               </>
             ) : (
               <span
                 className={
-                  currentPage === tab.title
-                    ? 'text-[#141414]'
-                    : 'text-[#A1A1A1]'
+                  currentPage === tab.title ? 'text-bw-1' : 'text-gray-1'
                 }
               >
                 {tab.title}

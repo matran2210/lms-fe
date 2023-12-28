@@ -17,7 +17,7 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModelSidebar from '@components/base/modal/SappModelSidebar'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -65,9 +65,13 @@ const Notifications = () => {
 
   const getApiNotificationDetail = async (id: string) => {
     try {
-      await dispatch(getNotificationDetail(id))
-      await coutNotificationsUnRead()
-      dispatch(updateStatus({ id: id }))
+      const res = await dispatch(getNotificationDetail(id))
+      if (res) {
+        await coutNotificationsUnRead()
+        dispatch(updateStatus({ id: id }))
+        notifyDetail?.created_by !== null &&
+          Router.push(`${notifyDetail?.content}`)
+      }
     } catch (error) {}
   }
 
@@ -123,7 +127,7 @@ const Notifications = () => {
   return (
     <>
       <div className="header bg-white border-b border-default px-4 lg:px-20">
-        <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
+        <div className="max-w-xxl my-0 mx-auto flex py-4.5">
           <SearchForm
             placeholder="Find..."
             formStyle="w-full flex items-center"
@@ -137,7 +141,7 @@ const Notifications = () => {
             Notifications
           </h2>
         </div>
-        <div className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between">
+        <div className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between border-b border-gray-2">
           <NotifyTab tabs={tabs} />
           <div className="settings flex items-center relative">
             <ActionCell open={openToolTip} setOpen={setOpenToolTip}>

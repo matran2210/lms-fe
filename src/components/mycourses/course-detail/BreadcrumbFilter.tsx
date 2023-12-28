@@ -1,7 +1,6 @@
 // components/SearchForm.tsx
 
-import React, { useState } from 'react'
-import HookFormSelect from '@components/base/select/HookFormSelect'
+import React from 'react'
 import Link from 'next/link'
 
 const BreadcrumbFilter = ({ name }: { name: string }) => {
@@ -9,7 +8,7 @@ const BreadcrumbFilter = ({ name }: { name: string }) => {
     <nav className="breadcrumbs" role="navigation" aria-label="breadcrumbs">
       <ol className="breadcrumbs__list flex flex-wrap text-medium-sm font-semibold">
         <li className="breadcrumbs__item text-gray-1">
-          <Link href="#" className="breadcrumbs__link" scroll={false}>
+          <Link href="/courses" className="breadcrumbs__link" scroll={false}>
             My Course
           </Link>
         </li>

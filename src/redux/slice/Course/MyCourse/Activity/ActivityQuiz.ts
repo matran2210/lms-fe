@@ -13,6 +13,8 @@ export interface IActivityStateQuestion extends IQuestion {
   confirmed?: boolean
   myAnswers?: any
   corrects?: any
+  quiz_position_mapping?: any
+  defaultValue?: any
 }
 
 /**
@@ -133,6 +135,49 @@ const confirmQuestion = createAsyncThunk(
 )
 
 /**
+ * Async thunk để xác nhận một câu hỏi trong bài kiểm tra.
+ * @type {AsyncThunk}
+ */
+const submitQuestion = createAsyncThunk(
+  'quiz/submitQuestion',
+  async (
+    {
+      id,
+      data,
+    }: { id: string; data: { answers: any[]; quiz_position_mapping: any } },
+
+    { rejectWithValue },
+  ) => {
+    try {
+      const result = await CourseActivityApi.submitQuestion(id, data)
+      if (result.success) {
+        return { ...result }
+      }
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+/**
+ * Selector để lấy ra danh sách câu hỏi từ Redux state.
+ * @function
+ * @param {ActivityQuizRootState} state - Trạng thái toàn bộ Redux store.
+ * @param {string} activityId - ID của hoạt động.
+ * @param {string} tabId - ID của tab.
+ * @param {string} quizId - ID của bài kiểm tra.
+ * @returns {IActivityStateQuestion[]} - Danh sách câu hỏi.
+ */
+export const selectQuestions = (
+  state: ActivityQuizRootState,
+  activityId: string,
+  tabId: string,
+  quizId: string,
+): IActivityStateQuestion[] | undefined => {
+  return state?.[activityId]?.[tabId]?.[quizId]?.questions
+}
+
+/**
  * Redux slice để xử lý các câu hỏi trong Redux store.
  * @type {Slice}
  */
@@ -207,6 +252,7 @@ const quizSlice: Slice = createSlice({
             if (questionToUpdate) {
               questionToUpdate.confirmed = true
               questionToUpdate.solution = payload.question.solution
+              questionToUpdate.defaultValue = payload.myAnswers
 
               switch (payload.question.qType as QUESTION_TYPES) {
                 case QUESTION_TYPES.ONE_CHOICE:
@@ -270,7 +316,7 @@ const quizSlice: Slice = createSlice({
                       question_id: payload.question.id,
                       answer: payload.myAnswers?.map(
                         (e: string, i: number) => ({
-                          id: e,
+                          answer_id: e,
                           answer_position: i + 1,
                         }),
                       ),
@@ -278,9 +324,49 @@ const quizSlice: Slice = createSlice({
                   ]
                   questionToUpdate.corrects = payload.question.answers
                   break
-                case QUESTION_TYPES.DRAG_DROP:
-                  break
+
                 case QUESTION_TYPES.MATCHING:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers || []),
+                    {
+                      question_id: payload.question.id,
+                      answer: payload.myAnswers?.map(
+                        (e: { question_id: string; answer_id: string }) => ({
+                          question_id: e.question_id,
+                          answer_id: e.answer_id,
+                        }),
+                      ),
+                    },
+                  ]
+                  questionToUpdate.corrects =
+                    payload.question.question_matchings
+                  break
+
+                case QUESTION_TYPES.DRAG_DROP:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers || []),
+                    {
+                      question_id: payload.question.id,
+                      answer: payload.myAnswers?.map((e: any, i: number) => ({
+                        answer_id: e.idAnswer,
+                        answer_position: i + 1,
+                      })),
+                    },
+                  ]
+                  questionToUpdate.quiz_position_mapping = [
+                    ...(questionToUpdate.quiz_position_mapping || []),
+                    {
+                      question_id: payload.question.id,
+                      answers: payload.question.answers?.map((e) => {
+                        return {
+                          answer_id: e.id,
+                          answer_position: e.answer_position,
+                        }
+                      }),
+                    },
+                  ]
+
+                  questionToUpdate.corrects = payload.question.answers
                   break
                 default:
                   break
@@ -289,6 +375,17 @@ const quizSlice: Slice = createSlice({
           }
         },
       )
+
+    builder.addCase(submitQuestion.pending, (state) => {
+      // state.loading = true
+    })
+    builder.addCase(submitQuestion.fulfilled, (state, action) => {
+      // state.loading = false
+      return state
+    })
+    builder.addCase(submitQuestion.rejected, (state) => {
+      // state.loading = false
+    })
   },
 })
 
@@ -303,4 +400,4 @@ export default quizSlice.reducer
 export const courseActivityQuizReducer = (state: RootState) =>
   state.courseActivityQuizReducer
 
-export { confirmQuestion, fetchQuestionById }
+export { confirmQuestion, fetchQuestionById, submitQuestion }

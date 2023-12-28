@@ -56,3 +56,12 @@
 .sapp-active-item-guide .item:first-child {
   @apply bg-white z-50;
 }
+
+.select__menu {
+  min-width: 150px !important;
+}
+
+.group-resource:hover {
+  fill: #ffb800; /* Change to the desired hover fill color */
+  cursor: pointer; /* Optional: Change cursor to pointer on hover */
+}

@@ -40,6 +40,7 @@ const MovableWindow = ({
       }}
       //   onClick={onClick}
       onMouseDown={onClick}
+      onTouchStart={onClick}
     >
       <div className="resizers">
         <div className="resizer top-left"></div>

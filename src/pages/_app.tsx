@@ -13,7 +13,13 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { onMessageListener } from 'src/utils/firebase'
-import { showNotification } from 'src/redux/slice/Notification/Notification'
+import {
+  showNotification,
+  hideNotification,
+} from 'src/redux/slice/Notification/Notification'
+import { useRouter } from 'next/router'
+import LearningResource from '@components/mycourses/LearningResource'
+import { getCountUnRead } from 'src/redux/slice/Notification/Notification'
 
 // import 'antd/dist/antd.css'
 
@@ -28,16 +34,32 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const { layout = LAYOUT.DEFAULT_LAYOUT } = (Component as any) || {}
   injectStore(store)
   const [show, setShow] = useState(false)
+  const router = useRouter()
+  const [openResource, setOpenResource] = useState(false)
 
   const dispatch = useAppDispatch()
-  const getStatusNoti = useAppSelector(
-    (state) => state.notificationReducer?.notification_status,
+  const getNotiUnread = useAppSelector(
+    (state) => state.notificationReducer?.total_records,
   )
+
+  const coutNotificationsUnRead = async () => {
+    try {
+      await dispatch(getCountUnRead())
+    } catch (error) {}
+  }
 
   useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
     })
+
+    // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
+    coutNotificationsUnRead()
+    if (getNotiUnread > 0) {
+      dispatch(showNotification())
+    } else {
+      dispatch(hideNotification())
+    }
   })
 
   switch (layout) {
@@ -60,11 +82,19 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       break
     default:
       content = (
-        <Layout>
+        <Layout openDrawer={openResource} setOpenResource={setOpenResource}>
           <Component {...pageProps} />
         </Layout>
       )
   }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.localStorage.getItem('accessToken') === '') {
+        setOpenResource(false)
+      }
+    }
+  }, [router.pathname])
 
   return (
     <>
@@ -76,7 +106,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Toaster />
         <SappConfirmDialogContainer />
-        <RouteGuard>{content}</RouteGuard>
+        <RouteGuard>
+          <>
+            {content}
+            <LearningResource
+              open={openResource}
+              setOpenResource={setOpenResource}
+            />
+          </>
+        </RouteGuard>
       </main>
     </>
   )
