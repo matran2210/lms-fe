@@ -6,6 +6,7 @@ export const url = {
   getQuestionResult: '/question/results',
   getTopicDescription: '/question-topic',
   submitQuestion: '/quiz',
+  submitCaseStudy: '/quiz/case-study',
   getResource: '/resource',
   getQuizAttempts: '/quiz-attempts',
   createQuizAttemp: '/quiz/quiz-attempt',

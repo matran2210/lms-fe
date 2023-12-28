@@ -139,7 +139,9 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
             My Course
           </h2>
           <div
-            className={`py-6 relative ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''}`}
+            className={`py-6 relative ${
+              guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
+            }`}
           >
             <Filter courses={data} />
             {guideStatus && guideStep === 6 && (

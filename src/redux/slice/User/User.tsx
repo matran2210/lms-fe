@@ -69,6 +69,11 @@ const initialState: UserState = {
     },
     user_contacts: [],
   },
+  loginHistory: {
+    meta: {},
+    userActivities: [],
+  },
+  loadHistory: false,
 }
 
 export const getMe = createAsyncThunk(
@@ -146,7 +151,28 @@ export const makeContactDefault = createAsyncThunk(
     }
   },
 )
-
+export const getLoginHistory = createAsyncThunk(
+  'userReducer/getListHistory',
+  async ({ page_index, page_size }: any, thunkApi) => {
+    try {
+      const res = await UserApi.getListHistory({ page_index, page_size })
+      return res
+    } catch (err) {
+      thunkApi.rejectWithValue(err)
+    }
+  },
+)
+export const loadMoreLoginHistory = createAsyncThunk(
+  'userReducer/loadMoreHistory',
+  async ({ page_index, page_size }: any, thunkApi) => {
+    try {
+      const res = await UserApi.getListHistory({ page_index, page_size })
+      return res
+    } catch (err) {
+      thunkApi.rejectWithValue(err)
+    }
+  },
+)
 export const userSlice = createSlice({
   name: 'userReducer',
   initialState,
@@ -192,6 +218,32 @@ export const userSlice = createSlice({
     })
     builder.addCase(makeContactDefault.rejected, (state) => {
       state.loading = false
+    })
+
+    builder.addCase(getLoginHistory.pending, (state) => {
+      state.loadHistory = true
+    })
+    builder.addCase(getLoginHistory.fulfilled, (state, action) => {
+      state.loginHistory = action.payload
+      state.loadHistory = false
+    })
+    builder.addCase(getLoginHistory.rejected, (state) => {
+      state.loadHistory = false
+    })
+    builder.addCase(loadMoreLoginHistory.pending, (state) => {
+      state.loadHistory = true
+    })
+    builder.addCase(loadMoreLoginHistory.fulfilled, (state, action) => {
+      let obj = { ...state.loginHistory }
+      obj.meta = action.payload.meta
+      obj.userActivities = obj.userActivities.concat(
+        action.payload.userActivities,
+      )
+      state.loginHistory = obj
+      state.loadHistory = false
+    })
+    builder.addCase(loadMoreLoginHistory.rejected, (state) => {
+      state.loadHistory = false
     })
   },
 })

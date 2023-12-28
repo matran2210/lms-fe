@@ -408,3 +408,11 @@ body * ::-webkit-scrollbar-thumb:hover {
     font-weight: 700;
   }
 }
+.sapp-hover-device-item:hover {
+  .sapp-logo {
+    @apply border-primary bg-secondary;
+  }
+  .logo {
+    fill: #ffb800;
+  }
+}

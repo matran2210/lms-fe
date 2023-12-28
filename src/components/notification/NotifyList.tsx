@@ -1,6 +1,6 @@
 import React, { useState, Dispatch, SetStateAction } from 'react'
 import Icon from '@components/icons'
-import blankAvatar from '@assets/images/blank_avatar.webp'
+import blankAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { calculateTimeAgo } from '@utils/helpers'
 import { useAppDispatch } from 'src/redux/hook'
@@ -19,9 +19,10 @@ const NotifyList = ({
   getApiNotificationDetail,
 }: IProps) => {
   const dispatch = useAppDispatch()
-  const handleOpen = async (id: string) => {
-    setOpen(!open)
+
+  const handleOpen = async (id: string, redirect: string | null) => {
     await getApiNotificationDetail(id)
+    redirect === null && setOpen(!open)
   }
 
   return (
@@ -35,7 +36,7 @@ const NotifyList = ({
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
             onClick={() => {
-              handleOpen(notifyItem?.id)
+              handleOpen(notifyItem?.id, notifyItem?.created_by)
             }}
           >
             {!readStatus && (
@@ -48,7 +49,9 @@ const NotifyList = ({
               <Image
                 src={notifyItem?.avatar?.ORIGIN ?? blankAvatar}
                 alt="avatar"
-                className="rounded-full"
+                className={`rounded-full ${
+                  !notifyItem?.avatar?.ORIGIN ? 'bg-gray-3' : ''
+                }`}
                 width={56}
                 height={56}
                 layout="fixed"

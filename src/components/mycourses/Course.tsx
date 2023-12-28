@@ -18,23 +18,32 @@ const Course = ({ course }: { course: ICourse }) => {
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
-    // Current date
-    const currentDate = new Date()
+    if (course?.finished_at) {
+      // Current date
+      const currentDate = new Date()
 
-    // Parse the specific date string to a Date object
-    const parsedSpecificDate = parseISO(course?.classes?.[0]?.finished_at as any)
+      // Parse the specific date string to a Date object
+      const parsedSpecificDate = parseISO(
+        course?.classes?.[0]?.finished_at as any,
+      )
 
-    // Calculate the difference in days
-    const difference = differenceInDays(parsedSpecificDate, currentDate) as any
+      // Calculate the difference in days
+      const difference = differenceInDays(
+        parsedSpecificDate,
+        currentDate,
+      ) as any
 
-    // Update state with the difference
-    setDaysDifference(difference)
+      // Update state with the difference
+      setDaysDifference(difference)
+    }
   }, [])
 
   const percentProgress = round(
-    (course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress?.total_course_sections_completed /
-      course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress?.total_course_sections) *
-    100,
+    (course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress
+      ?.total_course_sections_completed /
+      course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress
+        ?.total_course_sections) *
+      100,
     2,
   )
 
@@ -46,26 +55,26 @@ const Course = ({ course }: { course: ICourse }) => {
   //       : course?.classes?.[0]?.class_user_instances?.[0]?.status === CLASS_USER_STATUS.IN_PROGRESS
   //         ? 'In progress'
   //         : 'Expired'
-  
+
   const statusMap = {
     [CLASS_USER_STATUS.READY_TO_LEARN]: 'Ready to learn',
     [CLASS_USER_STATUS.COMPLETED]: 'Completed',
     [CLASS_USER_STATUS.IN_PROGRESS]: 'In progress',
     [CLASS_USER_STATUS.CANCELED]: '',
   } as any
-  
-  const classUserStatus = course?.classes?.[0]?.class_user_instances?.[0]?.status
+
+  const classUserStatus =
+    course?.classes?.[0]?.class_user_instances?.[0]?.status
   const showStatus = statusMap[classUserStatus]
-  
+
   const enableCourse = classUserStatus !== CLASS_USER_STATUS.CANCELED
 
   return (
     <div className="cursor-pointer">
       <div
-        className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${!enableCourse
-          ? 'text-gray-2'
-          : 'text-bw-1'
-          }`}
+        className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${
+          !enableCourse ? 'text-gray-2' : 'text-bw-1'
+        }`}
         onClick={() =>
           course.status !== CLASS_USER_STATUS.CANCELED
             ? router.push(`/courses/my-course/${course.id}`)
@@ -101,10 +110,9 @@ const Course = ({ course }: { course: ICourse }) => {
           dangerouslySetInnerHTML={{
             __html: truncateString(course?.description, 150),
           }}
-          className={`text-bas h-24 ${enableCourse
-            ? 'text-bw-1'
-            : 'text-gray-1 '
-            }`}
+          className={`text-bas h-24 ${
+            enableCourse ? 'text-bw-1' : 'text-gray-1 '
+          }`}
         />
       </div>
       <div className="mt-auto">
