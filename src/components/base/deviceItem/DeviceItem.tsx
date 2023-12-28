@@ -1,4 +1,4 @@
-import { AppleLogo, WinDowLogo } from '@assets/icons'
+import { AppleLogo, PhoneLogo, WinDowLogo } from '@assets/icons'
 import { useMemo } from 'react'
 import { format } from 'date-fns'
 const DeviceItem = ({ data }: any) => {
@@ -9,17 +9,19 @@ const DeviceItem = ({ data }: any) => {
           return <WinDowLogo />
         case 'Mac OS':
           return <AppleLogo />
+        default:
+          return <PhoneLogo />
       }
     }
   }, [data?.user_agent?.osName])
   return (
     <div className="flex items-center py-5 px-6 hover:bg-secondary sapp-hover-device-item gap-4">
-      <div className="border border-gray-1 flex p-3 sapp-logo">
+      <div className="border border-gray-1 flex sapp-logo bg-gray-4 box-border w-12 h-12 items-center justify-center">
         {chooseLogo}
       </div>
       <div>
         <div className="flex gap-2 items-center">
-          <div className="text-bw-1 text-base">
+          <div className="text-bw-1 text-base font-medium">
             {`${data.user_agent.browserName} ${data.user_agent.browserVersion} (${data.user_agent.osName})`}
           </div>
           {data.is_current && (

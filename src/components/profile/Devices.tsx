@@ -1,3 +1,4 @@
+import { SecurityIcon } from '@assets/icons'
 import DeviceItem from '@components/base/deviceItem/DeviceItem'
 import { apiURL } from '@components/mycourses/LearningResource'
 import axios from 'axios'
@@ -17,7 +18,9 @@ const Devices = ({}: any) => {
   }, [])
   return (
     <div className="bg-white py-6 flex-1 shadow-box">
-      <div className="text-xl font-bold border-b pb-5 border-gray-3 mx-6">{`Devices (${listDevices?.length})`}</div>
+      <div className="text-xl font-bold border-b pb-5 border-gray-3 mx-6">{`Devices (${
+        listDevices?.length || 0
+      })`}</div>
       {listDevices?.map((e: any) => {
         return (
           <div key={e.id}>
@@ -25,6 +28,20 @@ const Devices = ({}: any) => {
           </div>
         )
       })}
+      <div className="bg-gray-4 flex p-4 items-center gap-3 mx-6">
+        <div>
+          <SecurityIcon />
+        </div>
+        <div className="text-sm text-bw-2">
+          <span>Maximum limit of 3 devices: Please contact support team </span>
+          <span>
+            <a href="#" className="text-state-info underline">
+              0889 662 276
+            </a>
+          </span>
+          <span> to remove one before accessing your account on another.</span>
+        </div>
+      </div>
     </div>
   )
 }

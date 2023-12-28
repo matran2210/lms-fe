@@ -410,7 +410,7 @@ body * ::-webkit-scrollbar-thumb:hover {
 }
 .sapp-hover-device-item:hover {
   .sapp-logo {
-    @apply border-primary;
+    @apply border-primary bg-secondary;
   }
   .logo {
     fill: #ffb800;
