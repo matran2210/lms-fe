@@ -4,3 +4,4 @@ export type IProfilePages =
   | 'settings'
   | 'logout'
   | 'devices'
+  | 'login_history'

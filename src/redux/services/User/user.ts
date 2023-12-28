@@ -84,6 +84,17 @@ const UserApi = {
     })
     return res
   },
+  getListHistory: async ({ page_index, page_size }: any): Promise<any> => {
+    const uri = url.history
+    const res = httpService.GET<any, any>({
+      uri,
+      params: {
+        page_index: page_index,
+        page_size: page_size,
+      },
+    })
+    return res
+  },
 }
 
 export default UserApi

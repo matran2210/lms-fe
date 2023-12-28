@@ -1,5 +1,6 @@
 import CertificateContent from '@components/profile/CertificateContent'
 import Devices from '@components/profile/Devices'
+import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
@@ -47,6 +48,8 @@ const ProfilePage = ({ page }: IProps) => {
     selectedContent = <CertificateContent page={page} />
   } else if (page === 'devices') {
     selectedContent = <Devices />
+  } else if (page === 'login_history') {
+    selectedContent = <LoginHistory />
   } else {
     selectedContent = <div>Page not found</div>
   }
