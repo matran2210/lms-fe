@@ -18,17 +18,22 @@ const Course = ({ course }: { course: any }) => {
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
-    // Current date
-    const currentDate = new Date()
+    if (course?.finished_at) {
+      // Current date
+      const currentDate = new Date()
 
-    // Parse the specific date string to a Date object
-    const parsedSpecificDate = parseISO(course?.finished_at as any)
+      // Parse the specific date string to a Date object
+      const parsedSpecificDate = parseISO(course?.finished_at as any)
 
-    // Calculate the difference in days
-    const difference = differenceInDays(parsedSpecificDate, currentDate) as any
+      // Calculate the difference in days
+      const difference = differenceInDays(
+        parsedSpecificDate,
+        currentDate,
+      ) as any
 
-    // Update state with the difference
-    setDaysDifference(difference)
+      // Update state with the difference
+      setDaysDifference(difference)
+    }
   }, [])
 
   const percentProgress = round(
