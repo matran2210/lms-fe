@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 import { getMessagingToken } from 'src/utils/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import PopUpLimit from './PopupLimit'
 
 interface IInputProps {
   login: string
@@ -41,7 +42,7 @@ const LoginPage = () => {
   const dispatch = useAppDispatch()
   const userLogin = useAppSelector(loginReducer)
   const [loading, setLoading] = useState<boolean>(false)
-
+  const [openLimit, setOpenLimit] = useState<boolean>(false)
   // Validate for input
   const validationSchema = z.object({
     login: z
@@ -103,7 +104,11 @@ const LoginPage = () => {
         }),
       ).unwrap()
       router.push(PageLink.COURSES)
-    } catch (error) {}
+    } catch (error: any) {
+      if (error?.response?.data?.error?.code === '403|0001') {
+        setOpenLimit(true)
+      }
+    }
   }
   const socialLogin = () => {
     toast.error('Chức năng này sẽ được update vào version sau!')
@@ -183,6 +188,7 @@ const LoginPage = () => {
           </div> */}
         </form>
       </div>
+      <PopUpLimit open={openLimit} setOpen={setOpenLimit} />
     </>
   )
 }
