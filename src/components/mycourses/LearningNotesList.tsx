@@ -15,6 +15,12 @@ export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { resetNotesList } from 'src/redux/slice/Course/NotesList'
 import toast from 'react-hot-toast'
+import { format } from 'date-fns'
+import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -22,6 +28,22 @@ const LearningNotesList = () => {
   const notesListStatus = useAppSelector(
     (state) => state.notesListReducer?.status,
   )
+
+  const validationSchema = z.object({
+    note: z
+      .array(z.object({ value: z.string().min(1, VALIDATE_REQUIRED) }))
+      .optional(),
+  })
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<any>({
+    resolver: zodResolver(validationSchema),
+    mode: 'onSubmit',
+  })
+
   const dispatch = useAppDispatch()
   const [notesListData, setNotesListData] = useState<any>()
   const router = useRouter()
@@ -324,20 +346,30 @@ const LearningNotesList = () => {
       </div>
 
       <div>
-        {notesListData?.notes?.map((note: any) => (
+        {notesListData?.notes?.map((note: any, index: number) => (
           <div
             className="mt-6 p-6 border border-default last:mb-6"
             key={note?.id}
           >
-            <div className="flex items-center">
+            <div className="flex items-center mb-6 flex-wrap md:flex-nowrap">
               <SappBreadcrumbNotLink paths={note?.course_section_path} />
             </div>
-            <div className="mt-6 font-normal text-base">
+            <div className="font-normal text-base">
               {note?.description}
+              <form onSubmit={handleSubmit((e) => {})}>
+                <HookFormTextArea
+                  placeholder="Content..."
+                  control={control}
+                  name={`note.${index}.value`}
+                  defaultValue={note?.description}
+                  className="w-full sapp-text-area p-1"
+                />
+                <input type="submit" className="hidden" />
+              </form>
             </div>
             <div className="mt-5 flex justify-between">
               <div className="font-normal text-sm text-gray-1">
-                {note?.updated_at}
+                {format(note.updated_at, 'dd/MM/yyyy hh:mm')}
               </div>
               <div className="flex">
                 <div className="cursor-pointer">
