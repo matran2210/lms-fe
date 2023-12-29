@@ -37,10 +37,15 @@ export default function MenuItem({
     document.body.style.overflow = 'hidden'
   }
 
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
+  }
+
   const handleActive = () => {
     if (router?.query?.courseId || router.query.id) {
       name === 'Resource' && handleOpenResource()
-      name === 'Notes List' && dispatch(activeNotesList())
+      name === 'Notes List' && handleOpenNotesList()
     }
   }
 

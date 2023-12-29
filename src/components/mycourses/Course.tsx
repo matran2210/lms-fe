@@ -40,10 +40,11 @@ const Course = ({ course }: { course: ICourse }) => {
 
   const percentProgress = round(
     (course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress
-      ?.total_course_sections_completed /
-      course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress
-        ?.total_course_sections) *
-      100,
+      ?.total_course_sections_completed ||
+      0 /
+        course?.classes?.[0]?.class_user_instances?.[0]?.learning_progress
+          ?.total_course_sections ||
+      0) * 100,
     2,
   )
 

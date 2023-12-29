@@ -83,6 +83,29 @@ const CourseAPI = {
       document.body.removeChild(link)
     }
   },
+  getCourseNotesList: async (
+    page_size: number,
+    params?: Object,
+  ): Promise<any> => {
+    const response = await httpService.GET<any, any>({
+      uri: `course-section-notes?page_index=1&page_size=${page_size}`,
+      params: params,
+    })
+    return response
+  },
+  updateCourseNotesList: (id: string, params?: Object): Promise<any> => {
+    const response = httpService.PUT<any, any>({
+      uri: `course-section-notes/${id}`,
+      request: { params },
+    })
+    return response
+  },
+  deleteCourseNoteList: (id: string): Promise<any> => {
+    const response = httpService.DELETE<any, any>({
+      uri: `course-section-notes/${id}`,
+    })
+    return response
+  },
 }
 
 export default CourseAPI
