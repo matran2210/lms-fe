@@ -36,6 +36,7 @@ export interface IActivity {
   }
   files: File[]
   tabs?: ITab[]
+  class_id?: string
 }
 
 export interface ITab {

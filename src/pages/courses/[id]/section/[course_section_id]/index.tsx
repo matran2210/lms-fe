@@ -57,7 +57,12 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }, [openLearningOutcome])
 
   const handleRouterActivity = (id: string) => {
-    router.push(`/courses/${router.query.id}/activity/${id}`)
+    router.push({
+      pathname: `/courses/${router.query.id}/activity/${id}`,
+      query: {
+        classId: previewPart.class_id,
+      },
+    })
   }
   const handleRouterCaseStudy = (quizId: string, topicId: string) => {
     router.push({

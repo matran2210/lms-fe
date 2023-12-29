@@ -1,5 +1,6 @@
 import SappModal from '@components/base/modal/SappModal'
 import { formatTime } from '@components/common/timer'
+import { TEST_TYPE } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -44,13 +45,17 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       }}
       handleSubmit={onSubmit}
       showHeader={false}
-      // size="max-w-1/2"
+      refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
+      size="max-w-screen-sm "
       footerButtonClassName="justify-between flex"
       childClass=""
       parentChildClass=""
       position="center"
+      buttonSize="extra"
     >
-      <div className="text-bw-1 text-4xl font-bold mb-4">{title}</div>
+      <div className="text-bw-1 text-4xl font-bold mb-4">
+        {TEST_TYPE[data?.course_section_type]}
+      </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Name:</div>
         <div className="text-bw-1">{data?.name}</div>
@@ -71,7 +76,7 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
         <div className="text-gray-1">No of Attempts:</div>
         <div className="text-bw-1">
           {data?.quiz?.attempts?.length}/
-          {data?.quiz?.is_limited ? data?.quiz?.is_limited : 'Unlimited'}
+          {data?.quiz?.is_limited ? data?.quiz?.limit_count : 'Unlimited'}
         </div>
       </div>
       <div className="flex justify-between py-6 gap-8">

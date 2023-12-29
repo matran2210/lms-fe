@@ -125,9 +125,10 @@ const CourseActivityApi = {
    * @returns {Promise<IResponseMeta<IDiscussion, 'discussions'>>} - Dữ liệu cuộc thảo luận.
    */
   getDiscussion: async (
-    id: string,
+    class_id: string,
+    course_section_id: string,
   ): Promise<IResponseMeta<IDiscussion, 'discussions'>> => {
-    const uri = url.createDiscussion + `/${id}`
+    const uri = url.createDiscussion
     const response = await httpService.GET<
       {},
       IResponseMeta<IDiscussion, 'discussions'>
@@ -136,6 +137,8 @@ const CourseActivityApi = {
       params: {
         page_index: 1,
         page_size: 9999,
+        class_id,
+        course_section_id,
       },
     })
     return response
