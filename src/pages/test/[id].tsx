@@ -879,6 +879,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             setCurrentTab={setCurrentPage}
             optionShowAll={<OptionShowAll />}
             handleChangeTab={(e: any) => {
+              {
+                quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
+                  getResult(currentTabContent)
+              }
               handleChangeTab(e)
             }}
             activeShowAll={activeShowAll}
@@ -1219,14 +1223,32 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           >
             <div className="font-normal text-sm">Clear Selection</div>
           </button>
-          <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
-            onClick={() => {
-              getResult(currentTabContent)
-            }}
-          >
-            <div className="font-normal text-sm">Confirm Answer</div>
-          </button>
+          {quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
+          !currentTabContent?.done ? (
+            <button
+              className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+              onClick={() => {
+                getResult(currentTabContent)
+              }}
+            >
+              <div className="font-normal text-sm">Confirm Answer</div>
+            </button>
+          ) : (
+            filteredTabs.findIndex((e: any) => e.id === currentPage) <
+              filteredTabs.length - 2 && (
+              <button
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                onClick={() => {
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleChangeTab(filteredTabs[index + 1].id)
+                }}
+              >
+                <div className="font-normal text-sm">Next Question</div>
+              </button>
+            )
+          )}
         </div>
       </div>
       <TestTimeOutModal
