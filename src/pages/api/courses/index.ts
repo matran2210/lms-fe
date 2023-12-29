@@ -96,7 +96,7 @@ const CourseAPI = {
   updateCourseNotesList: (id: string, params?: Object): Promise<any> => {
     const response = httpService.PUT<any, any>({
       uri: `course-section-notes/${id}`,
-      request: { params },
+      request: params,
     })
     return response
   },

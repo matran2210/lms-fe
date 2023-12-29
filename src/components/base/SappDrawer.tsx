@@ -16,6 +16,7 @@ interface IProps {
   widthDrawer?: string
   btnSubmitTile?: string
   handleSubmit?: any
+  drawerSubId?: string
 }
 
 const SappDrawer = ({
@@ -28,6 +29,7 @@ const SappDrawer = ({
   widthDrawer,
   btnSubmitTile = 'Next Lesson',
   handleSubmit = () => {},
+  drawerSubId = '',
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -67,7 +69,10 @@ const SappDrawer = ({
             />
           </div>
         </div>
-        <div className="mt-6 mx-8 overflow-y-auto h-[80vh]" id="sapp-drawer">
+        <div
+          className="mt-6 mx-8 overflow-y-auto h-[80vh]"
+          id={`sapp-drawer${drawerSubId}`}
+        >
           {children}
         </div>
         {footer && (
