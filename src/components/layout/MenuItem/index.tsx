@@ -53,7 +53,9 @@ export default function MenuItem({
     <>
       <div
         className={`cursor-pointer ${
-          selected && type === 'level-1' && router.pathname !== '/' ? 'border-l-4 pr-1 border-active' : ''
+          selected && type === 'level-1' && router.pathname !== '/'
+            ? 'border-l-4 pr-1 border-active'
+            : ''
         } relative sidebar-list-items py-2 ${
           mode === 'student' ? 'mb-4 last:mb-0' : 'mb-7 last:mb-0'
         }`}

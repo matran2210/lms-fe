@@ -17,7 +17,8 @@ const STATE = {
   error:
     'checked:bg-state-error checked:hover:bg-state-error checked:focus:bg-state-error',
   default: 'checked:bg-bw-1 checked:hover:bg-bw-1 checked:focus:bg-bw-1',
-  primary: 'checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary',
+  primary:
+    'checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary',
 }
 
 const SIZES = {

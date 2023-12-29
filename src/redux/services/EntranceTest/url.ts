@@ -5,6 +5,7 @@ export const url = {
   getListEngLevel: '/english-levels',
   putLevel: '/users/input-level',
   getListEntranceTest: '/entrance-test',
+  getEntranceCount: '/users/entrance-test/count',
 }
 
 export default url

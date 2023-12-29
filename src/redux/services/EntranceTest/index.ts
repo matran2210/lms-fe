@@ -52,5 +52,12 @@ const EntranceApi = {
     )
     return response?.data?.data
   },
+  getEntranceCount: async (): Promise<IResponse<any>> => {
+    const uri = url.getEntranceCount
+    const res = await httpService.GET<any, any>({
+      uri,
+    })
+    return res
+  },
 }
 export default EntranceApi

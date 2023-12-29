@@ -7,6 +7,8 @@ import EntranceTestList from '@components/entrance-test/EntranceTestList'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import axios from 'axios'
 import { apiURL } from '@components/mycourses/LearningResource'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 
 // Config entrance test lists
 const entranceTestLists = [
@@ -134,14 +136,19 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const entranceTestLists = (await EntranceApi.getListEntranceTest(
-          refreshResponse.data.accessToken,
+          act,
         )) as any
 
         return {

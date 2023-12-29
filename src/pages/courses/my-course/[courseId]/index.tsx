@@ -4,7 +4,13 @@ import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
-import { buildQueryString } from '@utils/index'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { removeJwtToken } from '@utils/helpers/authen'
+import {
+  buildQueryString,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from '@utils/index'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -143,15 +149,19 @@ export async function getServerSideProps(context: any) {
           },
         )
 
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
-
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
         const courses = await fetchData(
           query.courseId,
           DEFAULT_PAGESIZE,
-          refreshResponse.data.accessToken,
+          act,
           queryString,
         )
 
@@ -161,6 +171,7 @@ export async function getServerSideProps(context: any) {
           },
         }
       } catch (refreshError) {
+        removeJwtToken()
         return {
           redirect: {
             destination: '/',
@@ -168,11 +179,10 @@ export async function getServerSideProps(context: any) {
           },
         }
       }
-    } else {
     }
     return {
       redirect: {
-        destination: '/',
+        destination: '/404',
         permanent: false,
       },
     }

@@ -30,7 +30,12 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import { LAYOUT } from '@utils/constants'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import {
+  DeserializeHighlight,
+  runHighlight,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
 import { uniqueId } from 'lodash'
@@ -41,6 +46,8 @@ import { DISPLAY_TYPE, QUESTION_TYPES } from 'src/constants'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
 import TestTimeOutModal from '../courses/test/test-timeout'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { removeJwtToken } from '@utils/helpers/authen'
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -1320,15 +1327,20 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const questions = (await CourseTestApi.getQuestionTabsById(
           context?.query?.id,
-          refreshResponse.data.accessToken,
+          act,
         )) as any
 
         return {
@@ -1337,6 +1349,7 @@ export async function getServerSideProps(context: any) {
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập
+        removeJwtToken()
         return {
           redirect: {
             destination: '/auth/login',
@@ -1348,6 +1361,7 @@ export async function getServerSideProps(context: any) {
       // Xử lý lỗi khác khi sử dụng accessToken
       if (error.response && error.response.status === 403) {
         // Chuyển hướng đến trang đăng nhập
+        removeJwtToken()
         return {
           redirect: {
             destination: '/auth/login',
@@ -1357,7 +1371,7 @@ export async function getServerSideProps(context: any) {
       } else
         return {
           redirect: {
-            destination: '/test',
+            destination: '/404',
             permanent: false,
           },
         }

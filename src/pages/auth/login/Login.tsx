@@ -24,6 +24,7 @@ import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 import { getMessagingToken } from 'src/utils/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import PopUpLimit from './PopupLimit'
+import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 
 interface IInputProps {
   login: string
@@ -94,16 +95,21 @@ const LoginPage = () => {
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
     try {
-      const getFireBaseToken = await handleDeviceToken()
-      const loginUserResult = await dispatch(
+      // const getFireBaseToken = await handleDeviceToken()
+      dispatch(
         getLoginUser({
           login,
           password,
           remember_me: remember_me ? remember_me : false,
-          device_id: getFireBaseToken,
+          device_id: '',
         }),
-      ).unwrap()
-      router.push(PageLink.COURSES)
+      )
+        // dispatch(getEntranceCount())
+        .unwrap()
+        .then((payload) => {
+          router.push(PageLink.COURSES)
+          dispatch(getEntranceCount())
+        })
     } catch (error: any) {
       if (error?.response?.data?.error?.code === '403|0001') {
         setOpenLimit(true)
@@ -147,7 +153,7 @@ const LoginPage = () => {
             placeholder="Password"
             type="password"
             textSize="sm"
-            className='mt-6'
+            className="mt-6"
           />
           <div className="mt-10">
             <SappButton
@@ -166,7 +172,7 @@ const LoginPage = () => {
               className="min-w-4 min-h-4 h-4"
               title="Keep me logged in"
               classNameTitle="text-medium-sm text-gray-1"
-              state='primary'
+              state="primary"
             />
             <span className="text-medium-sm text-gray-1 hover:underline">
               <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
