@@ -67,8 +67,9 @@ const refreshAccessToken = async (): Promise<string | null> => {
     // Return the new access token
     return act
   } catch (error) {
-    // store.dispatch(getLogoutUser())
     removeJwtToken()
+    window.location.href = PageLink.AUTH_LOGIN
+
     // If there is an error, return null
     return null
   }

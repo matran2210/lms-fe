@@ -15,6 +15,11 @@ import { useRouter } from 'next/router'
 import { buildQueryString } from '@utils/index'
 import { ICourseAll } from 'src/type/courses'
 import CourseAPI from '../api/courses'
+import {
+  entranceTestReducer,
+  getEntranceCount,
+} from 'src/redux/slice/EntranceTest/EntranceTest'
+import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -39,6 +44,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
+  const { shouldShowRemind } = useAppSelector(entranceTestReducer)
   const router = useRouter()
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
@@ -65,7 +71,9 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       }
     })
   }, [])
-
+  useEffect(() => {
+    dispatch(getEntranceCount())
+  }, [])
   const [data, setData] = useState<ICourseAll>(courses || [])
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
@@ -203,6 +211,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
           className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
         ></div>
       )}
+      <PopUpRemindEntrance />
     </>
   )
 }

@@ -8,12 +8,12 @@ export const getRefreshToken = async (): Promise<string> => {
   return (await AsyncStorage.getItem('refreshToken')) || ''
 }
 
-export const setAccessToken = (accToken: string) => {
-  AsyncStorage.setItem('accessToken', accToken)
+export const setAccessToken = async (accToken: string) => {
+  await AsyncStorage.setItem('accessToken', accToken)
 }
 
-export const setRefreshToken = (refreshToken: string) => {
-  AsyncStorage.setItem('refreshToken', refreshToken)
+export const setRefreshToken = async (refreshToken: string) => {
+  await AsyncStorage.setItem('refreshToken', refreshToken)
 }
 
 export const removeJwtToken = () => {
