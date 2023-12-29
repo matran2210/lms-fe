@@ -1,5 +1,6 @@
 export interface ICreateDiscussionRequest {
   course_section_id: string
+  class_id: string
   parent_id?: string
   content: string
 }
