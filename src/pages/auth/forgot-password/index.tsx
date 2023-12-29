@@ -78,7 +78,7 @@ const ForgotPasswordPage = () => {
             title="Back to Login"
             size="lager"
             type="submit"
-            className="w-full mt-8"
+            className="w-full"
             color="text"
             isUnderLine={false}
             isPadding={false}
