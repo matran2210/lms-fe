@@ -7,26 +7,16 @@ import Icon from '@components/icons'
 interface IProps {
   placeholder: string
   formStyle: string
-  getNotifications: (params: Object) => void
 }
 
-const SearchForm = ({ placeholder, formStyle, getNotifications }: IProps) => {
+const SearchForm = ({ placeholder, formStyle }: IProps) => {
   const router = useRouter()
   const [query, setQuery] = useState('')
-  const params = {
-    page_index: 1,
-    page_size: 10,
-    ...(router.asPath.includes('unread') && {
-      is_read: false,
-    }),
-    title: query,
-  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // Redirect to the search results page with the query as a query parameter
-    /*router.push(`notifications?name=${encodeURIComponent(query)}`)*/
-    getNotifications(params)
+    router.push(`courses?name=${encodeURIComponent(query)}`)
   }
 
   return (

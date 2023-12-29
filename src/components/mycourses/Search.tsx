@@ -37,12 +37,6 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     }
   }, [query])
 
-  useEffect(() => {
-    if (router.pathname === '/courses') {
-      router.push(`/courses`)
-    }
-  }, [])
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
