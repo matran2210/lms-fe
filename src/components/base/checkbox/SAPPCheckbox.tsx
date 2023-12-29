@@ -7,7 +7,7 @@ interface IProps {
   className?: string
   name?: string
   value?: string | boolean
-  state?: 'default' | 'error' | 'success' // Thêm prop state
+  state?: 'default' | 'error' | 'success' | 'primary' // Thêm prop state
   size?: 'small' | 'medium' | 'lager' // Thêm prop size
 }
 
@@ -17,6 +17,7 @@ const STATE = {
   error:
     'checked:bg-state-error checked:hover:bg-state-error checked:focus:bg-state-error',
   default: 'checked:bg-bw-1 checked:hover:bg-bw-1 checked:focus:bg-bw-1',
+  primary: 'checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary',
 }
 
 const SIZES = {
