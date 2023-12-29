@@ -111,17 +111,17 @@ const EntranceTestFillForm = ({
   useEffect(() => {
     if (user && open) {
       setValue('univers_id', {
-        value: user.university.code,
-        label: user.university.description,
+        value: user.university?.code,
+        label: user.university?.description,
       })
       setValue('univers_program_id', {
-        value: user.university_program.id,
-        label: user.university_program.name,
+        value: user.university_program?.id,
+        label: user.university_program?.name,
       })
-      setValue('majors_id', { value: user.major.id, label: user.major.name })
+      setValue('majors_id', { value: user.major?.id, label: user.major?.name })
       setValue('englishLevel_id', {
-        value: user.english_level.id,
-        label: user.english_level.name,
+        value: user.english_level?.id,
+        label: user.english_level?.name,
       })
     }
   }, [user, open])
