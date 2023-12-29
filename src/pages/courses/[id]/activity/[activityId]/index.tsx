@@ -18,6 +18,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import _debounce from 'lodash/debounce'
+import { useRouter } from 'next/router'
 
 type Props = {
   activity: IActivity
@@ -41,12 +42,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const videoDocumentRef = useRef<HTMLDivElement>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
-
+  const router = useRouter()
   useLayoutEffect(() => {
     if (activity) {
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion(activity?.id))
+        dispatch(
+          getDiscussion({ id: router.query.classId, sectionId: sectionId }),
+        )
         ;(async () => {
           await CourseActivityApi.startCourseSectionProgress(
             courseId,
@@ -351,7 +354,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       </div>
       <div ref={endActivityRef}></div>
       <div>
-        <Discussion />
+        <Discussion class_id={(router.query.classId as string) || ''} />
       </div>
     </div>
   )

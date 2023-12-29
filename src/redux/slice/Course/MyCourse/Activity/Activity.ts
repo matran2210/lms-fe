@@ -68,9 +68,9 @@ export const getCourseActivityTapById = createAsyncThunk(
 
 export const getDiscussion = createAsyncThunk(
   'courseActivityReducer/getDiscussion',
-  async (id: string, thunkAPI) => {
+  async ({ id, sectionId }: any, thunkAPI) => {
     try {
-      const res = await CourseActivityApi.getDiscussion(id)
+      const res = await CourseActivityApi.getDiscussion(id, sectionId)
       if (!res?.data) {
         return
       }

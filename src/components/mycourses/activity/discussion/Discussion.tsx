@@ -20,13 +20,15 @@ import {
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import DiscussionElement from './DiscussionElement'
 
-type Props = {}
+type Props = {
+  class_id: string
+}
 
 /**
  * Component chức năng đại diện cho phần discussion.
  * @param {Props} props - Props của component.
  */
-const Discussion = (props: Props) => {
+const Discussion = ({ class_id }: Props) => {
   const router = useRouter()
   const { control, handleSubmit, reset } = useForm<{
     comment: string
@@ -67,6 +69,7 @@ const Discussion = (props: Props) => {
         await dispatch(
           createDiscussion({
             course_section_id: router.query.activityId as string,
+            class_id: class_id,
             content: content?.trim(),
             parent_id,
           }),
@@ -77,7 +80,12 @@ const Discussion = (props: Props) => {
         } else {
           reset({ comment: '' })
         }
-        await dispatch(getDiscussion(router.query.activityId as string))
+        await dispatch(
+          getDiscussion({
+            id: class_id,
+            sectionId: router.query.activityId as string,
+          }),
+        )
       } catch (error) {}
     }
   }
