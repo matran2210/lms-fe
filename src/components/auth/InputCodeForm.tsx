@@ -115,6 +115,15 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
     }
   }
 
+  const handlePaste = (index: number, e: any) => {
+    const pasted = e.clipboardData.getData('text/plain').split(' ').slice(0, 6)
+
+    // Update the OTP array
+    const newOtp = [...code]
+    newOtp.splice(index, pasted.length, ...pasted)
+    setCode(newOtp)
+  }
+
   return (
     <>
       <div className="grid grid-cols-6 grid-rows-1 gap-3 mb-2">
@@ -128,6 +137,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
             inputClassName={`text-center h-16.75 w-16.75 ${
               errorMessage ? 'border-state-error' : 'border-gray-2'
             } pt-5.25 pb-5 px-0`}
+            onPaste={(e: any) => handlePaste(index, e)}
           />
         ))}
       </div>

@@ -146,8 +146,8 @@ const LoginPage = () => {
             control={control}
             placeholder="Password"
             type="password"
-            className="mt-6"
             textSize="sm"
+            className='mt-6'
           />
           <div className="mt-10">
             <SappButton
@@ -166,6 +166,7 @@ const LoginPage = () => {
               className="min-w-4 min-h-4 h-4"
               title="Keep me logged in"
               classNameTitle="text-medium-sm text-gray-1"
+              state='primary'
             />
             <span className="text-medium-sm text-gray-1 hover:underline">
               <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
