@@ -10,6 +10,9 @@ import axios from 'axios'
 import { parse } from 'cookie'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
+import { removeJwtToken } from '@utils/helpers/authen'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 
 // Config Courses
 const breadcrumbs: ITabs[] = [
@@ -104,9 +107,19 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập
+        removeJwtToken()
         return {
           redirect: {
             destination: '/auth/login',
@@ -118,6 +131,7 @@ export async function getServerSideProps(context: any) {
       // Xử lý lỗi khác khi sử dụng accessToken
       if (error.response && error.response.status === 403) {
         // Chuyển hướng đến trang đăng nhập
+        removeJwtToken()
         return {
           redirect: {
             destination: '/auth/login',
@@ -127,7 +141,7 @@ export async function getServerSideProps(context: any) {
       } else {
         return {
           redirect: {
-            destination: '/',
+            destination: '/404',
             permanent: false,
           },
         }

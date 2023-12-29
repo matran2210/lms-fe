@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Cookies from 'js-cookie'
 
 export const getAccessToken = async (): Promise<string> => {
   return (await AsyncStorage.getItem('accessToken')) || ''
@@ -20,4 +21,6 @@ export const removeJwtToken = () => {
   AsyncStorage.removeItem('accessToken')
   AsyncStorage.removeItem('refreshToken')
   AsyncStorage.removeItem('userInfo')
+  Cookies.remove('accessToken')
+  Cookies.remove('refreshToken')
 }

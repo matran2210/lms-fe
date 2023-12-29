@@ -19,6 +19,9 @@ import {
 import { IActivity } from 'src/type/course/my-course/Activity'
 import _debounce from 'lodash/debounce'
 import { useRouter } from 'next/router'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import { removeJwtToken } from '@utils/helpers/authen'
 
 type Props = {
   activity: IActivity
@@ -425,17 +428,22 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const newApiResponse = await axios.get(
           `${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type}`,
           {
             headers: {
-              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
+              Authorization: `Bearer ${act}`,
             },
           },
         )
@@ -450,6 +458,7 @@ export async function getServerSideProps(context: any) {
           },
         }
       } catch (refreshError) {
+        removeJwtToken()
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập
         return {
@@ -465,7 +474,7 @@ export async function getServerSideProps(context: any) {
       // Chuyển hướng đến trang đăng nhập
       return {
         redirect: {
-          destination: '/auth/login',
+          destination: '/404',
           permanent: false,
         },
       }

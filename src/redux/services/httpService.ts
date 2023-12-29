@@ -7,7 +7,7 @@ import url from './Authen/url'
 
 import toast from 'react-hot-toast'
 import { exceptions } from './en.exceptions'
-import { setCookieActToken } from '@utils/index'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 
 const { publicRuntimeConfig } = getConfig()
@@ -56,7 +56,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
     await AsyncStorage.setItem('accessToken', act)
     await AsyncStorage.setItem('refreshToken', rft)
     setCookieActToken(act)
-    setCookieActToken(rft)
+    setCookieRefreshToken(rft)
     // Resolve all the subscribers with the new access token
     refreshSubscribers.forEach((callback) => callback(act))
 
