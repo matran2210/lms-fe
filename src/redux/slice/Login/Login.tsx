@@ -15,6 +15,7 @@ import {
 } from '../../types/Login/login'
 import AuthApi from '../../services/Authen'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import EntranceApi from 'src/redux/services/EntranceTest'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -32,9 +33,12 @@ export const getLoginUser = createAsyncThunk(
   async (body: LoginReq, thunkAPI) => {
     try {
       const res = await AuthApi.login(body)
+
       if (!res.success) {
         return
       }
+      await setAccessToken(res.data.tokens.act)
+      await setRefreshToken(res.data.tokens.rft)
       return { ...res }
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
@@ -92,8 +96,7 @@ export const loginSlice = createSlice({
         const refreshToken = action.payload?.data.tokens.rft
         state.accessToken = accessToken
         state.user = action.payload.data.user
-        setAccessToken(accessToken)
-        setRefreshToken(refreshToken)
+
         setCookieActToken(accessToken)
         setCookieRefreshToken(refreshToken)
       }

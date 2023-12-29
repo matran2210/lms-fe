@@ -44,7 +44,7 @@ const SAPPTextFiled = ({
   field,
   textSize = 'base',
   isError,
-  onPaste
+  onPaste,
 }: IProps) => {
   const [showPassword, setShowPassword] = useState(false)
 

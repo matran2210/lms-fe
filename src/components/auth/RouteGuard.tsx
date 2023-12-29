@@ -46,7 +46,7 @@ export const RouteGuard = ({ children }: IProps) => {
 
     if (!accessToken && !refreshToken && !PUBLIC_PATHS[path]) {
       setAuthorized(false)
-      router.push(PageLink.AUTH_LOGIN)
+      // router.push(PageLink.AUTH_LOGIN)
     } else {
       setAuthorized(true)
     }
