@@ -51,6 +51,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   const { handleSubmit, reset } = useForm()
   const streamRef = useRef<StreamPlayerApi>()
   const dispatch = useAppDispatch()
+  const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
 
   useEffect(() => {
     if (videos?.[0]) {
@@ -294,6 +295,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
       )
         .unwrap()
         .then(() => {
+          setIsFinish({ [currentVideo?.quiz?.id || '']: true })
           toast.success('Nộp bài thành công!')
         })
     } catch (error) {}
@@ -335,10 +337,10 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
                 ...(currentVideo?.quiz?.multiple_choice_questions || []),
               ]
                 .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0))
-                .map((e) => {
+                .map((e, i) => {
                   return (
                     <div
-                      key={e.id}
+                      key={i}
                       className="gap-3 text-medium-sm flex px-6 py-3 hover:bg-primary-2"
                       onClick={() => {
                         handleOpenModalQuestions({
@@ -372,10 +374,12 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
             customTitle={
               <div className="text-xl font-bold text-bw-1">Question</div>
             }
+            parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
             okButtonCaption={`${
               newQuestion?.confirmed && isLastQuestion ? 'Finish' : 'Submit'
             }`}
-            {...(newQuestion?.confirmed && !isLastQuestion
+            {...((newQuestion?.confirmed && !isLastQuestion) ||
+            isFinish?.[currentVideo?.quiz?.id || '']
               ? {
                   cancelButtonCaption: 'Close',
                   confirmOnclose: false,
@@ -383,7 +387,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
                 }
               : {
                   confirmOnclose: true,
-                  showOkButton: true,
+                  showOkButton: !isFinish?.[currentVideo?.quiz?.id || ''],
                   closeAfterSubmit: false,
                 })}
             buttonSize="small"
@@ -421,7 +425,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
             onTimeUpdate: handleOnTimeUpdate,
             src:
               currentVideo?.file?.resource?.url
-                .replace(
+                ?.replace(
                   'https://customer-qf43f9e6huohhr1o.cloudflarestream.com/',
                   '',
                 )

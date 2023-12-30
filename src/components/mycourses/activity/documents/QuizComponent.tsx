@@ -422,12 +422,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     top: 'calc(50% - 150px)',
                     left: 'calc(50% - 200px)',
                   }}
-                  // key={e.id}
-                  // onClick={() => setOnFocusingPad(e.id)}
                   zIndex={999}
                 >
-                  <div className="w-full h-full absolute top-0 left-0 border bg-white py-4 px-6">
-                    <div className="flex items-center justify-between">
+                  <div className="w-full h-full absolute top-0 left-0 border bg-white py-4  flex flex-col">
+                    <div className="flex items-center justify-between flex-none px-6">
                       <div>
                         <span className="font-bold">
                           Exhibit {showExhibit.index}:{' '}
@@ -441,12 +439,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         ></SappIcon>
                       </div>
                     </div>
-                    {showExhibit?.description && (
-                      <EditorReader
-                        className="editor-wrap mt-1.5"
-                        text_editor_content={showExhibit?.description}
-                      />
-                    )}
+                    <div className="flex-auto overflow-scroll px-6">
+                      {showExhibit?.description && (
+                        <EditorReader
+                          className="editor-wrap mt-1.5"
+                          text_editor_content={showExhibit?.description}
+                        />
+                      )}
+                    </div>
                   </div>
                 </MovableWindow>
               )}
