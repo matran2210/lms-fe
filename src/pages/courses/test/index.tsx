@@ -24,7 +24,7 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
     router.push(`/test/${data.quiz.id}`)
   }
   const checkFinished = useMemo(() => {
-    if (data?.quiz?.attempts.lenght === 0) {
+    if (data?.quiz?.attempts.length === 0) {
       return true
     }
     for (let i in data?.quiz?.attempts) {
