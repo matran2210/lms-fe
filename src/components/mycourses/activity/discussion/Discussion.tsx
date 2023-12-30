@@ -181,9 +181,9 @@ const Discussion = ({ class_id }: Props) => {
   return (
     <div className="p-6 bg-white">
       <div className="text-xl font-bold mb-4">Discussion</div>
-      {selector.discussion?.map((e) => {
+      {selector.discussion?.map((e, i) => {
         return (
-          <div className="mt-6" key={e.id}>
+          <div className={` ${i !== 0 ? 'mt-6' : ''}`} key={e.id}>
             <DiscussionElement
               onReact={onReact}
               discussion={e}

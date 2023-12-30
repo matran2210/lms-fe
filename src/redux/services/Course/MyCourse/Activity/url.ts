@@ -1,7 +1,7 @@
 export const url = {
   createDiscussion: '/course-discussions',
   reactDiscussion: '/course-discussions/react',
-  submitQuestion: '/quiz',
+  submitQuiz: '/quiz',
   courseSections: '/course-sections/course',
 }
 
