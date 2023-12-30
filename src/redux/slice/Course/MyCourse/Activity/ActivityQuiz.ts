@@ -153,7 +153,7 @@ const submitQuestion = createAsyncThunk(
         ...data,
         answers: data.answers?.filter((obj) => {
           const keys = Object.keys(obj)
-          return !(keys.length === 1 && keys[0] === 'question_answer_id')
+          return keys.length > 1 && !(!obj.answer && !obj.question_answer_id)
         }),
       })
       if (result.success) {
