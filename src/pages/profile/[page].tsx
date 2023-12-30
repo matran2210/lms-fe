@@ -82,11 +82,10 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
   const params = context.query
   if (
     !params?.page ||
-    typeof params?.page !== 'string'
-    // ||
-    // !PROFILE_PAGES[
-    //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
-    // ]
+    typeof params?.page !== 'string' ||
+    !PROFILE_PAGES[
+      (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
+    ]
   ) {
     return {
       notFound: true,
