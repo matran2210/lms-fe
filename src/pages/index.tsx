@@ -4,7 +4,7 @@ import ProfilePage from './profile/[page]'
 const Home: NextPage = () => {
   return (
     <>
-      <ProfilePage page={'my_profile'} />
+      <ProfilePage />
     </>
   )
 }
