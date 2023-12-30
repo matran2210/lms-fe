@@ -69,8 +69,8 @@ const Notifications = () => {
       if (res) {
         await coutNotificationsUnRead()
         dispatch(updateStatus({ id: id }))
-        notifyDetail?.created_by !== null &&
-          Router.push(`${notifyDetail?.content}`)
+        res?.payload?.created_by !== null &&
+          Router.push(`${res?.payload?.content}`)
       }
     } catch (error) {}
   }
