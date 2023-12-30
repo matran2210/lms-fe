@@ -20,6 +20,8 @@ import {
 import { useRouter } from 'next/router'
 import LearningResource from '@components/mycourses/LearningResource'
 import { getCountUnRead } from 'src/redux/slice/Notification/Notification'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import LearningNotesList from '@components/mycourses/LearningNotesList'
 
 // import 'antd/dist/antd.css'
 
@@ -43,9 +45,12 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   )
 
   const coutNotificationsUnRead = async () => {
-    try {
-      await dispatch(getCountUnRead())
-    } catch (error) {}
+    const accessToken = await AsyncStorage.getItem('accessToken')
+    if (accessToken) {
+      try {
+        await dispatch(getCountUnRead())
+      } catch (error) {}
+    }
   }
 
   useEffect(() => {
@@ -113,6 +118,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               open={openResource}
               setOpenResource={setOpenResource}
             />
+            <LearningNotesList />
           </>
         </RouteGuard>
       </main>

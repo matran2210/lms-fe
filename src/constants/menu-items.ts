@@ -41,6 +41,12 @@ const MENU_OPTIONS: MenuOption[] = [
     ],
   },
   {
+    name: 'Notes List',
+    icon: 'notes-list',
+    url: '#',
+    type: 'level-1',
+  },
+  {
     name: `${TitleSidebar.TOPICS}`,
     icon: 'document',
     url: `${PageLink.TOPICS}`,

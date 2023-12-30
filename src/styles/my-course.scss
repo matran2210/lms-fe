@@ -65,3 +65,15 @@
   fill: #ffb800; /* Change to the desired hover fill color */
   cursor: pointer; /* Optional: Change cursor to pointer on hover */
 }
+
+.notes-list-icon {
+  @apply text-gray-1;
+
+  &:hover {
+    @apply text-primary;
+  }
+
+  &.active {
+    @apply text-primary;
+  }
+}

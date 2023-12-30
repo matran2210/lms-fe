@@ -99,3 +99,5 @@ export const defaultStatusDetail = [
     value: 'CANCELED',
   },
 ]
+
+export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
