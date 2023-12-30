@@ -97,7 +97,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       </div>
       {/* Solution test modal */}
       {/* <SolutionModal open={open} setOpen={setOpen} /> */}
-      <TestModal open={open} setOpen={setOpen} title={''} />
+      {/* <TestModal open={open} setOpen={setOpen} title={''} /> */}
     </div>
   )
 }

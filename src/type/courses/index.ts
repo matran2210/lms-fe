@@ -25,8 +25,9 @@ export interface ICourseSection {
     id: string
     limit_count: number
     name: string
-    quiz_timed: boolean
+    quiz_timed: number
     quiz_type: string
+    is_limited: boolean
   }
   learning_progress: {
     total_course_sections: number
