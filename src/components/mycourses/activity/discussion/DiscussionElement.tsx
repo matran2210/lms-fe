@@ -20,7 +20,6 @@ function DiscussionElement({
   discussion,
   idReply,
   handleChangeIdReply,
-  onReact,
 }: Props) {
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
@@ -51,7 +50,7 @@ function DiscussionElement({
           {discussion.username}
         </div>
         {discussion.content && (
-          <div className="text-base mb-2">{discussion.content}</div>
+          <div className={`text-base mb-2 `}>{discussion.content}</div>
         )}
 
         <div className="flex gap-y-1 gap-x-6 font-semibold text-medium-sm">
