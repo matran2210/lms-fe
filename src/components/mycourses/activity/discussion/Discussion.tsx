@@ -30,16 +30,19 @@ type Props = {
  */
 const Discussion = ({ class_id }: Props) => {
   const router = useRouter()
-  const { control, handleSubmit, reset } = useForm<{
-    comment: string
-    commentRoot: string
-  }>()
+
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
   const [idReply, setIdReply] = useState<string>()
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
   const { user } = useAppSelector(userReducer)
   const [stream, setStream] = useState<MediaStream | null>(null)
+  const [newCommentId, setNewCommentId] = useState<string>()
+
+  const { control, handleSubmit, reset, setError, clearErrors } = useForm<{
+    comment: string
+    commentRoot: string
+  }>({})
 
   /**
    * Xử lý sự thay đổi của ID phản hồi và đặt lại biểu mẫu.
@@ -61,11 +64,37 @@ const Discussion = ({ class_id }: Props) => {
     if (router.query.activityId) {
       let parent_id = idReply
       let content = comment
+      let fieldToReset
+
       if (isRoot) {
         parent_id = undefined
         content = commentRoot
+        fieldToReset = 'commentRoot'
+      } else {
+        fieldToReset = 'comment'
       }
+
       try {
+        // Trước khi gửi, clear lỗi của trường comment và commentRoot
+        clearErrors('comment')
+        clearErrors('commentRoot')
+
+        // Nếu isRoot là true và commentRoot không có giá trị, đặt lỗi cho trường commentRoot
+        if (isRoot && !commentRoot?.trim()) {
+          setError('commentRoot', {
+            type: 'manual',
+            message: 'This field is required',
+          })
+          return
+        }
+        if (!isRoot && !comment?.trim()) {
+          setError('comment', {
+            type: 'manual',
+            message: 'This field is required',
+          })
+          return
+        }
+
         await dispatch(
           createDiscussion({
             course_section_id: router.query.activityId as string,
@@ -73,20 +102,28 @@ const Discussion = ({ class_id }: Props) => {
             content: content?.trim(),
             parent_id,
           }),
-        ).unwrap()
+        )
+          .unwrap()
+          .then((result) => {
+            setNewCommentId(result?.id)
+          })
 
-        if (isRoot) {
-          reset({ commentRoot: '' })
-        } else {
-          reset({ comment: '' })
-        }
+        reset({ [fieldToReset]: '' })
+
         await dispatch(
           getDiscussion({
             id: class_id,
             sectionId: router.query.activityId as string,
           }),
         )
-      } catch (error) {}
+      } catch (error) {
+        // Sử dụng setError để đặt lỗi cho trường comment hoặc commentRoot tùy thuộc vào isRoot
+        const fieldName = isRoot ? 'commentRoot' : 'comment'
+        setError(fieldName, {
+          type: 'manual',
+          message: 'Có lỗi xảy ra khi gửi bình luận',
+        })
+      }
     }
   }
 
@@ -218,7 +255,7 @@ const Discussion = ({ class_id }: Props) => {
                 </div>
               )}
               <div
-                className={`flex items-center gap-3 overflow-hidden transition-max-height duration-300 ${
+                className={`flex items-start gap-3 overflow-hidden transition-max-height duration-300 ${
                   idReply === e.id ? `max-h-96 mt-6` : 'max-h-0'
                 }`}
               >
@@ -243,7 +280,7 @@ const Discussion = ({ class_id }: Props) => {
                     control={control}
                     name={idReply === e.id ? 'comment' : ''}
                     textSize="sm"
-                    inputClassName={'max-h-10'}
+                    inputClassName={'max-h-10 !pr-9'}
                     placeholder="Your comment..."
                   ></HookFormTextField>
                   <div
@@ -262,7 +299,7 @@ const Discussion = ({ class_id }: Props) => {
         )
       })}
       <div
-        className={`mt-6 flex items-center gap-3 overflow-hidden transition-max-height duration-300`}
+        className={`mt-6 flex items-start gap-3 overflow-hidden transition-max-height duration-300`}
       >
         <div className="flex-none leading-0">
           <Image
@@ -285,7 +322,7 @@ const Discussion = ({ class_id }: Props) => {
             control={control}
             name={'commentRoot'}
             textSize="sm"
-            inputClassName={'max-h-10'}
+            inputClassName={'max-h-10 !pr-9'}
             placeholder="Your comment..."
             className="h-fit"
           ></HookFormTextField>

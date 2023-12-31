@@ -225,6 +225,30 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       ?.course_tab_documents
   }, [selector.tabs])
 
+  /**
+   * Hàm để lấy ID của tab trước đó.
+   * @returns {string | undefined} - ID của tab trước đó.
+   */
+  const getPreviousTabId = () => {
+    const currentIndex = selector.tabs?.findIndex(
+      (tab) => tab.id === selector.currentTabId,
+    )
+    const previousIndex = (currentIndex || 0) - 1
+    return selector.tabs?.[previousIndex]?.id
+  }
+
+  /**
+   * Hàm để lấy ID của tab tiếp theo.
+   * @returns {string | undefined} - ID của tab tiếp theo.
+   */
+  const getNextTabId = () => {
+    const currentIndex = selector.tabs?.findIndex(
+      (tab) => tab.id === selector.currentTabId,
+    )
+    const nextIndex = (currentIndex || 0) + 1
+    return selector.tabs?.[nextIndex]?.id
+  }
+
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <div className="bg-gray-3 pb-10 px-6 ">
@@ -325,6 +349,56 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 return null
               })}
             </div>
+
+            <div className="flex justify-between flex-wrap gap-5 mt-8">
+              {getPreviousTabId() && (
+                <div className="w-full sm:w-auto">
+                  <div
+                    onClick={() => handleChangeTab(getPreviousTabId() || '')}
+                    className="flex items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={20}
+                      height={20}
+                      fill="none"
+                    >
+                      <path
+                        className="fill-bw-1 group-hover:fill-primary"
+                        fillRule="evenodd"
+                        d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Previous Tab
+                  </div>
+                </div>
+              )}
+              {getNextTabId() && (
+                <div className="w-full sm:w-auto relative ml-auto">
+                  <div
+                    onClick={() => handleChangeTab(getNextTabId() || '')}
+                    className="mb-2 z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                  >
+                    Next Tab
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={20}
+                      height={20}
+                      fill="none"
+                    >
+                      <path
+                        className="fill-bw-1 group-hover:fill-primary"
+                        fillRule="evenodd"
+                        d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div className="absolute -z-[9] top-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -354,6 +428,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           </div>
         </div>
       </div>
+
       <div ref={endActivityRef}></div>
       <div>
         <Discussion class_id={(router.query.classId as string) || ''} />
