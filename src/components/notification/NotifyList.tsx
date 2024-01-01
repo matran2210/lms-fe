@@ -9,7 +9,11 @@ interface IProps {
   notifyLists: any[]
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
-  getApiNotificationDetail: (id: string) => void
+  getApiNotificationDetail: (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => void
 }
 
 const NotifyList = ({
@@ -20,8 +24,12 @@ const NotifyList = ({
 }: IProps) => {
   const dispatch = useAppDispatch()
 
-  const handleOpen = async (id: string, redirect: string | null) => {
-    await getApiNotificationDetail(id)
+  const handleOpen = async (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => {
+    await getApiNotificationDetail(id, redirect, content)
     redirect === null && setOpen(!open)
   }
 
@@ -36,7 +44,11 @@ const NotifyList = ({
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
             onClick={() => {
-              handleOpen(notifyItem?.id, notifyItem?.created_by)
+              handleOpen(
+                notifyItem?.id,
+                notifyItem?.created_by ?? null,
+                notifyItem?.content,
+              )
             }}
           >
             {!readStatus && (
