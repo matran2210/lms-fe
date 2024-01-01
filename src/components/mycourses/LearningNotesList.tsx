@@ -63,7 +63,9 @@ const LearningNotesList = () => {
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
   const [showEdit, setShowEdit] = useState<string>()
   const [viewActivity, setViewActivity] = useState<string>()
+  const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
 
+  // Set default change section all
   useEffect(() => {
     if (selectedSection?.value === '') {
       setSelectedSubsection(null)
@@ -72,13 +74,13 @@ const LearningNotesList = () => {
     }
   }, [selectedSection?.value])
 
+  //Change dropdown
   useEffect(() => {
     if ((courseId || queryId) && notesListStatus) {
       getCourseSections(DEFAULT_PAGESIZE)
     }
   }, [notesListStatus])
 
-  // Change dropdown
   useEffect(() => {
     if (selectedSection?.value !== '') {
       getCourseSubsections(DEFAULT_PAGESIZE)
@@ -100,18 +102,47 @@ const LearningNotesList = () => {
       selectedUnit?.value ||
       selectedSubsection?.value ||
       selectedSection?.value ||
-      router?.query?.activityId ||
       '',
   })
 
-  // Lấy danh sách notes khi có sự thay đổi trong notesListStatus, selectedSection, selectedSubsection, selectedUnit, selectedActivity
+  // Lấy danh sách notes và fill tự động activity khi lần đầum mở trong activity
   useEffect(() => {
-    if (notesListStatus && (courseId || queryId)) {
+    if (router?.query?.activityId && notesListStatus) {
       CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, params).then((res) => {
         setNotesListData(res?.data)
         res?.data?.notes?.forEach((note: any, index: number) => {
           setValue(`note.${index}.value`, note?.description)
         })
+
+        const course_section_path = res?.data?.notes[0].course_section_path
+
+        if (res && course_section_path.length > 0) {
+          setSelectedSection(defaultValueActivity(course_section_path[3]))
+          setSelectedSubsection(defaultValueActivity(course_section_path[2]))
+          setTimeout(() => {
+            setSelectedUnit(defaultValueActivity(course_section_path[1]))
+          }, 500)
+          setTimeout(() => {
+            setSelectedActivity(defaultValueActivity(course_section_path[0]))
+            setFirstLoadActity(true)
+          }, 1000)
+        }
+      })
+    } else if (notesListStatus) {
+      setFirstLoadActity(true)
+    }
+  }, [notesListStatus])
+
+  // Lấy danh sách notes khi có sự thay đổi trong notesListStatus, selectedSection, selectedSubsection, selectedUnit, selectedActivity
+  useEffect(() => {
+    if (notesListStatus && (courseId || queryId) && firstLoadActity) {
+      CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, params).then((res) => {
+        setNotesListData(res?.data)
+        res?.data?.notes?.forEach((note: any, index: number) => {
+          setValue(`note.${index}.value`, note?.description)
+        })
+        setShowEdit('')
+        setViewActivity('')
       })
     }
   }, [
@@ -120,6 +151,7 @@ const LearningNotesList = () => {
     selectedSubsection?.value,
     selectedUnit?.value,
     selectedActivity?.value,
+    firstLoadActity,
   ])
 
   // Attach a scroll event listener to fetch more data when scrolling to the bottom
@@ -189,6 +221,12 @@ const LearningNotesList = () => {
     pageStateVariables.forEach((setPageVariable) => {
       setPageVariable(DEFAULT_PAGESIZE * 2)
     })
+    setFirstLoadActity(false)
+  }
+
+  const defaultValueActivity = (value: any) => {
+    const responce = { value: value.id, label: value.name }
+    return responce
   }
 
   async function getCourseSections(page_size: number) {
@@ -247,6 +285,7 @@ const LearningNotesList = () => {
       const res = await CourseAPI.getCourseNotesList(pageIndex, params)
       setNotesListData(res?.data)
       setShowEdit('')
+      setViewActivity('')
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } catch (error) {
       // Handle error if needed

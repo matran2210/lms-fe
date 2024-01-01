@@ -7,6 +7,7 @@ import { parseISO, differenceInDays } from 'date-fns'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
+import { TITLE_USER_STATUS } from 'src/constants'
 
 const Course = ({ course }: { course: ICourse }) => {
   const [open, setOpen] = useState<boolean>(false)
@@ -14,7 +15,7 @@ const Course = ({ course }: { course: ICourse }) => {
   //   setOpen(true)
   // }
   const router = useRouter()
-
+  const student = course?.classes[0]?.class_user_instances[0]
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
@@ -48,15 +49,114 @@ const Course = ({ course }: { course: ICourse }) => {
     2,
   )
 
-  // const showStatus =
-  //   course?.classes?.[0]?.class_user_instances?.[0]?.status === CLASS_USER_STATUS.READY_TO_LEARN
-  //     ? 'Ready to learn'
-  //     : course?.classes?.[0]?.class_user_instances?.[0]?.status === CLASS_USER_STATUS.COMPLETED
-  //       ? 'Completed'
-  //       : course?.classes?.[0]?.class_user_instances?.[0]?.status === CLASS_USER_STATUS.IN_PROGRESS
-  //         ? 'In progress'
-  //         : 'Expired'
+  // TODO: Function để hiển thị status của course, 1 số ý chưa rõ nên để bản nháp ở đây trước
+  const checkStatusCourse = () => {
+    const class_instance = course?.classes[0]
+    const course_instance = course
 
+    if (!class_instance) {
+      // Lớp học không tồn tại, thông báo lỗi 404
+      return '404 - Class does not exist'
+    }
+
+    if (!student) {
+      if (course_instance.course_type === 'TRIAL_COURSE') {
+        // Hiển thị button Activate để thêm học viên vào lớp và cho nó học
+        return 'Activate'
+      }
+
+      // Thông báo lỗi không có học viên
+      return 'No student found'
+    }
+
+    if (class_instance?.status === 'BLOCKED') {
+      // Lớp học đang bị khoá, không hiển thị button, bôi xám hết, nếu nó dùng url thì thông báo lỗi là lớp học đang bị BLOCK
+      return 'Class is blocked'
+    }
+
+    if (class_instance?.status === 'DRAFT') {
+      // thông báo lỗi 404 là lớp học không tồn tại (đề phòng vụ dùng url)
+      return '404 - Class does not exist'
+    }
+
+    if (!student?.finished_at) {
+      if (class_instance?.duration_type === 'FIXED') {
+        // Thông báo lỗi học viên không có trong lớp
+        return 'Student not found in the class'
+      }
+
+      if (class_instance?.duration_type === 'FLEXIBLE') {
+        // Hiển thị button Activate khoá học
+        return 'Activate'
+      }
+    }
+
+    if (student?.finished_at < new Date()) {
+      if (
+        course_instance?.course_type === 'TRIAL_COURSE' &&
+        student?.status === 'CANCELED'
+      ) {
+        if (student?.extend_count <= 2) {
+          // Hiển thị button Extend
+          return 'Extend'
+        }
+      }
+      // Thông báo lỗi đã hết thời gian học
+      return 'Course time has ended'
+    }
+
+    if (class_instance?.type === 'FOUNDATION') {
+      if (!student?.is_passed) {
+        if (student?.status === 'READY_TO_LEARN') {
+          // Hiển thị button Active (lớp FLEXIBLE)
+          // Hiển thị button Begin (lớp FIXED)
+          return 'Active or Begin'
+        }
+        if (student?.status === 'IN_PROGRESS') {
+          // Hiển thị button Resume
+          return 'Resume'
+        }
+      } else {
+        // Học viên đã pass khoá FOUNDATION, chỉ cho xem chứ không cho học
+        return 'Student has passed Foundation course'
+      }
+    }
+
+    if (student?.status === 'READY_TO_LEARN') {
+      // Hiển thị button Active (lớp FLEXIBLE)
+      // Hiển thị button Begin (lớp FIXED)
+      return 'Active or Begin'
+    }
+    if (student?.status === 'IN_PROGRESS') {
+      // Hiển thị button Resume
+      return 'Resume'
+    }
+    if (student?.status === 'COMPLETED') {
+      // Hiển thị button Review
+      return 'Review'
+    }
+  }
+
+  // Set active course dựa theo trạng thái của học viên
+  const renderStatusUser = (status: string) => {
+    switch (status) {
+      case `${TITLE_USER_STATUS.RESERVED}`:
+        return false
+        break
+      case `${TITLE_USER_STATUS.TRANSFER_TO}`:
+        return false
+        break
+      case `${TITLE_USER_STATUS.CANCELED}`:
+        iên
+        return false
+        break
+      default:
+        return true
+    }
+  }
+  const isActiveStudent = renderStatusUser(student?.type ?? '')
+
+  // Set enable course dựa theo trạng thái của course
   const statusMap = {
     [CLASS_USER_STATUS.READY_TO_LEARN]: 'Ready to learn',
     [CLASS_USER_STATUS.COMPLETED]: 'Completed',
@@ -67,8 +167,8 @@ const Course = ({ course }: { course: ICourse }) => {
   const classUserStatus =
     course?.classes?.[0]?.class_user_instances?.[0]?.status
   const showStatus = statusMap[classUserStatus]
-
-  const enableCourse = classUserStatus !== CLASS_USER_STATUS.CANCELED
+  const enableCourse =
+    classUserStatus !== CLASS_USER_STATUS.CANCELED && isActiveStudent
 
   return (
     <div className="cursor-pointer">
@@ -76,11 +176,13 @@ const Course = ({ course }: { course: ICourse }) => {
         className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${
           !enableCourse ? 'text-gray-2' : 'text-bw-1'
         }`}
-        onClick={() =>
-          course.status !== CLASS_USER_STATUS.CANCELED
-            ? router.push(`/courses/my-course/${course.id}`)
-            : {}
-        }
+        onClick={() => {
+          if (isActiveStudent) {
+            course.status !== CLASS_USER_STATUS.CANCELED
+              ? router.push(`/courses/my-course/${course.id}`)
+              : {}
+          }
+        }}
       >
         <div>{truncateString(course?.name, 40)}</div>
       </div>
@@ -163,11 +265,13 @@ const Course = ({ course }: { course: ICourse }) => {
             full={false}
             size={'small'}
             className="hover:bg-primary hover:text-white ml-auto"
-            onClick={() =>
-              course.status !== CLASS_USER_STATUS.CANCELED
-                ? router.push(`/courses/my-course/${course.id}`)
-                : {}
-            }
+            onClick={() => {
+              if (isActiveStudent) {
+                course.status !== CLASS_USER_STATUS.CANCELED
+                  ? router.push(`/courses/my-course/${course.id}`)
+                  : {}
+              }
+            }}
           />
           {/* )} */}
         </div>
