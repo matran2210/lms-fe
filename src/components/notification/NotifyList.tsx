@@ -60,8 +60,12 @@ const NotifyList = ({
             </div>
             <div className="block">
               <h4
-                className="text-base text-bw-1 mb-1"
-                dangerouslySetInnerHTML={{ __html: notifyItem?.title }}
+                className="text-base text-bw-1 mb-1 line-clamp-2"
+                dangerouslySetInnerHTML={{
+                  __html: notifyItem?.created_by
+                    ? notifyItem?.title
+                    : notifyItem?.content,
+                }}
               ></h4>
               <p className="text-gray-1 text-medium-sm text-left">
                 {calculateTimeAgo(notifyItem?.updated_at)}

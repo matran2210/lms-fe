@@ -70,7 +70,9 @@ const Notifications = () => {
         await coutNotificationsUnRead()
         dispatch(updateStatus({ id: id }))
         res?.payload?.created_by !== null &&
-          Router.push(`${res?.payload?.content}`)
+          Router.push(
+            `${res?.payload?.content?.replace('class_id', 'classId')}`,
+          )
       }
     } catch (error) {}
   }
