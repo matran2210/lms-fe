@@ -60,7 +60,7 @@ const Course = ({ course }: { course: ICourse }) => {
     }
 
     if (!student) {
-      if (course_instance.course_type === 'TRIAL_COURSE') {
+      if (course_instance?.course_type === 'TRIAL_COURSE') {
         // Hiển thị button Activate để thêm học viên vào lớp và cho nó học
         return 'Activate'
       }
@@ -147,7 +147,6 @@ const Course = ({ course }: { course: ICourse }) => {
         return false
         break
       case `${TITLE_USER_STATUS.CANCELED}`:
-        iên
         return false
         break
       default:
