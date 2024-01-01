@@ -1,8 +1,11 @@
 // ConfirmDialog.tsx
 import SappModal from '@components/base/modal/SappModal'
-import { Dispatch, FC, SetStateAction, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useMemo, useState } from 'react'
 import EntrancePopupContent from './EntrancePopupContent'
 import EntranceTestFillForm from './EntranceTestFillForm'
+import { useAppSelector } from 'src/redux/hook'
+import { userReducer } from 'src/redux/slice/User/User'
+import { useRouter } from 'next/router'
 
 // define the props for the confirm dialog component
 export type EntrancePopupProps = {
@@ -21,16 +24,42 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
     setOpen && setOpen(false)
     // setOpenFillForm(true)
   }
+  const { user } = useAppSelector(userReducer)
   const [openFillForn, setOpenFillForm] = useState(false)
+  const router = useRouter()
+
+  const checkInfo = useMemo(() => {
+    if (user.university && user.university_program && user.english_level) {
+      return true
+    }
+    return false
+  }, [user])
+  const checkLimit = useMemo(() => {
+    if (entrancePopupContent.is_limited) {
+      if (
+        entrancePopupContent.attempt_times === entrancePopupContent.limit_count
+      ) {
+        return true
+      }
+    }
+    return false
+  }, [entrancePopupContent])
   return (
     <>
       <SappModal
         open={open}
         setOpen={setOpen}
         cancelButtonCaption="Cancel"
-        okButtonCaption="Start"
+        okButtonCaption={`${!checkInfo ? 'Next' : 'Start'}`}
         handleCancel={handleOnClick}
-        handleSubmit={() => setOpenFillForm(true)}
+        handleSubmit={() => {
+          if (checkInfo) {
+            router.push(`/test/${entrancePopupContent.id}`)
+          } else {
+            setOpenFillForm(true)
+          }
+        }}
+        showOkButton={!checkLimit}
         showHeader={false}
         refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
         size="max-w-screen-sm"
@@ -39,7 +68,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         childClass=""
         parentChildClass=""
         position="center"
-        closeAfterSubmit={false}
+        closeAfterSubmit={true}
         buttonSize="extra"
       >
         <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">

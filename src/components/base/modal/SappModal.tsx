@@ -56,6 +56,7 @@ interface IProps {
   showOkButton?: boolean
   showCancelButton?: boolean
   zIndex?: string
+  scrollbale?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -118,6 +119,7 @@ const SappModal: React.FC<IProps> = ({
   showOkButton = true,
   showCancelButton = true,
   zIndex = 'z-[1000]',
+  scrollbale = true,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -277,7 +279,12 @@ const SappModal: React.FC<IProps> = ({
                     </div>
                   ))}
 
-                <div className={`${parentChildClass} `}>
+                <div
+                  className={`${parentChildClass} ${
+                    scrollbale &&
+                    'snap-y flex-1 overflow-y-scroll bg-white -mr-4.5'
+                  }`}
+                >
                   <div className={`${childClass}`}>{children}</div>
                 </div>
 
