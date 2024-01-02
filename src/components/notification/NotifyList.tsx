@@ -9,7 +9,11 @@ interface IProps {
   notifyLists: any[]
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
-  getApiNotificationDetail: (id: string) => void
+  getApiNotificationDetail: (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => void
 }
 
 const NotifyList = ({
@@ -20,8 +24,12 @@ const NotifyList = ({
 }: IProps) => {
   const dispatch = useAppDispatch()
 
-  const handleOpen = async (id: string, redirect: string | null) => {
-    await getApiNotificationDetail(id)
+  const handleOpen = async (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => {
+    await getApiNotificationDetail(id, redirect, content)
     redirect === null && setOpen(!open)
   }
 
@@ -36,7 +44,11 @@ const NotifyList = ({
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
             onClick={() => {
-              handleOpen(notifyItem?.id, notifyItem?.created_by)
+              handleOpen(
+                notifyItem?.id,
+                notifyItem?.created_by ?? null,
+                notifyItem?.content,
+              )
             }}
           >
             {!readStatus && (
@@ -60,8 +72,12 @@ const NotifyList = ({
             </div>
             <div className="block">
               <h4
-                className="text-base text-bw-1 mb-1"
-                dangerouslySetInnerHTML={{ __html: notifyItem?.title }}
+                className="text-base text-bw-1 mb-1 line-clamp-2"
+                dangerouslySetInnerHTML={{
+                  __html: notifyItem?.created_by
+                    ? notifyItem?.title
+                    : notifyItem?.content,
+                }}
               ></h4>
               <p className="text-gray-1 text-medium-sm text-left">
                 {calculateTimeAgo(notifyItem?.updated_at)}

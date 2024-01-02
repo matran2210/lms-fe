@@ -63,14 +63,19 @@ const Notifications = () => {
     } catch (error) {}
   }
 
-  const getApiNotificationDetail = async (id: string) => {
+  const getApiNotificationDetail = async (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => {
     try {
       const res = await dispatch(getNotificationDetail(id))
       if (res) {
         await coutNotificationsUnRead()
         dispatch(updateStatus({ id: id }))
-        res?.payload?.created_by !== null &&
-          Router.push(`${res?.payload?.content}`)
+        if (redirect !== null) {
+          Router.push(`${content?.replace('class_id', 'classId')}`)
+        }
       }
     } catch (error) {}
   }
