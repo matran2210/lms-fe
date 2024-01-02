@@ -61,7 +61,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         })()
       } catch (error) {}
     }
-  }, [])
+  }, [activity])
 
   useEffect(() => {
     finishedCourseSectionProgress()
@@ -406,26 +406,48 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       {/* </FadeInOut> */}
       <div className="bg-white px-6 py-3 mb-6 relative">
         <div className="flex justify-between flex-wrap gap-5">
-          <div className="w-full sm:w-auto">
-            <div className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary">
-              Previous Activity
+          {activity.previous_activity && (
+            <div className="w-full sm:w-auto">
+              <div
+                onClick={() => {
+                  router.push({
+                    pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
+                    query: {
+                      classId: router.query.classId,
+                    },
+                  })
+                }}
+                className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+              >
+                Previous Activity
+              </div>
+              <div className="text-medium-sm text-gray-1 flex">
+                <SappIcon icon="course_text"></SappIcon>
+                <span className="ml-2">{activity.previous_activity.name}</span>
+              </div>
             </div>
-            <div className="text-medium-sm text-gray-1 flex">
-              <SappIcon icon="course_text"></SappIcon>
-              <span className="ml-2">Interest Rates: Interpretation</span>
+          )}
+          {activity.next_activity && (
+            <div className="w-full sm:w-auto ml-auto">
+              <div
+                onClick={() => {
+                  router.push({
+                    pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
+                    query: {
+                      classId: router.query.classId,
+                    },
+                  })
+                }}
+                className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+              >
+                Next Activity
+              </div>
+              <div className="text-medium-sm text-gray-1 flex justify-end">
+                <span className="mr-2">{activity.next_activity.name}</span>
+                <SappIcon icon="course_video"></SappIcon>
+              </div>
             </div>
-          </div>
-          <div className="w-full sm:w-auto">
-            <div className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right">
-              Next Activity
-            </div>
-            <div className="text-medium-sm text-gray-1 flex justify-end">
-              <span className="mr-2">
-                The Future Value of a Single Cash Flow/a Series of Cash Flows
-              </span>
-              <SappIcon icon="course_video"></SappIcon>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -472,8 +494,10 @@ export async function getServerSideProps(context: any) {
         notFound: true,
       }
     }
+
     const activity = await CourseActivityApi.getActivityById(
       context?.query?.activityId,
+      context?.query.id,
       cookies.accessToken,
     )
 

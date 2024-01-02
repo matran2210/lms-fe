@@ -3,7 +3,7 @@ import SappModal from '@components/base/modal/SappModal'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useRef, useState } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -12,6 +12,7 @@ import {
   createDiscussion,
   getDiscussion,
   reactDiscussion,
+  uploadImagesDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { userReducer } from 'src/redux/slice/User/User'
 import {
@@ -37,7 +38,10 @@ const Discussion = ({ class_id }: Props) => {
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
   const { user } = useAppSelector(userReducer)
   const [stream, setStream] = useState<MediaStream | null>(null)
-  const [newCommentId, setNewCommentId] = useState<string>()
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [rootSelectedFiles, setRootSetSelectedFiles] = useState<File[]>([])
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const rootFileInputRef = useRef<HTMLInputElement | null>(null)
 
   const { control, handleSubmit, reset, setError, clearErrors } = useForm<{
     comment: string
@@ -51,6 +55,7 @@ const Discussion = ({ class_id }: Props) => {
   const handleChangeIdReply = (idReply: string) => {
     setIdReply(idReply)
     reset({ comment: '' })
+    setSelectedFiles([])
   }
 
   /**
@@ -80,14 +85,14 @@ const Discussion = ({ class_id }: Props) => {
         clearErrors('commentRoot')
 
         // Nếu isRoot là true và commentRoot không có giá trị, đặt lỗi cho trường commentRoot
-        if (isRoot && !commentRoot?.trim()) {
+        if (isRoot && !commentRoot?.trim() && !rootSelectedFiles?.[0]) {
           setError('commentRoot', {
             type: 'manual',
             message: 'This field is required',
           })
           return
         }
-        if (!isRoot && !comment?.trim()) {
+        if (!isRoot && !comment?.trim() && !selectedFiles?.[0]) {
           setError('comment', {
             type: 'manual',
             message: 'This field is required',
@@ -104,18 +109,44 @@ const Discussion = ({ class_id }: Props) => {
           }),
         )
           .unwrap()
-          .then((result) => {
-            setNewCommentId(result?.id)
+          .then((e) => {
+            if (
+              !e?.id ||
+              (isRoot && !rootSelectedFiles?.[0]) ||
+              (!isRoot && !selectedFiles?.[0])
+            ) {
+              dispatch(
+                getDiscussion({
+                  id: class_id,
+                  sectionId: router.query.activityId as string,
+                }),
+              )
+              return
+            }
+
+            dispatch(
+              uploadImagesDiscussion({
+                discussion_id: e.id,
+                new_discussion_file: isRoot ? rootSelectedFiles : selectedFiles,
+              }),
+            )
+              .unwrap()
+              .then(() => {
+                dispatch(
+                  getDiscussion({
+                    id: class_id,
+                    sectionId: router.query.activityId as string,
+                  }),
+                )
+                if (isRoot) {
+                  setRootSetSelectedFiles([])
+                } else {
+                  setSelectedFiles([])
+                }
+              })
           })
 
         reset({ [fieldToReset]: '' })
-
-        await dispatch(
-          getDiscussion({
-            id: class_id,
-            sectionId: router.query.activityId as string,
-          }),
-        )
       } catch (error) {
         // Sử dụng setError để đặt lỗi cho trường comment hoặc commentRoot tùy thuộc vào isRoot
         const fieldName = isRoot ? 'commentRoot' : 'comment'
@@ -190,18 +221,6 @@ const Discussion = ({ class_id }: Props) => {
   }
 
   /**
-   * Hàm mở camera và cập nhật state với video stream.
-   */
-  const openCamera = async () => {
-    try {
-      const cameraStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-      })
-      setStream(cameraStream)
-    } catch (error) {}
-  }
-
-  /**
    * Hàm đóng camera và cập nhật state với video stream.
    */
   const closeCamera = () => {
@@ -212,6 +231,42 @@ const Discussion = ({ class_id }: Props) => {
       })
       // Set the stream state to null
       setStream(null)
+    }
+  }
+
+  const handleFileChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    isRoot?: boolean,
+  ) => {
+    const files = e.target.files
+    if (files) {
+      if (isRoot) {
+        setRootSetSelectedFiles([...rootSelectedFiles, ...Array.from(files)])
+      } else {
+        setSelectedFiles([...selectedFiles, ...Array.from(files)])
+      }
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '' // Clear the input value
+    }
+    if (rootFileInputRef.current) {
+      rootFileInputRef.current.value = '' // Clear the input value
+    }
+    e.target.value = ''
+  }
+  const handleRemoveSelectedFiles = (
+    indexToRemove: number,
+    isRoot?: boolean,
+  ) => {
+    let updatedFiles: File[] = []
+    if (isRoot) {
+      updatedFiles = [...rootSelectedFiles]
+      updatedFiles.splice(indexToRemove, 1)
+      setRootSetSelectedFiles(updatedFiles)
+    } else {
+      updatedFiles = [...selectedFiles]
+      updatedFiles.splice(indexToRemove, 1)
+      setSelectedFiles(updatedFiles)
     }
   }
 
@@ -255,7 +310,7 @@ const Discussion = ({ class_id }: Props) => {
                 </div>
               )}
               <div
-                className={`flex items-start gap-3 overflow-hidden transition-max-height duration-300 ${
+                className={`flex items-start gap-3 overflow-visible transition-max-height duration-300 ${
                   idReply === e.id ? `max-h-96 mt-6` : 'max-h-0'
                 }`}
               >
@@ -274,20 +329,65 @@ const Discussion = ({ class_id }: Props) => {
                 </div>
                 <form
                   onSubmit={handleSubmit((e) => onSubmit(e))}
-                  className="flex-1 relative"
+                  className="flex-1"
+                  encType="multipart/form-data"
                 >
-                  <HookFormTextField
-                    control={control}
-                    name={idReply === e.id ? 'comment' : ''}
-                    textSize="sm"
-                    inputClassName={'max-h-10 !pr-9'}
-                    placeholder="Your comment..."
-                  ></HookFormTextField>
-                  <div
-                    onClick={openCamera}
-                    className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
-                  >
-                    <SappIcon icon="camera"></SappIcon>
+                  {selectedFiles.length > 0 && (
+                    <div>
+                      <ul className="flex gap-4 flex-wrap">
+                        {selectedFiles.map((file, index) => (
+                          <li key={index} className="leading-0 relative mb-2">
+                            <div
+                              className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
+                              role="button"
+                              onClick={() => handleRemoveSelectedFiles(index)}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                className="w-4 h-4 "
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </div>
+                            <Image
+                              width={100}
+                              height={100}
+                              src={URL.createObjectURL(file)}
+                              loading="eager"
+                              objectFit="contain"
+                            ></Image>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <div className="relative">
+                    <HookFormTextField
+                      control={control}
+                      name={idReply === e.id ? 'comment' : ''}
+                      textSize="sm"
+                      inputClassName={'max-h-10 !pr-9'}
+                      placeholder="Your comment..."
+                    ></HookFormTextField>
+                    <div className="absolute top-[13px] right-3 cursor-pointer">
+                      <SappIcon icon="camera"></SappIcon>
+                      <input
+                        type="file"
+                        className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
+                        accept="image/*"
+                        multiple
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                      />
+                    </div>
                   </div>
                   <button type="submit" className="hidden"></button>
                 </form>
@@ -299,7 +399,7 @@ const Discussion = ({ class_id }: Props) => {
         )
       })}
       <div
-        className={`mt-6 flex items-start gap-3 overflow-hidden transition-max-height duration-300`}
+        className={`mt-6 flex items-start gap-3 overflow-visible transition-max-height duration-300`}
       >
         <div className="flex-none leading-0">
           <Image
@@ -317,21 +417,66 @@ const Discussion = ({ class_id }: Props) => {
         <form
           onSubmit={handleSubmit((e) => onSubmit(e, true))}
           className="flex-1 relative"
+          encType="multipart/form-data"
         >
-          <HookFormTextField
-            control={control}
-            name={'commentRoot'}
-            textSize="sm"
-            inputClassName={'max-h-10 !pr-9'}
-            placeholder="Your comment..."
-            className="h-fit"
-          ></HookFormTextField>
-          <button type="submit" className="hidden"></button>
-          <div
-            onClick={openCamera}
-            className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
-          >
-            <SappIcon icon="camera"></SappIcon>
+          {rootSelectedFiles.length > 0 && (
+            <div>
+              <ul className="flex gap-4 flex-wrap">
+                {rootSelectedFiles.map((file, index) => (
+                  <li key={index} className="leading-0 relative mb-2">
+                    <div
+                      className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
+                      role="button"
+                      onClick={() => handleRemoveSelectedFiles(index, true)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4 "
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </div>
+                    <Image
+                      width={100}
+                      height={100}
+                      src={URL.createObjectURL(file)}
+                      loading="eager"
+                      objectFit="contain"
+                    ></Image>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="relative">
+            <HookFormTextField
+              control={control}
+              name={'commentRoot'}
+              textSize="sm"
+              inputClassName={'max-h-10 !pr-9'}
+              placeholder="Your comment..."
+              className="h-fit"
+            ></HookFormTextField>
+            <button type="submit" className="hidden"></button>
+            <div className="absolute top-[13px] right-3 cursor-pointer select-none">
+              <SappIcon icon="camera"></SappIcon>
+              <input
+                type="file"
+                className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
+                accept="image/*"
+                multiple
+                onChange={(e) => handleFileChange(e, true)}
+                ref={rootFileInputRef}
+              />
+            </div>
           </div>
         </form>
       </div>

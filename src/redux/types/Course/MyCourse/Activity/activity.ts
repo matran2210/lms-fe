@@ -4,6 +4,11 @@ export interface ICreateDiscussionRequest {
   parent_id?: string
   content: string
 }
+export interface ICreateDiscussionUploadRequest {
+  discussion_id: string
+  new_discussion_file: File[]
+  discussion_file_ids?: string[]
+}
 
 interface ICourseSection {
   id: string
