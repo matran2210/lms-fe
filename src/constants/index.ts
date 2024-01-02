@@ -101,3 +101,13 @@ export const defaultStatusDetail = [
 ]
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
+
+export const TITLE_USER_STATUS = {
+  NORMAL: 'NORMAL',
+  RESERVED: 'RESERVED',
+  MOVED_OUT: 'MOVED_OUT',
+  MOVED_IN: 'MOVED_IN',
+  TRANSFER_TO: 'TRANSFER_TO',
+  TRANSFERRED: 'TRANSFERRED',
+  CANCELED: 'CANCELED',
+}

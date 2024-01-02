@@ -76,6 +76,7 @@ export interface IClassUserInstances {
   status: string
   type: string
   updated_at: Date
+  finished_at: Date
 }
 
 export interface IClasses {
@@ -100,6 +101,7 @@ export interface ICourse {
   status: string
   updated_at: Date
   name: string
+  course_type: string
 }
 export interface ICourseAll {
   courses: ICourse[]
