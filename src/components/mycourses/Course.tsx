@@ -8,9 +8,11 @@ import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 import { TITLE_USER_STATUS } from 'src/constants'
+import { PopupExtend } from './PopupExtend'
 
 const Course = ({ course }: { course: ICourse }) => {
   const [open, setOpen] = useState<boolean>(false)
+  const [openExtend, setOpenExtend] = useState<boolean>(false)
   // const handleOnClick = () => {
   //   setOpen(true)
   // }
@@ -276,6 +278,7 @@ const Course = ({ course }: { course: ICourse }) => {
         </div>
       </div>
       <ResultRowsModal open={open} setOpen={setOpen} />
+      {/* <PopupExtend open={openExtend} setOpen={setOpenExtend} />*/}
     </div>
   )
 }
