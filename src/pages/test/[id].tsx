@@ -48,6 +48,7 @@ import { apiURL } from 'src/redux/services/httpService'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { removeJwtToken } from '@utils/helpers/authen'
+import ConFirmSubmit from './conFirmSubmit'
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -222,6 +223,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   )
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
+  const [openSubmit, setOpenSubmit] = useState(false)
   const [loading, setLoading] = useState(false)
   useClickOutside({
     ref: dropUpRef,
@@ -959,7 +961,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               loading: false,
               disabled: submited,
               onClick: () => {
-                handleSubmitQuestion()
+                setOpenSubmit(true)
               },
               //   full: fullWidthBtn,
             }}
@@ -1365,6 +1367,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setOpen={setOpenTimeOut}
         handleSubmit={handleSubmitQuestion}
         handleQuit={() => router.back()}
+      />
+      <ConFirmSubmit
+        open={openSubmit}
+        setOpen={setOpenSubmit}
+        handleSubmit={handleSubmitQuestion}
       />
     </div>
   )

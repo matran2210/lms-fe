@@ -663,3 +663,22 @@ export const ActiveIcon = () => {
     </svg>
   )
 }
+export const ConfirmIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="124"
+      height="124"
+      viewBox="0 0 124 124"
+      fill="none"
+    >
+      <path
+        d="M46.5 62L56.8333 72.3333L77.5 51.6667M108.5 62C108.5 87.6812 87.6812 108.5 62 108.5C36.3188 108.5 15.5 87.6812 15.5 62C15.5 36.3188 36.3188 15.5 62 15.5C87.6812 15.5 108.5 36.3188 108.5 62Z"
+        stroke="#FFB800"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  )
+}
