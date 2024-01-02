@@ -13,7 +13,7 @@ import {
 } from '@utils/helpers/ValidateMessage'
 import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -60,6 +60,10 @@ const MyProfile = ({
   }>({
     resolver: zodResolver(schema),
   })
+
+  useEffect(() => {
+    dispatch(getMe())
+  }, [])
 
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
     status: boolean
