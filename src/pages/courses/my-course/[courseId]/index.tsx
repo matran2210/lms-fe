@@ -88,7 +88,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
 
   return (
     <>
-      <div className="header bg-white border-b border-default">
+      <div className="header bg-white border-b border-default h-[70px]">
         <div className="max-w-xxl my-0 mx-auto flex py-6 xl-max:mx-5">
           <SearchForm
             placeholder="Enter name of part..."

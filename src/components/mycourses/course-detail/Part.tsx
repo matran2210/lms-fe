@@ -32,7 +32,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       }
       className="cursor-pointer"
     >
-      <div className={`name-part text-2xl font-semibold h-16`}>
+      <div className={`name-part text-2xl font-semibold h-[60px]`}>
         {courses?.name}
       </div>
       <div className="des mt-6 mb-15">
@@ -41,7 +41,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
             __html: truncateString(courses?.description, 150),
           }}
           className={`text-base ${
-            countWords(courses?.name) > 3 ? 'h-32' : 'h-40'
+            countWords(courses?.name) > 3 ? 'h-[120px]' : 'h-40'
           }`}
         />
       </div>

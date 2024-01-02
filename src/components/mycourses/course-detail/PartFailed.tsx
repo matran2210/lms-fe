@@ -20,7 +20,7 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
   }, [coursePart?.quiz?.attempts])
   return (
     <>
-      <div className={`name-part text-2xl font-semibold`}>
+      <div className={`name-part text-2xl font-semibold h-[60px]`}>
         <div>{coursePart?.name}</div>
       </div>
       <div className="info mt-6">
@@ -36,6 +36,11 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
               : 'Unlimited'}
           </p>
         </div>
+      </div>
+      <div className="des mt-6 mb-15">
+        <div
+          className={`text-base h-26`}
+        />
       </div>
       <div className="mt-auto">
         <div className="action flex items-center jusity-end relative">
