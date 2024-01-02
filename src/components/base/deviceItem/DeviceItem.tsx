@@ -32,7 +32,9 @@ const DeviceItem = ({ data }: any) => {
         </div>
         <div className="flex items-center gap-2">
           <div className="text-xsm text-gray-1">
-            {data.created_at ? format(new Date(data.created_at), 'hh:mm:ss dd/MM/yyyy') : ''}
+            {data.created_at
+              ? format(new Date(data.created_at), 'hh:mm:ss dd/MM/yyyy')
+              : ''}
           </div>
           <div className="bg-gray-1 rounded-full w-[4px] h-[4px]"></div>
           <div className="text-xsm text-gray-1">{data.ip}</div>

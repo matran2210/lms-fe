@@ -110,11 +110,12 @@ const LoginPage = () => {
           router.push(PageLink.COURSES)
           dispatch(getEntranceCount())
         })
-    } catch (error: any) {
-      if (error?.response?.data?.error?.code === '403|0001') {
-        setOpenLimit(true)
-      }
-    }
+        .catch((error) => {
+          if (error?.response?.data?.error?.code === '403|0001') {
+            setOpenLimit(true)
+          }
+        })
+    } catch (error: any) {}
   }
   const socialLogin = () => {
     toast.error('Chức năng này sẽ được update vào version sau!')
