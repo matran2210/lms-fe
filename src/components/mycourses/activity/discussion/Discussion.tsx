@@ -3,7 +3,7 @@ import SappModal from '@components/base/modal/SappModal'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, SetStateAction, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -20,6 +20,7 @@ import {
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import DiscussionElement from './DiscussionElement'
+import SappModalImage from '@components/base/modal/SappModalImage'
 
 type Props = {
   class_id: string
@@ -42,6 +43,8 @@ const Discussion = ({ class_id }: Props) => {
   const [rootSelectedFiles, setRootSetSelectedFiles] = useState<File[]>([])
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const rootFileInputRef = useRef<HTMLInputElement | null>(null)
+
+  const [imageSrc, setImageSrc] = useState<string>()
 
   const { control, handleSubmit, reset, setError, clearErrors } = useForm<{
     comment: string
@@ -281,6 +284,7 @@ const Discussion = ({ class_id }: Props) => {
               discussion={e}
               idReply={idReply}
               handleChangeIdReply={handleChangeIdReply}
+              setImageSrc={setImageSrc}
             />
             <div
               className={`${
@@ -303,6 +307,7 @@ const Discussion = ({ class_id }: Props) => {
                           rank={2}
                           discussion={f}
                           onReact={onReact}
+                          setImageSrc={setImageSrc}
                         />
                       </div>
                     )
@@ -363,6 +368,9 @@ const Discussion = ({ class_id }: Props) => {
                               src={URL.createObjectURL(file)}
                               loading="eager"
                               objectFit="contain"
+                              onClick={() => {
+                                setImageSrc(URL.createObjectURL(file))
+                              }}
                             ></Image>
                           </li>
                         ))}
@@ -450,6 +458,9 @@ const Discussion = ({ class_id }: Props) => {
                       src={URL.createObjectURL(file)}
                       loading="eager"
                       objectFit="contain"
+                      onClick={() => {
+                        setImageSrc(URL.createObjectURL(file))
+                      }}
                     ></Image>
                   </li>
                 ))}
@@ -491,6 +502,7 @@ const Discussion = ({ class_id }: Props) => {
           autoPlay
         />
       </SappModal>
+      <SappModalImage setSrc={setImageSrc} src={imageSrc}></SappModalImage>
     </div>
   )
 }

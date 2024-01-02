@@ -1,7 +1,7 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import {
   ICreateDiscussionResReact,
   IDiscussion,
@@ -13,6 +13,7 @@ type Props = {
   idReply?: string
   handleChangeIdReply?: (idReply: string) => void
   onReact: (data: ICreateDiscussionResReact) => Promise<void>
+  setImageSrc: (value: SetStateAction<string | undefined>) => void
 }
 
 function DiscussionElement({
@@ -20,6 +21,7 @@ function DiscussionElement({
   discussion,
   idReply,
   handleChangeIdReply,
+  setImageSrc,
 }: Props) {
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
@@ -48,6 +50,23 @@ function DiscussionElement({
       <div>
         <div className="text-base font-semibold mb-1">
           {discussion.username}
+        </div>
+        <div className="flex gap-3 flex-wrap">
+          {discussion.course_discussion_files?.map((e) => {
+            return (
+              <div key={e.course_discussion_id}>
+                <Image
+                  width={100}
+                  height={100}
+                  src={e.url}
+                  loading="eager"
+                  blurDataURL={blankAvatar.src}
+                  objectFit="contain"
+                  onClick={() => setImageSrc(e.url)}
+                ></Image>
+              </div>
+            )
+          })}
         </div>
         {discussion.content && (
           <div className={`text-base mb-2 `}>{discussion.content}</div>

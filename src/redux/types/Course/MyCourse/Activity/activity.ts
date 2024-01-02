@@ -31,6 +31,10 @@ interface ICourseSection {
 }
 
 export interface IDiscussion {
+  course_discussion_files: {
+    course_discussion_id: string
+    url: string
+  }[]
   id: string
   created_at: string
   updated_at: string
