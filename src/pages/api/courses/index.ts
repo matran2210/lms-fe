@@ -106,15 +106,17 @@ const CourseAPI = {
     })
     return response
   },
-  activeCourse: (id: string): Promise<any> => {
+  activeCourse: (params: Object): Promise<any> => {
     const response = httpService.POST<any, any>({
-      uri: `courses/active/${id}`,
+      uri: `courses/active`,
+      request: params,
     })
     return response
   },
-  extendCourse: (id: string): Promise<any> => {
+  extendCourse: (params: Object): Promise<any> => {
     const response = httpService.POST<any, any>({
-      uri: `courses/extend/${id}`,
+      uri: `courses/extend`,
+      request: params,
     })
     return response
   },

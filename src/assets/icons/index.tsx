@@ -641,3 +641,25 @@ export const LoginIcon = () => {
     </svg>
   )
 }
+
+export const ActiveIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="164"
+      height="164"
+      fill="none"
+      viewBox="0 0 164 164"
+    >
+      <rect width="164" height="164" fill="#FFFAF0" rx="82"></rect>
+      <path
+        fill="#FFB800"
+        d="M102.951 97.625H32.924l35.014-62.5 35.013 62.5z"
+      ></path>
+      <path
+        fill="#FFB800"
+        d="M97.625 63.25a31.346 31.346 0 00-6.357.656l17.138 30.664 5.198 9.305H67.813c3.992 12.666 15.845 21.875 29.812 21.875 17.23 0 31.25-14.02 31.25-31.25s-14.02-31.25-31.25-31.25z"
+      ></path>
+    </svg>
+  )
+}

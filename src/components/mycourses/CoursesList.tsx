@@ -1,21 +1,28 @@
-import React from 'react'
 import Course from './Course'
 import { ICourseAll } from 'src/type/courses'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 interface CoursesProps {
   courses: ICourseAll
+  setData: Dispatch<SetStateAction<ICourseAll>>
+  setLoading: Dispatch<SetStateAction<boolean>>
 }
 
-const CoursesList: React.FC<CoursesProps> = ({ courses }) => {
+const CoursesList: React.FC<CoursesProps> = ({
+  courses,
+  setData,
+  setLoading,
+}) => {
   return (
     <div className="grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-6 xl-max:px-6">
       {courses?.courses?.map((course, index: number) => (
-        <div
+        <Course
           key={index}
-          className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
-        >
-          <Course course={course} />
-        </div>
+          course={course}
+          index={index}
+          setData={setData}
+          setLoading={setLoading}
+        />
       ))}
     </div>
   )

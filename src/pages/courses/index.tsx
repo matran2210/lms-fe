@@ -207,7 +207,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
             handleCancel={closeUserGuide}
           />
         )}
-        <CoursesList courses={data} />
+        <CoursesList courses={data} setData={setData} setLoading={setLoading} />
       </div>
       {guideStatus && guideStep == 0 && <PopupWelcome />}
       {guideStatus && (

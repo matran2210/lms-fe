@@ -111,3 +111,26 @@ export const TITLE_USER_STATUS = {
   TRANSFERRED: 'TRANSFERRED',
   CANCELED: 'CANCELED',
 }
+export const COURSE_STATUS = {
+  PUBLISH: 'PUBLISH',
+  LOCK: 'LOCK',
+  DRAFT: 'DRAFT',
+  BLOCK: 'BLOCK',
+}
+
+export const CLASS_STATUS = {
+  PUBLIC: 'PUBLIC',
+  DRAFT: 'DRAFT',
+  BLOCK: 'BLOCK',
+  ENDED: 'ENDED',
+}
+
+export const BUTTON_STATUS = {
+  Active: 'Active',
+  Begin: 'Begin',
+  Resume: 'Resume',
+  Review: 'Review',
+  Extend: 'Extend',
+  Hidden: 'Hidden',
+  Disabled: 'Disabled',
+}
