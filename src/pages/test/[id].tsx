@@ -185,7 +185,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const router = useRouter()
 
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const [filteredTabs, setFilterdTabs] = useState<any>([])
+  // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control, handleSubmit, getValues, setValue } = useForm()
   const { control: controlFilter, watch: watchFilter } = useForm()
@@ -213,7 +213,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [remainTime, setRemainTime] = useState<number>(
     quizDetail.quiz_timed * 60,
   )
+  const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
+  const [loading, setLoading] = useState(false)
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -290,17 +292,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       </div>
     )
   }
-  useEffect(() => {
-    setFilterdTabs((prev: any) => {
-      const filter = watchFilter('filter')
-      if (filter === 'attempted') {
-        return tabs.filter((e: any) => e.viewed === true)
-      } else if (filter === 'unattempted') {
-        return tabs.filter((e: any) => e.viewed === false)
-      } else if (filter === 'flag') {
-        return tabs.filter((e: any) => e.flaged === true)
-      } else return tabs
-    })
+  const filteredTabs = useMemo(() => {
+    const filter = watchFilter('filter')
+    if (filter === 'attempted') {
+      return tabs.filter((e: any) => e.viewed === true)
+    } else if (filter === 'unattempted') {
+      return tabs.filter((e: any) => e.viewed === false)
+    } else if (filter === 'flag') {
+      return tabs.filter((e: any) => e.flaged === true)
+    } else return tabs
   }, [tabs, watchFilter('filter')])
   const ref = useRef(null) as any
 
@@ -337,7 +337,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     let value = [] as any
     const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
     for (let e of inputs) {
-      const idAnswer = e.querySelector('span')
+      const idAnswer = e.querySelector('.answer-box')
       value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
     }
     return value
@@ -375,32 +375,66 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         ],
       }
     }
-    setTabs((prev: any) => {
-      setStartTime(Date.now())
-      const newData = prev.map((item: any) => {
-        if (currentPage === item.id) {
-          // setCurrentTabContent({
-          //   ...item,
-          //   done: true,
-          //   corrects: corrects,
-          //   solution: res.data[0].solution,
-          //   answer: getCurrentAnswer(item),
-          // })
-          ref.current?.handleReset()
-          return {
-            ...item,
-            done: true,
-            corrects: corrects,
-            solution: res.data[0].solution,
-            timeSpent: item.timeSpent
-              ? currentTime - startTime + item.timeSpent
-              : currentTime - startTime,
-          }
+    // setTabs((prev: any) => {
+    //   setStartTime(Date.now())
+    //   const newData = prev.map((item: any) => {
+    //     if (currentPage === item.id) {
+    //       // setCurrentTabContent({
+    //       //   ...item,
+    //       //   done: true,
+    //       //   corrects: corrects,
+    //       //   solution: res.data[0].solution,
+    //       //   answer: getCurrentAnswer(item),
+    //       // })
+    //       ref.current?.handleReset()
+    //       return {
+    //         ...item,
+    //         done: true,
+    //         corrects: corrects,
+    //         solution: res.data[0].solution,
+    //         timeSpent: item.timeSpent
+    //           ? currentTime - startTime + item.timeSpent
+    //           : currentTime - startTime,
+    //       }
+    //     }
+    //     return item
+    //   })
+    //   return handleSaveCurrentAnswer(newData, currentTabContent)
+    // })
+    return { corrects: corrects, solution: res.data[0].solution }
+  }
+  const confirmAnswer = async (
+    corrects: any,
+    solution: any,
+    currentTabContent: any,
+  ) => {
+    setLoading(true)
+    setStartTime(Date.now())
+    const newData = tabs.map((item: any) => {
+      if (currentTabContent.id === item.id) {
+        // setCurrentTabContent({
+        //   ...item,
+        //   done: true,
+        //   corrects: corrects,
+        //   solution: res.data[0].solution,
+        //   answer: getCurrentAnswer(item),
+        // })
+        ref.current?.handleReset()
+        return {
+          ...item,
+          done: true,
+          corrects: corrects,
+          solution: solution,
+          timeSpent: item.timeSpent
+            ? currentTime - startTime + item.timeSpent
+            : currentTime - startTime,
         }
-        return item
-      })
-      return handleSaveCurrentAnswer(newData, currentTabContent)
+      }
+      return item
     })
+    const newTabs = await handleSaveCurrentAnswer(newData, currentTabContent)
+    setTabs(newTabs)
+    setLoading(false)
   }
   const getResultAll = async (currentTabContent: any) => {
     const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
@@ -432,26 +466,47 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       solution: res.data[0].solution,
     }
   }
-  const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
+  const handleSaveCurrentAnswer = async (tabs: any, currentContent: any) => {
     if (!currentContent.done) {
       if (
         currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
         currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
         currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
       ) {
-        return handleSaveAnswer(
+        const answers = await handleSaveAnswer(
           getValues(`${currentPage}_answer`),
           currentPage,
           tabs,
         )
+        return answers
       } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-        return handleSaveAnswer(getAnswerMatching(), currentPage, tabs)
+        const answers = await handleSaveAnswer(
+          getAnswerMatching(),
+          currentContent.id,
+          tabs,
+        )
+        return answers
       } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-        return handleSaveAnswer(getAnswerDragNDrop(), currentPage, tabs)
+        const answers = await handleSaveAnswer(
+          getAnswerDragNDrop(),
+          currentContent.id,
+          tabs,
+        )
+        return answers
       } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
-        return handleSaveAnswer(getValueSelectText(), currentPage, tabs)
+        const answers = await handleSaveAnswer(
+          getValueSelectText(),
+          currentContent.id,
+          tabs,
+        )
+        return answers
       } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
-        return handleSaveAnswer(getValueFillText(), currentPage, tabs)
+        const answers = await handleSaveAnswer(
+          getValueFillText(),
+          currentContent.id,
+          tabs,
+        )
+        return answers
       } else return tabs
     } else {
       return tabs
@@ -487,55 +542,45 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     }
   }
   const handleChangeTab = async (currentTab: any) => {
+    setLoading(true)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
     if (!currentContent?.viewed) {
       const { topicDescription, res } = await getDetail(currentTab)
-
-      setTabs((prev: any) => {
-        setStartTime(Date.now())
-        const newData = prev.map((item: any) => {
-          if (currentTab === item.id) {
-            if (item.viewed) {
-              // setCurrentTabContent({ ...item })
-              return { ...item }
-            } else {
-              return {
-                ...item,
-                viewed: true,
-                data: res.data[0],
-                topicDescription: topicDescription.data,
-              }
+      setStartTime(Date.now())
+      const newData = tabs.map((item: any) => {
+        if (currentTab === item.id) {
+          if (item.viewed) {
+            // setCurrentTabContent({ ...item })
+            return { ...item }
+          } else {
+            return {
+              ...item,
+              viewed: true,
+              data: res.data[0],
+              topicDescription: topicDescription.data,
             }
           }
-          return item
-        })
-        ref.current?.handleReset()
-        const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
-        setCurrentPage(currentTab)
-        setOpenScratchPad([])
-        setAllowHighLight(false)
-        // reset()
-        return savedAnswer
+        }
+        return item
       })
+      ref.current?.handleReset()
+      const savedAnswer = await handleSaveCurrentAnswer(
+        newData,
+        currentTabContent,
+      )
+      setCurrentPage(currentTab)
+      setOpenScratchPad([])
+      setAllowHighLight(false)
+      setTabs(savedAnswer)
     } else {
-      setTabs((prev: any) => {
-        // for (let e of prev) {
-        //   if (currentTab === e.id) {
-        //     setCurrentTabContent(() => {
-        //       ref.current?.handleReset()
-        //       return e
-        //     })
-        //   }
-        // }
-        ref.current?.handleReset()
-        const savedAnswer = handleSaveCurrentAnswer(prev, currentTabContent)
-        setCurrentPage(currentTab)
-        setOpenScratchPad([])
-        setAllowHighLight(false)
-        // reset()
-        return savedAnswer
-      })
+      ref.current?.handleReset()
+      const savedAnswer = await handleSaveCurrentAnswer(tabs, currentTabContent)
+      setCurrentPage(currentTab)
+      setOpenScratchPad([])
+      setAllowHighLight(false)
+      setTabs(savedAnswer)
     }
+    setLoading(false)
 
     // if (currentPage) {
     //   getDetail()
@@ -544,34 +589,56 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     //   return handleSaveCurrentAnswer(tabs)
     // })
   }
-  const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
-    // setTabs((prev: any) => {
+  const handleSaveAnswer = async (data: any, tabId: any, tabs: any) => {
     setStartTime(Date.now())
-    const newData = tabs.map((item: any) => {
+    let newData = [] as any
+    for (let item of tabs) {
       if (tabId === item.id) {
-        return {
-          ...item,
-          answer: data,
-          timeSpent: !item.done
-            ? item.timeSpent
-              ? currentTime - startTime + item.timeSpent
-              : currentTime - startTime <= 0
-                ? 0
-                : currentTime - startTime
-            : item.timeSpent,
+        if (quizDetail.grading_preference === 'AFTER_EACH_QUESTION') {
+          var result = await getResult(item)
+          var newItem = {
+            ...item,
+            done: true,
+            corrects: result.corrects,
+            solution: result.solution,
+            answer: data,
+            timeSpent: !item.done
+              ? item.timeSpent
+                ? currentTime - startTime + item.timeSpent
+                : currentTime - startTime <= 0
+                  ? 0
+                  : currentTime - startTime
+              : item.timeSpent,
+          }
+        } else {
+          var newItem = {
+            ...item,
+            answer: data,
+            timeSpent: !item.done
+              ? item.timeSpent
+                ? currentTime - startTime + item.timeSpent
+                : currentTime - startTime <= 0
+                  ? 0
+                  : currentTime - startTime
+              : item.timeSpent,
+          }
         }
+
+        newData.push(newItem)
+      } else {
+        newData.push(item)
       }
-      return item
-    })
+    }
     return newData
-    // })
   }
 
   const handleSubmitQuestion = async () => {
-    let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
+    let allQuest = await handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
     let answers = []
     let reformTabs: any[] = []
+    setLoading(true)
+    setSubmited(true)
     for (let e of allQuest) {
       reformTabs.push({ ...e, done: true })
       if (e.answer) {
@@ -643,7 +710,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
+      total_attempt_time: quizDetail.quiz_timed * 60 - remainTime,
     })
+    clearInterval(intervalRef.current)
+    setLoading(false)
     return
   }
   const handleClearSelection = (currentTabContent: any) => {
@@ -788,6 +858,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       clearInterval(interval)
     }
   }, [])
+  const intervalRef = useRef(null) as any
   useEffect(() => {
     if (quizDetail.quiz_timed) {
       const interval = setInterval(() => {
@@ -800,7 +871,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           return prev - 1
         })
       }, 1000)
-
+      intervalRef.current = interval
       // Return a function that clears the interval
 
       return () => {
@@ -844,6 +915,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
+      {loading && (
+        <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
+          Loading
+        </div>
+      )}
       <div>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
@@ -861,7 +937,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               title: 'Finish',
               size: 'medium',
               loading: false,
-              disabled: false,
+              disabled: submited,
               onClick: () => {
                 handleSubmitQuestion()
               },
@@ -886,10 +962,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             setCurrentTab={setCurrentPage}
             optionShowAll={<OptionShowAll />}
             handleChangeTab={(e: any) => {
-              {
-                quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
-                  getResult(currentTabContent)
-              }
               handleChangeTab(e)
             }}
             activeShowAll={activeShowAll}
@@ -922,6 +994,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               }
             }}
           >
+            <div className="mb-4">
+              {currentTabContent?.topicDescription?.name}
+            </div>
             <EditorReader
               className="editor-wrap"
               text_editor_content={
@@ -956,7 +1031,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
       ) : (
         <div
-          className="max-w-screen-2md w-full m-auto h-[calc(100%-176px)] overflow-auto py-6 px-6 mt-[72px]"
+          className=" h-[calc(100%-176px)] overflow-auto py-6 px-6 mt-[72px]"
           id={'preview-question'}
         >
           <div
@@ -976,8 +1051,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               }
             }}
           >
+            <div className="mb-4">
+              {currentTabContent?.topicDescription?.name}
+            </div>
             <EditorReader
-              className="editor-wrap mb-3"
+              className="editor-wrap mb-3 max-w-[950px] w-full m-auto"
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
@@ -985,16 +1063,18 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           </div>
 
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-          {checkType(
-            currentTabContent?.data,
-            currentTabContent?.data?.qType,
-            currentTabContent?.id,
-            currentTabContent?.answer,
-            currentTabContent?.corrects,
-            currentTabContent?.hightlight,
-            currentTabContent?.solution,
-            currentTabContent?.done,
-          )}
+          <div className="max-w-[950px] w-full m-auto">
+            {checkType(
+              currentTabContent?.data,
+              currentTabContent?.data?.qType,
+              currentTabContent?.id,
+              currentTabContent?.answer,
+              currentTabContent?.corrects,
+              currentTabContent?.hightlight,
+              currentTabContent?.solution,
+              currentTabContent?.done,
+            )}
+          </div>
           {/* ) : (
                 <EssayQuestionPreview
                   data={essayData?.req}
@@ -1234,15 +1314,16 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           !currentTabContent?.done ? (
             <button
               className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
-              onClick={() => {
-                getResult(currentTabContent)
+              onClick={async () => {
+                const data = await getResult(currentTabContent)
+                confirmAnswer(data.corrects, data.solution, currentTabContent)
               }}
             >
               <div className="font-normal text-sm">Confirm Answer</div>
             </button>
           ) : (
             filteredTabs.findIndex((e: any) => e.id === currentPage) <
-              filteredTabs.length - 2 && (
+              filteredTabs.length - 1 && (
               <button
                 className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
                 onClick={() => {
