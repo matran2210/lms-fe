@@ -237,13 +237,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     }
   }, [currentPage, tabs])
   const handleOpenScratchPad = (type: string) => {
+    setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       if (type === 'scratch_pad') {
         arr.push({ id: uniqueId('scratchPad'), type: type })
       } else if (type === 'calculator') {
-        for (let e of arr) {
-          if (e.type === 'calculator') {
+        for (let i in arr) {
+          if (arr[i].type === 'calculator') {
+            const cal = { ...arr[i] }
+            arr.splice(+i, 1)
+            arr.push(cal)
             return arr
           }
         }
@@ -1111,7 +1115,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
-                  <div>Calculator</div>
+                  <div className="text-sm font-normal">Calculator</div>
                   <button onClick={() => handleCloseScratchPad(e)}>
                     <CloseIcon />
                   </button>
@@ -1139,7 +1143,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
-                  <div>Scratch Pad</div>
+                  <div className="text-sm font-normal">Scratch Pad</div>
                   {/* <CloseIcon */}
                   <button onClick={() => handleCloseScratchPad(e)}>
                     <CloseIcon />
@@ -1150,7 +1154,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   placeholder="Take a note..."
                   control={control}
                   name={e.id}
-                  className="w-full h-[calc(100%-40px)] sapp-text-area"
+                  className="w-full h-[calc(100%-40px)] sapp-text-area px-5 py-3 placeholder:text-sm placeholder:font-normal"
                 />
                 {/* </div> */}
               </div>

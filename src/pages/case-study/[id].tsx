@@ -658,7 +658,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     placeholder="Take a note..."
                     control={controlScratch}
                     name={e.id}
-                    className="w-full h-[calc(100%-40px)] sapp-text-area"
+                    className="w-full h-[calc(100%-40px)] sapp-text-area p-5"
                   />
                   {/* </div> */}
                 </div>
