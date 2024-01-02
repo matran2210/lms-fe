@@ -47,8 +47,9 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
               coursePart?.quiz?.limit_count) && (
             <ButtonSecondary
               disabled={
+                coursePart?.quiz?.is_limited &&
                 coursePart?.quiz?.attempts?.length ===
-                coursePart?.quiz?.limit_count
+                  coursePart?.quiz?.limit_count
               }
               title={`${checkFinished ? 'Retake' : 'Start'}`}
               full={false}
