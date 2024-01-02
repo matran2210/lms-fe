@@ -30,6 +30,7 @@ interface IHookFormCheckBoxProps {
   size?: 'small' | 'medium' | 'lager' // Thêm prop size
   corrects?: { [key: string]: boolean }
   toggle?: boolean
+  positionCheckBox?: 'start' | 'center' | 'bottom'
 }
 
 const HookFormCheckBoxGroup = ({
@@ -54,6 +55,7 @@ const HookFormCheckBoxGroup = ({
   state,
   corrects,
   toggle = false,
+  positionCheckBox = 'center',
 }: IHookFormCheckBoxProps) => {
   gap = gap ? gap : direction === 'horizontal' ? 'gap-6' : 'gap-4'
 
@@ -102,15 +104,17 @@ const HookFormCheckBoxGroup = ({
 
                 return (
                   <label
-                    className={`flex justify-center items-center w-fit ${
+                    className={`flex justify-center items-${positionCheckBox} w-fit ${
                       disabled
                         ? 'opacity-60 cursor-not-allowed'
                         : 'cursor-pointer'
-                    } ${corrects && 'pointer-events-none'}`}
+                    } ${corrects && 'pointer-events-none'} `}
                     key={uniqueId(option.label)}
                   >
                     <SAPPCheckbox
-                      className={`me-2 ${className} `}
+                      className={`me-2 ${className} ${
+                        positionCheckBox === 'start' && 'mt-1'
+                      }`}
                       checked={
                         multiple
                           ? field.value?.includes(option.value.toString())

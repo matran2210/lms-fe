@@ -72,6 +72,8 @@ const MultiChoiceQuestion = ({
           multiple
           corrects={corrects}
           defaultValue={defaultValues || ''}
+          // justify='start'
+          positionCheckBox="start"
         />
       </div>
       {solution && (
