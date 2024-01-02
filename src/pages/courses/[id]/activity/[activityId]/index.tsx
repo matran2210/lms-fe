@@ -249,6 +249,15 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     return selector.tabs?.[nextIndex]?.id
   }
 
+  const getCourseIcon = (type: String) => {
+    if (type === 'TEXT') {
+      return <SappIcon icon="course_text"></SappIcon>
+    }
+    if (type === 'VIDEO') {
+      return <SappIcon icon="course_video"></SappIcon>
+    }
+  }
+
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <div className="bg-gray-3 pb-10 px-6 ">
@@ -422,7 +431,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 Previous Activity
               </div>
               <div className="text-medium-sm text-gray-1 flex">
-                <SappIcon icon="course_text"></SappIcon>
+                {getCourseIcon(activity.previous_activity?.display_icon)}
                 <span className="ml-2">{activity.previous_activity.name}</span>
               </div>
             </div>
@@ -444,7 +453,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               </div>
               <div className="text-medium-sm text-gray-1 flex justify-end">
                 <span className="mr-2">{activity.next_activity.name}</span>
-                <SappIcon icon="course_video"></SappIcon>
+                {getCourseIcon(activity.next_activity?.display_icon)}
               </div>
             </div>
           )}

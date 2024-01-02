@@ -54,7 +54,7 @@ function DiscussionElement({
         <div className="flex gap-3 flex-wrap">
           {discussion.course_discussion_files?.map((e) => {
             return (
-              <div key={e.course_discussion_id}>
+              <div key={e.id}>
                 <Image
                   width={100}
                   height={100}

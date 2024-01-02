@@ -21,6 +21,7 @@ import {
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
+import toast from 'react-hot-toast'
 
 type Props = {
   class_id: string
@@ -224,39 +225,58 @@ const Discussion = ({ class_id }: Props) => {
   }
 
   /**
-   * Hàm đóng camera và cập nhật state với video stream.
+   * Xử lý sự kiện thay đổi file khi người dùng chọn file từ hộp thoại
+   *
+   * @param {ChangeEvent<HTMLInputElement>} e - Sự kiện thay đổi file từ input element
+   * @param {boolean} [isRoot] - Biến xác định xem có phải là root file hay không
    */
-  const closeCamera = () => {
-    if (stream) {
-      // Stop the media stream tracks
-      stream.getTracks().forEach((track) => {
-        track.stop()
-      })
-      // Set the stream state to null
-      setStream(null)
-    }
-  }
-
   const handleFileChange = (
     e: ChangeEvent<HTMLInputElement>,
     isRoot?: boolean,
   ) => {
     const files = e.target.files
+
     if (files) {
-      if (isRoot) {
-        setRootSetSelectedFiles([...rootSelectedFiles, ...Array.from(files)])
+      // Kiểm tra và chỉ chấp nhận ảnh từ thiết bị
+      const imageFiles = Array.from(files).filter((file) =>
+        file.type.startsWith('image/'),
+      )
+
+      // Loại bỏ các file có định dạng .webp
+      const filteredFiles = imageFiles.filter(
+        (file) => !file.name.toLowerCase().endsWith('.webp'),
+      )
+
+      // Kiểm tra kích thước file không vượt quá 20MB
+      const validFiles = filteredFiles.filter(
+        (file) => file.size <= 20 * 1024 * 1024,
+      )
+
+      if (validFiles.length > 0) {
+        if (isRoot) {
+          setRootSetSelectedFiles([...rootSelectedFiles, ...validFiles])
+        } else {
+          setSelectedFiles([...selectedFiles, ...validFiles])
+        }
       } else {
-        setSelectedFiles([...selectedFiles, ...Array.from(files)])
+        // Hiển thị thông báo lỗi sử dụng react-hot-toast
+        toast.error('Vui lòng chọn ảnh từ thiết bị, không quá 20MB')
+        return
       }
     }
+
+    // Xóa giá trị của input để làm sạch
     if (fileInputRef.current) {
-      fileInputRef.current.value = '' // Clear the input value
+      fileInputRef.current.value = ''
     }
+
     if (rootFileInputRef.current) {
-      rootFileInputRef.current.value = '' // Clear the input value
+      rootFileInputRef.current.value = ''
     }
+
     e.target.value = ''
   }
+
   const handleRemoveSelectedFiles = (
     indexToRemove: number,
     isRoot?: boolean,
@@ -390,7 +410,7 @@ const Discussion = ({ class_id }: Props) => {
                       <input
                         type="file"
                         className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
-                        accept="image/*"
+                        accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
                         multiple
                         onChange={handleFileChange}
                         ref={fileInputRef}
@@ -482,7 +502,7 @@ const Discussion = ({ class_id }: Props) => {
               <input
                 type="file"
                 className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
-                accept="image/*"
+                accept="image/jpeg, image/png, image/gif"
                 multiple
                 onChange={(e) => handleFileChange(e, true)}
                 ref={rootFileInputRef}
@@ -491,17 +511,6 @@ const Discussion = ({ class_id }: Props) => {
           </div>
         </form>
       </div>
-      <SappModal
-        open={!!stream}
-        confirmOnclose
-        handleSubmit={closeCamera}
-        handleCancel={closeCamera}
-      >
-        <video
-          ref={(videoRef) => videoRef && (videoRef.srcObject = stream)}
-          autoPlay
-        />
-      </SappModal>
       <SappModalImage setSrc={setImageSrc} src={imageSrc}></SappModalImage>
     </div>
   )
