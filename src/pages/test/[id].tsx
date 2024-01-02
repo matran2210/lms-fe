@@ -236,6 +236,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return tabs.find((e: any) => e.id === currentPage)
     }
   }, [currentPage, tabs])
+  const checkCalExist = useMemo(() => {
+    for (let i in openScratchPad) {
+      if (openScratchPad[i].type === 'calculator') {
+        return +i
+      }
+    }
+    return -1
+    // if (!arr.includes('calculator')) {
+  }, [openScratchPad])
   const handleOpenScratchPad = (type: string) => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
@@ -243,14 +252,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       if (type === 'scratch_pad') {
         arr.push({ id: uniqueId('scratchPad'), type: type })
       } else if (type === 'calculator') {
-        for (let i in arr) {
-          if (arr[i].type === 'calculator') {
-            const cal = { ...arr[i] }
-            arr.splice(+i, 1)
-            arr.push(cal)
-            return arr
-          }
+        // for (let i in arr) {
+        if (checkCalExist > -1) {
+          const cal = { ...arr[checkCalExist] }
+          arr.splice(checkCalExist, 1)
+          arr.push(cal)
+          return arr
         }
+        // }
         // if (!arr.includes('calculator')) {
         arr.push({ id: 'calculator', type: 'calculator' })
         // }
@@ -1104,8 +1113,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               position={{
                 width: '400px',
                 height: '300px',
-                top: 'calc(50% - 150px)',
-                left: 'calc(50% - 200px)',
+                top: 'calc(25% - 150px)',
+                left: 'calc(25% - 200px)',
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
@@ -1170,8 +1179,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               position={{
                 width: '400px',
                 height: '300px',
-                top: 'calc(50% - 150px)',
-                left: 'calc(50% - 200px)',
+                top: 'calc(75% - 150px)',
+                left: 'calc(75% - 200px)',
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
@@ -1237,8 +1246,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             </div>
           </button>
           <button
-            className="h-full"
+            className={`h-full ${checkCalExist > -1 && 'sapp-disable-button'}`}
             onClick={() => handleOpenScratchPad('calculator')}
+            disabled={checkCalExist > -1}
           >
             <div className="flex items-center gap-3 ps-6 ">
               <CalculatorIcon />

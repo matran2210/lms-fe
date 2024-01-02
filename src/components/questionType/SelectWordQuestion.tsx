@@ -84,6 +84,7 @@ const SelectWord = forwardRef(
       elements.forEach((element, index) => {
         const selectElement = document.createElement('select')
         selectElement.classList.add('sapp-select--selectword-preview')
+        selectElement.setAttribute('required', 'true')
         selectElement.id = element.id
 
         const defaultAnswerValue = defaultAnswer?.[index] || ''
@@ -97,14 +98,14 @@ const SelectWord = forwardRef(
               correct.id === defaultAnswerValue &&
               correct.is_correct,
           )
-          optionClass = isCorrect ? 'border-success' : 'border-danger'
+          optionClass = isCorrect ? '!border-success' : '!border-danger'
 
           selectElement.classList.add(optionClass)
           selectElement.setAttribute('disabled', 'true')
         }
 
         selectElement.innerHTML = `
-        <option value="">Choose...</option>
+        <option value="" disabled selected >Choose</option>
         ${answerObj[+index + 1].map((e: any) => {
           const isSelected = e.value === defaultAnswerValue
 
@@ -130,7 +131,7 @@ const SelectWord = forwardRef(
         <EditorReader
           key={key}
           extenalRef={refEditor}
-          className="questions"
+          className="sapp-questions"
           // style={{borderBottom: '1px solid  white'}}
           text_editor_content={
             questionContent?.documentElement.querySelector('body')?.innerHTML ||
