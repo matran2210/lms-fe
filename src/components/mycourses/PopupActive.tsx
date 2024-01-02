@@ -1,23 +1,29 @@
-import { AlertIcon } from '@assets/icons'
+import { ActiveIcon } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
 
 interface IProps {
   open: boolean
   setOpen: any
+  activeCourse: () => void
 }
-const PopupExtend = ({ open, setOpen }: IProps) => {
+const PopupActive = ({ open, setOpen, activeCourse }: IProps) => {
+  const handleCancel = () => {
+    setOpen(false)
+  }
   const onOk = () => {
     setOpen(false)
+    activeCourse()
   }
   return (
     <SappModal
       open={open}
       setOpen={setOpen}
       //   cancelButtonCaption="Quit"
-      okButtonCaption="Back to My Course"
+      okButtonCaption="Confirm"
       //   handleCancel={onCancel}
       handleSubmit={onOk}
-      showCancelButton={false}
+      handleCancel={handleCancel}
+      cancelButtonClass={'no-underline'}
       showHeader={false}
       refClass="p-6 md:p-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all overflow-y-auto"
       size="max-w-[646px]"
@@ -31,17 +37,16 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       scrollbale={false}
     >
       <div className="mb-6">
-        <AlertIcon />
+        <ActiveIcon />
       </div>
       <div className="text-2xl md:text-4xl text-bw-1 font-bold">
-        Expired Course
+        Active Course?
       </div>
-      <div className="text-medium-sm text-gray-1 text-center mt-3 mb-7">
-        You can only extend a trial course of 2 times, please contact out
-        support at 0889 662 276.
+      <div className="text-medium-sm text-gray-1 text-center mt-3 mb-11">
+        You will have 60 days from the activation date to study this course
       </div>
     </SappModal>
   )
 }
 
-export default PopupExtend
+export default PopupActive

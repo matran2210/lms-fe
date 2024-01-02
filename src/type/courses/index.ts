@@ -76,6 +76,7 @@ export interface IClassUserInstances {
   status: string
   type: string
   updated_at: Date
+  started_at: Date
   finished_at: Date
 }
 
@@ -89,6 +90,7 @@ export interface IClasses {
   type: string
   updated_at: Date | null
   class_user_instances: IClassUserInstances[]
+  course_type: string
 }
 
 export interface ICourse {
