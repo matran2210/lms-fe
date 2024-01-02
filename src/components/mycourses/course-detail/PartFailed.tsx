@@ -9,7 +9,7 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
   const [open, setOpen] = useState(false)
   const checkFinished = useMemo(() => {
     if (coursePart?.quiz?.attempts?.length === 0) {
-      return true
+      return false
     }
     for (let i in coursePart?.quiz?.attempts) {
       if (coursePart?.quiz?.attempts[i].status === 'SUBMITTED') {
@@ -42,8 +42,9 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
       </div>
       <div className="mt-auto">
         <div className="action flex items-center jusity-end relative">
-          {coursePart?.quiz?.attempts?.length !==
-            coursePart?.quiz?.limit_count && (
+          {(!coursePart?.quiz?.is_limited ||
+            coursePart?.quiz?.attempts?.length !==
+              coursePart?.quiz?.limit_count) && (
             <ButtonSecondary
               disabled={
                 coursePart?.quiz?.attempts?.length ===

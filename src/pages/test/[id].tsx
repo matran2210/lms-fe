@@ -89,6 +89,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -104,6 +105,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             corrects={corrects}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.MATCHING:
@@ -119,6 +121,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             defaultAnswer={defaultValue}
             done={done}
             corrects={corrects?.corrects}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -133,6 +136,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -147,6 +151,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -161,6 +166,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -175,6 +181,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            solution={solution}
           />
           // <Luckysheet/>
         )

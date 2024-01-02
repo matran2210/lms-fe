@@ -20,6 +20,7 @@ interface IProps {
   defaultAnswer?: any
   extenalRef?: any
   corrects?: any
+  solution?: string
 }
 const DragNDropPreivew = forwardRef(
   (
@@ -33,6 +34,7 @@ const DragNDropPreivew = forwardRef(
       defaultAnswer,
       extenalRef,
       corrects,
+      solution,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -211,6 +213,12 @@ const DragNDropPreivew = forwardRef(
               }
             />
           </>
+        )}
+        {solution && (
+          <div className="bg-gray-4 mt-6 p-6">
+            <div className="font-semibold text-base text-bw-1 ">Solution</div>
+            <EditorReader className="mt-4" text_editor_content={solution} />
+          </div>
         )}
       </div>
     )

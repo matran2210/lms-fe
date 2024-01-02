@@ -17,6 +17,7 @@ export type IPreviewProp = {
   removeHighlight?: any
   allowHighLight?: boolean
   forCaseStudy?: boolean
+  solution?: string
 }
 const EssayQuestionPreview = ({
   data,
@@ -29,6 +30,7 @@ const EssayQuestionPreview = ({
   removeHighlight,
   allowHighLight,
   forCaseStudy = false,
+  solution,
 }: IPreviewProp) => {
   // const DynamicBundledEditor = dynamic(() => import('../base/spreadSheet/SpreadSheetEditor'), {
   //   ssr: false,
@@ -110,9 +112,7 @@ const EssayQuestionPreview = ({
                   height={500}
                 />
               ) : (
-                // <DynamicBundledEditor />
                 <div className="w-full, h-[500px]">
-                  {/* <Luckysheet id={'luckySheet' + index}/> */}
                   <Workbook
                     data={[
                       {
@@ -148,6 +148,12 @@ const EssayQuestionPreview = ({
           </>
         )}
       </div>
+      {solution && (
+        <div className="bg-gray-4 mt-6 p-6">
+          <div className="font-semibold text-base text-bw-1 ">Solution</div>
+          <EditorReader className="mt-4" text_editor_content={solution} />
+        </div>
+      )}
     </React.Fragment>
   )
 }

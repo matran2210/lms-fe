@@ -21,6 +21,7 @@ interface IProps {
   extenalRef?: any
   index?: number
   corrects?: any
+  solution?: string
 }
 type IProp = {
   value: string
@@ -40,6 +41,7 @@ const MatchingQuestion = forwardRef(
       done,
       extenalRef,
       corrects,
+      solution,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -326,6 +328,12 @@ const MatchingQuestion = forwardRef(
               })}
             </div>
           </>
+        )}
+        {solution && (
+          <div className="bg-gray-4 mt-6 p-6">
+            <div className="font-semibold text-base text-bw-1 ">Solution</div>
+            <EditorReader className="mt-4" text_editor_content={solution} />
+          </div>
         )}
       </div>
     )
