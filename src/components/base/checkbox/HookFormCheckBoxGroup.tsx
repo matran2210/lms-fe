@@ -133,7 +133,7 @@ const HookFormCheckBoxGroup = ({
                         positionCheckBox === 'start' && 'mt-1'
                       }`}
                       checked={checked}
-                      lowerOptions={!checked && checkHasChecked}
+                      lowerOptions={lowerOptions && !checked && checkHasChecked}
                       onChange={(event: React.ChangeEvent<any>) => {
                         if (multiple) {
                           let arr = [] as any
