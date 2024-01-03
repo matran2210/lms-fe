@@ -401,32 +401,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         ],
       }
     }
-    // setTabs((prev: any) => {
-    //   setStartTime(Date.now())
-    //   const newData = prev.map((item: any) => {
-    //     if (currentPage === item.id) {
-    //       // setCurrentTabContent({
-    //       //   ...item,
-    //       //   done: true,
-    //       //   corrects: corrects,
-    //       //   solution: res.data[0].solution,
-    //       //   answer: getCurrentAnswer(item),
-    //       // })
-    //       ref.current?.handleReset()
-    //       return {
-    //         ...item,
-    //         done: true,
-    //         corrects: corrects,
-    //         solution: res.data[0].solution,
-    //         timeSpent: item.timeSpent
-    //           ? currentTime - startTime + item.timeSpent
-    //           : currentTime - startTime,
-    //       }
-    //     }
-    //     return item
-    //   })
-    //   return handleSaveCurrentAnswer(newData, currentTabContent)
-    // })
     return { corrects: corrects, solution: res.data[0].solution }
   }
   const confirmAnswer = async (
@@ -541,23 +515,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return tabs
     }
   }
-  const getCurrentAnswer = (currentTabContent: any) => {
-    if (
-      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-    ) {
-      return getValues(`${currentPage}_answer`)
-    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      return getAnswerMatching()
-    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      return getAnswerDragNDrop()
-    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      return getValueSelectText()
-    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
-      return getValueFillText()
-    }
-  }
   async function getDetail(currentPage: string) {
     try {
       const topicDescription = await CourseTestApi.getTopicDescription(
@@ -623,35 +580,35 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     let newData = [] as any
     for (let item of tabs) {
       if (tabId === item.id) {
-        if (quizDetail.grading_preference === 'AFTER_EACH_QUESTION') {
-          var result = await getResult(item)
-          var newItem = {
-            ...item,
-            done: true,
-            corrects: result.corrects,
-            solution: result.solution,
-            answer: data,
-            timeSpent: !item.done
-              ? item.timeSpent
-                ? currentTime - startTime + item.timeSpent
-                : currentTime - startTime <= 0
-                  ? 0
-                  : currentTime - startTime
-              : item.timeSpent,
-          }
-        } else {
-          var newItem = {
-            ...item,
-            answer: data,
-            timeSpent: !item.done
-              ? item.timeSpent
-                ? currentTime - startTime + item.timeSpent
-                : currentTime - startTime <= 0
-                  ? 0
-                  : currentTime - startTime
-              : item.timeSpent,
-          }
+        // if (quizDetail.grading_preference === 'AFTER_EACH_QUESTION') {
+        //   var result = await getResult(item)
+        //   var newItem = {
+        //     ...item,
+        //     done: true,
+        //     corrects: result.corrects,
+        //     solution: result.solution,
+        //     answer: data,
+        //     timeSpent: !item.done
+        //       ? item.timeSpent
+        //         ? currentTime - startTime + item.timeSpent
+        //         : currentTime - startTime <= 0
+        //           ? 0
+        //           : currentTime - startTime
+        //       : item.timeSpent,
+        //   }
+        // } else {
+        var newItem = {
+          ...item,
+          answer: data,
+          timeSpent: !item.done
+            ? item.timeSpent
+              ? currentTime - startTime + item.timeSpent
+              : currentTime - startTime <= 0
+                ? 0
+                : currentTime - startTime
+            : item.timeSpent,
         }
+        // }
 
         newData.push(newItem)
       } else {
