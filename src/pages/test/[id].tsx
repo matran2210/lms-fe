@@ -196,7 +196,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control, handleSubmit, getValues, setValue } = useForm()
-  const { control: controlFilter, watch: watchFilter } = useForm()
+  const {
+    control: controlFilter,
+    watch: watchFilter,
+    setValue: setValueFilter,
+  } = useForm()
   const {
     control: controlExhibits,
     getValues: getValuesExhibits,
@@ -273,7 +277,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
         if (tab === item.id) {
-          return { ...item, flaged: true }
+          return { ...item, flaged: !item.flaged }
         }
         return item
       })
@@ -991,6 +995,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             }}
             activeShowAll={activeShowAll}
             setActiveShowAll={setActiveShowAll}
+            setValueFilter={setValueFilter}
           />
           {/* </div> */}
         </div>
