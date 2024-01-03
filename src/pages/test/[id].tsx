@@ -529,6 +529,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           tabs,
         )
         return answers
+      } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+        const answers = await handleSaveAnswer('', currentContent.id, tabs)
+        return answers
       } else return tabs
     } else {
       return tabs
@@ -1335,15 +1338,35 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           </button>
           {quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
           !currentTabContent?.done ? (
-            <button
-              className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
-              onClick={async () => {
-                const data = await getResult(currentTabContent)
-                confirmAnswer(data.corrects, data.solution, currentTabContent)
-              }}
-            >
-              <div className="font-normal text-sm">Confirm Answer</div>
-            </button>
+            currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
+              <button
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                onClick={async () => {
+                  const data = await getResult(currentTabContent)
+                  confirmAnswer(data.corrects, data.solution, currentTabContent)
+                }}
+              >
+                <div className="font-normal text-sm">Confirm Answer</div>
+              </button>
+            ) : (
+              <button
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                onClick={() => {
+                  // const data = await getResult(currentTabContent)
+                  // await confirmAnswer(
+                  //   data.corrects,
+                  //   data.solution,
+                  //   currentTabContent,
+                  // )
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleChangeTab(filteredTabs[index + 1].id)
+                }}
+              >
+                <div className="font-normal text-sm">Confirm & Next</div>
+              </button>
+            )
           ) : (
             filteredTabs.findIndex((e: any) => e.id === currentPage) <
               filteredTabs.length - 1 && (
