@@ -56,7 +56,7 @@ const EntranceTestFillForm = ({
     const res = await EntranceApi.getListUnivers()
     let optionUnivers = []
     for (let e of res.data) {
-      optionUnivers.push({ value: e.code, label: e.description })
+      optionUnivers.push({ value: e.code, label: e.name })
     }
     setListUnivers(optionUnivers)
     // return res?.data?.[0]
@@ -113,7 +113,7 @@ const EntranceTestFillForm = ({
       if (user.university) {
         setValue('univers_id', {
           value: user.university?.code,
-          label: user.university?.description,
+          label: user.university?.name,
         })
       }
       if (user.university_program) {
@@ -156,6 +156,7 @@ const EntranceTestFillForm = ({
         university_id: dataValue.univers_id.value,
       })
     }
+    setOpen && setOpen(false)
     router.push(`/test/${entrancePopupContent.id}`)
   }
 
@@ -176,7 +177,7 @@ const EntranceTestFillForm = ({
       position="center"
       buttonSize="extra"
       scrollbale={false}
-      // closeAfterSubmit={false}
+      closeAfterSubmit={false}
     >
       <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
         Fill this form
