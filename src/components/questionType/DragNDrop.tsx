@@ -128,15 +128,39 @@ const DragNDropPreivew = forwardRef(
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')">
-                          <span class="answer-box" draggable="true" ondragstart="drag(event, '${data.id}')" id="${defaultAnswer[index].idAnswer}">${defaultAnswer[index].value}</span>
+              element.outerHTML = `<span id="${
+                element.id
+              }" class="sapp-input-dragNDrop dropable" ondrop="drop(event,'${
+                data.id
+              }')" ondragover="allowDrop(event,'${data.id}')" indexBox="${
+                index + 1
+              }">
+                          <span class="answer-box" draggable="true" ondragstart="drag(event, '${
+                            data.id
+                          }')" id="${defaultAnswer[index].idAnswer}">${
+                            defaultAnswer[index].value
+                          }</span>
                </span>
               `
             } else {
-              element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
+              element.outerHTML = `<span id="${
+                element.id
+              }" class="sapp-input-dragNDrop dropable ${
+                data.id
+              }" ondrop="drop(event,'${
+                data.id
+              }')" ondragover="allowDrop(event,'${data.id}')" indexBox="${
+                index + 1
+              }"> </span>`
             }
           } else {
-            element.outerHTML = `<span  id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
+            element.outerHTML = `<span  id="${
+              element.id
+            }" class="sapp-input-dragNDrop dropable ${
+              data.id
+            }" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${
+              data.id
+            }')" indexBox="${index + 1}"> </span>`
           }
         })
         setQuestionContent(doc)

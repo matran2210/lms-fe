@@ -834,37 +834,37 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       createQuizAttempt()
     }
   }, [router.query.id])
-  // useEffect(() => {
-  //   // Create an interval that updates the current time every second
-  //   const interval = setInterval(() => {
-  //     setCurrentTime(Date.now())
-  //   }, 1000)
-  //   // Return a function that clears the interval
-  //   return () => {
-  //     clearInterval(interval)
-  //   }
-  // }, [])
-  // const intervalRef = useRef(null) as any
-  // useEffect(() => {
-  //   if (quizDetail.quiz_timed) {
-  //     const interval = setInterval(() => {
-  //       setRemainTime((prev) => {
-  //         if (prev === 1) {
-  //           clearInterval(interval)
-  //           setOpenTimeOut(true)
-  //           // handleSubmitQuestion()
-  //         }
-  //         return prev - 1
-  //       })
-  //     }, 1000)
-  //     intervalRef.current = interval
-  //     // Return a function that clears the interval
+  useEffect(() => {
+    // Create an interval that updates the current time every second
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now())
+    }, 1000)
+    // Return a function that clears the interval
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+  const intervalRef = useRef(null) as any
+  useEffect(() => {
+    if (quizDetail.quiz_timed) {
+      const interval = setInterval(() => {
+        setRemainTime((prev) => {
+          if (prev === 1) {
+            clearInterval(interval)
+            setOpenTimeOut(true)
+            // handleSubmitQuestion()
+          }
+          return prev - 1
+        })
+      }, 1000)
+      intervalRef.current = interval
+      // Return a function that clears the interval
 
-  //     return () => {
-  //       clearInterval(interval)
-  //     }
-  //   }
-  // }, [quizDetail])
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  }, [quizDetail])
   // useEffect(() => {
   //   const handleBeforeUnload = async (event: any) => {
   //     event.preventDefault()
