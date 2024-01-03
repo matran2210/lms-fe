@@ -233,6 +233,25 @@ export default function ExpandIcon({
           ></path>
         </svg>
       )}
+      {type === 'create-note' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M21.767 2.306a1.034 1.034 0 00-1.494-.035l-.858.855 1.461 1.458.844-.84a1.04 1.04 0 00.047-1.438zM11.848 15.75H8.25v-3.598l.44-.44 6.476-6.462H2.25v16.5h16.5V8.834l-6.462 6.475-.44.441zM18.75 6.71l1.537-1.54-1.457-1.457-1.54 1.537h1.46v1.46z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M9.75 14.25h1.476l7.524-7.54V5.25h-1.46l-7.54 7.524v1.476z"
+          ></path>
+        </svg>
+      )}
     </>
   )
 }
