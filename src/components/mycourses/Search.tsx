@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Icon from '@components/icons'
 import { buildQueryString } from '@utils/index'
+import { Controller, useForm } from 'react-hook-form'
 
 interface IProps {
   placeholder: string
@@ -12,7 +13,7 @@ interface IProps {
 
 const SearchForm = ({ placeholder, formStyle }: IProps) => {
   const router = useRouter()
-  const [query, setQuery] = useState('')
+  const { control, watch } = useForm()
 
   const queryString = buildQueryString({
     status: router.query.status || '',
@@ -23,10 +24,10 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     let timerId: any
 
     // Use useEffect to set up a timer to make the API call after 3 seconds
-    if (query.length > 2) {
+    if (watch('name')?.length > 2) {
       timerId = setTimeout(() => {
         router.push(
-          `/courses?name=${encodeURIComponent(query) ?? ''}${queryString}`,
+          `/courses?name=${watch('name') ?? ''}${queryString}`,
         )
       }, 2000)
     }
@@ -35,7 +36,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     return () => {
       clearTimeout(timerId)
     }
-  }, [query])
+  }, [queryString, watch('name')])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -49,12 +50,18 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
       <button type="submit" className="flex">
         <Icon type="search" className="text-primary" />
       </button>
-      <input
-        type="text"
-        placeholder={placeholder}
-        className="border-0 h-6 px-4 text-gray-1 focus:border-0 focus:outline-0 focus:ring-0 placeholder-text-gray-1"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+      <Controller
+        control={control}
+        name='name'
+        defaultValue={router.query.name}
+        render={({ field }) => (
+          <input
+            {...field}
+            type="text"
+            placeholder={placeholder}
+            className="border-0 h-6 px-4 text-gray-1 focus:border-0 focus:outline-0 focus:ring-0 placeholder-text-gray-1"
+          />
+        )}
       />
     </form>
   )

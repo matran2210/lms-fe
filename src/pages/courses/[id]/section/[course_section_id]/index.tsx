@@ -73,6 +73,14 @@ const CoursePartDetail = ({ previewPart }: any) => {
       query: { quiz_id: quizId },
     })
   }
+
+  const course_section = chapterDetail?.children?.[0]
+  const quiz = course_section?.quiz
+  
+  const handleNextLesson = () => {
+    course_section?.course_section_type === 'ACTIVITY' ? handleRouterActivity(course_section?.children?.[0]?.id) : course_section?.course_section_type === 'STORY' ? handleRouterCaseStudy(quiz?.id, quiz?.case_study_story?.id) : () => {}
+  }
+
   return (
     <div className="main max-w-xxl my-0 mx-auto">
       <div className="main max-w-xxl my-0 mx-auto">
@@ -114,6 +122,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         title={learningOutcome?.name}
         message="Bạn có chắc chắn muốn hủy không?"
         widthDrawer="w-6/12"
+        handleSubmit={handleNextLesson}
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
