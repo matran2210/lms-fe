@@ -5,7 +5,7 @@ import { ICourseSection } from 'src/type/courses'
 import TestModal from 'src/pages/courses/test'
 
 const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
-  const formattedTime = formatTime(coursePart?.quiz?.quiz_timed * 60 || 0)
+  const formattedTime = coursePart?.quiz?.quiz_timed ? formatTime(coursePart?.quiz?.quiz_timed * 60) : 'Unlimited'
   const [open, setOpen] = useState(false)
   const checkFinished = useMemo(() => {
     if (coursePart?.quiz?.attempts?.length === 0) {
@@ -18,6 +18,9 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
     }
     return false
   }, [coursePart?.quiz?.attempts])
+
+  const quizAttempt = coursePart?.quiz
+
   return (
     <>
       <div className={`name-part text-2xl font-semibold h-[60px]`}>
@@ -31,13 +34,11 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
         <div className="time-allow flex justify-between pt-4">
           <p className="text-base text-gray-1">Attempt:</p>
           <p className="text-base text-bw-1 font-semibold">
-            {coursePart?.quiz?.is_limited
-              ? coursePart?.quiz?.limit_count
-              : 'Unlimited'}
+            {`${quizAttempt?.attempts?.length} / ${quizAttempt?.limit_count !== 0 ? quizAttempt?.limit_count : 'Unlimited'}` ?? ''}
           </p>
         </div>
       </div>
-      <div className="des mt-6 mb-15">
+      <div className="des mt-6">
         <div className={`text-base h-26`} />
       </div>
       <div className="mt-auto">
