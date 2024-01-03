@@ -110,6 +110,7 @@ const EssayQuestionPreview = ({
                   name="editor"
                   math={true}
                   height={500}
+                  placeholder="Your answer here"
                 />
               ) : (
                 <div className="w-full, h-[500px]">

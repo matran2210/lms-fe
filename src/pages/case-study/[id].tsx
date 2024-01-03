@@ -708,14 +708,6 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
             </button>
           </div>
-          <div className="flex items-center h-full gap-3 pe-6">
-            <button
-              className="flex items-center gap-3 border border-gray-1 justify-center p-1"
-              onClick={() => {}}
-            >
-              <div className="font-normal text-sm">Confirm Answer</div>
-            </button>
-          </div>
         </div>
       </div>
     </div>

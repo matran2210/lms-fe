@@ -26,9 +26,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     // Use useEffect to set up a timer to make the API call after 3 seconds
     if (watch('name')?.length > 2) {
       timerId = setTimeout(() => {
-        router.push(
-          `/courses?name=${watch('name') ?? ''}${queryString}`,
-        )
+        router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
       }, 2000)
     }
 
@@ -52,7 +50,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
       </button>
       <Controller
         control={control}
-        name='name'
+        name="name"
         defaultValue={router.query.name}
         render={({ field }) => (
           <input
