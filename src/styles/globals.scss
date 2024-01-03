@@ -8,6 +8,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
   font-family: techNology;
   src: url('../assets/fonts/Technology/Technology.ttf');
@@ -287,7 +288,17 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
-  @apply inline-block min-w-[100px] border-b border-gray-500 border-0 min-h-[40px];
+  @apply inline-block min-w-[100px] border-b border-gray-500 border-0 min-h-[40px] relative;
+}
+
+.sapp-input-dragNDrop:not(:has(.answer-box))::after {
+  content: ' (' attr(indexBox) ')';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 20%);
+  background: white;
+  @apply text-gray-1;
 }
 
 .sapp-input-dragNDrop {
@@ -469,8 +480,10 @@ body *::-webkit-scrollbar-thumb:hover {
     fill: #ffb800;
   }
 }
+
 .sapp-disable-button {
   position: relative;
+
   ::after {
     content: '';
     @apply bg-gray-3;
@@ -482,6 +495,7 @@ body *::-webkit-scrollbar-thumb:hover {
     left: 1px;
   }
 }
+
 .sapp-separateLine :not(:last-child) {
   @apply border-b border-gray-4;
 }
