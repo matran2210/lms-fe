@@ -25,7 +25,7 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
   }
   const checkFinished = useMemo(() => {
     if (data?.quiz?.attempts.length === 0) {
-      return true
+      return false
     }
     for (let i in data?.quiz?.attempts) {
       if (data?.quiz?.attempts[i].status === 'SUBMITTED') {
@@ -62,7 +62,7 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Pass Mark:</div>
-        <div className="text-bw-1">--</div>
+        <div className="text-bw-1">{data?.quiz?.required_percent_score}</div>
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Time Allowed:</div>

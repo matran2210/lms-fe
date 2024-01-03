@@ -279,7 +279,7 @@ body *::-webkit-scrollbar-thumb:hover {
 .answer-box {
   border: 1px solid rgb(204, 204, 204);
   background: rgb(243, 243, 243);
-  @apply p-2;
+  @apply p-2 block;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
