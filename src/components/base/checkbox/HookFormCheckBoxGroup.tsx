@@ -31,6 +31,9 @@ interface IHookFormCheckBoxProps {
   corrects?: { [key: string]: boolean }
   toggle?: boolean
   positionCheckBox?: 'start' | 'center' | 'bottom'
+  lowerOptions?: boolean
+  seprateLine?: boolean
+  widthOptions?: string
 }
 
 const HookFormCheckBoxGroup = ({
@@ -56,8 +59,17 @@ const HookFormCheckBoxGroup = ({
   corrects,
   toggle = false,
   positionCheckBox = 'center',
+  lowerOptions = false,
+  seprateLine = false,
+  widthOptions = '',
 }: IHookFormCheckBoxProps) => {
-  gap = gap ? gap : direction === 'horizontal' ? 'gap-6' : 'gap-4'
+  gap = !seprateLine
+    ? gap
+      ? gap
+      : direction === 'horizontal'
+        ? 'gap-6'
+        : 'gap-4'
+    : ''
 
   return (
     <Controller
@@ -81,7 +93,7 @@ const HookFormCheckBoxGroup = ({
                       : justify === 'start'
                         ? 'justify-start'
                         : 'justify-end'
-                }`
+                } ${seprateLine && 'sapp-separateLine'}`
               }
             >
               {options.map((option, index) => {
@@ -101,6 +113,9 @@ const HookFormCheckBoxGroup = ({
                     stateLabel = 'text-state-error'
                   }
                 }
+                const checkHasChecked = multiple
+                  ? field.value?.length > 0
+                  : false
 
                 return (
                   <label
@@ -108,18 +123,17 @@ const HookFormCheckBoxGroup = ({
                       disabled
                         ? 'opacity-60 cursor-not-allowed'
                         : 'cursor-pointer'
-                    } ${corrects && 'pointer-events-none'} `}
+                    } ${corrects && 'pointer-events-none'} ${
+                      seprateLine && 'py-2'
+                    } ${widthOptions}`}
                     key={uniqueId(option.label)}
                   >
                     <SAPPCheckbox
                       className={`me-2 ${className} ${
                         positionCheckBox === 'start' && 'mt-1'
                       }`}
-                      checked={
-                        multiple
-                          ? field.value?.includes(option.value.toString())
-                          : option.value.toString() === field.value
-                      }
+                      checked={checked}
+                      lowerOptions={!checked && checkHasChecked}
                       onChange={(event: React.ChangeEvent<any>) => {
                         if (multiple) {
                           let arr = [] as any
@@ -161,7 +175,12 @@ const HookFormCheckBoxGroup = ({
                     <span
                       className={`${
                         classNameTitle ?? ''
-                      } ${stateLabel}  form-check-label fw-semibold`}
+                      } ${stateLabel}  form-check-label fw-semibold ${
+                        lowerOptions &&
+                        !checked &&
+                        checkHasChecked &&
+                        'text-gray-2'
+                      }`}
                     >
                       {option.label}
                       <YourAnswer show={checked && !!corrects}></YourAnswer>

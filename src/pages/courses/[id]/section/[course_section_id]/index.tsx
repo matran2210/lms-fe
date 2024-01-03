@@ -76,9 +76,13 @@ const CoursePartDetail = ({ previewPart }: any) => {
 
   const course_section = chapterDetail?.children?.[0]
   const quiz = course_section?.quiz
-  
+
   const handleNextLesson = () => {
-    course_section?.course_section_type === 'ACTIVITY' ? handleRouterActivity(course_section?.children?.[0]?.id) : course_section?.course_section_type === 'STORY' ? handleRouterCaseStudy(quiz?.id, quiz?.case_study_story?.id) : () => {}
+    course_section?.course_section_type === 'ACTIVITY'
+      ? handleRouterActivity(course_section?.children?.[0]?.id)
+      : course_section?.course_section_type === 'STORY'
+        ? handleRouterCaseStudy(quiz?.id, quiz?.case_study_story?.id)
+        : () => {}
   }
 
   return (

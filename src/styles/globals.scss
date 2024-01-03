@@ -8,6 +8,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: techNology;
+  src: url('../assets/fonts/Technology/Technology.ttf');
+}
 
 *:not(math, math *),
 *:not(math, math *)::after,
@@ -477,4 +481,7 @@ body *::-webkit-scrollbar-thumb:hover {
     position: absolute;
     left: 1px;
   }
+}
+.sapp-separateLine :not(:last-child) {
+  @apply border-b border-gray-4;
 }

@@ -4,10 +4,8 @@ import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
-import { PROFILE_PAGES } from '@utils/constants/User'
 import { GetServerSideProps } from 'next'
 import { StaticImageData } from 'next/image'
-import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { IProfilePages } from 'src/type/Profile'
 
@@ -15,9 +13,9 @@ interface IProps {
   page: IProfilePages
 }
 
-const ProfilePage = () => {
-  const router = useRouter()
-  const page = router.query.page as IProfilePages
+const ProfilePage = ({ page }: any) => {
+  // const router = useRouter()
+  // const page = router.query.page as IProfilePages
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
   const inputFileRef = useRef<HTMLInputElement | null>(null)

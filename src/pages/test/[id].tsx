@@ -698,7 +698,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       quiz_position_mapping: quiz_position_mapping,
       total_attempt_time: quizDetail.quiz_timed * 60 - remainTime,
     })
-    clearInterval(intervalRef.current)
+    // clearInterval(intervalRef.current)
     setLoading(false)
     return
   }
@@ -834,37 +834,37 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       createQuizAttempt()
     }
   }, [router.query.id])
-  useEffect(() => {
-    // Create an interval that updates the current time every second
-    const interval = setInterval(() => {
-      setCurrentTime(Date.now())
-    }, 1000)
-    // Return a function that clears the interval
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
-  const intervalRef = useRef(null) as any
-  useEffect(() => {
-    if (quizDetail.quiz_timed) {
-      const interval = setInterval(() => {
-        setRemainTime((prev) => {
-          if (prev === 1) {
-            clearInterval(interval)
-            setOpenTimeOut(true)
-            // handleSubmitQuestion()
-          }
-          return prev - 1
-        })
-      }, 1000)
-      intervalRef.current = interval
-      // Return a function that clears the interval
+  // useEffect(() => {
+  //   // Create an interval that updates the current time every second
+  //   const interval = setInterval(() => {
+  //     setCurrentTime(Date.now())
+  //   }, 1000)
+  //   // Return a function that clears the interval
+  //   return () => {
+  //     clearInterval(interval)
+  //   }
+  // }, [])
+  // const intervalRef = useRef(null) as any
+  // useEffect(() => {
+  //   if (quizDetail.quiz_timed) {
+  //     const interval = setInterval(() => {
+  //       setRemainTime((prev) => {
+  //         if (prev === 1) {
+  //           clearInterval(interval)
+  //           setOpenTimeOut(true)
+  //           // handleSubmitQuestion()
+  //         }
+  //         return prev - 1
+  //       })
+  //     }, 1000)
+  //     intervalRef.current = interval
+  //     // Return a function that clears the interval
 
-      return () => {
-        clearInterval(interval)
-      }
-    }
-  }, [quizDetail])
+  //     return () => {
+  //       clearInterval(interval)
+  //     }
+  //   }
+  // }, [quizDetail])
   // useEffect(() => {
   //   const handleBeforeUnload = async (event: any) => {
   //     event.preventDefault()
@@ -912,7 +912,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             {quizDetail.name}
           </div>
           {quizDetail.quiz_timed && (
-            <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
+            <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex font-tech">
               {formatTime(remainTime)}
             </div>
           )}
@@ -1086,7 +1086,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 100
+                  : index + 100
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1114,7 +1116,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 100
+                  : index + 100
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1144,20 +1148,22 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           return (
             <MovableWindow
               position={{
-                width: '400px',
-                height: '300px',
-                top: 'calc(75% - 150px)',
-                left: 'calc(75% - 200px)',
+                width: '600px',
+                height: '400px',
+                top: 'calc(75% - 250px)',
+                left: 'calc(0%)',
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 100
+                  : index + 100
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
-                  <div>
+                  <div className="truncate">
                     <span className="font-semibold text-base text-bw-1">{`Exhibit ${
                       i + 1
                     }: `}</span>
@@ -1245,6 +1251,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     name="exhibits"
                     options={exhibits}
                     multiple
+                    lowerOptions={true}
+                    // gap="0"
+                    widthOptions="w-full"
+                    seprateLine={true} // classNameTitle='text-gray-2'
                   />
                 </div>
               )}
@@ -1265,13 +1275,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 </div>
               </div>
               {showListRequirement && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits  justify-center">
+                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits justify-center sapp-separateLine">
                   {currentTabContent?.data?.requirements?.map(
                     (e: any, index: number) => {
                       return (
                         <button
                           key={e.id}
-                          className="p-3"
+                          className={`p-3 ${
+                            essayData.req !== e && 'text-gray-2'
+                          }`}
                           onClick={() => {
                             setEssayData({ req: e, index: index })
                           }}
