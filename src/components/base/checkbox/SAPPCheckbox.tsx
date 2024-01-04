@@ -7,8 +7,9 @@ interface IProps {
   className?: string
   name?: string
   value?: string | boolean
-  state?: 'default' | 'error' | 'success' // Thêm prop state
+  state?: 'default' | 'error' | 'success' | 'primary' // Thêm prop state
   size?: 'small' | 'medium' | 'lager' // Thêm prop size
+  lowerOptions?: boolean
 }
 
 const STATE = {
@@ -17,6 +18,8 @@ const STATE = {
   error:
     'checked:bg-state-error checked:hover:bg-state-error checked:focus:bg-state-error',
   default: 'checked:bg-bw-1 checked:hover:bg-bw-1 checked:focus:bg-bw-1',
+  primary:
+    'checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary',
 }
 
 const SIZES = {
@@ -33,6 +36,7 @@ const SAPPCheckbox = ({
   value,
   state = 'default', // Gán giá trị mặc định cho prop state
   size = 'medium', // Gán giá trị mặc định cho prop size
+  lowerOptions = false,
 }: IProps) => {
   return (
     <div className={`inline-block ${className}`}>
@@ -41,7 +45,9 @@ const SAPPCheckbox = ({
           SIZES[size]
         } border-1.5 border-bw-1  outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
           STATE[state]
-        } ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
+        } ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'} ${
+          lowerOptions && 'border-none'
+        }`}
         type="checkbox"
         checked={checked}
         onChange={onChange}

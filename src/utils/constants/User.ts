@@ -1,5 +1,5 @@
 export const PROFILE_PAGES = {
-  MY_PROFILE: {
+  MYPROFILE: {
     label: 'My Profile',
     children: [],
   },

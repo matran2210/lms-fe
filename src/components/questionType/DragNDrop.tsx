@@ -20,6 +20,7 @@ interface IProps {
   defaultAnswer?: any
   extenalRef?: any
   corrects?: any
+  solution?: string
 }
 const DragNDropPreivew = forwardRef(
   (
@@ -33,6 +34,7 @@ const DragNDropPreivew = forwardRef(
       defaultAnswer,
       extenalRef,
       corrects,
+      solution,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -91,31 +93,33 @@ const DragNDropPreivew = forwardRef(
       if (corrects) {
         elementsCorrects.forEach((element: any, index: number) => {
           element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop-answer corrects">
-          <span class="answer-box" id="${corrects[index].id}">${corrects[index].answer}</span>
+          <span id="${corrects[index].id}" class="flex justify-center w-full">${corrects[index].answer}</span>
           </span>`
         })
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span type="text" id="${
+              element.outerHTML = `<span  id="${
                 element.id
               }" class="sapp-input-dragNDrop-answer ${
                 defaultAnswer[index].idAnswer === corrects[index].id
                   ? 'corrects'
                   : 'wrongs'
               }">
-              <span class="answer-box"  id="${defaultAnswer[index].idAnswer}">${
+              <span id="${
+                defaultAnswer[index].idAnswer
+              }" class="flex justify-center w-full">${
                 defaultAnswer[index].value
               }</span>
               </span>`
             } else {
-              element.outerHTML = `<span type="text" id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs"> 
+              element.outerHTML = `<span id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs"> 
                 <span class="sapp-input-dragNDrop-empty"></span>
               </span>`
               //   })
             }
           } else {
-            element.outerHTML = `<span type="text" id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs"> 
+            element.outerHTML = `<span id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs"> 
               <span class="sapp-input-dragNDrop-empty"></span>
             </span>`
           }
@@ -126,16 +130,39 @@ const DragNDropPreivew = forwardRef(
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')">
-              <span class="answer-box" draggable="true" ondragstart="drag(event, '${data.id}')" id="${defaultAnswer[index].idAnswer}">${defaultAnswer[index].value}</span>
-              </span>`
+              element.outerHTML = `<span id="${
+                element.id
+              }" class="sapp-input-dragNDrop dropable" ondrop="drop(event,'${
+                data.id
+              }')" ondragover="allowDrop(event,'${data.id}')" indexBox="${
+                index + 1
+              }">
+                          <span class="answer-box" draggable="true" ondragstart="drag(event, '${
+                            data.id
+                          }')" id="${defaultAnswer[index].idAnswer}">${
+                            defaultAnswer[index].value
+                          }</span>
+               </span>
+              `
             } else {
-              element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
-              //   })
+              element.outerHTML = `<span id="${
+                element.id
+              }" class="sapp-input-dragNDrop dropable ${
+                data.id
+              }" ondrop="drop(event,'${
+                data.id
+              }')" ondragover="allowDrop(event,'${data.id}')" indexBox="${
+                index + 1
+              }"> </span>`
             }
           } else {
-            element.outerHTML = `<span type="text" id="${element.id}" class="sapp-input-dragNDrop dropable ${data.id}" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${data.id}')"> </span>`
-            //   })
+            element.outerHTML = `<span  id="${
+              element.id
+            }" class="sapp-input-dragNDrop dropable ${
+              data.id
+            }" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${
+              data.id
+            }')" indexBox="${index + 1}"> </span>`
           }
         })
         setQuestionContent(doc)
@@ -211,6 +238,12 @@ const DragNDropPreivew = forwardRef(
               }
             />
           </>
+        )}
+        {solution && (
+          <div className="bg-gray-4 mt-6 p-6">
+            <div className="font-semibold text-base text-bw-1 ">Solution</div>
+            <EditorReader className="mt-4" text_editor_content={solution} />
+          </div>
         )}
       </div>
     )

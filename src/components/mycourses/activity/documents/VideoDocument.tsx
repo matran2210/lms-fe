@@ -51,6 +51,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   const { handleSubmit, reset } = useForm()
   const streamRef = useRef<StreamPlayerApi>()
   const dispatch = useAppDispatch()
+  const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
 
   useEffect(() => {
     if (videos?.[0]) {
@@ -64,6 +65,13 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
    * @returns {Promise<void>} - A Promise that resolves when the operation is complete.
    */
   const handleSetCurrentVideo = async (v: IVideo): Promise<void> => {
+    handleOpenModalQuestions({
+      id: '',
+      open: false,
+      listQuestion: [],
+    })
+    setModalOpen(false)
+
     const listQuestion = [
       ...(v?.quiz?.constructed_questions || []),
       ...(v?.quiz?.multiple_choice_questions || []),
@@ -287,6 +295,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
       )
         .unwrap()
         .then(() => {
+          setIsFinish({ [currentVideo?.quiz?.id || '']: true })
           toast.success('Nộp bài thành công!')
         })
     } catch (error) {}
@@ -294,27 +303,29 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
 
   return (
     <div>
-      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 flex-wrap">
-        {videos?.map((v, i) => {
-          return (
-            <label
-              className=" flex items-center gap-2 select-none cursor-pointer mb-3"
-              key={v.file.id}
-            >
-              {/* Radio button for video selection */}
-              <SAPPRadio
-                onChange={() => debouncedHandleSetCurrentVideo.current(v)}
-                {...(v.file.id === currentVideo?.file.id
-                  ? {
-                      checked: true,
-                    }
-                  : { checked: false })}
-                size={'small'}
-              ></SAPPRadio>
-              <span className="radio-item-label">Video {i + 1}</span>
-            </label>
-          )
-        })}
+      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
+        <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
+          {videos?.map((v, i) => {
+            return (
+              <label
+                className=" flex items-center gap-2 select-none cursor-pointer"
+                key={v.file.id}
+              >
+                {/* Radio button for video selection */}
+                <SAPPRadio
+                  onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                  {...(v.file.id === currentVideo?.file.id
+                    ? {
+                        checked: true,
+                      }
+                    : { checked: false })}
+                  size={'small'}
+                ></SAPPRadio>
+                <span className="radio-item-label">Video {i + 1}</span>
+              </label>
+            )
+          })}
+        </div>
         <div className="flex items-center select-none cursor-pointer relative z-[9999] group">
           <span className="mr-2">Timeline</span>
           {/* Icon for course video timeline */}
@@ -326,10 +337,10 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
                 ...(currentVideo?.quiz?.multiple_choice_questions || []),
               ]
                 .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0))
-                .map((e) => {
+                .map((e, i) => {
                   return (
                     <div
-                      key={e.id}
+                      key={i}
                       className="gap-3 text-medium-sm flex px-6 py-3 hover:bg-primary-2"
                       onClick={() => {
                         handleOpenModalQuestions({
@@ -363,10 +374,12 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
             customTitle={
               <div className="text-xl font-bold text-bw-1">Question</div>
             }
+            parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
             okButtonCaption={`${
               newQuestion?.confirmed && isLastQuestion ? 'Finish' : 'Submit'
             }`}
-            {...(newQuestion?.confirmed && !isLastQuestion
+            {...((newQuestion?.confirmed && !isLastQuestion) ||
+            isFinish?.[currentVideo?.quiz?.id || '']
               ? {
                   cancelButtonCaption: 'Close',
                   confirmOnclose: false,
@@ -374,7 +387,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
                 }
               : {
                   confirmOnclose: true,
-                  showOkButton: true,
+                  showOkButton: !isFinish?.[currentVideo?.quiz?.id || ''],
                   closeAfterSubmit: false,
                 })}
             buttonSize="small"
@@ -412,7 +425,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
             onTimeUpdate: handleOnTimeUpdate,
             src:
               currentVideo?.file?.resource?.url
-                .replace(
+                ?.replace(
                   'https://customer-qf43f9e6huohhr1o.cloudflarestream.com/',
                   '',
                 )

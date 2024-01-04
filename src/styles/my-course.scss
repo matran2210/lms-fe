@@ -59,9 +59,22 @@
 
 .select__menu {
   min-width: 150px !important;
+  right: 0px;
 }
 
 .group-resource:hover {
   fill: #ffb800; /* Change to the desired hover fill color */
   cursor: pointer; /* Optional: Change cursor to pointer on hover */
+}
+
+.notes-list-icon {
+  @apply text-gray-1;
+
+  &:hover {
+    @apply text-primary;
+  }
+
+  &.active {
+    @apply text-primary;
+  }
 }

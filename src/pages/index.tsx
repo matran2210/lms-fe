@@ -1,10 +1,10 @@
 import type { NextPage } from 'next'
-import ProfilePage from './profile/[page]'
+import ProfilePage from './[page]'
 
 const Home: NextPage = () => {
   return (
     <>
-      <ProfilePage page={'my_profile'} />
+      <ProfilePage page={'myprofile'} />
     </>
   )
 }

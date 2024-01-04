@@ -12,9 +12,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { UserGuide } from 'src/constants'
 import { useRouter } from 'next/router'
-import { buildQueryString } from '@utils/index'
+import {
+  buildQueryString,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from '@utils/index'
 import { ICourseAll } from 'src/type/courses'
 import CourseAPI from '../api/courses'
+import {
+  entranceTestReducer,
+  getEntranceCount,
+} from 'src/redux/slice/EntranceTest/EntranceTest'
+import PopUpRemindEntrance from '@components/popUpRemindEntrance'
+import { removeJwtToken } from '@utils/helpers/authen'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -39,6 +49,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
+  const { shouldShowRemind } = useAppSelector(entranceTestReducer)
   const router = useRouter()
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
@@ -65,7 +76,9 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       }
     })
   }, [])
-
+  useEffect(() => {
+    dispatch(getEntranceCount())
+  }, [])
   const [data, setData] = useState<ICourseAll>(courses || [])
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
@@ -139,9 +152,9 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
             My Course
           </h2>
           <div
-            className={`py-6 relative
-            ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''}
-          `}
+            className={`py-6 relative ${
+              guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
+            }`}
           >
             <Filter courses={data} />
             {guideStatus && guideStep === 6 && (
@@ -194,7 +207,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
             handleCancel={closeUserGuide}
           />
         )}
-        <CoursesList courses={data} />
+        <CoursesList courses={data} setData={setData} setLoading={setLoading} />
       </div>
       {guideStatus && guideStep == 0 && <PopupWelcome />}
       {guideStatus && (
@@ -203,6 +216,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
           className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
         ></div>
       )}
+      <PopUpRemindEntrance />
     </>
   )
 }
@@ -244,26 +258,32 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
-
-        const courses = await fetchData(
-          1,
-          DEFAULT_PAGESIZE,
-          accessToken,
-          queryString,
-        )
+        const courses = await fetchData(1, DEFAULT_PAGESIZE, act, queryString)
 
         return {
           props: {
             courses: courses,
           },
         }
-      } catch (refreshError) {}
-    } else {
+      } catch (refreshError) {
+        removeJwtToken()
+        return {
+          redirect: {
+            destination: '/',
+            permanent: false,
+          },
+        }
+      }
     }
 
     return {

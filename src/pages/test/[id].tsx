@@ -29,8 +29,15 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { removeJwtToken } from '@utils/helpers/authen'
+import {
+  DeserializeHighlight,
+  runHighlight,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
 import { uniqueId } from 'lodash'
@@ -41,6 +48,7 @@ import { DISPLAY_TYPE, QUESTION_TYPES } from 'src/constants'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
 import TestTimeOutModal from '../courses/test/test-timeout'
+import ConFirmSubmit from './conFirmSubmit'
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -82,6 +90,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -97,6 +106,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             corrects={corrects}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.MATCHING:
@@ -112,6 +122,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             defaultAnswer={defaultValue}
             done={done}
             corrects={corrects?.corrects}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -126,6 +137,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -140,6 +152,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             allowHighLight={allowHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -154,6 +167,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
+            solution={solution}
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -168,6 +182,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            solution={solution}
           />
           // <Luckysheet/>
         )
@@ -178,10 +193,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const router = useRouter()
 
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const [filteredTabs, setFilterdTabs] = useState<any>([])
+  // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control, handleSubmit, getValues, setValue } = useForm()
-  const { control: controlFilter, watch: watchFilter } = useForm()
+  const {
+    control: controlFilter,
+    watch: watchFilter,
+    setValue: setValueFilter,
+  } = useForm()
   const {
     control: controlExhibits,
     getValues: getValuesExhibits,
@@ -206,7 +225,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [remainTime, setRemainTime] = useState<number>(
     quizDetail.quiz_timed * 60,
   )
+  const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
+  const [openSubmit, setOpenSubmit] = useState(false)
+  const [loading, setLoading] = useState(false)
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -220,17 +242,30 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return tabs.find((e: any) => e.id === currentPage)
     }
   }, [currentPage, tabs])
+  const checkCalExist = useMemo(() => {
+    for (let i in openScratchPad) {
+      if (openScratchPad[i].type === 'calculator') {
+        return +i
+      }
+    }
+    return -1
+    // if (!arr.includes('calculator')) {
+  }, [openScratchPad])
   const handleOpenScratchPad = (type: string) => {
+    setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       if (type === 'scratch_pad') {
         arr.push({ id: uniqueId('scratchPad'), type: type })
       } else if (type === 'calculator') {
-        for (let e of arr) {
-          if (e.type === 'calculator') {
-            return arr
-          }
+        // for (let i in arr) {
+        if (checkCalExist > -1) {
+          const cal = { ...arr[checkCalExist] }
+          arr.splice(checkCalExist, 1)
+          arr.push(cal)
+          return arr
         }
+        // }
         // if (!arr.includes('calculator')) {
         arr.push({ id: 'calculator', type: 'calculator' })
         // }
@@ -242,7 +277,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
         if (tab === item.id) {
-          return { ...item, flaged: true }
+          return { ...item, flaged: !item.flaged }
         }
         return item
       })
@@ -283,18 +318,91 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       </div>
     )
   }
+  const checkAnswered = (currentContent: any) => {
+    if (
+      currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.TRUE_FALSE
+    ) {
+      if (getValues(`${currentPage}_answer`)) {
+        return true
+      }
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+      if (
+        getValues(`${currentPage}_answer`) &&
+        getValues(`${currentPage}_answer`).length > 0
+      ) {
+        return true
+      }
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
+      for (let e of getAnswerMatching()) {
+        if (e.answer_id && e.answer_id !== '') {
+          return true
+        }
+      }
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      for (let e of getAnswerDragNDrop()) {
+        if (e.idAnswer && e.idAnswer !== '') {
+          return true
+        }
+      }
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
+      for (let e of getValueSelectText()) {
+        if (e && e !== '') {
+          return true
+        }
+      }
+
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
+      for (let e of getValueFillText()) {
+        if (e && e !== '') {
+          return true
+        }
+      }
+
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+      if (currentContent.viewed) {
+        return true
+      }
+      return false
+    }
+  }
+  const [filteredTabs, setFilterTabs] = useState<any[]>([])
+  const [trigger, setTrigger] = useState(false)
   useEffect(() => {
-    setFilterdTabs((prev: any) => {
+    if (tabs.length > 0) {
       const filter = watchFilter('filter')
       if (filter === 'attempted') {
-        return tabs.filter((e: any) => e.viewed === true)
+        setFilterTabs(
+          tabs.filter((e: any) => e.attempted === true || e.done === true),
+        )
+        return
       } else if (filter === 'unattempted') {
-        return tabs.filter((e: any) => e.viewed === false)
+        setFilterTabs(tabs.filter((e: any) => !e.attempted && !e.done))
+        return
       } else if (filter === 'flag') {
-        return tabs.filter((e: any) => e.flaged === true)
-      } else return tabs
-    })
-  }, [tabs, watchFilter('filter')])
+        setFilterTabs(tabs.filter((e: any) => e.flaged === true))
+        return
+      } else setFilterTabs(tabs)
+    }
+  }, [tabs, trigger])
+  useEffect(() => {
+    if (tabs.length > 0) {
+      if (currentTabContent.done) {
+        setTrigger(!trigger)
+      } else {
+        const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
+        setTabs(() => {
+          return savedAnswer
+        })
+      }
+    }
+  }, [watchFilter('filter')])
   const ref = useRef(null) as any
 
   const getValueFillText = () => {
@@ -330,7 +438,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     let value = [] as any
     const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
     for (let e of inputs) {
-      const idAnswer = e.querySelector('span')
+      const idAnswer = e.querySelector('.answer-box')
       value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
     }
     return value
@@ -368,32 +476,40 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         ],
       }
     }
-    setTabs((prev: any) => {
-      setStartTime(Date.now())
-      const newData = prev.map((item: any) => {
-        if (currentPage === item.id) {
-          // setCurrentTabContent({
-          //   ...item,
-          //   done: true,
-          //   corrects: corrects,
-          //   solution: res.data[0].solution,
-          //   answer: getCurrentAnswer(item),
-          // })
-          ref.current?.handleReset()
-          return {
-            ...item,
-            done: true,
-            corrects: corrects,
-            solution: res.data[0].solution,
-            timeSpent: item.timeSpent
-              ? currentTime - startTime + item.timeSpent
-              : currentTime - startTime,
-          }
+    return { corrects: corrects, solution: res.data[0].solution }
+  }
+  const confirmAnswer = async (
+    corrects: any,
+    solution: any,
+    currentTabContent: any,
+  ) => {
+    setLoading(true)
+    setStartTime(Date.now())
+    const newData = tabs.map((item: any) => {
+      if (currentTabContent.id === item.id) {
+        // setCurrentTabContent({
+        //   ...item,
+        //   done: true,
+        //   corrects: corrects,
+        //   solution: res.data[0].solution,
+        //   answer: getCurrentAnswer(item),
+        // })
+        ref.current?.handleReset()
+        return {
+          ...item,
+          done: true,
+          corrects: corrects,
+          solution: solution,
+          timeSpent: item.timeSpent
+            ? currentTime - startTime + item.timeSpent
+            : currentTime - startTime,
         }
-        return item
-      })
-      return handleSaveCurrentAnswer(newData, currentTabContent)
+      }
+      return item
     })
+    const newTabs = handleSaveCurrentAnswer(newData, currentTabContent)
+    setTabs(newTabs)
+    setLoading(false)
   }
   const getResultAll = async (currentTabContent: any) => {
     const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
@@ -432,39 +548,46 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
         currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
       ) {
-        return handleSaveAnswer(
+        const answers = handleSaveAnswer(
           getValues(`${currentPage}_answer`),
           currentPage,
           tabs,
         )
+        return answers
       } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-        return handleSaveAnswer(getAnswerMatching(), currentPage, tabs)
+        const answers = handleSaveAnswer(
+          getAnswerMatching(),
+          currentContent.id,
+          tabs,
+        )
+        return answers
       } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-        return handleSaveAnswer(getAnswerDragNDrop(), currentPage, tabs)
+        const answers = handleSaveAnswer(
+          getAnswerDragNDrop(),
+          currentContent.id,
+          tabs,
+        )
+        return answers
       } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
-        return handleSaveAnswer(getValueSelectText(), currentPage, tabs)
+        const answers = handleSaveAnswer(
+          getValueSelectText(),
+          currentContent.id,
+          tabs,
+        )
+        return answers
       } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
-        return handleSaveAnswer(getValueFillText(), currentPage, tabs)
+        const answers = handleSaveAnswer(
+          getValueFillText(),
+          currentContent.id,
+          tabs,
+        )
+        return answers
+      } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+        const answers = handleSaveAnswer('', currentContent.id, tabs)
+        return answers
       } else return tabs
     } else {
       return tabs
-    }
-  }
-  const getCurrentAnswer = (currentTabContent: any) => {
-    if (
-      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-    ) {
-      return getValues(`${currentPage}_answer`)
-    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      return getAnswerMatching()
-    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      return getAnswerDragNDrop()
-    } else if (currentTabContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      return getValueSelectText()
-    } else if (currentTabContent.qType === QUESTION_TYPES.FILL_WORD) {
-      return getValueFillText()
     }
   }
   async function getDetail(currentPage: string) {
@@ -480,55 +603,42 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     }
   }
   const handleChangeTab = async (currentTab: any) => {
+    setLoading(true)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
     if (!currentContent?.viewed) {
       const { topicDescription, res } = await getDetail(currentTab)
-
-      setTabs((prev: any) => {
-        setStartTime(Date.now())
-        const newData = prev.map((item: any) => {
-          if (currentTab === item.id) {
-            if (item.viewed) {
-              // setCurrentTabContent({ ...item })
-              return { ...item }
-            } else {
-              return {
-                ...item,
-                viewed: true,
-                data: res.data[0],
-                topicDescription: topicDescription.data,
-              }
+      setStartTime(Date.now())
+      const newData = tabs.map((item: any) => {
+        if (currentTab === item.id) {
+          if (item.viewed) {
+            // setCurrentTabContent({ ...item })
+            return { ...item }
+          } else {
+            return {
+              ...item,
+              viewed: true,
+              data: res.data[0],
+              topicDescription: topicDescription.data,
             }
           }
-          return item
-        })
-        ref.current?.handleReset()
-        const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
-        setCurrentPage(currentTab)
-        setOpenScratchPad([])
-        setAllowHighLight(false)
-        // reset()
-        return savedAnswer
+        }
+        return item
       })
+      ref.current?.handleReset()
+      const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
+      setCurrentPage(currentTab)
+      setOpenScratchPad([])
+      setAllowHighLight(false)
+      setTabs(savedAnswer)
     } else {
-      setTabs((prev: any) => {
-        // for (let e of prev) {
-        //   if (currentTab === e.id) {
-        //     setCurrentTabContent(() => {
-        //       ref.current?.handleReset()
-        //       return e
-        //     })
-        //   }
-        // }
-        ref.current?.handleReset()
-        const savedAnswer = handleSaveCurrentAnswer(prev, currentTabContent)
-        setCurrentPage(currentTab)
-        setOpenScratchPad([])
-        setAllowHighLight(false)
-        // reset()
-        return savedAnswer
-      })
+      ref.current?.handleReset()
+      const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
+      setCurrentPage(currentTab)
+      setOpenScratchPad([])
+      setAllowHighLight(false)
+      setTabs(savedAnswer)
     }
+    setLoading(false)
 
     // if (currentPage) {
     //   getDetail()
@@ -538,13 +648,31 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     // })
   }
   const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
-    // setTabs((prev: any) => {
     setStartTime(Date.now())
-    const newData = tabs.map((item: any) => {
+    let newData = [] as any
+    for (let item of tabs) {
       if (tabId === item.id) {
-        return {
+        // if (quizDetail.grading_preference === 'AFTER_EACH_QUESTION') {
+        //   var result = await getResult(item)
+        //   var newItem = {
+        //     ...item,
+        //     done: true,
+        //     corrects: result.corrects,
+        //     solution: result.solution,
+        //     answer: data,
+        //     timeSpent: !item.done
+        //       ? item.timeSpent
+        //         ? currentTime - startTime + item.timeSpent
+        //         : currentTime - startTime <= 0
+        //           ? 0
+        //           : currentTime - startTime
+        //       : item.timeSpent,
+        //   }
+        // } else {
+        var newItem = {
           ...item,
           answer: data,
+          attempted: checkAnswered(item),
           timeSpent: !item.done
             ? item.timeSpent
               ? currentTime - startTime + item.timeSpent
@@ -553,11 +681,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 : currentTime - startTime
             : item.timeSpent,
         }
+        // }
+
+        newData.push(newItem)
+      } else {
+        newData.push(item)
       }
-      return item
-    })
+    }
     return newData
-    // })
   }
 
   const handleSubmitQuestion = async () => {
@@ -565,6 +696,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     let quiz_position_mapping = []
     let answers = []
     let reformTabs: any[] = []
+    setLoading(true)
+    setSubmited(true)
     for (let e of allQuest) {
       reformTabs.push({ ...e, done: true })
       if (e.answer) {
@@ -636,7 +769,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
+      total_attempt_time: quizDetail.quiz_timed * 60 - remainTime,
     })
+    // clearInterval(intervalRef.current)
+    setLoading(false)
     return
   }
   const handleClearSelection = (currentTabContent: any) => {
@@ -781,6 +917,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       clearInterval(interval)
     }
   }, [])
+  const intervalRef = useRef(null) as any
   useEffect(() => {
     if (quizDetail.quiz_timed) {
       const interval = setInterval(() => {
@@ -793,7 +930,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           return prev - 1
         })
       }, 1000)
-
+      intervalRef.current = interval
       // Return a function that clears the interval
 
       return () => {
@@ -837,13 +974,18 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
+      {loading && (
+        <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
+          Loading
+        </div>
+      )}
       <div>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
             {quizDetail.name}
           </div>
           {quizDetail.quiz_timed && (
-            <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex">
+            <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex font-tech">
               {formatTime(remainTime)}
             </div>
           )}
@@ -854,9 +996,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               title: 'Finish',
               size: 'medium',
               loading: false,
-              disabled: false,
+              disabled: submited,
               onClick: () => {
-                handleSubmitQuestion()
+                setOpenSubmit(true)
               },
               //   full: fullWidthBtn,
             }}
@@ -883,6 +1025,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             }}
             activeShowAll={activeShowAll}
             setActiveShowAll={setActiveShowAll}
+            setValueFilter={setValueFilter}
           />
           {/* </div> */}
         </div>
@@ -911,6 +1054,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               }
             }}
           >
+            <div className="mb-4">
+              {currentTabContent?.topicDescription?.name}
+            </div>
             <EditorReader
               className="editor-wrap"
               text_editor_content={
@@ -919,7 +1065,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             />
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
-            <div className="px-6">
+            <div
+              className="px-6"
+              // onMouseUp={debounce(()=>{console.log(checkAnswered(currentTabContent))}, 500)}
+            >
               {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
               {checkType(
                 currentTabContent?.data,
@@ -945,7 +1094,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
       ) : (
         <div
-          className="max-w-screen-2md w-full m-auto h-[calc(100%-176px)] overflow-auto py-6 px-6 mt-[72px]"
+          className=" h-[calc(100%-176px)] overflow-auto py-6 px-6 mt-[72px]"
           id={'preview-question'}
         >
           <div
@@ -964,9 +1113,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 }
               }
             }}
+            className="editor-wrap mb-3 max-w-[950px] w-full m-auto"
           >
+            <div className="mb-4">
+              {currentTabContent?.topicDescription?.name}
+            </div>
             <EditorReader
-              className="editor-wrap mb-3"
+              className=""
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
@@ -974,16 +1127,18 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           </div>
 
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-          {checkType(
-            currentTabContent?.data,
-            currentTabContent?.data?.qType,
-            currentTabContent?.id,
-            currentTabContent?.answer,
-            currentTabContent?.corrects,
-            currentTabContent?.hightlight,
-            currentTabContent?.solution,
-            currentTabContent?.done,
-          )}
+          <div className="max-w-[950px] w-full m-auto">
+            {checkType(
+              currentTabContent?.data,
+              currentTabContent?.data?.qType,
+              currentTabContent?.id,
+              currentTabContent?.answer,
+              currentTabContent?.corrects,
+              currentTabContent?.hightlight,
+              currentTabContent?.solution,
+              currentTabContent?.done,
+            )}
+          </div>
           {/* ) : (
                 <EssayQuestionPreview
                   data={essayData?.req}
@@ -1002,18 +1157,20 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               position={{
                 width: '400px',
                 height: '300px',
-                top: 'calc(50% - 150px)',
-                left: 'calc(50% - 200px)',
+                top: 'calc(25% - 150px)',
+                left: 'calc(25% - 200px)',
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 100
+                  : index + 100
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
-                  <div>Calculator</div>
+                  <div className="text-sm font-normal">Calculator</div>
                   <button onClick={() => handleCloseScratchPad(e)}>
                     <CloseIcon />
                   </button>
@@ -1036,12 +1193,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 100
+                  : index + 100
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
-                  <div>Scratch Pad</div>
+                  <div className="text-sm font-normal">Scratch Pad</div>
                   {/* <CloseIcon */}
                   <button onClick={() => handleCloseScratchPad(e)}>
                     <CloseIcon />
@@ -1052,7 +1211,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   placeholder="Take a note..."
                   control={control}
                   name={e.id}
-                  className="w-full h-[calc(100%-40px)] sapp-text-area"
+                  className="w-full h-[calc(100%-40px)] sapp-text-area px-5 py-3 placeholder:text-sm placeholder:font-normal"
                 />
                 {/* </div> */}
               </div>
@@ -1066,20 +1225,22 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           return (
             <MovableWindow
               position={{
-                width: '400px',
-                height: '300px',
-                top: 'calc(50% - 150px)',
-                left: 'calc(50% - 200px)',
+                width: '600px',
+                height: '400px',
+                top: 'calc(75% - 250px)',
+                left: 'calc(0%)',
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
-                onFocusingPad === e.id ? openScratchPad.length + 10 : index + 10
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 100
+                  : index + 100
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
-                  <div>
+                  <div className="truncate">
                     <span className="font-semibold text-base text-bw-1">{`Exhibit ${
                       i + 1
                     }: `}</span>
@@ -1135,8 +1296,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             </div>
           </button>
           <button
-            className="h-full"
+            className={`h-full ${checkCalExist > -1 && 'sapp-disable-button'}`}
             onClick={() => handleOpenScratchPad('calculator')}
+            disabled={checkCalExist > -1}
           >
             <div className="flex items-center gap-3 ps-6 ">
               <CalculatorIcon />
@@ -1166,6 +1328,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     name="exhibits"
                     options={exhibits}
                     multiple
+                    lowerOptions={true}
+                    // gap="0"
+                    widthOptions="w-full"
+                    seprateLine={true} // classNameTitle='text-gray-2'
                   />
                 </div>
               )}
@@ -1186,13 +1352,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 </div>
               </div>
               {showListRequirement && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits  justify-center">
+                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits justify-center sapp-separateLine">
                   {currentTabContent?.data?.requirements?.map(
                     (e: any, index: number) => {
                       return (
                         <button
                           key={e.id}
-                          className="p-3"
+                          className={`p-3 ${
+                            essayData.req !== e && 'text-gray-2'
+                          }`}
                           onClick={() => {
                             setEssayData({ req: e, index: index })
                           }}
@@ -1219,14 +1387,53 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           >
             <div className="font-normal text-sm">Clear Selection</div>
           </button>
-          <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
-            onClick={() => {
-              getResult(currentTabContent)
-            }}
-          >
-            <div className="font-normal text-sm">Confirm Answer</div>
-          </button>
+          {quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
+          !currentTabContent?.done ? (
+            currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
+              <button
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                onClick={async () => {
+                  const data = await getResult(currentTabContent)
+                  confirmAnswer(data.corrects, data.solution, currentTabContent)
+                }}
+              >
+                <div className="font-normal text-sm">Confirm Answer</div>
+              </button>
+            ) : (
+              <button
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                onClick={() => {
+                  // const data = await getResult(currentTabContent)
+                  // await confirmAnswer(
+                  //   data.corrects,
+                  //   data.solution,
+                  //   currentTabContent,
+                  // )
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleChangeTab(filteredTabs[index + 1].id)
+                }}
+              >
+                <div className="font-normal text-sm">Confirm & Next</div>
+              </button>
+            )
+          ) : (
+            filteredTabs.findIndex((e: any) => e.id === currentPage) <
+              filteredTabs.length - 1 && (
+              <button
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                onClick={() => {
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleChangeTab(filteredTabs[index + 1].id)
+                }}
+              >
+                <div className="font-normal text-sm">Next Question</div>
+              </button>
+            )
+          )}
         </div>
       </div>
       <TestTimeOutModal
@@ -1234,6 +1441,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setOpen={setOpenTimeOut}
         handleSubmit={handleSubmitQuestion}
         handleQuit={() => router.back()}
+      />
+      <ConFirmSubmit
+        open={openSubmit}
+        setOpen={setOpenSubmit}
+        handleSubmit={handleSubmitQuestion}
       />
     </div>
   )
@@ -1298,15 +1510,20 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const questions = (await CourseTestApi.getQuestionTabsById(
           context?.query?.id,
-          refreshResponse.data.accessToken,
+          act,
         )) as any
 
         return {
@@ -1315,6 +1532,7 @@ export async function getServerSideProps(context: any) {
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập
+        removeJwtToken()
         return {
           redirect: {
             destination: '/auth/login',
@@ -1326,6 +1544,7 @@ export async function getServerSideProps(context: any) {
       // Xử lý lỗi khác khi sử dụng accessToken
       if (error.response && error.response.status === 403) {
         // Chuyển hướng đến trang đăng nhập
+        removeJwtToken()
         return {
           redirect: {
             destination: '/auth/login',
@@ -1335,7 +1554,7 @@ export async function getServerSideProps(context: any) {
       } else
         return {
           redirect: {
-            destination: '/test',
+            destination: '/404',
             permanent: false,
           },
         }

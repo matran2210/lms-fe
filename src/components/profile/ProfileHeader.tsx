@@ -183,7 +183,7 @@ const ProfileHeader = ({
               onClick={handlerCancelUploadAvatar}
             >
               <div
-                className="w-6-percent h-6 bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
+                className="w-6 h-6 bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
                 role="button"
               >
                 <svg

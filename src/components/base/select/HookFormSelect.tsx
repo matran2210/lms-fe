@@ -13,6 +13,7 @@ interface IProps {
   value?: string | null | undefined
   isDisabled?: boolean
   onMenuScrollToBottom?: any
+  classParent?: string
 }
 
 const HookFormSelect = ({
@@ -26,9 +27,10 @@ const HookFormSelect = ({
   value,
   isDisabled,
   onMenuScrollToBottom,
+  classParent = '',
 }: IProps) => {
   return (
-    <div className="select-options">
+    <div className={`select-options ${classParent}`}>
       <Select
         required={required}
         isMulti={isMulti}

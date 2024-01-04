@@ -1,7 +1,13 @@
 export interface ICreateDiscussionRequest {
   course_section_id: string
+  class_id: string
   parent_id?: string
   content: string
+}
+export interface ICreateDiscussionUploadRequest {
+  discussion_id: string
+  new_discussion_file: File[]
+  discussion_file_ids?: string[]
 }
 
 interface ICourseSection {
@@ -25,6 +31,11 @@ interface ICourseSection {
 }
 
 export interface IDiscussion {
+  course_discussion_files: {
+    course_discussion_id: string
+    url: string
+    id: string
+  }[]
   id: string
   created_at: string
   updated_at: string

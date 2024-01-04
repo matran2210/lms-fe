@@ -8,6 +8,9 @@ import SappDrawer from '@components/base/SappDrawer'
 import axios from 'axios'
 import { apiURL } from 'src/redux/services/httpService'
 import { useRouter } from 'next/router'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import { removeJwtToken } from '@utils/helpers/authen'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -20,8 +23,8 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const partDetail = tree[0] as any
 
   const fetchChapterDetail = async (
-    id: string | undefined,
-    course_section_id: string | undefined,
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
   ) => {
     setLoadingChapter(true)
     try {
@@ -57,7 +60,12 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }, [openLearningOutcome])
 
   const handleRouterActivity = (id: string) => {
-    router.push(`/courses/${router.query.id}/activity/${id}`)
+    router.push({
+      pathname: `/courses/${router.query.id}/activity/${id}`,
+      query: {
+        classId: previewPart.class_id,
+      },
+    })
   }
   const handleRouterCaseStudy = (quizId: string, topicId: string) => {
     router.push({
@@ -65,6 +73,25 @@ const CoursePartDetail = ({ previewPart }: any) => {
       query: { quiz_id: quizId },
     })
   }
+
+  const course_section = chapterDetail?.children?.[0]
+  const quiz = course_section?.quiz
+
+  const handleNextLesson = () => {
+    course_section?.course_section_type === 'ACTIVITY'
+      ? handleRouterActivity(course_section?.children?.[0]?.id)
+      : course_section?.course_section_type === 'STORY'
+        ? handleRouterCaseStudy(quiz?.id, quiz?.case_study_story?.id)
+        : () => {}
+  }
+
+  const handleLearningOutCome = async (id: string | string[] | undefined, course_section_id: string | string[] | undefined) => {
+    const res = await CourseAPI.learningOutcomeProgress(router.query.id, chapterDetail?.id)
+    if(res?.success) {
+      fetchChapterDetail(id, course_section_id)
+    }
+  }
+
   return (
     <div className="main max-w-xxl my-0 mx-auto">
       <div className="main max-w-xxl my-0 mx-auto">
@@ -98,6 +125,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         course_section_id={router.query.course_section_id as any}
         handleRouterActivity={handleRouterActivity}
         handleRouterCaseStudy={handleRouterCaseStudy}
+        handleLearningOutCome={handleLearningOutCome}
       />
 
       <SappDrawer
@@ -106,16 +134,17 @@ const CoursePartDetail = ({ previewPart }: any) => {
         title={learningOutcome?.name}
         message="Bạn có chắc chắn muốn hủy không?"
         widthDrawer="w-6/12"
+        handleSubmit={handleNextLesson}
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6"
+          className="pb-6 mr-3"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
         />
         {learningOutcome?.course_outcomes?.map((outcome, index) => (
-          <div className="flex mt-6]" key={outcome.id}>
+          <div className="flex mt-6 mr-3" key={outcome.id}>
             <div className="font-semibold leading-6 text-sm me-1">
               LO{index + 1}:
             </div>
@@ -176,17 +205,22 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const newApiResponse = await axios.get(
           `${apiURL}/course-sections/${query.id}`,
           {
             headers: {
-              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
+              Authorization: `Bearer ${act}`,
             },
           },
         )
@@ -203,6 +237,7 @@ export async function getServerSideProps(context: any) {
           },
         }
       } catch (refreshError) {
+        removeJwtToken()
         // Chuyển hướng đến trang đăng nhập
         return {
           redirect: {
@@ -215,7 +250,7 @@ export async function getServerSideProps(context: any) {
       // Chuyển hướng đến trang đăng nhập
       return {
         redirect: {
-          destination: '/',
+          destination: '/404',
           permanent: false,
         },
       }

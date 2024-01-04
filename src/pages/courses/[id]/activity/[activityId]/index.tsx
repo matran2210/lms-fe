@@ -18,6 +18,10 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import _debounce from 'lodash/debounce'
+import { useRouter } from 'next/router'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import { removeJwtToken } from '@utils/helpers/authen'
 
 type Props = {
   activity: IActivity
@@ -41,12 +45,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const videoDocumentRef = useRef<HTMLDivElement>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
-
+  const router = useRouter()
   useLayoutEffect(() => {
     if (activity) {
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion(activity?.id))
+        dispatch(
+          getDiscussion({ id: router.query.classId, sectionId: sectionId }),
+        )
         ;(async () => {
           await CourseActivityApi.startCourseSectionProgress(
             courseId,
@@ -55,7 +61,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         })()
       } catch (error) {}
     }
-  }, [])
+  }, [activity])
 
   useEffect(() => {
     finishedCourseSectionProgress()
@@ -219,6 +225,39 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       ?.course_tab_documents
   }, [selector.tabs])
 
+  /**
+   * Hàm để lấy ID của tab trước đó.
+   * @returns {string | undefined} - ID của tab trước đó.
+   */
+  const getPreviousTabId = () => {
+    const currentIndex = selector.tabs?.findIndex(
+      (tab) => tab.id === selector.currentTabId,
+    )
+    const previousIndex = (currentIndex || 0) - 1
+    return selector.tabs?.[previousIndex]?.id
+  }
+
+  /**
+   * Hàm để lấy ID của tab tiếp theo.
+   * @returns {string | undefined} - ID của tab tiếp theo.
+   */
+  const getNextTabId = () => {
+    const currentIndex = selector.tabs?.findIndex(
+      (tab) => tab.id === selector.currentTabId,
+    )
+    const nextIndex = (currentIndex || 0) + 1
+    return selector.tabs?.[nextIndex]?.id
+  }
+
+  const getCourseIcon = (type: String) => {
+    if (type === 'TEXT') {
+      return <SappIcon icon="course_text"></SappIcon>
+    }
+    if (type === 'VIDEO') {
+      return <SappIcon icon="course_video"></SappIcon>
+    }
+  }
+
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <div className="bg-gray-3 pb-10 px-6 ">
@@ -319,39 +358,111 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 return null
               })}
             </div>
+
+            <div className="flex justify-between flex-wrap gap-5 mt-8">
+              {getPreviousTabId() && (
+                <div className="w-full sm:w-auto">
+                  <div
+                    onClick={() => handleChangeTab(getPreviousTabId() || '')}
+                    className="flex items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={20}
+                      height={20}
+                      fill="none"
+                    >
+                      <path
+                        className="fill-bw-1 group-hover:fill-primary"
+                        fillRule="evenodd"
+                        d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Previous Tab
+                  </div>
+                </div>
+              )}
+              {getNextTabId() && (
+                <div className="w-full sm:w-auto relative ml-auto">
+                  <div
+                    onClick={() => handleChangeTab(getNextTabId() || '')}
+                    className="mb-2 z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                  >
+                    Next Tab
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={20}
+                      height={20}
+                      fill="none"
+                    >
+                      <path
+                        className="fill-bw-1 group-hover:fill-primary"
+                        fillRule="evenodd"
+                        d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div className="absolute -z-[9] top-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
+      <div className="border border-gray-2 my-8"></div>
       {/* </FadeInOut> */}
       <div className="bg-white px-6 py-3 mb-6 relative">
         <div className="flex justify-between flex-wrap gap-5">
-          <div className="w-full sm:w-auto">
-            <div className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary">
-              Previous Activity
+          {activity.previous_activity && (
+            <div className="w-full sm:w-auto">
+              <div
+                onClick={() => {
+                  router.push({
+                    pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
+                    query: {
+                      classId: router.query.classId,
+                    },
+                  })
+                }}
+                className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+              >
+                Previous Activity
+              </div>
+              <div className="text-medium-sm text-gray-1 flex">
+                {getCourseIcon(activity.previous_activity?.display_icon)}
+                <span className="ml-2">{activity.previous_activity.name}</span>
+              </div>
             </div>
-            <div className="text-medium-sm text-gray-1 flex">
-              <SappIcon icon="course_text"></SappIcon>
-              <span className="ml-2">Interest Rates: Interpretation</span>
+          )}
+          {activity.next_activity && (
+            <div className="w-full sm:w-auto ml-auto">
+              <div
+                onClick={() => {
+                  router.push({
+                    pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
+                    query: {
+                      classId: router.query.classId,
+                    },
+                  })
+                }}
+                className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+              >
+                Next Activity
+              </div>
+              <div className="text-medium-sm text-gray-1 flex justify-end">
+                <span className="mr-2">{activity.next_activity.name}</span>
+                {getCourseIcon(activity.next_activity?.display_icon)}
+              </div>
             </div>
-          </div>
-          <div className="w-full sm:w-auto">
-            <div className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right">
-              Next Activity
-            </div>
-            <div className="text-medium-sm text-gray-1 flex justify-end">
-              <span className="mr-2">
-                The Future Value of a Single Cash Flow/a Series of Cash Flows
-              </span>
-              <SappIcon icon="course_video"></SappIcon>
-            </div>
-          </div>
+          )}
         </div>
-
-        <div className="absolute bottom-0 left-0 right-0 border-2 border-primary"></div>
       </div>
+
       <div ref={endActivityRef}></div>
       <div>
-        <Discussion />
+        <Discussion class_id={(router.query.classId as string) || ''} />
       </div>
     </div>
   )
@@ -392,8 +503,10 @@ export async function getServerSideProps(context: any) {
         notFound: true,
       }
     }
+
     const activity = await CourseActivityApi.getActivityById(
       context?.query?.activityId,
+      context?.query.id,
       cookies.accessToken,
     )
 
@@ -422,17 +535,22 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const newApiResponse = await axios.get(
           `${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type}`,
           {
             headers: {
-              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
+              Authorization: `Bearer ${act}`,
             },
           },
         )
@@ -447,6 +565,7 @@ export async function getServerSideProps(context: any) {
           },
         }
       } catch (refreshError) {
+        removeJwtToken()
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập
         return {
@@ -462,7 +581,7 @@ export async function getServerSideProps(context: any) {
       // Chuyển hướng đến trang đăng nhập
       return {
         redirect: {
-          destination: '/auth/login',
+          destination: '/404',
           permanent: false,
         },
       }

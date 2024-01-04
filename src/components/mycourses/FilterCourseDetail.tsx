@@ -26,7 +26,7 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
     <div className="filter flex">
       <div className="pr-6 border-r border-gray-1">
         <div className="font-normal text-sm text-gray-1">
-          {totalResult} result
+          {totalResult} {totalResult > 1 ? 'results' : 'result'}
         </div>
       </div>
       <div className="filter pl-6 flex self-center">

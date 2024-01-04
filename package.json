@@ -45,7 +45,7 @@
     "next-with-less": "^3.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^9.3.0",
-    "preview-part": "^1.2.3",
+    "preview-part": "^1.2.15",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "7.48.2",

@@ -4,12 +4,14 @@ import {
   ICreateDiscussionRepReact,
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
+  ICreateDiscussionUploadRequest,
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IQuestion } from 'src/type/course/Question'
 import { IActivity, ITab } from 'src/type/course/my-course/Activity'
 import { apiURL, httpService } from '../../../httpService'
 import url from './url'
+import CourseTestApi from '../Test'
 
 /**
  * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.
@@ -25,6 +27,7 @@ const CourseActivityApi = {
    */
   getActivityById: async (
     id: string,
+    course_id: string,
     accessToken: string,
   ): Promise<IActivity> => {
     const headers = {
@@ -34,10 +37,9 @@ const CourseActivityApi = {
     const responseActivity = await axios.get<
       {},
       IResponse<{ data: IActivity }>
-    >(`${apiURL}/course-sections/activity/${id}`, {
+    >(`${apiURL}/courses/${course_id}/activity/${id}`, {
       headers,
     })
-
     const responseTabs = await axios.get<{}, IResponse<{ data: ITab[] }>>(
       `${apiURL}/course-sections/activity/${id}/tabs`,
       {
@@ -125,9 +127,10 @@ const CourseActivityApi = {
    * @returns {Promise<IResponseMeta<IDiscussion, 'discussions'>>} - Dữ liệu cuộc thảo luận.
    */
   getDiscussion: async (
-    id: string,
+    class_id: string,
+    course_section_id: string,
   ): Promise<IResponseMeta<IDiscussion, 'discussions'>> => {
-    const uri = url.createDiscussion + `/${id}`
+    const uri = url.createDiscussion
     const response = await httpService.GET<
       {},
       IResponseMeta<IDiscussion, 'discussions'>
@@ -136,6 +139,8 @@ const CourseActivityApi = {
       params: {
         page_index: 1,
         page_size: 9999,
+        class_id,
+        course_section_id,
       },
     })
     return response
@@ -159,6 +164,37 @@ const CourseActivityApi = {
       request,
     })
     return response
+  },
+
+  /**
+   * @description upload ảnh cho cuộc thảo luận.
+   * @async
+   * @param {ICreateDiscussionUploadRequest} request - Dữ liệu yêu cầu upload cuộc thảo luận.
+   * @returns {Promise<IResponse<IDiscussion>>} - Dữ liệu cuộc thảo luận đã upload.
+   */
+  uploadImagesDiscussion: async ({
+    discussion_id,
+    new_discussion_file,
+    discussion_file_ids,
+  }: ICreateDiscussionUploadRequest): Promise<IResponse<IDiscussion>> => {
+    const uri = url.uploadImageDiscussion
+    const formData = new FormData()
+
+    formData.append('discussion_id', discussion_id)
+
+    new_discussion_file?.forEach((file, index) => {
+      formData.append(`discussion_images[${index}]`, file)
+    })
+
+    discussion_file_ids?.forEach((discussion_file_id, index) => {
+      formData.append(`discussion_file_ids[${index}]`, discussion_file_id)
+    })
+
+    // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
+    return httpService.POST_FORM_DATA<any, any>({
+      uri,
+      request: formData,
+    })
   },
 
   /**
@@ -188,13 +224,19 @@ const CourseActivityApi = {
    * @param {any} data - Dữ liệu sẽ được gửi kèm theo câu hỏi.
    * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi từ máy chủ.
    */
-  submitQuestion: async (id: string, data: any): Promise<IResponse<any>> => {
-    const uri = url.submitQuestion + `/${id}` + '/submit'
-    const response = await httpService.POST<any, any>({
-      uri,
-      request: data,
-    })
-    return response
+  submitQuiz: async (id: string, data: any): Promise<IResponse<any>> => {
+    const quizAttemptResponse = await CourseTestApi.createQuizAttempt(id)
+
+    const quizAttemptId = quizAttemptResponse.data?.id
+    if (quizAttemptId) {
+      const uri = url.submitQuiz + `/${quizAttemptId}` + '/submit'
+      const response = await httpService.POST<any, any>({
+        uri,
+        request: data,
+      })
+      return response
+    }
+    throw new Error('')
   },
 
   /**

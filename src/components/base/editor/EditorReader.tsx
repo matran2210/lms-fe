@@ -51,13 +51,15 @@ const EditorReader = ({
   const handleOnclick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement
     if (target.tagName === 'VIDEO') {
-      const src = target.querySelector('source')?.getAttribute('src')
+      const src = target.querySelector('source')?.getAttribute('token')
       if (src && target.tagName === 'VIDEO') {
         var iframe = document.createElement('iframe')
-        iframe.src = src.replace(
-          '/manifest/video.m3u8',
-          '/iframe?autoplay=true',
-        )
+        iframe.src =
+          // src.replace(
+          //   '/manifest/video.m3u8',
+          //   '/iframe?autoplay=true',
+          // )
+          `https://customer-qf43f9e6huohhr1o.cloudflarestream.com/${src}/iframe?autoplay=true`
         iframe.id = target.id
         iframe.className = target.className
         iframe.style.cssText = target.style.cssText

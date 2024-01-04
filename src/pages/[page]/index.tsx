@@ -4,7 +4,6 @@ import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
-import { PROFILE_PAGES } from '@utils/constants/User'
 import { GetServerSideProps } from 'next'
 import { StaticImageData } from 'next/image'
 import { useRef, useState } from 'react'
@@ -14,7 +13,9 @@ interface IProps {
   page: IProfilePages
 }
 
-const ProfilePage = ({ page }: IProps) => {
+const ProfilePage = ({ page }: any) => {
+  // const router = useRouter()
+  // const page = router.query.page as IProfilePages
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
   const inputFileRef = useRef<HTMLInputElement | null>(null)
@@ -33,7 +34,7 @@ const ProfilePage = ({ page }: IProps) => {
   }
   let selectedContent: JSX.Element | null = null
 
-  if (page === 'my_profile') {
+  if (page === 'myprofile') {
     selectedContent = (
       <ProfileContent
         setReViewImageSrc={setReViewImageSrc}
@@ -44,9 +45,11 @@ const ProfilePage = ({ page }: IProps) => {
         handleSetAvatar={handleSetAvatar}
       />
     )
-  } else if (page === 'certificates') {
-    selectedContent = <CertificateContent page={page} />
-  } else if (page === 'devices') {
+  } 
+  // else if (page === 'certificates') {
+  //   selectedContent = <CertificateContent page={page} />
+  // } 
+  else if (page === 'devices') {
     selectedContent = <Devices />
   } else if (page === 'login_history') {
     selectedContent = <LoginHistory />
@@ -76,7 +79,7 @@ const ProfilePage = ({ page }: IProps) => {
 export const getServerSideProps: GetServerSideProps<IProps> = async (
   context,
 ) => {
-  const params = context.params
+  const params = context.query
   if (
     !params?.page ||
     typeof params?.page !== 'string'

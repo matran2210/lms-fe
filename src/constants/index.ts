@@ -1,5 +1,5 @@
 export const PageLink = {
-  DASHBOARD: '/',
+  DASHBOARD: '/myprofile',
   COURSES: '/courses',
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
@@ -87,15 +87,50 @@ export const defaultStatusDetail = [
     value: 'IN_PROGRESS',
   },
   {
-    label: 'READY_TO_LEARN',
+    label: 'Ready To Learn',
     value: 'READY_TO_LEARN',
   },
   {
-    label: 'COMPLETED',
+    label: 'In Progress',
     value: 'COMPLETED',
   },
   {
-    label: 'CANCELED',
+    label: 'Completed',
     value: 'CANCELED',
   },
 ]
+
+export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
+
+export const TITLE_USER_STATUS = {
+  NORMAL: 'NORMAL',
+  RESERVED: 'RESERVED',
+  MOVED_OUT: 'MOVED_OUT',
+  MOVED_IN: 'MOVED_IN',
+  TRANSFER_TO: 'TRANSFER_TO',
+  TRANSFERRED: 'TRANSFERRED',
+  CANCELED: 'CANCELED',
+}
+export const COURSE_STATUS = {
+  PUBLISH: 'PUBLISH',
+  LOCK: 'LOCK',
+  DRAFT: 'DRAFT',
+  BLOCK: 'BLOCK',
+}
+
+export const CLASS_STATUS = {
+  PUBLIC: 'PUBLIC',
+  DRAFT: 'DRAFT',
+  BLOCK: 'BLOCK',
+  ENDED: 'ENDED',
+}
+
+export const BUTTON_STATUS = {
+  Active: 'Active',
+  Begin: 'Begin',
+  Resume: 'Resume',
+  Review: 'Review',
+  Extend: 'Extend',
+  Hidden: 'Hidden',
+  Disabled: 'Disabled',
+}

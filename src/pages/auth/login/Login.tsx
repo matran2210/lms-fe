@@ -23,6 +23,8 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 import { getMessagingToken } from 'src/utils/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import PopUpLimit from './PopupLimit'
+import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 
 interface IInputProps {
   login: string
@@ -41,7 +43,7 @@ const LoginPage = () => {
   const dispatch = useAppDispatch()
   const userLogin = useAppSelector(loginReducer)
   const [loading, setLoading] = useState<boolean>(false)
-
+  const [openLimit, setOpenLimit] = useState<boolean>(false)
   // Validate for input
   const validationSchema = z.object({
     login: z
@@ -93,17 +95,27 @@ const LoginPage = () => {
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
     try {
-      const getFireBaseToken = await handleDeviceToken()
-      const loginUserResult = await dispatch(
+      // const getFireBaseToken = await handleDeviceToken()
+      dispatch(
         getLoginUser({
           login,
           password,
           remember_me: remember_me ? remember_me : false,
-          device_id: getFireBaseToken,
+          device_id: '',
         }),
-      ).unwrap()
-      router.push(PageLink.COURSES)
-    } catch (error) {}
+      )
+        // dispatch(getEntranceCount())
+        .unwrap()
+        .then((payload) => {
+          router.push(PageLink.COURSES)
+          dispatch(getEntranceCount())
+        })
+        .catch((error) => {
+          if (error?.response?.data?.error?.code === '403|0001') {
+            setOpenLimit(true)
+          }
+        })
+    } catch (error: any) {}
   }
   const socialLogin = () => {
     toast.error('Chức năng này sẽ được update vào version sau!')
@@ -141,8 +153,8 @@ const LoginPage = () => {
             control={control}
             placeholder="Password"
             type="password"
-            className="mt-6"
             textSize="sm"
+            className="mt-6"
           />
           <div className="mt-10">
             <SappButton
@@ -161,6 +173,7 @@ const LoginPage = () => {
               className="min-w-4 min-h-4 h-4"
               title="Keep me logged in"
               classNameTitle="text-medium-sm text-gray-1"
+              state="primary"
             />
             <span className="text-medium-sm text-gray-1 hover:underline">
               <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
@@ -183,6 +196,7 @@ const LoginPage = () => {
           </div> */}
         </form>
       </div>
+      <PopUpLimit open={openLimit} setOpen={setOpenLimit} />
     </>
   )
 }

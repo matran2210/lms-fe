@@ -6,6 +6,7 @@ import { buildQueryString, convertSnakeCaseToHumanReadable } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useForm } from 'react-hook-form'
 import { ICourseAll } from 'src/type/courses'
+import { defaultStatusDetail } from 'src/constants'
 
 const Filter = ({ courses }: { courses: ICourseAll }) => {
   const router = useRouter()
@@ -60,12 +61,7 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
         <SappHookFormSelect
           control={control}
           name="status"
-          options={defaultCategory.concat(
-            courses?.status?.map((status: any) => ({
-              label: convertSnakeCaseToHumanReadable(status?.status),
-              value: status?.status,
-            })),
-          )}
+          options={defaultStatusDetail}
           placeholder="Status"
         />
       </div>

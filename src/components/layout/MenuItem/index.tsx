@@ -3,11 +3,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { useAppSelector } from 'src/redux/hook'
+import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
+import { activeNotesList } from 'src/redux/slice/Course/NotesList'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -21,6 +22,7 @@ export default function MenuItem({
   setOpenResource,
 }: MenuItemProps) {
   const [isExpanded, toggleExpanded] = useState(false)
+  const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
   const selected = router.pathname === url
@@ -35,23 +37,32 @@ export default function MenuItem({
     document.body.style.overflow = 'hidden'
   }
 
-  const handleActiveResource =
-    name === 'Resource' && (router?.query?.courseId || router.query.id)
-      ? handleOpenResource
-      : () => {}
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
+  }
+
+  const handleActive = () => {
+    if (router?.query?.courseId || router.query.id) {
+      name === 'Resource' && handleOpenResource()
+      name === 'Notes List' && handleOpenNotesList()
+    }
+  }
 
   return (
     <>
       <div
         className={`cursor-pointer ${
-          selected && type === 'level-1' ? 'border-l-4 pr-1 border-active' : ''
+          selected && type === 'level-1' && router.pathname !== '/'
+            ? 'border-l-4 pr-1 border-active'
+            : ''
         } relative sidebar-list-items py-2 ${
           mode === 'student' ? 'mb-4 last:mb-0' : 'mb-7 last:mb-0'
         }`}
       >
         <div className="sidebar-item flex items-center justify-center group">
           <Link href={url} passHref>
-            <div className="flex items-center" onClick={handleActiveResource}>
+            <div className="flex items-center" onClick={handleActive}>
               {Icon === 'avatar' ? (
                 <div className="w-10 h-10">
                   <Image

@@ -7,7 +7,7 @@ import url from './Authen/url'
 
 import toast from 'react-hot-toast'
 import { exceptions } from './en.exceptions'
-import { setCookieActToken } from '@utils/index'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 
 const { publicRuntimeConfig } = getConfig()
@@ -56,7 +56,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
     await AsyncStorage.setItem('accessToken', act)
     await AsyncStorage.setItem('refreshToken', rft)
     setCookieActToken(act)
-    setCookieActToken(rft)
+    setCookieRefreshToken(rft)
     // Resolve all the subscribers with the new access token
     refreshSubscribers.forEach((callback) => callback(act))
 
@@ -67,8 +67,9 @@ const refreshAccessToken = async (): Promise<string | null> => {
     // Return the new access token
     return act
   } catch (error) {
-    // store.dispatch(getLogoutUser())
     removeJwtToken()
+    window.location.href = PageLink.AUTH_LOGIN
+
     // If there is an error, return null
     return null
   }
@@ -169,7 +170,10 @@ axiosInstance.interceptors.response.use(
     }
 
     if (isLoginPage && error.response?.config?.url !== '/me') {
-      if (error?.response?.status !== 422) {
+      if (
+        error?.response?.status !== 422 &&
+        error?.response?.data?.error?.code !== '403|0001'
+      ) {
         toast.error(
           errorMessage ||
             error?.response?.statusText ||
@@ -185,7 +189,10 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error.response && error.response.status !== 401) {
-      if (error?.response?.status !== 422) {
+      if (
+        error?.response?.status !== 422 &&
+        error?.response?.data?.error?.code !== '403|0001'
+      ) {
         toast.error(
           errorMessage ||
             error?.response?.statusText ||

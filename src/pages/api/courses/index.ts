@@ -8,7 +8,7 @@ const CourseAPI = {
     return response
   },
   getCoursePartDetail: async (
-    id: string | undefined,
+    id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ): Promise<any> => {
     const response = await httpService.GET<any, any>({
@@ -82,6 +82,49 @@ const CourseAPI = {
       link.click()
       document.body.removeChild(link)
     }
+  },
+  getCourseNotesList: async (
+    page_size: number,
+    params?: Object,
+  ): Promise<any> => {
+    const response = await httpService.GET<any, any>({
+      uri: `course-section-notes?page_index=1&page_size=${page_size}`,
+      params: params,
+    })
+    return response
+  },
+  updateCourseNotesList: (id: string, params?: Object): Promise<any> => {
+    const response = httpService.PUT<any, any>({
+      uri: `course-section-notes/${id}`,
+      request: params,
+    })
+    return response
+  },
+  deleteCourseNoteList: (id: string): Promise<any> => {
+    const response = httpService.DELETE<any, any>({
+      uri: `course-section-notes/${id}`,
+    })
+    return response
+  },
+  activeCourse: (params: Object): Promise<any> => {
+    const response = httpService.POST<any, any>({
+      uri: `courses/active`,
+      request: params,
+    })
+    return response
+  },
+  extendCourse: (params: Object): Promise<any> => {
+    const response = httpService.POST<any, any>({
+      uri: `courses/extend`,
+      request: params,
+    })
+    return response
+  },
+  learningOutcomeProgress: (course_id: string | string[] | undefined, section_id: string | string[] | undefined): Promise<any> => {
+    const response = httpService.GET<any, any>({
+      uri: `course-sections/course/${course_id}/section/${section_id}/progress`
+    })
+    return response
   },
 }
 

@@ -4,6 +4,7 @@ import { RootState } from 'src/redux/store'
 import {
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
+  ICreateDiscussionUploadRequest,
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IActivity } from 'src/type/course/my-course/Activity'
@@ -68,9 +69,9 @@ export const getCourseActivityTapById = createAsyncThunk(
 
 export const getDiscussion = createAsyncThunk(
   'courseActivityReducer/getDiscussion',
-  async (id: string, thunkAPI) => {
+  async ({ id, sectionId }: any, thunkAPI) => {
     try {
-      const res = await CourseActivityApi.getDiscussion(id)
+      const res = await CourseActivityApi.getDiscussion(id, sectionId)
       if (!res?.data) {
         return
       }
@@ -94,6 +95,21 @@ export const createDiscussion = createAsyncThunk(
     }
   },
 )
+export const uploadImagesDiscussion = createAsyncThunk(
+  'courseActivityReducer/uploadImagesDiscussion',
+  async (data: ICreateDiscussionUploadRequest, thunkAPI) => {
+    try {
+      const res = await CourseActivityApi.uploadImagesDiscussion(data)
+      if (!res?.data) {
+        return
+      }
+      return { ...res.data }
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 export const reactDiscussion = createAsyncThunk(
   'courseActivityReducer/reactDiscussion',
   async (data: ICreateDiscussionResReact, thunkAPI) => {
@@ -168,6 +184,17 @@ export const courseActivitySlice = createSlice({
     })
 
     builder.addCase(reactDiscussion.rejected, (state) => {
+      state.loadingDiscussion = false
+    })
+
+    builder.addCase(uploadImagesDiscussion.pending, (state) => {
+      state.loadingDiscussion = true
+    })
+    builder.addCase(uploadImagesDiscussion.fulfilled, (state, action) => {
+      state.loadingDiscussion = false
+    })
+
+    builder.addCase(uploadImagesDiscussion.rejected, (state) => {
       state.loadingDiscussion = false
     })
   },

@@ -204,7 +204,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     return () => containerDiv?.removeEventListener('scroll', handleScroll)
   }, [pageIndex])
 
-  const DEFAULT_SELECT = [{ label: 'All', value: '' }]
+  const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
   const download = async (name: string, file_key: string) => {
     await CourseAPI.downloadResource({
@@ -243,7 +243,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       title="Resource"
       footer={false}
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between mr-3">
         <HookFormSelect
           className="w-52"
           placeholder="Section"
@@ -332,7 +332,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
       {resources?.resources?.map((resource) => (
         <div key={resource.id}>
-          <div className=" mt-6 p-6" style={{ border: '1px solid #DCDDDD' }}>
+          <div className=" mt-6 p-6 mr-3 h-[92px]" style={{ border: '1px solid #DCDDDD' }}>
             <div className="flex justify-between items-center">
               <div>
                 <div className="font-normal text-base text-bw-1">
@@ -352,6 +352,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           </div>
         </div>
       ))}
+
     </SappDrawer>
   )
 }

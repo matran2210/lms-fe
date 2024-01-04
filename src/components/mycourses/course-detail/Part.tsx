@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import TestModal from 'src/pages/courses/test'
-import { round } from 'lodash'
+import { round, truncate } from 'lodash'
 import { useRouter } from 'next/router'
-import { countWords, formatTime } from '@utils/index'
+import { countWords, formatTime, truncateString } from '@utils/index'
 import { ICourseSection } from 'src/type/courses'
 import { useForm } from 'react-hook-form'
 
@@ -32,12 +32,16 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       }
       className="cursor-pointer"
     >
-      <div className={`name-part text-2xl font-semibold`}>{courses?.name}</div>
+      <div className={`name-part text-2xl font-semibold h-[60px]`}>
+        {courses?.name}
+      </div>
       <div className="des mt-6 mb-15">
         <div
-          dangerouslySetInnerHTML={{ __html: courses?.description }}
+          dangerouslySetInnerHTML={{
+            __html: truncateString(courses?.description, 370),
+          }}
           className={`text-base ${
-            countWords(courses?.name) > 3 ? 'h-32' : 'h-40'
+            countWords(courses?.name) > 3 ? 'h-[120px]' : 'h-40'
           }`}
         />
       </div>
@@ -93,7 +97,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       </div>
       {/* Solution test modal */}
       {/* <SolutionModal open={open} setOpen={setOpen} /> */}
-      <TestModal open={open} setOpen={setOpen} title={''} />
+      {/* <TestModal open={open} setOpen={setOpen} title={''} /> */}
     </div>
   )
 }

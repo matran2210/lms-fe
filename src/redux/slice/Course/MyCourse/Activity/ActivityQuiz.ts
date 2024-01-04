@@ -149,7 +149,13 @@ const submitQuestion = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const result = await CourseActivityApi.submitQuestion(id, data)
+      const result = await CourseActivityApi.submitQuiz(id, {
+        ...data,
+        answers: data.answers?.filter((obj) => {
+          const keys = Object.keys(obj)
+          return keys.length > 1 && !(!obj.answer && !obj.question_answer_id)
+        }),
+      })
       if (result.success) {
         return { ...result }
       }
@@ -254,6 +260,14 @@ const quizSlice: Slice = createSlice({
               questionToUpdate.solution = payload.question.solution
               questionToUpdate.defaultValue = payload.myAnswers
 
+              questionToUpdate.quiz_position_mapping = [
+                ...(questionToUpdate.quiz_position_mapping || []),
+                {
+                  question_id: payload.question.id,
+                  answers: payload.question?.answers,
+                },
+              ]
+
               switch (payload.question.qType as QUESTION_TYPES) {
                 case QUESTION_TYPES.ONE_CHOICE:
                 case QUESTION_TYPES.TRUE_FALSE:
@@ -351,18 +365,6 @@ const quizSlice: Slice = createSlice({
                         answer_id: e.idAnswer,
                         answer_position: i + 1,
                       })),
-                    },
-                  ]
-                  questionToUpdate.quiz_position_mapping = [
-                    ...(questionToUpdate.quiz_position_mapping || []),
-                    {
-                      question_id: payload.question.id,
-                      answers: payload.question.answers?.map((e) => {
-                        return {
-                          answer_id: e.id,
-                          answer_position: e.answer_position,
-                        }
-                      }),
                     },
                   ]
 

@@ -56,7 +56,7 @@ const EntranceTestFillForm = ({
     const res = await EntranceApi.getListUnivers()
     let optionUnivers = []
     for (let e of res.data) {
-      optionUnivers.push({ value: e.code, label: e.description })
+      optionUnivers.push({ value: e.code, label: e.name })
     }
     setListUnivers(optionUnivers)
     // return res?.data?.[0]
@@ -110,19 +110,30 @@ const EntranceTestFillForm = ({
   }, [open])
   useEffect(() => {
     if (user && open) {
-      setValue('univers_id', {
-        value: user.university.code,
-        label: user.university.description,
-      })
-      setValue('univers_program_id', {
-        value: user.university_program.id,
-        label: user.university_program.name,
-      })
-      setValue('majors_id', { value: user.major.id, label: user.major.name })
-      setValue('englishLevel_id', {
-        value: user.english_level.id,
-        label: user.english_level.name,
-      })
+      if (user.university) {
+        setValue('univers_id', {
+          value: user.university?.code,
+          label: user.university?.name,
+        })
+      }
+      if (user.university_program) {
+        setValue('univers_program_id', {
+          value: user.university_program?.id,
+          label: user.university_program?.name,
+        })
+      }
+      if (user.major) {
+        setValue('majors_id', {
+          value: user.major?.id,
+          label: user.major?.name,
+        })
+      }
+      if (user.english_level) {
+        setValue('englishLevel_id', {
+          value: user.english_level?.id,
+          label: user.english_level?.name,
+        })
+      }
     }
   }, [user, open])
 
@@ -145,6 +156,7 @@ const EntranceTestFillForm = ({
         university_id: dataValue.univers_id.value,
       })
     }
+    setOpen && setOpen(false)
     router.push(`/test/${entrancePopupContent.id}`)
   }
 
@@ -164,7 +176,8 @@ const EntranceTestFillForm = ({
       parentChildClass=""
       position="center"
       buttonSize="extra"
-      // closeAfterSubmit={false}
+      scrollbale={false}
+      closeAfterSubmit={false}
     >
       <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
         Fill this form

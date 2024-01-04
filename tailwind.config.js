@@ -33,7 +33,10 @@ module.exports = {
       ssm: ['12px', { lineHeight: '20px' }],
     },
     fontFamily: {
-      sans: ['Inter', 'sans-serif'],
+      sans: ['Roboto', 'sans-serif'],
+      // sans: ['Inter', 'sans-serif'],
+      tech: 'techNology',
+      inter: ['Inter', 'sans-serif'],
     },
     container: {
       center: true,
@@ -109,6 +112,7 @@ module.exports = {
         solution: '0px 2px 7px 0px rgba(0, 0, 0, 0.13)',
         'questions-exhibits': '5px -6px 10px -4px rgba(0, 0, 0, 0.15)',
         'question-footer': '0px -2px 7px 0px rgba(0, 0, 0, 0.13)',
+        preview: '0px 4px 12px 0px rgba(0, 0, 0, 0.10)',
       },
       minWidth: {
         4: '16px',
@@ -182,6 +186,7 @@ module.exports = {
         18: '18%',
         3.6: '36%',
         17: '17%',
+        '412px': '412px',
       },
       padding: {
         1.8: '0.47rem', // 7.5px

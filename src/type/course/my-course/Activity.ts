@@ -36,6 +36,17 @@ export interface IActivity {
   }
   files: File[]
   tabs?: ITab[]
+  class_id?: string
+  next_activity?: {
+    id: string
+    display_icon: string
+    name: string
+  }
+  previous_activity?: {
+    id: string
+    display_icon: string
+    name: string
+  }
 }
 
 export interface ITab {

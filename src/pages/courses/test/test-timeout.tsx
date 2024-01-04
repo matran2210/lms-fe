@@ -38,17 +38,19 @@ const TestTimeOutModal = ({
       handleCancel={onCancel}
       handleSubmit={onSubmit}
       showHeader={false}
-      size="w-max"
-      footerButtonClassName="flex flex-col-reverse gap-6"
+      refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
+      size="max-w-[646px]"
+      footerButtonClassName="flex flex-col-reverse gap-8 mt-0"
       childClass="flex flex-col justify-center items-center"
       parentChildClass=""
       position="center"
       fullWidthBtn={true}
       closeAfterSubmit={true}
+      buttonSize="extra"
     >
       <TimeIcon />
-      <div className="text-bw-1 text-4xl font-bold mt-6">Time Out</div>
-      <div className="text-gray-1 text-sm font-normal mt-4 mb-16">
+      <div className="text-bw-1 text-4xl font-bold mt-6 gap">Time Out</div>
+      <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-13">
         You will have 60 days from the activation date to study this course
       </div>
     </SappModal>

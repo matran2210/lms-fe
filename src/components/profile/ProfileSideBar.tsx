@@ -43,21 +43,13 @@ const ProfileSideBar = ({ page }: IProps) => {
                           className={`${className} cursor-pointer relative ms-4`}
                           key={key}
                         >
-                          <Link
-                            href={`/profile/${urlPage}/`}
-                            passHref
-                            scroll={false}
-                          >
+                          <Link href={`/${urlPage}/`} passHref scroll={false}>
                             <a className="p-5 block w-full text-left">
                               {v.label}
                             </a>
                           </Link>
                           <div className="absolute bottom-0">
-                            <Link
-                              href={`/profile/${urlPage}/`}
-                              passHref
-                              scroll={false}
-                            >
+                            <Link href={`/${urlPage}/`} passHref scroll={false}>
                               <a className="p-5 block w-full text-left">
                                 {v.label}
                               </a>
@@ -82,11 +74,11 @@ const ProfileSideBar = ({ page }: IProps) => {
           }
           return (
             <li className={`${className} cursor-pointer relative`} key={key}>
-              <Link href={`/profile/${urlPage}/`} passHref scroll={false}>
+              <Link href={`/${urlPage}/`} passHref scroll={false}>
                 <a className="p-5 block w-full text-left">{value.label}</a>
               </Link>
               <div className="absolute inset-0 border-b border-gray-3 bottom-0">
-                <Link href={`/profile/${urlPage}/`} passHref scroll={false}>
+                <Link href={`/${urlPage}/`} passHref scroll={false}>
                   <a className="p-5 block w-full text-left">{value.label}</a>
                 </Link>
               </div>

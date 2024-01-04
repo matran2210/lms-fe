@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/future/image'
 import React from 'react'
 import SappModal from './SappModal'
 
@@ -23,8 +23,21 @@ function SappModalImage({ src, setSrc }: Props) {
         position="center"
         showFooter={false}
         isContentFull={false}
+        showHeader={false}
       >
-        {src && <Image height={500} width={500} src={src}></Image>}
+        <div className="w-[600px] max-w-full h-full">
+          {src && (
+            <Image
+              src={src}
+              width="0"
+              height="800"
+              sizes="100%"
+              className="w-fit h-full"
+              alt={'image'}
+              loading={'eager'}
+            />
+          )}
+        </div>
       </SappModal>
     </div>
   )

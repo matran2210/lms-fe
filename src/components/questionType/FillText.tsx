@@ -25,6 +25,7 @@ interface IProps {
     answer_position: number
   }[]
   extenalRef?: any
+  solution?: string
 }
 const AddWordPreview = forwardRef(
   (
@@ -38,6 +39,7 @@ const AddWordPreview = forwardRef(
       defaultAnswer,
       corrects,
       extenalRef,
+      solution,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -120,27 +122,35 @@ const AddWordPreview = forwardRef(
     //   }
     // }
     return (
-      <EditorReader
-        id="hightlight_area"
-        onMouseUp={(e: any) => {
-          if (
-            e.target.tagName.charAt(0) !== 'm' &&
-            e.target.firstChild?.tagName !== 'math'
-          ) {
-            if (e) {
-              runHighlight(handleSaveHighLight, allowHighLight || false)
+      <div>
+        <EditorReader
+          id="hightlight_area"
+          onMouseUp={(e: any) => {
+            if (
+              e.target.tagName.charAt(0) !== 'm' &&
+              e.target.firstChild?.tagName !== 'math'
+            ) {
+              if (e) {
+                runHighlight(handleSaveHighLight, allowHighLight || false)
+              }
             }
+          }}
+          key={key}
+          extenalRef={refEditor}
+          className="sapp-questions"
+          text_editor_content={
+            questionContent?.documentElement.querySelector('body')?.innerHTML ||
+            ''
           }
-        }}
-        key={key}
-        extenalRef={refEditor}
-        className="sapp-questions"
-        text_editor_content={
-          questionContent?.documentElement.querySelector('body')?.innerHTML ||
-          ''
-        }
-        highlighted={highlighted}
-      />
+          highlighted={highlighted}
+        />
+        {solution && (
+          <div className="bg-gray-4 mt-6 p-6">
+            <div className="font-semibold text-base text-bw-1 ">Solution</div>
+            <EditorReader className="mt-4" text_editor_content={solution} />
+          </div>
+        )}
+      </div>
     )
   },
 )

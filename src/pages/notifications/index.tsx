@@ -63,14 +63,19 @@ const Notifications = () => {
     } catch (error) {}
   }
 
-  const getApiNotificationDetail = async (id: string) => {
+  const getApiNotificationDetail = async (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => {
     try {
       const res = await dispatch(getNotificationDetail(id))
       if (res) {
         await coutNotificationsUnRead()
         dispatch(updateStatus({ id: id }))
-        notifyDetail?.created_by !== null &&
-          Router.push(`${notifyDetail?.content}`)
+        if (redirect !== null) {
+          Router.push(`${content?.replace('class_id', 'classId')}`)
+        }
       }
     } catch (error) {}
   }
@@ -129,9 +134,8 @@ const Notifications = () => {
       <div className="header bg-white border-b border-default px-4 lg:px-20">
         <div className="max-w-xxl my-0 mx-auto flex py-4.5">
           <SearchForm
-            placeholder="Find..."
+            placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
-            getNotifications={getNotifications}
           />
         </div>
       </div>

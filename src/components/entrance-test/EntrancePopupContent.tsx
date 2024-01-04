@@ -30,23 +30,27 @@ const EntrancePopupContent = ({
         <div className="info">
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Name:</p>
-            <p className="text-bw-1">{name}</p>
+            <p className="text-bw-1 font-medium">{name}</p>
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Score:</p>
-            <p className="text-bw-1">--</p>
+            <p className="text-bw-1 font-medium">{score}</p>
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Time Allowed:</p>
-            <p className="text-bw-1">{timeAllowFormatted}</p>
+            <p className="text-bw-1 font-medium">{timeAllowFormatted}</p>
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>No of Attempts:</p>
-            <p className="text-bw-1">{attemps}</p>
+            <p className="text-bw-1 font-medium">{attemps}</p>
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Status:</p>
-            <div className={`${status ? 'text-state-success' : 'text-danger'}`}>
+            <div
+              className={`${
+                status ? 'text-state-success' : 'text-danger'
+              } font-medium`}
+            >
               {status ? 'Finished' : 'Unfinished'}
             </div>
           </div>
