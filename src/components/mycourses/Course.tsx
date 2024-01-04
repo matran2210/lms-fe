@@ -86,7 +86,7 @@ const Course = ({
       courseStatus === COURSE_STATUS.LOCK
     ) {
       if (classStatus === CLASS_STATUS.PUBLIC) {
-        if (classType === 'TRIAL_COURSE' && !student)
+        if (course?.course_type === 'TRIAL_COURSE' && !student)
           return BUTTON_STATUS.Active
         if (!startedAt && !finishedAt) {
           if (classInstance?.duration_type === 'FLEXIBLE')

@@ -54,6 +54,17 @@ a {
 * {
   scrollbar-width: thin;
   scrollbar-color: #d6dee1 transparent;
+  &::-webkit-scrollbar {
+    @apply h-4 w-2 border bg-bw-3;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-bw-3 border;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply border bg-gray-5;
+  }
 }
 
 /* Mac */
