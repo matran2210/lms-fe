@@ -66,7 +66,7 @@ const SappButton = ({
   let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-semibold  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
 
   isUnderLine = isUnderLine ?? color === 'text'
-  componentClass += ` ${isUnderLine ? 'underline' : ''}`
+  componentClass += ` ${isUnderLine ? 'hover:underline' : ''}`
 
   if (link)
     return (

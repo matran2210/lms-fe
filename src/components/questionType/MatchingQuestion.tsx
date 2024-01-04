@@ -228,7 +228,7 @@ const MatchingQuestion = forwardRef(
                   <div
                     // className="w-fit"
                     key={answer?.id}
-                    className="sapp-notched-container min-w-132px"
+                    className="sapp-notched-container min-w-fit"
                     id={answer?.id}
                     draggable="true"
                     onDragStart={drag}
