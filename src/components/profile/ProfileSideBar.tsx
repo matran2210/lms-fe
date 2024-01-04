@@ -43,21 +43,13 @@ const ProfileSideBar = ({ page }: IProps) => {
                           className={`${className} cursor-pointer relative ms-4`}
                           key={key}
                         >
-                          <Link
-                            href={`/${urlPage}/`}
-                            passHref
-                            scroll={false}
-                          >
+                          <Link href={`/${urlPage}/`} passHref scroll={false}>
                             <a className="p-5 block w-full text-left">
                               {v.label}
                             </a>
                           </Link>
                           <div className="absolute bottom-0">
-                            <Link
-                              href={`/${urlPage}/`}
-                              passHref
-                              scroll={false}
-                            >
+                            <Link href={`/${urlPage}/`} passHref scroll={false}>
                               <a className="p-5 block w-full text-left">
                                 {v.label}
                               </a>
