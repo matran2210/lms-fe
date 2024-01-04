@@ -47,7 +47,7 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
       <div className="des mt-6">
         <div className={`text-base h-26`} />
       </div>
-      <div className="mt-auto">
+      <div className="mt-7">
         <div className="action flex items-center jusity-end relative">
           {(!coursePart?.quiz?.is_limited ||
             coursePart?.quiz?.attempts?.length !==
