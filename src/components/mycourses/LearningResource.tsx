@@ -332,7 +332,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
       {resources?.resources?.map((resource) => (
         <div key={resource.id}>
-          <div className=" mt-6 p-6 mr-3 h-[92px]" style={{ border: '1px solid #DCDDDD' }}>
+          <div
+            className=" mt-6 p-6 mr-3 h-[92px]"
+            style={{ border: '1px solid #DCDDDD' }}
+          >
             <div className="flex justify-between items-center">
               <div>
                 <div className="font-normal text-base text-bw-1">
@@ -352,7 +355,6 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           </div>
         </div>
       ))}
-
     </SappDrawer>
   )
 }
