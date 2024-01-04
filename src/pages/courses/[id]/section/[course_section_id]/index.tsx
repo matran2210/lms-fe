@@ -23,8 +23,8 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const partDetail = tree[0] as any
 
   const fetchChapterDetail = async (
-    id: string | undefined,
-    course_section_id: string | undefined,
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
   ) => {
     setLoadingChapter(true)
     try {
@@ -85,6 +85,13 @@ const CoursePartDetail = ({ previewPart }: any) => {
         : () => {}
   }
 
+  const handleLearningOutCome = async (id: string | string[] | undefined, course_section_id: string | string[] | undefined) => {
+    const res = await CourseAPI.learningOutcomeProgress(router.query.id, chapterDetail?.id)
+    if(res?.success) {
+      fetchChapterDetail(id, course_section_id)
+    }
+  }
+
   return (
     <div className="main max-w-xxl my-0 mx-auto">
       <div className="main max-w-xxl my-0 mx-auto">
@@ -118,6 +125,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         course_section_id={router.query.course_section_id as any}
         handleRouterActivity={handleRouterActivity}
         handleRouterCaseStudy={handleRouterCaseStudy}
+        handleLearningOutCome={handleLearningOutCome}
       />
 
       <SappDrawer
@@ -130,13 +138,13 @@ const CoursePartDetail = ({ previewPart }: any) => {
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6"
+          className="pb-6 mr-3"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
         />
         {learningOutcome?.course_outcomes?.map((outcome, index) => (
-          <div className="flex mt-6]" key={outcome.id}>
+          <div className="flex mt-6 mr-3" key={outcome.id}>
             <div className="font-semibold leading-6 text-sm me-1">
               LO{index + 1}:
             </div>

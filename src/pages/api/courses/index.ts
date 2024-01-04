@@ -8,7 +8,7 @@ const CourseAPI = {
     return response
   },
   getCoursePartDetail: async (
-    id: string | undefined,
+    id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ): Promise<any> => {
     const response = await httpService.GET<any, any>({
@@ -117,6 +117,12 @@ const CourseAPI = {
     const response = httpService.POST<any, any>({
       uri: `courses/extend`,
       request: params,
+    })
+    return response
+  },
+  learningOutcomeProgress: (course_id: string | string[] | undefined, section_id: string | string[] | undefined): Promise<any> => {
+    const response = httpService.GET<any, any>({
+      uri: `course-sections/course/${course_id}/section/${section_id}/progress`
     })
     return response
   },
