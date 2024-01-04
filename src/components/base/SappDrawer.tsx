@@ -81,13 +81,13 @@ const SappDrawer = ({
               title="Cancel"
               className="ms-[4px]"
               onClick={handleMaskClick}
-              size='lager'
+              size="lager"
             />
             <ButtonPrimary
               title={btnSubmitTile}
               className="me-[32px]"
               onClick={handleSubmit}
-              size='lager'
+              size="lager"
             />
           </div>
         )}

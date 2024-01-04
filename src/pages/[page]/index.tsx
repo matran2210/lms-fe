@@ -45,11 +45,9 @@ const ProfilePage = ({ page }: any) => {
         handleSetAvatar={handleSetAvatar}
       />
     )
-  } 
-  else if (page === 'certificates') {
+  } else if (page === 'certificates') {
     selectedContent = <CertificateContent />
-  } 
-  else if (page === 'devices') {
+  } else if (page === 'devices') {
     selectedContent = <Devices />
   } else if (page === 'login_history') {
     selectedContent = <LoginHistory />

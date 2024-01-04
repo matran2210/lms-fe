@@ -1,28 +1,21 @@
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import MyProfileAPI from 'src/pages/api/profile'
-import { useAppDispatch } from 'src/redux/hook'
 
 const Certificate = () => {
   const [certificateData, setCertificateData] = useState<any>([])
 
-  const { id } = useParams()
-
-  const fetchChapterDetail = async (userId: any) => {
+  const fetchChapterDetail = async () => {
     try {
-      const res = await MyProfileAPI.getProfile(userId)
+      const res = await MyProfileAPI.getProfile()
       const certificate = res.course_user_certificate_instances
       setCertificateData(certificate)
     } catch (error) {}
   }
 
   useEffect(() => {
-    if (id) {
-      fetchChapterDetail(id)
-    }
-  }, [id])
+    fetchChapterDetail()
+  }, [])
   return (
     <div>
       <div className="relative">

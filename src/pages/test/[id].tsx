@@ -1267,7 +1267,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         }
       })}
       {/* </div> */}
-      <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px]">
+      <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px] z-10">
         <div className="flex items-center h-full">
           <button className="h-full">
             <div className="flex items-center gap-3 ps-6 ">

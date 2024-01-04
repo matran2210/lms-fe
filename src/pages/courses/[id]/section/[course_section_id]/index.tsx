@@ -85,9 +85,15 @@ const CoursePartDetail = ({ previewPart }: any) => {
         : () => {}
   }
 
-  const handleLearningOutCome = async (id: string | string[] | undefined, course_section_id: string | string[] | undefined) => {
-    const res = await CourseAPI.learningOutcomeProgress(router.query.id, chapterDetail?.id)
-    if(res?.success) {
+  const handleLearningOutCome = async (
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
+  ) => {
+    const res = await CourseAPI.learningOutcomeProgress(
+      router.query.id,
+      chapterDetail?.id,
+    )
+    if (res?.success) {
       fetchChapterDetail(id, course_section_id)
     }
   }
