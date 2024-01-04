@@ -13,9 +13,9 @@ import { pushNotes, closeNote } from 'src/redux/slice/Course/NotesList'
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 
 interface IProps {
-  id?: any
-  content?: any
-  index?: any
+  id: string | undefined
+  content: string
+  index: string | number
 }
 
 const CreateNote = ({ id, content, index }: IProps) => {

@@ -766,11 +766,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       handleChangeTab(tabs[0].id)
       return reformTabs
     })
-    await CourseTestApi.submitQuestion(quizAttempId as string, {
+    const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
       total_attempt_time: quizDetail.quiz_timed * 60 - remainTime,
     })
+    if (res) {
+      router.push(`/courses/test/test-result/${res?.data?.id}`)
+    }
+
     // clearInterval(intervalRef.current)
     setLoading(false)
     return

@@ -30,13 +30,28 @@ export const notesListSlice = createSlice({
     },
     closeNote: (state, action) => {
       const indexToDelete = action.payload // Chỉ mục cần xóa, truyền từ payload
-      // Xóa phần tử tại chỉ mục indexToDelete từ mảng note_data
-      state.note_data.splice(indexToDelete, 1)
+
+      // Tạo một bản sao của mảng note_data và loại bỏ phần tử tại chỉ mục indexToDelete
+      const updatedNoteData = state.note_data.filter(
+        (item, index) => index !== indexToDelete,
+      )
+
+      // Trả về một phiên bản mới của state với mảng note_data đã được cập nhật
+      state.note_data = updatedNoteData
+    },
+    clearNote: () => {
+      // Đặt giá trị khi action 'clearNote' được gọi
+      return initialState
     },
   },
 })
 
-export const { activeNotesList, resetNotesList, pushNotes, closeNote } =
-  notesListSlice.actions
+export const {
+  activeNotesList,
+  resetNotesList,
+  pushNotes,
+  closeNote,
+  clearNote,
+} = notesListSlice.actions
 export const notesListReducer = (state: RootState) => state.notesListReducer
 export default notesListSlice.reducer

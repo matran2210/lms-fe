@@ -23,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
+import { clearNote } from 'src/redux/slice/Course/NotesList'
 
 type Props = {
   activity: IActivity
@@ -75,6 +76,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     videoDocumentRef.current,
     observerRef.current,
   ])
+
+  // Clear notes
+  useEffect(() => {
+    dispatch(clearNote())
+  }, [])
 
   /**
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
