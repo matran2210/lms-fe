@@ -59,7 +59,7 @@ const SappDrawer = ({
         } transition-transform duration-300 ease-in-out overflow-y-auto h-screen`}
       >
         <div className="flex flex-col h-screenl justify-between">
-          <div className="w-100 justify-between bg-bw-1 h-[80px] text-2xl font-semibold items-center flex px-8 text-white">
+          <div className="w-100 justify-between bg-bw-2 h-[80px] text-2xl font-semibold items-center flex px-8 text-white">
             {title}
             <Image
               src={cross}
@@ -70,7 +70,7 @@ const SappDrawer = ({
           </div>
         </div>
         <div
-          className="mt-6 mx-8 overflow-y-auto h-[80vh]"
+          className="mt-6 ml-8 mr-3 overflow-y-auto h-[80vh]"
           id={`sapp-drawer${drawerSubId}`}
         >
           {children}
@@ -81,11 +81,13 @@ const SappDrawer = ({
               title="Cancel"
               className="ms-[4px]"
               onClick={handleMaskClick}
+              size='lager'
             />
             <ButtonPrimary
               title={btnSubmitTile}
-              className="h-10 me-[32px]"
+              className="me-[32px]"
               onClick={handleSubmit}
+              size='lager'
             />
           </div>
         )}
