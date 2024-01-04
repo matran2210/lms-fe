@@ -19,7 +19,9 @@ const Certificate = () => {
   }
 
   useEffect(() => {
-    fetchChapterDetail(id)
+    if (id) {
+      fetchChapterDetail(id)
+    }
   }, [id])
   return (
     <div>

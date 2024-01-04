@@ -46,9 +46,9 @@ const ProfilePage = ({ page }: any) => {
       />
     )
   } 
-  // else if (page === 'certificates') {
-  //   selectedContent = <CertificateContent page={page} />
-  // } 
+  else if (page === 'certificates') {
+    selectedContent = <CertificateContent />
+  } 
   else if (page === 'devices') {
     selectedContent = <Devices />
   } else if (page === 'login_history') {
