@@ -20,7 +20,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -138,6 +138,7 @@ body *::-webkit-scrollbar-thumb:hover {
   ul,
   menu {
     padding-inline-start: 40px !important;
+    list-style: auto;
   }
 }
 
@@ -306,7 +307,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop-answer {
-  @apply inline-block min-w-[100px] border border-gray-500 border text-center p-1 m-1 bg-gray-4;
+  @apply inline-block min-w-[100px] border border-gray-500 border p-1 m-1 bg-gray-4;
 
   &.corrects {
     @apply border-success text-state-success;

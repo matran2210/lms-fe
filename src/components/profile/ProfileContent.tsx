@@ -23,7 +23,7 @@ const ProfileContent = ({
 }: IProps) => {
   return (
     <div className="bg-white p-6 flex-1 shadow-box">
-      {page === 'my_profile' && (
+      {page === 'myprofile' && (
         <MyProfile
           isEdit={isEdit}
           setIsEdit={setIsEdit}

@@ -43,7 +43,8 @@ const TabSlide = ({
   }, [currentTab, elementRef?.current])
   useEffect(() => {
     function updateState() {
-      setValueFilter('filter', '')
+      setValueFilter('filter', undefined)
+      setActiveShowAll(false)
       const el = elementRef.current
       el && setHasScrollBar(el.scrollWidth > el.getBoundingClientRect().width)
     }

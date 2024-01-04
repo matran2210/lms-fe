@@ -34,7 +34,7 @@ const ProfilePage = ({ page }: any) => {
   }
   let selectedContent: JSX.Element | null = null
 
-  if (page === 'my_profile') {
+  if (page === 'myprofile') {
     selectedContent = (
       <ProfileContent
         setReViewImageSrc={setReViewImageSrc}

@@ -1,5 +1,5 @@
 export type IProfilePages =
-  | 'my_profile'
+  | 'myprofile'
   | 'certificates'
   | 'settings'
   | 'logout'

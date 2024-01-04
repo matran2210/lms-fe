@@ -33,8 +33,10 @@ module.exports = {
       ssm: ['12px', { lineHeight: '20px' }],
     },
     fontFamily: {
-      sans: ['Inter', 'sans-serif'],
+      sans: ['Roboto', 'sans-serif'],
+      // sans: ['Inter', 'sans-serif'],
       tech: 'techNology',
+      inter: ['Inter', 'sans-serif'],
     },
     container: {
       center: true,

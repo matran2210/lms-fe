@@ -93,7 +93,7 @@ const DragNDropPreivew = forwardRef(
       if (corrects) {
         elementsCorrects.forEach((element: any, index: number) => {
           element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop-answer corrects">
-          <span id="${corrects[index].id}">${corrects[index].answer}</span>
+          <span id="${corrects[index].id}" class="flex justify-center w-full">${corrects[index].answer}</span>
           </span>`
         })
         elements.forEach((element: any, index: number) => {
@@ -106,7 +106,9 @@ const DragNDropPreivew = forwardRef(
                   ? 'corrects'
                   : 'wrongs'
               }">
-              <span id="${defaultAnswer[index].idAnswer}">${
+              <span id="${
+                defaultAnswer[index].idAnswer
+              }" class="flex justify-center w-full">${
                 defaultAnswer[index].value
               }</span>
               </span>`

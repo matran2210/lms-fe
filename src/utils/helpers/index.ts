@@ -110,7 +110,7 @@ export const calculateTimeAgo = (date: string): string => {
 
   const daysAgo = Math.floor(hoursAgo / 24)
   if (daysAgo >= 1) {
-    const formatter = new Intl.DateTimeFormat('en-US', {
+    const formatter = new Intl.DateTimeFormat('en-GB', {
       day: 'numeric',
       month: 'numeric',
       year: 'numeric',
