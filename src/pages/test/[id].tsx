@@ -38,7 +38,7 @@ import {
 } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
-import { uniqueId } from 'lodash'
+import { debounce, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -317,6 +317,60 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         />
       </div>
     )
+  }
+  const checkAnswered = (currentContent: any) => {
+    if (
+      currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.TRUE_FALSE
+    ) {
+      if (getValues(`${currentPage}_answer`)) {
+        return true
+      }
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+      if (
+        getValues(`${currentPage}_answer`) &&
+        getValues(`${currentPage}_answer`).length > 0
+      ) {
+        return true
+      }
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
+      for (let e of getAnswerMatching()) {
+        if (e.answer_id && e.answer_id !== '') {
+          return true
+        }
+      }
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      for (let e of getAnswerDragNDrop()) {
+        if (e.idAnswer && e.idAnswer !== '') {
+          return true
+        }
+      }
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
+      for (let e of getValueSelectText()) {
+        if (e && e !== '') {
+          return true
+        }
+      }
+
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
+      for (let e of getValueFillText()) {
+        if (e && e !== '') {
+          return true
+        }
+      }
+
+      return false
+    } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+      if (currentContent.viewed) {
+        return true
+      }
+      return false
+    }
   }
   const filteredTabs = useMemo(() => {
     const filter = watchFilter('filter')
@@ -992,7 +1046,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             />
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
-            <div className="px-6">
+            <div
+              className="px-6"
+              // onMouseUp={debounce(()=>{console.log(checkAnswered(currentTabContent))}, 500)}
+            >
               {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
               {checkType(
                 currentTabContent?.data,
@@ -1037,12 +1094,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 }
               }
             }}
+            className="editor-wrap mb-3 max-w-[950px] w-full m-auto"
           >
             <div className="mb-4">
               {currentTabContent?.topicDescription?.name}
             </div>
             <EditorReader
-              className="editor-wrap mb-3 max-w-[950px] w-full m-auto"
+              className=""
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
