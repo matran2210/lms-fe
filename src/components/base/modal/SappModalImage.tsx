@@ -23,16 +23,16 @@ function SappModalImage({ src, setSrc }: Props) {
         position="center"
         showFooter={false}
         isContentFull={false}
-        showHeader={false}
+        title="Preview image"
       >
-        <div className="w-[600px] max-w-full h-full">
+        <div className="min-w-[100px] w-fit max-w-full  mx-auto">
           {src && (
             <Image
               src={src}
               width="0"
-              height="800"
+              height="0"
               sizes="100%"
-              className="w-fit h-full"
+              className="w-fit max-h-[500px] h-auto"
               alt={'image'}
               loading={'eager'}
             />

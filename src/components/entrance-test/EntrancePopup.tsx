@@ -61,7 +61,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         }}
         showOkButton={!checkLimit}
         showHeader={false}
-        refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
+        refClass="md:px-5 py-5 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
         size="max-w-screen-sm"
         // size="max-w-1/2"
         footerButtonClassName="justify-between flex"
@@ -70,12 +70,13 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         position="center"
         closeAfterSubmit={true}
         buttonSize="extra"
+        footerClassName="md:!px-16 !pb-12"
       >
-        <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
+        <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm md:px-16 pt-12">
           Entrance Test Info
         </h2>
         <div
-          className="cursor-pointer"
+          className="cursor-pointer md:px-16"
           // onClick={() => {
           //   handleOnClick()
           // }}

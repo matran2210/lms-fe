@@ -57,6 +57,7 @@ interface IProps {
   showCancelButton?: boolean
   zIndex?: string
   scrollbale?: boolean
+  footerClassName?: string
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -120,6 +121,7 @@ const SappModal: React.FC<IProps> = ({
   showCancelButton = true,
   zIndex = 'z-[1000]',
   scrollbale = true,
+  footerClassName,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -254,7 +256,7 @@ const SappModal: React.FC<IProps> = ({
             ></div>
             <div
               className={`${
-                isFullScreen || `${size} p-4 xl:py-11`
+                isFullScreen || `${size} p-4 xl:py-10`
               }  w-full text-center h-full flex justify-center inset-0 items-${position}`}
             >
               <div
@@ -289,7 +291,7 @@ const SappModal: React.FC<IProps> = ({
                 </div>
 
                 {showFooter && (
-                  <div className="md:pt-5 pt-5 relative">
+                  <div className={`md:pt-5 pt-5 relative ${footerClassName}`}>
                     {isBordered && (
                       <div className="absolute left-0 right-0 border-b border-gray-2 top-0 -mx-6"></div>
                     )}
