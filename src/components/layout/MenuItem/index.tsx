@@ -8,7 +8,7 @@ import { userReducer } from 'src/redux/slice/User/User'
 import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
-import { activeNotesList } from 'src/redux/slice/Course/NotesList'
+import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -42,10 +42,20 @@ export default function MenuItem({
     document.body.style.overflow = 'hidden'
   }
 
+  const handleAddNote = () => {
+    const note = {
+      id: '',
+      name: 'Note',
+      description: '',
+    }
+    dispatch(pushNotes(note))
+  }
+
   const handleActive = () => {
     if (router?.query?.courseId || router.query.id) {
       name === 'Resource' && handleOpenResource()
       name === 'Notes List' && handleOpenNotesList()
+      name === 'Create Note' && handleAddNote()
     }
   }
 

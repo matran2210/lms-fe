@@ -13,7 +13,7 @@ import { DEFAULT_SELECT } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
-import { resetNotesList } from 'src/redux/slice/Course/NotesList'
+import { resetNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
@@ -28,6 +28,10 @@ const DEFAULT_PAGESIZE = 20
 const LearningNotesList = () => {
   const notesListStatus = useAppSelector(
     (state) => state.notesListReducer?.status,
+  )
+
+  const getNotesData = useAppSelector(
+    (state) => state.notesListReducer?.note_data,
   )
 
   const validationSchema = z.object({
@@ -98,6 +102,7 @@ const LearningNotesList = () => {
   const params = cleanParamsAPI({
     course_id: courseId || queryId,
     course_section_id:
+      router?.query?.activityId ||
       selectedActivity?.value ||
       selectedUnit?.value ||
       selectedSubsection?.value ||
@@ -114,9 +119,9 @@ const LearningNotesList = () => {
           setValue(`note.${index}.value`, note?.description)
         })
 
-        const course_section_path = res?.data?.notes[0].course_section_path
+        const course_section_path = res?.data?.notes[0]?.course_section_path
 
-        if (res && course_section_path.length > 0) {
+        if (res && course_section_path?.length > 0) {
           setSelectedSection(defaultValueActivity(course_section_path[3]))
           setSelectedSubsection(defaultValueActivity(course_section_path[2]))
           setTimeout(() => {
@@ -321,6 +326,15 @@ const LearningNotesList = () => {
     setViewActivity('')
   }
 
+  const handleEditNote = (id: string, data: any, index: number) => {
+    const note = {
+      id: id,
+      name: 'Note',
+      description: data?.note[index]?.value,
+    }
+    dispatch(pushNotes(note))
+  }
+
   return (
     <SappDrawer
       isOpen={notesListStatus}
@@ -451,13 +465,20 @@ const LearningNotesList = () => {
                         showEdit === `note.${index}.value` ? 'active' : ''
                       }`}
                       onClick={() => {
-                        if (showEdit !== `note.${index}.value`) {
+                        /*if (showEdit !== `note.${index}.value`) {
                           setShowEdit(`note.${index}.value`)
-                        } else {
+                        } else {*/
+                        if (
+                          !getNotesData.some((item) =>
+                            item.id.includes(note?.id),
+                          )
+                        ) {
                           handleSubmit((data: any) => {
-                            onSubmit(data, note, index)
+                            handleEditNote(note?.id, data, index)
+                            onClose()
                           })()
                         }
+                        /*}*/
                       }}
                     >
                       <EditIcon />
