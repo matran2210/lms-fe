@@ -54,7 +54,13 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         handleCancel={handleOnClick}
         handleSubmit={() => {
           if (checkInfo) {
-            router.push(`/test/${entrancePopupContent.id}`)
+            // router.push(`/test/${entrancePopupContent.id}`)
+            router.push({
+              pathname: `/test/${entrancePopupContent.id}`,
+              query: {
+                type: 'entrance',
+              },
+            })
           } else {
             setOpenFillForm(true)
           }

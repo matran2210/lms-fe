@@ -28,7 +28,7 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       return false
     }
     for (let i in data?.quiz?.attempts) {
-      if (data?.quiz?.attempts[i].status === 'SUBMITTED') {
+      if (data?.quiz?.attempts[i]?.status === 'SUBMITTED') {
         return true
       }
     }
