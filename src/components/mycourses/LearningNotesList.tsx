@@ -9,7 +9,7 @@ import React, { Dispatch, useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import CourseAPI from 'src/pages/api/courses'
 import { ISection } from 'src/type/courses'
-import { DEFAULT_SELECT } from 'src/constants'
+import { DEFAULT_SELECT_SECTION } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
@@ -87,7 +87,7 @@ const LearningNotesList = () => {
       '',
   })
 
-  // Lấy danh sách notes và fill tự động activity khi lần đầum mở trong activity
+  // Lấy danh sách notes và fill tự động activity khi lần đầu mở trong activity
   useEffect(() => {
     const objectParams = cleanParamsAPI({
       course_id: courseId || queryId,
@@ -247,7 +247,10 @@ const LearningNotesList = () => {
       )
       setUnit(res?.data?.sections)
       setSelectedActivity(null)
-    } catch (error) {}
+    } catch (error) {
+      setSelectedUnit(null)
+      setSelectedActivity(null)
+    }
   }
 
   async function getCourseActivity(page_size: number) {
@@ -258,7 +261,9 @@ const LearningNotesList = () => {
         selectedUnit.value,
       )
       setActivity(res?.data?.sections)
-    } catch (error) {}
+    } catch (error) {
+      setSelectedActivity(null)
+    }
   }
 
   const fetchData = async (params?: Object) => {
@@ -304,10 +309,11 @@ const LearningNotesList = () => {
       footer={false}
       drawerSubId={'-notes-list'}
     >
-      <div className="flex justify-between gap-4 md:gap-6 flex-wrap md:flex-nowrap">
+      <div className="flex justify-between gap-4 md:gap-6 flex-wrap md:flex-nowrap mt-2">
         <HookFormSelect
           classParent="w-full max-w-52"
           placeholder="Section"
+          isClearable={true}
           value={selectedSection}
           onChange={(selectedOption) =>
             handleDropdownChange(
@@ -318,7 +324,7 @@ const LearningNotesList = () => {
           }
           options={
             sections &&
-            DEFAULT_SELECT.concat(
+            DEFAULT_SELECT_SECTION.concat(
               sections?.map((section) => ({
                 label: section.name,
                 value: section.id,
@@ -330,6 +336,7 @@ const LearningNotesList = () => {
         <HookFormSelect
           classParent="w-full max-w-52"
           placeholder="Subsection"
+          isClearable={true}
           value={selectedSubsection}
           onChange={(selectedOption) =>
             handleDropdownChange(
@@ -352,6 +359,7 @@ const LearningNotesList = () => {
         <HookFormSelect
           classParent="w-full max-w-52"
           placeholder="Unit"
+          isClearable={true}
           value={selectedUnit}
           onChange={(selectedOption) =>
             handleDropdownChange(
@@ -374,6 +382,7 @@ const LearningNotesList = () => {
         <HookFormSelect
           classParent="w-full max-w-52"
           placeholder="Activity"
+          isClearable={true}
           value={selectedActivity}
           onChange={(selectedOption) =>
             handleDropdownChange(selectedOption, setSelectedActivity, null)
@@ -397,8 +406,10 @@ const LearningNotesList = () => {
             className="mt-6 p-6 border border-default last:mb-6"
             key={note?.id}
           >
-            <div className="flex items-center mb-6 flex-wrap md:flex-nowrap">
-              <SappBreadcrumbNotLink paths={note?.course_section_path} />
+            <div className="flex items-center mb-4 flex-wrap md:flex-nowrap">
+              <SappBreadcrumbNotLink
+                paths={note?.course_section_path.reverse()}
+              />
             </div>
             <div className="font-normal text-base">
               <span>{note?.description}</span>

@@ -102,6 +102,8 @@ export const defaultStatusDetail = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
+export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
+
 export const TITLE_USER_STATUS = {
   NORMAL: 'NORMAL',
   RESERVED: 'RESERVED',
