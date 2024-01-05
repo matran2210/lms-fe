@@ -38,11 +38,9 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       <div className="des mt-6 mb-15">
         <div
           dangerouslySetInnerHTML={{
-            __html: truncateString(courses?.description, 370),
+            __html: truncateString(courses?.description, 300),
           }}
-          className={`text-base ${
-            countWords(courses?.name) > 3 ? 'h-[120px]' : 'h-40'
-          }`}
+          className='text-base h-[120px]'
         />
       </div>
       <div className="mt-auto">
