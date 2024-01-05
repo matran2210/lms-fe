@@ -93,7 +93,10 @@ const CourseAPI = {
     })
     return response
   },
-  updateCourseNotesList: (id: string, params?: Object): Promise<any> => {
+  updateCourseNotesList: (
+    id: string | undefined,
+    params?: Object,
+  ): Promise<any> => {
     const response = httpService.PUT<any, any>({
       uri: `course-section-notes/${id}`,
       request: params,
@@ -103,6 +106,25 @@ const CourseAPI = {
   deleteCourseNoteList: (id: string): Promise<any> => {
     const response = httpService.DELETE<any, any>({
       uri: `course-section-notes/${id}`,
+    })
+    return response
+  },
+  getNoteDetail: async (
+    course_section_id: string | number,
+    course_id?: string | number,
+  ): Promise<any> => {
+    const response = await httpService.GET<any, any>({
+      uri: `course-section-notes/${course_section_id}`,
+      params: {
+        course_id: course_id,
+      },
+    })
+    return response
+  },
+  createNote: (params: Object): Promise<any> => {
+    const response = httpService.POST<any, any>({
+      uri: `course-section-notes`,
+      request: params,
     })
     return response
   },

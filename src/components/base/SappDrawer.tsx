@@ -31,15 +31,15 @@ const SappDrawer = ({
   handleSubmit = () => {},
   drawerSubId = '',
 }: IProps) => {
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
-  // const handleOnClose = () => {
-  //   dispatch(confirmDialog.open({ message: message, onConfirm: onClose }))
-  // }
+  const handleOnClose = () => {
+    dispatch(confirmDialog.open({ message: message, onConfirm: onClose }))
+  }
 
   const handleMaskClick = (e: any) => {
     if (isOpen && e?.target?.closest('.custom-drawer') === null) {
-      onClose()
+      handleOnClose()
     }
   }
 

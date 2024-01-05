@@ -693,3 +693,60 @@ export const ConfirmIcon = () => {
     </svg>
   )
 }
+
+export const CloseIconNote = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="square"
+        strokeLinejoin="round"
+        d="M15 5L5 15M5 5l10 10"
+      ></path>
+    </svg>
+  )
+}
+
+export const SaveIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path stroke="currentColor" d="M14 17v-5H6v5"></path>
+      <path stroke="currentColor" strokeLinecap="square" d="M6 7h4"></path>
+      <path
+        stroke="currentColor"
+        d="M3 5c0-.943 0-1.414.293-1.707C3.586 3 4.057 3 5 3h8.06c.41 0 .614 0 .797.076.184.076.329.22.618.51l1.94 1.94c.288.288.433.433.509.617.076.183.076.388.076.797V15c0 .943 0 1.414-.293 1.707C16.414 17 15.943 17 15 17H5c-.943 0-1.414 0-1.707-.293C3 16.414 3 15.943 3 15V5z"
+      ></path>
+    </svg>
+  )
+}
+
+export const PlusIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="square"
+        strokeLinejoin="round"
+        d="M17.071 10H2.93M10 2.929V17.07"
+      ></path>
+    </svg>
+  )
+}

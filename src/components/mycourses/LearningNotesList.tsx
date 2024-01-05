@@ -13,14 +13,9 @@ import { DEFAULT_SELECT } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
-import { resetNotesList } from 'src/redux/slice/Course/NotesList'
+import { resetNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import PreviewNoteList from './PreviewNoteList'
 
 const DEFAULT_PAGESIZE = 20
@@ -30,21 +25,9 @@ const LearningNotesList = () => {
     (state) => state.notesListReducer?.status,
   )
 
-  const validationSchema = z.object({
-    note: z
-      .array(z.object({ value: z.string().min(0, VALIDATE_REQUIRED) }))
-      .optional(),
-  })
-
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<any>({
-    resolver: zodResolver(validationSchema),
-    mode: 'onSubmit',
-  })
+  const getNotesData = useAppSelector(
+    (state) => state.notesListReducer?.note_data,
+  )
 
   const dispatch = useAppDispatch()
   const [notesListData, setNotesListData] = useState<any>()
@@ -61,7 +44,6 @@ const LearningNotesList = () => {
   const [unit, setUnit] = useState<ISection[]>([])
   const [activity, setActivity] = useState<ISection[]>([])
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
-  const [showEdit, setShowEdit] = useState<string>()
   const [viewActivity, setViewActivity] = useState<string>()
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
 
@@ -107,27 +89,30 @@ const LearningNotesList = () => {
 
   // Lấy danh sách notes và fill tự động activity khi lần đầum mở trong activity
   useEffect(() => {
+    const objectParams = cleanParamsAPI({
+      course_id: courseId || queryId,
+      course_section_id: activityId || '',
+    })
+
     if (router?.query?.activityId && notesListStatus) {
-      CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, params).then((res) => {
-        setNotesListData(res?.data)
-        res?.data?.notes?.forEach((note: any, index: number) => {
-          setValue(`note.${index}.value`, note?.description)
-        })
+      CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams).then(
+        (res) => {
+          setNotesListData(res?.data)
+          const course_section_path = res?.data?.notes[0]?.course_section_path
 
-        const course_section_path = res?.data?.notes[0].course_section_path
-
-        if (res && course_section_path.length > 0) {
-          setSelectedSection(defaultValueActivity(course_section_path[3]))
-          setSelectedSubsection(defaultValueActivity(course_section_path[2]))
-          setTimeout(() => {
-            setSelectedUnit(defaultValueActivity(course_section_path[1]))
-          }, 500)
-          setTimeout(() => {
-            setSelectedActivity(defaultValueActivity(course_section_path[0]))
-            setFirstLoadActity(true)
-          }, 1000)
-        }
-      })
+          if (res && course_section_path?.length > 0) {
+            setSelectedSection(defaultValueActivity(course_section_path[3]))
+            setSelectedSubsection(defaultValueActivity(course_section_path[2]))
+            setTimeout(() => {
+              setSelectedUnit(defaultValueActivity(course_section_path[1]))
+            }, 500)
+            setTimeout(() => {
+              setSelectedActivity(defaultValueActivity(course_section_path[0]))
+              setFirstLoadActity(true)
+            }, 1000)
+          }
+        },
+      )
     } else if (notesListStatus) {
       setFirstLoadActity(true)
     }
@@ -138,10 +123,6 @@ const LearningNotesList = () => {
     if (notesListStatus && (courseId || queryId) && firstLoadActity) {
       CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, params).then((res) => {
         setNotesListData(res?.data)
-        res?.data?.notes?.forEach((note: any, index: number) => {
-          setValue(`note.${index}.value`, note?.description)
-        })
-        setShowEdit('')
         setViewActivity('')
       })
     }
@@ -284,7 +265,6 @@ const LearningNotesList = () => {
     try {
       const res = await CourseAPI.getCourseNotesList(pageIndex, params)
       setNotesListData(res?.data)
-      setShowEdit('')
       setViewActivity('')
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } catch (error) {
@@ -302,23 +282,17 @@ const LearningNotesList = () => {
     }
   }
 
-  const onSubmit = async (data: any, note: any, index: number) => {
-    const desUpdate = data?.note[index]?.value
-    try {
-      const object = {
-        name: note?.name,
-        description: desUpdate,
-      }
-      const res = await CourseAPI.updateCourseNotesList(note?.id, object)
-      fetchData(params)
-      toast.success('Cập nhật thành công!')
-    } catch (error) {
-      toast.error('Cập nhật không thành công!')
-    }
-  }
-
   const closePreview = () => {
     setViewActivity('')
+  }
+
+  const handleEditNote = (id: string, description: string, index: number) => {
+    const note = {
+      id: id,
+      name: 'Note',
+      description: description,
+    }
+    dispatch(pushNotes(note))
   }
 
   return (
@@ -427,17 +401,7 @@ const LearningNotesList = () => {
               <SappBreadcrumbNotLink paths={note?.course_section_path} />
             </div>
             <div className="font-normal text-base">
-              {showEdit === `note.${index}.value` ? (
-                <HookFormTextArea
-                  placeholder="Content..."
-                  control={control}
-                  name={`note.${index}.value`}
-                  defaultValue={note?.description}
-                  className="w-full h-20 p-1"
-                />
-              ) : (
-                <span>{note?.description}</span>
-              )}
+              <span>{note?.description}</span>
             </div>
             <div className="mt-5 flex justify-between">
               <div className="font-normal text-sm text-gray-1">
@@ -447,16 +411,15 @@ const LearningNotesList = () => {
                 <div className="cursor-pointer relative">
                   {activityId === note?.course_section_id ? (
                     <span
-                      className={`notes-list-icon ${
-                        showEdit === `note.${index}.value` ? 'active' : ''
-                      }`}
+                      className="notes-list-icon"
                       onClick={() => {
-                        if (showEdit !== `note.${index}.value`) {
-                          setShowEdit(`note.${index}.value`)
-                        } else {
-                          handleSubmit((data: any) => {
-                            onSubmit(data, note, index)
-                          })()
+                        if (
+                          !getNotesData.some((item) =>
+                            item.id.includes(note?.id),
+                          )
+                        ) {
+                          handleEditNote(note?.id, note?.description, index)
+                          onClose()
                         }
                       }}
                     >

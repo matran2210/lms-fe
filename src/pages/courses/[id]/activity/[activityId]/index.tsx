@@ -22,6 +22,8 @@ import { useRouter } from 'next/router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
+import CreateNote from '@components/mycourses/create-note/CreateNote'
+import { clearNote } from 'src/redux/slice/Course/NotesList'
 
 type Props = {
   activity: IActivity
@@ -39,6 +41,9 @@ enum ACTIVITY_TYPE {
 const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
+  const getNotesData = useAppSelector(
+    (state) => state.notesListReducer?.note_data,
+  )
   const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
@@ -71,6 +76,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     videoDocumentRef.current,
     observerRef.current,
   ])
+
+  // Clear notes
+  useEffect(() => {
+    dispatch(clearNote())
+  }, [])
 
   /**
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
@@ -260,6 +270,18 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
+      <>
+        {getNotesData?.map((e: any, index: number) => {
+          return (
+            <CreateNote
+              id={e?.id}
+              content={e?.description}
+              index={index}
+              key={index}
+            />
+          )
+        })}
+      </>
       <div className="bg-gray-3 pb-10 px-6 ">
         <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
           <div className="font-semibold text-2xl ">{activity.name}</div>

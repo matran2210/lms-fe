@@ -326,7 +326,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
             )
           })}
         </div>
-        <div className="flex items-center select-none cursor-pointer relative z-[9999] group">
+        <div className="flex items-center select-none cursor-pointer relative z-30 group">
           <span className="mr-2">Timeline</span>
           {/* Icon for course video timeline */}
           <SappIcon icon="course_video_timeline"></SappIcon>
