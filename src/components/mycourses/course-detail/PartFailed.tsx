@@ -10,11 +10,14 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
     : 'Unlimited'
   const [open, setOpen] = useState(false)
   const checkFinished = useMemo(() => {
+    if (!coursePart?.quiz?.attempts) {
+      return false
+    }
     if (coursePart?.quiz?.attempts?.length === 0) {
       return false
     }
     for (let i in coursePart?.quiz?.attempts) {
-      if (coursePart?.quiz?.attempts[i].status === 'SUBMITTED') {
+      if (coursePart?.quiz?.attempts[i]?.status === 'SUBMITTED') {
         return true
       }
     }

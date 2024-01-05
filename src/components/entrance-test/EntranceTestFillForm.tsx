@@ -157,7 +157,12 @@ const EntranceTestFillForm = ({
       })
     }
     setOpen && setOpen(false)
-    router.push(`/test/${entrancePopupContent.id}`)
+    router.push({
+      pathname: `/test/${entrancePopupContent.id}`,
+      query: {
+        type: 'entrance',
+      },
+    })
   }
 
   return (

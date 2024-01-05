@@ -191,7 +191,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     }
   }
   const router = useRouter()
-
+  const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
@@ -763,7 +763,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       })
     }
     setTabs(() => {
-      handleChangeTab(tabs[0].id)
+      // handleChangeTab(tabs[0].id)
       return reformTabs
     })
     const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
@@ -772,7 +772,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       total_attempt_time: quizDetail.quiz_timed * 60 - remainTime,
     })
     if (res) {
-      router.push(`/courses/test/test-result/${res?.data?.id}`)
+      if (type === 'entrance') {
+        router.push(`/entrance-test/test-result/${res?.data?.id}`)
+      } else {
+        router.push(`/courses/test/test-result/${res?.data?.id}`)
+      }
     }
 
     // clearInterval(intervalRef.current)
