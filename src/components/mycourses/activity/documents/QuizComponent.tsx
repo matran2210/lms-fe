@@ -308,7 +308,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getValueSelectText}
               defaultAnswer={activeQuestion?.defaultValue}
-              corrects={activeQuestion.corrects}
+              corrects={activeQuestion?.corrects}
             />
           )
 

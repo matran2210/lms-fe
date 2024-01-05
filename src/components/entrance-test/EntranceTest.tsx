@@ -26,7 +26,9 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   return (
     <>
       <div className="name">
-        <h2 className="text-2xl font-semibold mb-4 text-bw-1">{data?.name}</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-bw-1 line-clamp-2">
+          {data?.name}
+        </h2>
       </div>
       <div className="mt-auto">
         <div className="info">
