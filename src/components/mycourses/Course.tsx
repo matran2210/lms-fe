@@ -43,14 +43,12 @@ const Course = ({
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
-    if (course?.classes?.[0].finished_at) {
+    if (student?.finished_at) {
       // Current date
       const currentDate = new Date()
 
       // Parse the specific date string to a Date object
-      const parsedSpecificDate = parseISO(
-        course?.classes?.[0]?.finished_at as any,
-      )
+      const parsedSpecificDate = parseISO(student?.finished_at as any)
 
       // Calculate the difference in days
       const difference = differenceInDays(
@@ -211,9 +209,9 @@ const Course = ({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
+          className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
         >
-          <div className="cursor-pointer">
+          <div className="cursor-pointer min-h-352 flex flex-col">
             <div
               className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
@@ -224,14 +222,16 @@ const Course = ({
                 }
               }}
             >
-              <div>{truncateString(course?.name, 40)}</div>
+              <div className="line-clamp-2 text-ellipsis">
+                {truncateString(course?.name, 40)}
+              </div>
             </div>
             <div className="flex justify-between items-center">
               {enableCourse ? (
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
                   <span className="ml-1 text-bw-1 font-medium">
-                    {truncateString(course?.classes?.[0]?.name, 15)}
+                    {truncateString(course?.classes?.[0]?.code, 15)}
                   </span>
                 </div>
               ) : (
@@ -240,18 +240,20 @@ const Course = ({
                 </div>
               )}
               <div className="time-class text-medium-sm text-gray-1">
-                <span>
-                  <span className="font-medium">
-                    {daysDifference > 0 ? daysDifference : 0 ?? 0}{' '}
+                {determineButtonToShow !== 'Active' && (
+                  <span>
+                    <span className="font-medium text-bw-1">
+                      {daysDifference > 0 ? daysDifference : 0 ?? 0}{' '}
+                    </span>
+                    {daysDifference > 0 ? 'days left' : 'day left'}
                   </span>
-                  day left
-                </span>
+                )}
               </div>
             </div>
-            <div className="des mt-6 mb-8">
+            <div className="des mt-6 mb-8 line-clamp-5 text-ellipsis h-[116px]">
               <p
                 dangerouslySetInnerHTML={{
-                  __html: truncateString(course?.description, 150),
+                  __html: course?.description,
                 }}
                 className={`text-bas h-24 ${
                   enableCourse ? 'text-bw-1' : 'text-gray-1 '

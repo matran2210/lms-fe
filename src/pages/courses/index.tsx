@@ -63,6 +63,9 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
       confirmDialogOverLayRef.current.classList.add('pointer-events-none')
     }
+    // Remove hidden scroll when close user guide
+    document.body.style.removeProperty('padding-right')
+    document.body.classList.remove('overflow-hidden')
     setTimeout(() => {
       dispatch(reset())
     }, 50)
@@ -127,7 +130,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     <>
       <div className="header bg-white border-b border-default">
         <div
-          className={`max-w-xxl my-0 mx-auto flex py-[18px] xl-max:mx-6 relative 
+          className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
           ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
         >
           <SearchForm

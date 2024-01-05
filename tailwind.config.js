@@ -138,6 +138,7 @@ module.exports = {
         default: '40px',
         medium: '48px',
         large: '56px',
+        352: '352px',
       },
       maxHeight: {
         0: 0,
@@ -196,6 +197,7 @@ module.exports = {
         3.8: '0.89rem', // 14.3px
         4.5: '1.125rem', // 18px
         5.25: '1.313rem', // 21px
+        5.75: '23px', // 23px
         6.5: '26.5px',
         7.5: '1.875rem', // 30px
         8.25: '2.0625rem', // 33px

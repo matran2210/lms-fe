@@ -9,7 +9,7 @@
 
   .select__single-value,
   .select__placeholder {
-    @apply text-sm leading-4.5 font-medium p-0 m-0;
+    @apply text-sm leading-4.5 font-normal p-0 m-0;
   }
 
   .select__placeholder {
@@ -21,7 +21,7 @@
   }
 
   .select__option {
-    @apply text-sm leading-4.5 font-medium text-bw-1 cursor-pointer;
+    @apply text-sm leading-4.5 font-normal text-bw-1 cursor-pointer;
   }
 
   .select__option.select__option--is-selected {

@@ -24,7 +24,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     let timerId: any
 
     // Use useEffect to set up a timer to make the API call after 3 seconds
-    if (watch('name')?.length > 2) {
+    if (watch('name')?.length > 3) {
       timerId = setTimeout(() => {
         router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
       }, 2000)
@@ -57,7 +57,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
             {...field}
             type="text"
             placeholder={placeholder}
-            className="border-0 h-6 px-4 text-gray-1 focus:border-0 focus:outline-0 focus:ring-0 placeholder-text-gray-1"
+            className="border-0 h-6 px-4 text-bw-1 focus:border-0 focus:outline-0 focus:ring-0 placeholder-text-gray-1"
           />
         )}
       />

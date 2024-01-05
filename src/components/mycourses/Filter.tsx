@@ -50,11 +50,14 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
           name="type"
           options={defaultCategory.concat(
             courses?.total?.map((category: any) => ({
-              label: category?.categoryName,
+              label: `${category?.categoryName} (${category?.count})`,
               value: category?.categoryName,
             })),
           )}
-          placeholder="Categoty"
+          defaultValue={{ label: 'All', value: '' }}
+          placeholder="Category"
+          className="status-course"
+          isSearchable={false}
         />
       </div>
       <div className="filter pl-6 flex self-center">
@@ -63,6 +66,8 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
           name="status"
           options={defaultStatusDetail}
           placeholder="Status"
+          className="status-course"
+          isSearchable={false}
         />
       </div>
     </div>
