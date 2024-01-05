@@ -67,6 +67,7 @@ const SappHookFormSelect = ({
                 onChange={field.onChange}
                 isSearchable={isSearchable}
                 value={value}
+                defaultValue={defaultValue}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>

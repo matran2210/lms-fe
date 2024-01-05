@@ -83,19 +83,19 @@ export const defaultStatusDetail = [
     value: '',
   },
   {
-    label: 'In Progress',
-    value: 'IN_PROGRESS',
-  },
-  {
     label: 'Ready To Learn',
     value: 'READY_TO_LEARN',
   },
   {
     label: 'In Progress',
-    value: 'COMPLETED',
+    value: 'IN_PROGRESS',
   },
   {
     label: 'Completed',
+    value: 'COMPLETED',
+  },
+  {
+    label: 'Expired',
     value: 'CANCELED',
   },
 ]

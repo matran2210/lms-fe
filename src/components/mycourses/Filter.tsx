@@ -50,14 +50,11 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
           name="type"
           options={defaultCategory.concat(
             courses?.total?.map((category: any) => ({
-              label: category?.categoryName,
+              label: `${category?.categoryName} (${category?.count})`,
               value: category?.categoryName,
             })),
           )}
-          value={{
-            label: 'All',
-            value: '',
-          }}
+          defaultValue={{ label: 'All', value: '' }}
           placeholder="Category"
           className="status-course"
           isSearchable={false}
@@ -70,7 +67,7 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
           options={defaultStatusDetail}
           placeholder="Status"
           className="status-course"
-          isSearchable={true}
+          isSearchable={false}
         />
       </div>
     </div>
