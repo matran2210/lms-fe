@@ -211,9 +211,9 @@ const Course = ({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
+          className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
         >
-          <div className="cursor-pointer">
+          <div className="cursor-pointer min-h-352 flex flex-col">
             <div
               className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
@@ -241,10 +241,10 @@ const Course = ({
               )}
               <div className="time-class text-medium-sm text-gray-1">
                 <span>
-                  <span className="font-medium">
+                  <span className="font-medium text-bw-1">
                     {daysDifference > 0 ? daysDifference : 0 ?? 0}{' '}
                   </span>
-                  day left
+                  {daysDifference > 0 ? 'days left' : 'day left'}
                 </span>
               </div>
             </div>

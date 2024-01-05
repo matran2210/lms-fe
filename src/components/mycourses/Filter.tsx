@@ -54,7 +54,13 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
               value: category?.categoryName,
             })),
           )}
-          placeholder="Categoty"
+          value={{
+            label: 'All',
+            value: '',
+          }}
+          placeholder="Category"
+          className="status-course"
+          isSearchable={false}
         />
       </div>
       <div className="filter pl-6 flex self-center">
@@ -63,6 +69,8 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
           name="status"
           options={defaultStatusDetail}
           placeholder="Status"
+          className="status-course"
+          isSearchable={true}
         />
       </div>
     </div>

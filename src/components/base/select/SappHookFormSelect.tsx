@@ -18,6 +18,7 @@ interface IProps {
   defaultValue?: string | undefined | null
   label?: string
   labelClass?: string
+  isSearchable?: boolean
 }
 
 const SappHookFormSelect = ({
@@ -31,6 +32,8 @@ const SappHookFormSelect = ({
   labelClass = 'text-base block font-medium mb-2',
   label,
   required,
+  value,
+  isSearchable = true,
 }: IProps) => {
   return (
     <>
@@ -62,6 +65,8 @@ const SappHookFormSelect = ({
                 placeholder={placeholder}
                 isDisabled={isDisabled}
                 onChange={field.onChange}
+                isSearchable={isSearchable}
+                value={value}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>

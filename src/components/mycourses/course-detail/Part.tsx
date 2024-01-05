@@ -40,7 +40,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
           dangerouslySetInnerHTML={{
             __html: truncateString(courses?.description, 300),
           }}
-          className='text-base h-[120px]'
+          className="text-base h-[120px]"
         />
       </div>
       <div className="mt-auto">

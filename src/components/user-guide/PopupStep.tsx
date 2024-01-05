@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import SappModal from 'src/components/base/modal/SappModal'
 import SappButton from '@components/base/button/SappButton'
 import ButtonText from '@components/base/button/ButtonText'
 import { UserGuide } from 'src/constants'
@@ -32,6 +31,9 @@ const PopupStep = ({
       confirmDialogRef.current.classList.add('animate-jump-out')
       confirmDialogRef.current.classList.add('pointer-events-none')
     }
+    // Remove hidden scroll when close user guide
+    document.body.style.removeProperty('padding-right')
+    document.body.classList.remove('overflow-hidden')
     setTimeout(() => {
       handleCancel && handleCancel()
     }, 50)

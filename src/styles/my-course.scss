@@ -6,8 +6,12 @@
   @apply block;
 }
 
-.filter .select-single .select__value-container {
-  @apply p-0 pr-4;
+.filter .select-single.status-course .select__value-container {
+  @apply p-0 pr-2;
+
+  & > input {
+    @apply text-gray-1 text-medium-sm font-normal;
+  }
 }
 
 .filter .select-single .select__indicator {
@@ -76,5 +80,11 @@
 
   &.active {
     @apply text-primary;
+  }
+}
+
+.select-single.status-course {
+  .select__input-container {
+    @apply text-gray-1 text-medium-sm font-normal;
   }
 }
