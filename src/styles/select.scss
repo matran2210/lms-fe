@@ -44,6 +44,16 @@
     }
   }
 
+  &:hover {
+    .select__clear-indicator {
+      @apply transition-all opacity-100 duration-200;
+    }
+  }
+
+  .select__clear-indicator {
+    @apply cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 bg-white opacity-0;
+  }
+
   .select__input {
     @apply shadow-0;
   }
