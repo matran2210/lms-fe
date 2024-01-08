@@ -41,12 +41,10 @@ const Course = ({
   const student = course?.classes[0]?.class_user_instances[0]
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
+  const currentDate = new Date()
 
   useEffect(() => {
     if (student?.finished_at) {
-      // Current date
-      const currentDate = new Date()
-
       // Parse the specific date string to a Date object
       const parsedSpecificDate = parseISO(student?.finished_at as any)
 
@@ -78,6 +76,9 @@ const Course = ({
     const studentStatus = student?.status
     const startedAt = student?.started_at
     const finishedAt = student?.finished_at
+    // Chuyển đổi sang chuỗi theo định dạng ISO
+    const formattedDate = currentDate.toISOString()
+    const finishedAtDate = new Date(finishedAt).toISOString()
 
     if (
       courseStatus === COURSE_STATUS.PUBLISH ||
@@ -92,6 +93,7 @@ const Course = ({
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
         if (startedAt && finishedAt) {
+          if (formattedDate > finishedAtDate) return BUTTON_STATUS.Disabled
           if (studentStatus === 'READY_TO_LEARN') return BUTTON_STATUS.Begin
           if (studentStatus === 'IN_PROGRESS') return BUTTON_STATUS.Resume
           if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
@@ -217,7 +219,7 @@ const Course = ({
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
               }`}
               onClick={() => {
-                if (isActiveStudent) {
+                if (isActiveStudent && enableCourse) {
                   courseAction()
                 }
               }}
@@ -242,7 +244,11 @@ const Course = ({
               <div className="time-class text-medium-sm text-gray-1">
                 {determineButtonToShow !== 'Active' && (
                   <span>
-                    <span className="font-medium text-bw-1">
+                    <span
+                      className={`font-medium ${
+                        enableCourse ? 'text-bw-2' : 'text-gray-1'
+                      }`}
+                    >
                       {daysDifference > 0 ? daysDifference : 0 ?? 0}{' '}
                     </span>
                     {daysDifference > 0 ? 'days left' : 'day left'}
