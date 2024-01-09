@@ -51,6 +51,28 @@ const DragNDropPreivew = forwardRef(
       ev.dataTransfer.setData('text', ev.target.id)
       ev.dataTransfer.setData('questionId', data.id)
     }
+    function drop(ev: any, dropId: string, dropItem?: boolean) {
+      ev.preventDefault()
+      const slotId = ev.target.id
+      const slotElement = document.getElementById(slotId)
+      const questionId = ev.dataTransfer.getData('questionId')
+      const storage = document.querySelector(`.${storageId}`)
+      if (questionId === dropId) {
+        var data = ev.dataTransfer.getData('text')
+        if (
+          slotElement?.children.length === 0 &&
+          ev.target.classList.contains('dropable') &&
+          !dropItem
+        ) {
+          ev.target.appendChild(document.getElementById(data))
+        } else if (dropItem) {
+          const parent = ev.target.parentNode
+          storage?.appendChild(ev.target)
+          parent.appendChild(document.getElementById(data))
+          return
+        }
+      } else return
+    }
 
     const handleStorage = (event: any, id: string) => {
       // prevent the default behavior of the drop event
@@ -93,8 +115,8 @@ const DragNDropPreivew = forwardRef(
       if (corrects) {
         elementsCorrects.forEach((element: any, index: number) => {
           element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop-answer corrects">
-          <span id="${corrects[index].id}" class="flex justify-center w-full">${corrects[index].answer}</span>
-          </span>`
+        <span id="${corrects[index].id}" class="flex justify-center w-full">${corrects[index].answer}</span>
+        </span>`
         })
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
@@ -106,22 +128,22 @@ const DragNDropPreivew = forwardRef(
                   ? 'corrects'
                   : 'wrongs'
               }">
-              <span id="${
-                defaultAnswer[index].idAnswer
-              }" class="flex justify-center w-full">${
-                defaultAnswer[index].value
-              }</span>
-              </span>`
+            <span id="${
+              defaultAnswer[index].idAnswer
+            }" class="flex justify-center w-full">${
+              defaultAnswer[index].value
+            }</span>
+            </span>`
             } else {
-              element.outerHTML = `<span id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs"> 
-                <span class="sapp-input-dragNDrop-empty"></span>
-              </span>`
+              element.outerHTML = `<span id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs">
+              <span class="sapp-input-dragNDrop-empty"></span>
+            </span>`
               //   })
             }
           } else {
-            element.outerHTML = `<span id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs"> 
-              <span class="sapp-input-dragNDrop-empty"></span>
-            </span>`
+            element.outerHTML = `<span id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs">
+            <span class="sapp-input-dragNDrop-empty"></span>
+          </span>`
           }
         })
         setAnswerContent(doc2)
@@ -132,43 +154,83 @@ const DragNDropPreivew = forwardRef(
             if (defaultAnswer[index].value !== '') {
               element.outerHTML = `<span id="${
                 element.id
-              }" class="sapp-input-dragNDrop dropable" ondrop="drop(event,'${
-                data.id
-              }')" ondragover="allowDrop(event,'${data.id}')" indexBox="${
-                index + 1
-              }">
-                          <span class="answer-box" draggable="true" ondragstart="drag(event, '${
-                            data.id
-                          }')" id="${defaultAnswer[index].idAnswer}">${
-                            defaultAnswer[index].value
-                          }</span>
+              }" class="sapp-input-dragNDrop" indexBox="${index + 1}">
+                <span class="answer-box" id="${
+                  defaultAnswer[index].idAnswer
+                }">${defaultAnswer[index].value}</span>
                </span>
               `
             } else {
               element.outerHTML = `<span id="${
                 element.id
-              }" class="sapp-input-dragNDrop dropable ${
-                data.id
-              }" ondrop="drop(event,'${
-                data.id
-              }')" ondragover="allowDrop(event,'${data.id}')" indexBox="${
-                index + 1
-              }"> </span>`
+              }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
             }
           } else {
             element.outerHTML = `<span  id="${
               element.id
-            }" class="sapp-input-dragNDrop dropable ${
-              data.id
-            }" ondrop="drop(event,'${data.id}')" ondragover="allowDrop(event,'${
-              data.id
-            }')" indexBox="${index + 1}"> </span>`
+            }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
           }
         })
         setQuestionContent(doc)
       }
       // }
     }, [defaultAnswer, corrects])
+    const options = {
+      replace(domNode: any) {
+        if (
+          domNode.attribs &&
+          domNode.attribs.class === 'sapp-input-dragNDrop'
+        ) {
+          if (domNode.children.length > 1) {
+            const children = domNode.children[1]
+            return (
+              <span
+                id={domNode.attribs.id}
+                className="sapp-input-dragNDrop dropable"
+                onDrop={() => drop(event, data.id)}
+                onDragOver={allowDrop}
+                {...{ indexBox: domNode.attribs.indexbox }}
+              >
+                <span
+                  id={children.attribs.id}
+                  className={children.attribs.class}
+                  onDrop={() => drop(event, data.id, true)}
+                  onDragOver={allowDrop}
+                  draggable="true"
+                  onDragStart={drag}
+                >
+                  {children?.children[0]?.data}
+                </span>
+              </span>
+            )
+          } else {
+            return (
+              <span
+                id={domNode.attribs.id}
+                className="sapp-input-dragNDrop dropable"
+                onDrop={() => drop(event, data.id)}
+                onDragOver={allowDrop}
+                {...{ indexBox: domNode.attribs.indexbox }}
+              ></span>
+            )
+          }
+        }
+        if (domNode.attribs && domNode.attribs.class === 'answer-box') {
+          return (
+            <span
+              id={domNode.attribs.id}
+              className={domNode.attribs.class}
+              onDrop={() => drop(event, data.id)}
+              onDragOver={allowDrop}
+              draggable="true"
+              {...{ indexBox: domNode.attribs.indexbox }}
+            >
+              {domNode?.data}
+            </span>
+          )
+        }
+      },
+    }
     return (
       <div className="body-modal-white" key={key} ref={extenalRef || null}>
         {questionContent && (
@@ -192,6 +254,7 @@ const DragNDropPreivew = forwardRef(
                   questionContent?.documentElement.querySelector('body')
                     ?.innerHTML || ''
                 }
+                options={options}
               />
             </div>
             {!corrects && (
@@ -217,6 +280,7 @@ const DragNDropPreivew = forwardRef(
                         id={e?.id}
                         draggable="true"
                         onDragStart={drag}
+                        onDrop={() => drop(event, data.id, true)}
                       >
                         {e.answer}
                       </span>
