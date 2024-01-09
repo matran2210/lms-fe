@@ -1,7 +1,7 @@
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { apiURL } from 'src/redux/services/httpService'
 import CoursesList from '@components/mycourses/CoursesList'
@@ -74,7 +74,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     }, 50)
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (userGuideLine === 'NOT_ACTIVE') {
       dispatch(active())
     }
