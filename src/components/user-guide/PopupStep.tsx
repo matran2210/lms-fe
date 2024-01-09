@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react'
 import SappButton from '@components/base/button/SappButton'
 import ButtonText from '@components/base/button/ButtonText'
-import { UserGuide } from 'src/constants'
 
 type Props = {
   content: string

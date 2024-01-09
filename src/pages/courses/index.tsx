@@ -1,7 +1,7 @@
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import axios from 'axios'
 import { apiURL } from 'src/redux/services/httpService'
 import CoursesList from '@components/mycourses/CoursesList'
@@ -51,6 +51,9 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
   const { shouldShowRemind } = useAppSelector(entranceTestReducer)
   const router = useRouter()
+  const userGuideLine = useAppSelector(
+    (state) => state.userReducer.user.detail.settings?.course_guide,
+  )
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
 
@@ -71,14 +74,11 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     }, 50)
   }
 
-  useEffect(() => {
-    AsyncStorage.getItem('userGuide').then((accessToken) => {
-      if (!accessToken) {
-        AsyncStorage.setItem('userGuide', 'actived')
-        dispatch(active())
-      }
-    })
-  }, [])
+  useLayoutEffect(() => {
+    if (userGuideLine === 'NOT_ACTIVE') {
+      dispatch(active())
+    }
+  }, [userGuideLine])
   useEffect(() => {
     dispatch(getEntranceCount())
   }, [])
