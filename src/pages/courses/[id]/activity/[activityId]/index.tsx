@@ -20,10 +20,15 @@ import { IActivity } from 'src/type/course/my-course/Activity'
 import _debounce from 'lodash/debounce'
 import { useRouter } from 'next/router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import {
+  setCookieActToken,
+  setCookieRefreshToken,
+  truncateString,
+} from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
+import EditorReader from '@components/base/editor/EditorReader'
 
 type Props = {
   activity: IActivity
@@ -266,6 +271,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     if (type === 'VIDEO') {
       return <SappIcon icon="course_video"></SappIcon>
     }
+    if (type === 'PAST_EXAM_ANALYSIS') {
+      return <SappIcon icon="course_past_exam_analysis"></SappIcon>
+    }
   }
 
   return (
@@ -284,23 +292,24 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       </>
       <div className="bg-gray-3 pb-10 px-6 ">
         <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
-          <div className="font-semibold text-2xl ">{activity.name}</div>
+          <div className="font-medium text-2xl ">{activity.name}</div>
           <div className="text-base text-gray-1 whitespace-nowrap">
             {activity?.duration || 0} min estimated
           </div>
         </div>
 
-        <div className="py-6">
+        <div className="h-[1px] border-b"></div>
+
+        <div className="pt-6 pb-4">
           <div className="font-semibold text-base mb-2">Learning Outcome:</div>
           <ul className="list-disc text-base">
             {activity?.course_outcomes?.map((e) => {
               return (
                 <li className="ml-4" key={e.id}>
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: e.description,
-                    }}
-                  ></span>
+                  <EditorReader
+                    className="editor-wrap mt-1.5"
+                    text_editor_content={e.description}
+                  />
                 </li>
               )
             })}
@@ -308,16 +317,16 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         </div>
       </div>
 
-      <div className="-mt-9">
+      <div className="bg-gray-3">
         <div className="flex gap-2 px-6 flex-wrap">
           {selector.tabs?.map((e) => {
             return (
               <SappButton
                 key={e.id}
                 size="small"
-                className="py-2.5 !px-3 text-base !font-normal"
+                className="py-2.5 !px-3 text-medium-sm !font-normal"
                 color={tabButtonColor(e.id)}
-                title={e.name}
+                title={truncateString(e.name, 60)}
                 onClick={() => handleChangeTab(e.id)}
               ></SappButton>
             )
@@ -349,6 +358,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                         activityId={activity.id}
                         tabId={selector.currentTabId || ''}
                         quizId={e.quiz?.id || ''}
+                        grading_preference={
+                          e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
+                        }
                       ></QuizDocument>
                     </div>
                   )
@@ -383,50 +395,55 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
             <div className="flex justify-between flex-wrap gap-5 mt-8">
               {getPreviousTabId() && (
-                <div className="w-full sm:w-auto">
-                  <div
-                    onClick={() => handleChangeTab(getPreviousTabId() || '')}
-                    className="flex items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={20}
-                      height={20}
-                      fill="none"
+                <div className="w-auto">
+                  <div className="relative">
+                    <div
+                      onClick={() => handleChangeTab(getPreviousTabId() || '')}
+                      className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
                     >
-                      <path
-                        className="fill-bw-1 group-hover:fill-primary"
-                        fillRule="evenodd"
-                        d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Previous Tab
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={20}
+                        height={20}
+                        fill="none"
+                      >
+                        <path
+                          className="fill-bw-1 group-hover:fill-primary"
+                          fillRule="evenodd"
+                          d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      Previous Tab
+                    </div>
+                    <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
                   </div>
                 </div>
               )}
               {getNextTabId() && (
-                <div className="w-full sm:w-auto relative ml-auto">
-                  <div
-                    onClick={() => handleChangeTab(getNextTabId() || '')}
-                    className="mb-2 z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                  >
-                    Next Tab
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={20}
-                      height={20}
-                      fill="none"
+                <div className="w-auto relative ml-auto">
+                  <div className="relative">
+                    <div
+                      onClick={() => handleChangeTab(getNextTabId() || '')}
+                      className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                     >
-                      <path
-                        className="fill-bw-1 group-hover:fill-primary"
-                        fillRule="evenodd"
-                        d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                      Next Tab
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={20}
+                        height={20}
+                        fill="none"
+                      >
+                        <path
+                          className="fill-bw-1 group-hover:fill-primary"
+                          fillRule="evenodd"
+                          d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
                   </div>
-                  <div className="absolute -z-[9] top-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
                 </div>
               )}
             </div>
@@ -436,9 +453,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       <div className="border border-gray-2 my-8"></div>
       {/* </FadeInOut> */}
       <div className="bg-white px-6 py-3 mb-6 relative">
-        <div className="flex justify-between flex-wrap gap-5">
+        <div className="flex justify-between flex-nowrap gap-5">
           {activity.previous_activity && (
-            <div className="w-full sm:w-auto">
+            <div className="w-1/2">
               <div
                 onClick={() => {
                   router.push({
@@ -448,18 +465,18 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     },
                   })
                 }}
-                className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
               >
                 Previous Activity
               </div>
               <div className="text-medium-sm text-gray-1 flex">
-                {getCourseIcon(activity.previous_activity?.display_icon)}
+                {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
                 <span className="ml-2">{activity.previous_activity.name}</span>
               </div>
             </div>
           )}
           {activity.next_activity && (
-            <div className="w-full sm:w-auto ml-auto">
+            <div className="w-1/2">
               <div
                 onClick={() => {
                   router.push({
@@ -474,7 +491,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 Next Activity
               </div>
               <div className="text-medium-sm text-gray-1 flex justify-end">
-                <span className="mr-2">{activity.next_activity.name}</span>
+                <span className="mr-2">
+                  {truncateString(activity.next_activity.name, 100)}
+                </span>
                 {getCourseIcon(activity.next_activity?.display_icon)}
               </div>
             </div>

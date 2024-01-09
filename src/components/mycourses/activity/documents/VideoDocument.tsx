@@ -255,9 +255,16 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
 
     // Update isLastQuestion state
     setIsLastQuestion(isLast || false)
-
+    setActiveQuestion(currentQuestion)
     return currentQuestion
-  }, [selector, activeQuestion, activityId, tabId, currentVideo?.quiz?.id])
+  }, [
+    selector,
+    activeQuestion,
+    activityId,
+    tabId,
+    currentVideo?.quiz?.id,
+    defaultListQuestion,
+  ])
 
   const handleFinishQuiz = () => {
     const questions = selectQuestions(
@@ -272,7 +279,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
     }: { answers: any[]; quiz_position_mapping: any[] } = questions?.reduce(
       (acc: any, obj: any) => {
         if (obj?.myAnswers) {
-          acc.answers = acc.answers.concat(obj.myAnswers)
+          acc.answers = acc.answers.concat({ ...obj.myAnswers })
         }
 
         if (obj?.quiz_position_mapping) {
@@ -301,6 +308,12 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
     } catch (error) {}
   }
 
+  const handleGoTimeline = (time: number) => {
+    if (streamRef.current) {
+      streamRef.current.currentTime = time
+    }
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
@@ -321,7 +334,15 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
                     : { checked: false })}
                   size={'small'}
                 ></SAPPRadio>
-                <span className="radio-item-label">Video {i + 1}</span>
+                <span
+                  className={`radio-item-label  ${
+                    v.file.id === currentVideo?.file.id
+                      ? 'text-bw-1'
+                      : 'text-gray-1'
+                  }`}
+                >
+                  Video {i + 1}
+                </span>
               </label>
             )
           })}
@@ -332,32 +353,22 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
           <SappIcon icon="course_video_timeline"></SappIcon>
           <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100$]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
             <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
-              {[
-                ...(currentVideo?.quiz?.constructed_questions || []),
-                ...(currentVideo?.quiz?.multiple_choice_questions || []),
-              ]
+              {[...(currentVideo?.file?.resource?.time_line || [])]
                 .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0))
                 .map((e, i) => {
                   return (
                     <div
                       key={i}
-                      className="gap-3 text-medium-sm flex px-6 py-3 hover:bg-primary-2"
+                      className="gap-3 text-medium-sm flex px-6 py-3 hover:text-primary-2 text-bw-1"
                       onClick={() => {
-                        handleOpenModalQuestions({
-                          id: '',
-                          open: false,
-                          listQuestion: [],
-                        })
-                        setTimeout(() => {
-                          handleTrackTime(Number(e.time), e.id)
-                        }, 500)
+                        handleGoTimeline(e.time)
                       }}
                     >
                       <div className="text-state-info flex-none">
                         {formatTime(e.time)}
                       </div>
-                      <div className="text-bw-1 line-clamp-2 ">
-                        {htmlToRaw(e.question_content)}
+                      <div className="text-bw-1 line-clamp-2 text-inherit">
+                        {htmlToRaw(e.text)}
                       </div>
                     </div>
                   )
@@ -372,7 +383,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
           <SappModal
             open={modalOpen}
             customTitle={
-              <div className="text-xl font-bold text-bw-1">Question</div>
+              <div className="!text-xl font-bold text-bw-1">Question</div>
             }
             parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
             okButtonCaption={`${
@@ -386,12 +397,12 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
                   showOkButton: false,
                 }
               : {
-                  confirmOnclose: true,
+                  confirmOnclose: false,
                   showOkButton: !isFinish?.[currentVideo?.quiz?.id || ''],
                   closeAfterSubmit: false,
                 })}
             buttonSize="small"
-            size="max-w-[750px]"
+            size="max-w-[782px]"
             position="center"
             isInner={true}
             isBordered={true}
@@ -409,6 +420,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
               })
             }
             colorCancel="secondary"
+            cancelButtonCaption="Skip"
           >
             <div className="py-5">
               <QuizComponent

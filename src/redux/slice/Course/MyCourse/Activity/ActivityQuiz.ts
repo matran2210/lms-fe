@@ -328,12 +328,12 @@ const quizSlice: Slice = createSlice({
                     ...(questionToUpdate.myAnswers || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map(
-                        (e: string, i: number) => ({
+                      answer: payload.myAnswers
+                        ?.filter((e: string) => e)
+                        .map((e: string, i: number) => ({
                           answer_id: e,
                           answer_position: i + 1,
-                        }),
-                      ),
+                        })),
                     },
                   ]
                   questionToUpdate.corrects = payload.question.answers
