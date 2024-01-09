@@ -38,59 +38,14 @@ const ProfilePage = ({ page }: any) => {
   let breadcrumbs: ITabs[] = [
     {
       link: '/',
-      title: 'Courses',
+      title: 'Profile',
+    },
+    {
+      link: '/',
+      title: 'Detail',
     },
   ]
 
-  if (page === 'myprofile') {
-    breadcrumbs = [
-      ...breadcrumbs,
-      {
-        link: '/myprofile',
-        title: 'My Profile',
-      },
-    ]
-  } else if (page === 'devices') {
-    breadcrumbs = [
-      ...breadcrumbs,
-      {
-        link: '/devices',
-        title: 'Devices',
-      },
-    ]
-  } else if (page === 'certificates') {
-    breadcrumbs = [
-      ...breadcrumbs,
-      {
-        link: '/certificates',
-        title: 'Certificates',
-      },
-    ]
-  } else if (page === 'settings') {
-    breadcrumbs = [
-      ...breadcrumbs,
-      {
-        link: '/settings',
-        title: 'Settings',
-      },
-    ]
-  } else if (page === 'login_history') {
-    breadcrumbs = [
-      ...breadcrumbs,
-      {
-        link: '/login_history',
-        title: 'Login History',
-      },
-    ]
-  } else {
-    breadcrumbs = [
-      ...breadcrumbs,
-      {
-        link: '/404', // or any other link for the default case
-        title: 'Page Not Found',
-      },
-    ]
-  }
   let selectedContent: JSX.Element | null = null
 
   if (page === 'myprofile') {
@@ -126,7 +81,7 @@ const ProfilePage = ({ page }: any) => {
       </div>
       <div className="max-w-xxl my-0 mx-auto w-full">
         <div className="main lg:mx-0 sm:mx-4 ">
-          <BreadcrumbProfile tabs={breadcrumbs} currentPage={page} />
+          <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
         </div>
         <div className="relative">
           <ProfileHeader

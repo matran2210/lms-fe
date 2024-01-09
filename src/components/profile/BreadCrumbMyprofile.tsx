@@ -22,7 +22,7 @@ const BreadcrumbProfile: React.FC<BreadcrumbProps> = ({
                   <Link href={tab.link}>
                     <a
                       className={
-                        currentPage === tab.link.replace(/\//g, '')
+                        currentPage === tab.title
                           ? 'text-bw-1 font-semibold text-sm'
                           : 'text-gray-1 text-sm'
                       }
@@ -47,7 +47,7 @@ const BreadcrumbProfile: React.FC<BreadcrumbProps> = ({
               <Link href={tab.link}>
                 <a
                   className={
-                    currentPage === tab.link.replace(/\//g, '')
+                    currentPage === tab.title
                       ? 'text-bw-1 font-semibold text-sm'
                       : 'text-gray-1 text-sm'
                   }
