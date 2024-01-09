@@ -14,7 +14,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
       return (
         <div
           key={item?.id}
-          className={`border border-solid flex items-center flex-row justify-center w-10 h-10 text-sm font-medium leading-8.5 cursor-pointer
+          className={`border border-solid flex items-center flex-row justify-center w-12 h-12 text-sm font-medium leading-8.5 cursor-pointer
           ${
             item?.is_correct
               ? ' text-state-success border-success'
@@ -29,10 +29,14 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
 
     return (
       <div className="w-full">
-        <div className="text-xl font-bold mb-4">{type}</div>
-        <div className="flex flex-row flex-wrap gap-3 w-full items-start">
-          {renderBoxItems}
-        </div>
+        {data.length > 0 && (
+          <>
+            <div className="text-xl font-medium mb-4">{type}</div>
+            <div className="flex flex-row flex-wrap gap-3 w-full items-start">
+              {renderBoxItems}
+            </div>
+          </>
+        )}
       </div>
     )
   }
@@ -46,7 +50,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
           {renderBoxes('Multiple Question', questions?.selectedResponseAnswers)}
           {renderBoxes(
             'Constructed Questions',
-            questions?.constructedResponseAnswers,
+            questions?.constructedResponseAnswers ?? [],
           )}
         </div>
       </div>
@@ -64,7 +68,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
           <div className="flex items-center mr-4 w-20">
             <Icon
               type={'circle'}
-              className="w-4 h-4 text-danger pr-1.5 shrink-0"
+              className="w-4 h-4 text-danger mr-1.5 shrink-0"
             />
             <span className="text-base leading-6.2 text-danger font-normal">
               Incorrect
@@ -75,7 +79,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
               <ButtonPrimary
                 title={'Quit'}
                 size={'medium'}
-                className={'px-11'}
+                className={'px-11 text-medium-sm'}
               />
             </Link>
           </div>

@@ -249,7 +249,7 @@ const Course = ({
                   <span>
                     <span
                       className={`font-medium ${
-                        enableCourse ? 'text-bw-2' : 'text-gray-1'
+                        enableCourse ? 'text-bw-1' : 'text-gray-1'
                       }`}
                     >
                       {daysDifference > 0

@@ -12,10 +12,10 @@ interface IProps {
 const ChartCFAScore = ({ data }: IProps) => {
   return (
     <div className="block">
-      <div className="text-xl font-bold text-bw-1 mb-6">
+      <div className="text-xl font-medium text-bw-1 mb-6">
         Your Performance by Topic Area
       </div>
-      <div className="flex w-full relative mb-4 overflow-hidden">
+      <div className="flex w-full relative mb-4">
         <div className="absolute top-[43%] -translate-y-1/2 -left-11 text-medium-sm text-bw-1 font-normal -rotate-90 shrink-0">
           Available Points
         </div>

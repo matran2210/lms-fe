@@ -32,7 +32,7 @@ const Devices = ({}: any) => {
         <div>
           <SecurityIcon />
         </div>
-        <div className="text-sm text-bw-2">
+        <div className="text-sm text-bw-1">
           <span>Maximum limit of 3 devices: Please contact support team </span>
           <span>
             <a href="#" className="text-state-info underline">

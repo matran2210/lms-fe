@@ -103,7 +103,7 @@ const SappIcon = ({ icon, className }: Props) => {
           height="1.5"
           rx="0.3"
           transform="rotate(-90 5.25 19)"
-          fill="#141414"
+          fill="#404041"
         />
         <rect
           x="11.25"
@@ -112,7 +112,7 @@ const SappIcon = ({ icon, className }: Props) => {
           height="1.5"
           rx="0.3"
           transform="rotate(-90 11.25 19)"
-          fill="#141414"
+          fill="#404041"
         />
         <rect
           x="17.25"
@@ -121,7 +121,7 @@ const SappIcon = ({ icon, className }: Props) => {
           height="1.5"
           rx="0.3"
           transform="rotate(-90 17.25 19)"
-          fill="#141414"
+          fill="#404041"
         />
       </svg>
     ),
@@ -148,7 +148,7 @@ const SappIcon = ({ icon, className }: Props) => {
         className={className}
       >
         <path
-          fill="#141414"
+          fill="#404041"
           d="M11.313 3.411V2.203a.125.125 0 0 0-.202-.098L4.067 7.606a.498.498 0 0 0 0 .786l7.044 5.502a.124.124 0 0 0 .201-.099v-1.207a.253.253 0 0 0-.095-.197L5.592 8l5.625-4.392a.253.253 0 0 0 .095-.197Z"
         />
       </svg>
@@ -162,7 +162,7 @@ const SappIcon = ({ icon, className }: Props) => {
         className={className}
       >
         <path
-          fill="#141414"
+          fill="#404041"
           d="M4.688 12.59v1.207c0 .105.12.162.201.098l7.044-5.501a.497.497 0 0 0 0-.786L4.889 2.106a.124.124 0 0 0-.201.099v1.207c0 .077.035.15.095.197L10.408 8l-5.625 4.392a.253.253 0 0 0-.095.197Z"
         />
       </svg>

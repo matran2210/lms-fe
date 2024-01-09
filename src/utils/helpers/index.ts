@@ -138,3 +138,21 @@ export const debounce = <T extends (...args: any[]) => void>(
     timeoutId = setTimeout(() => func(...args), delay)
   }
 }
+
+/**
+ * @description Return number percent with type: 80.99
+ * @param {number} num: number
+ * @return {*}
+ */
+export const percentConversion = (num: number) => {
+  return Math.round(num * 10000) / 100
+}
+
+/**
+ * @description Return number percent with type: 80
+ * @param {number} num: number
+ * @return {*}
+ */
+export const roundNumber = (num: number) => {
+  return Math.round(num * 100) / 100
+}
