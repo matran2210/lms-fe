@@ -37,7 +37,7 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
         Expired Course
       </div>
       <div className="text-medium-sm text-gray-1 text-center mt-4 mb-7">
-        You can only extend a trial course of 2 times, please contact out
+        You can only extend a trial course of 1 times, please contact out
         support at 0889 662 276.
       </div>
     </SappModal>
