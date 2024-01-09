@@ -156,3 +156,16 @@ export const percentConversion = (num: number) => {
 export const roundNumber = (num: number) => {
   return Math.round(num * 100) / 100
 }
+
+/**
+ * @description Return number mm:ss
+ * @param {number} num: number
+ * @return {*}
+ */
+export const convertSecondsToMinutesSeconds = (seconds) => {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+  const formattedMinutes = String(minutes).padStart(2, '0')
+  const formattedSeconds = String(remainingSeconds).padStart(2, '0')
+  return `${formattedMinutes}:${formattedSeconds}`
+}

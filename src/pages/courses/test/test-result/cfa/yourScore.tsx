@@ -5,7 +5,7 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ChartCFAScore from './chartCFAScore'
 import TotalScore from '@components/mycourses/test/TotalScore'
-import { percentConversion, roundNumber } from '@utils/helpers'
+import { roundNumber } from '@utils/helpers'
 
 interface QuizReport {
   ratio: number
@@ -24,7 +24,7 @@ interface IProps {
 }
 
 const YourScore = ({ chartData }: IProps) => {
-  const highestValue = percentConversion(
+  const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,
   )
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)

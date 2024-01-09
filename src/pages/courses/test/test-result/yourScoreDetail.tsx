@@ -4,7 +4,7 @@ import { SetStateAction } from 'react'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { roundNumber } from '@utils/helpers'
+import { roundNumber, convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { QUESTION_TYPES } from 'src/constants'
 
 const headers = [
@@ -194,7 +194,9 @@ const YourScoreDetail = () => {
                     <div className="text-center">
                       {(() => {
                         if (e?.time_spent !== null) {
-                          return e?.time_spent
+                          return convertSecondsToMinutesSeconds(
+                            e?.time_spent || 0,
+                          )
                         } else {
                           return '---'
                         }

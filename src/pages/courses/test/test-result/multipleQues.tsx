@@ -9,7 +9,7 @@ interface MultipleQuestionProps {
 }
 
 const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
-  const renderBoxes = (type: string, data: any) => {
+  const renderBoxes = (type: string, data: any, totalBefore: number) => {
     const renderBoxItems = data?.map((item: any, index: number) => {
       return (
         <div
@@ -22,7 +22,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
           }
           `}
         >
-          {index + 1}
+          {index + totalBefore + 1}
         </div>
       )
     })
@@ -47,10 +47,15 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
     >
       <div className="flex flex-col gap-10 w-full items-start">
         <div className="flex flex-col gap-6 w-full items-start">
-          {renderBoxes('Multiple Question', questions?.selectedResponseAnswers)}
+          {renderBoxes(
+            'Multiple Questions',
+            questions?.selectedResponseAnswers ?? [],
+            0,
+          )}
           {renderBoxes(
             'Constructed Questions',
             questions?.constructedResponseAnswers ?? [],
+            questions?.selectedResponseAnswers?.length ?? 0,
           )}
         </div>
       </div>
@@ -59,7 +64,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
           <div className="flex items-center mr-6 w-20">
             <Icon
               type={'circle'}
-              className="w-4 h-4 text-state-success pr-1.5 shrink-0"
+              className="w-4 h-4 text-state-success mr-1.5 shrink-0"
             />
             <span className="text-base leading-6.2 text-state-success font-normal">
               Correct
@@ -75,7 +80,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
             </span>
           </div>
           <div className="flex justify-end w-full">
-            <Link href="/">
+            <Link href={`/courses/my-course/${questions?.course?.id}`}>
               <ButtonPrimary
                 title={'Quit'}
                 size={'medium'}
