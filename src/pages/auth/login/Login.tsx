@@ -25,6 +25,7 @@ import { getMessagingToken } from 'src/utils/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import PopUpLimit from './PopupLimit'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
+import EntranceApi from 'src/redux/services/EntranceTest'
 
 interface IInputProps {
   login: string
@@ -91,6 +92,21 @@ const LoginPage = () => {
     }
   }
 
+  async function getListEntranceTest() {
+    setLoading(true)
+    try {
+      const res = await EntranceApi.getListEntranceTestLogin()
+      if (res?.data?.length > 0) {
+        router.push(PageLink.ENTRANCE_TEST)
+      } else {
+        router.push(PageLink.COURSES)
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
@@ -107,7 +123,7 @@ const LoginPage = () => {
         // dispatch(getEntranceCount())
         .unwrap()
         .then((payload) => {
-          router.push(PageLink.COURSES)
+          getListEntranceTest()
           dispatch(getEntranceCount())
         })
         .catch((error) => {

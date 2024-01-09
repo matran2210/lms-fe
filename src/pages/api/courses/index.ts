@@ -151,6 +151,12 @@ const CourseAPI = {
     })
     return response
   },
+  userGuideActive: async (): Promise<any> => {
+    const response = await httpService.GET<any, any>({
+      uri: `guide-active`,
+    })
+    return response
+  },
 }
 
 export default CourseAPI

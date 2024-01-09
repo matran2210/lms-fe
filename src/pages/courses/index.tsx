@@ -51,6 +51,9 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
   const { shouldShowRemind } = useAppSelector(entranceTestReducer)
   const router = useRouter()
+  const userGuideLine = useAppSelector(
+    (state) => state.userReducer.user.detail.settings?.course_guide,
+  )
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
 
@@ -72,13 +75,10 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   }
 
   useEffect(() => {
-    AsyncStorage.getItem('userGuide').then((accessToken) => {
-      if (!accessToken) {
-        AsyncStorage.setItem('userGuide', 'actived')
-        dispatch(active())
-      }
-    })
-  }, [])
+    if (userGuideLine === 'NOT_ACTIVE') {
+      dispatch(active())
+    }
+  }, [userGuideLine])
   useEffect(() => {
     dispatch(getEntranceCount())
   }, [])

@@ -59,5 +59,12 @@ const EntranceApi = {
     })
     return res
   },
+  getListEntranceTestLogin: async (): Promise<IResponse<any>> => {
+    const uri = url.getListEntranceTest
+    const res = await httpService.GET<any, any>({
+      uri,
+    })
+    return res
+  },
 }
 export default EntranceApi
