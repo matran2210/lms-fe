@@ -36,7 +36,7 @@ const TestResultPage = ({ questions, type, chartData }: IProps) => {
   return (
     <>
       {type === 'CFA' && (
-        <div className="flex gap-6 overflow-y-auto">
+        <div className="flex gap-6 overflow-y-auto flex-wrap">
           <div className="max-h-full">
             <YourScore chartData={chartData} />
             <YourScoreDetail />

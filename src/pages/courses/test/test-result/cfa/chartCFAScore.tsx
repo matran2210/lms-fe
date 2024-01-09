@@ -47,13 +47,13 @@ const ChartCFAScore = ({ data }: IProps) => {
           ></div>
         ))}
       </div>
-      <div className="flex flex-row gap-6">
-        <div className="flex flex-col shrink-0 justify-between my-3">
-          <div className="text-medium-sm">Topic Area</div>
-          <div className="text-medium-sm">Topic Weight</div>
-        </div>
-        <div className="bg-gray-4 px-6 py-3 w-full overflow-x-auto">
-          <div className="flex flex-row gap-6 flex-start">
+      <div className="block">
+        <div className="bg-gray-4 w-full overflow-x-auto flex flex-row">
+          <div className="flex flex-col shrink-0 justify-between py-3 bg-white pr-7">
+            <div className="text-medium-sm">Topic Area</div>
+            <div className="text-medium-sm">Topic Weight</div>
+          </div>
+          <div className="flex flex-row gap-6 flex-start px-6 py-3 ">
             {data?.map((item: any) => (
               <div
                 key={item?.id}
