@@ -93,13 +93,18 @@ const Course = ({
         }
         if (startedAt && finishedAt) {
           const finishedAtDate = new Date(finishedAt).toISOString()
-          if (course?.course_type === 'TRIAL_COURSE')
+          if (
+            course?.course_type === 'TRIAL_COURSE' &&
+            student.extend_count === 0 &&
+            finishedAtDate <= formattedDate
+          )
             return BUTTON_STATUS.Extend
-          if (formattedDate >= finishedAtDate) return BUTTON_STATUS.Disabled
-          if (studentStatus === 'READY_TO_LEARN') return BUTTON_STATUS.Begin
-          if (studentStatus === 'IN_PROGRESS') return BUTTON_STATUS.Resume
-          if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
-          else return BUTTON_STATUS.Disabled
+          if (finishedAtDate <= formattedDate) return BUTTON_STATUS.Disabled
+          if (finishedAtDate > formattedDate) {
+            if (studentStatus === 'READY_TO_LEARN') return BUTTON_STATUS.Begin
+            if (studentStatus === 'IN_PROGRESS') return BUTTON_STATUS.Resume
+            if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
+          } else return BUTTON_STATUS.Disabled
         }
         return BUTTON_STATUS.Disabled
       }
@@ -164,9 +169,7 @@ const Course = ({
       const res = await CourseAPI.activeCourse(params)
       await fetchCourseList()
       toast.success('Active thành công!')
-    } catch (error) {
-      toast.error('Active không thành công!')
-    }
+    } catch (error) {}
   }
 
   async function extendCourse() {
@@ -177,9 +180,7 @@ const Course = ({
       const res = await CourseAPI.extendCourse(params)
       await fetchCourseList()
       toast.success('Gia hạn hành công!')
-    } catch (error) {
-      toast.error('Class user not allow extend!')
-    }
+    } catch (error) {}
   }
 
   const courseAction = () => {
