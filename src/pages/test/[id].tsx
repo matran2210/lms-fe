@@ -708,19 +708,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           answers.push({
             question_id: e.id,
             question_answer_id: e.answer,
-            time_spent: e.timeSpent,
+            time_spent: Math.ceil(e.timeSpent / 1000),
           })
         } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
           let answer = []
           for (let el of e.answer) {
             answer.push({ answer_id: el })
           }
-          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+          answers.push({
+            question_id: e.id,
+            answer,
+            time_spent: Math.ceil(e.timeSpent / 1000),
+          })
         } else if (e.qType === QUESTION_TYPES.MATCHING) {
           answers.push({
             question_id: e.id,
             answer: e.answer,
-            time_spent: e.timeSpent,
+            time_spent: Math.ceil(e.timeSpent / 1000),
           })
         } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
           let answer = []
@@ -732,7 +736,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+          answers.push({
+            question_id: e.id,
+            answer,
+            time_spent: Math.ceil(e.timeSpent / 1000),
+          })
         } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
           let answer = []
           for (let i in e.answer) {
@@ -743,7 +751,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+          answers.push({
+            question_id: e.id,
+            answer,
+            time_spent: Math.ceil(e.timeSpent / 1000),
+          })
         } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
           let answer = []
           for (let i in e.answer) {
@@ -754,7 +766,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+          answers.push({
+            question_id: e.id,
+            answer,
+            time_spent: Math.ceil(e.timeSpent / 1000),
+          })
         }
       }
       quiz_position_mapping.push({
@@ -763,7 +779,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       })
     }
     setTabs(() => {
-      // handleChangeTab(tabs[0].id)
+      // ref.setKey
+      handleChangeTab(tabs[0].id)
       return reformTabs
     })
     const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
