@@ -5,7 +5,7 @@ import { DeserializeHighlight } from '@utils/index'
 import parseHTML from 'html-react-parser'
 
 type Props = {
-  text_editor_content: string
+  text_editor_content: string | undefined
   className?: string
   extenalRef?: any
   id?: string
