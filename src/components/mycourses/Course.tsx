@@ -78,7 +78,6 @@ const Course = ({
     const finishedAt = student?.finished_at
     // Chuyển đổi sang chuỗi theo định dạng ISO
     const formattedDate = currentDate.toISOString()
-    const finishedAtDate = new Date(finishedAt).toISOString()
 
     if (
       courseStatus === COURSE_STATUS.PUBLISH ||
@@ -93,15 +92,13 @@ const Course = ({
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
         if (startedAt && finishedAt) {
-          if (formattedDate > finishedAtDate) return BUTTON_STATUS.Disabled
+          const finishedAtDate = new Date(finishedAt).toISOString()
+          if (course?.course_type === 'TRIAL_COURSE')
+            return BUTTON_STATUS.Extend
+          if (formattedDate >= finishedAtDate) return BUTTON_STATUS.Disabled
           if (studentStatus === 'READY_TO_LEARN') return BUTTON_STATUS.Begin
           if (studentStatus === 'IN_PROGRESS') return BUTTON_STATUS.Resume
           if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
-          if (
-            course?.course_type === 'TRIAL_COURSE' &&
-            student.extend_count === 0
-          )
-            return BUTTON_STATUS.Extend
           else return BUTTON_STATUS.Disabled
         }
         return BUTTON_STATUS.Disabled
@@ -167,7 +164,9 @@ const Course = ({
       const res = await CourseAPI.activeCourse(params)
       await fetchCourseList()
       toast.success('Active thành công!')
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Active không thành công!')
+    }
   }
 
   async function extendCourse() {
@@ -178,13 +177,15 @@ const Course = ({
       const res = await CourseAPI.extendCourse(params)
       await fetchCourseList()
       toast.success('Gia hạn hành công!')
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Class user not allow extend!')
+    }
   }
 
   const courseAction = () => {
     if (determineButtonToShow === 'Active') {
       setOpenActive(true)
-    } else if (determineButtonToShow === 'Active') {
+    } else if (determineButtonToShow === 'Extend') {
       student.extend_count === 0 ? extendCourse() : setOpenExtend(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
@@ -204,7 +205,8 @@ const Course = ({
   const classUserStatus =
     course?.classes?.[0]?.class_user_instances?.[0]?.status
   const showStatus = statusMap[classUserStatus]
-  const enableCourse = determineButtonToShow !== 'Disabled'
+  const enableCourse =
+    determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'
 
   return (
     <>
