@@ -4,6 +4,7 @@ type iconType =
   | 'camera'
   | 'course_text'
   | 'course_video'
+  | 'course_past_exam_analysis'
   | 'course_video_timeline'
   | 'arrow_left'
   | 'arrow_right'
@@ -83,6 +84,44 @@ const SappIcon = ({ icon, className }: Props) => {
           strokeLinecap="round"
           strokeLinejoin="round"
           d="M6 10.403V5.466a.469.469 0 0 1 .709-.4l4.228 2.457a.468.468 0 0 1 0 .812L6.71 10.803a.469.469 0 0 1-.709-.4Z"
+        />
+      </svg>
+    ),
+    course_past_exam_analysis: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={16}
+        height={16}
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <rect width="24" height="24" rx="3" fill="#F1F1F2" />
+        <rect
+          x="5.25"
+          y="19"
+          width="11"
+          height="1.5"
+          rx="0.3"
+          transform="rotate(-90 5.25 19)"
+          fill="#141414"
+        />
+        <rect
+          x="11.25"
+          y="19"
+          width="14"
+          height="1.5"
+          rx="0.3"
+          transform="rotate(-90 11.25 19)"
+          fill="#141414"
+        />
+        <rect
+          x="17.25"
+          y="19"
+          width="9"
+          height="1.5"
+          rx="0.3"
+          transform="rotate(-90 17.25 19)"
+          fill="#141414"
         />
       </svg>
     ),
