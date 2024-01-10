@@ -21,12 +21,12 @@ const PageLink = ({
   isFlagedProp,
   ...otherProps
 }: Props) => {
-  const [isViewed, setIsViewed] = useState<boolean>(false)
-  useEffect(() => {
-    if (isViewedProp !== undefined) {
-      setIsViewed(isViewedProp)
-    }
-  }, [isViewedProp])
+  // const [isViewed, setIsViewed] = useState<boolean>(false)
+  // useEffect(() => {
+  //   if (isViewedProp !== undefined) {
+  //     setIsViewed(isViewedProp)
+  //   }
+  // }, [isViewedProp])
   if (arrow && disabled) {
     return (
       <li
@@ -73,7 +73,7 @@ const PageLink = ({
           ? 'min-w-8 min-h-8 text-xsm leading-4.8 font-semibold rounded-md'
           : 'min-w-default min-h-default text-sm leading-8.5 font-normal border'
       } relative p-0.5 cursor-pointer flex items-center justify-center
-      ${isViewed && type !== 'row' ? 'bg-gray-3 !border-gray-2' : ''} 
+      ${isViewedProp && type !== 'row' ? 'bg-gray-3 !border-gray-2' : ''} 
       ${
         active
           ? 'bg-primary text-white border-active'
@@ -85,10 +85,10 @@ const PageLink = ({
     >
       <span
         className="w-full h-full text-center"
-        onClick={() => {
-          setIsViewed(true)
-          // setIsFlagged(!isFlagged)
-        }}
+        // onClick={() => {
+        //   setIsViewed(true)
+        //   // setIsFlagged(!isFlagged)
+        // }}
       >
         {children}
       </span>
