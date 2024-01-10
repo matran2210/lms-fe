@@ -100,6 +100,21 @@ export const defaultStatusDetail = [
   },
 ]
 
+export const defaultStatusEnstraceTest = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Submitted',
+    value: 'SUBMITTED',
+  },
+  {
+    label: 'Unsubmitted',
+    value: 'UN_SUBMITTED',
+  },
+]
+
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
 export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]

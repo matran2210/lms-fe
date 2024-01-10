@@ -105,3 +105,15 @@ export const cleanParamsAPI = (params: Object) => {
     ),
   )
 }
+
+export const buildOneChoiceQueryString = (params: Object) => {
+  const queryParams = Object.entries(params)
+    .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+    )
+    .join('&')
+
+  return queryParams ? `${queryParams}` : ''
+}
