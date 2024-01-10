@@ -29,6 +29,7 @@ interface IProps {
 }
 
 const TestResultPage = ({ questions, type, chartData }: IProps) => {
+  const courseDifficulty = questions?.course?.course_difficulty ?? 0
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,
   )
@@ -44,7 +45,7 @@ const TestResultPage = ({ questions, type, chartData }: IProps) => {
           <MultipleQuestion questions={questions} className={'h-[991px]'} />
         </div>
       )}
-      {type === 'ACCA' && (
+      {type === 'ACCA' && courseDifficulty <= 4 ? (
         <div className="flex gap-6 overflow-y-auto flex-wrap">
           <div className="max-h-full w-full max-w-smd">
             <TotalScore
@@ -62,8 +63,7 @@ const TestResultPage = ({ questions, type, chartData }: IProps) => {
             <YourScoreDetail />
           </div>
         </div>
-      )}
-      {type !== 'CFA' && type !== 'ACCA' && (
+      ) : (
         <div className="flex gap-6 overflow-y-auto flex-wrap">
           <MultipleQuestion questions={questions} className={'h-[991px]'} />
           <div className="max-h-full">
