@@ -152,7 +152,7 @@ const Course = ({
   async function fetchCourseList() {
     setLoading(true)
     try {
-      const newData = await CourseAPI.getCourse(1, queryString)
+      const newData = await CourseAPI.getCourse(18, queryString)
       setData(newData?.data)
     } catch (error) {
     } finally {
