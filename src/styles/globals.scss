@@ -522,3 +522,8 @@ body *::-webkit-scrollbar-thumb:hover {
 .word_icon path {
   fill: #dcdddd;
 }
+
+textarea.is-invalid:focus {
+  --tw-ring-color: #d35563;
+  --tw-ring-offset-color: #d35563;
+}

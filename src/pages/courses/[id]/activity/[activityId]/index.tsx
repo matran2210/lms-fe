@@ -284,8 +284,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
             <CreateNote
               id={e?.id}
               content={e?.description}
-              index={index}
-              key={index}
+              uuid={e?.uuid}
+              count={index}
+              key={e?.uuid}
             />
           )
         })}

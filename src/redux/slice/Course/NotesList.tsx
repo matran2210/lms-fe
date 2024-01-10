@@ -29,14 +29,14 @@ export const notesListSlice = createSlice({
       state.note_data.push(action.payload) // Assumed action.payload is the new data to be added
     },
     closeNote: (state, action) => {
-      const indexToDelete = action.payload // Chỉ mục cần xóa, truyền từ payload
+      const indexToDelete = action.payload
 
-      // Tạo một bản sao của mảng note_data và loại bỏ phần tử tại chỉ mục indexToDelete
+      // Filter out the note with the matching index or ID
       const updatedNoteData = state.note_data.filter(
-        (item, index) => index !== indexToDelete,
+        (item) => item.uuid !== indexToDelete,
       )
 
-      // Trả về một phiên bản mới của state với mảng note_data đã được cập nhật
+      // Update the state with the modified note_data array
       state.note_data = updatedNoteData
     },
     clearNote: () => {
