@@ -3,6 +3,7 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { ICourseSection } from 'src/type/courses'
 import TestModal from 'src/pages/courses/test'
+import SappButton from '@components/base/button/SappButton'
 
 const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
   const formattedTime = coursePart?.quiz?.quiz_timed
@@ -52,25 +53,49 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
       </div>
       <div className="mt-7">
         <div className="action flex items-center jusity-end relative">
-          {(!coursePart?.quiz?.is_limited ||
+          {!checkFinished ? (
+            !coursePart?.quiz?.is_limited ||
             coursePart?.quiz?.attempts?.length !==
-              coursePart?.quiz?.limit_count) && (
-            <ButtonSecondary
-              disabled={
-                coursePart?.quiz?.is_limited &&
-                coursePart?.quiz?.attempts?.length ===
-                  coursePart?.quiz?.limit_count
-              }
-              title={`${checkFinished ? 'Retake' : 'Start'}`}
-              full={false}
-              size={'small'}
-              className={`${
-                coursePart?.quiz?.attempts?.length !==
-                  coursePart?.quiz?.limit_count &&
-                'hover:bg-primary hover:text-white'
-              } ml-auto`}
-              onClick={() => setOpen(true)}
-            />
+              coursePart?.quiz?.limit_count ? (
+              <ButtonSecondary
+                disabled={
+                  coursePart?.quiz?.is_limited &&
+                  coursePart?.quiz?.attempts?.length ===
+                    coursePart?.quiz?.limit_count
+                }
+                title={`Start`}
+                full={false}
+                size={'small'}
+                className={`${
+                  coursePart?.quiz?.attempts?.length !==
+                    coursePart?.quiz?.limit_count &&
+                  'hover:bg-primary hover:text-white'
+                } ml-auto`}
+                onClick={() => setOpen(true)}
+              />
+            ) : (
+              <></>
+            )
+          ) : (
+            <div className="flex justify-between flex-1">
+              <SappButton title="Result" isUnderLine color="text"></SappButton>
+              <ButtonSecondary
+                disabled={
+                  coursePart?.quiz?.is_limited &&
+                  coursePart?.quiz?.attempts?.length ===
+                    coursePart?.quiz?.limit_count
+                }
+                title={'Retake'}
+                full={false}
+                size={'small'}
+                className={`${
+                  coursePart?.quiz?.attempts?.length !==
+                    coursePart?.quiz?.limit_count &&
+                  'hover:bg-primary hover:text-white'
+                } ml-auto`}
+                onClick={() => setOpen(true)}
+              />
+            </div>
           )}
         </div>
       </div>
