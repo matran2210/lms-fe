@@ -26,10 +26,15 @@ interface IProps {
   questions: Object
   type: string
   chartData: DataItem
+  courseDifficulty: number
 }
 
-const TestResultPage = ({ questions, type, chartData }: IProps) => {
-  const courseDifficulty = questions?.course?.course_difficulty ?? 0
+const TestResultPage = ({
+  questions,
+  type,
+  chartData,
+  courseDifficulty,
+}: IProps) => {
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,
   )
