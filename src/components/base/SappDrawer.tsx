@@ -67,14 +67,16 @@ const SappDrawer = ({
         } transition-transform duration-300 ease-in-out overflow-y-auto h-screen`}
       >
         <div className="flex flex-col h-screenl justify-between">
-          <div className="w-100 justify-between bg-bw-2 h-[80px] text-2xl font-semibold items-center flex px-8 text-white">
+          <div className="w-100 justify-between bg-bw-2 min-h-[80px] text-2xl font-semibold items-center flex px-8 text-white line-clamp-3 py-2">
             {title}
-            <Image
-              src={cross}
-              alt="SAPP Logo"
-              onClick={handleMaskClick}
-              className="cursor-pointer"
-            />
+            <div className="shrink-0">
+              <Image
+                src={cross}
+                alt="SAPP Logo"
+                onClick={handleMaskClick}
+                className="cursor-pointer"
+              />
+            </div>
           </div>
         </div>
         <div
