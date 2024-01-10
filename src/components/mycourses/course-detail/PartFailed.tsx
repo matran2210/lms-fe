@@ -29,7 +29,7 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
 
   return (
     <>
-      <div className={`name-part text-2xl font-semibold h-[60px]`}>
+      <div className={`name-part text-2xl font-semibold h-[60px] line-clamp-2`}>
         <div>{coursePart?.name}</div>
       </div>
       <div className="info mt-6">

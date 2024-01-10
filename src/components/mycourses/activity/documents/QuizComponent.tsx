@@ -350,7 +350,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               }}
                               className="font-semibold hover:text-primary truncate py-1.5 px-3"
                               key={e.id}
-                            >{`${e.name} Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto a laborum facilis illo, impedit quas ea? Placeat laudantium commodi provident obcaecati ducimus quae illum soluta, porro totam accusamus inventore ut!`}</div>
+                            >{`${e.name}`}</div>
                           )
                         })}
                       </div>
@@ -359,13 +359,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   <div className="ml-4">
                     <span className="text-state-error">* </span>
                     <span className="text-gray-1">
-                      You must finished 3 requirements to complete this question
-                      (Your answer is auto save)
+                      You must finished{' '}
+                      {activeQuestion.requirements?.length || 0} requirements to
+                      complete this question (Your answer is auto save)
                     </span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <div className="font-semibold">{`Requirement : ${showRequirement?.name}`}</div>
+                  <div className="font-semibold">{`${showRequirement?.name}`}</div>
                   {showRequirement?.description && (
                     <EditorReader
                       className="editor-wrap mt-1.5"
@@ -464,7 +465,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         <div ref={questionRef}>
           <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
-        {activeQuestion?.confirmed && (
+        {activeQuestion?.confirmed && activeQuestion.qType !== 'ESSAY' && (
           <div className="p-4 mt-8 bg-gray-4">
             <div className="font-semibold">Solution</div>
             {activeQuestion?.solution && (
