@@ -13,7 +13,7 @@ import {
 } from '@utils/helpers/ValidateMessage'
 import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useState, useEffect } from 'react'
+import { Dispatch, SetStateAction, useState, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -72,6 +72,7 @@ const MyProfile = ({
     address: string
     index: number
     id: string
+    is_default: boolean
   }>()
 
   /**
@@ -165,12 +166,35 @@ const MyProfile = ({
       }
     } catch (error) {}
   }
+
+  /**
+   * Sắp xếp mảng người dùng theo thời gian tạo và is_default.
+   *
+   * @param {Array} users - Mảng người dùng cần sắp xếp.
+   * @returns {Array} - Mảng đã sắp xếp theo is_default và created_at.
+   */
+  const sortByCreatedAtAndDefault = (users: Array<any>) => {
+    const sortedUsers = [...users]
+
+    sortedUsers.sort((a, b) => {
+      if (a.is_default && !b.is_default) return -1
+      if (!a.is_default && b.is_default) return 1
+
+      const dateA = new Date(a.created_at)
+      const dateB = new Date(b.created_at)
+
+      return dateB.getTime() - dateA.getTime()
+    })
+
+    return sortedUsers
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="block min-h-[40.3rem]">
-        <div className="relative">
-          <div className="flex items-center justify-between pb-6 mb-6">
-            <div className="text-xl font-bold  text-bw-1">Overview</div>
+        <div className="relative ">
+          <div className="flex items-center justify-between pb-6 mb-6 border-b border-b-gray-3">
+            <div className="text-xl font-semibold  text-bw-1">Overview</div>
             <div>
               {!isEdit ? (
                 <SappButton
@@ -202,8 +226,8 @@ const MyProfile = ({
               )}
             </div>
           </div>
-          <div className="h-1 absolute inset-0 border-b border-gray-3 bottom-0"></div>
         </div>
+
         <ul>
           {/* start:: Code*/}
           <li
@@ -269,40 +293,6 @@ const MyProfile = ({
           </li>
           {/* end:: Username*/}
 
-          {/* start:: Email*/}
-          <li
-            className={`md:flex block gap-[1.4rem] transition-[margin] ${
-              !isEdit ? 'mb-5' : 'mb-[2rem]'
-            }`}
-          >
-            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
-              Email
-            </div>
-            <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-              <TextSkeleton loading={loading && !isEdit} height="4">
-                {user.user_contacts?.[0]?.email}
-              </TextSkeleton>
-            </div>
-          </li>
-          {/* end:: Email*/}
-
-          {/* start:: Phone Number*/}
-          <li
-            className={`md:flex block gap-[1.4rem] transition-[margin] ${
-              !isEdit ? 'mb-5' : 'mb-[2rem]'
-            }`}
-          >
-            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
-              Phone Number
-            </div>
-            <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-              <TextSkeleton loading={loading && !isEdit} height="4">
-                {formatPhoneNumber(user.user_contacts?.[0]?.phone)}
-              </TextSkeleton>
-            </div>
-          </li>
-          {/* end:: Phone Number*/}
-
           {/* start:: Role*/}
           <li
             className={`md:flex block gap-[1.4rem] ${
@@ -350,7 +340,7 @@ const MyProfile = ({
           )}
           {/* end:: Updated At*/}
         </ul>
-        {user.user_contacts?.map((e, i) => {
+        {sortByCreatedAtAndDefault(user.user_contacts || [])?.map((e, i) => {
           return (
             <div className={`mt-5`} key={e.id}>
               <div
@@ -359,7 +349,7 @@ const MyProfile = ({
                 } `}
               >
                 <div>
-                  <span className="text-gray-1">Profile 1</span>
+                  <span className="text-gray-1">Profile {i + 1}</span>
                   {e.is_default && (
                     <span className="ml-[10px] bg-blue-600 bg-opacity-5 text-state-info py-1 px-2 inline-block select-none text-medium-sm leading-4">
                       Default
@@ -368,9 +358,11 @@ const MyProfile = ({
                 </div>
                 <div className="text-bw-1 mt-3 font-medium flex">
                   <div className="w-fit">
-                    {e.phone || '-'}
-                    <span className="text-gray-1 mx-3">|</span>
-                    {e.email || '-'}
+                    {e.phone && e.phone}
+                    {e.email && e.phone && (
+                      <span className="text-gray-1 mx-3">|</span>
+                    )}
+                    {e.email && e.email}
                   </div>
                   {!isEdit && (
                     <div
@@ -383,6 +375,7 @@ const MyProfile = ({
                           address: e.address,
                           index: i + 1,
                           id: e.id,
+                          is_default: e.is_default,
                         })
                       }
                     >
@@ -409,10 +402,12 @@ const MyProfile = ({
         isOpen={makeDefaultDrawer?.status || false}
         onClose={closeMakeDefault}
         title={'Profile ' + makeDefaultDrawer?.index || ''}
-        message="Bạn có chắc chắn muốn hủy không?"
+        message=""
+        confirmOnClose={false}
         widthDrawer="w-6/12"
         btnSubmitTile="Make Default"
         handleSubmit={submitMakeDefault}
+        showSubmitButton={makeDefaultDrawer?.is_default ? false : true}
       >
         <div className="text-bw-1">
           <span className="text-gray-1 w-[302px] inline-block">Email:</span>

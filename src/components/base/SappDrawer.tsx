@@ -17,6 +17,8 @@ interface IProps {
   btnSubmitTile?: string
   handleSubmit?: any
   drawerSubId?: string
+  confirmOnClose?: boolean
+  showSubmitButton?: boolean
 }
 
 const SappDrawer = ({
@@ -30,11 +32,17 @@ const SappDrawer = ({
   btnSubmitTile = 'Next Lesson',
   handleSubmit = () => {},
   drawerSubId = '',
+  confirmOnClose = true,
+  showSubmitButton = true,
 }: IProps) => {
   const dispatch = useAppDispatch()
 
   const handleOnClose = () => {
-    dispatch(confirmDialog.open({ message: message, onConfirm: onClose }))
+    if (confirmOnClose) {
+      dispatch(confirmDialog.open({ message: message, onConfirm: onClose }))
+    } else {
+      onClose()
+    }
   }
 
   const handleMaskClick = (e: any) => {
@@ -83,12 +91,14 @@ const SappDrawer = ({
               onClick={handleMaskClick}
               size="lager"
             />
-            <ButtonPrimary
-              title={btnSubmitTile}
-              className="me-[32px]"
-              onClick={handleSubmit}
-              size="lager"
-            />
+            {showSubmitButton && (
+              <ButtonPrimary
+                title={btnSubmitTile}
+                className="me-[32px]"
+                onClick={handleSubmit}
+                size="lager"
+              />
+            )}
           </div>
         )}
       </div>
