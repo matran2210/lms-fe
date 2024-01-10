@@ -17,11 +17,11 @@ import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 // Config Courses
 const breadcrumbs: ITabs[] = [
   {
-    link: 'Courses',
+    link: '/courses',
     title: 'Courses',
   },
   {
-    link: '/',
+    link: '/courses',
     title: 'Final Test',
   },
   {

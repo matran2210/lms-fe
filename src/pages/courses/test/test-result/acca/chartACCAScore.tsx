@@ -1,4 +1,4 @@
-import { percentConversion } from '@utils/helpers'
+import { percentConversion, roundNumber } from '@utils/helpers'
 
 interface DataItem {
   question_topic_id: string
@@ -46,7 +46,7 @@ const ChartACCAScore = ({ data }: IProps) => {
                     alt="Correct"
                     className="w-4 text-state-success mr-1.5"
                   />
-                  <span>45%</span>
+                  <span>{roundNumber(item?.ratio ?? 0)}%</span>
                 </div>
               </div>
             </div>

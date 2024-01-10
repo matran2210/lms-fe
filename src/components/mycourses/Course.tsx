@@ -95,7 +95,6 @@ const Course = ({
           const finishedAtDate = new Date(finishedAt).toISOString()
           if (
             course?.course_type === 'TRIAL_COURSE' &&
-            student.extend_count === 0 &&
             finishedAtDate <= formattedDate
           )
             return BUTTON_STATUS.Extend
