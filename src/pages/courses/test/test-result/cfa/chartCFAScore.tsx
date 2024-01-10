@@ -12,10 +12,10 @@ interface IProps {
 const ChartCFAScore = ({ data }: IProps) => {
   return (
     <div className="block">
-      <div className="text-xl font-bold text-bw-1 mb-6">
+      <div className="text-xl font-medium text-bw-1 mb-6">
         Your Performance by Topic Area
       </div>
-      <div className="flex w-full relative mb-4 overflow-hidden">
+      <div className="flex w-full relative mb-4">
         <div className="absolute top-[43%] -translate-y-1/2 -left-11 text-medium-sm text-bw-1 font-normal -rotate-90 shrink-0">
           Available Points
         </div>
@@ -47,13 +47,13 @@ const ChartCFAScore = ({ data }: IProps) => {
           ></div>
         ))}
       </div>
-      <div className="flex flex-row gap-6">
-        <div className="flex flex-col shrink-0 justify-between my-3">
-          <div className="text-medium-sm">Topic Area</div>
-          <div className="text-medium-sm">Topic Weight</div>
-        </div>
-        <div className="bg-gray-4 px-6 py-3 w-full overflow-x-auto">
-          <div className="flex flex-row gap-6 flex-start">
+      <div className="block">
+        <div className="bg-gray-4 w-full overflow-x-auto flex flex-row">
+          <div className="flex flex-col shrink-0 justify-between py-3 bg-white pr-7">
+            <div className="text-medium-sm">Topic Area</div>
+            <div className="text-medium-sm">Topic Weight</div>
+          </div>
+          <div className="flex flex-row gap-6 flex-start px-6 py-3 ">
             {data?.map((item: any) => (
               <div
                 key={item?.id}

@@ -4,6 +4,8 @@ import { SetStateAction } from 'react'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { roundNumber, convertSecondsToMinutesSeconds } from '@utils/helpers'
+import { QUESTION_TYPES } from 'src/constants'
 
 const headers = [
   {
@@ -95,14 +97,40 @@ const YourScoreDetail = () => {
     setScoreDetail(res?.data)
   }
 
+  // Hàm ánh xạ giá trị enum với tên tương ứng
+  const getTypeName = (type: QUESTION_TYPES): string => {
+    switch (type) {
+      case QUESTION_TYPES.TRUE_FALSE:
+        return 'True False'
+      case QUESTION_TYPES.ONE_CHOICE:
+        return 'One Choice'
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        return 'Multiple Choice'
+      case QUESTION_TYPES.MATCHING:
+        return 'Matching'
+      case QUESTION_TYPES.SELECT_WORD:
+        return 'Select Word'
+      case QUESTION_TYPES.FILL_WORD:
+        return 'Fill Up'
+      case QUESTION_TYPES.DRAG_DROP:
+        return 'Drag Drop'
+      case QUESTION_TYPES.ESSAY:
+        return 'Constructed'
+      default:
+        return '--'
+    }
+  }
+
   useEffect(() => {
     getScoreDetail()
   }, [router])
 
   return (
     <div className="bg-white px-6 xl:px-24 py-6 max-w-[1144px] max-h-full shadow-sidebar">
-      <div className="text-xl font-bold text-bw-1 mb-6">Your Score Details</div>
-      <div className="block">
+      <div className="text-xl font-medium text-bw-1 mb-6">
+        Your Score Details
+      </div>
+      <div className="block pl-4">
         <SappTable
           headers={headers}
           loading={true}
@@ -114,21 +142,26 @@ const YourScoreDetail = () => {
           <>
             {scoreDetail.answers?.map((e: any, index: number) => {
               return (
-                <tr key={e?.id}>
-                  <td className="pr-1">{index + 1}</td>
+                <tr
+                  className="border-dashed border-b border-gray-2"
+                  key={e?.id}
+                >
+                  <td className="pr-1 text-bw-1">{index + 1}</td>
                   <td className="text-start m-6 pr-4">
                     <div
-                      className="text-gray-600 sapp-text-truncate-1"
+                      className="text-bw-1 sapp-text-truncate-1"
                       dangerouslySetInnerHTML={{
-                        __html: String(e?.question?.question_content),
+                        __html: String(e?.question?.question_content ?? '--'),
                       }}
                     ></div>
                   </td>
-                  <td className="text-start m-6 pr-4">
-                    {e?.question?.question_topic?.name}
+                  <td className="text-start m-6 pr-4 text-bw-1">
+                    {e?.question?.question_topic?.name ?? '--'}
                   </td>
-                  <td className="text-start m-6 pr-4">
-                    <div className="mt-6 mr-6 mb-6">{e?.question?.qType}</div>
+                  <td className="text-start m-6 pr-4 text-bw-1">
+                    <div className="mt-6 mr-6 mb-6 min-w-132px">
+                      {getTypeName(e?.question?.qType ?? '--')}
+                    </div>
                   </td>
                   <td
                     className={`text-start m-6 pr-1
@@ -139,23 +172,31 @@ const YourScoreDetail = () => {
                       }
                     `}
                   >
-                    {e?.is_correct ? 'Correct' : 'Incorrect'}
+                    {e?.question?.qType !== 'ESSAY' ? (
+                      <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
+                    ) : (
+                      <>{e?.is_correct ? 'Submitted' : 'Unfinished'}</>
+                    )}
                   </td>
                   <td className="text-start m-6 text-gray-1 pr-4">
-                    <div className="flex items-center ml-1">
-                      <img
-                        src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                        alt="Correct"
-                        className="w-4 text-state-success mr-1"
-                      />
-                      29%
-                    </div>
+                    {e?.question?.qType !== 'ESSAY' && (
+                      <div className="flex items-center ml-1">
+                        <img
+                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                          alt="Correct"
+                          className="w-4 text-state-success mr-1"
+                        />
+                        {roundNumber(e?.question?.question_report?.ratio || 0)}%
+                      </div>
+                    )}
                   </td>
                   <td className="text-start m-6 pr-4">
-                    <div>
+                    <div className="text-center">
                       {(() => {
                         if (e?.time_spent !== null) {
-                          return e?.time_spent
+                          return convertSecondsToMinutesSeconds(
+                            e?.time_spent || 0,
+                          )
                         } else {
                           return '---'
                         }

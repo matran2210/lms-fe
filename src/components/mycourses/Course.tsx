@@ -249,10 +249,14 @@ const Course = ({
                   <span>
                     <span
                       className={`font-medium ${
-                        enableCourse ? 'text-bw-2' : 'text-gray-1'
+                        enableCourse ? 'text-bw-1' : 'text-gray-1'
                       }`}
                     >
-                      {daysDifference > 0 ? daysDifference : 0 ?? 0}{' '}
+                      {daysDifference > 0
+                        ? daysDifference
+                        : determineButtonToShow !== 'Disabled'
+                          ? 1
+                          : 0}{' '}
                     </span>
                     {daysDifference > 0 ? 'days left' : 'day left'}
                   </span>
