@@ -413,6 +413,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 control={controlAnswer}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
+                name={''}
               />
               {showExhibit?.id && (
                 <MovableWindow
