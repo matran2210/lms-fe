@@ -212,7 +212,7 @@ const LoginPage = () => {
           </div> */}
         </form>
       </div>
-      <PopUpLimit open={true} setOpen={setOpenLimit} />
+      <PopUpLimit open={openLimit} setOpen={setOpenLimit} />
     </>
   )
 }
