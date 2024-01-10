@@ -14,17 +14,12 @@ interface QuizReport {
   ratio: number
 }
 
-interface CourseDifficulty {
-  course_difficulty: number
-}
-
 interface DataItem {
   chart_data: any
   chart_type: string
   correct_answer: number
   total_question: number
   quiz_report: QuizReport
-  course: CourseDifficulty
 }
 
 interface IProps {
