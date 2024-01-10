@@ -41,6 +41,7 @@ const TestResultDetail = ({ questions, chartData }: any) => {
           questions={questions}
           type={questions?.course?.course_categories[0]?.name}
           chartData={chartData}
+          courseDifficulty={questions?.course?.course_difficulty ?? 0}
         />
       </div>
     </>
