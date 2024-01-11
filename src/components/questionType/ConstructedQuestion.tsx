@@ -143,7 +143,7 @@ const EssayQuestionPreview = ({
                 height={500}
                 placeholder="Your answer here"
                 defaultValue={defaultValue}
-                disabled={fullData.done}
+                disabled={fullData?.done}
                 // externalRef={externalRef}
               />
             ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
@@ -161,7 +161,7 @@ const EssayQuestionPreview = ({
                         // row={2}
 
                         onChange={(e) => {
-                          if (!fullData.done) {
+                          if (!fullData?.done) {
                             const currentSheet = refSheet.current?.getSheet()
                             if (value) {
                               let old = [...JSON.parse(value)]
@@ -213,7 +213,7 @@ const EssayQuestionPreview = ({
                 height={500}
                 placeholder="Your answer here"
                 defaultValue={defaultValue}
-                disabled={fullData.done}
+                disabled={fullData?.done}
               />
             ) : (
               <div className="w-full, h-[500px]">
@@ -231,7 +231,7 @@ const EssayQuestionPreview = ({
 
                         onChange={(e) => {
                           // const celldata = e.data
-                          if (!fullData.done) {
+                          if (!fullData?.done) {
                             const currentSheet = refSheet.current?.getSheet()
                             // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
                             // // listSheet.splice(0,1)
