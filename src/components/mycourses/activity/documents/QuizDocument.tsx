@@ -243,22 +243,23 @@ const QuizDocument = ({
           </div>
         </div>
 
-        <div
-          className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
-          onClick={
-            isLastQuestion
-              ? () => handleConfirmQuestion(true)
-              : () => {
-                  if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                    handleConfirmQuestion(false)
+        {(isQuestionConfirmed || (!isQuestionConfirmed && isLastQuestion)) && (
+          <div
+            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
+            onClick={
+              isLastQuestion
+                ? () => handleConfirmQuestion(true)
+                : () => {
+                    if (grading_preference !== 'AFTER_EACH_QUESTION') {
+                      handleConfirmQuestion(false)
+                    }
+                    handleNextQuestion()
                   }
-                  handleNextQuestion()
-                }
-          }
-        >
-          {isLastQuestion ? 'Finish' : 'Next'}
-        </div>
-
+            }
+          >
+            {isLastQuestion ? 'Finish' : 'Next'}
+          </div>
+        )}
         {!isQuestionConfirmed &&
           !isLastQuestion &&
           grading_preference === 'AFTER_EACH_QUESTION' && (
