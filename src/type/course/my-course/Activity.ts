@@ -47,6 +47,7 @@ export interface IActivity {
     display_icon: string
     name: string
   }
+  breadcumb: IBreadcrumb[]
 }
 
 export interface ITab {
@@ -84,4 +85,12 @@ export interface ITab {
       grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
     }
   }[]
+}
+
+export interface IBreadcrumb {
+  id: string
+  name: string
+  course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
+  parent_id?: string
+  url?: string
 }
