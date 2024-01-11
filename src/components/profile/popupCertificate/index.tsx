@@ -46,6 +46,7 @@ const PopUpCertificate = ({
           <div className="cursor-pointer" onClick={handleOnClose}>
             <CloseIconPreview />
           </div>
+          <div>{data.certificate.name}</div>
         </div>
       </div>
     </SappModal>
