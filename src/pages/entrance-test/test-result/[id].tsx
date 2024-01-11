@@ -5,10 +5,12 @@ import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-
+import QuizResult from 'entrance-test-result-package'
 const TestEntranceResult = ({ chartData }: any) => {
   //todo: call api, make UI
-  return <div>Result Test Entrance</div>
+  return <></>
+
+  // <QuizResult dataChart={chartData.chart_data} onClick={()=>{}} />
 }
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
