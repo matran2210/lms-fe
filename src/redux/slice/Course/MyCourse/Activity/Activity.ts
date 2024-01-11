@@ -7,7 +7,7 @@ import {
   ICreateDiscussionUploadRequest,
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
-import { IActivity } from 'src/type/course/my-course/Activity'
+import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
 
 // Tạo một đối tượng activity với giá trị mặc định
 export interface ICourseActivityState extends IActivity {
@@ -50,6 +50,7 @@ const initialState: ICourseActivityState = {
   },
   files: [] as any[],
   discussion: undefined,
+  breadcumb: [] as IBreadcrumb[],
 }
 
 export const getCourseActivityTapById = createAsyncThunk(
