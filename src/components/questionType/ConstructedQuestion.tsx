@@ -156,7 +156,7 @@ const EssayQuestionPreview = ({
                         // row={2}
 
                         onChange={(e) => {
-                          const currentSheet = refSheet.current.getSheet()
+                          const currentSheet = refSheet.current?.getSheet()
                           if (value) {
                             let old = [...JSON.parse(value)]
                             const index = old.findIndex(
@@ -216,7 +216,7 @@ const EssayQuestionPreview = ({
 
                         onChange={(e) => {
                           // const celldata = e.data
-                          const currentSheet = refSheet.current.getSheet()
+                          const currentSheet = refSheet.current?.getSheet()
                           // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
                           // // listSheet.splice(0,1)
                           // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
@@ -224,7 +224,7 @@ const EssayQuestionPreview = ({
                           if (value) {
                             let old = [...JSON.parse(value)]
                             const index = old.findIndex(
-                              (e: any) => e.id === currentSheet.id,
+                              (e: any) => e?.id === currentSheet?.id,
                             )
                             if (index >= 0) {
                               old.splice(index, 1, currentSheet)
