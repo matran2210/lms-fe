@@ -32,6 +32,8 @@ import {
   getTopicsCaseStudy,
   loadMoreQuestion,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
+import ConFirmSubmit from '../test/conFirmSubmit'
+import QuitTestModal from '../courses/test/quit-test'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -185,6 +187,8 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [openSubmit, setOpenSubmit] = useState(false)
+  const [openQuit, setOpenQuit] = useState(false)
   const dispatch = useAppDispatch()
   const { topics, listFullQuestions, listQuestions, loading } = useAppSelector(
     (state) => state.caseStudyTestReducer,
@@ -506,7 +510,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               loading: false,
               disabled: false,
               onClick: () => {
-                handleSubmitQuestion()
+                setOpenSubmit(true)
               },
             }}
             cancel={{
@@ -728,6 +732,16 @@ const CaseStudyDetail = ({ questions }: any) => {
           </div>
         </div>
       </div>
+      <ConFirmSubmit
+        open={openSubmit}
+        setOpen={setOpenSubmit}
+        handleSubmit={handleSubmitQuestion}
+      />
+      <QuitTestModal
+        open={openQuit}
+        setOpen={setOpenQuit}
+        handleQuit={() => router.back()}
+      />
     </div>
   )
 }

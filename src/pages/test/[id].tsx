@@ -51,6 +51,7 @@ import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
+import QuitTestModal from '../courses/test/quit-test'
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -242,6 +243,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
   const [openSubmit, setOpenSubmit] = useState(false)
+  const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
   useClickOutside({
     ref: dropUpRef,
@@ -1198,7 +1200,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               title: 'Quit',
               size: 'medium',
               onClick: () => {
-                router.back()
+                setOpenQuit(true)
               },
               loading: false,
               //   full: fullWidthBtn,
@@ -1645,6 +1647,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openTimeOut}
         setOpen={setOpenTimeOut}
         handleSubmit={handleSubmitQuestion}
+        handleQuit={() => router.back()}
+      />
+      <QuitTestModal
+        open={openQuit}
+        setOpen={setOpenQuit}
         handleQuit={() => router.back()}
       />
       <ConFirmSubmit
