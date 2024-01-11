@@ -306,7 +306,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               <span className="text-gray-1">/</span>
               <li
                 className={`${
-                  activity.breadcumb.length - 1 === i
+                  (activity.breadcumb?.length || 0) - 1 === i
                     ? 'text-bw-1'
                     : 'hover:text-primary cursor-pointer text-gray-1'
                 }`}
