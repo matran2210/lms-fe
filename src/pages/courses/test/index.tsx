@@ -24,13 +24,16 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
     router.push(`/test/${data.quiz.id}`)
   }
   const checkFinished = useMemo(() => {
-    if (data?.quiz?.attempts.length === 0) {
-      return false
-    }
-    for (let i in data?.quiz?.attempts) {
-      if (data?.quiz?.attempts[i]?.status === 'SUBMITTED') {
+    if (data?.quiz?.attempts) {
+      if (data?.quiz?.attempts?.length > 0) {
         return true
       }
+      // for (let i in data?.quiz?.attempts) {
+      //   if (data?.quiz?.attempts[i]?.status === 'SUBMITTED') {
+      //     return true
+      //   }
+      // }
+      return false
     }
     return false
   }, [data?.quiz?.attempts])
@@ -77,7 +80,7 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">No of Attempts:</div>
         <div className="text-bw-1">
-          {data?.quiz?.attempts?.length}/
+          {data?.quiz?.attempt_count || 0}/
           {data?.quiz?.is_limited ? data?.quiz?.limit_count : 'Unlimited'}
         </div>
       </div>

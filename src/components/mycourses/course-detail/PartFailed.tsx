@@ -4,24 +4,22 @@ import { formatTime } from '@components/common/timer'
 import { ICourseSection } from 'src/type/courses'
 import TestModal from 'src/pages/courses/test'
 import SappButton from '@components/base/button/SappButton'
+import { useRouter } from 'next/router'
 
 const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
     : 'Unlimited'
   const [open, setOpen] = useState(false)
+  const router = useRouter()
   const checkFinished = useMemo(() => {
     if (!coursePart?.quiz?.attempts) {
       return false
     }
-    if (coursePart?.quiz?.attempts?.length === 0) {
-      return false
+    if (coursePart?.quiz?.attempts?.length > 0) {
+      return true
     }
-    for (let i in coursePart?.quiz?.attempts) {
-      if (coursePart?.quiz?.attempts[i]?.status === 'SUBMITTED') {
-        return true
-      }
-    }
+
     return false
   }, [coursePart?.quiz?.attempts])
 
@@ -40,7 +38,7 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
         <div className="time-allow flex justify-between pt-4">
           <p className="text-base text-gray-1">Attempt:</p>
           <p className="text-base text-bw-1 font-semibold">
-            {`${quizAttempt?.attempts?.length} / ${
+            {`${quizAttempt?.attempt_count || 0} / ${
               quizAttempt?.limit_count !== 0
                 ? quizAttempt?.limit_count
                 : 'Unlimited'
@@ -78,7 +76,16 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
             )
           ) : (
             <div className="flex justify-between flex-1">
-              <SappButton title="Result" isUnderLine color="text"></SappButton>
+              <SappButton
+                title="Result"
+                isUnderLine
+                color="text"
+                onClick={() =>
+                  router.push(
+                    `/courses/test/test-result/${quizAttempt?.attempts[0].id}`,
+                  )
+                }
+              ></SappButton>
               <ButtonSecondary
                 disabled={
                   coursePart?.quiz?.is_limited &&

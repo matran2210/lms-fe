@@ -28,6 +28,7 @@ export interface ICourseSection {
     quiz_timed: number
     quiz_type: string
     is_limited: boolean
+    attempt_count: number
   }
   learning_progress: {
     total_course_sections: number
