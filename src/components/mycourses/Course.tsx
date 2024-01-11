@@ -3,7 +3,7 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { truncateString } from '@utils/index'
-import { parseISO, differenceInDays } from 'date-fns'
+import { parseISO, differenceInDays, startOfDay } from 'date-fns'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
@@ -77,7 +77,7 @@ const Course = ({
     const startedAt = student?.started_at
     const finishedAt = student?.finished_at
     // Chuyển đổi sang chuỗi theo định dạng ISO
-    const formattedDate = currentDate.toISOString()
+    const formattedDate = startOfDay(currentDate)
 
     if (
       courseStatus === COURSE_STATUS.PUBLISH ||
@@ -92,7 +92,7 @@ const Course = ({
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
         if (startedAt && finishedAt) {
-          const finishedAtDate = new Date(finishedAt).toISOString()
+          const finishedAtDate = startOfDay(new Date(finishedAt))
           if (
             course?.course_type === 'TRIAL_COURSE' &&
             finishedAtDate <= formattedDate
@@ -253,7 +253,7 @@ const Course = ({
                     >
                       {daysDifference > 0
                         ? daysDifference
-                        : determineButtonToShow !== 'Disabled'
+                        : enableCourse
                           ? 1
                           : 0}{' '}
                     </span>

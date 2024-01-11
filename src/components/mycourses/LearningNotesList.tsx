@@ -17,6 +17,7 @@ import { resetNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import PreviewNoteList from './PreviewNoteList'
+import { v4 as uuidv4 } from 'uuid'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -103,13 +104,14 @@ const LearningNotesList = () => {
           if (res && course_section_path?.length > 0) {
             setSelectedSection(defaultValueActivity(course_section_path[3]))
             setSelectedSubsection(defaultValueActivity(course_section_path[2]))
+            // Hiệu ứng fill data vào ô select
             setTimeout(() => {
               setSelectedUnit(defaultValueActivity(course_section_path[1]))
-            }, 500)
+            }, 2000)
             setTimeout(() => {
               setSelectedActivity(defaultValueActivity(course_section_path[0]))
               setFirstLoadActity(true)
-            }, 1000)
+            }, 4000)
           }
         },
       )
@@ -282,9 +284,7 @@ const LearningNotesList = () => {
       const res = await CourseAPI.deleteCourseNoteList(id)
       fetchData(params)
       toast.success('Xóa thành công!')
-    } catch (error) {
-      toast.error('Xóa không thành công!')
-    }
+    } catch (error) {}
   }
 
   const closePreview = () => {
@@ -293,6 +293,7 @@ const LearningNotesList = () => {
 
   const handleEditNote = (id: string, description: string, index: number) => {
     const note = {
+      uuid: uuidv4(),
       id: id,
       name: 'Note',
       description: description,
@@ -412,7 +413,7 @@ const LearningNotesList = () => {
               />
             </div>
             <div className="font-normal text-base">
-              <span>{note?.description}</span>
+              <span className="whitespace-pre-wrap">{note?.description}</span>
             </div>
             <div className="mt-5 flex justify-between">
               <div className="font-normal text-sm text-gray-1">

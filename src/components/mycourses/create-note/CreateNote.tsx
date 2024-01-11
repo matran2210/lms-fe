@@ -11,21 +11,23 @@ import CourseAPI from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { pushNotes, closeNote } from 'src/redux/slice/Course/NotesList'
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
+import { v4 as uuidv4 } from 'uuid'
 
 interface IProps {
   id: string | undefined
   content: string
-  index: string | number
+  uuid: string | number
+  count: number
 }
 
-const CreateNote = ({ id, content, index }: IProps) => {
+const CreateNote = ({ id, content, uuid, count }: IProps) => {
   const router = useRouter()
   const activityId = router.query.activityId
   const [activeSectionId, setActiveSectionId] = useState<string>()
   const dispatch = useAppDispatch()
 
   const validationSchema = z.object({
-    [`description_${id ? id : index}`]: z
+    [`description_${id ? id : uuid}`]: z
       .string()
       .trim()
       .min(1, VALIDATE_REQUIRED),
@@ -43,6 +45,7 @@ const CreateNote = ({ id, content, index }: IProps) => {
 
   const handleAddNote = () => {
     const note = {
+      uuid: uuidv4(),
       id: '',
       name: 'Note',
       description: '',
@@ -55,7 +58,7 @@ const CreateNote = ({ id, content, index }: IProps) => {
       const params = {
         course_section_id: activityId,
         name: 'Note',
-        description: data?.[`description_${id ? id : index}`],
+        description: data?.[`description_${id ? id : uuid}`],
       }
       const res = await CourseAPI.createNote(params)
       setActiveSectionId(res?.data?.id)
@@ -69,7 +72,7 @@ const CreateNote = ({ id, content, index }: IProps) => {
     try {
       const params = {
         name: 'Note',
-        description: data?.[`description_${id ? id : index}`],
+        description: data?.[`description_${id ? id : uuid}`],
       }
       const res = await CourseAPI.updateCourseNotesList(
         id || activeSectionId,
@@ -86,7 +89,7 @@ const CreateNote = ({ id, content, index }: IProps) => {
   }
 
   const removeNote = () => {
-    dispatch(closeNote(index))
+    dispatch(closeNote(uuid))
   }
 
   return (
@@ -96,7 +99,7 @@ const CreateNote = ({ id, content, index }: IProps) => {
           width: '412px',
           height: '350px',
           top: 'calc(50% - 150px)',
-          left: 'calc(22% - 200px)',
+          left: `calc(${22 + count}% - 200px)`,
         }}
         key={'testtesttest'}
         onClick={() => {}}
@@ -137,8 +140,8 @@ const CreateNote = ({ id, content, index }: IProps) => {
           <HookFormTextArea
             placeholder="Take a note..."
             control={control}
-            name={`description_${id ? id : index}`}
-            className="w-full h-[calc(100%-40px)] sapp-text-area px-4 py-4 placeholder:text-sm placeholder:font-normal"
+            name={`description_${id ? id : uuid}`}
+            className="w-full h-[calc(100%-40px)] sapp-text-area px-4 py-4 placeholder:text-medium-sm placeholder:font-medium placeholder:text-gray-1 whitespace-pre-wrap"
             defaultValue={content}
           />
         </div>

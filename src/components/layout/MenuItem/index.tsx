@@ -9,6 +9,7 @@ import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
+import { v4 as uuidv4 } from 'uuid'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -44,6 +45,7 @@ export default function MenuItem({
 
   const handleAddNote = () => {
     const note = {
+      uuid: uuidv4(),
       id: '',
       name: 'Note',
       description: '',
