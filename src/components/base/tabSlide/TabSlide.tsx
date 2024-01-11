@@ -27,7 +27,7 @@ const TabSlide = ({
   setValueFilter,
 }: IProps) => {
   const elementRef = useRef(null) as any
-  const [hasScrollBar, setHasScrollBar] = useState(false)
+  const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
 
   useEffect(() => {
     if (elementRef?.current && !activeShowAll) {
@@ -41,18 +41,28 @@ const TabSlide = ({
       )
     }
   }, [currentTab, elementRef?.current])
+
   useEffect(() => {
-    function updateState() {
-      setValueFilter('filter', undefined)
-      setActiveShowAll(false)
+    function updateState(hasScrollBar: any) {
+      // console.log(hasScrollBar);
+
+      if (hasScrollBar !== undefined) {
+        setValueFilter('filter', undefined)
+        setActiveShowAll(false)
+        const el = elementRef.current
+        el && setHasScrollBar(el.scrollWidth > el.getBoundingClientRect().width)
+      }
+    }
+    updateState(hasScrollBar)
+    window.addEventListener('resize', updateState)
+    return () => window.removeEventListener('resize', updateState)
+  }, [hasScrollBar])
+  useEffect(() => {
+    if (elementRef?.current && data.length > 0) {
       const el = elementRef.current
       el && setHasScrollBar(el.scrollWidth > el.getBoundingClientRect().width)
     }
-
-    updateState()
-    window.addEventListener('resize', updateState)
-    return () => window.removeEventListener('resize', updateState)
-  }, [])
+  }, [elementRef?.current, data])
   const renderTab = useMemo(() => {
     let arr = [] as any
     let i = 1

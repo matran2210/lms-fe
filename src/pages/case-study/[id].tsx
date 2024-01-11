@@ -24,6 +24,7 @@ import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
@@ -351,10 +352,10 @@ const CaseStudyDetail = ({ questions }: any) => {
           let answer = []
           if (e.answer) {
             for (let el of e.answer) {
-              answer.push({ answer_id: el })
+              if (el) {
+                answer.push({ answer_id: el })
+              }
             }
-          } else {
-            answer.push({ answer_id: '' })
           }
           answers.push({ question_id: e.id, answer })
         } else if (e.qType === QUESTION_TYPES.MATCHING) {
@@ -401,6 +402,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           })
         }
       }
+
       quiz_position_mapping.push({
         question_id: e.id,
         answers: e?.answers,
@@ -408,11 +410,16 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
-      await CourseTestApi.submitCaseStudy(quizAttempId as string, {
-        answers: answers,
-        quiz_position_mapping: quiz_position_mapping,
-        total_attempt_time: total_attempt_time,
-      })
+      try {
+        await CourseTestApi.submitCaseStudy(quizAttempId as string, {
+          answers: answers,
+          quiz_position_mapping: quiz_position_mapping,
+          total_attempt_time: total_attempt_time,
+        })
+        toast.success('submit success')
+      } catch (err) {
+        toast.error('submit failed')
+      }
     }
     return
   }
