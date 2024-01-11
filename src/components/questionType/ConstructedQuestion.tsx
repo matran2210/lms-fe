@@ -32,6 +32,7 @@ export type IPreviewProp = {
   defaultValue?: any
   response_option_custom?: any
   externalRef?: any
+  fullData: any
 }
 const EssayQuestionPreview = ({
   data,
@@ -50,6 +51,7 @@ const EssayQuestionPreview = ({
   defaultValue,
   response_option_custom,
   externalRef,
+  fullData,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
@@ -63,6 +65,7 @@ const EssayQuestionPreview = ({
   useEffect(() => {
     setValueText(defaultValue)
   }, [defaultValue])
+  // useEffect(()=>{
   if (externalRef) {
     externalRef.current = {
       reset: () =>
@@ -72,6 +75,7 @@ const EssayQuestionPreview = ({
         }),
     }
   }
+  // },[response_option_custom])
 
   return (
     <div
@@ -139,6 +143,7 @@ const EssayQuestionPreview = ({
                 height={500}
                 placeholder="Your answer here"
                 defaultValue={defaultValue}
+                disabled={fullData.done}
                 // externalRef={externalRef}
               />
             ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
@@ -156,23 +161,25 @@ const EssayQuestionPreview = ({
                         // row={2}
 
                         onChange={(e) => {
-                          const currentSheet = refSheet.current?.getSheet()
-                          if (value) {
-                            let old = [...JSON.parse(value)]
-                            const index = old.findIndex(
-                              (e: any) => e.id === currentSheet.id,
-                            )
-                            if (index >= 0) {
-                              old.splice(index, 1, currentSheet)
-                            } else {
-                              old.push(currentSheet)
+                          if (!fullData.done) {
+                            const currentSheet = refSheet.current?.getSheet()
+                            if (value) {
+                              let old = [...JSON.parse(value)]
+                              const index = old.findIndex(
+                                (e: any) => e.id === currentSheet.id,
+                              )
+                              if (index >= 0) {
+                                old.splice(index, 1, currentSheet)
+                              } else {
+                                old.push(currentSheet)
+                                // setValue(name, JSON.stringify(old))
+                              }
+                              onChange(JSON.stringify(old))
                               // setValue(name, JSON.stringify(old))
+                            } else {
+                              onChange(JSON.stringify([currentSheet]))
+                              // setValue(name, JSON.stringify([currentSheet]))
                             }
-                            onChange(JSON.stringify(old))
-                            // setValue(name, JSON.stringify(old))
-                          } else {
-                            onChange(JSON.stringify([currentSheet]))
-                            // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }}
                         data={
@@ -181,6 +188,13 @@ const EssayQuestionPreview = ({
                             : [
                                 {
                                   name: 'Sheet1',
+                                  // config: {
+                                  //   authority: {
+
+                                  //     sheet: true, //If it is 1 or true, the worksheet is protected; if it is 0 or false, the worksheet is not protected.
+
+                                  //   },
+                                  // },
                                 },
                               ]
                         }
@@ -199,6 +213,7 @@ const EssayQuestionPreview = ({
                 height={500}
                 placeholder="Your answer here"
                 defaultValue={defaultValue}
+                disabled={fullData.done}
               />
             ) : (
               <div className="w-full, h-[500px]">
@@ -210,33 +225,35 @@ const EssayQuestionPreview = ({
                     return (
                       <Workbook
                         // generateSheetId={() => name}
-                        ref={externalRef}
+                        ref={refSheet}
                         // column={2}
                         // row={2}
 
                         onChange={(e) => {
                           // const celldata = e.data
-                          const currentSheet = refSheet.current?.getSheet()
-                          // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
-                          // // listSheet.splice(0,1)
-                          // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
-                          // console.log(listSheet,"test");
-                          if (value) {
-                            let old = [...JSON.parse(value)]
-                            const index = old.findIndex(
-                              (e: any) => e?.id === currentSheet?.id,
-                            )
-                            if (index >= 0) {
-                              old.splice(index, 1, currentSheet)
-                            } else {
-                              old.push(currentSheet)
+                          if (!fullData.done) {
+                            const currentSheet = refSheet.current?.getSheet()
+                            // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
+                            // // listSheet.splice(0,1)
+                            // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
+                            // console.log(listSheet,"test");
+                            if (value) {
+                              let old = [...JSON.parse(value)]
+                              const index = old.findIndex(
+                                (e: any) => e?.id === currentSheet?.id,
+                              )
+                              if (index >= 0) {
+                                old.splice(index, 1, currentSheet)
+                              } else {
+                                old.push(currentSheet)
+                                // setValue(name, JSON.stringify(old))
+                              }
+                              onChange(JSON.stringify(old))
                               // setValue(name, JSON.stringify(old))
+                            } else {
+                              onChange(JSON.stringify([currentSheet]))
+                              // setValue(name, JSON.stringify([currentSheet]))
                             }
-                            onChange(JSON.stringify(old))
-                            // setValue(name, JSON.stringify(old))
-                          } else {
-                            onChange(JSON.stringify([currentSheet]))
-                            // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }}
                         data={
