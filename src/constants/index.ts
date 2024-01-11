@@ -83,24 +83,41 @@ export const defaultStatusDetail = [
     value: '',
   },
   {
-    label: 'In Progress',
-    value: 'IN_PROGRESS',
-  },
-  {
     label: 'Ready To Learn',
     value: 'READY_TO_LEARN',
   },
   {
     label: 'In Progress',
-    value: 'COMPLETED',
+    value: 'IN_PROGRESS',
   },
   {
     label: 'Completed',
+    value: 'COMPLETED',
+  },
+  {
+    label: 'Expired',
     value: 'CANCELED',
   },
 ]
 
+export const defaultStatusEnstraceTest = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Submitted',
+    value: 'SUBMITTED',
+  },
+  {
+    label: 'Unsubmitted',
+    value: 'UN_SUBMITTED',
+  },
+]
+
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
+
+export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
 
 export const TITLE_USER_STATUS = {
   NORMAL: 'NORMAL',

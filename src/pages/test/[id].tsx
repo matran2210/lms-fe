@@ -6,12 +6,14 @@ import {
   ArrowUpIcon,
   CalculatorIcon,
   CloseIcon,
+  ExcelIcon,
   ExhibitsIcon,
   FlagIcon,
   HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
   TextSquareIcon,
+  WordIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
@@ -44,7 +46,7 @@ import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { DISPLAY_TYPE, QUESTION_TYPES } from 'src/constants'
+import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
 import TestTimeOutModal from '../courses/test/test-timeout'
@@ -183,6 +185,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             solution={solution}
+            name={`${currentTabID}_answer`}
+            setValue={setValue}
+            defaultValue={defaultValue}
+            response_option_custom={currentTabContent.response_type}
+            externalRef={refEditor}
           />
           // <Luckysheet/>
         )
@@ -191,11 +198,18 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     }
   }
   const router = useRouter()
+  const type = router.query.type
 
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
-  const { control, handleSubmit, getValues, setValue } = useForm()
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch: watchEssay,
+  } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -219,7 +233,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [quizAttempId, setQuizAttempId] = useState('')
-  const [currentTime, setCurrentTime] = useState(Date.now())
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
   const [remainTime, setRemainTime] = useState<number>(
@@ -237,6 +250,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     ref: dropUpRequire,
     callback: () => setShowLisRequirement(false),
   })
+
   const currentTabContent = useMemo(() => {
     if (tabs && tabs.length > 0) {
       return tabs.find((e: any) => e.id === currentPage)
@@ -323,14 +337,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE
     ) {
-      if (getValues(`${currentPage}_answer`)) {
+      if (getValues(`${currentContent.id}_answer`)) {
         return true
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       if (
-        getValues(`${currentPage}_answer`) &&
-        getValues(`${currentPage}_answer`).length > 0
+        getValues(`${currentContent.id}_answer`) &&
+        getValues(`${currentContent.id}_answer`).length > 0
       ) {
         return true
       }
@@ -366,10 +380,44 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
       return false
     } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
-      if (currentContent.viewed) {
-        return true
+      const value = getValues(`${currentContent.id}_answer`)
+      if (currentContent.data.response_option !== null) {
+        if (currentContent.data.response_option === RESPONSE_OPTION.SHEET) {
+          if (value) {
+            const data = JSON.parse(value)
+            for (let e of data) {
+              if (e.celldata && e.celldata.length > 0) {
+                return true
+              }
+            }
+            return false
+          }
+          return false
+        } else {
+          if (value !== undefined && value !== '') {
+            return true
+          }
+          return false
+        }
+      } else {
+        if (currentContent.response_type === 1) {
+          if (value) {
+            const data = JSON.parse(value)
+            for (let e of data) {
+              if (e.celldata && e.celldata.length > 0) {
+                return true
+              }
+            }
+            return false
+          }
+          return false
+        } else {
+          if (value !== undefined && value !== '') {
+            return true
+          }
+          return false
+        }
       }
-      return false
     }
   }
   const [filteredTabs, setFilterTabs] = useState<any[]>([])
@@ -404,7 +452,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     }
   }, [watchFilter('filter')])
   const ref = useRef(null) as any
-
+  const refEditor = useRef(null) as any
   const getValueFillText = () => {
     let value = []
     const inputs = document.querySelectorAll('input[stringHTML="true"]') as any
@@ -501,8 +549,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           corrects: corrects,
           solution: solution,
           timeSpent: item.timeSpent
-            ? currentTime - startTime + item.timeSpent
-            : currentTime - startTime,
+            ? Date.now() - startTime + item.timeSpent
+            : Date.now() - startTime,
         }
       }
       return item
@@ -583,7 +631,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         )
         return answers
       } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
-        const answers = handleSaveAnswer('', currentContent.id, tabs)
+        const answers = handleSaveAnswer(
+          getValues(`${currentPage}_answer`),
+          currentContent.id,
+          tabs,
+        )
         return answers
       } else return tabs
     } else {
@@ -625,6 +677,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return item
       })
       ref.current?.handleReset()
+      refEditor?.current?.reset()
       const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
@@ -632,6 +685,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setTabs(savedAnswer)
     } else {
       ref.current?.handleReset()
+      refEditor?.current?.reset()
       const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
@@ -675,10 +729,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           attempted: checkAnswered(item),
           timeSpent: !item.done
             ? item.timeSpent
-              ? currentTime - startTime + item.timeSpent
-              : currentTime - startTime <= 0
+              ? Date.now() - startTime + item.timeSpent
+              : Date.now() - startTime <= 0
                 ? 0
-                : currentTime - startTime
+                : Date.now() - startTime
             : item.timeSpent,
         }
         // }
@@ -690,7 +744,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     }
     return newData
   }
-
+  const handleChangeTypeEssay = (value: number) => {
+    setTabs((prev: any) => {
+      const arr = [...prev]
+      const index = arr.findIndex((e) => e.id === currentPage)
+      arr[index] = { ...arr[index], response_type: value }
+      return arr
+    })
+  }
   const handleSubmitQuestion = async () => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
@@ -708,19 +769,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           answers.push({
             question_id: e.id,
             question_answer_id: e.answer,
-            time_spent: e.timeSpent,
+            time_spent: Math.ceil(e.timeSpent / 1000),
           })
         } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
           let answer = []
           for (let el of e.answer) {
             answer.push({ answer_id: el })
           }
-          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+          answers.push({
+            question_id: e.id,
+            answer,
+            time_spent: Math.ceil(e.timeSpent / 1000),
+          })
         } else if (e.qType === QUESTION_TYPES.MATCHING) {
           answers.push({
             question_id: e.id,
             answer: e.answer,
-            time_spent: e.timeSpent,
+            time_spent: Math.ceil(e.timeSpent / 1000),
           })
         } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
           let answer = []
@@ -732,7 +797,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+          answers.push({
+            question_id: e.id,
+            answer,
+            time_spent: Math.ceil(e.timeSpent / 1000),
+          })
         } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
           let answer = []
           for (let i in e.answer) {
@@ -743,7 +812,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+          answers.push({
+            question_id: e.id,
+            answer,
+            time_spent: Math.ceil(e.timeSpent / 1000),
+          })
         } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
           let answer = []
           for (let i in e.answer) {
@@ -754,7 +827,25 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               })
             }
           }
-          answers.push({ question_id: e.id, answer, time_spent: e.timeSpent })
+          answers.push({
+            question_id: e.id,
+            answer,
+            time_spent: Math.ceil(e.timeSpent),
+          })
+        } else if (e.qType === QUESTION_TYPES.ESSAY) {
+          if (checkAnswered(e)) {
+            answers.push({
+              question_id: e.id,
+              short_answers: e.answer || '',
+              response_option: e.data.response_option
+                ? e.data.response_option
+                : e.response_type === 0
+                  ? 'WORD'
+                  : 'SHEET',
+              time_spent: Math.ceil(e.timeSpent / 1000),
+              active: 'NOT_GRADED',
+            })
+          }
         }
       }
       quiz_position_mapping.push({
@@ -763,14 +854,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       })
     }
     setTabs(() => {
+      // ref.setKey
       handleChangeTab(tabs[0].id)
       return reformTabs
     })
-    await CourseTestApi.submitQuestion(quizAttempId as string, {
+    const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
       total_attempt_time: quizDetail.quiz_timed * 60 - remainTime,
     })
+    if (res) {
+      if (type === 'entrance') {
+        router.push(`/entrance-test/test-result/${res?.data?.id}`)
+      } else {
+        router.push(`/courses/test/test-result/${res?.data?.id}`)
+      }
+    }
+
     // clearInterval(intervalRef.current)
     setLoading(false)
     return
@@ -792,6 +892,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         data.qType === QUESTION_TYPES.SELECT_WORD
       ) {
         ref.current?.handleReset()
+      }
+      if (data.qType === QUESTION_TYPES.ESSAY) {
+        refEditor?.current?.reset()
       }
     }
   }
@@ -848,6 +951,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               index: +i,
               data: res.data[0],
               topicDescription: topicDescription.data,
+              response_type: 0,
             })
           } else {
             arr.push({
@@ -856,6 +960,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               flaged: false,
               done: false,
               index: +i,
+              response_type: 0,
             })
           }
         }
@@ -907,16 +1012,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       createQuizAttempt()
     }
   }, [router.query.id])
-  useEffect(() => {
-    // Create an interval that updates the current time every second
-    const interval = setInterval(() => {
-      setCurrentTime(Date.now())
-    }, 1000)
-    // Return a function that clears the interval
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
   const intervalRef = useRef(null) as any
   useEffect(() => {
     if (quizDetail.quiz_timed) {
@@ -1069,7 +1164,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               className="px-6"
               // onMouseUp={debounce(()=>{console.log(checkAnswered(currentTabContent))}, 500)}
             >
-              {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
               {checkType(
                 currentTabContent?.data,
                 currentTabContent?.data?.qType,
@@ -1080,15 +1174,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 currentTabContent?.solution,
                 currentTabContent?.done,
               )}
-              {/* ) : (
-                    <EssayQuestionPreview
-                      data={essayData?.req}
-                      question_content={data.question_content}
-                      index={essayData?.index}
-                      question_data={data}
-                    />
-                  )} */}
-              {/* <OneChoiceQuestion data={data} control={control} /> */}
             </div>
           </div>
         </div>
@@ -1139,15 +1224,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               currentTabContent?.done,
             )}
           </div>
-          {/* ) : (
-                <EssayQuestionPreview
-                  data={essayData?.req}
-                  question_content={data.question_content}
-                  index={essayData?.index}
-                  question_data={data}
-                />
-              )}
-            <OneChoiceQuestion data={data} control={control} /> */}
         </div>
       )}
       {openScratchPad.map((e, index: number) => {
@@ -1267,7 +1343,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         }
       })}
       {/* </div> */}
-      <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px]">
+      <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px] z-10">
         <div className="flex items-center h-full">
           <button className="h-full">
             <div className="flex items-center gap-3 ps-6 ">
@@ -1374,6 +1450,28 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           )}
         </div>
         <div className="flex items-center h-full gap-3 pe-6">
+          {currentTabContent?.data?.response_option === null &&
+            currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+              <div className="flex gap-1">
+                <div>Choose response option:</div>
+                <button
+                  onClick={() => handleChangeTypeEssay(0)}
+                  className={`${
+                    currentTabContent.response_type === 0 && 'active'
+                  }`}
+                >
+                  <WordIcon />
+                </button>
+                <button
+                  onClick={() => handleChangeTypeEssay(1)}
+                  className={`${
+                    currentTabContent.response_type === 1 && 'active'
+                  }`}
+                >
+                  <ExcelIcon />
+                </button>
+              </div>
+            )}
           <button
             className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
             onClick={() => handleFlagQuestion(currentPage)}

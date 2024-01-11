@@ -17,6 +17,8 @@ interface IProps {
   btnSubmitTile?: string
   handleSubmit?: any
   drawerSubId?: string
+  confirmOnClose?: boolean
+  showSubmitButton?: boolean
 }
 
 const SappDrawer = ({
@@ -30,16 +32,22 @@ const SappDrawer = ({
   btnSubmitTile = 'Next Lesson',
   handleSubmit = () => {},
   drawerSubId = '',
+  confirmOnClose = true,
+  showSubmitButton = true,
 }: IProps) => {
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
-  // const handleOnClose = () => {
-  //   dispatch(confirmDialog.open({ message: message, onConfirm: onClose }))
-  // }
+  const handleOnClose = () => {
+    if (confirmOnClose) {
+      dispatch(confirmDialog.open({ message: message, onConfirm: onClose }))
+    } else {
+      onClose()
+    }
+  }
 
   const handleMaskClick = (e: any) => {
     if (isOpen && e?.target?.closest('.custom-drawer') === null) {
-      onClose()
+      handleOnClose()
     }
   }
 
@@ -59,14 +67,16 @@ const SappDrawer = ({
         } transition-transform duration-300 ease-in-out overflow-y-auto h-screen`}
       >
         <div className="flex flex-col h-screenl justify-between">
-          <div className="w-100 justify-between bg-bw-2 h-[80px] text-2xl font-semibold items-center flex px-8 text-white">
+          <div className="w-100 justify-between bg-bw-2 min-h-[80px] text-2xl font-semibold items-center flex px-8 text-white line-clamp-3 py-2">
             {title}
-            <Image
-              src={cross}
-              alt="SAPP Logo"
-              onClick={handleMaskClick}
-              className="cursor-pointer"
-            />
+            <div className="shrink-0">
+              <Image
+                src={cross}
+                alt="SAPP Logo"
+                onClick={handleMaskClick}
+                className="cursor-pointer"
+              />
+            </div>
           </div>
         </div>
         <div
@@ -81,14 +91,16 @@ const SappDrawer = ({
               title="Cancel"
               className="ms-[4px]"
               onClick={handleMaskClick}
-              size='lager'
+              size="lager"
             />
-            <ButtonPrimary
-              title={btnSubmitTile}
-              className="me-[32px]"
-              onClick={handleSubmit}
-              size='lager'
-            />
+            {showSubmitButton && (
+              <ButtonPrimary
+                title={btnSubmitTile}
+                className="me-[32px]"
+                onClick={handleSubmit}
+                size="lager"
+              />
+            )}
           </div>
         )}
       </div>

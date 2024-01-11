@@ -1,3 +1,5 @@
+import SearchForm from '@components/mycourses/Search'
+import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
 import CertificateContent from '@components/profile/CertificateContent'
 import Devices from '@components/profile/Devices'
 import LoginHistory from '@components/profile/LoginHistory'
@@ -7,6 +9,7 @@ import ProfileSideBar from '@components/profile/ProfileSideBar'
 import { GetServerSideProps } from 'next'
 import { StaticImageData } from 'next/image'
 import { useRef, useState } from 'react'
+import { ITabs } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
 
 interface IProps {
@@ -32,6 +35,17 @@ const ProfilePage = ({ page }: any) => {
     }
     setIsEdit(isEdit)
   }
+  let breadcrumbs: ITabs[] = [
+    {
+      link: '/',
+      title: 'Profile',
+    },
+    {
+      link: '/',
+      title: 'Detail',
+    },
+  ]
+
   let selectedContent: JSX.Element | null = null
 
   if (page === 'myprofile') {
@@ -45,11 +59,9 @@ const ProfilePage = ({ page }: any) => {
         handleSetAvatar={handleSetAvatar}
       />
     )
-  } 
-  // else if (page === 'certificates') {
-  //   selectedContent = <CertificateContent page={page} />
-  // } 
-  else if (page === 'devices') {
+  } else if (page === 'certificates') {
+    selectedContent = <CertificateContent />
+  } else if (page === 'devices') {
     selectedContent = <Devices />
   } else if (page === 'login_history') {
     selectedContent = <LoginHistory />
@@ -58,21 +70,34 @@ const ProfilePage = ({ page }: any) => {
   }
 
   return (
-    <div className="max-w-xxl my-0 mx-auto w-full">
-      <div className="relative">
-        <ProfileHeader
-          reViewImageSrc={reViewImageSrc}
-          setReViewImageSrc={setReViewImageSrc}
-          setAvatar={handleSetAvatar}
-          isEdit={isEdit}
-          inputFileRef={inputFileRef}
-        ></ProfileHeader>
+    <>
+      <div className="header bg-white border-b border-default px-4 lg:px-20">
+        <div className="max-w-xxl my-0 mx-auto flex py-4.5">
+          <SearchForm
+            placeholder="Enter name of course..."
+            formStyle="w-full flex items-center"
+          />
+        </div>
       </div>
-      <div className="flex sm:flex-row flex-col justify-between gap-6">
-        <ProfileSideBar page={page}></ProfileSideBar>
-        {selectedContent}
+      <div className="max-w-xxl my-0 mx-auto w-full">
+        <div className="main lg:mx-0 sm:mx-4 ">
+          <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
+        </div>
+        <div className="relative">
+          <ProfileHeader
+            reViewImageSrc={reViewImageSrc}
+            setReViewImageSrc={setReViewImageSrc}
+            setAvatar={handleSetAvatar}
+            isEdit={isEdit}
+            inputFileRef={inputFileRef}
+          ></ProfileHeader>
+        </div>
+        <div className="flex sm:flex-row flex-col justify-between gap-6">
+          <ProfileSideBar page={page}></ProfileSideBar>
+          {selectedContent}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

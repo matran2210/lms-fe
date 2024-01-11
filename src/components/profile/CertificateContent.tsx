@@ -1,16 +1,9 @@
-import { IProfilePages } from 'src/type/Profile'
-import MyProfile from './MyProfile'
-import { StaticImageData } from 'next/image'
-import { Dispatch, SetStateAction } from 'react'
 import Certificate from './Certificate'
 
-interface IProps {
-  page: IProfilePages
-}
-const CertificateContent = ({ page }: IProps) => {
+const CertificateContent = () => {
   return (
-    <div className="bg-white p-6 flex-1 shadow-box">
-      {page === 'certificates' && <Certificate></Certificate>}
+    <div className="bg-white pt-6 flex-1 shadow-box">
+      <Certificate />
     </div>
   )
 }

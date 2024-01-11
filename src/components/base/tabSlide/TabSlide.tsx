@@ -159,7 +159,7 @@ const TabSlide = ({
                           handleChangeTab(pageNum.id)
                         }
                       }}
-                      isViewedProp={pageNum.viewed}
+                      isViewedProp={pageNum.attempted}
                       isFlagedProp={pageNum.flaged}
                       //   type={type}
                     >
@@ -176,7 +176,7 @@ const TabSlide = ({
                         handleChangeTab(pageNum.id)
                       }
                     }}
-                    isViewedProp={pageNum.viewed}
+                    isViewedProp={pageNum.attempted}
                     isFlagedProp={pageNum.flaged}
                     //   type={type}
                   >
@@ -200,7 +200,7 @@ const TabSlide = ({
                               handleChangeTab(pageNum[0].id)
                             }
                           }}
-                          isViewedProp={pageNum[0].viewed}
+                          isViewedProp={pageNum[0].attempted}
                           isFlagedProp={pageNum[0].flaged}
                           //   type={type}
                         >
@@ -225,7 +225,7 @@ const TabSlide = ({
                               handleChangeTab(pageNum[1].id)
                             }
                           }}
-                          isViewedProp={pageNum[1].viewed}
+                          isViewedProp={pageNum[1].attempted}
                           isFlagedProp={pageNum[1].flaged}
                           //   type={type}
                         >

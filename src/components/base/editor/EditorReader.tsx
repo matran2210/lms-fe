@@ -2,14 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import SappModalImage from '../modal/SappModalImage'
 import { DeserializeHighlight } from '@utils/index'
+import parseHTML from 'html-react-parser'
 
 type Props = {
-  text_editor_content?: string
+  text_editor_content: string | undefined
   className?: string
   extenalRef?: any
   id?: string
   onMouseUp?: any
   highlighted?: string
+  options?: any
 }
 
 const EditorReader = ({
@@ -19,6 +21,7 @@ const EditorReader = ({
   id,
   onMouseUp,
   highlighted,
+  options,
 }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
@@ -76,6 +79,18 @@ const EditorReader = ({
       }
     }
   }
+  // const options = {
+  //   replace(domNode:any) {
+  //     if (domNode.attribs && domNode.attribs.class === "highlighted") {
+  //       return (
+  //         <select onChange={(e) => console.log(e.target.value)}>
+  //           <option value="someOption">Some option</option>
+  //           <option value="otherOption">Other option</option>
+  //         </select>
+  //       );
+  //     }
+  //   },
+  // };
   return (
     <>
       <div
@@ -83,10 +98,9 @@ const EditorReader = ({
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
       >
-        <div
-          ref={extenalRef || refDocument}
-          dangerouslySetInnerHTML={{ __html: text_editor_content || '' }}
-        ></div>
+        <div ref={extenalRef || refDocument}>
+          {parseHTML(text_editor_content || '', options)}
+        </div>
       </div>
       {type === 'IMG' && (
         <SappModalImage src={src} setSrc={setSrc}></SappModalImage>

@@ -3,7 +3,7 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { truncateString } from '@utils/index'
-import { parseISO, differenceInDays } from 'date-fns'
+import { parseISO, differenceInDays, startOfDay } from 'date-fns'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
@@ -41,16 +41,12 @@ const Course = ({
   const student = course?.classes[0]?.class_user_instances[0]
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
+  const currentDate = new Date()
 
   useEffect(() => {
-    if (course?.classes?.[0].finished_at) {
-      // Current date
-      const currentDate = new Date()
-
+    if (student?.finished_at) {
       // Parse the specific date string to a Date object
-      const parsedSpecificDate = parseISO(
-        course?.classes?.[0]?.finished_at as any,
-      )
+      const parsedSpecificDate = parseISO(student?.finished_at as any)
 
       // Calculate the difference in days
       const difference = differenceInDays(
@@ -80,6 +76,8 @@ const Course = ({
     const studentStatus = student?.status
     const startedAt = student?.started_at
     const finishedAt = student?.finished_at
+    // Chuyển đổi sang chuỗi theo định dạng ISO
+    const formattedDate = startOfDay(currentDate)
 
     if (
       courseStatus === COURSE_STATUS.PUBLISH ||
@@ -94,15 +92,18 @@ const Course = ({
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
         if (startedAt && finishedAt) {
-          if (studentStatus === 'READY_TO_LEARN') return BUTTON_STATUS.Begin
-          if (studentStatus === 'IN_PROGRESS') return BUTTON_STATUS.Resume
-          if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
+          const finishedAtDate = startOfDay(new Date(finishedAt))
           if (
             course?.course_type === 'TRIAL_COURSE' &&
-            student.extend_count === 0
+            finishedAtDate <= formattedDate
           )
             return BUTTON_STATUS.Extend
-          else return BUTTON_STATUS.Disabled
+          if (finishedAtDate <= formattedDate) return BUTTON_STATUS.Disabled
+          if (finishedAtDate > formattedDate) {
+            if (studentStatus === 'READY_TO_LEARN') return BUTTON_STATUS.Begin
+            if (studentStatus === 'IN_PROGRESS') return BUTTON_STATUS.Resume
+            if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
+          } else return BUTTON_STATUS.Disabled
         }
         return BUTTON_STATUS.Disabled
       }
@@ -151,7 +152,7 @@ const Course = ({
   async function fetchCourseList() {
     setLoading(true)
     try {
-      const newData = await CourseAPI.getCourse(1, queryString)
+      const newData = await CourseAPI.getCourse(18, queryString)
       setData(newData?.data)
     } catch (error) {
     } finally {
@@ -184,7 +185,7 @@ const Course = ({
   const courseAction = () => {
     if (determineButtonToShow === 'Active') {
       setOpenActive(true)
-    } else if (determineButtonToShow === 'Active') {
+    } else if (determineButtonToShow === 'Extend') {
       student.extend_count === 0 ? extendCourse() : setOpenExtend(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
@@ -204,34 +205,37 @@ const Course = ({
   const classUserStatus =
     course?.classes?.[0]?.class_user_instances?.[0]?.status
   const showStatus = statusMap[classUserStatus]
-  const enableCourse = determineButtonToShow !== 'Disabled'
+  const enableCourse =
+    determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'
 
   return (
     <>
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item bg-white p-[30px] shadow-sidebar flex flex-col`}
+          className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
         >
-          <div className="cursor-pointer">
+          <div className="cursor-pointer min-h-352 flex flex-col">
             <div
               className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
               }`}
               onClick={() => {
-                if (isActiveStudent) {
+                if (isActiveStudent && enableCourse) {
                   courseAction()
                 }
               }}
             >
-              <div>{truncateString(course?.name, 40)}</div>
+              <div className="line-clamp-2 text-ellipsis">
+                {truncateString(course?.name, 40)}
+              </div>
             </div>
             <div className="flex justify-between items-center">
               {enableCourse ? (
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
                   <span className="ml-1 text-bw-1 font-medium">
-                    {truncateString(course?.classes?.[0]?.name, 15)}
+                    {truncateString(course?.classes?.[0]?.code, 15)}
                   </span>
                 </div>
               ) : (
@@ -240,18 +244,28 @@ const Course = ({
                 </div>
               )}
               <div className="time-class text-medium-sm text-gray-1">
-                <span>
-                  <span className="font-medium">
-                    {daysDifference > 0 ? daysDifference : 0 ?? 0}{' '}
+                {determineButtonToShow !== 'Active' && (
+                  <span>
+                    <span
+                      className={`font-medium ${
+                        enableCourse ? 'text-bw-1' : 'text-gray-1'
+                      }`}
+                    >
+                      {daysDifference > 0
+                        ? daysDifference
+                        : enableCourse
+                          ? 1
+                          : 0}{' '}
+                    </span>
+                    {daysDifference > 0 ? 'days left' : 'day left'}
                   </span>
-                  day left
-                </span>
+                )}
               </div>
             </div>
-            <div className="des mt-6 mb-8">
+            <div className="des mt-6 mb-8 line-clamp-5 text-ellipsis h-[116px]">
               <p
                 dangerouslySetInnerHTML={{
-                  __html: truncateString(course?.description, 150),
+                  __html: course?.description,
                 }}
                 className={`text-bas h-24 ${
                   enableCourse ? 'text-bw-1' : 'text-gray-1 '

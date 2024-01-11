@@ -511,3 +511,19 @@ body *::-webkit-scrollbar-thumb:hover {
 .sapp-separateLine :not(:last-child) {
   @apply border-b border-gray-4;
 }
+.active {
+  .word_icon path {
+    fill: #295496;
+  }
+  .excel_icon path {
+    fill: #1d5d36;
+  }
+}
+.word_icon path {
+  fill: #dcdddd;
+}
+
+textarea.is-invalid:focus {
+  --tw-ring-color: #d35563;
+  --tw-ring-offset-color: #d35563;
+}

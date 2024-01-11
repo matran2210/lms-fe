@@ -57,7 +57,7 @@ const HookFormEditor = ({
               </label>
             )}{' '}
             {!skeleton ? (
-              <>
+              <div>
                 <DynamicBundledEditor
                   onChange={(e) => {
                     onChange(e)
@@ -75,7 +75,7 @@ const HookFormEditor = ({
                   {/* <GuidelineField guideline={guideline} /> */}
                   <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
                 </div>
-              </>
+              </div>
             ) : (
               <Skeleton.Input
                 size="large"

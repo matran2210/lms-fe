@@ -1,53 +1,15 @@
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadcrumb'
-import CoursesList from '@components/mycourses/CoursesList'
-import Filter from '@components/mycourses/Filter'
-import Heading from '@components/mycourses/Heading'
-import React, { useEffect, useState } from 'react'
-import { ITabs } from 'src/type'
-import TestResultPage from './testResultPage'
-import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
+import { apiURL } from '@components/mycourses/LearningNotesList'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { removeJwtToken } from '@utils/helpers/authen'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import { apiURL } from 'src/redux/services/httpService'
-import { removeJwtToken } from '@utils/helpers/authen'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 
-// Config Courses
-const breadcrumbs: ITabs[] = [
-  {
-    link: '/courses',
-    title: 'Courses',
-  },
-  {
-    link: '/courses',
-    title: 'Final Test',
-  },
-  {
-    link: '/',
-    title: 'Results',
-  },
-]
-
-const TestResultDetail = ({ questions, chartData }: any) => {
-  return (
-    <>
-      <div className="main px-4 lg:px-16">
-        <Breadcrumb tabs={breadcrumbs} currentPage={'Results'} />
-      </div>
-      <div className="px-4 lg:px-0 mx-auto lg:mx-16 mb-6">
-        <TestResultPage
-          questions={questions}
-          type={questions?.course?.course_categories[0]?.name}
-          chartData={chartData}
-          courseDifficulty={questions?.course?.course_difficulty ?? 0}
-        />
-      </div>
-    </>
-  )
+const TestEntranceResult = ({ chartData }: any) => {
+  //todo: call api, make UI
+  return <div>Result Test Entrance</div>
 }
-
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
 
@@ -76,10 +38,6 @@ export async function getServerSideProps(context: any) {
         notFound: true,
       }
     }
-    const questions = (await CourseTestApi.getQuizAttempts(
-      context?.query?.id,
-      cookies.accessToken,
-    )) as any
 
     const chartData = (await CourseTestApi.getQuizAttemptsChartData(
       context?.query?.id,
@@ -88,7 +46,6 @@ export async function getServerSideProps(context: any) {
 
     return {
       props: {
-        questions: questions,
         chartData: chartData,
       },
     }
@@ -150,5 +107,4 @@ export async function getServerSideProps(context: any) {
     }
   }
 }
-
-export default TestResultDetail
+export default TestEntranceResult

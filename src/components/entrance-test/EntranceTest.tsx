@@ -17,16 +17,18 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   }
 
   const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data.total_attempt_time)
+    ? formatTime(data.total_attempt_time * 60)
     : 0
   const timeAllowFormatted = data?.quiz_timed
-    ? formatTime(data?.quiz_timed)
+    ? formatTime(data?.quiz_timed * 60)
     : 'Unlimited'
 
   return (
     <>
       <div className="name">
-        <h2 className="text-2xl font-semibold mb-4 text-bw-1">{data?.name}</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-bw-1 line-clamp-2">
+          {data?.name}
+        </h2>
       </div>
       <div className="mt-auto">
         <div className="info">

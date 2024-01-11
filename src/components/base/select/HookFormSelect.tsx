@@ -14,6 +14,7 @@ interface IProps {
   isDisabled?: boolean
   onMenuScrollToBottom?: any
   classParent?: string
+  isClearable?: boolean
 }
 
 const HookFormSelect = ({
@@ -28,6 +29,7 @@ const HookFormSelect = ({
   isDisabled,
   onMenuScrollToBottom,
   classParent = '',
+  isClearable = false,
 }: IProps) => {
   return (
     <div className={`select-options ${classParent}`}>
@@ -44,6 +46,7 @@ const HookFormSelect = ({
         value={value}
         isDisabled={isDisabled}
         onMenuScrollToBottom={onMenuScrollToBottom}
+        isClearable={isClearable}
       />
     </div>
   )

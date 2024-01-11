@@ -8,27 +8,41 @@ import YourScoreDetail from './yourScoreDetail'
 import MultipleQuestion from './multipleQues'
 import ChartACCAScore from './acca/chartACCAScore'
 import TotalScore from '@components/mycourses/test/TotalScore'
+import { roundNumber } from '@utils/helpers'
+
+interface QuizReport {
+  ratio: number
+}
 
 interface DataItem {
   chart_data: any
   chart_type: string
   correct_answer: number
   total_question: number
+  quiz_report: QuizReport
 }
 
 interface IProps {
   questions: Object
   type: string
   chartData: DataItem
+  courseDifficulty: number
 }
 
-const TestResultPage = ({ questions, type, chartData }: IProps) => {
-  const highestValue =
-    (chartData?.correct_answer / chartData?.total_question) * 100
+const TestResultPage = ({
+  questions,
+  type,
+  chartData,
+  courseDifficulty,
+}: IProps) => {
+  const highestValue = roundNumber(
+    (chartData?.correct_answer / chartData?.total_question) * 100,
+  )
+  const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
   return (
     <>
       {type === 'CFA' && (
-        <div className="flex gap-6 overflow-y-auto">
+        <div className="flex gap-6 overflow-y-auto flex-wrap">
           <div className="max-h-full">
             <YourScore chartData={chartData} />
             <YourScoreDetail />
@@ -36,7 +50,7 @@ const TestResultPage = ({ questions, type, chartData }: IProps) => {
           <MultipleQuestion questions={questions} className={'h-[991px]'} />
         </div>
       )}
-      {type === 'ACCA' && (
+      {type === 'ACCA' && courseDifficulty <= 4 ? (
         <div className="flex gap-6 overflow-y-auto flex-wrap">
           <div className="max-h-full w-full max-w-smd">
             <TotalScore
@@ -44,6 +58,8 @@ const TestResultPage = ({ questions, type, chartData }: IProps) => {
               className="px-7 pt-6 pb-4 mb-5 shadow-sidebar"
               classScore="pt-2"
               classGlobal="mt-0 mb-3 !items-end"
+              classCountAll="relative top-0.5"
+              globalAverage={GlobalAverage}
             />
             <MultipleQuestion questions={questions} className={'h-[815px]'} />
           </div>
@@ -52,8 +68,7 @@ const TestResultPage = ({ questions, type, chartData }: IProps) => {
             <YourScoreDetail />
           </div>
         </div>
-      )}
-      {type !== 'CFA' && type !== 'ACCA' && (
+      ) : (
         <div className="flex gap-6 overflow-y-auto flex-wrap">
           <MultipleQuestion questions={questions} className={'h-[991px]'} />
           <div className="max-h-full">

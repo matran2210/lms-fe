@@ -1,4 +1,4 @@
-// import Filter from '@components/mycourses/Filter'
+import EntranceTestFilter from '@components/entrance-test/EntranceTestFilter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import React from 'react'
@@ -9,52 +9,6 @@ import axios from 'axios'
 import { apiURL } from '@components/mycourses/LearningResource'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
-
-// Config entrance test lists
-const entranceTestLists = [
-  {
-    name: 'ACCA Entrance Test F1',
-    startStatus: true,
-    timeTaken: 2732,
-    timeAllow: 555,
-    result: '30/35',
-  },
-  {
-    name: 'CFA Level 1 Entrance Test',
-    startStatus: true,
-    timeTaken: 2732,
-    timeAllow: 555,
-    result: '30/35',
-  },
-  {
-    name: 'ACCA F1 Entrance Test kỳ 09/2023',
-    startStatus: false,
-    timeTaken: 2732,
-    timeAllow: 10800,
-    result: '30/35',
-  },
-  {
-    name: 'ACCA Entrance Test 07/2023',
-    startStatus: false,
-    timeTaken: 2732,
-    timeAllow: 2732,
-    result: '30/35',
-  },
-  {
-    name: 'ACCA F1 Entrance Test kỳ 09/2023',
-    startStatus: false,
-    timeTaken: 2732,
-    timeAllow: 555,
-    result: '30/35',
-  },
-  {
-    name: 'CFA Level 2 Entrance Test',
-    startStatus: true,
-    timeTaken: 2732,
-    timeAllow: 10800,
-    result: '30/35',
-  },
-]
 
 const EntranceTest = ({ entranceTestLists }: any) => {
   return (
@@ -72,7 +26,7 @@ const EntranceTest = ({ entranceTestLists }: any) => {
           <h2 className="text-medium-sm font-semibold text-bw-1">
             Entrance Test
           </h2>
-          {/* <Filter /> */}
+          <EntranceTestFilter count={entranceTestLists?.length || 0} />
         </div>
       </div>
       <div className="heading bg-white max-w-xxl my-0 mx-auto flex">

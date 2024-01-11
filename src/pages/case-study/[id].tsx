@@ -165,6 +165,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             forCaseStudy={true}
+            name={`${index}_answer`}
+            setValue={setValue}
+            defaultValue={defaultValue}
           />
         )
       default:
@@ -316,9 +319,10 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question.qType == QUESTION_TYPES.ESSAY) {
         arrAnswer.push({
           qType: question.qType,
-          answer: '',
+          answer: getValues(`${i}_answer`),
           id: question.id,
-          answers: [],
+          answers: question.answers,
+          response_option: question.response_option,
         })
       }
     }
@@ -387,7 +391,12 @@ const CaseStudyDetail = ({ questions }: any) => {
           }
           answers.push({ question_id: e.id, answer })
         } else if (e.qType === QUESTION_TYPES.ESSAY) {
-          answers.push({ question_id: e.id, answers: e.answer || '' })
+          answers.push({
+            question_id: e.id,
+            short_answers: e.answer || '',
+            response_option: e.response_option ? e.response_option : 'WORD',
+            active: 'NOT_GRADED',
+          })
         }
       }
       quiz_position_mapping.push({
@@ -395,7 +404,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         answers: e?.answers,
       })
     }
-    const total_attempt_time = Date.now() - startTime
+    const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
       await CourseTestApi.submitCaseStudy(quizAttempId as string, {
         answers: answers,

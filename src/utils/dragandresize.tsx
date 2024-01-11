@@ -38,6 +38,7 @@ export const moveAndResizeElement = (
     }
     target.classList.add('enable')
   }
+  const movablezone = element.querySelector('.sapp-movablezone') as any
   function handleMoveMouse(e: MouseEvent) {
     // if (!enable) {
     //   return
@@ -146,6 +147,18 @@ export const moveAndResizeElement = (
     }
   })
 
+  // movablezone?.addEventListener(
+  //   'mousedown',
+  //   function (e: MouseEvent) {
+  //     console.log("abc");
+
+  //     document.addEventListener('mousemove', handleMoveMouse, true)
+  //     isDown = true
+  //     offset = [element.offsetLeft - e.clientX, element.offsetTop - e.clientY]
+
+  //   },
+  //   true,
+  // )
   element.addEventListener(
     'mousedown',
     function (e: MouseEvent) {

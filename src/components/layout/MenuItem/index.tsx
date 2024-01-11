@@ -8,7 +8,8 @@ import { userReducer } from 'src/redux/slice/User/User'
 import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
-import { activeNotesList } from 'src/redux/slice/Course/NotesList'
+import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
+import { v4 as uuidv4 } from 'uuid'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -42,15 +43,35 @@ export default function MenuItem({
     document.body.style.overflow = 'hidden'
   }
 
+  const handleAddNote = () => {
+    const note = {
+      uuid: uuidv4(),
+      id: '',
+      name: 'Note',
+      description: '',
+    }
+    dispatch(pushNotes(note))
+  }
+
   const handleActive = () => {
     if (router?.query?.courseId || router.query.id) {
       name === 'Resource' && handleOpenResource()
       name === 'Notes List' && handleOpenNotesList()
+      name === 'Create Note' && handleAddNote()
     }
   }
 
+  const isActivity = router?.query?.activityId
+  const isInCourse =
+    router?.query?.courseId ||
+    router?.query?.activityId ||
+    router?.query?.course_section_id
+
   return (
     <>
+      {isActivity && name === 'Create Note' && mode === 'student' && (
+        <div className="h-px w-8 bg-gray-2 text-center mx-auto"></div>
+      )}
       <div
         className={`cursor-pointer ${
           selected && type === 'level-1' && router.pathname !== '/'
@@ -58,7 +79,15 @@ export default function MenuItem({
             : ''
         } relative sidebar-list-items py-2 ${
           mode === 'student' ? 'mb-4 last:mb-0' : 'mb-7 last:mb-0'
-        }`}
+        } ${
+          !isActivity && name === 'Create Note'
+            ? 'hidden'
+            : name === 'Create Note'
+              ? 'mt-4'
+              : ''
+        }
+        ${!isInCourse && name === 'Notes List' ? 'hidden' : ''}
+        `}
       >
         <div className="sidebar-item flex items-center justify-center group">
           <Link href={url} passHref>
@@ -84,7 +113,8 @@ export default function MenuItem({
                     type == 'level-1' ? '' : 'mr-4'
                   } text-gray-2 ${
                     selected ? 'text-primary' : ''
-                  } group-hover:text-primary`}
+                  } group-hover:text-primary 
+                  `}
                 />
               )}
               <span

@@ -78,6 +78,12 @@ const MENU_OPTIONS: MenuOption[] = [
     url: `${PageLink.ENTRANCE_TEST}`,
     type: 'level-1',
   },
+  {
+    name: 'Create Note',
+    icon: 'create-note',
+    url: '#',
+    type: 'level-1',
+  },
 ]
 
 const MENU_OPTIONS_BOTTOM: MenuOption[] = [

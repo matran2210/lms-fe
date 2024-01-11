@@ -51,6 +51,9 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
   const { shouldShowRemind } = useAppSelector(entranceTestReducer)
   const router = useRouter()
+  const userGuideLine = useAppSelector(
+    (state) => state.userReducer.user.detail.settings?.course_guide,
+  )
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
 
@@ -63,19 +66,19 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
       confirmDialogOverLayRef.current.classList.add('pointer-events-none')
     }
+    // Remove hidden scroll when close user guide
+    document.body.style.removeProperty('padding-right')
+    document.body.classList.remove('overflow-hidden')
     setTimeout(() => {
       dispatch(reset())
     }, 50)
   }
 
   useEffect(() => {
-    AsyncStorage.getItem('userGuide').then((accessToken) => {
-      if (!accessToken) {
-        AsyncStorage.setItem('userGuide', 'actived')
-        dispatch(active())
-      }
-    })
-  }, [])
+    if (userGuideLine === 'NOT_ACTIVE') {
+      dispatch(active())
+    }
+  }, [userGuideLine])
   useEffect(() => {
     dispatch(getEntranceCount())
   }, [])
@@ -127,7 +130,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     <>
       <div className="header bg-white border-b border-default">
         <div
-          className={`max-w-xxl my-0 mx-auto flex py-[18px] xl-max:mx-6 relative 
+          className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
           ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
         >
           <SearchForm

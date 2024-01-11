@@ -10,12 +10,17 @@ import {
 import { IQuestion } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import toast from 'react-hot-toast'
+import SappModal from '@components/base/modal/SappModal'
+import { QuizResultComponent } from 'quiz-result-package'
+import { IQuestionResponse } from 'quiz-result-package/dist/type'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 
 type Props = {
   questions: IQuestion[]
   activityId: string
   tabId: string
   quizId: string
+  grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
 }
 
 const QuizDocument = ({
@@ -23,6 +28,7 @@ const QuizDocument = ({
   activityId,
   tabId,
   quizId,
+  grading_preference,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -36,6 +42,12 @@ const QuizDocument = ({
   const isQuestionConfirmed = activeQuestion?.confirmed
 
   const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
+
+  const [modalResult, setModalResult] = useState<{
+    status?: boolean
+    questions?: any
+    id?: string
+  }>()
 
   useEffect(() => {
     if (questions?.[0]) {
@@ -109,7 +121,7 @@ const QuizDocument = ({
       quiz_position_mapping,
     }: { answers: any[]; quiz_position_mapping: any[] } = questionsList.reduce(
       (acc: any, obj: any) => {
-        if (obj?.myAnswers) {
+        if (obj?.myAnswers?.answer?.answer_id) {
           acc.answers = acc.answers.concat(obj.myAnswers)
         }
 
@@ -132,10 +144,51 @@ const QuizDocument = ({
         }),
       )
         .unwrap()
-        .then(() => {
-          toast.success('Nộp bài thành công!')
+        .then((e: any) => {
           setIsFinish({ [quizId]: true })
+          getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
         })
+    } catch (error) {}
+  }
+
+  const getTable = async ({
+    id,
+    page_index,
+    page_size,
+  }: {
+    id?: string
+    page_index: number
+    page_size: number
+  }) => {
+    try {
+      const response = await CourseActivityApi.getQuizAttemptsTable(
+        id || modalResult?.id || '',
+        {
+          page_index,
+          page_size,
+        },
+      )
+
+      const newQuestionResponse: IQuestionResponse = {
+        meta: response.data.meta,
+        data:
+          response.data.answers?.map((e: any) => ({
+            id: e.id,
+            content: e.question.question_content,
+            section: e.question.question_topic?.name,
+            type: e.question.qType,
+            result: {
+              is_correct: e.is_correct,
+              percent: 0,
+            },
+            time_spent: e.time_spent || 0,
+          })) || [],
+      }
+      setModalResult((e) => ({
+        id: id || e?.id,
+        status: true,
+        questions: newQuestionResponse,
+      }))
     } catch (error) {}
   }
 
@@ -176,21 +229,44 @@ const QuizDocument = ({
             onClick={
               isLastQuestion && !isFinish?.[quizId]
                 ? handleFinishQuiz
-                : handleNextQuestion
+                : () => {
+                    if (grading_preference !== 'AFTER_EACH_QUESTION') {
+                      handleConfirmQuestion()
+                    }
+                    handleNextQuestion()
+                  }
             }
           >
             {isLastQuestion && !isFinish?.[quizId] ? 'Finish' : 'Next'}
           </div>
         )}
-        {!isQuestionConfirmed && !isFinish?.[quizId] && (
-          <div
-            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
-            onClick={handleConfirmQuestion}
-          >
-            Confirm
-          </div>
-        )}
+        {!isQuestionConfirmed &&
+          !isFinish?.[quizId] &&
+          grading_preference === 'AFTER_EACH_QUESTION' && (
+            <div
+              className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
+              onClick={handleConfirmQuestion}
+            >
+              Confirm
+            </div>
+          )}
       </div>
+      <SappModal
+        open={modalResult?.status}
+        okButtonCaption={'Yes'}
+        cancelButtonCaption={'No'}
+        handleCancel={() => setModalResult(undefined)}
+        handleSubmit={() => setModalResult(undefined)}
+        setOpen={() => setModalResult(undefined)}
+        size="max-w-xxl"
+        position="center"
+        showFooter={false}
+      >
+        <QuizResultComponent
+          questionResponse={modalResult?.questions || []}
+          getTable={getTable}
+        />
+      </SappModal>
     </div>
   )
 }
