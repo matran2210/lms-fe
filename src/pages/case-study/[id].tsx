@@ -626,15 +626,15 @@ const CaseStudyDetail = ({ questions }: any) => {
                 position={{
                   width: '400px',
                   height: '300px',
-                  top: 'calc(50% - 150px)',
-                  left: 'calc(50% - 200px)',
+                  top: 'calc(25% - 150px)',
+                  left: 'calc(25% - 200px)',
                 }}
                 key={e.id}
                 onClick={() => setOnFocusingPad(e.id)}
                 zIndex={
                   onFocusingPad === e.id
-                    ? openScratchPad.length + 10
-                    : index + 10
+                    ? openScratchPad.length + 100
+                    : index + 100
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
@@ -663,8 +663,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 onClick={() => setOnFocusingPad(e.id)}
                 zIndex={
                   onFocusingPad === e.id
-                    ? openScratchPad.length + 10
-                    : index + 10
+                    ? openScratchPad.length + 100
+                    : index + 100
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
