@@ -168,6 +168,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             name={`${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
+            fullData={data}
           />
         )
       default:

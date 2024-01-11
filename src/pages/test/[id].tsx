@@ -190,6 +190,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             defaultValue={defaultValue}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
+            fullData={currentTabContent}
           />
           // <Luckysheet/>
         )
@@ -532,7 +533,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     currentTabContent: any,
   ) => {
     setLoading(true)
-    setStartTime(Date.now())
+    // setStartTime(Date.now())
     const newData = tabs.map((item: any) => {
       if (currentTabContent.id === item.id) {
         // setCurrentTabContent({
@@ -558,6 +559,102 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     const newTabs = handleSaveCurrentAnswer(newData, currentTabContent)
     setTabs(newTabs)
     setLoading(false)
+  }
+  const handleConfirmEssay = () => {
+    const newData = tabs.map((item: any) => {
+      if (currentTabContent.id === item.id) {
+        // setCurrentTabContent({
+        //   ...item,
+        //   done: true,
+        //   corrects: corrects,
+        //   solution: res.data[0].solution,
+        //   answer: getCurrentAnswer(item),
+        // })
+        ref.current?.handleReset()
+        return {
+          ...item,
+          done: true,
+          timeSpent: item.timeSpent
+            ? Date.now() - startTime + item.timeSpent
+            : Date.now() - startTime,
+        }
+      }
+      return item
+    })
+    const newTabs = handleSaveCurrentAnswer(newData, currentTabContent)
+    setTabs(newTabs)
+  }
+  const handleConfirmAndNext = async (currentTab: any, nextTab: any) => {
+    setLoading(true)
+    const currentContent = tabs.find((e: any) => e.id === nextTab)
+    const previousContent = tabs.find((e: any) => e.id === currentTab)
+    setStartTime(Date.now())
+    if (!currentContent?.viewed) {
+      const { topicDescription, res } = await getDetail(nextTab)
+      const newData = tabs.map((item: any) => {
+        if (nextTab === item.id) {
+          if (item.viewed) {
+            // setCurrentTabContent({ ...item })
+            return { ...item }
+          } else {
+            return {
+              ...item,
+              data: res.data[0],
+              topicDescription: topicDescription.data,
+              viewed: true,
+            }
+          }
+        } else if (currentTab === item.id) {
+          return {
+            ...item,
+            viewed: true,
+            done: true,
+            timeSpent: item.timeSpent
+              ? Date.now() - startTime + item.timeSpent
+              : Date.now() - startTime <= 0
+                ? 0
+                : Date.now() - startTime,
+          }
+        }
+        return item
+      })
+      ref.current?.handleReset()
+      refEditor?.current?.reset()
+      const savedAnswer = handleSaveCurrentAnswer(newData, previousContent)
+      setCurrentPage(nextTab)
+      setOpenScratchPad([])
+      setAllowHighLight(false)
+      setTabs(savedAnswer)
+    } else {
+      const newData = tabs.map((item: any) => {
+        if (currentTab === item.id) {
+          ref.current?.handleReset()
+          return {
+            ...item,
+            done: true,
+            timeSpent: item.timeSpent
+              ? Date.now() - startTime + item.timeSpent
+              : Date.now() - startTime <= 0
+                ? 0
+                : Date.now() - startTime,
+          }
+        }
+        return item
+      })
+      ref.current?.handleReset()
+      refEditor?.current?.reset()
+      const savedAnswer = handleSaveCurrentAnswer(newData, previousContent)
+      setCurrentPage(nextTab)
+      setOpenScratchPad([])
+      setAllowHighLight(false)
+      setTabs(savedAnswer)
+    }
+    setLoading(false)
+    // setTabs((prev: any) => {
+    //   handleChangeTab(currentTab)
+    //   return newTabs
+    // })
+    // setLoading(false)
   }
   const getResultAll = async (currentTabContent: any) => {
     const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
@@ -657,9 +754,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
+    setStartTime(Date.now())
     if (!currentContent?.viewed) {
       const { topicDescription, res } = await getDetail(currentTab)
-      setStartTime(Date.now())
       const newData = tabs.map((item: any) => {
         if (currentTab === item.id) {
           if (item.viewed) {
@@ -1455,7 +1552,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               <div className="flex gap-1">
                 <div>Choose response option:</div>
                 <button
-                  onClick={() => handleChangeTypeEssay(0)}
+                  onClick={() => {
+                    handleChangeTypeEssay(0)
+                    handleClearSelection(currentTabContent)
+                  }}
                   className={`${
                     currentTabContent.response_type === 0 && 'active'
                   }`}
@@ -1463,7 +1563,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <WordIcon />
                 </button>
                 <button
-                  onClick={() => handleChangeTypeEssay(1)}
+                  onClick={() => {
+                    handleChangeTypeEssay(1)
+                    handleClearSelection(currentTabContent)
+                  }}
                   className={`${
                     currentTabContent.response_type === 1 && 'active'
                   }`}
@@ -1497,23 +1600,27 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               >
                 <div className="font-normal text-sm">Confirm Answer</div>
               </button>
+            ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+              filteredTabs.length - 1 ? (
+              <button
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                onClick={() => {
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleConfirmAndNext(currentPage, filteredTabs[index + 1].id)
+                }}
+              >
+                <div className="font-normal text-sm">Confirm & Next</div>
+              </button>
             ) : (
               <button
                 className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
                 onClick={() => {
-                  // const data = await getResult(currentTabContent)
-                  // await confirmAnswer(
-                  //   data.corrects,
-                  //   data.solution,
-                  //   currentTabContent,
-                  // )
-                  const index = filteredTabs.findIndex(
-                    (e: any) => e.id === currentPage,
-                  )
-                  handleChangeTab(filteredTabs[index + 1].id)
+                  handleConfirmEssay()
                 }}
               >
-                <div className="font-normal text-sm">Confirm & Next</div>
+                <div className="font-normal text-sm">Confirm</div>
               </button>
             )
           ) : (
