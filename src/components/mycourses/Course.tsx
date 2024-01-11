@@ -85,7 +85,9 @@ const Course = ({
     ) {
       if (classStatus === CLASS_STATUS.PUBLIC) {
         if (course?.course_type === 'TRIAL_COURSE' && !student)
-          return BUTTON_STATUS.Active
+          if (classInstance?.duration_type === 'FLEXIBLE')
+            return BUTTON_STATUS.Active
+          else return BUTTON_STATUS.Hidden // Ẩn lớp học thử
         if (!startedAt && !finishedAt) {
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
