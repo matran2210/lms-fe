@@ -1,9 +1,11 @@
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { useEffect, useState } from 'react'
 import MyProfileAPI from 'src/pages/api/profile'
+import PopUpCertificate from './popupCertificate'
 
 const Certificate = () => {
   const [certificateData, setCertificateData] = useState<any>([])
+  const [modalOpen, setOpenModal] = useState(false)
 
   const fetchChapterDetail = async () => {
     try {
@@ -19,7 +21,7 @@ const Certificate = () => {
   return (
     <div>
       <div className="relative">
-        <div className="text-xl font-medium pb-6 pl-6 mb-6 text-bw-1">
+        <div className="text-xl font-medium pb-1 pl-6 mb-1 text-bw-1">
           Certificates ({certificateData.length})
         </div>
         <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>
@@ -30,12 +32,16 @@ const Certificate = () => {
         {certificateData.map((certificate: any) => {
           return (
             <div key={certificate.id}>
-              <div className="hover:bg-secondary hover:text-primary group relative flex flex-row gap-4 w-full items-start self-center pt-5 px-6 cursor-pointer min-h-[88px]">
-                <div className=" flex flex-row justify-center mb-5  items-start bg-gray-4 ">
+              <div
+                className="hover:bg-secondary hover:text-primary group relative flex flex-row gap-2 w-full items-start self-center pt-5 px-6 cursor-pointer min-h-[88px]  border-b border-gray-2"
+                onClick={() => setOpenModal(true)}
+              >
+                <div className=" flex flex-row justify-center mb-5  items-start bg-gray-4 border border-bottom ">
                   <a className="hover:text-primary group-hover:bg-secondary group-hover:border-active border-solid border px-5 py-1 h-[48px] w-[80px] ">
-                    <CertificateImg className="border-none text-gray-1" />
+                    <CertificateImg className="border-none text-gray-1 group-hover:text-primary" />
                   </a>
                 </div>
+
                 <div className="relative flex flex-col gap-1 w-full items-start cursor-pointer">
                   <div className="text-base leading-[24px] text-active hover:text-primary font-medium">
                     {certificate.certificate.name}
@@ -44,6 +50,16 @@ const Certificate = () => {
                     <div> Grade Achieved: {certificate.pass_point} %</div>
                   </div>
                 </div>
+              </div>
+              <div>
+                <PopUpCertificate
+                  id={certificate.id}
+                  openPreview={modalOpen}
+                  setOpenModal={setOpenModal}
+                  data={certificate}
+                  message={''}
+                  onClose={() => setOpenModal(false)}
+                ></PopUpCertificate>
               </div>
             </div>
           )
