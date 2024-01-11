@@ -114,10 +114,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       },
       event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => {
-      var mouseX = event.pageX - 624
-      var mouseY = event.pageY - 224
+      var mouseY = event.pageY - 300
 
-      setShowExhibit({ ...params, top: mouseY + 'px', left: mouseX + 'px' })
+      setShowExhibit({ ...params, top: mouseY + 'px', left: '33%' })
     }
 
     const handleCloseExhibit = () => {
