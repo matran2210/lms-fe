@@ -53,8 +53,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
   const videoDocumentRef = useRef<HTMLDivElement>(null)
-  const observerRef = useRef<IntersectionObserver>()
-  const isFinishRef = useRef<boolean>(false)
+  // const observerRef = useRef<IntersectionObserver>()
+  // const isFinishRef = useRef<boolean>(false)
   const router = useRouter()
   useLayoutEffect(() => {
     if (activity) {
@@ -73,14 +73,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     }
   }, [activity])
 
-  useEffect(() => {
-    finishedCourseSectionProgress()
-  }, [
-    endActivityRef.current,
-    quizDocumentRef.current,
-    videoDocumentRef.current,
-    observerRef.current,
-  ])
+  // useEffect(() => {
+  //   finishedCourseSectionProgress()
+  // }, [
+  //   endActivityRef.current,
+  //   quizDocumentRef.current,
+  //   videoDocumentRef.current,
+  //   observerRef.current,
+  // ])
 
   // Clear notes
   useEffect(() => {
@@ -90,121 +90,121 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   /**
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
    */
-  const finishedCourseSectionProgress = () => {
-    // Xác định loại hoạt động của phần hiện tại
-    const activityType = getActivityType(activity)
+  // const finishedCourseSectionProgress = () => {
+  //   // Xác định loại hoạt động của phần hiện tại
+  //   const activityType = getActivityType(activity)
 
-    // Xử lý khi chỉ có video và tham chiếu đến videoDocumentRef hiện tại
-    if (activityType === ACTIVITY_TYPE.ONLY_VIDEO && videoDocumentRef.current) {
-      videoDocumentRef.current.onclick = async () => {
-        await handleFinishedCourseSectionProgress()
-      }
-      return
-    }
-    // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
-    else if (
-      activityType === ACTIVITY_TYPE.ONLY_QUIZ &&
-      quizDocumentRef.current
-    ) {
-      quizDocumentRef.current.onclick = async () => {
-        await handleFinishedCourseSectionProgress()
-      }
-      return
-    }
+  //   // Xử lý khi chỉ có video và tham chiếu đến videoDocumentRef hiện tại
+  //   if (activityType === ACTIVITY_TYPE.ONLY_VIDEO && videoDocumentRef.current) {
+  //     videoDocumentRef.current.onclick = async () => {
+  //       await handleFinishedCourseSectionProgress()
+  //     }
+  //     return
+  //   }
+  //   // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
+  //   else if (
+  //     activityType === ACTIVITY_TYPE.ONLY_QUIZ &&
+  //     quizDocumentRef.current
+  //   ) {
+  //     quizDocumentRef.current.onclick = async () => {
+  //       await handleFinishedCourseSectionProgress()
+  //     }
+  //     return
+  //   }
 
-    // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-    if (endActivityRef.current) {
-      // Hủy theo dõi nếu đã có observerRef.current
-      if (observerRef.current) {
-        observerRef.current?.unobserve(endActivityRef.current)
-      }
+  //   // Xử lý khi có tham chiếu đến endActivityRef hiện tại
+  //   if (endActivityRef.current) {
+  //     // Hủy theo dõi nếu đã có observerRef.current
+  //     if (observerRef.current) {
+  //       observerRef.current?.unobserve(endActivityRef.current)
+  //     }
 
-      // Thiết lập các tùy chọn cho IntersectionObserver
-      const options = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5,
-      }
+  //     // Thiết lập các tùy chọn cho IntersectionObserver
+  //     const options = {
+  //       root: null,
+  //       rootMargin: '0px',
+  //       threshold: 0.5,
+  //     }
 
-      // Hàm xử lý khi có sự giao thoa
-      const handleIntersection = async (
-        entries: IntersectionObserverEntry[],
-      ) => {
-        const isVisible = entries[0].isIntersecting
+  //     // Hàm xử lý khi có sự giao thoa
+  //     const handleIntersection = async (
+  //       entries: IntersectionObserverEntry[],
+  //     ) => {
+  //       const isVisible = entries[0].isIntersecting
 
-        // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-        if (isVisible && endActivityRef.current) {
-          observerRef.current?.unobserve(endActivityRef.current)
-          await handleFinishedCourseSectionProgress()
-        }
-      }
+  //       // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
+  //       if (isVisible && endActivityRef.current) {
+  //         observerRef.current?.unobserve(endActivityRef.current)
+  //         await handleFinishedCourseSectionProgress()
+  //       }
+  //     }
 
-      // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
-      observerRef.current = new IntersectionObserver(
-        handleIntersection,
-        options,
-      )
+  //     // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
+  //     observerRef.current = new IntersectionObserver(
+  //       handleIntersection,
+  //       options,
+  //     )
 
-      // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-      if (endActivityRef.current) {
-        observerRef.current?.observe(endActivityRef.current)
-      }
+  //     // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
+  //     if (endActivityRef.current) {
+  //       observerRef.current?.observe(endActivityRef.current)
+  //     }
 
-      // Trả về hàm cleanup
-      return () => {
-        if (endActivityRef.current) {
-          observerRef.current?.unobserve(endActivityRef.current)
-        }
-      }
-    }
-  }
+  //     // Trả về hàm cleanup
+  //     return () => {
+  //       if (endActivityRef.current) {
+  //         observerRef.current?.unobserve(endActivityRef.current)
+  //       }
+  //     }
+  //   }
+  // }
 
   /**
    * Hàm xử lý khi kết thúc tiến trình phần của khóa học.
    */
-  const handleFinishedCourseSectionProgress = async () => {
-    if (!isFinishRef.current) {
-      await CourseActivityApi.finishedCourseSectionProgress(courseId, sectionId)
-      isFinishRef.current = true
-    }
-  }
+  // const handleFinishedCourseSectionProgress = async () => {
+  //   if (!isFinishRef.current) {
+  //     await CourseActivityApi.finishedCourseSectionProgress(courseId, sectionId)
+  //     isFinishRef.current = true
+  //   }
+  // }
 
   /**
    * Hàm để lấy ActivityType dựa trên document type.
    * @param {IActivity} activityReducer - activity.
    * @returns {string} - ActivityType.
    */
-  function getActivityType(activityReducer: IActivity): string {
-    const tabs = activityReducer.tabs
-    let hasVideo = false
-    let hasQuiz = false
-    if (!tabs?.[0]) {
-      return ACTIVITY_TYPE.NONE
-    }
-    for (const tab of tabs) {
-      const documents = tab.course_tab_documents
+  // function getActivityType(activityReducer: IActivity): string {
+  //   const tabs = activityReducer.tabs
+  //   let hasVideo = false
+  //   let hasQuiz = false
+  //   if (!tabs?.[0]) {
+  //     return ACTIVITY_TYPE.NONE
+  //   }
+  //   for (const tab of tabs) {
+  //     const documents = tab.course_tab_documents
 
-      if (documents) {
-        for (const document of documents) {
-          if (document.type === 'QUIZ') {
-            hasQuiz = true
-          } else if (document.type === 'VIDEO') {
-            hasVideo = true
-          }
-        }
-      }
-    }
+  //     if (documents) {
+  //       for (const document of documents) {
+  //         if (document.type === 'QUIZ') {
+  //           hasQuiz = true
+  //         } else if (document.type === 'VIDEO') {
+  //           hasVideo = true
+  //         }
+  //       }
+  //     }
+  //   }
 
-    if (hasVideo && hasQuiz) {
-      return ACTIVITY_TYPE.BOTH
-    } else if (hasVideo) {
-      return ACTIVITY_TYPE.ONLY_VIDEO
-    } else if (hasQuiz) {
-      return ACTIVITY_TYPE.ONLY_QUIZ
-    } else {
-      return ACTIVITY_TYPE.NONE
-    }
-  }
+  //   if (hasVideo && hasQuiz) {
+  //     return ACTIVITY_TYPE.BOTH
+  //   } else if (hasVideo) {
+  //     return ACTIVITY_TYPE.ONLY_VIDEO
+  //   } else if (hasQuiz) {
+  //     return ACTIVITY_TYPE.ONLY_QUIZ
+  //   } else {
+  //     return ACTIVITY_TYPE.NONE
+  //   }
+  // }
 
   /**
    * Hàm xử lý khi thay đổi tab.

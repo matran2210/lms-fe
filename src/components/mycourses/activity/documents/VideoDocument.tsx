@@ -5,6 +5,7 @@ import {
   IActivityStateQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
+  removeQuizFinished,
   selectQuestions,
   submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
@@ -19,6 +20,12 @@ import SappIcon from 'src/common/SappIcon'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import toast from 'react-hot-toast'
+import { QuizResultComponent } from 'quiz-result-package'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import {
+  IQuestionResult,
+  IQuestionResultResponse,
+} from 'quiz-result-package/dist/type'
 
 type Props = {
   videos?: IVideo[]
@@ -39,25 +46,39 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   const [currentListQuestion, setCurrentListQuestion] = useState<IQuestion[]>(
     [],
   )
-  const [defaultListQuestion, setDefaultListQuestion] = useState<IQuestion[]>(
-    [],
-  )
+  // const [defaultListQuestion, setDefaultListQuestion] = useState<IQuestion[]>(
+  //   [],
+  // )
   const selector = useAppSelector(courseActivityQuizReducer)
   // const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
   const questionRef = useRef<QuizComponentRef>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
-  const [isLastQuestion, setIsLastQuestion] = useState<boolean>(false)
+  const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
   const streamRef = useRef<StreamPlayerApi>()
   const dispatch = useAppDispatch()
-  const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
+  const [modalResult, setModalResult] = useState<{
+    status?: boolean
+    questions?: any
+    id?: string
+  }>()
+
+  const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
+
+  // const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
 
   useEffect(() => {
     if (videos?.[0]) {
       debouncedHandleSetCurrentVideo?.current(videos?.[0])
     }
   }, [])
+
+  useEffect(() => {
+    if (runHandleFinishQuiz > 1) {
+      handleFinishQuiz()
+    }
+  }, [runHandleFinishQuiz])
 
   /**
    * Handles setting the current video and fetching quiz questions.
@@ -76,7 +97,10 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
       ...(v?.quiz?.constructed_questions || []),
       ...(v?.quiz?.multiple_choice_questions || []),
     ]
-    setDefaultListQuestion(listQuestion)
+    if (listQuestion.length) {
+      setLastQuestion(listQuestion[listQuestion.length - 1])
+    }
+    // setDefaultListQuestion(listQuestion)
     setCurrentVideo(v)
     quizTimed.current = listQuestion.reduce(
       (obj, e) => {
@@ -221,6 +245,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
 
     // Close the modal and reset
     // setActiveQuestionIndex(-1)
+    streamRef.current?.play()
     setCurrentListQuestion([])
 
     reset()
@@ -228,51 +253,31 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
 
   /**
    * Handles form submission.
-   * @param {Object} data - Form data.
+   * @param {Object} _data - Form data.
    */
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (_data: any, isFinish: boolean = false) => {
     questionRef.current?.onSubmit({
       activityId: activityId,
       tabId: tabId,
       quizId: currentVideo?.quiz?.id || '',
+      then: () => {
+        if (isFinish) {
+          setRunHandleFinishQuiz((e) => e + 1)
+        } else {
+          streamRef.current?.play()
+        }
+      },
     })
   }
 
-  const newQuestion = useMemo(() => {
+  const handleFinishQuiz = async () => {
     const questions = selectQuestions(
       selector,
       activityId,
       tabId,
       currentVideo?.quiz?.id || '',
     )
-    const currentQuestion = questions?.find((e) => e.id === activeQuestion?.id)
 
-    // Check if the current question is the last one
-    const isLast =
-      currentQuestion &&
-      defaultListQuestion?.findIndex((e) => e.id === currentQuestion.id) ===
-        (defaultListQuestion?.length || 0) - 1
-
-    // Update isLastQuestion state
-    setIsLastQuestion(isLast || false)
-    setActiveQuestion(currentQuestion)
-    return currentQuestion
-  }, [
-    selector,
-    activeQuestion,
-    activityId,
-    tabId,
-    currentVideo?.quiz?.id,
-    defaultListQuestion,
-  ])
-
-  const handleFinishQuiz = () => {
-    const questions = selectQuestions(
-      selector,
-      activityId,
-      tabId,
-      currentVideo?.quiz?.id || '',
-    )
     const {
       answers,
       quiz_position_mapping,
@@ -281,7 +286,6 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
         if (obj?.myAnswers) {
           acc.answers = acc.answers.concat({ ...obj.myAnswers })
         }
-
         if (obj?.quiz_position_mapping) {
           acc.quiz_position_mapping = acc.quiz_position_mapping.concat(
             obj.quiz_position_mapping,
@@ -294,16 +298,24 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
     )
 
     try {
-      dispatch(
+      await dispatch(
         submitQuestion({
           id: currentVideo?.quiz?.id || '',
           data: { answers, quiz_position_mapping },
         }),
       )
         .unwrap()
-        .then(() => {
-          setIsFinish({ [currentVideo?.quiz?.id || '']: true })
+        .then((e: any) => {
+          // setIsFinish({ [currentVideo?.quiz?.id || '']: true })
           toast.success('Nộp bài thành công!')
+          getTable({ id: e?.quizAttemptId, page_index: 1, page_size: 10 })
+          dispatch(
+            removeQuizFinished({
+              activityId,
+              tabId,
+              quizId: currentVideo?.quiz?.id,
+            }),
+          )
         })
     } catch (error) {}
   }
@@ -314,6 +326,54 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
     }
   }
 
+  const getTable = async ({
+    id,
+    page_index,
+    page_size,
+  }: {
+    id?: string
+    page_index: number
+    page_size: number
+  }) => {
+    try {
+      const response = await CourseActivityApi.getQuizAttemptsTable(
+        id || modalResult?.id || '',
+        {
+          page_index,
+          page_size,
+        },
+      )
+
+      const newQuestionResponse: IQuestionResultResponse = {
+        meta: response.data.meta,
+        data:
+          response.data.answers?.map((e: any) => ({
+            id: e.id,
+            content: e.question.question_content,
+            section: e.question.question_topic?.name,
+            type: e.question.qType,
+            result: {
+              is_correct: e.is_correct,
+              percent: 0,
+            },
+            time_spent: e.time_spent || 0,
+          })) || [],
+      }
+      setModalResult((e) => ({
+        id: id || e?.id,
+        status: true,
+        questions: newQuestionResponse,
+      }))
+      streamRef.current?.pause()
+    } catch (error) {}
+  }
+
+  const handleCloseModalResult = () => {
+    streamRef.current?.play()
+    setModalResult(undefined)
+  }
+
+  const handleShowQuizResultDetail = (e: IQuestionResult) => {}
   return (
     <div>
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
@@ -387,20 +447,8 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
             }
             parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
             okButtonCaption={`${
-              newQuestion?.confirmed && isLastQuestion ? 'Finish' : 'Submit'
+              lastQuestion?.id === activeQuestion?.id ? 'Finish' : 'Confirm'
             }`}
-            {...((newQuestion?.confirmed && !isLastQuestion) ||
-            isFinish?.[currentVideo?.quiz?.id || '']
-              ? {
-                  cancelButtonCaption: 'Close',
-                  confirmOnclose: false,
-                  showOkButton: false,
-                }
-              : {
-                  confirmOnclose: false,
-                  showOkButton: !isFinish?.[currentVideo?.quiz?.id || ''],
-                  closeAfterSubmit: false,
-                })}
             buttonSize="small"
             size="max-w-[782px]"
             position="center"
@@ -409,9 +457,9 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
             okButtonClass="!w-20 h-8.5 !px-0"
             cancelButtonClass="!w-20 h-8.5 !px-0"
             handleSubmit={
-              newQuestion?.confirmed && isLastQuestion
-                ? handleFinishQuiz
-                : handleSubmit(onSubmit)
+              lastQuestion?.id === activeQuestion?.id
+                ? handleSubmit((e) => onSubmit(e, true))
+                : handleSubmit((e) => onSubmit(e))
             }
             handleCancel={() =>
               handleClose({
@@ -426,6 +474,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
               <QuizComponent
                 ref={questionRef}
                 activeQuestion={activeQuestion}
+                showCorrect={false}
               ></QuizComponent>
             </div>
           </SappModal>
@@ -446,6 +495,24 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
           pauseOnSeek={true}
         ></SAPPVideo>
       </div>
+      <SappModal
+        open={modalResult?.status}
+        okButtonCaption={'Yes'}
+        cancelButtonCaption={'No'}
+        handleCancel={handleCloseModalResult}
+        handleSubmit={handleCloseModalResult}
+        setOpen={handleCloseModalResult}
+        size="max-w-xxl"
+        position="center"
+        showFooter={false}
+        showHeader={false}
+      >
+        <QuizResultComponent
+          questionResponse={modalResult?.questions || []}
+          getTable={getTable}
+          onShowDetail={handleShowQuizResultDetail}
+        />
+      </SappModal>
     </div>
   )
 }
