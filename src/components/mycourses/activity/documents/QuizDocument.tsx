@@ -4,16 +4,16 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   courseActivityQuizReducer,
   fetchQuestionById,
+  selectQuestions,
   submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
-import { IQuestion } from 'src/type/course/Question'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import toast from 'react-hot-toast'
 import SappModal from '@components/base/modal/SappModal'
 import { QuizResultComponent } from 'quiz-result-package'
-import { IQuestionResponse } from 'quiz-result-package/dist/type'
+import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import { IQuestion } from 'src/type/course/Question'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 
 type Props = {
   questions: IQuestion[]
@@ -41,7 +41,7 @@ const QuizDocument = ({
   const isLastQuestion = activeQuestionIndex === questions.length - 1
   const isQuestionConfirmed = activeQuestion?.confirmed
 
-  const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
+  const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -62,6 +62,12 @@ const QuizDocument = ({
       )
     }
   }, [questions, dispatch])
+
+  useEffect(() => {
+    if (runHandleFinishQuiz > 1) {
+      handleFinishQuiz()
+    }
+  }, [runHandleFinishQuiz])
 
   const handleNextQuestion = () => {
     if (activeQuestionIndex < questions.length - 1) {
@@ -105,26 +111,31 @@ const QuizDocument = ({
     }
   }
 
-  const handleConfirmQuestion = () => {
+  const handleConfirmQuestion = (isFinish: boolean = false) => {
     if (activeQuestion) {
       questionRef.current?.onSubmit({
         activityId: activityId,
         tabId: tabId,
         quizId: quizId,
+        then: () => {
+          if (isFinish) {
+            setRunHandleFinishQuiz((e) => e + 1)
+          }
+        },
       })
     }
   }
 
   const handleFinishQuiz = () => {
+    const questions = selectQuestions(selector, activityId, tabId, quizId || '')
     const {
       answers,
       quiz_position_mapping,
-    }: { answers: any[]; quiz_position_mapping: any[] } = questionsList.reduce(
+    }: { answers: any[]; quiz_position_mapping: any[] } = questions?.reduce(
       (acc: any, obj: any) => {
-        if (obj?.myAnswers?.answer?.answer_id) {
-          acc.answers = acc.answers.concat(obj.myAnswers)
+        if (obj?.myAnswers) {
+          acc.answers = acc.answers.concat({ ...obj.myAnswers })
         }
-
         if (obj?.quiz_position_mapping) {
           acc.quiz_position_mapping = acc.quiz_position_mapping.concat(
             obj.quiz_position_mapping,
@@ -145,7 +156,6 @@ const QuizDocument = ({
       )
         .unwrap()
         .then((e: any) => {
-          setIsFinish({ [quizId]: true })
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
         })
     } catch (error) {}
@@ -169,7 +179,7 @@ const QuizDocument = ({
         },
       )
 
-      const newQuestionResponse: IQuestionResponse = {
+      const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.meta,
         data:
           response.data.answers?.map((e: any) => ({
@@ -196,7 +206,11 @@ const QuizDocument = ({
     <div>
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
-          <QuizComponent activeQuestion={activeQuestion} ref={questionRef} />
+          <QuizComponent
+            showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
+            activeQuestion={activeQuestion}
+            ref={questionRef}
+          />
         )}
       </div>
 
@@ -218,34 +232,38 @@ const QuizDocument = ({
             className={`cursor-pointer select-none ${
               isLastQuestion ? 'opacity-50' : ''
             }`}
-            onClick={handleNextQuestion}
+            onClick={() => {
+              if (grading_preference !== 'AFTER_EACH_QUESTION') {
+                handleConfirmQuestion(false)
+              }
+              handleNextQuestion()
+            }}
           >
             <SappIcon icon="arrow_right" />
           </div>
         </div>
-        {(!!isQuestionConfirmed || isFinish?.[quizId]) && (
-          <div
-            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
-            onClick={
-              isLastQuestion && !isFinish?.[quizId]
-                ? handleFinishQuiz
-                : () => {
-                    if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                      handleConfirmQuestion()
-                    }
-                    handleNextQuestion()
+
+        <div
+          className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
+          onClick={
+            isLastQuestion
+              ? () => handleConfirmQuestion(true)
+              : () => {
+                  if (grading_preference !== 'AFTER_EACH_QUESTION') {
+                    handleConfirmQuestion(false)
                   }
-            }
-          >
-            {isLastQuestion && !isFinish?.[quizId] ? 'Finish' : 'Next'}
-          </div>
-        )}
+                  handleNextQuestion()
+                }
+          }
+        >
+          {isLastQuestion ? 'Finish' : 'Next'}
+        </div>
+
         {!isQuestionConfirmed &&
-          !isFinish?.[quizId] &&
           grading_preference === 'AFTER_EACH_QUESTION' && (
             <div
               className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
-              onClick={handleConfirmQuestion}
+              onClick={() => handleConfirmQuestion(false)}
             >
               Confirm
             </div>

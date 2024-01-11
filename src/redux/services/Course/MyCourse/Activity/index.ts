@@ -292,6 +292,12 @@ const CourseActivityApi = {
       },
     })
   },
+
+  getQuizAttemptsAnswer: (id: string) => {
+    return httpService.GET<any, any>({
+      uri: `quiz-attempts/answers//${id}`,
+    })
+  },
 }
 
 export default CourseActivityApi

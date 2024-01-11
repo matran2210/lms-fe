@@ -41,10 +41,11 @@ export type QuizComponentRef = {
 
 type Props = {
   activeQuestion?: IActivityStateQuestion
+  showCorrect?: boolean
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
-  ({ activeQuestion }: Props, ref) => {
+  ({ activeQuestion, showCorrect }: Props, ref) => {
     const questionRef = useRef<HTMLDivElement>(null)
     const [essayData, setEssayData] = useState<any>()
 
@@ -239,7 +240,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             tabId: tabId,
             quizId: quizId,
             questionId: activeQuestion.id || '',
-            myAnswers,
+            myAnswers: myAnswers,
           }),
         )
           .unwrap()
@@ -257,7 +258,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             <OneChoiceQuestion
               data={activeQuestion}
               control={controlAnswer}
-              corrects={activeQuestion.corrects}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
               setValue={setValue}
             />
           )
@@ -267,7 +268,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             <MultiChoiceQuestion
               data={activeQuestion}
               control={controlAnswer}
-              corrects={activeQuestion.corrects}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
               setValue={setValue}
             />
           )
@@ -278,7 +279,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
-              corrects={activeQuestion.corrects}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
             />
           )
 
@@ -288,7 +289,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getValueFillText}
               defaultAnswer={activeQuestion?.defaultValue}
-              corrects={activeQuestion.corrects}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
             />
           )
 
@@ -298,7 +299,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getAnswerDragNDrop}
               defaultAnswer={activeQuestion?.defaultValue}
-              corrects={activeQuestion.corrects}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              resetDefaultAnswer={false}
             />
           )
 
@@ -308,7 +310,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getValueSelectText}
               defaultAnswer={activeQuestion?.defaultValue}
-              corrects={activeQuestion?.corrects}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
             />
           )
 
@@ -465,17 +467,19 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         <div ref={questionRef}>
           <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
-        {activeQuestion?.confirmed && activeQuestion.qType !== 'ESSAY' && (
-          <div className="p-4 mt-8 bg-gray-4">
-            <div className="font-semibold">Solution</div>
-            {activeQuestion?.solution && (
-              <EditorReader
-                text_editor_content={activeQuestion?.solution}
-                className="mt-4"
-              />
-            )}
-          </div>
-        )}
+        {activeQuestion?.confirmed &&
+          activeQuestion.qType !== 'ESSAY' &&
+          showCorrect && (
+            <div className="p-4 mt-8 bg-gray-4">
+              <div className="font-semibold">Solution</div>
+              {activeQuestion?.solution && (
+                <EditorReader
+                  text_editor_content={activeQuestion?.solution}
+                  className="mt-4"
+                />
+              )}
+            </div>
+          )}
       </div>
     )
   },

@@ -151,10 +151,7 @@ const submitQuestion = createAsyncThunk(
     try {
       const result = await CourseActivityApi.submitQuiz(id, {
         ...data,
-        answers: data.answers?.filter((obj) => {
-          const keys = Object.keys(obj)
-          return keys.length > 1 && !(!obj.answer && !obj.question_answer_id)
-        }),
+        answers: data.answers?.map((e) => e?.[0]),
       })
       if (result.success) {
         return { ...result }
@@ -190,7 +187,14 @@ export const selectQuestions = (
 const quizSlice: Slice = createSlice({
   name: 'quiz',
   initialState: {} as ActivityQuizRootState,
-  reducers: {},
+  reducers: {
+    removeQuizFinished: (state, action) => {
+      const { activityId, tabId, quizId } = action.payload
+      if (state[activityId]?.[tabId]?.[quizId]) {
+        delete state[activityId]?.[tabId]?.[quizId]
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -249,9 +253,9 @@ const quizSlice: Slice = createSlice({
           const questions =
             state[payload.activityId]?.[payload.tabId]?.[payload.quizId]
               ?.questions
-
+          let questionToUpdate: any
           if (questions) {
-            const questionToUpdate = questions.find(
+            questionToUpdate = questions.find(
               (question) => question.id === payload.question.id,
             )
 
@@ -261,7 +265,10 @@ const quizSlice: Slice = createSlice({
               questionToUpdate.defaultValue = payload.myAnswers
 
               questionToUpdate.quiz_position_mapping = [
-                ...(questionToUpdate.quiz_position_mapping || []),
+                ...(questionToUpdate?.quiz_position_mapping?.filter(
+                  (q: { question_id: string | undefined }) =>
+                    q.question_id !== payload.question.id,
+                ) || []),
                 {
                   question_id: payload.question.id,
                   answers: payload.question?.answers,
@@ -272,7 +279,10 @@ const quizSlice: Slice = createSlice({
                 case QUESTION_TYPES.ONE_CHOICE:
                 case QUESTION_TYPES.TRUE_FALSE:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
                       question_answer_id: payload.myAnswers,
@@ -290,7 +300,10 @@ const quizSlice: Slice = createSlice({
 
                 case QUESTION_TYPES.MULTIPLE_CHOICE:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
                       answer: payload.myAnswers?.map((e: string) => ({
@@ -309,7 +322,10 @@ const quizSlice: Slice = createSlice({
 
                 case QUESTION_TYPES.FILL_WORD:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
                       answer: payload.myAnswers?.map(
@@ -325,7 +341,10 @@ const quizSlice: Slice = createSlice({
 
                 case QUESTION_TYPES.SELECT_WORD:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
                       answer: payload.myAnswers
@@ -341,7 +360,10 @@ const quizSlice: Slice = createSlice({
 
                 case QUESTION_TYPES.MATCHING:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
                       answer: payload.myAnswers?.map(
@@ -358,7 +380,10 @@ const quizSlice: Slice = createSlice({
 
                 case QUESTION_TYPES.DRAG_DROP:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
                       answer: payload.myAnswers?.map((e: any, i: number) => ({
@@ -401,5 +426,11 @@ export default quizSlice.reducer
  */
 export const courseActivityQuizReducer = (state: RootState) =>
   state.courseActivityQuizReducer
+const { removeQuizFinished } = quizSlice.actions
 
-export { confirmQuestion, fetchQuestionById, submitQuestion }
+export {
+  confirmQuestion,
+  fetchQuestionById,
+  submitQuestion,
+  removeQuizFinished,
+}
