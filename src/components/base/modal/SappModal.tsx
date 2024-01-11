@@ -102,7 +102,7 @@ const SappModal: React.FC<IProps> = ({
   confirmOnclose,
   size = 'max-w-lg',
   modelClassname = '',
-  refClass = 'md:px-6 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
+  refClass = 'md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
   childClass = '',
   parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex gap-3',

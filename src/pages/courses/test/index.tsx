@@ -58,7 +58,7 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Name:</div>
-        <div className="text-bw-1">{data?.name}</div>
+        <div className="text-bw-1 line-clamp-2">{data?.name}</div>
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Pass Mark:</div>

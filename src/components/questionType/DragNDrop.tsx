@@ -21,6 +21,7 @@ interface IProps {
   extenalRef?: any
   corrects?: any
   solution?: string
+  resetDefaultAnswer?: boolean
 }
 const DragNDropPreivew = forwardRef(
   (
@@ -35,13 +36,16 @@ const DragNDropPreivew = forwardRef(
       extenalRef,
       corrects,
       solution,
+      resetDefaultAnswer = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
     const storageId = uniqueId('storage')
     const [answered, setAnswered] = useState<any>([])
     useEffect(() => {
-      setAnswered(defaultAnswer)
+      if (resetDefaultAnswer) {
+        setAnswered(defaultAnswer)
+      }
     }, [defaultAnswer])
     function allowDrop(ev: any) {
       ev.preventDefault()
