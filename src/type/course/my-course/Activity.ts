@@ -47,7 +47,7 @@ export interface IActivity {
     display_icon: string
     name: string
   }
-  breadcumb: IBreadcrumb[]
+  breadcumb?: IBreadcrumb[]
 }
 
 export interface ITab {
