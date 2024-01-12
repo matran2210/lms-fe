@@ -402,7 +402,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             question_id: e.id,
             short_answers: e.answer || '',
             response_option: e.response_option ? e.response_option : 'WORD',
-            active: 'NOT_GRADED',
+            active: 'SUBMITED',
           })
         }
       }

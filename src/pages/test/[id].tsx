@@ -942,7 +942,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   ? 'WORD'
                   : 'SHEET',
               time_spent: Math.ceil(e.timeSpent / 1000),
-              active: 'NOT_GRADED',
+              active: 'SUBMITED',
             })
           }
         }
