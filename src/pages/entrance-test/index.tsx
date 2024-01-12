@@ -8,7 +8,11 @@ import EntranceApi from 'src/redux/services/EntranceTest'
 import axios from 'axios'
 import { apiURL } from '@components/mycourses/LearningResource'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import {
+  setCookieActToken,
+  setCookieRefreshToken,
+  buildQueryString,
+} from '@utils/index'
 
 const EntranceTest = ({ entranceTestLists }: any) => {
   return (
@@ -64,9 +68,12 @@ export async function getServerSideProps(context: any) {
   try {
     // Parse cookies from the request headers
     const cookies = parse(req.headers.cookie || '')
-
+    const queryString = buildQueryString({
+      attempt_status: query.attempt_status || '',
+    })
     const entranceTestLists = (await EntranceApi.getListEntranceTest(
       cookies.accessToken,
+      queryString,
     )) as any
 
     return {
