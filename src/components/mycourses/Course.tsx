@@ -50,8 +50,8 @@ const Course = ({
 
       // Calculate the difference in days
       const difference = differenceInDays(
-        parsedSpecificDate,
-        currentDate,
+        startOfDay(parsedSpecificDate),
+        startOfDay(currentDate),
       ) as any
 
       // Update state with the difference
