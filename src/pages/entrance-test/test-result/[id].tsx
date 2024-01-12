@@ -8,6 +8,8 @@ import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import QuizResult from 'entrance-test-result-package'
 import 'entrance-test-result-package/dist/index.css'
 import { useRouter } from 'next/router'
+import TableEntranceResult from '../table-result/[id]'
+import { LAYOUT } from '@utils/constants'
 const TestEntranceResult = ({ chartData }: any) => {
   // console.log(chartData);
   const router = useRouter()
@@ -16,11 +18,11 @@ const TestEntranceResult = ({ chartData }: any) => {
 
   return (
     <QuizResult
-      dataChart={[]}
+      dataChart={chartData.chart_data}
       onClick={() => {
         router.push(`/entrance-test/table-result/${router.query.id}`)
       }}
-      dataTable={{ ...chartData, total_questions: chartData.total_question }}
+      dataTable={chartData}
     />
   )
 }
@@ -122,3 +124,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 export default TestEntranceResult
+TestEntranceResult.layout = LAYOUT.FULLSCREEN_LAYOUT
