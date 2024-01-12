@@ -35,7 +35,7 @@ const PopupActive = ({ open, setOpen, activeCourse }: IProps) => {
       closeAfterSubmit={true}
       buttonSize="extra"
       scrollbale={false}
-      confirmOnclose={true}
+      confirmOnclose={false}
     >
       <div className="mb-6">
         <ActiveIcon />

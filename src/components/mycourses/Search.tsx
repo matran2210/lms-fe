@@ -36,15 +36,23 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     }
   }, [queryString, watch('name')])
 
+  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    // Check if 'name' is empty and perform search immediately
+    if (!watch('name')) {
+      router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     // Redirect to the search results page with the query as a query parameter
-    router.push(`courses?${queryString}`)
+    router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
   }
 
   return (
-    <form className={formStyle} onSubmit={handleSubmit}>
+    <form className={formStyle} onSubmit={handleSubmit} onChange={handleReset}>
       <button type="submit" className="flex">
         <Icon type="search" className="text-primary" />
       </button>

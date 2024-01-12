@@ -11,10 +11,14 @@ import { defaultStatusDetail } from 'src/constants'
 const Filter = ({ courses }: { courses: ICourseAll }) => {
   const router = useRouter()
   const { control, watch } = useForm()
+  const totalCourse = courses?.total.reduce(
+    (total: number, item: any) => total + parseInt(item.count, 10),
+    0,
+  )
 
   const defaultCategory = [
     {
-      label: 'All',
+      label: `All (${totalCourse})`,
       value: '',
     },
   ]
@@ -54,7 +58,7 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
               value: category?.categoryName,
             })),
           )}
-          defaultValue={{ label: 'All', value: '' }}
+          defaultValue={{ label: `All (${totalCourse})`, value: '' }}
           placeholder="Category"
           className="status-course"
           isSearchable={false}
