@@ -4,25 +4,15 @@ import { removeJwtToken } from '@utils/helpers/authen'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import QuizResult from 'entrance-test-result-package'
-import 'entrance-test-result-package/dist/index.css'
 import { useRouter } from 'next/router'
-const TestEntranceResult = ({ chartData }: any) => {
-  // console.log(chartData);
+import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
+// import {} from 'explanation-package'
+const Explanation = ({ data }: any) => {
   const router = useRouter()
   //todo: call api, make UI
   // return <></>
 
-  return (
-    <QuizResult
-      dataChart={[]}
-      onClick={() => {
-        router.push(`/entrance-test/table-result/${router.query.id}`)
-      }}
-      dataTable={{ ...chartData, total_questions: chartData.total_question }}
-    />
-  )
+  return <></>
 }
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
@@ -53,14 +43,14 @@ export async function getServerSideProps(context: any) {
       }
     }
 
-    const chartData = (await CourseTestApi.getQuizAttemptsChartData(
+    const data = (await CourseTestApi.getAnswerData(
       context?.query?.id,
       cookies.accessToken,
     )) as any
 
     return {
       props: {
-        chartData: chartData,
+        data: data,
       },
     }
   } catch (error: any) {
@@ -88,6 +78,16 @@ export async function getServerSideProps(context: any) {
         setCookieActToken(act)
         setCookieRefreshToken(rft)
         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        const data = (await CourseTestApi.getAnswerData(
+          context?.query?.id,
+          act,
+        )) as any
+
+        return {
+          props: {
+            dara: data,
+          },
+        }
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập
@@ -121,4 +121,4 @@ export async function getServerSideProps(context: any) {
     }
   }
 }
-export default TestEntranceResult
+export default Explanation

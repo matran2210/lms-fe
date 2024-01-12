@@ -45,6 +45,7 @@ const AddWordPreview = forwardRef(
   ) => {
     const refEditor = useRef(null) as any
     const [questionContent, setQuestionContent] = useState<any>()
+    const [answerContent, setAnswerContent] = useState<any>()
     const str = data?.question_content
     const parser = new DOMParser()
     const [key, setKey] = useState<string>(uniqueId('key'))
@@ -65,7 +66,8 @@ const AddWordPreview = forwardRef(
     useEffect(() => {
       const doc = parser.parseFromString(str, 'text/html')
       const elements = doc.querySelectorAll('.question-content-tag')
-
+      const doc2 = parser.parseFromString(str, 'text/html')
+      const elementCorrects = doc2.querySelectorAll('.question-content-tag')
       elements.forEach((element, index) => {
         const inputId = element.id
         const inputValue = defaultAnswer?.[index] || ''
@@ -74,11 +76,13 @@ const AddWordPreview = forwardRef(
         if (corrects) {
           const correctAnswer = corrects?.find(
             (ans: any) =>
-              ans.answer_position === index + 1 && ans.answer === inputValue,
+              ans.answer_position === index + 1 &&
+              ans.answer.trim().toLowerCase() ===
+                inputValue.trim().toLowerCase(),
           )
           inputClass = correctAnswer
-            ? 'border-success text-state-success'
-            : 'border-danger text-danger'
+            ? 'border-success text-state-success text-center !font-normal'
+            : 'border-danger text-danger text center !font-normal'
         }
 
         element.outerHTML = `
@@ -89,6 +93,29 @@ const AddWordPreview = forwardRef(
         </span>
       `
       })
+      if (corrects) {
+        elementCorrects.forEach((element, index) => {
+          const inputId = element.id
+          const inputValue = defaultAnswer?.[index] || ''
+
+          let inputClass
+          // if (corrects) {
+          const correctAnswer = corrects?.find(
+            (ans: any) => ans.answer_position === index + 1,
+          )
+          if (correctAnswer) {
+            inputClass = 'text-base font-semibold text-state-success'
+            // }
+
+            element.outerHTML = `
+                <span>
+                <span id="${inputId}" class = "${inputClass}">${correctAnswer.answer} <span/>
+                </span>
+                `
+          }
+        })
+        setAnswerContent(doc2)
+      }
 
       setQuestionContent(doc)
     }, [defaultAnswer])
@@ -144,6 +171,18 @@ const AddWordPreview = forwardRef(
           }
           highlighted={highlighted}
         />
+        {answerContent && (
+          <>
+            <div className="font-semibold text-base mt-5">Correct Answer:</div>
+            <EditorReader
+              className="questions mt-2"
+              text_editor_content={
+                answerContent?.documentElement.querySelector('body')
+                  ?.innerHTML || ''
+              }
+            />
+          </>
+        )}
         {solution && (
           <div className="bg-gray-4 mt-6 p-6">
             <div className="font-semibold text-base text-bw-1 ">Solution</div>

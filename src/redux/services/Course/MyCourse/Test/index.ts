@@ -235,6 +235,21 @@ const CourseTestApi = {
     })
     return response
   },
+  getAnswerData: async (
+    id: string,
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.getAnswer}/${id}`,
+      {
+        headers,
+      },
+    )
+    return response.data?.data
+  },
 }
 
 export default CourseTestApi
