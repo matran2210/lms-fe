@@ -6,7 +6,7 @@ import { buildQueryString, convertSnakeCaseToHumanReadable } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useForm } from 'react-hook-form'
 import { ICourseAll } from 'src/type/courses'
-import { defaultStatusDetail } from 'src/constants'
+import { defaultStatusCourse } from 'src/constants'
 
 const Filter = ({ courses }: { courses: ICourseAll }) => {
   const router = useRouter()
@@ -68,7 +68,7 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
         <SappHookFormSelect
           control={control}
           name="status"
-          options={defaultStatusDetail}
+          options={defaultStatusCourse}
           placeholder="Status"
           className="status-course"
           isSearchable={false}
