@@ -1,4 +1,4 @@
-import SearchForm from '@components/notification/Search'
+import SearchForm from '@components/mycourses/Search'
 import NotifyTab from '@components/notification/NotifyTab'
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import ActionCell from '@components/base/action/ActionCell'

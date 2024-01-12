@@ -113,6 +113,8 @@ module.exports = {
         'questions-exhibits': '5px -6px 10px -4px rgba(0, 0, 0, 0.15)',
         'question-footer': '0px -2px 7px 0px rgba(0, 0, 0, 0.13)',
         preview: '0px 4px 12px 0px rgba(0, 0, 0, 0.10)',
+        select:
+          '0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 4px 0px rgba(0, 0, 0, 0.04)',
       },
       minWidth: {
         4: '16px',

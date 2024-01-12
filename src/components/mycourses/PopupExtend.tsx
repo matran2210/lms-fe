@@ -30,7 +30,7 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       closeAfterSubmit={true}
       buttonSize="extra"
       scrollbale={false}
-      confirmOnclose={true}
+      confirmOnclose={false}
     >
       <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
         <AlertIcon />
