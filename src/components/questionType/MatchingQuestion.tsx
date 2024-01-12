@@ -4,6 +4,7 @@ import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
   forwardRef,
+  memo,
   useEffect,
   useImperativeHandle,
   useState,
@@ -48,7 +49,7 @@ const MatchingQuestion = forwardRef(
     const [defaultValue, setDefaultValue] = useState<any>()
     const [answers, setAnswers] = useState<any>()
     const [correctAnswer, setCorrectAnswer] = useState<any>()
-    const storageId = uniqueId('storage')
+    const [storageId, setStoreId] = useState(uniqueId('storage'))
 
     function allowDrop(ev: any) {
       const slotId = ev.target.id
@@ -186,13 +187,10 @@ const MatchingQuestion = forwardRef(
           />
         </div>
         {!corrects ? (
-          <div className="flex flex-col gap-y-5">
+          <div className="flex flex-col gap-y-5 px-19">
             {data?.question_matchings.map((e: any) => {
               return (
-                <div
-                  className="flex flex-wrap gap-x-8 justify-between"
-                  key={e?.id}
-                >
+                <div className="flex flex-nowrap gap-x-20 " key={e?.id}>
                   <QuestionCard value={e?.content} />
                   <div
                     id={e?.id}
@@ -243,19 +241,16 @@ const MatchingQuestion = forwardRef(
           </div>
         ) : (
           <>
-            <div className="flex flex-col gap-y-5">
+            <div className="flex flex-col gap-y-5 px-[123px]">
               {data?.question_matchings.map((e: any, index: number) => {
                 return (
-                  <div
-                    className="flex flex-wrap gap-x-8 justify-between"
-                    key={index}
-                  >
+                  <div className="flex flex-nowrap justify-between" key={index}>
                     {defaultValue?.[e?.id]?.answer?.id ===
                     correctAnswer?.[e?.id]?.id ? (
                       <>
                         <QuestionCard
                           value={e?.content}
-                          className="sapp-arrowed-container "
+                          className="sapp-arrowed-container-incorrects !border-gray-6 before:!border-gray-6"
                         />
                         <div
                           // id={e?.id}
@@ -264,7 +259,7 @@ const MatchingQuestion = forwardRef(
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container min-w-132px"
+                              className="sapp-notched-container-incorrects min-w-132px !border-gray-6 before:!border-gray-6"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
@@ -299,14 +294,14 @@ const MatchingQuestion = forwardRef(
               })}
             </div>
             <div className="flex flex-col gap-y-5 mt-28">
-              <div className="text-bw-1 font-semibold text-2xl">
+              <div className="text-bw-1 font-semibold text-base">
                 Correct Answer
               </div>
 
               {data?.question_matchings.map((e: any, index: number) => {
                 return (
                   <div
-                    className="flex flex-wrap gap-x-8 justify-between"
+                    className="flex flex-nowrap justify-between px-[123px]"
                     key={index}
                   >
                     <QuestionCard
@@ -340,4 +335,4 @@ const MatchingQuestion = forwardRef(
   },
 )
 MatchingQuestion.displayName = 'MatchingQuestion'
-export default MatchingQuestion
+export default memo(MatchingQuestion)
