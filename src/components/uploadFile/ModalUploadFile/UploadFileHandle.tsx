@@ -4,10 +4,12 @@ import Dragger from 'antd/es/upload/Dragger'
 import React, { ReactElement } from 'react'
 import toast from 'react-hot-toast'
 import { validateFile } from 'src/utils/upload'
-import ButtonIconOnly from '../../button/ButtonIconOnly'
-import ButtonPrimary from '../../button/ButtonPrimary'
+// import ButtonIconOnly from '../../button/ButtonIconOnly'
+// import ButtonPrimary from '../../button/ButtonPrimary'
 import { UPLOAD_TYPE } from './UploadFileInterface'
-import { ResourceAPI } from 'src/apis/resource-bank'
+import ButtonIcon from '@components/base/button/ButtonIcon'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+// import { ResourceAPI } from 'src/apis/resource-bank'
 
 type Props = {
   beforeUpload?: (file: RcFile, FileList: RcFile[]) => boolean
@@ -103,20 +105,19 @@ const UploadFileHandle = ({
               />
             </div>
           </div>
-          <ButtonIconOnly
-            iconName={'trash'}
-            activeColor="danger"
-            bg="none"
+          <ButtonIcon
             onClick={() => {
               if ((_file as any).id && _file.status === 'done') {
-                try {
-                  ResourceAPI.deleteResource([(_file as any).id as string])
-                } catch (error) {}
+                // try {
+                //   ResourceAPI.deleteResource([(_file as any).id as string])
+                // } catch (error) {}
               }
               actions.remove()
               handleCancel(false, _file.uid)
             }}
-          />
+          >
+            <></>
+          </ButtonIcon>
         </div>
       </>
     )
@@ -181,7 +182,7 @@ const UploadFileHandle = ({
             <ButtonPrimary
               disabled={loading}
               title="Browse"
-              className="btn-sm mb-10"
+              // className="btn-sm mb-10"
             ></ButtonPrimary>
             <div className="d-flex sapp-w-fit-content my-0 mx-auto mw-100">
               <span className="text-nowrap"> File support:</span>
