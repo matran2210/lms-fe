@@ -57,6 +57,7 @@ const EssayQuestionPreview = ({
   const [key, setKey] = useState<string>('1')
   const [valueText, setValueText] = useState()
   const refSheet = useRef(null) as any
+  const inputRef = useRef(null) as any
   useEffect(() => {
     if (question_data) {
       DeserializeHighlight(highlighted)
@@ -73,6 +74,12 @@ const EssayQuestionPreview = ({
           const newKey = uniqueId('key')
           return newKey
         }),
+    }
+  }
+  const handleFileChange = (event: any) => {
+    const fileObj = event.target.files && event.target.files[0]
+    if (!fileObj) {
+      return
     }
   }
   // },[response_option_custom])
@@ -117,8 +124,19 @@ const EssayQuestionPreview = ({
                   Upload file to submit:
                 </div>
                 <div className="sapp-upload-button-preview">
+                  <input
+                    ref={inputRef}
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
                   {/* <UploadIcon /> */}
-                  <div className="title-btn-preview">Choose file to upload</div>
+                  <div
+                    className="title-btn-preview"
+                    onClick={() => inputRef.current.click()}
+                  >
+                    Choose file to upload
+                  </div>
                 </div>
               </div>
               {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
