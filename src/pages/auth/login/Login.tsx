@@ -26,6 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import PopUpLimit from './PopupLimit'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntranceApi from 'src/redux/services/EntranceTest'
+import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
 
 interface IInputProps {
   login: string
@@ -124,6 +125,7 @@ const LoginPage = () => {
         .unwrap()
         .then((payload) => {
           getListEntranceTest()
+          dispatch(clearGuideState())
           dispatch(getEntranceCount())
         })
         .catch((error) => {

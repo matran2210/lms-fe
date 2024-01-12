@@ -38,7 +38,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       <div className="des mt-6 mb-15">
         <div
           dangerouslySetInnerHTML={{
-            __html: truncateString(courses?.description, 300),
+            __html: truncateString(courses?.description, 250),
           }}
           className="text-base h-[120px]"
         />
