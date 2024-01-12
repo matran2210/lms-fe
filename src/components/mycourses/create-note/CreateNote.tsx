@@ -141,7 +141,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
             placeholder="Take a note..."
             control={control}
             name={`description_${id ? id : uuid}`}
-            className="w-full h-[calc(100%-40px)] sapp-text-area px-4 py-4 placeholder:text-medium-sm placeholder:font-medium placeholder:text-gray-1 whitespace-pre-wrap"
+            className="not-resizer w-full h-[calc(100%-40px)] sapp-text-area px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1 whitespace-pre-wrap"
             defaultValue={content}
           />
         </div>

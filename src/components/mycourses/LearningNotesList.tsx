@@ -102,16 +102,22 @@ const LearningNotesList = () => {
           const course_section_path = res?.data?.notes[0]?.course_section_path
 
           if (res && course_section_path?.length > 0) {
-            setSelectedSection(defaultValueActivity(course_section_path[3]))
-            setSelectedSubsection(defaultValueActivity(course_section_path[2]))
+            setSelectedSection(
+              defaultValueActivity(course_section_path, 'PART'),
+            )
+            setSelectedSubsection(
+              defaultValueActivity(course_section_path, 'CHAPTER'),
+            )
             // Hiệu ứng fill data vào ô select
             setTimeout(() => {
-              setSelectedUnit(defaultValueActivity(course_section_path[1]))
-            }, 2000)
+              setSelectedUnit(defaultValueActivity(course_section_path, 'UNIT'))
+            }, 500)
             setTimeout(() => {
-              setSelectedActivity(defaultValueActivity(course_section_path[0]))
+              setSelectedActivity(
+                defaultValueActivity(course_section_path, 'ACTIVITY'),
+              )
               setFirstLoadActity(true)
-            }, 4000)
+            }, 1000)
           }
         },
       )
@@ -207,7 +213,8 @@ const LearningNotesList = () => {
     setFirstLoadActity(false)
   }
 
-  const defaultValueActivity = (value: any) => {
+  const defaultValueActivity = (course_section_path: any, type: string) => {
+    const value = course_section_path.find((item: any) => item?.type === type)
     const responce = { value: value.id, label: value.name }
     return responce
   }
