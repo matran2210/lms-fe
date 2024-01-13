@@ -1,6 +1,6 @@
-import DocIcon from 'src/_metronic/assets/icons/document-icon.svg'
-import ImageIcon from 'src/_metronic/assets/icons/image-icon.svg'
-import VideoIcon from 'src/_metronic/assets/icons/video-icon.svg'
+import DocIcon from 'src/assets/images/document-icon.svg'
+import ImageIcon from 'src/assets/images/image-icon.svg'
+import VideoIcon from 'src/assets/images/video-icon.svg'
 import {
   MAX_UPLOAD_SIZE,
   MAX_UPLOAD_VIDEO_SIZE,
@@ -37,6 +37,7 @@ export enum RESOURCE_LOCATION {
   root = '',
   mail = 'mail',
   certificate = 'certificate',
+  essay = 'essay',
 }
 export enum SUFFIX_TYPE {
   'FOLDER' = 'FOLDER',

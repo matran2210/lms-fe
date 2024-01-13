@@ -52,6 +52,8 @@ import { apiURL } from 'src/redux/services/httpService'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import QuitTestModal from '../courses/test/quit-test'
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { RESOURCE_LOCATION } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -192,6 +194,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
+            openChooseFile={(e: any) => setOpenUpload(e)}
           />
           // <Luckysheet/>
         )
@@ -245,6 +248,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [openUpload, setOpenUpload] = useState(false)
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -842,6 +846,27 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
     }
     return newData
+  }
+  const handleSaveFileEssay = (file: any) => {
+    setTabs((prev: any) => {
+      let _tabs = [...prev]
+      let newData = [] as any
+      for (let item of _tabs) {
+        if (currentPage === item.id) {
+          var newItem = {
+            ...item,
+            answer_file: {
+              file_key: file.file_key,
+              file_name: file.name,
+            },
+          }
+          newData.push(newItem)
+        } else {
+          newData.push(item)
+        }
+      }
+      return newData
+    })
   }
   const handleChangeTypeEssay = (value: number) => {
     setTabs((prev: any) => {
@@ -1658,6 +1683,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openSubmit}
         setOpen={setOpenSubmit}
         handleSubmit={handleSubmitQuestion}
+      />
+      <ModalUploadFile
+        open={openUpload}
+        isMultiple={false}
+        setOpen={setOpenUpload}
+        fileType={'DOCUMENT'}
+        location={`question-answer/${currentPage}`}
+        setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
       />
     </div>
   )
