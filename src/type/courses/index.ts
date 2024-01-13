@@ -36,6 +36,7 @@ export interface ICourseSection {
   }
   remaining_time: number
   description: string
+  user_section_learning_status: string
 }
 
 export interface ICourseDetail {
