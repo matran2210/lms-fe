@@ -33,6 +33,7 @@ export type IPreviewProp = {
   response_option_custom?: any
   externalRef?: any
   fullData: any
+  openChooseFile?: any
 }
 const EssayQuestionPreview = ({
   data,
@@ -52,10 +53,10 @@ const EssayQuestionPreview = ({
   response_option_custom,
   externalRef,
   fullData,
+  openChooseFile,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
-  const [valueText, setValueText] = useState()
   const refSheet = useRef(null) as any
   const inputRef = useRef(null) as any
   useEffect(() => {
@@ -63,9 +64,6 @@ const EssayQuestionPreview = ({
       DeserializeHighlight(highlighted)
     }
   }, [question_data, question_content, data])
-  useEffect(() => {
-    setValueText(defaultValue)
-  }, [defaultValue])
   // useEffect(()=>{
   if (externalRef) {
     externalRef.current = {
@@ -117,33 +115,51 @@ const EssayQuestionPreview = ({
           </div>
           {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
             forCaseStudy) && <div className="sapp-seprate-line-preview"></div>}
-          {question_data.assignment_type !== 'TEXT' && (
-            <React.Fragment>
-              <div className="sapp-upload-file-preview">
-                <div className="title-upload-button-preview">
-                  Upload file to submit:
-                </div>
-                <div className="sapp-upload-button-preview">
-                  <input
-                    ref={inputRef}
-                    type="file"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                  {/* <UploadIcon /> */}
-                  <div
-                    className="title-btn-preview"
-                    onClick={() => inputRef.current.click()}
-                  >
-                    Choose file to upload
+          {question_data.assignment_type !== 'TEXT' ? (
+            !fullData.answer_file?.file_key ? (
+              <React.Fragment>
+                <div className="sapp-upload-file-preview">
+                  <div className="title-upload-button-preview">
+                    Upload file to submit:
+                  </div>
+                  <div className="sapp-upload-button-preview">
+                    <input
+                      ref={inputRef}
+                      type="file"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                    {/* <UploadIcon /> */}
+                    <div
+                      className="title-btn-preview"
+                      // onClick={() => inputRef.current.click()}
+                      onClick={() => openChooseFile(true)}
+                    >
+                      Choose file to upload
+                    </div>
                   </div>
                 </div>
-              </div>
-              {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
-                forCaseStudy) && (
-                <div className="sapp-seprate-line-preview"></div>
-              )}
-            </React.Fragment>
+                {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+                  forCaseStudy) && (
+                  <div className="sapp-seprate-line-preview"></div>
+                )}
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <div className="sapp-upload-file-preview">
+                  <div className="title-upload-button-preview">
+                    Uploaded file:
+                  </div>
+                  <div>{fullData.answer_file.file_name}</div>
+                </div>
+                {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+                  forCaseStudy) && (
+                  <div className="sapp-seprate-line-preview"></div>
+                )}
+              </React.Fragment>
+            )
+          ) : (
+            <></>
           )}
           <div
             style={

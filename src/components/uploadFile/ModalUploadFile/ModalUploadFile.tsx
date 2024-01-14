@@ -17,7 +17,6 @@ interface IModalUploadProps {
   setUnSelectedFile?: any
   fileType: keyof typeof UPLOAD_TYPE
   isMultiple?: boolean
-  resourceLocation: RESOURCE_LOCATION
   fileChecked?: any
   onlyTab?: 'UPLOAD_FILE' | 'RESOURCES'
   title?: string
@@ -29,6 +28,7 @@ interface IModalUploadProps {
   ) => boolean
   parentId?: string
   maxCount?: number
+  location: string
 }
 
 export const initCompleteModal = {
@@ -45,7 +45,6 @@ const ModalUploadFile = ({
   setUnSelectedFile,
   fileType,
   isMultiple,
-  resourceLocation,
   fileChecked,
   onlyTab,
   title,
@@ -53,6 +52,7 @@ const ModalUploadFile = ({
   customValidate,
   parentId,
   maxCount,
+  location,
 }: IModalUploadProps) => {
   const sourceRef = useRef<CancelTokenSource>()
   const isCancel = useRef<boolean>()
@@ -60,7 +60,7 @@ const ModalUploadFile = ({
 
   const [progress, setProgress] = useState<{ [key: string]: number }>({})
   const [loadingUpload, setLoadingUpload] = useState<boolean>(false)
-
+  const [disabled, setDisabled] = useState(false)
   const [fileResource, setFileResource] = useState<{
     listDataChecked: IResource[] | IResource
     unCheckedListData?: IResource[]
@@ -108,19 +108,19 @@ const ModalUploadFile = ({
     })
   }
 
-  const handleUploadFile = async () => {
+  async function handleUploadFile() {
     if (!uploadFile?.length) {
       toast.error(
         `Before uploading, please choose the file in the format of ${UPLOAD_TYPE[fileType].extension}.`,
       )
       return
     }
+    setDisabled(true)
     sourceRef.current = axios.CancelToken.source()
     isCancel.current = false
     setUploadFile((e: any) =>
       e.map((f: any) => ({ ...f, status: 'uploading' })),
     )
-
     try {
       setLoadingUpload(true)
       setProgress({})
@@ -139,12 +139,19 @@ const ModalUploadFile = ({
             description: '',
             name: u.originFileObj.name || 'undefined',
             getProgress: (percent) => getProgress(percent, u.uid),
-            location: 'essay',
+            location: location,
           })
           if (response) {
-            responseUploadedFiles.push(response)
+            responseUploadedFiles.push(response.data)
+            // console.log(responseUploadedFiles);
+
             setUploadFile((e: any) => {
-              e[index] = { ...e[index], status: 'done', id: response.id }
+              e[index] = {
+                ...e[index],
+                status: 'done',
+                fileName: response.data.name,
+                file_key: response.data.file_key,
+              }
               return e
             })
           }
@@ -160,7 +167,7 @@ const ModalUploadFile = ({
           })
         }
       }
-      setSelectedFile && setSelectedFile(responseUploadedFiles, 'upload')
+      setSelectedFile && setSelectedFile(responseUploadedFiles)
       toast.success('Upload completed!')
     } catch (error) {
       if (isCancel.current) {
@@ -174,9 +181,9 @@ const ModalUploadFile = ({
         handleCancel()
         setLoadingUpload(false)
       }, 1000)
+      setDisabled(false)
     }
   }
-
   return (
     <div>
       <SappModal
@@ -187,7 +194,8 @@ const ModalUploadFile = ({
         confirmOnclose
         handleCancel={handleCancel}
         handleSubmit={handleUploadFile}
-        closeAfterSubmit={true}
+        closeAfterSubmit={false}
+        externalLoading={disabled}
       >
         <UploadFileHandle
           uploadFile={uploadFile}

@@ -44,6 +44,7 @@ export class UploadAPI {
         location: location || '',
         size,
       })
+      // console.log({responsePreUpload},"test");
 
       await uploadFile(
         {
@@ -56,15 +57,16 @@ export class UploadAPI {
         getProgress,
       )
 
-      const response = await addFileResource({
-        name,
-        file_key: responsePreUpload.data.file_key,
-        location: location || '',
-        description,
-        size,
-        parent_id: null,
-      })
-      return response?.data?.[0]?.id
+      // const response = await addFileResource({
+      //   name,
+      //   file_key: responsePreUpload.data.file_key,
+      //   location: location || '',
+      //   description,
+      //   size,
+      //   parent_id: null,
+      // })
+      // return response?.data?.[0]?.id
+      return responsePreUpload
       // if (response?.data?.[0]?.id) {
       //   const responseFile = await ResourcesAPI.getFileFromResource(response.data[0].id, source)
       //   return responseFile.data
@@ -90,10 +92,11 @@ const preUpload = async ({
     type: string
     file_key: string
     upload_url: string
+    name: string
   }>
 > => {
   return httpService.GET({
-    uri: `/resources/pre-upload/metadata`,
+    uri: `/resource/pre-upload/metadata`,
     params: {
       content_type,
       name,
