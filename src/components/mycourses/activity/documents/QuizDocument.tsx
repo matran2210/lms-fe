@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   courseActivityQuizReducer,
   fetchQuestionById,
+  removeQuizFinished,
   selectQuestions,
   submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
@@ -157,6 +158,14 @@ const QuizDocument = ({
         .unwrap()
         .then((e: any) => {
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
+
+          dispatch(
+            removeQuizFinished({
+              activityId,
+              tabId,
+              quizId: quizId,
+            }),
+          )
         })
     } catch (error) {}
   }
