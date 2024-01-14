@@ -15,6 +15,7 @@ import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import PopupFinishQuiz from '../PopupFinishQuiz'
 
 type Props = {
   questions: IQuestion[]
@@ -49,6 +50,8 @@ const QuizDocument = ({
     questions?: any
     id?: string
   }>()
+
+  const [openConfirmQUiz, setOpenConfirmQUiz] = useState<boolean>(false)
 
   useEffect(() => {
     if (questions?.[0]) {
@@ -210,9 +213,13 @@ const QuizDocument = ({
       }))
     } catch (error) {}
   }
-
   return (
     <div>
+      <PopupFinishQuiz
+        open={openConfirmQUiz}
+        setOpen={setOpenConfirmQUiz}
+        submitQuiz={handleFinishQuiz}
+      ></PopupFinishQuiz>
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
           <QuizComponent
