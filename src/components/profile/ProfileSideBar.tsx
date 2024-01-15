@@ -90,7 +90,7 @@ const ProfileSideBar = ({ page }: IProps) => {
     })
 
     // Chuyển trang
-    router.push(`/${childLabel.toLowerCase()}`)
+    router.push(`/${childLabel.toLowerCase().replace(/_/g, '')}`)
   }
 
   const [isExpanded, toggleExpanded] = useState(false)
@@ -132,6 +132,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                     : ''
                 }`}
                 onClick={() => {
+                  onClick()
                   if (urlPage !== 'security') {
                     // If not 'security', use existing logic
                     handleChildClick(childLabel)

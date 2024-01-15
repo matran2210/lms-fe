@@ -6,18 +6,22 @@ import PopUpCertificate from './popupCertificate'
 const Certificate = () => {
   const [certificateData, setCertificateData] = useState<any>([])
   const [modalOpen, setOpenModal] = useState(false)
+  const [userDetail, setUserDetail] = useState('')
 
   const fetchChapterDetail = async () => {
     try {
-      const res = await MyProfileAPI.getProfile()
-      const certificate = res.course_user_certificate_instances
+      const res = await MyProfileAPI.getCertificate(1, 10)
+      const certificate = res.data.certificates
+      const userDetail = res.username
       setCertificateData(certificate)
+      setUserDetail(userDetail)
     } catch (error) {}
   }
 
   useEffect(() => {
     fetchChapterDetail()
   }, [])
+  const [clickedIndex, setClickedIndex] = useState<any>()
   return (
     <div>
       <div className="relative">
@@ -29,12 +33,15 @@ const Certificate = () => {
       <div
         style={{ maxHeight: '478px', overflowY: 'auto', minHeight: '400px' }}
       >
-        {certificateData.map((certificate: any) => {
+        {certificateData.map((certificate: any, index: any) => {
           return (
             <div key={certificate.id}>
               <div
                 className="hover:bg-secondary hover:text-primary group relative flex flex-row gap-2 w-full items-start self-center pt-5 px-6 cursor-pointer min-h-[88px]  border-b border-gray-2"
-                onClick={() => setOpenModal(true)}
+                onClick={() => {
+                  setClickedIndex(index)
+                  setOpenModal(true)
+                }}
               >
                 <div className=" flex flex-row justify-center mb-5  items-start bg-gray-4 border border-bottom ">
                   <a className="hover:text-primary group-hover:bg-secondary group-hover:border-active border-solid border px-5 py-1 h-[48px] w-[80px] ">
@@ -53,13 +60,17 @@ const Certificate = () => {
               </div>
               <div>
                 <PopUpCertificate
-                  id={certificate.id}
+                  id={clickedIndex}
                   openPreview={modalOpen}
                   setOpenModal={setOpenModal}
-                  data={certificate}
+                  data={certificateData[clickedIndex]}
                   message={''}
-                  onClose={() => setOpenModal(false)}
-                ></PopUpCertificate>
+                  onClose={() => {
+                    setClickedIndex(null)
+                    setOpenModal(false)
+                  }}
+                  userDetail={userDetail}
+                />
               </div>
             </div>
           )
