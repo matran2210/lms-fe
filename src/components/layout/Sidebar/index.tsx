@@ -12,7 +12,6 @@ type SidebarProps = {
   isOpened: boolean
   className: string
   toggleDrawer: () => void
-  mode: string
   setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
@@ -20,7 +19,6 @@ export default function Sidebar({
   isOpened,
   className,
   toggleDrawer,
-  mode,
   setOpenResource,
 }: SidebarProps) {
   const dispatch = useAppDispatch()
@@ -48,25 +46,17 @@ export default function Sidebar({
         } ${isOpened ? 'left-0' : '-left-full'}`}
       >
         <div
-          className={`${
-            mode === 'student' ? 'pt-2.5' : 'pt-8 '
-          } pb-6 relative ${
+          className={`pt-2.5 pb-6 relative ${
             guideStatus && guideStep == 2 ? 'bg-white z-50' : ''
           }`}
         >
-          <div className="flex justify-center text-center mx-auto pb-8">
-            {mode === 'student' ? (
-              <ExpandIcon type={'logo-default'} />
-            ) : (
-              <ExpandIcon type={'logo-teacher'} />
-            )}
+          <div className="group-logos flex justify-center text-center mx-auto pb-8">
+            <ExpandIcon type={'logo-default'} />
+            <ExpandIcon type={'logo-full'} />
           </div>
-          {mode === 'student' && (
-            <div className="h-px w-8 bg-gray-2 text-center mx-auto mb-6"></div>
-          )}
+          <div className="h-px w-[calc(100%-48px)] bg-gray-2 text-center mx-auto mb-6"></div>
           <MenuItemsList
-            mode={mode}
-            options={mode === 'student' ? MENU_ITEMS : MENU_ITEMS}
+            options={MENU_ITEMS}
             setOpenResource={setOpenResource}
           />
           {guideStatus && guideStep == 2 && (
@@ -81,16 +71,12 @@ export default function Sidebar({
           )}
         </div>
         <div
-          className={`absolute bottom-0 w-full ${
-            mode === 'student' ? 'pb-6' : 'pb-10'
-          } ${guideStatus && guideStep == 3 ? 'bg-white z-50' : ''}`}
+          className={`absolute bottom-0 w-full pb-6
+          ${guideStatus && guideStep == 3 ? 'bg-white z-50' : ''}`}
         >
-          {mode === 'student' && (
-            <div className="h-px w-8 bg-gray-2 text-center mx-auto mb-6"></div>
-          )}
+          <div className="h-px w-[calc(100%-48px)] bg-gray-2 text-center mx-auto mb-6"></div>
           <MenuItemsList
-            mode={mode}
-            options={mode === 'student' ? MENU_BOTTOM : MENU_BOTTOM}
+            options={MENU_BOTTOM}
             setOpenResource={setOpenResource}
           />
           {guideStatus && guideStep == 3 && (

@@ -390,20 +390,36 @@ export default function Icon({ type, className }: IconsPros) {
       )}
       {type === 'learning-resource' && (
         <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M21.938 2.25H2.063a.563.563 0 00-.563.563v2.624c0 .311.252.563.563.563h19.875c.31 0 .562-.252.562-.563V2.813a.562.562 0 00-.563-.562zM3 7.5v13.125a1.125 1.125 0 001.125 1.125h15.75A1.125 1.125 0 0021 20.625V7.5H3zm9 10.81l-4.063-4.06L9 13.187l2.25 2.252V9.75h1.5v5.69l2.253-2.254 1.06 1.061L12 18.311z"
+          ></path>
+        </svg>
+      )}
+      {type === 'entrance-test' && (
+        <svg
           width="24"
           height="24"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          className={`${className}`}
         >
           <path
             d="M7.5 11.25H14.408L11.408 8.25L12.4688 7.18922L17.2795 12L12.4688 16.8108L11.408 15.75L14.408 12.75H7.5V19.6875C7.5 19.8367 7.55926 19.9798 7.66475 20.0852C7.77024 20.1907 7.91332 20.25 8.0625 20.25H21.9375C22.0867 20.25 22.2298 20.1907 22.3352 20.0852C22.4407 19.9798 22.5 19.8367 22.5 19.6875V4.3125C22.5 4.16332 22.4407 4.02024 22.3352 3.91475C22.2298 3.80926 22.0867 3.75 21.9375 3.75H8.0625C7.91332 3.75 7.77024 3.80926 7.66475 3.91475C7.55926 4.02024 7.5 4.16332 7.5 4.3125V11.25Z"
-            fill="#DCDDDD"
+            fill="currentColor"
             className="group-resource"
           />
           <path
             d="M7.5 11.25H1.5V12.75H7.5V11.25Z"
-            fill="#DCDDDD"
+            fill="currentColor"
             className="group-resource"
           />
         </svg>

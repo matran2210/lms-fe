@@ -23,6 +23,7 @@ export const TitleSidebar = {
   TOPICS: 'Topics',
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
+  NOTIFICATION: 'Notifications',
 }
 
 export const GUIDELINE_PASSWORD = [
