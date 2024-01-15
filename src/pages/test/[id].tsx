@@ -1192,7 +1192,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setRemainTime((prev) => {
           if (prev === 1) {
             clearInterval(interval)
-            // setOpenTimeOut(true)
+            setOpenTimeOut(true)
             // handleSubmitQuestion()
           }
           return prev - 1
