@@ -439,6 +439,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           total_attempt_time: total_attempt_time,
         })
         toast.success('submit success')
+        router.push(`/courses/test/test-result/${quizAttempId}`)
       } catch (err) {
         toast.error('submit failed')
       }
@@ -547,9 +548,10 @@ const CaseStudyDetail = ({ questions }: any) => {
               title: 'Quit',
               size: 'medium',
               onClick: () => {
-                router.back()
+                setOpenQuit(true)
               },
               loading: false,
+              //   full: fullWidthBtn,
             }}
           ></ButtonCancelSubmit>
         </div>

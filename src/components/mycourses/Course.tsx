@@ -42,12 +42,12 @@ const Course = ({
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
   const currentDate = new Date()
+  currentDate.setUTCHours(0, 0, 0, 0)
 
   useEffect(() => {
     if (student?.finished_at) {
-      // Parse the specific date string to a Date object
       const parsedSpecificDate = parseISO(student?.finished_at as any)
-
+      parsedSpecificDate.setUTCHours(0, 0, 0, 0)
       // Calculate the difference in days
       const difference = differenceInDays(
         startOfDay(parsedSpecificDate),
@@ -97,7 +97,9 @@ const Course = ({
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
         if (startedAt && finishedAt) {
-          const finishedAtDate = startOfDay(new Date(finishedAt))
+          const parsedSpecificDate = parseISO(student?.finished_at as any)
+          parsedSpecificDate.setUTCHours(0, 0, 0, 0)
+          const finishedAtDate = startOfDay(parsedSpecificDate)
           if (
             course?.course_type === 'TRIAL_COURSE' &&
             finishedAtDate <= formattedDate
