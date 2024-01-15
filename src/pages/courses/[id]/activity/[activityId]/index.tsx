@@ -536,6 +536,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               </div>
             </div>
           )}
+          {!activity.previous_activity && <div></div>}
           {activity.next_activity && (
             <div className="w-1/2">
               <div
@@ -559,6 +560,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               </div>
             </div>
           )}
+          {!activity.next_activity && <div></div>}
         </div>
       </div>
 
