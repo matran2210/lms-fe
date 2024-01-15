@@ -264,7 +264,7 @@ const SappModal: React.FC<IProps> = ({
                 if (loading) {
                   return
                 }
-                ;() => onCancel()
+                onCancel()
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
