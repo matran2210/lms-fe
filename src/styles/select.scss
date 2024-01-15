@@ -21,7 +21,7 @@
   }
 
   .select__option {
-    @apply text-sm leading-4.5 font-normal text-bw-1 cursor-pointer bg-transparent;
+    @apply text-sm leading-4.5 font-normal text-bw-1 cursor-pointer bg-transparent line-clamp-2 max-h-11;
 
     &.select__option--is-focused {
       @apply bg-transparent;

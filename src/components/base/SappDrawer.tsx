@@ -67,7 +67,7 @@ const SappDrawer = ({
         } transition-transform duration-300 ease-in-out overflow-y-auto h-screen`}
       >
         <div className="flex flex-col h-screenl justify-between">
-          <div className="w-100 justify-between bg-bw-2 min-h-[80px] text-2xl font-semibold items-center flex px-8 text-white line-clamp-3 py-2">
+          <div className="w-100 justify-between bg-bw-2 min-h-[80px] text-2xl font-medium items-center flex px-8 text-white line-clamp-3 py-2">
             {title}
             <div className="shrink-0">
               <Image

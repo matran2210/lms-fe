@@ -47,6 +47,19 @@ const LearningNotesList = () => {
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
   const [viewActivity, setViewActivity] = useState<string>()
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
+  const [expandedNotes, setExpandedNotes] = useState<any>([])
+
+  const toggleExpand = (noteId: string) => {
+    setExpandedNotes((prevExpanded: any) => {
+      if (prevExpanded.includes(noteId)) {
+        // Nếu noteId đã trong mảng, loại bỏ nó
+        return prevExpanded.filter((id: string) => id !== noteId)
+      } else {
+        // Nếu noteId chưa có trong mảng, thêm nó vào
+        return [...prevExpanded, noteId]
+      }
+    })
+  }
 
   // Set default change section all
   useEffect(() => {
@@ -316,6 +329,7 @@ const LearningNotesList = () => {
       title="Notes List"
       footer={false}
       drawerSubId={'-notes-list'}
+      confirmOnClose={false}
     >
       <div className="flex justify-between gap-4 md:gap-6 flex-wrap md:flex-nowrap mt-2">
         <HookFormSelect
@@ -409,74 +423,104 @@ const LearningNotesList = () => {
       </div>
 
       <div>
-        {notesListData?.notes?.map((note: any, index: number) => (
-          <div
-            className="mt-6 p-6 border border-default last:mb-6"
-            key={note?.id}
-          >
-            <div className="flex items-center mb-4 flex-wrap md:flex-nowrap">
-              <SappBreadcrumbNotLink
-                paths={note?.course_section_path.reverse()}
-              />
-            </div>
-            <div className="font-normal text-base">
-              <span className="whitespace-pre-wrap">{note?.description}</span>
-            </div>
-            <div className="mt-5 flex justify-between">
-              <div className="font-normal text-sm text-gray-1">
-                {format(note?.updated_at, 'dd/MM/yyyy hh:mm')}
+        {notesListData?.notes?.map((note: any, index: number) => {
+          const isExpanded = expandedNotes.includes(note?.id)
+          return (
+            <div
+              className="mt-6 p-6 border border-default last:mb-6"
+              key={note?.id}
+            >
+              <div className="flex items-center mb-1.5 pb-px flex-wrap md:flex-nowrap">
+                <SappBreadcrumbNotLink
+                  paths={[...note?.course_section_path].reverse()}
+                />
               </div>
-              <div className="flex">
-                <div className="cursor-pointer relative">
-                  {activityId === note?.course_section_id ? (
-                    <span
-                      className="notes-list-icon"
-                      onClick={() => {
-                        if (
-                          !getNotesData.some((item) =>
-                            item.id.includes(note?.id),
-                          )
-                        ) {
-                          handleEditNote(note?.id, note?.description, index)
-                          onClose()
-                        }
-                      }}
-                    >
-                      <EditIcon />
-                    </span>
-                  ) : (
-                    <>
-                      {viewActivity === `note.${index}.value` && (
-                        <PreviewNoteList
-                          title={note?.name}
-                          content={note?.description}
-                          setOpen={closePreview}
-                        />
-                      )}
+              <div className="font-normal text-base">
+                <span
+                  className={`whitespace-pre-wrap ${
+                    isExpanded ? '' : 'line-clamp-3'
+                  }`}
+                >
+                  {note?.description}
+                </span>
+                {!isExpanded && note?.description?.length > 230 ? (
+                  <button
+                    className="block font-normal text-base text-gray-1"
+                    onClick={() => toggleExpand(note?.id)}
+                  >
+                    Show more
+                  </button>
+                ) : (
+                  <>
+                    {note?.description?.length > 230 ? (
+                      <button
+                        className="block font-normal text-base text-gray-1"
+                        onClick={() => toggleExpand(note?.id)}
+                      >
+                        Show less
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                )}
+              </div>
+              <div className="mt-5 flex justify-between">
+                <div className="font-normal text-sm text-gray-1">
+                  {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
+                </div>
+                <div className="flex">
+                  <div className="cursor-pointer relative">
+                    {activityId === note?.course_section_id ? (
                       <span
                         className="notes-list-icon"
                         onClick={() => {
-                          setViewActivity(`note.${index}.value`)
+                          if (
+                            !getNotesData.some((item) =>
+                              item.id.includes(note?.id),
+                            )
+                          ) {
+                            handleEditNote(note?.id, note?.description, index)
+                            onClose()
+                          }
                         }}
                       >
-                        <ViewIcon />
+                        <EditIcon />
                       </span>
-                    </>
-                  )}
-                </div>
-                <div className="ms-4 cursor-pointer">
-                  <span
-                    onClick={() => {
-                      handleDelete(note?.id)
-                    }}
-                  >
-                    <DeleteIcon />
-                  </span>
+                    ) : (
+                      <>
+                        {viewActivity === `note.${index}.value` && (
+                          <PreviewNoteList
+                            title={note?.name}
+                            content={note?.description}
+                            setOpen={closePreview}
+                          />
+                        )}
+                        <span
+                          className="notes-list-icon"
+                          onClick={() => {
+                            setViewActivity(`note.${index}.value`)
+                          }}
+                        >
+                          <ViewIcon />
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <div className="ms-4 cursor-pointer">
+                    <span
+                      onClick={() => {
+                        handleDelete(note?.id)
+                      }}
+                    >
+                      <DeleteIcon />
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </SappDrawer>
   )
