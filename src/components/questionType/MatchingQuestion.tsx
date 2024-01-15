@@ -182,7 +182,7 @@ const MatchingQuestion = forwardRef(
           }}
         >
           <EditorReader
-            className="sapp-questions"
+            className="sapp-questions !mb-[32px]"
             text_editor_content={data?.question_content}
           />
         </div>
