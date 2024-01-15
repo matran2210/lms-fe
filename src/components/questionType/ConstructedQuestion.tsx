@@ -110,7 +110,9 @@ const EssayQuestionPreview = ({
       {data && (
         <>
           <div>
-            <div className="sapp-questions-essay">{`Requirement : ${data.name}`}</div>
+            <div className="sapp-questions-essay">{`Requirement ${
+              index + 1
+            } : ${data.name}`}</div>
             <EditorReader
               className="editor-wrap"
               // className="questions"

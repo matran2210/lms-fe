@@ -1605,7 +1605,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         <button
                           key={e.id}
                           className={`p-3 ${
-                            essayData.req !== e && 'text-gray-2'
+                            essayData.req !== e && 'text-gray-1'
                           }`}
                           onClick={() => {
                             setEssayData({ req: e, index: index })

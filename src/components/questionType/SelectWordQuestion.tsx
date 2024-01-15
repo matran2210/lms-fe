@@ -191,7 +191,7 @@ const SelectWord = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base mt-5">Correct Answer:</div>
+            <div className="font-semibold text-base mt-5">Correct Answer</div>
             <EditorReader
               className="questions mt-2"
               text_editor_content={

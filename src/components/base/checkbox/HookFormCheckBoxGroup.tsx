@@ -179,7 +179,7 @@ const HookFormCheckBoxGroup = ({
                         lowerOptions &&
                         !checked &&
                         checkHasChecked &&
-                        'text-gray-2'
+                        'text-gray-1'
                       }`}
                     >
                       {option.label}
