@@ -85,42 +85,18 @@ const UploadFileHandle = ({
     }
     return (
       <>
-        <div className="sapp-upload-file-progress align-items-center">
-          <div className="sapp-upload-file-progress_icon">
-            <div>
-              {typeof newIcon === 'object' ? (
-                <img width={44} height={44} src={newIcon.src} alt="Icon" />
-              ) : (
-                <img width={44} height={44} src={newIcon?.[0].src} alt="Icon" />
-              )}
-            </div>
-          </div>
-
+        <div className="sapp-upload-file-progress items-center">
           <div className="w-100 sapp-upload-file-content">
             <div className="sapp-upload-file-name">
               {_file.name ?? _file.originFileObj?.name}
             </div>
-            {/* <div> */}
             <Progress
               percent={percent}
               status={'active'}
               strokeColor={strokeColor}
               className="m-0"
             />
-            {/* </div> */}
           </div>
-          {/* <ButtonIcon
-            onClick={() => {
-              if ((_file as any).id && _file.status === 'done') {
-                // try {
-                //   ResourceAPI.deleteResource([(_file as any).id as string])
-                // } catch (error) {}
-              }
-              actions.remove()
-              handleCancel(false, _file.uid)
-            }}
-          >
-          </ButtonIcon> */}
         </div>
       </>
     )
@@ -128,7 +104,6 @@ const UploadFileHandle = ({
 
   const handleChangeUpload = (e: UploadChangeParam<UploadFile<any>>) => {
     const length = e?.fileList?.length || 0
-
     e.fileList = e?.fileList?.filter((f: any, i) => {
       if (f.resource_id) {
         return true

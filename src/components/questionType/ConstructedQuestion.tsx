@@ -17,7 +17,7 @@ import { Controller } from 'react-hook-form'
 import { uniqueId } from 'lodash'
 import { IResource } from 'src/type/courses'
 import { UploadAPI } from 'src/pages/api/upload'
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon, UploadIcon } from '@assets/icons'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -79,12 +79,6 @@ const EssayQuestionPreview = ({
         }),
     }
   }
-  const handleFileChange = (event: any) => {
-    const fileObj = event.target.files && event.target.files[0]
-    if (!fileObj) {
-      return
-    }
-  }
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]
   }) => {
@@ -134,13 +128,14 @@ const EssayQuestionPreview = ({
                     Upload file to submit:
                   </div>
                   <div className="sapp-upload-button-preview">
-                    <input
+                    {/* <input
                       ref={inputRef}
                       type="file"
                       className="hidden"
                       onChange={handleFileChange}
-                    />
+                    /> */}
                     {/* <UploadIcon /> */}
+                    <UploadIcon />
                     <div
                       className="title-btn-preview"
                       // onClick={() => inputRef.current.click()}
@@ -176,12 +171,14 @@ const EssayQuestionPreview = ({
                   >
                     {fullData.answer_file.file_name}
                   </div>
-                  <div
-                    onClick={() => handleClearFile()}
-                    className="cursor-pointer"
-                  >
-                    <CloseIcon />
-                  </div>
+                  {!fullData?.done && (
+                    <div
+                      onClick={() => handleClearFile()}
+                      className="cursor-pointer"
+                    >
+                      <CloseIcon />
+                    </div>
+                  )}
                 </div>
                 {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
                   forCaseStudy) && (

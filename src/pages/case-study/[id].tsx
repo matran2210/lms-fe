@@ -29,6 +29,7 @@ import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import {
+  clearFileEssay,
   getTopicsCaseStudy,
   loadMoreQuestion,
   saveFileEssay,
@@ -177,6 +178,14 @@ const CaseStudyDetail = ({ questions }: any) => {
             response_option_custom={0}
             openChooseFile={(e: any) =>
               setOpenUpload({ status: true, question_id: data.id })
+            }
+            handleClearFile={() =>
+              dispatch(
+                clearFileEssay({
+                  question_id: data.id,
+                  topic_id: router.query.id as string,
+                }),
+              )
             }
           />
         )
@@ -769,7 +778,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         handleClose={() => {
           setOpenUpload({ status: false, question_id: undefined })
         }}
-        fileType={'DOCUMENT'}
+        fileType={'ESSAY'}
         location={`question-answer/${openUpload.question_id}`}
         setSelectedFile={(e: any) =>
           handleSaveFileEssay(

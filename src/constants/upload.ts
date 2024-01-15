@@ -39,4 +39,8 @@ export const VALID_UPLOAD_FILES = [
     type: 'application/vnd.ms-powerpoint',
     size: MAX_UPLOAD_SIZE,
   },
+  {
+    type: 'application/zip',
+    size: MAX_UPLOAD_SIZE,
+  },
 ]

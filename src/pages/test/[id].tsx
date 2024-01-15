@@ -1647,12 +1647,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <FlagIcon />
             <div className="font-normal text-sm">Flag to Review</div>
           </button>
-          <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
-            onClick={() => handleClearSelection(currentTabContent)}
-          >
-            <div className="font-normal text-sm">Clear Selection</div>
-          </button>
+          {!currentTabContent?.done && (
+            <button
+              className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+              onClick={() => handleClearSelection(currentTabContent)}
+            >
+              <div className="font-normal text-sm">Clear Selection</div>
+            </button>
+          )}
           {quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
@@ -1728,7 +1730,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         handleClose={() => {
           setOpenUpload({ status: false, question_id: undefined })
         }}
-        fileType={'DOCUMENT'}
+        fileType={'ESSAY'}
         location={`question-answer/${openUpload.question_id}`}
         setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
       />
