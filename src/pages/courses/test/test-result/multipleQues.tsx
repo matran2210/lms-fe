@@ -16,7 +16,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
           key={item?.id}
           className={`border border-solid flex items-center flex-row justify-center w-12 h-12 text-sm font-medium leading-8.5 cursor-pointer
           ${
-            item?.is_correct
+            item?.is_correct || item?.active === 'SUBMITED'
               ? ' text-state-success border-success'
               : ' text-danger border-error'
           }
