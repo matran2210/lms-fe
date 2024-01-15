@@ -1,9 +1,9 @@
 import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 // import {VALID_UPLOAD_EDITOR, VALID_UPLOAD_FILES} from 'src/constants/upload'
-import { fetcher, request } from 'src/services/request'
+import { fetcher, getBaseUrl, request } from 'src/services/request'
 import { IResponse } from 'src/redux/types'
 import { validateFile } from 'src/utils/upload'
-import { httpService } from 'src/redux/services/httpService'
+import { apiURL, httpService } from 'src/redux/services/httpService'
 // import {ResourcesAPI} from '../resources'
 // import {ResourceAPI} from '../resource-bank'
 
@@ -40,7 +40,7 @@ export class UploadAPI {
     try {
       const responsePreUpload = await preUpload({
         content_type,
-        name: (name || '').split('.').slice(0, -1).join('.'),
+        name: name || '',
         location: location || '',
         size,
       })
@@ -74,6 +74,28 @@ export class UploadAPI {
     } catch (error) {
       throw error
     }
+  }
+  static downloadFile = async (data: {
+    files: { name: string; file_key: string }[]
+  }) => {
+    try {
+      const responseToken: IResponse<{
+        data: string
+        success: boolean
+      }> = await httpService.POST({
+        uri: 'resource/get-token-download',
+        request: data,
+      })
+      if (responseToken?.success) {
+        const link = document.createElement('a')
+        link.href = `${apiURL}/resource/download?token=${responseToken?.data}`
+        link.download = data.files[0].name
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+    } catch (error) {}
   }
 }
 

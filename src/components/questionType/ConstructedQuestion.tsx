@@ -15,6 +15,9 @@ import { Workbook } from '@fortune-sheet/react'
 import '@fortune-sheet/react/dist/index.css'
 import { Controller } from 'react-hook-form'
 import { uniqueId } from 'lodash'
+import { IResource } from 'src/type/courses'
+import { UploadAPI } from 'src/pages/api/upload'
+import { CloseIcon } from '@assets/icons'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -34,6 +37,7 @@ export type IPreviewProp = {
   externalRef?: any
   fullData: any
   openChooseFile?: any
+  handleClearFile?: any
 }
 const EssayQuestionPreview = ({
   data,
@@ -54,6 +58,7 @@ const EssayQuestionPreview = ({
   externalRef,
   fullData,
   openChooseFile,
+  handleClearFile,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
@@ -80,8 +85,14 @@ const EssayQuestionPreview = ({
       return
     }
   }
+  const handleDownload = async (data: {
+    files: { name: string; file_key: string }[]
+  }) => {
+    try {
+      await UploadAPI.downloadFile(data)
+    } catch (error) {}
+  }
   // },[response_option_custom])
-
   return (
     <div
       key={key}
@@ -150,7 +161,27 @@ const EssayQuestionPreview = ({
                   <div className="title-upload-button-preview">
                     Uploaded file:
                   </div>
-                  <div>{fullData.answer_file.file_name}</div>
+                  <div
+                    className="cursor-pointer text-state-info hover:underline"
+                    onClick={() =>
+                      handleDownload({
+                        files: [
+                          {
+                            name: fullData.answer_file.file_name,
+                            file_key: fullData.answer_file.file_key,
+                          },
+                        ],
+                      })
+                    }
+                  >
+                    {fullData.answer_file.file_name}
+                  </div>
+                  <div
+                    onClick={() => handleClearFile()}
+                    className="cursor-pointer"
+                  >
+                    <CloseIcon />
+                  </div>
                 </div>
                 {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
                   forCaseStudy) && (

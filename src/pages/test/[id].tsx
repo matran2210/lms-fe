@@ -194,7 +194,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
-            openChooseFile={(e: any) => setOpenUpload(e)}
+            openChooseFile={(e: any) =>
+              setOpenUpload({ status: true, question_id: currentPage })
+            }
+            handleClearFile={handleClearFile}
           />
           // <Luckysheet/>
         )
@@ -248,7 +251,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [openUpload, setOpenUpload] = useState(false)
+  const [openUpload, setOpenUpload] = useState<any>({})
+
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -387,9 +391,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
       return false
     } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+      if (currentContent?.answer_file?.file_key) {
+        return true
+      }
       const value = getValues(`${currentContent.id}_answer`)
-      if (currentContent.data.response_option !== null) {
-        if (currentContent.data.response_option === RESPONSE_OPTION.SHEET) {
+      if (
+        currentContent?.data?.response_option &&
+        currentContent?.data?.response_option !== null
+      ) {
+        if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
           if (value) {
             const data = JSON.parse(value)
             for (let e of data) {
@@ -757,6 +767,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return { topicDescription: { data: {} }, res: { data: [] } }
     }
   }
+
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
@@ -956,20 +967,22 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             answer,
             time_spent: Math.ceil(e.timeSpent),
           })
-        } else if (e.qType === QUESTION_TYPES.ESSAY) {
-          if (checkAnswered(e)) {
-            answers.push({
-              question_id: e.id,
-              short_answers: e.answer || '',
-              response_option: e.data.response_option
-                ? e.data.response_option
-                : e.response_type === 0
-                  ? 'WORD'
-                  : 'SHEET',
-              time_spent: Math.ceil(e.timeSpent / 1000),
-              active: 'SUBMITED',
-            })
-          }
+        }
+      }
+      if (e.qType === QUESTION_TYPES.ESSAY) {
+        if (checkAnswered(e)) {
+          answers.push({
+            question_id: e.id,
+            short_answers: e.answer || '',
+            response_option: e.data.response_option
+              ? e.data.response_option
+              : e.response_type === 0
+                ? 'WORD'
+                : 'SHEET',
+            time_spent: Math.ceil(e.timeSpent / 1000),
+            active: 'SUBMITED',
+            answer_file: e.answer_file,
+          })
         }
       }
       quiz_position_mapping.push({
@@ -1019,7 +1032,35 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
       if (data.qType === QUESTION_TYPES.ESSAY) {
         refEditor?.current?.reset()
+        setTabs((prev: any) => {
+          const newData = prev.map((item: any) => {
+            if (currentTabContent?.id === item.id) {
+              return {
+                ...item,
+                answer_file: undefined,
+              }
+            }
+            return item
+          })
+          return newData
+        })
       }
+    }
+  }
+  const handleClearFile = () => {
+    if (!currentTabContent.done) {
+      setTabs((prev: any) => {
+        const newData = prev.map((item: any) => {
+          if (currentTabContent?.id === item.id) {
+            return {
+              ...item,
+              answer_file: undefined,
+            }
+          }
+          return item
+        })
+        return newData
+      })
     }
   }
   const handleSaveHighLight = (e: any) => {
@@ -1284,10 +1325,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             />
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
-            <div
-              className="px-6"
-              // onMouseUp={debounce(()=>{console.log(checkAnswered(currentTabContent))}, 500)}
-            >
+            <div className="px-6">
               {checkType(
                 currentTabContent?.data,
                 currentTabContent?.data?.qType,
@@ -1685,11 +1723,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         handleSubmit={handleSubmitQuestion}
       />
       <ModalUploadFile
-        open={openUpload}
+        open={openUpload.status}
         isMultiple={false}
-        setOpen={setOpenUpload}
+        handleClose={() => {
+          setOpenUpload({ status: false, question_id: undefined })
+        }}
         fileType={'DOCUMENT'}
-        location={`question-answer/${currentPage}`}
+        location={`question-answer/${openUpload.question_id}`}
         setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
       />
     </div>

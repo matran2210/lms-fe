@@ -31,9 +31,11 @@ import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import {
   getTopicsCaseStudy,
   loadMoreQuestion,
+  saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import QuitTestModal from '../courses/test/quit-test'
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -173,6 +175,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValue={defaultValue}
             fullData={data}
             response_option_custom={0}
+            openChooseFile={(e: any) =>
+              setOpenUpload({ status: true, question_id: data.id })
+            }
           />
         )
       default:
@@ -195,6 +200,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   )
   const [quizAttempId, setQuizAttempId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
+  const [openUpload, setOpenUpload] = useState<any>({})
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -330,6 +336,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           id: question.id,
           answers: question.answers,
           response_option: question.response_option,
+          answer_file: question.answer_file,
         })
       }
     }
@@ -397,14 +404,16 @@ const CaseStudyDetail = ({ questions }: any) => {
             }
           }
           answers.push({ question_id: e.id, answer })
-        } else if (e.qType === QUESTION_TYPES.ESSAY) {
-          answers.push({
-            question_id: e.id,
-            short_answers: e.answer || '',
-            response_option: e.response_option ? e.response_option : 'WORD',
-            active: 'SUBMITED',
-          })
         }
+      }
+      if (e.qType === QUESTION_TYPES.ESSAY) {
+        answers.push({
+          question_id: e.id,
+          short_answers: e.answer || '',
+          response_option: e.response_option ? e.response_option : 'WORD',
+          answer_file: e.answer_file,
+          active: 'SUBMITED',
+        })
       }
 
       quiz_position_mapping.push({
@@ -450,7 +459,19 @@ const CaseStudyDetail = ({ questions }: any) => {
       return arr
     })
   }
-
+  const handleSaveFileEssay = (
+    file: any,
+    question_id: string,
+    topic_id: string,
+  ) => {
+    dispatch(
+      saveFileEssay({
+        question_id: question_id,
+        file: file,
+        topic_id: topic_id,
+      }),
+    )
+  }
   // useEffect(() => {
   //   const handleBeforeUnload = async (event: any) => {
   //     event.preventDefault()
@@ -741,6 +762,22 @@ const CaseStudyDetail = ({ questions }: any) => {
         open={openQuit}
         setOpen={setOpenQuit}
         handleQuit={() => router.back()}
+      />
+      <ModalUploadFile
+        open={openUpload.status}
+        isMultiple={false}
+        handleClose={() => {
+          setOpenUpload({ status: false, question_id: undefined })
+        }}
+        fileType={'DOCUMENT'}
+        location={`question-answer/${openUpload.question_id}`}
+        setSelectedFile={(e: any) =>
+          handleSaveFileEssay(
+            e[0],
+            openUpload.question_id,
+            router.query.id as string,
+          )
+        }
       />
     </div>
   )

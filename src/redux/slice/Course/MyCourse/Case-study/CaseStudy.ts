@@ -61,6 +61,31 @@ export const caseStudyTestSlice = createSlice({
         }
       }
     },
+    saveFileEssay: (state, action) => {
+      const { question_id, file, topic_id } = action.payload
+      const arr = [...state.listQuestions]
+      let newData = [] as any
+      for (let item of arr) {
+        if (question_id === item[topic_id].id) {
+          var newItem = {
+            topic_id: {
+              ...item[topic_id],
+              answer_file: {
+                file_key: file.file_key,
+                file_name: file.name,
+              },
+            },
+          }
+          newData.push(newItem)
+        } else {
+          newData.push(item)
+        }
+      }
+      return {
+        ...state,
+        listQuestions: [...newData],
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getTopicsCaseStudy.pending, (state) => {
@@ -80,5 +105,5 @@ export const caseStudyTestSlice = createSlice({
 export const caseStudyTestReducer = (state: RootState) =>
   state.caseStudyTestReducer
 export const caseStudyTestAction = caseStudyTestSlice.actions
-export const { loadMoreQuestion } = caseStudyTestSlice.actions
+export const { loadMoreQuestion, saveFileEssay } = caseStudyTestSlice.actions
 export default caseStudyTestSlice.reducer

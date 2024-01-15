@@ -12,7 +12,7 @@ import { UploadAPI } from 'src/pages/api/upload'
 
 interface IModalUploadProps {
   open: boolean
-  setOpen: any
+  handleClose: any
   setSelectedFile?: any
   setUnSelectedFile?: any
   fileType: keyof typeof UPLOAD_TYPE
@@ -40,7 +40,7 @@ export const initCompleteModal = {
 
 const ModalUploadFile = ({
   open,
-  setOpen,
+  handleClose,
   setSelectedFile,
   setUnSelectedFile,
   fileType,
@@ -61,15 +61,6 @@ const ModalUploadFile = ({
   const [progress, setProgress] = useState<{ [key: string]: number }>({})
   const [loadingUpload, setLoadingUpload] = useState<boolean>(false)
   const [disabled, setDisabled] = useState(false)
-  const [fileResource, setFileResource] = useState<{
-    listDataChecked: IResource[] | IResource
-    unCheckedListData?: IResource[]
-  }>()
-
-  const [tab, setTab] = useState<'UPLOAD_FILE' | 'RESOURCES'>(
-    onlyTab || 'UPLOAD_FILE',
-  )
-
   const handleCancel = (closeModal: boolean = true, removedUid?: string) => {
     if (sourceRef.current) {
       sourceRef.current.cancel()
@@ -87,8 +78,7 @@ const ModalUploadFile = ({
     }
 
     if (closeModal) {
-      setOpen(false)
-      setTab('UPLOAD_FILE')
+      handleClose()
     }
   }
 
