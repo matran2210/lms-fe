@@ -26,6 +26,7 @@ import {
   IQuestionResult,
   IQuestionResultResponse,
 } from 'quiz-result-package/dist/type'
+import PopupFinishQuiz from '../PopupFinishQuiz'
 
 type Props = {
   videos?: IVideo[]
@@ -65,6 +66,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   }>()
 
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
+  const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
 
   // const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
 
@@ -76,7 +78,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
-      handleFinishQuiz()
+      setOpenFinishQUiz(true)
     }
   }, [runHandleFinishQuiz])
 
@@ -307,7 +309,6 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
         .unwrap()
         .then((e: any) => {
           // setIsFinish({ [currentVideo?.quiz?.id || '']: true })
-          toast.success('Nộp bài thành công!')
           getTable({ id: e?.quizAttemptId, page_index: 1, page_size: 10 })
           dispatch(
             removeQuizFinished({
@@ -376,6 +377,11 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   const handleShowQuizResultDetail = (e: IQuestionResult) => {}
   return (
     <div>
+      <PopupFinishQuiz
+        open={openFinishQUiz}
+        setOpen={setOpenFinishQUiz}
+        submitQuiz={handleFinishQuiz}
+      ></PopupFinishQuiz>
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
         <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
           {videos?.map((v, i) => {
@@ -495,23 +501,27 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
           pauseOnSeek={true}
         ></SAPPVideo>
       </div>
+
       <SappModal
         open={modalResult?.status}
         okButtonCaption={'Yes'}
         cancelButtonCaption={'No'}
-        handleCancel={handleCloseModalResult}
-        handleSubmit={handleCloseModalResult}
-        setOpen={handleCloseModalResult}
+        handleCancel={() => setModalResult(undefined)}
+        handleSubmit={() => setModalResult(undefined)}
+        setOpen={() => setModalResult(undefined)}
         size="max-w-xxl"
         position="center"
         showFooter={false}
-        showHeader={false}
+        isFullScreen={true}
+        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
       >
-        <QuizResultComponent
-          questionResponse={modalResult?.questions || []}
-          getTable={getTable}
-          onShowDetail={handleShowQuizResultDetail}
-        />
+        <div className="max-w-[1114px] mx-auto">
+          <QuizResultComponent
+            questionResponse={modalResult?.questions || []}
+            getTable={getTable}
+            onShowDetail={handleShowQuizResultDetail}
+          />
+        </div>
       </SappModal>
     </div>
   )

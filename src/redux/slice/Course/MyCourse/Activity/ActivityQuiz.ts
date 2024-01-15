@@ -191,7 +191,16 @@ const quizSlice: Slice = createSlice({
     removeQuizFinished: (state, action) => {
       const { activityId, tabId, quizId } = action.payload
       if (state[activityId]?.[tabId]?.[quizId]) {
-        delete state[activityId]?.[tabId]?.[quizId]
+        state[activityId]?.[tabId]?.[quizId]?.questions?.forEach(
+          (element: any, i: number) => {
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.corrects
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.myAnswers
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.confirmed
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]
+              ?.defaultValue
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.solution
+          },
+        )
       }
     },
   },

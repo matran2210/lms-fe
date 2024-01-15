@@ -10,6 +10,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { IButtonColors } from 'src/type'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+import { CloseIcon } from '@assets/icons'
 
 interface IProps {
   open?: boolean
@@ -289,6 +290,12 @@ const SappModal: React.FC<IProps> = ({
                             {title}
                           </div>
                         )}
+                        <div
+                          className="ml-auto cursor-pointer"
+                          onClick={onCancel}
+                        >
+                          <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+                        </div>
                       </div>
                       {isBordered && (
                         <div className="absolute inset-0 border-b border-gray-2 bottom-0 -mx-6"></div>

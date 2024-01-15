@@ -281,7 +281,14 @@ export const ScratchPadIcon = () => {
     </svg>
   )
 }
-export const CloseIcon = () => {
+// Import Tailwind CSS classes
+import 'tailwindcss/tailwind.css'
+
+export const CloseIcon = ({
+  className = 'stroke-bw-1 ',
+}: {
+  className?: string
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -289,22 +296,24 @@ export const CloseIcon = () => {
       height="20"
       viewBox="0 0 20 20"
       fill="none"
+      className="group select-none"
     >
       <path
         d="M15 5L5 15"
-        stroke="#404041"
+        className={className}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M5 5L15 15"
-        stroke="#404041"
+        className={className}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
   )
 }
+
 export const FlagIcon = () => {
   return (
     <svg
