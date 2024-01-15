@@ -17,9 +17,10 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       okButtonCaption="Back to My Course"
       //   handleCancel={onCancel}
       handleSubmit={onOk}
+      handleCancel={onOk}
       showCancelButton={false}
       showHeader={false}
-      refClass="p-6 md:py-[70px] md:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all overflow-y-auto"
+      refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
       size="max-w-[646px]"
       footerButtonClassName="flex flex-col-reverse gap-8"
       childClass="flex flex-col justify-center items-center"
@@ -29,16 +30,17 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       closeAfterSubmit={true}
       buttonSize="extra"
       scrollbale={false}
+      confirmOnclose={false}
     >
-      <div className="mb-6">
+      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
         <AlertIcon />
       </div>
       <div className="text-2xl md:text-4xl text-bw-1 font-semibold">
         Expired Course
       </div>
-      <div className="text-medium-sm text-gray-1 text-center mt-4 mb-7">
-        You can only extend a trial course of 1 times, please contact out
-        support at 0889 662 276.
+      <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 xl:mb-7 px-1">
+        You can only extend a trial course of 1 time, please contact out support
+        at 0889 662 276.
       </div>
     </SappModal>
   )

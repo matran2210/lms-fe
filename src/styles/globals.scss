@@ -135,6 +135,7 @@ body *::-webkit-scrollbar-thumb:hover {
   th {
     border-width: 1px;
     border-style: inset;
+    @apply border-gray-1; /* Add this line to set the border color to gray-2 */
   }
 
   tr {
@@ -142,23 +143,27 @@ body *::-webkit-scrollbar-thumb:hover {
     border-width: initial;
   }
 
-  // math, mroot, msqrt,mfrac, msub {
-  //   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
-  // }
   ol,
   ul,
   menu {
     padding-inline-start: 40px !important;
     list-style: auto;
   }
+  ul {
+    list-style-type: disc;
+  }
 }
 
 .sapp-questions .sapp-input-preview {
-  @apply w-24 h-7 rounded-md mb-1;
-  // width: 100px;
-  // height: 30px;
-  // border-radius: 4px;
-  // margin-bottom: 5px;
+  // @apply w-24 h-7 rounded-md mb-1;
+  border: 1px solid #dfdfdf;
+  border-radius: 2px;
+  padding: 8px;
+  width: 110px;
+  height: 35px;
+  margin-bottom: 8px;
+
+  @apply bg-gray-4 font-bold text-base text-center;
 }
 
 .sapp-select--selectword-preview {
@@ -175,8 +180,8 @@ body *::-webkit-scrollbar-thumb:hover {
   border-radius: 2px;
   padding-right: 1.5rem;
   padding-left: 1rem;
-  min-width: 110px;
-  min-height: 35px;
+  width: 110px;
+  height: 35px;
   max-width: 150px;
   margin-bottom: 8px;
 
@@ -194,10 +199,16 @@ body *::-webkit-scrollbar-thumb:hover {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  &.sapp-select-confirmed {
+    background-image: none;
+    text-align: center;
+    padding: 0;
+    @apply bg-gray-4;
+  }
 }
 
 .sapp-notched-container {
-  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-center p-5 border-dashed border border-bw-7;
+  @apply break-words flex-1 relative bg-gray-3 h-full flex items-center justify-start p-5 border-solid border border-gray-6 ps-8;
 }
 
 .sapp-notched-container:before {
@@ -208,11 +219,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-dashed bg-white absolute border border-bw-7;
+  @apply z-0 border-solid bg-white absolute border border-gray-6;
 }
 
 .sapp-arrowed-container {
-  @apply break-words relative bg-bw-6 h-auto flex items-center justify-center p-5 border-dashed border w-[48%] border-bw-7;
+  @apply break-words relative bg-gray-3 h-auto flex items-center justify-start p-5 border-solid border w-[40%] border-gray-6;
 }
 
 .sapp-arrowed-container:before {
@@ -224,11 +235,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-dashed bg-bw-6 absolute border right-0 border-bw-7;
+  @apply z-0 border-solid bg-gray-3 absolute border right-0 border-gray-6;
 }
 
 .sapp-arrowed-container-corrects {
-  @apply break-words relative bg-bw-6 h-auto flex items-center justify-center p-5 border-solid border w-[48%] border-success;
+  @apply break-words relative bg-bw-6 h-auto flex items-center justify-start p-5 border-solid border w-[48%] border-success;
 }
 
 .sapp-arrowed-container-corrects:before {
@@ -240,11 +251,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-bw-6 absolute border right-0 border-success;
+  @apply z-10 border-solid bg-bw-6 absolute border right-0 border-success;
 }
 
 .sapp-notched-container-corrects {
-  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-center p-5 border-solid border border-success;
+  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-start p-5 border-solid border border-success border-l-0 ps-8;
 }
 
 .sapp-notched-container-corrects:before {
@@ -259,7 +270,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-arrowed-container-incorrects {
-  @apply break-words relative bg-bw-6 h-auto flex items-center justify-center p-5 border-solid border w-[48%] border-error;
+  @apply break-words relative bg-gray-3 h-auto flex items-center justify-start p-5 border-solid border w-[48%] border-error;
 }
 
 .sapp-arrowed-container-incorrects:before {
@@ -271,11 +282,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-bw-6 absolute border right-0 border-error;
+  @apply z-10 border-solid bg-gray-3 absolute border right-0 border-error;
 }
 
 .sapp-notched-container-incorrects {
-  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-center p-5 border-solid border border-error;
+  @apply break-words flex-1 relative bg-gray-3 h-full flex items-center justify-start p-5 border-solid border border-error border-l-0 ps-8;
 }
 
 .sapp-notched-container-incorrects:before {
@@ -343,7 +354,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-upload-file-preview {
-  @apply flex gap-3 py-5 px-0;
+  @apply flex gap-3 py-5 px-0 items-center;
 }
 
 .sapp-upload-button-preview {

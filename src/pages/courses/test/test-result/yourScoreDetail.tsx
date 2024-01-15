@@ -93,7 +93,7 @@ const YourScoreDetail = () => {
   }
 
   const getScoreDetail = async () => {
-    const res = await fetchScoreDetail(1, 4)
+    const res = await fetchScoreDetail(1, 10)
     setScoreDetail(res?.data)
   }
 
@@ -166,7 +166,7 @@ const YourScoreDetail = () => {
                   <td
                     className={`text-start m-6 pr-1
                       ${
-                        e?.is_correct
+                        e?.is_correct || e?.active === 'SUBMITED'
                           ? ' text-state-success'
                           : ' text-state-error'
                       }
@@ -175,7 +175,9 @@ const YourScoreDetail = () => {
                     {e?.question?.qType !== 'ESSAY' ? (
                       <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
                     ) : (
-                      <>{e?.is_correct ? 'Submitted' : 'Unfinished'}</>
+                      <>
+                        {e?.active === 'SUBMITED' ? 'Submitted' : 'Unfinished'}
+                      </>
                     )}
                   </td>
                   <td className="text-start m-6 text-gray-1 pr-4">

@@ -10,6 +10,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { IButtonColors } from 'src/type'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+import { CloseIcon } from '@assets/icons'
 
 interface IProps {
   open?: boolean
@@ -58,6 +59,7 @@ interface IProps {
   zIndex?: string
   scrollbale?: boolean
   footerClassName?: string
+  externalLoading?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -122,6 +124,7 @@ const SappModal: React.FC<IProps> = ({
   zIndex = 'z-[1000]',
   scrollbale = true,
   footerClassName,
+  externalLoading,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -154,6 +157,9 @@ const SappModal: React.FC<IProps> = ({
    * @return void
    */
   const onOk = async () => {
+    if (handleSubmit) {
+    }
+
     // Nếu handleSubmit là một hàm bất đồng bộ, thì gọi hàm đó và đợi kết quả
     if (handleSubmit && handleSubmit.constructor.name === 'AsyncFunction') {
       setLoading(true)
@@ -249,7 +255,17 @@ const SappModal: React.FC<IProps> = ({
           >
             <div
               ref={confirmDialogOverLayRef}
-              onClick={onCancel}
+              onClick={() => {
+                if (externalLoading !== undefined) {
+                  if (externalLoading) {
+                    return
+                  }
+                }
+                if (loading) {
+                  return
+                }
+                onCancel()
+              }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
               } animate-fade-in-overlay  inset-0 bg-black opacity-80 transition-opacity ${overlayClass}`}
@@ -274,6 +290,12 @@ const SappModal: React.FC<IProps> = ({
                             {title}
                           </div>
                         )}
+                        <div
+                          className="ml-auto cursor-pointer"
+                          onClick={onCancel}
+                        >
+                          <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+                        </div>
                       </div>
                       {isBordered && (
                         <div className="absolute inset-0 border-b border-gray-2 bottom-0 -mx-6"></div>
@@ -305,7 +327,10 @@ const SappModal: React.FC<IProps> = ({
                         submit={{
                           title: okButtonCaption,
                           size: buttonSize,
-                          loading: loading,
+                          loading:
+                            externalLoading != undefined
+                              ? externalLoading
+                              : loading,
                           disabled: disabled,
                           onClick: onOk,
                           full: fullWidthBtn,
@@ -315,7 +340,10 @@ const SappModal: React.FC<IProps> = ({
                           title: cancelButtonCaption,
                           size: buttonSize,
                           onClick: onCancel,
-                          loading: loading,
+                          loading:
+                            externalLoading != undefined
+                              ? externalLoading
+                              : loading,
                           full: fullWidthBtn,
                           className: cancelButtonClass,
                         }}

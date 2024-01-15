@@ -72,6 +72,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       description: string
       index: number
       name: string
+      top: string
+      left: string
     }>()
 
     useEffect(() => {
@@ -103,13 +105,18 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       setShowRequirement(data)
     }
 
-    const handleShowExhibit = (params: {
-      id: string
-      description: string
-      index: number
-      name: string
-    }) => {
-      setShowExhibit(params)
+    const handleShowExhibit = (
+      params: {
+        id: string
+        description: string
+        index: number
+        name: string
+      },
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ) => {
+      var mouseY = event.pageY - 300
+
+      setShowExhibit({ ...params, top: mouseY + 'px', left: '33%' })
     }
 
     const handleCloseExhibit = () => {
@@ -392,13 +399,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       <div
                         className="cursor-pointer hover:text-primary"
                         key={e.id}
-                        onClick={() => {
-                          handleShowExhibit({
-                            id: e.id,
-                            description: e.description,
-                            name: e.name,
-                            index: i + 1,
-                          })
+                        onClick={(event) => {
+                          handleShowExhibit(
+                            {
+                              id: e.id,
+                              description: e.description,
+                              name: e.name,
+                              index: i + 1,
+                            },
+                            event,
+                          )
                         }}
                       >
                         Exhibit {i + 1}: {e.name}
@@ -417,14 +427,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
                 name={''}
+                fullData={null}
               />
               {showExhibit?.id && (
                 <MovableWindow
                   position={{
                     width: '624px',
                     height: '224px',
-                    top: 'calc(50% - 150px)',
-                    left: 'calc(50% - 200px)',
+                    left: showExhibit.left,
+                    top: showExhibit.top,
                   }}
                   zIndex={999}
                 >

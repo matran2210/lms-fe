@@ -17,11 +17,15 @@
   }
 
   .select__menu {
-    @apply border-default;
+    @apply border-0 shadow-select px-2;
   }
 
   .select__option {
-    @apply text-sm leading-4.5 font-normal text-bw-1 cursor-pointer;
+    @apply text-sm leading-4.5 font-normal text-bw-1 cursor-pointer bg-transparent;
+
+    &.select__option--is-focused {
+      @apply bg-transparent;
+    }
   }
 
   .select__option.select__option--is-selected {

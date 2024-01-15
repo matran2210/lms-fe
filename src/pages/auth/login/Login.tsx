@@ -26,6 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import PopUpLimit from './PopupLimit'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntranceApi from 'src/redux/services/EntranceTest'
+import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
 
 interface IInputProps {
   login: string
@@ -111,19 +112,20 @@ const LoginPage = () => {
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
     try {
-      // const getFireBaseToken = await handleDeviceToken()
+      const getFireBaseToken = await handleDeviceToken()
       dispatch(
         getLoginUser({
           login,
           password,
           remember_me: remember_me ? remember_me : false,
-          device_id: '',
+          device_id: getFireBaseToken,
         }),
       )
         // dispatch(getEntranceCount())
         .unwrap()
         .then((payload) => {
           getListEntranceTest()
+          dispatch(clearGuideState())
           dispatch(getEntranceCount())
         })
         .catch((error) => {

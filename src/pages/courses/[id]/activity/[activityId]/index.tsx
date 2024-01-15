@@ -1,11 +1,28 @@
 import SappButton from '@components/base/button/SappButton'
+import EditorReader from '@components/base/editor/EditorReader'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
+import CreateNote from '@components/mycourses/create-note/CreateNote'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { removeJwtToken } from '@utils/helpers/authen'
+import {
+  setCookieActToken,
+  setCookieRefreshToken,
+  truncateString,
+} from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
@@ -16,31 +33,13 @@ import {
   getCourseActivityTapById,
   getDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { IActivity } from 'src/type/course/my-course/Activity'
-import _debounce from 'lodash/debounce'
-import { useRouter } from 'next/router'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import {
-  setCookieActToken,
-  setCookieRefreshToken,
-  truncateString,
-} from '@utils/index'
-import { removeJwtToken } from '@utils/helpers/authen'
-import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
-import EditorReader from '@components/base/editor/EditorReader'
+import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
 
 type Props = {
   activity: IActivity
   courseId: string
   sectionId: string
-}
-
-enum ACTIVITY_TYPE {
-  BOTH = 'BOTH',
-  ONLY_VIDEO = 'ONLY_VIDEO',
-  ONLY_QUIZ = 'ONLY_QUIZ',
-  NONE = 'NONE',
 }
 
 const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
@@ -53,6 +52,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
   const videoDocumentRef = useRef<HTMLDivElement>(null)
+
   // const observerRef = useRef<IntersectionObserver>()
   // const isFinishRef = useRef<boolean>(false)
   const router = useRouter()
@@ -72,6 +72,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       } catch (error) {}
     }
   }, [activity])
+
+  // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
+  //   return breadcumb
+  // }
 
   // useEffect(() => {
   //   finishedCourseSectionProgress()
@@ -278,6 +282,62 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
+      <ul className="py-6 flex flex-wrap gap-1">
+        <li className="hover:text-primary cursor-pointer text-gray-1">
+          <Link href="/courses" className="breadcrumbs__link" scroll={false}>
+            My Course
+          </Link>
+        </li>
+        {activity.breadcumb?.map((e, i) => {
+          let url = ''
+          switch (e.course_section_type) {
+            case 'PART':
+              url = ''
+              break
+            case 'CHAPTER':
+              url = ''
+              break
+            case 'UNIT':
+              url = ''
+              break
+          }
+          return (
+            <React.Fragment key={e.id}>
+              <span className="text-gray-1">/</span>
+              <li
+                className={`${
+                  (activity.breadcumb?.length || 0) - 1 === i
+                    ? 'text-bw-1'
+                    : 'hover:text-primary cursor-pointer text-gray-1'
+                }`}
+              >
+                <Link
+                  href="/courses"
+                  className="breadcrumbs__link"
+                  scroll={false}
+                >
+                  {truncateString(e.name, 30)}
+                </Link>
+              </li>
+            </React.Fragment>
+          )
+        })}
+        {/* <li className="hover:text-primary cursor-pointer text-gray-1">
+          Part A: Audit framework an...
+        </li>
+        /
+        <li className="hover:text-primary cursor-pointer text-gray-1">
+          Chapter 3: Corporate gover...
+        </li>
+        /
+        <li className="hover:text-primary cursor-pointer text-gray-1">
+          Unit 1: Objectives of corpor...
+        </li>
+        /
+        <li className="hover:text-primary cursor-pointer text-bw-1">
+          Activity 4: Introduction to pr...
+        </li> */}
+      </ul>
       <>
         {getNotesData?.map((e: any, index: number) => {
           return (
@@ -476,6 +536,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               </div>
             </div>
           )}
+          {!activity.previous_activity && <div></div>}
           {activity.next_activity && (
             <div className="w-1/2">
               <div
@@ -499,6 +560,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               </div>
             </div>
           )}
+          {!activity.next_activity && <div></div>}
         </div>
       </div>
 

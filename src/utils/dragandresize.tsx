@@ -162,9 +162,13 @@ export const moveAndResizeElement = (
   element.addEventListener(
     'mousedown',
     function (e: MouseEvent) {
-      document.addEventListener('mousemove', handleMoveMouse, true)
-      isDown = true
-      offset = [element.offsetLeft - e.clientX, element.offsetTop - e.clientY]
+      // Check phần tử not-resizer, nếu tồn tại thì không kéo thả ở phần này
+      if (!(e.target as HTMLElement).classList.contains('not-resizer')) {
+        document.addEventListener('mousemove', handleMoveMouse, true)
+        isDown = true
+        offset = [element.offsetLeft - e.clientX, element.offsetTop - e.clientY]
+      }
+
       if ((e.target as HTMLElement).classList.contains('resizer')) {
         currentResizer = (e.target as HTMLElement)?.classList[1]
         original_width = parseFloat(

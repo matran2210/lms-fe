@@ -48,6 +48,9 @@ const fetchData = async (
 const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
+  const guideIsActive = useAppSelector(
+    (state) => state.userGuideReducer?.isActive,
+  )
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
   const { shouldShowRemind } = useAppSelector(entranceTestReducer)
   const router = useRouter()
@@ -75,7 +78,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   }
 
   useEffect(() => {
-    if (userGuideLine === 'NOT_ACTIVE') {
+    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
       dispatch(active())
     }
   }, [userGuideLine])

@@ -38,7 +38,7 @@ const Course = ({
   //   setOpen(true)
   // }
   const router = useRouter()
-  const student = course?.classes[0]?.class_user_instances[0]
+  const student = course?.classes?.[0]?.class_user_instances[0]
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
   const currentDate = new Date()
@@ -50,14 +50,14 @@ const Course = ({
 
       // Calculate the difference in days
       const difference = differenceInDays(
-        parsedSpecificDate,
-        currentDate,
+        startOfDay(parsedSpecificDate),
+        startOfDay(currentDate),
       ) as any
 
       // Update state with the difference
       setDaysDifference(difference)
     }
-  }, [])
+  }, [course])
   const percentProgress =
     round(
       (Number(
@@ -83,9 +83,14 @@ const Course = ({
       courseStatus === COURSE_STATUS.PUBLISH ||
       courseStatus === COURSE_STATUS.LOCK
     ) {
-      if (classStatus === CLASS_STATUS.PUBLIC) {
+      if (
+        classStatus === CLASS_STATUS.PUBLIC ||
+        classStatus === CLASS_STATUS.ENDED
+      ) {
         if (course?.course_type === 'TRIAL_COURSE' && !student)
-          return BUTTON_STATUS.Active
+          if (classInstance?.duration_type === 'FLEXIBLE')
+            return BUTTON_STATUS.Active
+          else return BUTTON_STATUS.Hidden // Ẩn lớp học thử
         if (!startedAt && !finishedAt) {
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
@@ -107,7 +112,6 @@ const Course = ({
         }
         return BUTTON_STATUS.Disabled
       }
-      if (classStatus === CLASS_STATUS.ENDED) return BUTTON_STATUS.Disabled // Lớp đã kết thúc
       if (
         classStatus === CLASS_STATUS.DRAFT ||
         classStatus === CLASS_STATUS.BLOCK
@@ -202,11 +206,28 @@ const Course = ({
     [CLASS_USER_STATUS.CANCELED]: '',
   } as any
 
-  const classUserStatus =
-    course?.classes?.[0]?.class_user_instances?.[0]?.status
+  const classUserStatus = student?.status
   const showStatus = statusMap[classUserStatus]
   const enableCourse =
     determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'
+
+  // Set active course dựa theo trạng thái của học viên
+  const renderStatusIcon = (status: string) => {
+    switch (status) {
+      case `${CLASS_USER_STATUS.READY_TO_LEARN}`:
+        return 'like'
+        break
+      case `${CLASS_USER_STATUS.IN_PROGRESS}`:
+        return 'hour'
+        break
+      case `${CLASS_USER_STATUS.COMPLETED}`:
+        return 'completed'
+        break
+      default:
+        return ''
+    }
+  }
+  const iconType = renderStatusIcon(classUserStatus ?? '')
 
   return (
     <>
@@ -273,40 +294,42 @@ const Course = ({
               />
             </div>
             <div className="mt-auto">
-              {enableCourse ? (
-                <div className="progress mb-6 h-8">
-                  <div className="info flex justify-between mb-2">
-                    <div className="text flex items-baseline">
-                      <Icon
-                        type={
-                          classUserStatus === CLASS_USER_STATUS.READY_TO_LEARN
-                            ? 'like'
-                            : classUserStatus === CLASS_USER_STATUS.IN_PROGRESS
-                              ? 'hour'
-                              : ''
-                        }
-                        className="relative top-0.5"
-                      />
-                      <p className="text-medium-sm font-medium text-bw-1 pl-1 ml-px">
-                        {showStatus}
-                      </p>
-                    </div>
-                    <div className="number">
-                      <p className="text-medium-sm font-medium text-bw-1">
-                        {percentProgress}%
-                      </p>
-                    </div>
+              <div className="progress mb-6 h-8">
+                <div className="info flex items-center justify-between mb-2">
+                  <div className="text flex items-baseline">
+                    <Icon
+                      type={enableCourse ? iconType : 'expired'}
+                      className={`relative top-0.5 ${
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
+                      }`}
+                    />
+                    <p
+                      className={`text-medium-sm font-medium ${
+                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                      } pl-1 ml-px`}
+                    >
+                      {enableCourse ? showStatus : 'Expired'}
+                    </p>
                   </div>
-                  <div className="progressbar bg-gray-3 h-1.5">
-                    <div
-                      className="progress-percentage bg-primary h-1.5"
-                      style={{ width: `${percentProgress}%` }}
-                    ></div>
+                  <div className="number">
+                    <p
+                      className={`text-medium-sm font-medium ${
+                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                      }`}
+                    >
+                      {percentProgress}%
+                    </p>
                   </div>
                 </div>
-              ) : (
-                <div className="progress mb-6 h-8" />
-              )}
+                <div className="progressbar bg-gray-3 h-1.5">
+                  <div
+                    className={`progress-percentage ${
+                      enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                    } h-1.5`}
+                    style={{ width: `${percentProgress}%` }}
+                  ></div>
+                </div>
+              </div>
               <div className="action flex items-center justify-end relative">
                 {/* {'changeExam' && (
                   <a className="underline capitalize block text-bw-1 text-medium-sm font-semibold">
@@ -314,7 +337,7 @@ const Course = ({
                   </a>
                 )} */}
                 {/* {'buttonText' && ( */}
-                {determineButtonToShow !== 'Disabled' && (
+                {determineButtonToShow !== 'Disabled' ? (
                   <ButtonSecondary
                     title={determineButtonToShow}
                     full={false}
@@ -326,6 +349,8 @@ const Course = ({
                       }
                     }}
                   />
+                ) : (
+                  <div className="action flex items-center justify-end relative h-8"></div>
                 )}
                 {/* )} */}
               </div>

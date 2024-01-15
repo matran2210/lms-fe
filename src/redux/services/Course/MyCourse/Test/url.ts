@@ -13,6 +13,7 @@ export const url = {
   getQuizAttemptsTable: '/quiz-attempts/table',
   getQuizAttemptsChartData: '/quiz-attempts/chart-data',
   createTopicAttempt: '/quiz/case-study/topic-attempt',
+  getAnswer: 'quiz-attempts/answers',
 }
 
 export default url

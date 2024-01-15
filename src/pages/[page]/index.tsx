@@ -42,7 +42,7 @@ const ProfilePage = ({ page }: any) => {
     },
     {
       link: '/',
-      title: 'Detail',
+      title: 'Details',
     },
   ]
 

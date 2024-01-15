@@ -51,6 +51,11 @@ import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
+import QuitTestModal from '../courses/test/quit-test'
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { RESOURCE_LOCATION } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
+import { useAppDispatch } from 'src/redux/hook'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -190,6 +195,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             defaultValue={defaultValue}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
+            fullData={currentTabContent}
+            openChooseFile={(e: any) =>
+              setOpenUpload({ status: true, question_id: currentPage })
+            }
+            handleClearFile={handleClearFile}
           />
           // <Luckysheet/>
         )
@@ -238,10 +248,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [remainTime, setRemainTime] = useState<number>(
     quizDetail.quiz_timed * 60,
   )
+  const dispatch = useAppDispatch()
+
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
   const [openSubmit, setOpenSubmit] = useState(false)
+  const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [openUpload, setOpenUpload] = useState<any>({})
+
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -380,9 +395,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
       return false
     } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+      if (currentContent?.answer_file?.file_key) {
+        return true
+      }
       const value = getValues(`${currentContent.id}_answer`)
-      if (currentContent.data.response_option !== null) {
-        if (currentContent.data.response_option === RESPONSE_OPTION.SHEET) {
+      if (
+        currentContent?.data?.response_option &&
+        currentContent?.data?.response_option !== null
+      ) {
+        if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
           if (value) {
             const data = JSON.parse(value)
             for (let e of data) {
@@ -532,7 +553,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     currentTabContent: any,
   ) => {
     setLoading(true)
-    setStartTime(Date.now())
+    // setStartTime(Date.now())
     const newData = tabs.map((item: any) => {
       if (currentTabContent.id === item.id) {
         // setCurrentTabContent({
@@ -546,6 +567,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return {
           ...item,
           done: true,
+          attempted: true,
           corrects: corrects,
           solution: solution,
           timeSpent: item.timeSpent
@@ -558,6 +580,105 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     const newTabs = handleSaveCurrentAnswer(newData, currentTabContent)
     setTabs(newTabs)
     setLoading(false)
+  }
+  const handleConfirmEssay = () => {
+    const newData = tabs.map((item: any) => {
+      if (currentTabContent.id === item.id) {
+        // setCurrentTabContent({
+        //   ...item,
+        //   done: true,
+        //   corrects: corrects,
+        //   solution: res.data[0].solution,
+        //   answer: getCurrentAnswer(item),
+        // })
+        ref.current?.handleReset()
+        return {
+          ...item,
+          done: true,
+          attempted: true,
+          timeSpent: item.timeSpent
+            ? Date.now() - startTime + item.timeSpent
+            : Date.now() - startTime,
+        }
+      }
+      return item
+    })
+    const newTabs = handleSaveCurrentAnswer(newData, currentTabContent)
+    setTabs(newTabs)
+  }
+  const handleConfirmAndNext = async (currentTab: any, nextTab: any) => {
+    setLoading(true)
+    const currentContent = tabs.find((e: any) => e.id === nextTab)
+    const previousContent = tabs.find((e: any) => e.id === currentTab)
+    setStartTime(Date.now())
+    if (!currentContent?.viewed) {
+      const { topicDescription, res } = await getDetail(nextTab)
+      const newData = tabs.map((item: any) => {
+        if (nextTab === item.id) {
+          if (item.viewed) {
+            // setCurrentTabContent({ ...item })
+            return { ...item }
+          } else {
+            return {
+              ...item,
+              data: res.data[0],
+              topicDescription: topicDescription.data,
+              viewed: true,
+            }
+          }
+        } else if (currentTab === item.id) {
+          return {
+            ...item,
+            viewed: true,
+            done: true,
+            attempted: true,
+            timeSpent: item.timeSpent
+              ? Date.now() - startTime + item.timeSpent
+              : Date.now() - startTime <= 0
+                ? 0
+                : Date.now() - startTime,
+          }
+        }
+        return item
+      })
+      ref.current?.handleReset()
+      refEditor?.current?.reset()
+      const savedAnswer = handleSaveCurrentAnswer(newData, previousContent)
+      setCurrentPage(nextTab)
+      setOpenScratchPad([])
+      setAllowHighLight(false)
+      setTabs(savedAnswer)
+    } else {
+      const newData = tabs.map((item: any) => {
+        if (currentTab === item.id) {
+          ref.current?.handleReset()
+          return {
+            ...item,
+            done: true,
+            attempted: true,
+            timeSpent: item.timeSpent
+              ? Date.now() - startTime + item.timeSpent
+              : Date.now() - startTime <= 0
+                ? 0
+                : Date.now() - startTime,
+          }
+        }
+        return item
+      })
+      ref.current?.handleReset()
+      refEditor?.current?.reset()
+      const savedAnswer = handleSaveCurrentAnswer(newData, previousContent)
+      setCurrentPage(nextTab)
+      setOpenScratchPad([])
+      setAllowHighLight(false)
+      setTabs(savedAnswer)
+    }
+    setLoading(false)
+    // setTabs((prev: any) => {
+    //   handleChangeTab(currentTab)
+    //   return newTabs
+    // })
+    // setLoading(false)
   }
   const getResultAll = async (currentTabContent: any) => {
     const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
@@ -654,12 +775,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return { topicDescription: { data: {} }, res: { data: [] } }
     }
   }
+
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
+    setStartTime(Date.now())
     if (!currentContent?.viewed) {
       const { topicDescription, res } = await getDetail(currentTab)
-      setStartTime(Date.now())
       const newData = tabs.map((item: any) => {
         if (currentTab === item.id) {
           if (item.viewed) {
@@ -726,7 +848,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         var newItem = {
           ...item,
           answer: data,
-          attempted: checkAnswered(item),
+          attempted: item.attempted || checkAnswered(item),
           timeSpent: !item.done
             ? item.timeSpent
               ? Date.now() - startTime + item.timeSpent
@@ -743,6 +865,27 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
     }
     return newData
+  }
+  const handleSaveFileEssay = (file: any) => {
+    setTabs((prev: any) => {
+      let _tabs = [...prev]
+      let newData = [] as any
+      for (let item of _tabs) {
+        if (currentPage === item.id) {
+          var newItem = {
+            ...item,
+            answer_file: {
+              file_key: file.file_key,
+              file_name: file.name,
+            },
+          }
+          newData.push(newItem)
+        } else {
+          newData.push(item)
+        }
+      }
+      return newData
+    })
   }
   const handleChangeTypeEssay = (value: number) => {
     setTabs((prev: any) => {
@@ -832,20 +975,22 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             answer,
             time_spent: Math.ceil(e.timeSpent),
           })
-        } else if (e.qType === QUESTION_TYPES.ESSAY) {
-          if (checkAnswered(e)) {
-            answers.push({
-              question_id: e.id,
-              short_answers: e.answer || '',
-              response_option: e.data.response_option
-                ? e.data.response_option
-                : e.response_type === 0
-                  ? 'WORD'
-                  : 'SHEET',
-              time_spent: Math.ceil(e.timeSpent / 1000),
-              active: 'NOT_GRADED',
-            })
-          }
+        }
+      }
+      if (e.qType === QUESTION_TYPES.ESSAY) {
+        if (checkAnswered(e)) {
+          answers.push({
+            question_id: e.id,
+            short_answers: e.answer || '',
+            response_option: e.data.response_option
+              ? e.data.response_option
+              : e.response_type === 0
+                ? 'WORD'
+                : 'SHEET',
+            time_spent: Math.ceil(e.timeSpent / 1000),
+            active: 'SUBMITED',
+            answer_file: e.answer_file,
+          })
         }
       }
       quiz_position_mapping.push({
@@ -895,7 +1040,35 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
       if (data.qType === QUESTION_TYPES.ESSAY) {
         refEditor?.current?.reset()
+        setTabs((prev: any) => {
+          const newData = prev.map((item: any) => {
+            if (currentTabContent?.id === item.id) {
+              return {
+                ...item,
+                answer_file: undefined,
+              }
+            }
+            return item
+          })
+          return newData
+        })
       }
+    }
+  }
+  const handleClearFile = () => {
+    if (!currentTabContent.done) {
+      setTabs((prev: any) => {
+        const newData = prev.map((item: any) => {
+          if (currentTabContent?.id === item.id) {
+            return {
+              ...item,
+              answer_file: undefined,
+            }
+          }
+          return item
+        })
+        return newData
+      })
     }
   }
   const handleSaveHighLight = (e: any) => {
@@ -1101,7 +1274,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               title: 'Quit',
               size: 'medium',
               onClick: () => {
-                router.back()
+                setOpenQuit(true)
               },
               loading: false,
               //   full: fullWidthBtn,
@@ -1160,10 +1333,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             />
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
-            <div
-              className="px-6"
-              // onMouseUp={debounce(()=>{console.log(checkAnswered(currentTabContent))}, 500)}
-            >
+            <div className="px-6">
               {checkType(
                 currentTabContent?.data,
                 currentTabContent?.data?.qType,
@@ -1451,11 +1621,33 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
         <div className="flex items-center h-full gap-3 pe-6">
           {currentTabContent?.data?.response_option === null &&
-            currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+            currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
+            !currentTabContent.done && (
               <div className="flex gap-1">
                 <div>Choose response option:</div>
                 <button
-                  onClick={() => handleChangeTypeEssay(0)}
+                  onClick={() => {
+                    // handleChangeTypeEssay(0)
+                    // handleClearSelection(currentTabContent)
+                    // if (confirmOnclose) {
+                    dispatch(
+                      confirmDialog.open({
+                        // Nội dung của hộp thoại xác nhận
+                        message:
+                          'Chuyển Type sẽ mất dữ liệu, bạn có muốn chuyển?',
+                        // Hàm thực thi khi người dùng xác nhận hành động
+                        onConfirm: () => {
+                          handleChangeTypeEssay(0)
+                          handleClearSelection(currentTabContent)
+                        },
+                      }),
+                    )
+                    // } else {
+                    //   // Nếu confirmOnclose là false, thì không cần xác nhận
+                    //   // Gọi hàm callHandleCancel
+                    //   callHandleCancel()
+                    // }
+                  }}
                   className={`${
                     currentTabContent.response_type === 0 && 'active'
                   }`}
@@ -1463,7 +1655,20 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <WordIcon />
                 </button>
                 <button
-                  onClick={() => handleChangeTypeEssay(1)}
+                  onClick={() => {
+                    dispatch(
+                      confirmDialog.open({
+                        // Nội dung của hộp thoại xác nhận
+                        message:
+                          'Chuyển Type sẽ mất dữ liệu, bạn có muốn chuyển?',
+                        // Hàm thực thi khi người dùng xác nhận hành động
+                        onConfirm: () => {
+                          handleChangeTypeEssay(1)
+                          handleClearSelection(currentTabContent)
+                        },
+                      }),
+                    )
+                  }}
                   className={`${
                     currentTabContent.response_type === 1 && 'active'
                   }`}
@@ -1479,12 +1684,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <FlagIcon />
             <div className="font-normal text-sm">Flag to Review</div>
           </button>
-          <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
-            onClick={() => handleClearSelection(currentTabContent)}
-          >
-            <div className="font-normal text-sm">Clear Selection</div>
-          </button>
+          {!currentTabContent?.done && (
+            <button
+              className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+              onClick={() => handleClearSelection(currentTabContent)}
+            >
+              <div className="font-normal text-sm">Clear Selection</div>
+            </button>
+          )}
           {quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
@@ -1497,23 +1704,27 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               >
                 <div className="font-normal text-sm">Confirm Answer</div>
               </button>
+            ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+              filteredTabs.length - 1 ? (
+              <button
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                onClick={() => {
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleConfirmAndNext(currentPage, filteredTabs[index + 1].id)
+                }}
+              >
+                <div className="font-normal text-sm">Confirm & Next</div>
+              </button>
             ) : (
               <button
                 className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
                 onClick={() => {
-                  // const data = await getResult(currentTabContent)
-                  // await confirmAnswer(
-                  //   data.corrects,
-                  //   data.solution,
-                  //   currentTabContent,
-                  // )
-                  const index = filteredTabs.findIndex(
-                    (e: any) => e.id === currentPage,
-                  )
-                  handleChangeTab(filteredTabs[index + 1].id)
+                  handleConfirmEssay()
                 }}
               >
-                <div className="font-normal text-sm">Confirm & Next</div>
+                <div className="font-normal text-sm">Confirm</div>
               </button>
             )
           ) : (
@@ -1540,10 +1751,25 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         handleSubmit={handleSubmitQuestion}
         handleQuit={() => router.back()}
       />
+      <QuitTestModal
+        open={openQuit}
+        setOpen={setOpenQuit}
+        handleQuit={() => router.back()}
+      />
       <ConFirmSubmit
         open={openSubmit}
         setOpen={setOpenSubmit}
         handleSubmit={handleSubmitQuestion}
+      />
+      <ModalUploadFile
+        open={openUpload.status}
+        isMultiple={false}
+        handleClose={() => {
+          setOpenUpload({ status: false, question_id: undefined })
+        }}
+        fileType={'ESSAY'}
+        location={`question-answer/${openUpload.question_id}`}
+        setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
       />
     </div>
   )

@@ -5,10 +5,26 @@ import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-
+import QuizResult from 'entrance-test-result-package'
+import 'entrance-test-result-package/dist/index.css'
+import { useRouter } from 'next/router'
+import TableEntranceResult from '../table-result/[id]'
+import { LAYOUT } from '@utils/constants'
 const TestEntranceResult = ({ chartData }: any) => {
+  // console.log(chartData);
+  const router = useRouter()
   //todo: call api, make UI
-  return <div>Result Test Entrance</div>
+  // return <></>
+
+  return (
+    <QuizResult
+      dataChart={chartData.chart_data}
+      onClick={() => {
+        router.push(`/entrance-test/table-result/${router.query.id}`)
+      }}
+      dataTable={chartData}
+    />
+  )
 }
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
@@ -108,3 +124,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 export default TestEntranceResult
+TestEntranceResult.layout = LAYOUT.FULLSCREEN_LAYOUT

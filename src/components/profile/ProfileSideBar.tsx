@@ -1,17 +1,51 @@
+import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { PageLink } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
-
 import { IProfilePages } from 'src/type/Profile'
+
 interface IProps {
   page: IProfilePages
 }
+
+interface ChildWithLabel {
+  label: string
+}
+
+interface ChildWithDevices {
+  DEVICES: {
+    label: string
+  }
+}
+
+interface ChildWithLoginHistory {
+  LOGIN_HISTORY: {
+    label: string
+  }
+}
+
+type Child = ChildWithLabel | ChildWithDevices | ChildWithLoginHistory
+
 const ProfileSideBar = ({ page }: IProps) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
+
+  const getLabelFromChild = (child: Child): string => {
+    if ('label' in child) {
+      return child.label
+    } else if ('DEVICES' in child) {
+      return child.DEVICES.label
+    } else if ('LOGIN_HISTORY' in child) {
+      return child.LOGIN_HISTORY.label
+    }
+
+    // Mặc định trả về chuỗi rỗng nếu không tìm thấy
+    return ''
+  }
 
   const handleLogout = async () => {
     try {
@@ -20,72 +54,138 @@ const ProfileSideBar = ({ page }: IProps) => {
     } catch (error) {}
   }
 
+  // Sử dụng useState để lưu trạng thái active của từng child
+  const [childActivationStates, setChildActivationStates] = useState<{
+    [key: string]: boolean
+  }>({})
+
+  const handleChildClick = (childLabel: string) => {
+    // Check if the clicked label is "Security"
+    if (childLabel.toLowerCase() === 'security') {
+      // Set both the "Security" page and the first child to active
+      setChildActivationStates({
+        security: true,
+        [Object.keys(childActivationStates)[0]]: true,
+      })
+      return
+    }
+
+    // Check if the clicked label is a child
+    if (childActivationStates[childLabel]) {
+      return // If the child is already active, do nothing
+    }
+
+    // Set the child and the "Security" page to active
+    setChildActivationStates((prev) => ({
+      ...prev,
+      [childLabel]: true,
+      security: true,
+    }))
+
+    // Set the active state of other children to false
+    Object.keys(childActivationStates).forEach((key) => {
+      if (key !== childLabel && key !== 'security') {
+        setChildActivationStates((prev) => ({ ...prev, [key]: false }))
+      }
+    })
+
+    // Chuyển trang
+    router.push(`/${childLabel.toLowerCase()}`)
+  }
+
+  const [isExpanded, toggleExpanded] = useState(false)
+  const onClick = () => {
+    toggleExpanded((prev) => !prev)
+  }
+
   return (
     <div className="md:w-[22.8rem] w-100 shadow-box">
       <ul className="px-3 py-4 bg-white h-full">
         {Object.entries(PROFILE_PAGES).map(([key, value]) => {
           const urlPage = key.toLowerCase()
-          const isActive = page === urlPage
-          let className =
-            'text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary'
-          if (value?.children?.length > 0) {
-            return (
-              <li className={`${className} cursor-pointer relative`} key={key}>
-                <div>
-                  <a className="p-5 block w-full text-left">{value.label}</a>
-                </div>
-                <div>
-                  {value?.children?.map((e: any) => {
-                    return Object.entries(e).map(([k, v]: any) => {
-                      const urlPage = k.toLowerCase()
-                      return (
-                        <div
-                          className={`${className} cursor-pointer relative ms-4`}
-                          key={key}
-                        >
-                          <Link href={`/${urlPage}/`} passHref scroll={false}>
-                            <a className="p-5 block w-full text-left">
-                              {v.label}
-                            </a>
-                          </Link>
-                          <div className="absolute bottom-0">
-                            <Link href={`/${urlPage}/`} passHref scroll={false}>
-                              <a className="p-5 block w-full text-left">
-                                {v.label}
-                              </a>
-                            </Link>
-                          </div>
-                        </div>
-                      )
-                    })
-                  })}
-                </div>
-                <div className=" border-b border-gray-3"></div>
+          const urlChildren = (value.children || []) as Child[]
 
-                {/* <Link href={`/profile/${urlPage}/`} passHref scroll={false}>
-                  <a className="p-5 block w-full text-left">{value.label}</a>
-                </Link> */}
-              </li>
-            )
-          }
+          const childLabel = getLabelFromChild(value).replace(/\s+/g, '_')
+          const isActive = urlPage === page
+
+          let className =
+            'text-gray-1 relative  hover:font-bold hover:text-primary'
 
           if (isActive) {
             className = 'bg-secondary font-bold text-primary'
           }
+          if (childActivationStates[childLabel]) {
+            className = 'bg-secondary font-bold text-primary'
+          }
+
           return (
             <li className={`${className} cursor-pointer relative`} key={key}>
-              <Link href={`/${urlPage}/`} passHref scroll={false}>
-                <a className="p-5 block w-full text-left">{value.label}</a>
-              </Link>
-              <div className="absolute inset-0 border-b border-gray-3 bottom-0">
-                <Link href={`/${urlPage}/`} passHref scroll={false}>
-                  <a className="p-5 block w-full text-left">{value.label}</a>
-                </Link>
-              </div>
+              <a
+                className={`p-5 w-full text-left flex justify-between hover:bg-secondary ${
+                  isActive ||
+                  (urlPage === 'security' &&
+                    Object.values(childActivationStates).some(
+                      (active) => active,
+                    ) &&
+                    !childActivationStates[childLabel])
+                    ? 'bg-secondary font-bold text-primary'
+                    : ''
+                }`}
+                onClick={() => {
+                  if (urlPage !== 'security') {
+                    // If not 'security', use existing logic
+                    handleChildClick(childLabel)
+                    setChildActivationStates({ security: false })
+                  } else if (!childActivationStates[childLabel]) {
+                    // If 'security' and not a child, set only 'security' to active
+                    setChildActivationStates({ security: true })
+                  }
+                }}
+              >
+                {value.label}
+                {urlPage === 'security' && (
+                  <div className="mt-2">
+                    <ExpandIcon
+                      isExpanded={isExpanded}
+                      handleClick={onClick}
+                      type={'ontoggle'}
+                      className={''}
+                    />
+                  </div>
+                )}
+              </a>
+              {isExpanded &&
+                urlChildren.map((child) => {
+                  const childLabel = getLabelFromChild(child).replace(
+                    /\s+/g,
+                    '_',
+                  )
+                  const childIsActive =
+                    childActivationStates[childLabel] || false
+                  return (
+                    <div
+                      key={childLabel}
+                      className={`${className} cursor-pointer relative ms-4 hover:bg-secondary ${
+                        childIsActive
+                          ? 'bg-secondary font-bold text-primary'
+                          : ''
+                      }`}
+                    >
+                      <a
+                        className="p-5 block w-full text-left"
+                        onClick={() => handleChildClick(childLabel)}
+                      >
+                        {getLabelFromChild(child)}
+                      </a>
+                    </div>
+                  )
+                })}
+              {urlChildren.length === 0 && (
+                <div className=" border-b border-gray-3"></div>
+              )}
             </li>
           )
         })}
-
         <li
           className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary"
           onClick={handleLogout}

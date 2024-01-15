@@ -6,15 +6,19 @@ import { buildQueryString, convertSnakeCaseToHumanReadable } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useForm } from 'react-hook-form'
 import { ICourseAll } from 'src/type/courses'
-import { defaultStatusDetail } from 'src/constants'
+import { defaultStatusCourse } from 'src/constants'
 
 const Filter = ({ courses }: { courses: ICourseAll }) => {
   const router = useRouter()
   const { control, watch } = useForm()
+  const totalCourse = courses?.total.reduce(
+    (total: number, item: any) => total + parseInt(item.count, 10),
+    0,
+  )
 
   const defaultCategory = [
     {
-      label: 'All',
+      label: `All (${totalCourse})`,
       value: '',
     },
   ]
@@ -54,7 +58,7 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
               value: category?.categoryName,
             })),
           )}
-          defaultValue={{ label: 'All', value: '' }}
+          defaultValue={{ label: `All (${totalCourse})`, value: '' }}
           placeholder="Category"
           className="status-course"
           isSearchable={false}
@@ -64,7 +68,7 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
         <SappHookFormSelect
           control={control}
           name="status"
-          options={defaultStatusDetail}
+          options={defaultStatusCourse}
           placeholder="Status"
           className="status-course"
           isSearchable={false}

@@ -18,6 +18,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
   const [learningOutcome, setLearningOutcome] = useState<ILearningOutcome>()
   const router = useRouter()
+  const [readMore, setReadMore] = useState<boolean>(false)
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
@@ -72,6 +73,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
       pathname: `/case-study/${topicId}`,
       query: { quiz_id: quizId },
     })
+  }
+
+  const handleRouterChapter = (id: string) => {
+    router.push(`/test/${id}`)
   }
 
   const course_section = chapterDetail?.children?.[0]
@@ -132,6 +137,9 @@ const CoursePartDetail = ({ previewPart }: any) => {
         handleRouterActivity={handleRouterActivity}
         handleRouterCaseStudy={handleRouterCaseStudy}
         handleLearningOutCome={handleLearningOutCome}
+        handleRouterChapter={handleRouterChapter}
+        readMore={readMore}
+        setReadMore={setReadMore}
       />
 
       <SappDrawer

@@ -45,15 +45,7 @@ const BreadcrumbProfile: React.FC<BreadcrumbProps> = ({
               </>
             ) : (
               <Link href={tab.link}>
-                <a
-                  className={
-                    currentPage === tab.title
-                      ? 'text-bw-1 font-semibold text-sm'
-                      : 'text-gray-1 text-sm'
-                  }
-                >
-                  {tab.title}
-                </a>
+                <a className={'text-bw-1 font-semibold text-sm'}>{tab.title}</a>
               </Link>
             )}
           </li>

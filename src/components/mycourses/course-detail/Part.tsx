@@ -5,7 +5,7 @@ import TestModal from 'src/pages/courses/test'
 import { round, truncate } from 'lodash'
 import { useRouter } from 'next/router'
 import { countWords, formatTime, truncateString } from '@utils/index'
-import { ICourseSection } from 'src/type/courses'
+import { ICourseSection, CLASS_USER_STATUS } from 'src/type/courses'
 import { useForm } from 'react-hook-form'
 
 const Part = ({ courses }: { courses: ICourseSection }) => {
@@ -25,6 +25,32 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
 
   const formattedTime = formatTime(courses?.remaining_time || 0)
 
+  const statusMap = {
+    [CLASS_USER_STATUS.READY_TO_LEARN]: 'Ready to learn',
+    [CLASS_USER_STATUS.COMPLETED]: 'Completed',
+    [CLASS_USER_STATUS.IN_PROGRESS]: 'In progress',
+    [CLASS_USER_STATUS.CANCELED]: '',
+  } as any
+
+  const showStatus = statusMap[courses?.user_section_learning_status || '']
+
+  const renderStatusIcon = (status: string) => {
+    switch (status) {
+      case `${CLASS_USER_STATUS.READY_TO_LEARN}`:
+        return 'like'
+        break
+      case `${CLASS_USER_STATUS.IN_PROGRESS}`:
+        return 'hour'
+        break
+      case `${CLASS_USER_STATUS.COMPLETED}`:
+        return 'completed'
+        break
+      default:
+        return ''
+    }
+  }
+  const iconType = renderStatusIcon(courses?.user_section_learning_status ?? '')
+
   return (
     <div
       onClick={() =>
@@ -38,7 +64,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       <div className="des mt-6 mb-15">
         <div
           dangerouslySetInnerHTML={{
-            __html: truncateString(courses?.description, 300),
+            __html: truncateString(courses?.description, 250),
           }}
           className="text-base h-[120px]"
         />
@@ -47,12 +73,9 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
         <div className="progress mb-6">
           <div className="info flex justify-between mb-2">
             <div className="text flex items-baseline">
-              <Icon
-                type={`${percentProgress === 0 ? 'like' : 'hour'}`}
-                className="relative top-0.5"
-              />
+              <Icon type={`${iconType}`} className="relative top-0.5" />
               <p className="text-medium-sm font-medium text-bw-1 pl-1 ml-px">
-                {percentProgress === 0 ? 'Ready To Learn' : 'In Progress'}
+                {showStatus}
               </p>
               <span className="text-medium-sm font-medium text-gray-1 pl-1 ml-px">
                 {formattedTime} left

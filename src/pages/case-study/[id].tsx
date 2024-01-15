@@ -24,13 +24,19 @@ import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import {
+  clearFileEssay,
   getTopicsCaseStudy,
   loadMoreQuestion,
+  saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
+import ConFirmSubmit from '../test/conFirmSubmit'
+import QuitTestModal from '../courses/test/quit-test'
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -168,6 +174,19 @@ const CaseStudyDetail = ({ questions }: any) => {
             name={`${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
+            fullData={data}
+            response_option_custom={0}
+            openChooseFile={(e: any) =>
+              setOpenUpload({ status: true, question_id: data.id })
+            }
+            handleClearFile={() =>
+              dispatch(
+                clearFileEssay({
+                  question_id: data.id,
+                  topic_id: router.query.id as string,
+                }),
+              )
+            }
           />
         )
       default:
@@ -182,12 +201,15 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [openSubmit, setOpenSubmit] = useState(false)
+  const [openQuit, setOpenQuit] = useState(false)
   const dispatch = useAppDispatch()
   const { topics, listFullQuestions, listQuestions, loading } = useAppSelector(
     (state) => state.caseStudyTestReducer,
   )
   const [quizAttempId, setQuizAttempId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
+  const [openUpload, setOpenUpload] = useState<any>({})
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -323,6 +345,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           id: question.id,
           answers: question.answers,
           response_option: question.response_option,
+          answer_file: question.answer_file,
         })
       }
     }
@@ -349,10 +372,10 @@ const CaseStudyDetail = ({ questions }: any) => {
           let answer = []
           if (e.answer) {
             for (let el of e.answer) {
-              answer.push({ answer_id: el })
+              if (el) {
+                answer.push({ answer_id: el })
+              }
             }
-          } else {
-            answer.push({ answer_id: '' })
           }
           answers.push({ question_id: e.id, answer })
         } else if (e.qType === QUESTION_TYPES.MATCHING) {
@@ -390,15 +413,18 @@ const CaseStudyDetail = ({ questions }: any) => {
             }
           }
           answers.push({ question_id: e.id, answer })
-        } else if (e.qType === QUESTION_TYPES.ESSAY) {
-          answers.push({
-            question_id: e.id,
-            short_answers: e.answer || '',
-            response_option: e.response_option ? e.response_option : 'WORD',
-            active: 'NOT_GRADED',
-          })
         }
       }
+      if (e.qType === QUESTION_TYPES.ESSAY) {
+        answers.push({
+          question_id: e.id,
+          short_answers: e.answer || '',
+          response_option: e.response_option ? e.response_option : 'WORD',
+          answer_file: e.answer_file,
+          active: 'SUBMITED',
+        })
+      }
+
       quiz_position_mapping.push({
         question_id: e.id,
         answers: e?.answers,
@@ -406,11 +432,16 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
-      await CourseTestApi.submitCaseStudy(quizAttempId as string, {
-        answers: answers,
-        quiz_position_mapping: quiz_position_mapping,
-        total_attempt_time: total_attempt_time,
-      })
+      try {
+        await CourseTestApi.submitCaseStudy(quizAttempId as string, {
+          answers: answers,
+          quiz_position_mapping: quiz_position_mapping,
+          total_attempt_time: total_attempt_time,
+        })
+        toast.success('submit success')
+      } catch (err) {
+        toast.error('submit failed')
+      }
     }
     return
   }
@@ -437,40 +468,52 @@ const CaseStudyDetail = ({ questions }: any) => {
       return arr
     })
   }
+  const handleSaveFileEssay = (
+    file: any,
+    question_id: string,
+    topic_id: string,
+  ) => {
+    dispatch(
+      saveFileEssay({
+        question_id: question_id,
+        file: file,
+        topic_id: topic_id,
+      }),
+    )
+  }
+  // useEffect(() => {
+  //   const handleBeforeUnload = async (event: any) => {
+  //     event.preventDefault()
+  //     await handleSubmitQuestion()
+  //   }
 
-  useEffect(() => {
-    const handleBeforeUnload = async (event: any) => {
-      event.preventDefault()
-      await handleSubmitQuestion()
-    }
+  //   // Thêm lắng nghe sự kiện beforeunload
+  //   window.addEventListener('beforeunload', handleBeforeUnload)
 
-    // Thêm lắng nghe sự kiện beforeunload
-    window.addEventListener('beforeunload', handleBeforeUnload)
+  //   // Cleanup khi component bị unmount
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload)
+  //   }
+  // }, [listQuestions])
+  // useEffect(() => {
+  //   router.beforePopState(({ as }) => {
+  //     if (as !== router.asPath) {
+  //       try {
+  //         handleSubmitQuestion()
+  //         return true
+  //       } catch (err) {
+  //         return true
+  //       }
+  //       // Will run when leaving the current page; on back/forward actions
+  //       // Add your logic here, like toggling the modal state
+  //     }
+  //     return true
+  //   })
 
-    // Cleanup khi component bị unmount
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-  }, [listQuestions])
-  useEffect(() => {
-    router.beforePopState(({ as }) => {
-      if (as !== router.asPath) {
-        try {
-          handleSubmitQuestion()
-          return true
-        } catch (err) {
-          return true
-        }
-        // Will run when leaving the current page; on back/forward actions
-        // Add your logic here, like toggling the modal state
-      }
-      return true
-    })
-
-    return () => {
-      router.beforePopState(() => true)
-    }
-  }, [listQuestions, router])
+  //   return () => {
+  //     router.beforePopState(() => true)
+  //   }
+  // }, [listQuestions, router])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {loading && (
@@ -497,7 +540,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               loading: false,
               disabled: false,
               onClick: () => {
-                handleSubmitQuestion()
+                setOpenSubmit(true)
               },
             }}
             cancel={{
@@ -613,15 +656,15 @@ const CaseStudyDetail = ({ questions }: any) => {
                 position={{
                   width: '400px',
                   height: '300px',
-                  top: 'calc(50% - 150px)',
-                  left: 'calc(50% - 200px)',
+                  top: 'calc(25% - 150px)',
+                  left: 'calc(25% - 200px)',
                 }}
                 key={e.id}
                 onClick={() => setOnFocusingPad(e.id)}
                 zIndex={
                   onFocusingPad === e.id
-                    ? openScratchPad.length + 10
-                    : index + 10
+                    ? openScratchPad.length + 100
+                    : index + 100
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
@@ -650,8 +693,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 onClick={() => setOnFocusingPad(e.id)}
                 zIndex={
                   onFocusingPad === e.id
-                    ? openScratchPad.length + 10
-                    : index + 10
+                    ? openScratchPad.length + 100
+                    : index + 100
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
@@ -719,6 +762,32 @@ const CaseStudyDetail = ({ questions }: any) => {
           </div>
         </div>
       </div>
+      <ConFirmSubmit
+        open={openSubmit}
+        setOpen={setOpenSubmit}
+        handleSubmit={handleSubmitQuestion}
+      />
+      <QuitTestModal
+        open={openQuit}
+        setOpen={setOpenQuit}
+        handleQuit={() => router.back()}
+      />
+      <ModalUploadFile
+        open={openUpload.status}
+        isMultiple={false}
+        handleClose={() => {
+          setOpenUpload({ status: false, question_id: undefined })
+        }}
+        fileType={'ESSAY'}
+        location={`question-answer/${openUpload.question_id}`}
+        setSelectedFile={(e: any) =>
+          handleSaveFileEssay(
+            e[0],
+            openUpload.question_id,
+            router.query.id as string,
+          )
+        }
+      />
     </div>
   )
 }

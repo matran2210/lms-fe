@@ -8,7 +8,11 @@ import {
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IQuestion } from 'src/type/course/Question'
-import { IActivity, ITab } from 'src/type/course/my-course/Activity'
+import {
+  IActivity,
+  IBreadcrumb,
+  ITab,
+} from 'src/type/course/my-course/Activity'
 import { apiURL, httpService } from '../../../httpService'
 import url from './url'
 import CourseTestApi from '../Test'
@@ -62,6 +66,19 @@ const CourseActivityApi = {
       }
     }
     return responseActivity.data.data
+  },
+
+  /**
+   * @description Lấy Breadcrumb ID.
+   * @async
+   * @param {string} id - ID của activity.
+   * @returns {Promise<IResponse<ITab>>} - Dữ liệu tab.
+   */
+  setBreadcrumb: async (id: string): Promise<IResponse<IBreadcrumb>> => {
+    const response = await httpService.GET<any, any>({
+      uri: `course-sections/tab/${id}`,
+    })
+    return response
   },
 
   /**

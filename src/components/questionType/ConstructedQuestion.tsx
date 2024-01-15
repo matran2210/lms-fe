@@ -15,6 +15,9 @@ import { Workbook } from '@fortune-sheet/react'
 import '@fortune-sheet/react/dist/index.css'
 import { Controller } from 'react-hook-form'
 import { uniqueId } from 'lodash'
+import { IResource } from 'src/type/courses'
+import { UploadAPI } from 'src/pages/api/upload'
+import { CloseIcon, UploadIcon } from '@assets/icons'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -32,6 +35,9 @@ export type IPreviewProp = {
   defaultValue?: any
   response_option_custom?: any
   externalRef?: any
+  fullData: any
+  openChooseFile?: any
+  handleClearFile?: any
 }
 const EssayQuestionPreview = ({
   data,
@@ -50,19 +56,20 @@ const EssayQuestionPreview = ({
   defaultValue,
   response_option_custom,
   externalRef,
+  fullData,
+  openChooseFile,
+  handleClearFile,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
-  const [valueText, setValueText] = useState()
   const refSheet = useRef(null) as any
+  const inputRef = useRef(null) as any
   useEffect(() => {
     if (question_data) {
       DeserializeHighlight(highlighted)
     }
   }, [question_data, question_content, data])
-  useEffect(() => {
-    setValueText(defaultValue)
-  }, [defaultValue])
+  // useEffect(()=>{
   if (externalRef) {
     externalRef.current = {
       reset: () =>
@@ -72,7 +79,14 @@ const EssayQuestionPreview = ({
         }),
     }
   }
-
+  const handleDownload = async (data: {
+    files: { name: string; file_key: string }[]
+  }) => {
+    try {
+      await UploadAPI.downloadFile(data)
+    } catch (error) {}
+  }
+  // },[response_option_custom])
   return (
     <div
       key={key}
@@ -106,22 +120,74 @@ const EssayQuestionPreview = ({
           </div>
           {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
             forCaseStudy) && <div className="sapp-seprate-line-preview"></div>}
-          {question_data.assignment_type !== 'TEXT' && (
-            <React.Fragment>
-              <div className="sapp-upload-file-preview">
-                <div className="title-upload-button-preview">
-                  Upload file to submit:
+          {question_data.assignment_type !== 'TEXT' ? (
+            !fullData.answer_file?.file_key ? (
+              <React.Fragment>
+                <div className="sapp-upload-file-preview">
+                  <div className="title-upload-button-preview">
+                    Upload file to submit:
+                  </div>
+                  <div className="sapp-upload-button-preview">
+                    {/* <input
+                      ref={inputRef}
+                      type="file"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    /> */}
+                    {/* <UploadIcon /> */}
+                    <UploadIcon />
+                    <div
+                      className="title-btn-preview"
+                      // onClick={() => inputRef.current.click()}
+                      onClick={() => openChooseFile(true)}
+                    >
+                      Choose file to upload
+                    </div>
+                  </div>
                 </div>
-                <div className="sapp-upload-button-preview">
-                  {/* <UploadIcon /> */}
-                  <div className="title-btn-preview">Choose file to upload</div>
+                {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+                  forCaseStudy) && (
+                  <div className="sapp-seprate-line-preview"></div>
+                )}
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <div className="sapp-upload-file-preview">
+                  <div className="title-upload-button-preview">
+                    Uploaded file:
+                  </div>
+                  <div
+                    className="cursor-pointer text-state-info hover:underline"
+                    onClick={() =>
+                      handleDownload({
+                        files: [
+                          {
+                            name: fullData.answer_file.file_name,
+                            file_key: fullData.answer_file.file_key,
+                          },
+                        ],
+                      })
+                    }
+                  >
+                    {fullData.answer_file.file_name}
+                  </div>
+                  {!fullData?.done && (
+                    <div
+                      onClick={() => handleClearFile()}
+                      className="cursor-pointer"
+                    >
+                      <CloseIcon />
+                    </div>
+                  )}
                 </div>
-              </div>
-              {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
-                forCaseStudy) && (
-                <div className="sapp-seprate-line-preview"></div>
-              )}
-            </React.Fragment>
+                {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+                  forCaseStudy) && (
+                  <div className="sapp-seprate-line-preview"></div>
+                )}
+              </React.Fragment>
+            )
+          ) : (
+            <></>
           )}
           <div
             style={
@@ -139,6 +205,7 @@ const EssayQuestionPreview = ({
                 height={500}
                 placeholder="Your answer here"
                 defaultValue={defaultValue}
+                disabled={fullData?.done}
                 // externalRef={externalRef}
               />
             ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
@@ -156,23 +223,25 @@ const EssayQuestionPreview = ({
                         // row={2}
 
                         onChange={(e) => {
-                          const currentSheet = refSheet.current?.getSheet()
-                          if (value) {
-                            let old = [...JSON.parse(value)]
-                            const index = old.findIndex(
-                              (e: any) => e.id === currentSheet.id,
-                            )
-                            if (index >= 0) {
-                              old.splice(index, 1, currentSheet)
-                            } else {
-                              old.push(currentSheet)
+                          if (!fullData?.done) {
+                            const currentSheet = refSheet.current?.getSheet()
+                            if (value) {
+                              let old = [...JSON.parse(value)]
+                              const index = old.findIndex(
+                                (e: any) => e.id === currentSheet.id,
+                              )
+                              if (index >= 0) {
+                                old.splice(index, 1, currentSheet)
+                              } else {
+                                old.push(currentSheet)
+                                // setValue(name, JSON.stringify(old))
+                              }
+                              onChange(JSON.stringify(old))
                               // setValue(name, JSON.stringify(old))
+                            } else {
+                              onChange(JSON.stringify([currentSheet]))
+                              // setValue(name, JSON.stringify([currentSheet]))
                             }
-                            onChange(JSON.stringify(old))
-                            // setValue(name, JSON.stringify(old))
-                          } else {
-                            onChange(JSON.stringify([currentSheet]))
-                            // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }}
                         data={
@@ -181,6 +250,13 @@ const EssayQuestionPreview = ({
                             : [
                                 {
                                   name: 'Sheet1',
+                                  // config: {
+                                  //   authority: {
+
+                                  //     sheet: true, //If it is 1 or true, the worksheet is protected; if it is 0 or false, the worksheet is not protected.
+
+                                  //   },
+                                  // },
                                 },
                               ]
                         }
@@ -199,6 +275,7 @@ const EssayQuestionPreview = ({
                 height={500}
                 placeholder="Your answer here"
                 defaultValue={defaultValue}
+                disabled={fullData?.done}
               />
             ) : (
               <div className="w-full, h-[500px]">
@@ -210,33 +287,35 @@ const EssayQuestionPreview = ({
                     return (
                       <Workbook
                         // generateSheetId={() => name}
-                        ref={externalRef}
+                        ref={refSheet}
                         // column={2}
                         // row={2}
 
                         onChange={(e) => {
                           // const celldata = e.data
-                          const currentSheet = refSheet.current?.getSheet()
-                          // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
-                          // // listSheet.splice(0,1)
-                          // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
-                          // console.log(listSheet,"test");
-                          if (value) {
-                            let old = [...JSON.parse(value)]
-                            const index = old.findIndex(
-                              (e: any) => e?.id === currentSheet?.id,
-                            )
-                            if (index >= 0) {
-                              old.splice(index, 1, currentSheet)
-                            } else {
-                              old.push(currentSheet)
+                          if (!fullData?.done) {
+                            const currentSheet = refSheet.current?.getSheet()
+                            // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
+                            // // listSheet.splice(0,1)
+                            // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
+                            // console.log(listSheet,"test");
+                            if (value) {
+                              let old = [...JSON.parse(value)]
+                              const index = old.findIndex(
+                                (e: any) => e?.id === currentSheet?.id,
+                              )
+                              if (index >= 0) {
+                                old.splice(index, 1, currentSheet)
+                              } else {
+                                old.push(currentSheet)
+                                // setValue(name, JSON.stringify(old))
+                              }
+                              onChange(JSON.stringify(old))
                               // setValue(name, JSON.stringify(old))
+                            } else {
+                              onChange(JSON.stringify([currentSheet]))
+                              // setValue(name, JSON.stringify([currentSheet]))
                             }
-                            onChange(JSON.stringify(old))
-                            // setValue(name, JSON.stringify(old))
-                          } else {
-                            onChange(JSON.stringify([currentSheet]))
-                            // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }}
                         data={

@@ -23,6 +23,7 @@ export const TitleSidebar = {
   TOPICS: 'Topics',
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
+  NOTIFICATION: 'Notifications',
 }
 
 export const GUIDELINE_PASSWORD = [
@@ -77,7 +78,7 @@ export const UserGuide = {
     'The filter section allows you to filter courses by curriculum and course status.',
 }
 
-export const defaultStatusDetail = [
+export const defaultStatusCourse = [
   {
     label: 'All',
     value: '',
@@ -97,6 +98,25 @@ export const defaultStatusDetail = [
   {
     label: 'Expired',
     value: 'CANCELED',
+  },
+]
+
+export const defaultStatusDetail = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Ready To Learn',
+    value: 'READY_TO_LEARN',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
+  },
+  {
+    label: 'Completed',
+    value: 'COMPLETED',
   },
 ]
 

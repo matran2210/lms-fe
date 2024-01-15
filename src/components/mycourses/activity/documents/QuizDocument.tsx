@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   courseActivityQuizReducer,
   fetchQuestionById,
+  removeQuizFinished,
   selectQuestions,
   submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
@@ -14,6 +15,7 @@ import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import PopupFinishQuiz from '../PopupFinishQuiz'
 
 type Props = {
   questions: IQuestion[]
@@ -49,6 +51,10 @@ const QuizDocument = ({
     id?: string
   }>()
 
+  const [quizComponentKey, setQuizComponentKey] = useState<number>(1)
+
+  const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
+
   useEffect(() => {
     if (questions?.[0]) {
       // Load the first question when the component mounts
@@ -65,7 +71,7 @@ const QuizDocument = ({
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
-      handleFinishQuiz()
+      setOpenFinishQUiz(true)
     }
   }, [runHandleFinishQuiz])
 
@@ -157,6 +163,16 @@ const QuizDocument = ({
         .unwrap()
         .then((e: any) => {
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
+
+          dispatch(
+            removeQuizFinished({
+              activityId,
+              tabId,
+              quizId: quizId,
+            }),
+          )
+          setQuizComponentKey((e) => e + 1)
+          setActiveQuestionIndex(0)
         })
     } catch (error) {}
   }
@@ -201,15 +217,20 @@ const QuizDocument = ({
       }))
     } catch (error) {}
   }
-
   return (
     <div>
+      <PopupFinishQuiz
+        open={openFinishQUiz}
+        setOpen={setOpenFinishQUiz}
+        submitQuiz={handleFinishQuiz}
+      ></PopupFinishQuiz>
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
           <QuizComponent
             showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
             activeQuestion={activeQuestion}
             ref={questionRef}
+            key={quizComponentKey}
           />
         )}
       </div>
@@ -243,23 +264,25 @@ const QuizDocument = ({
           </div>
         </div>
 
-        <div
-          className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
-          onClick={
-            isLastQuestion
-              ? () => handleConfirmQuestion(true)
-              : () => {
-                  if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                    handleConfirmQuestion(false)
+        {(isQuestionConfirmed || (!isQuestionConfirmed && isLastQuestion)) && (
+          <div
+            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
+            onClick={
+              isLastQuestion
+                ? () => handleConfirmQuestion(true)
+                : () => {
+                    if (grading_preference !== 'AFTER_EACH_QUESTION') {
+                      handleConfirmQuestion(false)
+                    }
+                    handleNextQuestion()
                   }
-                  handleNextQuestion()
-                }
-          }
-        >
-          {isLastQuestion ? 'Finish' : 'Next'}
-        </div>
-
+            }
+          >
+            {isLastQuestion ? 'Finish' : 'Next'}
+          </div>
+        )}
         {!isQuestionConfirmed &&
+          !isLastQuestion &&
           grading_preference === 'AFTER_EACH_QUESTION' && (
             <div
               className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
@@ -279,11 +302,15 @@ const QuizDocument = ({
         size="max-w-xxl"
         position="center"
         showFooter={false}
+        isFullScreen={true}
+        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
       >
-        <QuizResultComponent
-          questionResponse={modalResult?.questions || []}
-          getTable={getTable}
-        />
+        <div className="max-w-[1114px] mx-auto">
+          <QuizResultComponent
+            questionResponse={modalResult?.questions || []}
+            getTable={getTable}
+          />
+        </div>
       </SappModal>
     </div>
   )

@@ -40,12 +40,15 @@ const EntranceApi = {
     })
     return res
   },
-  getListEntranceTest: async (accessToken: string): Promise<IResponse<any>> => {
+  getListEntranceTest: async (
+    accessToken: string,
+    queryString?: string,
+  ): Promise<IResponse<any>> => {
     const headers = {
       Authorization: 'Bearer ' + accessToken,
     }
     const response = await axios.get<{}, IResponse<{ data: any }>>(
-      `${apiURL}${url.getListEntranceTest}`,
+      `${apiURL}${url.getListEntranceTest}?${queryString}`,
       {
         headers,
       },
