@@ -83,11 +83,15 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const quiz = course_section?.quiz
 
   const handleNextLesson = () => {
-    course_section?.course_section_type === 'ACTIVITY'
-      ? handleRouterActivity(course_section?.children?.[0]?.id)
-      : course_section?.course_section_type === 'STORY'
-        ? handleRouterCaseStudy(quiz?.id, quiz?.case_study_story?.id)
-        : () => {}
+    if (course_section?.course_section_type === 'CHAPTER_TEST') {
+      handleRouterChapter(course_section?.quiz?.id)
+    } else {
+      course_section?.course_section_type === 'ACTIVITY'
+        ? handleRouterActivity(course_section?.children?.[0]?.id)
+        : course_section?.course_section_type === 'STORY'
+          ? handleRouterCaseStudy(quiz?.id, quiz?.case_study_story?.id)
+          : () => {}
+    }
   }
 
   const handleLearningOutCome = async (
@@ -149,6 +153,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         message="Bạn có chắc chắn muốn hủy không?"
         widthDrawer="w-6/12"
         handleSubmit={handleNextLesson}
+        confirmOnClose={false}
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
