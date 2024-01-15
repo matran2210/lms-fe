@@ -1,3 +1,4 @@
+import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -59,23 +60,42 @@ const ProfileSideBar = ({ page }: IProps) => {
   }>({})
 
   const handleChildClick = (childLabel: string) => {
-    // Nếu child đang được active, không cần xử lý
-    if (childActivationStates[childLabel]) {
+    // Check if the clicked label is "Security"
+    if (childLabel.toLowerCase() === 'security') {
+      // Set both the "Security" page and the first child to active
+      setChildActivationStates({
+        security: true,
+        [Object.keys(childActivationStates)[0]]: true,
+      })
       return
     }
 
-    // Đặt trạng thái active của child được click thành true
-    setChildActivationStates((prev) => ({ ...prev, [childLabel]: true }))
+    // Check if the clicked label is a child
+    if (childActivationStates[childLabel]) {
+      return // If the child is already active, do nothing
+    }
 
-    // Đặt trạng thái active của các child khác thành false
+    // Set the child and the "Security" page to active
+    setChildActivationStates((prev) => ({
+      ...prev,
+      [childLabel]: true,
+      security: true,
+    }))
+
+    // Set the active state of other children to false
     Object.keys(childActivationStates).forEach((key) => {
-      if (key !== childLabel) {
+      if (key !== childLabel && key !== 'security') {
         setChildActivationStates((prev) => ({ ...prev, [key]: false }))
       }
     })
 
     // Chuyển trang
     router.push(`/${childLabel.toLowerCase()}`)
+  }
+
+  const [isExpanded, toggleExpanded] = useState(false)
+  const onClick = () => {
+    toggleExpanded((prev) => !prev)
   }
 
   return (
@@ -86,43 +106,80 @@ const ProfileSideBar = ({ page }: IProps) => {
           const urlChildren = (value.children || []) as Child[]
 
           const childLabel = getLabelFromChild(value).replace(/\s+/g, '_')
-          const isActive = urlPage === page || childActivationStates[childLabel]
+          const isActive = urlPage === page
 
           let className =
-            'text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary'
+            'text-gray-1 relative  hover:font-bold hover:text-primary'
 
           if (isActive) {
+            className = 'bg-secondary font-bold text-primary'
+          }
+          if (childActivationStates[childLabel]) {
             className = 'bg-secondary font-bold text-primary'
           }
 
           return (
             <li className={`${className} cursor-pointer relative`} key={key}>
               <a
-                className="p-5 block w-full text-left"
-                onClick={() => handleChildClick(childLabel)}
+                className={`p-5 w-full text-left flex justify-between hover:bg-secondary ${
+                  isActive ||
+                  (urlPage === 'security' &&
+                    Object.values(childActivationStates).some(
+                      (active) => active,
+                    ) &&
+                    !childActivationStates[childLabel])
+                    ? 'bg-secondary font-bold text-primary'
+                    : ''
+                }`}
+                onClick={() => {
+                  if (urlPage !== 'security') {
+                    // If not 'security', use existing logic
+                    handleChildClick(childLabel)
+                    setChildActivationStates({ security: false })
+                  } else if (!childActivationStates[childLabel]) {
+                    // If 'security' and not a child, set only 'security' to active
+                    setChildActivationStates({ security: true })
+                  }
+                }}
               >
                 {value.label}
-              </a>
-              {urlChildren.map((child) => {
-                const childLabel = getLabelFromChild(child).replace(/\s+/g, '_')
-                const childIsActive = childActivationStates[childLabel]
-
-                return (
-                  <div
-                    key={childLabel}
-                    className={`${className} cursor-pointer relative ms-4 ${
-                      childIsActive ? 'bg-secondary font-bold text-primary' : ''
-                    }`}
-                  >
-                    <a
-                      className="p-5 block w-full text-left"
-                      onClick={() => handleChildClick(childLabel)}
-                    >
-                      {getLabelFromChild(child)}
-                    </a>
+                {urlPage === 'security' && (
+                  <div className="mt-2">
+                    <ExpandIcon
+                      isExpanded={isExpanded}
+                      handleClick={onClick}
+                      type={'ontoggle'}
+                      className={''}
+                    />
                   </div>
-                )
-              })}
+                )}
+              </a>
+              {isExpanded &&
+                urlChildren.map((child) => {
+                  const childLabel = getLabelFromChild(child).replace(
+                    /\s+/g,
+                    '_',
+                  )
+                  const childIsActive =
+                    childActivationStates[childLabel] || false
+                  return (
+                    <div
+                      key={childLabel}
+                      className={`${className} cursor-pointer relative ms-4 hover:bg-secondary ${
+                        childIsActive
+                          ? 'bg-secondary font-bold text-primary'
+                          : ''
+                      }`}
+                    >
+                      <a
+                        className="p-5 block w-full text-left"
+                        onClick={() => handleChildClick(childLabel)}
+                      >
+                        {getLabelFromChild(child)}
+                      </a>
+                    </div>
+                  )
+                })}
               {urlChildren.length === 0 && (
                 <div className=" border-b border-gray-3"></div>
               )}
