@@ -170,8 +170,8 @@ const ModalUploadFile = ({
       setTimeout(() => {
         handleCancel()
         setLoadingUpload(false)
+        setDisabled(false)
       }, 1000)
-      setDisabled(false)
     }
   }
   return (
@@ -181,7 +181,7 @@ const ModalUploadFile = ({
         title={title || `Add ${UPLOAD_TYPE[fileType].type.toLocaleLowerCase()}`}
         cancelButtonCaption="Cancel"
         okButtonCaption={'Save'}
-        confirmOnclose
+        confirmOnclose={false}
         handleCancel={handleCancel}
         handleSubmit={handleUploadFile}
         closeAfterSubmit={false}

@@ -39,7 +39,6 @@ export const validateFile = (
   const fileSize = file.size
 
   if (!acceptFiles) return true
-
   const acceptedTypes = acceptFiles.map((file) => file.type)
 
   if (acceptedTypes.length > 0) {
@@ -50,7 +49,7 @@ export const validateFile = (
           : fileType === type,
       )
     ) {
-      toast.error('File không hỗ trowj')
+      toast.error('File không hỗ trợ')
       return false
     }
   }

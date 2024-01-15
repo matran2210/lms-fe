@@ -51,6 +51,7 @@ export enum SUFFIX_TYPE {
   'SHEET' = 'SHEET',
   'NOT_A_FILE' = 'NOT_A_FILE',
   'TEXT' = 'TEXT',
+  'ZIP' = 'ZIP',
 }
 
 export const UPLOAD_TYPE: {
@@ -93,6 +94,18 @@ export const UPLOAD_TYPE: {
     ],
     acceptFiles: VALID_UPLOAD_FILES,
     suffixType: `${SUFFIX_TYPE.PDF},${SUFFIX_TYPE.WORD_DOCUMENT},${SUFFIX_TYPE.DOCUMENT_VIEWER},${SUFFIX_TYPE.SHEET},${SUFFIX_TYPE.POWER_POINT},${SUFFIX_TYPE.TEXT}`,
+  },
+  ESSAY: {
+    type: 'DOCUMENT',
+    icon: DocIcon,
+    accept: '.pdf,.docx,.doc,.xls,.xlsx,.csv,.txt,.ppt,.pptx,.zip',
+    extension: '.pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx, .zip',
+    note: [
+      '.pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx, .zip',
+      'và dung lượng tối đa mỗi file là 20MB.',
+    ],
+    acceptFiles: VALID_UPLOAD_FILES,
+    suffixType: `${SUFFIX_TYPE.PDF},${SUFFIX_TYPE.WORD_DOCUMENT},${SUFFIX_TYPE.DOCUMENT_VIEWER},${SUFFIX_TYPE.SHEET},${SUFFIX_TYPE.POWER_POINT},${SUFFIX_TYPE.TEXT} ${SUFFIX_TYPE.ZIP}`,
   },
   ALL: {
     type: 'ALL',
