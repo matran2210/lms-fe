@@ -57,7 +57,7 @@ const Course = ({
       // Update state with the difference
       setDaysDifference(difference)
     }
-  }, [])
+  }, [course])
   const percentProgress =
     round(
       (Number(
@@ -83,7 +83,10 @@ const Course = ({
       courseStatus === COURSE_STATUS.PUBLISH ||
       courseStatus === COURSE_STATUS.LOCK
     ) {
-      if (classStatus === CLASS_STATUS.PUBLIC) {
+      if (
+        classStatus === CLASS_STATUS.PUBLIC ||
+        classStatus === CLASS_STATUS.ENDED
+      ) {
         if (course?.course_type === 'TRIAL_COURSE' && !student)
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
@@ -109,7 +112,6 @@ const Course = ({
         }
         return BUTTON_STATUS.Disabled
       }
-      if (classStatus === CLASS_STATUS.ENDED) return BUTTON_STATUS.Disabled // Lớp đã kết thúc
       if (
         classStatus === CLASS_STATUS.DRAFT ||
         classStatus === CLASS_STATUS.BLOCK
