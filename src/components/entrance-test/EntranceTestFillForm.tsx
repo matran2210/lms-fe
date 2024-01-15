@@ -148,6 +148,7 @@ const EntranceTestFillForm = ({
       user.english_level &&
       user.university_program
     ) {
+      return
     } else {
       await EntranceApi.putLevel({
         university_program_id: dataValue.univers_program_id.value,
@@ -155,14 +156,14 @@ const EntranceTestFillForm = ({
         english_level_id: dataValue.englishLevel_id.value,
         university_id: dataValue.univers_id.value,
       })
+      setOpen && setOpen(false)
+      router.push({
+        pathname: `/test/${entrancePopupContent.id}`,
+        query: {
+          type: 'entrance',
+        },
+      })
     }
-    setOpen && setOpen(false)
-    router.push({
-      pathname: `/test/${entrancePopupContent.id}`,
-      query: {
-        type: 'entrance',
-      },
-    })
   }
 
   return (

@@ -54,6 +54,8 @@ import ConFirmSubmit from './conFirmSubmit'
 import QuitTestModal from '../courses/test/quit-test'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { RESOURCE_LOCATION } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
+import { useAppDispatch } from 'src/redux/hook'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -246,6 +248,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [remainTime, setRemainTime] = useState<number>(
     quizDetail.quiz_timed * 60,
   )
+  const dispatch = useAppDispatch()
+
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
   const [openSubmit, setOpenSubmit] = useState(false)
@@ -563,6 +567,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return {
           ...item,
           done: true,
+          attempted: true,
           corrects: corrects,
           solution: solution,
           timeSpent: item.timeSpent
@@ -590,6 +595,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return {
           ...item,
           done: true,
+          attempted: true,
           timeSpent: item.timeSpent
             ? Date.now() - startTime + item.timeSpent
             : Date.now() - startTime,
@@ -625,6 +631,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             ...item,
             viewed: true,
             done: true,
+            attempted: true,
             timeSpent: item.timeSpent
               ? Date.now() - startTime + item.timeSpent
               : Date.now() - startTime <= 0
@@ -648,6 +655,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           return {
             ...item,
             done: true,
+            attempted: true,
             timeSpent: item.timeSpent
               ? Date.now() - startTime + item.timeSpent
               : Date.now() - startTime <= 0
@@ -840,7 +848,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         var newItem = {
           ...item,
           answer: data,
-          attempted: checkAnswered(item),
+          attempted: item.attempted || checkAnswered(item),
           timeSpent: !item.done
             ? item.timeSpent
               ? Date.now() - startTime + item.timeSpent
@@ -1613,13 +1621,32 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
         <div className="flex items-center h-full gap-3 pe-6">
           {currentTabContent?.data?.response_option === null &&
-            currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+            currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
+            !currentTabContent.done && (
               <div className="flex gap-1">
                 <div>Choose response option:</div>
                 <button
                   onClick={() => {
-                    handleChangeTypeEssay(0)
-                    handleClearSelection(currentTabContent)
+                    // handleChangeTypeEssay(0)
+                    // handleClearSelection(currentTabContent)
+                    // if (confirmOnclose) {
+                    dispatch(
+                      confirmDialog.open({
+                        // Nội dung của hộp thoại xác nhận
+                        message:
+                          'Chuyển Type sẽ mất dữ liệu, bạn có muốn chuyển?',
+                        // Hàm thực thi khi người dùng xác nhận hành động
+                        onConfirm: () => {
+                          handleChangeTypeEssay(0)
+                          handleClearSelection(currentTabContent)
+                        },
+                      }),
+                    )
+                    // } else {
+                    //   // Nếu confirmOnclose là false, thì không cần xác nhận
+                    //   // Gọi hàm callHandleCancel
+                    //   callHandleCancel()
+                    // }
                   }}
                   className={`${
                     currentTabContent.response_type === 0 && 'active'
@@ -1629,8 +1656,18 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 </button>
                 <button
                   onClick={() => {
-                    handleChangeTypeEssay(1)
-                    handleClearSelection(currentTabContent)
+                    dispatch(
+                      confirmDialog.open({
+                        // Nội dung của hộp thoại xác nhận
+                        message:
+                          'Chuyển Type sẽ mất dữ liệu, bạn có muốn chuyển?',
+                        // Hàm thực thi khi người dùng xác nhận hành động
+                        onConfirm: () => {
+                          handleChangeTypeEssay(1)
+                          handleClearSelection(currentTabContent)
+                        },
+                      }),
+                    )
                   }}
                   className={`${
                     currentTabContent.response_type === 1 && 'active'
