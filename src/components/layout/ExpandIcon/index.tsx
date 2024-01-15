@@ -1,5 +1,5 @@
 import LogoDefault from './LogoDefault'
-import LogoTeacher from './LogoTeacher'
+import LogoFull from './LogoFull'
 import ArrowUp from './ArrowUp'
 import { useAppSelector } from 'src/redux/hook'
 import Icon from '@components/icons'
@@ -34,7 +34,7 @@ export default function ExpandIcon({
         )
       )}
       {type === 'logo-default' && <LogoDefault />}
-      {type === 'logo-teacher' && <LogoTeacher />}
+      {type === 'logo-full' && <LogoFull />}
       {type === 'document' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -190,6 +190,21 @@ export default function ExpandIcon({
         </svg>
       )}
       {type === 'learning-resource' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`!min-w-[4px] !min-h-[4px] ${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M21.938 2.25H2.063a.563.563 0 00-.563.563v2.624c0 .311.252.563.563.563h19.875c.31 0 .562-.252.562-.563V2.813a.562.562 0 00-.563-.562zM3 7.5v13.125a1.125 1.125 0 001.125 1.125h15.75A1.125 1.125 0 0021 20.625V7.5H3zm9 10.81l-4.063-4.06L9 13.187l2.25 2.252V9.75h1.5v5.69l2.253-2.254 1.06 1.061L12 18.311z"
+          ></path>
+        </svg>
+      )}
+      {type === 'entrance-test' && (
         <svg
           width="24"
           height="24"

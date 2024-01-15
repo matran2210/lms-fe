@@ -11,13 +11,10 @@ interface LayoutProps {
 // eslint-disable-next-line import/no-unused-modules
 export default function Layout(props: LayoutProps): ReactElement {
   const router = useRouter()
-  const selectMode =
-    router.asPath.indexOf('teacher') > -1 ? 'teacher' : 'student'
   const { children, setOpenResource, openDrawer } = props
   return (
     <>
       <DashboardLayout
-        mode={selectMode}
         setOpenResource={setOpenResource}
         openDrawer={openDrawer}
       >

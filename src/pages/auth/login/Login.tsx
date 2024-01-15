@@ -112,13 +112,13 @@ const LoginPage = () => {
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
     try {
-      // const getFireBaseToken = await handleDeviceToken()
+      const getFireBaseToken = await handleDeviceToken()
       dispatch(
         getLoginUser({
           login,
           password,
           remember_me: remember_me ? remember_me : false,
-          device_id: '',
+          device_id: getFireBaseToken,
         }),
       )
         // dispatch(getEntranceCount())

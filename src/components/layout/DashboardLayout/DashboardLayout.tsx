@@ -2,14 +2,12 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import Sidebar from '../Sidebar'
 
 type DashboardLayoutProps = {
-  mode: 'student' | 'teacher'
   children: React.ReactNode
   setOpenResource: Dispatch<SetStateAction<boolean>>
   openDrawer: boolean
 }
 
 export default function DashboardLayout({
-  mode,
   children,
   setOpenResource,
   openDrawer,
@@ -23,14 +21,9 @@ export default function DashboardLayout({
     <div className="flex flex-nowrap">
       <Sidebar
         isOpened={isOpened}
-        mode={mode}
         toggleDrawer={toggleDrawer}
-        className={`fixed top-0 md:left-0 h-screen transition-all duration-200 ${
+        className={`menu-sidebar-left fixed top-0 md:left-0 h-screen transition-all duration-200 bg-white shadow-sidebar w-20 hover:w-[200px] max-w-screen ${
           openDrawer ? 'opacity-5' : ''
-        } ${
-          mode === 'student'
-            ? 'bg-white shadow-sidebar w-20'
-            : 'bg-bw-4 border-r border-dark w-[82px]'
         }`}
         setOpenResource={setOpenResource}
       />
