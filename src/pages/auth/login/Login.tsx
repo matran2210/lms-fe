@@ -73,7 +73,6 @@ const LoginPage = () => {
   })
 
   const handleDeviceToken = async () => {
-    setLoading(true)
     try {
       const accessDeviceToken = await AsyncStorage.getItem(
         'firebaseDeviceToken',
@@ -88,13 +87,10 @@ const LoginPage = () => {
       return token
     } catch (error) {
       return ''
-    } finally {
-      setLoading(false)
     }
   }
 
   async function getListEntranceTest() {
-    setLoading(true)
     try {
       const res = await EntranceApi.getListEntranceTestLogin()
       if (res?.data?.length > 0) {
@@ -102,15 +98,13 @@ const LoginPage = () => {
       } else {
         router.push(PageLink.COURSES)
       }
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
+    } catch (error) {}
   }
 
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
+    setLoading(true)
     try {
       const getFireBaseToken = await handleDeviceToken()
       dispatch(
@@ -133,7 +127,12 @@ const LoginPage = () => {
             setOpenLimit(true)
           }
         })
-    } catch (error: any) {}
+    } catch (error: any) {
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 2000)
+    }
   }
   const socialLogin = () => {
     toast.error('Chức năng này sẽ được update vào version sau!')
