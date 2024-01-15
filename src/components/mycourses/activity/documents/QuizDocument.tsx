@@ -51,7 +51,9 @@ const QuizDocument = ({
     id?: string
   }>()
 
-  const [openConfirmQUiz, setOpenConfirmQUiz] = useState<boolean>(false)
+  const [quizComponentKey, setQuizComponentKey] = useState<number>(1)
+
+  const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
 
   useEffect(() => {
     if (questions?.[0]) {
@@ -69,7 +71,7 @@ const QuizDocument = ({
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
-      handleFinishQuiz()
+      setOpenFinishQUiz(true)
     }
   }, [runHandleFinishQuiz])
 
@@ -169,6 +171,8 @@ const QuizDocument = ({
               quizId: quizId,
             }),
           )
+          setQuizComponentKey((e) => e + 1)
+          setActiveQuestionIndex(0)
         })
     } catch (error) {}
   }
@@ -216,8 +220,8 @@ const QuizDocument = ({
   return (
     <div>
       <PopupFinishQuiz
-        open={openConfirmQUiz}
-        setOpen={setOpenConfirmQUiz}
+        open={openFinishQUiz}
+        setOpen={setOpenFinishQUiz}
         submitQuiz={handleFinishQuiz}
       ></PopupFinishQuiz>
       <div className="border border-gray-3 p-6">
@@ -226,6 +230,7 @@ const QuizDocument = ({
             showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
             activeQuestion={activeQuestion}
             ref={questionRef}
+            key={quizComponentKey}
           />
         )}
       </div>
@@ -297,11 +302,15 @@ const QuizDocument = ({
         size="max-w-xxl"
         position="center"
         showFooter={false}
+        isFullScreen={true}
+        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
       >
-        <QuizResultComponent
-          questionResponse={modalResult?.questions || []}
-          getTable={getTable}
-        />
+        <div className="max-w-[1114px] mx-auto">
+          <QuizResultComponent
+            questionResponse={modalResult?.questions || []}
+            getTable={getTable}
+          />
+        </div>
       </SappModal>
     </div>
   )
