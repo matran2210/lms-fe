@@ -235,7 +235,7 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-10 border-solid bg-gray-3 absolute border right-0 border-gray-6;
+  @apply z-0 border-solid bg-gray-3 absolute border right-0 border-gray-6;
 }
 
 .sapp-arrowed-container-corrects {
