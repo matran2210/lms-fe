@@ -90,7 +90,13 @@ const ProfileSideBar = ({ page }: IProps) => {
     })
 
     // Chuyển trang
-    router.push(`/${childLabel.toLowerCase().replace(/_/g, '')}`)
+    let formattedChildLabel = childLabel.toLowerCase()
+
+    if (formattedChildLabel === 'my_profile') {
+      formattedChildLabel = formattedChildLabel.replace(/_/g, '') // hoặc có thể sử dụng ' ' để thay thế bằng khoảng trắng
+    }
+
+    router.push(`/${formattedChildLabel}`)
   }
 
   const [isExpanded, toggleExpanded] = useState(false)
@@ -132,13 +138,15 @@ const ProfileSideBar = ({ page }: IProps) => {
                     : ''
                 }`}
                 onClick={() => {
-                  onClick()
                   if (urlPage !== 'security') {
                     // If not 'security', use existing logic
                     handleChildClick(childLabel)
                     setChildActivationStates({ security: false })
-                  } else if (!childActivationStates[childLabel]) {
+                  } else if (childActivationStates[childLabel] === false) {
                     // If 'security' and not a child, set only 'security' to active
+                    setChildActivationStates({ security: true })
+                  } else if (urlPage === 'security') {
+                    onClick()
                     setChildActivationStates({ security: true })
                   }
                 }}
