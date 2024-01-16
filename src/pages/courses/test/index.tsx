@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 interface IProps {
   open: boolean
   setOpen: any
-  title: string
+  title?: string
   data?: any
 }
 const TestModal = ({ open, setOpen, title, data }: IProps) => {

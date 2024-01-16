@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
+import TestModal from 'src/pages/courses/test'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -19,6 +20,8 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [learningOutcome, setLearningOutcome] = useState<ILearningOutcome>()
   const router = useRouter()
   const [readMore, setReadMore] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false)
+  const [chapterData, setChapterData] = useState<any>({})
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
@@ -76,7 +79,11 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   const handleRouterChapter = (id: string) => {
-    router.push(`/test/${id}`)
+    const filteredData = chapterDetail?.children?.filter(
+      (item: any) => item?.quiz?.id === id,
+    )
+    setChapterData(filteredData?.[0])
+    setOpen(true)
   }
 
   const course_section = chapterDetail?.children?.[0]
@@ -174,6 +181,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
           </div>
         ))}
       </SappDrawer>
+      <TestModal open={open} setOpen={setOpen} data={chapterData} />
     </div>
   )
 }
