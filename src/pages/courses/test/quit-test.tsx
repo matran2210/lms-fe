@@ -12,19 +12,19 @@ interface IProps {
 const QuitTestModal = ({ open, setOpen, handleQuit }: IProps) => {
   const onSubmit = () => {
     setOpen(false)
+    handleQuit()
     // handleSubmit()
     //to do: start test
   }
   const onCancel = () => {
     setOpen(false)
-    handleQuit()
   }
   return (
     <SappModal
       open={open}
       setOpen={setOpen}
-      cancelButtonCaption="Quit"
-      okButtonCaption="Cancel"
+      cancelButtonCaption="Cancel"
+      okButtonCaption="Quit"
       handleCancel={onCancel}
       handleSubmit={onSubmit}
       showHeader={false}
@@ -37,6 +37,7 @@ const QuitTestModal = ({ open, setOpen, handleQuit }: IProps) => {
       fullWidthBtn={true}
       closeAfterSubmit={false}
       buttonSize="extra"
+      revertFunction={true}
     >
       <div className="p-8 rounded-full bg-secondary">
         <AlertTriagle />

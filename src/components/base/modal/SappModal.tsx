@@ -60,6 +60,8 @@ interface IProps {
   scrollbale?: boolean
   footerClassName?: string
   externalLoading?: boolean
+
+  revertFunction?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -125,6 +127,7 @@ const SappModal: React.FC<IProps> = ({
   scrollbale = true,
   footerClassName,
   externalLoading,
+  revertFunction = false,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -319,6 +322,7 @@ const SappModal: React.FC<IProps> = ({
                     )}
                     {customFooter || (
                       <ButtonCancelSubmit
+                        revertFunction={revertFunction}
                         className={footerButtonClassName}
                         color={color}
                         colorCancel={colorCancel}
