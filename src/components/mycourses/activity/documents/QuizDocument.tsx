@@ -133,6 +133,7 @@ const QuizDocument = ({
   }
 
   const handleFinishQuiz = () => {
+    setOpenFinishQUiz(false)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
     const {
       answers,
