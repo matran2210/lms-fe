@@ -94,7 +94,7 @@ const EditorReader = ({
   return (
     <>
       <div
-        className={`${className} mb-[32px] editor-wrap`}
+        className={`${className}`}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
       >
