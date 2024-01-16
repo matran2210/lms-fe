@@ -38,6 +38,7 @@ export type IPreviewProp = {
   fullData: any
   openChooseFile?: any
   handleClearFile?: any
+  setOpenPdf?: any
 }
 const EssayQuestionPreview = ({
   data,
@@ -59,6 +60,7 @@ const EssayQuestionPreview = ({
   fullData,
   openChooseFile,
   handleClearFile,
+  setOpenPdf,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
@@ -120,6 +122,20 @@ const EssayQuestionPreview = ({
               // style={{ borderBottom: "4px solid #F2F2F2" }}
               text_editor_content={data.description}
             />
+            {data?.files?.length > 0 &&
+              data?.files.map((e: any, index: number) => {
+                return (
+                  <div
+                    className="cursor-pointer text-state-info hover:underline"
+                    onClick={() =>
+                      setOpenPdf({ status: true, url: e.resource.url })
+                    }
+                    key={index}
+                  >
+                    {e.resource.name}
+                  </div>
+                )
+              })}
           </div>
           {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
             forCaseStudy) && <div className="sapp-seprate-line-preview"></div>}
