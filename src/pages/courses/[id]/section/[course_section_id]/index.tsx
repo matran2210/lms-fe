@@ -72,7 +72,15 @@ const CoursePartDetail = ({ previewPart }: any) => {
       },
     })
   }
-  const handleRouterCaseStudy = (quizId: string, topicId: string) => {
+  const handleRouterCaseStudy = async (
+    quizId: string,
+    topicId: string,
+    sectionId?: string | undefined,
+    caseStudyId?: string | undefined,
+  ) => {
+    if (sectionId && caseStudyId) {
+      await handleCaseStudyProcess(sectionId, caseStudyId)
+    }
     router.push({
       pathname: `/case-study/${topicId}`,
       query: { quiz_id: quizId, class_user_id: previewPart.class_user_id },
@@ -106,7 +114,12 @@ const CoursePartDetail = ({ previewPart }: any) => {
       course_section?.course_section_type === 'ACTIVITY'
         ? handleRouterActivity(course_section?.children?.[0]?.id)
         : course_section?.course_section_type === 'STORY'
-          ? handleRouterCaseStudy(quiz?.id, quiz?.case_study_story?.id)
+          ? handleRouterCaseStudy(
+              quiz?.id,
+              quiz?.case_study_story?.id,
+              course_section?.id,
+              quiz?.case_study_story?.instances?.[0]?.id,
+            )
           : () => {}
     }
   }
@@ -126,6 +139,13 @@ const CoursePartDetail = ({ previewPart }: any) => {
 
   const handleChapterTest = async () => {
     await CourseAPI.learningOutcomeProgress(router.query.id, chapterTestId)
+  }
+
+  const handleCaseStudyProcess = async (
+    courseId: string,
+    caseStudyId: string,
+  ) => {
+    await CourseAPI.caseStudyProgress(router.query.id, courseId, caseStudyId)
   }
 
   return (

@@ -145,9 +145,21 @@ const CourseAPI = {
   learningOutcomeProgress: (
     course_id: string | string[] | undefined,
     section_id: string | string[] | undefined,
+    params?: Object,
   ): Promise<any> => {
     const response = httpService.GET<any, any>({
       uri: `course-sections/course/${course_id}/section/${section_id}/progress`,
+      request: params,
+    })
+    return response
+  },
+  caseStudyProgress: (
+    course_id: string | string[] | undefined,
+    section_id: string | string[] | undefined,
+    caseStudyId: string | string[] | undefined,
+  ): Promise<any> => {
+    const response = httpService.GET<any, any>({
+      uri: `course-sections/course/${course_id}/section/${section_id}/progress?story_topic_id=${caseStudyId}`,
     })
     return response
   },
