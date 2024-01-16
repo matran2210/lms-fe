@@ -1,124 +1,93 @@
-import { apiURL } from '@components/mycourses/LearningNotesList'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { removeJwtToken } from '@utils/helpers/authen'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
-import axios from 'axios'
-import { parse } from 'cookie'
+import { ExplanationPackage } from 'explanation-package'
 import { useRouter } from 'next/router'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
+import { useEffect, useState } from 'react'
+import { httpService } from 'src/redux/services/httpService'
+import { QUESTION_TYPES } from 'src/type/course/Question'
+import 'explanation-package/dist/index.css'
+import { LAYOUT } from '@utils/constants'
 // import {} from 'explanation-package'
-const Explanation = ({ data }: any) => {
+const Explanation = () => {
   const router = useRouter()
+  const [activeQuestion, setActiveQuestion] = useState<any>()
+  function getCorrect(answers: any, questionType: any) {
+    switch (questionType as QUESTION_TYPES) {
+      case QUESTION_TYPES.ONE_CHOICE:
+      case QUESTION_TYPES.TRUE_FALSE:
+        const correctAnswers = answers
+        const corrects = Object.fromEntries(
+          correctAnswers.map((answer: any) => [answer.id, answer.is_correct]),
+        )
+        return corrects
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        return Object.fromEntries(
+          (answers || []).map((originalAnswer: any) => [
+            originalAnswer.id,
+            originalAnswer.is_correct,
+          ]),
+        )
+      case QUESTION_TYPES.FILL_WORD:
+      case QUESTION_TYPES.SELECT_WORD:
+        return answers || []
+      case QUESTION_TYPES.MATCHING:
+        return answers || []
+      case QUESTION_TYPES.DRAG_DROP:
+        return answers || []
+      default:
+        return {}
+    }
+  }
+  const getActiveQuestion = async (id: string) => {
+    // const quizAttempts = axiosInstance.get('')
+    // const selectedResponseAnswers = data.data.selectedResponseAnswers
+    try {
+      const resultResponse = (await httpService.GET({
+        uri: 'quiz-attempts/answers/' + id,
+      })) as any
+      // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
+      setActiveQuestion({
+        ...resultResponse.data.answer.question,
+        confirmed: true,
+        corrects: getCorrect(
+          resultResponse.data.answer.answer_position_mapping?.[0]
+            ? resultResponse.data.answer.answer_position_mapping
+            : resultResponse.data.answer.question.question_matchings,
+          resultResponse.data.answer.question.qType,
+        ),
+        answers:
+          resultResponse.data?.answer?.answer_position_mapping?.answers || [],
+        myAnswers: [
+          {
+            question_id: resultResponse.data.answer.question.id,
+            question_answer_id: resultResponse.data.answer.id,
+            answer: resultResponse.data.answer.answer,
+          },
+        ],
+        defaultValue: resultResponse.data.answer.answer,
+        next: resultResponse.data.next,
+        previous: resultResponse.data.previous,
+        total_question: resultResponse.data.total_question,
+        index: resultResponse.data.index,
+      })
+    } catch (err) {}
+  }
+
+  useEffect(() => {
+    if (router.query.id) {
+      getActiveQuestion(router.query.id as string)
+    }
+  }, [router.query.id])
+
   //todo: call api, make UI
   // return <></>
 
-  return <></>
-}
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
-
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
-
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
-
-  try {
-    const { req } = context
-
-    // Parse cookies from the request headers
-    const cookies = parse(req.headers.cookie || '')
-
-    if (!context?.query?.id) {
-      return {
-        notFound: true,
-      }
-    }
-
-    const data = (await CourseTestApi.getAnswerData(
-      context?.query?.id,
-      cookies.accessToken,
-    )) as any
-
-    return {
-      props: {
-        data: data,
-      },
-    }
-  } catch (error: any) {
-    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-    if (error.response && error.response.status === 401) {
-      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-      const refreshToken = req.cookies.refreshToken
-
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-        const userInfo = res?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        await AsyncStorage.setItem('accessToken', act)
-        await AsyncStorage.setItem('refreshToken', rft)
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
-        const data = (await CourseTestApi.getAnswerData(
-          context?.query?.id,
-          act,
-        )) as any
-
-        return {
-          props: {
-            dara: data,
-          },
-        }
-      } catch (refreshError) {
-        // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-        // Chuyển hướng đến trang đăng nhập
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      }
-    } else {
-      // Xử lý lỗi khác khi sử dụng accessToken
-      if (error.response && error.response.status === 403) {
-        // Chuyển hướng đến trang đăng nhập
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      } else {
-        return {
-          redirect: {
-            destination: '/404',
-            permanent: false,
-          },
-        }
-      }
-    }
-  }
+  return (
+    <div>
+      <ExplanationPackage
+        getActiveQuestion={getActiveQuestion}
+        activeQuestion={activeQuestion}
+      />
+    </div>
+  )
 }
 export default Explanation
+Explanation.layout = LAYOUT.FULLSCREEN_LAYOUT
