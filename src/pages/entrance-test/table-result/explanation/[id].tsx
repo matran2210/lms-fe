@@ -82,10 +82,10 @@ const Explanation = () => {
 
   return (
     <div>
-      {/* <ExplanationPackage
+      <ExplanationPackage
         getActiveQuestion={getActiveQuestion}
         activeQuestion={activeQuestion}
-      /> */}
+      />
     </div>
   )
 }
