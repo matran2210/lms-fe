@@ -7,10 +7,9 @@ const HistoryItem = ({ data }: any) => {
       </div>
       <div className="flex items-center gap-2">
         <div className="text-xsm text-gray-1">
-          {format(data.created_at, 'hh:mm:ss dd/MM/yyyy')}
+          {format(data.created_at, 'HH:mm:ss dd/MM/yyyy')}
         </div>
         <div className="bg-gray-1 rounded-full w-[4px] h-[4px]"></div>
-        <div className="text-xsm text-gray-1">{data.ip}</div>
         {data.location && (
           <div className="bg-gray-1 rounded-full w-[4px] h-[4px]"></div>
         )}
