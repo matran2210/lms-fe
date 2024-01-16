@@ -243,7 +243,7 @@ const CourseTestApi = {
       Authorization: 'Bearer ' + accessToken,
     }
     const response = await axios.get<{}, IResponse<{ data: any }>>(
-      `${apiURL}${url.getAnswer}/${id}`,
+      `${apiURL}/${url.getAnswer}/${id}`,
       {
         headers,
       },
