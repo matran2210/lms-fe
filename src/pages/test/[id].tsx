@@ -1181,6 +1181,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     async function createQuizAttempt() {
       const res = await CourseTestApi.createQuizAttempt(
         router.query.id as string,
+        router.query.class_user_id as string,
       )
       setQuizAttempId(res.data.id)
     }

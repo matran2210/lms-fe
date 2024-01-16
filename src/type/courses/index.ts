@@ -56,6 +56,7 @@ export interface IMeta {
 }
 
 export interface ICourseDetailAll {
+  class_user_id?: string
   data: ICourseDetail
   metadata: IMeta
 }

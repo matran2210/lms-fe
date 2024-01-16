@@ -219,15 +219,27 @@ const CaseStudyDetail = ({ questions }: any) => {
       )
     }
   }, [router.query.id])
-  async function createAttempts(quiz_id: string, id: string) {
-    const res = await CourseTestApi.createTopicAttempt(quiz_id, id)
+  async function createAttempts(
+    quiz_id: string,
+    id: string,
+    class_user_id: string,
+  ) {
+    const res = await CourseTestApi.createTopicAttempt(
+      quiz_id,
+      id,
+      class_user_id,
+    )
     setQuizAttempId(res.data.id)
   }
   useEffect(() => {
-    if (router.query.quiz_id && router.query.id) {
-      createAttempts(router.query.quiz_id as string, router.query.id as string)
+    if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
+      createAttempts(
+        router.query.quiz_id as string,
+        router.query.id as string,
+        router.query.class_user_id as string,
+      )
     }
-  }, [router.query.id, router.query.quiz_id])
+  }, [router.query.id])
   const getValueFillText = (index: number) => {
     let value = []
     if (valueRef.current[index]) {

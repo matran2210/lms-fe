@@ -41,7 +41,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
   const [data, setData] = useState<ICourseSection[]>(
     courses?.data?.course_sections_with_progress || [],
   )
-
+  const [class_user_id, setClassUserId] = useState(courses?.class_user_id)
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -106,7 +106,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
         <Heading greeting="Welcome to" title={courses?.data?.name} />
       </div>
       <div className="pt-6 max-w-xxl my-0 mx-auto xl-max:container">
-        <CourseParts courses={data} />
+        <CourseParts courses={data} class_user_id={class_user_id} />
       </div>
     </>
   )
