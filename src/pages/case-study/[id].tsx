@@ -439,7 +439,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           total_attempt_time: total_attempt_time,
         })
         toast.success('submit success')
-        router.push(`/courses/test/test-result/${quizAttempId}`)
+        router.push(`/case-study/table-result/${quizAttempId}`)
       } catch (err) {
         toast.error('submit failed')
       }
