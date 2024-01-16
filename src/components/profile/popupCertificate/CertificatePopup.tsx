@@ -299,7 +299,7 @@ const SappModalCerti: React.FC<IProps> = ({
                         </div>
                       </div>
                       {isBordered && (
-                        <div className="absolute inset-0 border-b border-gray-2 bottom-0 -mx-6"></div>
+                        <div className="absolute inset-0 border-b border-gray-2 bottom-0 -mx-6 h-[1px] -z-10"></div>
                       )}
                     </div>
                   ))}
