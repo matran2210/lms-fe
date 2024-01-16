@@ -35,6 +35,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
+import { StreamPlayerApi } from '@cloudflare/stream-react'
 
 type Props = {
   activity: IActivity
@@ -51,11 +52,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
-  const videoDocumentRef = useRef<HTMLDivElement>(null)
+  const streamRef = useRef<StreamPlayerApi>(null)
 
-  // const observerRef = useRef<IntersectionObserver>()
-  // const isFinishRef = useRef<boolean>(false)
+  const observerRef = useRef<IntersectionObserver>()
+  const isFinishRef = useRef<boolean>(false)
   const router = useRouter()
+  const activityType = activity?.display_icon
+
   useLayoutEffect(() => {
     if (activity) {
       try {
@@ -63,12 +66,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         dispatch(
           getDiscussion({ id: router.query.classId, sectionId: sectionId }),
         )
-        ;(async () => {
-          await CourseActivityApi.startCourseSectionProgress(
-            courseId,
-            sectionId,
-          )
-        })()
+        // ;(async () => {
+        //   await CourseActivityApi.startCourseSectionProgress(
+        //     courseId,
+        //     sectionId,
+        //   )
+        // })()
       } catch (error) {}
     }
   }, [activity])
@@ -77,14 +80,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   //   return breadcumb
   // }
 
-  // useEffect(() => {
-  //   finishedCourseSectionProgress()
-  // }, [
-  //   endActivityRef.current,
-  //   quizDocumentRef.current,
-  //   videoDocumentRef.current,
-  //   observerRef.current,
-  // ])
+  useEffect(() => {
+    finishedCourseSectionProgress()
+  }, [
+    endActivityRef.current,
+    quizDocumentRef.current,
+    observerRef.current,
+    streamRef.current,
+  ])
 
   // Clear notes
   useEffect(() => {
@@ -94,84 +97,76 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   /**
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
    */
-  // const finishedCourseSectionProgress = () => {
-  //   // Xác định loại hoạt động của phần hiện tại
-  //   const activityType = getActivityType(activity)
+  const finishedCourseSectionProgress = async () => {
+    // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
+    if (activityType === 'VIDEO' && streamRef?.current) {
+      streamRef.current.addEventListener('playing', async () => {
+        await handleFinishedCourseSectionProgress()
+      })
+      return
+    }
+    // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
+    else if (activityType === 'QUIZ' || 'PAST_EXAM_ANALYSIS') {
+      await handleFinishedCourseSectionProgress()
+      return
+    }
 
-  //   // Xử lý khi chỉ có video và tham chiếu đến videoDocumentRef hiện tại
-  //   if (activityType === ACTIVITY_TYPE.ONLY_VIDEO && videoDocumentRef.current) {
-  //     videoDocumentRef.current.onclick = async () => {
-  //       await handleFinishedCourseSectionProgress()
-  //     }
-  //     return
-  //   }
-  //   // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
-  //   else if (
-  //     activityType === ACTIVITY_TYPE.ONLY_QUIZ &&
-  //     quizDocumentRef.current
-  //   ) {
-  //     quizDocumentRef.current.onclick = async () => {
-  //       await handleFinishedCourseSectionProgress()
-  //     }
-  //     return
-  //   }
+    // Xử lý khi có tham chiếu đến endActivityRef hiện tại
+    if (endActivityRef.current && activityType === 'TEXT') {
+      // Hủy theo dõi nếu đã có observerRef.current
+      if (observerRef.current) {
+        observerRef.current?.unobserve(endActivityRef.current)
+      }
 
-  //   // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-  //   if (endActivityRef.current) {
-  //     // Hủy theo dõi nếu đã có observerRef.current
-  //     if (observerRef.current) {
-  //       observerRef.current?.unobserve(endActivityRef.current)
-  //     }
+      // Thiết lập các tùy chọn cho IntersectionObserver
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      }
 
-  //     // Thiết lập các tùy chọn cho IntersectionObserver
-  //     const options = {
-  //       root: null,
-  //       rootMargin: '0px',
-  //       threshold: 0.5,
-  //     }
+      // Hàm xử lý khi có sự giao thoa
+      const handleIntersection = async (
+        entries: IntersectionObserverEntry[],
+      ) => {
+        const isVisible = entries[0].isIntersecting
 
-  //     // Hàm xử lý khi có sự giao thoa
-  //     const handleIntersection = async (
-  //       entries: IntersectionObserverEntry[],
-  //     ) => {
-  //       const isVisible = entries[0].isIntersecting
+        // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
+        if (isVisible && endActivityRef.current) {
+          observerRef.current?.unobserve(endActivityRef.current)
+          await handleFinishedCourseSectionProgress()
+        }
+      }
 
-  //       // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-  //       if (isVisible && endActivityRef.current) {
-  //         observerRef.current?.unobserve(endActivityRef.current)
-  //         await handleFinishedCourseSectionProgress()
-  //       }
-  //     }
+      // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
+      observerRef.current = new IntersectionObserver(
+        handleIntersection,
+        options,
+      )
 
-  //     // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
-  //     observerRef.current = new IntersectionObserver(
-  //       handleIntersection,
-  //       options,
-  //     )
+      // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
+      if (endActivityRef.current) {
+        observerRef.current?.observe(endActivityRef.current)
+      }
 
-  //     // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-  //     if (endActivityRef.current) {
-  //       observerRef.current?.observe(endActivityRef.current)
-  //     }
-
-  //     // Trả về hàm cleanup
-  //     return () => {
-  //       if (endActivityRef.current) {
-  //         observerRef.current?.unobserve(endActivityRef.current)
-  //       }
-  //     }
-  //   }
-  // }
+      // Trả về hàm cleanup
+      return () => {
+        if (endActivityRef.current) {
+          observerRef.current?.unobserve(endActivityRef.current)
+        }
+      }
+    }
+  }
 
   /**
    * Hàm xử lý khi kết thúc tiến trình phần của khóa học.
    */
-  // const handleFinishedCourseSectionProgress = async () => {
-  //   if (!isFinishRef.current) {
-  //     await CourseActivityApi.finishedCourseSectionProgress(courseId, sectionId)
-  //     isFinishRef.current = true
-  //   }
-  // }
+  const handleFinishedCourseSectionProgress = async () => {
+    if (!isFinishRef.current) {
+      await CourseActivityApi.startCourseSectionProgress(courseId, sectionId)
+      isFinishRef.current = true
+    }
+  }
 
   /**
    * Hàm để lấy ActivityType dựa trên document type.
@@ -437,15 +432,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 }
                 if (e.type === 'VIDEO') {
                   return (
-                    <div
-                      className={marginBottom}
-                      key={e.id}
-                      ref={videoDocumentRef}
-                    >
+                    <div className={marginBottom} key={e.id}>
                       <VideoDocument
                         videos={e.videos}
                         activityId={activity.id}
                         tabId={selector.currentTabId || ''}
+                        streamRefProp={streamRef}
+                        handleProcess={handleFinishedCourseSectionProgress}
                       ></VideoDocument>
                     </div>
                   )

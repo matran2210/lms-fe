@@ -32,6 +32,8 @@ type Props = {
   videos?: IVideo[]
   activityId: string
   tabId: string
+  streamRefProp: StreamPlayerApi | any
+  handleProcess?: () => void
 }
 
 /**
@@ -40,7 +42,13 @@ type Props = {
  * @param {Props} props - The properties of the component.
  * @param {IVideo[]} props.videos - List of videos to be displayed.
  */
-const VideoDocument = ({ videos, activityId, tabId }: Props) => {
+const VideoDocument = ({
+  videos,
+  activityId,
+  tabId,
+  streamRefProp,
+  handleProcess,
+}: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
   const currentTimeRef = useRef(-1)
@@ -57,7 +65,8 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
   const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
-  const streamRef = useRef<StreamPlayerApi>()
+  const internalRef = useRef<StreamPlayerApi>()
+  const streamRef = streamRefProp ?? internalRef
   const dispatch = useAppDispatch()
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -75,6 +84,10 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
       debouncedHandleSetCurrentVideo?.current(videos?.[0])
     }
   }, [])
+
+  useEffect(() => {
+    handleProcess && streamRefProp?.current !== null && handleProcess()
+  }, [streamRefProp?.current])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
