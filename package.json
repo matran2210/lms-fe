@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@cloudflare/stream-react": "^1.8.0",
+    "@cyntler/react-doc-viewer": "1.10.4",
     "@fortune-sheet/react": "^0.19.1",
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.3.2",
@@ -45,6 +46,7 @@
     "next-compose-plugins": "^2.2.1",
     "next-i18next": "^13.2.2",
     "next-redux-wrapper": "^8.1.0",
+    "next-remove-imports": "^1.0.12",
     "next-with-less": "^3.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^9.3.0",
