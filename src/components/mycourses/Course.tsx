@@ -341,7 +341,11 @@ const Course = ({
                 {/* {'buttonText' && ( */}
                 {determineButtonToShow !== 'Disabled' ? (
                   <ButtonSecondary
-                    title={determineButtonToShow}
+                    title={
+                      determineButtonToShow === 'Active'
+                        ? 'Activate'
+                        : determineButtonToShow
+                    }
                     full={false}
                     size={'small'}
                     className="hover:bg-primary hover:text-white ml-auto"

@@ -11,8 +11,16 @@ interface IProps {
   title?: string
   data?: any
   class_user_id?: string
+  activeCourse?: () => void
 }
-const TestModal = ({ open, setOpen, title, data, class_user_id }: IProps) => {
+const TestModal = ({
+  open,
+  setOpen,
+  title,
+  data,
+  class_user_id,
+  activeCourse,
+}: IProps) => {
   const router = useRouter()
   const onSubmit = () => {
     //to do: start test
@@ -22,6 +30,7 @@ const TestModal = ({ open, setOpen, title, data, class_user_id }: IProps) => {
         class_user_id: class_user_id,
       },
     })
+    activeCourse && activeCourse()
   }
   const checkFinished = useMemo(() => {
     if (data?.quiz?.attempts) {

@@ -22,6 +22,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [readMore, setReadMore] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<any>({})
+  const [chapterTestId, setChapterTestId] = useState<string>()
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
@@ -79,10 +80,19 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   const handleRouterChapter = (id: string) => {
+    const partData = partDetail?.children?.filter(
+      (item: any) => item?.id === id,
+    )
     const filteredData = chapterDetail?.children?.filter(
       (item: any) => item?.quiz?.id === id,
     )
-    setChapterData(filteredData?.[0])
+    if (partData?.length > 0) {
+      setChapterData(partData?.[0])
+      setChapterTestId(partData?.[0]?.id)
+    } else {
+      setChapterData(filteredData?.[0])
+      setChapterTestId(filteredData?.[0]?.id)
+    }
     setOpen(true)
   }
 
@@ -112,6 +122,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
     if (res?.success) {
       fetchChapterDetail(id, course_section_id)
     }
+  }
+
+  const handleChapterTest = async () => {
+    await CourseAPI.learningOutcomeProgress(router.query.id, chapterTestId)
   }
 
   return (
@@ -186,6 +200,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         setOpen={setOpen}
         data={chapterData}
         class_user_id={previewPart.class_user_id}
+        activeCourse={handleChapterTest}
       />
     </div>
   )
