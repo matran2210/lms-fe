@@ -273,6 +273,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   }
 
   const handleFinishQuiz = async () => {
+    setOpenFinishQUiz(false)
     const questions = selectQuestions(
       selector,
       activityId,

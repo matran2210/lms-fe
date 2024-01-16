@@ -10,6 +10,7 @@ import { IQuestion } from 'src/type/course/Question'
  * @interface
  */
 export interface IActivityStateQuestion extends IQuestion {
+  question_topic: any
   confirmed?: boolean
   myAnswers?: any
   corrects?: any
@@ -403,6 +404,17 @@ const quizSlice: Slice = createSlice({
                   ]
 
                   questionToUpdate.corrects = payload.question.answers
+                  break
+                case QUESTION_TYPES.ESSAY:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
+                    {
+                      ...(payload.myAnswers || {}),
+                    },
+                  ]
                   break
                 default:
                   break

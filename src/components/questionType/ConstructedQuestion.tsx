@@ -103,12 +103,13 @@ const EssayQuestionPreview = ({
         }
       }}
     >
-      <EditorReader
-        className="sapp-questions"
-        text_editor_content={question_content}
-      />
       {data && (
         <>
+          <EditorReader
+            className="sapp-questions"
+            text_editor_content={question_content}
+          />
+
           <div>
             <div className="sapp-questions-essay">{`Requirement ${
               index + 1
@@ -122,223 +123,233 @@ const EssayQuestionPreview = ({
           </div>
           {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
             forCaseStudy) && <div className="sapp-seprate-line-preview"></div>}
-          {question_data.assignment_type !== 'TEXT' ? (
-            !fullData.answer_file?.file_key ? (
-              <React.Fragment>
-                <div className="sapp-upload-file-preview">
-                  <div className="title-upload-button-preview">
-                    Upload file to submit:
-                  </div>
-                  <div className="sapp-upload-button-preview">
-                    {/* <input
+        </>
+      )}
+      <>
+        {question_data.assignment_type !== 'TEXT' ? (
+          !fullData.answer_file?.file_key ? (
+            <React.Fragment>
+              <div
+                className={`sapp-upload-file-preview ${
+                  data
+                    ? ''
+                    : 'flex-col justify-start w-fit !items-start font-semibold !pt-0'
+                }`}
+              >
+                <div
+                  className={`${
+                    data ? '' : 'text-left'
+                  } title-upload-button-preview`}
+                >
+                  Upload file to submit:
+                </div>
+                <div className="sapp-upload-button-preview">
+                  {/* <input
                       ref={inputRef}
                       type="file"
                       className="hidden"
                       onChange={handleFileChange}
                     /> */}
-                    {/* <UploadIcon /> */}
-                    <UploadIcon />
-                    <div
-                      className="title-btn-preview"
-                      // onClick={() => inputRef.current.click()}
-                      onClick={() => openChooseFile(true)}
-                    >
-                      Choose file to upload
-                    </div>
-                  </div>
-                </div>
-                {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
-                  forCaseStudy) && (
-                  <div className="sapp-seprate-line-preview"></div>
-                )}
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <div className="sapp-upload-file-preview">
-                  <div className="title-upload-button-preview">
-                    Uploaded file:
-                  </div>
+                  {/* <UploadIcon /> */}
+                  <UploadIcon />
                   <div
-                    className="cursor-pointer text-state-info hover:underline"
-                    onClick={() =>
-                      handleDownload({
-                        files: [
-                          {
-                            name: fullData.answer_file.file_name,
-                            file_key: fullData.answer_file.file_key,
-                          },
-                        ],
-                      })
-                    }
+                    className="title-btn-preview"
+                    // onClick={() => inputRef.current.click()}
+                    onClick={() => openChooseFile(true)}
                   >
-                    {fullData.answer_file.file_name}
+                    Choose file to upload
                   </div>
-                  {!fullData?.done && (
-                    <div
-                      onClick={() => handleClearFile()}
-                      className="cursor-pointer"
-                    >
-                      <CloseIcon />
-                    </div>
-                  )}
                 </div>
-                {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
-                  forCaseStudy) && (
-                  <div className="sapp-seprate-line-preview"></div>
-                )}
-              </React.Fragment>
-            )
+              </div>
+              {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+                forCaseStudy) &&
+                data && <div className="sapp-seprate-line-preview"></div>}
+            </React.Fragment>
           ) : (
-            <></>
+            <React.Fragment>
+              <div className="sapp-upload-file-preview">
+                <div className="title-upload-button-preview">
+                  Uploaded file:
+                </div>
+                <div
+                  className="cursor-pointer text-state-info hover:underline"
+                  onClick={() =>
+                    handleDownload({
+                      files: [
+                        {
+                          name: fullData.answer_file.file_name,
+                          file_key: fullData.answer_file.file_key,
+                        },
+                      ],
+                    })
+                  }
+                >
+                  {fullData.answer_file.file_name}
+                </div>
+                {!fullData?.done && (
+                  <div
+                    onClick={() => handleClearFile()}
+                    className="cursor-pointer"
+                  >
+                    <CloseIcon />
+                  </div>
+                )}
+              </div>
+              {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
+                forCaseStudy) && (
+                <div className="sapp-seprate-line-preview"></div>
+              )}
+            </React.Fragment>
+          )
+        ) : (
+          <></>
+        )}
+        <div
+          style={
+            question_data.display_type === DISPLAY_TYPE.VERTICAL || forCaseStudy
+              ? { width: 'calc(100% + 20px)', marginLeft: '-20px' }
+              : { width: '100%', marginTop: '10px' }
+          }
+        >
+          {question_data.response_option === RESPONSE_OPTION.WORD ? (
+            <HookFormEditor
+              control={control}
+              name={name}
+              math={true}
+              height={500}
+              placeholder="Your answer here"
+              defaultValue={defaultValue}
+              disabled={fullData?.done}
+              // externalRef={externalRef}
+            />
+          ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
+            <div className="w-full, h-[500px]">
+              <Controller
+                name={name}
+                control={control}
+                defaultValue={defaultValue}
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <Workbook
+                      // generateSheetId={() => name}
+                      ref={refSheet}
+                      // column={2}
+                      // row={2}
+
+                      onChange={(e) => {
+                        if (!fullData?.done) {
+                          const currentSheet = refSheet.current?.getSheet()
+                          if (value) {
+                            let old = [...JSON.parse(value)]
+                            const index = old.findIndex(
+                              (e: any) => e.id === currentSheet.id,
+                            )
+                            if (index >= 0) {
+                              old.splice(index, 1, currentSheet)
+                            } else {
+                              old.push(currentSheet)
+                              // setValue(name, JSON.stringify(old))
+                            }
+                            onChange(JSON.stringify(old))
+                            // setValue(name, JSON.stringify(old))
+                          } else {
+                            onChange(JSON.stringify([currentSheet]))
+                            // setValue(name, JSON.stringify([currentSheet]))
+                          }
+                        }
+                      }}
+                      data={
+                        value
+                          ? JSON.parse(value)
+                          : [
+                              {
+                                name: 'Sheet1',
+                                // config: {
+                                //   authority: {
+
+                                //     sheet: true, //If it is 1 or true, the worksheet is protected; if it is 0 or false, the worksheet is not protected.
+
+                                //   },
+                                // },
+                              },
+                            ]
+                      }
+                      // onChange={(e) => console.log(e)}
+                    />
+                  )
+                }}
+              ></Controller>
+            </div>
+          ) : response_option_custom === 0 ? (
+            <HookFormEditor
+              control={control}
+              name={name}
+              // externalRef={externalRef}
+              math={true}
+              height={500}
+              placeholder="Your answer here"
+              defaultValue={defaultValue}
+              disabled={fullData?.done}
+            />
+          ) : (
+            <div className="w-full, h-[500px]">
+              <Controller
+                name={name}
+                control={control}
+                defaultValue={defaultValue}
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <Workbook
+                      // generateSheetId={() => name}
+                      ref={refSheet}
+                      // column={2}
+                      // row={2}
+
+                      onChange={(e) => {
+                        // const celldata = e.data
+                        if (!fullData?.done) {
+                          const currentSheet = refSheet.current?.getSheet()
+                          // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
+                          // // listSheet.splice(0,1)
+                          // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
+                          // console.log(listSheet,"test");
+                          if (value) {
+                            let old = [...JSON.parse(value)]
+                            const index = old.findIndex(
+                              (e: any) => e?.id === currentSheet?.id,
+                            )
+                            if (index >= 0) {
+                              old.splice(index, 1, currentSheet)
+                            } else {
+                              old.push(currentSheet)
+                              // setValue(name, JSON.stringify(old))
+                            }
+                            onChange(JSON.stringify(old))
+                            // setValue(name, JSON.stringify(old))
+                          } else {
+                            onChange(JSON.stringify([currentSheet]))
+                            // setValue(name, JSON.stringify([currentSheet]))
+                          }
+                        }
+                      }}
+                      data={
+                        value
+                          ? JSON.parse(value)
+                          : [
+                              {
+                                name: 'Sheet1',
+                              },
+                            ]
+                      }
+                      // onChange={(e) => console.log(e)}
+                    />
+                  )
+                }}
+              ></Controller>
+            </div>
           )}
-          <div
-            style={
-              question_data.display_type === DISPLAY_TYPE.VERTICAL ||
-              forCaseStudy
-                ? { width: 'calc(100% + 20px)', marginLeft: '-20px' }
-                : { width: '100%', marginTop: '10px' }
-            }
-          >
-            {question_data.response_option === RESPONSE_OPTION.WORD ? (
-              <HookFormEditor
-                control={control}
-                name={name}
-                math={true}
-                height={500}
-                placeholder="Your answer here"
-                defaultValue={defaultValue}
-                disabled={fullData?.done}
-                // externalRef={externalRef}
-              />
-            ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
-              <div className="w-full, h-[500px]">
-                <Controller
-                  name={name}
-                  control={control}
-                  defaultValue={defaultValue}
-                  render={({ field: { onChange, value } }) => {
-                    return (
-                      <Workbook
-                        // generateSheetId={() => name}
-                        ref={refSheet}
-                        // column={2}
-                        // row={2}
-
-                        onChange={(e) => {
-                          if (!fullData?.done) {
-                            const currentSheet = refSheet.current?.getSheet()
-                            if (value) {
-                              let old = [...JSON.parse(value)]
-                              const index = old.findIndex(
-                                (e: any) => e.id === currentSheet.id,
-                              )
-                              if (index >= 0) {
-                                old.splice(index, 1, currentSheet)
-                              } else {
-                                old.push(currentSheet)
-                                // setValue(name, JSON.stringify(old))
-                              }
-                              onChange(JSON.stringify(old))
-                              // setValue(name, JSON.stringify(old))
-                            } else {
-                              onChange(JSON.stringify([currentSheet]))
-                              // setValue(name, JSON.stringify([currentSheet]))
-                            }
-                          }
-                        }}
-                        data={
-                          value
-                            ? JSON.parse(value)
-                            : [
-                                {
-                                  name: 'Sheet1',
-                                  // config: {
-                                  //   authority: {
-
-                                  //     sheet: true, //If it is 1 or true, the worksheet is protected; if it is 0 or false, the worksheet is not protected.
-
-                                  //   },
-                                  // },
-                                },
-                              ]
-                        }
-                        // onChange={(e) => console.log(e)}
-                      />
-                    )
-                  }}
-                ></Controller>
-              </div>
-            ) : response_option_custom === 0 ? (
-              <HookFormEditor
-                control={control}
-                name={name}
-                // externalRef={externalRef}
-                math={true}
-                height={500}
-                placeholder="Your answer here"
-                defaultValue={defaultValue}
-                disabled={fullData?.done}
-              />
-            ) : (
-              <div className="w-full, h-[500px]">
-                <Controller
-                  name={name}
-                  control={control}
-                  defaultValue={defaultValue}
-                  render={({ field: { onChange, value } }) => {
-                    return (
-                      <Workbook
-                        // generateSheetId={() => name}
-                        ref={refSheet}
-                        // column={2}
-                        // row={2}
-
-                        onChange={(e) => {
-                          // const celldata = e.data
-                          if (!fullData?.done) {
-                            const currentSheet = refSheet.current?.getSheet()
-                            // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
-                            // // listSheet.splice(0,1)
-                            // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
-                            // console.log(listSheet,"test");
-                            if (value) {
-                              let old = [...JSON.parse(value)]
-                              const index = old.findIndex(
-                                (e: any) => e?.id === currentSheet?.id,
-                              )
-                              if (index >= 0) {
-                                old.splice(index, 1, currentSheet)
-                              } else {
-                                old.push(currentSheet)
-                                // setValue(name, JSON.stringify(old))
-                              }
-                              onChange(JSON.stringify(old))
-                              // setValue(name, JSON.stringify(old))
-                            } else {
-                              onChange(JSON.stringify([currentSheet]))
-                              // setValue(name, JSON.stringify([currentSheet]))
-                            }
-                          }
-                        }}
-                        data={
-                          value
-                            ? JSON.parse(value)
-                            : [
-                                {
-                                  name: 'Sheet1',
-                                },
-                              ]
-                        }
-                        // onChange={(e) => console.log(e)}
-                      />
-                    )
-                  }}
-                ></Controller>
-              </div>
-            )}
-          </div>
-        </>
-      )}
+        </div>
+      </>
     </div>
   )
 }

@@ -238,6 +238,17 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           case QUESTION_TYPES.DRAG_DROP:
             myAnswers = getAnswerDragNDrop()
             break
+          case QUESTION_TYPES.ESSAY:
+            myAnswers = {
+              question_id: activeQuestion.id,
+              short_answers: getValues('essay'),
+              response_option: activeQuestion.response_option
+                ? activeQuestion.response_option
+                : 'WORD',
+              // answer_file: activeQuestion.answer_file,
+              active: 'SUBMITED',
+            }
+            break
           default:
             break
         }
@@ -325,7 +336,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           return (
             <>
               <div>
-                <div className="flex items-center cursor-pointer select-none">
+                <div>
+                  <div className="font-semibold text-bw-1">
+                    Topic Description:
+                  </div>
+                  <div>
+                    <EditorReader
+                      className="editor-wrap mt-1.5"
+                      text_editor_content={
+                        activeQuestion?.question_topic?.description
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center cursor-pointer select-none mt-12">
                   <div className="relative">
                     <div
                       className="flex items-center hover:text-primary group"
@@ -426,8 +450,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 control={controlAnswer}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
-                name={''}
-                fullData={null}
+                name={'essay'}
+                fullData={activeQuestion}
               />
               {showExhibit?.id && (
                 <MovableWindow
