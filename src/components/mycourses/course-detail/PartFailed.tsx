@@ -6,7 +6,13 @@ import TestModal from 'src/pages/courses/test'
 import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
 
-const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
+const PartFailed = ({
+  coursePart,
+  class_user_id,
+}: {
+  coursePart: ICourseSection
+  class_user_id?: string
+}) => {
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
     : 'Unlimited'
@@ -111,6 +117,7 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
         setOpen={setOpen}
         title={coursePart?.name}
         data={coursePart}
+        class_user_id={class_user_id}
       />
     </>
   )

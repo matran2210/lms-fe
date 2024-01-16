@@ -22,6 +22,7 @@ import LearningResource from '@components/mycourses/LearningResource'
 import { getCountUnRead } from 'src/redux/slice/Notification/Notification'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
+import '@fortune-sheet/react/dist/index.css'
 
 // import 'antd/dist/antd.css'
 

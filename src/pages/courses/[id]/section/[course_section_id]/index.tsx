@@ -74,7 +74,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const handleRouterCaseStudy = (quizId: string, topicId: string) => {
     router.push({
       pathname: `/case-study/${topicId}`,
-      query: { quiz_id: quizId },
+      query: { quiz_id: quizId, class_user_id: previewPart.class_user_id },
     })
   }
 
@@ -181,7 +181,12 @@ const CoursePartDetail = ({ previewPart }: any) => {
           </div>
         ))}
       </SappDrawer>
-      <TestModal open={open} setOpen={setOpen} data={chapterData} />
+      <TestModal
+        open={open}
+        setOpen={setOpen}
+        data={chapterData}
+        class_user_id={previewPart.class_user_id}
+      />
     </div>
   )
 }

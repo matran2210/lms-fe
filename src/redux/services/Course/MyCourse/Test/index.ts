@@ -60,6 +60,7 @@ const CourseTestApi = {
   createTopicAttempt: async (
     quiz_id: string,
     question_topic_id: string,
+    class_user_id?: string,
   ): Promise<IResponse<any>> => {
     const uri = url.createTopicAttempt
     const response = await httpService.POST<any, any>({
@@ -67,6 +68,7 @@ const CourseTestApi = {
       request: {
         quiz_id,
         question_topic_id,
+        class_user_id,
       },
     })
     return response
@@ -238,12 +240,16 @@ const CourseTestApi = {
     )
     return response.data?.data
   },
-  createQuizAttempt: async (id: string): Promise<IResponse<any>> => {
+  createQuizAttempt: async (
+    id: string,
+    class_user_id?: string,
+  ): Promise<IResponse<any>> => {
     const uri = url.createQuizAttemp
     const response = await httpService.POST<any, any>({
       uri,
       request: {
         quiz_id: id,
+        class_user_id: class_user_id || undefined,
       },
     })
     return response

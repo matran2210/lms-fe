@@ -2,7 +2,13 @@ import React from 'react'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
 
-const CourseParts = ({ courses }: { courses: any }) => {
+const CourseParts = ({
+  courses,
+  class_user_id,
+}: {
+  courses: any
+  class_user_id?: string
+}) => {
   return (
     <div className="grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-10">
       {courses?.map((coursePart: any, index: number) => {
@@ -14,7 +20,11 @@ const CourseParts = ({ courses }: { courses: any }) => {
             {['MID_TERM_TEST', 'FINAL_TEST'].includes(
               coursePart?.course_section_type,
             ) ? (
-              <PartMiddleTest key={index} coursePart={coursePart} />
+              <PartMiddleTest
+                key={index}
+                coursePart={coursePart}
+                class_user_id={class_user_id}
+              />
             ) : (
               <Part key={index} courses={coursePart} />
             )}

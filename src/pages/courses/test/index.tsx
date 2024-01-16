@@ -10,18 +10,18 @@ interface IProps {
   setOpen: any
   title?: string
   data?: any
+  class_user_id?: string
 }
-const TestModal = ({ open, setOpen, title, data }: IProps) => {
+const TestModal = ({ open, setOpen, title, data, class_user_id }: IProps) => {
   const router = useRouter()
-  const dispatch = useAppDispatch()
-  // const {} = useAppSelector()
-  //to do: call api to get datail
-  const getData = useEffect(() => {
-    //dispatch(getDetailTest)
-  }, [])
   const onSubmit = () => {
     //to do: start test
-    router.push(`/test/${data.quiz.id}`)
+    router.push({
+      pathname: `/test/${data.quiz.id}`,
+      query: {
+        class_user_id: class_user_id,
+      },
+    })
   }
   const checkFinished = useMemo(() => {
     if (data?.quiz?.attempts) {
