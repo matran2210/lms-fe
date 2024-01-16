@@ -65,6 +65,13 @@ export default function MenuItem({
     router?.query?.activityId ||
     router?.query?.course_section_id
 
+  const closeSideBar = () => {
+    document.body.classList.add('no-hover')
+    setTimeout(() => {
+      document.body.classList.remove('no-hover')
+    }, 1000)
+  }
+
   return (
     <>
       {isActivity && name === 'Create Note' && (
@@ -89,6 +96,7 @@ export default function MenuItem({
           className={`sidebar-item flex items-center group ${
             Icon === 'avatar' ? '-ml-2' : ''
           }`}
+          onClick={() => closeSideBar()}
         >
           <Link href={url} passHref>
             <div className="flex items-center" onClick={handleActive}>

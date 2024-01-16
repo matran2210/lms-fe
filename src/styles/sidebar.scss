@@ -1,22 +1,26 @@
-.menu-sidebar-left {
-  &:hover {
-    .group-logos {
-      @apply pb-5;
-    }
+body:not(.no-hover) {
+  .menu-sidebar-left {
+    &:hover {
+      @apply w-[200px];
 
-    .logo-default {
-      @apply hidden;
-    }
+      .group-logos {
+        @apply pb-5;
+      }
 
-    .logo-full {
-      @apply block;
-    }
+      .logo-default {
+        @apply hidden;
+      }
 
-    .sidebar-item .label {
-      display: -webkit-box;
+      .logo-full {
+        @apply block;
+      }
 
-      &.avatar {
-        display: block;
+      .sidebar-item .label {
+        display: -webkit-box;
+
+        &.avatar {
+          display: block;
+        }
       }
     }
   }

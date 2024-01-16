@@ -149,8 +149,8 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   return (
-    <div className="main max-w-xxl my-0 mx-auto">
-      <div className="main max-w-xxl my-0 mx-auto">
+    <div className="main max-w-xxl my-0 mx-auto default-content-editor">
+      <div className="w-full">
         <div className="flex pt-6 pb-1 items-center">
           <p
             onClick={() => router.push('/courses')}
