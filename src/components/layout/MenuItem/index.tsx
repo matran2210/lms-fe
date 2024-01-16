@@ -14,11 +14,13 @@ import { v4 as uuidv4 } from 'uuid'
 type MenuItemProps = {
   menuItem: MenuItemType
   setOpenResource: Dispatch<SetStateAction<boolean>>
+  closeSideBar: () => void
 }
 
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   setOpenResource,
+  closeSideBar,
 }: MenuItemProps) {
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()
@@ -64,13 +66,6 @@ export default function MenuItem({
     router?.query?.courseId ||
     router?.query?.activityId ||
     router?.query?.course_section_id
-
-  const closeSideBar = () => {
-    document.body.classList.add('no-hover')
-    setTimeout(() => {
-      document.body.classList.remove('no-hover')
-    }, 1000)
-  }
 
   return (
     <>
@@ -168,6 +163,7 @@ export default function MenuItem({
             <MenuItemsList
               options={subItems}
               setOpenResource={setOpenResource}
+              closeSideBar={closeSideBar}
             />
           </div>
         ) : null}
