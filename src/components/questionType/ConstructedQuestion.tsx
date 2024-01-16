@@ -18,6 +18,7 @@ import { uniqueId } from 'lodash'
 import { IResource } from 'src/type/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
+import PopupViewPdf from '@components/base/pdf/popupViewPdf'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -64,6 +65,7 @@ const EssayQuestionPreview = ({
   const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
   const inputRef = useRef(null) as any
+  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   useEffect(() => {
     if (question_data) {
       DeserializeHighlight(highlighted)
@@ -119,6 +121,20 @@ const EssayQuestionPreview = ({
               // style={{ borderBottom: "4px solid #F2F2F2" }}
               text_editor_content={data.description}
             />
+            {data?.files?.length > 0 &&
+              data?.files.map((e: any, index: number) => {
+                return (
+                  <div
+                    className="cursor-pointer text-state-info hover:underline"
+                    onClick={() =>
+                      setOpenPdf({ status: true, url: e.resource.url })
+                    }
+                    key={index}
+                  >
+                    {e.resource.name}
+                  </div>
+                )
+              })}
           </div>
           {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
             forCaseStudy) && <div className="sapp-seprate-line-preview"></div>}
@@ -339,6 +355,11 @@ const EssayQuestionPreview = ({
           </div>
         </>
       )}
+      <PopupViewPdf
+        open={openPdf?.status || false}
+        setOpen={setOpenPdf}
+        url={openPdf?.url || ''}
+      />
     </div>
   )
 }
