@@ -27,6 +27,7 @@ import {
   IQuestionResultResponse,
 } from 'quiz-result-package/dist/type'
 import PopupFinishQuiz from '../PopupFinishQuiz'
+import ModalExplanationPackage from '../ModalExplanationPackage'
 
 type Props = {
   videos?: IVideo[]
@@ -77,7 +78,10 @@ const VideoDocument = ({
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
   const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
 
-  // const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
+  const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
+    id: string
+    isOpen: boolean
+  }>()
 
   useEffect(() => {
     if (videos?.[0]) {
@@ -388,7 +392,10 @@ const VideoDocument = ({
     setModalResult(undefined)
   }
 
-  const handleShowQuizResultDetail = (e: IQuestionResult) => {}
+  const handleShowQuizResultDetail = (data: IQuestionResult) => {
+    setShowQuestionResultDetail({ id: data.id, isOpen: true })
+  }
+
   return (
     <div>
       <PopupFinishQuiz
@@ -537,6 +544,11 @@ const VideoDocument = ({
           />
         </div>
       </SappModal>
+      <ModalExplanationPackage
+        quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
+        open={showQuestionResultDetail?.isOpen || false}
+        setOpen={() => setShowQuestionResultDetail(undefined)}
+      ></ModalExplanationPackage>
     </div>
   )
 }
