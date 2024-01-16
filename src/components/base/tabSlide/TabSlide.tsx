@@ -62,7 +62,7 @@ const TabSlide = ({
       const el = elementRef.current
       el && setHasScrollBar(el.scrollWidth > el.getBoundingClientRect().width)
     }
-  }, [elementRef?.current, data])
+  }, [elementRef?.current])
   const renderTab = useMemo(() => {
     let arr = [] as any
     let i = 1

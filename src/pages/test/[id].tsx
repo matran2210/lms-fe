@@ -1246,7 +1246,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
-      {loading && (
+      {loading && tabs?.length !== 0 && filteredTabs.length !== 0 && (
         <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
           Loading
         </div>
@@ -1286,21 +1286,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           ></ButtonCancelSubmit>
         </div>
         {/* End Header */}
-        <div className="px-6 bg-gray-4 shadow-solution py-4 absolute w-full">
-          <TabSlide
-            data={filteredTabs}
-            currentTab={currentPage}
-            setCurrentTab={setCurrentPage}
-            optionShowAll={<OptionShowAll />}
-            handleChangeTab={(e: any) => {
-              handleChangeTab(e)
-            }}
-            activeShowAll={activeShowAll}
-            setActiveShowAll={setActiveShowAll}
-            setValueFilter={setValueFilter}
-          />
-          {/* </div> */}
-        </div>
+        {tabs?.length > 0 && (
+          <div className="px-6 bg-gray-4 shadow-solution py-4 absolute w-full">
+            <TabSlide
+              data={filteredTabs}
+              currentTab={currentPage}
+              setCurrentTab={setCurrentPage}
+              optionShowAll={<OptionShowAll />}
+              handleChangeTab={(e: any) => {
+                handleChangeTab(e)
+              }}
+              activeShowAll={activeShowAll}
+              setActiveShowAll={setActiveShowAll}
+              setValueFilter={setValueFilter}
+            />
+            {/* </div> */}
+          </div>
+        )}
       </div>
       {/* <div className=''> */}
       {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
@@ -1414,8 +1416,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
                 onFocusingPad === e.id
-                  ? openScratchPad.length + 100
-                  : index + 100
+                  ? openScratchPad.length + 1400
+                  : index + 1400
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1444,8 +1446,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
                 onFocusingPad === e.id
-                  ? openScratchPad.length + 100
-                  : index + 100
+                  ? openScratchPad.length + 1400
+                  : index + 1400
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1484,8 +1486,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
                 onFocusingPad === e.id
-                  ? openScratchPad.length + 100
-                  : index + 100
+                  ? openScratchPad.length + 1400
+                  : index + 1400
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
