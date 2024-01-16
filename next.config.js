@@ -26,11 +26,6 @@ const securityHeaders = [
 ]
 
 module.exports = withBundleAnalyzer({
-  webpack: (config) => {
-    config.resolve.alias.canvas = false
-
-    return config
-  },
   i18n,
   reactStrictMode: false,
   productionBrowserSourceMaps: true,

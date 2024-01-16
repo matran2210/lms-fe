@@ -56,9 +56,6 @@ import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadF
 import { RESOURCE_LOCATION } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import dynamic from 'next/dynamic'
-import PopupViewPdf from '@components/base/pdf/popupViewPdf'
-
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -259,7 +256,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
   const [openUpload, setOpenUpload] = useState<any>({})
-  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -1195,7 +1192,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setRemainTime((prev) => {
           if (prev === 1) {
             clearInterval(interval)
-            // setOpenTimeOut(true)
+            setOpenTimeOut(true)
             // handleSubmitQuestion()
           }
           return prev - 1
@@ -1209,8 +1206,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
     }
   }, [quizDetail])
-  // console.log(Ex);
-
   // useEffect(() => {
   //   const handleBeforeUnload = async (event: any) => {
   //     event.preventDefault()
@@ -1300,11 +1295,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             setActiveShowAll={setActiveShowAll}
             setValueFilter={setValueFilter}
           />
-
           {/* </div> */}
         </div>
       </div>
-      {/* <PDFViewer/> */}
       {/* <div className=''> */}
       {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
         <div
@@ -1510,26 +1503,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   dangerouslySetInnerHTML={{ __html: exhibitsDes?.description }}
                 ></div>{' '} */}
                 {/* </div> */}
-                <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
-                  <EditorReader
-                    text_editor_content={exhibitsDes?.description}
-                    className=" w-full "
-                  />
-                  {exhibitsDes?.files?.length > 0 &&
-                    exhibitsDes?.files.map((e: any, index: number) => {
-                      return (
-                        <div
-                          key={index}
-                          className="cursor-pointer text-state-info hover:underline"
-                          onClick={() =>
-                            setOpenPdf({ status: true, url: e.resource.url })
-                          }
-                        >
-                          {e.resource.name}
-                        </div>
-                      )
-                    })}
-                </div>
+                <EditorReader
+                  text_editor_content={exhibitsDes?.description}
+                  className="bg-white h-[calc(100%-40px)] w-full overflow-auto p-5"
+                />
               </div>
             </MovableWindow>
           )
@@ -1793,11 +1770,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         fileType={'ESSAY'}
         location={`question-answer/${openUpload.question_id}`}
         setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
-      />
-      <PopupViewPdf
-        open={openPdf?.status || false}
-        setOpen={setOpenPdf}
-        url={openPdf?.url || ''}
       />
     </div>
   )
