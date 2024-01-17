@@ -26,7 +26,12 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const selected = router.pathname === url
+  const isDetailCourse =
+    router.pathname.includes('/my-course') ||
+    router.pathname.includes('/section') ||
+    router.pathname.includes('/activity')
+  const selected =
+    router.pathname === url || (Icon === 'stats-chart-sharp' && isDetailCourse)
   const isNested = subItems && subItems?.length > 0
 
   const onClick = () => {
@@ -74,17 +79,31 @@ export default function MenuItem({
       )}
       <div
         className={`cursor-pointer hover:bg-secondary ${
-          selected && type === 'level-1' && router.pathname !== '/'
+          selected && type === 'level-1'
             ? 'pl-6 border-l-4 pr-1 border-active'
             : 'pl-7'
         } relative sidebar-list-items py-2 mb-4 last:mb-0 ${
-          !isActivity && name === 'Create Note'
+          !isActivity && (name === 'Create Note' || name === 'Caculator')
             ? 'hidden'
             : name === 'Create Note'
               ? 'mt-4'
               : ''
         }
-        ${!isInCourse && name === 'Notes List' ? 'hidden' : ''}
+        ${
+          !isInCourse &&
+          (name === 'Notes List' ||
+            name === 'Resource' ||
+            name === 'Result' ||
+            Icon === 'stats-chart-sharp')
+            ? 'hidden'
+            : ''
+        }
+        ${
+          isInCourse &&
+          (name === 'Courses' || name === 'Entrance Test' || Icon === 'grid')
+            ? 'hidden'
+            : ''
+        }
         `}
       >
         <div
@@ -112,8 +131,8 @@ export default function MenuItem({
               ) : (
                 <ExpandIcon
                   type={Icon}
-                  className={`before-icon shrink-0 min-w-6 min-h-6 text-gray-2 ${
-                    selected ? 'text-primary' : ''
+                  className={`before-icon shrink-0 min-w-6 min-h-6 ${
+                    selected ? 'text-primary' : 'text-gray-2'
                   } group-hover:text-primary 
                   `}
                 />
@@ -121,8 +140,8 @@ export default function MenuItem({
 
               {Icon === 'avatar' ? (
                 <div
-                  className={`label hidden text-base font-semibold text-gray-2 pl-2 avatar ${
-                    selected ? 'text-primary' : ''
+                  className={`label hidden text-base font-semibold pl-2 avatar ${
+                    selected ? 'text-primary' : 'text-gray-2'
                   } group-hover:text-primary`}
                 >
                   <div className="text-base font-semibold text-bw-1 line-clamp-1">
@@ -134,8 +153,8 @@ export default function MenuItem({
                 </div>
               ) : (
                 <span
-                  className={`label hidden text-base font-semibold text-gray-2 pl-4 line-clamp-1 ${
-                    selected ? 'text-primary' : ''
+                  className={`label hidden text-base font-semibold pl-4 line-clamp-1 ${
+                    selected ? 'text-primary' : 'text-gray-2'
                   } group-hover:text-primary`}
                 >
                   {name}

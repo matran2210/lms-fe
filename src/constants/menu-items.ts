@@ -1,14 +1,15 @@
 import { PageLink, TitleSidebar } from './index'
 
 const MENU_OPTIONS: MenuOption[] = [
-  /*{
+  {
     name: `${TitleSidebar.DASHBOARD}`,
-    icon: 'home',
-    url: `${PageLink.DASHBOARD}`,
-  },*/
+    icon: 'grid',
+    url: `/`,
+    type: 'level-1',
+  },
   {
     name: `${TitleSidebar.COURSES}`,
-    icon: 'grid',
+    icon: 'course',
     url: `${PageLink.COURSES}`,
     type: 'level-1',
     // subItems: [
@@ -41,31 +42,37 @@ const MENU_OPTIONS: MenuOption[] = [
     // ],
   },
   {
+    name: `${TitleSidebar.DASHBOARD}`,
+    icon: 'stats-chart-sharp',
+    url: '/',
+    type: 'level-1',
+  },
+  {
     name: 'Notes List',
     icon: 'notes-list',
     url: '#',
     type: 'level-1',
   },
-  {
-    name: `${TitleSidebar.TOPICS}`,
-    icon: 'document',
-    url: `${PageLink.TOPICS}`,
-    type: 'level-1',
-    // subItems: [
-    //   {
-    //     name: `${TitleSidebar.TOPICS_LIST}`,
-    //     icon: 'document',
-    //     url: `${PageLink.TOPICS}`,
-    //     type: 'level-2',
-    //   },
-    //   {
-    //     name: `${TitleSidebar.CASE_STUDY}`,
-    //     icon: 'document',
-    //     url: `${PageLink.CASE_STUDY}`,
-    //     type: 'level-2',
-    //   },
-    // ],
-  },
+  // {
+  //   name: `${TitleSidebar.TOPICS}`,
+  //   icon: 'document',
+  //   url: `${PageLink.TOPICS}`,
+  //   type: 'level-1',
+  // subItems: [
+  //   {
+  //     name: `${TitleSidebar.TOPICS_LIST}`,
+  //     icon: 'document',
+  //     url: `${PageLink.TOPICS}`,
+  //     type: 'level-2',
+  //   },
+  //   {
+  //     name: `${TitleSidebar.CASE_STUDY}`,
+  //     icon: 'document',
+  //     url: `${PageLink.CASE_STUDY}`,
+  //     type: 'level-2',
+  //   },
+  // ],
+  // },
   {
     name: 'Resource',
     icon: 'learning-resource',
@@ -79,8 +86,20 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
   },
   {
+    name: 'Result',
+    icon: 'result',
+    url: '/',
+    type: 'level-1',
+  },
+  {
     name: 'Create Note',
     icon: 'create-note',
+    url: '#',
+    type: 'level-1',
+  },
+  {
+    name: 'Caculator',
+    icon: 'caculator',
     url: '#',
     type: 'level-1',
   },
