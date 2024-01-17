@@ -52,6 +52,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const dispatch = useAppDispatch()
     const { control: controlAnswer, setValue, reset, getValues } = useForm({})
+    const DragDropRef = useRef(null) as any
 
     const [showListRequirement, setShowListRequirement] =
       useState<boolean>(false)
@@ -261,6 +262,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           default:
             break
         }
+        DragDropRef.current?.handleReset()
         dispatch(
           confirmQuestion({
             activityId: activityId,
@@ -330,6 +332,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               resetDefaultAnswer={false}
+              ref={DragDropRef}
             />
           )
 
