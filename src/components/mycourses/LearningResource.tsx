@@ -74,7 +74,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         router.query.courseId || router.query.id,
         page_size || DEFAULT_PAGESIZE,
       )
-      setSections(res?.data?.sections)
+      setSections([...res?.data?.sections].reverse())
       setSelectedSubsection(null)
       setSelectedUnit(null)
       setSelectedActivity(null)
@@ -96,7 +96,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         'CHAPTER',
         selectedSection.value,
       )
-      setSubsections(res?.data?.sections)
+      setSubsections([...res?.data?.sections].reverse())
       setSelectedUnit(null)
       setSelectedActivity(null)
     } catch (error) {}
@@ -117,7 +117,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         'UNIT',
         selectedSubsection.value,
       )
-      setUnit(res?.data?.sections)
+      setUnit([...res?.data?.sections].reverse())
       setSelectedActivity(null)
     } catch (error) {}
   }
@@ -135,7 +135,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         'ACTIVITY',
         selectedUnit.value,
       )
-      setActivity(res?.data?.sections)
+      setActivity([...res?.data?.sections].reverse())
     } catch (error) {}
   }
 
@@ -242,11 +242,13 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       onClose={onClose}
       title="Resource"
       footer={false}
+      confirmOnClose={false}
     >
-      <div className="flex justify-between mr-3">
+      <div className="flex justify-between gap-4 md:gap-6 flex-wrap md:flex-nowrap mt-2">
         <HookFormSelect
-          className="w-52"
+          classParent="w-full md:max-w-[208px]"
           placeholder="Section"
+          isClearable={true}
           value={selectedSection}
           onChange={(selectedOption) =>
             handleDropdownChange(
@@ -267,8 +269,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToSections}
         />
         <HookFormSelect
-          className="w-52"
+          classParent="w-full md:max-w-[208px]"
           placeholder="Subsection"
+          isClearable={true}
           value={selectedSubsection}
           onChange={(selectedOption) =>
             handleDropdownChange(
@@ -289,8 +292,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToSubsections}
         />
         <HookFormSelect
-          className="w-52"
+          classParent="w-full md:max-w-[208px]"
           placeholder="Unit"
+          isClearable={true}
           value={selectedUnit}
           onChange={(selectedOption) =>
             handleDropdownChange(
@@ -311,8 +315,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToUnit}
         />
         <HookFormSelect
-          className="w-52"
+          classParent="w-full md:max-w-[208px]"
           placeholder="Activity"
+          isClearable={true}
           value={selectedActivity}
           onChange={(selectedOption) =>
             handleDropdownChange(selectedOption, setSelectedActivity, null)
@@ -333,7 +338,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       {resources?.resources?.map((resource) => (
         <div key={resource.id}>
           <div
-            className=" mt-6 p-6 mr-3 h-[92px]"
+            className="mt-6 p-6 h-[92px] last:mb-6"
             style={{ border: '1px solid #DCDDDD' }}
           >
             <div className="flex justify-between items-center">

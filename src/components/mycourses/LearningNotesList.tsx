@@ -239,7 +239,7 @@ const LearningNotesList = () => {
           courseId || queryId,
           page_size || DEFAULT_PAGESIZE,
         )
-        setSections(res?.data?.sections)
+        setSections([...res?.data?.sections].reverse())
         setSelectedSubsection(null)
         setSelectedUnit(null)
         setSelectedActivity(null)
@@ -254,7 +254,7 @@ const LearningNotesList = () => {
         'CHAPTER',
         selectedSection.value,
       )
-      setSubsections(res?.data?.sections)
+      setSubsections([...res?.data?.sections].reverse())
       setSelectedUnit(null)
       setSelectedActivity(null)
     } catch (error) {}
@@ -267,7 +267,7 @@ const LearningNotesList = () => {
         'UNIT',
         selectedSubsection.value,
       )
-      setUnit(res?.data?.sections)
+      setUnit([...res?.data?.sections].reverse())
       setSelectedActivity(null)
     } catch (error) {
       setSelectedUnit(null)
@@ -282,7 +282,7 @@ const LearningNotesList = () => {
         'ACTIVITY',
         selectedUnit.value,
       )
-      setActivity(res?.data?.sections)
+      setActivity([...res?.data?.sections].reverse())
     } catch (error) {
       setSelectedActivity(null)
     }
@@ -333,7 +333,7 @@ const LearningNotesList = () => {
     >
       <div className="flex justify-between gap-4 md:gap-6 flex-wrap md:flex-nowrap mt-2">
         <HookFormSelect
-          classParent="w-full max-w-[208px]"
+          classParent="w-full md:max-w-[208px]"
           placeholder="Section"
           isClearable={true}
           value={selectedSection}
@@ -356,7 +356,7 @@ const LearningNotesList = () => {
           onMenuScrollToBottom={handleMenuScrollToSections}
         />
         <HookFormSelect
-          classParent="w-full max-w-[208px]"
+          classParent="w-full md:max-w-[208px]"
           placeholder="Subsection"
           isClearable={true}
           value={selectedSubsection}
@@ -379,7 +379,7 @@ const LearningNotesList = () => {
           onMenuScrollToBottom={handleMenuScrollToSubsections}
         />
         <HookFormSelect
-          classParent="w-full max-w-[208px]"
+          classParent="w-full md:max-w-[208px]"
           placeholder="Unit"
           isClearable={true}
           value={selectedUnit}
@@ -402,7 +402,7 @@ const LearningNotesList = () => {
           onMenuScrollToBottom={handleMenuScrollToUnit}
         />
         <HookFormSelect
-          classParent="w-full max-w-[208px]"
+          classParent="w-full md:max-w-[208px]"
           placeholder="Activity"
           isClearable={true}
           value={selectedActivity}
