@@ -3,7 +3,7 @@ import { PageLink } from 'src/constants'
 
 const LogoFull = () => {
   return (
-    <Link href={PageLink.DASHBOARD}>
+    <Link href={PageLink.COURSES}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="112"

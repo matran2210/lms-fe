@@ -181,6 +181,7 @@ const LoginPage = () => {
               size="lager"
               loading={loading ? loading : userLogin.loading}
               type="submit"
+              disabled={loading}
             />
           </div>
           <div className="flex justify-between mb-15">
