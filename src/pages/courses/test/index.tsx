@@ -11,7 +11,7 @@ interface IProps {
   title?: string
   data?: any
   class_user_id?: string
-  activeCourse?: () => void
+  activeCourse?: any
 }
 const TestModal = ({
   open,
@@ -22,15 +22,17 @@ const TestModal = ({
   activeCourse,
 }: IProps) => {
   const router = useRouter()
-  const onSubmit = () => {
+  const onSubmit = async () => {
     //to do: start test
-    router.push({
-      pathname: `/test/${data.quiz.id}`,
-      query: {
-        class_user_id: class_user_id,
-      },
-    })
-    activeCourse && activeCourse()
+    try {
+      activeCourse && (await activeCourse())
+      router.push({
+        pathname: `/test/${data.quiz.id}`,
+        query: {
+          class_user_id: class_user_id,
+        },
+      })
+    } catch (err) {}
   }
   const checkFinished = useMemo(() => {
     if (data?.quiz?.attempts) {
