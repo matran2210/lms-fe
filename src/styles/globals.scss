@@ -538,3 +538,9 @@ textarea.is-invalid:focus {
   --tw-ring-color: #d35563;
   --tw-ring-offset-color: #d35563;
 }
+
+@layer utilities {
+  .grid-fit-content {
+    grid-template-columns: min-content 1fr;
+  }
+}

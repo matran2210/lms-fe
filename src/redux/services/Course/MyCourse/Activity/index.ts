@@ -312,7 +312,7 @@ const CourseActivityApi = {
 
   getQuizAttemptsAnswer: (id: string) => {
     return httpService.GET<any, any>({
-      uri: `quiz-attempts/answers//${id}`,
+      uri: `quiz-attempts/answers/${id}`,
     })
   },
 }

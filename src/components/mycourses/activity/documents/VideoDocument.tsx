@@ -27,6 +27,7 @@ import {
   IQuestionResultResponse,
 } from 'quiz-result-package/dist/type'
 import PopupFinishQuiz from '../PopupFinishQuiz'
+import ModalExplanationPackage from '../ModalExplanationPackage'
 
 type Props = {
   videos?: IVideo[]
@@ -77,7 +78,10 @@ const VideoDocument = ({
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
   const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
 
-  // const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
+  const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
+    id: string
+    isOpen: boolean
+  }>()
 
   useEffect(() => {
     if (videos?.[0]) {
@@ -388,7 +392,10 @@ const VideoDocument = ({
     setModalResult(undefined)
   }
 
-  const handleShowQuizResultDetail = (e: IQuestionResult) => {}
+  const handleShowQuizResultDetail = (data: IQuestionResult) => {
+    setShowQuestionResultDetail({ id: data.id, isOpen: true })
+  }
+
   return (
     <div>
       <PopupFinishQuiz
@@ -428,10 +435,15 @@ const VideoDocument = ({
           })}
         </div>
         <div className="flex items-center select-none cursor-pointer relative z-30 group">
-          <span className="mr-2">Timeline</span>
+          <span className="mr-2 text-bw-1 group-hover:text-primary">
+            Timeline
+          </span>
           {/* Icon for course video timeline */}
-          <SappIcon icon="course_video_timeline"></SappIcon>
-          <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100$]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
+          <SappIcon
+            className="fill-bw-1 group-hover:fill-primary"
+            icon="course_video_timeline"
+          ></SappIcon>
+          <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100px]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
             <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
               {[...(currentVideo?.file?.resource?.time_line || [])]
                 .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0))
@@ -439,12 +451,12 @@ const VideoDocument = ({
                   return (
                     <div
                       key={i}
-                      className="gap-3 text-medium-sm flex px-6 py-3 hover:text-primary-2 text-bw-1"
+                      className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid px-6 py-3 hover:text-primary-2 text-bw-1 grid-cols-[1fr,6fr]"
                       onClick={() => {
                         handleGoTimeline(e.time)
                       }}
                     >
-                      <div className="text-state-info flex-none">
+                      <div className="text-state-info">
                         {formatTime(e.time)}
                       </div>
                       <div className="text-bw-1 line-clamp-2 text-inherit">
@@ -537,6 +549,11 @@ const VideoDocument = ({
           />
         </div>
       </SappModal>
+      <ModalExplanationPackage
+        quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
+        open={showQuestionResultDetail?.isOpen || false}
+        setOpen={() => setShowQuestionResultDetail(undefined)}
+      ></ModalExplanationPackage>
     </div>
   )
 }

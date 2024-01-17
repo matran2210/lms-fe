@@ -11,11 +11,16 @@ import {
 
 import SappModal from '@components/base/modal/SappModal'
 import { QuizResultComponent } from 'quiz-result-package'
-import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
+import {
+  IQuestionResult,
+  IQuestionResultResponse,
+} from 'quiz-result-package/dist/type'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import PopupFinishQuiz from '../PopupFinishQuiz'
+import ModalExplanationPackage from '../ModalExplanationPackage'
+import toast from 'react-hot-toast'
 
 type Props = {
   questions: IQuestion[]
@@ -53,64 +58,75 @@ const QuizDocument = ({
 
   const [quizComponentKey, setQuizComponentKey] = useState<number>(1)
 
-  const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
+  const [openFinishQuiz, setOpenFinishQuiz] = useState<boolean>(false)
+
+  const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
+    id: string
+    isOpen: boolean
+  }>()
 
   useEffect(() => {
     if (questions?.[0]) {
       // Load the first question when the component mounts
-      dispatch(
-        fetchQuestionById({
-          activityId: activityId,
-          tabId: tabId,
-          quizId: quizId,
-          questionId: questions[0]?.id || '',
-        }),
-      )
+      try {
+        dispatch(
+          fetchQuestionById({
+            activityId: activityId,
+            tabId: tabId,
+            quizId: quizId,
+            questionId: questions[0]?.id || '',
+          }),
+        )
+      } catch (error) {}
     }
   }, [questions, dispatch])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
-      setOpenFinishQUiz(true)
+      setOpenFinishQuiz(true)
     }
   }, [runHandleFinishQuiz])
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (activeQuestionIndex < questions.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
 
       // Load the next question if it hasn't been loaded yet
       const nextQuestionId = questions[activeQuestionIndex + 1]?.id
       if (nextQuestionId) {
-        dispatch(
-          fetchQuestionById({
-            activityId: activityId,
-            tabId: tabId,
-            quizId: quizId,
-            questionId: nextQuestionId || '',
-          }),
-        )
+        try {
+          await dispatch(
+            fetchQuestionById({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: nextQuestionId || '',
+            }),
+          )
+        } catch (error) {}
       }
 
       questionRef.current?.reset()
     }
   }
 
-  const handlePrevQuestion = () => {
+  const handlePrevQuestion = async () => {
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex(activeQuestionIndex - 1)
 
       // Load the previous question if it hasn't been loaded yet
       const prevQuestionId = questions[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
-        dispatch(
-          fetchQuestionById({
-            activityId: activityId,
-            tabId: tabId,
-            quizId: quizId,
-            questionId: prevQuestionId || '',
-          }),
-        )
+        try {
+          dispatch(
+            fetchQuestionById({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: prevQuestionId || '',
+            }),
+          )
+        } catch (error) {}
       }
 
       questionRef.current?.reset()
@@ -133,7 +149,7 @@ const QuizDocument = ({
   }
 
   const handleFinishQuiz = () => {
-    setOpenFinishQUiz(false)
+    setOpenFinishQuiz(false)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
     const {
       answers,
@@ -175,7 +191,11 @@ const QuizDocument = ({
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
         })
-    } catch (error) {}
+    } catch (error: any) {
+      if (error.response.status === 422) {
+        toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
+      }
+    }
   }
 
   const getTable = async ({
@@ -218,13 +238,19 @@ const QuizDocument = ({
       }))
     } catch (error) {}
   }
+
+  const handleShowQuestionResultDetail = (data: IQuestionResult) => {
+    setShowQuestionResultDetail({ id: data.id, isOpen: true })
+  }
+
   return (
     <div>
       <PopupFinishQuiz
-        open={openFinishQUiz}
-        setOpen={setOpenFinishQUiz}
+        open={openFinishQuiz}
+        setOpen={setOpenFinishQuiz}
         submitQuiz={handleFinishQuiz}
       ></PopupFinishQuiz>
+
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
           <QuizComponent
@@ -310,9 +336,15 @@ const QuizDocument = ({
           <QuizResultComponent
             questionResponse={modalResult?.questions || []}
             getTable={getTable}
+            onShowDetail={handleShowQuestionResultDetail}
           />
         </div>
       </SappModal>
+      <ModalExplanationPackage
+        quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
+        open={showQuestionResultDetail?.isOpen || false}
+        setOpen={() => setShowQuestionResultDetail(undefined)}
+      ></ModalExplanationPackage>
     </div>
   )
 }

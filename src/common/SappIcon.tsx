@@ -131,10 +131,9 @@ const SappIcon = ({ icon, className }: Props) => {
         width={18}
         height={18}
         fill="none"
-        className={className}
       >
         <path
-          fill="#FFB800"
+          className={className}
           d="M17.438 4.219H.563v1.687h16.875V4.22ZM14.625 8.156H3.375v1.688h11.25V8.156ZM11.25 12.094h-4.5v1.687h4.5v-1.687Z"
         />
       </svg>

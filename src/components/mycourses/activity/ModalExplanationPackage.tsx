@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
+import SappModal from '@components/base/modal/SappModal'
 import { ExplanationPackage } from 'explanation-package'
 import 'explanation-package/dist/index.css'
+import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -20,33 +21,38 @@ export enum QUESTION_TYPES {
   ESSAY = 'ESSAY',
 }
 
-const ModalExplanationPackage = () => {
+const ModalExplanationPackage = ({
+  quizAttemptsAnswerId,
+  open,
+  setOpen,
+}: {
+  quizAttemptsAnswerId: string
+  open: boolean
+  setOpen: (open?: boolean) => void
+}) => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   useEffect(() => {
-    getActiveQuestion('ec8910e3-7b06-4375-9bb2-3dd677be503b')
-  }, [])
+    if (quizAttemptsAnswerId) {
+      getActiveQuestion(quizAttemptsAnswerId)
+    }
+  }, [quizAttemptsAnswerId])
 
   const getActiveQuestion = async (id: string) => {
-    // const quizAttempts = axiosInstance.get('')
-    // const selectedResponseAnswers = data.data.selectedResponseAnswers
     const resultResponse = await CourseActivityApi.getQuizAttemptsAnswer(id)
-
-    // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
     setActiveQuestion({
       ...resultResponse.data.answer.question,
       confirmed: true,
       corrects: getCorrect(
-        resultResponse.data.answer.answer_position_mapping?.[0]
-          ? resultResponse.data.answer.answer_position_mapping
+        resultResponse.data.answer.question.answers?.[0]
+          ? resultResponse.data.answer.question.answers
           : resultResponse.data.answer.question.question_matchings,
         resultResponse.data.answer.question.qType,
       ),
-      answers:
-        resultResponse.data?.answer?.answer_position_mapping?.answers || [],
+      answers: resultResponse.data?.answer?.question.answers || [],
       myAnswers: [
         {
           question_id: resultResponse.data.answer.question.id,
-          question_answer_id: resultResponse.data.answer.id,
+          question_answer_id: resultResponse.data.answer.question_answer_id,
           answer: resultResponse.data.answer.answer,
         },
       ],
@@ -88,10 +94,26 @@ const ModalExplanationPackage = () => {
 
   return (
     <div>
-      <ExplanationPackage
-        getActiveQuestion={getActiveQuestion}
-        activeQuestion={activeQuestion}
-      />
+      <SappModal
+        open={open}
+        okButtonCaption={'Yes'}
+        cancelButtonCaption={'No'}
+        handleCancel={() => setOpen(undefined)}
+        handleSubmit={() => setOpen(undefined)}
+        setOpen={() => setOpen(undefined)}
+        size="max-w-xxl"
+        position="center"
+        showFooter={false}
+        isFullScreen={true}
+        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+      >
+        <div className="mx-auto">
+          <ExplanationPackage
+            getActiveQuestion={getActiveQuestion}
+            activeQuestion={activeQuestion}
+          />
+        </div>
+      </SappModal>
     </div>
   )
 }
