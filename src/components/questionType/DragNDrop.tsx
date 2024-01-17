@@ -115,7 +115,6 @@ const DragNDropPreivew = forwardRef(
       // if (refContent?.current) {
       const elements = doc.querySelectorAll('.question-content-tag')
       const elementsCorrects = doc2.querySelectorAll('.question-content-tag')
-
       if (corrects) {
         elementsCorrects.forEach((element: any, index: number) => {
           element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop-answer corrects">
@@ -297,7 +296,9 @@ const DragNDropPreivew = forwardRef(
         )}
         {answerContent && (
           <>
-            <div className="font-semibold text-xl mt-5">Correct Answer:</div>
+            <div className="text-bw-1 font-semibold text-base">
+              Correct Answer
+            </div>
             <EditorReader
               className="questions mt-2"
               text_editor_content={

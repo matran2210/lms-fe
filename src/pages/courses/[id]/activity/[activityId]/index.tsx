@@ -404,6 +404,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                         grading_preference={
                           e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
                         }
+                        document_id={e.id}
                       ></QuizDocument>
                     </div>
                   )

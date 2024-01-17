@@ -28,6 +28,7 @@ type Props = {
   tabId: string
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
+  document_id: string
 }
 
 const QuizDocument = ({
@@ -36,6 +37,7 @@ const QuizDocument = ({
   tabId,
   quizId,
   grading_preference,
+  document_id,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -258,6 +260,7 @@ const QuizDocument = ({
             activeQuestion={activeQuestion}
             ref={questionRef}
             key={quizComponentKey}
+            document_id={document_id}
           />
         )}
       </div>
