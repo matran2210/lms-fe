@@ -80,7 +80,7 @@ const SappDrawer = ({
           </div>
         </div>
         <div
-          className="mt-6 ml-8 mr-3 overflow-y-auto h-[80vh]"
+          className="mt-6 ml-8 mr-4 overflow-y-auto h-[80vh]"
           id={`sapp-drawer${drawerSubId}`}
         >
           {children}
