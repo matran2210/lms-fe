@@ -52,17 +52,17 @@ const MatchingQuestion = forwardRef(
     const [storageId, setStoreId] = useState(uniqueId('storage'))
 
     function allowDrop(ev: any) {
-      const slotId = ev.target.id
-      const slotElement = document.getElementById(slotId)
+      // const slotId = ev.target.id
+      // const slotElement = document.getElementById(slotId)
 
-      if (
-        slotElement?.children.length === 0 &&
-        ev.target.classList.contains('dropable')
-      ) {
-        ev.preventDefault()
-      } else {
-        return
-      }
+      // if (
+      //   slotElement?.children.length === 0 &&
+      //   ev.target.classList.contains('dropable')
+      // ) {
+      ev.preventDefault()
+      // } else {
+      //   return
+      // }
     }
     function allowDropStorage(ev: any) {
       if (ev.target.classList.contains('dropable')) {
@@ -77,19 +77,25 @@ const MatchingQuestion = forwardRef(
       ev.dataTransfer.setData('questionId', data.id)
     }
 
-    function drop(ev: any, dropId: string) {
+    function drop(ev: any, dropId: string, dropItem?: boolean) {
       ev.preventDefault()
       const slotId = ev.target.id
       const slotElement = document.getElementById(slotId)
       const questionId = ev.dataTransfer.getData('questionId')
+      var data = ev.dataTransfer.getData('text')
+      const draggingItem = document.getElementById(data)
+      const oldParent = draggingItem?.parentNode
       if (questionId === dropId) {
-        var data = ev.dataTransfer.getData('text')
         if (
           slotElement?.children.length === 0 &&
-          ev.target.classList.contains('dropable')
+          ev.target.classList.contains('dropable') &&
+          !dropItem
         ) {
           ev.target.appendChild(document.getElementById(data))
-        } else {
+        } else if (dropItem) {
+          const parent = ev.target.parentNode
+          oldParent?.appendChild(ev.target)
+          parent.appendChild(document.getElementById(data))
           return
         }
       } else return
@@ -221,8 +227,8 @@ const MatchingQuestion = forwardRef(
                         id={defaultValue[e?.id]?.answer.id}
                         draggable="true"
                         onDragStart={drag}
-                        onDrop={() => {}}
-                        onDragOver={() => {}}
+                        onDrop={() => drop(event, data.id, true)}
+                        onDragOver={() => allowDrop(event)}
                       >
                         {defaultValue[e?.id].answer?.answer}
                       </div>
@@ -246,8 +252,8 @@ const MatchingQuestion = forwardRef(
                     id={answer?.id}
                     draggable="true"
                     onDragStart={drag}
-                    onDrop={() => {}}
-                    onDragOver={() => {}}
+                    onDrop={() => drop(event, data.id, true)}
+                    onDragOver={() => allowDrop(event)}
                   >
                     {answer?.answer}
                   </div>
