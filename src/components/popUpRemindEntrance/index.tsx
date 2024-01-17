@@ -20,7 +20,7 @@ const PopUpRemindEntrance = () => {
   }
   return (
     <SappModal
-      open={shouldShowRemind}
+      open={shouldShowRemind && count > 0}
       setOpen={() => dispatch(closeShowRemind())}
       cancelButtonCaption="Close"
       okButtonCaption="Take Your Test"
