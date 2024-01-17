@@ -35,6 +35,7 @@ type Props = {
   tabId: string
   streamRefProp: StreamPlayerApi | any
   handleProcess?: () => void
+  document_id: string
 }
 
 /**
@@ -49,6 +50,7 @@ const VideoDocument = ({
   tabId,
   streamRefProp,
   handleProcess,
+  document_id,
 }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
@@ -507,6 +509,7 @@ const VideoDocument = ({
                 ref={questionRef}
                 activeQuestion={activeQuestion}
                 showCorrect={false}
+                document_id={document_id}
               ></QuizComponent>
             </div>
           </SappModal>

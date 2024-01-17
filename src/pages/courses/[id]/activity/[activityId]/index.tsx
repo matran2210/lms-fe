@@ -427,6 +427,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                         tabId={selector.currentTabId || ''}
                         streamRefProp={streamRef}
                         handleProcess={handleFinishedCourseSectionProgress}
+                        document_id={e.id}
                       ></VideoDocument>
                     </div>
                   )
