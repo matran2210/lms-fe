@@ -1013,9 +1013,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     })
     if (res) {
       if (type === 'entrance') {
-        router.push(`/entrance-test/test-result/${res?.data?.id}`)
+        router.replace(`/entrance-test/test-result/${res?.data?.id}`)
       } else {
-        router.push(`/courses/test/test-result/${res?.data?.id}`)
+        router.replace(`/courses/test/test-result/${res?.data?.id}`)
       }
     }
 
