@@ -402,8 +402,12 @@ const quizSlice: Slice = createSlice({
                       })),
                     },
                   ]
+                  const corrects = [...(payload.question.answers || [])]
 
-                  questionToUpdate.corrects = payload.question.answers
+                  questionToUpdate.corrects = corrects.sort(
+                    (a: any, b: any) => a.answer_position - b.answer_position,
+                  )
+
                   break
                 case QUESTION_TYPES.ESSAY:
                   questionToUpdate.myAnswers = [

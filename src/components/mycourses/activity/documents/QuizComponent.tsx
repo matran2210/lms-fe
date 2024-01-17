@@ -42,10 +42,11 @@ export type QuizComponentRef = {
 type Props = {
   activeQuestion?: IActivityStateQuestion
   showCorrect?: boolean
+  document_id: string
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
-  ({ activeQuestion, showCorrect }: Props, ref) => {
+  ({ activeQuestion, showCorrect, document_id }: Props, ref) => {
     const questionRef = useRef<HTMLDivElement>(null)
     const [essayData, setEssayData] = useState<any>()
 
@@ -187,12 +188,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         switch (activeQuestion?.qType) {
           case QUESTION_TYPES.ONE_CHOICE:
           case QUESTION_TYPES.TRUE_FALSE: {
-            setValue && setValue('answer', activeQuestion.defaultValue)
+            setValue &&
+              setValue(
+                `${activeQuestion.id}_${document_id}_answer`,
+                activeQuestion.defaultValue,
+              )
             break
           }
 
           case QUESTION_TYPES.MULTIPLE_CHOICE: {
-            setValue && setValue('multiples', activeQuestion.defaultValue)
+            setValue &&
+              setValue(
+                `${activeQuestion.id}_${document_id}_answer`,
+                activeQuestion.defaultValue,
+              )
             break
           }
         }
@@ -221,10 +230,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         switch (activeQuestion.qType as QUESTION_TYPES) {
           case QUESTION_TYPES.ONE_CHOICE:
           case QUESTION_TYPES.TRUE_FALSE:
-            myAnswers = getValues('answer')
+            myAnswers = getValues(`${activeQuestion.id}_${document_id}_answer`)
             break
           case QUESTION_TYPES.MULTIPLE_CHOICE:
-            myAnswers = getValues('multiples')
+            myAnswers = getValues(`${activeQuestion.id}_${document_id}_answer`)
             break
           case QUESTION_TYPES.FILL_WORD:
             myAnswers = getValueFillText()
@@ -278,6 +287,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               setValue={setValue}
+              name={`${activeQuestion.id}_${document_id}_answer`}
             />
           )
 
@@ -288,6 +298,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               setValue={setValue}
+              name={`${activeQuestion.id}_${document_id}_answer`}
             />
           )
 
