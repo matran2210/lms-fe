@@ -185,6 +185,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         handleRouterChapter={handleRouterChapter}
         readMore={readMore}
         setReadMore={setReadMore}
+        defaultActive={router.query.unit_id ? router.query.unit_id : ''}
       />
 
       <SappDrawer

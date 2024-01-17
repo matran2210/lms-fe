@@ -287,13 +287,19 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           let url = ''
           switch (e.course_section_type) {
             case 'PART':
-              url = ''
+              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${e?.id}`
               break
             case 'CHAPTER':
-              url = ''
+              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${e?.id}`
               break
             case 'UNIT':
-              url = ''
+              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${activity.breadcumb?.[2]?.id}`
+              break
+            case 'ACTIVITY':
+              url = `#`
+              break
+            default:
+              url = `/courses/my-course/${e?.id}`
               break
           }
           return (
@@ -306,32 +312,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     : 'hover:text-primary cursor-pointer text-gray-1'
                 }`}
               >
-                <Link
-                  href="/courses"
-                  className="breadcrumbs__link"
-                  scroll={false}
-                >
+                <Link href={url} className="breadcrumbs__link" scroll={false}>
                   {truncateString(e.name, 30)}
                 </Link>
               </li>
             </React.Fragment>
           )
         })}
-        {/* <li className="hover:text-primary cursor-pointer text-gray-1">
-          Part A: Audit framework an...
-        </li>
-        /
-        <li className="hover:text-primary cursor-pointer text-gray-1">
-          Chapter 3: Corporate gover...
-        </li>
-        /
-        <li className="hover:text-primary cursor-pointer text-gray-1">
-          Unit 1: Objectives of corpor...
-        </li>
-        /
-        <li className="hover:text-primary cursor-pointer text-bw-1">
-          Activity 4: Introduction to pr...
-        </li> */}
       </ul>
       <>
         {getNotesData?.map((e: any, index: number) => {
