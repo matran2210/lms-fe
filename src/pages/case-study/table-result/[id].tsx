@@ -90,7 +90,7 @@ const TableCaseStudyResult = () => {
     }
   }
   const getScoreDetail = async () => {
-    const res = await fetchScoreDetail(1, 10)
+    const res = await fetchScoreDetail(1, 20)
     const topic = await fetchTopicAttemptDetail(router.query.id as string)
     setScoreDetail(res?.data)
     setTopicAttemptDetail(topic?.data)
