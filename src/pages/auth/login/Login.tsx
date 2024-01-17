@@ -126,13 +126,11 @@ const LoginPage = () => {
           if (error?.response?.data?.error?.code === '403|0001') {
             setOpenLimit(true)
           }
+          setTimeout(() => {
+            setLoading(false)
+          }, 1000)
         })
-    } catch (error: any) {
-    } finally {
-      setTimeout(() => {
-        setLoading(false)
-      }, 2000)
-    }
+    } catch (error: any) {}
   }
   const socialLogin = () => {
     toast.error('Chức năng này sẽ được update vào version sau!')

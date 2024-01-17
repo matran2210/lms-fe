@@ -52,6 +52,7 @@ module.exports = removeImports(
         'd3s1adm34w18qs.cloudfront.net',
         'cdn-dev.sapp.edu.vn',
         'media.zim.vn',
+        'cdn-staging.sapp.edu.vn',
       ],
     },
     swcMinify: true,
