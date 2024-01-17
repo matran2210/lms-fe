@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -84,7 +84,6 @@ const VideoDocument = ({
     id: string
     isOpen: boolean
   }>()
-
   useEffect(() => {
     if (videos?.[0]) {
       debouncedHandleSetCurrentVideo?.current(videos?.[0])
@@ -170,11 +169,13 @@ const VideoDocument = ({
             setCurrentListQuestion(listQuestion)
             setActiveQuestion(e.payload.question)
             setModalOpen(true)
+            setHideVideo(true)
           }
         })
       } else {
         setCurrentListQuestion([])
         setModalOpen(false)
+        setHideVideo(false)
       }
     } catch (error) {}
   }
@@ -185,6 +186,7 @@ const VideoDocument = ({
    * @param {string} questionId - The ID of the quiz question to find.
    * @returns {boolean} - Returns true if a quiz question is opened; otherwise, false.
    */
+  const [hideVideo, setHideVideo] = useState(false)
   const handleTrackTime = (time: number, questionId?: string) => {
     const quizAtTime = quizTimed.current?.[time]
 
@@ -472,49 +474,6 @@ const VideoDocument = ({
         </div>
       </div>
       <div className="relative">
-        <div>
-          {/* Modal for quiz questions */}
-          <SappModal
-            open={modalOpen}
-            customTitle={
-              <div className="!text-xl font-bold text-bw-1">Question</div>
-            }
-            parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
-            okButtonCaption={`${
-              lastQuestion?.id === activeQuestion?.id ? 'Finish' : 'Confirm'
-            }`}
-            buttonSize="small"
-            size="max-w-[782px]"
-            position="center"
-            isInner={true}
-            isBordered={true}
-            okButtonClass="!w-20 h-8.5 !px-0"
-            cancelButtonClass="!w-20 h-8.5 !px-0"
-            handleSubmit={
-              lastQuestion?.id === activeQuestion?.id
-                ? handleSubmit((e) => onSubmit(e, true))
-                : handleSubmit((e) => onSubmit(e))
-            }
-            handleCancel={() =>
-              handleClose({
-                questionId: activeQuestion?.id,
-                listQuestion: currentListQuestion,
-              })
-            }
-            colorCancel="secondary"
-            cancelButtonCaption="Skip"
-          >
-            <div className="py-5">
-              <QuizComponent
-                ref={questionRef}
-                activeQuestion={activeQuestion}
-                showCorrect={false}
-                document_id={document_id}
-              ></QuizComponent>
-            </div>
-          </SappModal>
-        </div>
-        {/* Video player component */}
         <SAPPVideo
           streamRef={streamRef}
           options={{
@@ -528,7 +487,48 @@ const VideoDocument = ({
                 .replace('/manifest/video.m3u8', '') || '',
           }}
           pauseOnSeek={true}
+          hideVideo={hideVideo}
         ></SAPPVideo>
+        {/* Modal for quiz questions */}
+        <SappModal
+          open={modalOpen}
+          customTitle={
+            <div className="!text-xl font-bold text-bw-1">Question</div>
+          }
+          parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
+          okButtonCaption={`${
+            lastQuestion?.id === activeQuestion?.id ? 'Finish' : 'Confirm'
+          }`}
+          buttonSize="small"
+          size="max-w-[782px]"
+          position="center"
+          isInner={true}
+          isBordered={true}
+          okButtonClass="!w-20 h-8.5 !px-0"
+          cancelButtonClass="!w-20 h-8.5 !px-0"
+          handleSubmit={
+            lastQuestion?.id === activeQuestion?.id
+              ? handleSubmit((e) => onSubmit(e, true))
+              : handleSubmit((e) => onSubmit(e))
+          }
+          handleCancel={() =>
+            handleClose({
+              questionId: activeQuestion?.id,
+              listQuestion: currentListQuestion,
+            })
+          }
+          colorCancel="secondary"
+          cancelButtonCaption="Skip"
+        >
+          <div className="py-5">
+            <QuizComponent
+              ref={questionRef}
+              activeQuestion={activeQuestion}
+              showCorrect={false}
+              document_id={document_id}
+            ></QuizComponent>
+          </div>
+        </SappModal>
       </div>
 
       <SappModal
@@ -561,4 +561,4 @@ const VideoDocument = ({
   )
 }
 
-export default VideoDocument
+export default memo(VideoDocument)
