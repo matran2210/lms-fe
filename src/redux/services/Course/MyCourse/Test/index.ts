@@ -210,6 +210,13 @@ const CourseTestApi = {
     })
     return response
   },
+  getTopicAttemptsDetail: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.getTopicAttemptDetail + `${id}/score`
+    const response = await httpService.GET<any, any>({
+      uri,
+    })
+    return response
+  },
   getQuizAttempts: async (
     id: string,
     accessToken: string,
