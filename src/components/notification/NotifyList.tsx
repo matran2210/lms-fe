@@ -76,7 +76,9 @@ const NotifyList = ({
                 dangerouslySetInnerHTML={{
                   __html: notifyItem?.created_by
                     ? notifyItem?.title
-                    : notifyItem?.content,
+                    : notifyItem?.content
+                        .replace(/<a\b[^>]*>/g, '')
+                        .replace(/<\/a>/g, ''),
                 }}
               ></h4>
               <p className="text-gray-1 text-medium-sm text-left">

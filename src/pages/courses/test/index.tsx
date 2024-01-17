@@ -74,7 +74,7 @@ const TestModal = ({
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Pass Mark:</div>
-        <div className="text-bw-1">
+        <div className="text-bw-1 pr-0.5">
           {data?.quiz?.attempts?.[0]?.score ?? '- -'}
         </div>
       </div>
