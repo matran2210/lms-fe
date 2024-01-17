@@ -53,7 +53,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
   const streamRef = useRef<StreamPlayerApi>(null)
-
+  const videoRef = useRef<any>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
   const router = useRouter()
@@ -87,6 +87,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     quizDocumentRef.current,
     observerRef.current,
     streamRef.current,
+    videoRef.current,
   ])
 
   // Clear notes
@@ -99,10 +100,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
    */
   const finishedCourseSectionProgress = async () => {
     // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
-    if (activityType === 'VIDEO' && streamRef?.current) {
-      streamRef.current.addEventListener('playing', async () => {
-        await handleFinishedCourseSectionProgress()
-      })
+    if (activityType === 'VIDEO' && videoRef?.current) {
+      for (let e of videoRef.current) {
+        e.addEventListener('playing', async () => {
+          await handleFinishedCourseSectionProgress()
+        })
+      }
       return
     }
     // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
@@ -420,12 +423,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 }
                 if (e.type === 'VIDEO') {
                   return (
-                    <div className={marginBottom} key={e.id}>
+                    <div className={marginBottom} key={i}>
                       <VideoDocument
                         videos={e.videos}
                         activityId={activity.id}
                         tabId={selector.currentTabId || ''}
-                        streamRefProp={streamRef}
+                        streamRefProp={(el: any) =>
+                          (videoRef.current[i || 0] = el)
+                        }
                         handleProcess={handleFinishedCourseSectionProgress}
                         document_id={e.id}
                       ></VideoDocument>
