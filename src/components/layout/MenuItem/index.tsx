@@ -14,11 +14,13 @@ import { v4 as uuidv4 } from 'uuid'
 type MenuItemProps = {
   menuItem: MenuItemType
   setOpenResource: Dispatch<SetStateAction<boolean>>
+  closeSideBar: () => void
 }
 
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   setOpenResource,
+  closeSideBar,
 }: MenuItemProps) {
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()
@@ -89,6 +91,7 @@ export default function MenuItem({
           className={`sidebar-item flex items-center group ${
             Icon === 'avatar' ? '-ml-2' : ''
           }`}
+          onClick={() => closeSideBar()}
         >
           <Link href={url} passHref>
             <div className="flex items-center" onClick={handleActive}>
@@ -160,6 +163,7 @@ export default function MenuItem({
             <MenuItemsList
               options={subItems}
               setOpenResource={setOpenResource}
+              closeSideBar={closeSideBar}
             />
           </div>
         ) : null}

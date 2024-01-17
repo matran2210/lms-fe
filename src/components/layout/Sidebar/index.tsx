@@ -33,6 +33,13 @@ export default function Sidebar({
     dispatch(reset())
   }
 
+  const closeSideBar = () => {
+    document.body.classList.add('no-hover')
+    setTimeout(() => {
+      document.body.classList.remove('no-hover')
+    }, 1000)
+  }
+
   useEffect(() => {
     try {
       dispatch(getMe())
@@ -50,7 +57,10 @@ export default function Sidebar({
             guideStatus && guideStep == 2 ? 'bg-white z-50' : ''
           }`}
         >
-          <div className="group-logos flex justify-center text-center mx-auto pb-8">
+          <div
+            className="group-logos flex justify-center text-center mx-auto pb-8"
+            onClick={() => closeSideBar()}
+          >
             <ExpandIcon type={'logo-default'} />
             <ExpandIcon type={'logo-full'} />
           </div>
@@ -58,6 +68,7 @@ export default function Sidebar({
           <MenuItemsList
             options={MENU_ITEMS}
             setOpenResource={setOpenResource}
+            closeSideBar={closeSideBar}
           />
           {guideStatus && guideStep == 2 && (
             <PopupStep
@@ -78,6 +89,7 @@ export default function Sidebar({
           <MenuItemsList
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}
+            closeSideBar={closeSideBar}
           />
           {guideStatus && guideStep == 3 && (
             <PopupStep
