@@ -66,13 +66,17 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
         </div>
         <div className="action flex items-center jusity-between relative mt-10">
           {data.is_attempt ? (
-            <ButtonSecondary
-              title="Detail"
-              full={false}
-              size={'small'}
-              onClick={handleOnClick}
-              className="hover:bg-primary hover:text-white ml-auto"
-            />
+            data.attempt_status === 'SUBMITTED' ? (
+              <ButtonSecondary
+                title="Detail"
+                full={false}
+                size={'small'}
+                onClick={handleOnClick}
+                className="hover:bg-primary hover:text-white ml-auto"
+              />
+            ) : (
+              <></>
+            )
           ) : (
             <ButtonSecondary
               title="Begin"

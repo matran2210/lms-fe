@@ -221,9 +221,14 @@ const TableCaseStudyResult = () => {
                     <td className="pr-1 text-bw-1">{index + 1}</td>
                     <td className="text-start m-6 pr-4">
                       <div
-                        className="text-bw-1 sapp-text-truncate-1"
+                        className="text-bw-1 sapp-text-truncate-1 cursor-pointer hover:font-semibold"
                         dangerouslySetInnerHTML={{
                           __html: String(e?.question?.question_content ?? '--'),
+                        }}
+                        onClick={() => {
+                          router.push(
+                            `/entrance-test/table-result/explanation/${e.id}`,
+                          )
                         }}
                       ></div>
                     </td>
