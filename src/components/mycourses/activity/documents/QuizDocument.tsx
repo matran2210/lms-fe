@@ -9,18 +9,19 @@ import {
   submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
+import { CloseIcon } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
 import { QuizResultComponent } from 'quiz-result-package'
 import {
   IQuestionResult,
   IQuestionResultResponse,
 } from 'quiz-result-package/dist/type'
+import toast from 'react-hot-toast'
+import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion } from 'src/type/course/Question'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import PopupFinishQuiz from '../PopupFinishQuiz'
 import ModalExplanationPackage from '../ModalExplanationPackage'
-import toast from 'react-hot-toast'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 
 type Props = {
   questions: IQuestion[]
@@ -247,11 +248,11 @@ const QuizDocument = ({
 
   return (
     <div>
-      <PopupFinishQuiz
+      <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
-        submitQuiz={handleFinishQuiz}
-      ></PopupFinishQuiz>
+        handleSubmit={handleFinishQuiz}
+      ></ConFirmSubmit>
 
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
@@ -294,7 +295,9 @@ const QuizDocument = ({
           </div>
         </div>
 
-        {(isQuestionConfirmed || (!isQuestionConfirmed && isLastQuestion)) && (
+        {(isQuestionConfirmed ||
+          grading_preference !== 'AFTER_EACH_QUESTION' ||
+          (!isQuestionConfirmed && isLastQuestion)) && (
           <div
             className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
             onClick={
@@ -333,14 +336,23 @@ const QuizDocument = ({
         position="center"
         showFooter={false}
         isFullScreen={true}
-        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        showHeader={false}
       >
-        <div className="max-w-[1114px] mx-auto">
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-            onShowDetail={handleShowQuestionResultDetail}
-          />
+        <div>
+          <div
+            className="ml-auto cursor-pointer absolute  right-6 top-4.5"
+            onClick={() => setModalResult(undefined)}
+          >
+            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+          </div>
+          <div className="max-w-[1114px] mx-auto">
+            <QuizResultComponent
+              questionResponse={modalResult?.questions || []}
+              getTable={getTable}
+              onShowDetail={handleShowQuestionResultDetail}
+            />
+          </div>
         </div>
       </SappModal>
       <ModalExplanationPackage
