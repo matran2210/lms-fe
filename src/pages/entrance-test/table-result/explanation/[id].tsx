@@ -48,17 +48,16 @@ const Explanation = () => {
         ...resultResponse.data.answer.question,
         confirmed: true,
         corrects: getCorrect(
-          resultResponse.data.answer.answer_position_mapping?.[0]
-            ? resultResponse.data.answer.answer_position_mapping
+          resultResponse.data.answer.question.answers?.[0]
+            ? resultResponse.data.answer.question.answers
             : resultResponse.data.answer.question.question_matchings,
           resultResponse.data.answer.question.qType,
         ),
-        answers:
-          resultResponse.data?.answer?.answer_position_mapping?.answers || [],
+        answers: resultResponse.data?.answer?.question.answers || [],
         myAnswers: [
           {
             question_id: resultResponse.data.answer.question.id,
-            question_answer_id: resultResponse.data.answer.id,
+            question_answer_id: resultResponse.data.answer.question_answer_id,
             answer: resultResponse.data.answer.answer,
           },
         ],

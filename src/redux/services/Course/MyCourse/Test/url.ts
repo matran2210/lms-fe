@@ -15,6 +15,7 @@ export const url = {
   getQuizAttemptsChartData: '/quiz-attempts/chart-data',
   createTopicAttempt: '/quiz/case-study/topic-attempt',
   getAnswer: 'quiz-attempts/answers',
+  getTopicAttemptDetail: '/quiz-attempts/topic/',
 }
 
 export default url

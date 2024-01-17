@@ -1,6 +1,7 @@
 import { CloseIcon } from '@assets/icons'
 import SappTable from '@components/base/SappTable'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { LAYOUT } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
 import { useRouter } from 'next/router'
@@ -41,6 +42,7 @@ const TableCaseStudyResult = () => {
     answers: [],
     meta: {},
   })
+  const [topicAttemptDetail, setTopicAttemptDetail] = useState<any>()
   const router = useRouter()
 
   const fetchScoreDetail = async (page_index: number, page_size: number) => {
@@ -50,6 +52,12 @@ const TableCaseStudyResult = () => {
         page_index,
         page_size,
       )
+      return res
+    } catch (error) {}
+  }
+  const fetchTopicAttemptDetail = async (id: string) => {
+    try {
+      const res = await CourseTestApi.getTopicAttemptsDetail(id)
       return res
     } catch (error) {}
   }
@@ -68,7 +76,6 @@ const TableCaseStudyResult = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [scoreDetail])
-
   const handlNextPage = async () => {
     const totalPages = scoreDetail?.meta?.total_pages
     const pageIndex = scoreDetail?.meta?.page_index
@@ -84,9 +91,20 @@ const TableCaseStudyResult = () => {
   }
   const getScoreDetail = async () => {
     const res = await fetchScoreDetail(1, 10)
+    const topic = await fetchTopicAttemptDetail(router.query.id as string)
     setScoreDetail(res?.data)
+    setTopicAttemptDetail(topic?.data)
   }
-
+  const handleRetake = (
+    topicId: string,
+    quizId: string,
+    class_user_id?: string,
+  ) => {
+    router.push({
+      pathname: `/case-study/${topicId}`,
+      query: { quiz_id: quizId, class_user_id: class_user_id },
+    })
+  }
   // Hàm ánh xạ giá trị enum với tên tương ứng
   const getTypeName = (type: QUESTION_TYPES): string => {
     switch (type) {
@@ -116,22 +134,74 @@ const TableCaseStudyResult = () => {
       getScoreDetail()
     }
   }, [router.query.id])
-
   return (
     <div className="relative">
       <div
-        className=" fixed  px-5 py-6 right-0 cursor-pointer"
-        onClick={() => {}}
+        className=" fixed  px-6 py-4 right-0 cursor-pointer"
+        onClick={() => {
+          router.back()
+        }}
       >
         <CloseIcon />
       </div>
       <div className="bg-white max-w-[1144px] max-h-full m-auto pt-8">
-        <div className="flex justify-between mb-10">
-          <div className="text-xl font-medium text-bw-1 mb-6">
-            Your Score Details
+        <div className="flex justify-between mb-10 items-center">
+          <div className="">
+            <div className="text-xl font-medium text-bw-1 ">
+              {topicAttemptDetail?.question_topic?.name}
+            </div>
+            <div className="text-base">
+              <span className="font-normal text-gray-1">Your Score:</span>{' '}
+              <span className="font-bold text-state-error">
+                {topicAttemptDetail?.score}%
+              </span>
+            </div>
           </div>
-          <ButtonPrimary title="Retake 0/3" size="medium"></ButtonPrimary>
+          {topicAttemptDetail?.quiz?.is_limited ? (
+            topicAttemptDetail?.quiz?.limit_count > 1 ? (
+              topicAttemptDetail?.quiz?.limit_count >
+              topicAttemptDetail?.retake_times ? (
+                <ButtonPrimary
+                  title={`Retake ${topicAttemptDetail?.retake_times} ${
+                    topicAttemptDetail?.is_limited
+                      ? `/${topicAttemptDetail?.limit_count}`
+                      : '/ Unlimited'
+                  }`}
+                  size="medium"
+                />
+              ) : (
+                <ButtonSecondary
+                  disabled={true}
+                  title={`Retake ${topicAttemptDetail?.retake_times} ${
+                    topicAttemptDetail?.is_limited
+                      ? `/${topicAttemptDetail?.limit_count}`
+                      : '/ Unlimited'
+                  }`}
+                  size="medium"
+                />
+              )
+            ) : (
+              <></>
+            )
+          ) : (
+            <ButtonPrimary
+              title={`Retake ${topicAttemptDetail?.retake_times} ${
+                topicAttemptDetail?.is_limited
+                  ? `/${topicAttemptDetail?.limit_count}`
+                  : '/ Unlimited'
+              }`}
+              size="medium"
+              onClick={() =>
+                handleRetake(
+                  topicAttemptDetail?.question_topic?.id,
+                  topicAttemptDetail?.quiz?.id,
+                  router.query.class_user_id as string,
+                )
+              }
+            />
+          )}
         </div>
+
         <div className="block pl-4">
           <SappTable
             headers={headers}
