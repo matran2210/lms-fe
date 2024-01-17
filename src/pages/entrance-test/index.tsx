@@ -1,7 +1,7 @@
 import EntranceTestFilter from '@components/entrance-test/EntranceTestFilter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { parse } from 'cookie'
 import EntranceTestList from '@components/entrance-test/EntranceTestList'
 import EntranceApi from 'src/redux/services/EntranceTest'
@@ -13,8 +13,16 @@ import {
   setCookieRefreshToken,
   buildQueryString,
 } from '@utils/index'
+import PopUpRemindEntrance from '@components/popUpRemindEntrance'
+import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
+import { useAppDispatch } from 'src/redux/hook'
 
 const EntranceTest = ({ entranceTestLists }: any) => {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(getEntranceCount())
+  }, [])
+
   return (
     <>
       <div className="header bg-white border-b border-default">
@@ -43,6 +51,7 @@ const EntranceTest = ({ entranceTestLists }: any) => {
       <div className="pt-6 max-w-xxl my-0 mx-auto">
         <EntranceTestList entranceTestLists={entranceTestLists} />
       </div>
+      <PopUpRemindEntrance />
     </>
   )
 }

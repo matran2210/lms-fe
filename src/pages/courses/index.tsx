@@ -19,11 +19,6 @@ import {
 } from '@utils/index'
 import { ICourseAll } from 'src/type/courses'
 import CourseAPI from '../api/courses'
-import {
-  entranceTestReducer,
-  getEntranceCount,
-} from 'src/redux/slice/EntranceTest/EntranceTest'
-import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { removeJwtToken } from '@utils/helpers/authen'
 
 const DEFAULT_PAGESIZE = 9
@@ -52,7 +47,6 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     (state) => state.userGuideReducer?.isActive,
   )
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
-  const { shouldShowRemind } = useAppSelector(entranceTestReducer)
   const router = useRouter()
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
@@ -82,9 +76,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       dispatch(active())
     }
   }, [userGuideLine])
-  useEffect(() => {
-    dispatch(getEntranceCount())
-  }, [])
+
   const [data, setData] = useState<ICourseAll>(courses || [])
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
@@ -222,7 +214,6 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
           className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
         ></div>
       )}
-      <PopUpRemindEntrance />
     </>
   )
 }
