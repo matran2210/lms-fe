@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 import TestModal from 'src/pages/courses/test'
+import { PageLink } from 'src/constants'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -116,7 +117,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         : course_section?.course_section_type === 'STORY'
           ? handleRouterCaseStudy(
               quiz?.id,
-              quiz?.case_study_story?.id,
+              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
               course_section?.id,
               quiz?.case_study_story?.instances?.[0]?.id,
             )
@@ -312,7 +313,7 @@ export async function getServerSideProps(context: any) {
         // Chuyển hướng đến trang đăng nhập
         return {
           redirect: {
-            destination: '/',
+            destination: PageLink.AUTH_LOGIN,
             permanent: false,
           },
         }

@@ -20,6 +20,7 @@ import {
 import { ICourseAll } from 'src/type/courses'
 import CourseAPI from '../api/courses'
 import { removeJwtToken } from '@utils/helpers/authen'
+import { PageLink } from 'src/constants'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -276,7 +277,7 @@ export async function getServerSideProps(context: any) {
         removeJwtToken()
         return {
           redirect: {
-            destination: '/',
+            destination: PageLink.AUTH_LOGIN,
             permanent: false,
           },
         }
@@ -285,7 +286,7 @@ export async function getServerSideProps(context: any) {
 
     return {
       redirect: {
-        destination: '/',
+        destination: PageLink.AUTH_LOGIN,
         permanent: false,
       },
     }
