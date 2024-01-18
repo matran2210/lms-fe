@@ -47,7 +47,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   const coutNotificationsUnRead = async () => {
     const accessToken = await AsyncStorage.getItem('accessToken')
-    if (accessToken) {
+    if (accessToken && router?.asPath !== '/auth/login') {
       try {
         await dispatch(getCountUnRead())
       } catch (error) {}

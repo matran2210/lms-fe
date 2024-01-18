@@ -24,6 +24,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [open, setOpen] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<any>({})
   const [chapterTestId, setChapterTestId] = useState<string>()
+  const [defaultActive, setDefaultActive] = useState<string>()
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
@@ -153,6 +154,11 @@ const CoursePartDetail = ({ previewPart }: any) => {
     )
   }
 
+  useEffect(() => {
+    router.query.unit_id &&
+      setDefaultActive(String(router?.query?.unit_id) || '')
+  }, [router?.asPath])
+
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
@@ -190,7 +196,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         handleRouterChapter={handleRouterChapter}
         readMore={readMore}
         setReadMore={setReadMore}
-        defaultActive={router.query.unit_id ? router.query.unit_id : ''}
+        defaultActive={defaultActive ? defaultActive : ''}
       />
 
       <SappDrawer
