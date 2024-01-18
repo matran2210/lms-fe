@@ -17,6 +17,7 @@ const MultiChoiceQuestion = ({
   removeHighlight,
   allowHighLight,
   solution,
+  allowUnHighLight,
 }: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
@@ -34,11 +35,11 @@ const MultiChoiceQuestion = ({
   useEffect(() => {
     setValue(name, defaultValues)
   }, [defaultValues])
-  useEffect(() => {
-    if (data) {
-      DeserializeHighlight(highlighted)
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data) {
+  //     DeserializeHighlight(highlighted)
+  //   }
+  // }, [data])
   return (
     <div>
       <div
@@ -49,7 +50,20 @@ const MultiChoiceQuestion = ({
             e.target.firstChild?.tagName !== 'math'
           ) {
             if (e) {
-              runHighlight(handleSaveHighLight, allowHighLight || false)
+              if (allowHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowHighLight || false,
+                  'hightlight_area',
+                )
+              } else if (allowUnHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowUnHighLight || false,
+                  'hightlight_area',
+                  { color: 'white' },
+                )
+              }
             }
           }
         }}
@@ -57,6 +71,7 @@ const MultiChoiceQuestion = ({
         <EditorReader
           text_editor_content={data?.question_content}
           className="sapp-questions"
+          highlighted={highlighted}
         />
       </div>
       <div

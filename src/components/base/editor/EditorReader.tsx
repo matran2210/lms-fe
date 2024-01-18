@@ -12,6 +12,7 @@ type Props = {
   onMouseUp?: any
   highlighted?: string
   options?: any
+  highlighArea?: string
 }
 
 const EditorReader = ({
@@ -22,6 +23,7 @@ const EditorReader = ({
   onMouseUp,
   highlighted,
   options,
+  highlighArea = 'hightlight_area',
 }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
@@ -66,7 +68,11 @@ const EditorReader = ({
   }, [text_editor_content])
 
   useEffect(() => {
-    if (highlighted) {
+    if (highlighArea === 'hightlight_area_topic') {
+      DeserializeHighlight(highlighted, highlighArea)
+    } else if (highlighArea === 'hightlight_area_require') {
+      DeserializeHighlight(highlighted, highlighArea)
+    } else if (highlighArea === 'hightlight_area') {
       DeserializeHighlight(highlighted)
     }
   }, [content, highlighted])

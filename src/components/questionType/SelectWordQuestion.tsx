@@ -25,6 +25,7 @@ interface IProps {
   }[]
   extenalRef?: any
   solution?: string
+  allowUnHighLight?: boolean
 }
 const SelectWord = forwardRef(
   (
@@ -39,6 +40,7 @@ const SelectWord = forwardRef(
       corrects,
       extenalRef,
       solution,
+      allowUnHighLight,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -161,11 +163,13 @@ const SelectWord = forwardRef(
       setQuestionContent(doc)
     }, [defaultAnswer])
 
-    useEffect(() => {
-      if (data) {
-        DeserializeHighlight(highlighted)
-      }
-    }, [data])
+    // useEffect(() => {
+    //   if (questionContent) {
+    //     console.log("abc");
+
+    //     DeserializeHighlight(highlighted)
+    //   }
+    // }, [questionContent])
     return (
       <div>
         <EditorReader
@@ -184,10 +188,24 @@ const SelectWord = forwardRef(
               e.target.firstChild?.tagName !== 'math'
             ) {
               if (e) {
-                runHighlight(handleSaveHighLight, allowHighLight || false)
+                if (allowHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowHighLight || false,
+                    'hightlight_area',
+                  )
+                } else if (allowUnHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowUnHighLight || false,
+                    'hightlight_area',
+                    { color: 'white' },
+                  )
+                }
               }
             }
           }}
+          highlighted={highlighted}
         />
         {answerContent && (
           <>

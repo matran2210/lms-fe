@@ -62,7 +62,7 @@ export const validateFile = (
     )?.size || 0
 
   if (maxFileSize > 0 && fileSize > maxFileSize) {
-    toast.error('File quá lonw')
+    toast.error('File quá lớn')
     return false
   }
 

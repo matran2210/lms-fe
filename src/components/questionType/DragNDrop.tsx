@@ -22,6 +22,7 @@ interface IProps {
   corrects?: any
   solution?: string
   resetDefaultAnswer?: boolean
+  allowUnHighLight?: boolean
 }
 const DragNDropPreivew = forwardRef(
   (
@@ -37,6 +38,7 @@ const DragNDropPreivew = forwardRef(
       corrects,
       solution,
       resetDefaultAnswer = false,
+      allowUnHighLight,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -106,9 +108,7 @@ const DragNDropPreivew = forwardRef(
         })
       },
     }))
-    useEffect(() => {
-      DeserializeHighlight(highlighted)
-    }, [questionContent])
+
     useEffect(() => {
       const doc = parser.parseFromString(str, 'text/html')
       const doc2 = parser.parseFromString(str, 'text/html')
@@ -246,7 +246,20 @@ const DragNDropPreivew = forwardRef(
                   e.target.firstChild?.tagName !== 'math'
                 ) {
                   if (e) {
-                    runHighlight(handleSaveHighLight, allowHighLight || false)
+                    if (allowHighLight) {
+                      runHighlight(
+                        handleSaveHighLight,
+                        allowHighLight || false,
+                        'hightlight_area',
+                      )
+                    } else if (allowUnHighLight) {
+                      runHighlight(
+                        handleSaveHighLight,
+                        allowUnHighLight || false,
+                        'hightlight_area',
+                        { color: 'white' },
+                      )
+                    }
                   }
                 }
               }}
@@ -258,6 +271,7 @@ const DragNDropPreivew = forwardRef(
                     ?.innerHTML || ''
                 }
                 options={options}
+                highlighted={highlighted}
               />
             </div>
             {!corrects && (

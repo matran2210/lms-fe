@@ -382,9 +382,9 @@ body *::-webkit-scrollbar-thumb:hover {
   @apply cursor-pointer flex justify-evenly gap-2 w-max items-center px-2 py-0 border;
 }
 
-.tox-tinymce {
-  border: none !important;
-}
+// .tox-tinymce {
+//   border: none !important;
+// }
 
 .resizable {
   @apply bg-white absolute top-[100px] left-[100px] cursor-move;

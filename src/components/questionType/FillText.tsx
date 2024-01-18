@@ -26,6 +26,7 @@ interface IProps {
   }[]
   extenalRef?: any
   solution?: string
+  allowUnHighLight?: boolean
 }
 const AddWordPreview = forwardRef(
   (
@@ -40,6 +41,7 @@ const AddWordPreview = forwardRef(
       corrects,
       extenalRef,
       solution,
+      allowUnHighLight,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -163,7 +165,20 @@ const AddWordPreview = forwardRef(
               e.target.firstChild?.tagName !== 'math'
             ) {
               if (e) {
-                runHighlight(handleSaveHighLight, allowHighLight || false)
+                if (allowHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowHighLight || false,
+                    'hightlight_area',
+                  )
+                } else if (allowUnHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowUnHighLight || false,
+                    'hightlight_area',
+                    { color: 'white' },
+                  )
+                }
               }
             }
           }}

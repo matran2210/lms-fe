@@ -23,6 +23,7 @@ interface IProps {
   index?: number
   corrects?: any
   solution?: string
+  allowUnHighLight?: boolean
 }
 type IProp = {
   value: string
@@ -43,6 +44,7 @@ const MatchingQuestion = forwardRef(
       extenalRef,
       corrects,
       solution,
+      allowUnHighLight,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -134,11 +136,11 @@ const MatchingQuestion = forwardRef(
     }: IProp) => {
       return <div className={`${className}`}>{value}</div>
     }
-    useEffect(() => {
-      if (data) {
-        DeserializeHighlight(highlighted)
-      }
-    }, [data])
+    // useEffect(() => {
+    //   if (data) {
+    //     DeserializeHighlight(highlighted)
+    //   }
+    // }, [data])
     function shuffleArray(array: Array<any>) {
       let currentIndex = array.length,
         randomIndex
@@ -198,7 +200,20 @@ const MatchingQuestion = forwardRef(
               e.target.firstChild?.tagName !== 'math'
             ) {
               // if(e){
-              runHighlight(handleSaveHighLight, allowHighLight || false)
+              if (allowHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowHighLight || false,
+                  'hightlight_area',
+                )
+              } else if (allowUnHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowUnHighLight || false,
+                  'hightlight_area',
+                  { color: 'white' },
+                )
+              }
               // }
             }
           }}
@@ -206,6 +221,7 @@ const MatchingQuestion = forwardRef(
           <EditorReader
             className="sapp-questions !mb-[32px]"
             text_editor_content={data?.question_content}
+            highlighted={highlighted}
           />
         </div>
         {!corrects ? (
