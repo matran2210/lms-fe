@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -10,26 +10,24 @@ import {
   submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
+import { CloseIcon } from '@assets/icons'
 import { StreamPlayerApi } from '@cloudflare/stream-react'
 import SappModal from '@components/base/modal/SappModal'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { debounce } from '@utils/helpers'
-import SappIcon from 'src/common/SappIcon'
-import { IQuestion, IVideo } from 'src/type/course/Question'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import toast from 'react-hot-toast'
 import { QuizResultComponent } from 'quiz-result-package'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import {
   IQuestionResult,
   IQuestionResultResponse,
 } from 'quiz-result-package/dist/type'
-import PopupFinishQuiz from '../PopupFinishQuiz'
-import ModalExplanationPackage from '../ModalExplanationPackage'
-import { CloseIcon } from '@assets/icons'
+import SappIcon from 'src/common/SappIcon'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import { IQuestion, IVideo } from 'src/type/course/Question'
+import ModalExplanationPackage from '../ModalExplanationPackage'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 
 type Props = {
   videos?: IVideo[]
@@ -81,6 +79,7 @@ const VideoDocument = ({
 
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
   const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
     id: string
@@ -360,6 +359,7 @@ const VideoDocument = ({
     page_index: number
     page_size: number
   }) => {
+    setLoading(true)
     try {
       const response = await CourseActivityApi.getQuizAttemptsTable(
         id || modalResult?.id || '',
@@ -371,18 +371,17 @@ const VideoDocument = ({
 
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.meta,
-        data:
+        data: (modalResult?.questions?.data || []).concat(
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
             section: e.question.question_topic?.name,
             type: e.question.qType,
-            result: {
-              is_correct: e.is_correct,
-              percent: 0,
-            },
-            time_spent: e.time_spent || 0,
+            is_correct: e.is_correct,
+            time_spent: e.time_spent,
+            question: e.question as any,
           })) || [],
+        ),
       }
       setModalResult((e) => ({
         id: id || e?.id,
@@ -390,7 +389,10 @@ const VideoDocument = ({
         questions: newQuestionResponse,
       }))
       streamRef.current?.pause()
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleCloseModalResult = () => {
@@ -560,6 +562,7 @@ const VideoDocument = ({
               questionResponse={modalResult?.questions || []}
               getTable={getTable}
               onShowDetail={handleShowQuizResultDetail}
+              loading={loading}
             />
           </div>
         </div>

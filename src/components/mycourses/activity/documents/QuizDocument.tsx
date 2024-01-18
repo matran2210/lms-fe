@@ -53,6 +53,8 @@ const QuizDocument = ({
 
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
+  const [loading, setLoading] = useState<boolean>(false)
+
   const [modalResult, setModalResult] = useState<{
     status?: boolean
     questions?: any
@@ -210,6 +212,7 @@ const QuizDocument = ({
     page_index: number
     page_size: number
   }) => {
+    setLoading(true)
     try {
       const response = await CourseActivityApi.getQuizAttemptsTable(
         id || modalResult?.id || '',
@@ -221,25 +224,27 @@ const QuizDocument = ({
 
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.meta,
-        data:
+        data: (modalResult?.questions?.data || []).concat(
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
             section: e.question.question_topic?.name,
             type: e.question.qType,
-            result: {
-              is_correct: e.is_correct,
-              percent: 0,
-            },
-            time_spent: e.time_spent || 0,
+            is_correct: e.is_correct,
+            time_spent: e.time_spent,
+            question: e.question as any,
           })) || [],
+        ),
       }
       setModalResult((e) => ({
         id: id || e?.id,
         status: true,
         questions: newQuestionResponse,
       }))
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleShowQuestionResultDetail = (data: IQuestionResult) => {
@@ -351,6 +356,7 @@ const QuizDocument = ({
               questionResponse={modalResult?.questions || []}
               getTable={getTable}
               onShowDetail={handleShowQuestionResultDetail}
+              loading={loading}
             />
           </div>
         </div>

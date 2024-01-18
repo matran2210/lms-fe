@@ -152,8 +152,21 @@ const submitQuestion = createAsyncThunk(
     try {
       const result = await CourseActivityApi.submitQuiz(id, {
         ...data,
-        answers: data.answers?.map((e) => e?.[0]),
+        answers: (data.answers || []).reduce((acc, e) => {
+          if (
+            e?.[0]?.answers &&
+            Array.isArray(e[0].answers) &&
+            e[0].answers.length <= 0
+          ) {
+            return acc
+          }
+          if ('question_answer_id' in e?.[0] && !e?.[0]?.question_answer_id) {
+            return acc
+          }
+          return [...acc, e?.[0]]
+        }, []),
       })
+
       if (result.success) {
         return { ...result }
       }
