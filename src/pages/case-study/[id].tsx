@@ -660,7 +660,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 const topicId = Object.keys(e)[0] as any
                 return (
                   <div key={question?.id + index} topic-key={topicId}>
-                    <div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>
+                    {/*<div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>*/}
 
                     {checkType(
                       question,
