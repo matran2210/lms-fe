@@ -90,7 +90,7 @@ const TableCaseStudyResult = () => {
     }
   }
   const getScoreDetail = async () => {
-    const res = await fetchScoreDetail(1, 10)
+    const res = await fetchScoreDetail(1, 20)
     const topic = await fetchTopicAttemptDetail(router.query.id as string)
     setScoreDetail(res?.data)
     setTopicAttemptDetail(topic?.data)
@@ -100,7 +100,7 @@ const TableCaseStudyResult = () => {
     quizId: string,
     class_user_id?: string,
   ) => {
-    router.push({
+    router.replace({
       pathname: `/case-study/${topicId}`,
       query: { quiz_id: quizId, class_user_id: class_user_id },
     })
@@ -195,7 +195,7 @@ const TableCaseStudyResult = () => {
                 handleRetake(
                   topicAttemptDetail?.question_topic?.id,
                   topicAttemptDetail?.quiz?.id,
-                  router.query.class_user_id as string,
+                  topicAttemptDetail?.class_user_id as string,
                 )
               }
             />

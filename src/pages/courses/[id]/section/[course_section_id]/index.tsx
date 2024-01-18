@@ -145,7 +145,11 @@ const CoursePartDetail = ({ previewPart }: any) => {
     courseId: string,
     caseStudyId: string,
   ) => {
-    await CourseAPI.caseStudyProgress(router.query.id, courseId, caseStudyId)
+    const res = await CourseAPI.caseStudyProgress(
+      router.query.id,
+      courseId,
+      caseStudyId,
+    )
   }
 
   return (
@@ -243,7 +247,6 @@ export async function getServerSideProps(context: any) {
         },
       },
     )
-
     // Xử lý dữ liệu từ API
     const nodeList = apiResponse?.data?.data
     // const tree = TreeHelper.convertFromArray(nodeList)
