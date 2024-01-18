@@ -28,6 +28,8 @@ import {
 } from 'quiz-result-package/dist/type'
 import PopupFinishQuiz from '../PopupFinishQuiz'
 import ModalExplanationPackage from '../ModalExplanationPackage'
+import { CloseIcon } from '@assets/icons'
+import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 
 type Props = {
   videos?: IVideo[]
@@ -402,11 +404,12 @@ const VideoDocument = ({
 
   return (
     <div>
-      <PopupFinishQuiz
+      <ConFirmSubmit
         open={openFinishQUiz}
         setOpen={setOpenFinishQUiz}
-        submitQuiz={handleFinishQuiz}
-      ></PopupFinishQuiz>
+        handleSubmit={handleFinishQuiz}
+      ></ConFirmSubmit>
+
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
         <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
           {videos?.map((v, i) => {
@@ -542,14 +545,23 @@ const VideoDocument = ({
         position="center"
         showFooter={false}
         isFullScreen={true}
-        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        showHeader={false}
       >
-        <div className="max-w-[1114px] mx-auto">
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-            onShowDetail={handleShowQuizResultDetail}
-          />
+        <div>
+          <div
+            className="ml-auto cursor-pointer absolute  right-6 top-4.5"
+            onClick={() => setModalResult(undefined)}
+          >
+            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+          </div>
+          <div className="max-w-[1114px] mx-auto">
+            <QuizResultComponent
+              questionResponse={modalResult?.questions || []}
+              getTable={getTable}
+              onShowDetail={handleShowQuizResultDetail}
+            />
+          </div>
         </div>
       </SappModal>
       <ModalExplanationPackage
