@@ -976,7 +976,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           answers.push({
             question_id: e.id,
             answer,
-            time_spent: Math.ceil(e.timeSpent),
+            time_spent: Math.ceil(e.timeSpent / 1000),
           })
         }
       }
