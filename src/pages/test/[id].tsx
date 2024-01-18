@@ -58,6 +58,15 @@ import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import dynamic from 'next/dynamic'
 import PopupViewPdf from '@components/base/pdf/popupViewPdf'
+import LimitQuizModal from './limitQuizModal'
+type Window = {
+  userAgreed: any
+}
+declare global {
+  interface Window {
+    userAgreed: any
+  }
+}
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -258,6 +267,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [openLimit, setOpenLimit] = useState(false)
   const [openUpload, setOpenUpload] = useState<any>({})
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   useClickOutside({
@@ -1179,11 +1189,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   }, [watch('exhibits')])
   useEffect(() => {
     async function createQuizAttempt() {
-      const res = await CourseTestApi.createQuizAttempt(
-        router.query.id as string,
-        router.query.class_user_id as string,
-      )
-      setQuizAttempId(res.data.id)
+      try {
+        const res = await CourseTestApi.createQuizAttempt(
+          router.query.id as string,
+          router.query.class_user_id as string,
+        )
+        setQuizAttempId(res.data.id)
+      } catch (err: any) {
+        if (err.response.data.error.code === '400|060710') {
+          setOpenLimit(true)
+        }
+      }
     }
     if (router.query.id) {
       createQuizAttempt()
@@ -1196,7 +1212,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setRemainTime((prev) => {
           if (prev === 1) {
             clearInterval(interval)
-            setOpenTimeOut(true)
+            if (!openLimit) {
+              setOpenTimeOut(true)
+            }
             // handleSubmitQuestion()
           }
           return prev - 1
@@ -1209,21 +1227,35 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         clearInterval(interval)
       }
     }
-  }, [quizDetail])
-  // useEffect(() => {
-  //   const handleBeforeUnload = async (event: any) => {
-  //     event.preventDefault()
-  //     await handleSubmitQuestion()
-  //   }
+  }, [quizDetail, openLimit])
+  // useEffect(()=>{
+  //   window.addEventListener("beforeunload", function (event) {
+  //     // Hiển thị hộp thoại cảnh báo có nút OK
+  //     var result = confirm("Bạn có chắc chắn muốn rời khỏi trang này không?");
+  //     // Nếu người dùng nhấn OK
+  //     if (result) {
+  //       // Đặt một cờ để biết người dùng đã đồng ý
+  //       window.userAgreed = true;
+  //       // Trả về một chuỗi cảnh báo
+  //       event.returnValue = "Bạn có chắc chắn muốn rời khỏi trang này không?";
+  //     }
+  //     // Nếu người dùng nhấn Cancel
+  //     else {
+  //       // Hủy bỏ sự kiện
+  //       event.preventDefault();
+  //     }
+  //   });
 
-  //   // Thêm lắng nghe sự kiện beforeunload
-  //   window.addEventListener('beforeunload', handleBeforeUnload)
+  //   // Đăng ký hàm xử lý sự kiện unload
+  //   window.addEventListener("unload", function (event) {
+  //     // Nếu người dùng đã đồng ý rời khỏi trang
+  //     if (window.userAgreed) {
+  //       // Tải lại trang hoặc quay lại trang trước đó
+  //       window.location.reload || window.history.back();
+  //     }
+  //   });
+  // },[])
 
-  //   // Cleanup khi component bị unmount
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload)
-  //   }
-  // }, [currentTabContent, quizAttempId])
   // useEffect(() => {
   //   router.beforePopState(({ as }) => {
   //     if (as !== router.asPath) {
@@ -1826,6 +1858,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       <QuitTestModal
         open={openQuit}
         setOpen={setOpenQuit}
+        handleQuit={() => router.back()}
+      />
+      <LimitQuizModal
+        open={openLimit}
+        setOpen={setOpenLimit}
         handleQuit={() => router.back()}
       />
       <ConFirmSubmit
