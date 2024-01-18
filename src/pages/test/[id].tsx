@@ -1693,36 +1693,41 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               </div>
             )}
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px] py-2"
             onClick={() => handleFlagQuestion(currentPage)}
           >
             <FlagIcon />
-            <div className="font-normal text-sm">Flag to Review</div>
+            <div className="font-medium text-medium-sm">Flag to Review</div>
           </button>
-          {!currentTabContent?.done && (
-            <button
-              className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
-              onClick={() => handleClearSelection(currentTabContent)}
-            >
-              <div className="font-normal text-sm">Clear Selection</div>
-            </button>
-          )}
+          {/* {!currentTabContent?.done && ( */}
+          <button
+            disabled={currentTabContent?.done}
+            className={`flex items-center gap-3 border border-solid ${
+              !currentTabContent?.done
+                ? 'border-gray-1 text-bw-1'
+                : 'border-default text-gray-2'
+            } justify-center p-1 w-[150px] py-2`}
+            onClick={() => handleClearSelection(currentTabContent)}
+          >
+            <div className="font-medium text-medium-sm">Clear Selection</div>
+          </button>
+          {/* )} */}
           {quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px] py-2"
                 onClick={async () => {
                   const data = await getResult(currentTabContent)
                   confirmAnswer(data.corrects, data.solution, currentTabContent)
                 }}
               >
-                <div className="font-normal text-sm">Confirm Answer</div>
+                <div className="font-medium text-medium-sm">Confirm Answer</div>
               </button>
             ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
               filteredTabs.length - 1 ? (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px] py-2"
                 onClick={() => {
                   const index = filteredTabs.findIndex(
                     (e: any) => e.id === currentPage,
