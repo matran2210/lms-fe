@@ -134,10 +134,11 @@ const TableCaseStudyResult = () => {
       getScoreDetail()
     }
   }, [router.query.id])
+
   return (
     <div className="relative">
       <div
-        className=" fixed  px-6 py-4 right-0 cursor-pointer"
+        className="fixed px-6 py-4 right-0 cursor-pointer"
         onClick={() => {
           router.back()
         }}
@@ -147,7 +148,7 @@ const TableCaseStudyResult = () => {
       <div className="bg-white max-w-[1144px] max-h-full m-auto pt-8">
         <div className="flex justify-between mb-10 items-center">
           <div className="">
-            <div className="text-xl font-medium text-bw-1 ">
+            <div className="text-xl font-medium text-bw-1 pb-1.5">
               {topicAttemptDetail?.question_topic?.name}
             </div>
             <div className="text-base">
@@ -168,6 +169,7 @@ const TableCaseStudyResult = () => {
                       : '/ Unlimited'
                   }`}
                   size="medium"
+                  className={'!font-medium'}
                 />
               ) : (
                 <ButtonSecondary
@@ -178,6 +180,7 @@ const TableCaseStudyResult = () => {
                       : '/ Unlimited'
                   }`}
                   size="medium"
+                  className={'!font-medium'}
                 />
               )
             ) : (
@@ -198,6 +201,7 @@ const TableCaseStudyResult = () => {
                   topicAttemptDetail?.class_user_id as string,
                 )
               }
+              className={'!font-medium'}
             />
           )}
         </div>

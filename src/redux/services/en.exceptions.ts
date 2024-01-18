@@ -64,4 +64,5 @@ export const exceptions = {
   '403|5902': 'This Question Already In Used',
   '404|071704': 'Course Section Note Not Found',
   '400|100006': 'Class User Not Allow Extend',
+  '400|060710': 'Quiz Attempt Limited',
 }
