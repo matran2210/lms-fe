@@ -333,7 +333,7 @@ const MyProfile = ({
               </div>
               <div className="flex-auto max-w-[300px] font-medium text-bw-1">
                 <TextSkeleton loading={loading && !isEdit} height="4">
-                  {formatDate(user.updated_at)}
+                  {formatDate(user?.updated_at)}
                 </TextSkeleton>
               </div>
             </li>
@@ -433,14 +433,27 @@ const MyProfile = ({
 export default MyProfile
 
 export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
+  try {
+    const { req, res, query } = context
 
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
+    // Lấy accessToken từ cookie
+    const accessToken = req.cookies.accessToken
 
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
+    // Kiểm tra accessToken
+    if (!accessToken) {
+      // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
+      return {
+        redirect: {
+          destination: '/auth/login',
+          permanent: false,
+        },
+      }
+    }
+
+    return {
+      props: {},
+    }
+  } catch (err) {
     return {
       redirect: {
         destination: '/auth/login',

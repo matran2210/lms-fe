@@ -1,5 +1,5 @@
 export const PageLink = {
-  DASHBOARD: '/myprofile',
+  DASHBOARD: '/',
   COURSES: '/courses',
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
@@ -12,11 +12,13 @@ export const PageLink = {
   AUTH_CHANGE_PASSWORD_SUCCESS: '/auth/change-password/change-password-success',
   NOTIFICATION: '/notifications',
   ENTRANCE_TEST: '/entrance-test',
+  MYPROFILE: '/myprofile',
 }
 
 export const TitleSidebar = {
   DASHBOARD: 'Dashboard',
-  COURSES: 'Courses',
+  COURSES: 'My Course',
+  RESOURCES: 'Resources',
   COURSE_NEW: 'Course new',
   COURSE_LIST: 'Course list',
   CASE_STUDY: 'Case Study',
@@ -24,6 +26,11 @@ export const TitleSidebar = {
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
   NOTIFICATION: 'Notifications',
+  RESULTS: 'Results',
+  NOTES_LIST: 'Notes List',
+  NEW_NOTE: 'New Note',
+  CALCULATOR: 'Calculator',
+  ENTRANCE_TEST: 'Entrance Test',
 }
 
 export const GUIDELINE_PASSWORD = [
