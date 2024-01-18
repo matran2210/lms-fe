@@ -53,7 +53,7 @@ const TestModal = ({
       open={open}
       setOpen={setOpen}
       cancelButtonCaption="Cancel"
-      okButtonCaption="Start"
+      okButtonCaption={checkFinished ? 'Retake' : 'Start'}
       handleCancel={() => {
         setOpen(false)
       }}
@@ -72,17 +72,19 @@ const TestModal = ({
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Name:</div>
-        <div className="text-bw-1 line-clamp-2">{data?.name}</div>
+        <div className="text-bw-1 line-clamp-2 pr-0.5 font-medium">
+          {data?.name}
+        </div>
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Pass Point:</div>
-        <div className="text-bw-1 pr-0.5">
+        <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.required_percent_score ?? '- -'}
         </div>
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Time Allowed:</div>
-        <div className="text-bw-1">
+        <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.quiz_timed
             ? formatTime(data?.quiz?.quiz_timed)
             : 'Unlimited'}
@@ -90,7 +92,7 @@ const TestModal = ({
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">No of Attempts:</div>
-        <div className="text-bw-1">
+        <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.attempt_count || 0}/
           {data?.quiz?.is_limited ? data?.quiz?.limit_count : 'Unlimited'}
         </div>
@@ -98,7 +100,7 @@ const TestModal = ({
       {data?.quiz?.attempts?.[0]?.ratio_score && (
         <div className="flex justify-between py-6 gap-8">
           <div className="text-gray-1">Latest Result:</div>
-          <div className="text-state-info font-medium underline">
+          <div className="text-state-info pr-0.5 font-medium underline">
             {data?.quiz?.attempts?.[0]?.ratio_score ?? '- -'}
           </div>
         </div>
@@ -106,7 +108,9 @@ const TestModal = ({
       <div className="flex justify-between py-6 gap-8">
         <div className="text-gray-1">Status:</div>
         <div
-          className={`${checkFinished ? 'text-state-success' : 'text-danger'}`}
+          className={`${
+            checkFinished ? 'text-state-success' : 'text-danger'
+          } pr-0.5 font-medium`}
         >
           {checkFinished ? 'Finished' : 'Unfinished'}
         </div>

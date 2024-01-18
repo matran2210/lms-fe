@@ -19,6 +19,7 @@ interface IProps {
   drawerSubId?: string
   confirmOnClose?: boolean
   showSubmitButton?: boolean
+  heightBody?: string
 }
 
 const SappDrawer = ({
@@ -34,6 +35,7 @@ const SappDrawer = ({
   drawerSubId = '',
   confirmOnClose = true,
   showSubmitButton = true,
+  heightBody = 'h-[calc(100vh-104px)]',
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -61,10 +63,11 @@ const SappDrawer = ({
       )}
       <div
         className={`fixed top-0 right-0 h-full bg-white transform z-50 ${
-          widthDrawer ?? 'w-screen lg:w-[960px]'
+          widthDrawer ?? 'w-screen lg:w-1/2'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
-        } transition-transform duration-300 ease-in-out overflow-y-auto h-screen`}
+        } transition-transform duration-300 ease-in-out
+        h-screen`}
       >
         <div className="flex flex-col justify-between">
           <div className="relative w-100 justify-between bg-bw-2 min-h-[80px] text-2xl font-medium flex items-center px-8 text-white py-2">
@@ -80,13 +83,13 @@ const SappDrawer = ({
           </div>
         </div>
         <div
-          className="mt-6 ml-8 mr-4 overflow-y-auto h-[80vh]"
+          className={`mt-6 ml-8 mr-4 overflow-y-auto ${heightBody}`}
           id={`sapp-drawer${drawerSubId}`}
         >
           {children}
         </div>
         {footer && (
-          <div className="flex justify-between h-[82px] items-center border-t border-default">
+          <div className="flex justify-between h-[82px] items-center border-t border-default absolute bottom-0 left-0 right-0 w-full bg-white">
             <ButtonText
               title="Cancel"
               className="ms-[4px]"

@@ -243,10 +243,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       title="Resource"
       footer={false}
       confirmOnClose={false}
+      heightBody={'h-[calc(100vh-112px)]'}
     >
-      <div className="flex justify-between gap-4 md:gap-6 flex-wrap md:flex-nowrap mt-2">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mt-2">
         <HookFormSelect
-          classParent="w-full md:max-w-[208px]"
+          classParent="w-full md:max-w-full"
           placeholder="Section"
           isClearable={true}
           value={selectedSection}
@@ -269,7 +270,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToSections}
         />
         <HookFormSelect
-          classParent="w-full md:max-w-[208px]"
+          classParent="w-full md:max-w-full"
           placeholder="Subsection"
           isClearable={true}
           value={selectedSubsection}
@@ -292,7 +293,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToSubsections}
         />
         <HookFormSelect
-          classParent="w-full md:max-w-[208px]"
+          classParent="w-full md:max-w-full"
           placeholder="Unit"
           isClearable={true}
           value={selectedUnit}
@@ -315,7 +316,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToUnit}
         />
         <HookFormSelect
-          classParent="w-full md:max-w-[208px]"
+          classParent="w-full md:max-w-full"
           placeholder="Activity"
           isClearable={true}
           value={selectedActivity}

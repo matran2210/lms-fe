@@ -116,7 +116,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         : course_section?.course_section_type === 'STORY'
           ? handleRouterCaseStudy(
               quiz?.id,
-              quiz?.case_study_story?.id,
+              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
               course_section?.id,
               quiz?.case_study_story?.instances?.[0]?.id,
             )
