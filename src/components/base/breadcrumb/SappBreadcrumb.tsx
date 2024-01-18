@@ -12,23 +12,27 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ tabs, currentPage }) => {
     <nav className="breadcrumb" aria-label="breadcrumbs">
       <ul className="breadcrumb flex flex-row py-6 font-semibold">
         {tabs.map((tab, index) => (
-          <li key={index}>
+          <li
+            className="flex items-center gap-0.5 text-medium-sm font-semibold "
+            key={index}
+          >
             {index !== tabs.length - 1 ? (
               <>
                 {tab.link ? (
                   <Link href={tab.link}>
                     <a
-                      className={
+                      className={`w-fit max-w-[210px] line-clamp-1 ${
                         currentPage === tab.title
                           ? 'text-bw-1 font-bold'
                           : 'text-gray-1'
                       }
+                      `}
                     >
                       {tab.title}
                     </a>
                   </Link>
                 ) : (
-                  <span>{tab.title}</span>
+                  <span className="">{tab.title}</span>
                 )}
                 <span
                   className={`${
