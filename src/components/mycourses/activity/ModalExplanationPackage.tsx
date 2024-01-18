@@ -4,6 +4,7 @@ import SappModal from '@components/base/modal/SappModal'
 import { ExplanationPackage } from 'explanation-package'
 import 'explanation-package/dist/index.css'
 import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
+import { CloseIcon } from '@assets/icons'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -105,13 +106,24 @@ const ModalExplanationPackage = ({
         position="center"
         showFooter={false}
         isFullScreen={true}
-        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        refClass="h-full md:px-0 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        showHeader={false}
       >
-        <div className="mx-auto">
-          <ExplanationPackage
-            getActiveQuestion={getActiveQuestion}
-            activeQuestion={activeQuestion}
-          />
+        <div>
+          <div
+            className="ml-auto cursor-pointer absolute  right-6 top-[14px]"
+            onClick={() => setOpen(undefined)}
+          >
+            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+          </div>
+          <div className="mx-auto">
+            <div className="mx-auto">
+              <ExplanationPackage
+                getActiveQuestion={getActiveQuestion}
+                activeQuestion={activeQuestion}
+              />
+            </div>
+          </div>
         </div>
       </SappModal>
     </div>

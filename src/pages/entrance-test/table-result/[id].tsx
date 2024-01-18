@@ -66,7 +66,7 @@ const TableEntranceResult = () => {
   // return <></>
 
   return (
-    <div className="max-w-screen-lg m-auto overflow-hidden">
+    <div className="max-w-screen-lg m-auto overflow-y-hidden overflow-x-auto px-6">
       <div
         className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
         onClick={() => {
