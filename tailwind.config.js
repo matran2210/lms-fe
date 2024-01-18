@@ -63,8 +63,8 @@ module.exports = {
         },
         state: {
           info: '#3964EA',
-          success: '#008000',
-          error: '#D35563',
+          success: '#397839',
+          error: '#B90E0A',
         },
         bw: {
           1: '#404041',
@@ -94,8 +94,8 @@ module.exports = {
         DEFAULT: '#DCDDDD',
         default: '#DCDDDD',
         focus: '#141414',
-        success: '#008000',
-        error: '#D35563',
+        success: '#397839',
+        error: '#B90E0A',
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
         active: '#FFB800',
