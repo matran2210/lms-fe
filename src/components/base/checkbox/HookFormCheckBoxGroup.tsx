@@ -34,6 +34,7 @@ interface IHookFormCheckBoxProps {
   lowerOptions?: boolean
   seprateLine?: boolean
   widthOptions?: string
+  maxWidthContent?: boolean
 }
 
 const HookFormCheckBoxGroup = ({
@@ -62,6 +63,7 @@ const HookFormCheckBoxGroup = ({
   lowerOptions = false,
   seprateLine = false,
   widthOptions = '',
+  maxWidthContent = false,
 }: IHookFormCheckBoxProps) => {
   gap = !seprateLine
     ? gap
@@ -93,7 +95,9 @@ const HookFormCheckBoxGroup = ({
                       : justify === 'start'
                         ? 'justify-start'
                         : 'justify-end'
-                } ${seprateLine && 'sapp-separateLine'}`
+                } ${seprateLine && 'sapp-separateLine'} ${
+                  maxWidthContent && 'w-max'
+                }`
               }
             >
               {options.map((option, index) => {
