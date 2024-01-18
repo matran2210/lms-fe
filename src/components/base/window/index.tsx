@@ -32,7 +32,7 @@ const MovableWindow = ({
   return (
     <div
       ref={elementRef}
-      className={`sapp-opacity-bg-border resizable moveable-resizable min-w-fit shadow-preview ${className} relative`}
+      className={`sapp-opacity-bg-border resizable moveable-resizable min-w-fit shadow-preview ${className} absolute`}
       style={{
         width: position?.width,
         height: position?.height,

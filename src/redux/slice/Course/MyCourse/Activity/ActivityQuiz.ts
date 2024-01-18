@@ -10,6 +10,7 @@ import { IQuestion } from 'src/type/course/Question'
  * @interface
  */
 export interface IActivityStateQuestion extends IQuestion {
+  question_topic: any
   confirmed?: boolean
   myAnswers?: any
   corrects?: any
@@ -151,8 +152,21 @@ const submitQuestion = createAsyncThunk(
     try {
       const result = await CourseActivityApi.submitQuiz(id, {
         ...data,
-        answers: data.answers?.map((e) => e?.[0]),
+        answers: (data.answers || []).reduce((acc, e) => {
+          if (
+            e?.[0]?.answers &&
+            Array.isArray(e[0].answers) &&
+            e[0].answers.length <= 0
+          ) {
+            return acc
+          }
+          if ('question_answer_id' in e?.[0] && !e?.[0]?.question_answer_id) {
+            return acc
+          }
+          return [...acc, e?.[0]]
+        }, []),
       })
+
       if (result.success) {
         return { ...result }
       }
@@ -401,8 +415,23 @@ const quizSlice: Slice = createSlice({
                       })),
                     },
                   ]
+                  const corrects = [...(payload.question.answers || [])]
 
-                  questionToUpdate.corrects = payload.question.answers
+                  questionToUpdate.corrects = corrects.sort(
+                    (a: any, b: any) => a.answer_position - b.answer_position,
+                  )
+
+                  break
+                case QUESTION_TYPES.ESSAY:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
+                    {
+                      ...(payload.myAnswers || {}),
+                    },
+                  ]
                   break
                 default:
                   break

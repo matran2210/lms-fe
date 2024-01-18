@@ -8,20 +8,31 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 interface IProps {
   open: boolean
   setOpen: any
-  title: string
+  title?: string
   data?: any
+  class_user_id?: string
+  activeCourse?: any
 }
-const TestModal = ({ open, setOpen, title, data }: IProps) => {
+const TestModal = ({
+  open,
+  setOpen,
+  title,
+  data,
+  class_user_id,
+  activeCourse,
+}: IProps) => {
   const router = useRouter()
-  const dispatch = useAppDispatch()
-  // const {} = useAppSelector()
-  //to do: call api to get datail
-  const getData = useEffect(() => {
-    //dispatch(getDetailTest)
-  }, [])
-  const onSubmit = () => {
+  const onSubmit = async () => {
     //to do: start test
-    router.push(`/test/${data.quiz.id}`)
+    try {
+      activeCourse && (await activeCourse())
+      router.push({
+        pathname: `/test/${data.quiz.id}`,
+        query: {
+          class_user_id: class_user_id,
+        },
+      })
+    } catch (err) {}
   }
   const checkFinished = useMemo(() => {
     if (data?.quiz?.attempts) {
@@ -42,7 +53,7 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       open={open}
       setOpen={setOpen}
       cancelButtonCaption="Cancel"
-      okButtonCaption="Start"
+      okButtonCaption={checkFinished ? 'Retake' : 'Start'}
       handleCancel={() => {
         setOpen(false)
       }}
@@ -61,17 +72,19 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Name:</div>
-        <div className="text-bw-1 line-clamp-2">{data?.name}</div>
+        <div className="text-bw-1 line-clamp-2 pr-0.5 font-medium">
+          {data?.name}
+        </div>
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
-        <div className="text-gray-1">Pass Mark:</div>
-        <div className="text-bw-1">
-          {data?.quiz?.attempts?.[0]?.score ?? '- -'}
+        <div className="text-gray-1">Pass Point:</div>
+        <div className="text-bw-1 pr-0.5 font-medium">
+          {data?.quiz?.required_percent_score ?? '- -'}
         </div>
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Time Allowed:</div>
-        <div className="text-bw-1">
+        <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.quiz_timed
             ? formatTime(data?.quiz?.quiz_timed)
             : 'Unlimited'}
@@ -79,15 +92,25 @@ const TestModal = ({ open, setOpen, title, data }: IProps) => {
       </div>
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">No of Attempts:</div>
-        <div className="text-bw-1">
+        <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.attempt_count || 0}/
           {data?.quiz?.is_limited ? data?.quiz?.limit_count : 'Unlimited'}
         </div>
       </div>
+      {data?.quiz?.attempts?.[0]?.ratio_score && (
+        <div className="flex justify-between py-6 gap-8">
+          <div className="text-gray-1">Latest Result:</div>
+          <div className="text-state-info pr-0.5 font-medium underline">
+            {data?.quiz?.attempts?.[0]?.ratio_score ?? '- -'}
+          </div>
+        </div>
+      )}
       <div className="flex justify-between py-6 gap-8">
         <div className="text-gray-1">Status:</div>
         <div
-          className={`${checkFinished ? 'text-state-success' : 'text-danger'}`}
+          className={`${
+            checkFinished ? 'text-state-success' : 'text-danger'
+          } pr-0.5 font-medium`}
         >
           {checkFinished ? 'Finished' : 'Unfinished'}
         </div>

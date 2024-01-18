@@ -37,6 +37,7 @@ import {
 import ConFirmSubmit from '../test/conFirmSubmit'
 import QuitTestModal from '../courses/test/quit-test'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import PopupViewPdf from '@components/base/pdf/popupViewPdf'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -187,6 +188,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 }),
               )
             }
+            setOpenPdf={setOpenPdf}
           />
         )
       default:
@@ -210,6 +212,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [quizAttempId, setQuizAttempId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
   const [openUpload, setOpenUpload] = useState<any>({})
+  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -219,15 +222,27 @@ const CaseStudyDetail = ({ questions }: any) => {
       )
     }
   }, [router.query.id])
-  async function createAttempts(quiz_id: string, id: string) {
-    const res = await CourseTestApi.createTopicAttempt(quiz_id, id)
+  async function createAttempts(
+    quiz_id: string,
+    id: string,
+    class_user_id: string,
+  ) {
+    const res = await CourseTestApi.createTopicAttempt(
+      quiz_id,
+      id,
+      class_user_id,
+    )
     setQuizAttempId(res.data.id)
   }
   useEffect(() => {
-    if (router.query.quiz_id && router.query.id) {
-      createAttempts(router.query.quiz_id as string, router.query.id as string)
+    if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
+      createAttempts(
+        router.query.quiz_id as string,
+        router.query.id as string,
+        router.query.class_user_id as string,
+      )
     }
-  }, [router.query.id, router.query.quiz_id])
+  }, [router.query.id])
   const getValueFillText = (index: number) => {
     let value = []
     if (valueRef.current[index]) {
@@ -439,6 +454,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           total_attempt_time: total_attempt_time,
         })
         toast.success('submit success')
+        router.replace(
+          `/case-study/table-result/${quizAttempId}?class_user_id=${router.query.class_user_id}`,
+        )
       } catch (err) {
         toast.error('submit failed')
       }
@@ -547,9 +565,10 @@ const CaseStudyDetail = ({ questions }: any) => {
               title: 'Quit',
               size: 'medium',
               onClick: () => {
-                router.back()
+                setOpenQuit(true)
               },
               loading: false,
+              //   full: fullWidthBtn,
             }}
           ></ButtonCancelSubmit>
         </div>
@@ -582,12 +601,27 @@ const CaseStudyDetail = ({ questions }: any) => {
               key={topics?.id}
               data-key={topics?.id}
               // className="min-h-[calc(100vh-104px)]"
+              className="mb-4"
             >
               <EditorReader
                 className="editor-wrap"
                 text_editor_content={topics?.description}
               />
             </div>
+            {topics?.files?.length > 0 &&
+              topics?.files.map((e: any, index: number) => {
+                return (
+                  <div
+                    className="cursor-pointer text-state-info hover:underline"
+                    onClick={() =>
+                      setOpenPdf({ status: true, url: e.resource.url })
+                    }
+                    key={index}
+                  >
+                    {e.resource.name}
+                  </div>
+                )
+              })}
           </div>
 
           <div
@@ -787,6 +821,11 @@ const CaseStudyDetail = ({ questions }: any) => {
             router.query.id as string,
           )
         }
+      />
+      <PopupViewPdf
+        open={openPdf?.status || false}
+        setOpen={setOpenPdf}
+        url={openPdf?.url || ''}
       />
     </div>
   )

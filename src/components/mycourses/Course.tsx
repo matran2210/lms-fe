@@ -38,16 +38,16 @@ const Course = ({
   //   setOpen(true)
   // }
   const router = useRouter()
-  const student = course?.classes?.[0]?.class_user_instances[0]
+  const student = course?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
   const currentDate = new Date()
+  currentDate.setUTCHours(0, 0, 0, 0)
 
   useEffect(() => {
     if (student?.finished_at) {
-      // Parse the specific date string to a Date object
       const parsedSpecificDate = parseISO(student?.finished_at as any)
-
+      parsedSpecificDate.setUTCHours(0, 0, 0, 0)
       // Calculate the difference in days
       const difference = differenceInDays(
         startOfDay(parsedSpecificDate),
@@ -87,17 +87,28 @@ const Course = ({
         classStatus === CLASS_STATUS.PUBLIC ||
         classStatus === CLASS_STATUS.ENDED
       ) {
-        if (course?.course_type === 'TRIAL_COURSE' && !student)
+        if (course?.course_type === 'TRIAL_COURSE' && !student) {
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
-          else return BUTTON_STATUS.Hidden // Ẩn lớp học thử
+          if (
+            classInstance?.duration_type === 'FIXED' &&
+            classInstance?.finished_at
+          ) {
+            const getISOFinish = parseISO(classInstance?.finished_at as any)
+            const classFinish = startOfDay(getISOFinish.setUTCHours(0, 0, 0, 0))
+            if (classFinish <= formattedDate) return BUTTON_STATUS.Extend
+            if (classFinish > formattedDate) return BUTTON_STATUS.Active
+          }
+        }
         if (!startedAt && !finishedAt) {
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
         if (startedAt && finishedAt) {
-          const finishedAtDate = startOfDay(new Date(finishedAt))
+          const parsedSpecificDate = parseISO(student?.finished_at as any)
+          parsedSpecificDate.setUTCHours(0, 0, 0, 0)
+          const finishedAtDate = startOfDay(parsedSpecificDate)
           if (
             course?.course_type === 'TRIAL_COURSE' &&
             finishedAtDate <= formattedDate
@@ -190,7 +201,7 @@ const Course = ({
     if (determineButtonToShow === 'Active') {
       setOpenActive(true)
     } else if (determineButtonToShow === 'Extend') {
-      student.extend_count === 0 ? extendCourse() : setOpenExtend(true)
+      student?.extend_count === 0 ? extendCourse() : setOpenExtend(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
         ? router.push(`/courses/my-course/${course.id}`)
@@ -339,7 +350,11 @@ const Course = ({
                 {/* {'buttonText' && ( */}
                 {determineButtonToShow !== 'Disabled' ? (
                   <ButtonSecondary
-                    title={determineButtonToShow}
+                    title={
+                      determineButtonToShow === 'Active'
+                        ? 'Activate'
+                        : determineButtonToShow
+                    }
                     full={false}
                     size={'small'}
                     className="hover:bg-primary hover:text-white ml-auto"

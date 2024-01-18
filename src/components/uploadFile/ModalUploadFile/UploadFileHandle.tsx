@@ -166,10 +166,10 @@ const UploadFileHandle = ({
             <ButtonPrimary
               disabled={loading}
               title="Browse"
-              // className="btn-sm mb-10"
+              className="mb-10"
             ></ButtonPrimary>
-            <div className="d-flex sapp-w-fit-content my-0 mx-auto mw-100">
-              <span className="text-nowrap"> File support:</span>
+            <div className="flex w-fit my-0 mx-auto">
+              <span className="text-left"> File support:</span>
               <div className="ms-2">
                 {UPLOAD_TYPE[fileType].note?.map((e, i) => {
                   return (

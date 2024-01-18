@@ -73,7 +73,6 @@ const LoginPage = () => {
   })
 
   const handleDeviceToken = async () => {
-    setLoading(true)
     try {
       const accessDeviceToken = await AsyncStorage.getItem(
         'firebaseDeviceToken',
@@ -88,13 +87,10 @@ const LoginPage = () => {
       return token
     } catch (error) {
       return ''
-    } finally {
-      setLoading(false)
     }
   }
 
   async function getListEntranceTest() {
-    setLoading(true)
     try {
       const res = await EntranceApi.getListEntranceTestLogin()
       if (res?.data?.length > 0) {
@@ -102,15 +98,13 @@ const LoginPage = () => {
       } else {
         router.push(PageLink.COURSES)
       }
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
+    } catch (error) {}
   }
 
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
+    setLoading(true)
     try {
       const getFireBaseToken = await handleDeviceToken()
       dispatch(
@@ -132,6 +126,9 @@ const LoginPage = () => {
           if (error?.response?.data?.error?.code === '403|0001') {
             setOpenLimit(true)
           }
+          setTimeout(() => {
+            setLoading(false)
+          }, 1000)
         })
     } catch (error: any) {}
   }
@@ -182,6 +179,7 @@ const LoginPage = () => {
               size="lager"
               loading={loading ? loading : userLogin.loading}
               type="submit"
+              disabled={loading}
             />
           </div>
           <div className="flex justify-between mb-15">

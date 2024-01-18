@@ -5,8 +5,16 @@ import { ICourseSection } from 'src/type/courses'
 import TestModal from 'src/pages/courses/test'
 import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
+import CourseAPI from 'src/pages/api/courses'
+import toast from 'react-hot-toast'
 
-const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
+const PartFailed = ({
+  coursePart,
+  class_user_id,
+}: {
+  coursePart: ICourseSection
+  class_user_id?: string
+}) => {
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
     : 'Unlimited'
@@ -22,7 +30,17 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
 
     return false
   }, [coursePart?.quiz?.attempts])
-
+  const handleChapterTest = async () => {
+    try {
+      await CourseAPI.learningOutcomeProgress(
+        router.query.courseId,
+        coursePart.id,
+      )
+    } catch (err) {
+      toast.error('Cannot progress Test')
+      throw err
+    }
+  }
   const quizAttempt = coursePart?.quiz
 
   return (
@@ -89,14 +107,14 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
               <ButtonSecondary
                 disabled={
                   coursePart?.quiz?.is_limited &&
-                  coursePart?.quiz?.attempts?.length ===
+                  coursePart?.quiz?.attempt_count ===
                     coursePart?.quiz?.limit_count
                 }
                 title={'Retake'}
                 full={false}
                 size={'small'}
                 className={`${
-                  coursePart?.quiz?.attempts?.length !==
+                  coursePart?.quiz?.attempt_count !==
                     coursePart?.quiz?.limit_count &&
                   'hover:bg-primary hover:text-white'
                 } ml-auto`}
@@ -111,6 +129,8 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
         setOpen={setOpen}
         title={coursePart?.name}
         data={coursePart}
+        class_user_id={class_user_id}
+        activeCourse={handleChapterTest}
       />
     </>
   )

@@ -1,5 +1,6 @@
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
+import PopupViewPdf from '@components/base/pdf/popupViewPdf'
 import MovableWindow from '@components/base/window'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
@@ -8,6 +9,7 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import React, {
   forwardRef,
   useEffect,
@@ -23,6 +25,7 @@ import {
   IActivityStateQuestion,
   confirmQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import { saveFileEssay } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 
 export type QuizComponentRef = {
   onSubmit: ({
@@ -42,15 +45,17 @@ export type QuizComponentRef = {
 type Props = {
   activeQuestion?: IActivityStateQuestion
   showCorrect?: boolean
+  document_id: string
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
-  ({ activeQuestion, showCorrect }: Props, ref) => {
+  ({ activeQuestion, showCorrect, document_id }: Props, ref) => {
     const questionRef = useRef<HTMLDivElement>(null)
     const [essayData, setEssayData] = useState<any>()
 
     const dispatch = useAppDispatch()
     const { control: controlAnswer, setValue, reset, getValues } = useForm({})
+    const DragDropRef = useRef(null) as any
 
     const [showListRequirement, setShowListRequirement] =
       useState<boolean>(false)
@@ -65,6 +70,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       description: string
       index: number
       name: string
+      files: any
     }>()
 
     const [showExhibit, setShowExhibit] = useState<{
@@ -74,7 +80,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       name: string
       top: string
       left: string
+      files: any
     }>()
+
+    const [openUpload, setOpenUpload] = useState<any>({})
+    const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
 
     useEffect(() => {
       const defaultRequirement = activeQuestion?.requirements?.[0]
@@ -82,6 +92,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         setShowRequirement({
           name: defaultRequirement.name,
           description: defaultRequirement.description,
+          files: defaultRequirement.files,
           index: 1,
         })
       }
@@ -100,6 +111,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       description: string
       index: number
       name: string
+      files: any
     }) => {
       setShowListRequirement(false)
       setShowRequirement(data)
@@ -111,11 +123,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         description: string
         index: number
         name: string
+        files: any
       },
       event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => {
       var mouseY = event.pageY - 300
-
       setShowExhibit({ ...params, top: mouseY + 'px', left: '33%' })
     }
 
@@ -187,12 +199,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         switch (activeQuestion?.qType) {
           case QUESTION_TYPES.ONE_CHOICE:
           case QUESTION_TYPES.TRUE_FALSE: {
-            setValue && setValue('answer', activeQuestion.defaultValue)
+            setValue &&
+              setValue(
+                `${activeQuestion.id}_${document_id}_answer`,
+                activeQuestion.defaultValue,
+              )
             break
           }
 
           case QUESTION_TYPES.MULTIPLE_CHOICE: {
-            setValue && setValue('multiples', activeQuestion.defaultValue)
+            setValue &&
+              setValue(
+                `${activeQuestion.id}_${document_id}_answer`,
+                activeQuestion.defaultValue,
+              )
             break
           }
         }
@@ -221,10 +241,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         switch (activeQuestion.qType as QUESTION_TYPES) {
           case QUESTION_TYPES.ONE_CHOICE:
           case QUESTION_TYPES.TRUE_FALSE:
-            myAnswers = getValues('answer')
+            myAnswers = getValues(`${activeQuestion.id}_${document_id}_answer`)
             break
           case QUESTION_TYPES.MULTIPLE_CHOICE:
-            myAnswers = getValues('multiples')
+            myAnswers = getValues(`${activeQuestion.id}_${document_id}_answer`)
             break
           case QUESTION_TYPES.FILL_WORD:
             myAnswers = getValueFillText()
@@ -238,9 +258,21 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           case QUESTION_TYPES.DRAG_DROP:
             myAnswers = getAnswerDragNDrop()
             break
+          case QUESTION_TYPES.ESSAY:
+            myAnswers = {
+              question_id: activeQuestion.id,
+              short_answers: getValues('essay'),
+              response_option: activeQuestion.response_option
+                ? activeQuestion.response_option
+                : 'WORD',
+              // answer_file: activeQuestion.answer_file,
+              active: 'SUBMITED',
+            }
+            break
           default:
             break
         }
+        DragDropRef.current?.handleReset()
         dispatch(
           confirmQuestion({
             activityId: activityId,
@@ -257,6 +289,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       }
     }
 
+    const handleSaveFileEssay = (
+      file: any,
+      question_id: string,
+      topic_id: string,
+    ) => {
+      dispatch(
+        saveFileEssay({
+          question_id: question_id,
+          file: file,
+          topic_id: topic_id,
+        }),
+      )
+    }
+
     const renderQuestion = () => {
       switch (activeQuestion?.qType) {
         case QUESTION_TYPES.ONE_CHOICE:
@@ -267,6 +313,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               setValue={setValue}
+              name={`${activeQuestion.id}_${document_id}_answer`}
             />
           )
 
@@ -277,6 +324,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               setValue={setValue}
+              name={`${activeQuestion.id}_${document_id}_answer`}
             />
           )
 
@@ -308,6 +356,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               resetDefaultAnswer={false}
+              ref={DragDropRef}
             />
           )
 
@@ -325,7 +374,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           return (
             <>
               <div>
-                <div className="flex items-center cursor-pointer select-none">
+                <div>
+                  <div className="font-semibold text-bw-1">
+                    Topic Description:
+                  </div>
+                  <div>
+                    <EditorReader
+                      className="editor-wrap mt-1.5"
+                      text_editor_content={
+                        activeQuestion?.question_topic?.description
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center cursor-pointer select-none mt-12">
                   <div className="relative">
                     <div
                       className="flex items-center hover:text-primary group"
@@ -355,6 +417,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                   description: e.description,
                                   index: i + 1,
                                   name: e.name,
+                                  files: e.files,
                                 })
                               }}
                               className="font-semibold hover:text-primary truncate py-1.5 px-3"
@@ -382,6 +445,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       text_editor_content={showRequirement?.description}
                     />
                   )}
+                  {showRequirement?.files?.length > 0 &&
+                    showRequirement?.files.map((e: any, index: number) => {
+                      return (
+                        <div
+                          className="cursor-pointer text-state-info hover:underline"
+                          onClick={() =>
+                            setOpenPdf({ status: true, url: e.resource.url })
+                          }
+                          key={index}
+                        >
+                          {e.resource.name}
+                        </div>
+                      )
+                    })}
                 </div>
                 <div className="border border-gray-2 my-6"></div>
                 <div className="flex items-center mb-4">
@@ -406,6 +483,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               description: e.description,
                               name: e.name,
                               index: i + 1,
+                              files: e.files,
                             },
                             event,
                           )
@@ -426,45 +504,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 control={controlAnswer}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
-                name={''}
-                fullData={null}
+                name={'essay'}
+                fullData={activeQuestion}
+                openChooseFile={(e: any) =>
+                  setOpenUpload({
+                    status: true,
+                    question_id: activeQuestion.id,
+                  })
+                }
               />
-              {showExhibit?.id && (
-                <MovableWindow
-                  position={{
-                    width: '624px',
-                    height: '224px',
-                    left: showExhibit.left,
-                    top: showExhibit.top,
-                  }}
-                  zIndex={999}
-                >
-                  <div className="w-full h-full absolute top-0 left-0 border bg-white py-4  flex flex-col">
-                    <div className="flex items-center justify-between flex-none px-6">
-                      <div>
-                        <span className="font-bold">
-                          Exhibit {showExhibit.index}:{' '}
-                        </span>
-                        {showExhibit.name}
-                      </div>
-                      <div onClick={() => handleCloseExhibit()}>
-                        <SappIcon
-                          icon="x"
-                          className="cursor-pointer hover:fill-primary"
-                        ></SappIcon>
-                      </div>
-                    </div>
-                    <div className="flex-auto overflow-scroll px-6">
-                      {showExhibit?.description && (
-                        <EditorReader
-                          className="editor-wrap mt-1.5"
-                          text_editor_content={showExhibit?.description}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </MovableWindow>
-              )}
             </>
           )
 
@@ -478,19 +526,88 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         <div ref={questionRef}>
           <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
-        {activeQuestion?.confirmed &&
-          activeQuestion.qType !== 'ESSAY' &&
-          showCorrect && (
-            <div className="p-4 mt-8 bg-gray-4">
-              <div className="font-semibold">Solution</div>
-              {activeQuestion?.solution && (
-                <EditorReader
-                  text_editor_content={activeQuestion?.solution}
-                  className="mt-4"
-                />
-              )}
+        <div>
+          {activeQuestion?.confirmed &&
+            activeQuestion.qType !== 'ESSAY' &&
+            showCorrect && (
+              <div className="p-4 mt-8 bg-gray-4">
+                <div className="font-semibold">Solution</div>
+                {activeQuestion?.solution && (
+                  <EditorReader
+                    text_editor_content={activeQuestion?.solution}
+                    className="mt-4"
+                  />
+                )}
+              </div>
+            )}
+        </div>
+        <ModalUploadFile
+          open={openUpload.status}
+          isMultiple={false}
+          handleClose={() => {
+            setOpenUpload({ status: false, question_id: undefined })
+          }}
+          fileType={'ESSAY'}
+          location={`question-answer/${openUpload.question_id}`}
+          setSelectedFile={(e: any) =>
+            handleSaveFileEssay(e[0], openUpload.question_id, '')
+          }
+        />
+        <PopupViewPdf
+          open={openPdf?.status || false}
+          setOpen={setOpenPdf}
+          url={openPdf?.url || ''}
+        />
+        {showExhibit?.id && (
+          <MovableWindow
+            position={{
+              width: '624px',
+              height: '224px',
+              left: showExhibit.left,
+              top: showExhibit.top,
+            }}
+            zIndex={999}
+          >
+            <div className="w-full h-full absolute top-0 left-0 border bg-white py-4  flex flex-col">
+              <div className="flex items-center justify-between flex-none px-6">
+                <div>
+                  <span className="font-bold">
+                    Exhibit {showExhibit.index}:{' '}
+                  </span>
+                  {showExhibit.name}
+                </div>
+                <div onClick={() => handleCloseExhibit()}>
+                  <SappIcon
+                    icon="x"
+                    className="cursor-pointer hover:fill-primary"
+                  ></SappIcon>
+                </div>
+              </div>
+              <div className="flex-auto overflow-scroll px-6">
+                {showExhibit?.description && (
+                  <EditorReader
+                    className="editor-wrap mt-1.5"
+                    text_editor_content={showExhibit?.description}
+                  />
+                )}
+                {showExhibit?.files?.length > 0 &&
+                  showExhibit?.files.map((e: any, index: number) => {
+                    return (
+                      <div
+                        className="cursor-pointer text-state-info hover:underline"
+                        onClick={() =>
+                          setOpenPdf({ status: true, url: e.resource.url })
+                        }
+                        key={index}
+                      >
+                        {e.resource.name}
+                      </div>
+                    )
+                  })}
+              </div>
             </div>
-          )}
+          </MovableWindow>
+        )}
       </div>
     )
   },

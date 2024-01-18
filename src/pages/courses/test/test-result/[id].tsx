@@ -14,23 +14,31 @@ import { removeJwtToken } from '@utils/helpers/authen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 
-// Config Courses
-const breadcrumbs: ITabs[] = [
-  {
-    link: '/courses',
-    title: 'Courses',
-  },
-  {
-    link: '/courses',
-    title: 'Final Test',
-  },
-  {
-    link: '/',
-    title: 'Results',
-  },
-]
-
 const TestResultDetail = ({ questions, chartData }: any) => {
+  const testType =
+    questions?.quizAttempt?.quiz?.quiz_type === 'MID_TERM_TEST'
+      ? 'Midterm Test'
+      : 'Final Test'
+  // Config Courses
+  const breadcrumbs: ITabs[] = [
+    {
+      link: '/courses',
+      title: 'Courses',
+    },
+    {
+      link: `/courses/my-course/${questions?.course?.id ?? ''}`,
+      title: `${questions?.course?.name ?? 'Course Detail'}`,
+    },
+    {
+      link: `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`,
+      title: `${testType}`,
+    },
+    {
+      link: '/',
+      title: 'Results',
+    },
+  ]
+
   return (
     <>
       <div className="main px-4 lg:px-16">

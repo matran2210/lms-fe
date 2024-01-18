@@ -38,11 +38,11 @@ export function runHighlight(
   handleSaveHighLight: any,
   allowHighLight: boolean,
   elementID = 'hightlight_area',
+  options?: optionsImpl,
 ) {
   // run mobile a bit
   const domEle = document.getElementById(elementID)
 
-  const options: optionsImpl = {}
   if (domEle && allowHighLight) {
     doHighlight(domEle, false, options)
     handleSaveHighLight(serializeHighlights(domEle))

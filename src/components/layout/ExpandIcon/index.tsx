@@ -35,6 +35,79 @@ export default function ExpandIcon({
       )}
       {type === 'logo-default' && <LogoDefault />}
       {type === 'logo-full' && <LogoFull />}
+      {type === 'stats-chart-sharp' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M6 23.25H2.25v-9H6v9zM16.5 23.25h-3.75V9.75h3.75v13.5zM21.75 23.25H18V4.5h3.75v18.75zM11.25 23.25H7.5V.75h3.75v22.5z"
+          ></path>
+        </svg>
+      )}
+      {type === 'course' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M12.75 1.954v6.858a.188.188 0 00.188.188h6.858a.094.094 0 00.066-.16L12.91 1.888a.093.093 0 00-.16.066z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M11.625 10.5a.375.375 0 01-.375-.375V1.5H4.312a.563.563 0 00-.562.563v19.875a.562.562 0 00.563.562h15.375a.562.562 0 00.562-.563V10.5h-8.625zM16.5 18h-9v-1.5h9V18zm0-3.75h-9v-1.5h9v1.5z"
+          ></path>
+        </svg>
+      )}
+      {type === 'result' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M3.75 1.5l-3 6h13.552l3.76-6H3.75z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M23.25 6.75L19.875 1.5l-5.906 9.332a5.999 5.999 0 00-3.938 0L8.884 9h-6.83l4.062 6.323a6 6 0 1011.766 0L23.25 6.75zM12 19.781a3.282 3.282 0 110-6.563 3.282 3.282 0 010 6.563z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M12 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+          ></path>
+        </svg>
+      )}
+
+      {type === 'caculator' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M19.5 2.25a.75.75 0 00-.75-.75H5.25a.75.75 0 00-.75.75v19.5a.75.75 0 00.75.75h13.5a.75.75 0 00.75-.75V2.25zM9 20.25H6.75V18H9v2.25zm0-3.75H6.75v-2.25H9v2.25zm0-3.75H6.75V10.5H9v2.25zm4.125 7.5h-2.25V18h2.25v2.25zm0-3.75h-2.25v-2.25h2.25v2.25zm0-3.75h-2.25V10.5h2.25v2.25zm4.125 7.5H15v-6h2.25v6zm0-7.5H15V10.5h2.25v2.25zm0-4.5H6.75v-4.5h10.5v4.5z"
+          ></path>
+        </svg>
+      )}
       {type === 'document' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -264,6 +337,21 @@ export default function ExpandIcon({
           <path
             fill="currentColor"
             d="M9.75 14.25h1.476l7.524-7.54V5.25h-1.46l-7.54 7.524v1.476z"
+          ></path>
+        </svg>
+      )}
+      {type === 'profile-detail' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.544 15.73H10.97a.134.134 0 01-.133-.135v-1.573a.134.134 0 01.133-.133h1.574a.134.134 0 01.133.133v1.573a.134.134 0 01-.133.134zm.885-5.157c-.844.567-.96 1.086-.96 1.562v.573a.156.156 0 01-.156.157h-1.146a.156.156 0 01-.157-.157v-.573c0-1.14.525-2.048 1.606-2.774 1.004-.674 1.572-1.1 1.572-2.04 0-.638-.365-1.123-1.12-1.482-.177-.084-.573-.167-1.06-.16-.61.007-1.083.153-1.449.447-.688.554-.746 1.157-.746 1.166a3.422 3.422 0 00-.044.535.156.156 0 01-.156.156H8.506a.156.156 0 01-.157-.14 3.213 3.213 0 01.005-.625c.012-.126.094-1.266 1.29-2.229.62-.499 1.41-.758 2.344-.77.662-.008 1.283.104 1.704.303 1.261.6 1.954 1.594 1.954 2.8 0 1.761-1.178 2.553-2.217 3.25z"
           ></path>
         </svg>
       )}

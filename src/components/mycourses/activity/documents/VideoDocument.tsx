@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -10,28 +10,32 @@ import {
   submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
+import { CloseIcon } from '@assets/icons'
 import { StreamPlayerApi } from '@cloudflare/stream-react'
 import SappModal from '@components/base/modal/SappModal'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { debounce } from '@utils/helpers'
-import SappIcon from 'src/common/SappIcon'
-import { IQuestion, IVideo } from 'src/type/course/Question'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import toast from 'react-hot-toast'
 import { QuizResultComponent } from 'quiz-result-package'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import {
   IQuestionResult,
   IQuestionResultResponse,
 } from 'quiz-result-package/dist/type'
-import PopupFinishQuiz from '../PopupFinishQuiz'
+import SappIcon from 'src/common/SappIcon'
+import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import { IQuestion, IVideo } from 'src/type/course/Question'
+import ModalExplanationPackage from '../ModalExplanationPackage'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 
 type Props = {
   videos?: IVideo[]
   activityId: string
   tabId: string
+  streamRefProp: StreamPlayerApi | any
+  handleProcess?: () => void
+  document_id: string
 }
 
 /**
@@ -40,7 +44,14 @@ type Props = {
  * @param {Props} props - The properties of the component.
  * @param {IVideo[]} props.videos - List of videos to be displayed.
  */
-const VideoDocument = ({ videos, activityId, tabId }: Props) => {
+const VideoDocument = ({
+  videos,
+  activityId,
+  tabId,
+  streamRefProp,
+  handleProcess,
+  document_id,
+}: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
   const currentTimeRef = useRef(-1)
@@ -57,7 +68,8 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
   const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
-  const streamRef = useRef<StreamPlayerApi>()
+  const internalRef = useRef<StreamPlayerApi>()
+  const streamRef = streamRefProp ?? internalRef
   const dispatch = useAppDispatch()
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -67,14 +79,21 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
 
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
   const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  // const [isFinish, setIsFinish] = useState<{ [key: string]: true }>()
-
+  const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
+    id: string
+    isOpen: boolean
+  }>()
   useEffect(() => {
     if (videos?.[0]) {
       debouncedHandleSetCurrentVideo?.current(videos?.[0])
     }
   }, [])
+
+  useEffect(() => {
+    handleProcess && streamRefProp?.current !== null && handleProcess()
+  }, [streamRefProp?.current])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
@@ -151,11 +170,13 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
             setCurrentListQuestion(listQuestion)
             setActiveQuestion(e.payload.question)
             setModalOpen(true)
+            setHideVideo(true)
           }
         })
       } else {
         setCurrentListQuestion([])
         setModalOpen(false)
+        setHideVideo(false)
       }
     } catch (error) {}
   }
@@ -166,6 +187,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
    * @param {string} questionId - The ID of the quiz question to find.
    * @returns {boolean} - Returns true if a quiz question is opened; otherwise, false.
    */
+  const [hideVideo, setHideVideo] = useState(false)
   const handleTrackTime = (time: number, questionId?: string) => {
     const quizAtTime = quizTimed.current?.[time]
 
@@ -273,6 +295,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
   }
 
   const handleFinishQuiz = async () => {
+    setOpenFinishQUiz(false)
     const questions = selectQuestions(
       selector,
       activityId,
@@ -336,6 +359,7 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
     page_index: number
     page_size: number
   }) => {
+    setLoading(true)
     try {
       const response = await CourseActivityApi.getQuizAttemptsTable(
         id || modalResult?.id || '',
@@ -347,18 +371,17 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
 
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.meta,
-        data:
+        data: (modalResult?.questions?.data || []).concat(
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
             section: e.question.question_topic?.name,
             type: e.question.qType,
-            result: {
-              is_correct: e.is_correct,
-              percent: 0,
-            },
-            time_spent: e.time_spent || 0,
+            is_correct: e.is_correct,
+            time_spent: e.time_spent,
+            question: e.question as any,
           })) || [],
+        ),
       }
       setModalResult((e) => ({
         id: id || e?.id,
@@ -366,7 +389,10 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
         questions: newQuestionResponse,
       }))
       streamRef.current?.pause()
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleCloseModalResult = () => {
@@ -374,14 +400,18 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
     setModalResult(undefined)
   }
 
-  const handleShowQuizResultDetail = (e: IQuestionResult) => {}
+  const handleShowQuizResultDetail = (data: IQuestionResult) => {
+    setShowQuestionResultDetail({ id: data.id, isOpen: true })
+  }
+
   return (
     <div>
-      <PopupFinishQuiz
+      <ConFirmSubmit
         open={openFinishQUiz}
         setOpen={setOpenFinishQUiz}
-        submitQuiz={handleFinishQuiz}
-      ></PopupFinishQuiz>
+        handleSubmit={handleFinishQuiz}
+      ></ConFirmSubmit>
+
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
         <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
           {videos?.map((v, i) => {
@@ -414,10 +444,15 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
           })}
         </div>
         <div className="flex items-center select-none cursor-pointer relative z-30 group">
-          <span className="mr-2">Timeline</span>
+          <span className="mr-2 text-bw-1 group-hover:text-primary">
+            Timeline
+          </span>
           {/* Icon for course video timeline */}
-          <SappIcon icon="course_video_timeline"></SappIcon>
-          <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100$]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
+          <SappIcon
+            className="fill-bw-1 group-hover:fill-primary"
+            icon="course_video_timeline"
+          ></SappIcon>
+          <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100px]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
             <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
               {[...(currentVideo?.file?.resource?.time_line || [])]
                 .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0))
@@ -425,12 +460,12 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
                   return (
                     <div
                       key={i}
-                      className="gap-3 text-medium-sm flex px-6 py-3 hover:text-primary-2 text-bw-1"
+                      className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid px-6 py-3 hover:text-primary-2 text-bw-1 grid-cols-[1fr,6fr]"
                       onClick={() => {
                         handleGoTimeline(e.time)
                       }}
                     >
-                      <div className="text-state-info flex-none">
+                      <div className="text-state-info">
                         {formatTime(e.time)}
                       </div>
                       <div className="text-bw-1 line-clamp-2 text-inherit">
@@ -444,48 +479,6 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
         </div>
       </div>
       <div className="relative">
-        <div>
-          {/* Modal for quiz questions */}
-          <SappModal
-            open={modalOpen}
-            customTitle={
-              <div className="!text-xl font-bold text-bw-1">Question</div>
-            }
-            parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
-            okButtonCaption={`${
-              lastQuestion?.id === activeQuestion?.id ? 'Finish' : 'Confirm'
-            }`}
-            buttonSize="small"
-            size="max-w-[782px]"
-            position="center"
-            isInner={true}
-            isBordered={true}
-            okButtonClass="!w-20 h-8.5 !px-0"
-            cancelButtonClass="!w-20 h-8.5 !px-0"
-            handleSubmit={
-              lastQuestion?.id === activeQuestion?.id
-                ? handleSubmit((e) => onSubmit(e, true))
-                : handleSubmit((e) => onSubmit(e))
-            }
-            handleCancel={() =>
-              handleClose({
-                questionId: activeQuestion?.id,
-                listQuestion: currentListQuestion,
-              })
-            }
-            colorCancel="secondary"
-            cancelButtonCaption="Skip"
-          >
-            <div className="py-5">
-              <QuizComponent
-                ref={questionRef}
-                activeQuestion={activeQuestion}
-                showCorrect={false}
-              ></QuizComponent>
-            </div>
-          </SappModal>
-        </div>
-        {/* Video player component */}
         <SAPPVideo
           streamRef={streamRef}
           options={{
@@ -499,7 +492,48 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
                 .replace('/manifest/video.m3u8', '') || '',
           }}
           pauseOnSeek={true}
+          hideVideo={hideVideo}
         ></SAPPVideo>
+        {/* Modal for quiz questions */}
+        <SappModal
+          open={modalOpen}
+          customTitle={
+            <div className="!text-xl font-bold text-bw-1">Question</div>
+          }
+          parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
+          okButtonCaption={`${
+            lastQuestion?.id === activeQuestion?.id ? 'Finish' : 'Confirm'
+          }`}
+          buttonSize="small"
+          size="max-w-[782px]"
+          position="center"
+          isInner={true}
+          isBordered={true}
+          okButtonClass="!w-20 h-8.5 !px-0"
+          cancelButtonClass="!w-20 h-8.5 !px-0"
+          handleSubmit={
+            lastQuestion?.id === activeQuestion?.id
+              ? handleSubmit((e) => onSubmit(e, true))
+              : handleSubmit((e) => onSubmit(e))
+          }
+          handleCancel={() =>
+            handleClose({
+              questionId: activeQuestion?.id,
+              listQuestion: currentListQuestion,
+            })
+          }
+          colorCancel="secondary"
+          cancelButtonCaption="Skip"
+        >
+          <div className="py-5">
+            <QuizComponent
+              ref={questionRef}
+              activeQuestion={activeQuestion}
+              showCorrect={false}
+              document_id={document_id}
+            ></QuizComponent>
+          </div>
+        </SappModal>
       </div>
 
       <SappModal
@@ -513,18 +547,33 @@ const VideoDocument = ({ videos, activityId, tabId }: Props) => {
         position="center"
         showFooter={false}
         isFullScreen={true}
-        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        showHeader={false}
       >
-        <div className="max-w-[1114px] mx-auto">
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-            onShowDetail={handleShowQuizResultDetail}
-          />
+        <div>
+          <div
+            className="ml-auto cursor-pointer absolute  right-6 top-4.5"
+            onClick={() => setModalResult(undefined)}
+          >
+            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+          </div>
+          <div className="max-w-[1114px] mx-auto">
+            <QuizResultComponent
+              questionResponse={modalResult?.questions || []}
+              getTable={getTable}
+              onShowDetail={handleShowQuizResultDetail}
+              loading={loading}
+            />
+          </div>
         </div>
       </SappModal>
+      <ModalExplanationPackage
+        quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
+        open={showQuestionResultDetail?.isOpen || false}
+        setOpen={() => setShowQuestionResultDetail(undefined)}
+      ></ModalExplanationPackage>
     </div>
   )
 }
 
-export default VideoDocument
+export default memo(VideoDocument)

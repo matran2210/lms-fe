@@ -10,21 +10,38 @@ import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
+import { TitleSidebar } from 'src/constants'
 
 type MenuItemProps = {
   menuItem: MenuItemType
   setOpenResource: Dispatch<SetStateAction<boolean>>
+  closeSideBar: () => void
 }
 
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   setOpenResource,
+  closeSideBar,
 }: MenuItemProps) {
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const selected = router.pathname === url
+  const isDetailCourse =
+    router.pathname.includes('/my-course') ||
+    router.pathname.includes('/section') ||
+    router.pathname.includes('/activity')
+  const isProfile =
+    Icon === 'avatar' &&
+    (router.asPath === '/myprofile' ||
+      router.asPath === '/certificates' ||
+      router.asPath === '/settings' ||
+      router.asPath === '/login_history' ||
+      router.asPath === '/devices')
+  const selected =
+    router.pathname === url ||
+    (Icon === 'stats-chart-sharp' && isDetailCourse) ||
+    isProfile
   const isNested = subItems && subItems?.length > 0
 
   const onClick = () => {
@@ -53,9 +70,9 @@ export default function MenuItem({
 
   const handleActive = () => {
     if (router?.query?.courseId || router.query.id) {
-      name === 'Resource' && handleOpenResource()
-      name === 'Notes List' && handleOpenNotesList()
-      name === 'Create Note' && handleAddNote()
+      name === TitleSidebar.RESOURCES && handleOpenResource()
+      name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
+      name === TitleSidebar.NEW_NOTE && handleAddNote()
     }
   }
 
@@ -67,28 +84,48 @@ export default function MenuItem({
 
   return (
     <>
-      {isActivity && name === 'Create Note' && (
+      {isActivity && name === TitleSidebar.NEW_NOTE && (
         <div className="h-px w-[calc(100%-48px)] bg-gray-2 text-center mx-auto"></div>
       )}
       <div
-        className={`cursor-pointer hover:bg-secondary ${
-          selected && type === 'level-1' && router.pathname !== '/'
+        className={`cursor-pointer hover:bg-secondary group ${
+          selected && type === 'level-1'
             ? 'pl-6 border-l-4 pr-1 border-active'
             : 'pl-7'
         } relative sidebar-list-items py-2 mb-4 last:mb-0 ${
-          !isActivity && name === 'Create Note'
+          !isActivity &&
+          (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
             ? 'hidden'
-            : name === 'Create Note'
+            : name === TitleSidebar.NEW_NOTE
               ? 'mt-4'
               : ''
         }
-        ${!isInCourse && name === 'Notes List' ? 'hidden' : ''}
+        ${
+          !isInCourse &&
+          (name === TitleSidebar.NOTES_LIST ||
+            name === TitleSidebar.RESOURCES ||
+            name === TitleSidebar.RESULTS ||
+            Icon === 'stats-chart-sharp' ||
+            Icon === 'profile-detail')
+            ? 'hidden'
+            : ''
+        }
+        ${
+          isInCourse &&
+          (name === TitleSidebar.COURSES ||
+            name === TitleSidebar.ENTRANCE_TEST ||
+            Icon === 'grid' ||
+            Icon === 'avatar')
+            ? 'hidden'
+            : ''
+        }
         `}
       >
         <div
-          className={`sidebar-item flex items-center group ${
+          className={`sidebar-item flex items-center ${
             Icon === 'avatar' ? '-ml-2' : ''
           }`}
+          onClick={() => closeSideBar()}
         >
           <Link href={url} passHref>
             <div className="flex items-center" onClick={handleActive}>
@@ -109,8 +146,8 @@ export default function MenuItem({
               ) : (
                 <ExpandIcon
                   type={Icon}
-                  className={`before-icon shrink-0 min-w-6 min-h-6 text-gray-2 ${
-                    selected ? 'text-primary' : ''
+                  className={`before-icon shrink-0 min-w-6 min-h-6 ${
+                    selected ? 'text-primary' : 'text-gray-2'
                   } group-hover:text-primary 
                   `}
                 />
@@ -118,11 +155,11 @@ export default function MenuItem({
 
               {Icon === 'avatar' ? (
                 <div
-                  className={`label hidden text-base font-semibold text-gray-2 pl-2 avatar ${
-                    selected ? 'text-primary' : ''
+                  className={`label transition-all duration-150 invisible opacity-0 text-base font-semibold pl-2 avatar ${
+                    selected ? 'text-primary' : 'text-gray-2'
                   } group-hover:text-primary`}
                 >
-                  <div className="text-base font-semibold text-bw-1 line-clamp-1">
+                  <div className="text-base font-semibold text-bw-1 group-hover:text-primary line-clamp-1">
                     {user?.detail?.full_name}
                   </div>
                   <div className="text-medium-sm font-normal line-clamp-1">
@@ -130,13 +167,25 @@ export default function MenuItem({
                   </div>
                 </div>
               ) : (
-                <span
-                  className={`label hidden text-base font-semibold text-gray-2 pl-4 line-clamp-1 ${
-                    selected ? 'text-primary' : ''
-                  } group-hover:text-primary`}
-                >
-                  {name}
-                </span>
+                <>
+                  {Icon === 'profile-detail' ? (
+                    <span
+                      className={`label transition-all duration-150 invisible opacity-0 text-base font-semibold pl-4 line-clamp-1 ${
+                        selected ? 'text-primary' : 'text-gray-2'
+                      } group-hover:text-primary`}
+                    >
+                      {user?.detail?.full_name}
+                    </span>
+                  ) : (
+                    <span
+                      className={`label transition-all duration-150 invisible opacity-0 text-base font-semibold pl-4 line-clamp-1 ${
+                        selected ? 'text-primary' : 'text-gray-2'
+                      } group-hover:text-primary`}
+                    >
+                      {name}
+                    </span>
+                  )}
+                </>
               )}
             </div>
           </Link>
@@ -160,6 +209,7 @@ export default function MenuItem({
             <MenuItemsList
               options={subItems}
               setOpenResource={setOpenResource}
+              closeSideBar={closeSideBar}
             />
           </div>
         ) : null}

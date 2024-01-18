@@ -1,5 +1,5 @@
 # Step 1. Rebuild the source code only when needed
-FROM node:14-alpine AS builder
+FROM node:18.19-slim AS builder
 
 WORKDIR /app
 
@@ -34,7 +34,7 @@ RUN yarn build
 # RUN yarn postbuild
 
 # Step 2. Production image, copy all the files and run next
-FROM node:14-alpine AS runner
+FROM node:18.19-slim AS runner
 
 WORKDIR /app
 

@@ -9,7 +9,7 @@ interface IProps {
   setOpen: any
   handleQuit: any
 }
-const QuitTestModal = ({ open, setOpen, handleQuit }: IProps) => {
+const LimitQuizModal = ({ open, setOpen, handleQuit }: IProps) => {
   const onSubmit = () => {
     setOpen(false)
     handleQuit()
@@ -23,9 +23,8 @@ const QuitTestModal = ({ open, setOpen, handleQuit }: IProps) => {
     <SappModal
       open={open}
       setOpen={setOpen}
-      cancelButtonCaption="Cancel"
+      showCancelButton={false}
       okButtonCaption="Quit"
-      handleCancel={onCancel}
       handleSubmit={onSubmit}
       showHeader={false}
       refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
@@ -37,17 +36,15 @@ const QuitTestModal = ({ open, setOpen, handleQuit }: IProps) => {
       fullWidthBtn={true}
       closeAfterSubmit={false}
       buttonSize="extra"
-      revertFunction={true}
     >
       <div className="p-8 rounded-full bg-secondary">
         <AlertTriagle />
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6">Are you sure?</div>
-      <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-7 text-center">
-        If you quit at this time, the test results will not be saved
+      <div className="text-bw-1 text-4xl font-semibold mt-6">
+        Quiz limit exceded
       </div>
     </SappModal>
   )
 }
 
-export default QuitTestModal
+export default LimitQuizModal

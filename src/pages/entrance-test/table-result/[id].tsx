@@ -1,3 +1,4 @@
+import { CloseIcon } from '@assets/icons'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
@@ -7,6 +8,7 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 const TableEntranceResult = () => {
   const router = useRouter()
   const { id } = router.query
+  const [loading, setLoading] = useState<boolean>(false)
   const [modalResult, setModalResult] = useState<{
     status?: boolean
     questions?: any
@@ -21,6 +23,7 @@ const TableEntranceResult = () => {
     page_index: number
     page_size: number
   }) => {
+    setLoading(true)
     try {
       const response = await CourseActivityApi.getQuizAttemptsTable(
         id || modalResult?.id || '',
@@ -31,25 +34,27 @@ const TableEntranceResult = () => {
       )
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.meta,
-        data:
+        data: (modalResult?.questions?.data || []).concat(
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
             section: e.question.question_topic?.name,
             type: e.question.qType,
-            result: {
-              is_correct: e.is_correct,
-              percent: 0,
-            },
-            time_spent: e.time_spent || 0,
+            is_correct: e.is_correct,
+            time_spent: e.time_spent,
+            question: e.question as any,
           })) || [],
+        ),
       }
       setModalResult((e) => ({
         id: id || e?.id,
         status: true,
         questions: newQuestionResponse,
       }))
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
   useEffect(() => {
     if (id) {
@@ -61,7 +66,15 @@ const TableEntranceResult = () => {
   // return <></>
 
   return (
-    <div className="max-w-screen-lg m-auto">
+    <div className="max-w-screen-lg m-auto overflow-y-hidden overflow-x-auto px-6">
+      <div
+        className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
+        onClick={() => {
+          router.back()
+        }}
+      >
+        <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+      </div>
       {modalResult?.questions?.data?.length > 0 ? (
         <QuizResultComponent
           questionResponse={modalResult?.questions || []}
@@ -69,6 +82,7 @@ const TableEntranceResult = () => {
           onShowDetail={(e) => {
             router.push(`/entrance-test/table-result/explanation/${e.id}`)
           }}
+          loading={loading}
         />
       ) : (
         <></>

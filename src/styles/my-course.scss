@@ -88,3 +88,30 @@
     @apply text-gray-1 text-medium-sm font-normal;
   }
 }
+
+.default-content-editor {
+  thead,
+  tbody,
+  tfoot,
+  td,
+  th {
+    border-width: 1px;
+    border-style: inset;
+    @apply border-gray-1; /* Add this line to set the border color to gray-2 */
+  }
+
+  tr {
+    border-style: initial;
+    border-width: initial;
+  }
+
+  ol,
+  ul,
+  menu {
+    padding-inline-start: 40px !important;
+    list-style: auto;
+  }
+  ul {
+    list-style-type: disc;
+  }
+}

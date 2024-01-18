@@ -35,6 +35,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
+import { StreamPlayerApi } from '@cloudflare/stream-react'
 
 type Props = {
   activity: IActivity
@@ -51,11 +52,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
-  const videoDocumentRef = useRef<HTMLDivElement>(null)
-
-  // const observerRef = useRef<IntersectionObserver>()
-  // const isFinishRef = useRef<boolean>(false)
+  const streamRef = useRef<StreamPlayerApi>(null)
+  const videoRef = useRef<any>(null)
+  const observerRef = useRef<IntersectionObserver>()
+  const isFinishRef = useRef<boolean>(false)
   const router = useRouter()
+  const activityType = activity?.display_icon
+
   useLayoutEffect(() => {
     if (activity) {
       try {
@@ -63,12 +66,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         dispatch(
           getDiscussion({ id: router.query.classId, sectionId: sectionId }),
         )
-        ;(async () => {
-          await CourseActivityApi.startCourseSectionProgress(
-            courseId,
-            sectionId,
-          )
-        })()
+        // ;(async () => {
+        //   await CourseActivityApi.startCourseSectionProgress(
+        //     courseId,
+        //     sectionId,
+        //   )
+        // })()
       } catch (error) {}
     }
   }, [activity])
@@ -77,14 +80,15 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   //   return breadcumb
   // }
 
-  // useEffect(() => {
-  //   finishedCourseSectionProgress()
-  // }, [
-  //   endActivityRef.current,
-  //   quizDocumentRef.current,
-  //   videoDocumentRef.current,
-  //   observerRef.current,
-  // ])
+  useEffect(() => {
+    finishedCourseSectionProgress()
+  }, [
+    endActivityRef.current,
+    quizDocumentRef.current,
+    observerRef.current,
+    streamRef.current,
+    videoRef.current,
+  ])
 
   // Clear notes
   useEffect(() => {
@@ -94,84 +98,78 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   /**
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
    */
-  // const finishedCourseSectionProgress = () => {
-  //   // Xác định loại hoạt động của phần hiện tại
-  //   const activityType = getActivityType(activity)
+  const finishedCourseSectionProgress = async () => {
+    // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
+    if (activityType === 'VIDEO' && videoRef?.current) {
+      for (let e of videoRef.current) {
+        e.addEventListener('playing', async () => {
+          await handleFinishedCourseSectionProgress()
+        })
+      }
+      return
+    }
+    // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
+    else if (activityType === 'QUIZ' || 'PAST_EXAM_ANALYSIS') {
+      await handleFinishedCourseSectionProgress()
+      return
+    }
 
-  //   // Xử lý khi chỉ có video và tham chiếu đến videoDocumentRef hiện tại
-  //   if (activityType === ACTIVITY_TYPE.ONLY_VIDEO && videoDocumentRef.current) {
-  //     videoDocumentRef.current.onclick = async () => {
-  //       await handleFinishedCourseSectionProgress()
-  //     }
-  //     return
-  //   }
-  //   // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
-  //   else if (
-  //     activityType === ACTIVITY_TYPE.ONLY_QUIZ &&
-  //     quizDocumentRef.current
-  //   ) {
-  //     quizDocumentRef.current.onclick = async () => {
-  //       await handleFinishedCourseSectionProgress()
-  //     }
-  //     return
-  //   }
+    // Xử lý khi có tham chiếu đến endActivityRef hiện tại
+    if (endActivityRef.current && activityType === 'TEXT') {
+      // Hủy theo dõi nếu đã có observerRef.current
+      if (observerRef.current) {
+        observerRef.current?.unobserve(endActivityRef.current)
+      }
 
-  //   // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-  //   if (endActivityRef.current) {
-  //     // Hủy theo dõi nếu đã có observerRef.current
-  //     if (observerRef.current) {
-  //       observerRef.current?.unobserve(endActivityRef.current)
-  //     }
+      // Thiết lập các tùy chọn cho IntersectionObserver
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      }
 
-  //     // Thiết lập các tùy chọn cho IntersectionObserver
-  //     const options = {
-  //       root: null,
-  //       rootMargin: '0px',
-  //       threshold: 0.5,
-  //     }
+      // Hàm xử lý khi có sự giao thoa
+      const handleIntersection = async (
+        entries: IntersectionObserverEntry[],
+      ) => {
+        const isVisible = entries[0].isIntersecting
 
-  //     // Hàm xử lý khi có sự giao thoa
-  //     const handleIntersection = async (
-  //       entries: IntersectionObserverEntry[],
-  //     ) => {
-  //       const isVisible = entries[0].isIntersecting
+        // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
+        if (isVisible && endActivityRef.current) {
+          observerRef.current?.unobserve(endActivityRef.current)
+          await handleFinishedCourseSectionProgress()
+        }
+      }
 
-  //       // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-  //       if (isVisible && endActivityRef.current) {
-  //         observerRef.current?.unobserve(endActivityRef.current)
-  //         await handleFinishedCourseSectionProgress()
-  //       }
-  //     }
+      // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
+      observerRef.current = new IntersectionObserver(
+        handleIntersection,
+        options,
+      )
 
-  //     // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
-  //     observerRef.current = new IntersectionObserver(
-  //       handleIntersection,
-  //       options,
-  //     )
+      // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
+      if (endActivityRef.current) {
+        observerRef.current?.observe(endActivityRef.current)
+      }
 
-  //     // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-  //     if (endActivityRef.current) {
-  //       observerRef.current?.observe(endActivityRef.current)
-  //     }
-
-  //     // Trả về hàm cleanup
-  //     return () => {
-  //       if (endActivityRef.current) {
-  //         observerRef.current?.unobserve(endActivityRef.current)
-  //       }
-  //     }
-  //   }
-  // }
+      // Trả về hàm cleanup
+      return () => {
+        if (endActivityRef.current) {
+          observerRef.current?.unobserve(endActivityRef.current)
+        }
+      }
+    }
+  }
 
   /**
    * Hàm xử lý khi kết thúc tiến trình phần của khóa học.
    */
-  // const handleFinishedCourseSectionProgress = async () => {
-  //   if (!isFinishRef.current) {
-  //     await CourseActivityApi.finishedCourseSectionProgress(courseId, sectionId)
-  //     isFinishRef.current = true
-  //   }
-  // }
+  const handleFinishedCourseSectionProgress = async () => {
+    if (!isFinishRef.current) {
+      await CourseActivityApi.startCourseSectionProgress(courseId, sectionId)
+      isFinishRef.current = true
+    }
+  }
 
   /**
    * Hàm để lấy ActivityType dựa trên document type.
@@ -292,13 +290,19 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           let url = ''
           switch (e.course_section_type) {
             case 'PART':
-              url = ''
+              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${e?.id}`
               break
             case 'CHAPTER':
-              url = ''
+              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${e?.id}`
               break
             case 'UNIT':
-              url = ''
+              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${activity.breadcumb?.[2]?.id}`
+              break
+            case 'ACTIVITY':
+              url = `#`
+              break
+            default:
+              url = `/courses/my-course/${e?.id}`
               break
           }
           return (
@@ -311,32 +315,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     : 'hover:text-primary cursor-pointer text-gray-1'
                 }`}
               >
-                <Link
-                  href="/courses"
-                  className="breadcrumbs__link"
-                  scroll={false}
-                >
+                <Link href={url} className="breadcrumbs__link" scroll={false}>
                   {truncateString(e.name, 30)}
                 </Link>
               </li>
             </React.Fragment>
           )
         })}
-        {/* <li className="hover:text-primary cursor-pointer text-gray-1">
-          Part A: Audit framework an...
-        </li>
-        /
-        <li className="hover:text-primary cursor-pointer text-gray-1">
-          Chapter 3: Corporate gover...
-        </li>
-        /
-        <li className="hover:text-primary cursor-pointer text-gray-1">
-          Unit 1: Objectives of corpor...
-        </li>
-        /
-        <li className="hover:text-primary cursor-pointer text-bw-1">
-          Activity 4: Introduction to pr...
-        </li> */}
       </ul>
       <>
         {getNotesData?.map((e: any, index: number) => {
@@ -351,7 +336,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           )
         })}
       </>
-      <div className="bg-gray-3 pb-10 px-6 ">
+      <div className="bg-gray-3 px-6 ">
         <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
           <div className="font-medium text-2xl ">{activity.name}</div>
           <div className="text-base text-gray-1 whitespace-nowrap">
@@ -397,9 +382,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       {/* <FadeInOut show={!selector.loading}> */}
       {!!course_tab_documents?.length && (
         <div className="bg-white pb-6 mb-6">
-          <div
-            className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6 relative`}
-          >
+          <div className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6`}>
             <div className="tab-content">
               {course_tab_documents?.map((e, i) => {
                 const marginBottom =
@@ -422,6 +405,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                         grading_preference={
                           e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
                         }
+                        document_id={e.id}
                       ></QuizDocument>
                     </div>
                   )
@@ -437,15 +421,16 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 }
                 if (e.type === 'VIDEO') {
                   return (
-                    <div
-                      className={marginBottom}
-                      key={e.id}
-                      ref={videoDocumentRef}
-                    >
+                    <div className={marginBottom} key={i}>
                       <VideoDocument
                         videos={e.videos}
                         activityId={activity.id}
                         tabId={selector.currentTabId || ''}
+                        streamRefProp={(el: any) =>
+                          (videoRef.current[i || 0] = el)
+                        }
+                        handleProcess={handleFinishedCourseSectionProgress}
+                        document_id={e.id}
                       ></VideoDocument>
                     </div>
                   )

@@ -26,6 +26,7 @@ interface IProps {
   }[]
   extenalRef?: any
   solution?: string
+  allowUnHighLight?: boolean
 }
 const AddWordPreview = forwardRef(
   (
@@ -40,6 +41,7 @@ const AddWordPreview = forwardRef(
       corrects,
       extenalRef,
       solution,
+      allowUnHighLight,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -81,8 +83,8 @@ const AddWordPreview = forwardRef(
                 inputValue.trim().toLowerCase(),
           )
           inputClass = correctAnswer
-            ? 'border-success text-state-success text-center !font-normal'
-            : 'border-danger text-danger text center !font-normal'
+            ? '!border-success text-state-success text-center !font-normal'
+            : '!border-danger text-danger text center !font-normal'
         }
 
         element.outerHTML = `
@@ -100,16 +102,21 @@ const AddWordPreview = forwardRef(
 
           let inputClass
           // if (corrects) {
-          const correctAnswer = corrects?.find(
+          const correctAnswer = corrects?.filter(
             (ans: any) => ans.answer_position === index + 1,
           )
           if (correctAnswer) {
             inputClass = 'text-base font-semibold text-state-success'
             // }
-
             element.outerHTML = `
                 <span>
-                <span id="${inputId}" class = "${inputClass}">${correctAnswer.answer} <span/>
+                <span id="${inputId}" class = "${inputClass}">${correctAnswer
+                  .map((e, i) => {
+                    if (i < correctAnswer.length - 1) {
+                      return e.answer + ' / '
+                    } else return e.answer
+                  })
+                  .join('')} <span/>
                 </span>
                 `
           }
@@ -158,7 +165,20 @@ const AddWordPreview = forwardRef(
               e.target.firstChild?.tagName !== 'math'
             ) {
               if (e) {
-                runHighlight(handleSaveHighLight, allowHighLight || false)
+                if (allowHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowHighLight || false,
+                    'hightlight_area',
+                  )
+                } else if (allowUnHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowUnHighLight || false,
+                    'hightlight_area',
+                    { color: 'white' },
+                  )
+                }
               }
             }
           }}
@@ -173,7 +193,7 @@ const AddWordPreview = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base mt-5">Correct Answer:</div>
+            <div className="font-semibold text-base mt-5">Correct Answer</div>
             <EditorReader
               className="questions mt-2"
               text_editor_content={

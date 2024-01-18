@@ -90,12 +90,19 @@ const ProfileSideBar = ({ page }: IProps) => {
     })
 
     // Chuyển trang
-    router.push(`/${childLabel.toLowerCase()}`)
+    let formattedChildLabel = childLabel.toLowerCase()
+
+    if (formattedChildLabel === 'my_profile') {
+      formattedChildLabel = formattedChildLabel.replace(/_/g, '') // hoặc có thể sử dụng ' ' để thay thế bằng khoảng trắng
+    }
+
+    router.push(`/${formattedChildLabel}`)
   }
 
   const [isExpanded, toggleExpanded] = useState(false)
-  const onClick = () => {
-    toggleExpanded((prev) => !prev)
+
+  const onClickExpand = () => {
+    toggleExpanded((prev) => !prev) // Sử dụng callback để đảm bảo sử dụng giá trị mới nhất
   }
 
   return (
@@ -131,13 +138,20 @@ const ProfileSideBar = ({ page }: IProps) => {
                     ? 'bg-secondary font-bold text-primary'
                     : ''
                 }`}
+                style={{
+                  position: 'relative', // Đặt position là relative
+                  zIndex: 2, // Thiết lập z-index của thẻ a
+                }}
                 onClick={() => {
                   if (urlPage !== 'security') {
                     // If not 'security', use existing logic
                     handleChildClick(childLabel)
                     setChildActivationStates({ security: false })
-                  } else if (!childActivationStates[childLabel]) {
+                  } else if (childActivationStates[childLabel] === false) {
                     // If 'security' and not a child, set only 'security' to active
+                    setChildActivationStates({ security: true })
+                  } else if (urlPage === 'security') {
+                    onClickExpand()
                     setChildActivationStates({ security: true })
                   }
                 }}
@@ -147,7 +161,6 @@ const ProfileSideBar = ({ page }: IProps) => {
                   <div className="mt-2">
                     <ExpandIcon
                       isExpanded={isExpanded}
-                      handleClick={onClick}
                       type={'ontoggle'}
                       className={''}
                     />

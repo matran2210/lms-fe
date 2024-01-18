@@ -24,7 +24,9 @@ const ButtonSecondary = ({
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-semibold bg-gray-3 ${
-    !disabled && 'hover:bg-gray-4 cursor-pointer'
+    disabled
+      ? 'cursor-not-allowed opacity-60'
+      : 'hover:bg-gray-4  cursor-pointer'
   }`
 
   if (link)

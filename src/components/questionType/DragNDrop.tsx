@@ -22,6 +22,7 @@ interface IProps {
   corrects?: any
   solution?: string
   resetDefaultAnswer?: boolean
+  allowUnHighLight?: boolean
 }
 const DragNDropPreivew = forwardRef(
   (
@@ -37,6 +38,7 @@ const DragNDropPreivew = forwardRef(
       corrects,
       solution,
       resetDefaultAnswer = false,
+      allowUnHighLight,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -106,16 +108,13 @@ const DragNDropPreivew = forwardRef(
         })
       },
     }))
-    useEffect(() => {
-      DeserializeHighlight(highlighted)
-    }, [questionContent])
+
     useEffect(() => {
       const doc = parser.parseFromString(str, 'text/html')
       const doc2 = parser.parseFromString(str, 'text/html')
       // if (refContent?.current) {
       const elements = doc.querySelectorAll('.question-content-tag')
       const elementsCorrects = doc2.querySelectorAll('.question-content-tag')
-
       if (corrects) {
         elementsCorrects.forEach((element: any, index: number) => {
           element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop-answer corrects">
@@ -247,7 +246,20 @@ const DragNDropPreivew = forwardRef(
                   e.target.firstChild?.tagName !== 'math'
                 ) {
                   if (e) {
-                    runHighlight(handleSaveHighLight, allowHighLight || false)
+                    if (allowHighLight) {
+                      runHighlight(
+                        handleSaveHighLight,
+                        allowHighLight || false,
+                        'hightlight_area',
+                      )
+                    } else if (allowUnHighLight) {
+                      runHighlight(
+                        handleSaveHighLight,
+                        allowUnHighLight || false,
+                        'hightlight_area',
+                        { color: 'white' },
+                      )
+                    }
                   }
                 }
               }}
@@ -259,6 +271,7 @@ const DragNDropPreivew = forwardRef(
                     ?.innerHTML || ''
                 }
                 options={options}
+                highlighted={highlighted}
               />
             </div>
             {!corrects && (
@@ -297,7 +310,9 @@ const DragNDropPreivew = forwardRef(
         )}
         {answerContent && (
           <>
-            <div className="font-semibold text-xl mt-5">Correct Answer:</div>
+            <div className="text-bw-1 font-semibold text-base">
+              Correct Answer
+            </div>
             <EditorReader
               className="questions mt-2"
               text_editor_content={

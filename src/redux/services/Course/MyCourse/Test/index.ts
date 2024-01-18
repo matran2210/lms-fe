@@ -60,6 +60,7 @@ const CourseTestApi = {
   createTopicAttempt: async (
     quiz_id: string,
     question_topic_id: string,
+    class_user_id?: string,
   ): Promise<IResponse<any>> => {
     const uri = url.createTopicAttempt
     const response = await httpService.POST<any, any>({
@@ -67,6 +68,7 @@ const CourseTestApi = {
       request: {
         quiz_id,
         question_topic_id,
+        class_user_id,
       },
     })
     return response
@@ -195,6 +197,26 @@ const CourseTestApi = {
     })
     return response
   },
+  getCaseStudyAttemptsTable: async (
+    id: string,
+    page_index: number,
+    page_size: number,
+  ): Promise<IResponse<any>> => {
+    const uri =
+      url.getCaseStudyAttmptsTable +
+      `/${id}?page_index=${page_index}&page_size=${page_size}`
+    const response = await httpService.GET<any, any>({
+      uri,
+    })
+    return response
+  },
+  getTopicAttemptsDetail: async (id: string): Promise<IResponse<any>> => {
+    const uri = url.getTopicAttemptDetail + `${id}/score`
+    const response = await httpService.GET<any, any>({
+      uri,
+    })
+    return response
+  },
   getQuizAttempts: async (
     id: string,
     accessToken: string,
@@ -225,12 +247,16 @@ const CourseTestApi = {
     )
     return response.data?.data
   },
-  createQuizAttempt: async (id: string): Promise<IResponse<any>> => {
+  createQuizAttempt: async (
+    id: string,
+    class_user_id?: string,
+  ): Promise<IResponse<any>> => {
     const uri = url.createQuizAttemp
     const response = await httpService.POST<any, any>({
       uri,
       request: {
         quiz_id: id,
+        class_user_id: class_user_id || undefined,
       },
     })
     return response
@@ -243,7 +269,7 @@ const CourseTestApi = {
       Authorization: 'Bearer ' + accessToken,
     }
     const response = await axios.get<{}, IResponse<{ data: any }>>(
-      `${apiURL}${url.getAnswer}/${id}`,
+      `${apiURL}/${url.getAnswer}/${id}`,
       {
         headers,
       },

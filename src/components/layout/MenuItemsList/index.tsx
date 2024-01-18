@@ -5,11 +5,13 @@ import MenuItem from '../MenuItem'
 type MenuItemsListProps = {
   options: MenuItemType[]
   setOpenResource: Dispatch<SetStateAction<boolean>>
+  closeSideBar: () => void
 }
 
 export default function MenuItemsList({
   options,
   setOpenResource,
+  closeSideBar,
 }: MenuItemsListProps) {
   return (
     <div className="menu-items-list">
@@ -18,6 +20,7 @@ export default function MenuItemsList({
           menuItem={option}
           key={option.id}
           setOpenResource={setOpenResource}
+          closeSideBar={closeSideBar}
         />
       ))}
     </div>

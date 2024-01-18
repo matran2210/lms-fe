@@ -5,15 +5,21 @@ import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { formatTime } from '@components/common/timer'
 import EntrancePopup from './EntrancePopup'
+import { useRouter } from 'next/router'
 
 interface EntranceTestProps {
   data: any
 }
 
 const EntranceTest = ({ data }: EntranceTestProps) => {
+  const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
   const handleOnClick = () => {
-    setOpen(true)
+    if (data.attempt_times >= 1) {
+      router.push(`entrance-test/test-result/${data.quiz_attempt_id}`)
+    } else {
+      setOpen(true)
+    }
   }
 
   const timeTakenFormatted = data?.total_attempt_time
@@ -60,13 +66,17 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
         </div>
         <div className="action flex items-center jusity-between relative mt-10">
           {data.is_attempt ? (
-            <ButtonSecondary
-              title="Detail"
-              full={false}
-              size={'small'}
-              onClick={handleOnClick}
-              className="hover:bg-primary hover:text-white ml-auto"
-            />
+            data.attempt_status === 'SUBMITTED' ? (
+              <ButtonSecondary
+                title="Detail"
+                full={false}
+                size={'small'}
+                onClick={handleOnClick}
+                className="hover:bg-primary hover:text-white ml-auto"
+              />
+            ) : (
+              <></>
+            )
           ) : (
             <ButtonSecondary
               title="Begin"

@@ -22,7 +22,7 @@ export default function DashboardLayout({
       <Sidebar
         isOpened={isOpened}
         toggleDrawer={toggleDrawer}
-        className={`menu-sidebar-left fixed top-0 md:left-0 h-screen transition-all duration-200 bg-white shadow-sidebar w-20 hover:w-[200px] max-w-screen ${
+        className={`menu-sidebar-left fixed top-0 md:left-0 h-screen bg-white shadow-sidebar w-20 max-w-screen overflow-hidden ${
           openDrawer ? 'opacity-5' : ''
         }`}
         setOpenResource={setOpenResource}

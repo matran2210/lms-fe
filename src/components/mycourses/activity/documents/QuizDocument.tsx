@@ -9,13 +9,19 @@ import {
   submitQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
+import { CloseIcon } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
 import { QuizResultComponent } from 'quiz-result-package'
-import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
+import {
+  IQuestionResult,
+  IQuestionResultResponse,
+} from 'quiz-result-package/dist/type'
+import toast from 'react-hot-toast'
+import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion } from 'src/type/course/Question'
+import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import PopupFinishQuiz from '../PopupFinishQuiz'
 
 type Props = {
   questions: IQuestion[]
@@ -23,6 +29,7 @@ type Props = {
   tabId: string
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
+  document_id: string
 }
 
 const QuizDocument = ({
@@ -31,6 +38,7 @@ const QuizDocument = ({
   tabId,
   quizId,
   grading_preference,
+  document_id,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -45,6 +53,8 @@ const QuizDocument = ({
 
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
+  const [loading, setLoading] = useState<boolean>(false)
+
   const [modalResult, setModalResult] = useState<{
     status?: boolean
     questions?: any
@@ -53,64 +63,75 @@ const QuizDocument = ({
 
   const [quizComponentKey, setQuizComponentKey] = useState<number>(1)
 
-  const [openFinishQUiz, setOpenFinishQUiz] = useState<boolean>(false)
+  const [openFinishQuiz, setOpenFinishQuiz] = useState<boolean>(false)
+
+  const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
+    id: string
+    isOpen: boolean
+  }>()
 
   useEffect(() => {
     if (questions?.[0]) {
       // Load the first question when the component mounts
-      dispatch(
-        fetchQuestionById({
-          activityId: activityId,
-          tabId: tabId,
-          quizId: quizId,
-          questionId: questions[0]?.id || '',
-        }),
-      )
+      try {
+        dispatch(
+          fetchQuestionById({
+            activityId: activityId,
+            tabId: tabId,
+            quizId: quizId,
+            questionId: questions[0]?.id || '',
+          }),
+        )
+      } catch (error) {}
     }
   }, [questions, dispatch])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
-      setOpenFinishQUiz(true)
+      setOpenFinishQuiz(true)
     }
   }, [runHandleFinishQuiz])
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (activeQuestionIndex < questions.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
 
       // Load the next question if it hasn't been loaded yet
       const nextQuestionId = questions[activeQuestionIndex + 1]?.id
       if (nextQuestionId) {
-        dispatch(
-          fetchQuestionById({
-            activityId: activityId,
-            tabId: tabId,
-            quizId: quizId,
-            questionId: nextQuestionId || '',
-          }),
-        )
+        try {
+          await dispatch(
+            fetchQuestionById({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: nextQuestionId || '',
+            }),
+          )
+        } catch (error) {}
       }
 
       questionRef.current?.reset()
     }
   }
 
-  const handlePrevQuestion = () => {
+  const handlePrevQuestion = async () => {
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex(activeQuestionIndex - 1)
 
       // Load the previous question if it hasn't been loaded yet
       const prevQuestionId = questions[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
-        dispatch(
-          fetchQuestionById({
-            activityId: activityId,
-            tabId: tabId,
-            quizId: quizId,
-            questionId: prevQuestionId || '',
-          }),
-        )
+        try {
+          dispatch(
+            fetchQuestionById({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: prevQuestionId || '',
+            }),
+          )
+        } catch (error) {}
       }
 
       questionRef.current?.reset()
@@ -133,6 +154,7 @@ const QuizDocument = ({
   }
 
   const handleFinishQuiz = () => {
+    setOpenFinishQuiz(false)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
     const {
       answers,
@@ -174,7 +196,11 @@ const QuizDocument = ({
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
         })
-    } catch (error) {}
+    } catch (error: any) {
+      if (error.response.status === 422) {
+        toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
+      }
+    }
   }
 
   const getTable = async ({
@@ -186,6 +212,7 @@ const QuizDocument = ({
     page_index: number
     page_size: number
   }) => {
+    setLoading(true)
     try {
       const response = await CourseActivityApi.getQuizAttemptsTable(
         id || modalResult?.id || '',
@@ -197,33 +224,41 @@ const QuizDocument = ({
 
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.meta,
-        data:
+        data: (modalResult?.questions?.data || []).concat(
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
             section: e.question.question_topic?.name,
             type: e.question.qType,
-            result: {
-              is_correct: e.is_correct,
-              percent: 0,
-            },
-            time_spent: e.time_spent || 0,
+            is_correct: e.is_correct,
+            time_spent: e.time_spent,
+            question: e.question as any,
           })) || [],
+        ),
       }
       setModalResult((e) => ({
         id: id || e?.id,
         status: true,
         questions: newQuestionResponse,
       }))
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const handleShowQuestionResultDetail = (data: IQuestionResult) => {
+    setShowQuestionResultDetail({ id: data.id, isOpen: true })
+  }
+
   return (
     <div>
-      <PopupFinishQuiz
-        open={openFinishQUiz}
-        setOpen={setOpenFinishQUiz}
-        submitQuiz={handleFinishQuiz}
-      ></PopupFinishQuiz>
+      <ConFirmSubmit
+        open={openFinishQuiz}
+        setOpen={setOpenFinishQuiz}
+        handleSubmit={handleFinishQuiz}
+      ></ConFirmSubmit>
+
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
           <QuizComponent
@@ -231,6 +266,7 @@ const QuizDocument = ({
             activeQuestion={activeQuestion}
             ref={questionRef}
             key={quizComponentKey}
+            document_id={document_id}
           />
         )}
       </div>
@@ -264,7 +300,9 @@ const QuizDocument = ({
           </div>
         </div>
 
-        {(isQuestionConfirmed || (!isQuestionConfirmed && isLastQuestion)) && (
+        {(isQuestionConfirmed ||
+          grading_preference !== 'AFTER_EACH_QUESTION' ||
+          (!isQuestionConfirmed && isLastQuestion)) && (
           <div
             className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
             onClick={
@@ -303,15 +341,31 @@ const QuizDocument = ({
         position="center"
         showFooter={false}
         isFullScreen={true}
-        refClass="h-full md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        showHeader={false}
       >
-        <div className="max-w-[1114px] mx-auto">
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-          />
+        <div>
+          <div
+            className="ml-auto cursor-pointer absolute  right-6 top-4.5"
+            onClick={() => setModalResult(undefined)}
+          >
+            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+          </div>
+          <div className="max-w-[1114px] mx-auto">
+            <QuizResultComponent
+              questionResponse={modalResult?.questions || []}
+              getTable={getTable}
+              onShowDetail={handleShowQuestionResultDetail}
+              loading={loading}
+            />
+          </div>
         </div>
       </SappModal>
+      <ModalExplanationPackage
+        quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
+        open={showQuestionResultDetail?.isOpen || false}
+        setOpen={() => setShowQuestionResultDetail(undefined)}
+      ></ModalExplanationPackage>
     </div>
   )
 }

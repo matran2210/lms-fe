@@ -98,10 +98,10 @@ export const UPLOAD_TYPE: {
   ESSAY: {
     type: 'DOCUMENT',
     icon: DocIcon,
-    accept: '.pdf,.docx,.doc,.xls,.xlsx,.csv,.txt,.ppt,.pptx,.zip',
-    extension: '.pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx, .zip',
+    accept: '.pdf,.docx,.doc,.xls,.xlsx,.csv,.ppt,.pptx,.zip',
+    extension: '.pdf, .docx, .doc, .xls, .xlsx, .csv, .ppt, .pptx, .zip',
     note: [
-      '.pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx, .zip',
+      '.pdf, .docx, .doc, .xls, .xlsx, .csv, .ppt, .pptx, .zip',
       'và dung lượng tối đa mỗi file là 20MB.',
     ],
     acceptFiles: VALID_UPLOAD_FILES,

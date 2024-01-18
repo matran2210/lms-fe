@@ -16,6 +16,7 @@ module.exports = {
       '2xl': '1440px',
       '2xl-min': { min: '1441px' },
       '3xl': '1536px',
+      '3.5xl': '1660px',
       '4xl': '1920px',
     },
     fontSize: {
@@ -62,8 +63,8 @@ module.exports = {
         },
         state: {
           info: '#3964EA',
-          success: '#008000',
-          error: '#D35563',
+          success: '#397839',
+          error: '#B90E0A',
         },
         bw: {
           1: '#404041',
@@ -93,8 +94,8 @@ module.exports = {
         DEFAULT: '#DCDDDD',
         default: '#DCDDDD',
         focus: '#141414',
-        success: '#008000',
-        error: '#D35563',
+        success: '#397839',
+        error: '#B90E0A',
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
         active: '#FFB800',

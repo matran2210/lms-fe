@@ -13,6 +13,7 @@ import {
   HighlightIcon,
   ScratchPadIcon,
   TextSquareIcon,
+  UnHighLightIcon,
   WordIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
@@ -56,6 +57,17 @@ import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadF
 import { RESOURCE_LOCATION } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import dynamic from 'next/dynamic'
+import PopupViewPdf from '@components/base/pdf/popupViewPdf'
+import LimitQuizModal from './limitQuizModal'
+type Window = {
+  userAgreed: any
+}
+declare global {
+  interface Window {
+    userAgreed: any
+  }
+}
 const TestDetail = ({ questions, quizDetail }: any) => {
   const checkType = (
     data: any,
@@ -81,6 +93,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             solution={solution}
           />
         )
@@ -97,6 +110,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             solution={solution}
           />
         )
@@ -112,6 +126,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             corrects={corrects}
             solution={solution}
           />
@@ -126,6 +141,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             done={done}
             corrects={corrects?.corrects}
@@ -141,6 +157,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
@@ -157,6 +174,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             solution={solution}
@@ -171,6 +189,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
@@ -189,10 +208,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             solution={solution}
             name={`${currentTabID}_answer`}
             setValue={setValue}
-            defaultValue={defaultValue}
+            defaultValue={getValues(`${currentTabID}_answer`)}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -200,6 +220,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               setOpenUpload({ status: true, question_id: currentPage })
             }
             handleClearFile={handleClearFile}
+            setOpenPdf={setOpenPdf}
+            handleSaveHighLightRequirement={handleSaveHighLightRequirement}
           />
           // <Luckysheet/>
         )
@@ -240,6 +262,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [showListExhibits, setShowListExhibits] = useState(false)
   const [showListRequirement, setShowLisRequirement] = useState(false)
   const [allowHighLight, setAllowHighLight] = useState(false)
+  const [allowUnHighLight, setAllowUnHighLight] = useState(false)
+
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [quizAttempId, setQuizAttempId] = useState('')
@@ -255,8 +279,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [openLimit, setOpenLimit] = useState(false)
   const [openUpload, setOpenUpload] = useState<any>({})
-
+  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -647,6 +672,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setCurrentPage(nextTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
+      setAllowUnHighLight(false)
       setTabs(savedAnswer)
     } else {
       const newData = tabs.map((item: any) => {
@@ -671,6 +697,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setCurrentPage(nextTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
+      setAllowUnHighLight(false)
       setTabs(savedAnswer)
     }
     setLoading(false)
@@ -804,6 +831,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setCurrentPage(currentTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
+      setAllowUnHighLight(false)
       setTabs(savedAnswer)
     } else {
       ref.current?.handleReset()
@@ -812,6 +840,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setCurrentPage(currentTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
+      setAllowUnHighLight(false)
       setTabs(savedAnswer)
     }
     setLoading(false)
@@ -973,7 +1002,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           answers.push({
             question_id: e.id,
             answer,
-            time_spent: Math.ceil(e.timeSpent),
+            time_spent: Math.ceil(e.timeSpent / 1000),
           })
         }
       }
@@ -1010,9 +1039,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     })
     if (res) {
       if (type === 'entrance') {
-        router.push(`/entrance-test/test-result/${res?.data?.id}`)
+        router.replace(`/entrance-test/test-result/${res?.data?.id}`)
       } else {
-        router.push(`/courses/test/test-result/${res?.data?.id}`)
+        router.replace(`/courses/test/test-result/${res?.data?.id}`)
       }
     }
 
@@ -1097,17 +1126,36 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return newData
     })
   }
+  const handleSaveHighLightRequirement = (e: any) => {
+    setTabs((prev: any) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          // setCurrentTabContent({ ...item, hightlightTopic: e })
+          item.data.requirements[essayData.index] = {
+            ...item.data.requirements[essayData.index],
+            highlighted: e,
+          }
+          return { ...item }
+        }
+        return item
+      })
+      return newData
+    })
+  }
   useEffect(() => {
     if (currentTabContent?.data?.requirements) {
       setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })
     }
-    if (currentTabContent?.hightlightTopic) {
-      DeserializeHighlight(
-        currentTabContent?.hightlightTopic,
-        'hightlight_area_topic',
-      )
-    }
-  }, [currentTabContent])
+  }, [currentTabContent?.id])
+  // useEffect(()=>{
+  //   // if (currentTabContent?.hightlightTopic) {
+
+  //     DeserializeHighlight(
+  //       currentTabContent?.hightlightTopic,
+  //       'hightlight_area_topic',
+  //     )
+  //   // }
+  // },[currentTabContent?.id])
   useEffect(() => {
     async function fetchTabs() {
       if (questions?.length > 0) {
@@ -1176,10 +1224,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   }, [watch('exhibits')])
   useEffect(() => {
     async function createQuizAttempt() {
-      const res = await CourseTestApi.createQuizAttempt(
-        router.query.id as string,
-      )
-      setQuizAttempId(res.data.id)
+      try {
+        const res = await CourseTestApi.createQuizAttempt(
+          router.query.id as string,
+          router.query.class_user_id as string,
+        )
+        setQuizAttempId(res.data.id)
+      } catch (err: any) {
+        if (err.response.data.error.code === '400|060710') {
+          setOpenLimit(true)
+        }
+      }
     }
     if (router.query.id) {
       createQuizAttempt()
@@ -1192,7 +1247,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setRemainTime((prev) => {
           if (prev === 1) {
             clearInterval(interval)
-            setOpenTimeOut(true)
+            if (!openLimit) {
+              setOpenTimeOut(true)
+            }
             // handleSubmitQuestion()
           }
           return prev - 1
@@ -1205,21 +1262,35 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         clearInterval(interval)
       }
     }
-  }, [quizDetail])
-  // useEffect(() => {
-  //   const handleBeforeUnload = async (event: any) => {
-  //     event.preventDefault()
-  //     await handleSubmitQuestion()
-  //   }
+  }, [quizDetail, openLimit])
+  // useEffect(()=>{
+  //   window.addEventListener("beforeunload", function (event) {
+  //     // Hiển thị hộp thoại cảnh báo có nút OK
+  //     var result = confirm("Bạn có chắc chắn muốn rời khỏi trang này không?");
+  //     // Nếu người dùng nhấn OK
+  //     if (result) {
+  //       // Đặt một cờ để biết người dùng đã đồng ý
+  //       window.userAgreed = true;
+  //       // Trả về một chuỗi cảnh báo
+  //       event.returnValue = "Bạn có chắc chắn muốn rời khỏi trang này không?";
+  //     }
+  //     // Nếu người dùng nhấn Cancel
+  //     else {
+  //       // Hủy bỏ sự kiện
+  //       event.preventDefault();
+  //     }
+  //   });
 
-  //   // Thêm lắng nghe sự kiện beforeunload
-  //   window.addEventListener('beforeunload', handleBeforeUnload)
+  //   // Đăng ký hàm xử lý sự kiện unload
+  //   window.addEventListener("unload", function (event) {
+  //     // Nếu người dùng đã đồng ý rời khỏi trang
+  //     if (window.userAgreed) {
+  //       // Tải lại trang hoặc quay lại trang trước đó
+  //       window.location.reload || window.history.back();
+  //     }
+  //   });
+  // },[])
 
-  //   // Cleanup khi component bị unmount
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload)
-  //   }
-  // }, [currentTabContent, quizAttempId])
   // useEffect(() => {
   //   router.beforePopState(({ as }) => {
   //     if (as !== router.asPath) {
@@ -1242,7 +1313,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
-      {loading && (
+      {loading && tabs?.length !== 0 && filteredTabs.length !== 0 && (
         <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
           Loading
         </div>
@@ -1282,21 +1353,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           ></ButtonCancelSubmit>
         </div>
         {/* End Header */}
-        <div className="px-6 bg-gray-4 shadow-solution py-4 absolute w-full">
-          <TabSlide
-            data={filteredTabs}
-            currentTab={currentPage}
-            setCurrentTab={setCurrentPage}
-            optionShowAll={<OptionShowAll />}
-            handleChangeTab={(e: any) => {
-              handleChangeTab(e)
-            }}
-            activeShowAll={activeShowAll}
-            setActiveShowAll={setActiveShowAll}
-            setValueFilter={setValueFilter}
-          />
-          {/* </div> */}
-        </div>
+        {tabs?.length > 0 && (
+          <div className="px-6 bg-gray-4 shadow-solution py-4 absolute w-full">
+            <TabSlide
+              data={filteredTabs}
+              currentTab={currentPage}
+              setCurrentTab={setCurrentPage}
+              optionShowAll={<OptionShowAll />}
+              handleChangeTab={(e: any) => {
+                handleChangeTab(e)
+              }}
+              activeShowAll={activeShowAll}
+              setActiveShowAll={setActiveShowAll}
+              setValueFilter={setValueFilter}
+            />
+            {/* </div> */}
+          </div>
+        )}
       </div>
       {/* <div className=''> */}
       {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
@@ -1313,11 +1386,20 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 e.target.firstChild?.tagName !== 'math'
               ) {
                 if (e) {
-                  runHighlight(
-                    handleSaveHighLightTopic,
-                    allowHighLight || false,
-                    'hightlight_area_topic',
-                  )
+                  if (allowHighLight) {
+                    runHighlight(
+                      handleSaveHighLightTopic,
+                      allowHighLight || false,
+                      'hightlight_area_topic',
+                    )
+                  } else if (allowUnHighLight) {
+                    runHighlight(
+                      handleSaveHighLightTopic,
+                      allowUnHighLight || false,
+                      'hightlight_area_topic',
+                      { color: 'white' },
+                    )
+                  }
                 }
               }
             }}
@@ -1326,11 +1408,29 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               {currentTabContent?.topicDescription?.name}
             </div>
             <EditorReader
-              className="editor-wrap"
+              className="mb-4"
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
+              highlighted={currentTabContent?.hightlightTopic}
+              highlighArea="hightlight_area_topic"
             />
+            {currentTabContent?.topicDescription?.files?.length > 0 &&
+              currentTabContent?.topicDescription?.files?.map(
+                (e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline"
+                      onClick={() =>
+                        setOpenPdf({ status: true, url: e.resource.url })
+                      }
+                      key={index}
+                    >
+                      {e.resource.name}
+                    </div>
+                  )
+                },
+              )}
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
             <div className="px-6">
@@ -1360,11 +1460,20 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 e.target.firstChild?.tagName !== 'math'
               ) {
                 if (e) {
-                  runHighlight(
-                    handleSaveHighLightTopic,
-                    allowHighLight || false,
-                    'hightlight_area_topic',
-                  )
+                  if (allowHighLight) {
+                    runHighlight(
+                      handleSaveHighLightTopic,
+                      allowHighLight || false,
+                      'hightlight_area_topic',
+                    )
+                  } else if (allowUnHighLight) {
+                    runHighlight(
+                      handleSaveHighLightTopic,
+                      allowUnHighLight || false,
+                      'hightlight_area_topic',
+                      { color: 'white' },
+                    )
+                  }
                 }
               }
             }}
@@ -1374,11 +1483,29 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               {currentTabContent?.topicDescription?.name}
             </div>
             <EditorReader
-              className=""
+              className="mb-4"
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
+              highlighted={currentTabContent?.hightlightTopic}
+              highlighArea="hightlight_area_topic"
             />
+            {currentTabContent?.topicDescription?.files?.length > 0 &&
+              currentTabContent?.topicDescription?.files?.map(
+                (e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline"
+                      onClick={() =>
+                        setOpenPdf({ status: true, url: e.resource.url })
+                      }
+                      key={index}
+                    >
+                      {e.resource.name}
+                    </div>
+                  )
+                },
+              )}
           </div>
 
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
@@ -1410,8 +1537,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
                 onFocusingPad === e.id
-                  ? openScratchPad.length + 100
-                  : index + 100
+                  ? openScratchPad.length + 1400
+                  : index + 1400
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1440,8 +1567,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
                 onFocusingPad === e.id
-                  ? openScratchPad.length + 100
-                  : index + 100
+                  ? openScratchPad.length + 1400
+                  : index + 1400
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1480,8 +1607,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               onClick={() => setOnFocusingPad(e.id)}
               zIndex={
                 onFocusingPad === e.id
-                  ? openScratchPad.length + 100
-                  : index + 100
+                  ? openScratchPad.length + 1400
+                  : index + 1400
               }
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1496,17 +1623,26 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     <CloseIcon />
                   </button>
                 </div>
-                {/* <div className='flex flex-'> */}
-                {/* <div
-                  className="bg-white h-[calc(100%-40px)] w-full overflow-auto"
-                  id={'preview-question'}
-                  dangerouslySetInnerHTML={{ __html: exhibitsDes?.description }}
-                ></div>{' '} */}
-                {/* </div> */}
-                <EditorReader
-                  text_editor_content={exhibitsDes?.description}
-                  className="bg-white h-[calc(100%-40px)] w-full overflow-auto p-5"
-                />
+                <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                  <EditorReader
+                    text_editor_content={exhibitsDes?.description}
+                    className=" w-full "
+                  />
+                  {exhibitsDes?.files?.length > 0 &&
+                    exhibitsDes?.files.map((e: any, index: number) => {
+                      return (
+                        <div
+                          key={index}
+                          className="cursor-pointer text-state-info hover:underline"
+                          onClick={() =>
+                            setOpenPdf({ status: true, url: e.resource.url })
+                          }
+                        >
+                          {e.resource.name}
+                        </div>
+                      )
+                    })}
+                </div>
               </div>
             </MovableWindow>
           )
@@ -1516,27 +1652,47 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px] z-10">
         <div className="flex items-center h-full">
           <button className="h-full">
-            <div className="flex items-center gap-3 ps-6 ">
+            <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
               <HelpIcon />
-              <div className="font-normal text-sm pe-6 border-r">Help</div>
+              <div className="hidden font-normal text-sm 3xl:inline-block">
+                Help
+              </div>
             </div>
           </button>
           <button
             className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
-            onClick={() => setAllowHighLight(!allowHighLight)}
+            onClick={() => {
+              setAllowHighLight(!allowHighLight)
+              setAllowUnHighLight(false)
+            }}
           >
-            <div className="flex items-center gap-3 ps-6 ">
+            <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
               <HighlightIcon />
-              <div className="font-normal text-sm pe-6 border-r">Highlight</div>
+              <div className="hidden font-normal text-sm 3xl:inline-block">
+                Highlight
+              </div>
+            </div>
+          </button>
+          <button
+            className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+            onClick={() => {
+              setAllowUnHighLight(!allowUnHighLight), setAllowHighLight(false)
+            }}
+          >
+            <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
+              <UnHighLightIcon />
+              <div className="hidden font-normal text-sm 3xl:inline-block">
+                UnHighLight
+              </div>
             </div>
           </button>
           <button
             className="h-full"
             onClick={() => handleOpenScratchPad('scratch_pad')}
           >
-            <div className="flex items-center gap-3 ps-6 ">
+            <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l">
               <ScratchPadIcon />
-              <div className="font-normal text-sm pe-6 border-r">
+              <div className="hidden font-normal text-sm 3xl:inline-block">
                 Scratch Pad
               </div>
             </div>
@@ -1546,9 +1702,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             onClick={() => handleOpenScratchPad('calculator')}
             disabled={checkCalExist > -1}
           >
-            <div className="flex items-center gap-3 ps-6 ">
+            <div className="flex items-center gap-3 px-4 3xl:px-6 border-l">
               <CalculatorIcon />
-              <div className="font-normal text-sm pe-6 border-r">
+              <div className="hidden font-normal text-sm 3xl:inline-block">
                 Calculator
               </div>
             </div>
@@ -1556,19 +1712,25 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
             <button className="h-full relative" ref={dropUpRef}>
               <div
-                className="flex items-center gap-3 ps-6 "
+                className="flex items-center gap-3 px-4 3xl:px-6 border-l"
                 onClick={() => {
                   setShowListExhibits(!showListExhibits)
                 }}
               >
                 <ExhibitsIcon />
-                <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
-                  {`Exhibits (${currentTabContent?.data?.exhibits?.length})`}
+                <div className="font-normal flex text-sm items-center gap-3">
+                  <div>
+                    <span className="hidden 3xl:inline-block 3xl:me-1">
+                      Exhibits
+                    </span>
+                    <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span>
+                  </div>
+                  {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
                   <ArrowUpIcon />
                 </div>
               </div>
               {showListExhibits && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits p-4 justify-center z-[1400]">
+                <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
                   <HookFormCheckBoxGroup
                     control={controlExhibits}
                     name="exhibits"
@@ -1578,6 +1740,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     // gap="0"
                     widthOptions="w-full"
                     seprateLine={true} // classNameTitle='text-gray-2'
+                    maxWidthContent
                   />
                 </div>
               )}
@@ -1586,26 +1749,31 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
             <button className="h-full relative" ref={dropUpRequire}>
               <div
-                className="flex items-center gap-3 ps-6 "
+                className="flex items-center gap-3 px-4 3xl:px-6 border-l"
                 onClick={() => {
                   setShowLisRequirement(!showListRequirement)
                 }}
               >
                 <TextSquareIcon />
-                <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
-                  {`Requirement (${currentTabContent?.data?.requirements?.length})`}
+                <div className="font-normal flex text-sm items-center gap-3">
+                  <div>
+                    <span className="hidden 3xl:inline-block 3xl:me-1">
+                      Requirement
+                    </span>
+                    <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
+                  </div>
                   <ArrowUpIcon />
                 </div>
               </div>
               {showListRequirement && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits justify-center sapp-separateLine">
+                <div className="bg-gray-3 absolute h-fit max-w-max bottom-full shadow-questions-exhibits justify-center sapp-separateLine">
                   {currentTabContent?.data?.requirements?.map(
                     (e: any, index: number) => {
                       return (
                         <button
                           key={e.id}
                           className={`p-3 ${
-                            essayData.req !== e && 'text-gray-2'
+                            essayData.index !== index && 'text-gray-1'
                           }`}
                           onClick={() => {
                             setEssayData({ req: e, index: index })
@@ -1624,7 +1792,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
             !currentTabContent.done && (
               <div className="flex gap-1">
-                <div>Choose response option:</div>
+                <div className="hidden 3.5xl:block">
+                  Choose response option:
+                </div>
                 <button
                   onClick={() => {
                     // handleChangeTypeEssay(0)
@@ -1678,36 +1848,43 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               </div>
             )}
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+            className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 3xl:w-[150px]"
             onClick={() => handleFlagQuestion(currentPage)}
           >
             <FlagIcon />
-            <div className="font-normal text-sm">Flag to Review</div>
+            <div className="font-medium text-medium-sm hidden 3xl:block">
+              Flag to Review
+            </div>
           </button>
-          {!currentTabContent?.done && (
-            <button
-              className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
-              onClick={() => handleClearSelection(currentTabContent)}
-            >
-              <div className="font-normal text-sm">Clear Selection</div>
-            </button>
-          )}
+          {/* {!currentTabContent?.done && ( */}
+          <button
+            disabled={currentTabContent?.done}
+            className={`flex items-center gap-3 border border-solid ${
+              !currentTabContent?.done
+                ? 'border-gray-1 text-bw-1'
+                : 'border-default text-gray-2'
+            } justify-center p-1 w-[150px] py-2`}
+            onClick={() => handleClearSelection(currentTabContent)}
+          >
+            <div className="font-medium text-medium-sm">Clear Selection</div>
+          </button>
+          {/* )} */}
           {quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2"
                 onClick={async () => {
                   const data = await getResult(currentTabContent)
                   confirmAnswer(data.corrects, data.solution, currentTabContent)
                 }}
               >
-                <div className="font-normal text-sm">Confirm Answer</div>
+                <div className="font-medium text-medium-sm">Confirm Answer</div>
               </button>
             ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
               filteredTabs.length - 1 ? (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2"
                 onClick={() => {
                   const index = filteredTabs.findIndex(
                     (e: any) => e.id === currentPage,
@@ -1715,23 +1892,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   handleConfirmAndNext(currentPage, filteredTabs[index + 1].id)
                 }}
               >
-                <div className="font-normal text-sm">Confirm & Next</div>
+                <div className="font-medium text-medium-sm">Confirm & Next</div>
               </button>
             ) : (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] "
                 onClick={() => {
                   handleConfirmEssay()
                 }}
               >
-                <div className="font-normal text-sm">Confirm</div>
+                <div className="font-medium text-medium-sm">Confirm</div>
               </button>
             )
           ) : (
             filteredTabs.findIndex((e: any) => e.id === currentPage) <
               filteredTabs.length - 1 && (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px]"
                 onClick={() => {
                   const index = filteredTabs.findIndex(
                     (e: any) => e.id === currentPage,
@@ -1739,7 +1916,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   handleChangeTab(filteredTabs[index + 1].id)
                 }}
               >
-                <div className="font-normal text-sm">Next Question</div>
+                <div className="font-medium text-medium-sm">Next Question</div>
               </button>
             )
           )}
@@ -1756,6 +1933,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setOpen={setOpenQuit}
         handleQuit={() => router.back()}
       />
+      <LimitQuizModal
+        open={openLimit}
+        setOpen={setOpenLimit}
+        handleQuit={() => router.back()}
+      />
       <ConFirmSubmit
         open={openSubmit}
         setOpen={setOpenSubmit}
@@ -1770,6 +1952,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         fileType={'ESSAY'}
         location={`question-answer/${openUpload.question_id}`}
         setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
+      />
+      <PopupViewPdf
+        open={openPdf?.status || false}
+        setOpen={setOpenPdf}
+        url={openPdf?.url || ''}
       />
     </div>
   )

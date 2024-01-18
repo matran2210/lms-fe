@@ -9,8 +9,9 @@ import React, {
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { IButtonColors } from 'src/type'
-import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+
 import { CloseIcon } from '@assets/icons'
+import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 
 interface IProps {
   open?: boolean
@@ -60,8 +61,6 @@ interface IProps {
   scrollbale?: boolean
   footerClassName?: string
   externalLoading?: boolean
-
-  revertFunction?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -81,7 +80,7 @@ interface IProps {
  * @param confirmOnclose: boolean - biến xác định modal có yêu cầu xác nhận khi đóng hay không
  * @param width: number - biến xác định modal width
  */
-const SappModal: React.FC<IProps> = ({
+const SappModalCerti: React.FC<IProps> = ({
   open,
   children,
   cancelButtonCaption = 'Cancel',
@@ -123,11 +122,10 @@ const SappModal: React.FC<IProps> = ({
   closeAfterSubmit = true,
   showOkButton = true,
   showCancelButton = true,
-  zIndex = 'z-[1500]',
+  zIndex = 'z-[1000]',
   scrollbale = true,
   footerClassName,
   externalLoading,
-  revertFunction = false,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -271,7 +269,7 @@ const SappModal: React.FC<IProps> = ({
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
-              } animate-fade-in-overlay  inset-0 bg-black opacity-80 transition-opacity ${overlayClass}`}
+              } animate-fade-in-overlay  inset-0 bg-black opacity-20 transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${
@@ -281,8 +279,8 @@ const SappModal: React.FC<IProps> = ({
               <div
                 ref={confirmDialogRef}
                 className={`w-fit max-h-full max-w-full 
-                ${isContentFull ? 'w-full' : 'w-fit'}
-                ${refClass}`}
+                  ${isContentFull ? 'w-full' : 'w-fit'}
+                  ${refClass}`}
               >
                 {showHeader &&
                   (customHeader || (
@@ -322,7 +320,6 @@ const SappModal: React.FC<IProps> = ({
                     )}
                     {customFooter || (
                       <ButtonCancelSubmit
-                        revertFunction={revertFunction}
                         className={footerButtonClassName}
                         color={color}
                         colorCancel={colorCancel}
@@ -364,4 +361,4 @@ const SappModal: React.FC<IProps> = ({
   )
 }
 
-export default SappModal
+export default SappModalCerti

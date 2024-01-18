@@ -1,4 +1,4 @@
-import { percentConversion, roundNumber } from '@utils/helpers'
+import { roundNumber } from '@utils/helpers'
 
 interface DataItem {
   question_topic_id: string
@@ -13,7 +13,7 @@ interface IProps {
 
 const ChartACCAScore = ({ data }: IProps) => {
   return (
-    <div className="block bg-white mb-6 py-6 pr-5 pl-6 xl:pl-24 shadow-sidebar">
+    <div className="block bg-white mb-6 py-6 pr-5 pl-6 xl:pl-24 shadow-sidebar max-w-[1144px]">
       <div className="text-xl font-medium text-bw-1 mb-5">
         Your Score by Topic
       </div>
@@ -22,14 +22,14 @@ const ChartACCAScore = ({ data }: IProps) => {
           {data?.map((item: any) => (
             <div
               key={item?.id}
-              className="flex flex-col w-1/3 max-w-78 justify-between shrink-0 items-start gap-1"
+              className="flex flex-col w-1/3 max-w-78 justify-end shrink-0 items-start gap-1"
             >
               <div className="text-bw-1 font-medium">{item?.title}</div>
               <div className="h-2 bg-gray-3 w-full relative">
                 <div
                   className="absolute left-0 top-0 h-2 bg-primary"
                   style={{
-                    width: `${percentConversion(
+                    width: `${roundNumber(
                       (item?.total_correct_answers / item?.total_questions) *
                         100,
                     )}%`,
@@ -37,7 +37,7 @@ const ChartACCAScore = ({ data }: IProps) => {
                 ></div>
               </div>
               <div className="text-base text-bw-1 font-normal flex items-center justify-between w-full">
-                {`${percentConversion(
+                {`${roundNumber(
                   (item?.total_correct_answers / item?.total_questions) * 100,
                 )}%`}
                 <div className="flex items-center pl-1 text-gray-1">

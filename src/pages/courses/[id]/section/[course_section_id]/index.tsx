@@ -11,6 +11,8 @@ import { useRouter } from 'next/router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
+import TestModal from 'src/pages/courses/test'
+import { PageLink } from 'src/constants'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -19,6 +21,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [learningOutcome, setLearningOutcome] = useState<ILearningOutcome>()
   const router = useRouter()
   const [readMore, setReadMore] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false)
+  const [chapterData, setChapterData] = useState<any>({})
+  const [chapterTestId, setChapterTestId] = useState<string>()
+  const [defaultActive, setDefaultActive] = useState<string>()
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
@@ -68,26 +74,56 @@ const CoursePartDetail = ({ previewPart }: any) => {
       },
     })
   }
-  const handleRouterCaseStudy = (quizId: string, topicId: string) => {
+  const handleRouterCaseStudy = async (
+    quizId: string,
+    topicId: string,
+    sectionId?: string | undefined,
+    caseStudyId?: string | undefined,
+  ) => {
+    if (sectionId && caseStudyId) {
+      await handleCaseStudyProcess(sectionId, caseStudyId)
+    }
     router.push({
       pathname: `/case-study/${topicId}`,
-      query: { quiz_id: quizId },
+      query: { quiz_id: quizId, class_user_id: previewPart.class_user_id },
     })
   }
 
   const handleRouterChapter = (id: string) => {
-    router.push(`/test/${id}`)
+    const partData = partDetail?.children?.filter(
+      (item: any) => item?.id === id,
+    )
+    const filteredData = chapterDetail?.children?.filter(
+      (item: any) => item?.quiz?.id === id,
+    )
+    if (partData?.length > 0) {
+      setChapterData(partData?.[0])
+      setChapterTestId(partData?.[0]?.id)
+    } else {
+      setChapterData(filteredData?.[0])
+      setChapterTestId(filteredData?.[0]?.id)
+    }
+    setOpen(true)
   }
 
   const course_section = chapterDetail?.children?.[0]
   const quiz = course_section?.quiz
 
   const handleNextLesson = () => {
-    course_section?.course_section_type === 'ACTIVITY'
-      ? handleRouterActivity(course_section?.children?.[0]?.id)
-      : course_section?.course_section_type === 'STORY'
-        ? handleRouterCaseStudy(quiz?.id, quiz?.case_study_story?.id)
-        : () => {}
+    if (course_section?.course_section_type === 'CHAPTER_TEST') {
+      handleRouterChapter(course_section?.quiz?.id)
+    } else {
+      course_section?.course_section_type === 'ACTIVITY'
+        ? handleRouterActivity(course_section?.children?.[0]?.id)
+        : course_section?.course_section_type === 'STORY'
+          ? handleRouterCaseStudy(
+              quiz?.id,
+              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+              course_section?.id,
+              quiz?.case_study_story?.instances?.[0]?.id,
+            )
+          : () => {}
+    }
   }
 
   const handleLearningOutCome = async (
@@ -103,9 +139,29 @@ const CoursePartDetail = ({ previewPart }: any) => {
     }
   }
 
+  const handleChapterTest = async () => {
+    await CourseAPI.learningOutcomeProgress(router.query.id, chapterTestId)
+  }
+
+  const handleCaseStudyProcess = async (
+    courseId: string,
+    caseStudyId: string,
+  ) => {
+    const res = await CourseAPI.caseStudyProgress(
+      router.query.id,
+      courseId,
+      caseStudyId,
+    )
+  }
+
+  useEffect(() => {
+    router.query.unit_id &&
+      setDefaultActive(String(router?.query?.unit_id) || '')
+  }, [router?.asPath])
+
   return (
-    <div className="main max-w-xxl my-0 mx-auto">
-      <div className="main max-w-xxl my-0 mx-auto">
+    <div className="main max-w-xxl my-0 mx-auto default-content-editor">
+      <div className="w-full">
         <div className="flex pt-6 pb-1 items-center">
           <p
             onClick={() => router.push('/courses')}
@@ -140,6 +196,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         handleRouterChapter={handleRouterChapter}
         readMore={readMore}
         setReadMore={setReadMore}
+        defaultActive={defaultActive ? defaultActive : ''}
       />
 
       <SappDrawer
@@ -149,6 +206,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         message="Bạn có chắc chắn muốn hủy không?"
         widthDrawer="w-6/12"
         handleSubmit={handleNextLesson}
+        confirmOnClose={false}
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
@@ -169,6 +227,13 @@ const CoursePartDetail = ({ previewPart }: any) => {
           </div>
         ))}
       </SappDrawer>
+      <TestModal
+        open={open}
+        setOpen={setOpen}
+        data={chapterData}
+        class_user_id={previewPart.class_user_id}
+        activeCourse={handleChapterTest}
+      />
     </div>
   )
 }
@@ -189,7 +254,6 @@ export async function getServerSideProps(context: any) {
         },
       },
     )
-
     // Xử lý dữ liệu từ API
     const nodeList = apiResponse?.data?.data
     // const tree = TreeHelper.convertFromArray(nodeList)
@@ -255,7 +319,7 @@ export async function getServerSideProps(context: any) {
         // Chuyển hướng đến trang đăng nhập
         return {
           redirect: {
-            destination: '/',
+            destination: PageLink.AUTH_LOGIN,
             permanent: false,
           },
         }
