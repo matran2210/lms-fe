@@ -1332,11 +1332,27 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               {currentTabContent?.topicDescription?.name}
             </div>
             <EditorReader
-              className="editor-wrap"
+              className="mb-4"
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
             />
+            {currentTabContent?.topicDescription?.files?.length > 0 &&
+              currentTabContent?.topicDescription?.files?.map(
+                (e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline"
+                      onClick={() =>
+                        setOpenPdf({ status: true, url: e.resource.url })
+                      }
+                      key={index}
+                    >
+                      {e.resource.name}
+                    </div>
+                  )
+                },
+              )}
           </div>
           <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
             <div className="px-6">
@@ -1380,11 +1396,27 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               {currentTabContent?.topicDescription?.name}
             </div>
             <EditorReader
-              className=""
+              className="mb-4"
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
             />
+            {currentTabContent?.topicDescription?.files?.length > 0 &&
+              currentTabContent?.topicDescription?.files?.map(
+                (e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline"
+                      onClick={() =>
+                        setOpenPdf({ status: true, url: e.resource.url })
+                      }
+                      key={index}
+                    >
+                      {e.resource.name}
+                    </div>
+                  )
+                },
+              )}
           </div>
 
           {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
@@ -1531,27 +1563,31 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px] z-10">
         <div className="flex items-center h-full">
           <button className="h-full">
-            <div className="flex items-center gap-3 ps-6 ">
+            <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
               <HelpIcon />
-              <div className="font-normal text-sm pe-6 border-r">Help</div>
+              <div className="hidden font-normal text-sm 3xl:inline-block">
+                Help
+              </div>
             </div>
           </button>
           <button
             className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
             onClick={() => setAllowHighLight(!allowHighLight)}
           >
-            <div className="flex items-center gap-3 ps-6 ">
+            <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
               <HighlightIcon />
-              <div className="font-normal text-sm pe-6 border-r">Highlight</div>
+              <div className="hidden font-normal text-sm 3xl:inline-block">
+                Highlight
+              </div>
             </div>
           </button>
           <button
             className="h-full"
             onClick={() => handleOpenScratchPad('scratch_pad')}
           >
-            <div className="flex items-center gap-3 ps-6 ">
+            <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l">
               <ScratchPadIcon />
-              <div className="font-normal text-sm pe-6 border-r">
+              <div className="hidden font-normal text-sm 3xl:inline-block">
                 Scratch Pad
               </div>
             </div>
@@ -1561,9 +1597,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             onClick={() => handleOpenScratchPad('calculator')}
             disabled={checkCalExist > -1}
           >
-            <div className="flex items-center gap-3 ps-6 ">
+            <div className="flex items-center gap-3 px-4 3xl:px-6 border-l">
               <CalculatorIcon />
-              <div className="font-normal text-sm pe-6 border-r">
+              <div className="hidden font-normal text-sm 3xl:inline-block">
                 Calculator
               </div>
             </div>
@@ -1571,19 +1607,25 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
             <button className="h-full relative" ref={dropUpRef}>
               <div
-                className="flex items-center gap-3 ps-6 "
+                className="flex items-center gap-3 px-4 3xl:px-6 border-l"
                 onClick={() => {
                   setShowListExhibits(!showListExhibits)
                 }}
               >
                 <ExhibitsIcon />
-                <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
-                  {`Exhibits (${currentTabContent?.data?.exhibits?.length})`}
+                <div className="font-normal flex text-sm items-center gap-3">
+                  <div>
+                    <span className="hidden 3xl:inline-block 3xl:me-1">
+                      Exhibits
+                    </span>
+                    <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span>
+                  </div>
+                  {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
                   <ArrowUpIcon />
                 </div>
               </div>
               {showListExhibits && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits p-4 justify-center z-[1400]">
+                <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
                   <HookFormCheckBoxGroup
                     control={controlExhibits}
                     name="exhibits"
@@ -1593,6 +1635,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     // gap="0"
                     widthOptions="w-full"
                     seprateLine={true} // classNameTitle='text-gray-2'
+                    maxWidthContent
                   />
                 </div>
               )}
@@ -1601,19 +1644,24 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
             <button className="h-full relative" ref={dropUpRequire}>
               <div
-                className="flex items-center gap-3 ps-6 "
+                className="flex items-center gap-3 px-4 3xl:px-6 border-l"
                 onClick={() => {
                   setShowLisRequirement(!showListRequirement)
                 }}
               >
                 <TextSquareIcon />
-                <div className="font-normal flex text-sm pe-6 border-r items-center gap-3">
-                  {`Requirement (${currentTabContent?.data?.requirements?.length})`}
+                <div className="font-normal flex text-sm items-center gap-3">
+                  <div>
+                    <span className="hidden 3xl:inline-block 3xl:me-1">
+                      Requirement
+                    </span>
+                    <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
+                  </div>
                   <ArrowUpIcon />
                 </div>
               </div>
               {showListRequirement && (
-                <div className="bg-gray-3 absolute h-fit w-full bottom-full max-h-40 shadow-questions-exhibits justify-center sapp-separateLine">
+                <div className="bg-gray-3 absolute h-fit max-w-max bottom-full shadow-questions-exhibits justify-center sapp-separateLine">
                   {currentTabContent?.data?.requirements?.map(
                     (e: any, index: number) => {
                       return (
@@ -1639,7 +1687,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
             !currentTabContent.done && (
               <div className="flex gap-1">
-                <div>Choose response option:</div>
+                <div className="hidden 3.5xl:block">
+                  Choose response option:
+                </div>
                 <button
                   onClick={() => {
                     // handleChangeTypeEssay(0)
@@ -1693,11 +1743,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               </div>
             )}
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px] py-2"
+            className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 3xl:w-[150px]"
             onClick={() => handleFlagQuestion(currentPage)}
           >
             <FlagIcon />
-            <div className="font-medium text-medium-sm">Flag to Review</div>
+            <div className="font-medium text-medium-sm hidden 3xl:block">
+              Flag to Review
+            </div>
           </button>
           {/* {!currentTabContent?.done && ( */}
           <button
@@ -1716,7 +1768,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px] py-2"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2"
                 onClick={async () => {
                   const data = await getResult(currentTabContent)
                   confirmAnswer(data.corrects, data.solution, currentTabContent)
@@ -1727,7 +1779,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
               filteredTabs.length - 1 ? (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px] py-2"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2"
                 onClick={() => {
                   const index = filteredTabs.findIndex(
                     (e: any) => e.id === currentPage,
@@ -1735,23 +1787,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   handleConfirmAndNext(currentPage, filteredTabs[index + 1].id)
                 }}
               >
-                <div className="font-normal text-sm">Confirm & Next</div>
+                <div className="font-medium text-medium-sm">Confirm & Next</div>
               </button>
             ) : (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] "
                 onClick={() => {
                   handleConfirmEssay()
                 }}
               >
-                <div className="font-normal text-sm">Confirm</div>
+                <div className="font-medium text-medium-sm">Confirm</div>
               </button>
             )
           ) : (
             filteredTabs.findIndex((e: any) => e.id === currentPage) <
               filteredTabs.length - 1 && (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center p-1 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px]"
                 onClick={() => {
                   const index = filteredTabs.findIndex(
                     (e: any) => e.id === currentPage,
@@ -1759,7 +1811,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   handleChangeTab(filteredTabs[index + 1].id)
                 }}
               >
-                <div className="font-normal text-sm">Next Question</div>
+                <div className="font-medium text-medium-sm">Next Question</div>
               </button>
             )
           )}
