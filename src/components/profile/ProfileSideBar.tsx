@@ -100,8 +100,13 @@ const ProfileSideBar = ({ page }: IProps) => {
   }
 
   const [isExpanded, toggleExpanded] = useState(false)
+
   const onClick = () => {
-    toggleExpanded((prev) => !prev)
+    toggleExpanded((prev) => !prev) // Sử dụng callback để đảm bảo sử dụng giá trị mới nhất
+  }
+
+  const onClickExpand = () => {
+    toggleExpanded((prev) => !prev) // Sử dụng callback để đảm bảo sử dụng giá trị mới nhất
   }
 
   return (
@@ -137,6 +142,10 @@ const ProfileSideBar = ({ page }: IProps) => {
                     ? 'bg-secondary font-bold text-primary'
                     : ''
                 }`}
+                style={{
+                  position: 'relative', // Đặt position là relative
+                  zIndex: 2, // Thiết lập z-index của thẻ a
+                }}
                 onClick={() => {
                   if (urlPage !== 'security') {
                     // If not 'security', use existing logic
@@ -146,7 +155,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                     // If 'security' and not a child, set only 'security' to active
                     setChildActivationStates({ security: true })
                   } else if (urlPage === 'security') {
-                    onClick()
+                    onClickExpand()
                     setChildActivationStates({ security: true })
                   }
                 }}
@@ -156,7 +165,6 @@ const ProfileSideBar = ({ page }: IProps) => {
                   <div className="mt-2">
                     <ExpandIcon
                       isExpanded={isExpanded}
-                      handleClick={onClick}
                       type={'ontoggle'}
                       className={''}
                     />
