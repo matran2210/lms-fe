@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 import TestModal from 'src/pages/courses/test'
+import { PageLink } from 'src/constants'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -312,7 +313,7 @@ export async function getServerSideProps(context: any) {
         // Chuyển hướng đến trang đăng nhập
         return {
           redirect: {
-            destination: '/',
+            destination: PageLink.AUTH_LOGIN,
             permanent: false,
           },
         }

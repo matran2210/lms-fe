@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react'
 import CourseAPI from 'src/pages/api/courses'
 import { apiURL } from 'src/redux/services/httpService'
 import { ICourseDetailAll, ICourseSection } from 'src/type/courses'
+import { PageLink } from 'src/constants'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -174,7 +175,7 @@ export async function getServerSideProps(context: any) {
         removeJwtToken()
         return {
           redirect: {
-            destination: '/',
+            destination: PageLink.AUTH_LOGIN,
             permanent: false,
           },
         }
