@@ -389,12 +389,14 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map(
-                        (e: { question_id: string; answer_id: string }) => ({
-                          question_id: e.question_id,
-                          answer_id: e.answer_id,
-                        }),
-                      ),
+                      answer:
+                        Array.isArray(payload.myAnswers) &&
+                        payload.myAnswers?.map(
+                          (e: { question_id: string; answer_id: string }) => ({
+                            question_id: e.question_id,
+                            answer_id: e.answer_id,
+                          }),
+                        ),
                     },
                   ]
                   questionToUpdate.corrects =
