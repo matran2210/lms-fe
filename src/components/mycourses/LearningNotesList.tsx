@@ -432,7 +432,7 @@ const LearningNotesList = () => {
               key={note?.id}
             >
               <div
-                className="flex items-center mb-1.5 pb-px flex-wrap"
+                className="flex items-center mb-1.5 pb-px"
                 onClick={() => onClose()}
               >
                 <SappBreadcrumbNotLink

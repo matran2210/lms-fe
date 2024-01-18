@@ -10,28 +10,32 @@ type IProps = {
 
 const SappBreadcrumbNotLink = ({ paths }: { paths: IProps[] }) => {
   const router = useRouter()
+  const getCourseId = router?.query?.courseId ?? router.query.id
   return (
     <>
       {paths.map((path, index) => {
         let url = ''
         switch (path.type) {
           case 'PART':
-            url = `/courses/${router.query.id}/section/${path?.id}`
+            url = `/courses/${getCourseId}/section/${path?.id}`
             break
           case 'CHAPTER':
-            url = `/courses/${router.query.id}/section/${paths?.[1]?.id}?unit_id=${path?.id}`
+            url = `/courses/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`
             break
           case 'UNIT':
-            url = `/courses/${router.query.id}/section/${paths?.[1]?.id}?unit_id=${paths?.[2]?.id}`
+            url = `/courses/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
             break
           case 'ACTIVITY':
-            url = `#`
+            url = `/courses/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
             break
         }
         return (
-          <span key={path?.id}>
+          <span
+            key={path?.id}
+            className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis"
+          >
             <Link href={url} className="breadcrumbs__link" scroll={false}>
-              <span className="font-normal text-sm text-gray-1 w-max max-w-[190px] inline-block whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
+              <span className="font-normal text-sm text-gray-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
                 {path?.name}
               </span>
             </Link>
