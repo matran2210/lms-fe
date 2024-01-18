@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import SappModalImage from '../modal/SappModalImage'
 import { DeserializeHighlight } from '@utils/index'
@@ -26,6 +26,7 @@ const EditorReader = ({
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
+  const [content, setContent] = useState<any>()
   // const [content, setContent] = useState<string | undefined>('')
   useEffect(() => {
     if (extenalRef) {
@@ -41,35 +42,56 @@ const EditorReader = ({
         refDocument.current?.removeEventListener('click', handleOnclick)
       }
     }
-  }, [refDocument, extenalRef])
+  }, [refDocument?.current, extenalRef?.current])
+  useEffect(() => {
+    return () => {
+      setContent(text_editor_content)
+    }
+  }, [])
+  useEffect(() => {
+    if (text_editor_content) {
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(text_editor_content, 'text/html')
+      const videos = doc.querySelectorAll('video')
+      let overLay = document.createElement('span')
+      overLay.setAttribute('class', 'sapp_overlay_video')
+      videos.forEach((el: any, index: number) => {
+        const parent = el.parentNode
+        parent?.append(overLay)
+        parent.classList.add('relative')
+        parent.classList.add('w-fit')
+      })
+      setContent(doc?.documentElement.querySelector('body')?.innerHTML || '')
+    }
+  }, [text_editor_content])
+
   useEffect(() => {
     if (highlighted) {
       DeserializeHighlight(highlighted)
     }
-  }, [text_editor_content, highlighted])
+  }, [content, highlighted])
   // useEffect(() => {
   //   setContent(text_editor_content)
   // }, [text_editor_content])
 
   const handleOnclick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement
-    if (target.tagName === 'VIDEO') {
-      const src = target.querySelector('source')?.getAttribute('token')
-      if (src && target.tagName === 'VIDEO') {
+    if (target.className === 'sapp_overlay_video') {
+      // const overlay = target.nextSibling as any
+      const video = target.previousSibling as any
+      const src = video.querySelector('source')?.getAttribute('token')
+      if (src && src !== 'null' && video.tagName === 'VIDEO') {
         var iframe = document.createElement('iframe')
-        iframe.src =
-          // src.replace(
-          //   '/manifest/video.m3u8',
-          //   '/iframe?autoplay=true',
-          // )
-          `https://customer-qf43f9e6huohhr1o.cloudflarestream.com/${src}/iframe?autoplay=true`
-        iframe.id = target.id
-        iframe.className = target.className
-        iframe.style.cssText = target.style.cssText
+        iframe.src = `https://customer-qf43f9e6huohhr1o.cloudflarestream.com/${src}/iframe?autoplay=true`
+        iframe.id = video.id
+        iframe.className = video.className
+        iframe.style.cssText = video.style.cssText
         iframe.allow =
           'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;'
         iframe.allowFullscreen = true
-        target?.parentNode?.replaceChild(iframe, target)
+        video?.parentNode?.replaceChild(iframe, video)
+        target?.classList.add('hidden')
+        // target?.parentNode?.removeChild(target.nextSibling as Node)
       }
     } else if (target.tagName === 'IMG') {
       setType('IMG')
@@ -79,18 +101,6 @@ const EditorReader = ({
       }
     }
   }
-  // const options = {
-  //   replace(domNode:any) {
-  //     if (domNode.attribs && domNode.attribs.class === "highlighted") {
-  //       return (
-  //         <select onChange={(e) => console.log(e.target.value)}>
-  //           <option value="someOption">Some option</option>
-  //           <option value="otherOption">Other option</option>
-  //         </select>
-  //       );
-  //     }
-  //   },
-  // };
   return (
     <>
       <div
@@ -99,7 +109,7 @@ const EditorReader = ({
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
       >
         <div ref={extenalRef || refDocument}>
-          {parseHTML(text_editor_content || '', options)}
+          {parseHTML(content || '', options)}
         </div>
       </div>
       {type === 'IMG' && (
