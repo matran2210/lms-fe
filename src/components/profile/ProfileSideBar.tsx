@@ -101,10 +101,6 @@ const ProfileSideBar = ({ page }: IProps) => {
 
   const [isExpanded, toggleExpanded] = useState(false)
 
-  const onClick = () => {
-    toggleExpanded((prev) => !prev) // Sử dụng callback để đảm bảo sử dụng giá trị mới nhất
-  }
-
   const onClickExpand = () => {
     toggleExpanded((prev) => !prev) // Sử dụng callback để đảm bảo sử dụng giá trị mới nhất
   }
