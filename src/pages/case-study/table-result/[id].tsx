@@ -134,6 +134,7 @@ const TableCaseStudyResult = () => {
       getScoreDetail()
     }
   }, [router.query.id])
+
   return (
     <div className="relative">
       <div
