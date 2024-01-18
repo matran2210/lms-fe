@@ -28,6 +28,7 @@ export type IPreviewProp = {
   highlighted?: any
   removeHighlight?: any
   allowHighLight?: boolean
+  allowUnHighLight?: boolean
   forCaseStudy?: boolean
   solution?: string
   setValue?: any
@@ -38,6 +39,7 @@ export type IPreviewProp = {
   openChooseFile?: any
   handleClearFile?: any
   setOpenPdf?: any
+  handleSaveHighLightRequirement?: any
 }
 const EssayQuestionPreview = ({
   data,
@@ -60,16 +62,20 @@ const EssayQuestionPreview = ({
   openChooseFile,
   handleClearFile,
   setOpenPdf,
+  allowUnHighLight,
+  handleSaveHighLightRequirement,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
   const inputRef = useRef(null) as any
-  useEffect(() => {
-    if (question_data) {
-      DeserializeHighlight(highlighted)
-    }
-  }, [question_data, question_content, data])
+  // useEffect(() => {
+  //   // if (question_data) {
+  //   DeserializeHighlight(highlighted)
+  //   console.log(highlighted)
+
+  //   // }
+  // }, [question_data, question_content, data])
   // useEffect(()=>{
   if (externalRef) {
     externalRef.current = {
@@ -87,31 +93,103 @@ const EssayQuestionPreview = ({
       await UploadAPI.downloadFile(data)
     } catch (error) {}
   }
+  // useEffect(() => {
+  //   // setKey((prev) => {
+  //   //   const newKey = uniqueId('key')
+  //   //   return newKey
+  //   // })
+  // }, [data])
   // },[response_option_custom])
   return (
     <div
       key={key}
       style={{ background: 'white' }}
-      id="hightlight_area"
-      onMouseUp={(e: any) => {
-        if (
-          e.target.tagName.charAt(0) !== 'm' &&
-          e.target.firstChild?.tagName !== 'math'
-        ) {
-          if (e) {
-            runHighlight(handleSaveHighLight, allowHighLight || false)
-          }
-        }
-      }}
+      // id="hightlight_area"
+      // onMouseUp={(e: any) => {
+      //   if (
+      //     e.target.tagName.charAt(0) !== 'm' &&
+      //     e.target.firstChild?.tagName !== 'math'
+      //   ) {
+      //     if (e) {
+      //       if (allowHighLight) {
+      //         runHighlight(
+      //           handleSaveHighLight,
+      //           allowHighLight || false,
+      //           'hightlight_area',
+      //         )
+      //       } else if (allowUnHighLight) {
+      //         runHighlight(
+      //           handleSaveHighLight,
+      //           allowUnHighLight || false,
+      //           'hightlight_area',
+      //           { color: 'white' },
+      //         )
+      //       }
+      //     }
+      //   }
+      // }}
     >
       {data && (
         <>
-          <EditorReader
-            className="sapp-questions"
-            text_editor_content={question_content}
-          />
+          <div
+            id="hightlight_area"
+            onMouseUp={(e: any) => {
+              if (
+                e.target.tagName.charAt(0) !== 'm' &&
+                e.target.firstChild?.tagName !== 'math'
+              ) {
+                if (e) {
+                  if (allowHighLight) {
+                    runHighlight(
+                      handleSaveHighLight,
+                      allowHighLight || false,
+                      'hightlight_area',
+                    )
+                  } else if (allowUnHighLight) {
+                    runHighlight(
+                      handleSaveHighLight,
+                      allowUnHighLight || false,
+                      'hightlight_area',
+                      { color: 'white' },
+                    )
+                  }
+                }
+              }
+            }}
+          >
+            <EditorReader
+              className="sapp-questions"
+              text_editor_content={question_content}
+              highlighted={highlighted}
+            />
+          </div>
 
-          <div>
+          <div
+            id="hightlight_area_require"
+            onMouseUp={(e: any) => {
+              if (
+                e.target.tagName.charAt(0) !== 'm' &&
+                e.target.firstChild?.tagName !== 'math'
+              ) {
+                if (e) {
+                  if (allowHighLight) {
+                    runHighlight(
+                      handleSaveHighLightRequirement,
+                      allowHighLight || false,
+                      'hightlight_area_require',
+                    )
+                  } else if (allowUnHighLight) {
+                    runHighlight(
+                      handleSaveHighLightRequirement,
+                      allowUnHighLight || false,
+                      'hightlight_area_require',
+                      { color: 'white' },
+                    )
+                  }
+                }
+              }
+            }}
+          >
             <div className="sapp-questions-essay">{`Requirement ${
               index + 1
             } : ${data.name}`}</div>
@@ -120,6 +198,8 @@ const EssayQuestionPreview = ({
               // className="questions"
               // style={{ borderBottom: "4px solid #F2F2F2" }}
               text_editor_content={data.description}
+              highlighted={question_data?.requirements[index].highlighted}
+              highlighArea="hightlight_area_require"
             />
             {data?.files?.length > 0 &&
               data?.files.map((e: any, index: number) => {

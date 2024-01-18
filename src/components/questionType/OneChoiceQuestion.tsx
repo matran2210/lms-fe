@@ -14,6 +14,7 @@ export type IPreviewProp = {
   removeHighlight?: any
   allowHighLight?: boolean
   solution?: any
+  allowUnHighLight?: boolean
 }
 const OneChoiceQuestion = ({
   data,
@@ -27,6 +28,7 @@ const OneChoiceQuestion = ({
   removeHighlight,
   allowHighLight,
   solution,
+  allowUnHighLight,
 }: IPreviewProp) => {
   useEffect(() => {
     if (defaultValues) {
@@ -44,11 +46,6 @@ const OneChoiceQuestion = ({
     }
     return answers
   }, [data])
-  useEffect(() => {
-    if (data) {
-      DeserializeHighlight(highlighted)
-    }
-  }, [data])
   return (
     <div>
       <div
@@ -59,7 +56,21 @@ const OneChoiceQuestion = ({
             e.target.firstChild?.tagName !== 'math'
           ) {
             if (e) {
-              runHighlight(handleSaveHighLight, allowHighLight || false)
+              if (allowHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowHighLight || false,
+                  'hightlight_area',
+                )
+              } else if (allowUnHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowUnHighLight || false,
+                  'hightlight_area',
+                  { color: 'white' },
+                )
+              }
+              // runHighlight(handleSaveHighLight, allowHighLight || false, "hightlight_area")
             }
           }
         }}
@@ -67,6 +78,7 @@ const OneChoiceQuestion = ({
         <EditorReader
           text_editor_content={data?.question_content}
           className="sapp-questions"
+          highlighted={highlighted}
         />
       </div>
       <div

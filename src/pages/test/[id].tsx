@@ -13,6 +13,7 @@ import {
   HighlightIcon,
   ScratchPadIcon,
   TextSquareIcon,
+  UnHighLightIcon,
   WordIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
@@ -92,6 +93,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             solution={solution}
           />
         )
@@ -108,6 +110,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             solution={solution}
           />
         )
@@ -123,6 +126,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             corrects={corrects}
             solution={solution}
           />
@@ -137,6 +141,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             done={done}
             corrects={corrects?.corrects}
@@ -152,6 +157,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
@@ -168,6 +174,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             solution={solution}
@@ -182,6 +189,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
@@ -200,10 +208,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             highlighted={highlighted}
             removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             solution={solution}
             name={`${currentTabID}_answer`}
             setValue={setValue}
-            defaultValue={defaultValue}
+            defaultValue={getValues(`${currentTabID}_answer`)}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -212,6 +221,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             }
             handleClearFile={handleClearFile}
             setOpenPdf={setOpenPdf}
+            handleSaveHighLightRequirement={handleSaveHighLightRequirement}
           />
           // <Luckysheet/>
         )
@@ -252,6 +262,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [showListExhibits, setShowListExhibits] = useState(false)
   const [showListRequirement, setShowLisRequirement] = useState(false)
   const [allowHighLight, setAllowHighLight] = useState(false)
+  const [allowUnHighLight, setAllowUnHighLight] = useState(false)
+
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [quizAttempId, setQuizAttempId] = useState('')
@@ -660,6 +672,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setCurrentPage(nextTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
+      setAllowUnHighLight(false)
       setTabs(savedAnswer)
     } else {
       const newData = tabs.map((item: any) => {
@@ -684,6 +697,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setCurrentPage(nextTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
+      setAllowUnHighLight(false)
       setTabs(savedAnswer)
     }
     setLoading(false)
@@ -817,6 +831,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setCurrentPage(currentTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
+      setAllowUnHighLight(false)
       setTabs(savedAnswer)
     } else {
       ref.current?.handleReset()
@@ -825,6 +840,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setCurrentPage(currentTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
+      setAllowUnHighLight(false)
       setTabs(savedAnswer)
     }
     setLoading(false)
@@ -1110,17 +1126,36 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return newData
     })
   }
+  const handleSaveHighLightRequirement = (e: any) => {
+    setTabs((prev: any) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          // setCurrentTabContent({ ...item, hightlightTopic: e })
+          item.data.requirements[essayData.index] = {
+            ...item.data.requirements[essayData.index],
+            highlighted: e,
+          }
+          return { ...item }
+        }
+        return item
+      })
+      return newData
+    })
+  }
   useEffect(() => {
     if (currentTabContent?.data?.requirements) {
       setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })
     }
-    if (currentTabContent?.hightlightTopic) {
-      DeserializeHighlight(
-        currentTabContent?.hightlightTopic,
-        'hightlight_area_topic',
-      )
-    }
-  }, [currentTabContent])
+  }, [currentTabContent?.id])
+  // useEffect(()=>{
+  //   // if (currentTabContent?.hightlightTopic) {
+
+  //     DeserializeHighlight(
+  //       currentTabContent?.hightlightTopic,
+  //       'hightlight_area_topic',
+  //     )
+  //   // }
+  // },[currentTabContent?.id])
   useEffect(() => {
     async function fetchTabs() {
       if (questions?.length > 0) {
@@ -1351,11 +1386,20 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 e.target.firstChild?.tagName !== 'math'
               ) {
                 if (e) {
-                  runHighlight(
-                    handleSaveHighLightTopic,
-                    allowHighLight || false,
-                    'hightlight_area_topic',
-                  )
+                  if (allowHighLight) {
+                    runHighlight(
+                      handleSaveHighLightTopic,
+                      allowHighLight || false,
+                      'hightlight_area_topic',
+                    )
+                  } else if (allowUnHighLight) {
+                    runHighlight(
+                      handleSaveHighLightTopic,
+                      allowUnHighLight || false,
+                      'hightlight_area_topic',
+                      { color: 'white' },
+                    )
+                  }
                 }
               }
             }}
@@ -1368,6 +1412,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
+              highlighted={currentTabContent?.hightlightTopic}
+              highlighArea="hightlight_area_topic"
             />
             {currentTabContent?.topicDescription?.files?.length > 0 &&
               currentTabContent?.topicDescription?.files?.map(
@@ -1414,11 +1460,20 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 e.target.firstChild?.tagName !== 'math'
               ) {
                 if (e) {
-                  runHighlight(
-                    handleSaveHighLightTopic,
-                    allowHighLight || false,
-                    'hightlight_area_topic',
-                  )
+                  if (allowHighLight) {
+                    runHighlight(
+                      handleSaveHighLightTopic,
+                      allowHighLight || false,
+                      'hightlight_area_topic',
+                    )
+                  } else if (allowUnHighLight) {
+                    runHighlight(
+                      handleSaveHighLightTopic,
+                      allowUnHighLight || false,
+                      'hightlight_area_topic',
+                      { color: 'white' },
+                    )
+                  }
                 }
               }
             }}
@@ -1432,6 +1487,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               text_editor_content={
                 currentTabContent?.topicDescription?.description
               }
+              highlighted={currentTabContent?.hightlightTopic}
+              highlighArea="hightlight_area_topic"
             />
             {currentTabContent?.topicDescription?.files?.length > 0 &&
               currentTabContent?.topicDescription?.files?.map(
@@ -1604,12 +1661,28 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           </button>
           <button
             className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
-            onClick={() => setAllowHighLight(!allowHighLight)}
+            onClick={() => {
+              setAllowHighLight(!allowHighLight)
+              setAllowUnHighLight(false)
+            }}
           >
             <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
               <HighlightIcon />
               <div className="hidden font-normal text-sm 3xl:inline-block">
                 Highlight
+              </div>
+            </div>
+          </button>
+          <button
+            className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+            onClick={() => {
+              setAllowUnHighLight(!allowUnHighLight), setAllowHighLight(false)
+            }}
+          >
+            <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
+              <UnHighLightIcon />
+              <div className="hidden font-normal text-sm 3xl:inline-block">
+                UnHighLight
               </div>
             </div>
           </button>
@@ -1700,7 +1773,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         <button
                           key={e.id}
                           className={`p-3 ${
-                            essayData.req !== e && 'text-gray-1'
+                            essayData.index !== index && 'text-gray-1'
                           }`}
                           onClick={() => {
                             setEssayData({ req: e, index: index })
