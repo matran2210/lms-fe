@@ -38,7 +38,7 @@ const Course = ({
   //   setOpen(true)
   // }
   const router = useRouter()
-  const student = course?.classes?.[0]?.class_user_instances[0]
+  const student = course?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
   const currentDate = new Date()
@@ -87,10 +87,19 @@ const Course = ({
         classStatus === CLASS_STATUS.PUBLIC ||
         classStatus === CLASS_STATUS.ENDED
       ) {
-        if (course?.course_type === 'TRIAL_COURSE' && !student)
+        if (course?.course_type === 'TRIAL_COURSE' && !student) {
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
-          else return BUTTON_STATUS.Hidden // Ẩn lớp học thử
+          if (
+            classInstance?.duration_type === 'FIXED' &&
+            classInstance?.finished_at
+          ) {
+            const getISOFinish = parseISO(classInstance?.finished_at as any)
+            const classFinish = startOfDay(getISOFinish.setUTCHours(0, 0, 0, 0))
+            if (classFinish <= formattedDate) return BUTTON_STATUS.Extend
+            if (classFinish > formattedDate) return BUTTON_STATUS.Active
+          }
+        }
         if (!startedAt && !finishedAt) {
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
@@ -192,7 +201,7 @@ const Course = ({
     if (determineButtonToShow === 'Active') {
       setOpenActive(true)
     } else if (determineButtonToShow === 'Extend') {
-      student.extend_count === 0 ? extendCourse() : setOpenExtend(true)
+      student?.extend_count === 0 ? extendCourse() : setOpenExtend(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
         ? router.push(`/courses/my-course/${course.id}`)
