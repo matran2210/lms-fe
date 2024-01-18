@@ -154,7 +154,7 @@ const EssayQuestionPreview = ({
                 <div
                   className={`${
                     data ? '' : 'text-left'
-                  } title-upload-button-preview`}
+                  } font-semibold text-base`}
                 >
                   Upload file to submit:
                 </div>
@@ -183,8 +183,8 @@ const EssayQuestionPreview = ({
           ) : (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
-                <div className="title-upload-button-preview">
-                  Uploaded file:
+                <div className="font-semibold text-base">
+                  Upload file to submit:
                 </div>
                 <div
                   className="cursor-pointer text-state-info hover:underline"
@@ -238,7 +238,7 @@ const EssayQuestionPreview = ({
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
-            <div className="w-full, h-[500px]">
+            <div className="w-full h-[500px] border">
               <Controller
                 name={name}
                 control={control}
@@ -307,7 +307,7 @@ const EssayQuestionPreview = ({
               disabled={fullData?.done}
             />
           ) : (
-            <div className="w-full, h-[500px]">
+            <div className="w-full h-[500px] border">
               <Controller
                 name={name}
                 control={control}

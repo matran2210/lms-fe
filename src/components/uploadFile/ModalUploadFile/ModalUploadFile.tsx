@@ -9,6 +9,7 @@ import UploadFileHandle from './UploadFileHandle'
 import { RESOURCE_LOCATION, UPLOAD_TYPE } from './UploadFileInterface'
 import SappModal from '@components/base/modal/SappModal'
 import { UploadAPI } from 'src/pages/api/upload'
+import { capitalize } from 'lodash'
 
 interface IModalUploadProps {
   open: boolean
@@ -178,7 +179,10 @@ const ModalUploadFile = ({
     <div>
       <SappModal
         open={open}
-        title={title || `Add ${UPLOAD_TYPE[fileType].type.toLocaleLowerCase()}`}
+        title={
+          title ||
+          `Add ${capitalize(UPLOAD_TYPE[fileType].type.toLocaleLowerCase())}`
+        }
         cancelButtonCaption="Cancel"
         okButtonCaption={'Save'}
         confirmOnclose={false}
@@ -186,6 +190,8 @@ const ModalUploadFile = ({
         handleSubmit={handleUploadFile}
         closeAfterSubmit={false}
         externalLoading={disabled}
+        size="max-w-xl"
+        position="center"
       >
         <UploadFileHandle
           uploadFile={uploadFile}
