@@ -198,7 +198,7 @@ const EssayQuestionPreview = ({
               // className="questions"
               // style={{ borderBottom: "4px solid #F2F2F2" }}
               text_editor_content={data.description}
-              highlighted={question_data?.requirements[index]?.highlighted}
+              highlighted={question_data?.requirements?.[index]?.highlighted}
               highlighArea="hightlight_area_require"
             />
             {data?.files?.length > 0 &&
@@ -302,7 +302,7 @@ const EssayQuestionPreview = ({
         <div
           style={
             question_data.display_type === DISPLAY_TYPE.VERTICAL || forCaseStudy
-              ? { width: 'calc(100% + 20px)', marginLeft: '-20px' }
+              ? { width: 'calc(100% + 40px)', marginLeft: '-20px' }
               : { width: '100%', marginTop: '10px' }
           }
         >

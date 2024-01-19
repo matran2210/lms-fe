@@ -33,22 +33,22 @@ const EntranceTest = ({ entranceTestLists }: any) => {
           />
         </div>
       </div>
-      <div className="main max-w-xxl my-0 mx-auto">
+      <div className="main max-w-xxl my-0 mx-auto sm:mx-8">
         <div className="flex justify-between py-6">
-          <h2 className="text-medium-sm font-semibold text-bw-1">
+          <h2 className="text-medium-sm font-semibold text-bw-1 ">
             Entrance Test
           </h2>
           <EntranceTestFilter count={entranceTestLists?.length || 0} />
         </div>
       </div>
-      <div className="heading bg-white max-w-xxl my-0 mx-auto flex">
+      <div className="heading bg-white max-w-xxl my-0 mx-auto flex sm:mx-8">
         <Heading
           greeting="Welcome to"
           title="Entrance Test"
           des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
         />
       </div>
-      <div className="pt-6 max-w-xxl my-0 mx-auto">
+      <div className="pt-6 max-w-xxl my-0 mx-auto sm:mx-8">
         <EntranceTestList entranceTestLists={entranceTestLists} />
       </div>
       <PopUpRemindEntrance />
