@@ -257,6 +257,7 @@ const QuizDocument = ({
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
         handleSubmit={handleFinishQuiz}
+        handleCancel={() => {}}
       ></ConFirmSubmit>
 
       <div className="border border-gray-3 p-6">

@@ -410,6 +410,7 @@ const VideoDocument = ({
         open={openFinishQUiz}
         setOpen={setOpenFinishQUiz}
         handleSubmit={handleFinishQuiz}
+        handleCancel={() => {}}
       ></ConFirmSubmit>
 
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
