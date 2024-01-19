@@ -4,6 +4,7 @@ import {
   HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
+  UnHighLightIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -69,6 +70,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             // solution={solution}
           />
         )
@@ -85,6 +87,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -99,6 +102,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             corrects={corrects}
           />
         )
@@ -112,6 +116,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             done={done}
             extenalRef={(el: any) => (ref.current[index || 0] = el)}
@@ -126,6 +131,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             extenalRef={(el: any) => (ref.current[index || 0] = el)}
@@ -141,6 +147,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             extenalRef={(el: any) => (ref.current[index || 0] = el)}
           />
@@ -154,6 +161,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             extenalRef={(el: any) => (ref.current[index || 0] = el)}
@@ -171,6 +179,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
             forCaseStudy={true}
             name={`${index}_answer`}
             setValue={setValue}
@@ -201,6 +210,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const { control, handleSubmit, getValues, setValue } = useForm()
   const { control: controlScratch } = useForm()
   const [allowHighLight, setAllowHighLight] = useState(false)
+  const [allowUnHighLight, setAllowUnHighLight] = useState(false)
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
@@ -499,6 +509,31 @@ const CaseStudyDetail = ({ questions }: any) => {
       }),
     )
   }
+  // const unsavedChanges = true
+  // const warningText =
+  //   'You have unsaved changes - are you sure you wish to leave this page?'
+
+  // useEffect(() => {
+  //   const handleWindowClose = (e: any) => {
+  //     // if (!unsavedChanges) return
+  //     e.preventDefault()
+  //     return (e.returnValue = warningText)
+  //   }
+  //   const handleBrowseAway = () => {
+  //     console.log('abc')
+
+  //     // if (!unsavedChanges) return
+  //     if (window.confirm(warningText)) return
+  //     router.events.emit('routeChangeError')
+  //     throw 'routeChange aborted.'
+  //   }
+  //   window.addEventListener('beforeunload', handleWindowClose)
+  //   router.events.on('routeChangeStart', handleBrowseAway)
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleWindowClose)
+  //     router.events.off('routeChangeStart', handleBrowseAway)
+  //   }
+  // }, [])
   // useEffect(() => {
   //   const handleBeforeUnload = async (event: any) => {
   //     event.preventDefault()
@@ -586,11 +621,20 @@ const CaseStudyDetail = ({ questions }: any) => {
                 e.target.firstChild?.tagName !== 'math'
               ) {
                 if (e) {
-                  runHighlight(
-                    () => {},
-                    allowHighLight || false,
-                    'hightlight_area_topic',
-                  )
+                  if (allowHighLight) {
+                    runHighlight(
+                      () => {},
+                      allowHighLight || false,
+                      'hightlight_area_topic',
+                    )
+                  } else if (allowUnHighLight) {
+                    runHighlight(
+                      () => {},
+                      allowUnHighLight || false,
+                      'hightlight_area_topic',
+                      { color: 'white' },
+                    )
+                  }
                 }
               }
             }}
@@ -645,11 +689,20 @@ const CaseStudyDetail = ({ questions }: any) => {
                   e.target.firstChild?.tagName !== 'math'
                 ) {
                   if (e) {
-                    runHighlight(
-                      () => {},
-                      allowHighLight || false,
-                      'hightlight_area',
-                    )
+                    if (allowHighLight) {
+                      runHighlight(
+                        () => {},
+                        allowHighLight || false,
+                        'hightlight_area_topic',
+                      )
+                    } else if (allowUnHighLight) {
+                      runHighlight(
+                        () => {},
+                        allowUnHighLight || false,
+                        'hightlight_area_topic',
+                        { color: 'white' },
+                      )
+                    }
                   }
                 }
               }}
@@ -768,6 +821,19 @@ const CaseStudyDetail = ({ questions }: any) => {
                 <HighlightIcon />
                 <div className="font-normal text-sm pe-6 border-r">
                   Highlight
+                </div>
+              </div>
+            </button>
+            <button
+              className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+              onClick={() => {
+                setAllowUnHighLight(!allowUnHighLight), setAllowHighLight(false)
+              }}
+            >
+              <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
+                <UnHighLightIcon />
+                <div className="hidden font-normal text-sm 3xl:inline-block">
+                  UnHighlight
                 </div>
               </div>
             </button>

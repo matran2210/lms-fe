@@ -269,9 +269,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [quizAttempId, setQuizAttempId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
-  const [remainTime, setRemainTime] = useState<number>(
-    quizDetail.quiz_timed * 60,
-  )
+  const [remainTime, setRemainTime] = useState<number>(0 * 60)
   const dispatch = useAppDispatch()
 
   const [submited, setSubmited] = useState(false)
@@ -290,7 +288,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     ref: dropUpRequire,
     callback: () => setShowLisRequirement(false),
   })
-
+  const [onMount, setOnMount] = useState(true)
   const currentTabContent = useMemo(() => {
     if (tabs && tabs.length > 0) {
       return tabs.find((e: any) => e.id === currentPage)
@@ -1242,7 +1240,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   }, [router.query.id])
   const intervalRef = useRef(null) as any
   useEffect(() => {
-    if (quizDetail.quiz_timed) {
+    if (quizDetail?.quiz_timed) {
       const interval = setInterval(() => {
         setRemainTime((prev) => {
           if (prev === 1) {
@@ -1310,6 +1308,44 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   //     router.beforePopState(() => true)
   //   }
   // }, [currentTabContent, quizAttempId, router])
+  // const unsavedChanges = true
+  // const warningText =
+  //   'You have unsaved changes - are you sure you wish to leave this page?'
+
+  // useEffect(() => {
+  //   const handleWindowClose = (e:any) => {
+  //     // if (!unsavedChanges) return
+  //     e.preventDefault()
+  //     return (e.returnValue = warningText)
+  //   }
+  //   const handleBrowseAway = () => {
+  //     console.log("abc");
+
+  //     // if (!unsavedChanges) return
+  //     if (window.confirm(warningText)) return
+  //     router.events.emit('routeChangeError')
+  //     throw 'routeChange aborted.'
+  //   }
+  //   window.addEventListener('beforeunload', handleWindowClose)
+  //   router.events.on('routeChangeStart', handleBrowseAway)
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleWindowClose)
+  //     router.events.off('routeChangeStart', handleBrowseAway)
+  //   }
+  // }, [])
+  // const stringToDisplay = 'Do you want to save before leaving the page ?';
+  // const shouldPreventLeaving = true
+  // useEffect(() => {
+  //   const routeChange = () => {
+  //   onMount && setOnMount(false);
+  //   };
+
+  //   router.events.on("routeChangeStart", routeChange);
+
+  //   return () => {
+  //     router.events.off("routeChangeStart", routeChange);
+  //   };
+  //   }, []);
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
@@ -1321,9 +1357,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       <div>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
-            {quizDetail.name}
+            {quizDetail?.name}
           </div>
-          {quizDetail.quiz_timed && (
+          {quizDetail?.quiz_timed && (
             <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex font-tech">
               {formatTime(remainTime)}
             </div>
@@ -1682,7 +1718,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
               <UnHighLightIcon />
               <div className="hidden font-normal text-sm 3xl:inline-block">
-                UnHighLight
+                UnHighlight
               </div>
             </div>
           </button>
@@ -1869,7 +1905,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="font-medium text-medium-sm">Clear Selection</div>
           </button>
           {/* )} */}
-          {quizDetail.grading_preference === 'AFTER_EACH_QUESTION' &&
+          {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
