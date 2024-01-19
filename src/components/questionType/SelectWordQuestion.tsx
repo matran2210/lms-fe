@@ -126,10 +126,45 @@ const SelectWord = forwardRef(
           <option value="" disabled selected >Choose</option>
           ${answerObj[+index + 1].map((e: any) => {
             const isSelected = e.value === defaultAnswerValue
+            if (e.label.length > 100) {
+              let arr = []
+              var start = 0 // Vị trí bắt đầu của phần tử
+              var end = 0 // Vị trí kết thúc của phần tử
+              while (start < e.label.length) {
+                // Lặp cho đến khi hết chuỗi
+                end = start + 50 // Tính vị trí kết thúc theo số lượng ký tự tối thiểu
+                if (end < e.label.length) {
+                  // Nếu vị trí kết thúc không vượt quá độ dài chuỗi
+                  while (e.label[end] != ' ') {
+                    // Lặp cho đến khi tìm được khoảng trắng
+                    end-- // Giảm vị trí kết thúc
+                  }
+                }
+                var sub = e.label.slice(start, end)
+                // Cắt một phần tử từ vị trí bắt đầu đến vị trí kết thúc
+                arr.push(sub) // Thêm phần tử vào mảng
+                start = end + 1 // Cập nhật vị trí bắt đầu của phần tử tiếp theo
+              }
+              return arr
+                .map((el, i) => {
+                  if (i === 0) {
+                    return `<option value="${e.value}" ${
+                      isSelected ? 'selected' : ''
+                    } class="w-[50px] break-all">${el}</option>`
+                  }
+                  return `<option disabled value="${e.value}" ${
+                    isSelected ? 'selected' : ''
+                  } class="w-[50px] break-all">${el}</option>`
+                })
+                .join('')
 
-            return `<option value="${e.value}" ${
-              isSelected ? 'selected' : ''
-            } >${e.label}</option>`
+              // return arr
+            } else {
+              return `<option value="${e.value}" ${
+                isSelected ? 'selected' : ''
+              } class="w-[50px] break-all">${e.label}</option>
+              `
+            }
           })}
           `
         }
