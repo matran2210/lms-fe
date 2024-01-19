@@ -1828,7 +1828,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
             !currentTabContent.done && (
               <div className="flex gap-1">
-                <div className="hidden 3.5xl:block">
+                <div className="hidden 3.5xl:block text-bw-1">
                   Choose response option:
                 </div>
                 <button
@@ -1884,7 +1884,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               </div>
             )}
           <button
-            className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 3xl:w-[150px]"
+            className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 3xl:w-[150px] text-bw-1"
             onClick={() => handleFlagQuestion(currentPage)}
           >
             <FlagIcon />
@@ -1909,7 +1909,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
                 onClick={async () => {
                   const data = await getResult(currentTabContent)
                   confirmAnswer(data.corrects, data.solution, currentTabContent)
@@ -1920,7 +1920,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
               filteredTabs.length - 1 ? (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
                 onClick={() => {
                   const index = filteredTabs.findIndex(
                     (e: any) => e.id === currentPage,
@@ -1932,7 +1932,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               </button>
             ) : (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] "
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
                 onClick={() => {
                   handleConfirmEssay()
                 }}
@@ -1944,7 +1944,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             filteredTabs.findIndex((e: any) => e.id === currentPage) <
               filteredTabs.length - 1 && (
               <button
-                className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px]"
+                className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
                 onClick={() => {
                   const index = filteredTabs.findIndex(
                     (e: any) => e.id === currentPage,
