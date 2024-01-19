@@ -1720,7 +1720,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
               <UnHighLightIcon />
               <div className="hidden font-normal text-sm 3xl:inline-block">
-                UnHighlight
+                Unhighlight
               </div>
             </div>
           </button>
