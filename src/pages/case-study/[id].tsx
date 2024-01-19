@@ -213,6 +213,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [startTime, setStartTime] = useState(Date.now())
   const [openUpload, setOpenUpload] = useState<any>({})
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+  const [breadCrumb, setBreadCrumb] = useState<any>()
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -232,6 +233,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       id,
       class_user_id,
     )
+    setBreadCrumb(res?.data?.breadcumb)
     setQuizAttempId(res.data.id)
   }
   useEffect(() => {
@@ -243,6 +245,13 @@ const CaseStudyDetail = ({ questions }: any) => {
       )
     }
   }, [router.query.id])
+
+  const backToPart = () => {
+    router.push(
+      `/courses/${breadCrumb?.[0]?.id}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
+    )
+  }
+
   const getValueFillText = (index: number) => {
     let value = []
     if (valueRef.current[index]) {
@@ -804,7 +813,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       <QuitTestModal
         open={openQuit}
         setOpen={setOpenQuit}
-        handleQuit={() => router.back()}
+        handleQuit={() => backToPart()}
       />
       <ModalUploadFile
         open={openUpload.status}
