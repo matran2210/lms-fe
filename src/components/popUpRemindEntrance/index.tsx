@@ -11,16 +11,20 @@ const PopUpRemindEntrance = () => {
   const { shouldShowRemind, count } = useAppSelector(entranceTestReducer)
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const getEnstranceTest = localStorage.getItem('enstranceTest')
   const onCancel = () => {
     dispatch(closeShowRemind())
+    localStorage.setItem('enstranceTest', 'false')
   }
   const onOk = () => {
     dispatch(closeShowRemind())
     router.push('/entrance-test')
+    localStorage.setItem('enstranceTest', 'false')
   }
+
   return (
     <SappModal
-      open={shouldShowRemind && count > 0}
+      open={shouldShowRemind && getEnstranceTest === 'true'}
       setOpen={() => dispatch(closeShowRemind())}
       cancelButtonCaption="Close"
       okButtonCaption="Take Your Test"
