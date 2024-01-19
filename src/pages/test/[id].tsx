@@ -269,7 +269,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [quizAttempId, setQuizAttempId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
-  const [remainTime, setRemainTime] = useState<number>(0 * 60)
+  const [remainTime, setRemainTime] = useState<number>(
+    quizDetail.quiz_timed * 60,
+  )
   const dispatch = useAppDispatch()
 
   const [submited, setSubmited] = useState(false)
