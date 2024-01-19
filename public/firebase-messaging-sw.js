@@ -19,7 +19,7 @@ firebase.initializeApp(firebaseConfig)
 
 // Retrieve firebase messaging
 // eslint-disable-next-line no-undef
-const messaging = firebase.messaging();
+const messaging = firebase.messaging()
 
 messaging.onBackgroundMessage(function(payload) {
   const notificationTitle = payload.notification.title
@@ -30,4 +30,18 @@ messaging.onBackgroundMessage(function(payload) {
   // eslint-disable-next-line no-restricted-globals
   self.registration.showNotification(notificationTitle,
     notificationOptions)
+})
+
+// Remove firebase messaging
+messaging.setBackgroundMessageHandler(function(payload) {
+  return new Promise(function(resolve, reject) {
+    resolve()
+    setTimeout(function(){
+      self.registration.getNotifications().then(notifications => {  
+        notifications.forEach((notification) => { 
+          notification.close();
+        })
+      })
+    },10)
+  })
 })
