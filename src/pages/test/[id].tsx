@@ -1252,6 +1252,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           if (prev === 1) {
             clearInterval(interval)
             if (!openLimit) {
+              setUnsavedChanges(false)
               setOpenTimeOut(true)
             }
             // handleSubmitQuestion()
