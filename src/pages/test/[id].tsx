@@ -1034,6 +1034,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       handleChangeTab(tabs[0].id)
       return reformTabs
     })
+    setUnsavedChanges(false)
     const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
@@ -1234,6 +1235,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setQuizAttempId(res.data.id)
       } catch (err: any) {
         if (err.response.data.error.code === '400|060710') {
+          setUnsavedChanges(false)
           setOpenLimit(true)
         }
       }
@@ -1964,7 +1966,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openTimeOut}
         setOpen={setOpenTimeOut}
         handleSubmit={handleSubmitQuestion}
-        handleQuit={() => router.back()}
+        handleQuit={() => {
+          setUnsavedChanges(() => {
+            router.back()
+            return false
+          })
+        }}
       />
       <QuitTestModal
         open={openQuit}
@@ -1981,6 +1988,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openSubmit}
         setOpen={setOpenSubmit}
         handleSubmit={handleSubmitQuestion}
+        handleCancel={() => setUnsavedChanges(true)}
       />
       <ModalUploadFile
         open={openUpload.status}

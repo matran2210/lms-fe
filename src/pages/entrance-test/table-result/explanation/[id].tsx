@@ -47,15 +47,13 @@ const Explanation = () => {
       ...resultResponse.data.answer.question,
       confirmed: true,
       corrects: getCorrect(
-        resultResponse.data.answer.question.answers?.[0]
+        resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
           ? resultResponse.data.answer.question.answers
-          : resultResponse.data.answer.question.question_matchings,
+          : resultResponse.data.answer.answer_matching_mapping,
         resultResponse.data.answer.question.qType,
       ),
       question_matchings: getCorrect(
-        resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
-          ? resultResponse.data.answer.answer_position_mapping
-          : resultResponse.data.answer.answer_matching_mapping,
+        resultResponse.data.answer.answer_matching_mapping,
         resultResponse.data.answer.question.qType,
       ),
       answers: resultResponse.data?.answer?.question.answers || [],

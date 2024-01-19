@@ -5,13 +5,20 @@ interface IProps {
   open: boolean
   setOpen: any
   handleSubmit: any
+  handleCancel: any
 }
-const ConFirmSubmit = ({ open, setOpen, handleSubmit }: IProps) => {
+const ConFirmSubmit = ({
+  open,
+  setOpen,
+  handleSubmit,
+  handleCancel,
+}: IProps) => {
   const onSubmit = () => {
     handleSubmit()
     //to do: start test
   }
   const onCancel = () => {
+    handleCancel()
     setOpen(false)
   }
   return (
