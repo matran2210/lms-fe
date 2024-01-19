@@ -280,6 +280,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [openLimit, setOpenLimit] = useState(false)
   const [openUpload, setOpenUpload] = useState<any>({})
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+  const [unsavedChanges, setUnsavedChanges] = useState(true)
+
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -1308,31 +1310,28 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   //     router.beforePopState(() => true)
   //   }
   // }, [currentTabContent, quizAttempId, router])
-  // const unsavedChanges = true
-  // const warningText =
-  //   'You have unsaved changes - are you sure you wish to leave this page?'
+  const warningText =
+    'You have unsaved changes - are you sure you wish to leave this page?'
 
-  // useEffect(() => {
-  //   const handleWindowClose = (e:any) => {
-  //     // if (!unsavedChanges) return
-  //     e.preventDefault()
-  //     return (e.returnValue = warningText)
-  //   }
-  //   const handleBrowseAway = () => {
-  //     console.log("abc");
-
-  //     // if (!unsavedChanges) return
-  //     if (window.confirm(warningText)) return
-  //     router.events.emit('routeChangeError')
-  //     throw 'routeChange aborted.'
-  //   }
-  //   window.addEventListener('beforeunload', handleWindowClose)
-  //   router.events.on('routeChangeStart', handleBrowseAway)
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleWindowClose)
-  //     router.events.off('routeChangeStart', handleBrowseAway)
-  //   }
-  // }, [])
+  useEffect(() => {
+    const handleWindowClose = (e: any) => {
+      if (!unsavedChanges) return
+      e.preventDefault()
+      return (e.returnValue = warningText)
+    }
+    const handleBrowseAway = () => {
+      if (!unsavedChanges) return
+      if (window.confirm(warningText)) return
+      router.events.emit('routeChangeError')
+      throw 'routeChange aborted.'
+    }
+    window.addEventListener('beforeunload', handleWindowClose)
+    router.events.on('routeChangeStart', handleBrowseAway)
+    return () => {
+      window.removeEventListener('beforeunload', handleWindowClose)
+      router.events.off('routeChangeStart', handleBrowseAway)
+    }
+  }, [unsavedChanges])
   // const stringToDisplay = 'Do you want to save before leaving the page ?';
   // const shouldPreventLeaving = true
   // useEffect(() => {
@@ -1382,6 +1381,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               size: 'medium',
               onClick: () => {
                 setOpenQuit(true)
+                setUnsavedChanges(false)
               },
               loading: false,
               //   full: fullWidthBtn,
@@ -1968,6 +1968,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openQuit}
         setOpen={setOpenQuit}
         handleQuit={() => router.back()}
+        handleCancel={() => setUnsavedChanges(true)}
       />
       <LimitQuizModal
         open={openLimit}

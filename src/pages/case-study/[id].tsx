@@ -223,6 +223,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [startTime, setStartTime] = useState(Date.now())
   const [openUpload, setOpenUpload] = useState<any>({})
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+  const [unsavedChanges, setUnsavedChanges] = useState(true)
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -509,64 +510,28 @@ const CaseStudyDetail = ({ questions }: any) => {
       }),
     )
   }
-  // const unsavedChanges = true
-  // const warningText =
-  //   'You have unsaved changes - are you sure you wish to leave this page?'
+  const warningText =
+    'You have unsaved changes - are you sure you wish to leave this page?'
 
-  // useEffect(() => {
-  //   const handleWindowClose = (e: any) => {
-  //     // if (!unsavedChanges) return
-  //     e.preventDefault()
-  //     return (e.returnValue = warningText)
-  //   }
-  //   const handleBrowseAway = () => {
-  //     console.log('abc')
-
-  //     // if (!unsavedChanges) return
-  //     if (window.confirm(warningText)) return
-  //     router.events.emit('routeChangeError')
-  //     throw 'routeChange aborted.'
-  //   }
-  //   window.addEventListener('beforeunload', handleWindowClose)
-  //   router.events.on('routeChangeStart', handleBrowseAway)
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleWindowClose)
-  //     router.events.off('routeChangeStart', handleBrowseAway)
-  //   }
-  // }, [])
-  // useEffect(() => {
-  //   const handleBeforeUnload = async (event: any) => {
-  //     event.preventDefault()
-  //     await handleSubmitQuestion()
-  //   }
-
-  //   // Thêm lắng nghe sự kiện beforeunload
-  //   window.addEventListener('beforeunload', handleBeforeUnload)
-
-  //   // Cleanup khi component bị unmount
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload)
-  //   }
-  // }, [listQuestions])
-  // useEffect(() => {
-  //   router.beforePopState(({ as }) => {
-  //     if (as !== router.asPath) {
-  //       try {
-  //         handleSubmitQuestion()
-  //         return true
-  //       } catch (err) {
-  //         return true
-  //       }
-  //       // Will run when leaving the current page; on back/forward actions
-  //       // Add your logic here, like toggling the modal state
-  //     }
-  //     return true
-  //   })
-
-  //   return () => {
-  //     router.beforePopState(() => true)
-  //   }
-  // }, [listQuestions, router])
+  useEffect(() => {
+    const handleWindowClose = (e: any) => {
+      if (!unsavedChanges) return
+      e.preventDefault()
+      return (e.returnValue = warningText)
+    }
+    const handleBrowseAway = () => {
+      if (!unsavedChanges) return
+      if (window.confirm(warningText)) return
+      router.events.emit('routeChangeError')
+      throw 'routeChange aborted.'
+    }
+    window.addEventListener('beforeunload', handleWindowClose)
+    router.events.on('routeChangeStart', handleBrowseAway)
+    return () => {
+      window.removeEventListener('beforeunload', handleWindowClose)
+      router.events.off('routeChangeStart', handleBrowseAway)
+    }
+  }, [unsavedChanges])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {loading && (
@@ -601,6 +566,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               size: 'medium',
               onClick: () => {
                 setOpenQuit(true)
+                setUnsavedChanges(false)
               },
               loading: false,
               //   full: fullWidthBtn,
@@ -871,6 +837,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         open={openQuit}
         setOpen={setOpenQuit}
         handleQuit={() => router.back()}
+        handleCancel={() => setUnsavedChanges(true)}
       />
       <ModalUploadFile
         open={openUpload.status}
