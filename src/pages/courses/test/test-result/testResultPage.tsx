@@ -41,15 +41,6 @@ const TestResultPage = ({
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
   return (
     <>
-      {type === 'CFA' && (
-        <div className="flex gap-6 overflow-y-auto flex-wrap">
-          <div className="max-h-full">
-            <YourScore chartData={chartData} />
-            <YourScoreDetail />
-          </div>
-          <MultipleQuestion questions={questions} className={'h-[991px]'} />
-        </div>
-      )}
       {type === 'ACCA' && courseDifficulty <= 4 ? (
         <div className="flex gap-6 overflow-y-auto flex-wrap">
           <div className="max-h-full w-full max-w-smd">
@@ -69,12 +60,24 @@ const TestResultPage = ({
           </div>
         </div>
       ) : (
-        <div className="flex gap-6 overflow-y-auto flex-wrap">
-          <MultipleQuestion questions={questions} className={'h-[991px]'} />
-          <div className="max-h-full">
-            <YourScoreDetail />
-          </div>
-        </div>
+        <>
+          {type === 'CFA' ? (
+            <div className="flex gap-6 overflow-y-auto flex-wrap">
+              <div className="max-h-full">
+                <YourScore chartData={chartData} />
+                <YourScoreDetail />
+              </div>
+              <MultipleQuestion questions={questions} className={'h-[991px]'} />
+            </div>
+          ) : (
+            <div className="flex gap-6 overflow-y-auto flex-wrap">
+              <MultipleQuestion questions={questions} className={'h-[991px]'} />
+              <div className="max-h-full">
+                <YourScoreDetail />
+              </div>
+            </div>
+          )}
+        </>
       )}
     </>
   )
