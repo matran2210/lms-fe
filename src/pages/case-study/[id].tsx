@@ -223,6 +223,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [startTime, setStartTime] = useState(Date.now())
   const [openUpload, setOpenUpload] = useState<any>({})
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+  const [breadCrumb, setBreadCrumb] = useState<any>()
   const [unsavedChanges, setUnsavedChanges] = useState(true)
   useEffect(() => {
     if (router.query.id) {
@@ -243,6 +244,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       id,
       class_user_id,
     )
+    setBreadCrumb(res?.data?.breadcumb)
     setQuizAttempId(res.data.id)
   }
   useEffect(() => {
@@ -254,6 +256,13 @@ const CaseStudyDetail = ({ questions }: any) => {
       )
     }
   }, [router.query.id])
+
+  const backToPart = () => {
+    router.push(
+      `/courses/${breadCrumb?.[0]?.id}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
+    )
+  }
+
   const getValueFillText = (index: number) => {
     let value = []
     if (valueRef.current[index]) {
@@ -627,20 +636,22 @@ const CaseStudyDetail = ({ questions }: any) => {
                 text_editor_content={topics?.description}
               />
             </div>
-            {topics?.files?.length > 0 &&
-              topics?.files.map((e: any, index: number) => {
-                return (
-                  <div
-                    className="cursor-pointer text-state-info hover:underline"
-                    onClick={() =>
-                      setOpenPdf({ status: true, url: e.resource.url })
-                    }
-                    key={index}
-                  >
-                    {e.resource.name}
-                  </div>
-                )
-              })}
+            <>
+              {topics?.files?.length > 0 &&
+                topics?.files.map((e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline"
+                      onClick={() =>
+                        setOpenPdf({ status: true, url: e.resource.url })
+                      }
+                      key={index}
+                    >
+                      {e.resource.name}
+                    </div>
+                  )
+                })}
+            </>
           </div>
 
           <div
@@ -853,7 +864,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       <QuitTestModal
         open={openQuit}
         setOpen={setOpenQuit}
-        handleQuit={() => router.back()}
+        handleQuit={() => backToPart()}
         handleCancel={() => setUnsavedChanges(true)}
       />
       <ModalUploadFile
