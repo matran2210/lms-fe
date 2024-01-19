@@ -14,8 +14,8 @@ const Explanation = () => {
       case QUESTION_TYPES.ONE_CHOICE:
       case QUESTION_TYPES.TRUE_FALSE:
         const correctAnswers = answers
-        const corrects = Object.fromEntries(
-          correctAnswers.map((answer: any) => [answer.id, answer.is_correct]),
+        const corrects = Object?.fromEntries(
+          correctAnswers?.map((answer: any) => [answer.id, answer.is_correct]),
         )
         return corrects
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -47,9 +47,9 @@ const Explanation = () => {
       ...resultResponse.data.answer.question,
       confirmed: true,
       corrects: getCorrect(
-        resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
-          ? resultResponse.data.answer.question.answer_position_mapping
-          : resultResponse.data.answer.question.answer_matching_mapping,
+        resultResponse.data.answer.question.answers?.[0]
+          ? resultResponse.data.answer.question.answers
+          : resultResponse.data.answer.question.question_matchings,
         resultResponse.data.answer.question.qType,
       ),
       question_matchings: getCorrect(
