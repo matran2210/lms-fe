@@ -269,7 +269,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [quizAttempId, setQuizAttempId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
-  const [remainTime, setRemainTime] = useState<number>(0 * 60)
+  const [remainTime, setRemainTime] = useState<number>(
+    quizDetail.quiz_timed * 60,
+  )
   const dispatch = useAppDispatch()
 
   const [submited, setSubmited] = useState(false)
@@ -1718,7 +1720,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
               <UnHighLightIcon />
               <div className="hidden font-normal text-sm 3xl:inline-block">
-                UnHighlight
+                Unhighlight
               </div>
             </div>
           </button>

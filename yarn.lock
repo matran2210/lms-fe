@@ -3032,10 +3032,10 @@ entities@^4.2.0, entities@^4.4.0, entities@^4.5.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
-entrance-test-result-package@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.3.tgz#5abdc3bda88939bdb2ebcd1b7b5af9e48646df11"
-  integrity sha512-x91MQy/+HvMIG+YAK5GZW7RZT86TY36k7VeTzR2BClx7PJhWB2gPPWg4UyMkeV7R8oAaMqJd8cmbegWC6o/wBg==
+entrance-test-result-package@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.13.tgz#c3cf89db60db3c2a0571c57258221ca4467401d7"
+  integrity sha512-StaKstJZDKzjuDjU7PBGMJleo7Qh6Y/ssV/s49w0fw497YPk3SvlmiAz3Fwu8FL8VwvWvxLl5mAawRwRL+BBtg==
   dependencies:
     sass "^1.69.5"
 
@@ -3424,10 +3424,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.9.tgz#0b4c43f6f55bc3894b1e75b363a9936db75c7acf"
-  integrity sha512-DB0lGRYheQV5nrmnXqFSXVboKHJLZ0by8MNCymH1XtYAF+ViYNEJDrHSVszrseiyyN5CbbKitK8hFeFhJ+r+jg==
+explanation-package@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.10.tgz#f12e47f1d0ce35d69261f5a07c00a24b1265180e"
+  integrity sha512-8VBoiiSoOeOSKy4Idv9sBCXgzrpRhYEIxJANbKGUIAWIy0xoYyAmQGRwppkBd/0pnHD9yt30TtKQfrrvicf6Tg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -5729,10 +5729,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.0.9.tgz#92396ce9149c2bcd2c91600c23cbdbc5d1031c37"
-  integrity sha512-701I+UAOflCGhuAnVBmDtO+BO0X5n5j4YCPd0PbzQngQg76QLEUBc1XOUFsQmefkdSUz5btx60+E2He/mI/iwg==
+quiz-result-package@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.0.10.tgz#f5567c63d5f5b59c3085298027d64a16435118d6"
+  integrity sha512-K6nKgoJ+jEArYTHWE1kmOV8UeMrIR8pdd/VlPOGBuP6f+zNaVf/yNgi1iBIih9EApxC73VT03aGStF7OX1SjqQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 
