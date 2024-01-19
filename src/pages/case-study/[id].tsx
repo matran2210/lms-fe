@@ -23,7 +23,7 @@ import { LAYOUT } from '@utils/constants'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { QUESTION_TYPES } from 'src/constants'
@@ -223,6 +223,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [startTime, setStartTime] = useState(Date.now())
   const [openUpload, setOpenUpload] = useState<any>({})
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+  const [unsavedChanges, setUnsavedChanges] = useState(true)
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -509,64 +510,37 @@ const CaseStudyDetail = ({ questions }: any) => {
       }),
     )
   }
-  // const unsavedChanges = true
-  // const warningText =
-  //   'You have unsaved changes - are you sure you wish to leave this page?'
+  const checkCalExist = useMemo(() => {
+    for (let i in openScratchPad) {
+      if (openScratchPad[i].type === 'calculator') {
+        return +i
+      }
+    }
+    return -1
+    // if (!arr.includes('calculator')) {
+  }, [openScratchPad])
+  const warningText =
+    'You have unsaved changes - are you sure you wish to leave this page?'
 
-  // useEffect(() => {
-  //   const handleWindowClose = (e: any) => {
-  //     // if (!unsavedChanges) return
-  //     e.preventDefault()
-  //     return (e.returnValue = warningText)
-  //   }
-  //   const handleBrowseAway = () => {
-  //     console.log('abc')
-
-  //     // if (!unsavedChanges) return
-  //     if (window.confirm(warningText)) return
-  //     router.events.emit('routeChangeError')
-  //     throw 'routeChange aborted.'
-  //   }
-  //   window.addEventListener('beforeunload', handleWindowClose)
-  //   router.events.on('routeChangeStart', handleBrowseAway)
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleWindowClose)
-  //     router.events.off('routeChangeStart', handleBrowseAway)
-  //   }
-  // }, [])
-  // useEffect(() => {
-  //   const handleBeforeUnload = async (event: any) => {
-  //     event.preventDefault()
-  //     await handleSubmitQuestion()
-  //   }
-
-  //   // Thêm lắng nghe sự kiện beforeunload
-  //   window.addEventListener('beforeunload', handleBeforeUnload)
-
-  //   // Cleanup khi component bị unmount
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload)
-  //   }
-  // }, [listQuestions])
-  // useEffect(() => {
-  //   router.beforePopState(({ as }) => {
-  //     if (as !== router.asPath) {
-  //       try {
-  //         handleSubmitQuestion()
-  //         return true
-  //       } catch (err) {
-  //         return true
-  //       }
-  //       // Will run when leaving the current page; on back/forward actions
-  //       // Add your logic here, like toggling the modal state
-  //     }
-  //     return true
-  //   })
-
-  //   return () => {
-  //     router.beforePopState(() => true)
-  //   }
-  // }, [listQuestions, router])
+  useEffect(() => {
+    const handleWindowClose = (e: any) => {
+      if (!unsavedChanges) return
+      e.preventDefault()
+      return (e.returnValue = warningText)
+    }
+    const handleBrowseAway = () => {
+      if (!unsavedChanges) return
+      if (window.confirm(warningText)) return
+      router.events.emit('routeChangeError')
+      throw 'routeChange aborted.'
+    }
+    window.addEventListener('beforeunload', handleWindowClose)
+    router.events.on('routeChangeStart', handleBrowseAway)
+    return () => {
+      window.removeEventListener('beforeunload', handleWindowClose)
+      router.events.off('routeChangeStart', handleBrowseAway)
+    }
+  }, [unsavedChanges])
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {loading && (
@@ -601,6 +575,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               size: 'medium',
               onClick: () => {
                 setOpenQuit(true)
+                setUnsavedChanges(false)
               },
               loading: false,
               //   full: fullWidthBtn,
@@ -808,18 +783,23 @@ const CaseStudyDetail = ({ questions }: any) => {
         <div className=" bg-gray-3 flex items-center justify-between shadow-question-footer h-[48px] relative">
           <div className="flex items-center h-full">
             <button className="h-full">
-              <div className="flex items-center gap-3 ps-6 ">
+              <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                 <HelpIcon />
-                <div className="font-normal text-sm pe-6 border-r">Help</div>
+                <div className="hidden font-normal text-sm 3xl:inline-block">
+                  Help
+                </div>
               </div>
             </button>
             <button
               className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
-              onClick={() => setAllowHighLight(!allowHighLight)}
+              onClick={() => {
+                setAllowHighLight(!allowHighLight)
+                setAllowUnHighLight(false)
+              }}
             >
-              <div className="flex items-center gap-3 ps-6 ">
+              <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
                 <HighlightIcon />
-                <div className="font-normal text-sm pe-6 border-r">
+                <div className="hidden font-normal text-sm 3xl:inline-block">
                   Highlight
                 </div>
               </div>
@@ -841,20 +821,23 @@ const CaseStudyDetail = ({ questions }: any) => {
               className="h-full"
               onClick={() => handleOpenScratchPad('scratch_pad')}
             >
-              <div className="flex items-center gap-3 ps-6 ">
+              <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l">
                 <ScratchPadIcon />
-                <div className="font-normal text-sm pe-6 border-r">
+                <div className="hidden font-normal text-sm 3xl:inline-block">
                   Scratch Pad
                 </div>
               </div>
             </button>
             <button
-              className="h-full"
+              className={`h-full ${
+                checkCalExist > -1 && 'sapp-disable-button'
+              }`}
               onClick={() => handleOpenScratchPad('calculator')}
+              disabled={checkCalExist > -1}
             >
-              <div className="flex items-center gap-3 ps-6 ">
+              <div className="flex items-center gap-3 px-4 3xl:px-6 border-l">
                 <CalculatorIcon />
-                <div className="font-normal text-sm pe-6 border-r">
+                <div className="hidden font-normal text-sm 3xl:inline-block">
                   Calculator
                 </div>
               </div>
@@ -871,6 +854,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         open={openQuit}
         setOpen={setOpenQuit}
         handleQuit={() => router.back()}
+        handleCancel={() => setUnsavedChanges(true)}
       />
       <ModalUploadFile
         open={openUpload.status}
