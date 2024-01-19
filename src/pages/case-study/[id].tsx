@@ -473,6 +473,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
         })
+        setUnsavedChanges(false)
         toast.success('submit success')
         router.replace(
           `/case-study/table-result/${quizAttempId}?class_user_id=${router.query.class_user_id}`,
@@ -824,7 +825,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
                 <UnHighLightIcon />
                 <div className="hidden font-normal text-sm 3xl:inline-block">
-                  UnHighlight
+                  Unhighlight
                 </div>
               </div>
             </button>
@@ -860,6 +861,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         open={openSubmit}
         setOpen={setOpenSubmit}
         handleSubmit={handleSubmitQuestion}
+        handleCancel={() => setUnsavedChanges(true)}
       />
       <QuitTestModal
         open={openQuit}
