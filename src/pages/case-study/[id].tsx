@@ -473,6 +473,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
         })
+        setUnsavedChanges(false)
         toast.success('submit success')
         router.replace(
           `/case-study/table-result/${quizAttempId}?class_user_id=${router.query.class_user_id}`,
@@ -860,6 +861,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         open={openSubmit}
         setOpen={setOpenSubmit}
         handleSubmit={handleSubmitQuestion}
+        handleCancel={() => setUnsavedChanges(true)}
       />
       <QuitTestModal
         open={openQuit}
