@@ -66,7 +66,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
         </div>
         <div className="action flex items-center jusity-between relative mt-10">
           {data.is_attempt ? (
-            data.attempt_status === 'SUBMITTED' ? (
+            data.attempt_status === 'SUBMITTED' || 'UN_FINISHED' ? (
               <ButtonSecondary
                 title="Detail"
                 full={false}
