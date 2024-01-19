@@ -51,7 +51,7 @@ const TestTimeOutModal = ({
       <TimeIcon />
       <div className="text-bw-1 text-4xl font-bold mt-6 gap">Time Out</div>
       <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-13">
-        You will have 60 days from the activation date to study this course
+        You are running out of time to do your test
       </div>
     </SappModal>
   )
