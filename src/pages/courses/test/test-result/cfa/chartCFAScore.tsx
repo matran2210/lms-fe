@@ -11,7 +11,7 @@ interface IProps {
 
 const ChartCFAScore = ({ data }: IProps) => {
   return (
-    <div className="block">
+    <div className="block overflow-x-auto">
       <div className="text-xl font-medium text-bw-1 mb-6">
         Your Performance by Topic Area
       </div>
@@ -39,7 +39,7 @@ const ChartCFAScore = ({ data }: IProps) => {
             key={item?.question_topic_id}
             className="w-16 h-1 bg-primary absolute"
             style={{
-              left: `${14.2 * (index + 1)}%`,
+              left: `${13.9 * (index + 1)}%`,
               bottom: `${
                 (item?.total_correct_answers / item.total_questions) * 100
               }%`,
@@ -48,16 +48,16 @@ const ChartCFAScore = ({ data }: IProps) => {
         ))}
       </div>
       <div className="block">
-        <div className="bg-gray-4 w-full overflow-x-auto flex flex-row">
+        <div className="bg-gray-4 w-full flex flex-row">
           <div className="flex flex-col shrink-0 justify-between py-3 bg-white pr-7">
             <div className="text-medium-sm">Topic Area</div>
             <div className="text-medium-sm">Topic Weight</div>
           </div>
-          <div className="flex flex-row gap-6 flex-start px-6 py-3 ">
+          <div className="flex flex-row flex-start pr-6">
             {data?.map((item: any) => (
               <div
                 key={item?.id}
-                className="flex flex-col w-full max-w-27 justify-between shrink-0 items-start gap-1"
+                className="bg-gray-4 flex flex-col w-full min-w-[134px] max-w-27 justify-between shrink-0 items-start gap-1 first:pl-6 pr-6 py-3"
               >
                 <div className="text-bw-1 font-medium">{item?.title}</div>
                 <div className="text-medium-sm text-gray-1 font-normal">

@@ -121,6 +121,7 @@ const LoginPage = () => {
           getListEntranceTest()
           dispatch(clearGuideState())
           dispatch(getEntranceCount())
+          localStorage.setItem('enstranceTest', 'true')
         })
         .catch((error) => {
           if (error?.response?.data?.error?.code === '403|0001') {

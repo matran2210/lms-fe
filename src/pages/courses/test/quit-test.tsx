@@ -8,8 +8,9 @@ interface IProps {
   open: boolean
   setOpen: any
   handleQuit: any
+  handleCancel: any
 }
-const QuitTestModal = ({ open, setOpen, handleQuit }: IProps) => {
+const QuitTestModal = ({ open, setOpen, handleQuit, handleCancel }: IProps) => {
   const onSubmit = () => {
     setOpen(false)
     handleQuit()
@@ -17,6 +18,7 @@ const QuitTestModal = ({ open, setOpen, handleQuit }: IProps) => {
     //to do: start test
   }
   const onCancel = () => {
+    handleCancel()
     setOpen(false)
   }
   return (

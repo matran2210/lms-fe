@@ -62,6 +62,7 @@ export const exceptions = {
   '400|6007': 'Invalid Quiz',
   '400|6008': 'Locked Quiz Status',
   '403|5902': 'This Question Already In Used',
+  '403|6010': "You don't have permission to view this page. Please login",
   '404|071704': 'Course Section Note Not Found',
   '400|100006': 'Class User Not Allow Extend',
   '400|060710': 'Quiz Attempt Limited',

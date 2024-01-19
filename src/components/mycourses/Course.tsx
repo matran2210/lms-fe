@@ -191,6 +191,15 @@ const Course = ({
       const params = {
         classId: `${classInstance?.id}`,
       }
+      if (
+        course?.course_type === 'TRIAL_COURSE' &&
+        !student &&
+        classInstance?.duration_type === 'FIXED'
+      ) {
+        Object.assign(params, {
+          is_student_in_class: false,
+        })
+      }
       const res = await CourseAPI.extendCourse(params)
       await fetchCourseList()
       toast.success('Gia hạn hành công!')
