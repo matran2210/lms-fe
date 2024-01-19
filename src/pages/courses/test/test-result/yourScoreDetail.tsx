@@ -19,7 +19,7 @@ const headers = [
       'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
   },
   {
-    label: 'Topic',
+    label: 'Section (Part)',
     className:
       'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
   },
@@ -161,7 +161,7 @@ const YourScoreDetail = () => {
                     ></div>
                   </td>
                   <td className="text-start m-6 pr-4 text-bw-1">
-                    {e?.question?.question_topic?.name ?? '--'}
+                    {e?.question?.question_filter_id?.part?.name ?? '--'}
                   </td>
                   <td className="text-start m-6 pr-4 text-bw-1">
                     <div className="mt-6 mr-6 mb-6 min-w-132px">
