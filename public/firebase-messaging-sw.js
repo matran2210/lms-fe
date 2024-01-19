@@ -33,15 +33,15 @@ messaging.onBackgroundMessage(function(payload) {
 })
 
 // Remove firebase messaging
-messaging.setBackgroundMessageHandler(function(payload) {
-  return new Promise(function(resolve, reject) {
-    resolve()
-    setTimeout(function(){
-      self.registration.getNotifications().then(notifications => {  
-        notifications.forEach((notification) => { 
-          notification.close();
-        })
-      })
-    },10)
-  })
-})
+// messaging.setBackgroundMessageHandler(function(payload) {
+//   return new Promise(function(resolve, reject) {
+//     resolve()
+//     setTimeout(function(){
+//       self.registration.getNotifications().then(notifications => {  
+//         notifications.forEach((notification) => { 
+//           notification.close();
+//         })
+//       })
+//     },10)
+//   })
+// })

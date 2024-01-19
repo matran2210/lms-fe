@@ -18,7 +18,7 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[755px]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[725px]',
   },
   {
     label: 'Type',
