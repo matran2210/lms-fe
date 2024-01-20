@@ -74,6 +74,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         // })()
       } catch (error) {}
     }
+    return () => {
+      dispatch(courseActivityAction.resetActivity())
+    }
   }, [activity])
 
   // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
