@@ -30,6 +30,7 @@ type Props = {
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   document_id: string
+  is_graded?: boolean
 }
 
 const QuizDocument = ({
@@ -39,6 +40,7 @@ const QuizDocument = ({
   quizId,
   grading_preference,
   document_id,
+  is_graded,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -273,9 +275,14 @@ const QuizDocument = ({
       </div>
 
       <div className="min-h-[50px] bg-gray-3 flex items-center py-2 px-6">
-        <div className="text-state-info bg-state-info bg-opacity-10 whitespace-nowrap px-1 py-0.5 font-semibold text-center text-medium-sm text-[11px]">
-          Graded Activity
-        </div>
+        {is_graded ? (
+          <div className="text-state-info bg-state-info bg-opacity-10 whitespace-nowrap px-1 py-0.5 font-semibold text-center text-medium-sm text-[11px]">
+            Graded Activity
+          </div>
+        ) : (
+          <div></div>
+        )}
+
         <div className="w-fit mx-auto flex items-center gap-3">
           <div
             className={`cursor-pointer select-none ${
