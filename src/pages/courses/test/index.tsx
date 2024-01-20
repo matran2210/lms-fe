@@ -98,7 +98,7 @@ const TestModal = ({
         </div>
       </div>
       {data?.quiz?.attempts?.[0]?.ratio_score && (
-        <div className="flex justify-between py-6 gap-8">
+        <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
           <div className="text-gray-1">Latest Result:</div>
           <div className="text-state-info pr-0.5 font-medium underline">
             {data?.quiz?.attempts?.[0]?.ratio_score ?? '- -'}
