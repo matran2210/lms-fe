@@ -22,6 +22,8 @@ const COLORS = {
   outline:
     'bg-white border-bw-1 hover:border-gray-1 hover:text-gray-1 text-bw-1',
   text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2', // Add a new color for ButtonText
+
+  quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
 }
 
 const PADDINGS = {
@@ -44,6 +46,7 @@ const COLOR_LOADING = {
   white: 'bg-gray-1',
   outline: 'bg-gray-1',
   text: 'bg-none',
+  quizActivity: 'bg-white',
 }
 
 const SappButton = ({

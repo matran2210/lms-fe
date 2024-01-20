@@ -275,7 +275,7 @@ const SappModal: React.FC<IProps> = ({
             ></div>
             <div
               className={`${
-                isFullScreen || `${size} p-4 xl:py-10`
+                isFullScreen || `${size} p-4 xl:py-8`
               }  w-full text-center h-full flex justify-center inset-0 items-${position}`}
             >
               <div

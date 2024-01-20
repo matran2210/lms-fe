@@ -329,7 +329,7 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map((e: string) => ({
+                      answer: (payload.myAnswers || [])?.map((e: string) => ({
                         answer_id: e,
                       })),
                     },
@@ -351,7 +351,7 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map(
+                      answer: (payload.myAnswers || [])?.map(
                         (e: string, i: number) => ({
                           answer_text: e,
                           answer_position: i + 1,
@@ -370,7 +370,7 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers
+                      answer: (payload.myAnswers || [])
                         ?.filter((e: string) => e)
                         .map((e: string, i: number) => ({
                           answer_id: e,
@@ -391,7 +391,7 @@ const quizSlice: Slice = createSlice({
                       question_id: payload.question.id,
                       answer:
                         Array.isArray(payload.myAnswers) &&
-                        payload.myAnswers?.map(
+                        (payload.myAnswers || [])?.map(
                           (e: { question_id: string; answer_id: string }) => ({
                             question_id: e.question_id,
                             answer_id: e.answer_id,
@@ -411,10 +411,12 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map((e: any, i: number) => ({
-                        answer_id: e.idAnswer,
-                        answer_position: i + 1,
-                      })),
+                      answer: (payload.myAnswers || [])?.map(
+                        (e: any, i: number) => ({
+                          answer_id: e.idAnswer,
+                          answer_position: i + 1,
+                        }),
+                      ),
                     },
                   ]
                   const corrects = [...(payload.question.answers || [])]
