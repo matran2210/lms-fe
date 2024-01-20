@@ -125,6 +125,10 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .editor-wrap {
+  hr {
+    @apply hidden;
+  }
+
   p {
     @apply break-words mb-2;
   }

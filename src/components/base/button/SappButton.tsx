@@ -63,7 +63,7 @@ const SappButton = ({
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
-  let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-semibold  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
+  let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
 
   isUnderLine = isUnderLine ?? color === 'text'
   componentClass += ` ${isUnderLine ? 'hover:underline' : ''}`
