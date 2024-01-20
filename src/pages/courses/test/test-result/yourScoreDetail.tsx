@@ -126,7 +126,7 @@ const YourScoreDetail = () => {
   }, [router])
 
   return (
-    <div className="bg-white px-6 xl:px-24 py-6 max-w-[1144px] max-h-full shadow-sidebar">
+    <div className="bg-white px-6 md:px-24 py-6 max-w-[1144px] max-h-full shadow-sidebar">
       <div className="text-xl font-medium text-bw-1 mb-6">
         Your Score Details
       </div>

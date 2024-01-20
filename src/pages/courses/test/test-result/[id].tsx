@@ -13,12 +13,9 @@ import { apiURL } from 'src/redux/services/httpService'
 import { removeJwtToken } from '@utils/helpers/authen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import { TEST_TYPE } from '@utils/constants'
 
 const TestResultDetail = ({ questions, chartData }: any) => {
-  const testType =
-    questions?.quizAttempt?.quiz?.quiz_type === 'MID_TERM_TEST'
-      ? 'Midterm Test'
-      : 'Final Test'
   // Config Courses
   const breadcrumbs: ITabs[] = [
     {
@@ -31,7 +28,7 @@ const TestResultDetail = ({ questions, chartData }: any) => {
     },
     {
       link: `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`,
-      title: `${testType}`,
+      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
     },
     {
       link: '/',
