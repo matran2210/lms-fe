@@ -29,7 +29,7 @@ const YourScore = ({ chartData }: IProps) => {
   )
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
   return (
-    <div className="bg-white w-full max-w-[1144px] items-start px-4 xl:px-24 py-6 mb-6 shadow-sidebar">
+    <div className="bg-white w-full max-w-[1144px] items-start px-4 md:px-24 py-6 mb-6 shadow-sidebar">
       <TotalScore score={highestValue} globalAverage={GlobalAverage} />
       <div className="block w-full">
         <ChartCFAScore data={chartData?.chart_data} />
