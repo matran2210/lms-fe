@@ -58,6 +58,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const isFinishRef = useRef<boolean>(false)
   const router = useRouter()
   const activityType = activity?.display_icon
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useLayoutEffect(() => {
     if (activity) {
@@ -84,7 +85,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // }
 
   useEffect(() => {
-    finishedCourseSectionProgress()
+    setTimeout(() => {
+      finishedCourseSectionProgress()
+    }, 500)
   }, [
     endActivityRef.current,
     quizDocumentRef.current,
@@ -102,66 +105,75 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
    */
   const finishedCourseSectionProgress = async () => {
-    // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
-    if (activityType === 'VIDEO' && videoRef?.current) {
-      for (let e of videoRef.current) {
-        e.addEventListener('playing', async () => {
-          await handleFinishedCourseSectionProgress()
-        })
-      }
-      return
-    }
-    // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
-    else if (activityType === 'QUIZ' || 'PAST_EXAM_ANALYSIS') {
-      await handleFinishedCourseSectionProgress()
-      return
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
     }
 
-    // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-    if (endActivityRef.current && activityType === 'TEXT') {
-      // Hủy theo dõi nếu đã có observerRef.current
-      if (observerRef.current) {
-        observerRef.current?.unobserve(endActivityRef.current)
-      }
-
-      // Thiết lập các tùy chọn cho IntersectionObserver
-      const options = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5,
-      }
-
-      // Hàm xử lý khi có sự giao thoa
-      const handleIntersection = async (
-        entries: IntersectionObserverEntry[],
-      ) => {
-        const isVisible = entries[0].isIntersecting
-
-        // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-        if (isVisible && endActivityRef.current) {
-          observerRef.current?.unobserve(endActivityRef.current)
-          await handleFinishedCourseSectionProgress()
+    timeoutRef.current = setTimeout(async () => {
+      // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
+      if (activityType === 'VIDEO' && videoRef?.current) {
+        for (let e of videoRef.current) {
+          e.addEventListener('playing', async () => {
+            await handleFinishedCourseSectionProgress()
+          })
         }
+        return
+      }
+      // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
+      else if (
+        activityType === 'QUIZ' ||
+        activityType === 'PAST_EXAM_ANALYSIS'
+      ) {
+        await handleFinishedCourseSectionProgress()
+        return
       }
 
-      // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
-      observerRef.current = new IntersectionObserver(
-        handleIntersection,
-        options,
-      )
+      // Xử lý khi có tham chiếu đến endActivityRef hiện tại
+      else if (endActivityRef.current && activityType === 'TEXT') {
+        // Hủy theo dõi nếu đã có observerRef.current
+        if (observerRef.current) {
+          observerRef.current?.unobserve(endActivityRef.current)
+        }
 
-      // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-      if (endActivityRef.current) {
-        observerRef.current?.observe(endActivityRef.current)
-      }
+        // Thiết lập các tùy chọn cho IntersectionObserver
+        const options = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.5,
+        }
 
-      // Trả về hàm cleanup
-      return () => {
+        // Hàm xử lý khi có sự giao thoa
+        const handleIntersection = async (
+          entries: IntersectionObserverEntry[],
+        ) => {
+          const isVisible = entries[0].isIntersecting
+
+          // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
+          if (isVisible && endActivityRef.current) {
+            observerRef.current?.unobserve(endActivityRef.current)
+            await handleFinishedCourseSectionProgress()
+          }
+        }
+
+        // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
+        observerRef.current = new IntersectionObserver(
+          handleIntersection,
+          options,
+        )
+
+        // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
         if (endActivityRef.current) {
-          observerRef.current?.unobserve(endActivityRef.current)
+          observerRef.current?.observe(endActivityRef.current)
+        }
+
+        // Trả về hàm cleanup
+        return () => {
+          if (endActivityRef.current) {
+            observerRef.current?.unobserve(endActivityRef.current)
+          }
         }
       }
-    }
+    }, 300)
   }
 
   /**

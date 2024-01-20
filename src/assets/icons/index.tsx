@@ -734,7 +734,7 @@ export const ConfirmIcon = () => {
       <path
         d="M46.5 62L56.8333 72.3333L77.5 51.6667M108.5 62C108.5 87.6812 87.6812 108.5 62 108.5C36.3188 108.5 15.5 87.6812 15.5 62C15.5 36.3188 36.3188 15.5 62 15.5C87.6812 15.5 108.5 36.3188 108.5 62Z"
         stroke="#FFB800"
-        stroke-width="8"
+        strokeWidth="8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

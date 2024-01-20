@@ -10,6 +10,7 @@ export type IButtonColors =
   | 'white'
   | 'outline'
   | 'text'
+  | 'quizActivity'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void

@@ -148,7 +148,7 @@ export default function Icon({ type, className }: IconsPros) {
               width="16.5"
               height="16.5"
               stroke="currentColor"
-              stroke-width="1.5"
+              strokeWidth="1.5"
             />
           </g>
         </svg>
