@@ -10,6 +10,7 @@ import { IQuestion } from 'src/type/course/Question'
  * @interface
  */
 export interface IActivityStateQuestion extends IQuestion {
+  answer_file: any
   question_topic: any
   confirmed?: boolean
   myAnswers?: any

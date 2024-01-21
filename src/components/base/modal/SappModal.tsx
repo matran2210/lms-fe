@@ -62,6 +62,7 @@ interface IProps {
   externalLoading?: boolean
 
   revertFunction?: boolean
+  showCloseIcon?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -128,6 +129,7 @@ const SappModal: React.FC<IProps> = ({
   footerClassName,
   externalLoading,
   revertFunction = false,
+  showCloseIcon,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -287,22 +289,24 @@ const SappModal: React.FC<IProps> = ({
                 {showHeader &&
                   (customHeader || (
                     <div className="bg-white md:pb-5 pb-5 relative">
+                      {isBordered && (
+                        <div className="absolute left-0 right-0 border-b border-gray-2 bottom-0 -mx-6"></div>
+                      )}
                       <div className="flex">
                         {customTitle || (
                           <div className="text-xl font-bold text-bw-1">
                             {title}
                           </div>
                         )}
-                        <div
-                          className="ml-auto cursor-pointer"
-                          onClick={onCancel}
-                        >
-                          <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
-                        </div>
+                        {showCloseIcon && (
+                          <div
+                            className="ml-auto cursor-pointer"
+                            onClick={onCancel}
+                          >
+                            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+                          </div>
+                        )}
                       </div>
-                      {isBordered && (
-                        <div className="absolute inset-0 border-b border-gray-2 bottom-0 -mx-6 h-[1px] -z-10"></div>
-                      )}
                     </div>
                   ))}
 

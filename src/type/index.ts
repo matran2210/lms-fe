@@ -10,6 +10,7 @@ export type IButtonColors =
   | 'white'
   | 'outline'
   | 'text'
+  | 'textUnderline'
   | 'quizActivity'
 export interface IButtonProps {
   title: string

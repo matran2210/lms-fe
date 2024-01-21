@@ -21,8 +21,9 @@ const COLORS = {
     'bg-white hover:bg-primary-2 disabled:bg-white text-gray-1 hover:text-white',
   outline:
     'bg-white border-bw-1 hover:border-gray-1 hover:text-gray-1 text-bw-1',
-  text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2', // Add a new color for ButtonText
-
+  text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 font-medium',
+  textUnderline:
+    'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
   quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
 }
 
@@ -46,6 +47,7 @@ const COLOR_LOADING = {
   white: 'bg-gray-1',
   outline: 'bg-gray-1',
   text: 'bg-none',
+  textUnderline: 'bg-none',
   quizActivity: 'bg-white',
 }
 

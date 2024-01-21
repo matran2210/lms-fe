@@ -5,6 +5,7 @@ import { ExplanationPackage } from 'explanation-package'
 import 'explanation-package/dist/index.css'
 import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
 import { CloseIcon } from '@assets/icons'
+import { UploadAPI } from 'src/pages/api/upload'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -27,13 +28,11 @@ const ModalExplanationPackage = ({
   open,
   setOpen,
   document_id = '',
-  handleDownload = () => {},
 }: {
   quizAttemptsAnswerId: string
   open: boolean
   setOpen: (open?: boolean) => void
   document_id?: string
-  handleDownload?: () => void
 }) => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   useEffect(() => {
@@ -99,6 +98,14 @@ const ModalExplanationPackage = ({
       default:
         return {}
     }
+  }
+
+  const handleDownload = async (data: {
+    files: { name: string; file_key: string }[]
+  }) => {
+    try {
+      await UploadAPI.downloadFile(data)
+    } catch (error) {}
   }
 
   return (
