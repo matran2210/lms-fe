@@ -295,6 +295,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     if (type === 'PAST_EXAM_ANALYSIS') {
       return <SappIcon icon="course_past_exam_analysis"></SappIcon>
     }
+    if (type === 'QUIZ') {
+      return <SappIcon icon="course_quiz"></SappIcon>
+    }
   }
 
   return (
