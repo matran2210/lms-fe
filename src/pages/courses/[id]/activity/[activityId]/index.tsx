@@ -451,6 +451,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                         }
                         handleProcess={handleFinishedCourseSectionProgress}
                         document_id={e.id}
+                        quizId={e.quiz?.id || ''}
                       ></VideoDocument>
                     </div>
                   )

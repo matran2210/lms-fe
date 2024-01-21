@@ -36,6 +36,7 @@ type Props = {
   streamRefProp: StreamPlayerApi | any
   handleProcess?: () => void
   document_id: string
+  quizId: string
 }
 
 /**
@@ -51,6 +52,7 @@ const VideoDocument = ({
   streamRefProp,
   handleProcess,
   document_id,
+  quizId,
 }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
@@ -375,7 +377,7 @@ const VideoDocument = ({
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
-            section: e.question.question_topic?.name,
+            section: e.question.question_filter_id?.part?.name,
             type: e.question.qType,
             is_correct: e.is_correct,
             time_spent: e.time_spent,
@@ -528,6 +530,9 @@ const VideoDocument = ({
         >
           <div className="py-5">
             <QuizComponent
+              activityId={activityId}
+              tabId={tabId}
+              quizId={quizId}
               ref={questionRef}
               activeQuestion={activeQuestion}
               showCorrect={false}

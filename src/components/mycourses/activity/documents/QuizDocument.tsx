@@ -237,7 +237,7 @@ const QuizDocument = ({
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
-            section: e.question.question_topic?.name,
+            section: e.question.question_filter_id?.part?.name,
             type: e.question.qType,
             is_correct: e.is_correct,
             time_spent: e.time_spent,
@@ -272,6 +272,9 @@ const QuizDocument = ({
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
           <QuizComponent
+            activityId={activityId}
+            tabId={tabId}
+            quizId={quizId}
             showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
             activeQuestion={activeQuestion}
             ref={questionRef}

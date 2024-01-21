@@ -38,7 +38,7 @@ const TableEntranceResult = () => {
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
-            section: e.question.question_topic?.name,
+            section: e.question.question_filter_id?.part?.name,
             type: e.question.qType,
             is_correct: e.is_correct,
             time_spent: e.time_spent,
