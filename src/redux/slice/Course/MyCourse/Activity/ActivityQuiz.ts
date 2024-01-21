@@ -230,6 +230,33 @@ const quizSlice: Slice = createSlice({
           question_id: string
           file: any
         }
+      const existingQuestion = state?.[activityId]?.[tabId]?.[
+        quizId
+      ]?.questions.find((q: { id: string }) => q.id === question_id)
+
+      if (existingQuestion) {
+        existingQuestion.answer_file = {
+          file_key: file.file_key,
+          file_name: file.name,
+        }
+      }
+    },
+    clearFileEssay: (state, action) => {
+      const { activityId, tabId, quizId, question_id, file } =
+        action.payload as unknown as {
+          activityId: string
+          tabId: string
+          quizId: string
+          question_id: string
+          file: any
+        }
+      const existingQuestion = state?.[activityId]?.[tabId]?.[
+        quizId
+      ]?.questions.find((q: { id: string }) => q.id === question_id)
+
+      if (existingQuestion) {
+        existingQuestion.answer_file = null
+      }
     },
   },
   extraReducers: (builder) => {
@@ -482,7 +509,8 @@ export default quizSlice.reducer
  */
 export const courseActivityQuizReducer = (state: RootState) =>
   state.courseActivityQuizReducer
-const { removeQuizFinished, resetQuizActivity } = quizSlice.actions
+const { removeQuizFinished, resetQuizActivity, saveFileEssay, clearFileEssay } =
+  quizSlice.actions
 
 export {
   confirmQuestion,
@@ -490,4 +518,6 @@ export {
   submitQuestion,
   removeQuizFinished,
   resetQuizActivity,
+  saveFileEssay,
+  clearFileEssay,
 }

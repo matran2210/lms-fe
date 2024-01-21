@@ -23,9 +23,10 @@ import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
+  clearFileEssay,
   confirmQuestion,
+  saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { saveFileEssay } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 
 export type QuizComponentRef = {
   onSubmit: ({
@@ -46,10 +47,23 @@ type Props = {
   activeQuestion?: IActivityStateQuestion
   showCorrect?: boolean
   document_id: string
+  activityId: string
+  tabId: string
+  quizId: string
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
-  ({ activeQuestion, showCorrect, document_id }: Props, ref) => {
+  (
+    {
+      activeQuestion,
+      showCorrect,
+      document_id,
+      activityId,
+      tabId,
+      quizId,
+    }: Props,
+    ref,
+  ) => {
     const questionRef = useRef<HTMLDivElement>(null)
     const [essayData, setEssayData] = useState<any>()
 
@@ -296,6 +310,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     ) => {
       dispatch(
         saveFileEssay({
+          activityId,
+          tabId,
+          quizId,
           question_id: question_id,
           file: file,
           topic_id: topic_id,
@@ -513,6 +530,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     question_id: activeQuestion.id,
                   })
                 }
+                handleClearFile={() => {
+                  dispatch(
+                    clearFileEssay({
+                      activityId,
+                      tabId,
+                      quizId,
+                      question_id: activeQuestion.id,
+                    }),
+                  )
+                }}
               />
             </>
           )
