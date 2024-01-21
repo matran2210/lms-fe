@@ -5,6 +5,7 @@ import { httpService } from 'src/redux/services/httpService'
 import { QUESTION_TYPES } from 'src/type/course/Question'
 import 'explanation-package/dist/index.css'
 import { LAYOUT } from '@utils/constants'
+import { CloseIcon } from '@assets/icons'
 // import {} from 'explanation-package'
 const Explanation = () => {
   const router = useRouter()
@@ -83,6 +84,20 @@ const Explanation = () => {
 
   return (
     <div>
+      <div
+        className="ml-auto cursor-pointer absolute  right-6 top-[14px]"
+        onClick={() => {
+          if (activeQuestion?.answer?.quiz_attempt?.id) {
+            router.push(
+              `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
+            )
+          } else {
+            router.back()
+          }
+        }}
+      >
+        <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+      </div>
       <ExplanationPackage
         getActiveQuestion={getActiveQuestion}
         activeQuestion={activeQuestion}
