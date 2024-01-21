@@ -387,7 +387,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     />
                   </div>
                 </div>
-                <div className="flex items-center cursor-pointer select-none mt-12">
+                <div className="border border-b-gray-2 my-6"></div>
+                <div className="flex items-center cursor-pointer select-none">
                   <div className="relative">
                     <div
                       className="flex items-center hover:text-primary group"
@@ -460,7 +461,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       )
                     })}
                 </div>
-                <div className="border border-gray-2 my-6"></div>
+                <div className="border border-b-gray-2 my-6"></div>
                 <div className="flex items-center mb-4">
                   <div className="font-semibold">
                     Exhibits ({activeQuestion.exhibits?.length || 0})
@@ -495,7 +496,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   })}
                 </div>
               </div>
-              <div className="border border-gray-2 my-6"></div>
+              <div className="border border-b-gray-2 my-6"></div>
               <EssayQuestionPreview
                 data={null}
                 question_content={activeQuestion?.question_content}

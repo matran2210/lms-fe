@@ -36,6 +36,7 @@ import {
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
 import { StreamPlayerApi } from '@cloudflare/stream-react'
+import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 
 type Props = {
   activity: IActivity
@@ -62,6 +63,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
   useLayoutEffect(() => {
     if (activity) {
+      dispatch(resetQuizActivity({}))
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(
@@ -75,8 +77,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         // })()
       } catch (error) {}
     }
+
     return () => {
       dispatch(courseActivityAction.resetActivity())
+      dispatch(resetQuizActivity({}))
     }
   }, [activity])
 

@@ -217,6 +217,20 @@ const quizSlice: Slice = createSlice({
         )
       }
     },
+    resetQuizActivity: (state, _action) => {
+      state = undefined
+      return {}
+    },
+    saveFileEssay: (state, action) => {
+      const { activityId, tabId, quizId, question_id, file } =
+        action.payload as unknown as {
+          activityId: string
+          tabId: string
+          quizId: string
+          question_id: string
+          file: any
+        }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -468,11 +482,12 @@ export default quizSlice.reducer
  */
 export const courseActivityQuizReducer = (state: RootState) =>
   state.courseActivityQuizReducer
-const { removeQuizFinished } = quizSlice.actions
+const { removeQuizFinished, resetQuizActivity } = quizSlice.actions
 
 export {
   confirmQuestion,
   fetchQuestionById,
   submitQuestion,
   removeQuizFinished,
+  resetQuizActivity,
 }
