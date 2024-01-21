@@ -26,10 +26,14 @@ const ModalExplanationPackage = ({
   quizAttemptsAnswerId,
   open,
   setOpen,
+  document_id = '',
+  handleDownload = () => {},
 }: {
   quizAttemptsAnswerId: string
   open: boolean
   setOpen: (open?: boolean) => void
+  document_id?: string
+  handleDownload?: () => void
 }) => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   useEffect(() => {
@@ -125,6 +129,8 @@ const ModalExplanationPackage = ({
               <ExplanationPackage
                 getActiveQuestion={getActiveQuestion}
                 activeQuestion={activeQuestion}
+                document_id={document_id}
+                handleDownload={handleDownload}
               />
             </div>
           </div>

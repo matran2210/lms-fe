@@ -101,6 +101,8 @@ const Explanation = () => {
       <ExplanationPackage
         getActiveQuestion={getActiveQuestion}
         activeQuestion={activeQuestion}
+        document_id={''}
+        handleDownload={() => {}}
       />
     </div>
   )
