@@ -21,6 +21,9 @@ const ConFirmSubmit = ({
     handleCancel()
     setOpen(false)
   }
+  const onClose = () => {
+    setOpen(false)
+  }
   return (
     <SappModal
       open={open}
@@ -29,6 +32,7 @@ const ConFirmSubmit = ({
       okButtonCaption="Submit"
       handleCancel={onCancel}
       handleSubmit={onSubmit}
+      handleCloseOnly={onClose}
       //   showCancelButton={false}
       showHeader={false}
       refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"

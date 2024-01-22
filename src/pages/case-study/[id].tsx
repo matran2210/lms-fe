@@ -39,6 +39,7 @@ import ConFirmSubmit from '../test/conFirmSubmit'
 import QuitTestModal from '../courses/test/quit-test'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import PopupViewPdf from '@components/base/pdf/popupViewPdf'
+import LimitQuizModal from '../test/limitQuizModal'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -225,6 +226,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [breadCrumb, setBreadCrumb] = useState<any>()
   const [unsavedChanges, setUnsavedChanges] = useState(true)
+  const [openLimit, setOpenLimit] = useState(false)
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -239,13 +241,20 @@ const CaseStudyDetail = ({ questions }: any) => {
     id: string,
     class_user_id: string,
   ) {
-    const res = await CourseTestApi.createTopicAttempt(
-      quiz_id,
-      id,
-      class_user_id,
-    )
-    setBreadCrumb(res?.data?.breadcumb)
-    setQuizAttempId(res.data.id)
+    try {
+      const res = await CourseTestApi.createTopicAttempt(
+        quiz_id,
+        id,
+        class_user_id,
+      )
+      setBreadCrumb(res?.data?.breadcumb)
+      setQuizAttempId(res.data.id)
+    } catch (err: any) {
+      if (err.response.data.error.code === '400|060710') {
+        setUnsavedChanges(false)
+        setOpenLimit(true)
+      }
+    }
   }
   useEffect(() => {
     if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
@@ -473,13 +482,14 @@ const CaseStudyDetail = ({ questions }: any) => {
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
         })
-        setUnsavedChanges(false)
         toast.success('submit success')
         router.replace(
           `/case-study/table-result/${quizAttempId}?class_user_id=${router.query.class_user_id}`,
         )
       } catch (err) {
         toast.error('submit failed')
+      } finally {
+        // setUnsavedChanges(false)
       }
     }
     return
@@ -531,7 +541,6 @@ const CaseStudyDetail = ({ questions }: any) => {
   }, [openScratchPad])
   const warningText =
     'You have unsaved changes - are you sure you wish to leave this page?'
-
   useEffect(() => {
     const handleWindowClose = (e: any) => {
       if (!unsavedChanges) return
@@ -703,7 +712,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   <div
                     key={question?.id + index}
                     topic-key={topicId}
-                    className={`${index === 0 ? 'pb-8' : 'py-8'} border-b`}
+                    className={`${index === 0 ? 'mb-8' : 'pt-8 mb-8 border-t'}`}
                   >
                     {/*<div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>*/}
 
@@ -873,6 +882,11 @@ const CaseStudyDetail = ({ questions }: any) => {
         setOpen={setOpenQuit}
         handleQuit={() => backToPart()}
         handleCancel={() => setUnsavedChanges(true)}
+      />
+      <LimitQuizModal
+        open={openLimit}
+        setOpen={setOpenLimit}
+        handleQuit={() => router.back()}
       />
       <ModalUploadFile
         open={openUpload.status}

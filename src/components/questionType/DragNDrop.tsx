@@ -236,7 +236,11 @@ const DragNDropPreivew = forwardRef(
       },
     }
     return (
-      <div className="body-modal-white" key={key} ref={extenalRef || null}>
+      <div
+        className="body-modal-white -mt-2"
+        key={key}
+        ref={extenalRef || null}
+      >
         {questionContent && (
           <>
             <div

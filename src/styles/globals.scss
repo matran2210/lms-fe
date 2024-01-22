@@ -185,7 +185,7 @@ body *::-webkit-scrollbar-thumb:hover {
   padding: 8px;
   width: 110px;
   height: 35px;
-  margin-bottom: 8px;
+  // margin-bottom: 8px;
 
   @apply bg-gray-4 font-bold text-base text-center;
 }
@@ -336,7 +336,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
-  @apply inline-block min-w-[100px] border-b border-gray-500 border-0 min-h-[40px] relative;
+  @apply inline-block min-w-[100px] border-b border-gray-500 border-0 min-h-[17px] relative;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box))::after {
