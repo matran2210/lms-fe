@@ -279,7 +279,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               response_option: activeQuestion.response_option
                 ? activeQuestion.response_option
                 : 'WORD',
-              // answer_file: activeQuestion.answer_file,
+              answer_file: activeQuestion.answer_file,
               active: 'SUBMITED',
             }
             break
@@ -512,6 +512,32 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     )
                   })}
                 </div>
+                {activeQuestion.question_topic?.files?.length && (
+                  <div>
+                    <div className="border border-b-gray-2 my-6"></div>
+                    <div>
+                      <div className="font-semibold mb-2">Topic Resource:</div>
+                      {activeQuestion.question_topic?.files.map(
+                        (e: any, index: number) => {
+                          return (
+                            <div
+                              className="cursor-pointer text-state-info hover:underline"
+                              onClick={() => {
+                                setOpenPdf({
+                                  status: true,
+                                  url: e.resource.url,
+                                })
+                              }}
+                              key={index}
+                            >
+                              {e.resource.name}
+                            </div>
+                          )
+                        },
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="border border-b-gray-2 my-6"></div>
               <EssayQuestionPreview

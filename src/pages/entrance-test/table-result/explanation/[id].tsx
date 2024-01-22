@@ -6,6 +6,7 @@ import { QUESTION_TYPES } from 'src/type/course/Question'
 import 'explanation-package/dist/index.css'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
+import { UploadAPI } from 'src/pages/api/upload'
 // import {} from 'explanation-package'
 const Explanation = () => {
   const router = useRouter()
@@ -82,6 +83,14 @@ const Explanation = () => {
   //todo: call api, make UI
   // return <></>
 
+  const handleDownload = async (data: {
+    files: { name: string; file_key: string }[]
+  }) => {
+    try {
+      await UploadAPI.downloadFile(data)
+    } catch (error) {}
+  }
+
   return (
     <div>
       <div
@@ -102,7 +111,7 @@ const Explanation = () => {
         getActiveQuestion={getActiveQuestion}
         activeQuestion={activeQuestion}
         document_id={''}
-        handleDownload={() => {}}
+        handleDownload={handleDownload}
       />
     </div>
   )
