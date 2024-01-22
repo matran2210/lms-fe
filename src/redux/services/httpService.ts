@@ -172,7 +172,8 @@ axiosInstance.interceptors.response.use(
     if (isLoginPage && error.response?.config?.url !== '/me') {
       if (
         error?.response?.status !== 422 &&
-        error?.response?.data?.error?.code !== '403|0001'
+        error?.response?.data?.error?.code !== '403|0001' &&
+        error?.response?.data?.error?.code !== '400|060710'
       ) {
         toast.error(
           errorMessage ||
@@ -191,7 +192,8 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status !== 401) {
       if (
         error?.response?.status !== 422 &&
-        error?.response?.data?.error?.code !== '403|0001'
+        error?.response?.data?.error?.code !== '403|0001' &&
+        error?.response?.data?.error?.code !== '400|060710'
       ) {
         toast.error(
           errorMessage ||
