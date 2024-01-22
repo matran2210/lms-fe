@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { httpService } from 'src/redux/services/httpService'
 import { QUESTION_TYPES } from 'src/type/course/Question'
-import 'explanation-package/dist/index.css'
+// import 'explanation-package/dist/index.css'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
@@ -54,10 +54,7 @@ const Explanation = () => {
           : resultResponse.data.answer.answer_matching_mapping,
         resultResponse.data.answer.question.qType,
       ),
-      question_matchings: getCorrect(
-        resultResponse.data.answer.answer_matching_mapping,
-        resultResponse.data.answer.question.qType,
-      ),
+      question_matchings: resultResponse.data.answer.answer_matching_mapping,
       answers: resultResponse.data?.answer?.question.answers || [],
       myAnswers: [
         {
