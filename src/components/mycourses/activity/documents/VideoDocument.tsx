@@ -95,10 +95,10 @@ const VideoDocument = ({
 
   useEffect(() => {
     handleProcess &&
-      streamRefProp?.current !== null &&
-      streamRefProp?.current !== undefined &&
+      streamRef?.current !== null &&
+      streamRef?.current !== undefined &&
       handleProcess()
-  }, [streamRefProp?.current])
+  }, [streamRef?.current])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
