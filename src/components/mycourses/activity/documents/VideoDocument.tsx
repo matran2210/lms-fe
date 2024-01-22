@@ -94,7 +94,10 @@ const VideoDocument = ({
   }, [])
 
   useEffect(() => {
-    handleProcess && streamRefProp?.current !== null && handleProcess()
+    handleProcess &&
+      streamRefProp?.current !== null &&
+      streamRefProp?.current !== undefined &&
+      handleProcess()
   }, [streamRefProp?.current])
 
   useEffect(() => {
