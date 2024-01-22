@@ -115,27 +115,26 @@ const ProfileSideBar = ({ page }: IProps) => {
           const childLabel = getLabelFromChild(value).replace(/\s+/g, '_')
           const isActive = urlPage === page
 
-          let className =
-            'text-gray-1 relative  hover:font-bold hover:text-primary'
+          let className = 'text-gray-1 relative hover:text-primary'
 
           if (isActive) {
             className = 'bg-secondary font-bold text-primary'
           }
           if (childActivationStates[childLabel]) {
-            className = 'bg-secondary font-bold text-primary'
+            className = 'bg-secondary hover:font-bold text-primary'
           }
 
           return (
             <li className={`${className} cursor-pointer relative`} key={key}>
               <a
-                className={`p-5 w-full text-left flex justify-between hover:bg-secondary ${
+                className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-bold ${
                   isActive ||
                   (urlPage === 'security' &&
                     Object.values(childActivationStates).some(
                       (active) => active,
                     ) &&
                     !childActivationStates[childLabel])
-                    ? 'bg-secondary font-bold text-primary'
+                    ? 'bg-secondary text-primary font-bold'
                     : ''
                 }`}
                 style={{
@@ -185,7 +184,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                       }`}
                     >
                       <a
-                        className="p-5 block w-full text-left"
+                        className="p-5 block w-full text-left hover:font-bold"
                         onClick={() => handleChildClick(childLabel)}
                       >
                         {getLabelFromChild(child)}

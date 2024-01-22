@@ -17,7 +17,7 @@ export const exceptions = {
   '400|4101': 'Permission Already Exists',
   '400|4102': 'Permission Not Found',
   '403|0000': 'Not Modified',
-  '401|0000': 'Unauthorized',
+  '401|0000': "You don't have permission to view this page. Please login",
   '403|0001': 'Forbidden',
   '500|0000': 'Internal Server Error',
   '400|0000': 'Bad Request',
