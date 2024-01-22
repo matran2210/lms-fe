@@ -699,7 +699,11 @@ const CaseStudyDetail = ({ questions }: any) => {
                 const question = Object.values(e)[0] as any
                 const topicId = Object.keys(e)[0] as any
                 return (
-                  <div key={question?.id + index} topic-key={topicId}>
+                  <div
+                    key={question?.id + index}
+                    topic-key={topicId}
+                    className={`${index === 0 ? 'pb-8' : 'py-8'} border-b`}
+                  >
                     {/*<div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>*/}
 
                     {checkType(
@@ -714,7 +718,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       undefined,
                       undefined,
                       question?.requirements?.[0],
-                      undefined,
+                      question?.question_content,
                       valueRef,
                     )}
                   </div>
