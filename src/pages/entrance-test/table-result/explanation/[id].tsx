@@ -7,6 +7,7 @@ import { QUESTION_TYPES } from 'src/type/course/Question'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
+import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 // import {} from 'explanation-package'
 const Explanation = () => {
   const router = useRouter()
@@ -44,7 +45,9 @@ const Explanation = () => {
     const resultResponse = (await httpService.GET({
       uri: 'quiz-attempts/answers/' + id,
     })) as any
-    // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
+    const topicDescription = await CourseTestApi.getTopicDescription(
+      resultResponse?.data?.answer?.question?.question_topic_id,
+    ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
     setActiveQuestion({
       ...resultResponse.data.answer.question,
       confirmed: true,
@@ -68,6 +71,7 @@ const Explanation = () => {
       previous: resultResponse.data.previous,
       total_question: resultResponse.data.total_question,
       index: resultResponse.data.index,
+      topic: topicDescription,
     })
   }
 

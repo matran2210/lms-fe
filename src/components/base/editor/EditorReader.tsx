@@ -46,11 +46,6 @@ const EditorReader = ({
     }
   }, [refDocument?.current, extenalRef?.current])
   useEffect(() => {
-    return () => {
-      setContent(text_editor_content)
-    }
-  }, [])
-  useEffect(() => {
     if (text_editor_content) {
       const parser = new DOMParser()
       const doc = parser.parseFromString(text_editor_content, 'text/html')

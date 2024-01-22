@@ -578,6 +578,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               disabled: false,
               onClick: () => {
                 setOpenSubmit(true)
+                setUnsavedChanges(false)
               },
             }}
             cancel={{
