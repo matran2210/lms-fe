@@ -118,7 +118,7 @@ const ProfileSideBar = ({ page }: IProps) => {
           let className = 'text-gray-1 relative hover:text-primary'
 
           if (isActive) {
-            className = 'bg-secondary hover:font-bold text-primary'
+            className = 'bg-secondary font-bold text-primary'
           }
           if (childActivationStates[childLabel]) {
             className = 'bg-secondary hover:font-bold text-primary'
@@ -134,7 +134,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                       (active) => active,
                     ) &&
                     !childActivationStates[childLabel])
-                    ? 'bg-secondary text-primary hover:font-bold'
+                    ? 'bg-secondary text-primary font-bold'
                     : ''
                 }`}
                 style={{
@@ -178,7 +178,9 @@ const ProfileSideBar = ({ page }: IProps) => {
                     <div
                       key={childLabel}
                       className={`${className} cursor-pointer relative ms-4 hover:bg-secondary ${
-                        childIsActive ? 'bg-secondary text-primary' : ''
+                        childIsActive
+                          ? 'bg-secondary font-bold text-primary'
+                          : ''
                       }`}
                     >
                       <a
