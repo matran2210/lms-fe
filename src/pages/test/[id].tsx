@@ -1378,6 +1378,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               disabled: submited,
               onClick: () => {
                 setOpenSubmit(true)
+                setUnsavedChanges(false)
               },
               //   full: fullWidthBtn,
             }}
