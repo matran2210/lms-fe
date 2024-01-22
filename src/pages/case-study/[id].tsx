@@ -232,6 +232,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       dispatch(
         getTopicsCaseStudy({
           id: router.query.id,
+          quiz_id: router.query.quiz_id,
         }),
       )
     }
@@ -247,14 +248,15 @@ const CaseStudyDetail = ({ questions }: any) => {
         id,
         class_user_id,
       )
-      setBreadCrumb(res?.data?.breadcumb)
-      setQuizAttempId(res.data.id)
-    } catch (err: any) {
-      if (err.response.data.error.code === '400|060710') {
+      if (res?.success === false) {
+        setBreadCrumb(res?.data?.breadcumb)
         setUnsavedChanges(false)
         setOpenLimit(true)
+      } else {
+        setBreadCrumb(res?.data?.breadcumb)
+        setQuizAttempId(res.data.id)
       }
-    }
+    } catch (err) {}
   }
   useEffect(() => {
     if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
@@ -886,7 +888,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       <LimitQuizModal
         open={openLimit}
         setOpen={setOpenLimit}
-        handleQuit={() => router.back()}
+        handleQuit={() => backToPart()}
       />
       <ModalUploadFile
         open={openUpload.status}
