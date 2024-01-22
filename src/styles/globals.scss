@@ -326,7 +326,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .answer-area {
-  @apply flex flex-wrap gap-5 mt-15;
+  @apply flex flex-wrap gap-5 mt-4;
 }
 
 .answer-box {
@@ -379,7 +379,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-upload-file-preview {
-  @apply flex gap-3 py-5 px-0 items-center;
+  @apply flex gap-3 mb-4 px-0 items-center;
 }
 
 .sapp-upload-button-preview {

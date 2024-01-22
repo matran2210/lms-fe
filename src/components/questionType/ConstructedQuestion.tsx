@@ -194,7 +194,7 @@ const EssayQuestionPreview = ({
               index + 1
             } : ${data.name}`}</div>
             <EditorReader
-              className="editor-wrap"
+              className="editor-wrap mb-4"
               // className="questions"
               // style={{ borderBottom: "4px solid #F2F2F2" }}
               text_editor_content={data.description}
@@ -216,8 +216,8 @@ const EssayQuestionPreview = ({
                 )
               })}
           </div>
-          {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
-            forCaseStudy) && <div className="sapp-seprate-line-preview"></div>}
+          {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
+            !forCaseStudy && <div className="sapp-seprate-line-preview"></div>}
         </>
       )}
       <>
@@ -256,8 +256,8 @@ const EssayQuestionPreview = ({
                   </div>
                 </div>
               </div>
-              {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
-                forCaseStudy) &&
+              {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
+                !forCaseStudy &&
                 data && <div className="sapp-seprate-line-preview"></div>}
             </React.Fragment>
           ) : (
@@ -290,10 +290,10 @@ const EssayQuestionPreview = ({
                   </div>
                 )}
               </div>
-              {(question_data.display_type === DISPLAY_TYPE.VERTICAL ||
-                forCaseStudy) && (
-                <div className="sapp-seprate-line-preview"></div>
-              )}
+              {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
+                !forCaseStudy && (
+                  <div className="sapp-seprate-line-preview"></div>
+                )}
             </React.Fragment>
           )
         ) : (
@@ -302,7 +302,7 @@ const EssayQuestionPreview = ({
         <div
           style={
             question_data.display_type === DISPLAY_TYPE.VERTICAL || forCaseStudy
-              ? { width: 'calc(100% + 40px)', marginLeft: '-20px' }
+              ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
         >
