@@ -71,7 +71,7 @@ const Explanation = () => {
       previous: resultResponse.data.previous,
       total_question: resultResponse.data.total_question,
       index: resultResponse.data.index,
-      topic: topicDescription,
+      question_topic: topicDescription?.data,
     })
   }
 

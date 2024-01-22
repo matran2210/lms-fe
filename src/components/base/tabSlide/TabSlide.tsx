@@ -159,7 +159,7 @@ const TabSlide = ({
                 firstEssayPosition !== undefined &&
                 pageNum.index === firstEssayPosition ? (
                   <div className="flex" key={pageNum.id}>
-                    <div className="h-full border me-2"></div>
+                    {idx !== 0 && <div className="h-full border me-2"></div>}
                     <PageLink
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
