@@ -37,6 +37,7 @@ import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
 import { StreamPlayerApi } from '@cloudflare/stream-react'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import PopupViewPdf from '@components/base/pdf/popupViewPdf'
 
 type Props = {
   activity: IActivity
@@ -60,6 +61,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const router = useRouter()
   const activityType = activity?.display_icon
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
 
   useLayoutEffect(() => {
     if (activity) {
@@ -369,7 +371,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
           <div className="h-[1px] border-b"></div>
 
-          <div className="pt-6 pb-4">
+          <div
+            className={`pt-6 pb-4 ${activity?.files?.length > 0 && 'border-b'}`}
+          >
             <div className="font-semibold text-base mb-2">
               Learning Outcome:
             </div>
@@ -386,6 +390,29 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               })}
             </ul>
           </div>
+          {activity?.files?.length > 0 && (
+            <div className="pt-6 pb-4">
+              <div className="font-semibold text-base mb-2">Resource:</div>
+              <ul className="list-disc text-base">
+                {activity?.files.map((e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline"
+                      onClick={() => {
+                        setOpenPdf({
+                          status: true,
+                          url: e.resource.url,
+                        })
+                      }}
+                      key={index}
+                    >
+                      {e.resource.name}
+                    </div>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="bg-gray-3">
@@ -586,6 +613,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       <div className="shadow-activity">
         <Discussion class_id={(router.query.classId as string) || ''} />
       </div>
+      <PopupViewPdf
+        open={openPdf?.status || false}
+        setOpen={setOpenPdf}
+        url={openPdf?.url || ''}
+      />
     </div>
   )
 }
