@@ -792,11 +792,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return tabs
     }
   }
+
   async function getDetail(currentPage: string) {
     try {
       const topicDescription = await CourseTestApi.getTopicDescription(
         questions[questions.findIndex((e: any) => e.id === currentPage)]
           .question_topic_id,
+        quizDetail?.id,
       )
       const res = await CourseTestApi.getQuestionsDetail(currentPage)
       return { topicDescription, res }
