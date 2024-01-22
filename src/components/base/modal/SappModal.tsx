@@ -25,7 +25,7 @@ interface IProps {
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void
-
+  handleCloseOnly?: () => void
   disabled?: boolean
 
   title?: string
@@ -93,7 +93,7 @@ const SappModal: React.FC<IProps> = ({
 
   handleCancel,
   handleSubmit,
-
+  handleCloseOnly,
   disabled,
 
   title,
@@ -162,9 +162,6 @@ const SappModal: React.FC<IProps> = ({
    * @return void
    */
   const onOk = async () => {
-    if (handleSubmit) {
-    }
-
     // Nếu handleSubmit là một hàm bất đồng bộ, thì gọi hàm đó và đợi kết quả
     if (handleSubmit && handleSubmit.constructor.name === 'AsyncFunction') {
       setLoading(true)
@@ -175,7 +172,7 @@ const SappModal: React.FC<IProps> = ({
         setLoading(false)
       }
       if (closeAfterSubmit) {
-        handleClose()
+        CloseOnly()
       }
 
       return
@@ -185,7 +182,7 @@ const SappModal: React.FC<IProps> = ({
       handleSubmit()
     }
     if (closeAfterSubmit) {
-      handleClose()
+      CloseOnly()
     }
   }
 
@@ -241,6 +238,19 @@ const SappModal: React.FC<IProps> = ({
     }
     setTimeout(() => {
       handleCancel && handleCancel()
+    }, 50)
+  }
+  const CloseOnly = () => {
+    if (confirmDialogRef.current) {
+      confirmDialogRef.current.classList.add('animate-jump-out')
+      confirmDialogRef.current.classList.add('pointer-events-none')
+    }
+    if (confirmDialogOverLayRef.current) {
+      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
+      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
+    }
+    setTimeout(() => {
+      handleCloseOnly ? handleCloseOnly() : handleCancel && handleCancel()
     }, 50)
   }
 
