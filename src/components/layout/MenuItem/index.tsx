@@ -144,13 +144,31 @@ export default function MenuItem({
                   />
                 </div>
               ) : (
-                <ExpandIcon
-                  type={Icon}
-                  className={`before-icon shrink-0 min-w-6 min-h-6 ${
-                    selected ? 'text-primary' : 'text-gray-2'
-                  } group-hover:text-primary 
-                  `}
-                />
+                <>
+                  {Icon === 'profile-detail' ? (
+                    <div className="min-w-6 min-h-6 shrink-0 flex items-center">
+                      <Image
+                        src={
+                          user.detail.avatar['40x40'] ||
+                          user.detail.avatar['ORIGIN'] ||
+                          blankAvatar
+                        }
+                        alt="avatar"
+                        className="rounded-full"
+                        width={24}
+                        height={24}
+                      />
+                    </div>
+                  ) : (
+                    <ExpandIcon
+                      type={Icon}
+                      className={`before-icon shrink-0 min-w-6 min-h-6 ${
+                        selected ? 'text-primary' : 'text-gray-2'
+                      } group-hover:text-primary 
+                      `}
+                    />
+                  )}
+                </>
               )}
 
               {Icon === 'avatar' ? (
