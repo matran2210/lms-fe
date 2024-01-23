@@ -576,7 +576,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       {/* Header */}
       <div className="h-full" ref={containerRef}>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
-          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
+          <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
             {topics.name}
           </div>
           <ButtonCancelSubmit
@@ -753,8 +753,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 onClick={() => setOnFocusingPad(e.id)}
                 zIndex={
                   onFocusingPad === e.id
-                    ? openScratchPad.length + 100
-                    : index + 100
+                    ? openScratchPad.length + 1400
+                    : index + 1400
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
@@ -783,8 +783,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 onClick={() => setOnFocusingPad(e.id)}
                 zIndex={
                   onFocusingPad === e.id
-                    ? openScratchPad.length + 100
-                    : index + 100
+                    ? openScratchPad.length + 1400
+                    : index + 1400
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">

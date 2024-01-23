@@ -375,7 +375,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-seprate-line-preview {
-  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3;
+  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3 mb-4;
 }
 
 .sapp-upload-file-preview {
