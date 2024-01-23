@@ -23,7 +23,9 @@ const TotalScore = ({
         <div className="text-xl font-medium leading-6.2 text-bw-1">
           Your Score
         </div>
-        <div className={`${classScore} text-6px font-bold text-primary mt-2`}>
+        <div
+          className={`${classScore} text-6px font-bold text-primary mt-2 font-inter`}
+        >
           <>{score}%</>
         </div>
       </div>
