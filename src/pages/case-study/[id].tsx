@@ -577,7 +577,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       <div className="h-full" ref={containerRef}>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
-            {topics.name}
+            {topics.case_study_name} - {topics.name}
           </div>
           <ButtonCancelSubmit
             className={'flex gap-4 flex-row-reverse w-1/3'}
