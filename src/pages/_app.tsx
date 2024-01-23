@@ -58,14 +58,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
     })
-
-    // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
-    coutNotificationsUnRead()
-    if (getNotiUnread > 0) {
-      dispatch(showNotification())
-    } else {
-      dispatch(hideNotification())
-    }
   })
 
   switch (layout) {
@@ -99,6 +91,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       if (window.localStorage.getItem('accessToken') === '') {
         setOpenResource(false)
       }
+    }
+    // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
+    coutNotificationsUnRead()
+    if (getNotiUnread > 0) {
+      dispatch(showNotification())
+    } else {
+      dispatch(hideNotification())
     }
   }, [router.pathname])
 
