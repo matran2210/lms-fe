@@ -18,7 +18,7 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[755px]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[725px]',
   },
   {
     label: 'Type',
@@ -163,10 +163,10 @@ const TableCaseStudyResult = () => {
               topicAttemptDetail?.quiz?.limit_count >
               topicAttemptDetail?.retake_times ? (
                 <ButtonPrimary
-                  title={`Retake ${topicAttemptDetail?.retake_times} ${
-                    topicAttemptDetail?.is_limited
-                      ? `/${topicAttemptDetail?.limit_count}`
-                      : '/ Unlimited'
+                  title={`Retake ${topicAttemptDetail?.retake_times}${
+                    topicAttemptDetail?.quiz?.is_limited
+                      ? `/${topicAttemptDetail?.quiz?.limit_count}`
+                      : '/Unlimited'
                   }`}
                   size="medium"
                   className={'!font-medium'}
@@ -174,10 +174,10 @@ const TableCaseStudyResult = () => {
               ) : (
                 <ButtonSecondary
                   disabled={true}
-                  title={`Retake ${topicAttemptDetail?.retake_times} ${
-                    topicAttemptDetail?.is_limited
-                      ? `/${topicAttemptDetail?.limit_count}`
-                      : '/ Unlimited'
+                  title={`Retake ${topicAttemptDetail?.retake_times}${
+                    topicAttemptDetail?.quiz?.is_limited
+                      ? `/${topicAttemptDetail?.quiz?.limit_count}`
+                      : '/Unlimited'
                   }`}
                   size="medium"
                   className={'!font-medium'}
@@ -188,10 +188,10 @@ const TableCaseStudyResult = () => {
             )
           ) : (
             <ButtonPrimary
-              title={`Retake ${topicAttemptDetail?.retake_times} ${
-                topicAttemptDetail?.is_limited
-                  ? `/${topicAttemptDetail?.limit_count}`
-                  : '/ Unlimited'
+              title={`Retake ${topicAttemptDetail?.retake_times}${
+                topicAttemptDetail?.quiz?.is_limited
+                  ? `/${topicAttemptDetail?.quiz?.limit_count}`
+                  : '/Unlimited'
               }`}
               size="medium"
               onClick={() =>

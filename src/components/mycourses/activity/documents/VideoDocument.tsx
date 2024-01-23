@@ -33,9 +33,10 @@ type Props = {
   videos?: IVideo[]
   activityId: string
   tabId: string
-  streamRefProp: StreamPlayerApi | any
+  streamRefProp?: StreamPlayerApi | any
   handleProcess?: () => void
   document_id: string
+  quizId: string
 }
 
 /**
@@ -51,6 +52,7 @@ const VideoDocument = ({
   streamRefProp,
   handleProcess,
   document_id,
+  quizId,
 }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
@@ -69,7 +71,7 @@ const VideoDocument = ({
   const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
   const internalRef = useRef<StreamPlayerApi>()
-  const streamRef = streamRefProp ?? internalRef
+  const streamRef = streamRefProp?.current ? streamRefProp : internalRef
   const dispatch = useAppDispatch()
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -92,8 +94,11 @@ const VideoDocument = ({
   }, [])
 
   useEffect(() => {
-    handleProcess && streamRefProp?.current !== null && handleProcess()
-  }, [streamRefProp?.current])
+    handleProcess &&
+      streamRef?.current !== null &&
+      streamRef?.current !== undefined &&
+      handleProcess()
+  }, [streamRef?.current])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
@@ -375,7 +380,7 @@ const VideoDocument = ({
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
-            section: e.question.question_topic?.name,
+            section: e.question.question_filter_id?.part?.name,
             type: e.question.qType,
             is_correct: e.is_correct,
             time_spent: e.time_spent,
@@ -410,6 +415,7 @@ const VideoDocument = ({
         open={openFinishQUiz}
         setOpen={setOpenFinishQUiz}
         handleSubmit={handleFinishQuiz}
+        handleCancel={() => {}}
       ></ConFirmSubmit>
 
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
@@ -460,12 +466,12 @@ const VideoDocument = ({
                   return (
                     <div
                       key={i}
-                      className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid px-6 py-3 hover:text-primary-2 text-bw-1 grid-cols-[1fr,6fr]"
+                      className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid p-3 hover:text-primary-2 text-bw-1 grid-cols-[1.3fr,6fr]"
                       onClick={() => {
                         handleGoTimeline(e.time)
                       }}
                     >
-                      <div className="text-state-info">
+                      <div className="text-state-info mim-w-[62px]">
                         {formatTime(e.time)}
                       </div>
                       <div className="text-bw-1 line-clamp-2 text-inherit">
@@ -510,7 +516,8 @@ const VideoDocument = ({
           isInner={true}
           isBordered={true}
           okButtonClass="!w-20 h-8.5 !px-0"
-          cancelButtonClass="!w-20 h-8.5 !px-0"
+          cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
+          footerButtonClassName="!justify-between flex"
           handleSubmit={
             lastQuestion?.id === activeQuestion?.id
               ? handleSubmit((e) => onSubmit(e, true))
@@ -522,11 +529,14 @@ const VideoDocument = ({
               listQuestion: currentListQuestion,
             })
           }
-          colorCancel="secondary"
+          colorCancel="textUnderline"
           cancelButtonCaption="Skip"
         >
           <div className="py-5">
             <QuizComponent
+              activityId={activityId}
+              tabId={tabId}
+              quizId={quizId}
               ref={questionRef}
               activeQuestion={activeQuestion}
               showCorrect={false}

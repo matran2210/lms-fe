@@ -136,6 +136,11 @@ export const courseActivitySlice = createSlice({
         currentTabId: action.payload?.tabs?.[0]?.id,
       }
     },
+    resetActivity: () => {
+      return {
+        ...initialState,
+      }
+    },
   },
 
   extraReducers: (builder) => {

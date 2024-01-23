@@ -53,8 +53,10 @@ export default function Sidebar({
         } ${isOpened ? 'w-[200px]' : ''}`}
       >
         <div
-          className={`pt-5.25 pb-6 relative max-h-[calc(100vh-145px) overflow-y-auto overflow-x-hidden ${
-            guideStatus && guideStep == 2 ? 'bg-white z-50' : ''
+          className={`pt-5.25 pb-6 relative max-h-[calc(100vh-145px) ${
+            guideStatus && guideStep == 2
+              ? 'bg-white z-50'
+              : 'overflow-y-auto overflow-x-hidden'
           }`}
         >
           <div

@@ -25,7 +25,7 @@ interface IProps {
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void
-
+  handleCloseOnly?: () => void
   disabled?: boolean
 
   title?: string
@@ -62,6 +62,7 @@ interface IProps {
   externalLoading?: boolean
 
   revertFunction?: boolean
+  showCloseIcon?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -92,7 +93,7 @@ const SappModal: React.FC<IProps> = ({
 
   handleCancel,
   handleSubmit,
-
+  handleCloseOnly,
   disabled,
 
   title,
@@ -128,6 +129,7 @@ const SappModal: React.FC<IProps> = ({
   footerClassName,
   externalLoading,
   revertFunction = false,
+  showCloseIcon,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -160,9 +162,6 @@ const SappModal: React.FC<IProps> = ({
    * @return void
    */
   const onOk = async () => {
-    if (handleSubmit) {
-    }
-
     // Nếu handleSubmit là một hàm bất đồng bộ, thì gọi hàm đó và đợi kết quả
     if (handleSubmit && handleSubmit.constructor.name === 'AsyncFunction') {
       setLoading(true)
@@ -173,7 +172,7 @@ const SappModal: React.FC<IProps> = ({
         setLoading(false)
       }
       if (closeAfterSubmit) {
-        handleClose()
+        CloseOnly()
       }
 
       return
@@ -183,7 +182,7 @@ const SappModal: React.FC<IProps> = ({
       handleSubmit()
     }
     if (closeAfterSubmit) {
-      handleClose()
+      CloseOnly()
     }
   }
 
@@ -241,6 +240,19 @@ const SappModal: React.FC<IProps> = ({
       handleCancel && handleCancel()
     }, 50)
   }
+  const CloseOnly = () => {
+    if (confirmDialogRef.current) {
+      confirmDialogRef.current.classList.add('animate-jump-out')
+      confirmDialogRef.current.classList.add('pointer-events-none')
+    }
+    if (confirmDialogOverLayRef.current) {
+      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
+      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
+    }
+    setTimeout(() => {
+      handleCloseOnly ? handleCloseOnly() : handleCancel && handleCancel()
+    }, 50)
+  }
 
   return (
     <>
@@ -275,7 +287,7 @@ const SappModal: React.FC<IProps> = ({
             ></div>
             <div
               className={`${
-                isFullScreen || `${size} p-4 xl:py-10`
+                isFullScreen || `${size} p-4 xl:py-8`
               }  w-full text-center h-full flex justify-center inset-0 items-${position}`}
             >
               <div
@@ -287,22 +299,24 @@ const SappModal: React.FC<IProps> = ({
                 {showHeader &&
                   (customHeader || (
                     <div className="bg-white md:pb-5 pb-5 relative">
+                      {isBordered && (
+                        <div className="absolute left-0 right-0 border-b border-gray-2 bottom-0 -mx-6"></div>
+                      )}
                       <div className="flex">
                         {customTitle || (
                           <div className="text-xl font-bold text-bw-1">
                             {title}
                           </div>
                         )}
-                        <div
-                          className="ml-auto cursor-pointer"
-                          onClick={onCancel}
-                        >
-                          <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
-                        </div>
+                        {showCloseIcon && (
+                          <div
+                            className="ml-auto cursor-pointer"
+                            onClick={onCancel}
+                          >
+                            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+                          </div>
+                        )}
                       </div>
-                      {isBordered && (
-                        <div className="absolute inset-0 border-b border-gray-2 bottom-0 -mx-6 h-[1px] -z-10"></div>
-                      )}
                     </div>
                   ))}
 

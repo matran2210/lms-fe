@@ -5,13 +5,23 @@ interface IProps {
   open: boolean
   setOpen: any
   handleSubmit: any
+  handleCancel: any
 }
-const ConFirmSubmit = ({ open, setOpen, handleSubmit }: IProps) => {
+const ConFirmSubmit = ({
+  open,
+  setOpen,
+  handleSubmit,
+  handleCancel,
+}: IProps) => {
   const onSubmit = () => {
     handleSubmit()
     //to do: start test
   }
   const onCancel = () => {
+    handleCancel()
+    setOpen(false)
+  }
+  const onClose = () => {
     setOpen(false)
   }
   return (
@@ -22,9 +32,10 @@ const ConFirmSubmit = ({ open, setOpen, handleSubmit }: IProps) => {
       okButtonCaption="Submit"
       handleCancel={onCancel}
       handleSubmit={onSubmit}
+      handleCloseOnly={onClose}
       //   showCancelButton={false}
       showHeader={false}
-      refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
+      refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
       size="max-w-[614px]"
       footerButtonClassName="flex flex-col-reverse gap-6"
       childClass="flex flex-col justify-center items-center"
@@ -33,8 +44,9 @@ const ConFirmSubmit = ({ open, setOpen, handleSubmit }: IProps) => {
       fullWidthBtn={true}
       closeAfterSubmit={true}
       buttonSize="extra"
+      scrollbale={false}
     >
-      <div className="p-11">
+      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
         <ConfirmIcon />
       </div>
       <div className="text-bw-1 text-4xl font-bold mt-6">

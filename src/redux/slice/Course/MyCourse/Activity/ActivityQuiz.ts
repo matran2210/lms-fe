@@ -10,6 +10,7 @@ import { IQuestion } from 'src/type/course/Question'
  * @interface
  */
 export interface IActivityStateQuestion extends IQuestion {
+  answer_file: any
   question_topic: any
   confirmed?: boolean
   myAnswers?: any
@@ -217,6 +218,47 @@ const quizSlice: Slice = createSlice({
         )
       }
     },
+    resetQuizActivity: (state, _action) => {
+      state = undefined
+      return {}
+    },
+    saveFileEssay: (state, action) => {
+      const { activityId, tabId, quizId, question_id, file } =
+        action.payload as unknown as {
+          activityId: string
+          tabId: string
+          quizId: string
+          question_id: string
+          file: any
+        }
+      const existingQuestion = state?.[activityId]?.[tabId]?.[
+        quizId
+      ]?.questions.find((q: { id: string }) => q.id === question_id)
+
+      if (existingQuestion) {
+        existingQuestion.answer_file = {
+          file_key: file.file_key,
+          file_name: file.name,
+        }
+      }
+    },
+    clearFileEssay: (state, action) => {
+      const { activityId, tabId, quizId, question_id, file } =
+        action.payload as unknown as {
+          activityId: string
+          tabId: string
+          quizId: string
+          question_id: string
+          file: any
+        }
+      const existingQuestion = state?.[activityId]?.[tabId]?.[
+        quizId
+      ]?.questions.find((q: { id: string }) => q.id === question_id)
+
+      if (existingQuestion) {
+        existingQuestion.answer_file = null
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -329,7 +371,7 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map((e: string) => ({
+                      answer: (payload.myAnswers || [])?.map((e: string) => ({
                         answer_id: e,
                       })),
                     },
@@ -351,7 +393,7 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map(
+                      answer: (payload.myAnswers || [])?.map(
                         (e: string, i: number) => ({
                           answer_text: e,
                           answer_position: i + 1,
@@ -370,7 +412,7 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers
+                      answer: (payload.myAnswers || [])
                         ?.filter((e: string) => e)
                         .map((e: string, i: number) => ({
                           answer_id: e,
@@ -389,12 +431,14 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map(
-                        (e: { question_id: string; answer_id: string }) => ({
-                          question_id: e.question_id,
-                          answer_id: e.answer_id,
-                        }),
-                      ),
+                      answer:
+                        Array.isArray(payload.myAnswers) &&
+                        (payload.myAnswers || [])?.map(
+                          (e: { question_id: string; answer_id: string }) => ({
+                            question_id: e.question_id,
+                            answer_id: e.answer_id,
+                          }),
+                        ),
                     },
                   ]
                   questionToUpdate.corrects =
@@ -409,10 +453,12 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map((e: any, i: number) => ({
-                        answer_id: e.idAnswer,
-                        answer_position: i + 1,
-                      })),
+                      answer: (payload.myAnswers || [])?.map(
+                        (e: any, i: number) => ({
+                          answer_id: e.idAnswer,
+                          answer_position: i + 1,
+                        }),
+                      ),
                     },
                   ]
                   const corrects = [...(payload.question.answers || [])]
@@ -464,11 +510,15 @@ export default quizSlice.reducer
  */
 export const courseActivityQuizReducer = (state: RootState) =>
   state.courseActivityQuizReducer
-const { removeQuizFinished } = quizSlice.actions
+const { removeQuizFinished, resetQuizActivity, saveFileEssay, clearFileEssay } =
+  quizSlice.actions
 
 export {
   confirmQuestion,
   fetchQuestionById,
   submitQuestion,
   removeQuizFinished,
+  resetQuizActivity,
+  saveFileEssay,
+  clearFileEssay,
 }

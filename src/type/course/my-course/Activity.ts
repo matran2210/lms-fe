@@ -83,6 +83,7 @@ export interface ITab {
       constructed_questions: IQuestion[]
       multiple_choice_questions: IQuestion[]
       grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
+      is_graded?: boolean
     }
   }[]
 }

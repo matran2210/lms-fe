@@ -50,8 +50,11 @@ const CourseTestApi = {
     })
     return response
   },
-  getTopicQuiz: async (id: string): Promise<IResponse<any>> => {
-    const uri = url.getTopicQuiz + `/${id}`
+  getTopicQuiz: async (
+    id: string,
+    quiz_id: string,
+  ): Promise<IResponse<any>> => {
+    const uri = url.getTopicQuiz + `/${id}?quiz_id=${quiz_id}`
     const response = await httpService.GET<any, any>({
       uri,
     })
@@ -154,8 +157,11 @@ const CourseTestApi = {
     })
     return response
   },
-  getTopicDescription: async (id: string): Promise<IResponse<any>> => {
-    const uri = url.getTopicDescription + `/${id}`
+  getTopicDescription: async (
+    id: string,
+    quiz_id?: string,
+  ): Promise<IResponse<any>> => {
+    const uri = url.getTopicDescription + `/${id}?quiz_id=${quiz_id}`
     const response = await httpService.GET<any, any>({
       uri,
     })

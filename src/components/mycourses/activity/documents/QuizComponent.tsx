@@ -23,9 +23,10 @@ import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
+  clearFileEssay,
   confirmQuestion,
+  saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { saveFileEssay } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 
 export type QuizComponentRef = {
   onSubmit: ({
@@ -46,10 +47,23 @@ type Props = {
   activeQuestion?: IActivityStateQuestion
   showCorrect?: boolean
   document_id: string
+  activityId: string
+  tabId: string
+  quizId: string
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
-  ({ activeQuestion, showCorrect, document_id }: Props, ref) => {
+  (
+    {
+      activeQuestion,
+      showCorrect,
+      document_id,
+      activityId,
+      tabId,
+      quizId,
+    }: Props,
+    ref,
+  ) => {
     const questionRef = useRef<HTMLDivElement>(null)
     const [essayData, setEssayData] = useState<any>()
 
@@ -261,11 +275,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           case QUESTION_TYPES.ESSAY:
             myAnswers = {
               question_id: activeQuestion.id,
-              short_answers: getValues('essay'),
+              short_answer: getValues('essay'),
               response_option: activeQuestion.response_option
                 ? activeQuestion.response_option
                 : 'WORD',
-              // answer_file: activeQuestion.answer_file,
+              answer_file: activeQuestion.answer_file,
               active: 'SUBMITED',
             }
             break
@@ -296,6 +310,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     ) => {
       dispatch(
         saveFileEssay({
+          activityId,
+          tabId,
+          quizId,
           question_id: question_id,
           file: file,
           topic_id: topic_id,
@@ -387,7 +404,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     />
                   </div>
                 </div>
-                <div className="flex items-center cursor-pointer select-none mt-12">
+                <div className="border border-b-gray-2 my-6"></div>
+                <div className="flex items-center cursor-pointer select-none">
                   <div className="relative">
                     <div
                       className="flex items-center hover:text-primary group"
@@ -460,7 +478,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       )
                     })}
                 </div>
-                <div className="border border-gray-2 my-6"></div>
+                <div className="border border-b-gray-2 my-6"></div>
                 <div className="flex items-center mb-4">
                   <div className="font-semibold">
                     Exhibits ({activeQuestion.exhibits?.length || 0})
@@ -494,8 +512,34 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     )
                   })}
                 </div>
+                {activeQuestion.question_topic?.files?.length && (
+                  <div>
+                    <div className="border border-b-gray-2 my-6"></div>
+                    <div>
+                      <div className="font-semibold mb-2">Topic Resource:</div>
+                      {activeQuestion.question_topic?.files.map(
+                        (e: any, index: number) => {
+                          return (
+                            <div
+                              className="cursor-pointer text-state-info hover:underline"
+                              onClick={() => {
+                                setOpenPdf({
+                                  status: true,
+                                  url: e.resource.url,
+                                })
+                              }}
+                              key={index}
+                            >
+                              {e.resource.name}
+                            </div>
+                          )
+                        },
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="border border-gray-2 my-6"></div>
+              <div className="border border-b-gray-2 my-6"></div>
               <EssayQuestionPreview
                 data={null}
                 question_content={activeQuestion?.question_content}
@@ -512,6 +556,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     question_id: activeQuestion.id,
                   })
                 }
+                handleClearFile={() => {
+                  dispatch(
+                    clearFileEssay({
+                      activityId,
+                      tabId,
+                      quizId,
+                      question_id: activeQuestion.id,
+                    }),
+                  )
+                }}
               />
             </>
           )

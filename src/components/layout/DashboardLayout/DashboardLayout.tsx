@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import Sidebar from '../Sidebar'
+import { useAppSelector } from 'src/redux/hook'
 
 type DashboardLayoutProps = {
   children: React.ReactNode
@@ -16,15 +17,17 @@ export default function DashboardLayout({
   const toggleDrawer = () => {
     setOpened((prev) => !prev)
   }
+  const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
 
   return (
     <div className="flex flex-nowrap">
       <Sidebar
         isOpened={isOpened}
         toggleDrawer={toggleDrawer}
-        className={`menu-sidebar-left fixed top-0 md:left-0 h-screen bg-white shadow-sidebar w-20 max-w-screen overflow-hidden ${
+        className={`menu-sidebar-left fixed top-0 md:left-0 h-screen bg-white shadow-sidebar w-20 max-w-screen ${
           openDrawer ? 'opacity-5' : ''
-        }`}
+        }
+        ${guideStatus ? '' : 'overflow-hidden'}`}
         setOpenResource={setOpenResource}
       />
       <div className="w-full min-h-screen">

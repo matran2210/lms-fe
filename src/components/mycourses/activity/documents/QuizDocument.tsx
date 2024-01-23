@@ -22,6 +22,8 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion } from 'src/type/course/Question'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import SappButton from '@components/base/button/SappButton'
 
 type Props = {
   questions: IQuestion[]
@@ -30,6 +32,7 @@ type Props = {
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   document_id: string
+  is_graded?: boolean
 }
 
 const QuizDocument = ({
@@ -39,6 +42,7 @@ const QuizDocument = ({
   quizId,
   grading_preference,
   document_id,
+  is_graded,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -139,6 +143,7 @@ const QuizDocument = ({
   }
 
   const handleConfirmQuestion = (isFinish: boolean = false) => {
+    setLoading(true)
     if (activeQuestion) {
       questionRef.current?.onSubmit({
         activityId: activityId,
@@ -148,6 +153,7 @@ const QuizDocument = ({
           if (isFinish) {
             setRunHandleFinishQuiz((e) => e + 1)
           }
+          setLoading(false)
         },
       })
     }
@@ -155,6 +161,7 @@ const QuizDocument = ({
 
   const handleFinishQuiz = () => {
     setOpenFinishQuiz(false)
+    setLoading(true)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
     const {
       answers,
@@ -193,6 +200,7 @@ const QuizDocument = ({
               quizId: quizId,
             }),
           )
+          setLoading(false)
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
         })
@@ -200,6 +208,7 @@ const QuizDocument = ({
       if (error.response.status === 422) {
         toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
       }
+      setLoading(false)
     }
   }
 
@@ -228,7 +237,7 @@ const QuizDocument = ({
           response.data.answers?.map((e: any) => ({
             id: e.id,
             content: e.question.question_content,
-            section: e.question.question_topic?.name,
+            section: e.question.question_filter_id?.part?.name,
             type: e.question.qType,
             is_correct: e.is_correct,
             time_spent: e.time_spent,
@@ -257,11 +266,15 @@ const QuizDocument = ({
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
         handleSubmit={handleFinishQuiz}
+        handleCancel={() => {}}
       ></ConFirmSubmit>
 
       <div className="border border-gray-3 p-6">
         {activeQuestion && (
           <QuizComponent
+            activityId={activityId}
+            tabId={tabId}
+            quizId={quizId}
             showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
             activeQuestion={activeQuestion}
             ref={questionRef}
@@ -272,24 +285,37 @@ const QuizDocument = ({
       </div>
 
       <div className="min-h-[50px] bg-gray-3 flex items-center py-2 px-6">
-        <div className="text-state-info bg-state-info bg-opacity-10 whitespace-nowrap px-1 py-0.5 font-semibold text-center text-medium-sm text-[11px]">
+        <div
+          className={`${
+            is_graded || 'invisible'
+          } text-state-info bg-state-info bg-opacity-10 whitespace-nowrap px-1 py-0.5 font-semibold text-center text-medium-sm text-[11px]`}
+        >
           Graded Activity
         </div>
+
         <div className="w-fit mx-auto flex items-center gap-3">
           <div
             className={`cursor-pointer select-none ${
-              activeQuestionIndex === 0 ? 'opacity-50' : ''
+              activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
             }`}
-            onClick={handlePrevQuestion}
+            onClick={() => {
+              if (loading) {
+                return
+              }
+              handlePrevQuestion()
+            }}
           >
             <SappIcon icon="arrow_left" />
           </div>
           Question: {activeQuestionIndex + 1} of {questions?.length || 0}
           <div
             className={`cursor-pointer select-none ${
-              isLastQuestion ? 'opacity-50' : ''
+              isLastQuestion || loading ? 'opacity-50' : ''
             }`}
             onClick={() => {
+              if (loading) {
+                return
+              }
               if (grading_preference !== 'AFTER_EACH_QUESTION') {
                 handleConfirmQuestion(false)
               }
@@ -299,35 +325,44 @@ const QuizDocument = ({
             <SappIcon icon="arrow_right" />
           </div>
         </div>
-
         {(isQuestionConfirmed ||
           grading_preference !== 'AFTER_EACH_QUESTION' ||
-          (!isQuestionConfirmed && isLastQuestion)) && (
-          <div
-            className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
-            onClick={
-              isLastQuestion
-                ? () => handleConfirmQuestion(true)
-                : () => {
-                    if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                      handleConfirmQuestion(false)
-                    }
-                    handleNextQuestion()
-                  }
-            }
-          >
-            {isLastQuestion ? 'Finish' : 'Next'}
-          </div>
+          (isQuestionConfirmed && isLastQuestion)) && (
+          <SappButton
+            title={isLastQuestion ? 'Finish' : 'Next'}
+            full={false}
+            size={'small'}
+            onClick={() => {
+              if (loading) {
+                return
+              }
+              if (isLastQuestion) {
+                handleConfirmQuestion(true)
+              } else {
+                if (grading_preference !== 'AFTER_EACH_QUESTION') {
+                  handleConfirmQuestion(false)
+                }
+                handleNextQuestion()
+              }
+            }}
+            color="quizActivity"
+            loading={loading}
+          />
         )}
         {!isQuestionConfirmed &&
-          !isLastQuestion &&
           grading_preference === 'AFTER_EACH_QUESTION' && (
-            <div
-              className={`bg-gray-1 h-8 w-24 cursor-pointer select-none font-semibold text-white text-center text-medium-sm flex items-center justify-center hover:bg-gray-2`}
-              onClick={() => handleConfirmQuestion(false)}
-            >
-              Confirm
-            </div>
+            <SappButton
+              title={'Confirm'}
+              full={false}
+              size={'small'}
+              onClick={() => {
+                if (!loading) {
+                  handleConfirmQuestion(false)
+                }
+              }}
+              color="quizActivity"
+              loading={loading}
+            />
           )}
       </div>
       <SappModal

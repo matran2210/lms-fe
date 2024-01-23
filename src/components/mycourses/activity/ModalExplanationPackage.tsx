@@ -5,6 +5,8 @@ import { ExplanationPackage } from 'explanation-package'
 import 'explanation-package/dist/index.css'
 import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
 import { CloseIcon } from '@assets/icons'
+import { UploadAPI } from 'src/pages/api/upload'
+import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -26,10 +28,12 @@ const ModalExplanationPackage = ({
   quizAttemptsAnswerId,
   open,
   setOpen,
+  document_id = '',
 }: {
   quizAttemptsAnswerId: string
   open: boolean
   setOpen: (open?: boolean) => void
+  document_id?: string
 }) => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   useEffect(() => {
@@ -40,15 +44,19 @@ const ModalExplanationPackage = ({
 
   const getActiveQuestion = async (id: string) => {
     const resultResponse = await CourseActivityApi.getQuizAttemptsAnswer(id)
+    const topicDescription = await CourseTestApi.getTopicDescription(
+      resultResponse?.data?.answer?.question?.question_topic_id,
+    )
     setActiveQuestion({
       ...resultResponse.data.answer.question,
       confirmed: true,
       corrects: getCorrect(
-        resultResponse.data.answer.question.answers?.[0]
+        resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
           ? resultResponse.data.answer.question.answers
-          : resultResponse.data.answer.question.question_matchings,
+          : resultResponse.data.answer.answer_matching_mapping,
         resultResponse.data.answer.question.qType,
       ),
+      question_matchings: resultResponse.data.answer.answer_matching_mapping,
       answers: resultResponse.data?.answer?.question.answers || [],
       myAnswers: [
         {
@@ -62,6 +70,7 @@ const ModalExplanationPackage = ({
       previous: resultResponse.data.previous,
       total_question: resultResponse.data.total_question,
       index: resultResponse.data.index,
+      question_topic: topicDescription?.data,
     })
   }
 
@@ -93,6 +102,14 @@ const ModalExplanationPackage = ({
     }
   }
 
+  const handleDownload = async (data: {
+    files: { name: string; file_key: string }[]
+  }) => {
+    try {
+      await UploadAPI.downloadFile(data)
+    } catch (error) {}
+  }
+
   return (
     <div>
       <SappModal
@@ -121,6 +138,8 @@ const ModalExplanationPackage = ({
               <ExplanationPackage
                 getActiveQuestion={getActiveQuestion}
                 activeQuestion={activeQuestion}
+                document_id={document_id}
+                handleDownload={handleDownload}
               />
             </div>
           </div>

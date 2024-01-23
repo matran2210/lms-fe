@@ -84,7 +84,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
               <ButtonPrimary
                 title={'Quit'}
                 size={'medium'}
-                className={'px-11 text-medium-sm'}
+                className={'px-11 text-medium-sm !font-medium'}
               />
             </Link>
           </div>

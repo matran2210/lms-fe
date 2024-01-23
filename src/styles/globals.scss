@@ -125,6 +125,10 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .editor-wrap {
+  hr {
+    @apply hidden;
+  }
+
   p {
     @apply break-words mb-2;
   }
@@ -181,7 +185,7 @@ body *::-webkit-scrollbar-thumb:hover {
   padding: 8px;
   width: 110px;
   height: 35px;
-  margin-bottom: 8px;
+  // margin-bottom: 8px;
 
   @apply bg-gray-4 font-bold text-base text-center;
 }
@@ -322,7 +326,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .answer-area {
-  @apply flex flex-wrap gap-5 mt-15;
+  @apply flex flex-wrap gap-5 mt-4;
 }
 
 .answer-box {
@@ -332,7 +336,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
-  @apply inline-block min-w-[100px] border-b border-gray-500 border-0 min-h-[40px] relative;
+  @apply inline-block min-w-[100px] border-b border-gray-500 border-0 min-h-[17px] relative;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box))::after {
@@ -375,7 +379,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-upload-file-preview {
-  @apply flex gap-3 py-5 px-0 items-center;
+  @apply flex gap-3 mb-4 px-0 items-center;
 }
 
 .sapp-upload-button-preview {
@@ -567,4 +571,8 @@ textarea.is-invalid:focus {
   .grid-fit-content {
     grid-template-columns: min-content 1fr;
   }
+}
+
+.min-w-\[63px\] {
+  min-width: 63px;
 }

@@ -39,6 +39,7 @@ import ConFirmSubmit from '../test/conFirmSubmit'
 import QuitTestModal from '../courses/test/quit-test'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import PopupViewPdf from '@components/base/pdf/popupViewPdf'
+import LimitQuizModal from '../test/limitQuizModal'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -225,11 +226,13 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [breadCrumb, setBreadCrumb] = useState<any>()
   const [unsavedChanges, setUnsavedChanges] = useState(true)
+  const [openLimit, setOpenLimit] = useState(false)
   useEffect(() => {
     if (router.query.id) {
       dispatch(
         getTopicsCaseStudy({
           id: router.query.id,
+          quiz_id: router.query.quiz_id,
         }),
       )
     }
@@ -239,13 +242,21 @@ const CaseStudyDetail = ({ questions }: any) => {
     id: string,
     class_user_id: string,
   ) {
-    const res = await CourseTestApi.createTopicAttempt(
-      quiz_id,
-      id,
-      class_user_id,
-    )
-    setBreadCrumb(res?.data?.breadcumb)
-    setQuizAttempId(res.data.id)
+    try {
+      const res = await CourseTestApi.createTopicAttempt(
+        quiz_id,
+        id,
+        class_user_id,
+      )
+      if (res?.success === false) {
+        setBreadCrumb(res?.data?.breadcumb)
+        setUnsavedChanges(false)
+        setOpenLimit(true)
+      } else {
+        setBreadCrumb(res?.data?.breadcumb)
+        setQuizAttempId(res.data.id)
+      }
+    } catch (err) {}
   }
   useEffect(() => {
     if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
@@ -258,7 +269,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   }, [router.query.id])
 
   const backToPart = () => {
-    router.push(
+    router.replace(
       `/courses/${breadCrumb?.[0]?.id}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
     )
   }
@@ -453,7 +464,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       if (e.qType === QUESTION_TYPES.ESSAY) {
         answers.push({
           question_id: e.id,
-          short_answers: e.answer || '',
+          short_answer: e.answer || '',
           response_option: e.response_option ? e.response_option : 'WORD',
           answer_file: e.answer_file,
           active: 'SUBMITED',
@@ -479,6 +490,8 @@ const CaseStudyDetail = ({ questions }: any) => {
         )
       } catch (err) {
         toast.error('submit failed')
+      } finally {
+        // setUnsavedChanges(false)
       }
     }
     return
@@ -530,7 +543,6 @@ const CaseStudyDetail = ({ questions }: any) => {
   }, [openScratchPad])
   const warningText =
     'You have unsaved changes - are you sure you wish to leave this page?'
-
   useEffect(() => {
     const handleWindowClose = (e: any) => {
       if (!unsavedChanges) return
@@ -577,6 +589,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               disabled: false,
               onClick: () => {
                 setOpenSubmit(true)
+                setUnsavedChanges(false)
               },
             }}
             cancel={{
@@ -698,7 +711,11 @@ const CaseStudyDetail = ({ questions }: any) => {
                 const question = Object.values(e)[0] as any
                 const topicId = Object.keys(e)[0] as any
                 return (
-                  <div key={question?.id + index} topic-key={topicId}>
+                  <div
+                    key={question?.id + index}
+                    topic-key={topicId}
+                    className={`${index === 0 ? 'mb-8' : 'pt-8 mb-8 border-t'}`}
+                  >
                     {/*<div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>*/}
 
                     {checkType(
@@ -713,7 +730,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       undefined,
                       undefined,
                       question?.requirements?.[0],
-                      undefined,
+                      question?.question_content,
                       valueRef,
                     )}
                   </div>
@@ -824,7 +841,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
                 <UnHighLightIcon />
                 <div className="hidden font-normal text-sm 3xl:inline-block">
-                  UnHighlight
+                  Unhighlight
                 </div>
               </div>
             </button>
@@ -860,12 +877,18 @@ const CaseStudyDetail = ({ questions }: any) => {
         open={openSubmit}
         setOpen={setOpenSubmit}
         handleSubmit={handleSubmitQuestion}
+        handleCancel={() => setUnsavedChanges(true)}
       />
       <QuitTestModal
         open={openQuit}
         setOpen={setOpenQuit}
         handleQuit={() => backToPart()}
         handleCancel={() => setUnsavedChanges(true)}
+      />
+      <LimitQuizModal
+        open={openLimit}
+        setOpen={setOpenLimit}
+        handleQuit={() => backToPart()}
       />
       <ModalUploadFile
         open={openUpload.status}

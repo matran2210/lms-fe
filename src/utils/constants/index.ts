@@ -5,12 +5,12 @@ export const LAYOUT = {
   FULLSCREEN_LAYOUT: 'FULLSCREEN_LAYOUT',
 }
 export const TEST_TYPE = {
-  QUIZ: 'QUIZ',
-  MID_TERM_TEST: 'MID TERM TEST',
-  FINAL_TEST: 'FINAL TEST',
-  MOCK_TEST: 'MOCK TEST',
-  ENTRANCE_TEST: 'ENTRANCE TEST',
+  QUIZ: 'Quiz',
+  MID_TERM_TEST: 'Mid Term Test',
+  FINAL_TEST: 'Final Test',
+  MOCK_TEST: 'Mock Test',
+  ENTRANCE_TEST: 'Entrance Test',
   // STORY = 'STORY',
-  TOPIC_TEST: 'TOPIC TEST',
-  CHAPTER_TEST: 'CHAPTER TEST',
+  TOPIC_TEST: 'Topic Test',
+  CHAPTER_TEST: 'Chapter Test',
 } as any

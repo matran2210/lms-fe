@@ -36,6 +36,8 @@ import {
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
 import { StreamPlayerApi } from '@cloudflare/stream-react'
+import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import PopupViewPdf from '@components/base/pdf/popupViewPdf'
 
 type Props = {
   activity: IActivity
@@ -52,15 +54,18 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
-  const streamRef = useRef<StreamPlayerApi>(null)
+  const streamRef = useRef<StreamPlayerApi[]>(null)
   const videoRef = useRef<any>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
   const router = useRouter()
   const activityType = activity?.display_icon
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
 
   useLayoutEffect(() => {
     if (activity) {
+      dispatch(resetQuizActivity({}))
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(
@@ -74,6 +79,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         // })()
       } catch (error) {}
     }
+
+    return () => {
+      dispatch(courseActivityAction.resetActivity())
+      dispatch(resetQuizActivity({}))
+    }
   }, [activity])
 
   // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
@@ -81,7 +91,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // }
 
   useEffect(() => {
-    finishedCourseSectionProgress()
+    setTimeout(() => {
+      finishedCourseSectionProgress()
+    }, 500)
   }, [
     endActivityRef.current,
     quizDocumentRef.current,
@@ -99,66 +111,75 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
    */
   const finishedCourseSectionProgress = async () => {
-    // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
-    if (activityType === 'VIDEO' && videoRef?.current) {
-      for (let e of videoRef.current) {
-        e.addEventListener('playing', async () => {
-          await handleFinishedCourseSectionProgress()
-        })
-      }
-      return
-    }
-    // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
-    else if (activityType === 'QUIZ' || 'PAST_EXAM_ANALYSIS') {
-      await handleFinishedCourseSectionProgress()
-      return
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
     }
 
-    // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-    if (endActivityRef.current && activityType === 'TEXT') {
-      // Hủy theo dõi nếu đã có observerRef.current
-      if (observerRef.current) {
-        observerRef.current?.unobserve(endActivityRef.current)
-      }
-
-      // Thiết lập các tùy chọn cho IntersectionObserver
-      const options = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5,
-      }
-
-      // Hàm xử lý khi có sự giao thoa
-      const handleIntersection = async (
-        entries: IntersectionObserverEntry[],
-      ) => {
-        const isVisible = entries[0].isIntersecting
-
-        // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-        if (isVisible && endActivityRef.current) {
-          observerRef.current?.unobserve(endActivityRef.current)
-          await handleFinishedCourseSectionProgress()
+    timeoutRef.current = setTimeout(async () => {
+      // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
+      if (activityType === 'VIDEO' && videoRef?.current) {
+        for (let e of videoRef.current) {
+          e.addEventListener('playing', async () => {
+            await handleFinishedCourseSectionProgress()
+          })
         }
+        return
+      }
+      // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
+      else if (
+        activityType === 'QUIZ' ||
+        activityType === 'PAST_EXAM_ANALYSIS'
+      ) {
+        await handleFinishedCourseSectionProgress()
+        return
       }
 
-      // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
-      observerRef.current = new IntersectionObserver(
-        handleIntersection,
-        options,
-      )
+      // Xử lý khi có tham chiếu đến endActivityRef hiện tại
+      else if (endActivityRef.current && activityType === 'TEXT') {
+        // Hủy theo dõi nếu đã có observerRef.current
+        if (observerRef.current) {
+          observerRef.current?.unobserve(endActivityRef.current)
+        }
 
-      // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-      if (endActivityRef.current) {
-        observerRef.current?.observe(endActivityRef.current)
-      }
+        // Thiết lập các tùy chọn cho IntersectionObserver
+        const options = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.5,
+        }
 
-      // Trả về hàm cleanup
-      return () => {
+        // Hàm xử lý khi có sự giao thoa
+        const handleIntersection = async (
+          entries: IntersectionObserverEntry[],
+        ) => {
+          const isVisible = entries[0].isIntersecting
+
+          // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
+          if (isVisible && endActivityRef.current) {
+            observerRef.current?.unobserve(endActivityRef.current)
+            await handleFinishedCourseSectionProgress()
+          }
+        }
+
+        // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
+        observerRef.current = new IntersectionObserver(
+          handleIntersection,
+          options,
+        )
+
+        // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
         if (endActivityRef.current) {
-          observerRef.current?.unobserve(endActivityRef.current)
+          observerRef.current?.observe(endActivityRef.current)
+        }
+
+        // Trả về hàm cleanup
+        return () => {
+          if (endActivityRef.current) {
+            observerRef.current?.unobserve(endActivityRef.current)
+          }
         }
       }
-    }
+    }, 300)
   }
 
   /**
@@ -276,6 +297,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     if (type === 'PAST_EXAM_ANALYSIS') {
       return <SappIcon icon="course_past_exam_analysis"></SappIcon>
     }
+    if (type === 'QUIZ') {
+      return <SappIcon icon="course_quiz"></SappIcon>
+    }
   }
 
   return (
@@ -336,169 +360,203 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           )
         })}
       </>
-      <div className="bg-gray-3 px-6 ">
-        <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
-          <div className="font-medium text-2xl ">{activity.name}</div>
-          <div className="text-base text-gray-1 whitespace-nowrap">
-            {activity?.duration || 0} min estimated
+      <div className="shadow-activity">
+        <div className="bg-gray-3 px-6 ">
+          <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
+            <div className="font-medium text-2xl ">{activity.name}</div>
+            <div className="text-base text-gray-1 whitespace-nowrap">
+              {activity?.duration || 0} min estimated
+            </div>
           </div>
+
+          <div className="h-[1px] border-b"></div>
+
+          <div
+            className={`pt-6 pb-4 ${activity?.files?.length > 0 && 'border-b'}`}
+          >
+            <div className="font-semibold text-base mb-2">
+              Learning Outcome:
+            </div>
+            <ul className="list-disc text-base">
+              {activity?.course_outcomes?.map((e) => {
+                return (
+                  <li className="ml-4" key={e.id}>
+                    <EditorReader
+                      className="editor-wrap mt-1.5"
+                      text_editor_content={e.description}
+                    />
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+          {activity?.files?.length > 0 && (
+            <div className="pt-6 pb-4">
+              <div className="font-semibold text-base mb-2">Resource:</div>
+              <ul className="list-disc text-base">
+                {activity?.files.map((e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline"
+                      onClick={() => {
+                        setOpenPdf({
+                          status: true,
+                          url: e.resource.url,
+                        })
+                      }}
+                      key={index}
+                    >
+                      {e.resource.name}
+                    </div>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
         </div>
 
-        <div className="h-[1px] border-b"></div>
-
-        <div className="pt-6 pb-4">
-          <div className="font-semibold text-base mb-2">Learning Outcome:</div>
-          <ul className="list-disc text-base">
-            {activity?.course_outcomes?.map((e) => {
+        <div className="bg-gray-3">
+          <div className="flex gap-2 px-6 flex-wrap">
+            {selector.tabs?.map((e) => {
               return (
-                <li className="ml-4" key={e.id}>
-                  <EditorReader
-                    className="editor-wrap mt-1.5"
-                    text_editor_content={e.description}
-                  />
-                </li>
+                <SappButton
+                  key={e.id}
+                  size="small"
+                  className="py-2.5 !px-3 text-medium-sm !font-normal"
+                  color={tabButtonColor(e.id)}
+                  title={truncateString(e.name, 60)}
+                  onClick={() => handleChangeTab(e.id)}
+                ></SappButton>
               )
             })}
-          </ul>
-        </div>
-      </div>
-
-      <div className="bg-gray-3">
-        <div className="flex gap-2 px-6 flex-wrap">
-          {selector.tabs?.map((e) => {
-            return (
-              <SappButton
-                key={e.id}
-                size="small"
-                className="py-2.5 !px-3 text-medium-sm !font-normal"
-                color={tabButtonColor(e.id)}
-                title={truncateString(e.name, 60)}
-                onClick={() => handleChangeTab(e.id)}
-              ></SappButton>
-            )
-          })}
-        </div>
-      </div>
-      {/* <FadeInOut show={!selector.loading}> */}
-      {!!course_tab_documents?.length && (
-        <div className="bg-white pb-6 mb-6">
-          <div className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6`}>
-            <div className="tab-content">
-              {course_tab_documents?.map((e, i) => {
-                const marginBottom =
-                  i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                if (e.type === 'QUIZ') {
-                  return (
-                    <div
-                      className={marginBottom}
-                      key={e.id}
-                      ref={quizDocumentRef}
-                    >
-                      <QuizDocument
-                        questions={[
-                          ...(e.quiz?.multiple_choice_questions || []),
-                          ...(e.quiz?.constructed_questions || []),
-                        ]}
-                        activityId={activity.id}
-                        tabId={selector.currentTabId || ''}
-                        quizId={e.quiz?.id || ''}
-                        grading_preference={
-                          e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
-                        }
-                        document_id={e.id}
-                      ></QuizDocument>
-                    </div>
-                  )
-                }
-                if (e.type === 'TEXT') {
-                  return (
-                    <div className={marginBottom} key={e.id}>
-                      <TextDocument
-                        text_editor_content={e.text_editor_content}
-                      ></TextDocument>
-                    </div>
-                  )
-                }
-                if (e.type === 'VIDEO') {
-                  return (
-                    <div className={marginBottom} key={i}>
-                      <VideoDocument
-                        videos={e.videos}
-                        activityId={activity.id}
-                        tabId={selector.currentTabId || ''}
-                        streamRefProp={(el: any) =>
-                          (videoRef.current[i || 0] = el)
-                        }
-                        handleProcess={handleFinishedCourseSectionProgress}
-                        document_id={e.id}
-                      ></VideoDocument>
-                    </div>
-                  )
-                }
-                return null
-              })}
-            </div>
-
-            <div className="flex justify-between flex-wrap gap-5 mt-8">
-              {getPreviousTabId() && (
-                <div className="w-auto">
-                  <div className="relative">
-                    <div
-                      onClick={() => handleChangeTab(getPreviousTabId() || '')}
-                      className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={20}
-                        height={20}
-                        fill="none"
-                      >
-                        <path
-                          className="fill-bw-1 group-hover:fill-primary"
-                          fillRule="evenodd"
-                          d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      Previous Tab
-                    </div>
-                    <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
-                  </div>
-                </div>
-              )}
-              {getNextTabId() && (
-                <div className="w-auto relative ml-auto">
-                  <div className="relative">
-                    <div
-                      onClick={() => handleChangeTab(getNextTabId() || '')}
-                      className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                    >
-                      Next Tab
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={20}
-                        height={20}
-                        fill="none"
-                      >
-                        <path
-                          className="fill-bw-1 group-hover:fill-primary"
-                          fillRule="evenodd"
-                          d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
         </div>
-      )}
-      <div className="border border-gray-2 my-8"></div>
+
+        {/* <FadeInOut show={!selector.loading}> */}
+        {!!course_tab_documents?.length && (
+          <div className="bg-white pb-6 mb-6">
+            <div className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6`}>
+              <div className="tab-content">
+                {course_tab_documents?.map((e, i) => {
+                  const marginBottom =
+                    i < course_tab_documents?.length - 1 ? 'mb-6' : ''
+                  if (e.type === 'QUIZ') {
+                    return (
+                      <div
+                        className={marginBottom}
+                        key={e.id}
+                        ref={quizDocumentRef}
+                      >
+                        <QuizDocument
+                          questions={[
+                            ...(e.quiz?.multiple_choice_questions || []),
+                            ...(e.quiz?.constructed_questions || []),
+                          ]}
+                          activityId={activity.id}
+                          tabId={selector.currentTabId || ''}
+                          quizId={e.quiz?.id || ''}
+                          grading_preference={
+                            e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
+                          }
+                          document_id={e.id}
+                          is_graded={e.quiz?.is_graded || false}
+                        ></QuizDocument>
+                      </div>
+                    )
+                  }
+                  if (e.type === 'TEXT') {
+                    return (
+                      <div className={marginBottom} key={e.id}>
+                        <TextDocument
+                          text_editor_content={e.text_editor_content}
+                        ></TextDocument>
+                      </div>
+                    )
+                  }
+                  if (e.type === 'VIDEO') {
+                    return (
+                      <div className={marginBottom} key={i}>
+                        <VideoDocument
+                          videos={e.videos}
+                          activityId={activity.id}
+                          tabId={selector.currentTabId || ''}
+                          streamRefProp={(el: any) =>
+                            (videoRef.current[i || 0] = el)
+                          }
+                          handleProcess={handleFinishedCourseSectionProgress}
+                          document_id={e.id}
+                          quizId={e.quiz?.id || ''}
+                        ></VideoDocument>
+                      </div>
+                    )
+                  }
+                  return null
+                })}
+              </div>
+
+              <div className="flex justify-between flex-wrap gap-5 mt-8">
+                {getPreviousTabId() && (
+                  <div className="w-auto">
+                    <div className="relative">
+                      <div
+                        onClick={() =>
+                          handleChangeTab(getPreviousTabId() || '')
+                        }
+                        className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={20}
+                          height={20}
+                          fill="none"
+                        >
+                          <path
+                            className="fill-bw-1 group-hover:fill-primary"
+                            fillRule="evenodd"
+                            d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Previous Tab
+                      </div>
+                      <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+                    </div>
+                  </div>
+                )}
+                {getNextTabId() && (
+                  <div className="w-auto relative ml-auto">
+                    <div className="relative">
+                      <div
+                        onClick={() => handleChangeTab(getNextTabId() || '')}
+                        className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                      >
+                        Next Tab
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={20}
+                          height={20}
+                          fill="none"
+                        >
+                          <path
+                            className="fill-bw-1 group-hover:fill-primary"
+                            fillRule="evenodd"
+                            d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        {!course_tab_documents?.length && <div className="py-3"></div>}
+      </div>
       {/* </FadeInOut> */}
-      <div className="bg-white px-6 py-3 mb-6 relative">
+      <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
         <div className="flex justify-between flex-nowrap gap-5">
           {activity.previous_activity && (
             <div className="w-1/2">
@@ -517,7 +575,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               </div>
               <div className="text-medium-sm text-gray-1 flex">
                 {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
-                <span className="ml-2">{activity.previous_activity.name}</span>
+                <span className="ml-2">
+                  {truncateString(activity.previous_activity.name, 100)}
+                </span>
               </div>
             </div>
           )}
@@ -550,9 +610,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       </div>
 
       <div ref={endActivityRef}></div>
-      <div>
+      <div className="shadow-activity">
         <Discussion class_id={(router.query.classId as string) || ''} />
       </div>
+      <PopupViewPdf
+        open={openPdf?.status || false}
+        setOpen={setOpenPdf}
+        url={openPdf?.url || ''}
+      />
     </div>
   )
 }

@@ -20,9 +20,9 @@ const initialState: ICaseStudyTest = {
 }
 export const getTopicsCaseStudy = createAsyncThunk(
   'caseStudyTestReducer/getTopicsCaseStudy',
-  async ({ id }: any, thunkAPI) => {
+  async ({ id, quiz_id }: any, thunkAPI) => {
     try {
-      const res = await CourseTestApi.getTopicQuiz(id)
+      const res = await CourseTestApi.getTopicQuiz(id, quiz_id)
       let arr2 = [] as any
       for (let j = 0; j < res.data.questions.length; j++) {
         arr2.push({

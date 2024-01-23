@@ -269,7 +269,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [quizAttempId, setQuizAttempId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
-  const [remainTime, setRemainTime] = useState<number>(0 * 60)
+  const [remainTime, setRemainTime] = useState<number>(
+    quizDetail.quiz_timed * 60,
+  )
   const dispatch = useAppDispatch()
 
   const [submited, setSubmited] = useState(false)
@@ -790,11 +792,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return tabs
     }
   }
+
   async function getDetail(currentPage: string) {
     try {
       const topicDescription = await CourseTestApi.getTopicDescription(
         questions[questions.findIndex((e: any) => e.id === currentPage)]
           .question_topic_id,
+        quizDetail?.id,
       )
       const res = await CourseTestApi.getQuestionsDetail(currentPage)
       return { topicDescription, res }
@@ -1010,7 +1014,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         if (checkAnswered(e)) {
           answers.push({
             question_id: e.id,
-            short_answers: e.answer || '',
+            short_answer: e.answer || '',
             response_option: e.data.response_option
               ? e.data.response_option
               : e.response_type === 0
@@ -1032,6 +1036,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       handleChangeTab(tabs[0].id)
       return reformTabs
     })
+    setUnsavedChanges(false)
     const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
@@ -1232,6 +1237,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setQuizAttempId(res.data.id)
       } catch (err: any) {
         if (err.response.data.error.code === '400|060710') {
+          setUnsavedChanges(false)
           setOpenLimit(true)
         }
       }
@@ -1248,6 +1254,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           if (prev === 1) {
             clearInterval(interval)
             if (!openLimit) {
+              setUnsavedChanges(false)
               setOpenTimeOut(true)
             }
             // handleSubmitQuestion()
@@ -1373,6 +1380,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               disabled: submited,
               onClick: () => {
                 setOpenSubmit(true)
+                setUnsavedChanges(false)
               },
               //   full: fullWidthBtn,
             }}
@@ -1718,7 +1726,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
               <UnHighLightIcon />
               <div className="hidden font-normal text-sm 3xl:inline-block">
-                UnHighlight
+                Unhighlight
               </div>
             </div>
           </button>
@@ -1962,7 +1970,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openTimeOut}
         setOpen={setOpenTimeOut}
         handleSubmit={handleSubmitQuestion}
-        handleQuit={() => router.back()}
+        handleQuit={() => {
+          setUnsavedChanges(() => {
+            router.back()
+            return false
+          })
+        }}
       />
       <QuitTestModal
         open={openQuit}
@@ -1979,6 +1992,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openSubmit}
         setOpen={setOpenSubmit}
         handleSubmit={handleSubmitQuestion}
+        handleCancel={() => setUnsavedChanges(true)}
       />
       <ModalUploadFile
         open={openUpload.status}
