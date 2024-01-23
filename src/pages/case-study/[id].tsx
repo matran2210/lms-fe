@@ -199,6 +199,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               )
             }
             setOpenPdf={setOpenPdf}
+            setUnsavedChanges={setUnsavedChanges}
           />
         )
       default:
