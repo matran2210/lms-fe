@@ -275,7 +275,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           case QUESTION_TYPES.ESSAY:
             myAnswers = {
               question_id: activeQuestion.id,
-              short_answers: getValues('essay'),
+              short_answer: getValues('essay'),
               response_option: activeQuestion.response_option
                 ? activeQuestion.response_option
                 : 'WORD',

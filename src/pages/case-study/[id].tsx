@@ -269,7 +269,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   }, [router.query.id])
 
   const backToPart = () => {
-    router.push(
+    router.replace(
       `/courses/${breadCrumb?.[0]?.id}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
     )
   }
@@ -464,7 +464,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       if (e.qType === QUESTION_TYPES.ESSAY) {
         answers.push({
           question_id: e.id,
-          short_answers: e.answer || '',
+          short_answer: e.answer || '',
           response_option: e.response_option ? e.response_option : 'WORD',
           answer_file: e.answer_file,
           active: 'SUBMITED',
