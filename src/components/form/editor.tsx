@@ -40,6 +40,7 @@ interface IProps {
   disabled?: boolean
   key?: number | string
 }
+
 const TinyEditor = ({
   onChange,
   valueText,
@@ -205,7 +206,7 @@ const TinyEditor = ({
         <Editor
           {...(key && { key: key })}
           disabled={disabled}
-          apiKey="tyfr3hvp7v3mt24gzu3jtbbm3nvr01hquem04a4oei6ui86j"
+          apiKey={process.env.NEXT_PUBLIC_TINY_EDITDER_API_KEY}
           initialValue={valueText}
           onInit={(evt, editor) => {
             editorRef.current = editor

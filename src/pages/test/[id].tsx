@@ -1014,7 +1014,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         if (checkAnswered(e)) {
           answers.push({
             question_id: e.id,
-            short_answers: e.answer || '',
+            short_answer: e.answer || '',
             response_option: e.data.response_option
               ? e.data.response_option
               : e.response_type === 0

@@ -269,7 +269,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   }, [router.query.id])
 
   const backToPart = () => {
-    router.push(
+    router.replace(
       `/courses/${breadCrumb?.[0]?.id}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
     )
   }
@@ -464,7 +464,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       if (e.qType === QUESTION_TYPES.ESSAY) {
         answers.push({
           question_id: e.id,
-          short_answers: e.answer || '',
+          short_answer: e.answer || '',
           response_option: e.response_option ? e.response_option : 'WORD',
           answer_file: e.answer_file,
           active: 'SUBMITED',
@@ -577,7 +577,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       <div className="h-full" ref={containerRef}>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
-            {topics.name}
+            {topics.case_study_name} - {topics.name}
           </div>
           <ButtonCancelSubmit
             className={'flex gap-4 flex-row-reverse w-1/3'}
