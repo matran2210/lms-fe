@@ -40,6 +40,7 @@ export type IPreviewProp = {
   handleClearFile?: any
   setOpenPdf?: any
   handleSaveHighLightRequirement?: any
+  setUnsavedChanges?: any
 }
 const EssayQuestionPreview = ({
   data,
@@ -64,6 +65,7 @@ const EssayQuestionPreview = ({
   setOpenPdf,
   allowUnHighLight,
   handleSaveHighLightRequirement,
+  setUnsavedChanges,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
@@ -90,8 +92,12 @@ const EssayQuestionPreview = ({
     files: { name: string; file_key: string }[]
   }) => {
     try {
+      setUnsavedChanges && setUnsavedChanges(false)
       await UploadAPI.downloadFile(data)
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setUnsavedChanges && setUnsavedChanges(true)
+    }
   }
   // useEffect(() => {
   //   // setKey((prev) => {

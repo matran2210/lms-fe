@@ -222,6 +222,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             handleClearFile={handleClearFile}
             setOpenPdf={setOpenPdf}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+            setUnsavedChanges={setUnsavedChanges}
           />
           // <Luckysheet/>
         )
