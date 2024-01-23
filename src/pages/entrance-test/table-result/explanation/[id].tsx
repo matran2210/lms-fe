@@ -47,6 +47,7 @@ const Explanation = () => {
     })) as any
     const topicDescription = await CourseTestApi.getTopicDescription(
       resultResponse?.data?.answer?.question?.question_topic_id,
+      resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
     ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
     setActiveQuestion({
       ...resultResponse.data.answer.question,

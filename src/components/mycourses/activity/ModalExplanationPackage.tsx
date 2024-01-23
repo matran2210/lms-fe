@@ -46,6 +46,7 @@ const ModalExplanationPackage = ({
     const resultResponse = await CourseActivityApi.getQuizAttemptsAnswer(id)
     const topicDescription = await CourseTestApi.getTopicDescription(
       resultResponse?.data?.answer?.question?.question_topic_id,
+      resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
     )
     setActiveQuestion({
       ...resultResponse.data.answer.question,
