@@ -1362,7 +1362,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       )}
       <div>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
-          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
+          <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
             {quizDetail?.name}
           </div>
           {quizDetail?.quiz_timed && (
@@ -1848,7 +1848,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                       confirmDialog.open({
                         // Nội dung của hộp thoại xác nhận
                         message:
-                          'Chuyển Type sẽ mất dữ liệu, bạn có muốn chuyển?',
+                          'Change Type will delete your input, do you want to continue?',
                         // Hàm thực thi khi người dùng xác nhận hành động
                         onConfirm: () => {
                           handleChangeTypeEssay(0)
@@ -1874,7 +1874,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                       confirmDialog.open({
                         // Nội dung của hộp thoại xác nhận
                         message:
-                          'Chuyển Type sẽ mất dữ liệu, bạn có muốn chuyển?',
+                          'Change Type will delete your input, do you want to continue?',
                         // Hàm thực thi khi người dùng xác nhận hành động
                         onConfirm: () => {
                           handleChangeTypeEssay(1)
