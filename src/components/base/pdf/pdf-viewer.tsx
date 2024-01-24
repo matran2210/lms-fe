@@ -9,7 +9,14 @@ export default function PDFViewer({ file }: { file: string }) {
       documents={docs}
       pluginRenderers={DocViewerRenderers}
       initialActiveDocument={docs[1]}
-      style={{ height: '70vh' }}
+      style={{ height: 'calc(100vh - 104px' }}
+      config={{
+        pdfZoom: {
+          zoomJump: 25,
+          defaultZoom: 50,
+        },
+        header: { disableHeader: true },
+      }}
     />
   )
 }
