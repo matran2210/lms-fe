@@ -194,14 +194,14 @@ const MyProfile = ({
       <form onSubmit={handleSubmit(onSubmit)} className="block min-h-[40.3rem]">
         <div className="relative ">
           <div className="flex items-center justify-between pb-6 mb-6 border-b border-b-gray-3">
-            <div className="text-xl font-semibold  text-bw-1">Overview</div>
+            <div className="text-xl font-medium text-bw-1">Overview</div>
             <div>
               {!isEdit ? (
                 <SappButton
                   onClick={handleChangeToEditForm}
                   size="medium"
                   title={'Edit'}
-                  className="min-w-[120px] text-sm"
+                  className="min-w-[120px] text-base"
                   loading={loading && !isEdit}
                 ></SappButton>
               ) : (
@@ -413,18 +413,27 @@ const MyProfile = ({
           <span className="text-gray-1 w-[302px] inline-block">Email:</span>
           <span className="font-medium">{makeDefaultDrawer?.email || ''}</span>
         </div>
-        <div className="mt-5 text-bw-1">
-          <span className="text-gray-1 w-[302px] inline-block">
-            Phone Number:
-          </span>
-          <span className="font-medium">{makeDefaultDrawer?.phone || ''} </span>
-        </div>
-        <div className="mt-5 text-bw-1">
-          <span className="text-gray-1 w-[302px] inline-block"> Address: </span>
-          <span className="font-medium">
-            {makeDefaultDrawer?.address || ''}{' '}
-          </span>
-        </div>
+        {makeDefaultDrawer?.phone && (
+          <div className="mt-5 text-bw-1">
+            <span className="text-gray-1 w-[302px] inline-block">
+              Phone Number:
+            </span>
+            <span className="font-medium">
+              {makeDefaultDrawer?.phone || ''}{' '}
+            </span>
+          </div>
+        )}
+        {makeDefaultDrawer?.address && (
+          <div className="mt-5 text-bw-1">
+            <span className="text-gray-1 w-[302px] inline-block">
+              {' '}
+              Address:{' '}
+            </span>
+            <span className="font-medium">
+              {makeDefaultDrawer?.address || ''}{' '}
+            </span>
+          </div>
+        )}
       </SappDrawer>
     </div>
   )
