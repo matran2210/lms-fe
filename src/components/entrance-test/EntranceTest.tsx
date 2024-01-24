@@ -28,7 +28,6 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   const timeAllowFormatted = data?.quiz_timed
     ? formatTime(data?.quiz_timed * 60)
     : 'Unlimited'
-
   return (
     <>
       <div className="name">
