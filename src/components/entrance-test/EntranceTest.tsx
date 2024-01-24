@@ -26,7 +26,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
     ? formatTime(data.total_attempt_time)
     : 0
   const timeAllowFormatted = data?.quiz_timed
-    ? formatTime(data?.quiz_timed)
+    ? formatTime(data?.quiz_timed * 60)
     : 'Unlimited'
   return (
     <>
