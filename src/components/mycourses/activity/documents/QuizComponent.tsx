@@ -275,7 +275,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           case QUESTION_TYPES.ESSAY:
             myAnswers = {
               question_id: activeQuestion.id,
-              short_answer: getValues('essay'),
+              short_answer: getValues(
+                `${activeQuestion.id}_${document_id}_essay`,
+              ),
               response_option: activeQuestion.response_option
                 ? activeQuestion.response_option
                 : 'WORD',
@@ -548,7 +550,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 control={controlAnswer}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
-                name={'essay'}
+                name={`${activeQuestion.id}_${document_id}_essay`}
                 fullData={activeQuestion}
                 openChooseFile={(e: any) =>
                   setOpenUpload({
