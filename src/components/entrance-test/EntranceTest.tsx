@@ -23,10 +23,10 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   }
 
   const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data.total_attempt_time * 60)
+    ? formatTime(data.total_attempt_time)
     : 0
   const timeAllowFormatted = data?.quiz_timed
-    ? formatTime(data?.quiz_timed * 60)
+    ? formatTime(data?.quiz_timed)
     : 'Unlimited'
   return (
     <>
