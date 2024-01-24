@@ -109,7 +109,7 @@ const TableCaseStudyResult = () => {
   const getTypeName = (type: QUESTION_TYPES): string => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
-        return 'True False'
+        return 'True/False'
       case QUESTION_TYPES.ONE_CHOICE:
         return 'One Choice'
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -146,13 +146,15 @@ const TableCaseStudyResult = () => {
         <CloseIcon />
       </div>
       <div className="bg-white max-w-[1144px] max-h-full m-auto pt-8">
-        <div className="flex justify-between mb-10 items-center">
-          <div className="">
-            <div className="text-xl font-medium text-bw-1 pb-1.5">
+        <div className="flex justify-between mb-10 items-center flex-row">
+          <div className="pr-4">
+            <div className="text-xl font-medium text-bw-1 line-clamp-1">
               {topicAttemptDetail?.question_topic?.name}
             </div>
             <div className="text-base">
-              <span className="font-normal text-gray-1">Your Score:</span>{' '}
+              <span className="font-normal text-gray-1 pt-1.5">
+                Your Score:
+              </span>{' '}
               <span className="font-bold text-state-error">
                 {topicAttemptDetail?.score}%
               </span>
@@ -169,7 +171,7 @@ const TableCaseStudyResult = () => {
                       : '/Unlimited'
                   }`}
                   size="medium"
-                  className={'!font-medium'}
+                  className={'!font-medium shrink-0'}
                   onClick={() =>
                     handleRetake(
                       topicAttemptDetail?.question_topic?.id,
@@ -187,7 +189,7 @@ const TableCaseStudyResult = () => {
                       : '/Unlimited'
                   }`}
                   size="medium"
-                  className={'!font-medium'}
+                  className={'!font-medium shrink-0'}
                 />
               )
             ) : (
@@ -208,7 +210,7 @@ const TableCaseStudyResult = () => {
                   topicAttemptDetail?.class_user_id as string,
                 )
               }
-              className={'!font-medium'}
+              className={'!font-medium shrink-0'}
             />
           )}
         </div>

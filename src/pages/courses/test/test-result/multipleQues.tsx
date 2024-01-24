@@ -32,7 +32,11 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
         {data.length > 0 && (
           <>
             <div className="text-xl font-medium mb-4">{type}</div>
-            <div className="flex flex-row flex-wrap gap-3 w-full items-start">
+            <div
+              className={`flex flex-row flex-wrap gap-3 w-full items-start ${
+                type === 'Multiple Questions' ? 'mb-6' : ''
+              }`}
+            >
               {renderBoxItems}
             </div>
           </>
@@ -46,7 +50,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
       className={`${className} bg-white flex flex-col justify-between w-full max-w-smd items-start px-6 py-6 overflow-y-auto shadow-sidebar`}
     >
       <div className="flex flex-col gap-10 w-full items-start">
-        <div className="flex flex-col gap-6 w-full items-start">
+        <div className="flex flex-col w-full items-start">
           {renderBoxes(
             'Multiple Questions',
             questions?.selectedResponseAnswers ?? [],

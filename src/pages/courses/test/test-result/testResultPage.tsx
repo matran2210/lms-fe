@@ -48,7 +48,7 @@ const TestResultPage = ({
               score={highestValue}
               className="px-7 pt-6 pb-4 mb-5 shadow-sidebar"
               classScore="pt-2"
-              classGlobal="mt-0 mb-3 !items-end"
+              classGlobal="mt-3 mb-3.5 !items-end"
               classCountAll="relative top-0.5"
               globalAverage={GlobalAverage}
             />
