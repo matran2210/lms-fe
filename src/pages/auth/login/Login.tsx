@@ -12,6 +12,7 @@ import {
   VALIDATE_MIN_LENGTH,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
+  VALIDATE_MIN_LENGTH_PASSWORD,
 } from '@utils/helpers/ValidateMessage'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -55,7 +56,7 @@ const LoginPage = () => {
     password: z
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
-      .min(8, { message: VALIDATE_MIN_LENGTH('Password', 8) })
+      .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
       .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
     remember_me: z.boolean().default(false),
   })
