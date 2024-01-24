@@ -36,43 +36,56 @@ const ModalExplanationPackage = ({
   document_id?: string
 }) => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
     if (quizAttemptsAnswerId) {
       getActiveQuestion(quizAttemptsAnswerId)
     }
   }, [quizAttemptsAnswerId])
 
+  useEffect(() => {
+    if (!open) {
+      setActiveQuestion(undefined)
+    }
+  }, [open])
+
   const getActiveQuestion = async (id: string) => {
-    const resultResponse = await CourseActivityApi.getQuizAttemptsAnswer(id)
-    const topicDescription = await CourseTestApi.getTopicDescription(
-      resultResponse?.data?.answer?.question?.question_topic_id,
-      resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
-    )
-    setActiveQuestion({
-      ...resultResponse.data.answer.question,
-      confirmed: true,
-      corrects: getCorrect(
-        resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
-          ? resultResponse.data.answer.question.answers
-          : resultResponse.data.answer.answer_matching_mapping,
-        resultResponse.data.answer.question.qType,
-      ),
-      question_matchings: resultResponse.data.answer.answer_matching_mapping,
-      answers: resultResponse.data?.answer?.question.answers || [],
-      myAnswers: [
-        {
-          question_id: resultResponse.data.answer.question.id,
-          question_answer_id: resultResponse.data.answer.question_answer_id,
-          answer: resultResponse.data.answer.answer,
-        },
-      ],
-      defaultValue: resultResponse.data.answer.answer,
-      next: resultResponse.data.next,
-      previous: resultResponse.data.previous,
-      total_question: resultResponse.data.total_question,
-      index: resultResponse.data.index,
-      question_topic: topicDescription?.data,
-    })
+    setLoading(true)
+    try {
+      const resultResponse = await CourseActivityApi.getQuizAttemptsAnswer(id)
+      const topicDescription = await CourseTestApi.getTopicDescription(
+        resultResponse?.data?.answer?.question?.question_topic_id,
+        resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
+      )
+      setActiveQuestion({
+        ...resultResponse.data.answer.question,
+        confirmed: true,
+        corrects: getCorrect(
+          resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
+            ? resultResponse.data.answer.question.answers
+            : resultResponse.data.answer.answer_matching_mapping,
+          resultResponse.data.answer.question.qType,
+        ),
+        question_matchings: resultResponse.data.answer.answer_matching_mapping,
+        answers: resultResponse.data?.answer?.question.answers || [],
+        myAnswers: [
+          {
+            question_id: resultResponse.data.answer.question.id,
+            question_answer_id: resultResponse.data.answer.question_answer_id,
+            answer: resultResponse.data.answer.answer,
+          },
+        ],
+        defaultValue: resultResponse.data.answer.answer,
+        next: resultResponse.data.next,
+        previous: resultResponse.data.previous,
+        total_question: resultResponse.data.total_question,
+        index: resultResponse.data.index,
+        question_topic: topicDescription?.data,
+      })
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   function getCorrect(answers: any, questionType: any) {
@@ -113,6 +126,11 @@ const ModalExplanationPackage = ({
 
   return (
     <div>
+      {loading && (
+        <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
+          Loading
+        </div>
+      )}
       <SappModal
         open={open}
         okButtonCaption={'Yes'}
