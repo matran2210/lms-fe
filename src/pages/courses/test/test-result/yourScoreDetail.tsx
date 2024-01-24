@@ -41,7 +41,7 @@ const headers = [
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[95px]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[95px] !pr-0 text-center',
   },
 ]
 
@@ -101,7 +101,7 @@ const YourScoreDetail = () => {
   const getTypeName = (type: QUESTION_TYPES): string => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
-        return 'True False'
+        return 'True/False'
       case QUESTION_TYPES.ONE_CHOICE:
         return 'One Choice'
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -169,7 +169,7 @@ const YourScoreDetail = () => {
                     {e?.question?.question_filter_id?.part?.name ?? '--'}
                   </td>
                   <td className="text-start m-6 pr-4 text-bw-1">
-                    <div className="mt-6 mr-6 mb-6 min-w-132px">
+                    <div className="mt-6 mr-6 mb-6 min-w-[111px]">
                       {getTypeName(e?.question?.qType ?? '--')}
                     </div>
                   </td>
@@ -202,7 +202,7 @@ const YourScoreDetail = () => {
                       </div>
                     )}
                   </td>
-                  <td className="text-start m-6 pr-4">
+                  <td className="text-start m-6">
                     <div className="text-center">
                       {(() => {
                         if (e?.time_spent !== null) {

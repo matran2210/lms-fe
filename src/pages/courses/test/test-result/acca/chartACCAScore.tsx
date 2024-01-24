@@ -24,7 +24,9 @@ const ChartACCAScore = ({ data }: IProps) => {
               key={item?.id}
               className="flex flex-col w-1/3 max-w-78 justify-end shrink-0 items-start gap-1"
             >
-              <div className="text-bw-1 font-medium">{item?.title}</div>
+              <div className="text-bw-1 font-medium line-clamp-2">
+                {item?.title}
+              </div>
               <div className="h-2 bg-gray-3 w-full relative">
                 <div
                   className="absolute left-0 top-0 h-2 bg-primary"
