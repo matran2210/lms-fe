@@ -120,7 +120,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             done={done}
-            extenalRef={(el: any) => (ref.current[index || 0] = el)}
+            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -135,7 +135,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
-            extenalRef={(el: any) => (ref.current[index || 0] = el)}
+            extenalRef={(el: any) => {
+              valueRef.current[index || 0] = el
+            }}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -150,7 +152,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
-            extenalRef={(el: any) => (ref.current[index || 0] = el)}
+            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -165,7 +167,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
-            extenalRef={(el: any) => (ref.current[index || 0] = el)}
+            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.ESSAY:
