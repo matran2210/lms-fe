@@ -192,6 +192,7 @@ const ModalUploadFile = ({
         externalLoading={disabled}
         size="max-w-xl"
         position="center"
+        scrollbale={false}
       >
         <UploadFileHandle
           uploadFile={uploadFile}

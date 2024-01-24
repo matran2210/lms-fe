@@ -234,15 +234,18 @@ const QuizDocument = ({
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.meta,
         data: (modalResult?.questions?.data || []).concat(
-          response.data.answers?.map((e: any) => ({
-            id: e.id,
-            content: e.question.question_content,
-            section: e.question.question_filter_id?.part?.name,
-            type: e.question.qType,
-            is_correct: e.is_correct,
-            time_spent: e.time_spent,
-            question: e.question as any,
-          })) || [],
+          response.data.answers?.map((e: any) => {
+            return {
+              id: e.id,
+              content: e.question.question_content,
+              section: e.question.question_filter_id?.part?.name,
+              type: e.question.qType,
+              is_correct: e.is_correct,
+              time_spent: e.time_spent,
+              question: e.question as any,
+              active: e.active,
+            }
+          }) || [],
         ),
       }
       setModalResult((e) => ({
