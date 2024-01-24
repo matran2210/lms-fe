@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import SappModal from '@components/base/modal/SappModal'
 import { ExplanationPackage } from 'explanation-package'
-import 'explanation-package/dist/index.css'
+// import 'explanation-package/dist/index.css'
 import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
