@@ -156,7 +156,7 @@ const AddWordPreview = forwardRef(
     //   }
     // }
     return (
-      <div>
+      <div ref={extenalRef}>
         <EditorReader
           id="hightlight_area"
           onMouseUp={(e: any) => {

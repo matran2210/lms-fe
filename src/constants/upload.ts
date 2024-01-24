@@ -43,4 +43,8 @@ export const VALID_UPLOAD_FILES = [
     type: 'application/zip',
     size: MAX_UPLOAD_SIZE,
   },
+  {
+    type: 'application/x-zip-compressed',
+    size: MAX_UPLOAD_SIZE,
+  },
 ]
