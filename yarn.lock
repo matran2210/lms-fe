@@ -3424,32 +3424,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package2@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/explanation-package2/-/explanation-package2-1.0.0.tgz#46c9c009ebfac13216baca73dec13f86b5ab7da3"
-  integrity sha512-4gr3QUQjh8jAB0U4LVpvTnuqkTvQDGOETWae8s3eKWYwY0rYczEEeDx5ci/Z7wX7tQhp68AQXV4cNAmR7ENRGg==
-  dependencies:
-    "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
-    "@cloudflare/stream-react" "^1.9.1"
-    "@cyntler/react-doc-viewer" "1.10.4"
-    "@fortune-sheet/react" "^0.19.1"
-    "@funktechno/texthighlighter" "^2.1.2"
-    "@tailwindcss/aspect-ratio" "^0.4.2"
-    "@tailwindcss/forms" "^0.5.7"
-    "@tinymce/tinymce-react" "^4.3.0"
-    "@wiris/mathtype-tinymce6" "^8.5.0"
-    autoprefixer "^10.4.16"
-    css-loader "^6.8.1"
-    lodash "^4.17.21"
-    react-hook-form "7.46.0"
-    react-shadow "^20.4.0"
-    sass "^1.53.0"
-    tailwindcss "^3.3.5"
-
-explanation-package@^1.0.20:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.20.tgz#2354553579da5e05ac1f372bdbc88287e32050ce"
-  integrity sha512-7RQ6Fk1HOINi2cuMto8kuZr7zLillHXvKE/1aY/+SC54lNIit3u7LjpuHSgVFugITpkiNuFK5WNfVUfKcjqW6Q==
+explanation-package@^1.0.23:
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.23.tgz#454d96e3480dc0c3a1300c149109cbd7809c3154"
+  integrity sha512-VdM3iA5U2ZwX9DTJ0xgwwbzNjCBW1afaYtK8HhchyQM3JfRb1x48JXfU3UGfcDwe9cgXj3nx4M514vsy6lriog==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -5752,10 +5730,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.1.22:
-  version "1.1.22"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.22.tgz#2443b799ca6c153087b02342a2dc850822030999"
-  integrity sha512-a2x6En46i8v5W5IqkZ5DOxQMoZxpR+vl3yrjZ6mEHnjWti7/Y2h8DR1xkdLkVU7JnbqNO78TPPAuKIbEZmsU1Q==
+quiz-result-package@^1.1.23:
+  version "1.1.23"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.23.tgz#e6c89358513e3c0e6786de9eab523363014b7bd9"
+  integrity sha512-UTkZWthGwoHABmshFEDzE03Uvt7DO0QHyTryL+Ngmt2wYe/r7WM4hVn7qFebAK7KHZ25+Ruun2xNv0JLKqM5nA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 
