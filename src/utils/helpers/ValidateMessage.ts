@@ -20,6 +20,8 @@ const VALIDATE_MIN_LENGTH_PASSWORD = (
 const VALIDATE_PASSWORD_REGEX_MSG =
   'Password must be at least 8 characters, 1 uppercase letter, 1 number'
 
+const SHOW_ERROR_USERNAME_PASSWORD = 'Username or account is incorrect.'
+
 export {
   VALIDATE_REQUIRED,
   VALIDATE_MIN,
@@ -27,4 +29,5 @@ export {
   VALIDATE_MIN_LENGTH,
   VALIDATE_MIN_LENGTH_PASSWORD,
   VALIDATE_PASSWORD_REGEX_MSG,
+  SHOW_ERROR_USERNAME_PASSWORD,
 }

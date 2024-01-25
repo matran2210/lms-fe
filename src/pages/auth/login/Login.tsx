@@ -13,6 +13,7 @@ import {
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
   VALIDATE_MIN_LENGTH_PASSWORD,
+  SHOW_ERROR_USERNAME_PASSWORD,
 } from '@utils/helpers/ValidateMessage'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -52,17 +53,23 @@ const LoginPage = () => {
     login: z
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
+      .min(1, {
+        message: VALIDATE_REQUIRED,
+      })
       .min(5, { message: VALIDATE_MIN_LENGTH('Username or Email', 5) }),
     password: z
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
+      .min(1, {
+        message: VALIDATE_REQUIRED,
+      })
       .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
       .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
     remember_me: z.boolean().default(false),
   })
 
   // Using validate for input
-  const { control, handleSubmit } = useForm<IInputProps>({
+  const { control, setError, getValues, handleSubmit } = useForm<IInputProps>({
     resolver: zodResolver(validationSchema),
     mode: 'onChange',
     defaultValues: {
@@ -127,6 +134,9 @@ const LoginPage = () => {
         .catch((error) => {
           if (error?.response?.data?.error?.code === '403|0001') {
             setOpenLimit(true)
+          } else if (error?.response?.data?.error?.code === '401|0000') {
+            setError('login', { message: SHOW_ERROR_USERNAME_PASSWORD })
+            setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
           }
           setTimeout(() => {
             setLoading(false)

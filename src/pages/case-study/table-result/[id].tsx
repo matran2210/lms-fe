@@ -151,7 +151,7 @@ const TableCaseStudyResult = () => {
             <div className="text-xl font-medium text-bw-1 line-clamp-1">
               {topicAttemptDetail?.question_topic?.name}
             </div>
-            <div className="text-base">
+            <div className="text-base pt-2.5">
               <span className="font-normal text-gray-1 pt-1.5">
                 Your Score:
               </span>{' '}
