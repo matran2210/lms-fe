@@ -5730,10 +5730,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.1.23:
-  version "1.1.23"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.23.tgz#e6c89358513e3c0e6786de9eab523363014b7bd9"
-  integrity sha512-UTkZWthGwoHABmshFEDzE03Uvt7DO0QHyTryL+Ngmt2wYe/r7WM4hVn7qFebAK7KHZ25+Ruun2xNv0JLKqM5nA==
+quiz-result-package@^1.1.25:
+  version "1.1.25"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.25.tgz#23633325e81c424f95c72b924e3daf8e0964d658"
+  integrity sha512-KmP8HVhQi7DRXnda3eHd7Mpafabbvnp8Bt170nPNn2OMjlMeL+Q3NFhaYjFlT4hEz8Tpmasi2QLfy8TacfCBlw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 
