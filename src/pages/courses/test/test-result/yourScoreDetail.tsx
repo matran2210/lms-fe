@@ -159,9 +159,7 @@ const YourScoreDetail = () => {
                       }}
                       onClick={() => {
                         e?.question?.qType !== 'ESSAY' &&
-                          router.push(
-                            `/entrance-test/table-result/explanation/${e.id}`,
-                          )
+                          router.push(`/explanation/${e.id}`)
                       }}
                     ></div>
                   </td>

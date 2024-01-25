@@ -80,7 +80,7 @@ const TableEntranceResult = () => {
           questionResponse={modalResult?.questions || []}
           getTable={getTable}
           onShowDetail={(e) => {
-            router.push(`/entrance-test/table-result/explanation/${e.id}`)
+            router.push(`/explanation/${e.id}`)
           }}
           loading={loading}
         />
