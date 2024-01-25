@@ -195,7 +195,11 @@ const ProfileSideBar = ({ page }: IProps) => {
                     </div>
                   )
                 })}
-              <div className="border-b border-gray-3 relative top-px group-hover:border-secondary"></div>
+              <div
+                className={`border-b border-gray-3 relative top-px group-hover:border-secondary ${
+                  isActive ? 'border-secondary' : ''
+                }`}
+              ></div>
             </li>
           )
         })}
