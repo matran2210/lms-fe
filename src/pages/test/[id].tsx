@@ -60,6 +60,8 @@ import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import dynamic from 'next/dynamic'
 import PopupViewPdf from '@components/base/pdf/popupViewPdf'
 import LimitQuizModal from './limitQuizModal'
+import useCountdown from '@components/auth/Countdown'
+import CountDown from './countdown'
 type Window = {
   userAgreed: any
 }
@@ -270,9 +272,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [quizAttempId, setQuizAttempId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
-  const [remainTime, setRemainTime] = useState<number>(
-    quizDetail.quiz_timed * 60,
-  )
+  const timeRef = useRef(null) as any
   const dispatch = useAppDispatch()
 
   const [submited, setSubmited] = useState(false)
@@ -1041,7 +1041,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
       answers: answers,
       quiz_position_mapping: quiz_position_mapping,
-      total_attempt_time: quizDetail.quiz_timed * 60 - remainTime,
+      total_attempt_time:
+        quizDetail.quiz_timed * 60 -
+        (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
     })
     if (res) {
       if (type === 'entrance') {
@@ -1247,77 +1249,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       createQuizAttempt()
     }
   }, [router.query.id])
-  const intervalRef = useRef(null) as any
-  useEffect(() => {
-    if (quizDetail?.quiz_timed) {
-      const interval = setInterval(() => {
-        setRemainTime((prev) => {
-          if (prev === 1) {
-            clearInterval(interval)
-            if (!openLimit) {
-              setUnsavedChanges(false)
-              setOpenTimeOut(true)
-            }
-            // handleSubmitQuestion()
-          }
-          return prev - 1
-        })
-      }, 1000)
-      intervalRef.current = interval
-      // Return a function that clears the interval
-
-      return () => {
-        clearInterval(interval)
-      }
-    }
-  }, [quizDetail, openLimit])
-  // useEffect(()=>{
-  //   window.addEventListener("beforeunload", function (event) {
-  //     // Hiển thị hộp thoại cảnh báo có nút OK
-  //     var result = confirm("Bạn có chắc chắn muốn rời khỏi trang này không?");
-  //     // Nếu người dùng nhấn OK
-  //     if (result) {
-  //       // Đặt một cờ để biết người dùng đã đồng ý
-  //       window.userAgreed = true;
-  //       // Trả về một chuỗi cảnh báo
-  //       event.returnValue = "Bạn có chắc chắn muốn rời khỏi trang này không?";
-  //     }
-  //     // Nếu người dùng nhấn Cancel
-  //     else {
-  //       // Hủy bỏ sự kiện
-  //       event.preventDefault();
-  //     }
-  //   });
-
-  //   // Đăng ký hàm xử lý sự kiện unload
-  //   window.addEventListener("unload", function (event) {
-  //     // Nếu người dùng đã đồng ý rời khỏi trang
-  //     if (window.userAgreed) {
-  //       // Tải lại trang hoặc quay lại trang trước đó
-  //       window.location.reload || window.history.back();
-  //     }
-  //   });
-  // },[])
-
-  // useEffect(() => {
-  //   router.beforePopState(({ as }) => {
-  //     if (as !== router.asPath) {
-  //       try {
-  //         handleSubmitQuestion()
-  //         return true
-  //       } catch (err) {
-  //         return true
-  //       }
-  //       // Will run when leaving the current page; on back/forward actions
-  //       // Add your logic here, like toggling the modal state
-  //     }
-  //     return true
-  //   })
-
-  //   return () => {
-  //     router.beforePopState(() => true)
-  //   }
-  // }, [currentTabContent, quizAttempId, router])
   const warningText =
     'You have unsaved changes - are you sure you wish to leave this page?'
 
@@ -1340,19 +1271,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       router.events.off('routeChangeStart', handleBrowseAway)
     }
   }, [unsavedChanges])
-  // const stringToDisplay = 'Do you want to save before leaving the page ?';
-  // const shouldPreventLeaving = true
-  // useEffect(() => {
-  //   const routeChange = () => {
-  //   onMount && setOnMount(false);
-  //   };
-
-  //   router.events.on("routeChangeStart", routeChange);
-
-  //   return () => {
-  //     router.events.off("routeChangeStart", routeChange);
-  //   };
-  //   }, []);
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden relative">
       {/* Header */}
@@ -1367,9 +1285,16 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             {quizDetail?.name}
           </div>
           {quizDetail?.quiz_timed && (
-            <div className="text-bw-1 text-xl font-bold w-1/3 justify-center flex font-tech">
-              {formatTime(remainTime)}
-            </div>
+            <CountDown
+              remainTime={quizDetail?.quiz_timed}
+              onTimeOut={() => {
+                if (!openLimit) {
+                  setUnsavedChanges(false)
+                  setOpenTimeOut(true)
+                }
+              }}
+              ref={timeRef}
+            />
           )}
           <ButtonCancelSubmit
             className={'flex gap-4 flex-row-reverse w-1/3'}
