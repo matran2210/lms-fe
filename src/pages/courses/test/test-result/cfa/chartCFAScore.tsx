@@ -1,8 +1,11 @@
+import { roundNumber } from '@utils/helpers'
+
 interface DataItem {
   question_topic_id: string
   title: string
   total_correct_answers: number
   total_questions: number
+  total_quiz_questions: number
 }
 
 interface IProps {
@@ -73,9 +76,9 @@ const ChartCFAScore = ({ data }: IProps) => {
                   {item?.title}
                 </div>
                 <div className="text-medium-sm text-gray-1 font-normal">
-                  {`${
-                    (item?.total_correct_answers / item?.total_questions) * 100
-                  }%`}
+                  {`${roundNumber(
+                    (item?.total_questions / item?.total_quiz_questions) * 100,
+                  )}%`}
                 </div>
               </div>
             ))}
