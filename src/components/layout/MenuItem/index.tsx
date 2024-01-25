@@ -89,7 +89,10 @@ export default function MenuItem({
       )}
       <div
         className={`cursor-pointer hover:bg-secondary group ${
-          selected && type === 'level-1'
+          selected &&
+          type === 'level-1' &&
+          Icon !== 'avatar' &&
+          Icon !== 'profile-detail'
             ? 'pl-6 border-l-4 pr-1 border-active'
             : 'pl-7'
         } relative sidebar-list-items py-2 mb-4 last:mb-0 ${
