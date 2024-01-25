@@ -287,7 +287,7 @@ const EssayQuestionPreview = ({
                 >
                   {fullData.answer_file.file_name}
                 </div>
-                {fullData?.done && fullData?.confirmed && (
+                {!fullData?.done && !fullData?.confirmed && (
                   <div
                     onClick={() => handleClearFile()}
                     className="cursor-pointer"
