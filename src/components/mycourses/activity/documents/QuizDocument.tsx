@@ -75,19 +75,21 @@ const QuizDocument = ({
   }>()
 
   useEffect(() => {
-    if (questions?.[0]) {
-      // Load the first question when the component mounts
-      try {
-        dispatch(
-          fetchQuestionById({
-            activityId: activityId,
-            tabId: tabId,
-            quizId: quizId,
-            questionId: questions[0]?.id || '',
-          }),
-        )
-      } catch (error) {}
-    }
+    ;(async () => {
+      if (questions?.[0]) {
+        // Load the first question when the component mounts
+        try {
+          dispatch(
+            fetchQuestionById({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: questions[0]?.id || '',
+            }),
+          )
+        } catch (error) {}
+      }
+    })()
   }, [questions, dispatch])
 
   useEffect(() => {
@@ -127,7 +129,7 @@ const QuizDocument = ({
       const prevQuestionId = questions[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
         try {
-          dispatch(
+          await dispatch(
             fetchQuestionById({
               activityId: activityId,
               tabId: tabId,
@@ -155,11 +157,14 @@ const QuizDocument = ({
           }
           setLoading(false)
         },
+        onFinally: () => {
+          setLoading(false)
+        },
       })
     }
   }
 
-  const handleFinishQuiz = () => {
+  const handleFinishQuiz = async () => {
     setOpenFinishQuiz(false)
     setLoading(true)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
@@ -183,7 +188,7 @@ const QuizDocument = ({
     )
 
     try {
-      dispatch(
+      await dispatch(
         submitQuestion({
           id: quizId,
           data: { answers, quiz_position_mapping },
@@ -208,6 +213,7 @@ const QuizDocument = ({
       if (error.response.status === 422) {
         toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
       }
+    } finally {
       setLoading(false)
     }
   }
