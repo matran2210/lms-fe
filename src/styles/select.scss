@@ -9,7 +9,7 @@
 
   .select__single-value,
   .select__placeholder {
-    @apply text-sm leading-4.5 font-medium p-0 m-0;
+    @apply text-sm leading-4.5 font-normal p-0 m-0;
   }
 
   .select__placeholder {
@@ -17,11 +17,15 @@
   }
 
   .select__menu {
-    @apply border-default;
+    @apply border-0 shadow-select px-2 text-sm;
   }
 
   .select__option {
-    @apply text-sm leading-4.5 font-medium text-bw-1 cursor-pointer;
+    @apply text-sm leading-4.5 font-normal text-bw-1 cursor-pointer bg-transparent line-clamp-2 max-h-11;
+
+    &.select__option--is-focused {
+      @apply bg-transparent;
+    }
   }
 
   .select__option.select__option--is-selected {
@@ -42,6 +46,16 @@
     svg {
       @apply w-7-percent h-7;
     }
+  }
+
+  &:hover {
+    .select__clear-indicator {
+      @apply transition-all opacity-100 duration-200;
+    }
+  }
+
+  .select__clear-indicator {
+    @apply cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 bg-white opacity-0;
   }
 
   .select__input {

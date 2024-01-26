@@ -10,6 +10,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { IButtonColors } from 'src/type'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+import { CloseIcon } from '@assets/icons'
 
 interface IProps {
   open?: boolean
@@ -20,11 +21,11 @@ interface IProps {
   okButtonCaption?: string
   okButtonClass?: string | undefined
   cancelButtonClass?: string | undefined
-  buttonSize?: 'small' | 'medium' | 'lager'
+  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void
-
+  handleCloseOnly?: () => void
   disabled?: boolean
 
   title?: string
@@ -56,6 +57,12 @@ interface IProps {
   showOkButton?: boolean
   showCancelButton?: boolean
   zIndex?: string
+  scrollbale?: boolean
+  footerClassName?: string
+  externalLoading?: boolean
+
+  revertFunction?: boolean
+  showCloseIcon?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -86,7 +93,7 @@ const SappModal: React.FC<IProps> = ({
 
   handleCancel,
   handleSubmit,
-
+  handleCloseOnly,
   disabled,
 
   title,
@@ -100,7 +107,7 @@ const SappModal: React.FC<IProps> = ({
   confirmOnclose,
   size = 'max-w-lg',
   modelClassname = '',
-  refClass = 'md:px-6 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
+  refClass = 'md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
   childClass = '',
   parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex gap-3',
@@ -117,7 +124,12 @@ const SappModal: React.FC<IProps> = ({
   closeAfterSubmit = true,
   showOkButton = true,
   showCancelButton = true,
-  zIndex = 'z-[1000]',
+  zIndex = 'z-[1500]',
+  scrollbale = true,
+  footerClassName,
+  externalLoading,
+  revertFunction = false,
+  showCloseIcon,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -153,10 +165,14 @@ const SappModal: React.FC<IProps> = ({
     // Nếu handleSubmit là một hàm bất đồng bộ, thì gọi hàm đó và đợi kết quả
     if (handleSubmit && handleSubmit.constructor.name === 'AsyncFunction') {
       setLoading(true)
-      await handleSubmit()
-      setLoading(false)
+      try {
+        await handleSubmit()
+      } catch (err) {
+      } finally {
+        setLoading(false)
+      }
       if (closeAfterSubmit) {
-        handleClose()
+        CloseOnly()
       }
 
       return
@@ -166,7 +182,7 @@ const SappModal: React.FC<IProps> = ({
       handleSubmit()
     }
     if (closeAfterSubmit) {
-      handleClose()
+      CloseOnly()
     }
   }
 
@@ -224,6 +240,19 @@ const SappModal: React.FC<IProps> = ({
       handleCancel && handleCancel()
     }, 50)
   }
+  const CloseOnly = () => {
+    if (confirmDialogRef.current) {
+      confirmDialogRef.current.classList.add('animate-jump-out')
+      confirmDialogRef.current.classList.add('pointer-events-none')
+    }
+    if (confirmDialogOverLayRef.current) {
+      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
+      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
+    }
+    setTimeout(() => {
+      handleCloseOnly ? handleCloseOnly() : handleCancel && handleCancel()
+    }, 50)
+  }
 
   return (
     <>
@@ -241,14 +270,24 @@ const SappModal: React.FC<IProps> = ({
           >
             <div
               ref={confirmDialogOverLayRef}
-              onClick={onCancel}
+              onClick={() => {
+                if (externalLoading !== undefined) {
+                  if (externalLoading) {
+                    return
+                  }
+                }
+                if (loading) {
+                  return
+                }
+                onCancel()
+              }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
               } animate-fade-in-overlay  inset-0 bg-black opacity-80 transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${
-                isFullScreen || `${size} p-4 xl:py-11`
+                isFullScreen || `${size} p-4 xl:py-8`
               }  w-full text-center h-full flex justify-center inset-0 items-${position}`}
             >
               <div
@@ -260,32 +299,44 @@ const SappModal: React.FC<IProps> = ({
                 {showHeader &&
                   (customHeader || (
                     <div className="bg-white md:pb-5 pb-5 relative">
+                      {isBordered && (
+                        <div className="absolute left-0 right-0 border-b border-gray-2 bottom-0 -mx-6"></div>
+                      )}
                       <div className="flex">
                         {customTitle || (
                           <div className="text-xl font-bold text-bw-1">
                             {title}
                           </div>
                         )}
+                        {showCloseIcon && (
+                          <div
+                            className="ml-auto cursor-pointer"
+                            onClick={onCancel}
+                          >
+                            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+                          </div>
+                        )}
                       </div>
-                      {isBordered && (
-                        <div className="absolute inset-0 border-b border-gray-2 bottom-0 -mx-6"></div>
-                      )}
                     </div>
                   ))}
 
                 <div
-                  className={`${parentChildClass} snap-y flex-1 overflow-y-scroll bg-white -mr-4.5`}
+                  className={`${parentChildClass} ${
+                    scrollbale &&
+                    'snap-y flex-1 overflow-y-scroll bg-white -mr-4.5'
+                  }`}
                 >
                   <div className={`${childClass}`}>{children}</div>
                 </div>
 
                 {showFooter && (
-                  <div className="md:pt-5 pt-5 relative">
+                  <div className={`md:pt-5 pt-5 relative ${footerClassName}`}>
                     {isBordered && (
                       <div className="absolute left-0 right-0 border-b border-gray-2 top-0 -mx-6"></div>
                     )}
                     {customFooter || (
                       <ButtonCancelSubmit
+                        revertFunction={revertFunction}
                         className={footerButtonClassName}
                         color={color}
                         colorCancel={colorCancel}
@@ -294,7 +345,10 @@ const SappModal: React.FC<IProps> = ({
                         submit={{
                           title: okButtonCaption,
                           size: buttonSize,
-                          loading: loading,
+                          loading:
+                            externalLoading != undefined
+                              ? externalLoading
+                              : loading,
                           disabled: disabled,
                           onClick: onOk,
                           full: fullWidthBtn,
@@ -304,7 +358,10 @@ const SappModal: React.FC<IProps> = ({
                           title: cancelButtonCaption,
                           size: buttonSize,
                           onClick: onCancel,
-                          loading: loading,
+                          loading:
+                            externalLoading != undefined
+                              ? externalLoading
+                              : loading,
                           full: fullWidthBtn,
                           className: cancelButtonClass,
                         }}

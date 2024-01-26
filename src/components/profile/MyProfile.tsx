@@ -1,3 +1,4 @@
+import SappDrawer from '@components/base/SappDrawer'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import SappButton from '@components/base/button/SappButton'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
@@ -11,11 +12,15 @@ import {
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import { StaticImageData } from 'next/image'
-import { Dispatch, SetStateAction } from 'react'
+import { useRouter } from 'next/router'
+import { Dispatch, SetStateAction, useState, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
+import { PageLink } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
+  makeContactDefault,
   updateUser,
   updateUserAvatar,
   userReducer,
@@ -47,6 +52,7 @@ const MyProfile = ({
   setReViewImageSrc,
 }: IProps) => {
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)
   // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
   const { control, setValue, handleSubmit, reset } = useForm<{
@@ -54,6 +60,20 @@ const MyProfile = ({
   }>({
     resolver: zodResolver(schema),
   })
+
+  useEffect(() => {
+    dispatch(getMe())
+  }, [])
+
+  const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
+    status: boolean
+    email: string
+    phone: string
+    address: string
+    index: number
+    id: string
+    is_default: boolean
+  }>()
 
   /**
    * Hàm để chuyển sang chế độ chỉnh sửa form
@@ -121,18 +141,93 @@ const MyProfile = ({
       dispatch(getMe())
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
+    } catch (error: any) {
+      setIsEdit(false)
+      setReViewImageSrc(undefined)
+      if (error?.response?.data?.error?.code === '403|1002') {
+        await dispatch(getLogoutUser())
+        router.push(PageLink.AUTH_LOGIN)
+      }
+    }
+  }
+  const closeMakeDefault = () => {
+    setMakeDefaultDrawer(undefined)
+  }
+
+  const submitMakeDefault = async () => {
+    try {
+      if (makeDefaultDrawer?.id) {
+        await dispatch(makeContactDefault(makeDefaultDrawer.id))
+          .unwrap()
+          .then(async (e) => {
+            setMakeDefaultDrawer(undefined)
+            await dispatch(getMe())
+          })
+      }
     } catch (error) {}
+  }
+
+  /**
+   * Sắp xếp mảng người dùng theo thời gian tạo và is_default.
+   *
+   * @param {Array} users - Mảng người dùng cần sắp xếp.
+   * @returns {Array} - Mảng đã sắp xếp theo is_default và created_at.
+   */
+  const sortByCreatedAtAndDefault = (users: Array<any>) => {
+    const sortedUsers = [...users]
+
+    sortedUsers.sort((a, b) => {
+      if (a.is_default && !b.is_default) return -1
+      if (!a.is_default && b.is_default) return 1
+
+      const dateA = new Date(a.created_at)
+      const dateB = new Date(b.created_at)
+
+      return dateB.getTime() - dateA.getTime()
+    })
+
+    return sortedUsers
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="block min-h-[40.3rem]">
-        <div className="relative">
-          <div className="text-xl font-bold pb-6 mb-6 text-bw-1">
-            {`${isEdit ? 'Edit' : 'My'}`} Profile
+        <div className="relative ">
+          <div className="flex items-center justify-between pb-6 mb-6 border-b border-b-gray-3">
+            <div className="text-xl font-medium text-bw-1">Overview</div>
+            <div>
+              {!isEdit ? (
+                <SappButton
+                  onClick={handleChangeToEditForm}
+                  size="medium"
+                  title={'Edit'}
+                  className="min-w-[120px] text-base"
+                  loading={loading && !isEdit}
+                ></SappButton>
+              ) : (
+                <ButtonCancelSubmit
+                  className="gap-12 flex"
+                  cancel={{
+                    title: 'Cancel',
+                    onClick: handleChangeToPreview,
+                    size: 'medium',
+                    isPaddingHorizontal: false,
+                    disabled: loading || loadingEditName,
+                    className: 'min-w-fit !px-0 text-base w-30',
+                  }}
+                  submit={{
+                    title: 'Save',
+                    size: 'medium',
+                    className: 'min-w-fit px-0 text-sm w-30',
+                    type: 'submit',
+                    loading: loading || loadingEditName,
+                  }}
+                ></ButtonCancelSubmit>
+              )}
+            </div>
           </div>
-          <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>
         </div>
+
         <ul>
           {/* start:: Code*/}
           <li
@@ -145,7 +240,7 @@ const MyProfile = ({
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit} height="4">
-                {user.code?.toString()}
+                {user.code?.toString() ?? user.key?.toString()}
               </TextSkeleton>
             </div>
           </li>
@@ -198,40 +293,6 @@ const MyProfile = ({
           </li>
           {/* end:: Username*/}
 
-          {/* start:: Email*/}
-          <li
-            className={`md:flex block gap-[1.4rem] transition-[margin] ${
-              !isEdit ? 'mb-5' : 'mb-[2rem]'
-            }`}
-          >
-            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
-              Email
-            </div>
-            <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-              <TextSkeleton loading={loading && !isEdit} height="4">
-                {user.user_contacts?.[0]?.email}
-              </TextSkeleton>
-            </div>
-          </li>
-          {/* end:: Email*/}
-
-          {/* start:: Phone Number*/}
-          <li
-            className={`md:flex block gap-[1.4rem] transition-[margin] ${
-              !isEdit ? 'mb-5' : 'mb-[2rem]'
-            }`}
-          >
-            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
-              Phone Number
-            </div>
-            <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-              <TextSkeleton loading={loading && !isEdit} height="4">
-                {formatPhoneNumber(user.user_contacts?.[0]?.phone)}
-              </TextSkeleton>
-            </div>
-          </li>
-          {/* end:: Phone Number*/}
-
           {/* start:: Role*/}
           <li
             className={`md:flex block gap-[1.4rem] ${
@@ -272,45 +333,141 @@ const MyProfile = ({
               </div>
               <div className="flex-auto max-w-[300px] font-medium text-bw-1">
                 <TextSkeleton loading={loading && !isEdit} height="4">
-                  {formatDate(user.updated_at)}
+                  {formatDate(user?.updated_at)}
                 </TextSkeleton>
               </div>
             </li>
           )}
           {/* end:: Updated At*/}
         </ul>
-        <div className={`${isEdit ? 'mt-11' : 'mt-10'}`}>
-          {!isEdit ? (
-            <SappButton
-              onClick={handleChangeToEditForm}
-              size="medium"
-              title={'Edit'}
-              className="min-w-[120px] text-sm"
-              loading={loading && !isEdit}
-            ></SappButton>
-          ) : (
-            <ButtonCancelSubmit
-              cancel={{
-                title: 'Cancel',
-                onClick: handleChangeToPreview,
-                size: 'medium',
-                isPaddingHorizontal: false,
-                disabled: loading || loadingEditName,
-                className: 'min-w-fit !px-0 text-base w-30',
-              }}
-              submit={{
-                title: 'Save',
-                size: 'medium',
-                className: 'min-w-fit px-0 text-sm w-30',
-                type: 'submit',
-                loading: loading || loadingEditName,
-              }}
-            ></ButtonCancelSubmit>
-          )}
-        </div>
+        {sortByCreatedAtAndDefault(user.user_contacts || [])?.map((e, i) => {
+          return (
+            <div className={`mt-5`} key={e.id}>
+              <div
+                className={`border border-gray-3 p-4 ${
+                  isEdit ? 'bg-gray-3' : ''
+                } `}
+              >
+                <div>
+                  <span className="text-gray-1">Profile {i + 1}</span>
+                  {e.is_default && (
+                    <span className="ml-[10px] bg-blue-600 bg-opacity-5 text-state-info py-1 px-2 inline-block select-none text-medium-sm leading-4">
+                      Default
+                    </span>
+                  )}
+                </div>
+                <div className="text-bw-1 mt-3 font-medium flex">
+                  <div className="w-fit">
+                    {e.phone && e.phone}
+                    {e.email && e.phone && (
+                      <span className="text-gray-1 mx-3">|</span>
+                    )}
+                    {e.email && e.email}
+                  </div>
+                  {!isEdit && (
+                    <div
+                      className="ml-auto w-fit cursor-pointer select-none group"
+                      onClick={() =>
+                        setMakeDefaultDrawer({
+                          status: true,
+                          email: e.email,
+                          phone: e.phone,
+                          address: e.address,
+                          index: i + 1,
+                          id: e.id,
+                          is_default: e.is_default,
+                        })
+                      }
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={24}
+                        height={24}
+                        fill="none"
+                      >
+                        <path
+                          className="fill-current text-gray-500 group-hover:text-primary transition-colors duration-300"
+                          d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </form>
+      <SappDrawer
+        isOpen={makeDefaultDrawer?.status || false}
+        onClose={closeMakeDefault}
+        title={'Profile ' + makeDefaultDrawer?.index || ''}
+        message=""
+        confirmOnClose={false}
+        widthDrawer="w-6/12"
+        btnSubmitTile="Make Default"
+        handleSubmit={submitMakeDefault}
+        showSubmitButton={makeDefaultDrawer?.is_default ? false : true}
+      >
+        <div className="text-bw-1">
+          <span className="text-gray-1 w-[302px] inline-block">Email:</span>
+          <span className="font-medium">{makeDefaultDrawer?.email || ''}</span>
+        </div>
+        {makeDefaultDrawer?.phone && (
+          <div className="mt-5 text-bw-1">
+            <span className="text-gray-1 w-[302px] inline-block">
+              Phone Number:
+            </span>
+            <span className="font-medium">
+              {makeDefaultDrawer?.phone || ''}{' '}
+            </span>
+          </div>
+        )}
+        {makeDefaultDrawer?.address && (
+          <div className="mt-5 text-bw-1">
+            <span className="text-gray-1 w-[302px] inline-block">
+              {' '}
+              Address:{' '}
+            </span>
+            <span className="font-medium">
+              {makeDefaultDrawer?.address || ''}{' '}
+            </span>
+          </div>
+        )}
+      </SappDrawer>
     </div>
   )
 }
 
 export default MyProfile
+
+export async function getServerSideProps(context: any) {
+  try {
+    const { req, res, query } = context
+
+    // Lấy accessToken từ cookie
+    const accessToken = req.cookies.accessToken
+
+    // Kiểm tra accessToken
+    if (!accessToken) {
+      // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
+      return {
+        redirect: {
+          destination: '/auth/login',
+          permanent: false,
+        },
+      }
+    }
+
+    return {
+      props: {},
+    }
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  }
+}

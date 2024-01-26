@@ -1,78 +1,107 @@
 import { PageLink, TitleSidebar } from './index'
 
 const MENU_OPTIONS: MenuOption[] = [
-  /*{
-    name: `${TitleSidebar.DASHBOARD}`,
-    icon: 'home',
-    url: `${PageLink.DASHBOARD}`,
-  },*/
   {
-    name: `${TitleSidebar.COURSES}`,
+    name: `${TitleSidebar.DASHBOARD}`,
     icon: 'grid',
-    url: `${PageLink.COURSES}`,
+    url: `/`,
     type: 'level-1',
-    subItems: [
-      {
-        name: `${TitleSidebar.COURSE_NEW}`,
-        icon: 'document',
-        url: `${PageLink.COURSE_NEW}`,
-        type: 'level-2',
-      },
-      {
-        name: `${TitleSidebar.COURSE_LIST}`,
-        icon: 'document',
-        url: `${PageLink.COURSES}`,
-        type: 'level-2',
-        subItems: [
-          {
-            name: `${TitleSidebar.TEACHER}`,
-            icon: 'dot',
-            url: `${PageLink.TEACHER}`,
-            type: 'level-3',
-          },
-          {
-            name: `${TitleSidebar.COURSE_LIST}`,
-            icon: 'dot',
-            url: `${PageLink.COURSES}`,
-            type: 'level-3',
-          },
-        ],
-      },
-    ],
   },
   {
-    name: `${TitleSidebar.TOPICS}`,
-    icon: 'document',
-    url: `${PageLink.TOPICS}`,
+    name: `${TitleSidebar.COURSES}`,
+    icon: 'course',
+    url: `${PageLink.COURSES}`,
     type: 'level-1',
-    subItems: [
-      {
-        name: `${TitleSidebar.TOPICS_LIST}`,
-        icon: 'document',
-        url: `${PageLink.TOPICS}`,
-        type: 'level-2',
-      },
-      {
-        name: `${TitleSidebar.CASE_STUDY}`,
-        icon: 'document',
-        url: `${PageLink.CASE_STUDY}`,
-        type: 'level-2',
-      },
-    ],
+    // subItems: [
+    //   {
+    //     name: `${TitleSidebar.COURSE_NEW}`,
+    //     icon: 'document',
+    //     url: `${PageLink.COURSE_NEW}`,
+    //     type: 'level-2',
+    //   },
+    //   {
+    //     name: `${TitleSidebar.COURSE_LIST}`,
+    //     icon: 'document',
+    //     url: `${PageLink.COURSES}`,
+    //     type: 'level-2',
+    //     subItems: [
+    //       {
+    //         name: `${TitleSidebar.TEACHER}`,
+    //         icon: 'dot',
+    //         url: `${PageLink.TEACHER}`,
+    //         type: 'level-3',
+    //       },
+    //       {
+    //         name: `${TitleSidebar.COURSE_LIST}`,
+    //         icon: 'dot',
+    //         url: `${PageLink.COURSES}`,
+    //         type: 'level-3',
+    //       },
+    //     ],
+    //   },
+    // ],
+  },
+  {
+    name: `${TitleSidebar.DASHBOARD}`,
+    icon: 'stats-chart-sharp',
+    url: '/',
+    type: 'level-1',
+  },
+  {
+    name: `${TitleSidebar.NOTES_LIST}`,
+    icon: 'notes-list',
+    url: '#',
+    type: 'level-1',
+  },
+  {
+    name: `${TitleSidebar.RESOURCES}`,
+    icon: 'learning-resource',
+    url: '#',
+    type: 'level-1',
+  },
+  {
+    name: `${TitleSidebar.ENTRANCE_TEST}`,
+    icon: 'entrance-test',
+    url: `${PageLink.ENTRANCE_TEST}`,
+    type: 'level-1',
+  },
+  {
+    name: `${TitleSidebar.RESULTS}`,
+    icon: 'result',
+    url: '/',
+    type: 'level-1',
+  },
+  {
+    name: `${TitleSidebar.NEW_NOTE}`,
+    icon: 'create-note',
+    url: '#',
+    type: 'level-1',
+  },
+  {
+    name: `${TitleSidebar.CALCULATOR}`,
+    icon: 'caculator',
+    url: '#',
+    type: 'level-1',
   },
 ]
 
 const MENU_OPTIONS_BOTTOM: MenuOption[] = [
   {
-    name: `${TitleSidebar.COURSES}`,
+    name: `${TitleSidebar.NOTIFICATION}`,
     icon: 'notification',
     url: `${PageLink.NOTIFICATION}`,
     type: 'level-1',
   },
   {
-    name: `${TitleSidebar.COURSES}`,
+    name: ``,
     icon: 'avatar',
-    url: `${PageLink.DASHBOARD}`,
+    url: `${PageLink.MYPROFILE}`,
+    type: 'level-1',
+  },
+  {
+    name: ``,
+    icon: 'profile-detail',
+    url: `${PageLink.MYPROFILE}`,
     type: 'level-1',
   },
 ]

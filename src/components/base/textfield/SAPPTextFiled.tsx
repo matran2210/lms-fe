@@ -19,6 +19,7 @@ interface IProps {
   field?: ControllerRenderProps<any, string>
   textSize?: 'base' | 'sm'
   isError?: boolean
+  onPaste?: (e: any) => void
 }
 
 const TEXT_SIZES = {
@@ -43,6 +44,7 @@ const SAPPTextFiled = ({
   field,
   textSize = 'base',
   isError,
+  onPaste,
 }: IProps) => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -65,11 +67,12 @@ const SAPPTextFiled = ({
             defaultValue={value ? defaultValue : undefined}
             onChange={onChange}
             className={`${inputClassName} ${TEXT_SIZES[textSize]} ${
-              isError ? 'border-error' : ''
-            } form-control w-full bg-transparent border py-3 px-4 shadow-0 focus:shadow-0 focus:outline-none font-medium text-bw-1 placeholder:font-medium placeholder:text-gray-1`}
+              isError ? '!border-error' : ''
+            } h-[50px] border-solid form-control w-full border-default bg-transparent border py-3 px-4 shadow-0 focus:shadow-0 focus:border-primary focus:outline-none font-medium text-bw-1 placeholder:font-medium placeholder:text-gray-1`}
             placeholder={placeholder}
             disabled={disabled}
             maxLength={maxLength}
+            onPaste={onPaste}
           />
         </div>
         {type == 'password' && (

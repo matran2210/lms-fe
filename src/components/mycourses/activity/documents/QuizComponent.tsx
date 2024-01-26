@@ -1,11 +1,16 @@
+import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
+import PopupViewPdf from '@components/base/pdf/popupViewPdf'
+import MovableWindow from '@components/base/window'
+import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
-import {
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -13,11 +18,15 @@ import {
   useState,
 } from 'react'
 import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import SappIcon from 'src/common/SappIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
+  clearFileEssay,
   confirmQuestion,
+  saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 
 export type QuizComponentRef = {
@@ -25,25 +34,125 @@ export type QuizComponentRef = {
     activityId,
     tabId,
     quizId,
+    then,
+    onError,
+    onFinally,
   }: {
     activityId: string
     tabId: string
     quizId: string
+    then?: (e: any) => void
+    onError?: (e: any) => void
+    onFinally?: () => void
   }) => void
   reset: UseFormReset<FieldValues>
 }
 
 type Props = {
   activeQuestion?: IActivityStateQuestion
+  showCorrect?: boolean
+  document_id: string
+  activityId: string
+  tabId: string
+  quizId: string
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
-  ({ activeQuestion }: Props, ref) => {
+  (
+    {
+      activeQuestion,
+      showCorrect,
+      document_id,
+      activityId,
+      tabId,
+      quizId,
+    }: Props,
+    ref,
+  ) => {
     const questionRef = useRef<HTMLDivElement>(null)
+    const [essayData, setEssayData] = useState<any>()
 
-    const [defaultAnswer, setDefaultAnswer] = useState<any>()
     const dispatch = useAppDispatch()
     const { control: controlAnswer, setValue, reset, getValues } = useForm({})
+    const DragDropRef = useRef(null) as any
+
+    const [showListRequirement, setShowListRequirement] =
+      useState<boolean>(false)
+    const listRequirementRef = useRef<HTMLDivElement>(null)
+
+    useClickOutside({
+      ref: listRequirementRef,
+      callback: () => setShowListRequirement(false),
+    })
+
+    const [showRequirement, setShowRequirement] = useState<{
+      description: string
+      index: number
+      name: string
+      files: any
+    }>()
+
+    const [showExhibit, setShowExhibit] = useState<{
+      id: string
+      description: string
+      index: number
+      name: string
+      top: string
+      left: string
+      files: any
+    }>()
+
+    const [openUpload, setOpenUpload] = useState<any>({})
+    const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+
+    useEffect(() => {
+      const defaultRequirement = activeQuestion?.requirements?.[0]
+      if (defaultRequirement) {
+        setShowRequirement({
+          name: defaultRequirement.name,
+          description: defaultRequirement.description,
+          files: defaultRequirement.files,
+          index: 1,
+        })
+      }
+    }, [activeQuestion])
+
+    useEffect(() => {
+      if (activeQuestion?.requirements) {
+        setEssayData({
+          req: activeQuestion.requirements[0],
+          index: 0,
+        })
+      }
+    }, [activeQuestion])
+
+    const handleShowRequirement = (data: {
+      description: string
+      index: number
+      name: string
+      files: any
+    }) => {
+      setShowListRequirement(false)
+      setShowRequirement(data)
+    }
+
+    const handleShowExhibit = (
+      params: {
+        id: string
+        description: string
+        index: number
+        name: string
+        files: any
+      },
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ) => {
+      var mouseY = event.pageY - 300
+      setShowExhibit({ ...params, top: mouseY + 'px', left: '33%' })
+    }
+
+    const handleCloseExhibit = () => {
+      setShowExhibit(undefined)
+    }
 
     const getValueFillText = () => {
       let value = []
@@ -70,7 +179,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const getAnswerMatching = () => {
       let value = [] as any
-      const inputs = document.querySelectorAll('.sapp-match-result') as any
+      const inputs = questionRef.current?.querySelectorAll(
+        '.sapp-match-result',
+      ) as any
       for (let e of inputs) {
         const childId = e.querySelector('.sapp-notched-container')
         value.push({ question_id: e.id, answer_id: childId?.id })
@@ -79,66 +190,53 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }
     const getAnswerDragNDrop = () => {
       let value = [] as any
-      const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
+      const inputs = questionRef.current?.querySelectorAll(
+        '.sapp-input-dragNDrop',
+      ) as any
       for (let e of inputs) {
         const idAnswer = e.querySelector('span')
         value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
       }
       return value
     }
+
     useEffect(() => {
-      const handleResponseResults = () => {
-        if (activeQuestion) {
-          if (!activeQuestion.confirmed) {
-            return
+      if (
+        activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
+        activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+        activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+      ) {
+        handleResponseResults()
+      }
+    }, [activeQuestion])
+
+    const handleResponseResults = () => {
+      if (activeQuestion) {
+        if (!activeQuestion.confirmed) {
+          return
+        }
+        switch (activeQuestion?.qType) {
+          case QUESTION_TYPES.ONE_CHOICE:
+          case QUESTION_TYPES.TRUE_FALSE: {
+            setValue &&
+              setValue(
+                `${activeQuestion.id}_${document_id}_answer`,
+                activeQuestion.defaultValue,
+              )
+            break
           }
-          switch (activeQuestion?.qType) {
-            case QUESTION_TYPES.ONE_CHOICE:
-            case QUESTION_TYPES.TRUE_FALSE: {
-              setValue &&
-                setValue(
-                  'answer',
-                  activeQuestion.myAnswers?.find(
-                    (e: any) => e.question_id === activeQuestion.id,
-                  )?.question_answer_id,
-                )
 
-              break
-            }
-
-            case QUESTION_TYPES.MULTIPLE_CHOICE: {
-              setValue &&
-                setValue(
-                  'multiples',
-                  activeQuestion.myAnswers
-                    ?.find((e: any) => e.question_id === activeQuestion.id)
-                    ?.answer?.map((e: { answer_id: string }) => e.answer_id),
-                )
-              break
-            }
-
-            case QUESTION_TYPES.FILL_WORD: {
-              const myAnswers = activeQuestion?.myAnswers
-                ?.find((e: any) => e.question_id === activeQuestion.id)
-                ?.answer?.map((e: any) => e.answer_id)
-              setDefaultAnswer(myAnswers)
-              break
-            }
-            case QUESTION_TYPES.SELECT_WORD:
-              const myAnswers = activeQuestion?.myAnswers
-                ?.find((e: any) => e.question_id === activeQuestion.id)
-                ?.answer?.map((e: any) => e.id)
-              setDefaultAnswer(myAnswers)
-              break
-            default:
-              break
+          case QUESTION_TYPES.MULTIPLE_CHOICE: {
+            setValue &&
+              setValue(
+                `${activeQuestion.id}_${document_id}_answer`,
+                activeQuestion.defaultValue,
+              )
+            break
           }
         }
       }
-
-      // Gọi handleResponseResults khi results thay đổi
-      handleResponseResults()
-    }, [activeQuestion])
+    }
 
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
@@ -150,101 +248,445 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       activityId,
       tabId,
       quizId,
+      then,
+      onError,
+      onFinally: onFinally,
     }: {
       activityId: string
       tabId: string
       quizId: string
+      then?: (e: any) => void
+      onError?: (e: any) => void
+      onFinally?: () => void
     }) => {
       if (activeQuestion) {
         let myAnswers
         switch (activeQuestion.qType as QUESTION_TYPES) {
           case QUESTION_TYPES.ONE_CHOICE:
           case QUESTION_TYPES.TRUE_FALSE:
-            myAnswers = getValues('answer')
+            myAnswers = getValues(`${activeQuestion.id}_${document_id}_answer`)
             break
           case QUESTION_TYPES.MULTIPLE_CHOICE:
-            myAnswers = getValues('multiples')
+            myAnswers = getValues(`${activeQuestion.id}_${document_id}_answer`)
             break
           case QUESTION_TYPES.FILL_WORD:
             myAnswers = getValueFillText()
+            break
           case QUESTION_TYPES.SELECT_WORD:
             myAnswers = getValueSelectText()
+            break
+          case QUESTION_TYPES.MATCHING:
+            myAnswers = getAnswerMatching()
+            break
+          case QUESTION_TYPES.DRAG_DROP:
+            myAnswers = getAnswerDragNDrop()
+            break
+          case QUESTION_TYPES.ESSAY:
+            myAnswers = {
+              question_id: activeQuestion.id,
+              short_answer: getValues(
+                `${activeQuestion.id}_${document_id}_essay`,
+              ),
+              response_option: activeQuestion.response_option
+                ? activeQuestion.response_option
+                : 'WORD',
+              answer_file: activeQuestion.answer_file,
+              active: 'SUBMITED',
+            }
+            break
           default:
             break
         }
+        DragDropRef.current?.handleReset()
+        try {
+          dispatch(
+            confirmQuestion({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: activeQuestion.id || '',
+              myAnswers: myAnswers,
+            }),
+          )
+            .unwrap()
+            .then((e: any) => {
+              then && then(e)
+            })
+            .catch((e) => {
+              toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
+              onError && onError(e)
+            })
+        } catch (error) {
+          toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
+          onError && onError(error)
+        } finally {
+          onFinally && onFinally()
+        }
+      }
+    }
 
+    const handleSaveFileEssay = (
+      file: any,
+      question_id: string,
+      topic_id: string,
+    ) => {
+      try {
         dispatch(
-          confirmQuestion({
-            activityId: activityId,
-            tabId: tabId,
-            quizId: quizId,
-            questionId: activeQuestion.id || '',
-            myAnswers,
+          saveFileEssay({
+            activityId,
+            tabId,
+            quizId,
+            question_id: question_id,
+            file: file,
+            topic_id: topic_id,
           }),
         )
+      } catch (error) {
+        toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
+      }
+    }
+
+    const renderQuestion = () => {
+      switch (activeQuestion?.qType) {
+        case QUESTION_TYPES.ONE_CHOICE:
+        case QUESTION_TYPES.TRUE_FALSE:
+          return (
+            <OneChoiceQuestion
+              data={activeQuestion}
+              control={controlAnswer}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              setValue={setValue}
+              name={`${activeQuestion.id}_${document_id}_answer`}
+            />
+          )
+
+        case QUESTION_TYPES.MULTIPLE_CHOICE:
+          return (
+            <MultiChoiceQuestion
+              data={activeQuestion}
+              control={controlAnswer}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              setValue={setValue}
+              name={`${activeQuestion.id}_${document_id}_answer`}
+            />
+          )
+
+        case QUESTION_TYPES.MATCHING:
+          return (
+            <MatchingQuestion
+              data={activeQuestion}
+              action={getAnswerMatching}
+              defaultAnswer={activeQuestion?.defaultValue}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
+            />
+          )
+
+        case QUESTION_TYPES.FILL_WORD:
+          return (
+            <AddWordPreview
+              data={activeQuestion}
+              action={getValueFillText}
+              defaultAnswer={activeQuestion?.defaultValue}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
+            />
+          )
+
+        case QUESTION_TYPES.DRAG_DROP:
+          return (
+            <DragNDropPreivew
+              data={activeQuestion}
+              action={getAnswerDragNDrop}
+              defaultAnswer={activeQuestion?.defaultValue}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              resetDefaultAnswer={false}
+              ref={DragDropRef}
+            />
+          )
+
+        case QUESTION_TYPES.SELECT_WORD:
+          return (
+            <SelectWord
+              data={activeQuestion}
+              action={getValueSelectText}
+              defaultAnswer={activeQuestion?.defaultValue}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
+            />
+          )
+
+        case QUESTION_TYPES.ESSAY:
+          return (
+            <>
+              <div>
+                <div>
+                  <div className="font-semibold text-bw-1">
+                    Topic Description:
+                  </div>
+                  <div>
+                    <EditorReader
+                      className="editor-wrap mt-1.5"
+                      text_editor_content={
+                        activeQuestion?.question_topic?.description
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="border border-b-gray-2 my-6"></div>
+                <div className="flex items-center cursor-pointer select-none">
+                  <div className="relative">
+                    <div
+                      className="flex items-center hover:text-primary group"
+                      onClick={() => setShowListRequirement(true)}
+                    >
+                      <div className="font-semibold">
+                        Requirement {showRequirement?.index}/
+                        {activeQuestion.requirements?.length || 0}
+                      </div>
+                      <div>
+                        <SappIcon
+                          className="ml-2 -mt-1 group-hover:fill-primary fill-bw-1"
+                          icon="arrow_down"
+                        ></SappIcon>
+                      </div>
+                    </div>
+                    {showListRequirement && (
+                      <div
+                        ref={listRequirementRef}
+                        className="absolute z-50 text-over  left-0 bottom-0 bg-white w-max max-w-md translate-y-full shadow-md py-1"
+                      >
+                        {activeQuestion.requirements?.map((e, i) => {
+                          return (
+                            <div
+                              onClick={() => {
+                                handleShowRequirement({
+                                  description: e.description,
+                                  index: i + 1,
+                                  name: e.name,
+                                  files: e.files,
+                                })
+                              }}
+                              className="font-semibold hover:text-primary truncate py-1.5 px-3"
+                              key={e.id}
+                            >{`${e.name}`}</div>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                  <div className="ml-4">
+                    <span className="text-state-error">* </span>
+                    <span className="text-gray-1">
+                      You must finished{' '}
+                      {activeQuestion.requirements?.length || 0} requirements to
+                      complete this question (Your answer is auto save)
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="font-semibold">{`${showRequirement?.name}`}</div>
+                  {showRequirement?.description && (
+                    <EditorReader
+                      className="editor-wrap mt-1.5"
+                      text_editor_content={showRequirement?.description}
+                    />
+                  )}
+                  {showRequirement?.files?.length > 0 &&
+                    showRequirement?.files.map((e: any, index: number) => {
+                      return (
+                        <div
+                          className="cursor-pointer text-state-info hover:underline"
+                          onClick={() =>
+                            setOpenPdf({ status: true, url: e.resource.url })
+                          }
+                          key={index}
+                        >
+                          {e.resource.name}
+                        </div>
+                      )
+                    })}
+                </div>
+                <div className="border border-b-gray-2 my-6"></div>
+                <div className="flex items-center mb-4">
+                  <div className="font-semibold">
+                    Exhibits ({activeQuestion.exhibits?.length || 0})
+                  </div>
+                  <div className="ml-4">
+                    <span className="text-state-error">* </span>
+                    <span className="text-gray-1">Click to view</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {activeQuestion.exhibits?.map((e, i) => {
+                    return (
+                      <div
+                        className="cursor-pointer hover:text-primary"
+                        key={e.id}
+                        onClick={(event) => {
+                          handleShowExhibit(
+                            {
+                              id: e.id,
+                              description: e.description,
+                              name: e.name,
+                              index: i + 1,
+                              files: e.files,
+                            },
+                            event,
+                          )
+                        }}
+                      >
+                        Exhibit {i + 1}: {e.name}
+                      </div>
+                    )
+                  })}
+                </div>
+                {activeQuestion.question_topic?.files?.length && (
+                  <div>
+                    <div className="border border-b-gray-2 my-6"></div>
+                    <div>
+                      <div className="font-semibold mb-2">Topic Resource:</div>
+                      {activeQuestion.question_topic?.files.map(
+                        (e: any, index: number) => {
+                          return (
+                            <div
+                              className="cursor-pointer text-state-info hover:underline"
+                              onClick={() => {
+                                setOpenPdf({
+                                  status: true,
+                                  url: e.resource.url,
+                                })
+                              }}
+                              key={index}
+                            >
+                              {e.resource.name}
+                            </div>
+                          )
+                        },
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="border border-b-gray-2 my-6"></div>
+              <EssayQuestionPreview
+                data={null}
+                question_content={activeQuestion?.question_content}
+                index={essayData?.index}
+                question_data={activeQuestion}
+                control={controlAnswer}
+                handleSaveHighLight={() => {}}
+                forCaseStudy={true}
+                name={`${activeQuestion.id}_${document_id}_essay`}
+                fullData={activeQuestion}
+                openChooseFile={(e: any) =>
+                  setOpenUpload({
+                    status: true,
+                    question_id: activeQuestion.id,
+                  })
+                }
+                handleClearFile={() => {
+                  dispatch(
+                    clearFileEssay({
+                      activityId,
+                      tabId,
+                      quizId,
+                      question_id: activeQuestion.id,
+                    }),
+                  )
+                }}
+              />
+            </>
+          )
+
+        default:
+          return <div></div>
       }
     }
 
     return (
-      <div ref={questionRef}>
-        <div>
-          {activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
-          activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ? (
-            <OneChoiceQuestion
-              data={activeQuestion}
-              control={controlAnswer}
-              corrects={activeQuestion.corrects}
-              setValue={setValue}
-            />
-          ) : activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE ? (
-            <MultiChoiceQuestion
-              data={activeQuestion}
-              control={controlAnswer}
-              corrects={activeQuestion.corrects}
-              setValue={setValue}
-            />
-          ) : activeQuestion?.qType === QUESTION_TYPES.MATCHING ? (
-            <MatchingQuestion
-              data={activeQuestion}
-              action={getAnswerMatching}
-            />
-          ) : activeQuestion?.qType === QUESTION_TYPES.FILL_WORD ? (
-            <AddWordPreview
-              data={activeQuestion}
-              action={getValueFillText}
-              defaultAnswer={defaultAnswer}
-              corrects={activeQuestion.corrects}
-            />
-          ) : activeQuestion?.qType === QUESTION_TYPES.DRAG_DROP ? (
-            <DragNDropPreivew
-              data={activeQuestion}
-              action={getAnswerDragNDrop}
-              defaultAnswer={defaultAnswer}
-              // corrects={activeQuestion.corrects}
-            />
-          ) : activeQuestion?.qType === QUESTION_TYPES.SELECT_WORD ? (
-            <SelectWord
-              data={activeQuestion}
-              action={getValueSelectText}
-              defaultAnswer={defaultAnswer}
-              corrects={activeQuestion.corrects}
-            />
-          ) : activeQuestion?.qType === QUESTION_TYPES.ESSAY ? (
-            <>ESSAY</>
-          ) : (
-            <div></div>
-          )}
+      <div>
+        <div ref={questionRef}>
+          <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
-        {activeQuestion?.confirmed && (
-          <div className="p-4 mt-8 bg-gray-4">
-            <div className="font-semibold">Solution</div>
-            {activeQuestion?.solution && (
-              <EditorReader
-                text_editor_content={activeQuestion?.solution}
-                className="mt-4"
-              />
+        <div>
+          {activeQuestion?.confirmed &&
+            activeQuestion.qType !== 'ESSAY' &&
+            showCorrect && (
+              <div className="p-4 mt-8 bg-gray-4">
+                <div className="font-semibold">Solution</div>
+                {activeQuestion?.solution && (
+                  <EditorReader
+                    text_editor_content={activeQuestion?.solution}
+                    className="mt-4"
+                  />
+                )}
+              </div>
             )}
-          </div>
+        </div>
+        <ModalUploadFile
+          open={openUpload.status}
+          isMultiple={false}
+          handleClose={() => {
+            setOpenUpload({ status: false, question_id: undefined })
+          }}
+          fileType={'ESSAY'}
+          location={`question-answer/${openUpload.question_id}`}
+          setSelectedFile={(e: any) =>
+            handleSaveFileEssay(e[0], openUpload.question_id, '')
+          }
+        />
+        <PopupViewPdf
+          open={openPdf?.status || false}
+          setOpen={setOpenPdf}
+          url={openPdf?.url || ''}
+        />
+        {showExhibit?.id && (
+          <MovableWindow
+            position={{
+              width: '624px',
+              height: '224px',
+              left: showExhibit.left,
+              top: showExhibit.top,
+            }}
+            zIndex={999}
+          >
+            <div className="w-full h-full absolute top-0 left-0 border bg-white py-4  flex flex-col">
+              <div className="flex items-center justify-between flex-none px-6">
+                <div>
+                  <span className="font-bold">
+                    Exhibit {showExhibit.index}:{' '}
+                  </span>
+                  {showExhibit.name}
+                </div>
+                <div onClick={() => handleCloseExhibit()}>
+                  <SappIcon
+                    icon="x"
+                    className="cursor-pointer hover:fill-primary"
+                  ></SappIcon>
+                </div>
+              </div>
+              <div className="flex-auto overflow-scroll px-6">
+                {showExhibit?.description && (
+                  <EditorReader
+                    className="editor-wrap mt-1.5"
+                    text_editor_content={showExhibit?.description}
+                  />
+                )}
+                {showExhibit?.files?.length > 0 &&
+                  showExhibit?.files.map((e: any, index: number) => {
+                    return (
+                      <div
+                        className="cursor-pointer text-state-info hover:underline"
+                        onClick={() =>
+                          setOpenPdf({ status: true, url: e.resource.url })
+                        }
+                        key={index}
+                      >
+                        {e.resource.name}
+                      </div>
+                    )
+                  })}
+              </div>
+            </div>
+          </MovableWindow>
         )}
       </div>
     )

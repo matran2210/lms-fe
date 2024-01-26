@@ -6,8 +6,12 @@
   @apply block;
 }
 
-.filter .select-single .select__value-container {
-  @apply p-0 pr-4;
+.filter .select-single.status-course .select__value-container {
+  @apply p-0 pr-2;
+
+  & > input {
+    @apply text-gray-1 text-medium-sm font-normal;
+  }
 }
 
 .filter .select-single .select__indicator {
@@ -55,4 +59,59 @@
 
 .sapp-active-item-guide .item:first-child {
   @apply bg-white z-50;
+}
+
+.select__menu {
+  min-width: 150px !important;
+  right: 0px;
+}
+
+.group-resource:hover {
+  fill: #ffb800; /* Change to the desired hover fill color */
+  cursor: pointer; /* Optional: Change cursor to pointer on hover */
+}
+
+.notes-list-icon {
+  @apply text-gray-1;
+
+  &:hover {
+    @apply text-primary;
+  }
+
+  &.active {
+    @apply text-primary;
+  }
+}
+
+.select-single.status-course {
+  .select__input-container {
+    @apply text-gray-1 text-medium-sm font-normal;
+  }
+}
+
+.default-content-editor {
+  thead,
+  tbody,
+  tfoot,
+  td,
+  th {
+    border-width: 1px;
+    border-style: inset;
+    @apply border-gray-1; /* Add this line to set the border color to gray-2 */
+  }
+
+  tr {
+    border-style: initial;
+    border-width: initial;
+  }
+
+  ol,
+  ul,
+  menu {
+    padding-inline-start: 40px !important;
+    list-style: auto;
+  }
+  ul {
+    list-style-type: disc;
+  }
 }

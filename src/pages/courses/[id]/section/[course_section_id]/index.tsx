@@ -8,6 +8,11 @@ import SappDrawer from '@components/base/SappDrawer'
 import axios from 'axios'
 import { apiURL } from 'src/redux/services/httpService'
 import { useRouter } from 'next/router'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import { removeJwtToken } from '@utils/helpers/authen'
+import TestModal from 'src/pages/courses/test'
+import { PageLink } from 'src/constants'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -15,13 +20,18 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
   const [learningOutcome, setLearningOutcome] = useState<ILearningOutcome>()
   const router = useRouter()
+  const [readMore, setReadMore] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false)
+  const [chapterData, setChapterData] = useState<any>({})
+  const [chapterTestId, setChapterTestId] = useState<string>()
+  const [defaultActive, setDefaultActive] = useState<string>()
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
 
   const fetchChapterDetail = async (
-    id: string | undefined,
-    course_section_id: string | undefined,
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
   ) => {
     setLoadingChapter(true)
     try {
@@ -56,9 +66,102 @@ const CoursePartDetail = ({ previewPart }: any) => {
     }
   }, [openLearningOutcome])
 
+  const handleRouterActivity = (id: string) => {
+    router.push({
+      pathname: `/courses/${router.query.id}/activity/${id}`,
+      query: {
+        classId: previewPart.class_id,
+      },
+    })
+  }
+  const handleRouterCaseStudy = async (
+    quizId: string,
+    topicId: string,
+    sectionId?: string | undefined,
+    caseStudyId?: string | undefined,
+  ) => {
+    if (sectionId && caseStudyId) {
+      await handleCaseStudyProcess(sectionId, caseStudyId)
+    }
+    router.push({
+      pathname: `/case-study/${topicId}`,
+      query: { quiz_id: quizId, class_user_id: previewPart.class_user_id },
+    })
+  }
+
+  const handleRouterChapter = (id: string) => {
+    const partData = partDetail?.children?.filter(
+      (item: any) => item?.id === id,
+    )
+    const filteredData = chapterDetail?.children?.filter(
+      (item: any) => item?.quiz?.id === id,
+    )
+    if (partData?.length > 0) {
+      setChapterData(partData?.[0])
+      setChapterTestId(partData?.[0]?.id)
+    } else {
+      setChapterData(filteredData?.[0])
+      setChapterTestId(filteredData?.[0]?.id)
+    }
+    setOpen(true)
+  }
+
+  const course_section = chapterDetail?.children?.[0]
+  const quiz = course_section?.quiz
+
+  const handleNextLesson = () => {
+    if (course_section?.course_section_type === 'CHAPTER_TEST') {
+      handleRouterChapter(course_section?.quiz?.id)
+    } else {
+      course_section?.course_section_type === 'ACTIVITY'
+        ? handleRouterActivity(course_section?.children?.[0]?.id)
+        : course_section?.course_section_type === 'STORY'
+          ? handleRouterCaseStudy(
+              quiz?.id,
+              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+              course_section?.id,
+              quiz?.case_study_story?.instances?.[0]?.id,
+            )
+          : () => {}
+    }
+  }
+
+  const handleLearningOutCome = async (
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
+  ) => {
+    const res = await CourseAPI.learningOutcomeProgress(
+      router.query.id,
+      chapterDetail?.id,
+    )
+    if (res?.success) {
+      fetchChapterDetail(id, course_section_id)
+    }
+  }
+
+  const handleChapterTest = async () => {
+    await CourseAPI.learningOutcomeProgress(router.query.id, chapterTestId)
+  }
+
+  const handleCaseStudyProcess = async (
+    courseId: string,
+    caseStudyId: string,
+  ) => {
+    const res = await CourseAPI.caseStudyProgress(
+      router.query.id,
+      courseId,
+      caseStudyId,
+    )
+  }
+
+  useEffect(() => {
+    router.query.unit_id &&
+      setDefaultActive(String(router?.query?.unit_id) || '')
+  }, [router?.asPath])
+
   return (
-    <div className="main max-w-xxl my-0 mx-auto">
-      <div className="main max-w-xxl my-0 mx-auto">
+    <div className="main max-w-xxl my-0 mx-auto default-content-editor">
+      <div className="w-full">
         <div className="flex pt-6 pb-1 items-center">
           <p
             onClick={() => router.push('/courses')}
@@ -87,6 +190,13 @@ const CoursePartDetail = ({ previewPart }: any) => {
         setOpenLearningOutcome={setOpenLearningOutcome}
         course_id={router.query.id as any}
         course_section_id={router.query.course_section_id as any}
+        handleRouterActivity={handleRouterActivity}
+        handleRouterCaseStudy={handleRouterCaseStudy}
+        handleLearningOutCome={handleLearningOutCome}
+        handleRouterChapter={handleRouterChapter}
+        readMore={readMore}
+        setReadMore={setReadMore}
+        defaultActive={defaultActive ? defaultActive : ''}
       />
 
       <SappDrawer
@@ -95,26 +205,35 @@ const CoursePartDetail = ({ previewPart }: any) => {
         title={learningOutcome?.name}
         message="Bạn có chắc chắn muốn hủy không?"
         widthDrawer="w-6/12"
+        handleSubmit={handleNextLesson}
+        confirmOnClose={false}
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-[24px]"
+          className="pb-6 mr-3"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
         />
         {learningOutcome?.course_outcomes?.map((outcome, index) => (
-          <div className="flex mt-[24px]" key={outcome.id}>
-            <div className="font-semibold leading-[24px] text-[16px] me-1">
+          <div className="flex mt-6 mr-3" key={outcome.id}>
+            <div className="font-semibold leading-6 text-sm me-1">
               LO{index + 1}:
             </div>
             <p
-              className="text-[16px] font-normal leading-[24px] text-[#141414]"
+              className="text-sm font-normal leading-6 text-bw-1"
               dangerouslySetInnerHTML={{ __html: outcome?.description }}
             />
           </div>
         ))}
       </SappDrawer>
+      <TestModal
+        open={open}
+        setOpen={setOpen}
+        data={chapterData}
+        class_user_id={previewPart.class_user_id}
+        activeCourse={handleChapterTest}
+      />
     </div>
   )
 }
@@ -135,7 +254,6 @@ export async function getServerSideProps(context: any) {
         },
       },
     )
-
     // Xử lý dữ liệu từ API
     const nodeList = apiResponse?.data?.data
     // const tree = TreeHelper.convertFromArray(nodeList)
@@ -165,17 +283,22 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const newApiResponse = await axios.get(
           `${apiURL}/course-sections/${query.id}`,
           {
             headers: {
-              Authorization: `Bearer ${refreshResponse.data.accessToken}`,
+              Authorization: `Bearer ${act}`,
             },
           },
         )
@@ -192,10 +315,11 @@ export async function getServerSideProps(context: any) {
           },
         }
       } catch (refreshError) {
+        removeJwtToken()
         // Chuyển hướng đến trang đăng nhập
         return {
           redirect: {
-            destination: '/',
+            destination: PageLink.AUTH_LOGIN,
             permanent: false,
           },
         }
@@ -204,7 +328,7 @@ export async function getServerSideProps(context: any) {
       // Chuyển hướng đến trang đăng nhập
       return {
         redirect: {
-          destination: '/',
+          destination: '/404',
           permanent: false,
         },
       }

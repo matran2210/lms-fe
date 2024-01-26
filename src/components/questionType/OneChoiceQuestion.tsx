@@ -1,7 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
-import { useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 export type IPreviewProp = {
   data: any
   control: any
@@ -14,6 +14,7 @@ export type IPreviewProp = {
   removeHighlight?: any
   allowHighLight?: boolean
   solution?: any
+  allowUnHighLight?: boolean
 }
 const OneChoiceQuestion = ({
   data,
@@ -27,9 +28,14 @@ const OneChoiceQuestion = ({
   removeHighlight,
   allowHighLight,
   solution,
+  allowUnHighLight,
 }: IPreviewProp) => {
   useEffect(() => {
-    setValue(name, defaultValues)
+    if (defaultValues) {
+      setValue(name, defaultValues)
+    } else {
+      setValue(name, '')
+    }
   }, [defaultValues])
   const convertAnswer = useMemo(() => {
     let answers = []
@@ -40,22 +46,39 @@ const OneChoiceQuestion = ({
     }
     return answers
   }, [data])
-  useEffect(() => {
-    if (data) {
-      DeserializeHighlight(highlighted)
-    }
-  }, [data])
   return (
     <div>
       <div
         id="hightlight_area"
-        onMouseUp={() =>
-          runHighlight(handleSaveHighLight, allowHighLight || false)
-        }
+        onMouseUp={(e: any) => {
+          if (
+            e.target.tagName.charAt(0) !== 'm' &&
+            e.target.firstChild?.tagName !== 'math'
+          ) {
+            if (e) {
+              if (allowHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowHighLight || false,
+                  'hightlight_area',
+                )
+              } else if (allowUnHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowUnHighLight || false,
+                  'hightlight_area',
+                  { color: 'white' },
+                )
+              }
+              // runHighlight(handleSaveHighLight, allowHighLight || false, "hightlight_area")
+            }
+          }
+        }}
       >
         <EditorReader
           text_editor_content={data?.question_content}
           className="sapp-questions"
+          highlighted={highlighted}
         />
       </div>
       <div

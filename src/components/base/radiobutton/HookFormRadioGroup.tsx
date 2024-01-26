@@ -2,6 +2,7 @@ import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SAPPRadio from './SAPPRadio'
 import YourAnswer from '../tags/YourAnswer'
+import { uniqueId } from 'lodash'
 // import './HookFormRadioGroup.scss'
 
 interface IHookFormRadioGroupProps {
@@ -83,7 +84,7 @@ const HookFormRadioGroup = ({
 
                 return (
                   <div
-                    key={index}
+                    key={uniqueId('check')}
                     className={`${!!corrects && 'pointer-events-none'}`}
                   >
                     <div className="flex flex-row">
@@ -109,7 +110,7 @@ const HookFormRadioGroup = ({
                             onChange && onChange(e)
                             field.onChange(e.target.value)
                           }}
-                          key={option.label}
+                          key={index}
                           value={option.value.toString()}
                           checked={checked}
                           className="flex-none mt-[3px]"

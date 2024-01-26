@@ -1,64 +1,97 @@
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import React from 'react'
+import Icon from '@components/icons'
+import Link from 'next/link'
 
 interface MultipleQuestionProps {
-  data: {
-    id: number
-    status: string
-    type: string
-  }[]
+  questions: any
+  className?: string
 }
 
-const MultipleQuestion: React.FC<MultipleQuestionProps> = ({ data }) => {
-  const renderBoxes = (type: string) => {
-    const filteredData = data.filter((item) => item.type === type)
-
-    const renderBoxItems = filteredData.map((item) => {
-      let className =
-        'text-center font-["Inter"] font-medium leading-[33px] border-solid flex flex-row justify-center pt-3 w-16 h-16 items-start border'
-
-      if (item.status === 'true') {
-        className += ' text-[#008000] border-[#008000]'
-      } else {
-        className += ' text-[#d35563] border-[#d35563]'
-      }
-
+const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
+  const renderBoxes = (type: string, data: any, totalBefore: number) => {
+    const renderBoxItems = data?.map((item: any, index: number) => {
       return (
-        <div key={item.id} className={className}>
-          {item.id}
+        <div
+          key={item?.id}
+          className={`border border-solid flex items-center flex-row justify-center w-12 h-12 text-sm font-medium leading-8.5 cursor-pointer
+          ${
+            item?.is_correct || item?.active === 'SUBMITED'
+              ? ' text-state-success border-success'
+              : ' text-danger border-error'
+          }
+          `}
+        >
+          {index + totalBefore + 1}
         </div>
       )
     })
 
     return (
       <div className="w-full">
-        <div className="text-xl font-bold mb-4">{type}</div>
-        <div className="flex flex-col gap-3 w-full items-start">
-          {renderBoxItems}
-        </div>
+        {data.length > 0 && (
+          <>
+            <div className="text-xl font-medium mb-4">{type}</div>
+            <div
+              className={`flex flex-row flex-wrap gap-3 w-full items-start ${
+                type === 'Multiple Questions' ? 'mb-6' : ''
+              }`}
+            >
+              {renderBoxItems}
+            </div>
+          </>
+        )}
       </div>
     )
   }
 
   return (
-    <div className="bg-white flex flex-col justify-between max-w-[420px] h-[991px] items-start pl-6 py-6">
+    <div
+      className={`${className} bg-white flex flex-col justify-between w-full max-w-smd items-start px-6 py-6 overflow-y-auto shadow-sidebar`}
+    >
       <div className="flex flex-col gap-10 w-full items-start">
-        <div className="flex flex-col gap-6 w-full items-start">
-          {renderBoxes('Multiple Question')}
-          {renderBoxes('Constructed Questions')}
+        <div className="flex flex-col w-full items-start">
+          {renderBoxes(
+            'Multiple Questions',
+            questions?.selectedResponseAnswers ?? [],
+            0,
+          )}
+          {renderBoxes(
+            'Constructed Questions',
+            questions?.constructedResponseAnswers ?? [],
+            questions?.selectedResponseAnswers?.length ?? 0,
+          )}
         </div>
       </div>
-      <div className="flex justify-between mt-auto w-full">
-        <div className="mr-4 w-[200px]">
-          <div className="inline-block h-4 w-4 rounded-full bg-[#008000] mr-1"></div>
-          <span className="text-[#008000] font-light">Correct</span>
-        </div>
-        <div className="mr-4 w-[200px]">
-          <div className="inline-block h-4 w-4 rounded-full bg-[#d35563] mr-1 "></div>
-          <span className="text-[#d35563] font-light">Incorrect</span>
-        </div>
-        <div className="flex justify-end mt-auto w-full pr-[27px]">
-          <ButtonPrimary title={'Quit'} />
+      <div className="mt-auto w-full">
+        <div className="border-t border-default pt-6 flex justify-between">
+          <div className="flex items-center mr-6 w-20">
+            <Icon
+              type={'circle'}
+              className="w-4 h-4 text-state-success mr-1.5 shrink-0"
+            />
+            <span className="text-base leading-6.2 text-state-success font-normal">
+              Correct
+            </span>
+          </div>
+          <div className="flex items-center mr-4 w-20">
+            <Icon
+              type={'circle'}
+              className="w-4 h-4 text-danger mr-1.5 shrink-0"
+            />
+            <span className="text-base leading-6.2 text-danger font-normal">
+              Incorrect
+            </span>
+          </div>
+          <div className="flex justify-end w-full">
+            <Link href={`/courses/my-course/${questions?.course?.id}`}>
+              <ButtonPrimary
+                title={'Quit'}
+                size={'medium'}
+                className={'px-11 text-medium-sm !font-medium'}
+              />
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -1,14 +1,51 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { ICourseSection } from 'src/type/courses'
+import TestModal from 'src/pages/courses/test'
+import SappButton from '@components/base/button/SappButton'
+import { useRouter } from 'next/router'
+import CourseAPI from 'src/pages/api/courses'
+import toast from 'react-hot-toast'
 
-const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
-  const formattedTime = formatTime(coursePart?.quiz?.limit_count || 0)
+const PartFailed = ({
+  coursePart,
+  class_user_id,
+}: {
+  coursePart: ICourseSection
+  class_user_id?: string
+}) => {
+  const formattedTime = coursePart?.quiz?.quiz_timed
+    ? formatTime(coursePart?.quiz?.quiz_timed * 60)
+    : 'Unlimited'
+  const [open, setOpen] = useState(false)
+  const router = useRouter()
+  const checkFinished = useMemo(() => {
+    if (!coursePart?.quiz?.attempts) {
+      return false
+    }
+    if (coursePart?.quiz?.attempts?.length > 0) {
+      return true
+    }
+
+    return false
+  }, [coursePart?.quiz?.attempts])
+  const handleChapterTest = async () => {
+    try {
+      await CourseAPI.learningOutcomeProgress(
+        router.query.courseId,
+        coursePart.id,
+      )
+    } catch (err) {
+      toast.error('Cannot progress Test')
+      throw err
+    }
+  }
+  const quizAttempt = coursePart?.quiz
 
   return (
     <>
-      <div className={`name-part text-2xl font-semibold`}>
+      <div className={`name-part text-2xl font-semibold h-[60px] line-clamp-2`}>
         <div>{coursePart?.name}</div>
       </div>
       <div className="info mt-6">
@@ -19,20 +56,82 @@ const PartFailed = ({ coursePart }: { coursePart: ICourseSection }) => {
         <div className="time-allow flex justify-between pt-4">
           <p className="text-base text-gray-1">Attempt:</p>
           <p className="text-base text-bw-1 font-semibold">
-            {!coursePart?.quiz?.quiz_timed ? '' : coursePart?.quiz.quiz_timed}
+            {`${quizAttempt?.attempt_count || 0} / ${
+              quizAttempt?.limit_count !== 0
+                ? quizAttempt?.limit_count
+                : 'Unlimited'
+            }` ?? ''}
           </p>
         </div>
       </div>
-      <div className="mt-auto">
+      <div className="des mt-6">
+        <div className={`text-base h-26`} />
+      </div>
+      <div className="mt-7">
         <div className="action flex items-center jusity-end relative">
-          <ButtonSecondary
-            title={'Retake'}
-            full={false}
-            size={'small'}
-            className="hover:bg-primary hover:text-white ml-auto"
-          />
+          {!checkFinished ? (
+            !coursePart?.quiz?.is_limited ||
+            coursePart?.quiz?.attempts?.length !==
+              coursePart?.quiz?.limit_count ? (
+              <ButtonSecondary
+                disabled={
+                  coursePart?.quiz?.is_limited &&
+                  coursePart?.quiz?.attempts?.length ===
+                    coursePart?.quiz?.limit_count
+                }
+                title={`Start`}
+                full={false}
+                size={'small'}
+                className={`${
+                  coursePart?.quiz?.attempts?.length !==
+                    coursePart?.quiz?.limit_count &&
+                  'hover:bg-primary hover:text-white'
+                } ml-auto`}
+                onClick={() => setOpen(true)}
+              />
+            ) : (
+              <></>
+            )
+          ) : (
+            <div className="flex justify-between flex-1">
+              <SappButton
+                title="Result"
+                isUnderLine
+                color="text"
+                onClick={() =>
+                  router.push(
+                    `/courses/test/test-result/${quizAttempt?.attempts[0].id}`,
+                  )
+                }
+              ></SappButton>
+              <ButtonSecondary
+                disabled={
+                  coursePart?.quiz?.is_limited &&
+                  coursePart?.quiz?.attempt_count ===
+                    coursePart?.quiz?.limit_count
+                }
+                title={'Retake'}
+                full={false}
+                size={'small'}
+                className={`${
+                  coursePart?.quiz?.attempt_count !==
+                    coursePart?.quiz?.limit_count &&
+                  'hover:bg-primary hover:text-white'
+                } ml-auto`}
+                onClick={() => setOpen(true)}
+              />
+            </div>
+          )}
         </div>
       </div>
+      <TestModal
+        open={open}
+        setOpen={setOpen}
+        title={coursePart?.name}
+        data={coursePart}
+        class_user_id={class_user_id}
+        activeCourse={handleChapterTest}
+      />
     </>
   )
 }

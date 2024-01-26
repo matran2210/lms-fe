@@ -11,6 +11,10 @@ interface IProps {
   placeholder?: string
   onChange?: (select: any) => void
   value?: string | null | undefined
+  isDisabled?: boolean
+  onMenuScrollToBottom?: any
+  classParent?: string
+  isClearable?: boolean
 }
 
 const HookFormSelect = ({
@@ -22,9 +26,13 @@ const HookFormSelect = ({
   onChange,
   placeholder,
   value,
+  isDisabled,
+  onMenuScrollToBottom,
+  classParent = '',
+  isClearable = false,
 }: IProps) => {
   return (
-    <div className="select-options">
+    <div className={`select-options ${classParent}`}>
       <Select
         required={required}
         isMulti={isMulti}
@@ -36,6 +44,9 @@ const HookFormSelect = ({
         placeholder={placeholder}
         onChange={onChange}
         value={value}
+        isDisabled={isDisabled}
+        onMenuScrollToBottom={onMenuScrollToBottom}
+        isClearable={isClearable}
       />
     </div>
   )

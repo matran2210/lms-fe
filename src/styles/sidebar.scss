@@ -1,3 +1,33 @@
+body:not(.no-hover) {
+  .menu-sidebar-left {
+    &:hover {
+      @apply w-[200px];
+
+      .group-logos {
+        @apply pb-5;
+      }
+
+      .logo-full {
+        @apply visible opacity-100;
+      }
+
+      .sidebar-item .label {
+        display: -webkit-box;
+        @apply visible opacity-100;
+
+        &.avatar {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.menu-sidebar-left {
+  transition: width 0.2s linear;
+  -webkit-transform: translateZ(0) scale(1, 1);
+}
+
 .sidebar-list-items {
   &:hover {
     .sidebar-child.level-1 {
@@ -14,14 +44,10 @@
         .label {
           @apply block;
         }
-
-        .before-icon {
-          @apply mr-4;
-        }
       }
 
       .sidebar-list-items {
-        @apply mb-3 last:mb-0;
+        @apply mb-3 last:mb-0 pl-0;
       }
     }
 
@@ -30,6 +56,10 @@
 
       &.active {
         @apply opacity-100 visible h-full;
+
+        .sidebar-list-items {
+          @apply pl-0;
+        }
       }
 
       .menu-items-list {

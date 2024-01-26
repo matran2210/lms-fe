@@ -9,13 +9,23 @@ const ButtonCancelSubmit = ({
   colorCancel = 'text',
   showOkButton = true,
   showCancelButton = true,
+  revertFunction = false,
 }: IButtonCancelSubmitProps) => {
   return (
     <div className={className}>
       {showCancelButton && (
-        <SappButton color={colorCancel} {...cancel}></SappButton>
+        <SappButton
+          color={colorCancel}
+          {...(!revertFunction ? { ...cancel } : { ...submit })}
+          isPadding={false}
+        ></SappButton>
       )}
-      {showOkButton && <SappButton color={color} {...submit}></SappButton>}
+      {showOkButton && (
+        <SappButton
+          color={color}
+          {...(!revertFunction ? { ...submit } : { ...cancel })}
+        ></SappButton>
+      )}
     </div>
   )
 }

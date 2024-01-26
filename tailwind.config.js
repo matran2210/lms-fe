@@ -16,14 +16,17 @@ module.exports = {
       '2xl': '1440px',
       '2xl-min': { min: '1441px' },
       '3xl': '1536px',
+      '3.5xl': '1660px',
       '4xl': '1920px',
     },
     fontSize: {
+      '6px': ['64px', { lineHeight: '76.8px ' }],
       '5xl': ['40px', { lineHeight: '50px' }],
       '4xl': ['36px', { lineHeight: '45px' }],
       '3xl': ['32px', { lineHeight: '40px' }],
       '2xl': ['24px', { lineHeight: '30px' }],
       xl: ['20px', { lineHeight: '25px' }],
+      'lg-xl': ['18px', { lineHeight: '27px' }],
       lg: ['18px', { lineHeight: '24px' }],
       base: ['16px', { lineHeight: '24px' }],
       sm: ['14px', { lineHeight: '24px' }],
@@ -32,7 +35,10 @@ module.exports = {
       ssm: ['12px', { lineHeight: '20px' }],
     },
     fontFamily: {
-      sans: ['Inter', 'sans-serif'],
+      sans: ['Roboto', 'sans-serif'],
+      // sans: ['Inter', 'sans-serif'],
+      tech: 'techNology',
+      inter: ['Inter', 'sans-serif'],
     },
     container: {
       center: true,
@@ -58,14 +64,18 @@ module.exports = {
         },
         state: {
           info: '#3964EA',
-          success: '#008000',
-          error: '#D35563',
+          success: '#397839',
+          error: '#B90E0A',
         },
         bw: {
-          1: '#141414',
-          2: '#404041',
+          1: '#404041',
+          2: '#141414',
           3: '#FFFFFF',
           4: '#111424',
+          5: '#000000CC',
+          6: '#F9FAFC',
+          7: '#EDEFF5',
+          9: '#C3C3C3',
         },
         gray: {
           1: '#A1A1A1',
@@ -85,8 +95,8 @@ module.exports = {
         DEFAULT: '#DCDDDD',
         default: '#DCDDDD',
         focus: '#141414',
-        success: '#008000',
-        error: '#D35563',
+        success: '#397839',
+        error: '#B90E0A',
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
         active: '#FFB800',
@@ -97,6 +107,7 @@ module.exports = {
       },
       boxShadow: {
         0: '0',
+        activity: '0px 2px 4px 0px #00000014, 0px 0px 6px 0px #00000005',
         sidebar:
           '0px 2px 4px 0px rgba(0, 0, 0, 0.08), 0px 0px 6px 0px rgba(0, 0, 0, 0.02)',
         'single-dialog': '0px 4px 62px 0px rgba(0, 0, 0, 0.07)',
@@ -105,6 +116,9 @@ module.exports = {
         solution: '0px 2px 7px 0px rgba(0, 0, 0, 0.13)',
         'questions-exhibits': '5px -6px 10px -4px rgba(0, 0, 0, 0.15)',
         'question-footer': '0px -2px 7px 0px rgba(0, 0, 0, 0.13)',
+        preview: '0px 4px 12px 0px rgba(0, 0, 0, 0.10)',
+        select:
+          '0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 4px 0px rgba(0, 0, 0, 0.04)',
       },
       minWidth: {
         4: '16px',
@@ -130,12 +144,17 @@ module.exports = {
         default: '40px',
         medium: '48px',
         large: '56px',
+        352: '352px',
       },
       maxHeight: {
         0: 0,
         5.5: '22px',
       },
       maxWidth: {
+        27: '110px',
+        78: '304px',
+        '365px': '365px',
+        smd: '402px',
         md: '448px',
         lg: '512px',
         xl: '576px',
@@ -148,6 +167,7 @@ module.exports = {
         0: '0',
         4.5: '17px',
         4.8: '18px',
+        4.9: '19.2px',
         5.2: '20.962px',
         6.2: '25px',
         6.5: '27px',
@@ -173,6 +193,7 @@ module.exports = {
         18: '18%',
         3.6: '36%',
         17: '17%',
+        '624px': '624px',
       },
       padding: {
         1.8: '0.47rem', // 7.5px
@@ -182,6 +203,8 @@ module.exports = {
         3.8: '0.89rem', // 14.3px
         4.5: '1.125rem', // 18px
         5.25: '1.313rem', // 21px
+        5.75: '23px', // 23px
+        6.5: '26.5px',
         7.5: '1.875rem', // 30px
         8.25: '2.0625rem', // 33px
         17.5: '4.375rem', // 70px
@@ -194,6 +217,9 @@ module.exports = {
         8.25: '2.0625rem', // 33px
         13: '3.25rem', // 52px
         15: '3.75rem', // 60px
+      },
+      inset: {
+        27: '108px',
       },
       height: {
         4.5: '1.125rem', // 18px

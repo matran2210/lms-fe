@@ -7,6 +7,7 @@ interface IProps {
   position?: any
   onClick?: any
   zIndex?: number
+  className?: string
 }
 const MovableWindow = ({
   children,
@@ -14,6 +15,7 @@ const MovableWindow = ({
   position,
   onClick,
   zIndex,
+  className,
 }: IProps) => {
   const elementRef = useRef<HTMLDivElement>(null)
 
@@ -30,7 +32,7 @@ const MovableWindow = ({
   return (
     <div
       ref={elementRef}
-      className="sapp-opacity-bg-border resizable moveable-resizable min-w-fit shadow-box"
+      className={`sapp-opacity-bg-border resizable moveable-resizable min-w-fit shadow-preview ${className} absolute`}
       style={{
         width: position?.width,
         height: position?.height,
@@ -40,7 +42,12 @@ const MovableWindow = ({
       }}
       //   onClick={onClick}
       onMouseDown={onClick}
+      onTouchStart={onClick}
     >
+      {/* <div
+        className="sapp-movablezone absolute top-0 w-full
+      h-[48px] z-[100000000000000]"
+      ></div> */}
       <div className="resizers">
         <div className="resizer top-left"></div>
         <div className="resizer top-right"></div>

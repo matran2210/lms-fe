@@ -5,6 +5,7 @@ const SIZES = {
   small: 'text-[0.875rem] leading-4',
   medium: 'text-[1rem] leading-6',
   lager: 'text-lg leading-6.5',
+  extra: 'text-lg leading-6.5',
 }
 
 const COLORS = {
@@ -20,13 +21,17 @@ const COLORS = {
     'bg-white hover:bg-primary-2 disabled:bg-white text-gray-1 hover:text-white',
   outline:
     'bg-white border-bw-1 hover:border-gray-1 hover:text-gray-1 text-bw-1',
-  text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2', // Add a new color for ButtonText
+  text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 font-medium',
+  textUnderline:
+    'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
+  quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
 }
 
 const PADDINGS = {
   small: 'px-7 py-2',
   medium: 'px-8 py-2',
   lager: 'px-9 py-2.8',
+  extra: 'px-17.5 py-2.8',
   none: '',
 }
 
@@ -42,6 +47,8 @@ const COLOR_LOADING = {
   white: 'bg-gray-1',
   outline: 'bg-gray-1',
   text: 'bg-none',
+  textUnderline: 'bg-none',
+  quizActivity: 'bg-white',
 }
 
 const SappButton = ({
@@ -61,10 +68,10 @@ const SappButton = ({
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
-  let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-semibold  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
+  let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
 
   isUnderLine = isUnderLine ?? color === 'text'
-  componentClass += ` ${isUnderLine ? 'underline' : ''}`
+  componentClass += ` ${isUnderLine ? 'hover:underline' : ''}`
 
   if (link)
     return (

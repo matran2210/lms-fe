@@ -1,4 +1,4 @@
-import SearchForm from '@components/notification/Search'
+import SearchForm from '@components/mycourses/Search'
 import NotifyTab from '@components/notification/NotifyTab'
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import ActionCell from '@components/base/action/ActionCell'
@@ -17,7 +17,7 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModelSidebar from '@components/base/modal/SappModelSidebar'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -63,11 +63,20 @@ const Notifications = () => {
     } catch (error) {}
   }
 
-  const getApiNotificationDetail = async (id: string) => {
+  const getApiNotificationDetail = async (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => {
     try {
-      await dispatch(getNotificationDetail(id))
-      await coutNotificationsUnRead()
-      dispatch(updateStatus({ id: id }))
+      const res = await dispatch(getNotificationDetail(id))
+      if (res) {
+        await coutNotificationsUnRead()
+        dispatch(updateStatus({ id: id }))
+        if (redirect !== null) {
+          Router.push(`${content?.replace('class_id', 'classId')}`)
+        }
+      }
     } catch (error) {}
   }
 
@@ -123,11 +132,10 @@ const Notifications = () => {
   return (
     <>
       <div className="header bg-white border-b border-default px-4 lg:px-20">
-        <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
+        <div className="max-w-xxl my-0 mx-auto flex py-4.5">
           <SearchForm
-            placeholder="Find..."
+            placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
-            getNotifications={getNotifications}
           />
         </div>
       </div>
@@ -137,7 +145,7 @@ const Notifications = () => {
             Notifications
           </h2>
         </div>
-        <div className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between">
+        <div className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between border-b border-gray-2">
           <NotifyTab tabs={tabs} />
           <div className="settings flex items-center relative">
             <ActionCell open={openToolTip} setOpen={setOpenToolTip}>

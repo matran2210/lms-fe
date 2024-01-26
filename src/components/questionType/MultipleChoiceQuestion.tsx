@@ -1,8 +1,8 @@
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import EditorReader from '@components/base/editor/EditorReader'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
 import { IPreviewProp } from './OneChoiceQuestion'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
 // import {IPreviewProp} from '../true-false-question'
 
 const MultiChoiceQuestion = ({
@@ -16,11 +16,17 @@ const MultiChoiceQuestion = ({
   highlighted,
   removeHighlight,
   allowHighLight,
+  solution,
+  allowUnHighLight,
 }: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
     if (data?.answers) {
-      for (let e of data?.answers) {
+      const oldData = [...data?.answers]
+      const sorted = oldData.sort(
+        (a: any, b: any) => a.answer_position - b.answer_position,
+      )
+      for (let e of sorted) {
         answers.push({ label: e.answer, value: e.id })
       }
     }
@@ -29,22 +35,43 @@ const MultiChoiceQuestion = ({
   useEffect(() => {
     setValue(name, defaultValues)
   }, [defaultValues])
-  useEffect(() => {
-    if (data) {
-      DeserializeHighlight(highlighted)
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data) {
+  //     DeserializeHighlight(highlighted)
+  //   }
+  // }, [data])
   return (
     <div>
       <div
         id="hightlight_area"
-        onMouseUp={() =>
-          runHighlight(handleSaveHighLight, allowHighLight || false)
-        }
+        onMouseUp={(e: any) => {
+          if (
+            e.target.tagName.charAt(0) !== 'm' &&
+            e.target.firstChild?.tagName !== 'math'
+          ) {
+            if (e) {
+              if (allowHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowHighLight || false,
+                  'hightlight_area',
+                )
+              } else if (allowUnHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowUnHighLight || false,
+                  'hightlight_area',
+                  { color: 'white' },
+                )
+              }
+            }
+          }
+        }}
       >
         <EditorReader
           text_editor_content={data?.question_content}
           className="sapp-questions"
+          highlighted={highlighted}
         />
       </div>
       <div
@@ -60,8 +87,16 @@ const MultiChoiceQuestion = ({
           multiple
           corrects={corrects}
           defaultValue={defaultValues || ''}
+          // justify='start'
+          positionCheckBox="start"
         />
       </div>
+      {solution && (
+        <div className="bg-gray-4 mt-6 p-6">
+          <div className="font-semibold text-base text-bw-1 ">Solution</div>
+          <EditorReader className="mt-4" text_editor_content={solution} />
+        </div>
+      )}
     </div>
   )
 }

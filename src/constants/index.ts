@@ -11,17 +11,26 @@ export const PageLink = {
   AUTH_CHANGE_PASSWORD: '/auth/change-password',
   AUTH_CHANGE_PASSWORD_SUCCESS: '/auth/change-password/change-password-success',
   NOTIFICATION: '/notifications',
+  ENTRANCE_TEST: '/entrance-test',
+  MYPROFILE: '/myprofile',
 }
 
 export const TitleSidebar = {
   DASHBOARD: 'Dashboard',
-  COURSES: 'Courses',
+  COURSES: 'My Course',
+  RESOURCES: 'Resources',
   COURSE_NEW: 'Course new',
   COURSE_LIST: 'Course list',
   CASE_STUDY: 'Case Study',
   TOPICS: 'Topics',
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
+  NOTIFICATION: 'Notifications',
+  RESULTS: 'Results',
+  NOTES_LIST: 'Notes List',
+  NEW_NOTE: 'New Note',
+  CALCULATOR: 'Calculator',
+  ENTRANCE_TEST: 'Entrance Test',
 }
 
 export const GUIDELINE_PASSWORD = [
@@ -74,4 +83,98 @@ export const UserGuide = {
     'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
   CONTENT_STEP_6:
     'The filter section allows you to filter courses by curriculum and course status.',
+}
+
+export const defaultStatusCourse = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Ready To Learn',
+    value: 'READY_TO_LEARN',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
+  },
+  {
+    label: 'Completed',
+    value: 'COMPLETED',
+  },
+  {
+    label: 'Expired',
+    value: 'CANCELED',
+  },
+]
+
+export const defaultStatusDetail = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Ready To Learn',
+    value: 'READY_TO_LEARN',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
+  },
+  {
+    label: 'Completed',
+    value: 'COMPLETED',
+  },
+]
+
+export const defaultStatusEnstraceTest = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Submitted',
+    value: 'SUBMITTED',
+  },
+  {
+    label: 'Unsubmitted',
+    value: 'UN_SUBMITTED',
+  },
+]
+
+export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
+
+export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
+
+export const TITLE_USER_STATUS = {
+  NORMAL: 'NORMAL',
+  RESERVED: 'RESERVED',
+  MOVED_OUT: 'MOVED_OUT',
+  MOVED_IN: 'MOVED_IN',
+  TRANSFER_TO: 'TRANSFER_TO',
+  TRANSFERRED: 'TRANSFERRED',
+  CANCELED: 'CANCELED',
+}
+export const COURSE_STATUS = {
+  PUBLISH: 'PUBLISH',
+  LOCK: 'LOCK',
+  DRAFT: 'DRAFT',
+  BLOCK: 'BLOCK',
+}
+
+export const CLASS_STATUS = {
+  PUBLIC: 'PUBLIC',
+  DRAFT: 'DRAFT',
+  BLOCK: 'BLOCK',
+  ENDED: 'ENDED',
+}
+
+export const BUTTON_STATUS = {
+  Active: 'Active',
+  Begin: 'Begin',
+  Resume: 'Resume',
+  Review: 'Review',
+  Extend: 'Extend',
+  Hidden: 'Hidden',
+  Disabled: 'Disabled',
 }

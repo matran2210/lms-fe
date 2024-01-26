@@ -10,6 +10,8 @@ export type IButtonColors =
   | 'white'
   | 'outline'
   | 'text'
+  | 'textUnderline'
+  | 'quizActivity'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void
@@ -17,7 +19,7 @@ export interface IButtonProps {
   link?: string
   disabled?: boolean
   loading?: boolean
-  size?: 'small' | 'medium' | 'lager'
+  size?: 'small' | 'medium' | 'lager' | 'extra'
   full?: boolean
   name?: string
   type?: 'button' | 'reset' | 'submit'
@@ -41,4 +43,11 @@ export type IButtonCancelSubmitProps = {
   colorCancel?: IButtonColors
   showOkButton?: boolean
   showCancelButton?: boolean
+  size?: 'small' | 'medium' | 'lager' | 'extra'
+  revertFunction?: boolean
+}
+declare global {
+  interface Window {
+    luckysheet: any
+  }
 }

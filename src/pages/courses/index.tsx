@@ -11,8 +11,16 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { UserGuide } from 'src/constants'
-import CourseAPI from '../api/courses'
 import { useRouter } from 'next/router'
+import {
+  buildQueryString,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from '@utils/index'
+import { ICourseAll } from 'src/type/courses'
+import CourseAPI from '../api/courses'
+import { removeJwtToken } from '@utils/helpers/authen'
+import { PageLink } from 'src/constants'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -20,14 +28,10 @@ const fetchData = async (
   page: number,
   pageSize: number,
   token: string,
-  name?: string,
-  type?: string,
-  status?: string,
+  queryString?: string,
 ) => {
   const apiResponse = await axios.get(
-    `${apiURL}/courses?page_index=${page}&page_size=${pageSize}&name=${
-      name ?? ''
-    }&type=${type ?? ''}&status=${status ?? ''}`,
+    `${apiURL}/courses?page_index=${page}&page_size=${pageSize}${queryString}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -37,11 +41,17 @@ const fetchData = async (
   return apiResponse?.data?.data
 }
 
-const MyCourse = ({ courses }: any) => {
+const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
+  const guideIsActive = useAppSelector(
+    (state) => state.userGuideReducer?.isActive,
+  )
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
   const router = useRouter()
+  const userGuideLine = useAppSelector(
+    (state) => state.userReducer.user.detail.settings?.course_guide,
+  )
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
 
@@ -54,35 +64,39 @@ const MyCourse = ({ courses }: any) => {
       confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
       confirmDialogOverLayRef.current.classList.add('pointer-events-none')
     }
+    // Remove hidden scroll when close user guide
+    document.body.style.removeProperty('padding-right')
+    document.body.classList.remove('overflow-hidden')
     setTimeout(() => {
       dispatch(reset())
     }, 50)
   }
 
   useEffect(() => {
-    AsyncStorage.getItem('userGuide').then((accessToken) => {
-      if (!accessToken) {
-        AsyncStorage.setItem('userGuide', 'actived')
-        dispatch(active())
-      }
-    })
-  }, [])
+    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
+      dispatch(active())
+    }
+  }, [userGuideLine])
 
-  const [data, setData] = useState<any>(courses || [])
-  const [page, setPage] = useState(1)
+  const [data, setData] = useState<ICourseAll>(courses || [])
+  const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
+  const queryString = buildQueryString({
+    name: router.query.name || '',
+    status: router.query.status || '',
+    type: router.query.type || '',
+  })
+
   const loadMore = async () => {
     if (loading) return
     setLoading(true)
     try {
       const newData = await CourseAPI.getCourse(
-        page + 1,
-        DEFAULT_PAGESIZE,
-        router.query.name,
-        router.query.type,
-      ) // Increase pageSize by 3
-      setData([...data, ...newData?.data?.data?.course_sections_with_progress])
-      setPage(page + 1)
+        page + DEFAULT_PAGESIZE,
+        queryString,
+      )
+      setData(newData?.data)
+      setPage(page + DEFAULT_PAGESIZE)
     } catch (error) {
     } finally {
       setLoading(false)
@@ -101,13 +115,18 @@ const MyCourse = ({ courses }: any) => {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [loading, page])
+  }, [loading, router.query.name, router.query.type, router.query.status])
+
+  useEffect(() => {
+    // Update data when courses?.data?.course_sections_with_progress changes
+    setData(courses || [])
+  }, [courses])
 
   return (
     <>
       <div className="header bg-white border-b border-default">
         <div
-          className={`max-w-xxl my-0 mx-auto flex py-[18px] xl-max:mx-6 relative 
+          className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
           ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
         >
           <SearchForm
@@ -117,7 +136,7 @@ const MyCourse = ({ courses }: any) => {
           {guideStatus && guideStep === 1 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_1}
-              className="top-full w-full left-0 mt-3"
+              className="top-full w-full max-w-[365px] left-0 mt-3"
               index={1}
               total={6}
               handleNext={nextStep}
@@ -132,15 +151,15 @@ const MyCourse = ({ courses }: any) => {
             My Course
           </h2>
           <div
-            className={`py-6 relative
-            ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''}
-          `}
+            className={`py-6 relative ${
+              guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
+            }`}
           >
-            <Filter courses={courses} />
+            <Filter courses={data} />
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}
-                className="w-screen top-full right-full mt-3"
+                className="w-screen max-w-365px top-full right-full mt-3"
                 index={6}
                 total={6}
                 handleNext={closeUserGuide}
@@ -164,7 +183,7 @@ const MyCourse = ({ courses }: any) => {
         {guideStatus && guideStep === 4 && (
           <PopupStep
             content={UserGuide.CONTENT_STEP_4}
-            className="top-full w-full left-0 mt-3"
+            className="top-full w-full max-w-365px left-0 mt-3"
             index={4}
             total={6}
             handleNext={nextStep}
@@ -180,14 +199,14 @@ const MyCourse = ({ courses }: any) => {
         {guideStatus && guideStep === 5 && (
           <PopupStep
             content={UserGuide.CONTENT_STEP_5}
-            className="w-full top-0 left-1/3 mt-6"
+            className="w-full max-w-xs 2xl:max-w-[362px] top-0 left-1/2 2xl:left-[33%] mt-6"
             index={5}
             total={6}
             handleNext={nextStep}
             handleCancel={closeUserGuide}
           />
         )}
-        <CoursesList courses={courses} />
+        <CoursesList courses={data} setData={setData} setLoading={setLoading} />
       </div>
       {guideStatus && guideStep == 0 && <PopupWelcome />}
       {guideStatus && (
@@ -205,15 +224,17 @@ export default MyCourse
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
   const accessToken = req.cookies.accessToken
-
+  const queryString = buildQueryString({
+    name: query.name || '',
+    status: query.status || '',
+    type: query.type || '',
+  })
   try {
     const courses = await fetchData(
       1,
       DEFAULT_PAGESIZE,
       accessToken,
-      query.name,
-      query.type,
-      query.status,
+      queryString,
     )
 
     return {
@@ -235,33 +256,37 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
+        const userInfo = res?.data?.tokens
+        const act = userInfo?.act
+        const rft = userInfo?.rft
+        // Save the new access token to the AsyncStorage
+        await AsyncStorage.setItem('accessToken', act)
+        await AsyncStorage.setItem('refreshToken', rft)
+        setCookieActToken(act)
+        setCookieRefreshToken(rft)
+        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
-        res.setHeader(
-          'Set-Cookie',
-          `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-        )
-
-        const courses = await fetchData(
-          1,
-          DEFAULT_PAGESIZE,
-          accessToken,
-          query.name,
-          query.type,
-          query.status,
-        )
+        const courses = await fetchData(1, DEFAULT_PAGESIZE, act, queryString)
 
         return {
           props: {
             courses: courses,
           },
         }
-      } catch (refreshError) {}
-    } else {
+      } catch (refreshError) {
+        removeJwtToken()
+        return {
+          redirect: {
+            destination: PageLink.AUTH_LOGIN,
+            permanent: false,
+          },
+        }
+      }
     }
 
     return {
       redirect: {
-        destination: '/',
+        destination: PageLink.AUTH_LOGIN,
         permanent: false,
       },
     }

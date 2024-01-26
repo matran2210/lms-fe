@@ -5,13 +5,21 @@ import SappButton from '@components/base/button/SappButton'
 import { UserGuide } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { increment } from 'src/redux/slice/Course/UserGuide'
+import CourseAPI from 'src/pages/api/courses'
 
 type Props = {}
 
 const PopupWelcome = ({}: Props) => {
   const dispatch = useAppDispatch()
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     dispatch(increment())
+    await activeUserGuide()
+  }
+
+  async function activeUserGuide() {
+    try {
+      await CourseAPI.userGuideActive()
+    } catch (error) {}
   }
 
   return (
@@ -27,6 +35,9 @@ const PopupWelcome = ({}: Props) => {
         childClass={'text-center py-12 px-14'}
         overlayClass={'!hidden'}
         isContentFull={true}
+        refClass={
+          'md:px-6 py-6.5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all'
+        }
       >
         <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
           <Icon type="play-circle-sharp" className="text-primary" />

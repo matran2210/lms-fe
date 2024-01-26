@@ -64,7 +64,7 @@ const HookFormTextField = ({
                   className={`${className} ${
                     error
                       ? 'border-error focus:border-error'
-                      : '!border-gray-2 focus:border-focus '
+                      : 'border-default focus:border-focus '
                   }`}
                   placeholder={placeholder}
                   disabled={disabled}

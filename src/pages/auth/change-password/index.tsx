@@ -9,6 +9,7 @@ import {
   VALIDATE_MIN_LENGTH,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
+  VALIDATE_MIN_LENGTH_PASSWORD,
 } from '@utils/helpers/ValidateMessage'
 import { display422Errors } from '@utils/helpers/form'
 import { useRouter } from 'next/router'
@@ -33,16 +34,20 @@ const ChangePasswordPage = () => {
       password: z
         .string({ required_error: VALIDATE_REQUIRED })
         .trim()
-        .min(1, { message: VALIDATE_REQUIRED })
-        .min(8, { message: VALIDATE_MIN_LENGTH('Password', 8) })
+        .min(1, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
+        .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
         .regex(VALIDATE_PASSWORD, {
           message: VALIDATE_PASSWORD_REGEX_MSG,
         }),
       confirmPassword: z
         .string({ required_error: VALIDATE_REQUIRED })
         .trim()
-        .min(1, { message: VALIDATE_REQUIRED })
-        .min(8, { message: VALIDATE_MIN_LENGTH('Confirm password', 8) })
+        .min(1, {
+          message: VALIDATE_MIN_LENGTH_PASSWORD('Confirm password', 8, 1, 1),
+        })
+        .min(8, {
+          message: VALIDATE_MIN_LENGTH_PASSWORD('Confirm password', 8, 1, 1),
+        })
         .regex(VALIDATE_PASSWORD, {
           message: VALIDATE_PASSWORD_REGEX_MSG,
         }),

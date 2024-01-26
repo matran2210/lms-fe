@@ -25,7 +25,7 @@ export const formatTime = (input?: string | number): string => {
   const minutes = Math.floor(remainingSeconds / 60)
   const finalSeconds = remainingSeconds % 60
 
-  const formattedHours = hours !== 0 ? String(hours).padStart(2, '0') + ':' : ''
+  const formattedHours = String(hours).padStart(2, '0') + ':'
   const formattedMinutes = String(minutes).padStart(2, '0')
   const formattedSeconds = String(finalSeconds).padStart(2, '0')
 

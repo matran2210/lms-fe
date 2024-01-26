@@ -11,7 +11,7 @@ interface EntrancePopupContentProps {
   score: number
   timeAllow: number
   attemps: string
-  status: string
+  status: boolean
 }
 
 const EntrancePopupContent = ({
@@ -22,7 +22,9 @@ const EntrancePopupContent = ({
   status,
 }: EntrancePopupContentProps) => {
   const [open, setOpen] = useState<boolean>(false)
-  const timeAllowFormatted = formatTime(timeAllow)
+  const timeAllowFormatted = timeAllow
+    ? formatTime(timeAllow * 60)
+    : 'Unlimited'
 
   return (
     <>
@@ -30,35 +32,32 @@ const EntrancePopupContent = ({
         <div className="info">
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Name:</p>
-            <p className="text-bw-1">{name}</p>
+            <p className="text-bw-1 font-medium line-clamp-2">{name}</p>
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Score:</p>
-            <p className="text-bw-1">--</p>
+            <p className="text-bw-1 font-medium">
+              {score && score !== null ? score : '--'}
+            </p>
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Time Allowed:</p>
-            <p className="text-bw-1">{timeAllowFormatted}</p>
+            <p className="text-bw-1 font-medium">{timeAllowFormatted}</p>
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>No of Attempts:</p>
-            <p className="text-bw-1">{attemps}</p>
+            <p className="text-bw-1 font-medium">{attemps}</p>
           </div>
-          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+          <div className="flex justify-between text-base text-gray-1 capitalize py-6">
             <p>Status:</p>
-            <p className="text-state-error">{status}</p>
+            <div
+              className={`${
+                status ? 'text-state-success' : 'text-danger'
+              } font-medium`}
+            >
+              {status ? 'Finished' : 'Unfinished'}
+            </div>
           </div>
-        </div>
-        <div className="action flex items-center justify-between relative mt-10">
-          <div className="underline text-bw-1 text-lg leading-6.5 font-semibold">
-            Cancel
-          </div>
-          <ButtonPrimary
-            title="Start"
-            full={false}
-            size={'lager'}
-            className="hover:bg-primary hover:text-white"
-          />
         </div>
       </div>
       <ResultRowsModal open={open} setOpen={setOpen} />

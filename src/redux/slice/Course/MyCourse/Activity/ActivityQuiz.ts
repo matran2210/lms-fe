@@ -10,9 +10,13 @@ import { IQuestion } from 'src/type/course/Question'
  * @interface
  */
 export interface IActivityStateQuestion extends IQuestion {
+  answer_file: any
+  question_topic: any
   confirmed?: boolean
   myAnswers?: any
   corrects?: any
+  quiz_position_mapping?: any
+  defaultValue?: any
 }
 
 /**
@@ -133,13 +137,129 @@ const confirmQuestion = createAsyncThunk(
 )
 
 /**
+ * Async thunk để xác nhận một câu hỏi trong bài kiểm tra.
+ * @type {AsyncThunk}
+ */
+const submitQuestion = createAsyncThunk(
+  'quiz/submitQuestion',
+  async (
+    {
+      id,
+      data,
+    }: { id: string; data: { answers: any[]; quiz_position_mapping: any } },
+
+    { rejectWithValue },
+  ) => {
+    try {
+      const result = await CourseActivityApi.submitQuiz(id, {
+        ...data,
+        answers: (data.answers || []).reduce((acc, e) => {
+          if (
+            e?.[0]?.answers &&
+            Array.isArray(e[0].answers) &&
+            e[0].answers.length <= 0
+          ) {
+            return acc
+          }
+          if ('question_answer_id' in e?.[0] && !e?.[0]?.question_answer_id) {
+            return acc
+          }
+          return [...acc, e?.[0]]
+        }, []),
+      })
+
+      if (result.success) {
+        return { ...result }
+      }
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+/**
+ * Selector để lấy ra danh sách câu hỏi từ Redux state.
+ * @function
+ * @param {ActivityQuizRootState} state - Trạng thái toàn bộ Redux store.
+ * @param {string} activityId - ID của hoạt động.
+ * @param {string} tabId - ID của tab.
+ * @param {string} quizId - ID của bài kiểm tra.
+ * @returns {IActivityStateQuestion[]} - Danh sách câu hỏi.
+ */
+export const selectQuestions = (
+  state: ActivityQuizRootState,
+  activityId: string,
+  tabId: string,
+  quizId: string,
+): IActivityStateQuestion[] | undefined => {
+  return state?.[activityId]?.[tabId]?.[quizId]?.questions
+}
+
+/**
  * Redux slice để xử lý các câu hỏi trong Redux store.
  * @type {Slice}
  */
 const quizSlice: Slice = createSlice({
   name: 'quiz',
   initialState: {} as ActivityQuizRootState,
-  reducers: {},
+  reducers: {
+    removeQuizFinished: (state, action) => {
+      const { activityId, tabId, quizId } = action.payload
+      if (state[activityId]?.[tabId]?.[quizId]) {
+        state[activityId]?.[tabId]?.[quizId]?.questions?.forEach(
+          (element: any, i: number) => {
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.corrects
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.myAnswers
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.confirmed
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]
+              ?.defaultValue
+            delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.solution
+          },
+        )
+      }
+    },
+    resetQuizActivity: (state, _action) => {
+      state = undefined
+      return {}
+    },
+    saveFileEssay: (state, action) => {
+      const { activityId, tabId, quizId, question_id, file } =
+        action.payload as unknown as {
+          activityId: string
+          tabId: string
+          quizId: string
+          question_id: string
+          file: any
+        }
+      const existingQuestion = state?.[activityId]?.[tabId]?.[
+        quizId
+      ]?.questions.find((q: { id: string }) => q.id === question_id)
+
+      if (existingQuestion) {
+        existingQuestion.answer_file = {
+          file_key: file.file_key,
+          file_name: file.name,
+        }
+      }
+    },
+    clearFileEssay: (state, action) => {
+      const { activityId, tabId, quizId, question_id, file } =
+        action.payload as unknown as {
+          activityId: string
+          tabId: string
+          quizId: string
+          question_id: string
+          file: any
+        }
+      const existingQuestion = state?.[activityId]?.[tabId]?.[
+        quizId
+      ]?.questions.find((q: { id: string }) => q.id === question_id)
+
+      if (existingQuestion) {
+        existingQuestion.answer_file = null
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -198,21 +318,36 @@ const quizSlice: Slice = createSlice({
           const questions =
             state[payload.activityId]?.[payload.tabId]?.[payload.quizId]
               ?.questions
-
+          let questionToUpdate: any
           if (questions) {
-            const questionToUpdate = questions.find(
+            questionToUpdate = questions.find(
               (question) => question.id === payload.question.id,
             )
 
             if (questionToUpdate) {
               questionToUpdate.confirmed = true
               questionToUpdate.solution = payload.question.solution
+              questionToUpdate.defaultValue = payload.myAnswers
+
+              questionToUpdate.quiz_position_mapping = [
+                ...(questionToUpdate?.quiz_position_mapping?.filter(
+                  (q: { question_id: string | undefined }) =>
+                    q.question_id !== payload.question.id,
+                ) || []),
+                {
+                  question_id: payload.question.id,
+                  answers: payload.question?.answers,
+                },
+              ]
 
               switch (payload.question.qType as QUESTION_TYPES) {
                 case QUESTION_TYPES.ONE_CHOICE:
                 case QUESTION_TYPES.TRUE_FALSE:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
                       question_answer_id: payload.myAnswers,
@@ -230,10 +365,13 @@ const quizSlice: Slice = createSlice({
 
                 case QUESTION_TYPES.MULTIPLE_CHOICE:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map((e: string) => ({
+                      answer: (payload.myAnswers || [])?.map((e: string) => ({
                         answer_id: e,
                       })),
                     },
@@ -249,10 +387,13 @@ const quizSlice: Slice = createSlice({
 
                 case QUESTION_TYPES.FILL_WORD:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map(
+                      answer: (payload.myAnswers || [])?.map(
                         (e: string, i: number) => ({
                           answer_text: e,
                           answer_position: i + 1,
@@ -265,22 +406,78 @@ const quizSlice: Slice = createSlice({
 
                 case QUESTION_TYPES.SELECT_WORD:
                   questionToUpdate.myAnswers = [
-                    ...(questionToUpdate.myAnswers || []),
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: payload.myAnswers?.map(
-                        (e: string, i: number) => ({
-                          id: e,
+                      answer: (payload.myAnswers || [])
+                        ?.filter((e: string) => e)
+                        .map((e: string, i: number) => ({
+                          answer_id: e,
+                          answer_position: i + 1,
+                        })),
+                    },
+                  ]
+                  questionToUpdate.corrects = payload.question.answers
+                  break
+
+                case QUESTION_TYPES.MATCHING:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
+                    {
+                      question_id: payload.question.id,
+                      answer:
+                        Array.isArray(payload.myAnswers) &&
+                        (payload.myAnswers || [])?.map(
+                          (e: { question_id: string; answer_id: string }) => ({
+                            question_id: e.question_id,
+                            answer_id: e.answer_id,
+                          }),
+                        ),
+                    },
+                  ]
+                  questionToUpdate.corrects =
+                    payload.question.question_matchings
+                  break
+
+                case QUESTION_TYPES.DRAG_DROP:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
+                    {
+                      question_id: payload.question.id,
+                      answer: (payload.myAnswers || [])?.map(
+                        (e: any, i: number) => ({
+                          answer_id: e.idAnswer,
                           answer_position: i + 1,
                         }),
                       ),
                     },
                   ]
-                  questionToUpdate.corrects = payload.question.answers
+                  const corrects = [...(payload.question.answers || [])]
+
+                  questionToUpdate.corrects = corrects.sort(
+                    (a: any, b: any) => a.answer_position - b.answer_position,
+                  )
+
                   break
-                case QUESTION_TYPES.DRAG_DROP:
-                  break
-                case QUESTION_TYPES.MATCHING:
+                case QUESTION_TYPES.ESSAY:
+                  questionToUpdate.myAnswers = [
+                    ...(questionToUpdate.myAnswers?.filter(
+                      (q: { question_id: string | undefined }) =>
+                        q.question_id !== payload.question.id,
+                    ) || []),
+                    {
+                      ...(payload.myAnswers || {}),
+                    },
+                  ]
                   break
                 default:
                   break
@@ -289,6 +486,17 @@ const quizSlice: Slice = createSlice({
           }
         },
       )
+
+    builder.addCase(submitQuestion.pending, (state) => {
+      // state.loading = true
+    })
+    builder.addCase(submitQuestion.fulfilled, (state, action) => {
+      // state.loading = false
+      return state
+    })
+    builder.addCase(submitQuestion.rejected, (state) => {
+      // state.loading = false
+    })
   },
 })
 
@@ -302,5 +510,15 @@ export default quizSlice.reducer
  */
 export const courseActivityQuizReducer = (state: RootState) =>
   state.courseActivityQuizReducer
+const { removeQuizFinished, resetQuizActivity, saveFileEssay, clearFileEssay } =
+  quizSlice.actions
 
-export { confirmQuestion, fetchQuestionById }
+export {
+  confirmQuestion,
+  fetchQuestionById,
+  submitQuestion,
+  removeQuizFinished,
+  resetQuizActivity,
+  saveFileEssay,
+  clearFileEssay,
+}

@@ -36,6 +36,18 @@ export interface IActivity {
   }
   files: File[]
   tabs?: ITab[]
+  class_id?: string
+  next_activity?: {
+    id: string
+    display_icon: string
+    name: string
+  }
+  previous_activity?: {
+    id: string
+    display_icon: string
+    name: string
+  }
+  breadcumb?: IBreadcrumb[]
 }
 
 export interface ITab {
@@ -67,8 +79,19 @@ export interface ITab {
     files?: IFile[]
     videos?: IVideo[]
     quiz?: {
+      id?: string
       constructed_questions: IQuestion[]
       multiple_choice_questions: IQuestion[]
+      grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
+      is_graded?: boolean
     }
   }[]
+}
+
+export interface IBreadcrumb {
+  id: string
+  name: string
+  course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
+  parent_id?: string
+  url?: string
 }

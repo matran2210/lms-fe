@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 @import 'variables.scss';
 @import 'fonts.scss';
 @import 'select.scss';
@@ -8,13 +9,32 @@
 @tailwind components;
 @tailwind utilities;
 
-*,
-*::after,
-*::before {
+@font-face {
+  font-family: techNology;
+  src: url('../assets/fonts/Technology/Technology.ttf');
+}
+
+*:not(math, math *),
+*:not(math, math *)::after,
+*:not(math, math *)::before {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* .sheet,
+* .iconfont::before,
+.sheet *,
+* .sheet,
+.sheet *::before {
+  font-family: unset;
+}
+
+* .fa,
+* .fa::before {
+  font-family: 'Font Awesome 5 Free';
 }
 
 html {
@@ -30,22 +50,41 @@ a {
   text-decoration: none;
 }
 
-body * ::-webkit-scrollbar {
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d6dee1 transparent;
+
+  &::-webkit-scrollbar {
+    @apply h-4 w-2 border bg-bw-3;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-bw-3 border;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply border bg-gray-5;
+  }
+}
+
+/* Mac */
+body *::-webkit-scrollbar {
   width: 17px;
 }
 
-body * ::-webkit-scrollbar-track {
+body *::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
-body * ::-webkit-scrollbar-thumb {
+body *::-webkit-scrollbar-thumb {
   background-color: #d6dee1;
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
-body * ::-webkit-scrollbar-thumb:hover {
+body *::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
 
@@ -86,6 +125,10 @@ body * ::-webkit-scrollbar-thumb:hover {
 }
 
 .editor-wrap {
+  hr {
+    @apply hidden;
+  }
+
   p {
     @apply break-words mb-2;
   }
@@ -96,29 +139,101 @@ body * ::-webkit-scrollbar-thumb:hover {
   td,
   th {
     border-width: 1px;
-    border-style: inherit;
+    border-style: inset;
+    @apply border-gray-1;
+    /* Add this line to set the border color to gray-2 */
   }
 
   tr {
     border-style: initial;
     border-width: initial;
   }
+
+  ol,
+  ul,
+  menu {
+    padding-inline-start: 40px !important;
+    list-style: auto;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  .sapp_overlay_video {
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    transform: translate(50%, -50%);
+    z-index: 100;
+    &::before {
+      color: white;
+      content: '\25B6';
+      opacity: 0.5;
+      cursor: pointer;
+      text-shadow: 0 3px black;
+
+      font-size: 50px;
+    }
+  }
 }
 
 .sapp-questions .sapp-input-preview {
-  @apply w-24 h-7 rounded-md mb-1;
-  // width: 100px;
-  // height: 30px;
-  // border-radius: 4px;
-  // margin-bottom: 5px;
+  // @apply w-24 h-7 rounded-md mb-1;
+  border: 1px solid #dfdfdf;
+  border-radius: 2px;
+  padding: 8px;
+  width: 110px;
+  height: 35px;
+  margin-bottom: 4px;
+
+  @apply bg-gray-4 font-bold text-base text-center;
 }
 
 .sapp-select--selectword-preview {
   @apply min-w-78px rounded;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="non"><path d="M10.9827 0.571289H9.97827C9.90996 0.571289 9.84568 0.604771 9.8055 0.659682L6.00059 5.90433L2.19568 0.659682C2.1555 0.604771 2.09121 0.571289 2.02291 0.571289H1.01845C0.931392 0.571289 0.880499 0.670396 0.931392 0.741379L5.65371 7.25165C5.82514 7.48736 6.17603 7.48736 6.34612 7.25165L11.0684 0.741379C11.1207 0.670396 11.0698 0.571289 10.9827 0.571289Z" fill="%23DCDDDD" /></svg>');
+  background-repeat: no-repeat;
+  background-position-x: 97%;
+  background-position-y: 13px;
+  border: 1px solid #dfdfdf;
+  border-radius: 2px;
+  padding-right: 1.5rem;
+  padding-left: 1rem;
+  width: 110px;
+  height: 35px;
+  max-width: 150px;
+  margin-bottom: 8px;
+
+  [disabled] {
+    color: gray;
+  }
+
+  &:invalid {
+    color: gray;
+  }
+
+  option {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.sapp-select-confirmed {
+    background-image: none;
+    text-align: center;
+    padding: 0;
+    @apply bg-gray-4;
+  }
 }
 
 .sapp-notched-container {
-  @apply break-words flex-1 relative bg-gray-3 h-auto flex items-center justify-center p-5 border-dashed border;
+  @apply break-words flex-1 relative bg-gray-3 h-full flex items-center justify-start p-5 border-solid border border-gray-6 ps-8;
 }
 
 .sapp-notched-container:before {
@@ -129,11 +244,11 @@ body * ::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-dashed bg-white absolute border;
+  @apply z-0 border-solid bg-white absolute border border-gray-6;
 }
 
 .sapp-arrowed-container {
-  @apply break-words relative bg-gray-3 h-auto flex items-center justify-center p-5 border-dashed border w-[48%];
+  @apply break-words relative bg-gray-3 h-auto flex items-center justify-start p-5 border-solid border w-[40%] border-gray-6;
 }
 
 .sapp-arrowed-container:before {
@@ -145,21 +260,113 @@ body * ::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-dashed bg-gray-3 absolute border right-0;
+  @apply z-0 border-solid bg-gray-3 absolute border right-0 border-gray-6;
+}
+
+.sapp-arrowed-container-corrects {
+  @apply break-words relative bg-bw-6 h-auto flex items-center justify-start p-5 border-solid border w-[48%] border-success;
+}
+
+.sapp-arrowed-container-corrects:before {
+  border: 1px dashed rgb(224, 221, 227);
+  content: '';
+  right: 0;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-10 border-solid bg-bw-6 absolute border right-0 border-success;
+}
+
+.sapp-notched-container-corrects {
+  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-start p-5 border-solid border border-success border-l-0 ps-8;
+}
+
+.sapp-notched-container-corrects:before {
+  content: '';
+  left: -1.2px;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-solid bg-white absolute border border-success;
+}
+
+.sapp-arrowed-container-incorrects {
+  @apply break-words relative bg-gray-3 h-auto flex items-center justify-start p-5 border-solid border w-[48%] border-error;
+}
+
+.sapp-arrowed-container-incorrects:before {
+  border: 1px dashed rgb(224, 221, 227);
+  content: '';
+  right: 0;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-10 border-solid bg-gray-3 absolute border right-0 border-error;
+}
+
+.sapp-notched-container-incorrects {
+  @apply break-words flex-1 relative bg-gray-3 h-full flex items-center justify-start p-5 border-solid border border-error border-l-0 ps-8;
+}
+
+.sapp-notched-container-incorrects:before {
+  content: '';
+  left: -1.2px;
+  /* top: 50%; */
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, 0) rotate(-135deg);
+  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-solid bg-white absolute border border-error;
 }
 
 .answer-area {
-  @apply flex flex-wrap gap-5 mt-15;
+  @apply flex flex-wrap gap-5 mt-4;
+}
 
-  .answer-box {
-    border: 1px solid rgb(204, 204, 204);
-    background: rgb(243, 243, 243);
-    @apply p-2;
-  }
+.answer-box {
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(243, 243, 243);
+  @apply p-2 block;
+}
+
+.sapp-input-dragNDrop:not(:has(.answer-box)) {
+  @apply inline-block min-w-[100px] border-b border-gray-500 border-0 min-h-[17px] relative;
+}
+
+.sapp-input-dragNDrop:not(:has(.answer-box))::after {
+  content: ' (' attr(indexBox) ')';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 20%);
+  background: white;
+  @apply text-gray-1;
 }
 
 .sapp-input-dragNDrop {
-  @apply inline-block min-w-[100px] border-b border-gray-500 border-0;
+  @apply mt-2 inline-block;
+}
+
+.sapp-input-dragNDrop-answer {
+  @apply inline-block min-w-[100px] border border-gray-500 border p-1 m-1 bg-gray-4;
+
+  &.corrects {
+    @apply border-success text-state-success;
+  }
+
+  &.wrongs {
+    @apply border-error text-state-error;
+  }
+}
+
+.sapp-input-dragNDrop-empty {
+  @apply inline-block min-w-[100px] border-0 text-center;
 }
 
 .sapp-questions-essay {
@@ -168,20 +375,20 @@ body * ::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-seprate-line-preview {
-  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3;
+  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3 mb-4;
 }
 
 .sapp-upload-file-preview {
-  @apply flex gap-3 py-5 px-0;
+  @apply flex gap-3 mb-4 px-0 items-center;
 }
 
 .sapp-upload-button-preview {
   @apply cursor-pointer flex justify-evenly gap-2 w-max items-center px-2 py-0 border;
 }
 
-.tox-tinymce {
-  border: none !important;
-}
+// .tox-tinymce {
+//   border: none !important;
+// }
 
 .resizable {
   @apply bg-white absolute top-[100px] left-[100px] cursor-move;
@@ -258,4 +465,118 @@ body * ::-webkit-scrollbar-thumb:hover {
 .button {
   display: block;
   @apply flex-1 bg-gray-2;
+}
+
+.stream-player__progress-bar {
+  /* Set the position to relative */
+  position: relative;
+}
+
+/* Add a point before the progress bar */
+.stream-player__progress-bar::before {
+  /* Set the position to absolute */
+  position: absolute;
+  /* Set the content to a circle icon */
+  content: '\25cf';
+  /* Set the font size to 12px */
+  font-size: 12px;
+  /* Set the color to white */
+  color: white;
+  /* Set the left position to 10% of the progress bar width */
+  left: 10%;
+  /* Set the top position to 50% of the progress bar height */
+  top: 50%;
+  /* Adjust the position with transform */
+  transform: translate(-50%, -50%);
+}
+
+/* Add another point after the progress bar */
+.stream-player__progress-bar::after {
+  /* Set the position to absolute */
+  position: absolute;
+  /* Set the content to a star icon */
+  content: '\2605';
+  /* Set the font size to 12px */
+  font-size: 12px;
+  /* Set the color to yellow */
+  color: yellow;
+  /* Set the right position to 20% of the progress bar width */
+  right: 20%;
+  /* Set the top position to 50% of the progress bar height */
+  top: 50%;
+  /* Adjust the position with transform */
+  transform: translate(50%, -50%);
+}
+
+.required {
+  &:after {
+    content: '*';
+    position: relative;
+    font-size: inherit;
+    color: #d35563;
+    padding-left: 0.25rem;
+    font-weight: 700;
+  }
+}
+
+.sapp-hover-device-item:hover {
+  .sapp-logo {
+    @apply border-primary bg-secondary;
+  }
+
+  .logo {
+    fill: #ffb800;
+  }
+}
+
+.sapp-disable-button {
+  position: relative;
+
+  ::after {
+    content: '';
+    @apply bg-gray-3;
+    // background: white;
+    opacity: 0.6;
+    width: calc(100% - 2px);
+    height: 100%;
+    position: absolute;
+    left: 1px;
+  }
+}
+
+.sapp-separateLine :not(:last-child) {
+  @apply border-b border-gray-4;
+}
+
+.active {
+  .word_icon path {
+    fill: #295496;
+  }
+
+  .excel_icon path {
+    fill: #1d5d36;
+  }
+}
+
+.word_icon path {
+  fill: #dcdddd;
+}
+
+textarea.is-invalid:focus {
+  --tw-ring-color: #d35563;
+  --tw-ring-offset-color: #d35563;
+}
+
+@layer utilities {
+  .grid-fit-content {
+    grid-template-columns: min-content 1fr;
+  }
+}
+
+.min-w-\[63px\] {
+  min-width: 63px;
+}
+
+.hover-transition-font-weight {
+  transition: font-weight 0.1s ease;
 }

@@ -1,7 +1,8 @@
 import { IUser } from 'src/redux/types/User/urser'
-import { httpService } from '../httpService'
+import { apiURL, httpService } from '../httpService'
 import url from './url'
 import { IResponse } from 'src/redux/types'
+import axios from 'axios'
 
 const UserApi = {
   /**
@@ -30,11 +31,11 @@ const UserApi = {
     const uri = url.user
     // Sử dụng httpService để gửi yêu cầu PUT
     return httpService.PUT<
-      { full_name: string; avatar?: { [key: string]: string } | null },
+      { full_name: string },
       IResponse<{ message: string }>
     >({
       uri,
-      request: { full_name, avatar },
+      request: { full_name },
     })
   },
 
@@ -54,6 +55,45 @@ const UserApi = {
       uri,
       request: formData,
     })
+  },
+
+  makeContactDefault: (id: string): Promise<any> => {
+    const uri = `${url.makeContactDefault}/${id}/make-this-default`
+    return httpService.POST<{}, IResponse<{ message: string }>>({
+      uri,
+    })
+  },
+  getListDevicesServerSide: async (
+    accessToken: string,
+  ): Promise<IResponse<any>> => {
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+    }
+    const response = await axios.get<{}, IResponse<{ data: any }>>(
+      `${apiURL}${url.devices}`,
+      {
+        headers,
+      },
+    )
+    return response.data?.data
+  },
+  getListDevices: async (): Promise<IResponse<any>> => {
+    const uri = url.devices
+    const res = httpService.GET<any, any>({
+      uri,
+    })
+    return res
+  },
+  getListHistory: async ({ page_index, page_size }: any): Promise<any> => {
+    const uri = url.history
+    const res = httpService.GET<any, any>({
+      uri,
+      params: {
+        page_index: page_index,
+        page_size: page_size,
+      },
+    })
+    return res
   },
 }
 

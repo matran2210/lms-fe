@@ -1,6 +1,6 @@
 import React, { useState, Dispatch, SetStateAction } from 'react'
 import Icon from '@components/icons'
-import blankAvatar from '@assets/images/blank_avatar.webp'
+import blankAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { calculateTimeAgo } from '@utils/helpers'
 import { useAppDispatch } from 'src/redux/hook'
@@ -9,7 +9,11 @@ interface IProps {
   notifyLists: any[]
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
-  getApiNotificationDetail: (id: string) => void
+  getApiNotificationDetail: (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => void
 }
 
 const NotifyList = ({
@@ -19,9 +23,14 @@ const NotifyList = ({
   getApiNotificationDetail,
 }: IProps) => {
   const dispatch = useAppDispatch()
-  const handleOpen = async (id: string) => {
-    setOpen(!open)
-    await getApiNotificationDetail(id)
+
+  const handleOpen = async (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => {
+    await getApiNotificationDetail(id, redirect, content)
+    redirect === null && setOpen(!open)
   }
 
   return (
@@ -35,7 +44,11 @@ const NotifyList = ({
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
             onClick={() => {
-              handleOpen(notifyItem?.id)
+              handleOpen(
+                notifyItem?.id,
+                notifyItem?.created_by ?? null,
+                notifyItem?.content,
+              )
             }}
           >
             {!readStatus && (
@@ -44,20 +57,29 @@ const NotifyList = ({
                 className="text-primary absolute left-2 top-1/2"
               />
             )}
-
-            <Image
-              src={blankAvatar}
-              alt="avatar"
-              className="rounded-full"
-              width={56}
-              height={56}
-              layout="fixed"
-              objectFit={'cover'}
-            />
+            <div className="shrink-0">
+              <Image
+                src={notifyItem?.avatar?.ORIGIN ?? blankAvatar}
+                alt="avatar"
+                className={`rounded-full ${
+                  !notifyItem?.avatar?.ORIGIN ? 'bg-gray-3' : ''
+                }`}
+                width={56}
+                height={56}
+                layout="fixed"
+                objectFit={'cover'}
+              />
+            </div>
             <div className="block">
               <h4
-                className="text-base text-bw-1 mb-1"
-                dangerouslySetInnerHTML={{ __html: notifyItem?.title }}
+                className="text-base text-bw-1 mb-1 line-clamp-2"
+                dangerouslySetInnerHTML={{
+                  __html: notifyItem?.created_by
+                    ? notifyItem?.title
+                    : notifyItem?.content
+                        .replace(/<a\b[^>]*>/g, '')
+                        .replace(/<\/a>/g, ''),
+                }}
               ></h4>
               <p className="text-gray-1 text-medium-sm text-left">
                 {calculateTimeAgo(notifyItem?.updated_at)}

@@ -1,5 +1,5 @@
 import LogoDefault from './LogoDefault'
-import LogoTeacher from './LogoTeacher'
+import LogoFull from './LogoFull'
 import ArrowUp from './ArrowUp'
 import { useAppSelector } from 'src/redux/hook'
 import Icon from '@components/icons'
@@ -34,7 +34,80 @@ export default function ExpandIcon({
         )
       )}
       {type === 'logo-default' && <LogoDefault />}
-      {type === 'logo-teacher' && <LogoTeacher />}
+      {type === 'logo-full' && <LogoFull />}
+      {type === 'stats-chart-sharp' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M6 23.25H2.25v-9H6v9zM16.5 23.25h-3.75V9.75h3.75v13.5zM21.75 23.25H18V4.5h3.75v18.75zM11.25 23.25H7.5V.75h3.75v22.5z"
+          ></path>
+        </svg>
+      )}
+      {type === 'course' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M12.75 1.954v6.858a.188.188 0 00.188.188h6.858a.094.094 0 00.066-.16L12.91 1.888a.093.093 0 00-.16.066z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M11.625 10.5a.375.375 0 01-.375-.375V1.5H4.312a.563.563 0 00-.562.563v19.875a.562.562 0 00.563.562h15.375a.562.562 0 00.562-.563V10.5h-8.625zM16.5 18h-9v-1.5h9V18zm0-3.75h-9v-1.5h9v1.5z"
+          ></path>
+        </svg>
+      )}
+      {type === 'result' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M3.75 1.5l-3 6h13.552l3.76-6H3.75z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M23.25 6.75L19.875 1.5l-5.906 9.332a5.999 5.999 0 00-3.938 0L8.884 9h-6.83l4.062 6.323a6 6 0 1011.766 0L23.25 6.75zM12 19.781a3.282 3.282 0 110-6.563 3.282 3.282 0 010 6.563z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M12 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+          ></path>
+        </svg>
+      )}
+
+      {type === 'caculator' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M19.5 2.25a.75.75 0 00-.75-.75H5.25a.75.75 0 00-.75.75v19.5a.75.75 0 00.75.75h13.5a.75.75 0 00.75-.75V2.25zM9 20.25H6.75V18H9v2.25zm0-3.75H6.75v-2.25H9v2.25zm0-3.75H6.75V10.5H9v2.25zm4.125 7.5h-2.25V18h2.25v2.25zm0-3.75h-2.25v-2.25h2.25v2.25zm0-3.75h-2.25V10.5h2.25v2.25zm4.125 7.5H15v-6h2.25v6zm0-7.5H15V10.5h2.25v2.25zm0-4.5H6.75v-4.5h10.5v4.5z"
+          ></path>
+        </svg>
+      )}
       {type === 'document' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -187,6 +260,99 @@ export default function ExpandIcon({
             <path d="M13.288 23.896l-1.768 5.207c2.567.829 5.331.886 7.926.17l-.665-5.416a8.382 8.382 0 01-5.493.039zM8.12 13.122l-5.645-.859a13.856 13.856 0 00.225 8.143l5.491-1.375a8.391 8.391 0 01-.071-5.909zm20.643-1.789l-4.965 1.675a8.39 8.39 0 01-.247 6.522l5.351.672a13.868 13.868 0 00-.139-8.869zm-17.369-8.45l1.018 5.528a8.395 8.395 0 016.442-.288l1.583-5.137a13.855 13.855 0 00-9.043-.103z"></path>
             <circle cx="15.979" cy="15.977" r="6.117"></circle>
           </g>
+        </svg>
+      )}
+      {type === 'learning-resource' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`!min-w-[4px] !min-h-[4px] ${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M21.938 2.25H2.063a.563.563 0 00-.563.563v2.624c0 .311.252.563.563.563h19.875c.31 0 .562-.252.562-.563V2.813a.562.562 0 00-.563-.562zM3 7.5v13.125a1.125 1.125 0 001.125 1.125h15.75A1.125 1.125 0 0021 20.625V7.5H3zm9 10.81l-4.063-4.06L9 13.187l2.25 2.252V9.75h1.5v5.69l2.253-2.254 1.06 1.061L12 18.311z"
+          ></path>
+        </svg>
+      )}
+      {type === 'entrance-test' && (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={`!min-w-[4px] !min-h-[4px] ${className}`}
+        >
+          <path
+            d="M7.5 11.25H14.408L11.408 8.25L12.4688 7.18922L17.2795 12L12.4688 16.8108L11.408 15.75L14.408 12.75H7.5V19.6875C7.5 19.8367 7.55926 19.9798 7.66475 20.0852C7.77024 20.1907 7.91332 20.25 8.0625 20.25H21.9375C22.0867 20.25 22.2298 20.1907 22.3352 20.0852C22.4407 19.9798 22.5 19.8367 22.5 19.6875V4.3125C22.5 4.16332 22.4407 4.02024 22.3352 3.91475C22.2298 3.80926 22.0867 3.75 21.9375 3.75H8.0625C7.91332 3.75 7.77024 3.80926 7.66475 3.91475C7.55926 4.02024 7.5 4.16332 7.5 4.3125V11.25Z"
+            fill="currentColor"
+            className="group-resource"
+          />
+          <path
+            d="M7.5 11.25H1.5V12.75H7.5V11.25Z"
+            fill="currentColor"
+            className="group-resource"
+          />
+        </svg>
+      )}
+      {type === 'notes-list' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M14.435 11.625l-4.31-4.382v4.1a.281.281 0 00.281.282h4.029z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M8.625 12.563V6.75H2.812a.563.563 0 00-.562.563v15.375a.562.562 0 00.563.562h11.624a.562.562 0 00.563-.563v-9.562H9.187a.563.563 0 01-.562-.563zM17.156 5.625h4.029l-4.31-4.382v4.1a.281.281 0 00.281.282z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M15.938 7.125a.562.562 0 01-.563-.563V.75H8.062a.563.563 0 00-.562.563V5.25h1.974a1.913 1.913 0 011.354.57l5.117 5.202c.357.362.556.851.555 1.36v6.368h4.688a.562.562 0 00.562-.563V7.126h-5.813z"
+          ></path>
+        </svg>
+      )}
+      {type === 'create-note' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M21.767 2.306a1.034 1.034 0 00-1.494-.035l-.858.855 1.461 1.458.844-.84a1.04 1.04 0 00.047-1.438zM11.848 15.75H8.25v-3.598l.44-.44 6.476-6.462H2.25v16.5h16.5V8.834l-6.462 6.475-.44.441zM18.75 6.71l1.537-1.54-1.457-1.457-1.54 1.537h1.46v1.46z"
+          ></path>
+          <path
+            fill="currentColor"
+            d="M9.75 14.25h1.476l7.524-7.54V5.25h-1.46l-7.54 7.524v1.476z"
+          ></path>
+        </svg>
+      )}
+      {type === 'profile-detail' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.544 15.73H10.97a.134.134 0 01-.133-.135v-1.573a.134.134 0 01.133-.133h1.574a.134.134 0 01.133.133v1.573a.134.134 0 01-.133.134zm.885-5.157c-.844.567-.96 1.086-.96 1.562v.573a.156.156 0 01-.156.157h-1.146a.156.156 0 01-.157-.157v-.573c0-1.14.525-2.048 1.606-2.774 1.004-.674 1.572-1.1 1.572-2.04 0-.638-.365-1.123-1.12-1.482-.177-.084-.573-.167-1.06-.16-.61.007-1.083.153-1.449.447-.688.554-.746 1.157-.746 1.166a3.422 3.422 0 00-.044.535.156.156 0 01-.156.156H8.506a.156.156 0 01-.157-.14 3.213 3.213 0 01.005-.625c.012-.126.094-1.266 1.29-2.229.62-.499 1.41-.758 2.344-.77.662-.008 1.283.104 1.704.303 1.261.6 1.954 1.594 1.954 2.8 0 1.761-1.178 2.553-2.217 3.25z"
+          ></path>
         </svg>
       )}
     </>

@@ -95,7 +95,7 @@ export const calculateTimeAgo = (date: string): string => {
 
   const secondsAgo = Math.floor(timeDifference / 1000)
   if (secondsAgo < 60) {
-    return secondsAgo === 0 ? 'just now' : `${secondsAgo} seconds ago`
+    return secondsAgo <= 0 ? 'just now' : `${secondsAgo} seconds ago`
   }
 
   const minutesAgo = Math.floor(secondsAgo / 60)
@@ -110,7 +110,7 @@ export const calculateTimeAgo = (date: string): string => {
 
   const daysAgo = Math.floor(hoursAgo / 24)
   if (daysAgo >= 1) {
-    const formatter = new Intl.DateTimeFormat('en-US', {
+    const formatter = new Intl.DateTimeFormat('en-GB', {
       day: 'numeric',
       month: 'numeric',
       year: 'numeric',
@@ -137,4 +137,35 @@ export const debounce = <T extends (...args: any[]) => void>(
     clearTimeout(timeoutId)
     timeoutId = setTimeout(() => func(...args), delay)
   }
+}
+
+/**
+ * @description Return number percent with type: 80.99
+ * @param {number} num: number
+ * @return {*}
+ */
+export const percentConversion = (num: number) => {
+  return Math.round(num * 10000) / 100
+}
+
+/**
+ * @description Return number percent with type: 80
+ * @param {number} num: number
+ * @return {*}
+ */
+export const roundNumber = (num: number) => {
+  return Math.round(num * 100) / 100
+}
+
+/**
+ * @description Return number mm:ss
+ * @param {number} num: number
+ * @return {*}
+ */
+export const convertSecondsToMinutesSeconds = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+  const formattedMinutes = String(minutes).padStart(2, '0')
+  const formattedSeconds = String(remainingSeconds).padStart(2, '0')
+  return `${formattedMinutes}:${formattedSeconds}`
 }

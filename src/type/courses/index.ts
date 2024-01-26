@@ -25,8 +25,10 @@ export interface ICourseSection {
     id: string
     limit_count: number
     name: string
-    quiz_timed: boolean
+    quiz_timed: number
     quiz_type: string
+    is_limited: boolean
+    attempt_count: number
   }
   learning_progress: {
     total_course_sections: number
@@ -34,6 +36,7 @@ export interface ICourseSection {
   }
   remaining_time: number
   description: string
+  user_section_learning_status: string
 }
 
 export interface ICourseDetail {
@@ -53,6 +56,7 @@ export interface IMeta {
 }
 
 export interface ICourseDetailAll {
+  class_user_id?: string
   data: ICourseDetail
   metadata: IMeta
 }
@@ -61,5 +65,85 @@ export enum CLASS_USER_STATUS {
   READY_TO_LEARN = 'READY_TO_LEARN', // 1
   IN_PROGRESS = 'IN_PROGRESS', // 2
   COMPLETED = 'COMPLETED', // 3
-  CANCELED = 'CANCELED', // 4
+  CANCELED = 'ENDED', // 4
+}
+
+export interface IClassUserInstances {
+  extend_count: number
+  id: string
+  is_passed: boolean
+  learning_progress: {
+    total_course_sections: number
+    total_course_sections_completed: number
+  }
+  status: string
+  type: string
+  updated_at: Date
+  started_at: Date
+  finished_at: Date
+}
+
+export interface IClasses {
+  code: string
+  duration_type: 'FLEXIBLE' | 'FIXED'
+  finished_at: Date | null
+  id: string
+  name: string
+  status: string
+  type: string
+  updated_at: Date | null
+  class_user_instances: IClassUserInstances[]
+  course_type: string
+}
+
+export interface ICourse {
+  certificate_id: string
+  classes: IClasses[]
+  code: string
+  type: string
+  description: string
+  id: string
+  status: string
+  updated_at: Date
+  name: string
+  course_type: string
+}
+export interface ICourseAll {
+  courses: ICourse[]
+  metadata: IMeta
+  status: Array<{ count: number; status: string }>
+  total: Array<{ categoryName: string; count: number }>
+}
+
+export interface IResource {
+  created_at: Date
+  file_key: string
+  id: string
+  is_default: boolean
+  location: string
+  name: string
+  resource_type: string
+  size: number
+  status: string
+  suffix_type: string
+  thumbnail: string
+  updated_at: string
+}
+export interface IResourceDetail {
+  meta: IMeta
+  resources: IResource[]
+}
+
+export interface ISection {
+  course_id: string
+  course_section_type: string
+  created_at: Date
+  id: string
+  name: string
+  updated_at: Date
+}
+
+export interface ISectionDetail {
+  meta: IMeta
+  sections: ISection[]
 }

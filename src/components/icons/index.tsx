@@ -19,7 +19,7 @@ export default function Icon({ type, className }: IconsPros) {
             <path
               id="Vector"
               d="M6.50001 13.2835C9.9702 13.2835 12.7833 10.4703 12.7833 7.00013C12.7833 3.52994 9.9702 0.716797 6.50001 0.716797C3.02982 0.716797 0.216675 3.52994 0.216675 7.00013C0.216675 10.4703 3.02982 13.2835 6.50001 13.2835Z"
-              fill="#141414"
+              fill="#404041"
             />
             <path
               id="Vector_2"
@@ -148,7 +148,7 @@ export default function Icon({ type, className }: IconsPros) {
               width="16.5"
               height="16.5"
               stroke="currentColor"
-              stroke-width="1.5"
+              strokeWidth="1.5"
             />
           </g>
         </svg>
@@ -300,6 +300,60 @@ export default function Icon({ type, className }: IconsPros) {
           </defs>
         </svg>
       )}
+      {type === 'completed' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="13"
+          height="14"
+          fill="none"
+          viewBox="0 0 13 14"
+        >
+          <g clipPath="url(#clip0_5_9473)">
+            <path
+              fill="currentColor"
+              d="M6.5 13.284A6.283 6.283 0 106.5.716a6.283 6.283 0 000 12.566z"
+            ></path>
+            <path
+              fill="#fff"
+              d="M5.257 9.615L3.783 8.176a.332.332 0 010-.477l.489-.476a.351.351 0 01.489 0l.877.857 2.46-3.74a.35.35 0 01.476-.101l.582.365a.333.333 0 01.104.467l-2.913 4.43a.715.715 0 01-1.09.114z"
+            ></path>
+          </g>
+          <defs>
+            <clipPath id="clip0_5_9473">
+              <path
+                fill="#fff"
+                d="M0 0H13V13H0z"
+                transform="translate(0 .5)"
+              ></path>
+            </clipPath>
+          </defs>
+        </svg>
+      )}
+      {type === 'expired' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="13"
+          height="14"
+          fill="none"
+          viewBox="0 0 13 14"
+          className={`${className}`}
+        >
+          <g fill="currentColor" clipPath="url(#clip0_5_9451)">
+            <path d="M6.88 6.847l.468.487a3.883 3.883 0 013.34-.804 4.222 4.222 0 00-3.807-3.727v4.044zM6.812 7.875l-.693-.722v-4.35a4.196 4.196 0 00-2.316.961l.632.633-.539.538-.632-.632a4.196 4.196 0 00-.962 2.316H3.2v.762h-.897c.08.877.428 1.677.962 2.317l.607-.607.538.538-.606.607a4.197 4.197 0 002.226.953 3.9 3.9 0 01.783-3.314z"></path>
+            <path d="M6.296 11.972A4.982 4.982 0 011.523 7 4.982 4.982 0 016.5 2.023a4.982 4.982 0 014.972 4.773c.575.266 1.075.67 1.457 1.167.047-.318.071-.64.071-.963a6.457 6.457 0 00-1.904-4.596A6.458 6.458 0 006.5.5a6.458 6.458 0 00-4.596 1.904A6.458 6.458 0 000 7c0 1.736.676 3.368 1.904 4.596A6.457 6.457 0 006.5 13.5c.324 0 .645-.024.963-.071a3.925 3.925 0 01-1.167-1.457z"></path>
+            <path d="M9.836 7.172a3.168 3.168 0 00-3.164 3.164A3.168 3.168 0 009.836 13.5 3.168 3.168 0 0013 10.336a3.168 3.168 0 00-3.164-3.164zm0 4.951a.45.45 0 110-.9.45.45 0 010 .9zm.316-1.44H9.52l-.158-2.328h.947l-.157 2.328z"></path>
+          </g>
+          <defs>
+            <clipPath id="clip0_5_9451">
+              <path
+                fill="#fff"
+                d="M0 0H13V13H0z"
+                transform="translate(0 .5)"
+              ></path>
+            </clipPath>
+          </defs>
+        </svg>
+      )}
       {type === 'search' && (
         <svg
           width="24"
@@ -332,6 +386,54 @@ export default function Icon({ type, className }: IconsPros) {
               d="M50 9.375C27.6 9.375 9.375 27.6 9.375 50S27.6 90.625 50 90.625 90.625 72.4 90.625 50 72.4 9.375 50 9.375zM39.062 67.188V32.812L67.189 50 39.061 67.188z"
             ></path>
           </g>
+        </svg>
+      )}
+      {type === 'learning-resource' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            fill="currentColor"
+            d="M21.938 2.25H2.063a.563.563 0 00-.563.563v2.624c0 .311.252.563.563.563h19.875c.31 0 .562-.252.562-.563V2.813a.562.562 0 00-.563-.562zM3 7.5v13.125a1.125 1.125 0 001.125 1.125h15.75A1.125 1.125 0 0021 20.625V7.5H3zm9 10.81l-4.063-4.06L9 13.187l2.25 2.252V9.75h1.5v5.69l2.253-2.254 1.06 1.061L12 18.311z"
+          ></path>
+        </svg>
+      )}
+      {type === 'entrance-test' && (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={`${className}`}
+        >
+          <path
+            d="M7.5 11.25H14.408L11.408 8.25L12.4688 7.18922L17.2795 12L12.4688 16.8108L11.408 15.75L14.408 12.75H7.5V19.6875C7.5 19.8367 7.55926 19.9798 7.66475 20.0852C7.77024 20.1907 7.91332 20.25 8.0625 20.25H21.9375C22.0867 20.25 22.2298 20.1907 22.3352 20.0852C22.4407 19.9798 22.5 19.8367 22.5 19.6875V4.3125C22.5 4.16332 22.4407 4.02024 22.3352 3.91475C22.2298 3.80926 22.0867 3.75 21.9375 3.75H8.0625C7.91332 3.75 7.77024 3.80926 7.66475 3.91475C7.55926 4.02024 7.5 4.16332 7.5 4.3125V11.25Z"
+            fill="currentColor"
+            className="group-resource"
+          />
+          <path
+            d="M7.5 11.25H1.5V12.75H7.5V11.25Z"
+            fill="currentColor"
+            className="group-resource"
+          />
+        </svg>
+      )}
+      {type === 'circle' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          className={`${className}`}
+        >
+          <circle cx="8" cy="8" r="8" fill="currentColor" />
         </svg>
       )}
     </>

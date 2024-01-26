@@ -14,7 +14,7 @@ interface IHookFormCheckBoxProps {
   required?: boolean
   disabled?: boolean
   classNameTitle?: string
-  state?: 'default' | 'error' | 'success' // Thêm prop state
+  state?: 'default' | 'error' | 'success' | 'primary' // Thêm prop state
   size?: 'small' | 'medium' | 'lager' // Thêm prop size
 }
 
