@@ -55,7 +55,7 @@ const Course = ({
       ) as any
 
       // Update state with the difference
-      setDaysDifference(difference)
+      setDaysDifference(difference + 1)
     }
   }, [course])
   const percentProgress =
@@ -77,7 +77,7 @@ const Course = ({
     const startedAt = student?.started_at
     const finishedAt = student?.finished_at
     // Chuyển đổi sang chuỗi theo định dạng ISO
-    const formattedDate = startOfDay(currentDate)
+    const formattedDate = new Date()
 
     if (
       courseStatus === COURSE_STATUS.PUBLISH ||
@@ -94,8 +94,8 @@ const Course = ({
             classInstance?.duration_type === 'FIXED' &&
             classInstance?.finished_at
           ) {
-            const getISOFinish = parseISO(classInstance?.finished_at as any)
-            const classFinish = startOfDay(getISOFinish.setUTCHours(0, 0, 0, 0))
+            const classFinish = new Date(classInstance?.finished_at as any)
+            // const classFinish = startOfDay(getISOFinish.setUTCHours(0, 0, 0, 0))
             if (classFinish <= formattedDate) return BUTTON_STATUS.Extend
             if (classFinish > formattedDate) return BUTTON_STATUS.Active
           }
@@ -106,9 +106,9 @@ const Course = ({
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
         if (startedAt && finishedAt) {
-          const parsedSpecificDate = parseISO(student?.finished_at as any)
-          parsedSpecificDate.setUTCHours(0, 0, 0, 0)
-          const finishedAtDate = startOfDay(parsedSpecificDate)
+          // const parsedSpecificDate = parseISO(student?.finished_at as any)
+          // parsedSpecificDate.setUTCHours(0, 0, 0, 0)
+          const finishedAtDate = new Date(student?.finished_at as any)
           if (
             course?.course_type === 'TRIAL_COURSE' &&
             finishedAtDate <= formattedDate
