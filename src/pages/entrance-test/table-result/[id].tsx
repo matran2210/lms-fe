@@ -36,6 +36,7 @@ const TableEntranceResult = () => {
         meta: response.data.meta,
         data: (modalResult?.questions?.data || []).concat(
           response.data.answers?.map((e: any) => ({
+            active: e.active,
             id: e.id,
             content: e.question.question_content,
             section: e.question.question_filter_id?.part?.name,
