@@ -1,6 +1,12 @@
 import useCountdown from '@components/auth/Countdown'
 import { formatTime } from '@components/common/timer'
-import { ForwardedRef, forwardRef, useEffect, useImperativeHandle } from 'react'
+import {
+  ForwardedRef,
+  forwardRef,
+  memo,
+  useEffect,
+  useImperativeHandle,
+} from 'react'
 
 const CountDown = forwardRef(
   ({ remainTime, onTimeOut }: any, ref: ForwardedRef<any>) => {
@@ -23,4 +29,4 @@ const CountDown = forwardRef(
   },
 )
 CountDown.displayName = 'CountDown'
-export default CountDown
+export default memo(CountDown)
