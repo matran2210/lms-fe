@@ -207,20 +207,24 @@ const EssayQuestionPreview = ({
               highlighted={question_data?.requirements?.[index]?.highlighted}
               highlighArea="hightlight_area_require"
             />
-            {data?.files?.length > 0 &&
-              data?.files.map((e: any, index: number) => {
-                return (
-                  <div
-                    className="cursor-pointer text-state-info hover:underline"
-                    onClick={() =>
-                      setOpenPdf({ status: true, url: e.resource.url })
-                    }
-                    key={index}
-                  >
-                    {e.resource.name}
-                  </div>
-                )
-              })}
+
+            {data?.files?.length > 0 && (
+              <div className="mb-4">
+                {data?.files.map((e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline w-fit mb-1"
+                      onClick={() =>
+                        setOpenPdf({ status: true, url: e.resource.url })
+                      }
+                      key={index}
+                    >
+                      {e.resource.name}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
           {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
             !forCaseStudy && <div className="sapp-seprate-line-preview"></div>}
