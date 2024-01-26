@@ -125,9 +125,12 @@ const ProfileSideBar = ({ page }: IProps) => {
           }
 
           return (
-            <li className={`${className} cursor-pointer relative`} key={key}>
+            <li
+              className={`${className} cursor-pointer relative group`}
+              key={key}
+            >
               <a
-                className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-bold ${
+                className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-bold hover-transition-font-weight ${
                   isActive ||
                   (urlPage === 'security' &&
                     Object.values(childActivationStates).some(
@@ -135,7 +138,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                     ) &&
                     !childActivationStates[childLabel])
                     ? 'bg-secondary text-primary font-bold'
-                    : ''
+                    : 'hover:left-[-0.5px]'
                 }`}
                 style={{
                   position: 'relative', // Đặt position là relative
@@ -177,14 +180,14 @@ const ProfileSideBar = ({ page }: IProps) => {
                   return (
                     <div
                       key={childLabel}
-                      className={`${className} cursor-pointer relative ms-4 hover:bg-secondary ${
+                      className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-bold hover-transition-font-weight ${
                         childIsActive
                           ? 'bg-secondary font-bold text-primary'
-                          : ''
+                          : 'hover:left-[-0.5px]'
                       }`}
                     >
                       <a
-                        className="p-5 block w-full text-left hover:font-bold"
+                        className="p-5 block w-full text-left"
                         onClick={() => handleChildClick(childLabel)}
                       >
                         {getLabelFromChild(child)}
@@ -192,17 +195,19 @@ const ProfileSideBar = ({ page }: IProps) => {
                     </div>
                   )
                 })}
-              {urlChildren.length === 0 && (
-                <div className=" border-b border-gray-3"></div>
-              )}
+              <div
+                className={`border-b border-gray-3 relative top-px group-hover:border-secondary ${
+                  isActive ? 'border-secondary' : ''
+                }`}
+              ></div>
             </li>
           )
         })}
         <li
-          className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary"
+          className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
           onClick={handleLogout}
         >
-          <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>
+          <div className="absolute inset-0 bottom-0"></div>
           <div>Logout</div>
         </li>
       </ul>

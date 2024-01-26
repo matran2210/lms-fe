@@ -30,7 +30,7 @@ const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
       showCancelButton={false}
       showOkButton={false}
       showHeader={true}
-      refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
+      refClass="md:px-8 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all w-[75vh] h-full"
       size=""
       footerButtonClassName="flex flex-col-reverse gap-6"
       childClass="flex flex-col justify-center items-center"

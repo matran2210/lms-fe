@@ -37,7 +37,7 @@ const EntrancePopupContent = ({
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
             <p>Score:</p>
             <p className="text-bw-1 font-medium">
-              {score !== null ? score : '--'}
+              {score && score !== null ? score : '--'}
             </p>
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">

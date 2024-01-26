@@ -116,12 +116,13 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   }
 
   const handlePaste = (index: number, e: any) => {
-    const pasted = e.clipboardData.getData('text/plain').split(' ').slice(0, 6)
+    e.preventDefault() // Ngăn chặn hành động paste mặc định
+    // const pasted = e.clipboardData.getData('text/plain').split(' ').slice(0, 6)
 
-    // Update the OTP array
-    const newOtp = [...code]
-    newOtp.splice(index, pasted.length, ...pasted)
-    setCode(newOtp)
+    // // Update the OTP array
+    // const newOtp = [...code]
+    // newOtp.splice(index, pasted.length, ...pasted)
+    // setCode(newOtp)
   }
 
   return (

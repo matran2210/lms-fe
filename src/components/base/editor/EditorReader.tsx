@@ -59,6 +59,8 @@ const EditorReader = ({
         parent.classList.add('w-fit')
       })
       setContent(doc?.documentElement.querySelector('body')?.innerHTML || '')
+    } else {
+      setContent(text_editor_content)
     }
   }, [text_editor_content])
 

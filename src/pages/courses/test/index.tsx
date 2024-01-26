@@ -90,7 +90,7 @@ const TestModal = ({
         <div className="text-gray-1">Time Allowed:</div>
         <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.quiz_timed
-            ? formatTime(data?.quiz?.quiz_timed)
+            ? formatTime(data?.quiz?.quiz_timed * 60)
             : 'Unlimited'}
         </div>
       </div>

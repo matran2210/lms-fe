@@ -109,7 +109,7 @@ const TableCaseStudyResult = () => {
   const getTypeName = (type: QUESTION_TYPES): string => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
-        return 'True False'
+        return 'True/False'
       case QUESTION_TYPES.ONE_CHOICE:
         return 'One Choice'
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -146,13 +146,15 @@ const TableCaseStudyResult = () => {
         <CloseIcon />
       </div>
       <div className="bg-white max-w-[1144px] max-h-full m-auto pt-8">
-        <div className="flex justify-between mb-10 items-center">
-          <div className="">
-            <div className="text-xl font-medium text-bw-1 pb-1.5">
+        <div className="flex justify-between mb-10 items-center flex-row">
+          <div className="pr-4">
+            <div className="text-xl font-medium text-bw-1 line-clamp-1">
               {topicAttemptDetail?.question_topic?.name}
             </div>
-            <div className="text-base">
-              <span className="font-normal text-gray-1">Your Score:</span>{' '}
+            <div className="text-base pt-2.5">
+              <span className="font-normal text-gray-1 pt-1.5">
+                Your Score:
+              </span>{' '}
               <span className="font-bold text-state-error">
                 {topicAttemptDetail?.score}%
               </span>
@@ -169,7 +171,14 @@ const TableCaseStudyResult = () => {
                       : '/Unlimited'
                   }`}
                   size="medium"
-                  className={'!font-medium'}
+                  className={'!font-medium shrink-0'}
+                  onClick={() =>
+                    handleRetake(
+                      topicAttemptDetail?.question_topic?.id,
+                      topicAttemptDetail?.quiz?.id,
+                      topicAttemptDetail?.class_user_id as string,
+                    )
+                  }
                 />
               ) : (
                 <ButtonSecondary
@@ -180,7 +189,7 @@ const TableCaseStudyResult = () => {
                       : '/Unlimited'
                   }`}
                   size="medium"
-                  className={'!font-medium'}
+                  className={'!font-medium shrink-0'}
                 />
               )
             ) : (
@@ -201,7 +210,7 @@ const TableCaseStudyResult = () => {
                   topicAttemptDetail?.class_user_id as string,
                 )
               }
-              className={'!font-medium'}
+              className={'!font-medium shrink-0'}
             />
           )}
         </div>
@@ -225,14 +234,17 @@ const TableCaseStudyResult = () => {
                     <td className="pr-1 text-bw-1">{index + 1}</td>
                     <td className="text-start m-6 pr-4">
                       <div
-                        className="text-bw-1 sapp-text-truncate-1 cursor-pointer hover:font-semibold"
+                        className={`text-bw-1 sapp-text-truncate-1 ${
+                          e?.question?.qType !== 'ESSAY'
+                            ? 'cursor-pointer hover:font-semibold'
+                            : ''
+                        }`}
                         dangerouslySetInnerHTML={{
                           __html: String(e?.question?.question_content ?? '--'),
                         }}
                         onClick={() => {
-                          router.push(
-                            `/entrance-test/table-result/explanation/${e.id}`,
-                          )
+                          e?.question?.qType !== 'ESSAY' &&
+                            router.push(`/explanation/${e.id}`)
                         }}
                       ></div>
                     </td>

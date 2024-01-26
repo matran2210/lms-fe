@@ -370,26 +370,29 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           </div>
 
           <div className="h-[1px] border-b"></div>
-
-          <div
-            className={`pt-6 pb-4 ${activity?.files?.length > 0 && 'border-b'}`}
-          >
-            <div className="font-semibold text-base mb-2">
-              Learning Outcome:
+          {activity?.course_outcomes?.length > 0 && (
+            <div
+              className={`pt-6 pb-4 ${
+                activity?.files?.length > 0 && 'border-b'
+              }`}
+            >
+              <div className="font-semibold text-base mb-2">
+                Learning Outcome:
+              </div>
+              <ul className="list-disc text-base">
+                {activity?.course_outcomes?.map((e) => {
+                  return (
+                    <li className="ml-4" key={e.id}>
+                      <EditorReader
+                        className="editor-wrap mt-1.5"
+                        text_editor_content={e.description}
+                      />
+                    </li>
+                  )
+                })}
+              </ul>
             </div>
-            <ul className="list-disc text-base">
-              {activity?.course_outcomes?.map((e) => {
-                return (
-                  <li className="ml-4" key={e.id}>
-                    <EditorReader
-                      className="editor-wrap mt-1.5"
-                      text_editor_content={e.description}
-                    />
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
+          )}
           {activity?.files?.length > 0 && (
             <div className="pt-6 pb-4">
               <div className="font-semibold text-base mb-2">Resource:</div>

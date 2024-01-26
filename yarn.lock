@@ -3032,10 +3032,10 @@ entities@^4.2.0, entities@^4.4.0, entities@^4.5.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
-entrance-test-result-package@^1.0.13:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.13.tgz#c3cf89db60db3c2a0571c57258221ca4467401d7"
-  integrity sha512-StaKstJZDKzjuDjU7PBGMJleo7Qh6Y/ssV/s49w0fw497YPk3SvlmiAz3Fwu8FL8VwvWvxLl5mAawRwRL+BBtg==
+entrance-test-result-package@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.15.tgz#401f68496ef41ed96e33e76452c9af341127c5d7"
+  integrity sha512-KUUXSSlt8RUM4+qfJ8S3NB+T7iWLD8inh4csXScDLKZ2/xR/7bD/aT2QOcjA9e4NM+Z50mbXpEMme5ZkV/tNRA==
   dependencies:
     sass "^1.69.5"
 
@@ -3424,10 +3424,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.20:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.20.tgz#2354553579da5e05ac1f372bdbc88287e32050ce"
-  integrity sha512-7RQ6Fk1HOINi2cuMto8kuZr7zLillHXvKE/1aY/+SC54lNIit3u7LjpuHSgVFugITpkiNuFK5WNfVUfKcjqW6Q==
+explanation-package@^1.0.25:
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.25.tgz#194a5d2910bc9463f4f545059d179ed4523d3b8c"
+  integrity sha512-4baaoNGPLyUZqkmkcaHQHb/Q0apcjVkuxx3BaUvEBgKY31gVYG/nIdws6YPIquHKoGfF5rw8ajF88TJV3fxq6Q==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -5650,10 +5650,10 @@ pretty-bytes@^5.3.0:
   resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-5.6.0.tgz#356256f643804773c82f64723fe78c92c62beaeb"
   integrity sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==
 
-preview-part@^1.2.22:
-  version "1.2.22"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.22.tgz#486fa6945afd67a8be1dc807ec6ef068c504d8b4"
-  integrity sha512-UxrAeTd0bK2Nw+dNGTwXkmdzK00UMW1zVCmdHNDbrsvjs7Dix23kS6OPb/TnGgRs7cZmqcZ2h8gu6v62RgfIuw==
+preview-part@^1.2.23:
+  version "1.2.23"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.23.tgz#70c1519aa5a56b6503425dc54e4a94f83e4eac07"
+  integrity sha512-jGfRWNIOLtuYT2sqbGnKZShrL18Ch7oTeA2lwNwetVC30jhXdShT8DcNPp52M02s8T2+vcuf/quLJfzroU/0VQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/lodash" "^4.14.202"
@@ -5730,10 +5730,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.0.14:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.0.14.tgz#ab60080a2b1a99ade66c0c280e419e49710db749"
-  integrity sha512-Ctnn+7+xkWMeJTalJpkEouJkUwCJC5Q1ooENmHX9Gybe+F4klUJ1kXXf1mStCmBtXunl9oa8mLz438UwixuMjw==
+quiz-result-package@^1.1.25:
+  version "1.1.25"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.25.tgz#23633325e81c424f95c72b924e3daf8e0964d658"
+  integrity sha512-KmP8HVhQi7DRXnda3eHd7Mpafabbvnp8Bt170nPNn2OMjlMeL+Q3NFhaYjFlT4hEz8Tpmasi2QLfy8TacfCBlw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 

@@ -120,7 +120,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             done={done}
-            extenalRef={(el: any) => (ref.current[index || 0] = el)}
+            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -135,7 +135,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
-            extenalRef={(el: any) => (ref.current[index || 0] = el)}
+            extenalRef={(el: any) => {
+              valueRef.current[index || 0] = el
+            }}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -150,7 +152,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
-            extenalRef={(el: any) => (ref.current[index || 0] = el)}
+            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -165,7 +167,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
-            extenalRef={(el: any) => (ref.current[index || 0] = el)}
+            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -199,6 +201,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               )
             }
             setOpenPdf={setOpenPdf}
+            setUnsavedChanges={setUnsavedChanges}
           />
         )
       default:
@@ -576,8 +579,8 @@ const CaseStudyDetail = ({ questions }: any) => {
       {/* Header */}
       <div className="h-full" ref={containerRef}>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
-          <div className="text-bw-1 text-xl font-bold w-1/3 truncate">
-            {topics.name}
+          <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
+            {topics.case_study_name} - {topics.name}
           </div>
           <ButtonCancelSubmit
             className={'flex gap-4 flex-row-reverse w-1/3'}
@@ -753,8 +756,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 onClick={() => setOnFocusingPad(e.id)}
                 zIndex={
                   onFocusingPad === e.id
-                    ? openScratchPad.length + 100
-                    : index + 100
+                    ? openScratchPad.length + 1400
+                    : index + 1400
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
@@ -783,8 +786,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 onClick={() => setOnFocusingPad(e.id)}
                 zIndex={
                   onFocusingPad === e.id
-                    ? openScratchPad.length + 100
-                    : index + 100
+                    ? openScratchPad.length + 1400
+                    : index + 1400
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">

@@ -185,7 +185,7 @@ body *::-webkit-scrollbar-thumb:hover {
   padding: 8px;
   width: 110px;
   height: 35px;
-  // margin-bottom: 8px;
+  margin-bottom: 4px;
 
   @apply bg-gray-4 font-bold text-base text-center;
 }
@@ -375,7 +375,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-seprate-line-preview {
-  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3;
+  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3 mb-4;
 }
 
 .sapp-upload-file-preview {
@@ -575,4 +575,8 @@ textarea.is-invalid:focus {
 
 .min-w-\[63px\] {
   min-width: 63px;
+}
+
+.hover-transition-font-weight {
+  transition: font-weight 0.1s ease;
 }

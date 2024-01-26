@@ -18,6 +18,7 @@ import React, {
   useState,
 } from 'react'
 import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
@@ -34,11 +35,15 @@ export type QuizComponentRef = {
     tabId,
     quizId,
     then,
+    onError,
+    onFinally,
   }: {
     activityId: string
     tabId: string
     quizId: string
     then?: (e: any) => void
+    onError?: (e: any) => void
+    onFinally?: () => void
   }) => void
   reset: UseFormReset<FieldValues>
 }
@@ -244,11 +249,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       tabId,
       quizId,
       then,
+      onError,
+      onFinally: onFinally,
     }: {
       activityId: string
       tabId: string
       quizId: string
       then?: (e: any) => void
+      onError?: (e: any) => void
+      onFinally?: () => void
     }) => {
       if (activeQuestion) {
         let myAnswers
@@ -275,7 +284,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           case QUESTION_TYPES.ESSAY:
             myAnswers = {
               question_id: activeQuestion.id,
-              short_answer: getValues('essay'),
+              short_answer: getValues(
+                `${activeQuestion.id}_${document_id}_essay`,
+              ),
               response_option: activeQuestion.response_option
                 ? activeQuestion.response_option
                 : 'WORD',
@@ -287,19 +298,30 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             break
         }
         DragDropRef.current?.handleReset()
-        dispatch(
-          confirmQuestion({
-            activityId: activityId,
-            tabId: tabId,
-            quizId: quizId,
-            questionId: activeQuestion.id || '',
-            myAnswers: myAnswers,
-          }),
-        )
-          .unwrap()
-          .then((e: any) => {
-            then && then(e)
-          })
+        try {
+          dispatch(
+            confirmQuestion({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: activeQuestion.id || '',
+              myAnswers: myAnswers,
+            }),
+          )
+            .unwrap()
+            .then((e: any) => {
+              then && then(e)
+            })
+            .catch((e) => {
+              toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
+              onError && onError(e)
+            })
+        } catch (error) {
+          toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
+          onError && onError(error)
+        } finally {
+          onFinally && onFinally()
+        }
       }
     }
 
@@ -308,16 +330,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       question_id: string,
       topic_id: string,
     ) => {
-      dispatch(
-        saveFileEssay({
-          activityId,
-          tabId,
-          quizId,
-          question_id: question_id,
-          file: file,
-          topic_id: topic_id,
-        }),
-      )
+      try {
+        dispatch(
+          saveFileEssay({
+            activityId,
+            tabId,
+            quizId,
+            question_id: question_id,
+            file: file,
+            topic_id: topic_id,
+          }),
+        )
+      } catch (error) {
+        toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
+      }
     }
 
     const renderQuestion = () => {
@@ -548,7 +574,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 control={controlAnswer}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
-                name={'essay'}
+                name={`${activeQuestion.id}_${document_id}_essay`}
                 fullData={activeQuestion}
                 openChooseFile={(e: any) =>
                   setOpenUpload({

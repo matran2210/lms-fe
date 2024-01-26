@@ -12,6 +12,7 @@ import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 const Explanation = () => {
   const router = useRouter()
   const [activeQuestion, setActiveQuestion] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(false)
   function getCorrect(answers: any, questionType: any) {
     switch (questionType as QUESTION_TYPES) {
       case QUESTION_TYPES.ONE_CHOICE:
@@ -40,39 +41,46 @@ const Explanation = () => {
     }
   }
   const getActiveQuestion = async (id: string) => {
-    // const quizAttempts = axiosInstance.get('')
-    // const selectedResponseAnswers = data.data.selectedResponseAnswers
-    const resultResponse = (await httpService.GET({
-      uri: 'quiz-attempts/answers/' + id,
-    })) as any
-    const topicDescription = await CourseTestApi.getTopicDescription(
-      resultResponse?.data?.answer?.question?.question_topic_id,
-    ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
-    setActiveQuestion({
-      ...resultResponse.data.answer.question,
-      confirmed: true,
-      corrects: getCorrect(
-        resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
-          ? resultResponse.data.answer.question.answers
-          : resultResponse.data.answer.answer_matching_mapping,
-        resultResponse.data.answer.question.qType,
-      ),
-      question_matchings: resultResponse.data.answer.answer_matching_mapping,
-      answers: resultResponse.data?.answer?.question.answers || [],
-      myAnswers: [
-        {
-          question_id: resultResponse.data.answer.question.id,
-          question_answer_id: resultResponse.data.answer.question_answer_id,
-          answer: resultResponse.data.answer.answer,
-        },
-      ],
-      defaultValue: resultResponse.data.answer.answer,
-      next: resultResponse.data.next,
-      previous: resultResponse.data.previous,
-      total_question: resultResponse.data.total_question,
-      index: resultResponse.data.index,
-      question_topic: topicDescription?.data,
-    })
+    setLoading(true)
+    try {
+      // const quizAttempts = axiosInstance.get('')
+      // const selectedResponseAnswers = data.data.selectedResponseAnswers
+      const resultResponse = (await httpService.GET({
+        uri: 'quiz-attempts/answers/' + id,
+      })) as any
+      const topicDescription = await CourseTestApi.getTopicDescription(
+        resultResponse?.data?.answer?.question?.question_topic_id,
+        resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
+      ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
+      setActiveQuestion({
+        ...resultResponse.data.answer.question,
+        confirmed: true,
+        corrects: getCorrect(
+          resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
+            ? resultResponse.data.answer.question.answers
+            : resultResponse.data.answer.answer_matching_mapping,
+          resultResponse.data.answer.question.qType,
+        ),
+        question_matchings: resultResponse.data.answer.answer_matching_mapping,
+        answers: resultResponse.data?.answer?.question.answers || [],
+        myAnswers: [
+          {
+            question_id: resultResponse.data.answer.question.id,
+            question_answer_id: resultResponse.data.answer.question_answer_id,
+            answer: resultResponse.data.answer.answer,
+          },
+        ],
+        defaultValue: resultResponse.data.answer.answer,
+        next: resultResponse.data.next,
+        previous: resultResponse.data.previous,
+        total_question: resultResponse.data.total_question,
+        index: resultResponse.data.index,
+        question_topic: topicDescription?.data,
+      })
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -94,6 +102,11 @@ const Explanation = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
+          Loading
+        </div>
+      )}
       <div
         className="ml-auto cursor-pointer absolute  right-6 top-[14px]"
         onClick={() => {

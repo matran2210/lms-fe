@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import { exceptions } from './en.exceptions'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
+import { capitalize } from 'lodash'
 
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -176,10 +177,12 @@ axiosInstance.interceptors.response.use(
         error?.response?.data?.error?.code !== '400|060710'
       ) {
         toast.error(
-          errorMessage ||
-            error?.response?.statusText ||
-            error?.message ||
-            'Unknown error!',
+          capitalize(
+            errorMessage ||
+              error?.response?.statusText ||
+              error?.message ||
+              'Unknown error!',
+          ),
         )
       }
       return Promise.reject(error)
@@ -198,6 +201,7 @@ axiosInstance.interceptors.response.use(
         toast.error(
           errorMessage ||
             error?.response?.statusText ||
+            error?.response?.data?.message ||
             error?.message ||
             'Unknown error!',
         )

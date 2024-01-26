@@ -206,7 +206,7 @@ const SelectWord = forwardRef(
     //   }
     // }, [questionContent])
     return (
-      <div>
+      <div ref={extenalRef}>
         <EditorReader
           key={key}
           extenalRef={refEditor}

@@ -75,19 +75,21 @@ const QuizDocument = ({
   }>()
 
   useEffect(() => {
-    if (questions?.[0]) {
-      // Load the first question when the component mounts
-      try {
-        dispatch(
-          fetchQuestionById({
-            activityId: activityId,
-            tabId: tabId,
-            quizId: quizId,
-            questionId: questions[0]?.id || '',
-          }),
-        )
-      } catch (error) {}
-    }
+    ;(async () => {
+      if (questions?.[0]) {
+        // Load the first question when the component mounts
+        try {
+          dispatch(
+            fetchQuestionById({
+              activityId: activityId,
+              tabId: tabId,
+              quizId: quizId,
+              questionId: questions[0]?.id || '',
+            }),
+          )
+        } catch (error) {}
+      }
+    })()
   }, [questions, dispatch])
 
   useEffect(() => {
@@ -127,7 +129,7 @@ const QuizDocument = ({
       const prevQuestionId = questions[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
         try {
-          dispatch(
+          await dispatch(
             fetchQuestionById({
               activityId: activityId,
               tabId: tabId,
@@ -155,11 +157,14 @@ const QuizDocument = ({
           }
           setLoading(false)
         },
+        onFinally: () => {
+          setLoading(false)
+        },
       })
     }
   }
 
-  const handleFinishQuiz = () => {
+  const handleFinishQuiz = async () => {
     setOpenFinishQuiz(false)
     setLoading(true)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
@@ -183,7 +188,7 @@ const QuizDocument = ({
     )
 
     try {
-      dispatch(
+      await dispatch(
         submitQuestion({
           id: quizId,
           data: { answers, quiz_position_mapping },
@@ -208,6 +213,7 @@ const QuizDocument = ({
       if (error.response.status === 422) {
         toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
       }
+    } finally {
       setLoading(false)
     }
   }
@@ -234,15 +240,18 @@ const QuizDocument = ({
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.meta,
         data: (modalResult?.questions?.data || []).concat(
-          response.data.answers?.map((e: any) => ({
-            id: e.id,
-            content: e.question.question_content,
-            section: e.question.question_filter_id?.part?.name,
-            type: e.question.qType,
-            is_correct: e.is_correct,
-            time_spent: e.time_spent,
-            question: e.question as any,
-          })) || [],
+          response.data.answers?.map((e: any) => {
+            return {
+              id: e.id,
+              content: e.question.question_content,
+              section: e.question.question_filter_id?.part?.name,
+              type: e.question.qType,
+              is_correct: e.is_correct,
+              time_spent: e.time_spent,
+              question: e.question as any,
+              active: e.active,
+            }
+          }) || [],
         ),
       }
       setModalResult((e) => ({

@@ -40,6 +40,7 @@ export type IPreviewProp = {
   handleClearFile?: any
   setOpenPdf?: any
   handleSaveHighLightRequirement?: any
+  setUnsavedChanges?: any
 }
 const EssayQuestionPreview = ({
   data,
@@ -64,6 +65,7 @@ const EssayQuestionPreview = ({
   setOpenPdf,
   allowUnHighLight,
   handleSaveHighLightRequirement,
+  setUnsavedChanges,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
@@ -90,8 +92,12 @@ const EssayQuestionPreview = ({
     files: { name: string; file_key: string }[]
   }) => {
     try {
+      setUnsavedChanges && setUnsavedChanges(false)
       await UploadAPI.downloadFile(data)
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setUnsavedChanges && setUnsavedChanges(true)
+    }
   }
   // useEffect(() => {
   //   // setKey((prev) => {
@@ -281,7 +287,7 @@ const EssayQuestionPreview = ({
                 >
                   {fullData.answer_file.file_name}
                 </div>
-                {!fullData?.done && (
+                {!fullData?.done && !fullData?.confirmed && (
                   <div
                     onClick={() => handleClearFile()}
                     className="cursor-pointer"
@@ -314,7 +320,7 @@ const EssayQuestionPreview = ({
               height={500}
               placeholder="Your answer here"
               defaultValue={defaultValue}
-              disabled={fullData?.done}
+              disabled={fullData?.done || fullData?.confirmed}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
@@ -332,7 +338,7 @@ const EssayQuestionPreview = ({
                       // row={2}
 
                       onChange={(e) => {
-                        if (!fullData?.done) {
+                        if (!fullData?.done && !fullData?.confirmed) {
                           const currentSheet = refSheet.current?.getSheet()
                           if (value) {
                             let old = [...JSON.parse(value)]
@@ -384,7 +390,7 @@ const EssayQuestionPreview = ({
               height={500}
               placeholder="Your answer here"
               defaultValue={defaultValue}
-              disabled={fullData?.done}
+              disabled={fullData?.done || fullData?.confirmed}
             />
           ) : (
             <div className="w-full h-[500px] border">
@@ -402,7 +408,7 @@ const EssayQuestionPreview = ({
 
                       onChange={(e) => {
                         // const celldata = e.data
-                        if (!fullData?.done) {
+                        if (!fullData?.done && !fullData?.confirmed) {
                           const currentSheet = refSheet.current?.getSheet()
                           // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
                           // // listSheet.splice(0,1)
