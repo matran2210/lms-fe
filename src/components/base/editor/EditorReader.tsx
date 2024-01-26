@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import SappModalImage from '../modal/SappModalImage'
 import { DeserializeHighlight } from '@utils/index'
 import parseHTML from 'html-react-parser'
+import { useEffect, useRef, useState } from 'react'
+import SappModalImage from '../modal/SappModalImage'
 
 type Props = {
   text_editor_content: string | undefined
@@ -29,7 +28,6 @@ const EditorReader = ({
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   const [content, setContent] = useState<any>()
-  // const [content, setContent] = useState<string | undefined>('')
   useEffect(() => {
     if (extenalRef) {
       extenalRef.current?.addEventListener('click', handleOnclick)
@@ -50,20 +48,24 @@ const EditorReader = ({
       const parser = new DOMParser()
       const doc = parser.parseFromString(text_editor_content, 'text/html')
       const videos = doc.querySelectorAll('video')
-      let overLay = document.createElement('span')
-      overLay.setAttribute('class', 'sapp_overlay_video')
-      videos.forEach((el: any, index: number) => {
-        const parent = el.parentNode
-        parent?.append(overLay)
-        parent.classList.add('relative')
-        parent.classList.add('w-fit')
-      })
+      for (let video of videos) {
+        const src = video.querySelector('source')?.getAttribute('token')
+        if (src && src !== 'null' && video.tagName === 'VIDEO') {
+          var wrapper = document.createElement('div')
+          var overLay = document.createElement('span')
+          overLay.className = 'sapp_overlay_video'
+          const _video = video.cloneNode(true)
+          wrapper.append(_video)
+          wrapper.className = 'relative w-fit'
+          wrapper.append(overLay)
+          video?.parentNode?.replaceChild(wrapper, video)
+        }
+      }
       setContent(doc?.documentElement.querySelector('body')?.innerHTML || '')
     } else {
       setContent(text_editor_content)
     }
   }, [text_editor_content])
-
   useEffect(() => {
     if (highlighArea === 'hightlight_area_topic') {
       DeserializeHighlight(highlighted, highlighArea)
