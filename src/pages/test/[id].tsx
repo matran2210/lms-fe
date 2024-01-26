@@ -1679,43 +1679,44 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               </div>
             </div>
           </button>
-          {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-            <button className="h-full relative" ref={dropUpRef}>
-              <div
-                className="flex items-center gap-3 px-4 3xl:px-6 border-l"
-                onClick={() => {
-                  setShowListExhibits(!showListExhibits)
-                }}
-              >
-                <ExhibitsIcon />
-                <div className="font-normal flex text-sm items-center gap-3">
-                  <div>
-                    <span className="hidden 3xl:inline-block 3xl:me-1">
-                      Exhibits
-                    </span>
-                    <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span>
+          {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
+            currentTabContent?.data?.exhibits?.length > 0 && (
+              <button className="h-full relative" ref={dropUpRef}>
+                <div
+                  className="flex items-center gap-3 px-4 3xl:px-6 border-l"
+                  onClick={() => {
+                    setShowListExhibits(!showListExhibits)
+                  }}
+                >
+                  <ExhibitsIcon />
+                  <div className="font-normal flex text-sm items-center gap-3">
+                    <div>
+                      <span className="hidden 3xl:inline-block 3xl:me-1">
+                        Exhibits
+                      </span>
+                      <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span>
+                    </div>
+                    {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
+                    <ArrowUpIcon />
                   </div>
-                  {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
-                  <ArrowUpIcon />
                 </div>
-              </div>
-              {showListExhibits && (
-                <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
-                  <HookFormCheckBoxGroup
-                    control={controlExhibits}
-                    name="exhibits"
-                    options={exhibits}
-                    multiple
-                    lowerOptions={true}
-                    // gap="0"
-                    widthOptions="w-full"
-                    seprateLine={true} // classNameTitle='text-gray-2'
-                    maxWidthContent
-                  />
-                </div>
-              )}
-            </button>
-          )}
+                {showListExhibits && (
+                  <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
+                    <HookFormCheckBoxGroup
+                      control={controlExhibits}
+                      name="exhibits"
+                      options={exhibits}
+                      multiple
+                      lowerOptions={true}
+                      // gap="0"
+                      widthOptions="w-full"
+                      seprateLine={true} // classNameTitle='text-gray-2'
+                      maxWidthContent
+                    />
+                  </div>
+                )}
+              </button>
+            )}
           {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
             <button className="h-full relative" ref={dropUpRequire}>
               <div
@@ -1736,7 +1737,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 </div>
               </div>
               {showListRequirement && (
-                <div className="bg-gray-3 absolute h-fit max-w-max bottom-full shadow-questions-exhibits justify-center sapp-separateLine">
+                <div className="bg-gray-3 absolute h-fit bottom-full shadow-questions-exhibits justify-center sapp-separateLine 3xl:w-full">
                   {currentTabContent?.data?.requirements?.map(
                     (e: any, index: number) => {
                       return (

@@ -504,41 +504,47 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       )
                     })}
                 </div>
-                <div className="border border-b-gray-2 my-6"></div>
-                <div className="flex items-center mb-4">
-                  <div className="font-semibold">
-                    Exhibits ({activeQuestion.exhibits?.length || 0})
-                  </div>
-                  <div className="ml-4">
-                    <span className="text-state-error">* </span>
-                    <span className="text-gray-1">Click to view</span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  {activeQuestion.exhibits?.map((e, i) => {
-                    return (
-                      <div
-                        className="cursor-pointer hover:text-primary"
-                        key={e.id}
-                        onClick={(event) => {
-                          handleShowExhibit(
-                            {
-                              id: e.id,
-                              description: e.description,
-                              name: e.name,
-                              index: i + 1,
-                              files: e.files,
-                            },
-                            event,
-                          )
-                        }}
-                      >
-                        Exhibit {i + 1}: {e.name}
+                {activeQuestion?.exhibits?.length &&
+                  activeQuestion?.exhibits?.length > 0 && (
+                    <>
+                      <div className="border border-b-gray-2 my-6"></div>
+                      <div className="flex items-center mb-4">
+                        <div className="font-semibold">
+                          Exhibits ({activeQuestion.exhibits?.length || 0})
+                        </div>
+                        <div className="ml-4">
+                          <span className="text-state-error">* </span>
+                          <span className="text-gray-1">Click to view</span>
+                        </div>
                       </div>
-                    )
-                  })}
-                </div>
-                {activeQuestion.question_topic?.files?.length && (
+                      <div className="flex flex-col gap-2">
+                        {activeQuestion.exhibits?.map((e, i) => {
+                          return (
+                            <div
+                              className="cursor-pointer hover:text-primary"
+                              key={e.id}
+                              onClick={(event) => {
+                                handleShowExhibit(
+                                  {
+                                    id: e.id,
+                                    description: e.description,
+                                    name: e.name,
+                                    index: i + 1,
+                                    files: e.files,
+                                  },
+                                  event,
+                                )
+                              }}
+                            >
+                              Exhibit {i + 1}: {e.name}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </>
+                  )}
+
+                {activeQuestion.question_topic?.files?.length > 0 && (
                   <div>
                     <div className="border border-b-gray-2 my-6"></div>
                     <div>
