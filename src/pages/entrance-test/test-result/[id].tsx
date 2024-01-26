@@ -10,6 +10,7 @@ import 'entrance-test-result-package/dist/index.css'
 import { useRouter } from 'next/router'
 import TableEntranceResult from '../table-result/[id]'
 import { LAYOUT } from '@utils/constants'
+import { CloseIcon } from '@assets/icons'
 const TestEntranceResult = ({ chartData }: any) => {
   // console.log(chartData);
   const router = useRouter()
@@ -17,13 +18,23 @@ const TestEntranceResult = ({ chartData }: any) => {
   // return <></>
 
   return (
-    <QuizResult
-      dataChart={chartData.chart_data}
-      onClick={() => {
-        router.push(`/entrance-test/table-result/${router.query.id}`)
-      }}
-      dataTable={chartData}
-    />
+    <div className="bg-white">
+      <div
+        className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
+        onClick={() => {
+          router.back()
+        }}
+      >
+        <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+      </div>
+      <QuizResult
+        dataChart={chartData.chart_data}
+        onClick={() => {
+          router.push(`/entrance-test/table-result/${router.query.id}`)
+        }}
+        dataTable={chartData}
+      />
+    </div>
   )
 }
 export async function getServerSideProps(context: any) {
