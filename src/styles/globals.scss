@@ -160,6 +160,10 @@ body *::-webkit-scrollbar-thumb:hover {
     list-style-type: disc;
   }
 
+  hr {
+    @apply border-default;
+  }
+
   .sapp_overlay_video {
     position: absolute;
     right: 50%;
