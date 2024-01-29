@@ -34,6 +34,7 @@ const Course = ({
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
   const [openActive, setOpenActive] = useState<boolean>(false)
+  const [timeActive, setTimeActive] = useState<string>()
   // const handleOnClick = () => {
   //   setOpen(true)
   // }
@@ -208,6 +209,18 @@ const Course = ({
 
   const courseAction = () => {
     if (determineButtonToShow === 'Active') {
+      if (classInstance?.duration_type === 'FLEXIBLE') {
+        setTimeActive(Number(classInstance?.flexible_days))
+      } else {
+        const parsedSpecificDate = parseISO(
+          student?.finished_at as any,
+        ).setUTCHours(0, 0, 0, 0)
+        const getDateActive = differenceInDays(
+          startOfDay(parsedSpecificDate),
+          startOfDay(currentDate),
+        ) as any
+        setTimeActive(Number(getDateActive + 1))
+      }
       setOpenActive(true)
     } else if (determineButtonToShow === 'Extend') {
       student?.extend_count === 0 ? extendCourse() : setOpenExtend(true)
@@ -385,6 +398,7 @@ const Course = ({
       )}
       <PopupExtend open={openExtend} setOpen={setOpenExtend} />
       <PopupActive
+        time={timeActive}
         open={openActive}
         setOpen={setOpenActive}
         activeCourse={activeCourse}
