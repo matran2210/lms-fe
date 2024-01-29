@@ -212,11 +212,11 @@ const Course = ({
       if (classInstance?.duration_type === 'FLEXIBLE') {
         setTimeActive(Number(classInstance?.flexible_days))
       } else {
-        const parsedSpecificDate = parseISO(
-          student?.finished_at as any,
+        const classFinishedAt = parseISO(
+          classInstance?.finished_at as any,
         ).setUTCHours(0, 0, 0, 0)
         const getDateActive = differenceInDays(
-          startOfDay(parsedSpecificDate),
+          startOfDay(classFinishedAt),
           startOfDay(currentDate),
         ) as any
         setTimeActive(Number(getDateActive + 1))
