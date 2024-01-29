@@ -1,5 +1,9 @@
+import { CloseIcon } from '@assets/icons'
+import { StreamPlayerApi } from '@cloudflare/stream-react'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
+import PdfViewer from '@components/base/pdf/pdf-viewer'
+import MovableWindow from '@components/base/window'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
@@ -14,6 +18,7 @@ import {
 } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
+import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, {
@@ -33,11 +38,9 @@ import {
   getCourseActivityTapById,
   getDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { clearNote } from 'src/redux/slice/Course/NotesList'
-import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
-import { StreamPlayerApi } from '@cloudflare/stream-react'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import PopupViewPdf from '@components/base/pdf/popupViewPdf'
+import { clearNote } from 'src/redux/slice/Course/NotesList'
+import { IActivity } from 'src/type/course/my-course/Activity'
 
 type Props = {
   activity: IActivity
@@ -61,8 +64,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const router = useRouter()
   const activityType = activity?.display_icon
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
-
+  // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+  const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
@@ -286,7 +290,39 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     const nextIndex = (currentIndex || 0) + 1
     return selector.tabs?.[nextIndex]?.id
   }
+  const handleOpenScratchPad = (
+    data: any,
+    file?: string,
+    fileName?: string,
+  ) => {
+    // console.log(file);
 
+    setOnFocusingPad('')
+    setOpenScratchPad((prev) => {
+      let arr = [...prev]
+      if (data.type === 'file') {
+        arr.push({
+          type: data.type,
+          file: file,
+          id: uniqueId('file'),
+          fileName: fileName,
+        })
+      } else if (data.type === 'exhibits') {
+        arr.push({
+          id: uniqueId('exhibits'),
+          ...data,
+        })
+      }
+      return arr
+    })
+  }
+  const handleCloseScratchPad = (pad: any) => {
+    setOpenScratchPad((prev) => {
+      let arr = [...prev]
+      const newArr = arr.filter((e) => e.id !== pad.id)
+      return newArr
+    })
+  }
   const getCourseIcon = (type: String) => {
     if (type === 'TEXT') {
       return <SappIcon icon="course_text"></SappIcon>
@@ -402,10 +438,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     <div
                       className="cursor-pointer text-state-info hover:underline"
                       onClick={() => {
-                        setOpenPdf({
-                          status: true,
-                          url: e.resource.url,
-                        })
+                        handleOpenScratchPad(
+                          {
+                            type: 'file',
+                          },
+                          e.resource.url,
+                          e.resource.name,
+                        )
                       }}
                       key={index}
                     >
@@ -463,6 +502,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           }
                           document_id={e.id}
                           is_graded={e.quiz?.is_graded || false}
+                          setOpenFile={handleOpenScratchPad}
                         ></QuizDocument>
                       </div>
                     )
@@ -616,11 +656,111 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       <div className="shadow-activity">
         <Discussion class_id={(router.query.classId as string) || ''} />
       </div>
-      <PopupViewPdf
+      {openScratchPad.map((e, index: number) => {
+        if (e.type === 'file') {
+          return (
+            <MovableWindow
+              position={{
+                width: '595px',
+                height: '842px',
+                top: 'calc(50% - 421px)',
+                left: 'calc(50% - 300px)',
+              }}
+              key={e.id}
+              onClick={() => setOnFocusingPad(e.id)}
+              zIndex={
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 1400
+                  : index + 1400
+              }
+              fixed
+              // not_resizable
+              // className='pointer-events-none'
+            >
+              <div className="absolute h-full w-full  top-0 left-0 border">
+                <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
+                  <div className="text-sm font-normal truncate">
+                    {e.fileName}
+                  </div>
+                  {/* <CloseIcon */}
+                  <button onClick={() => handleCloseScratchPad(e)}>
+                    <CloseIcon />
+                  </button>
+                </div>
+                <div
+                  className="overflow-auto p-4 bg-white"
+                  style={{ height: 'calc(100% - 40px' }}
+                >
+                  {/* <div className='flex flex-'> */}
+                  <PdfViewer file={e.file} />
+                </div>
+                {/* </div> */}
+              </div>
+            </MovableWindow>
+          )
+        } else if (e.type === 'exhibits') {
+          return (
+            <MovableWindow
+              position={{
+                width: '600px',
+                height: '400px',
+                top: 'calc(50% - 250px)',
+                left: 'calc(50% - 200px)',
+              }}
+              key={e.id}
+              onClick={() => setOnFocusingPad(e.id)}
+              zIndex={
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 1400
+                  : index + 1400
+              }
+            >
+              <div className="absolute h-full w-full  top-0 left-0 border">
+                <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
+                  <div className="truncate">
+                    <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                      e?.index + 1
+                    }: `}</span>
+                    {e?.name}
+                  </div>
+                  <button onClick={() => handleCloseScratchPad(e)}>
+                    <CloseIcon />
+                  </button>
+                </div>
+                <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                  <EditorReader
+                    text_editor_content={e?.description}
+                    className=" w-full "
+                  />
+                  {e?.files?.length > 0 &&
+                    e?.files.map((e: any, index: number) => {
+                      return (
+                        <div
+                          key={index}
+                          className="cursor-pointer text-state-info hover:underline"
+                          onClick={() =>
+                            handleOpenScratchPad(
+                              { type: 'file' },
+                              e.resource.url,
+                              e.resource.name,
+                            )
+                          }
+                        >
+                          {e.resource.name}
+                        </div>
+                      )
+                    })}
+                </div>
+              </div>
+            </MovableWindow>
+          )
+        }
+      })}
+      {/* <PopupViewPdf
         open={openPdf?.status || false}
         setOpen={setOpenPdf}
         url={openPdf?.url || ''}
-      />
+      /> */}
     </div>
   )
 }

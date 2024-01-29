@@ -20,11 +20,11 @@ import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
+import PDFViewer from '@components/base/pdf/pdf-viewer'
 import TabSlide from '@components/base/tabSlide/TabSlide'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
-import { formatTime } from '@components/common/timer'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -32,11 +32,11 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
 import { removeJwtToken } from '@utils/helpers/authen'
 import {
-  DeserializeHighlight,
   runHighlight,
   setCookieActToken,
   setCookieRefreshToken,
@@ -48,21 +48,15 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import { useAppDispatch } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
-import QuitTestModal from '../courses/test/quit-test'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { RESOURCE_LOCATION } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import dynamic from 'next/dynamic'
-import PopupViewPdf from '@components/base/pdf/popupViewPdf'
-import LimitQuizModal from './limitQuizModal'
-import useCountdown from '@components/auth/Countdown'
 import CountDown from './countdown'
-import PDFViewer from '@components/base/pdf/pdf-viewer'
+import LimitQuizModal from './limitQuizModal'
 type Window = {
   userAgreed: any
 }
@@ -1997,11 +1991,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         location={`question-answer/${openUpload.question_id}`}
         setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
       />
-      <PopupViewPdf
+      {/* <PopupViewPdf
         open={openPdf?.status || false}
         setOpen={setOpenPdf}
         url={openPdf?.url || ''}
-      />
+      /> */}
     </div>
   )
 }
