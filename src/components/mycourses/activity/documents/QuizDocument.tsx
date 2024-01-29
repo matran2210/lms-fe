@@ -33,6 +33,7 @@ type Props = {
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   document_id: string
   is_graded?: boolean
+  setOpenFile?: any
 }
 
 const QuizDocument = ({
@@ -43,6 +44,7 @@ const QuizDocument = ({
   grading_preference,
   document_id,
   is_graded,
+  setOpenFile,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -289,6 +291,7 @@ const QuizDocument = ({
             ref={questionRef}
             key={quizComponentKey}
             document_id={document_id}
+            setOpenFile={setOpenFile}
           />
         )}
       </div>

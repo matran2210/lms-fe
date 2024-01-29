@@ -11,7 +11,6 @@ import EditorReader from '@components/base/editor/EditorReader'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
-import { formatTime } from '@components/common/timer'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -19,6 +18,7 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { LAYOUT } from '@utils/constants'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
@@ -35,10 +35,8 @@ import {
   loadMoreQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import ConFirmSubmit from '../test/conFirmSubmit'
 import QuitTestModal from '../courses/test/quit-test'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import PopupViewPdf from '@components/base/pdf/popupViewPdf'
+import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
 
 const CaseStudyDetail = ({ questions }: any) => {

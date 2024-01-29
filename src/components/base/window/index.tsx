@@ -9,6 +9,7 @@ interface IProps {
   zIndex?: number
   className?: string
   not_resizable?: boolean
+  fixed?: boolean
 }
 const MovableWindow = ({
   children,
@@ -18,6 +19,7 @@ const MovableWindow = ({
   zIndex,
   className,
   not_resizable = false,
+  fixed = false,
 }: IProps) => {
   const elementRef = useRef<HTMLDivElement>(null)
 
@@ -35,7 +37,9 @@ const MovableWindow = ({
   return (
     <div
       ref={elementRef}
-      className={`sapp-opacity-bg-border resizable moveable-resizable min-w-fit shadow-preview ${className} absolute`}
+      className={`sapp-opacity-bg-border resizable moveable-resizable min-w-fit shadow-preview ${className} ${
+        fixed ? 'fixed' : 'absolute'
+      }`}
       style={{
         width: position?.width,
         height: position?.height,
