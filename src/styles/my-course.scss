@@ -114,4 +114,8 @@
   ul {
     list-style-type: disc;
   }
+
+  hr {
+    @apply border-default;
+  }
 }
