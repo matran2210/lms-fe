@@ -3424,10 +3424,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.26:
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.26.tgz#d3ee66a6411b382f2d22a8ab4d4ea4a5d94d70ce"
-  integrity sha512-xFeijYXLNRChEoD2rDoXufwFiUgVseRrydSh/rxqOgfs26s6RE7oW4gVl8f96eKpIXnTVnaz5UUDSYyLVIBE9Q==
+explanation-package@^1.0.27:
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.27.tgz#6b5240d2389814a661d5d193f4f2af8ba3fce122"
+  integrity sha512-9vCPLlefS8kAliko/txX3Vs/AEguTnwiJbkrT7qoGW7QkEWUlrFrYmHezXviedV5dVnTDefJfzD28p8QtR99yA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
