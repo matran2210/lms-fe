@@ -94,6 +94,7 @@ export interface IClasses {
   updated_at: Date | null
   class_user_instances: IClassUserInstances[]
   course_type: string
+  flexible_days: number
 }
 
 export interface ICourse {

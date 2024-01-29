@@ -34,7 +34,7 @@ const Course = ({
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
   const [openActive, setOpenActive] = useState<boolean>(false)
-  const [timeActive, setTimeActive] = useState<string>()
+  const [timeActive, setTimeActive] = useState<number>()
   // const handleOnClick = () => {
   //   setOpen(true)
   // }
