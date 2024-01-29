@@ -200,7 +200,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 }),
               )
             }
-            setOpenPdf={setOpenPdf}
+            setOpenPdf={handleOpenScratchPad}
             setUnsavedChanges={setUnsavedChanges}
           />
         )
@@ -506,7 +506,11 @@ const CaseStudyDetail = ({ questions }: any) => {
       return newArr
     })
   }
-  const handleOpenScratchPad = (type: string) => {
+  const handleOpenScratchPad = (
+    type: string,
+    file?: string,
+    fileName?: string,
+  ) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       if (type === 'scratch_pad') {
@@ -518,6 +522,13 @@ const CaseStudyDetail = ({ questions }: any) => {
           }
         }
         arr.push({ id: 'calculator', type: 'calculator' })
+      } else if (type === 'file') {
+        arr.push({
+          type: type,
+          file: file,
+          id: uniqueId('file'),
+          fileName: fileName,
+        })
       }
       return arr
     })
@@ -659,7 +670,11 @@ const CaseStudyDetail = ({ questions }: any) => {
                     <div
                       className="cursor-pointer text-state-info hover:underline"
                       onClick={() =>
-                        setOpenPdf({ status: true, url: e.resource.url })
+                        handleOpenScratchPad(
+                          'file',
+                          e.resource.url,
+                          e.resource.name,
+                        )
                       }
                       key={index}
                     >
@@ -909,11 +924,11 @@ const CaseStudyDetail = ({ questions }: any) => {
           )
         }
       />
-      <PopupViewPdf
+      {/* <PopupViewPdf
         open={openPdf?.status || false}
         setOpen={setOpenPdf}
         url={openPdf?.url || ''}
-      />
+      /> */}
     </div>
   )
 }
