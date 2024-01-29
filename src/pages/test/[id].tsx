@@ -62,6 +62,7 @@ import PopupViewPdf from '@components/base/pdf/popupViewPdf'
 import LimitQuizModal from './limitQuizModal'
 import useCountdown from '@components/auth/Countdown'
 import CountDown from './countdown'
+import PDFViewer from '@components/base/pdf/pdf-viewer'
 type Window = {
   userAgreed: any
 }
@@ -222,7 +223,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               setOpenUpload({ status: true, question_id: currentPage })
             }
             handleClearFile={handleClearFile}
-            setOpenPdf={setOpenPdf}
+            setOpenPdf={handleOpenScratchPad}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             setUnsavedChanges={setUnsavedChanges}
           />
@@ -308,7 +309,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     return -1
     // if (!arr.includes('calculator')) {
   }, [openScratchPad])
-  const handleOpenScratchPad = (type: string) => {
+  const handleOpenScratchPad = (
+    type: string,
+    file?: string,
+    fileName?: string,
+  ) => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
@@ -326,6 +331,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         // if (!arr.includes('calculator')) {
         arr.push({ id: 'calculator', type: 'calculator' })
         // }
+      } else if (type === 'file') {
+        arr.push({
+          type: type,
+          file: file,
+          id: uniqueId('file'),
+          fileName: fileName,
+        })
       }
       return arr
     })
@@ -1392,7 +1404,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     <div
                       className="cursor-pointer text-state-info hover:underline"
                       onClick={() =>
-                        setOpenPdf({ status: true, url: e.resource.url })
+                        handleOpenScratchPad(
+                          'file',
+                          e.resource.url,
+                          e.resource.name,
+                        )
                       }
                       key={index}
                     >
@@ -1466,8 +1482,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   return (
                     <div
                       className="cursor-pointer text-state-info hover:underline"
-                      onClick={() =>
-                        setOpenPdf({ status: true, url: e.resource.url })
+                      onClick={
+                        () =>
+                          handleOpenScratchPad(
+                            'file',
+                            e.resource.url,
+                            e.resource.name,
+                          )
+                        // setOpenPdf({ status: true, url: e.resource.url })
                       }
                       key={index}
                     >
@@ -1554,7 +1576,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   placeholder="Take a note..."
                   control={control}
                   name={e.id}
-                  className="w-full h-[calc(100%-40px)] sapp-text-area px-5 py-3 placeholder:text-sm placeholder:font-normal"
+                  className="w-full h-[calc(100%-40px)] sapp-text-area px-5 py-3 placeholder:text-sm placeholder:font-normal not-resizer"
                 />
                 {/* </div> */}
               </div>
@@ -1605,7 +1627,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                           key={index}
                           className="cursor-pointer text-state-info hover:underline"
                           onClick={() =>
-                            setOpenPdf({ status: true, url: e.resource.url })
+                            handleOpenScratchPad(
+                              'file',
+                              e.resource.url,
+                              e.resource.name,
+                            )
                           }
                         >
                           {e.resource.name}
@@ -1613,6 +1639,46 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                       )
                     })}
                 </div>
+              </div>
+            </MovableWindow>
+          )
+        } else if (e.type === 'file') {
+          return (
+            <MovableWindow
+              position={{
+                width: '595px',
+                height: '842px',
+                top: 'calc(50% - 421px)',
+                left: 'calc(50% - 300px)',
+              }}
+              key={e.id}
+              onClick={() => setOnFocusingPad(e.id)}
+              zIndex={
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 1400
+                  : index + 1400
+              }
+              // not_resizable
+              // className='pointer-events-none'
+            >
+              <div className="absolute h-full w-full  top-0 left-0 border">
+                <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
+                  <div className="text-sm font-normal truncate">
+                    {e.fileName}
+                  </div>
+                  {/* <CloseIcon */}
+                  <button onClick={() => handleCloseScratchPad(e)}>
+                    <CloseIcon />
+                  </button>
+                </div>
+                <div
+                  className="overflow-auto p-4 bg-white"
+                  style={{ height: 'calc(100% - 40px' }}
+                >
+                  {/* <div className='flex flex-'> */}
+                  <PDFViewer file={e.file} />
+                </div>
+                {/* </div> */}
               </div>
             </MovableWindow>
           )

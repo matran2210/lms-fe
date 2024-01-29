@@ -1,5 +1,6 @@
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
-export default function PDFViewer({ file }: { file: string }) {
+import { memo } from 'react'
+const PDFViewer = ({ file }: { file: string }) => {
   const docs = [
     { uri: file }, // Remote file
   ]
@@ -8,7 +9,12 @@ export default function PDFViewer({ file }: { file: string }) {
       documents={docs}
       pluginRenderers={DocViewerRenderers}
       initialActiveDocument={docs[1]}
-      style={{ height: 'calc(100vh - 104px' }}
+      config={{
+        header: {
+          disableHeader: true,
+        },
+      }}
     />
   )
 }
+export default memo(PDFViewer)

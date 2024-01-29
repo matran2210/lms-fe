@@ -8,6 +8,7 @@ interface IProps {
   onClick?: any
   zIndex?: number
   className?: string
+  not_resizable?: boolean
 }
 const MovableWindow = ({
   children,
@@ -16,6 +17,7 @@ const MovableWindow = ({
   onClick,
   zIndex,
   className,
+  not_resizable = false,
 }: IProps) => {
   const elementRef = useRef<HTMLDivElement>(null)
 
@@ -26,6 +28,7 @@ const MovableWindow = ({
         ({ top, left, width, height }) => {
           getResize && getResize({ top, left, width, height })
         },
+        not_resizable,
       )
     }
   }, [])

@@ -504,7 +504,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       )
                     })}
                 </div>
-                {activeQuestion?.exhibits?.length &&
+                {activeQuestion?.exhibits &&
                   activeQuestion?.exhibits?.length > 0 && (
                     <>
                       <div className="border border-b-gray-2 my-6"></div>
