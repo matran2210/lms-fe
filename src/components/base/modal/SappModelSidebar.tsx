@@ -73,7 +73,7 @@ function SappModelSidebar({
     }
     setTimeout(() => {
       setOpen && setOpen(!open)
-    }, 100)
+    }, 250)
   }
 
   return (

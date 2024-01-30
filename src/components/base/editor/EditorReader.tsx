@@ -2,6 +2,7 @@ import { DeserializeHighlight } from '@utils/index'
 import parseHTML from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
+import { video_url } from '@utils/constants'
 
 type Props = {
   text_editor_content: string | undefined
@@ -87,7 +88,7 @@ const EditorReader = ({
       const src = video.querySelector('source')?.getAttribute('token')
       if (src && src !== 'null' && video.tagName === 'VIDEO') {
         var iframe = document.createElement('iframe')
-        iframe.src = `https://customer-qf43f9e6huohhr1o.cloudflarestream.com/${src}/iframe?autoplay=true`
+        iframe.src = `${video_url}${src}/iframe?autoplay=true`
         iframe.id = video.id
         iframe.className = video.className
         iframe.style.cssText = video.style.cssText

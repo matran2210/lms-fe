@@ -5,8 +5,9 @@ interface IProps {
   open: boolean
   setOpen: any
   activeCourse: () => void
+  time?: number
 }
-const PopupActive = ({ open, setOpen, activeCourse }: IProps) => {
+const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
   const handleCancel = () => {
     setOpen(false)
   }
@@ -44,7 +45,8 @@ const PopupActive = ({ open, setOpen, activeCourse }: IProps) => {
         Active Course?
       </div>
       <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 2xl:mb-11">
-        You will have 60 days from the activation date to study this course
+        You will have {time} {time > 1 ? 'days' : 'day'} from the activation
+        date to study this course
       </div>
     </SappModal>
   )
