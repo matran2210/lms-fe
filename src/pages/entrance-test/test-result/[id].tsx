@@ -12,7 +12,6 @@ import TableEntranceResult from '../table-result/[id]'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 const TestEntranceResult = ({ chartData }: any) => {
-  // console.log(chartData);
   const router = useRouter()
   //todo: call api, make UI
   // return <></>
