@@ -28,9 +28,16 @@ const NotifyList = ({
     id: string,
     redirect: string | null,
     content: string,
+    tag: string | null,
   ) => {
     await getApiNotificationDetail(id, redirect, content)
-    redirect === null && setOpen(!open)
+    const regexTagA = /<a\b[^>]*>(.*?)<\/a>/
+    const containsAnchorTag = regexTagA.test(content)
+    if (containsAnchorTag && tag === 'STRONG') {
+      setOpen(false)
+    } else if (redirect === null) {
+      setOpen(!open)
+    }
   }
 
   return (
@@ -43,11 +50,12 @@ const NotifyList = ({
             className={`w-full p-6 pb-5 cursor-pointer relative flex items-center gap-4 ${
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
-            onClick={() => {
+            onClick={(e: React.MouseEvent<HTMLElement>) => {
               handleOpen(
                 notifyItem?.id,
                 notifyItem?.created_by ?? null,
                 notifyItem?.content,
+                (e.target as HTMLElement).tagName,
               )
             }}
           >
@@ -76,9 +84,7 @@ const NotifyList = ({
                 dangerouslySetInnerHTML={{
                   __html: notifyItem?.created_by
                     ? notifyItem?.title
-                    : notifyItem?.content
-                        .replace(/<a\b[^>]*>/g, '')
-                        .replace(/<\/a>/g, ''),
+                    : notifyItem?.content,
                 }}
               ></h4>
               <p className="text-gray-1 text-medium-sm text-left">
