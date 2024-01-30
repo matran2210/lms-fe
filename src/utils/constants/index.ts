@@ -14,3 +14,5 @@ export const TEST_TYPE = {
   TOPIC_TEST: 'Topic Test',
   CHAPTER_TEST: 'Chapter Test',
 } as any
+
+export const video_url = process.env.NEXT_PUBLIC_VIDEO_URL

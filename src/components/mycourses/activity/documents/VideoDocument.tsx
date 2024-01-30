@@ -28,6 +28,7 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import { video_url } from '@utils/constants'
 
 type Props = {
   videos?: IVideo[]
@@ -92,7 +93,6 @@ const VideoDocument = ({
       debouncedHandleSetCurrentVideo?.current(videos?.[0])
     }
   }, [])
-
   useEffect(() => {
     handleProcess &&
       streamRef?.current !== null &&
@@ -130,7 +130,7 @@ const VideoDocument = ({
     setCurrentVideo(v)
     quizTimed.current = listQuestion.reduce(
       (obj, e) => {
-        if (e.time && e.id) {
+        if (e.time !== undefined && e.id !== undefined) {
           if (!obj[e.time]) {
             obj[e.time] = []
           }
@@ -195,7 +195,6 @@ const VideoDocument = ({
   const [hideVideo, setHideVideo] = useState(false)
   const handleTrackTime = (time: number, questionId?: string) => {
     const quizAtTime = quizTimed.current?.[time]
-
     if (quizAtTime && quizAtTime.length > 0) {
       let foundQuestion = null
 
@@ -491,10 +490,7 @@ const VideoDocument = ({
             onTimeUpdate: handleOnTimeUpdate,
             src:
               currentVideo?.file?.resource?.url
-                ?.replace(
-                  'https://customer-qf43f9e6huohhr1o.cloudflarestream.com/',
-                  '',
-                )
+                ?.replace(video_url || '', '')
                 .replace('/manifest/video.m3u8', '') || '',
           }}
           pauseOnSeek={true}

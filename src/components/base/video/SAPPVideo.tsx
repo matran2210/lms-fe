@@ -1,5 +1,6 @@
 import { Stream, StreamPlayerApi, StreamProps } from '@cloudflare/stream-react'
 import styles from '@styles/components/SAPPVideo.module.scss'
+import { video_url } from '@utils/constants'
 import { MutableRefObject, useEffect, useRef } from 'react'
 interface IProp {
   options: StreamProps
@@ -40,7 +41,7 @@ const SAPPVideo = ({
           <Stream
             {...options}
             // key={options.src}
-            src={`https://customer-qf43f9e6huohhr1o.cloudflarestream.com/${options.src}/iframe?allowfullscreen=false`}
+            src={`${video_url}${options.src}/iframe?allowfullscreen=false`}
             streamRef={streamRef}
             controls
             responsive={false}
