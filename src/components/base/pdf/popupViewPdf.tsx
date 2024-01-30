@@ -30,7 +30,7 @@ const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
       showCancelButton={false}
       showOkButton={false}
       showHeader={true}
-      refClass="md:px-8 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all w-[75vh] h-full"
+      refClass="md:px-8 pt-4 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all w-[75vh] h-full"
       size=""
       footerButtonClassName="flex flex-col-reverse gap-6"
       childClass="flex flex-col justify-center items-center"
@@ -39,8 +39,11 @@ const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
       fullWidthBtn={true}
       closeAfterSubmit={true}
       buttonSize="extra"
+      showCloseIcon
     >
-      <PDFViewer file={url} />
+      <div className="h-[calc(100vh-104px)] w-full">
+        <PDFViewer file={url} />
+      </div>
     </SappModal>
   )
 }

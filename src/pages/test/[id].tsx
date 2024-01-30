@@ -20,11 +20,11 @@ import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
+import PDFViewer from '@components/base/pdf/pdf-viewer'
 import TabSlide from '@components/base/tabSlide/TabSlide'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
-import { formatTime } from '@components/common/timer'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -32,11 +32,11 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
+import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
 import { removeJwtToken } from '@utils/helpers/authen'
 import {
-  DeserializeHighlight,
   runHighlight,
   setCookieActToken,
   setCookieRefreshToken,
@@ -48,20 +48,15 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import { useAppDispatch } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
-import QuitTestModal from '../courses/test/quit-test'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { RESOURCE_LOCATION } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import dynamic from 'next/dynamic'
-import PopupViewPdf from '@components/base/pdf/popupViewPdf'
-import LimitQuizModal from './limitQuizModal'
-import useCountdown from '@components/auth/Countdown'
 import CountDown from './countdown'
+import LimitQuizModal from './limitQuizModal'
 type Window = {
   userAgreed: any
 }
@@ -222,7 +217,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               setOpenUpload({ status: true, question_id: currentPage })
             }
             handleClearFile={handleClearFile}
-            setOpenPdf={setOpenPdf}
+            setOpenPdf={handleOpenScratchPad}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             setUnsavedChanges={setUnsavedChanges}
           />
@@ -308,7 +303,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     return -1
     // if (!arr.includes('calculator')) {
   }, [openScratchPad])
-  const handleOpenScratchPad = (type: string) => {
+  const handleOpenScratchPad = (
+    type: string,
+    file?: string,
+    fileName?: string,
+  ) => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
@@ -326,6 +325,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         // if (!arr.includes('calculator')) {
         arr.push({ id: 'calculator', type: 'calculator' })
         // }
+      } else if (type === 'file') {
+        arr.push({
+          type: type,
+          file: file,
+          id: uniqueId('file'),
+          fileName: fileName,
+        })
       }
       return arr
     })
@@ -1392,7 +1398,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     <div
                       className="cursor-pointer text-state-info hover:underline"
                       onClick={() =>
-                        setOpenPdf({ status: true, url: e.resource.url })
+                        handleOpenScratchPad(
+                          'file',
+                          e.resource.url,
+                          e.resource.name,
+                        )
                       }
                       key={index}
                     >
@@ -1466,8 +1476,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   return (
                     <div
                       className="cursor-pointer text-state-info hover:underline"
-                      onClick={() =>
-                        setOpenPdf({ status: true, url: e.resource.url })
+                      onClick={
+                        () =>
+                          handleOpenScratchPad(
+                            'file',
+                            e.resource.url,
+                            e.resource.name,
+                          )
+                        // setOpenPdf({ status: true, url: e.resource.url })
                       }
                       key={index}
                     >
@@ -1554,7 +1570,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   placeholder="Take a note..."
                   control={control}
                   name={e.id}
-                  className="w-full h-[calc(100%-40px)] sapp-text-area px-5 py-3 placeholder:text-sm placeholder:font-normal"
+                  className="w-full h-[calc(100%-40px)] sapp-text-area px-5 py-3 placeholder:text-sm placeholder:font-normal not-resizer"
                 />
                 {/* </div> */}
               </div>
@@ -1605,7 +1621,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                           key={index}
                           className="cursor-pointer text-state-info hover:underline"
                           onClick={() =>
-                            setOpenPdf({ status: true, url: e.resource.url })
+                            handleOpenScratchPad(
+                              'file',
+                              e.resource.url,
+                              e.resource.name,
+                            )
                           }
                         >
                           {e.resource.name}
@@ -1613,6 +1633,46 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                       )
                     })}
                 </div>
+              </div>
+            </MovableWindow>
+          )
+        } else if (e.type === 'file') {
+          return (
+            <MovableWindow
+              position={{
+                width: '595px',
+                height: '842px',
+                top: 'calc(50% - 421px)',
+                left: 'calc(50% - 300px)',
+              }}
+              key={e.id}
+              onClick={() => setOnFocusingPad(e.id)}
+              zIndex={
+                onFocusingPad === e.id
+                  ? openScratchPad.length + 1400
+                  : index + 1400
+              }
+              // not_resizable
+              // className='pointer-events-none'
+            >
+              <div className="absolute h-full w-full  top-0 left-0 border">
+                <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
+                  <div className="text-sm font-normal truncate">
+                    {e.fileName}
+                  </div>
+                  {/* <CloseIcon */}
+                  <button onClick={() => handleCloseScratchPad(e)}>
+                    <CloseIcon />
+                  </button>
+                </div>
+                <div
+                  className="overflow-auto p-4 bg-white"
+                  style={{ height: 'calc(100% - 40px' }}
+                >
+                  {/* <div className='flex flex-'> */}
+                  <PDFViewer file={e.file} />
+                </div>
+                {/* </div> */}
               </div>
             </MovableWindow>
           )
@@ -1679,43 +1739,44 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               </div>
             </div>
           </button>
-          {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-            <button className="h-full relative" ref={dropUpRef}>
-              <div
-                className="flex items-center gap-3 px-4 3xl:px-6 border-l"
-                onClick={() => {
-                  setShowListExhibits(!showListExhibits)
-                }}
-              >
-                <ExhibitsIcon />
-                <div className="font-normal flex text-sm items-center gap-3">
-                  <div>
-                    <span className="hidden 3xl:inline-block 3xl:me-1">
-                      Exhibits
-                    </span>
-                    <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span>
+          {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
+            currentTabContent?.data?.exhibits?.length > 0 && (
+              <button className="h-full relative" ref={dropUpRef}>
+                <div
+                  className="flex items-center gap-3 px-4 3xl:px-6 border-l"
+                  onClick={() => {
+                    setShowListExhibits(!showListExhibits)
+                  }}
+                >
+                  <ExhibitsIcon />
+                  <div className="font-normal flex text-sm items-center gap-3">
+                    <div>
+                      <span className="hidden 3xl:inline-block 3xl:me-1">
+                        Exhibits
+                      </span>
+                      <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span>
+                    </div>
+                    {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
+                    <ArrowUpIcon />
                   </div>
-                  {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
-                  <ArrowUpIcon />
                 </div>
-              </div>
-              {showListExhibits && (
-                <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
-                  <HookFormCheckBoxGroup
-                    control={controlExhibits}
-                    name="exhibits"
-                    options={exhibits}
-                    multiple
-                    lowerOptions={true}
-                    // gap="0"
-                    widthOptions="w-full"
-                    seprateLine={true} // classNameTitle='text-gray-2'
-                    maxWidthContent
-                  />
-                </div>
-              )}
-            </button>
-          )}
+                {showListExhibits && (
+                  <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
+                    <HookFormCheckBoxGroup
+                      control={controlExhibits}
+                      name="exhibits"
+                      options={exhibits}
+                      multiple
+                      lowerOptions={true}
+                      // gap="0"
+                      widthOptions="w-full"
+                      seprateLine={true} // classNameTitle='text-gray-2'
+                      maxWidthContent
+                    />
+                  </div>
+                )}
+              </button>
+            )}
           {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
             <button className="h-full relative" ref={dropUpRequire}>
               <div
@@ -1736,7 +1797,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 </div>
               </div>
               {showListRequirement && (
-                <div className="bg-gray-3 absolute h-fit max-w-max bottom-full shadow-questions-exhibits justify-center sapp-separateLine">
+                <div className="bg-gray-3 absolute h-fit bottom-full shadow-questions-exhibits justify-center sapp-separateLine 3xl:w-full">
                   {currentTabContent?.data?.requirements?.map(
                     (e: any, index: number) => {
                       return (
@@ -1930,11 +1991,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         location={`question-answer/${openUpload.question_id}`}
         setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
       />
-      <PopupViewPdf
+      {/* <PopupViewPdf
         open={openPdf?.status || false}
         setOpen={setOpenPdf}
         url={openPdf?.url || ''}
-      />
+      /> */}
     </div>
   )
 }

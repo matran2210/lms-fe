@@ -160,6 +160,10 @@ body *::-webkit-scrollbar-thumb:hover {
     list-style-type: disc;
   }
 
+  hr {
+    @apply border-default;
+  }
+
   .sapp_overlay_video {
     position: absolute;
     right: 50%;
@@ -391,7 +395,7 @@ body *::-webkit-scrollbar-thumb:hover {
 // }
 
 .resizable {
-  @apply bg-white absolute top-[100px] left-[100px] cursor-move;
+  @apply bg-white top-[100px] left-[100px] cursor-move;
 }
 
 .resizable .resizers {

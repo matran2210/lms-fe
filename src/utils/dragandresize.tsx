@@ -1,5 +1,6 @@
 export const moveAndResizeElement = (
   element: HTMLElement,
+
   callback: ({
     left,
     top,
@@ -11,6 +12,7 @@ export const moveAndResizeElement = (
     width: string
     height: string
   }) => void,
+  not_resizable?: boolean,
 ) => {
   let mousePosition: { x: number; y: number }
   let offset: [number, number] = [0, 0]
@@ -27,16 +29,18 @@ export const moveAndResizeElement = (
   let enable = false
 
   function handleDoubleClick(e: MouseEvent) {
-    enable = true
-    const resizable = document.body.querySelectorAll('.resizable.enable')
-    resizable.forEach((e) => {
-      e.classList.remove('enable')
-    })
-    let target = e.target as HTMLDivElement
-    if (!target.classList.contains('resizable')) {
-      target = target.closest('.resizable') as HTMLDivElement
+    if (!not_resizable) {
+      enable = true
+      const resizable = document.body.querySelectorAll('.resizable.enable')
+      resizable.forEach((e) => {
+        e.classList.remove('enable')
+      })
+      let target = e.target as HTMLDivElement
+      if (!target.classList.contains('resizable')) {
+        target = target.closest('.resizable') as HTMLDivElement
+      }
+      target.classList.add('enable')
     }
-    target.classList.add('enable')
   }
   const movablezone = element.querySelector('.sapp-movablezone') as any
   function handleMoveMouse(e: MouseEvent) {

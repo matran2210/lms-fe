@@ -1,6 +1,5 @@
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
-import PopupViewPdf from '@components/base/pdf/popupViewPdf'
 import MovableWindow from '@components/base/window'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
@@ -55,6 +54,7 @@ type Props = {
   activityId: string
   tabId: string
   quizId: string
+  setOpenFile?: any
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -66,6 +66,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       activityId,
       tabId,
       quizId,
+      setOpenFile,
     }: Props,
     ref,
   ) => {
@@ -92,16 +93,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       files: any
     }>()
 
-    const [showExhibit, setShowExhibit] = useState<{
-      id: string
-      description: string
-      index: number
-      name: string
-      top: string
-      left: string
-      files: any
-    }>()
-
+    // const [showExhibit, setShowExhibit] = useState<{
+    //   id: string
+    //   description: string
+    //   index: number
+    //   name: string
+    //   top: string
+    //   left: string
+    //   files: any
+    // }>()
     const [openUpload, setOpenUpload] = useState<any>({})
     const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
 
@@ -136,23 +136,23 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       setShowRequirement(data)
     }
 
-    const handleShowExhibit = (
-      params: {
-        id: string
-        description: string
-        index: number
-        name: string
-        files: any
-      },
-      event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    ) => {
-      var mouseY = event.pageY - 300
-      setShowExhibit({ ...params, top: mouseY + 'px', left: '33%' })
-    }
+    // const handleShowExhibit = (
+    //   params: {
+    //     id: string
+    //     description: string
+    //     index: number
+    //     name: string
+    //     files: any
+    //   },
+    //   event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    // ) => {
+    //   var mouseY = event.pageY - 300
+    //   setShowExhibit({ ...params, top: mouseY + 'px', left: '33%' })
+    // }
 
-    const handleCloseExhibit = () => {
-      setShowExhibit(undefined)
-    }
+    // const handleCloseExhibit = () => {
+    //   setShowExhibit(undefined)
+    // }
 
     const getValueFillText = () => {
       let value = []
@@ -495,7 +495,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         <div
                           className="cursor-pointer text-state-info hover:underline"
                           onClick={() =>
-                            setOpenPdf({ status: true, url: e.resource.url })
+                            setOpenFile &&
+                            setOpenFile(
+                              { type: 'file' },
+                              e.resource.url,
+                              e.resource.name,
+                            )
                           }
                           key={index}
                         >
@@ -504,41 +509,48 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       )
                     })}
                 </div>
-                <div className="border border-b-gray-2 my-6"></div>
-                <div className="flex items-center mb-4">
-                  <div className="font-semibold">
-                    Exhibits ({activeQuestion.exhibits?.length || 0})
-                  </div>
-                  <div className="ml-4">
-                    <span className="text-state-error">* </span>
-                    <span className="text-gray-1">Click to view</span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  {activeQuestion.exhibits?.map((e, i) => {
-                    return (
-                      <div
-                        className="cursor-pointer hover:text-primary"
-                        key={e.id}
-                        onClick={(event) => {
-                          handleShowExhibit(
-                            {
-                              id: e.id,
-                              description: e.description,
-                              name: e.name,
-                              index: i + 1,
-                              files: e.files,
-                            },
-                            event,
-                          )
-                        }}
-                      >
-                        Exhibit {i + 1}: {e.name}
+                {activeQuestion?.exhibits &&
+                  activeQuestion?.exhibits?.length > 0 && (
+                    <>
+                      <div className="border border-b-gray-2 my-6"></div>
+                      <div className="flex items-center mb-4">
+                        <div className="font-semibold">
+                          Exhibits ({activeQuestion.exhibits?.length || 0})
+                        </div>
+                        <div className="ml-4">
+                          <span className="text-state-error">* </span>
+                          <span className="text-gray-1">Click to view</span>
+                        </div>
                       </div>
-                    )
-                  })}
-                </div>
-                {activeQuestion.question_topic?.files?.length && (
+                      <div className="flex flex-col gap-2">
+                        {activeQuestion.exhibits?.map((e, i) => {
+                          return (
+                            <div
+                              className="cursor-pointer hover:text-primary"
+                              key={e.id}
+                              onClick={(event) => {
+                                setOpenFile &&
+                                  setOpenFile(
+                                    {
+                                      type: 'exhibits',
+                                      description: e.description,
+                                      name: e.name,
+                                      index: i + 1,
+                                      files: e.files,
+                                    },
+                                    event,
+                                  )
+                              }}
+                            >
+                              Exhibit {i + 1}: {e.name}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </>
+                  )}
+
+                {activeQuestion.question_topic?.files?.length > 0 && (
                   <div>
                     <div className="border border-b-gray-2 my-6"></div>
                     <div>
@@ -549,10 +561,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                             <div
                               className="cursor-pointer text-state-info hover:underline"
                               onClick={() => {
-                                setOpenPdf({
-                                  status: true,
-                                  url: e.resource.url,
-                                })
+                                setOpenFile &&
+                                  setOpenFile(
+                                    { type: 'file' },
+                                    e.resource.url,
+                                    e.resource.name,
+                                  )
                               }}
                               key={index}
                             >
@@ -633,61 +647,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             handleSaveFileEssay(e[0], openUpload.question_id, '')
           }
         />
-        <PopupViewPdf
+        {/* <PopupViewPdf
           open={openPdf?.status || false}
           setOpen={setOpenPdf}
           url={openPdf?.url || ''}
-        />
-        {showExhibit?.id && (
-          <MovableWindow
-            position={{
-              width: '624px',
-              height: '224px',
-              left: showExhibit.left,
-              top: showExhibit.top,
-            }}
-            zIndex={999}
-          >
-            <div className="w-full h-full absolute top-0 left-0 border bg-white py-4  flex flex-col">
-              <div className="flex items-center justify-between flex-none px-6">
-                <div>
-                  <span className="font-bold">
-                    Exhibit {showExhibit.index}:{' '}
-                  </span>
-                  {showExhibit.name}
-                </div>
-                <div onClick={() => handleCloseExhibit()}>
-                  <SappIcon
-                    icon="x"
-                    className="cursor-pointer hover:fill-primary"
-                  ></SappIcon>
-                </div>
-              </div>
-              <div className="flex-auto overflow-scroll px-6">
-                {showExhibit?.description && (
-                  <EditorReader
-                    className="editor-wrap mt-1.5"
-                    text_editor_content={showExhibit?.description}
-                  />
-                )}
-                {showExhibit?.files?.length > 0 &&
-                  showExhibit?.files.map((e: any, index: number) => {
-                    return (
-                      <div
-                        className="cursor-pointer text-state-info hover:underline"
-                        onClick={() =>
-                          setOpenPdf({ status: true, url: e.resource.url })
-                        }
-                        key={index}
-                      >
-                        {e.resource.name}
-                      </div>
-                    )
-                  })}
-              </div>
-            </div>
-          </MovableWindow>
-        )}
+        /> */}
       </div>
     )
   },
