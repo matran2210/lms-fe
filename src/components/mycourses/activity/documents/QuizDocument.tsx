@@ -348,7 +348,17 @@ const QuizDocument = ({
               if (loading) {
                 return
               }
-              if (isLastQuestion) {
+              if (
+                isLastQuestion &&
+                grading_preference === 'AFTER_EACH_QUESTION'
+              ) {
+                setRunHandleFinishQuiz((e) => e + 1)
+                return
+              }
+              if (
+                isLastQuestion &&
+                grading_preference !== 'AFTER_EACH_QUESTION'
+              ) {
                 handleConfirmQuestion(true)
               } else {
                 if (grading_preference !== 'AFTER_EACH_QUESTION') {
