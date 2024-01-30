@@ -15,6 +15,7 @@ import {
 } from 'src/constants'
 import PopupExtend from './PopupExtend'
 import PopupActive from './PopupActive'
+import PopupLesson from './PopupLesson'
 import CourseAPI from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { ICourseAll } from 'src/type/courses'
@@ -35,6 +36,7 @@ const Course = ({
   const [openExtend, setOpenExtend] = useState<boolean>(false)
   const [openActive, setOpenActive] = useState<boolean>(false)
   const [timeActive, setTimeActive] = useState<number>()
+  const [openLesson, setOpenLesson] = useState<boolean>(false)
   // const handleOnClick = () => {
   //   setOpen(true)
   // }
@@ -208,7 +210,9 @@ const Course = ({
   }
 
   const courseAction = () => {
-    if (determineButtonToShow === 'Active') {
+    if (classInstance?.type === 'LESSON' && student?.is_passed === false) {
+      setOpenLesson(true)
+    } else if (determineButtonToShow === 'Active') {
       if (classInstance?.duration_type === 'FLEXIBLE') {
         setTimeActive(Number(classInstance?.flexible_days))
       } else {
@@ -403,6 +407,7 @@ const Course = ({
         setOpen={setOpenActive}
         activeCourse={activeCourse}
       />
+      <PopupLesson open={openLesson} setOpen={setOpenLesson} />
     </>
   )
 }
