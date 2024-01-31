@@ -5,7 +5,7 @@ import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import QuizResult from 'entrance-test-result-package'
+import QuizResult from 'test-result-package'
 import 'entrance-test-result-package/dist/index.css'
 import { useRouter } from 'next/router'
 import TableEntranceResult from '../table-result/[id]'
@@ -17,7 +17,7 @@ const TestEntranceResult = ({ chartData }: any) => {
   // return <></>
 
   return (
-    <div className="bg-white">
+    <div className="bg-gray-4">
       <div
         className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
         onClick={() => {
