@@ -269,7 +269,7 @@ const SappModalCerti: React.FC<IProps> = ({
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
-              } animate-fade-in-overlay  inset-0 bg-black opacity-20 transition-opacity ${overlayClass}`}
+              } animate-fade-in-overlay  inset-0 bg-black opacity-80 transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${
