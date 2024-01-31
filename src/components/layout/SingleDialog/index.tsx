@@ -10,7 +10,7 @@ interface LayoutProps {
 export default function SingleDialogLayout(props: LayoutProps): ReactElement {
   const { children } = props
   return (
-    <div className="min-h-screen bg-white relative pt-[5.563rem] pb-[7.313rem] after:absolute after:bottom-0 after:left-0 after:block after:w-full after:h-[7px] after:bg-primary">
+    <div className="min-h-screen bg-white relative lg:pt-[5.563rem] lg:pb-[0rem] pt-[5.563rem] pb-[7.313rem] after:absolute after:bottom-0 after:left-0 after:block after:w-full after:h-[7px] after:bg-primary">
       <div className="block max-w-[14rem] mb-20 mx-auto">
         <Image src={SAPP_Logo} alt="SAPP Logo" />
       </div>
