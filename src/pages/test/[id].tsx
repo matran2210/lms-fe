@@ -272,6 +272,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
+  const [QuizResultId, setQuizResultId] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -935,7 +936,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return arr
     })
   }
-  const handleSubmitQuestion = async () => {
+  const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
     let answers = []
@@ -1038,24 +1039,46 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         answers: e.data?.answers,
       })
     }
-    setTabs(() => {
-      // ref.setKey
-      handleChangeTab(tabs[0].id)
-      return reformTabs
-    })
-    setUnsavedChanges(false)
-    const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
-      answers: answers,
-      quiz_position_mapping: quiz_position_mapping,
-      total_attempt_time:
-        quizDetail.quiz_timed * 60 -
-        (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-    })
-    if (res) {
-      if (type === 'entrance') {
-        router.replace(`/entrance-test/test-result/${res?.data?.id}`)
-      } else {
-        router.replace(`/courses/test/test-result/${res?.data?.id}`)
+    if (type_submit === 'submit') {
+      setTabs(() => {
+        // ref.setKey
+        handleChangeTab(tabs[0].id)
+        return reformTabs
+      })
+      setUnsavedChanges(false)
+      const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
+        answers: answers,
+        quiz_position_mapping: quiz_position_mapping,
+        total_attempt_time:
+          quizDetail.quiz_timed * 60 -
+          (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+      })
+      if (res) {
+        if (type === 'entrance') {
+          router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+        } else {
+          router.replace(`/courses/test/test-result/${res?.data?.id}`)
+        }
+      }
+    } else {
+      setTabs(() => {
+        // ref.setKey
+        handleChangeTab(tabs[0].id)
+        return reformTabs
+      })
+      setUnsavedChanges(false)
+      const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
+        answers: answers,
+        quiz_position_mapping: quiz_position_mapping,
+        total_attempt_time:
+          quizDetail.quiz_timed * 60 -
+          (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+      })
+      if (res) {
+        setQuizResultId(() => {
+          setOpenTimeOut(true)
+          return res?.data?.id
+        })
       }
     }
 
@@ -1292,11 +1315,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           </div>
           {quizDetail?.quiz_timed && (
             <CountDown
-              remainTime={quizDetail?.quiz_timed}
+              remainTime={quizDetail?.quiz_timed / 6}
               onTimeOut={() => {
                 if (!openLimit) {
                   setUnsavedChanges(false)
-                  setOpenTimeOut(true)
+                  handleSubmitQuestion('timeout')
+                  // setOpenTimeOut(true)
                 }
               }}
               ref={timeRef}
@@ -1956,7 +1980,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       <TestTimeOutModal
         open={openTimeOut}
         setOpen={setOpenTimeOut}
-        handleSubmit={handleSubmitQuestion}
+        handleSubmit={() => {
+          if (type === 'entrance') {
+            router.replace(`/entrance-test/test-result/${QuizResultId}`)
+          } else {
+            router.replace(`/courses/test/test-result/${QuizResultId}`)
+          }
+        }}
         handleQuit={() => {
           setUnsavedChanges(() => {
             router.back()
@@ -1978,7 +2008,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       <ConFirmSubmit
         open={openSubmit}
         setOpen={setOpenSubmit}
-        handleSubmit={handleSubmitQuestion}
+        handleSubmit={() => handleSubmitQuestion('submit')}
         handleCancel={() => setUnsavedChanges(true)}
       />
       <ModalUploadFile

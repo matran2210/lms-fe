@@ -215,7 +215,7 @@ const EssayQuestionPreview = ({
                     <div
                       className="cursor-pointer text-state-info hover:underline w-fit mb-1"
                       onClick={() =>
-                        setOpenPdf('file', e.resource.url, e.resource.name)
+                        setOpenPdf({ status: true, url: e.resource.url })
                       }
                       key={index}
                     >
