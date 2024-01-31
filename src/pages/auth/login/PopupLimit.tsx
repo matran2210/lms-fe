@@ -44,7 +44,7 @@ const PopUpLimit = ({ open, setOpen }: IProps) => {
       </div>
       <div className="text-bw-1 text-4xl font-semibold mt-6">Access Limits</div>
       <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-7 text-center">
-        You can only access a maximum of 3 devices, please contact out support
+        You can only access a maximum of 3 devices, please contact our support
         at 0889 662 276.
       </div>
     </SappModal>
