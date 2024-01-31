@@ -162,7 +162,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog max-h-[515px]">
+      <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
         <div className="text-4xl font-bold text-bw-1 mb-2">Log In</div>
         <div className="text-medium-sm text-gray-1 mb-10">
           Login to Continue Learning
