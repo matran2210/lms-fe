@@ -1,4 +1,10 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import React, {
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+  useMemo,
+} from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
@@ -20,6 +26,7 @@ import CourseAPI from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { ICourseAll } from 'src/type/courses'
 import { buildQueryString } from '@utils/index'
+import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 
 const Course = ({
   course,
@@ -44,23 +51,26 @@ const Course = ({
   const student = course?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
-  const currentDate = new Date()
-  currentDate.setUTCHours(0, 0, 0, 0)
+  const currentDate = useMemo(() => new Date(), [])
 
   useEffect(() => {
     if (student?.finished_at) {
-      const parsedSpecificDate = parseISO(student?.finished_at as any)
-      parsedSpecificDate.setUTCHours(0, 0, 0, 0)
-      // Calculate the difference in days
-      const difference = differenceInDays(
-        startOfDay(parsedSpecificDate),
-        startOfDay(currentDate),
-      ) as any
+      const currentLocalDate = new Date()
+      const currentUTCDate = convertLocalTimeToUTC(currentLocalDate)
+      const finishDate = new Date(student?.finished_at)
+      const finishUTCDate = convertLocalTimeToUTC(finishDate)
+
+      const currentTime = currentUTCDate.getTime()
+      const finishTime = finishUTCDate.getTime()
+
+      const theRestHours = (finishTime - currentTime) / 3600000
+      const dayLefts = convertHourToDayLeft(theRestHours)
 
       // Update state with the difference
-      setDaysDifference(difference + 1)
+      setDaysDifference(dayLefts)
     }
-  }, [course])
+  }, [course, student?.finished_at])
+
   const percentProgress =
     round(
       (Number(
