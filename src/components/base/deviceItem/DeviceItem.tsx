@@ -1,6 +1,7 @@
 import { AppleLogo, PhoneLogo, WinDowLogo } from '@assets/icons'
 import { useMemo } from 'react'
 import { format, formatDistanceToNow } from 'date-fns'
+import { calculateTimeAgo } from '@utils/helpers'
 const DeviceItem = ({ data }: any) => {
   const chooseLogo = useMemo(() => {
     if (data?.user_agent?.osName) {
@@ -15,19 +16,8 @@ const DeviceItem = ({ data }: any) => {
     }
   }, [data?.user_agent?.osName])
   const formattedDate = useMemo(() => {
-    if (data.created_at) {
-      const loginTime = new Date(data.updated_at)
-      const currentTime = new Date()
-
-      const timeDifference = currentTime.getTime() - loginTime.getTime()
-
-      let formattedTime
-
-      if (timeDifference < 24 * 60 * 60 * 1000) {
-        formattedTime = formatDistanceToNow(loginTime, { addSuffix: true })
-      } else {
-        formattedTime = format(loginTime, 'HH:mm:ss dd/MM/yyyy')
-      }
+    if (data?.created_at) {
+      return calculateTimeAgo(data.created_at)
     }
     return null
   }, [data.created_at])
