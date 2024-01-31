@@ -99,6 +99,7 @@ module.exports = {
         error: '#B90E0A',
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
+        'gray-3': '#F8F8F8',
         active: '#FFB800',
         dark: '#1C2039',
       },

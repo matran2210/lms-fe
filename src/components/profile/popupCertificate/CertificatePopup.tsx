@@ -278,7 +278,7 @@ const SappModalCerti: React.FC<IProps> = ({
             >
               <div
                 ref={confirmDialogRef}
-                className={`w-fit max-h-full max-w-full 
+                className={`max-h-full max-w-full 
                   ${isContentFull ? 'w-full' : 'w-fit'}
                   ${refClass}`}
               >
