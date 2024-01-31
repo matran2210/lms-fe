@@ -1315,7 +1315,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           </div>
           {quizDetail?.quiz_timed && (
             <CountDown
-              remainTime={quizDetail?.quiz_timed / 6}
+              remainTime={quizDetail?.quiz_timed}
               onTimeOut={() => {
                 if (!openLimit) {
                   setUnsavedChanges(false)
