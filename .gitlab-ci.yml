@@ -1,12 +1,12 @@
 default:
   image: node:16.17.0-alpine
 
-deploy_uat:
+deploy_prod:
   stage: deploy
   only:
-    - staging
+    - master
   script:
     - yarn global add vercel
     - yarn install
     - vercel deploy --prod --token=$VERCEL_TOKEN
-  environment: staging
+  environment: production
