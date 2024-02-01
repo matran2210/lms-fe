@@ -1,28 +1,27 @@
 import { RouteGuard } from '@components/auth/RouteGuard'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import Layout from '@components/layout'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 import SingleDialogLayout from '@components/layout/SingleDialog'
+import LearningNotesList from '@components/mycourses/LearningNotesList'
+import LearningResource from '@components/mycourses/LearningResource'
+import '@fortune-sheet/react/dist/index.css'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import '@styles/globals.scss'
 import { LAYOUT } from '@utils/constants'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import { Toaster } from 'react-hot-toast'
-import { injectStore } from 'src/redux/services/httpService'
-import { store, wrapper } from '../redux/store'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { onMessageListener } from 'src/utils/firebase'
-import {
-  showNotification,
-  hideNotification,
-} from 'src/redux/slice/Notification/Notification'
 import { useRouter } from 'next/router'
-import LearningResource from '@components/mycourses/LearningResource'
-import { getCountUnRead } from 'src/redux/slice/Notification/Notification'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import LearningNotesList from '@components/mycourses/LearningNotesList'
-import '@fortune-sheet/react/dist/index.css'
+import { useEffect, useState } from 'react'
+import { Toaster } from 'react-hot-toast'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { injectStore } from 'src/redux/services/httpService'
+import {
+  getCountUnRead,
+  showNotification,
+} from 'src/redux/slice/Notification/Notification'
+import { onMessageListener } from 'src/utils/firebase'
+import { store, wrapper } from '../redux/store'
 
 // import 'antd/dist/antd.css'
 
@@ -36,13 +35,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   let content = null
   const { layout = LAYOUT.DEFAULT_LAYOUT } = (Component as any) || {}
   injectStore(store)
-  const [show, setShow] = useState(false)
+  // const [show, setShow] = useState(false)
   const router = useRouter()
   const [openResource, setOpenResource] = useState(false)
-
+  const [loading, setLoading] = useState(true)
   const dispatch = useAppDispatch()
-  const getNotiUnread = useAppSelector(
-    (state) => state.notificationReducer?.total_records,
+  const gettingNotiUnread = useAppSelector(
+    (state) => state.notificationReducer?.loading,
   )
 
   const coutNotificationsUnRead = async () => {
@@ -85,8 +84,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         </Layout>
       )
   }
-
-  useEffect(() => {
+  const handleOnChangePage = () => {
     if (typeof window !== 'undefined') {
       if (window.localStorage.getItem('accessToken') === '') {
         setOpenResource(false)
@@ -94,11 +92,44 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
     // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
     coutNotificationsUnRead()
-    if (getNotiUnread > 0) {
-      dispatch(showNotification())
-    } else {
-      dispatch(hideNotification())
+    // if (getNotiUnread > 0) {
+    //   dispatch(showNotification())
+    // } else {
+    //   dispatch(hideNotification())
+    // }
+  }
+  useEffect(() => {
+    handleOnChangePage()
+    router.events.on('routeChangeError', (e) => setLoading(false))
+    router.events.on('routeChangeStart', (e) => setLoading(false))
+    router.events.on('routeChangeComplete', (e) => setLoading(true))
+
+    return () => {
+      router.events.off('routeChangeError', (e) => setLoading(false))
+      router.events.off('routeChangeStart', (e) => setLoading(false))
+      router.events.off('routeChangeComplete', (e) => setLoading(true))
     }
+  }, [])
+  useEffect(() => {
+    const loader = document.getElementById('globalLoader')
+
+    if (typeof window !== 'undefined') {
+      if (loader) loader.className = '!hidden'
+    }
+  }, [])
+  useEffect(() => {
+    const loader = document.getElementById('globalLoader')
+    if (loading && !gettingNotiUnread) {
+      if (loader) loader.className = '!hidden'
+    } else {
+      if (loader) {
+        loader.className = ''
+      }
+    }
+  }, [loading, gettingNotiUnread])
+
+  useEffect(() => {
+    handleOnChangePage()
   }, [router.pathname])
 
   return (

@@ -53,11 +53,14 @@ const initialState: NotificationState = {
 
 export const getCountUnRead = createAsyncThunk(
   'notificationReducer/getCountUnRead',
-  async (thunkAPI) => {
+  async ({}, thunkAPI) => {
     try {
       const res = await NotificationApi.getCountUnRead()
       if (!res?.data) {
         return
+      }
+      if (res.data.total_records > 0) {
+        thunkAPI.dispatch(showNotification())
       }
       return { ...res.data }
     } catch (error: any) {
