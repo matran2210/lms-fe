@@ -8,7 +8,6 @@ interface PopupProp {
   openPreview: boolean
   setOpenModal: Dispatch<SetStateAction<boolean>>
   data: any
-  id: any
   message: string
   confirmOnClose?: boolean
   onClose: () => void
@@ -16,7 +15,6 @@ interface PopupProp {
 }
 
 const PopUpCertificate = ({
-  id,
   openPreview,
   setOpenModal,
   data,
@@ -36,7 +34,7 @@ const PopUpCertificate = ({
       setOpen={setOpenModal}
       showHeader={false}
       showFooter={false}
-      title={data?.certificate?.name ?? 'Preview Certification'}
+      title={data?.course?.name ?? 'Preview Certification'}
       size="max-w-[1200px] max-h-[1200px] w-fit h-fit"
       footerButtonClassName="flex flex-col-reverse gap-6"
       childClass="flex flex-col justify-center items-center"
@@ -48,7 +46,7 @@ const PopUpCertificate = ({
       <div className="w-full">
         <div className="border-b border-solid border-gray-3 w-full flex justify-between pb-6">
           <div className=" flex text-xl font-sans font-medium leading-6.2 text-bw-1 w-full pr-4">
-            {data?.certificate?.name}
+            {data?.course?.name}
           </div>
           <div className="cursor-pointer" onClick={handleOnClose}>
             <CloseIconPreview />
