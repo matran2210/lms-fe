@@ -34,7 +34,7 @@
     "axios": "^1.6.2",
     "cookie": "^0.6.0",
     "date-fns": "^3.0.6",
-    "entrance-test-result-package": "^1.0.16",
+    "entrance-test-result-package": "^1.0.18",
     "explanation-package": "^1.0.28",
     "file-saver": "^2.0.5",
     "firebase": "^10.7.1",

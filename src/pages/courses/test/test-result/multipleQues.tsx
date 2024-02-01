@@ -2,6 +2,7 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import React from 'react'
 import Icon from '@components/icons'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface MultipleQuestionProps {
   questions: any
@@ -9,11 +10,15 @@ interface MultipleQuestionProps {
 }
 
 const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
+  const router = useRouter()
   const renderBoxes = (type: string, data: any, totalBefore: number) => {
     const renderBoxItems = data?.map((item: any, index: number) => {
       return (
         <div
           key={item?.id}
+          onClick={() => {
+            router.push(`/explanation/${item?.id}`)
+          }}
           className={`border border-solid flex items-center flex-row justify-center w-12 h-12 text-sm font-medium leading-8.5 cursor-pointer
           ${
             item?.is_correct || item?.active === 'SUBMITED'

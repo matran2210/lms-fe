@@ -10,7 +10,6 @@ const Devices = ({}: any) => {
   const [listDevices, setListDevices] = useState<any>()
   const getListDevices = async () => {
     const res = await UserApi.getListDevices()
-    // console.log(res);
     setListDevices(res)
   }
   useEffect(() => {

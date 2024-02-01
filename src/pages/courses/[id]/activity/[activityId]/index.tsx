@@ -295,8 +295,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     file?: string,
     fileName?: string,
   ) => {
-    // console.log(file);
-
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]

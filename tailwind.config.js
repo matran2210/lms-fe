@@ -99,6 +99,7 @@ module.exports = {
         error: '#B90E0A',
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
+        'gray-3': '#F8F8F8',
         active: '#FFB800',
         dark: '#1C2039',
       },
@@ -272,7 +273,7 @@ module.exports = {
       animation: {
         'jump-in': 'jump-in 0.1s ease-in-out',
         'jump-out': 'jump-out 0.1s ease-in-out',
-        'fade-in-overlay': 'fade-in-overlay 0.4s ease-in-out',
+        'fade-in-overlay': 'fade-in-overlay 0.3s ease-in-out',
         'fade-out-overlay': 'fade-out-overlay 0.3s ease-out',
         'fade-in-sidebar': 'fade-in-sidebar 0.4s ease-in-out',
         'fade-out-sidebar': 'fade-out-sidebar 0.3s ease-in-out',

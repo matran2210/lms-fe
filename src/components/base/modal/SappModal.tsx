@@ -63,6 +63,7 @@ interface IProps {
 
   revertFunction?: boolean
   showCloseIcon?: boolean
+  disableClickOutSide?: boolean
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -130,6 +131,7 @@ const SappModal: React.FC<IProps> = ({
   externalLoading,
   revertFunction = false,
   showCloseIcon,
+  disableClickOutSide = false,
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -279,7 +281,7 @@ const SappModal: React.FC<IProps> = ({
                 if (loading) {
                   return
                 }
-                onCancel()
+                !disableClickOutSide && onCancel()
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'

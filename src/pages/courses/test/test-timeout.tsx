@@ -36,6 +36,7 @@ const TestTimeOutModal = ({
       cancelButtonCaption="Quit"
       okButtonCaption="Submit"
       handleCancel={onCancel}
+      handleCloseOnly={() => setOpen(false)}
       handleSubmit={onSubmit}
       showHeader={false}
       refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
@@ -47,6 +48,7 @@ const TestTimeOutModal = ({
       fullWidthBtn={true}
       closeAfterSubmit={true}
       buttonSize="extra"
+      disableClickOutSide
     >
       <TimeIcon />
       <div className="text-bw-1 text-4xl font-bold mt-6 gap">Time Out</div>

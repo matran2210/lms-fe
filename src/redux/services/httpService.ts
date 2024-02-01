@@ -173,6 +173,7 @@ axiosInstance.interceptors.response.use(
     if (isLoginPage && error.response?.config?.url !== '/me') {
       if (
         error?.response?.status !== 422 &&
+        error?.response?.data?.error?.code !== '401|0000' &&
         error?.response?.data?.error?.code !== '403|0001' &&
         error?.response?.data?.error?.code !== '400|060710'
       ) {
