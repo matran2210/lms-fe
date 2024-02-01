@@ -24,7 +24,7 @@ const Certificate = () => {
   useEffect(() => {
     fetchChapterDetail()
   }, [])
-  const [clickedIndex, setClickedIndex] = useState<any>()
+  const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
   return (
     <div>
       <div className="relative">
@@ -42,7 +42,7 @@ const Certificate = () => {
               <div
                 className="hover:bg-secondary hover:text-primary group relative flex flex-row gap-2 w-full items-start self-center pt-5 px-6 cursor-pointer min-h-[88px]  border-b border-gray-2"
                 onClick={() => {
-                  setClickedIndex(index)
+                  setCertificateDataPopup(certificate)
                   setOpenModal(true)
                 }}
               >
@@ -61,24 +61,21 @@ const Certificate = () => {
                   </div>
                 </div>
               </div>
-              <div>
-                <PopUpCertificate
-                  id={clickedIndex}
-                  openPreview={modalOpen}
-                  setOpenModal={setOpenModal}
-                  data={certificateData[clickedIndex]}
-                  message={''}
-                  onClose={() => {
-                    setClickedIndex(null)
-                    setOpenModal(false)
-                  }}
-                  userDetail={userDetail}
-                />
-              </div>
             </div>
           )
         })}
       </div>
+      <PopUpCertificate
+        openPreview={modalOpen}
+        setOpenModal={setOpenModal}
+        data={certificateDataPopup}
+        message={''}
+        onClose={() => {
+          setCertificateDataPopup(null)
+          setOpenModal(false)
+        }}
+        userDetail={userDetail}
+      />
     </div>
   )
 }
