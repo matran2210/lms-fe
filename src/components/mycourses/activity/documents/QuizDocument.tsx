@@ -6,7 +6,7 @@ import {
   fetchQuestionById,
   removeQuizFinished,
   selectQuestions,
-  submitQuestion,
+  submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import { CloseIcon } from '@assets/icons'
@@ -191,7 +191,7 @@ const QuizDocument = ({
 
     try {
       await dispatch(
-        submitQuestion({
+        submitQuiz({
           id: quizId,
           data: { answers, quiz_position_mapping },
         }),
@@ -212,7 +212,7 @@ const QuizDocument = ({
           setActiveQuestionIndex(0)
         })
     } catch (error: any) {
-      if (error.response.status === 422) {
+      if (error?.response?.status === 422) {
         toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
       }
     } finally {
@@ -292,6 +292,7 @@ const QuizDocument = ({
             key={quizComponentKey}
             document_id={document_id}
             setOpenFile={setOpenFile}
+            grading_preference={grading_preference}
           />
         )}
       </div>

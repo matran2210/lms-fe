@@ -67,6 +67,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
@@ -484,7 +485,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     return (
                       <div
                         className={marginBottom}
-                        key={e.id}
+                        key={e.id + '_' + i + '_' + selector.currentTabId}
                         ref={quizDocumentRef}
                       >
                         <QuizDocument
@@ -507,7 +508,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                   }
                   if (e.type === 'TEXT') {
                     return (
-                      <div className={marginBottom} key={e.id}>
+                      <div
+                        className={marginBottom}
+                        key={e.id + '_' + i + '_' + selector.currentTabId}
+                      >
                         <TextDocument
                           text_editor_content={e.text_editor_content}
                         ></TextDocument>
@@ -516,7 +520,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                   }
                   if (e.type === 'VIDEO') {
                     return (
-                      <div className={marginBottom} key={i}>
+                      <div
+                        className={marginBottom}
+                        key={i + '_' + selector.currentTabId}
+                      >
                         <VideoDocument
                           videos={e.videos}
                           activityId={activity.id}

@@ -7,7 +7,7 @@ import {
   fetchQuestionById,
   removeQuizFinished,
   selectQuestions,
-  submitQuestion,
+  submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import { CloseIcon } from '@assets/icons'
@@ -328,7 +328,7 @@ const VideoDocument = ({
 
     try {
       await dispatch(
-        submitQuestion({
+        submitQuiz({
           id: currentVideo?.quiz?.id || '',
           data: { answers, quiz_position_mapping },
         }),
@@ -397,11 +397,6 @@ const VideoDocument = ({
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleCloseModalResult = () => {
-    streamRef.current?.play()
-    setModalResult(undefined)
   }
 
   const handleShowQuizResultDetail = (data: IQuestionResult) => {
