@@ -39,9 +39,10 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
       userSectionLearningStatus !== undefined
     ) {
       router.push(
-        userSectionLearningStatus !== '' || userSectionLearningType !== ''
-          ? `${apiUrl}?name=${router.query.name || ''}${queryString}`
-          : apiUrl,
+        // userSectionLearningStatus !== '' || userSectionLearningType !== ''
+        // ?
+        `${apiUrl}?name=${router.query.name || ''}${queryString}`,
+        // : apiUrl,
       )
     }
   }, [apiUrl, queryString, watch('status'), watch('type')])

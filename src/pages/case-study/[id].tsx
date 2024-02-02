@@ -38,6 +38,7 @@ import {
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
+import useMousePosition from '@utils/hookMouseMove'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -228,6 +229,17 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [breadCrumb, setBreadCrumb] = useState<any>()
   const [unsavedChanges, setUnsavedChanges] = useState(true)
   const [openLimit, setOpenLimit] = useState(false)
+  const [startResize, setStartResize] = useState(false)
+  const [currentMousePos, setCurrentMousePos] = useState(0)
+  const [leftWidth, setLeftWidth] = useState(0)
+  const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
+  const { x } = useMousePosition()
+  useEffect(() => {
+    if (startResize) {
+      const temp = currentLeftWidth
+      setLeftWidth(temp + (currentMousePos - (x || 0)))
+    }
+  }, [x, startResize])
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -575,11 +587,20 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
   }, [unsavedChanges])
   return (
-    <div className="h-screen flex flex-col bg-white overflow-hidden relative">
+    <div
+      className="h-screen flex flex-col bg-white overflow-hidden relative"
+      onMouseUp={() => {
+        setStartResize(false)
+        setCurrentLeftWidth(leftWidth)
+      }}
+    >
       {loading && (
         <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
           Loading
         </div>
+      )}
+      {startResize && (
+        <div className="absolute w-screen h-screen z-[1350]"></div>
       )}
       {/* <div
         className={`absolute w-full bg-black h-[200px]`}
@@ -618,86 +639,16 @@ const CaseStudyDetail = ({ questions }: any) => {
         </div>
         {/* End Header */}
         <div
-          className="flex gap-5 h-[calc(100%-104px)] bg-gray-3"
+          className="flex h-[calc(100%-104px)] bg-gray-3"
           id={'preview-question'}
         >
           <div
-            className="w-1/2 h-full overflow-auto bg-white p-6"
-            id="hightlight_area_topic"
-            onMouseUp={(e: any) => {
-              if (
-                e.target.tagName.charAt(0) !== 'm' &&
-                e.target.firstChild?.tagName !== 'math'
-              ) {
-                if (e) {
-                  if (allowHighLight) {
-                    runHighlight(
-                      () => {},
-                      allowHighLight || false,
-                      'hightlight_area_topic',
-                    )
-                  } else if (allowUnHighLight) {
-                    runHighlight(
-                      () => {},
-                      allowUnHighLight || false,
-                      'hightlight_area_topic',
-                      { color: 'white' },
-                    )
-                  }
-                }
-              }
-            }}
-          >
-            {/* {topics} */}
-
-            <div
-              key={topics?.id}
-              data-key={topics?.id}
-              // className="min-h-[calc(100vh-104px)]"
-              className="mb-4"
-            >
-              <EditorReader
-                className="editor-wrap"
-                text_editor_content={topics?.description}
-              />
-            </div>
-            <>
-              {topics?.files?.length > 0 &&
-                topics?.files.map((e: any, index: number) => {
-                  return (
-                    <div
-                      className="cursor-pointer text-state-info hover:underline"
-                      onClick={() =>
-                        handleOpenScratchPad(
-                          'file',
-                          e.resource.url,
-                          e?.resource?.name,
-                        )
-                      }
-                      key={index}
-                    >
-                      {e?.resource?.name}
-                    </div>
-                  )
-                })}
-            </>
-          </div>
-
-          <div
-            className="w-1/2 h-full overflow-auto bg-white py-6 "
-            onScroll={(e) => {
-              const { target } = e
-              if (
-                (target as any).scrollTop + (target as any).offsetHeight >=
-                (target as any).scrollHeight
-              ) {
-                dispatch(loadMoreQuestion(''))
-              }
-            }}
+            className={`h-full overflow-auto bg-white p-6`}
+            style={{ width: `calc(50% - ${leftWidth}px)` }}
           >
             <div
-              className="px-6"
-              id="hightlight_area"
+              className="min-w-[700px]"
+              id="hightlight_area_topic"
               onMouseUp={(e: any) => {
                 if (
                   e.target.tagName.charAt(0) !== 'm' &&
@@ -722,36 +673,123 @@ const CaseStudyDetail = ({ questions }: any) => {
                 }
               }}
             >
-              {/* {topics.map((el: any) => { */}
-              {listQuestions?.map((e: any, index: number) => {
-                const question = Object.values(e)[0] as any
-                const topicId = Object.keys(e)[0] as any
-                return (
-                  <div
-                    key={question?.id + index}
-                    topic-key={topicId}
-                    className={`${index === 0 ? 'mb-8' : 'pt-8 mb-8 border-t'}`}
-                  >
-                    {/*<div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>*/}
+              {/* {topics} */}
 
-                    {checkType(
-                      question,
-                      index,
-                      question,
-                      question?.qType,
-                      question?.id,
-                      undefined,
-                      undefined,
-                      undefined,
-                      undefined,
-                      undefined,
-                      question?.requirements?.[0],
-                      question?.question_content,
-                      valueRef,
-                    )}
-                  </div>
-                )
-              })}
+              <div
+                key={topics?.id}
+                data-key={topics?.id}
+                // className="min-h-[calc(100vh-104px)]"
+                className="mb-4"
+              >
+                <EditorReader
+                  className="editor-wrap"
+                  text_editor_content={topics?.description}
+                />
+              </div>
+              <>
+                {topics?.files?.length > 0 &&
+                  topics?.files.map((e: any, index: number) => {
+                    return (
+                      <div
+                        className="cursor-pointer text-state-info hover:underline"
+                        onClick={() =>
+                          handleOpenScratchPad(
+                            'file',
+                            e.resource.url,
+                            e?.resource?.name,
+                          )
+                        }
+                        key={index}
+                      >
+                        {e?.resource?.name}
+                      </div>
+                    )
+                  })}
+              </>
+            </div>
+          </div>
+          <div
+            className="w-[20px] h-full bg-gray-3 cursor-ew-resize"
+            onMouseDown={() => {
+              setStartResize(true)
+              setCurrentMousePos(x || 0)
+            }}
+            onMouseUp={() => setStartResize(false)}
+          ></div>
+          <div
+            className={` h-full overflow-auto bg-white py-6 `}
+            style={{ width: `calc(50% + ${leftWidth}px)` }}
+            onScroll={(e) => {
+              const { target } = e
+              if (
+                (target as any).scrollTop + (target as any).offsetHeight >=
+                (target as any).scrollHeight
+              ) {
+                dispatch(loadMoreQuestion(''))
+              }
+            }}
+          >
+            <div className="min-w-[700px]">
+              <div
+                className="px-6"
+                id="hightlight_area"
+                onMouseUp={(e: any) => {
+                  if (
+                    e.target.tagName.charAt(0) !== 'm' &&
+                    e.target.firstChild?.tagName !== 'math'
+                  ) {
+                    if (e) {
+                      if (allowHighLight) {
+                        runHighlight(
+                          () => {},
+                          allowHighLight || false,
+                          'hightlight_area_topic',
+                        )
+                      } else if (allowUnHighLight) {
+                        runHighlight(
+                          () => {},
+                          allowUnHighLight || false,
+                          'hightlight_area_topic',
+                          { color: 'white' },
+                        )
+                      }
+                    }
+                  }
+                }}
+              >
+                {/* {topics.map((el: any) => { */}
+                {listQuestions?.map((e: any, index: number) => {
+                  const question = Object.values(e)[0] as any
+                  const topicId = Object.keys(e)[0] as any
+                  return (
+                    <div
+                      key={question?.id + index}
+                      topic-key={topicId}
+                      className={`${
+                        index === 0 ? 'mb-8' : 'pt-8 mb-8 border-t'
+                      }`}
+                    >
+                      {/*<div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>*/}
+
+                      {checkType(
+                        question,
+                        index,
+                        question,
+                        question?.qType,
+                        question?.id,
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        question?.requirements?.[0],
+                        question?.question_content,
+                        valueRef,
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>
