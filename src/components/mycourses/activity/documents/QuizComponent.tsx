@@ -533,12 +533,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                             setOpenFile(
                               { type: 'file' },
                               e.resource.url,
-                              e.resource.name,
+                              e?.resource?.name,
                             )
                           }
                           key={index}
                         >
-                          {e.resource.name}
+                          {e?.resource?.name}
                         </div>
                       )
                     })}
@@ -599,12 +599,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                   setOpenFile(
                                     { type: 'file' },
                                     e.resource.url,
-                                    e.resource.name,
+                                    e?.resource?.name,
                                   )
                               }}
                               key={index}
                             >
-                              {e.resource.name}
+                              {e?.resource?.name}
                             </div>
                           )
                         },

@@ -31,7 +31,7 @@ type IProp = {
   value: string
   className?: string
 }
-
+let dragParentIdRef: string
 const MatchingQuestion = forwardRef(
   (
     {
@@ -55,8 +55,6 @@ const MatchingQuestion = forwardRef(
     const [answers, setAnswers] = useState<any>()
     const [correctAnswer, setCorrectAnswer] = useState<any>()
     const [storageId, setStoreId] = useState(uniqueId('storage'))
-
-    const dragParentIdRef = useRef<string>()
 
     function allowDrop(ev: any) {
       // const slotId = ev.target.id
@@ -84,7 +82,7 @@ const MatchingQuestion = forwardRef(
       ev.dataTransfer.setData('questionId', data.id)
 
       if (uuid) {
-        dragParentIdRef.current = ev.target.closest(`#${uuid}`)?.id
+        dragParentIdRef = ev.target.closest(`#${uuid}`)?.id
       }
     }
 
@@ -93,12 +91,10 @@ const MatchingQuestion = forwardRef(
 
       const slotElement = ev.target
 
-      if (!uuid || !dragParentIdRef.current) {
+      if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
         return
       }
-      if (dragParentIdRef.current !== uuid) {
-        return
-      }
+      dragParentIdRef = ''
 
       const questionId = ev.dataTransfer.getData('questionId')
       var data = ev.dataTransfer.getData('text')

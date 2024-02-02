@@ -442,12 +442,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                             type: 'file',
                           },
                           e.resource.url,
-                          e.resource.name,
+                          e?.resource?.name,
                         )
                       }}
                       key={index}
                     >
-                      {e.resource.name}
+                      {e?.resource?.name}
                     </div>
                   )
                 })}
@@ -534,6 +534,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           handleProcess={handleFinishedCourseSectionProgress}
                           document_id={e.id}
                           quizId={e.quiz?.id || ''}
+                          grading_preference={
+                            e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
+                          }
                         ></VideoDocument>
                       </div>
                     )
@@ -747,11 +750,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                             handleOpenScratchPad(
                               { type: 'file' },
                               e.resource.url,
-                              e.resource.name,
+                              e?.resource?.name,
                             )
                           }
                         >
-                          {e.resource.name}
+                          {e?.resource?.name}
                         </div>
                       )
                     })}

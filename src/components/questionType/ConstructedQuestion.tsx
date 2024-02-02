@@ -219,7 +219,7 @@ const EssayQuestionPreview = ({
                       }
                       key={index}
                     >
-                      {e.resource.name}
+                      {e?.resource?.name}
                     </div>
                   )
                 })}

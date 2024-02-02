@@ -594,6 +594,10 @@ textarea.is-invalid:focus {
   min-width: 63px;
 }
 
+.max-w-40 {
+  max-width: 10rem;
+}
+
 .hover-transition-font-weight {
   transition: font-weight 0.1s ease;
 }

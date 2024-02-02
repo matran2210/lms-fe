@@ -25,6 +25,7 @@ interface IProps {
   allowUnHighLight?: boolean
   uuid?: string
 }
+let dragParentIdRef: string
 const DragNDropPreivew = forwardRef(
   (
     {
@@ -46,7 +47,7 @@ const DragNDropPreivew = forwardRef(
   ) => {
     const storageId = uniqueId('storage')
     const [answered, setAnswered] = useState<any>([])
-    const dragParentIdRef = useRef<string>()
+
     useEffect(() => {
       if (resetDefaultAnswer) {
         setAnswered(defaultAnswer)
@@ -62,7 +63,7 @@ const DragNDropPreivew = forwardRef(
       ev.dataTransfer.setData('questionId', data.id)
 
       if (uuid) {
-        dragParentIdRef.current = ev.target.closest(`#${uuid}`)?.id
+        dragParentIdRef = ev.target.closest(`#${uuid}`)?.id
       }
     }
     function drop(ev: any, dropId: string, dropItem?: boolean) {
@@ -70,12 +71,10 @@ const DragNDropPreivew = forwardRef(
 
       const slotElement = ev.target
 
-      if (!uuid || !dragParentIdRef.current) {
+      if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
         return
       }
-      if (dragParentIdRef.current !== uuid) {
-        return
-      }
+      dragParentIdRef = ''
 
       const questionId = ev.dataTransfer.getData('questionId')
 
