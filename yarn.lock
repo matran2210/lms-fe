@@ -3424,10 +3424,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.28:
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.28.tgz#4569cb0f00a7156cf18f0379df390a5e7900a8ea"
-  integrity sha512-pzsTmMkEKM2/4KB9UuZ5rb9U8lOkuMt/uPV8mDf0XHi9NYTD4kGNGA/Ou/nOqgL/fI5VFDbzDhze/uQl5dEiPA==
+explanation-package@^1.0.29:
+  version "1.0.29"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.29.tgz#e6bb04fdce555ff9ec5530c63eaba26ef5c62d95"
+  integrity sha512-6aqJUv+iXLb5O91xrNq/6tuQW5/nnsyGVjchUt8gk0912G2qkqVSo3+vKKrYutN/rXgD3ab7gXDMsXWcthM5vA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
