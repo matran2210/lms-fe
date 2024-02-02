@@ -6,6 +6,8 @@ deploy_prod:
   only:
     - master
   script:
+    - VERCEL_PROJECT_ID=$VERCEL_ORG_ID_PROD
+    - VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_PROD
     - yarn global add vercel
     - yarn install
     - vercel deploy --prod --token=$VERCEL_TOKEN
