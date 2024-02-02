@@ -1,6 +1,5 @@
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
-import MovableWindow from '@components/base/window'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -19,7 +18,7 @@ import React, {
 import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
-import { QUESTION_TYPES } from 'src/constants'
+import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
@@ -27,6 +26,7 @@ import {
   confirmQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import { v4 as uuidv4 } from 'uuid'
 
 export type QuizComponentRef = {
   onSubmit: ({
@@ -55,6 +55,7 @@ type Props = {
   tabId: string
   quizId: string
   setOpenFile?: any
+  grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -67,6 +68,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       tabId,
       quizId,
       setOpenFile,
+      grading_preference,
     }: Props,
     ref,
   ) => {
@@ -75,6 +77,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const dispatch = useAppDispatch()
     const { control: controlAnswer, setValue, reset, getValues } = useForm({})
+
     const DragDropRef = useRef(null) as any
 
     const [showListRequirement, setShowListRequirement] =
@@ -215,29 +218,31 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         if (!activeQuestion.confirmed) {
           return
         }
-        switch (activeQuestion?.qType) {
-          case QUESTION_TYPES.ONE_CHOICE:
-          case QUESTION_TYPES.TRUE_FALSE: {
-            setValue &&
-              setValue(
-                `${activeQuestion.id}_${document_id}_answer`,
-                activeQuestion.defaultValue,
-              )
-            break
-          }
+        setTimeout(() => {
+          switch (activeQuestion?.qType) {
+            case QUESTION_TYPES.ONE_CHOICE:
+            case QUESTION_TYPES.TRUE_FALSE: {
+              setValue &&
+                setValue(
+                  `${activeQuestion.id}_${document_id}_answer`,
+                  activeQuestion.defaultValue,
+                )
 
-          case QUESTION_TYPES.MULTIPLE_CHOICE: {
-            setValue &&
-              setValue(
-                `${activeQuestion.id}_${document_id}_answer`,
-                activeQuestion.defaultValue,
-              )
-            break
+              break
+            }
+
+            case QUESTION_TYPES.MULTIPLE_CHOICE: {
+              setValue &&
+                setValue(
+                  `${activeQuestion.id}_${document_id}_answer`,
+                  activeQuestion.defaultValue,
+                )
+              break
+            }
           }
-        }
+        })
       }
     }
-
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
       onSubmit: onSubmit,
@@ -282,16 +287,43 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             myAnswers = getAnswerDragNDrop()
             break
           case QUESTION_TYPES.ESSAY:
+            const value = getValues(`${activeQuestion.id}_${document_id}_essay`)
+
+            const isSubmitted = (() => {
+              if (grading_preference === 'AFTER_ALL_QUESTIONS') {
+                if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+                  if (value) {
+                    const data = JSON.parse(value)
+                    for (let e of data) {
+                      if (e.celldata && e.celldata.length > 0) {
+                        return true
+                      }
+                    }
+                    return false
+                  }
+                  return false
+                } else {
+                  if (value !== undefined && value !== '') {
+                    return true
+                  }
+                  return false
+                }
+              }
+            })()
+
+            let active = 'UNFINISHED'
+            if (isSubmitted) {
+              active = 'SUBMITED'
+            }
+
             myAnswers = {
               question_id: activeQuestion.id,
-              short_answer: getValues(
-                `${activeQuestion.id}_${document_id}_essay`,
-              ),
+              short_answer: value,
               response_option: activeQuestion.response_option
                 ? activeQuestion.response_option
                 : 'WORD',
               answer_file: activeQuestion.answer_file,
-              active: 'SUBMITED',
+              active,
             }
             break
           default:
@@ -378,6 +410,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
+              uuid={'_' + uuidv4().replaceAll('-', '_')}
             />
           )
 
@@ -400,6 +433,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               resetDefaultAnswer={false}
               ref={DragDropRef}
+              uuid={'_' + uuidv4().replaceAll('-', '_')}
             />
           )
 
@@ -499,12 +533,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                             setOpenFile(
                               { type: 'file' },
                               e.resource.url,
-                              e.resource.name,
+                              e?.resource?.name,
                             )
                           }
                           key={index}
                         >
-                          {e.resource.name}
+                          {e?.resource?.name}
                         </div>
                       )
                     })}
@@ -565,12 +599,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                   setOpenFile(
                                     { type: 'file' },
                                     e.resource.url,
-                                    e.resource.name,
+                                    e?.resource?.name,
                                   )
                               }}
                               key={index}
                             >
-                              {e.resource.name}
+                              {e?.resource?.name}
                             </div>
                           )
                         },

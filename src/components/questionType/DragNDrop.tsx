@@ -1,5 +1,5 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -23,7 +23,9 @@ interface IProps {
   solution?: string
   resetDefaultAnswer?: boolean
   allowUnHighLight?: boolean
+  uuid?: string
 }
+let dragParentIdRef: string
 const DragNDropPreivew = forwardRef(
   (
     {
@@ -39,11 +41,13 @@ const DragNDropPreivew = forwardRef(
       solution,
       resetDefaultAnswer = false,
       allowUnHighLight,
+      uuid,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
     const storageId = uniqueId('storage')
     const [answered, setAnswered] = useState<any>([])
+
     useEffect(() => {
       if (resetDefaultAnswer) {
         setAnswered(defaultAnswer)
@@ -57,25 +61,55 @@ const DragNDropPreivew = forwardRef(
     function drag(ev: any) {
       ev.dataTransfer.setData('text', ev.target.id)
       ev.dataTransfer.setData('questionId', data.id)
+
+      if (uuid) {
+        dragParentIdRef = ev.target.closest(`#${uuid}`)?.id
+      }
     }
     function drop(ev: any, dropId: string, dropItem?: boolean) {
       ev.preventDefault()
-      const slotId = ev.target.id
-      const slotElement = document.getElementById(slotId)
+
+      const slotElement = ev.target
+
+      if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
+        return
+      }
+      dragParentIdRef = ''
+
       const questionId = ev.dataTransfer.getData('questionId')
-      const storage = document.querySelector(`.${storageId}`)
+
+      let storage
+      if (uuid) {
+        storage = slotElement
+          .closest(`#${uuid}`)
+          ?.querySelector(`.${storageId}`)
+      } else {
+        storage = document.querySelector(`.${storageId}`)
+      }
+
       if (questionId === dropId) {
         var data = ev.dataTransfer.getData('text')
+
+        let draggingItem
+
+        if (uuid) {
+          draggingItem = slotElement
+            .closest(`#${uuid}`)
+            ?.querySelector(`[id="${data}"]`)
+        } else {
+          draggingItem = document.getElementById(data)
+        }
+
         if (
           slotElement?.children.length === 0 &&
           ev.target.classList.contains('dropable') &&
           !dropItem
         ) {
-          ev.target.appendChild(document.getElementById(data))
+          ev.target.appendChild(draggingItem)
         } else if (dropItem) {
           const parent = ev.target.parentNode
           storage?.appendChild(ev.target)
-          parent.appendChild(document.getElementById(data))
+          parent.appendChild(draggingItem)
           return
         }
       } else return
@@ -89,10 +123,25 @@ const DragNDropPreivew = forwardRef(
       const questId = event.dataTransfer.getData('questionId')
 
       // get the storage element from the DOM
-      const storage = document.querySelector(`.${storageId}`)
+      let storage
+      if (uuid) {
+        storage = event.target
+          .closest(`#${uuid}`)
+          ?.querySelector(`.${storageId}`)
+      } else {
+        storage = document.querySelector(`.${storageId}`)
+      }
       // append the piece element to the storage element
       if (event.target === storage && questId === id) {
-        storage?.appendChild(document.getElementById(pieceId) as any)
+        if (uuid) {
+          storage?.appendChild(
+            event.target
+              .closest(`#${uuid}`)
+              ?.querySelector(`[id="${pieceId}"]`) as any,
+          )
+        } else {
+          storage?.appendChild(document.getElementById(pieceId) as any)
+        }
       } else return
     }
     const str = data?.question_content
@@ -240,6 +289,7 @@ const DragNDropPreivew = forwardRef(
         className="body-modal-white -mt-2"
         key={key}
         ref={extenalRef || null}
+        id={`${uuid}`}
       >
         {questionContent && (
           <>

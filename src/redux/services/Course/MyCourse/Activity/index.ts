@@ -121,7 +121,20 @@ const CourseActivityApi = {
     const response = await httpService.GET<any, any>({
       uri: `question?question_ids=${question_ids?.join(',')}`,
     })
-    return response
+
+    return {
+      ...response,
+      data: response.data?.map((e: { id: string }) => {
+        return {
+          ...e,
+          quiz_position_mapping: [
+            {
+              question_id: e.id,
+            },
+          ],
+        }
+      }),
+    }
   },
 
   /**

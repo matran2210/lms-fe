@@ -1425,12 +1425,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         handleOpenScratchPad(
                           'file',
                           e.resource.url,
-                          e.resource.name,
+                          e?.resource?.name,
                         )
                       }
                       key={index}
                     >
-                      {e.resource.name}
+                      {e?.resource?.name}
                     </div>
                   )
                 },
@@ -1505,13 +1505,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                           handleOpenScratchPad(
                             'file',
                             e.resource.url,
-                            e.resource.name,
+                            e?.resource?.name,
                           )
                         // setOpenPdf({ status: true, url: e.resource.url })
                       }
                       key={index}
                     >
-                      {e.resource.name}
+                      {e?.resource?.name}
                     </div>
                   )
                 },
@@ -1648,11 +1648,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                             handleOpenScratchPad(
                               'file',
                               e.resource.url,
-                              e.resource.name,
+                              e?.resource?.name,
                             )
                           }
                         >
-                          {e.resource.name}
+                          {e?.resource?.name}
                         </div>
                       )
                     })}

@@ -81,6 +81,12 @@ const fetchQuestionById = createAsyncThunk(
     }
 
     if (existingQuestion) {
+      existingQuestion.quiz_position_mapping = [
+        {
+          question_id: existingQuestion.id,
+          answers: existingQuestion?.answers,
+        },
+      ]
       return { ...result, question: existingQuestion }
     }
 
@@ -140,8 +146,8 @@ const confirmQuestion = createAsyncThunk(
  * Async thunk để xác nhận một câu hỏi trong bài kiểm tra.
  * @type {AsyncThunk}
  */
-const submitQuestion = createAsyncThunk(
-  'quiz/submitQuestion',
+const submitQuiz = createAsyncThunk(
+  'quiz/submitQuiz',
   async (
     {
       id,
@@ -153,19 +159,19 @@ const submitQuestion = createAsyncThunk(
     try {
       const result = await CourseActivityApi.submitQuiz(id, {
         ...data,
-        answers: (data.answers || []).reduce((acc, e) => {
-          if (
-            e?.[0]?.answers &&
-            Array.isArray(e[0].answers) &&
-            e[0].answers.length <= 0
-          ) {
-            return acc
-          }
-          if ('question_answer_id' in e?.[0] && !e?.[0]?.question_answer_id) {
-            return acc
-          }
-          return [...acc, e?.[0]]
-        }, []),
+        answers:
+          (data.answers || [])
+            .map((e) => {
+              let value = e?.[0] || e
+              return value
+            })
+            ?.filter(
+              (e) =>
+                e.answer ||
+                e.question_answer_id ||
+                e.short_answer ||
+                e.answer_file,
+            ) || undefined,
       })
 
       if (result.success) {
@@ -487,14 +493,14 @@ const quizSlice: Slice = createSlice({
         },
       )
 
-    builder.addCase(submitQuestion.pending, (state) => {
+    builder.addCase(submitQuiz.pending, (state) => {
       // state.loading = true
     })
-    builder.addCase(submitQuestion.fulfilled, (state, action) => {
+    builder.addCase(submitQuiz.fulfilled, (state, action) => {
       // state.loading = false
       return state
     })
-    builder.addCase(submitQuestion.rejected, (state) => {
+    builder.addCase(submitQuiz.rejected, (state) => {
       // state.loading = false
     })
   },
@@ -516,7 +522,7 @@ const { removeQuizFinished, resetQuizActivity, saveFileEssay, clearFileEssay } =
 export {
   confirmQuestion,
   fetchQuestionById,
-  submitQuestion,
+  submitQuiz,
   removeQuizFinished,
   resetQuizActivity,
   saveFileEssay,
