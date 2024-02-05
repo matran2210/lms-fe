@@ -182,6 +182,6 @@ export const convertHourToDayLeft = (hours: number) => {
     return 0
   }
 
-  const days = Math.round(hours / 24)
+  const days = Math.ceil(hours / 24)
   return days
 }

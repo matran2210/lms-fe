@@ -7,7 +7,7 @@ import {
   fetchQuestionById,
   removeQuizFinished,
   selectQuestions,
-  submitQuestion,
+  submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import { CloseIcon } from '@assets/icons'
@@ -38,6 +38,7 @@ type Props = {
   handleProcess?: () => void
   document_id: string
   quizId: string
+  grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
 }
 
 /**
@@ -54,6 +55,7 @@ const VideoDocument = ({
   handleProcess,
   document_id,
   quizId,
+  grading_preference,
 }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
@@ -328,7 +330,7 @@ const VideoDocument = ({
 
     try {
       await dispatch(
-        submitQuestion({
+        submitQuiz({
           id: currentVideo?.quiz?.id || '',
           data: { answers, quiz_position_mapping },
         }),
@@ -397,11 +399,6 @@ const VideoDocument = ({
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleCloseModalResult = () => {
-    streamRef.current?.play()
-    setModalResult(undefined)
   }
 
   const handleShowQuizResultDetail = (data: IQuestionResult) => {
@@ -537,6 +534,7 @@ const VideoDocument = ({
               activeQuestion={activeQuestion}
               showCorrect={false}
               document_id={document_id}
+              grading_preference={grading_preference}
             ></QuizComponent>
           </div>
         </SappModal>
@@ -556,9 +554,9 @@ const VideoDocument = ({
         refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
         showHeader={false}
       >
-        <div>
+        <div className="relative">
           <div
-            className="ml-auto cursor-pointer absolute  right-6 top-4.5"
+            className="ml-auto cursor-pointer absolute  right-6 top-5"
             onClick={() => setModalResult(undefined)}
           >
             <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
