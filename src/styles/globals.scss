@@ -182,7 +182,7 @@ body *::-webkit-scrollbar-thumb:hover {
     right: 50%;
     top: 50%;
     transform: translate(50%, -50%);
-    z-index: 100;
+    z-index: 1;
     &::before {
       color: white;
       content: '\25B6';
