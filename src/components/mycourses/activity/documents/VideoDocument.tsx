@@ -165,21 +165,23 @@ const VideoDocument = ({
   }) => {
     try {
       if (open) {
-        dispatch(
+        await dispatch(
           fetchQuestionById({
             activityId: activityId,
             tabId: tabId,
             quizId: currentVideo?.quiz?.id || '',
             questionId: id,
           }),
-        ).then((e: any) => {
-          if (e.payload.question) {
-            setCurrentListQuestion(listQuestion)
-            setActiveQuestion(e.payload.question)
-            setModalOpen(true)
-            setHideVideo(true)
-          }
-        })
+        )
+          .unwrap()
+          .then((e: any) => {
+            if (e.question) {
+              setCurrentListQuestion(listQuestion)
+              setActiveQuestion(e.question)
+              setModalOpen(true)
+              setHideVideo(true)
+            }
+          })
       } else {
         setCurrentListQuestion([])
         setModalOpen(false)
@@ -504,7 +506,7 @@ const VideoDocument = ({
             lastQuestion?.id === activeQuestion?.id ? 'Finish' : 'Confirm'
           }`}
           buttonSize="small"
-          size="max-w-[782px]"
+          size="max-w-full"
           position="center"
           isInner={true}
           isBordered={true}
