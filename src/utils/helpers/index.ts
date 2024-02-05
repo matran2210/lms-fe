@@ -169,3 +169,19 @@ export const convertSecondsToMinutesSeconds = (seconds: number) => {
   const formattedSeconds = String(remainingSeconds).padStart(2, '0')
   return `${formattedMinutes}:${formattedSeconds}`
 }
+
+export const convertLocalTimeToUTC = (currentTime: Date) => {
+  const offsetMinutes = currentTime.getTimezoneOffset()
+  const utcTime = new Date(currentTime.getTime() + offsetMinutes * 60 * 1000)
+
+  return utcTime
+}
+
+export const convertHourToDayLeft = (hours: number) => {
+  if (hours <= 0) {
+    return 0
+  }
+
+  const days = Math.ceil(hours / 24)
+  return days
+}

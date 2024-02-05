@@ -67,6 +67,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
@@ -295,8 +296,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     file?: string,
     fileName?: string,
   ) => {
-    // console.log(file);
-
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
@@ -443,12 +442,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                             type: 'file',
                           },
                           e.resource.url,
-                          e.resource.name,
+                          e?.resource?.name,
                         )
                       }}
                       key={index}
                     >
-                      {e.resource.name}
+                      {e?.resource?.name}
                     </div>
                   )
                 })}
@@ -486,7 +485,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     return (
                       <div
                         className={marginBottom}
-                        key={e.id}
+                        key={e.id + '_' + i + '_' + selector.currentTabId}
                         ref={quizDocumentRef}
                       >
                         <QuizDocument
@@ -509,7 +508,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                   }
                   if (e.type === 'TEXT') {
                     return (
-                      <div className={marginBottom} key={e.id}>
+                      <div
+                        className={marginBottom}
+                        key={e.id + '_' + i + '_' + selector.currentTabId}
+                      >
                         <TextDocument
                           text_editor_content={e.text_editor_content}
                         ></TextDocument>
@@ -518,7 +520,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                   }
                   if (e.type === 'VIDEO') {
                     return (
-                      <div className={marginBottom} key={i}>
+                      <div
+                        className={marginBottom}
+                        key={i + '_' + selector.currentTabId}
+                      >
                         <VideoDocument
                           videos={e.videos}
                           activityId={activity.id}
@@ -529,6 +534,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           handleProcess={handleFinishedCourseSectionProgress}
                           document_id={e.id}
                           quizId={e.quiz?.id || ''}
+                          grading_preference={
+                            e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
+                          }
                         ></VideoDocument>
                       </div>
                     )
@@ -742,11 +750,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                             handleOpenScratchPad(
                               { type: 'file' },
                               e.resource.url,
-                              e.resource.name,
+                              e?.resource?.name,
                             )
                           }
                         >
-                          {e.resource.name}
+                          {e?.resource?.name}
                         </div>
                       )
                     })}

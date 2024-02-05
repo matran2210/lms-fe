@@ -19,7 +19,6 @@ const HistoryItem = ({ data }: any) => {
       </div>
       <div className="flex items-center gap-2">
         <div className="text-xsm text-gray-1">{formattedTime}</div>
-        <div className="bg-gray-1 rounded-full w-[4px] h-[4px]"></div>
         {data.location && (
           <div className="bg-gray-1 rounded-full w-[4px] h-[4px]"></div>
         )}

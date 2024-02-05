@@ -6,7 +6,7 @@ import {
   fetchQuestionById,
   removeQuizFinished,
   selectQuestions,
-  submitQuestion,
+  submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import { CloseIcon } from '@assets/icons'
@@ -191,7 +191,7 @@ const QuizDocument = ({
 
     try {
       await dispatch(
-        submitQuestion({
+        submitQuiz({
           id: quizId,
           data: { answers, quiz_position_mapping },
         }),
@@ -212,7 +212,7 @@ const QuizDocument = ({
           setActiveQuestionIndex(0)
         })
     } catch (error: any) {
-      if (error.response.status === 422) {
+      if (error?.response?.status === 422) {
         toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
       }
     } finally {
@@ -292,6 +292,7 @@ const QuizDocument = ({
             key={quizComponentKey}
             document_id={document_id}
             setOpenFile={setOpenFile}
+            grading_preference={grading_preference}
           />
         )}
       </div>
@@ -348,7 +349,17 @@ const QuizDocument = ({
               if (loading) {
                 return
               }
-              if (isLastQuestion) {
+              if (
+                isLastQuestion &&
+                grading_preference === 'AFTER_EACH_QUESTION'
+              ) {
+                setRunHandleFinishQuiz((e) => e + 1)
+                return
+              }
+              if (
+                isLastQuestion &&
+                grading_preference !== 'AFTER_EACH_QUESTION'
+              ) {
                 handleConfirmQuestion(true)
               } else {
                 if (grading_preference !== 'AFTER_EACH_QUESTION') {
@@ -391,14 +402,14 @@ const QuizDocument = ({
         refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
         showHeader={false}
       >
-        <div>
+        <div className="relative">
           <div
-            className="ml-auto cursor-pointer absolute  right-6 top-4.5"
+            className="ml-auto cursor-pointer absolute  right-6 top-5"
             onClick={() => setModalResult(undefined)}
           >
             <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
           </div>
-          <div className="max-w-[1114px] mx-auto">
+          <div className="max-w-[1114px] mx-auto overflow-auto">
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}
               getTable={getTable}

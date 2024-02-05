@@ -149,7 +149,7 @@ const YourScoreDetail = () => {
                   <td className="pr-1 text-bw-1">{index + 1}</td>
                   <td className="text-start m-6 pr-4">
                     <div
-                      className={`text-bw-1 sapp-text-truncate-1 cursor-pointer hover:font-semibold`}
+                      className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
                       dangerouslySetInnerHTML={{
                         __html: String(e?.question?.question_content ?? '--'),
                       }}
@@ -158,7 +158,7 @@ const YourScoreDetail = () => {
                       }}
                     ></div>
                   </td>
-                  <td className="text-start m-6 pr-4 text-bw-1">
+                  <td className="text-start m-6 pr-4 text-bw-1 line-clamp-1">
                     {e?.question?.question_filter_id?.part?.name ?? '--'}
                   </td>
                   <td className="text-start m-6 pr-4 text-bw-1">

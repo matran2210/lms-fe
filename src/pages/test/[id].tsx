@@ -57,6 +57,7 @@ import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
+import useMousePosition from '@utils/hookMouseMove'
 type Window = {
   userAgreed: any
 }
@@ -272,14 +273,24 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
+  const [QuizResultId, setQuizResultId] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
   const [openLimit, setOpenLimit] = useState(false)
   const [openUpload, setOpenUpload] = useState<any>({})
-  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [unsavedChanges, setUnsavedChanges] = useState(true)
-
+  const [startResize, setStartResize] = useState(false)
+  const [currentMousePos, setCurrentMousePos] = useState(0)
+  const [leftWidth, setLeftWidth] = useState(0)
+  const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
+  const { x } = useMousePosition()
+  useEffect(() => {
+    if (startResize) {
+      const temp = currentLeftWidth
+      setLeftWidth(temp + (currentMousePos - (x || 0)))
+    }
+  }, [x, startResize])
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -935,7 +946,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return arr
     })
   }
-  const handleSubmitQuestion = async () => {
+  const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
     let answers = []
@@ -1038,24 +1049,46 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         answers: e.data?.answers,
       })
     }
-    setTabs(() => {
-      // ref.setKey
-      handleChangeTab(tabs[0].id)
-      return reformTabs
-    })
-    setUnsavedChanges(false)
-    const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
-      answers: answers,
-      quiz_position_mapping: quiz_position_mapping,
-      total_attempt_time:
-        quizDetail.quiz_timed * 60 -
-        (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-    })
-    if (res) {
-      if (type === 'entrance') {
-        router.replace(`/entrance-test/test-result/${res?.data?.id}`)
-      } else {
-        router.replace(`/courses/test/test-result/${res?.data?.id}`)
+    if (type_submit === 'submit') {
+      setTabs(() => {
+        // ref.setKey
+        handleChangeTab(tabs[0].id)
+        return reformTabs
+      })
+      setUnsavedChanges(false)
+      const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
+        answers: answers,
+        quiz_position_mapping: quiz_position_mapping,
+        total_attempt_time:
+          quizDetail.quiz_timed * 60 -
+          (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+      })
+      if (res) {
+        if (type === 'entrance') {
+          router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+        } else {
+          router.replace(`/courses/test/test-result/${res?.data?.id}`)
+        }
+      }
+    } else {
+      setTabs(() => {
+        // ref.setKey
+        handleChangeTab(tabs[0].id)
+        return reformTabs
+      })
+      setUnsavedChanges(false)
+      const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
+        answers: answers,
+        quiz_position_mapping: quiz_position_mapping,
+        total_attempt_time:
+          quizDetail.quiz_timed * 60 -
+          (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+      })
+      if (res) {
+        setQuizResultId(() => {
+          setOpenTimeOut(true)
+          return res?.data?.id
+        })
       }
     }
 
@@ -1278,12 +1311,21 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     }
   }, [unsavedChanges])
   return (
-    <div className="h-screen flex flex-col bg-white overflow-hidden relative">
+    <div
+      className="h-screen flex flex-col bg-white overflow-hidden relative"
+      onMouseUp={() => {
+        setStartResize(false)
+        setCurrentLeftWidth(leftWidth)
+      }}
+    >
       {/* Header */}
       {loading && tabs?.length !== 0 && filteredTabs.length !== 0 && (
         <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
           Loading
         </div>
+      )}
+      {startResize && (
+        <div className="absolute w-screen h-screen z-[1350]"></div>
       )}
       <div>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
@@ -1296,7 +1338,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               onTimeOut={() => {
                 if (!openLimit) {
                   setUnsavedChanges(false)
-                  setOpenTimeOut(true)
+                  handleSubmitQuestion('timeout')
+                  // setOpenTimeOut(true)
                 }
               }}
               ref={timeRef}
@@ -1350,70 +1393,86 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       {/* <div className=''> */}
       {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
         <div
-          className="flex gap-5 h-[calc(100%-176px)] bg-gray-3 mt-[72px]"
+          className="flex h-[calc(100%-176px)] bg-gray-3 mt-[72px]"
           id={'preview-question'}
         >
           <div
-            className="w-1/2 h-full overflow-auto bg-white p-6"
-            id="hightlight_area_topic"
-            onMouseUp={(e: any) => {
-              if (
-                e.target.tagName.charAt(0) !== 'm' &&
-                e.target.firstChild?.tagName !== 'math'
-              ) {
-                if (e) {
-                  if (allowHighLight) {
-                    runHighlight(
-                      handleSaveHighLightTopic,
-                      allowHighLight || false,
-                      'hightlight_area_topic',
-                    )
-                  } else if (allowUnHighLight) {
-                    runHighlight(
-                      handleSaveHighLightTopic,
-                      allowUnHighLight || false,
-                      'hightlight_area_topic',
-                      { color: 'white' },
-                    )
+            className="h-full overflow-auto bg-white p-6"
+            style={{ width: `calc(50% - ${leftWidth}px)` }}
+          >
+            <div
+              className="min-w-[700px]"
+              id="hightlight_area_topic"
+              onMouseUp={(e: any) => {
+                if (
+                  e.target.tagName.charAt(0) !== 'm' &&
+                  e.target.firstChild?.tagName !== 'math'
+                ) {
+                  if (e) {
+                    if (allowHighLight) {
+                      runHighlight(
+                        handleSaveHighLightTopic,
+                        allowHighLight || false,
+                        'hightlight_area_topic',
+                      )
+                    } else if (allowUnHighLight) {
+                      runHighlight(
+                        handleSaveHighLightTopic,
+                        allowUnHighLight || false,
+                        'hightlight_area_topic',
+                        { color: 'white' },
+                      )
+                    }
                   }
                 }
-              }
-            }}
-          >
-            <div className="mb-4">
-              {currentTabContent?.topicDescription?.name}
+              }}
+            >
+              <div className="mb-4">
+                {currentTabContent?.topicDescription?.name}
+              </div>
+              <EditorReader
+                className="mb-4"
+                text_editor_content={
+                  currentTabContent?.topicDescription?.description
+                }
+                highlighted={currentTabContent?.hightlightTopic}
+                highlighArea="hightlight_area_topic"
+              />
+              {currentTabContent?.topicDescription?.files?.length > 0 &&
+                currentTabContent?.topicDescription?.files?.map(
+                  (e: any, index: number) => {
+                    return (
+                      <div
+                        className="cursor-pointer text-state-info hover:underline"
+                        onClick={() =>
+                          handleOpenScratchPad(
+                            'file',
+                            e.resource.url,
+                            e?.resource?.name,
+                          )
+                        }
+                        key={index}
+                      >
+                        {e?.resource?.name}
+                      </div>
+                    )
+                  },
+                )}
             </div>
-            <EditorReader
-              className="mb-4"
-              text_editor_content={
-                currentTabContent?.topicDescription?.description
-              }
-              highlighted={currentTabContent?.hightlightTopic}
-              highlighArea="hightlight_area_topic"
-            />
-            {currentTabContent?.topicDescription?.files?.length > 0 &&
-              currentTabContent?.topicDescription?.files?.map(
-                (e: any, index: number) => {
-                  return (
-                    <div
-                      className="cursor-pointer text-state-info hover:underline"
-                      onClick={() =>
-                        handleOpenScratchPad(
-                          'file',
-                          e.resource.url,
-                          e.resource.name,
-                        )
-                      }
-                      key={index}
-                    >
-                      {e.resource.name}
-                    </div>
-                  )
-                },
-              )}
           </div>
-          <div className="w-1/2 h-full overflow-auto bg-white py-6 ">
-            <div className="px-6">
+          <div
+            className="w-[20px] h-full bg-gray-3 cursor-ew-resize"
+            onMouseDown={() => {
+              setStartResize(true)
+              setCurrentMousePos(x || 0)
+            }}
+            onMouseUp={() => setStartResize(false)}
+          ></div>
+          <div
+            className="h-full overflow-auto bg-white py-6 "
+            style={{ width: `calc(50% + ${leftWidth}px)` }}
+          >
+            <div className="px-6 min-w-[700px]">
               {checkType(
                 currentTabContent?.data,
                 currentTabContent?.data?.qType,
@@ -1481,13 +1540,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                           handleOpenScratchPad(
                             'file',
                             e.resource.url,
-                            e.resource.name,
+                            e?.resource?.name,
                           )
                         // setOpenPdf({ status: true, url: e.resource.url })
                       }
                       key={index}
                     >
-                      {e.resource.name}
+                      {e?.resource?.name}
                     </div>
                   )
                 },
@@ -1624,11 +1683,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                             handleOpenScratchPad(
                               'file',
                               e.resource.url,
-                              e.resource.name,
+                              e?.resource?.name,
                             )
                           }
                         >
-                          {e.resource.name}
+                          {e?.resource?.name}
                         </div>
                       )
                     })}
@@ -1956,7 +2015,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       <TestTimeOutModal
         open={openTimeOut}
         setOpen={setOpenTimeOut}
-        handleSubmit={handleSubmitQuestion}
+        handleSubmit={() => {
+          if (type === 'entrance') {
+            router.replace(`/entrance-test/test-result/${QuizResultId}`)
+          } else {
+            router.replace(`/courses/test/test-result/${QuizResultId}`)
+          }
+        }}
         handleQuit={() => {
           setUnsavedChanges(() => {
             router.back()
@@ -1978,7 +2043,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       <ConFirmSubmit
         open={openSubmit}
         setOpen={setOpenSubmit}
-        handleSubmit={handleSubmitQuestion}
+        handleSubmit={() => handleSubmitQuestion('submit')}
         handleCancel={() => setUnsavedChanges(true)}
       />
       <ModalUploadFile

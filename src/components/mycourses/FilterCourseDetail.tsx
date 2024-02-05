@@ -15,11 +15,11 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
   const userSectionLearningStatus = watch('user_section_learning_status')?.value
 
   useEffect(() => {
-    router.push(
-      userSectionLearningStatus !== undefined
-        ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
-        : apiUrl,
-    )
+    // router.push(
+    //   userSectionLearningStatus !== undefined
+    //     ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
+    //     : apiUrl,
+    // )
   }, [watch('user_section_learning_status')])
 
   return (

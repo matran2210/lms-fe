@@ -7,6 +7,7 @@ import {
   memo,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from 'react'
 
@@ -24,12 +25,13 @@ interface IProps {
   corrects?: any
   solution?: string
   allowUnHighLight?: boolean
+  uuid?: string
 }
 type IProp = {
   value: string
   className?: string
 }
-
+let dragParentIdRef: string
 const MatchingQuestion = forwardRef(
   (
     {
@@ -45,6 +47,7 @@ const MatchingQuestion = forwardRef(
       corrects,
       solution,
       allowUnHighLight,
+      uuid,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -77,15 +80,35 @@ const MatchingQuestion = forwardRef(
     function drag(ev: any) {
       ev.dataTransfer.setData('text', ev.target.id)
       ev.dataTransfer.setData('questionId', data.id)
+
+      if (uuid) {
+        dragParentIdRef = ev.target.closest(`#${uuid}`)?.id
+      }
     }
 
     function drop(ev: any, dropId: string, dropItem?: boolean) {
       ev.preventDefault()
-      const slotId = ev.target.id
-      const slotElement = document.getElementById(slotId)
+
+      const slotElement = ev.target
+
+      if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
+        return
+      }
+      dragParentIdRef = ''
+
       const questionId = ev.dataTransfer.getData('questionId')
       var data = ev.dataTransfer.getData('text')
-      const draggingItem = document.getElementById(data)
+
+      let draggingItem
+
+      if (uuid) {
+        draggingItem = slotElement
+          .closest(`#${uuid}`)
+          ?.querySelector(`[id="${data}"]`)
+      } else {
+        draggingItem = document.getElementById(data)
+      }
+
       const oldParent = draggingItem?.parentNode
       if (questionId === dropId) {
         if (
@@ -93,11 +116,11 @@ const MatchingQuestion = forwardRef(
           ev.target.classList.contains('dropable') &&
           !dropItem
         ) {
-          ev.target.appendChild(document.getElementById(data))
+          ev.target.appendChild(draggingItem)
         } else if (dropItem) {
           const parent = ev.target.parentNode
           oldParent?.appendChild(ev.target)
-          parent.appendChild(document.getElementById(data))
+          parent.appendChild(draggingItem)
           return
         }
       } else return
@@ -109,10 +132,25 @@ const MatchingQuestion = forwardRef(
       const pieceId = event.dataTransfer.getData('text')
       const questId = event.dataTransfer.getData('questionId')
       // get the storage element from the DOM
-      const storage = document.querySelector(`.${storageId}`)
+      let storage
+      if (uuid) {
+        storage = event.target
+          .closest(`#${uuid}`)
+          ?.querySelector(`.${storageId}`)
+      } else {
+        storage = document.querySelector(`.${storageId}`)
+      }
       // append the piece element to the storage element
       if (event.target === storage && questId === id) {
-        storage?.appendChild(document.getElementById(pieceId) as any)
+        if (uuid) {
+          storage?.appendChild(
+            event.target
+              .closest(`#${uuid}`)
+              ?.querySelector(`[id="${pieceId}"]`) as any,
+          )
+        } else {
+          storage?.appendChild(document.getElementById(pieceId) as any)
+        }
       } else return
     }
     const [key, setKey] = useState<string>('1')
@@ -191,7 +229,7 @@ const MatchingQuestion = forwardRef(
       setDefaultValue(obj)
     }, [defaultAnswer, data.question_matchings])
     return (
-      <div key={key} ref={extenalRef}>
+      <div key={key} ref={extenalRef} id={`${uuid}`}>
         <div
           id="hightlight_area"
           onMouseUp={(e: any) => {

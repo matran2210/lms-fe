@@ -12,13 +12,12 @@ import TableEntranceResult from '../table-result/[id]'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 const TestEntranceResult = ({ chartData }: any) => {
-  // console.log(chartData);
   const router = useRouter()
   //todo: call api, make UI
   // return <></>
 
   return (
-    <div className="bg-white">
+    <div className="bg-gray-4">
       <div
         className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
         onClick={() => {
