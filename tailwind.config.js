@@ -20,7 +20,8 @@ module.exports = {
       '4xl': '1920px',
     },
     fontSize: {
-      '6px': ['64px', { lineHeight: '76.8px ' }],
+      '6xl': ['64px', { lineHeight: '76.8px ' }],
+      '5.5xl': ['56px', { lineHeight: '67px ' }],
       '5xl': ['40px', { lineHeight: '50px' }],
       '4xl': ['36px', { lineHeight: '45px' }],
       '3xl': ['32px', { lineHeight: '40px' }],

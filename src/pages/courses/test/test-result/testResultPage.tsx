@@ -42,8 +42,8 @@ const TestResultPage = ({
   return (
     <>
       {type === 'ACCA' && courseDifficulty <= 4 ? (
-        <div className="flex gap-6 overflow-y-auto flex-wrap">
-          <div className="max-h-full w-full max-w-smd">
+        <div className="flex xl:gap-6 overflow-y-auto flex-wrap">
+          <div className="max-h-full w-full xl:max-w-smd">
             <TotalScore
               score={highestValue}
               className="px-7 pt-6 pb-4 mb-5 shadow-sidebar"
@@ -54,7 +54,7 @@ const TestResultPage = ({
             />
             <MultipleQuestion questions={questions} className={'h-[815px]'} />
           </div>
-          <div className="max-h-full">
+          <div className="max-h-full w-full xl:w-auto">
             <ChartACCAScore data={chartData?.chart_data} />
             <YourScoreDetail />
           </div>
@@ -63,16 +63,22 @@ const TestResultPage = ({
         <>
           {type === 'CFA' ? (
             <div className="flex gap-6 overflow-y-auto flex-wrap">
-              <div className="max-h-full">
+              <div className="max-h-full w-full xl:w-auto">
                 <YourScore chartData={chartData} />
                 <YourScoreDetail />
               </div>
-              <MultipleQuestion questions={questions} className={'h-[991px]'} />
+              <MultipleQuestion
+                questions={questions}
+                className={'xl:h-[991px]'}
+              />
             </div>
           ) : (
             <div className="flex gap-6 overflow-y-auto flex-wrap">
-              <MultipleQuestion questions={questions} className={'h-[991px]'} />
-              <div className="max-h-full">
+              <MultipleQuestion
+                questions={questions}
+                className={'xl:h-[991px]'}
+              />
+              <div className="max-h-full w-full xl:w-auto">
                 <YourScoreDetail />
               </div>
             </div>

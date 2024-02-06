@@ -15,7 +15,7 @@ interface IProps {
 const ChartCFAScore = ({ data }: IProps) => {
   return (
     <div className="block overflow-x-auto">
-      <div className="text-xl font-medium text-bw-1 mb-6">
+      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
         Your Performance by Topic Area
       </div>
       <div className="flex w-full relative mb-4">
@@ -27,7 +27,7 @@ const ChartCFAScore = ({ data }: IProps) => {
           <div
             className="flex items-center min-w-full mt-10"
             style={{
-              width: `${data.length > 0 && 14.5 * (data.length + 1)}%`,
+              width: `${data.length > 0 && 17.5 * (data.length + 3)}%`,
             }}
           >
             <span className="text-medium-sm text-bw-1 font-normal pr-7">
@@ -38,7 +38,7 @@ const ChartCFAScore = ({ data }: IProps) => {
           <div
             className="flex items-center min-w-full mt-4"
             style={{
-              width: `${data.length > 0 && 14.5 * (data.length + 1)}%`,
+              width: `${data.length > 0 && 17.5 * (data.length + 3)}%`,
             }}
           >
             <span className="text-medium-sm text-bw-1 font-normal pr-7">
@@ -47,18 +47,6 @@ const ChartCFAScore = ({ data }: IProps) => {
             <div className="w-full border-b border-gray-1"></div>
           </div>
         </div>
-        {data.map((item, index) => (
-          <div
-            key={item?.question_topic_id}
-            className="w-16 h-1 bg-primary absolute first:left-[14%]"
-            style={{
-              left: `${14.085 * (index + 1)}%`,
-              bottom: `${
-                (item?.total_correct_answers / item.total_questions) * 100
-              }%`,
-            }}
-          ></div>
-        ))}
       </div>
       <div className="block">
         <div className="bg-gray-4 w-full flex flex-row">
@@ -66,12 +54,23 @@ const ChartCFAScore = ({ data }: IProps) => {
             <div className="text-medium-sm text-bw-1">Topic Area</div>
             <div className="text-medium-sm text-bw-1">Topic Weight</div>
           </div>
-          <div className="flex flex-row flex-start pr-6">
+          <div className="flex flex-row flex-start pr-12">
             {data?.map((item: any) => (
               <div
                 key={item?.id}
-                className="bg-gray-4 flex flex-col w-full min-w-[134px] max-w-[134px] justify-between shrink-0 items-start gap-1 first:ml-6 pr-6 py-3"
+                className="bg-gray-4 flex relative flex-col w-full min-w-[134px] max-w-[134px] justify-between shrink-0 items-start gap-1 first:ml-6 pr-6 py-3"
               >
+                <div className="absolute left-0 bottom-[calc(100%+16px)] h-40 w-auto">
+                  <div
+                    className="w-16 h-1 bg-primary absolute left-0"
+                    style={{
+                      bottom: `${
+                        (item?.total_correct_answers / item?.total_questions) *
+                        100
+                      }%`,
+                    }}
+                  ></div>
+                </div>
                 <div className="text-medium-sm text-bw-1 font-medium w-full line-clamp-2">
                   {item?.title}
                 </div>
