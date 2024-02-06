@@ -11,7 +11,7 @@ const headers = [
   {
     label: '#',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-62px',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[44px] xl:min-w-62px',
   },
   {
     label: 'Question',
@@ -126,11 +126,11 @@ const YourScoreDetail = () => {
   }, [router])
 
   return (
-    <div className="bg-white px-6 md:px-24 py-6 max-w-[1144px] max-h-full shadow-sidebar">
-      <div className="text-xl font-medium text-bw-1 mb-6">
+    <div className="bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar">
+      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
         Your Score Details
       </div>
-      <div className="block pl-4">
+      <div className="block pl-4 overflow-x-auto">
         <SappTable
           headers={headers}
           loading={true}
@@ -147,7 +147,7 @@ const YourScoreDetail = () => {
                   key={e?.id}
                 >
                   <td className="pr-1 text-bw-1">{index + 1}</td>
-                  <td className="text-start m-6 pr-4">
+                  <td className="text-start m-6 pr-4 max-w-[210px]">
                     <div
                       className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
                       dangerouslySetInnerHTML={{
@@ -158,7 +158,7 @@ const YourScoreDetail = () => {
                       }}
                     ></div>
                   </td>
-                  <td className="text-start m-6 pr-4 text-bw-1 line-clamp-1">
+                  <td className="text-start my-6 pr-4 text-bw-1 line-clamp-1">
                     {e?.question?.question_filter_id?.part?.name ?? '--'}
                   </td>
                   <td className="text-start m-6 pr-4 text-bw-1">
