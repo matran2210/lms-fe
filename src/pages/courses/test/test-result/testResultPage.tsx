@@ -52,7 +52,10 @@ const TestResultPage = ({
               classCountAll="relative top-0.5"
               globalAverage={GlobalAverage}
             />
-            <MultipleQuestion questions={questions} className={'h-[815px]'} />
+            <MultipleQuestion
+              questions={questions}
+              className={'xl:h-[815px]'}
+            />
           </div>
           <div className="max-h-full w-full xl:w-auto">
             <ChartACCAScore data={chartData?.chart_data} />

@@ -121,6 +121,7 @@ module.exports = {
         preview: '0px 4px 12px 0px rgba(0, 0, 0, 0.10)',
         select:
           '0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 4px 0px rgba(0, 0, 0, 0.04)',
+        'sidebar-tablet': '0px -2px 7px 0px #0000001A',
       },
       minWidth: {
         4: '16px',

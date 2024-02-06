@@ -55,9 +55,9 @@ const ChartCFAScore = ({ data }: IProps) => {
             <div className="text-medium-sm text-bw-1">Topic Weight</div>
           </div>
           <div className="flex flex-row flex-start pr-12">
-            {data?.map((item: any) => (
+            {data?.map((item: any, index: number) => (
               <div
-                key={item?.id}
+                key={item?.id + index}
                 className="bg-gray-4 flex relative flex-col w-full min-w-[134px] max-w-[134px] justify-between shrink-0 items-start gap-1 first:ml-6 pr-6 py-3"
               >
                 <div className="absolute left-0 bottom-[calc(100%+16px)] h-40 w-auto">
