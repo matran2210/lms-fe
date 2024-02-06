@@ -237,7 +237,9 @@ const Course = ({
       }
       setOpenActive(true)
     } else if (determineButtonToShow === 'Extend') {
-      student?.extend_count === 0 ? extendCourse() : setOpenExtend(true)
+      student?.extend_count === 0 || !student
+        ? extendCourse()
+        : setOpenExtend(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
         ? router.push(`/courses/my-course/${course.id}`)
