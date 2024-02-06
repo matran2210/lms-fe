@@ -20,7 +20,7 @@ import { CloseIcon, UploadIcon } from '@assets/icons'
 export type IPreviewProp = {
   data: any
   question_content: string
-  index: number
+  index: number | undefined
   question_data: any
   control: any
   name: string
@@ -48,7 +48,7 @@ const EssayQuestionPreview = ({
   index,
   question_data,
   control,
-  handleSaveHighLight,
+  handleSaveHighLight = () => {},
   highlighted,
   removeHighlight,
   allowHighLight,
@@ -64,7 +64,7 @@ const EssayQuestionPreview = ({
   handleClearFile,
   setOpenPdf,
   allowUnHighLight,
-  handleSaveHighLightRequirement,
+  handleSaveHighLightRequirement = () => {},
   setUnsavedChanges,
 }: IPreviewProp) => {
   // console.log(response_option_custom)
@@ -196,15 +196,19 @@ const EssayQuestionPreview = ({
               }
             }}
           >
-            <div className="sapp-questions-essay">{`Requirement ${
-              index + 1
-            } : ${data.name}`}</div>
+            <div className="sapp-questions-essay">
+              {index !== undefined
+                ? `Requirement ${index + 1}: ${data.name}`
+                : `Requirement: ${data.name}`}
+            </div>
             <EditorReader
               className="editor-wrap mb-4"
               // className="questions"
               // style={{ borderBottom: "4px solid #F2F2F2" }}
               text_editor_content={data.description}
-              highlighted={question_data?.requirements?.[index]?.highlighted}
+              highlighted={
+                question_data?.requirements?.[index || 0]?.highlighted
+              }
               highlighArea="hightlight_area_require"
             />
 

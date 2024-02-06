@@ -174,7 +174,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           <EssayQuestionPreview
             data={requirement}
             question_content={question_content}
-            index={1}
+            index={undefined}
             question_data={data}
             control={control}
             handleSaveHighLight={() => {}}
