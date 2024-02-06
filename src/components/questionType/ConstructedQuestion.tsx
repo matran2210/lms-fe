@@ -196,9 +196,11 @@ const EssayQuestionPreview = ({
               }
             }}
           >
-            <div className="sapp-questions-essay">{`Requirement ${
-              index + 1
-            } : ${data.name}`}</div>
+            <div className="sapp-questions-essay">
+              {!forCaseStudy
+                ? `Requirement ${index + 1}: ${data.name}`
+                : `Requirement: ${data.name}`}
+            </div>
             <EditorReader
               className="editor-wrap mb-4"
               // className="questions"
