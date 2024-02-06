@@ -33,7 +33,7 @@ const YourScore = ({ chartData }: IProps) => {
       <TotalScore
         score={highestValue}
         globalAverage={GlobalAverage}
-        classGlobal="mt-15"
+        classGlobal="mt-15 xl:pr-0"
       />
       <div className="block w-full">
         <ChartCFAScore data={chartData?.chart_data} />
