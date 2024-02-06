@@ -475,13 +475,52 @@ const CaseStudyDetail = ({ questions }: any) => {
         }
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
-        answers.push({
-          question_id: e.id,
-          short_answer: e.answer || '',
-          response_option: e.response_option ? e.response_option : 'WORD',
-          answer_file: e.answer_file,
-          active: 'SUBMITED',
-        })
+        if (
+          (e.answer !== undefined && e.answer !== '') ||
+          e.answer_file?.file_key
+        ) {
+          if (!e.response_option) {
+            answers.push({
+              question_id: e.id,
+              short_answer: e.answer || '',
+              response_option: e.response_option ? e.response_option : 'WORD',
+              answer_file: e.answer_file,
+              active: 'SUBMITED',
+            })
+          } else {
+            if (e.response_option === 'SHEET') {
+              if (e.answer) {
+                const data = JSON.parse(e.answer)
+                for (let el of data) {
+                  if (el.celldata && el.celldata.length > 0) {
+                    answers.push({
+                      question_id: e.id,
+                      short_answer: e.answer || '',
+                      response_option: e.response_option
+                        ? e.response_option
+                        : 'WORD',
+                      answer_file: e.answer_file,
+                      active: 'SUBMITED',
+                    })
+                    break
+                  }
+                }
+                continue
+              }
+              continue
+            } else {
+              answers.push({
+                question_id: e.id,
+                short_answer: e.answer || '',
+                response_option: e.response_option ? e.response_option : 'WORD',
+                answer_file: e.answer_file,
+                active: 'SUBMITED',
+              })
+            }
+          }
+        } else {
+          continue
+        }
       }
 
       quiz_position_mapping.push({
