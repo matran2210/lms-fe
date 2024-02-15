@@ -25,7 +25,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
           ${
             item?.is_correct || item?.active === 'SUBMITED'
               ? ' text-state-success border-success'
-              : ' text-danger border-error'
+              : ' text-state-error border-error'
           }
           `}
         >
@@ -66,7 +66,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
           ${
             item?.is_correct || item?.active === 'SUBMITED'
               ? ' text-state-success border-success'
-              : ' text-danger border-error'
+              : ' text-state-error border-error'
           }
           `}
         >
@@ -137,9 +137,9 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
           <div className="hidden xl:flex items-center mr-4 w-20">
             <Icon
               type={'circle'}
-              className="w-4 h-4 text-danger mr-1.5 shrink-0"
+              className="w-4 h-4 text-state-error mr-1.5 shrink-0"
             />
-            <span className="text-base leading-6.2 text-danger font-normal">
+            <span className="text-base leading-6.2 text-state-error font-normal">
               Incorrect
             </span>
           </div>

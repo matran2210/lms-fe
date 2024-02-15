@@ -117,7 +117,7 @@ const TestModal = ({
         <div className="text-gray-1">Status:</div>
         <div
           className={`${
-            checkFinished ? 'text-state-success' : 'text-danger'
+            checkFinished ? 'text-state-success' : 'text-state-error'
           } pr-0.5 font-medium`}
         >
           {checkFinished ? 'Finished' : 'Unfinished'}
