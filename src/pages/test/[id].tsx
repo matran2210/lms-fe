@@ -36,6 +36,7 @@ import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadF
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
 import { removeJwtToken } from '@utils/helpers/authen'
+import useMousePosition from '@utils/hookMouseMove'
 import {
   runHighlight,
   setCookieActToken,
@@ -57,7 +58,6 @@ import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
-import useMousePosition from '@utils/hookMouseMove'
 type Window = {
   userAgreed: any
 }
@@ -285,6 +285,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
   const { x } = useMousePosition()
+  const rightSideRef = useRef<any>(null)
   useEffect(() => {
     if (startResize) {
       const temp = currentLeftWidth
@@ -1102,7 +1103,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setTabs((prev: any) => {
         const arr = [...prev]
         const currentIndex = arr.findIndex((e) => e.id === data.id)
-        arr[currentIndex] = { ...arr[currentIndex], answer: undefined }
+        arr[currentIndex] = {
+          ...arr[currentIndex],
+          answer: undefined,
+          attempted: false,
+        }
         return arr
       })
       setValue(`${currentTabContent?.id}_answer`, undefined)
@@ -1471,6 +1476,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           <div
             className="h-full overflow-auto bg-white py-6 "
             style={{ width: `calc(50% + ${leftWidth}px)` }}
+            ref={rightSideRef}
           >
             <div className="px-6 min-w-[700px]">
               {checkType(
@@ -1867,6 +1873,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                           }`}
                           onClick={() => {
                             setEssayData({ req: e, index: index })
+                            rightSideRef?.current &&
+                              rightSideRef.current.scrollTo({
+                                top: 0,
+                                behavior: 'smooth',
+                              })
                           }}
                         >{`Requirement (${index + 1})`}</button>
                       )
