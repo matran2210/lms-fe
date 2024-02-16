@@ -536,7 +536,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
         })
-        toast.success('submit success')
+        toast.success('Submitted successfully')
         router.replace(
           `/case-study/table-result/${quizAttempId}?class_user_id=${router.query.class_user_id}`,
         )
