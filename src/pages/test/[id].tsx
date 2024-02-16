@@ -1110,7 +1110,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         }
         return arr
       })
-      setValue(`${currentTabContent?.id}_answer`, undefined)
+      setValue(`${currentTabContent?.id}_answer`, '')
       if (
         data.qType === QUESTION_TYPES.DRAG_DROP ||
         data.qType === QUESTION_TYPES.MATCHING ||
