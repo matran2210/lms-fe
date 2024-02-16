@@ -44,7 +44,6 @@ const TabSlide = ({
 
   useEffect(() => {
     function updateState(hasScrollBar: any) {
-
       if (hasScrollBar !== undefined) {
         setValueFilter('filter', undefined)
         setActiveShowAll(false)
