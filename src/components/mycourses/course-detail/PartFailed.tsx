@@ -45,7 +45,7 @@ const PartFailed = ({
 
   return (
     <>
-      <div className={`name-part text-2xl font-semibold h-[60px] line-clamp-2`}>
+      <div className={`name-part text-2xl font-medium h-[60px] line-clamp-2`}>
         <div>{coursePart?.name}</div>
       </div>
       <div className="info mt-6">

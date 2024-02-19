@@ -287,7 +287,7 @@ const Course = ({
         >
           <div className="cursor-pointer min-h-352 flex flex-col">
             <div
-              className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${
+              className={`name-course text-2xl font-medium mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
               }`}
               onClick={() => {

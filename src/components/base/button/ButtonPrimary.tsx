@@ -26,7 +26,7 @@ const ButtonPrimary = ({
     disabled || loading
       ? 'cursor-not-allowed opacity-60 bg-primary-2'
       : 'cursor-pointer'
-  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-primary hover:bg-primary-2`
+  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-primary hover:bg-primary-2`
   if (link)
     return (
       <a href={link} className={componentClass} aria-disabled={disabled}>

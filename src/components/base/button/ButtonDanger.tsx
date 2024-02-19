@@ -26,7 +26,7 @@ const ButtonDanger = ({
     disabled || loading
       ? 'cursor-not-allowed opacity-60 bg-danger'
       : 'cursor-pointer'
-  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold bg-danger hover:bg-danger-2`
+  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-danger hover:bg-danger-2`
   if (link)
     return (
       <a href={link} className={componentClass} aria-disabled={disabled}>
