@@ -17,14 +17,14 @@ const TotalScore = ({
 }: IProps) => {
   return (
     <div
-      className={`${className} bg-white flex flex-wrap flex-row justify-between w-full mb-6`}
+      className={`${className} bg-white flex flex-wrap flex-row justify-between w-full mb-6 pr-6`}
     >
       <div className="block">
-        <div className="text-xl font-medium leading-6.2 text-bw-1">
+        <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1">
           Your Score
         </div>
         <div
-          className={`${classScore} text-6px font-bold text-primary mt-2 font-inter`}
+          className={`${classScore} text-5.5xl xl:text-6xl font-bold text-primary mt-2 font-inter`}
         >
           <>{score}%</>
         </div>

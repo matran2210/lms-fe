@@ -58,6 +58,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         color="danger"
         showHeader={false}
         zIndex="z-[9999999]"
+        position="center"
       >
         <div className="">
           <div className="mx-auto mb-7 flex w-fit h-fit flex-shrink-0 items-center justify-center rounded-full bg-red-100">

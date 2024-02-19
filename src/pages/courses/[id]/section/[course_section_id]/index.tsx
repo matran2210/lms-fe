@@ -155,10 +155,34 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   useEffect(() => {
-    router.query.unit_id &&
-      setDefaultActive(String(router?.query?.unit_id) || '')
-  }, [router?.asPath])
+    if (partDetail.children.learning_progress !== '') {
+      const matchingChild = partDetail.children.find(
+        (child: {
+          learning_progress: {
+            total_course_sections: any
+            total_course_sections_completed: any
+          }
+        }) => {
+          if (child.learning_progress) {
+            const { total_course_sections, total_course_sections_completed } =
+              child.learning_progress
+            const progressRatio =
+              (total_course_sections_completed / total_course_sections) * 100
+            return progressRatio < 100
+          }
+          return false
+        },
+      )
 
+      if (matchingChild) {
+        setDefaultActive(matchingChild.id)
+      } else {
+        setDefaultActive('')
+      }
+    } else {
+      setDefaultActive('')
+    }
+  }, [partDetail])
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
