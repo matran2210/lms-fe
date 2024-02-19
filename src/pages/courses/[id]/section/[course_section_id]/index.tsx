@@ -156,7 +156,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
 
   useEffect(() => {
     if (partDetail.children.learning_progress !== '') {
-      const matchingChild = partDetail.children.find(
+      const filteredChildren = partDetail.children.filter(
+        (child: any) => child.course_section_type === 'CHAPTER',
+      )
+      const matchingChild = filteredChildren.find(
         (child: {
           learning_progress: {
             total_course_sections: any
@@ -176,8 +179,8 @@ const CoursePartDetail = ({ previewPart }: any) => {
 
       if (matchingChild) {
         setDefaultActive(matchingChild.id)
-      } else {
-        setDefaultActive('')
+      } else if (filteredChildren.length > 0) {
+        setDefaultActive(filteredChildren[0].id) // Set default to the first child
       }
     } else {
       setDefaultActive('')
