@@ -58,7 +58,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       }
       className="cursor-pointer"
     >
-      <div className={`name-part text-2xl font-semibold h-[60px]`}>
+      <div className={`name-part text-2xl font-medium h-[60px]`}>
         {courses?.name}
       </div>
       <div className="des mt-6 mb-15">
