@@ -597,3 +597,7 @@ textarea.is-invalid:focus {
 .hover-transition-font-weight {
   transition: font-weight 0.1s ease;
 }
+
+.ant-tooltip-inner {
+  color: #404041 !important;
+}
