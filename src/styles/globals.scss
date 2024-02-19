@@ -63,11 +63,7 @@ a {
   text-decoration: none;
 }
 
-/* Firefox */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #d6dee1 transparent;
-
   &::-webkit-scrollbar {
     @apply h-4 w-2 border bg-bw-3;
   }
