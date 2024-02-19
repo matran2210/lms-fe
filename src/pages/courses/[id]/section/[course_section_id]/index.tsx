@@ -9,10 +9,15 @@ import axios from 'axios'
 import { apiURL } from 'src/redux/services/httpService'
 import { useRouter } from 'next/router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import {
+  setCookieActToken,
+  setCookieRefreshToken,
+  truncateString,
+} from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 import TestModal from 'src/pages/courses/test'
 import { PageLink } from 'src/constants'
+import { Tooltip } from 'antd'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -190,21 +195,47 @@ const CoursePartDetail = ({ previewPart }: any) => {
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
         <div className="flex pt-6 pb-1 items-center">
-          <p
+          <span
             onClick={() => router.push('/courses')}
-            className="text-medium-sm font-semibold text-gray-1 cursor-pointer"
+            className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
           >
             My Course
-          </p>
-          <p
-            className="text-medium-sm font-semibold text-gray-1 ms-1 cursor-pointer"
+          </span>
+          <span
+            className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
             onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
           >
-            / {previewPart?.name} /
-          </p>
-          <p className="text-medium-sm font-semibold text-bw-1 ms-1">
-            {partDetail?.name}
-          </p>
+            /
+            <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5">
+              {(previewPart?.name as string)?.length > 50 ? (
+                <Tooltip
+                  title={previewPart?.name}
+                  color="#ffffff"
+                  placement="bottom"
+                >
+                  {truncateString(previewPart?.name, 50)}
+                </Tooltip>
+              ) : (
+                <>{previewPart?.name}</>
+              )}
+            </p>
+          </span>
+          <span className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
+            <p className="text-medium-sm font-medium text-bw-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis">
+              /{' '}
+              {(partDetail?.name as string)?.length > 50 ? (
+                <Tooltip
+                  title={partDetail?.name}
+                  color="#ffffff"
+                  placement="bottom"
+                >
+                  {truncateString(partDetail?.name, 50)}
+                </Tooltip>
+              ) : (
+                <>{partDetail?.name}</>
+              )}
+            </p>
+          </span>
         </div>
       </div>
       <PreviewPartDetail
