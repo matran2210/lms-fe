@@ -327,7 +327,7 @@ const Course = ({
                           ? 1
                           : 0}{' '}
                     </span>
-                    {daysDifference > 0 ? 'days left' : 'day left'}
+                    {daysDifference > 1 ? 'days left' : 'day left'}
                   </span>
                 )}
               </div>

@@ -112,17 +112,17 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const handleNextLesson = () => {
     if (course_section?.course_section_type === 'CHAPTER_TEST') {
       handleRouterChapter(course_section?.quiz?.id)
-    } else {
-      course_section?.course_section_type === 'ACTIVITY'
-        ? handleRouterActivity(course_section?.children?.[0]?.id)
-        : course_section?.course_section_type === 'STORY'
-          ? handleRouterCaseStudy(
-              quiz?.id,
-              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-              course_section?.id,
-              quiz?.case_study_story?.instances?.[0]?.id,
-            )
-          : () => {}
+    } else if (course_section?.course_section_type === 'ACTIVITY') {
+      handleRouterActivity(course_section?.children?.[0]?.id)
+    } else if (course_section?.course_section_type === 'STORY') {
+      handleRouterCaseStudy(
+        quiz?.id,
+        quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+        course_section?.id,
+        quiz?.case_study_story?.instances?.[0]?.id,
+      )
+    } else if (course_section?.course_section_type === 'UNIT') {
+      handleRouterActivity(course_section?.children?.[0]?.id)
     }
   }
 
