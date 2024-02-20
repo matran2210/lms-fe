@@ -1,6 +1,6 @@
 // components/SearchForm.tsx
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { buildQueryString, convertSnakeCaseToHumanReadable } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
@@ -11,6 +11,7 @@ import { defaultStatusCourse } from 'src/constants'
 const Filter = ({ courses }: { courses: ICourseAll }) => {
   const router = useRouter()
   const { control, watch } = useForm()
+  const [activeStatus, setActiveStatus] = useState<boolean>(false)
   const totalCourse = courses?.total.reduce(
     (total: number, item: any) => total + parseInt(item.count, 10),
     0,
@@ -49,7 +50,11 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
 
   return (
     <div className="filter flex">
-      <div className="pr-6 border-r border-gray-1">
+      <div
+        className={`pr-6 border-r border-gray-1 ${
+          !activeStatus ? 'inactive-filter' : ''
+        }`}
+      >
         <SappHookFormSelect
           control={control}
           name="type"
@@ -60,6 +65,7 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
             })),
           )}
           defaultValue={{ label: `All (${totalCourse})`, value: '' }}
+          onChange={() => setActiveStatus(true)}
           placeholder="Category"
           className="status-course"
           isSearchable={false}
