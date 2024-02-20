@@ -10,7 +10,7 @@ import { defaultStatusCourse } from 'src/constants'
 
 const Filter = ({ courses }: { courses: ICourseAll }) => {
   const router = useRouter()
-  const { control, watch } = useForm()
+  const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
   const totalCourse = courses?.total.reduce(
     (total: number, item: any) => total + parseInt(item.count, 10),
@@ -47,6 +47,9 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
       )
     }
   }, [apiUrl, queryString, watch('status'), watch('type')])
+  useEffect(() => {
+    setValue('type', { label: `All (${totalCourse})`, value: '' })
+  }, [totalCourse])
 
   return (
     <div className="filter flex">

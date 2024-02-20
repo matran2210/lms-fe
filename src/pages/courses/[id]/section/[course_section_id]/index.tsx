@@ -117,17 +117,17 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const handleNextLesson = () => {
     if (course_section?.course_section_type === 'CHAPTER_TEST') {
       handleRouterChapter(course_section?.quiz?.id)
-    } else {
-      course_section?.course_section_type === 'ACTIVITY'
-        ? handleRouterActivity(course_section?.children?.[0]?.id)
-        : course_section?.course_section_type === 'STORY'
-          ? handleRouterCaseStudy(
-              quiz?.id,
-              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-              course_section?.id,
-              quiz?.case_study_story?.instances?.[0]?.id,
-            )
-          : () => {}
+    } else if (course_section?.course_section_type === 'ACTIVITY') {
+      handleRouterActivity(course_section?.children?.[0]?.id)
+    } else if (course_section?.course_section_type === 'STORY') {
+      handleRouterCaseStudy(
+        quiz?.id,
+        quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+        course_section?.id,
+        quiz?.case_study_story?.instances?.[0]?.id,
+      )
+    } else if (course_section?.course_section_type === 'UNIT') {
+      handleRouterActivity(course_section?.children?.[0]?.id)
     }
   }
 
@@ -207,6 +207,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
           <span
             className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
             onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
+            title={previewPart?.name}
           >
             /
             <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5">
@@ -271,14 +272,14 @@ const CoursePartDetail = ({ previewPart }: any) => {
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6 mr-3"
+          className="pb-6 mr-3 text-bw-1"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
         />
         {learningOutcome?.course_outcomes?.map((outcome, index) => (
           <div className="flex mt-6 mr-3" key={outcome.id}>
-            <div className="font-semibold leading-6 text-sm me-1">
+            <div className="font-medium leading-6 text-base me-1 text-bw-1">
               LO{index + 1}:
             </div>
             <p

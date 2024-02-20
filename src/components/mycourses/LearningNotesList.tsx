@@ -439,7 +439,7 @@ const LearningNotesList = () => {
                   paths={[...note?.course_section_path].reverse()}
                 />
               </div>
-              <div className="font-normal text-base">
+              <div className="font-normal text-base text-bw-1">
                 <span
                   className={`whitespace-pre-wrap ${
                     isExpanded ? '' : 'line-clamp-3'
