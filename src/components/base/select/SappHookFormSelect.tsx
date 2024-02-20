@@ -29,6 +29,7 @@ const SappHookFormSelect = ({
   defaultValue,
   options,
   placeholder,
+  onChange,
   labelClass = 'text-base block font-medium mb-2',
   label,
   required,
@@ -63,7 +64,12 @@ const SappHookFormSelect = ({
                 instanceId="selectInstanceId"
                 placeholder={placeholder}
                 isDisabled={isDisabled}
-                onChange={field.onChange}
+                onChange={(selectedOption) => {
+                  // Gọi hàm onChange truyền từ props
+                  onChange && onChange(selectedOption)
+                  // Gọi hàm onChange của field
+                  field.onChange(selectedOption)
+                }}
                 isSearchable={isSearchable}
                 defaultValue={defaultValue}
               />
