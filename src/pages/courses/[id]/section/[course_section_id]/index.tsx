@@ -160,7 +160,9 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   useEffect(() => {
-    if (partDetail.children.learning_progress !== '') {
+    if (router.query.unit_id) {
+      setDefaultActive(String(router?.query?.unit_id) || '')
+    } else if (partDetail.children.learning_progress !== '') {
       const filteredChildren = partDetail.children.filter(
         (child: any) => child.course_section_type === 'CHAPTER',
       )
@@ -190,7 +192,8 @@ const CoursePartDetail = ({ previewPart }: any) => {
     } else {
       setDefaultActive('')
     }
-  }, [partDetail])
+  }, [router?.asPath])
+
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
