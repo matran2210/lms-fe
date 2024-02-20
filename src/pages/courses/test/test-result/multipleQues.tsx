@@ -160,14 +160,18 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
             )}
           </div>
           <div className="flex items-center justify-end w-full shrink max-h-[40px] max-w-[192px]">
-            <div
-              className="block xl:hidden text-medium-sm font-medium underline cursor-pointer mr-6"
-              onClick={() => {
-                setShowMore(!showMore)
-              }}
-            >
-              {showMore ? 'View Less' : 'View All'}
-            </div>
+            {(questions?.selectedResponseAnswers?.length ||
+              0 + questions?.constructedResponseAnswers?.length ||
+              0) >= 10 && (
+              <div
+                className="block xl:hidden text-medium-sm font-medium underline cursor-pointer mr-6"
+                onClick={() => {
+                  setShowMore(!showMore)
+                }}
+              >
+                {showMore ? 'View Less' : 'View All'}
+              </div>
+            )}
             <Link href={`/courses/my-course/${questions?.course?.id}`}>
               <ButtonPrimary
                 title={'Quit'}

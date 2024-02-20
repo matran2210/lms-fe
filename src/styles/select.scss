@@ -62,3 +62,7 @@
     @apply shadow-0;
   }
 }
+
+.inactive-filter .select-single .select__single-value {
+  @apply text-gray-1;
+}

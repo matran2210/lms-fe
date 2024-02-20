@@ -569,9 +569,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                       type: 'exhibits',
                                       description: e.description,
                                       name: e.name,
-                                      index: i + 1,
+                                      index: i,
                                       files: e.files,
                                     },
+                                    null,
+                                    null,
                                     event,
                                   )
                               }}

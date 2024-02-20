@@ -1315,6 +1315,22 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       router.events.off('routeChangeStart', handleBrowseAway)
     }
   }, [unsavedChanges])
+  useEffect(() => {
+    if (startResize) {
+      document.body.style.webkitUserSelect = 'none'
+
+      document.body.style.userSelect = 'none'
+    } else {
+      document.body.style.webkitUserSelect = 'unset'
+
+      document.body.style.userSelect = 'unset'
+    }
+    return () => {
+      document.body.style.webkitUserSelect = 'unset'
+
+      document.body.style.userSelect = 'unset'
+    }
+  }, [startResize])
   return (
     <div
       className="h-screen flex flex-col bg-white overflow-hidden relative"
@@ -1329,9 +1345,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           Loading
         </div>
       )}
-      {startResize && (
+      {/* {startResize && (
         <div className="absolute w-screen h-screen z-[1350]"></div>
-      )}
+      )} */}
       <div>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">

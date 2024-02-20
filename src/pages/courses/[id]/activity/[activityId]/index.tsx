@@ -68,6 +68,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
 
+  const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
+    top: 'calc(50% - 250px)',
+    left: 'calc(50% - 200px)',
+  })
+
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
@@ -296,7 +301,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     data: any,
     file?: string,
     fileName?: string,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
+    if (event) {
+      var mouseY = event.pageY - 300
+      setExhibitsPopupPosition({ top: mouseY + 'px', left: '33%' })
+    }
+
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
@@ -714,8 +725,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               position={{
                 width: '600px',
                 height: '400px',
-                top: 'calc(50% - 250px)',
-                left: 'calc(50% - 200px)',
+                top: exhibitsPopupPosition.top,
+                left: exhibitsPopupPosition.left,
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}

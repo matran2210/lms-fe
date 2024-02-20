@@ -326,7 +326,7 @@ const MatchingQuestion = forwardRef(
                       <>
                         <QuestionCard
                           value={e?.content}
-                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6 text-state-success"
+                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6 text-bw-1"
                         />
                         <div
                           // id={e?.id}
@@ -335,7 +335,7 @@ const MatchingQuestion = forwardRef(
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container-corrects text-state-success min-w-132px !border-gray-6 before:!border-gray-6"
+                              className="sapp-notched-container-corrects text-bw-1 min-w-132px !border-gray-6 before:!border-gray-6"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
