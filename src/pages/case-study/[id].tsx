@@ -625,6 +625,22 @@ const CaseStudyDetail = ({ questions }: any) => {
       router.events.off('routeChangeStart', handleBrowseAway)
     }
   }, [unsavedChanges])
+  useEffect(() => {
+    if (startResize) {
+      document.body.style.webkitUserSelect = 'none'
+
+      document.body.style.userSelect = 'none'
+    } else {
+      document.body.style.webkitUserSelect = 'unset'
+
+      document.body.style.userSelect = 'unset'
+    }
+    return () => {
+      document.body.style.webkitUserSelect = 'unset'
+
+      document.body.style.userSelect = 'unset'
+    }
+  }, [startResize])
   return (
     <div
       className="h-screen flex flex-col bg-white overflow-hidden relative"
@@ -638,9 +654,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           Loading
         </div>
       )}
-      {startResize && (
+      {/* {startResize && (
         <div className="absolute w-screen h-screen z-[1350]"></div>
-      )}
+      )} */}
       {/* <div
         className={`absolute w-full bg-black h-[200px]`}
         style={{ top: 96 }}

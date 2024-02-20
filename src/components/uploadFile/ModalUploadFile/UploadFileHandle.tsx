@@ -85,7 +85,7 @@ const UploadFileHandle = ({
     }
     return (
       <>
-        <div className="sapp-upload-file-progress items-center">
+        <div className="sapp-upload-file-progress items-center mt-2">
           <div className="w-100 sapp-upload-file-content">
             <div className="sapp-upload-file-name">
               {_file.name ?? _file.originFileObj?.name}
