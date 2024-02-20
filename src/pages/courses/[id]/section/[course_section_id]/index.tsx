@@ -162,37 +162,35 @@ const CoursePartDetail = ({ previewPart }: any) => {
   useEffect(() => {
     if (router.query.unit_id) {
       setDefaultActive(String(router?.query?.unit_id) || '')
-    } else {
-      if (partDetail.children.learning_progress !== '') {
-        const filteredChildren = partDetail.children.filter(
-          (child: any) => child.course_section_type === 'CHAPTER',
-        )
-        const matchingChild = filteredChildren.find(
-          (child: {
-            learning_progress: {
-              total_course_sections: any
-              total_course_sections_completed: any
-            }
-          }) => {
-            if (child.learning_progress) {
-              const { total_course_sections, total_course_sections_completed } =
-                child.learning_progress
-              const progressRatio =
-                (total_course_sections_completed / total_course_sections) * 100
-              return progressRatio < 100
-            }
-            return false
-          },
-        )
+    } else if (partDetail.children.learning_progress !== '') {
+      const filteredChildren = partDetail.children.filter(
+        (child: any) => child.course_section_type === 'CHAPTER',
+      )
+      const matchingChild = filteredChildren.find(
+        (child: {
+          learning_progress: {
+            total_course_sections: any
+            total_course_sections_completed: any
+          }
+        }) => {
+          if (child.learning_progress) {
+            const { total_course_sections, total_course_sections_completed } =
+              child.learning_progress
+            const progressRatio =
+              (total_course_sections_completed / total_course_sections) * 100
+            return progressRatio < 100
+          }
+          return false
+        },
+      )
 
-        if (matchingChild) {
-          setDefaultActive(matchingChild.id)
-        } else if (filteredChildren.length > 0) {
-          setDefaultActive(filteredChildren[0].id) // Set default to the first child
-        }
-      } else {
-        setDefaultActive('')
+      if (matchingChild) {
+        setDefaultActive(matchingChild.id)
+      } else if (filteredChildren.length > 0) {
+        setDefaultActive(filteredChildren[0].id) // Set default to the first child
       }
+    } else {
+      setDefaultActive('')
     }
   }, [router?.asPath])
 
