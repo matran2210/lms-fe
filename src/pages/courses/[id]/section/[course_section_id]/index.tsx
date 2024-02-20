@@ -193,16 +193,21 @@ const CoursePartDetail = ({ previewPart }: any) => {
           <p
             onClick={() => router.push('/courses')}
             className="text-medium-sm font-semibold text-gray-1 cursor-pointer"
+            title={'My Course'}
           >
             My Course
           </p>
           <p
             className="text-medium-sm font-semibold text-gray-1 ms-1 cursor-pointer"
             onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
+            title={previewPart?.name}
           >
             / {previewPart?.name} /
           </p>
-          <p className="text-medium-sm font-semibold text-bw-1 ms-1">
+          <p
+            className="text-medium-sm font-semibold text-bw-1 ms-1"
+            title={partDetail?.name}
+          >
             {partDetail?.name}
           </p>
         </div>
@@ -237,14 +242,14 @@ const CoursePartDetail = ({ previewPart }: any) => {
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6 mr-3"
+          className="pb-6 mr-3 text-bw-1"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
         />
         {learningOutcome?.course_outcomes?.map((outcome, index) => (
           <div className="flex mt-6 mr-3" key={outcome.id}>
-            <div className="font-semibold leading-6 text-sm me-1">
+            <div className="font-medium leading-6 text-base me-1 text-bw-1">
               LO{index + 1}:
             </div>
             <p

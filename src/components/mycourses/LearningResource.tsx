@@ -262,7 +262,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
             sections &&
             DEFAULT_SELECT.concat(
               sections?.map((section) => ({
-                label: section.name,
+                label: (
+                  <>
+                    <span title={section.name}>{section.name}</span>
+                  </>
+                ).props.children,
                 value: section.id,
               })),
             )
@@ -284,7 +288,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedSection
               ? subSections?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []
@@ -307,7 +315,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedSubsection
               ? unit?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []
@@ -326,7 +338,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedUnit
               ? activity?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []

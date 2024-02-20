@@ -70,7 +70,7 @@ const SappDrawer = ({
         h-screen`}
       >
         <div className="flex flex-col justify-between">
-          <div className="relative w-100 justify-between bg-bw-2 min-h-[80px] text-2xl font-medium flex items-center px-8 text-white py-2">
+          <div className="relative w-100 justify-between bg-bw-1 min-h-[80px] text-2xl font-medium flex items-center px-8 text-white py-2">
             <span className="pr-4 line-clamp-3">{title}</span>
             <div className="shrink-0">
               <Image
@@ -83,10 +83,10 @@ const SappDrawer = ({
           </div>
         </div>
         <div
-          className={`mt-6 ml-7 pl-1 mr-4 overflow-y-auto ${heightBody}`}
+          className={`mt-6 mx-6 overflow-y-auto ${heightBody}`}
           id={`sapp-drawer${drawerSubId}`}
         >
-          <div className="mr-4">{children}</div>
+          <div className="mx-2">{children}</div>
         </div>
         {footer && (
           <div className="flex justify-between h-[82px] items-center border-t border-default absolute bottom-0 left-0 right-0 w-full bg-white">
