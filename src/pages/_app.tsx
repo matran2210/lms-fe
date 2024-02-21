@@ -99,7 +99,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     // }
   }
   useEffect(() => {
-    handleOnChangePage()
+    // handleOnChangePage()
     router.events.on('routeChangeError', (e) => setLoading(false))
     router.events.on('routeChangeStart', (e) => setLoading(false))
     router.events.on('routeChangeComplete', (e) => setLoading(true))
