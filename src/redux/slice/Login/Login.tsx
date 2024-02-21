@@ -16,6 +16,7 @@ import {
 import AuthApi from '../../services/Authen'
 import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
 import EntranceApi from 'src/redux/services/EntranceTest'
+import { PageLink } from 'src/constants'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -26,6 +27,7 @@ const initialState: LoginState = {
     email: '',
     username: '',
   },
+  unsavedChange: false,
 }
 
 export const getLoginUser = createAsyncThunk(
@@ -72,7 +74,12 @@ export const changePassword = createAsyncThunk(
     }
   },
 )
-
+export const disableUnsavedChange = createAsyncThunk(
+  'loginReducer/disableUnsavedChange',
+  async ({}, thunkAPI) => {
+    return false
+  },
+)
 export const loginSlice = createSlice({
   name: 'loginReducer',
   initialState,
@@ -82,8 +89,14 @@ export const loginSlice = createSlice({
       state.loading = false
     },
     resetAuthUserState: (state: LoginState, action) => {},
+    enableUnsavedChange: (state: LoginState) => {
+      state.unsavedChange = true
+    },
   },
   extraReducers: (builder) => {
+    builder.addCase(disableUnsavedChange.fulfilled, (state, action) => {
+      state.unsavedChange = false
+    })
     builder.addCase(getLoginUser.pending, (state) => {
       state.loading = true
     })
@@ -119,6 +132,8 @@ export const loginSlice = createSlice({
         username: '',
       }
       removeJwtToken()
+
+      window.location.href = PageLink.AUTH_LOGIN
     })
     builder.addCase(getLogoutUser.rejected, (state, action) => {
       state.accessToken = ''

@@ -107,12 +107,13 @@ const HookFormCheckBoxGroup = ({
                 let checked: boolean = multiple
                   ? field.value?.includes(option.value.toString())
                   : option.value.toString() === field.value
-
-                if (!!corrects && checked) {
+                let correctCheck: boolean =
+                  corrects?.[option.value as string] || false
+                if (!!corrects) {
                   if (corrects?.[option.value as string]) {
                     state = 'success'
                     stateLabel = 'text-state-success'
-                  } else {
+                  } else if (checked) {
                     state = 'error'
                     stateLabel = 'text-state-error'
                   }
@@ -134,9 +135,9 @@ const HookFormCheckBoxGroup = ({
                   >
                     <SAPPCheckbox
                       className={`me-2 ${className} ${
-                        positionCheckBox === 'start' && 'mt-1'
+                        positionCheckBox === 'start' && 'mt-[2px]'
                       }`}
-                      checked={checked}
+                      checked={checked || correctCheck}
                       lowerOptions={lowerOptions && !checked && checkHasChecked}
                       onChange={(event: React.ChangeEvent<any>) => {
                         if (multiple) {

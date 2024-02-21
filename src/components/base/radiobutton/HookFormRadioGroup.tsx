@@ -72,11 +72,13 @@ const HookFormRadioGroup = ({
                 let state: 'error' | 'default' | 'success' | undefined
                 let stateLabel: string = 'text-bw-1'
                 let checked: boolean = option.value.toString() === field.value
-                if (!!corrects && checked) {
+                let correctCheck: boolean =
+                  corrects?.[option.value as string] || false
+                if (!!corrects) {
                   if (corrects?.[option.value as string]) {
                     state = 'success'
                     stateLabel = 'text-state-success'
-                  } else {
+                  } else if (checked) {
                     state = 'error'
                     stateLabel = 'text-state-error'
                   }
@@ -112,7 +114,7 @@ const HookFormRadioGroup = ({
                           }}
                           key={index}
                           value={option.value.toString()}
-                          checked={checked}
+                          checked={checked || correctCheck}
                           className="flex-none mt-[3px]"
                           size="small"
                           state={state}
