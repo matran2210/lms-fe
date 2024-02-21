@@ -350,6 +350,7 @@ const Discussion = ({ class_id }: Props) => {
                       blankAvatar
                     }
                     loading="eager"
+                    priority={true}
                   ></Image>
                 </div>
                 <form
@@ -391,6 +392,7 @@ const Discussion = ({ class_id }: Props) => {
                               onClick={() => {
                                 setImageSrc(URL.createObjectURL(file))
                               }}
+                              priority={true}
                             ></Image>
                           </li>
                         ))}
@@ -440,6 +442,7 @@ const Discussion = ({ class_id }: Props) => {
               blankAvatar
             }
             loading="eager"
+            priority={true}
           ></Image>
         </div>
         <form
@@ -481,6 +484,7 @@ const Discussion = ({ class_id }: Props) => {
                       onClick={() => {
                         setImageSrc(URL.createObjectURL(file))
                       }}
+                      priority={true}
                     ></Image>
                   </li>
                 ))}

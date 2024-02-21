@@ -12,14 +12,14 @@ const LearningExplanation = () => {
       <div className="bg-gray-3 h-[60px] flex justify-between items-center">
         <div></div>
         <div className="flex">
-          <Image src={prev} alt="" />
+          <Image src={prev} alt="" priority={true} />
           <span className="text-bw-1 text-base font-normal mx-1">
             Question and Solution: 3 of 4
           </span>
-          <Image src={next} alt="" />
+          <Image src={next} alt="" priority={true} />
         </div>
         <div className="me-7">
-          <Image src={arrows} alt="" />
+          <Image src={arrows} alt="" priority={true} />
         </div>
       </div>
 

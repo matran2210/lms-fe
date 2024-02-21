@@ -78,6 +78,7 @@ const SappDrawer = ({
                 alt="SAPP Logo"
                 onClick={handleMaskClick}
                 className="cursor-pointer"
+                priority={true}
               />
             </div>
           </div>

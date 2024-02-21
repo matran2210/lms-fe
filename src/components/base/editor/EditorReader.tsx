@@ -103,8 +103,10 @@ const EditorReader = ({
     } else if (target.tagName === 'IMG') {
       const imageSrc = target.getAttribute('src')
       if (imageSrc) {
-        setSrc(imageSrc)
-        setType('IMG')
+        setSrc(() => {
+          setType('IMG')
+          return imageSrc
+        })
       }
     }
   }
