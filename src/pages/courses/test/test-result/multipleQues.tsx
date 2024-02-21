@@ -96,7 +96,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
 
   return (
     <div
-      className={`${className} fixed xl:static z-30 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] xl:max-w-smd items-start px-6 py-4 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
+      className={`${className} fixed xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] xl:max-w-smd items-start px-6 py-4 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
     >
       <div
         className={`${
@@ -160,9 +160,9 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
             )}
           </div>
           <div className="flex items-center justify-end w-full shrink max-h-[40px] max-w-[192px]">
-            {(questions?.selectedResponseAnswers?.length ||
-              0 + questions?.constructedResponseAnswers?.length ||
-              0) >= 10 && (
+            {Number(questions?.selectedResponseAnswers?.length || 0) +
+              Number(questions?.constructedResponseAnswers?.length || 0) >=
+              8 && (
               <div
                 className="block xl:hidden text-medium-sm font-medium underline cursor-pointer mr-6"
                 onClick={() => {
