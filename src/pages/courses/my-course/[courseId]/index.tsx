@@ -69,16 +69,21 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
   }
 
   useEffect(() => {
+    let isFetching = false
+
     const handleScroll = () => {
       if (
+        !isFetching &&
         window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 10
+          document.documentElement.offsetHeight - 10
       ) {
+        isFetching = true
         loadMore()
       }
     }
 
     window.addEventListener('scroll', handleScroll)
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [loading, router.query.user_section_learning_status])
 
