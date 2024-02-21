@@ -17,6 +17,8 @@ import { uniqueId } from 'lodash'
 import { IResource } from 'src/type/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
+import { useAppDispatch } from 'src/redux/hook'
+import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -67,6 +69,7 @@ const EssayQuestionPreview = ({
   handleSaveHighLightRequirement = () => {},
   setUnsavedChanges,
 }: IPreviewProp) => {
+  const dispatch = useAppDispatch()
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
@@ -93,10 +96,12 @@ const EssayQuestionPreview = ({
   }) => {
     try {
       setUnsavedChanges && setUnsavedChanges(false)
+      dispatch(disableUnsavedChange())
       await UploadAPI.downloadFile(data)
     } catch (error) {
     } finally {
       setUnsavedChanges && setUnsavedChanges(true)
+      dispatch(loginSlice.actions.enableUnsavedChange())
     }
   }
   // useEffect(() => {
