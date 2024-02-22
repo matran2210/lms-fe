@@ -18,12 +18,13 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     status: router.query.status || '',
     type: router.query.type ?? '',
   })
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
   useEffect(() => {
     let timerId: any
 
     // Use useEffect to set up a timer to make the API call after 3 seconds
-    if (watch('name')?.length >= 3) {
+    if (!isFirstRender && watch('name')?.length >= 3) {
       timerId = setTimeout(() => {
         !isSubmitting &&
           router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
@@ -34,11 +35,12 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     return () => {
       clearTimeout(timerId)
     }
-  }, [queryString, watch('name'), isSubmitting])
+  }, [queryString, watch('name'), isSubmitting, isFirstRender])
 
   const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    setIsFirstRender(false)
     setIsSubmitting(false)
     // Check if 'name' is empty and perform search immediately
     if (!watch('name')) {
@@ -50,6 +52,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     e.preventDefault()
 
     setIsSubmitting(true)
+    setIsFirstRender(false)
     // Redirect to the search results page with the query as a query parameter
     router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
   }

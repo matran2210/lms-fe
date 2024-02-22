@@ -272,7 +272,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6 mr-3 text-bw-1"
+          className="pb-6  text-bw-1"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
