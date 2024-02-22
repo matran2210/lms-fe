@@ -27,6 +27,7 @@ const LogoDefault = () => {
             ></use>
           </pattern>
           <image
+            priority={true}
             id="image0_6640_7766"
             width="2049"
             height="1026"
