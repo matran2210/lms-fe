@@ -1343,7 +1343,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }}
     >
       {/* Header */}
-      {loading && !currentTabContent?.id && (
+      {(loading || !currentTabContent?.id) && (
         <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
           Loading
         </div>

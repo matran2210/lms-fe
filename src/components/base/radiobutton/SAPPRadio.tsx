@@ -15,7 +15,7 @@ interface IProps {
 
 const STATE = {
   success:
-    'bg-radio-success-checked checked:text-transparent checked:hover:bg-radio-success-checked checked:focus:bg-radio-success-checked',
+    'checked:bg-radio-success-checked checked:text-transparent checked:hover:bg-radio-success-checked checked:focus:bg-radio-success-checked',
   error:
     'checked:bg-radio-error-checked checked:text-transparent checked:hover:bg-radio-error-checked checked:focus:bg-radio-error-checked',
   default:

@@ -13,6 +13,7 @@
   font-family: techNology;
   src: url('../assets/fonts/Technology/Technology.ttf');
 }
+
 #globalLoader {
   position: fixed;
   z-index: 9999;
@@ -179,6 +180,7 @@ body *::-webkit-scrollbar-thumb:hover {
     top: 50%;
     transform: translate(50%, -50%);
     z-index: 1;
+
     &::before {
       color: white;
       content: '\25B6';
@@ -203,9 +205,12 @@ body *::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-4 font-bold text-base text-center;
 }
 
-.sapp-select--selectword-preview {
+.sapp-select--selectword-preview,
+.sapp-select--selectword-preview:focus {
   @apply min-w-78px rounded;
-
+  --tw-ring-color: unset;
+  --tw-ring-offset-shadow: unset;
+  --tw-ring-shadow: unset;
   -webkit-appearance: none;
   -moz-appearance: none;
   background: #f9f9f9;
@@ -222,11 +227,7 @@ body *::-webkit-scrollbar-thumb:hover {
   max-width: 150px;
   margin-bottom: 8px;
 
-  [disabled] {
-    color: #dcdddd;
-  }
-
-  &:invalid {
+  &:required:invalid {
     color: #dcdddd;
   }
 
@@ -236,7 +237,15 @@ body *::-webkit-scrollbar-thumb:hover {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
+  option[value=''][disabled] {
+    display: none;
+  }
+  option[disabled] {
+    color: #dcdddd;
+  }
+  option {
+    color: #404041;
+  }
   &.sapp-select-confirmed {
     background-image: none;
     text-align: center;
