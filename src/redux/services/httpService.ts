@@ -2,7 +2,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import getConfig from 'next/config'
 import { PageLink } from 'src/constants'
-import { getLogoutUser } from '../slice/Login/Login'
+import {
+  disableUnsavedChange,
+  getLogoutUser,
+  loginSlice,
+} from '../slice/Login/Login'
 import url from './Authen/url'
 
 import toast from 'react-hot-toast'
@@ -68,8 +72,14 @@ const refreshAccessToken = async (): Promise<string | null> => {
     // Return the new access token
     return act
   } catch (error) {
-    removeJwtToken()
-    window.location.href = PageLink.AUTH_LOGIN
+    store
+      .dispatch(disableUnsavedChange())
+      .unwrap()
+      .then(() => {
+        removeJwtToken()
+        window.location.href = PageLink.AUTH_LOGIN
+      })
+    // window.location.href = PageLink.AUTH_LOGIN
 
     // If there is an error, return null
     return null

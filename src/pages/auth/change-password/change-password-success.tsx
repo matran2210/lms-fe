@@ -26,6 +26,7 @@ const ChangePasswordSuccess = () => {
                     alt="SAPP Logo"
                     width={164}
                     height={164}
+                    priority={true}
                   />
                 </div>
                 <div className="text-center mb-16">

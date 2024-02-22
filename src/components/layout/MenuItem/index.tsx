@@ -144,6 +144,7 @@ export default function MenuItem({
                     className="rounded-full"
                     width={40}
                     height={40}
+                    priority={true}
                   />
                 </div>
               ) : (
@@ -160,6 +161,7 @@ export default function MenuItem({
                         className="rounded-full"
                         width={24}
                         height={24}
+                        priority={true}
                       />
                     </div>
                   ) : (

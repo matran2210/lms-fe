@@ -49,7 +49,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
@@ -58,6 +58,8 @@ import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
+import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import NewFiltext from '@components/questionType/NewFillText'
 type Window = {
   userAgreed: any
 }
@@ -148,8 +150,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <AddWordPreview
+          <NewFiltext
+            control={control}
+            name={`${currentTabID}_fillword`}
             data={data}
+            setValue={setValue}
             action={getValueFillText}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
@@ -220,7 +225,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             handleClearFile={handleClearFile}
             setOpenPdf={handleOpenScratchPad}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-            setUnsavedChanges={setUnsavedChanges}
           />
           // <Luckysheet/>
         )
@@ -279,19 +283,45 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [loading, setLoading] = useState(false)
   const [openLimit, setOpenLimit] = useState(false)
   const [openUpload, setOpenUpload] = useState<any>({})
-  const [unsavedChanges, setUnsavedChanges] = useState(true)
   const [startResize, setStartResize] = useState(false)
   const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
-  const { x } = useMousePosition()
+  // const { x } = useMousePosition()
+  const { unsavedChange } = useAppSelector((state) => state.loginReducer)
   const rightSideRef = useRef<any>(null)
+  const [mousePosition, setMousePosition] = useState({ x: null, y: null })
+  useEffect(() => {
+    const updateMousePosition = (ev: any) => {
+      setMousePosition({ x: ev.clientX, y: ev.clientY })
+    }
+    const clickPosition = (ev: any) => {
+      setMousePosition(() => {
+        setCurrentMousePos(ev.clientX)
+        return { x: ev.clientX, y: ev.clientY }
+      })
+    }
+    if (startResize) {
+      window.addEventListener('mousemove', updateMousePosition)
+      window.addEventListener('mousedown', clickPosition)
+    } else {
+      window.removeEventListener('mousemove', updateMousePosition)
+      window.removeEventListener('mousedown', clickPosition)
+    }
+    return () => {
+      window.removeEventListener('mousemove', updateMousePosition)
+      window.removeEventListener('mousedown', clickPosition)
+    }
+  }, [startResize])
+  useEffect(() => {
+    dispatch(loginSlice.actions.enableUnsavedChange())
+  }, [])
   useEffect(() => {
     if (startResize) {
       const temp = currentLeftWidth
-      setLeftWidth(temp + (currentMousePos - (x || 0)))
+      setLeftWidth(temp + (currentMousePos - (mousePosition.x || 0)))
     }
-  }, [x, startResize])
+  }, [mousePosition.x, startResize])
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -304,7 +334,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const currentTabContent = useMemo(() => {
     if (tabs && tabs.length > 0) {
       return tabs.find((e: any) => e.id === currentPage)
-    }
+    } else return undefined
   }, [currentPage, tabs])
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
@@ -433,12 +463,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
       return false
     } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
-      for (let e of getValueFillText()) {
-        if (e && e !== '') {
-          return true
+      if (
+        getValues(`${currentContent.id}_fillword`) &&
+        getValues(`${currentContent.id}_fillword`)?.length > 0
+      ) {
+        for (let e of getValues(`${currentContent.id}_fillword`)) {
+          if (e) {
+            return true
+          }
         }
+        return false
       }
-
       return false
     } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
       if (currentContent?.answer_file?.file_key) {
@@ -521,12 +556,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const ref = useRef(null) as any
   const refEditor = useRef(null) as any
   const getValueFillText = () => {
-    let value = []
-    const inputs = document.querySelectorAll('input[stringHTML="true"]') as any
-    for (let e of inputs) {
-      value.push(e.value)
-    }
-    return value
+    // let value = []
+    // const inputs = document.querySelectorAll('input[stringHTML="true"]') as any
+    // for (let e of inputs) {
+    //   value.push(e.value)
+    // }
+    // return value
   }
   const getValueSelectText = () => {
     let value = [] as any
@@ -609,7 +644,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         //   solution: res.data[0].solution,
         //   answer: getCurrentAnswer(item),
         // })
-        ref.current?.handleReset()
+        if (currentTabContent.qType !== QUESTION_TYPES.FILL_WORD) {
+          ref.current?.handleReset()
+        }
         return {
           ...item,
           done: true,
@@ -794,8 +831,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return answers
       } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
         const answers = handleSaveAnswer(
-          getValueFillText(),
-          currentContent.id,
+          getValues(`${currentPage}_fillword`),
+          currentPage,
           tabs,
         )
         return answers
@@ -1056,7 +1093,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         handleChangeTab(tabs[0].id)
         return reformTabs
       })
-      setUnsavedChanges(false)
+      dispatch(disableUnsavedChange())
       const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
@@ -1077,7 +1114,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         handleChangeTab(tabs[0].id)
         return reformTabs
       })
-      setUnsavedChanges(false)
+      dispatch(disableUnsavedChange())
       const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
@@ -1108,17 +1145,18 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           answer: undefined,
           attempted: false,
         }
+        if (
+          data.qType === QUESTION_TYPES.DRAG_DROP ||
+          data.qType === QUESTION_TYPES.MATCHING ||
+          data.qType === QUESTION_TYPES.FILL_WORD ||
+          data.qType === QUESTION_TYPES.SELECT_WORD
+        ) {
+          ref.current?.handleReset()
+        }
         return arr
       })
       setValue(`${currentTabContent?.id}_answer`, '')
-      if (
-        data.qType === QUESTION_TYPES.DRAG_DROP ||
-        data.qType === QUESTION_TYPES.MATCHING ||
-        data.qType === QUESTION_TYPES.FILL_WORD ||
-        data.qType === QUESTION_TYPES.SELECT_WORD
-      ) {
-        ref.current?.handleReset()
-      }
+      setValue(`${currentTabContent?.id}_fillword`, '')
       if (data.qType === QUESTION_TYPES.ESSAY) {
         refEditor?.current?.reset()
         setTabs((prev: any) => {
@@ -1284,7 +1322,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setQuizAttempId(res.data.id)
       } catch (err: any) {
         if (err.response.data.error.code === '400|060710') {
-          setUnsavedChanges(false)
+          dispatch(disableUnsavedChange())
           setOpenLimit(true)
         }
       }
@@ -1298,12 +1336,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
   useEffect(() => {
     const handleWindowClose = (e: any) => {
-      if (!unsavedChanges) return
+      if (!unsavedChange) return
       e.preventDefault()
       return (e.returnValue = warningText)
     }
     const handleBrowseAway = () => {
-      if (!unsavedChanges) return
+      if (!unsavedChange) return
       if (window.confirm(warningText)) return
       router.events.emit('routeChangeError')
       throw 'routeChange aborted.'
@@ -1314,7 +1352,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       window.removeEventListener('beforeunload', handleWindowClose)
       router.events.off('routeChangeStart', handleBrowseAway)
     }
-  }, [unsavedChanges])
+  }, [unsavedChange])
+  useEffect(() => {
+    if (startResize) {
+      document.body.style.webkitUserSelect = 'none'
+
+      document.body.style.userSelect = 'none'
+    } else {
+      document.body.style.webkitUserSelect = 'unset'
+
+      document.body.style.userSelect = 'unset'
+    }
+    return () => {
+      document.body.style.webkitUserSelect = 'unset'
+
+      document.body.style.userSelect = 'unset'
+    }
+  }, [startResize])
   return (
     <div
       className="h-screen flex flex-col bg-white overflow-hidden relative"
@@ -1324,14 +1378,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }}
     >
       {/* Header */}
-      {loading && tabs?.length !== 0 && filteredTabs.length !== 0 && (
+      {(loading || !currentTabContent?.id) && (
         <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
           Loading
         </div>
       )}
-      {startResize && (
+      {/* {startResize && (
         <div className="absolute w-screen h-screen z-[1350]"></div>
-      )}
+      )} */}
       <div>
         <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
           <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
@@ -1342,7 +1396,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               remainTime={quizDetail?.quiz_timed}
               onTimeOut={() => {
                 if (!openLimit) {
-                  setUnsavedChanges(false)
+                  dispatch(disableUnsavedChange())
                   handleSubmitQuestion('timeout')
                   // setOpenTimeOut(true)
                 }
@@ -1360,7 +1414,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               disabled: submited,
               onClick: () => {
                 setOpenSubmit(true)
-                setUnsavedChanges(false)
+                dispatch(disableUnsavedChange())
               },
               //   full: fullWidthBtn,
             }}
@@ -1369,7 +1423,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               size: 'medium',
               onClick: () => {
                 setOpenQuit(true)
-                setUnsavedChanges(false)
+                dispatch(disableUnsavedChange())
               },
               loading: false,
               //   full: fullWidthBtn,
@@ -1378,7 +1432,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
         {/* End Header */}
         {tabs?.length > 0 && (
-          <div className="px-6 bg-gray-4 shadow-solution py-4 absolute w-full z-10">
+          <div className="px-6 bg-gray-4 shadow-solution relative py-4 w-full z-10">
             <TabSlide
               data={filteredTabs}
               currentTab={currentPage}
@@ -1398,7 +1452,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       {/* <div className=''> */}
       {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
         <div
-          className="flex h-[calc(100%-176px)] bg-gray-3 mt-[72px]"
+          className={`flex bg-gray-3 flex-1 overflow-auto`}
           id={'preview-question'}
         >
           <div
@@ -1469,7 +1523,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             className="w-[20px] h-full bg-gray-3 cursor-ew-resize"
             onMouseDown={() => {
               setStartResize(true)
-              setCurrentMousePos(x || 0)
+              // setCurrentMousePos(mousePosition.x || 0)
             }}
             onMouseUp={() => setStartResize(false)}
           ></div>
@@ -1494,7 +1548,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
       ) : (
         <div
-          className=" h-[calc(100%-176px)] overflow-auto py-6 px-6 mt-[72px]"
+          className={`overflow-auto py-6 px-6 flex-1`}
           id={'preview-question'}
         >
           <div
@@ -1744,7 +1798,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         }
       })}
       {/* </div> */}
-      <div className=" bg-gray-3 flex items-center flex-1  justify-between shadow-question-footer min-h-[48px] z-10">
+      <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px]  z-10">
         <div className="flex items-center h-full">
           <button className="h-full">
             <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -2027,24 +2081,25 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openTimeOut}
         setOpen={setOpenTimeOut}
         handleSubmit={() => {
-          if (type === 'entrance') {
-            router.replace(`/entrance-test/test-result/${QuizResultId}`)
-          } else {
-            router.replace(`/courses/test/test-result/${QuizResultId}`)
-          }
+          dispatch(disableUnsavedChange())
+            .unwrap()
+            .then(() => {
+              if (type === 'entrance') {
+                router.replace(`/entrance-test/test-result/${QuizResultId}`)
+              } else {
+                router.replace(`/courses/test/test-result/${QuizResultId}`)
+              }
+            })
         }}
         handleQuit={() => {
-          setUnsavedChanges(() => {
-            router.back()
-            return false
-          })
+          router.back()
         }}
       />
       <QuitTestModal
         open={openQuit}
         setOpen={setOpenQuit}
         handleQuit={() => router.back()}
-        handleCancel={() => setUnsavedChanges(true)}
+        handleCancel={() => dispatch(loginSlice.actions.enableUnsavedChange())}
       />
       <LimitQuizModal
         open={openLimit}
@@ -2055,7 +2110,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         open={openSubmit}
         setOpen={setOpenSubmit}
         handleSubmit={() => handleSubmitQuestion('submit')}
-        handleCancel={() => setUnsavedChanges(true)}
+        handleCancel={() => dispatch(loginSlice.actions.enableUnsavedChange())}
       />
       <ModalUploadFile
         open={openUpload.status}

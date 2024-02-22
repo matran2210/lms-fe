@@ -132,7 +132,7 @@ const LoginPage = () => {
           localStorage.setItem('enstranceTest', 'true')
         })
         .catch((error) => {
-          if (error?.response?.data?.error?.code === '403|0001') {
+          if (error?.response?.data?.error?.code === '403|000010') {
             setOpenLimit(true)
           } else if (error?.response?.data?.error?.code === '401|0000') {
             setError('login', { message: SHOW_ERROR_USERNAME_PASSWORD })

@@ -383,7 +383,7 @@ const QuizDocument = ({
                   handleConfirmQuestion(false)
                 }
               }}
-              color="quizActivity"
+              color="primary"
               loading={loading}
             />
           )}

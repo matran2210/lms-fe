@@ -46,7 +46,7 @@ const NotifyList = ({
         const readStatus = notifyItem?.notification_user_instances?.is_read
         return (
           <div
-            key={notifyItem?.id}
+            key={notifyItem?.id + index}
             className={`w-full p-6 pb-5 cursor-pointer relative flex items-center gap-4 ${
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
@@ -76,6 +76,7 @@ const NotifyList = ({
                 height={56}
                 layout="fixed"
                 objectFit={'cover'}
+                priority={true}
               />
             </div>
             <div className="block">

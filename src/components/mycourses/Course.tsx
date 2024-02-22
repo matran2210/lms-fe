@@ -27,6 +27,7 @@ import toast from 'react-hot-toast'
 import { ICourseAll } from 'src/type/courses'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
+import { Tooltip } from 'antd'
 
 const Course = ({
   course,
@@ -297,7 +298,13 @@ const Course = ({
               }}
             >
               <div className="line-clamp-2 text-ellipsis">
-                {truncateString(course?.name, 40)}
+                {(course?.name as string)?.length > 50 ? (
+                  <Tooltip title={course?.name} color="#ffffff" placement="top">
+                    {truncateString(course?.name, 50)}
+                  </Tooltip>
+                ) : (
+                  <>{course?.name}</>
+                )}
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -327,20 +334,43 @@ const Course = ({
                           ? 1
                           : 0}{' '}
                     </span>
-                    {daysDifference > 0 ? 'days left' : 'day left'}
+                    {daysDifference > 1 ? 'days left' : 'day left'}
                   </span>
                 )}
               </div>
             </div>
             <div className="des mt-6 mb-8 line-clamp-5 text-ellipsis h-[116px]">
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: course?.description,
-                }}
-                className={`text-bas h-24 ${
-                  enableCourse ? 'text-bw-1' : 'text-gray-1 '
-                }`}
-              />
+              {(course?.description as string).length > 250 ? (
+                <Tooltip
+                  title={
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: course?.description,
+                      }}
+                    />
+                  }
+                  color="#ffffff"
+                  placement="right"
+                >
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: course?.description,
+                    }}
+                    className={`text-bas h-24 ${
+                      enableCourse ? 'text-bw-1' : 'text-gray-1 '
+                    }`}
+                  />
+                </Tooltip>
+              ) : (
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: course?.description,
+                  }}
+                  className={`text-bas h-24 ${
+                    enableCourse ? 'text-bw-1' : 'text-gray-1 '
+                  }`}
+                />
+              )}
             </div>
             <div className="mt-auto">
               <div className="progress mb-6 h-8">

@@ -262,7 +262,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
             sections &&
             DEFAULT_SELECT.concat(
               sections?.map((section) => ({
-                label: section.name,
+                label: (
+                  <>
+                    <span title={section.name}>{section.name}</span>
+                  </>
+                ).props.children,
                 value: section.id,
               })),
             )
@@ -284,7 +288,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedSection
               ? subSections?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []
@@ -307,7 +315,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedSubsection
               ? unit?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []
@@ -326,7 +338,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedUnit
               ? activity?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []
@@ -339,25 +355,23 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       {resources?.resources?.map((resource) => (
         <div key={resource.id}>
           <div
-            className="mt-6 p-6 h-[92px] last:mb-6"
+            className="mt-6 p-6 h-[92px] last:mb-6 flex justify-between items-center"
             style={{ border: '1px solid #DCDDDD' }}
           >
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="font-normal text-base text-bw-1">
-                  {resource?.name}
-                </div>
-                <div className="text-gray-1 font-normal text-base">
-                  {bytesToKilobyte(resource?.size)}
-                </div>
+            <div>
+              <div className="font-normal text-base text-bw-1">
+                {resource?.name}
               </div>
-              <a
-                className="cursor-pointer"
-                onClick={() => download(resource.name, resource.file_key)}
-              >
-                <DownloadIcon />
-              </a>
+              <div className="text-gray-1 font-normal text-base">
+                {bytesToKilobyte(resource?.size)}
+              </div>
             </div>
+            <a
+              className="cursor-pointer"
+              onClick={() => download(resource.name, resource.file_key)}
+            >
+              <DownloadIcon />
+            </a>
           </div>
         </div>
       ))}

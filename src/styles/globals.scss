@@ -13,6 +13,7 @@
   font-family: techNology;
   src: url('../assets/fonts/Technology/Technology.ttf');
 }
+
 #globalLoader {
   position: fixed;
   z-index: 9999;
@@ -63,11 +64,7 @@ a {
   text-decoration: none;
 }
 
-/* Firefox */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #d6dee1 transparent;
-
   &::-webkit-scrollbar {
     @apply h-4 w-2 border bg-bw-3;
   }
@@ -183,6 +180,7 @@ body *::-webkit-scrollbar-thumb:hover {
     top: 50%;
     transform: translate(50%, -50%);
     z-index: 1;
+
     &::before {
       color: white;
       content: '\25B6';
@@ -207,31 +205,30 @@ body *::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-4 font-bold text-base text-center;
 }
 
-.sapp-select--selectword-preview {
+.sapp-select--selectword-preview,
+.sapp-select--selectword-preview:focus {
   @apply min-w-78px rounded;
-
+  --tw-ring-color: unset;
+  --tw-ring-offset-shadow: unset;
+  --tw-ring-shadow: unset;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: transparent;
+  background: #f9f9f9;
   background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="non"><path d="M10.9827 0.571289H9.97827C9.90996 0.571289 9.84568 0.604771 9.8055 0.659682L6.00059 5.90433L2.19568 0.659682C2.1555 0.604771 2.09121 0.571289 2.02291 0.571289H1.01845C0.931392 0.571289 0.880499 0.670396 0.931392 0.741379L5.65371 7.25165C5.82514 7.48736 6.17603 7.48736 6.34612 7.25165L11.0684 0.741379C11.1207 0.670396 11.0698 0.571289 10.9827 0.571289Z" fill="%23DCDDDD" /></svg>');
   background-repeat: no-repeat;
-  background-position-x: 97%;
+  background-position-x: 90%;
   background-position-y: 13px;
   border: 1px solid #dfdfdf;
   border-radius: 2px;
   padding-right: 1.5rem;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
   width: 110px;
   height: 35px;
   max-width: 150px;
   margin-bottom: 8px;
 
-  [disabled] {
-    color: gray;
-  }
-
-  &:invalid {
-    color: gray;
+  &:required:invalid {
+    color: #dcdddd;
   }
 
   option {
@@ -240,7 +237,15 @@ body *::-webkit-scrollbar-thumb:hover {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
+  option[value=''][disabled] {
+    display: none;
+  }
+  option[disabled] {
+    color: #dcdddd;
+  }
+  option {
+    color: #404041;
+  }
   &.sapp-select-confirmed {
     background-image: none;
     text-align: center;
@@ -308,11 +313,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-white absolute border border-success;
+  @apply z-0 border-solid bg-white absolute border-success;
 }
 
 .sapp-arrowed-container-incorrects {
-  @apply break-words relative bg-gray-3 h-auto flex items-center justify-start p-5 border-solid border w-[48%] border-error;
+  @apply break-words relative bg-bw-6 h-auto flex items-center justify-start p-5 border-solid border w-[48%] border-error;
 }
 
 .sapp-arrowed-container-incorrects:before {
@@ -324,11 +329,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-10 border-solid bg-gray-3 absolute border right-0 border-error;
+  @apply z-10 border-solid bg-bw-6 absolute border right-0 border-error;
 }
 
 .sapp-notched-container-incorrects {
-  @apply break-words flex-1 relative bg-gray-3 h-full flex items-center justify-start p-5 border-solid border border-error border-l-0 ps-8;
+  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-start p-5 border-solid border border-error border-l-0 ps-8;
 }
 
 .sapp-notched-container-incorrects:before {
@@ -337,9 +342,10 @@ body *::-webkit-scrollbar-thumb:hover {
   /* top: 50%; */
   width: 30px;
   height: 30px;
+  border: 0;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-white absolute border border-error;
+  @apply z-0 border-solid bg-white absolute border-error;
 }
 
 .answer-area {
@@ -600,4 +606,8 @@ textarea.is-invalid:focus {
 
 .hover-transition-font-weight {
   transition: font-weight 0.1s ease;
+}
+
+.ant-tooltip-inner {
+  color: #404041 !important;
 }

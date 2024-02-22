@@ -57,7 +57,8 @@ const EditorReader = ({
           overLay.className = 'sapp_overlay_video'
           const _video = video.cloneNode(true)
           wrapper.append(_video)
-          wrapper.className = 'relative w-fit'
+          wrapper.className = 'relative w-fit overflow-clip'
+          wrapper.style.cssText = `height:${video.getAttribute('height')}px`
           wrapper.append(overLay)
           video?.parentNode?.replaceChild(wrapper, video)
         }
@@ -100,10 +101,12 @@ const EditorReader = ({
         // target?.parentNode?.removeChild(target.nextSibling as Node)
       }
     } else if (target.tagName === 'IMG') {
-      setType('IMG')
       const imageSrc = target.getAttribute('src')
       if (imageSrc) {
-        setSrc(imageSrc)
+        setSrc(() => {
+          setType('IMG')
+          return imageSrc
+        })
       }
     }
   }
@@ -118,7 +121,7 @@ const EditorReader = ({
           {parseHTML(content || '', options)}
         </div>
       </div>
-      {type === 'IMG' && (
+      {type === 'IMG' && src && (
         <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
       )}
     </>

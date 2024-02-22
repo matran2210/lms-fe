@@ -71,7 +71,6 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       dispatch(reset())
     }, 50)
   }
-
   useEffect(() => {
     if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
       dispatch(active())
@@ -104,11 +103,15 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   }
 
   useEffect(() => {
+    let isFetching = false
+
     const handleScroll = () => {
       if (
+        !isFetching &&
         window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 10
+          document.documentElement.offsetHeight - 10
       ) {
+        isFetching = true
         loadMore()
       }
     }

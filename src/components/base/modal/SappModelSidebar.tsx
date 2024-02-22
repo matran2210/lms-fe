@@ -68,7 +68,9 @@ function SappModelSidebar({
       confirmDialogRef.current.classList.add('pointer-events-none')
     }
     if (confirmDialogOverLayRef.current) {
-      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
+      confirmDialogOverLayRef.current.classList.add(
+        'animate-fade-out-overlay-sidebar',
+      )
       confirmDialogOverLayRef.current.classList.add('pointer-events-none')
     }
     setTimeout(() => {
@@ -105,7 +107,7 @@ function SappModelSidebar({
             <div
               ref={confirmDialogOverLayRef}
               onClick={handleClose}
-              className={`sapp-overlay fixed inset-0 bg-overlay-dark-sidebar z-40 cursor-pointer animate-fade-in-overlay ${overlayClass}`}
+              className={`sapp-overlay fixed inset-0 bg-overlay-dark-sidebar z-40 cursor-pointer animate-fade-in-overlay-sidebar ${overlayClass}`}
             ></div>
           </>
         )}

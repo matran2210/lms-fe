@@ -436,6 +436,25 @@ export default function Icon({ type, className }: IconsPros) {
           <circle cx="8" cy="8" r="8" fill="currentColor" />
         </svg>
       )}
+
+      {type === 'arrow-bottom' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          className={`${className}`}
+        >
+          <path
+            stroke="currentColor"
+            strokeLinecap="square"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+            d="M19 9.391l-7 7.305L5 9.39"
+          ></path>
+        </svg>
+      )}
     </>
   )
 }
