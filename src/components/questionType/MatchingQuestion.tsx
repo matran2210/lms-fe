@@ -369,7 +369,7 @@ const MatchingQuestion = forwardRef(
                 )
               })}
             </div>
-            <div className="flex flex-col gap-y-5 mt-28">
+            <div className="flex flex-col gap-y-5 pt-[42px]">
               <div className="text-bw-1 font-semibold text-base">
                 Correct Answer
               </div>
