@@ -59,6 +59,7 @@ import ConFirmSubmit from './conFirmSubmit'
 import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import NewFiltext from '@components/questionType/NewFillText'
 type Window = {
   userAgreed: any
 }
@@ -149,8 +150,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <AddWordPreview
+          <NewFiltext
+            control={control}
+            name={`${currentTabID}_fillword`}
             data={data}
+            setValue={setValue}
             action={getValueFillText}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
@@ -283,18 +287,41 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
-  const { x } = useMousePosition()
+  // const { x } = useMousePosition()
   const { unsavedChange } = useAppSelector((state) => state.loginReducer)
   const rightSideRef = useRef<any>(null)
+  const [mousePosition, setMousePosition] = useState({ x: null, y: null })
+  useEffect(() => {
+    const updateMousePosition = (ev: any) => {
+      setMousePosition({ x: ev.clientX, y: ev.clientY })
+    }
+    const clickPosition = (ev: any) => {
+      setMousePosition(() => {
+        setCurrentMousePos(ev.clientX)
+        return { x: ev.clientX, y: ev.clientY }
+      })
+    }
+    if (startResize) {
+      window.addEventListener('mousemove', updateMousePosition)
+      window.addEventListener('mousedown', clickPosition)
+    } else {
+      window.removeEventListener('mousemove', updateMousePosition)
+      window.removeEventListener('mousedown', clickPosition)
+    }
+    return () => {
+      window.removeEventListener('mousemove', updateMousePosition)
+      window.removeEventListener('mousedown', clickPosition)
+    }
+  }, [startResize])
   useEffect(() => {
     dispatch(loginSlice.actions.enableUnsavedChange())
   }, [])
   useEffect(() => {
     if (startResize) {
       const temp = currentLeftWidth
-      setLeftWidth(temp + (currentMousePos - (x || 0)))
+      setLeftWidth(temp + (currentMousePos - (mousePosition.x || 0)))
     }
-  }, [x, startResize])
+  }, [mousePosition.x, startResize])
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -436,12 +463,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
       return false
     } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
-      for (let e of getValueFillText()) {
-        if (e && e !== '') {
-          return true
+      if (
+        getValues(`${currentContent.id}_fillword`) &&
+        getValues(`${currentContent.id}_fillword`)?.length > 0
+      ) {
+        for (let e of getValues(`${currentContent.id}_fillword`)) {
+          if (e) {
+            return true
+          }
         }
+        return false
       }
-
       return false
     } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
       if (currentContent?.answer_file?.file_key) {
@@ -524,12 +556,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const ref = useRef(null) as any
   const refEditor = useRef(null) as any
   const getValueFillText = () => {
-    let value = []
-    const inputs = document.querySelectorAll('input[stringHTML="true"]') as any
-    for (let e of inputs) {
-      value.push(e.value)
-    }
-    return value
+    // let value = []
+    // const inputs = document.querySelectorAll('input[stringHTML="true"]') as any
+    // for (let e of inputs) {
+    //   value.push(e.value)
+    // }
+    // return value
   }
   const getValueSelectText = () => {
     let value = [] as any
@@ -612,7 +644,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         //   solution: res.data[0].solution,
         //   answer: getCurrentAnswer(item),
         // })
-        ref.current?.handleReset()
+        if (currentTabContent.qType !== QUESTION_TYPES.FILL_WORD) {
+          ref.current?.handleReset()
+        }
         return {
           ...item,
           done: true,
@@ -797,8 +831,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return answers
       } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
         const answers = handleSaveAnswer(
-          getValueFillText(),
-          currentContent.id,
+          getValues(`${currentPage}_fillword`),
+          currentPage,
           tabs,
         )
         return answers
@@ -1111,17 +1145,18 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           answer: undefined,
           attempted: false,
         }
+        if (
+          data.qType === QUESTION_TYPES.DRAG_DROP ||
+          data.qType === QUESTION_TYPES.MATCHING ||
+          data.qType === QUESTION_TYPES.FILL_WORD ||
+          data.qType === QUESTION_TYPES.SELECT_WORD
+        ) {
+          ref.current?.handleReset()
+        }
         return arr
       })
       setValue(`${currentTabContent?.id}_answer`, '')
-      if (
-        data.qType === QUESTION_TYPES.DRAG_DROP ||
-        data.qType === QUESTION_TYPES.MATCHING ||
-        data.qType === QUESTION_TYPES.FILL_WORD ||
-        data.qType === QUESTION_TYPES.SELECT_WORD
-      ) {
-        ref.current?.handleReset()
-      }
+      setValue(`${currentTabContent?.id}_fillword`, '')
       if (data.qType === QUESTION_TYPES.ESSAY) {
         refEditor?.current?.reset()
         setTabs((prev: any) => {
@@ -1490,7 +1525,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             className="w-[20px] h-full bg-gray-3 cursor-ew-resize"
             onMouseDown={() => {
               setStartResize(true)
-              setCurrentMousePos(x || 0)
+              // setCurrentMousePos(mousePosition.x || 0)
             }}
             onMouseUp={() => setStartResize(false)}
           ></div>
