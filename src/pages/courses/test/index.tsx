@@ -66,6 +66,10 @@ const TestModal = ({
       parentChildClass=""
       position="center"
       buttonSize="extra"
+      disabled={
+        data?.quiz?.is_limited &&
+        data?.quiz?.attempt_count === data?.quiz?.limit_count
+      }
     >
       <div className="text-bw-1 text-4xl font-bold mb-4">
         {TEST_TYPE[data?.course_section_type]}
