@@ -1452,9 +1452,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       {/* <div className=''> */}
       {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
         <div
-          className={`flex bg-gray-3 ${
-            !activeShowAll ? 'h-[calc(100%-192px)]' : 'h-[calc(100%-240px)]'
-          }`}
+          className={`flex bg-gray-3 flex-1 overflow-auto`}
           id={'preview-question'}
         >
           <div
@@ -1550,9 +1548,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
       ) : (
         <div
-          className={`${
-            !activeShowAll ? 'h-[calc(100%-192px)]' : 'h-[calc(100%-240px)]'
-          } overflow-auto py-6 px-6 `}
+          className={`overflow-auto py-6 px-6 flex-1`}
           id={'preview-question'}
         >
           <div
@@ -1802,7 +1798,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         }
       })}
       {/* </div> */}
-      <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px] z-10">
+      <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px]  z-10">
         <div className="flex items-center h-full">
           <button className="h-full">
             <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
