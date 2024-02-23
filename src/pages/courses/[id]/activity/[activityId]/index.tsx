@@ -350,8 +350,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   }
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
-      <ul className="py-6 flex flex-wrap gap-1">
-        <li className="hover:text-primary cursor-pointer text-gray-1">
+      <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto">
+        <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
             My Course
           </Link>
@@ -382,11 +382,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 className={`${
                   (activity.breadcumb?.length || 0) - 1 === i
                     ? 'text-bw-1'
-                    : 'hover:text-primary cursor-pointer text-gray-1'
+                    : 'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
                 }`}
               >
                 <Link href={url} className="breadcrumbs__link" scroll={false}>
-                  {truncateString(e.name, 30)}
+                  {truncateString(e.name, 25)}
                 </Link>
               </li>
             </React.Fragment>
