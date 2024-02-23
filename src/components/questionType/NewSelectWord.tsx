@@ -1,9 +1,9 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
-import { runHighlight } from '@utils/index'
-import { Element, HTMLReactParserOptions } from 'html-react-parser'
+import HookFormSelect from '@components/base/select/HookFormSelect'
+import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
+import { DeserializeHighlight, runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
-import {
+import React, {
   ForwardedRef,
   forwardRef,
   useEffect,
@@ -11,9 +11,7 @@ import {
   useRef,
   useState,
 } from 'react'
-
 interface IProps {
-  control: any
   data: any
   action?: any
   handleSaveHighLight?: any
@@ -30,13 +28,13 @@ interface IProps {
   extenalRef?: any
   solution?: string
   allowUnHighLight?: boolean
-  name?: string
+  control?: any
   setValue?: any
+  name?: string
 }
-const NewFiltext = forwardRef(
+const NewSelectWord = forwardRef(
   (
     {
-      control,
       data,
       action,
       handleSaveHighLight,
@@ -48,74 +46,116 @@ const NewFiltext = forwardRef(
       extenalRef,
       solution,
       allowUnHighLight,
-      name,
+      control,
       setValue,
+      name,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
-    // useEffect(() => {
-    //   if (defaultAnswer) {
-    //     defaultAnswer.forEach((e: any, i: number) => {
-    //       if (e) {
-    //         setValue(`${name}.${i}`, e)
-    //       } else {
-    //         setValue(`${name}.${i}`, '')
-    //       }
-    //     })
-    //   } else {
-    //     setValue(name, '')
-    //   }
-    // }, [defaultAnswer])
     const refEditor = useRef(null) as any
     const [questionContent, setQuestionContent] = useState<any>()
     const [answerContent, setAnswerContent] = useState<any>()
     const str = data?.question_content
-    const parser = new DOMParser()
+    const [key, setKey] = useState<string>(uniqueId('key'))
     useImperativeHandle(ref, () => ({
       handleReset() {
-        const doc = parser.parseFromString(str, 'text/html')
-        const elements = doc.querySelectorAll('.question-content-tag')
-        elements.forEach((element: globalThis.Element, index: number) => {
-          setValue(`${name}.${index}`, '')
+        // setAnswered([])
+        setKey((prev) => {
+          const newKey = uniqueId('key')
+          return newKey
         })
+        // setAnswered()
       },
       handleGetResult() {
-        // return getValues()
+        // action()
       },
     }))
+    const formatAnswer = (data: any) => {
+      let objAnswer: any = {}
+      for (let e of data?.answers) {
+        if (!objAnswer[e.answer_position]) {
+          objAnswer[e.answer_position] = []
+        }
+        objAnswer[e.answer_position].push({
+          label:
+            'River Manufacturing is one of many companies in an industry that makeRiver Manufacturing is one of many companies in an industry that makeRiver Manufacturing is one of many companies in an industry that makeRiver Manufacturing is one of many companies in an industry that makeRiver Manufacturing is one of many companies in an industry that makeRiver Manufacturing is one of many companies in an industry that make',
+          value: e.id,
+          result: e.is_correct,
+        })
+      }
+      return objAnswer
+    }
+    const answerObj = formatAnswer(data)
+
+    const parser = new DOMParser()
+
     useEffect(() => {
       const doc = parser.parseFromString(str, 'text/html')
       const elements = doc.querySelectorAll('.question-content-tag')
       const doc2 = parser.parseFromString(str, 'text/html')
       const elementCorrects = doc2.querySelectorAll('.question-content-tag')
-      elements.forEach((element: globalThis.Element, index: number) => {
+
+      elements.forEach((element, index) => {
         element.setAttribute('index', index.toString())
         if (defaultAnswer?.[index]) {
           setValue(`${name}.${index}`, defaultAnswer[index])
         } else {
           setValue(`${name}.${index}`, '')
         }
+        const selectElement = document.createElement('select')
+        selectElement.classList.add('sapp-select--selectword-preview')
+        selectElement.setAttribute('required', 'true')
+        selectElement.id = element.id
+
+        const defaultAnswerValue = defaultAnswer?.[index] || ''
+
+        let optionClass = ''
+
+        if (corrects) {
+          const isCorrect = corrects?.some(
+            (correct) =>
+              correct.answer_position === index + 1 &&
+              correct.id === defaultAnswerValue &&
+              correct.is_correct,
+          )
+          optionClass = isCorrect ? '!border-success' : '!border-danger'
+          const textClass = isCorrect
+            ? 'text-state-success'
+            : 'text-state-error'
+          selectElement.classList.add(optionClass)
+          selectElement.classList.add('sapp-select-confirmed')
+          selectElement.classList.add(textClass)
+          selectElement.setAttribute('disabled', 'true')
+          selectElement.innerHTML = `
+        <option value="" disabled selected ></option>
+        ${answerObj[+index + 1].map((e: any) => {
+          const isSelected = e.value === defaultAnswerValue
+
+          return `<option value="${e.value}" ${isSelected ? 'selected' : ''} >${
+            e.label
+          }</option>`
+        })}
+      `
+          element.replaceWith(selectElement)
+        }
       })
       if (corrects) {
         elementCorrects.forEach((element, index) => {
           const inputId = element.id
+          const inputValue = defaultAnswer?.[index] || ''
+
           let inputClass
           // if (corrects) {
-          const correctAnswer = corrects?.filter(
-            (ans: any) => ans.answer_position === index + 1,
+          const correctAnswer = corrects?.find(
+            (ans: any) => ans.answer_position === index + 1 && ans.is_correct,
           )
           if (correctAnswer) {
             inputClass = 'text-base font-semibold text-state-success'
             // }
+
             element.outerHTML = `
                 <span>
-                <span id="${inputId}" class = "${inputClass}">${correctAnswer
-                  .map((e, i) => {
-                    if (i < correctAnswer.length - 1) {
-                      return e.answer + ' / '
-                    } else return e.answer
-                  })
-                  .join('')} <span/>
+                <span id="${inputId}" class = "${inputClass}">${correctAnswer.answer} <span/>
                 </span>
                 `
           }
@@ -124,13 +164,14 @@ const NewFiltext = forwardRef(
       }
 
       setQuestionContent(doc)
-    }, [str, corrects, defaultAnswer])
-    const options: HTMLReactParserOptions = {
-      replace(domNode) {
+    }, [defaultAnswer])
+
+    const options: any = {
+      replace(domNode: any) {
         if (!corrects) {
           if (
-            (domNode as Element).attribs &&
-            (domNode as Element).attribs.class === 'question-content-tag'
+            domNode.attribs &&
+            domNode.attribs.class === 'question-content-tag'
           ) {
             return (
               <span
@@ -140,41 +181,13 @@ const NewFiltext = forwardRef(
                   width: '110px',
                 }}
               >
-                <HookFormTextField
+                <SappHookFormSelect
                   control={control}
-                  name={`${name}.${Number((domNode as Element).attribs.index)}`}
-                  inputClassName="!h-[35px]"
-                />
-              </span>
-            )
-          }
-        } else {
-          if (
-            (domNode as Element).attribs &&
-            (domNode as Element).attribs.class === 'question-content-tag'
-          ) {
-            const index = Number((domNode as Element).attribs.index)
-            const inputValue = defaultAnswer?.[index]
-            let inputClass
-            if (corrects) {
-              const correctAnswer = corrects?.find(
-                (ans: any) =>
-                  ans.answer_position === index + 1 &&
-                  ans.answer?.trim()?.toLowerCase() ===
-                    inputValue?.trim()?.toLowerCase(),
-              )
-              inputClass = correctAnswer
-                ? '!border-success text-state-success text-center !font-normal'
-                : '!border-danger text-danger text center !font-normal'
-            }
-            return (
-              <span>
-                <input
-                  disabled
-                  type="text"
-                  id={(domNode as Element).attribs.id}
-                  className={'sapp-input-preview ' + inputClass}
-                  value={inputValue}
+                  name={`${name}.${Number(domNode.attribs.index)}`}
+                  options={answerObj[Number(domNode.attribs.index) + 1]}
+                  isSearchable={false}
+                  placeholder="Choose"
+                  className="select_word_for_test"
                 />
               </span>
             )
@@ -185,6 +198,14 @@ const NewFiltext = forwardRef(
     return (
       <div ref={extenalRef}>
         <EditorReader
+          key={key}
+          extenalRef={refEditor}
+          className="sapp-questions pb-[26px]"
+          // style={{borderBottom: '1px solid  white'}}
+          text_editor_content={
+            questionContent?.documentElement.querySelector('body')?.innerHTML ||
+            ''
+          }
           id="hightlight_area"
           onMouseUp={(e: any) => {
             if (
@@ -209,12 +230,6 @@ const NewFiltext = forwardRef(
               }
             }
           }}
-          extenalRef={refEditor}
-          className="sapp-questions"
-          text_editor_content={
-            questionContent?.documentElement?.querySelector('body')
-              ?.innerHTML || ''
-          }
           highlighted={highlighted}
           options={options}
         />
@@ -231,7 +246,7 @@ const NewFiltext = forwardRef(
           </>
         )}
         {solution && (
-          <div className="bg-gray-4 mt-6 p-6">
+          <div className="bg-gray-4 mt-6 p-6 ">
             <div className="font-semibold text-base text-bw-1 ">Solution</div>
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
@@ -240,5 +255,5 @@ const NewFiltext = forwardRef(
     )
   },
 )
-NewFiltext.displayName = 'AddWordPreview'
-export default NewFiltext
+NewSelectWord.displayName = 'SelectWord'
+export default NewSelectWord

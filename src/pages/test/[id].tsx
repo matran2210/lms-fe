@@ -60,6 +60,7 @@ import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import NewFiltext from '@components/questionType/NewFillText'
+import NewSelectWord from '@components/questionType/NewSelectWord'
 type Window = {
   userAgreed: any
 }
@@ -186,6 +187,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
+            // control={control}
+            // setValue={setValue}
+            // name={`${currentTabID}_fillword`}
             data={data}
             action={getValueSelectText}
             handleSaveHighLight={handleSaveHighLight}
@@ -885,7 +889,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         }
         return item
       })
-      ref.current?.handleReset()
+      if (currentTabContent.qType !== QUESTION_TYPES.FILL_WORD) {
+        ref.current?.handleReset()
+      }
       refEditor?.current?.reset()
       const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
       setCurrentPage(currentTab)
@@ -894,7 +900,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
     } else {
-      ref.current?.handleReset()
+      if (currentTabContent.qType !== QUESTION_TYPES.FILL_WORD) {
+        ref.current?.handleReset()
+      }
       refEditor?.current?.reset()
       const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
       setCurrentPage(currentTab)

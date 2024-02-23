@@ -52,10 +52,10 @@ const SelectWord = forwardRef(
     useImperativeHandle(ref, () => ({
       handleReset() {
         // setAnswered([])
-        setKey((prev) => {
-          const newKey = uniqueId('key')
-          return newKey
-        })
+        // setKey((prev) => {
+        //   const newKey = uniqueId('key')
+        //   return newKey
+        // })
         // setAnswered()
       },
       handleGetResult() {
@@ -93,7 +93,6 @@ const SelectWord = forwardRef(
         selectElement.id = element.id
 
         const defaultAnswerValue = defaultAnswer?.[index] || ''
-
         let optionClass = ''
 
         if (corrects) {

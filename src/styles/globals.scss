@@ -611,3 +611,17 @@ textarea.is-invalid:focus {
 .ant-tooltip-inner {
   color: #404041 !important;
 }
+.select_word_for_test {
+  .select__control {
+    @apply h-[35px];
+  }
+  .select__menu {
+    overflow: unset;
+    width: 500px;
+  }
+  .select__option {
+    overflow: unset;
+    max-height: unset;
+    display: block;
+  }
+}
