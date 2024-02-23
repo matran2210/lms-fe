@@ -53,6 +53,24 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }
 
+  const getTitleHeader = (pathname: string) => {
+    if (pathname.includes('/explanation') && router.query?.title) {
+      return router.query?.title
+    }
+    if (
+      pathname.includes('/courses') ||
+      pathname.includes('/test') ||
+      pathname.includes('/case-study') ||
+      pathname.includes('/casestudy')
+    )
+      return 'My Course'
+    if (pathname.includes('/notifications')) return 'Notification'
+    if (pathname.includes('/entrance-test')) return 'Entrance Test '
+    if (pathname.includes('/profile') || pathname.includes('/[page]'))
+      return 'Profile'
+    return 'Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy'
+  }
+
   useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
@@ -135,9 +153,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   return (
     <>
       <Head>
-        <title>
-          Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy
-        </title>
+        <title>{getTitleHeader(router.pathname)}</title>
         <link rel="icon" href="/sapp.svg" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
         <meta charSet="utf-8"></meta>

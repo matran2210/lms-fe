@@ -19,7 +19,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
         <div
           key={item?.id}
           onClick={() => {
-            router.push(`/explanation/${item?.id}`)
+            router.push(`/explanation/${item?.id}?title=My Course`)
           }}
           className={`border border-solid flex items-center flex-row justify-center w-10 xl:w-12 h-10 xl:h-12 text-sm font-medium leading-8.5 cursor-pointer
           ${
@@ -60,7 +60,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
         <div
           key={item?.id}
           onClick={() => {
-            router.push(`/explanation/${item?.id}`)
+            router.push(`/explanation/${item?.id}?title=My Course`)
           }}
           className={`border border-solid flex items-center flex-row justify-center w-10 xl:w-12 h-10 xl:h-12 text-sm font-medium leading-8.5 cursor-pointer
           ${
