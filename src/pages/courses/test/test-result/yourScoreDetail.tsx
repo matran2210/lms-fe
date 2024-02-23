@@ -154,7 +154,7 @@ const YourScoreDetail = () => {
                         __html: String(e?.question?.question_content ?? '--'),
                       }}
                       onClick={() => {
-                        router.push(`/explanation/${e.id}`)
+                        router.push(`/explanation/${e.id}?title=My Course`)
                       }}
                     ></div>
                   </td>
