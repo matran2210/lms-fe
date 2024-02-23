@@ -313,7 +313,7 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-white absolute border-success;
+  @apply z-0 border-solid bg-bw-6 absolute border-success;
 }
 
 .sapp-arrowed-container-incorrects {
@@ -345,7 +345,7 @@ body *::-webkit-scrollbar-thumb:hover {
   border: 0;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-white absolute border-error;
+  @apply z-0 border-solid bg-bw-6 absolute border-error;
 }
 
 .answer-area {
