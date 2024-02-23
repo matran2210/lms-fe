@@ -13,7 +13,7 @@
   }
 
   .select__placeholder {
-    @apply text-gray-1;
+    @apply text-bw-1;
   }
 
   .select__menu {
@@ -64,5 +64,5 @@
 }
 
 .inactive-filter .select-single .select__single-value {
-  @apply text-gray-1;
+  @apply text-bw-1;
 }
