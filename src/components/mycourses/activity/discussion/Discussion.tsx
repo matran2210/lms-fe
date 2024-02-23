@@ -104,6 +104,13 @@ const Discussion = ({ class_id }: Props) => {
           return
         }
 
+        const getSelectedFiles = selectedFiles
+        const getRootSelectedFiles = rootSelectedFiles
+
+        // Clear comment data
+        reset({ [fieldToReset]: '' })
+        isRoot ? setRootSetSelectedFiles([]) : setSelectedFiles([])
+
         await dispatch(
           createDiscussion({
             course_section_id: router.query.activityId as string,
@@ -116,8 +123,8 @@ const Discussion = ({ class_id }: Props) => {
           .then((e) => {
             if (
               !e?.id ||
-              (isRoot && !rootSelectedFiles?.[0]) ||
-              (!isRoot && !selectedFiles?.[0])
+              (isRoot && !getRootSelectedFiles?.[0]) ||
+              (!isRoot && !getSelectedFiles?.[0])
             ) {
               dispatch(
                 getDiscussion({
@@ -131,7 +138,9 @@ const Discussion = ({ class_id }: Props) => {
             dispatch(
               uploadImagesDiscussion({
                 discussion_id: e.id,
-                new_discussion_file: isRoot ? rootSelectedFiles : selectedFiles,
+                new_discussion_file: isRoot
+                  ? getRootSelectedFiles
+                  : getSelectedFiles,
               }),
             )
               .unwrap()
@@ -149,8 +158,6 @@ const Discussion = ({ class_id }: Props) => {
                 }
               })
           })
-
-        reset({ [fieldToReset]: '' })
       } catch (error) {
         // Sử dụng setError để đặt lỗi cho trường comment hoặc commentRoot tùy thuộc vào isRoot
         const fieldName = isRoot ? 'commentRoot' : 'comment'
