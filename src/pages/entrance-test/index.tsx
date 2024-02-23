@@ -16,6 +16,7 @@ import {
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { useAppDispatch } from 'src/redux/hook'
+import { removeJwtToken } from '@utils/helpers/authen'
 
 const EntranceTest = ({ entranceTestLists }: any) => {
   const dispatch = useAppDispatch()
@@ -63,17 +64,6 @@ export async function getServerSideProps(context: any) {
   // Lấy accessToken từ cookie
   const accessToken = req.cookies.accessToken
 
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
-
   try {
     // Parse cookies from the request headers
     const cookies = parse(req.headers.cookie || '')
@@ -106,7 +96,7 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage
@@ -117,8 +107,12 @@ export async function getServerSideProps(context: any) {
         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
+        const queryString = buildQueryString({
+          attempt_status: query.attempt_status || '',
+        })
         const entranceTestLists = (await EntranceApi.getListEntranceTest(
           act,
+          queryString,
         )) as any
 
         return {
@@ -126,10 +120,11 @@ export async function getServerSideProps(context: any) {
         }
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
+        removeJwtToken()
         // Chuyển hướng đến trang đăng nhập
         return {
           redirect: {
-            destination: '/auth/login',
+            destination: '/',
             permanent: false,
           },
         }
@@ -147,7 +142,7 @@ export async function getServerSideProps(context: any) {
       } else
         return {
           redirect: {
-            destination: '/test',
+            destination: '/auth/login',
             permanent: false,
           },
         }
