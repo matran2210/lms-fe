@@ -51,12 +51,12 @@ const SelectWord = forwardRef(
     const [key, setKey] = useState<string>(uniqueId('key'))
     useImperativeHandle(ref, () => ({
       handleReset() {
-        // setAnswered([])
-        // setKey((prev) => {
-        //   const newKey = uniqueId('key')
-        //   return newKey
-        // })
-        // setAnswered()
+        const inputs = document.querySelectorAll(
+          'select.sapp-select--selectword-preview',
+        ) as any
+        for (let e of inputs) {
+          e.value = ''
+        }
       },
       handleGetResult() {
         // action()

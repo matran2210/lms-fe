@@ -113,7 +113,6 @@ const EssayQuestionPreview = ({
   // },[response_option_custom])
   return (
     <div
-      key={key}
       style={{ background: 'white' }}
       // id="hightlight_area"
       // onMouseUp={(e: any) => {
@@ -324,6 +323,7 @@ const EssayQuestionPreview = ({
               ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
+          key={key}
         >
           {question_data.response_option === RESPONSE_OPTION.WORD ? (
             <HookFormEditor
