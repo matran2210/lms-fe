@@ -4443,10 +4443,10 @@ entities@^4.2.0, entities@^4.4.0, entities@^4.5.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
-entrance-test-result-package@^1.0.18:
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.18.tgz#be80068b0f4fa7c3ef6888b5063457596de63cf4"
-  integrity sha512-vleWfufxbffWVJutKiOsDWJels4PM65FGhB2q9U1RNOsjcr+wgvftP28kVeY7zLlHfM55sTBBVK1RSReQaGnjw==
+entrance-test-result-package@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.19.tgz#13e2a3bba870adbc34ea9877c7226bd9182a9d4c"
+  integrity sha512-v7bWKBA0Qf7jD4gQgSvaRosxcgaO3JCe/kB5ay+gi7uAP0U2IJo1yDvRi/WOMkp1S0jJ5aXOtRVXetVP5xbMig==
   dependencies:
     sass "^1.69.5"
 
