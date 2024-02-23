@@ -40,7 +40,7 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
     ) {
       router.push(`${apiUrl}?name=${router.query.name || ''}${queryString}`)
     }
-  }, [apiUrl, queryString, watch('status'), watch('type'), watch('name')])
+  }, [apiUrl, queryString, watch('status'), watch('type')])
   useEffect(() => {
     setValue('type', { label: `All (${totalCourse})`, value: '' })
   }, [totalCourse])

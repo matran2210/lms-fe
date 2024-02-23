@@ -121,7 +121,7 @@ const EditorReader = ({
           {parseHTML(content || '', options)}
         </div>
       </div>
-      {type === 'IMG' && src && (
+      {type === 'IMG' && (
         <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
       )}
     </>
