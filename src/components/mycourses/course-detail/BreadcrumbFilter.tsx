@@ -6,7 +6,7 @@ import Link from 'next/link'
 const BreadcrumbFilter = ({ name }: { name: string }) => {
   return (
     <nav className="breadcrumbs" role="navigation" aria-label="breadcrumbs">
-      <ol className="breadcrumbs__list flex flex-wrap text-medium-sm font-semibold">
+      <ol className="breadcrumbs__list flex flex-wrap text-medium-sm font-medium">
         <li className="breadcrumbs__item text-gray-1">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
             My Course
