@@ -32,21 +32,19 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
   })
 
   useEffect(() => {
-    const userSectionLearningType = watch('type')?.value
-    const userSectionLearningStatus = watch('status')?.value
+    const userSectionLearningName = watch('name')?.value
+    if (userSectionLearningName !== undefined) {
+      const userSectionLearningType = watch('type')?.value
+      const userSectionLearningStatus = watch('status')?.value
 
-    if (
-      userSectionLearningType !== undefined ||
-      userSectionLearningStatus !== undefined
-    ) {
-      router.push(
-        // userSectionLearningStatus !== '' || userSectionLearningType !== ''
-        // ?
-        `${apiUrl}?name=${router.query.name || ''}${queryString}`,
-        // : apiUrl,
-      )
+      if (
+        userSectionLearningType !== undefined ||
+        userSectionLearningStatus !== undefined
+      ) {
+        router.push(`${apiUrl}?name=${router.query.name || ''}${queryString}`)
+      }
     }
-  }, [apiUrl, queryString, watch('status'), watch('type')])
+  }, [apiUrl, queryString, watch('status'), watch('type'), watch('name')])
   useEffect(() => {
     setValue('type', { label: `All (${totalCourse})`, value: '' })
   }, [totalCourse])
