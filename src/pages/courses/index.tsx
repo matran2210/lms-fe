@@ -226,23 +226,6 @@ export default MyCourse
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
   const accessToken = req.cookies.accessToken
-  // if (query.name === undefined) {
-  //   return {
-  //     props: {
-  //       courses: {
-  //         courses: [],
-  //         metadata: {
-  //           page_index: 0,
-  //           page_size: 0,
-  //           total_pages: 0,
-  //           total_records: 0,
-  //         },
-  //         status: [],
-  //         total: [],
-  //       },
-  //     },
-  //   }
-  // }
   const queryString = buildQueryString({
     name: query.name || '',
     status: query.status || '',
