@@ -43,6 +43,7 @@ export type IPreviewProp = {
   setOpenPdf?: any
   handleSaveHighLightRequirement?: any
   setUnsavedChanges?: any
+  handleChange?: () => void
 }
 const EssayQuestionPreview = ({
   data,
@@ -68,6 +69,7 @@ const EssayQuestionPreview = ({
   allowUnHighLight,
   handleSaveHighLightRequirement = () => {},
   setUnsavedChanges,
+  handleChange,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   // console.log(response_option_custom)
@@ -334,6 +336,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={fullData?.done || fullData?.confirmed}
+              handleChange={handleChange}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
@@ -371,6 +374,7 @@ const EssayQuestionPreview = ({
                             // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
+                        handleChange()
                       }}
                       data={
                         value
@@ -404,6 +408,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={fullData?.done || fullData?.confirmed}
+              handleChange={handleChange}
             />
           ) : (
             <div className="w-full h-[500px] border">
@@ -445,6 +450,7 @@ const EssayQuestionPreview = ({
                             // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
+                        handleChange()
                       }}
                       data={
                         value
