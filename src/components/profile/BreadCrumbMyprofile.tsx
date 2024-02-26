@@ -13,7 +13,7 @@ const BreadcrumbProfile: React.FC<BreadcrumbProps> = ({
 }) => {
   return (
     <nav className="breadcrumb" aria-label="breadcrumbs">
-      <ul className="breadcrumb flex flex-row py-6 font-semibold">
+      <ul className="breadcrumb flex flex-row py-6 font-medium text-sm">
         {tabs.map((tab, index) => (
           <li key={index}>
             {index !== tabs.length - 1 ? (

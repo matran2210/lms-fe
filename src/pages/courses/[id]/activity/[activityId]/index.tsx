@@ -350,7 +350,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   }
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
-      <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto">
+      <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
         <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
             My Course

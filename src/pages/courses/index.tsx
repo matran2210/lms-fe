@@ -149,7 +149,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       </div>
       <div className="main max-w-xxl my-0 mx-auto">
         <div className="flex justify-between xl-max:mx-6">
-          <h2 className="text-medium-sm font-semibold text-bw-1 py-6">
+          <h2 className="text-medium-sm font-medium text-bw-1 py-6">
             My Course
           </h2>
           <div

@@ -10,7 +10,7 @@ interface BreadcrumbProps {
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ tabs, currentPage }) => {
   return (
     <nav className="breadcrumb" aria-label="breadcrumbs">
-      <ul className="breadcrumb flex flex-row py-6 font-semibold">
+      <ul className="breadcrumb flex flex-row py-6 font-medium text-sm">
         {tabs.map((tab, index) => (
           <li
             className="flex items-center gap-0.5 text-medium-sm font-semibold "
