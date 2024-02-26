@@ -53,37 +53,36 @@ const NewFiltext = forwardRef(
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
-    useEffect(() => {
-      if (defaultAnswer) {
-        defaultAnswer.forEach((e: any, i: number) => {
-          if (e) {
-            setValue(`${name}.${i}`, e)
-          } else {
-            setValue(`${name}.${i}`, '')
-          }
-        })
-      } else {
-        setValue(name, '')
-      }
-    }, [defaultAnswer])
+    // useEffect(() => {
+    //   if (defaultAnswer) {
+    //     defaultAnswer.forEach((e: any, i: number) => {
+    //       if (e) {
+    //         setValue(`${name}.${i}`, e)
+    //       } else {
+    //         setValue(`${name}.${i}`, '')
+    //       }
+    //     })
+    //   } else {
+    //     setValue(name, '')
+    //   }
+    // }, [defaultAnswer])
     const refEditor = useRef(null) as any
     const [questionContent, setQuestionContent] = useState<any>()
     const [answerContent, setAnswerContent] = useState<any>()
     const str = data?.question_content
     const parser = new DOMParser()
-    const [key, setKey] = useState<string>(uniqueId('key'))
     useImperativeHandle(ref, () => ({
       handleReset() {
-        setKey((prev) => {
-          const newKey = uniqueId('key')
-          return newKey
+        const doc = parser.parseFromString(str, 'text/html')
+        const elements = doc.querySelectorAll('.question-content-tag')
+        elements.forEach((element: globalThis.Element, index: number) => {
+          setValue(`${name}.${index}`, '')
         })
       },
       handleGetResult() {
         // return getValues()
       },
     }))
-
     useEffect(() => {
       const doc = parser.parseFromString(str, 'text/html')
       const elements = doc.querySelectorAll('.question-content-tag')
@@ -91,6 +90,11 @@ const NewFiltext = forwardRef(
       const elementCorrects = doc2.querySelectorAll('.question-content-tag')
       elements.forEach((element: globalThis.Element, index: number) => {
         element.setAttribute('index', index.toString())
+        if (defaultAnswer?.[index]) {
+          setValue(`${name}.${index}`, defaultAnswer[index])
+        } else {
+          setValue(`${name}.${index}`, '')
+        }
       })
       if (corrects) {
         elementCorrects.forEach((element, index) => {
@@ -120,7 +124,7 @@ const NewFiltext = forwardRef(
       }
 
       setQuestionContent(doc)
-    }, [str, corrects])
+    }, [str, corrects, defaultAnswer])
     const options: HTMLReactParserOptions = {
       replace(domNode) {
         if (!corrects) {
@@ -139,7 +143,7 @@ const NewFiltext = forwardRef(
                 <HookFormTextField
                   control={control}
                   name={`${name}.${Number((domNode as Element).attribs.index)}`}
-                  inputClassName="h-[35px]"
+                  inputClassName="!h-[35px]"
                 />
               </span>
             )
@@ -205,7 +209,6 @@ const NewFiltext = forwardRef(
               }
             }
           }}
-          key={key}
           extenalRef={refEditor}
           className="sapp-questions"
           text_editor_content={

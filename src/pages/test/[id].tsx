@@ -27,16 +27,15 @@ import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
-import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
+import NewFiltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
 import { removeJwtToken } from '@utils/helpers/authen'
-import useMousePosition from '@utils/hookMouseMove'
 import {
   runHighlight,
   setCookieActToken,
@@ -53,13 +52,12 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
-import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import NewFiltext from '@components/questionType/NewFillText'
 type Window = {
   userAgreed: any
 }
@@ -186,6 +184,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
+            // control={control}
+            // setValue={setValue}
+            // name={`${currentTabID}_fillword`}
             data={data}
             action={getValueSelectText}
             handleSaveHighLight={handleSaveHighLight}
@@ -496,7 +497,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           }
           return false
         } else {
-          if (value !== undefined && value !== '') {
+          if (value !== undefined) {
             return true
           }
           return false
@@ -514,7 +515,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           }
           return false
         } else {
-          if (value !== undefined && value !== '') {
+          if (value !== undefined) {
             return true
           }
           return false
@@ -644,7 +645,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         //   solution: res.data[0].solution,
         //   answer: getCurrentAnswer(item),
         // })
-        if (currentTabContent.qType !== QUESTION_TYPES.FILL_WORD) {
+        if (
+          currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
+          currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
+        ) {
           ref.current?.handleReset()
         }
         return {
@@ -885,7 +889,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         }
         return item
       })
-      ref.current?.handleReset()
+      if (
+        currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
+        currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
+      ) {
+        ref.current?.handleReset()
+      }
       refEditor?.current?.reset()
       const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
       setCurrentPage(currentTab)
@@ -894,7 +903,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
     } else {
-      ref.current?.handleReset()
+      if (
+        currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
+        currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
+      ) {
+        ref.current?.handleReset()
+      }
       refEditor?.current?.reset()
       const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
       setCurrentPage(currentTab)
@@ -1155,7 +1169,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         }
         return arr
       })
-      setValue(`${currentTabContent?.id}_answer`, '')
+      if (data.qType === QUESTION_TYPES.ESSAY) {
+        setValue(`${currentTabContent?.id}_answer`, undefined)
+      } else {
+        setValue(`${currentTabContent?.id}_answer`, '')
+      }
       setValue(`${currentTabContent?.id}_fillword`, '')
       if (data.qType === QUESTION_TYPES.ESSAY) {
         refEditor?.current?.reset()
@@ -2024,7 +2042,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="font-medium text-medium-sm">Clear Selection</div>
           </button>
           {/* )} */}
-          {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
+          {quizDetail?.grading_preference !== 'AFTER_EACH_QUESTION' &&
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
