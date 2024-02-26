@@ -19,7 +19,7 @@ export interface IActivity {
   position: string
   parent_id: string
   display_icon: string
-  total_activity: number
+  total_activity?: number
   course_outcomes: {
     id: string
     created_at: string
