@@ -618,7 +618,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!course_tab_documents?.length && <div className="py-3"></div>}
       </div>
       {/* </FadeInOut> */}
-      {activity?.files?.length > 0 && (
+      {activity?.total_activity > 1 && (
         <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
           <div className="flex justify-between flex-nowrap gap-5">
             {activity.previous_activity && (
