@@ -36,7 +36,7 @@ const EntranceTest = ({ entranceTestLists }: any) => {
       </div>
       <div className="main max-w-xxl my-0 mx-8 lg:mx-auto">
         <div className="flex justify-between py-6">
-          <h2 className="text-medium-sm font-semibold text-bw-1 ">
+          <h2 className="text-medium-sm font-medium text-bw-1 ">
             Entrance Test
           </h2>
           <EntranceTestFilter count={entranceTestLists?.length || 0} />
