@@ -137,7 +137,7 @@ const HookFormCheckBoxGroup = ({
                       className={`me-2 ${className} ${
                         positionCheckBox === 'start' && 'mt-[2px]'
                       }`}
-                      checked={checked || correctCheck}
+                      checked={checked}
                       lowerOptions={lowerOptions && !checked && checkHasChecked}
                       onChange={(event: React.ChangeEvent<any>) => {
                         if (multiple) {
