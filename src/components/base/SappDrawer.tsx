@@ -35,7 +35,7 @@ const SappDrawer = ({
   drawerSubId = '',
   confirmOnClose = true,
   showSubmitButton = true,
-  heightBody = 'h-[calc(100vh-80px-82px-24px)]',
+  heightBody = 'h-[calc(100vh-80px)]',
 }: IProps) => {
   const dispatch = useAppDispatch()
 

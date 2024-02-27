@@ -269,6 +269,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         widthDrawer="w-6/12"
         handleSubmit={handleNextLesson}
         confirmOnClose={false}
+        heightBody="h-[calc(100vh-80px-82px-24px)]"
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
