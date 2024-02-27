@@ -35,7 +35,7 @@ const SappDrawer = ({
   drawerSubId = '',
   confirmOnClose = true,
   showSubmitButton = true,
-  heightBody = 'h-[calc(100vh-104px)]',
+  heightBody = 'h-[calc(100vh-80px)]',
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -87,7 +87,7 @@ const SappDrawer = ({
           className={`mt-6 mx-6 overflow-y-auto ${heightBody}`}
           id={`sapp-drawer${drawerSubId}`}
         >
-          <div className="mx-2">{children}</div>
+          <div className="mx-2 mr-1">{children}</div>
         </div>
         {footer && (
           <div className="flex justify-between h-[82px] items-center border-t border-default absolute bottom-0 left-0 right-0 w-full bg-white">

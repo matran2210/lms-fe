@@ -350,8 +350,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   }
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
-      <ul className="py-6 flex flex-wrap gap-1">
-        <li className="hover:text-primary cursor-pointer text-gray-1">
+      <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
+        <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
             My Course
           </Link>
@@ -382,11 +382,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 className={`${
                   (activity.breadcumb?.length || 0) - 1 === i
                     ? 'text-bw-1'
-                    : 'hover:text-primary cursor-pointer text-gray-1'
+                    : 'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
                 }`}
               >
                 <Link href={url} className="breadcrumbs__link" scroll={false}>
-                  {truncateString(e.name, 30)}
+                  {truncateString(e.name, 25)}
                 </Link>
               </li>
             </React.Fragment>
@@ -618,7 +618,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!course_tab_documents?.length && <div className="py-3"></div>}
       </div>
       {/* </FadeInOut> */}
-      {lengthDoc > 1 && (
+      {(activity?.total_activity as Number) > 1 && (
         <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
           <div className="flex justify-between flex-nowrap gap-5">
             {activity.previous_activity && (
@@ -853,7 +853,7 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage

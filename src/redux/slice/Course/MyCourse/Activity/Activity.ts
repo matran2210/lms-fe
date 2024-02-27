@@ -39,6 +39,7 @@ const initialState: ICourseActivityState = {
   position: '',
   parent_id: '',
   display_icon: '',
+  total_activity: 0,
   course_outcomes: [] as any[],
   course_learning_outcome: {
     id: '',

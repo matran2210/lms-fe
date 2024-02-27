@@ -91,7 +91,7 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage

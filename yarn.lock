@@ -4443,10 +4443,10 @@ entities@^4.2.0, entities@^4.4.0, entities@^4.5.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
-entrance-test-result-package@^1.0.18:
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.18.tgz#be80068b0f4fa7c3ef6888b5063457596de63cf4"
-  integrity sha512-vleWfufxbffWVJutKiOsDWJels4PM65FGhB2q9U1RNOsjcr+wgvftP28kVeY7zLlHfM55sTBBVK1RSReQaGnjw==
+entrance-test-result-package@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.19.tgz#13e2a3bba870adbc34ea9877c7226bd9182a9d4c"
+  integrity sha512-v7bWKBA0Qf7jD4gQgSvaRosxcgaO3JCe/kB5ay+gi7uAP0U2IJo1yDvRi/WOMkp1S0jJ5aXOtRVXetVP5xbMig==
   dependencies:
     sass "^1.69.5"
 
@@ -4835,10 +4835,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.32:
-  version "1.0.32"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.32.tgz#30213b8a078eb52669896aee7cb99523856c3acf"
-  integrity sha512-G8CWdmApDcu3G6pwFSTg+fDrdlwIrxuNSV9HWi/tcWgGur4ONEQAO/v57kO2yWaV6GNr5BwpkXqNAe7S1g3pow==
+explanation-package@^1.0.34:
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.34.tgz#a6e65bab79a6febc845aefe746ea07306354fbfc"
+  integrity sha512-DJhZcd2AM+twQEpIaTZ9zlV+acqXB8x8HpMTDqP/rE8F4IgR/M0O3mY26iMAHfITfmiee/Wyszg5zvvUGWfWPA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -4856,6 +4856,7 @@ explanation-package@^1.0.32:
     react-shadow "^20.4.0"
     sass "^1.53.0"
     tailwindcss "^3.3.5"
+    tinymce "^6.8.3"
 
 external-editor@^2.0.1:
   version "2.2.0"
@@ -9056,6 +9057,11 @@ tiny-warning@^1.0.0:
   version "6.8.2"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.8.2.tgz#567b1a0d922555b535de4c74b7c74af6964016ea"
   integrity sha512-Lho79o2Y1Yn+XdlTEkHTEkEmzwYWTXz7IUsvPwxJF3VTtgHUIAAuBab29kik+f2KED3rZvQavr9D7sHVMJ9x4A==
+
+tinymce@^6.8.3:
+  version "6.8.3"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.8.3.tgz#0025a4aaa4c24dc2a3e32e83dfda705d196fd802"
+  integrity sha512-3fCHKAeqT+xNwBVESf6iDbDV0VNwZNmfrkx9c/6Gz5iB8piMfaO6s7FvoiTrj1hf1gVbfyLTnz1DooI6DhgINQ==
 
 tmp@^0.0.33:
   version "0.0.33"

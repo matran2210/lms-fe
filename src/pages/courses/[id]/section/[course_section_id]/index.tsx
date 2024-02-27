@@ -269,10 +269,11 @@ const CoursePartDetail = ({ previewPart }: any) => {
         widthDrawer="w-6/12"
         handleSubmit={handleNextLesson}
         confirmOnClose={false}
+        heightBody="h-[calc(100vh-80px-82px-24px)]"
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6 mr-3 text-bw-1"
+          className="pb-6  text-bw-1"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
@@ -345,7 +346,7 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage

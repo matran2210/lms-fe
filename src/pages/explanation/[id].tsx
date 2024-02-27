@@ -76,6 +76,8 @@ const Explanation = () => {
         total_question: resultResponse.data.total_question,
         index: resultResponse.data.index,
         question_topic: topicDescription?.data,
+        short_answer: resultResponse?.data?.answer?.short_answer,
+        response_option_answer: resultResponse?.data?.answer?.response_option,
       })
     } catch (error) {
     } finally {

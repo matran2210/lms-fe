@@ -34,17 +34,11 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
   useEffect(() => {
     const userSectionLearningType = watch('type')?.value
     const userSectionLearningStatus = watch('status')?.value
-
     if (
-      userSectionLearningType !== undefined ||
+      userSectionLearningType !== '' ||
       userSectionLearningStatus !== undefined
     ) {
-      router.push(
-        // userSectionLearningStatus !== '' || userSectionLearningType !== ''
-        // ?
-        `${apiUrl}?name=${router.query.name || ''}${queryString}`,
-        // : apiUrl,
-      )
+      router.push(`${apiUrl}?name=${router.query.name || ''}${queryString}`)
     }
   }, [apiUrl, queryString, watch('status'), watch('type')])
   useEffect(() => {

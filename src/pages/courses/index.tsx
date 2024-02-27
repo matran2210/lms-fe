@@ -124,7 +124,6 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     // Update data when courses?.data?.course_sections_with_progress changes
     setData(courses || [])
   }, [courses])
-
   return (
     <>
       <div className="header bg-white border-b border-default">
@@ -150,7 +149,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       </div>
       <div className="main max-w-xxl my-0 mx-auto">
         <div className="flex justify-between xl-max:mx-6">
-          <h2 className="text-medium-sm font-semibold text-bw-1 py-6">
+          <h2 className="text-medium-sm font-medium text-bw-1 py-6">
             My Course
           </h2>
           <div
@@ -227,23 +226,6 @@ export default MyCourse
 export async function getServerSideProps(context: any) {
   const { req, res, query } = context
   const accessToken = req.cookies.accessToken
-  if (query.name === undefined) {
-    return {
-      props: {
-        courses: {
-          courses: [],
-          metadata: {
-            page_index: 0,
-            page_size: 0,
-            total_pages: 0,
-            total_records: 0,
-          },
-          status: [],
-          total: [],
-        },
-      },
-    }
-  }
   const queryString = buildQueryString({
     name: query.name || '',
     status: query.status || '',
@@ -276,7 +258,7 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage

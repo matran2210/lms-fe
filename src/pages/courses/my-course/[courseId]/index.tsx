@@ -103,7 +103,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
         </div>
       </div>
       <div className="main max-w-xxl my-0 mx-auto xl-max:container">
-        <div className="flex justify-between py-6">
+        <div className="flex justify-between py-6 line-clamp-1">
           <BreadcrumbFilter name={courses?.data?.name} />
           <FilterCourseDetail totalResult={data?.length} />
         </div>
@@ -155,7 +155,7 @@ export async function getServerSideProps(context: any) {
           },
         )
 
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage
