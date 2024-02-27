@@ -374,7 +374,7 @@ const EssayQuestionPreview = ({
                             // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
-                        handleChange()
+                        handleChange && handleChange()
                       }}
                       data={
                         value
@@ -450,7 +450,7 @@ const EssayQuestionPreview = ({
                             // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
-                        handleChange()
+                        handleChange && handleChange()
                       }}
                       data={
                         value
