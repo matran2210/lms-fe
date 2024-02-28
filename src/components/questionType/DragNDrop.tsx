@@ -365,7 +365,7 @@ const DragNDropPreivew = forwardRef(
         )}
         {answerContent && (
           <>
-            <div className="text-bw-1 font-semibold text-base pt-[34px]">
+            <div className="text-bw-1 font-semibold text-base pt-[24px]">
               Correct Answer
             </div>
             <EditorReader
