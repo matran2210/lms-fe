@@ -23,7 +23,7 @@ const BreadcrumbProfile: React.FC<BreadcrumbProps> = ({
                     <a
                       className={
                         currentPage === tab.title
-                          ? 'text-bw-1 font-semibold text-sm'
+                          ? 'text-bw-1 text-sm'
                           : 'text-gray-1 text-sm'
                       }
                     >
@@ -36,7 +36,7 @@ const BreadcrumbProfile: React.FC<BreadcrumbProps> = ({
                 <span
                   className={`${
                     currentPage === tab.link
-                      ? 'text-bw-1 font-semibold text-sm '
+                      ? 'text-bw-1 text-sm '
                       : 'text-gray-1 text-sm'
                   } pr-1`}
                 >
@@ -45,7 +45,7 @@ const BreadcrumbProfile: React.FC<BreadcrumbProps> = ({
               </>
             ) : (
               <Link href={tab.link}>
-                <a className={'text-bw-1 font-semibold text-sm'}>{tab.title}</a>
+                <a className={'text-bw-1 text-sm'}>{tab.title}</a>
               </Link>
             )}
           </li>
