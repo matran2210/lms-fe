@@ -220,7 +220,7 @@ const NewFiltext = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base mt-[30px]">
+            <div className="font-semibold text-base mt-[28px]">
               Correct Answer
             </div>
             <EditorReader
