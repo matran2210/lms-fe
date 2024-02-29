@@ -41,6 +41,7 @@ import {
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity } from 'src/type/course/my-course/Activity'
+import { Tooltip } from 'antd'
 
 type Props = {
   activity: IActivity
@@ -384,9 +385,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     ? 'text-bw-1'
                     : 'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
                 }`}
+                title={e?.name}
               >
                 <Link href={url} className="breadcrumbs__link" scroll={false}>
-                  {truncateString(e.name, 25)}
+                  {truncateString(e?.name, 25)}
                 </Link>
               </li>
             </React.Fragment>
