@@ -70,14 +70,16 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseSections(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSectionList(
-        router.query.courseId || router.query.id,
-        page_size || DEFAULT_PAGESIZE,
-      )
-      setSections([...res?.data?.sections].reverse())
-      setSelectedSubsection(null)
-      setSelectedUnit(null)
-      setSelectedActivity(null)
+      if (open) {
+        const res = await CourseAPI.getCourseSectionList(
+          router.query.courseId || router.query.id,
+          page_size || DEFAULT_PAGESIZE,
+        )
+        setSections([...res?.data?.sections].reverse())
+        setSelectedSubsection(null)
+        setSelectedUnit(null)
+        setSelectedActivity(null)
+      }
     } catch (error) {}
   }
 
@@ -103,7 +105,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    if (selectedSection?.value !== '') {
+    if (selectedSection?.value !== '' && open) {
       getCourseSubsections(DEFAULT_PAGESIZE)
     }
   }, [selectedSection])
@@ -123,7 +125,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    getCourseUnit()
+    if (open) {
+      getCourseUnit()
+    }
   }, [selectedSubsection])
 
   const [activity, setActivity] = useState<ISection[]>([])
@@ -140,7 +144,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    getCourseActivity(DEFAULT_PAGESIZE)
+    if (open) {
+      getCourseActivity(DEFAULT_PAGESIZE)
+    }
   }, [selectedUnit])
 
   const params = cleanParamsAPI({
@@ -193,7 +199,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         containerDiv &&
         containerDiv.clientHeight + containerDiv.scrollTop ===
           containerDiv.scrollHeight &&
-        (router.query.courseId || router.query.id)
+        (router.query.courseId || router.query.id) &&
+        open
       ) {
         fetchData(params)
       }

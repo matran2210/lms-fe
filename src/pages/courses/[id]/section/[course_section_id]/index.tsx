@@ -139,9 +139,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
       router.query.id,
       chapterDetail?.id,
     )
-    if (res?.success) {
-      fetchChapterDetail(id, course_section_id)
-    }
+    // 29/2/2023: Temporary comment to fix multiple API calls
+    // if (res?.success) {
+    //   fetchChapterDetail(id, course_section_id)
+    // }
   }
 
   const handleChapterTest = async () => {

@@ -104,10 +104,12 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
 
   useEffect(() => {
     let isFetching = false
+    const isEndPage = page <= data?.metadata?.total_records
 
     const handleScroll = () => {
       if (
         !isFetching &&
+        isEndPage &&
         window.innerHeight + document.documentElement.scrollTop >=
           document.documentElement.offsetHeight - 10
       ) {
