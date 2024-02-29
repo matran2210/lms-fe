@@ -102,7 +102,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
           />
         </div>
       </div>
-      <div className="main max-w-xxl my-0 mx-auto xl-max:container">
+      <div className="main max-w-xxl my-0 mx-auto xl-max:container relative">
         <div className="flex justify-between py-6 line-clamp-1">
           <BreadcrumbFilter name={courses?.data?.name} />
           <FilterCourseDetail totalResult={data?.length} />
