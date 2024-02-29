@@ -38,7 +38,7 @@
     "cookie": "^0.6.0",
     "date-fns": "^3.0.6",
     "entrance-test-result-package": "^1.0.20",
-    "explanation-package": "^1.0.34",
+    "explanation-package": "^1.0.35",
     "file-saver": "^2.0.5",
     "firebase": "^10.7.1",
     "html-docx-js-typescript-papersize-thenn": "^0.1.5",
