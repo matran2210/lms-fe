@@ -55,19 +55,34 @@ const MatchingQuestion = forwardRef(
     const [answers, setAnswers] = useState<any>()
     const [correctAnswer, setCorrectAnswer] = useState<any>()
     const [storageId, setStoreId] = useState(uniqueId('storage'))
+    const matchingQuestionRef = useRef<HTMLDivElement>(null)
 
     function allowDrop(ev: any) {
-      // const slotId = ev.target.id
-      // const slotElement = document.getElementById(slotId)
-
-      // if (
-      //   slotElement?.children.length === 0 &&
-      //   ev.target.classList.contains('dropable')
-      // ) {
       ev.preventDefault()
-      // } else {
-      //   return
-      // }
+
+      const matchingQuestion = matchingQuestionRef.current
+      if (!matchingQuestion) return
+
+      const rect = matchingQuestion.getBoundingClientRect()
+
+      // Lấy chiều dài của phần tử matchingQuestion
+      const matchingQuestionHeight = matchingQuestion.clientHeight
+
+      // Lấy tọa độ y của con trỏ chuột tính từ đỉnh của phần tử matchingQuestion
+      const mouseY = ev.clientY - rect.top
+
+      // Thiết lập ngưỡng cho việc cuộn
+      const threshold = 200
+
+      // Kiểm tra nếu con trỏ chuột nằm ở phía trên ngưỡng
+      if (mouseY < threshold) {
+        matchingQuestion.scrollBy(0, -10)
+      }
+
+      // Kiểm tra nếu con trỏ chuột nằm ở phía dưới ngưỡng
+      if (mouseY > matchingQuestionHeight - threshold) {
+        matchingQuestion.scrollBy(0, 10)
+      }
     }
     function allowDropStorage(ev: any) {
       if (ev.target.classList.contains('dropable')) {
@@ -263,7 +278,10 @@ const MatchingQuestion = forwardRef(
           />
         </div>
         {!corrects ? (
-          <div className="flex flex-col gap-y-5 px-19">
+          <div
+            className="flex flex-col gap-y-5 px-19"
+            ref={matchingQuestionRef}
+          >
             {data?.question_matchings.map((e: any) => {
               return (
                 <div className="flex flex-nowrap gap-x-20 " key={e?.id}>
@@ -292,7 +310,7 @@ const MatchingQuestion = forwardRef(
               )
             })}
             <div
-              className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable ${storageId}`}
+              className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable overflow-hidden ${storageId}`}
               onDrop={(ev) => handleStorage(ev, data?.id)}
               onDragOver={allowDropStorage}
               id="storage"
@@ -369,7 +387,7 @@ const MatchingQuestion = forwardRef(
                 )
               })}
             </div>
-            <div className="flex flex-col gap-y-5 pt-[42px]">
+            <div className="flex flex-col gap-y-5 pt-[34px]">
               <div className="text-bw-1 font-semibold text-base">
                 Correct Answer
               </div>

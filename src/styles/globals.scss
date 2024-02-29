@@ -260,13 +260,13 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-notched-container:before {
   content: '';
-  left: -1.2px;
+  left: 0;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
-  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-white absolute border border-gray-6;
+  // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-solid bg-white absolute border border-t-0 border-r-0 border-gray-6;
 }
 
 .sapp-arrowed-container {
@@ -276,13 +276,13 @@ body *::-webkit-scrollbar-thumb:hover {
 .sapp-arrowed-container:before {
   border: 1px dashed rgb(224, 221, 227);
   content: '';
-  right: 0;
+  right: -1px;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
-  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-gray-3 absolute border right-0 border-gray-6;
+  // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-0 border-solid bg-gray-3 absolute border border-t-0 border-r-0 border-gray-6;
 }
 
 .sapp-arrowed-container-corrects {
@@ -292,13 +292,13 @@ body *::-webkit-scrollbar-thumb:hover {
 .sapp-arrowed-container-corrects:before {
   border: 1px dashed rgb(224, 221, 227);
   content: '';
-  right: 0;
+  right: -1px;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
-  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-10 border-solid bg-bw-6 absolute border right-0 border-success;
+  // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-10 border-solid bg-bw-6 absolute border border-t-0 border-r-0 border-success;
 }
 
 .sapp-notched-container-corrects {
@@ -323,13 +323,13 @@ body *::-webkit-scrollbar-thumb:hover {
 .sapp-arrowed-container-incorrects:before {
   border: 1px dashed rgb(224, 221, 227);
   content: '';
-  right: 0;
+  right: -1px;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
-  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-10 border-solid bg-bw-6 absolute border right-0 border-error;
+  // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  @apply z-10 border-solid bg-bw-6 absolute border border-t-0 border-r-0 border-error;
 }
 
 .sapp-notched-container-incorrects {

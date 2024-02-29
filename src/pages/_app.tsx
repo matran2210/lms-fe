@@ -64,7 +64,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       pathname.startsWith('/casestudy')
     )
       return 'My Course'
-    if (pathname.startsWith('/notifications')) return 'Notification'
+    if (pathname.startsWith('/notifications')) return 'Notifications'
     if (pathname.startsWith('/entrance-test')) return 'Entrance Test '
     if (pathname.startsWith('/profile') || pathname.startsWith('/[page]'))
       return 'Profile'

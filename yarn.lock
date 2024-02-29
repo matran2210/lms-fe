@@ -4443,10 +4443,10 @@ entities@^4.2.0, entities@^4.4.0, entities@^4.5.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
-entrance-test-result-package@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.19.tgz#13e2a3bba870adbc34ea9877c7226bd9182a9d4c"
-  integrity sha512-v7bWKBA0Qf7jD4gQgSvaRosxcgaO3JCe/kB5ay+gi7uAP0U2IJo1yDvRi/WOMkp1S0jJ5aXOtRVXetVP5xbMig==
+entrance-test-result-package@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.npmjs.org/entrance-test-result-package/-/entrance-test-result-package-1.0.20.tgz#49e0bfa18af2e72670b2f4fba7ece5765c433c77"
+  integrity sha512-4AEwXGHQsAUjKuUkZvBj2VsKhrdbN7sIEMbBIkiN0zUMpPmS4GyYcIdMXxV/dd9Jpgpfaq7xpFm1h8Qe6XiENw==
   dependencies:
     sass "^1.69.5"
 
@@ -4835,10 +4835,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.34:
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.34.tgz#a6e65bab79a6febc845aefe746ea07306354fbfc"
-  integrity sha512-DJhZcd2AM+twQEpIaTZ9zlV+acqXB8x8HpMTDqP/rE8F4IgR/M0O3mY26iMAHfITfmiee/Wyszg5zvvUGWfWPA==
+explanation-package@^1.0.35:
+  version "1.0.35"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.35.tgz#824ebc5792cadce2469e93751e26097ef0bc95ea"
+  integrity sha512-IN2WPhXZnx7OBOsoWbb0xVsHdSPVtbVEe//q1DbicO5Qt9IU+1LsmggJpjrEGVRCGkPVtdRacAh5wrcwoS6cLQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
