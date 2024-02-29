@@ -2042,7 +2042,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="font-medium text-medium-sm">Clear Selection</div>
           </button>
           {/* )} */}
-          {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
+          {quizDetail?.grading_preference === 'AFTER_ALL_QUESTIONS' &&
           !currentTabContent?.done ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
