@@ -19,6 +19,7 @@ import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,
   showNotification,
+  hideNotification,
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { store, wrapper } from '../redux/store'
@@ -42,6 +43,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const dispatch = useAppDispatch()
   const gettingNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.loading,
+  )
+  const getNotiUnread = useAppSelector(
+    (state) => state.notificationReducer?.total_records,
   )
 
   const coutNotificationsUnRead = async () => {
@@ -110,11 +114,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
     // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
     coutNotificationsUnRead()
-    // if (getNotiUnread > 0) {
-    //   dispatch(showNotification())
-    // } else {
-    //   dispatch(hideNotification())
-    // }
   }
   useEffect(() => {
     // handleOnChangePage()
@@ -149,6 +148,14 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   useEffect(() => {
     handleOnChangePage()
   }, [router.pathname])
+
+  useEffect(() => {
+    if (getNotiUnread > 0) {
+      dispatch(showNotification())
+    } else {
+      dispatch(hideNotification())
+    }
+  }, [getNotiUnread])
 
   return (
     <>
