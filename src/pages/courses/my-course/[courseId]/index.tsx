@@ -42,7 +42,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
   const [data, setData] = useState<ICourseSection[]>(
     courses?.data?.course_sections_with_progress || [],
   )
-  const [metadata, setMetadata] = useState<IMeta[]>(courses?.metadata || [])
+  const [metadata, setMetadata] = useState<IMeta>(courses?.metadata ?? {})
   const [class_user_id, setClassUserId] = useState(courses?.class_user_id)
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
