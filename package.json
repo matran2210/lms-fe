@@ -24,6 +24,7 @@
     "@fortune-sheet/react": "^0.19.1",
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.3.2",
+    "@lottiefiles/react-lottie-player": "^3.5.3",
     "@react-native-async-storage/async-storage": "^1.19.5",
     "@reduxjs/toolkit": "^1.9.7",
     "@tinymce/tinymce-react": "^4.3.0",

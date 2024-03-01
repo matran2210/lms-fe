@@ -23,9 +23,14 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { store, wrapper } from '../redux/store'
+<<<<<<< HEAD
 import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
+=======
+import { Controls, Player } from '@lottiefiles/react-lottie-player'
+import animation from 'src/assets/images/animation.json'
+>>>>>>> 2894275 (feat(SAPP-680): add loading animation global)
 
 // import 'antd/dist/antd.css'
 
@@ -118,6 +123,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
     coutNotificationsUnRead()
   }
+
   useEffect(() => {
     // handleOnChangePage()
     router.events.on('routeChangeError', (e) => setLoading(true))
@@ -130,6 +136,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       router.events.off('routeChangeComplete', (e) => setLoading(true))
     }
   }, [])
+
   useEffect(() => {
     const loader = document.getElementById('globalLoader')
 
@@ -137,6 +144,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       if (loader) loader.className = '!hidden'
     }
   }, [])
+
   useEffect(() => {
     const loader = document.getElementById('globalLoader')
     if (loading && !gettingNotiUnread) {
@@ -239,6 +247,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             <LearningNotesList />
           </>
         </RouteGuard>
+        <div id="globalLoader">
+          <Player src={animation} className="player" autoplay loop>
+            <Controls />
+          </Player>
+        </div>
       </main>
     </>
   )
