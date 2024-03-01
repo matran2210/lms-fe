@@ -2029,7 +2029,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               Flag to Review
             </div>
           </button>
-          {/* {!currentTabContent?.done && ( */}
           <button
             disabled={currentTabContent?.done}
             className={`flex items-center gap-3 border border-solid ${

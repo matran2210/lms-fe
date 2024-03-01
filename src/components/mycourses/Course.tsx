@@ -45,9 +45,6 @@ const Course = ({
   const [openActive, setOpenActive] = useState<boolean>(false)
   const [timeActive, setTimeActive] = useState<number>()
   const [openLesson, setOpenLesson] = useState<boolean>(false)
-  // const handleOnClick = () => {
-  //   setOpen(true)
-  // }
   const router = useRouter()
   const student = course?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = course?.classes[0]
