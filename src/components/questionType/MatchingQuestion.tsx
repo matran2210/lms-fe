@@ -60,6 +60,9 @@ const MatchingQuestion = forwardRef(
     function allowDrop(ev: any) {
       ev.preventDefault()
 
+      const slotElement = ev.target
+      slotElement.classList.add('dragging')
+
       const matchingQuestion = matchingQuestionRef.current
       if (!matchingQuestion) return
 
@@ -105,6 +108,7 @@ const MatchingQuestion = forwardRef(
       ev.preventDefault()
 
       const slotElement = ev.target
+      slotElement.classList.remove('dragging')
 
       if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
         return

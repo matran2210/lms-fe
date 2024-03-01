@@ -255,7 +255,11 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-notched-container {
-  @apply break-words flex-1 relative bg-gray-3 h-full flex items-center justify-start p-5 border-solid border border-gray-6 ps-8;
+  @apply break-words flex-1 relative bg-gray-3 h-full flex items-center justify-start p-5 border-solid border border-gray-6 ps-8 z-10;
+
+  &.dragging {
+    @apply z-20;
+  }
 }
 
 .sapp-notched-container:before {
@@ -355,7 +359,7 @@ body *::-webkit-scrollbar-thumb:hover {
 .answer-box {
   border: 1px solid rgb(204, 204, 204);
   background: rgb(243, 243, 243);
-  @apply p-2 block;
+  @apply p-2 block z-10;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
