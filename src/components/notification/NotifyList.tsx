@@ -66,18 +66,29 @@ const NotifyList = ({
               />
             )}
             <div className="shrink-0">
-              <Image
-                src={notifyItem?.avatar?.ORIGIN ?? blankAvatar}
-                alt="avatar"
-                className={`rounded-full ${
-                  !notifyItem?.avatar?.ORIGIN ? 'bg-gray-3' : ''
-                }`}
-                width={56}
-                height={56}
-                layout="fixed"
-                objectFit={'cover'}
-                priority={true}
-              />
+              <>{/*Fix image load slow*/}</>
+              {notifyItem?.avatar?.ORIGIN ? (
+                <img
+                  src={
+                    notifyItem?.avatar['50x50'] || notifyItem?.avatar?.ORIGIN
+                  }
+                  alt="avatar"
+                  className="rounded-full w-14 h-14 object-cover bg-gray-3"
+                  width={56}
+                  height={56}
+                />
+              ) : (
+                <Image
+                  src={blankAvatar}
+                  alt="avatar"
+                  className={`rounded-full`}
+                  width={56}
+                  height={56}
+                  layout="fixed"
+                  objectFit={'cover'}
+                  priority={true}
+                />
+              )}
             </div>
             <div className="block">
               <h4
