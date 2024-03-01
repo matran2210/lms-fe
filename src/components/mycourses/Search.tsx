@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import Icon from '@components/icons'
 import { buildQueryString } from '@utils/index'
 import { Controller, useForm } from 'react-hook-form'
+import { debounce } from 'lodash'
 
 interface IProps {
   placeholder: string
@@ -37,7 +38,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     }
   }, [queryString, watch('name'), isSubmitting, isFirstRender])
 
-  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleReset = debounce((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     setIsFirstRender(false)
@@ -46,7 +47,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     if (!watch('name')) {
       router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
     }
-  }
+  }, 500)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
