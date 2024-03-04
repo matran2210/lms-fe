@@ -1,6 +1,8 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { truncateString } from '@utils/index'
+import { Tooltip } from 'antd'
 
 type IProps = {
   id: string
@@ -36,7 +38,17 @@ const SappBreadcrumbNotLink = ({ paths }: { paths: IProps[] }) => {
           >
             <Link href={url} className="breadcrumbs__link" scroll={false}>
               <span className="font-normal text-sm text-gray-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
-                {path?.name}
+                {(path?.name as string)?.length > 50 ? (
+                  <Tooltip
+                    title={path?.name}
+                    color="#ffffff"
+                    placement="bottom"
+                  >
+                    {path?.name}
+                  </Tooltip>
+                ) : (
+                  <>{path?.name}</>
+                )}
               </span>
             </Link>
             {index < paths.length - 1 && (

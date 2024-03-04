@@ -96,9 +96,13 @@ const Notifications = () => {
   }
 
   const handleScroll = () => {
+    const scrollPosition =
+      window.innerHeight + document.documentElement.scrollTop
+    const documentHeight = document.documentElement.offsetHeight
+
     if (
-      window.innerHeight + document.documentElement.scrollTop !==
-      document.documentElement.offsetHeight
+      scrollPosition !== documentHeight &&
+      scrollPosition + 1 < documentHeight
     ) {
       return
     }
@@ -124,7 +128,7 @@ const Notifications = () => {
   useEffect(() => {
     getNotifications({
       page_index: 1,
-      page_size: 10,
+      page_size: 30,
       ...(router.asPath.includes('unread') && {
         is_read: false,
       }),
@@ -148,7 +152,7 @@ const Notifications = () => {
       </div>
       <div className="lg:px-20">
         <div className="main max-w-xxl my-0 mx-auto pt-6 px-4 lg:px-0">
-          <h2 className="text-medium-sm font-semibold text-bw-1 pb-6">
+          <h2 className="text-medium-sm font-medium text-bw-1 pb-6">
             Notifications
           </h2>
         </div>

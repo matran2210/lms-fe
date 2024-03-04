@@ -7,6 +7,8 @@ import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
 import CourseAPI from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
+import { Tooltip } from 'antd'
+import { truncateString } from '@utils/index'
 
 const PartFailed = ({
   coursePart,
@@ -45,8 +47,16 @@ const PartFailed = ({
 
   return (
     <>
-      <div className={`name-part text-2xl font-semibold h-[60px] line-clamp-2`}>
-        <div>{coursePart?.name}</div>
+      <div
+        className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-default`}
+      >
+        {(coursePart?.name as string)?.length > 50 ? (
+          <Tooltip title={coursePart?.name} color="#ffffff" placement="top">
+            {truncateString(coursePart?.name, 50)}
+          </Tooltip>
+        ) : (
+          <>{coursePart?.name}</>
+        )}
       </div>
       <div className="info mt-6">
         <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
@@ -98,6 +108,7 @@ const PartFailed = ({
                 title="Result"
                 isUnderLine
                 color="text"
+                className="!font-semibold underline !p-0"
                 onClick={() =>
                   router.push(
                     `/courses/test/test-result/${quizAttempt?.attempts[0].id}`,

@@ -45,6 +45,7 @@ function DiscussionElement({
           }
           loading="eager"
           blurDataURL={blankAvatar.src}
+          priority={true}
         ></Image>
       </div>
       <div>
@@ -63,6 +64,7 @@ function DiscussionElement({
                   blurDataURL={blankAvatar.src}
                   objectFit="contain"
                   onClick={() => setImageSrc(e.url)}
+                  priority={true}
                 ></Image>
               </div>
             )

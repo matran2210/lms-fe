@@ -27,6 +27,7 @@ import toast from 'react-hot-toast'
 import { ICourseAll } from 'src/type/courses'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
+import { Tooltip } from 'antd'
 
 const Course = ({
   course,
@@ -44,9 +45,6 @@ const Course = ({
   const [openActive, setOpenActive] = useState<boolean>(false)
   const [timeActive, setTimeActive] = useState<number>()
   const [openLesson, setOpenLesson] = useState<boolean>(false)
-  // const handleOnClick = () => {
-  //   setOpen(true)
-  // }
   const router = useRouter()
   const student = course?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = course?.classes[0]
@@ -237,7 +235,9 @@ const Course = ({
       }
       setOpenActive(true)
     } else if (determineButtonToShow === 'Extend') {
-      student?.extend_count === 0 ? extendCourse() : setOpenExtend(true)
+      student?.extend_count === 0 || !student
+        ? extendCourse()
+        : setOpenExtend(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
         ? router.push(`/courses/my-course/${course.id}`)
@@ -285,7 +285,7 @@ const Course = ({
         >
           <div className="cursor-pointer min-h-352 flex flex-col">
             <div
-              className={`name-course text-2xl font-semibold mb-4 xl:h-[60px] ${
+              className={`name-course text-2xl font-medium mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
               }`}
               onClick={() => {
@@ -295,7 +295,13 @@ const Course = ({
               }}
             >
               <div className="line-clamp-2 text-ellipsis">
-                {truncateString(course?.name, 40)}
+                {(course?.name as string)?.length > 50 ? (
+                  <Tooltip title={course?.name} color="#ffffff" placement="top">
+                    {truncateString(course?.name, 50)}
+                  </Tooltip>
+                ) : (
+                  <>{course?.name}</>
+                )}
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -325,20 +331,43 @@ const Course = ({
                           ? 1
                           : 0}{' '}
                     </span>
-                    {daysDifference > 0 ? 'days left' : 'day left'}
+                    {daysDifference > 1 ? 'days left' : 'day left'}
                   </span>
                 )}
               </div>
             </div>
             <div className="des mt-6 mb-8 line-clamp-5 text-ellipsis h-[116px]">
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: course?.description,
-                }}
-                className={`text-bas h-24 ${
-                  enableCourse ? 'text-bw-1' : 'text-gray-1 '
-                }`}
-              />
+              {(course?.description as string).length > 250 ? (
+                <Tooltip
+                  title={
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: course?.description,
+                      }}
+                    />
+                  }
+                  color="#ffffff"
+                  placement="right"
+                >
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: course?.description,
+                    }}
+                    className={`text-bas h-24 ${
+                      enableCourse ? 'text-bw-1' : 'text-gray-1 '
+                    }`}
+                  />
+                </Tooltip>
+              ) : (
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: course?.description,
+                  }}
+                  className={`text-bas h-24 ${
+                    enableCourse ? 'text-bw-1' : 'text-gray-1 '
+                  }`}
+                />
+              )}
             </div>
             <div className="mt-auto">
               <div className="progress mb-6 h-8">

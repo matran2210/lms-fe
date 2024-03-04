@@ -35,6 +35,7 @@ function SappModalCertificate({ src, setSrc }: Props) {
               className="md:w-auto w-full max-h-[800px] object-contain h-full md:min-h-[500px]"
               alt={'image'}
               loading={'eager'}
+              priority={true}
             />
           )}
         </div>

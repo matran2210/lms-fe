@@ -54,6 +54,7 @@ export interface LoginState {
     email: string
     username: string
   }
+  unsavedChange?: boolean
 }
 
 export interface ErrorLogin {

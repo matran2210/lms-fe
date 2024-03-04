@@ -9,10 +9,15 @@ import axios from 'axios'
 import { apiURL } from 'src/redux/services/httpService'
 import { useRouter } from 'next/router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import {
+  setCookieActToken,
+  setCookieRefreshToken,
+  truncateString,
+} from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 import TestModal from 'src/pages/courses/test'
 import { PageLink } from 'src/constants'
+import { Tooltip } from 'antd'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -112,17 +117,17 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const handleNextLesson = () => {
     if (course_section?.course_section_type === 'CHAPTER_TEST') {
       handleRouterChapter(course_section?.quiz?.id)
-    } else {
-      course_section?.course_section_type === 'ACTIVITY'
-        ? handleRouterActivity(course_section?.children?.[0]?.id)
-        : course_section?.course_section_type === 'STORY'
-          ? handleRouterCaseStudy(
-              quiz?.id,
-              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-              course_section?.id,
-              quiz?.case_study_story?.instances?.[0]?.id,
-            )
-          : () => {}
+    } else if (course_section?.course_section_type === 'ACTIVITY') {
+      handleRouterActivity(course_section?.children?.[0]?.id)
+    } else if (course_section?.course_section_type === 'STORY') {
+      handleRouterCaseStudy(
+        quiz?.id,
+        quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+        course_section?.id,
+        quiz?.case_study_story?.instances?.[0]?.id,
+      )
+    } else if (course_section?.course_section_type === 'UNIT') {
+      handleRouterActivity(course_section?.children?.[0]?.id)
     }
   }
 
@@ -134,9 +139,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
       router.query.id,
       chapterDetail?.id,
     )
-    if (res?.success) {
-      fetchChapterDetail(id, course_section_id)
-    }
+    // 29/2/2023: Temporary comment to fix multiple API calls
+    // if (res?.success) {
+    //   fetchChapterDetail(id, course_section_id)
+    // }
   }
 
   const handleChapterTest = async () => {
@@ -155,29 +161,85 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   useEffect(() => {
-    router.query.unit_id &&
+    if (router.query.unit_id) {
       setDefaultActive(String(router?.query?.unit_id) || '')
+    } else if (partDetail.children.learning_progress !== '') {
+      const filteredChildren = partDetail.children.filter(
+        (child: any) => child.course_section_type === 'CHAPTER',
+      )
+      const matchingChild = filteredChildren.find(
+        (child: {
+          learning_progress: {
+            total_course_sections: any
+            total_course_sections_completed: any
+          }
+        }) => {
+          if (child.learning_progress) {
+            const { total_course_sections, total_course_sections_completed } =
+              child.learning_progress
+            const progressRatio =
+              (total_course_sections_completed / total_course_sections) * 100
+            return progressRatio < 100
+          }
+          return false
+        },
+      )
+
+      if (matchingChild) {
+        setDefaultActive(matchingChild.id)
+      } else if (filteredChildren.length > 0) {
+        setDefaultActive(filteredChildren[0].id) // Set default to the first child
+      }
+    } else {
+      setDefaultActive('')
+    }
   }, [router?.asPath])
 
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
         <div className="flex pt-6 pb-1 items-center">
-          <p
+          <span
             onClick={() => router.push('/courses')}
-            className="text-medium-sm font-semibold text-gray-1 cursor-pointer"
+            className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
           >
             My Course
-          </p>
-          <p
-            className="text-medium-sm font-semibold text-gray-1 ms-1 cursor-pointer"
+          </span>
+          <span
+            className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
             onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
           >
-            / {previewPart?.name} /
-          </p>
-          <p className="text-medium-sm font-semibold text-bw-1 ms-1">
-            {partDetail?.name}
-          </p>
+            /
+            <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
+              {(previewPart?.name as string)?.length > 50 ? (
+                <Tooltip
+                  title={previewPart?.name}
+                  color="#ffffff"
+                  placement="bottom"
+                >
+                  {truncateString(previewPart?.name, 50)}
+                </Tooltip>
+              ) : (
+                <>{previewPart?.name}</>
+              )}
+            </p>
+          </span>
+          <span className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
+            <p className="text-medium-sm font-medium text-bw-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis">
+              /{' '}
+              {(partDetail?.name as string)?.length > 50 ? (
+                <Tooltip
+                  title={partDetail?.name}
+                  color="#ffffff"
+                  placement="bottom"
+                >
+                  {truncateString(partDetail?.name, 100)}
+                </Tooltip>
+              ) : (
+                <>{partDetail?.name}</>
+              )}
+            </p>
+          </span>
         </div>
       </div>
       <PreviewPartDetail
@@ -207,17 +269,18 @@ const CoursePartDetail = ({ previewPart }: any) => {
         widthDrawer="w-6/12"
         handleSubmit={handleNextLesson}
         confirmOnClose={false}
+        heightBody="h-[calc(100vh-80px-82px-24px)]"
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6 mr-3"
+          className="pb-6  text-bw-1"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
         />
         {learningOutcome?.course_outcomes?.map((outcome, index) => (
           <div className="flex mt-6 mr-3" key={outcome.id}>
-            <div className="font-semibold leading-6 text-sm me-1">
+            <div className="font-medium leading-6 text-base me-1 text-bw-1">
               LO{index + 1}:
             </div>
             <p
@@ -283,7 +346,7 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage

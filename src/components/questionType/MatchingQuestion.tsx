@@ -55,19 +55,37 @@ const MatchingQuestion = forwardRef(
     const [answers, setAnswers] = useState<any>()
     const [correctAnswer, setCorrectAnswer] = useState<any>()
     const [storageId, setStoreId] = useState(uniqueId('storage'))
+    const matchingQuestionRef = useRef<HTMLDivElement>(null)
 
     function allowDrop(ev: any) {
-      // const slotId = ev.target.id
-      // const slotElement = document.getElementById(slotId)
-
-      // if (
-      //   slotElement?.children.length === 0 &&
-      //   ev.target.classList.contains('dropable')
-      // ) {
       ev.preventDefault()
-      // } else {
-      //   return
-      // }
+
+      const slotElement = ev.target
+      slotElement.classList.add('dragging')
+
+      const matchingQuestion = matchingQuestionRef.current
+      if (!matchingQuestion) return
+
+      const rect = matchingQuestion.getBoundingClientRect()
+
+      // Lấy chiều dài của phần tử matchingQuestion
+      const matchingQuestionHeight = matchingQuestion.clientHeight
+
+      // Lấy tọa độ y của con trỏ chuột tính từ đỉnh của phần tử matchingQuestion
+      const mouseY = ev.clientY - rect.top
+
+      // Thiết lập ngưỡng cho việc cuộn
+      const threshold = 200
+
+      // Kiểm tra nếu con trỏ chuột nằm ở phía trên ngưỡng
+      if (mouseY < threshold) {
+        matchingQuestion.scrollBy(0, -10)
+      }
+
+      // Kiểm tra nếu con trỏ chuột nằm ở phía dưới ngưỡng
+      if (mouseY > matchingQuestionHeight - threshold) {
+        matchingQuestion.scrollBy(0, 10)
+      }
     }
     function allowDropStorage(ev: any) {
       if (ev.target.classList.contains('dropable')) {
@@ -90,6 +108,7 @@ const MatchingQuestion = forwardRef(
       ev.preventDefault()
 
       const slotElement = ev.target
+      slotElement.classList.remove('dragging')
 
       if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
         return
@@ -263,7 +282,10 @@ const MatchingQuestion = forwardRef(
           />
         </div>
         {!corrects ? (
-          <div className="flex flex-col gap-y-5 px-19">
+          <div
+            className="flex flex-col gap-y-5 px-19"
+            ref={matchingQuestionRef}
+          >
             {data?.question_matchings.map((e: any) => {
               return (
                 <div className="flex flex-nowrap gap-x-20 " key={e?.id}>
@@ -292,7 +314,7 @@ const MatchingQuestion = forwardRef(
               )
             })}
             <div
-              className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable ${storageId}`}
+              className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable overflow-hidden ${storageId}`}
               onDrop={(ev) => handleStorage(ev, data?.id)}
               onDragOver={allowDropStorage}
               id="storage"
@@ -326,7 +348,7 @@ const MatchingQuestion = forwardRef(
                       <>
                         <QuestionCard
                           value={e?.content}
-                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6 text-state-success"
+                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6 text-bw-1"
                         />
                         <div
                           // id={e?.id}
@@ -335,7 +357,7 @@ const MatchingQuestion = forwardRef(
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container-corrects text-state-success min-w-132px !border-gray-6 before:!border-gray-6"
+                              className="sapp-notched-container-corrects text-bw-1 min-w-132px !border-gray-6 before:!border-gray-6"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
@@ -369,7 +391,7 @@ const MatchingQuestion = forwardRef(
                 )
               })}
             </div>
-            <div className="flex flex-col gap-y-5 mt-28">
+            <div className="flex flex-col gap-y-5 pt-[34px]">
               <div className="text-bw-1 font-semibold text-base">
                 Correct Answer
               </div>

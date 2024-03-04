@@ -51,12 +51,12 @@ const SelectWord = forwardRef(
     const [key, setKey] = useState<string>(uniqueId('key'))
     useImperativeHandle(ref, () => ({
       handleReset() {
-        // setAnswered([])
-        setKey((prev) => {
-          const newKey = uniqueId('key')
-          return newKey
-        })
-        // setAnswered()
+        const inputs = document.querySelectorAll(
+          'select.sapp-select--selectword-preview',
+        ) as any
+        for (let e of inputs) {
+          e.value = ''
+        }
       },
       handleGetResult() {
         // action()
@@ -93,7 +93,6 @@ const SelectWord = forwardRef(
         selectElement.id = element.id
 
         const defaultAnswerValue = defaultAnswer?.[index] || ''
-
         let optionClass = ''
 
         if (corrects) {
@@ -210,7 +209,7 @@ const SelectWord = forwardRef(
         <EditorReader
           key={key}
           extenalRef={refEditor}
-          className="sapp-questions"
+          className="sapp-questions pb-[14px]"
           // style={{borderBottom: '1px solid  white'}}
           text_editor_content={
             questionContent?.documentElement.querySelector('body')?.innerHTML ||
@@ -244,7 +243,7 @@ const SelectWord = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base mt-5">Correct Answer</div>
+            <div className="font-semibold text-base">Correct Answer</div>
             <EditorReader
               className="questions mt-2"
               text_editor_content={

@@ -134,17 +134,28 @@ export default function MenuItem({
             <div className="flex items-center" onClick={handleActive}>
               {Icon === 'avatar' ? (
                 <div className="w-10 h-10 shrink-0">
-                  <Image
-                    src={
-                      user.detail.avatar['40x40'] ||
-                      user.detail.avatar['ORIGIN'] ||
-                      blankAvatar
-                    }
-                    alt="avatar"
-                    className="rounded-full"
-                    width={40}
-                    height={40}
-                  />
+                  {user?.detail?.avatar['40x40'] ||
+                  user.detail.avatar['ORIGIN'] ? (
+                    <img
+                      src={
+                        user.detail.avatar['40x40'] ||
+                        user.detail.avatar['ORIGIN']
+                      }
+                      alt="avatar"
+                      className="rounded-full w-10 h-10 object-cover"
+                      width={40}
+                      height={40}
+                    />
+                  ) : (
+                    <Image
+                      src={blankAvatar}
+                      alt="avatar"
+                      className="rounded-full"
+                      width={40}
+                      height={40}
+                      priority={true}
+                    />
+                  )}
                 </div>
               ) : (
                 <>
@@ -160,6 +171,7 @@ export default function MenuItem({
                         className="rounded-full"
                         width={24}
                         height={24}
+                        priority={true}
                       />
                     </div>
                   ) : (

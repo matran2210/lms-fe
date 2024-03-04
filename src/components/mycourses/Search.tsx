@@ -1,10 +1,9 @@
-// components/SearchForm.tsx
-
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Icon from '@components/icons'
 import { buildQueryString } from '@utils/index'
 import { Controller, useForm } from 'react-hook-form'
+import { debounce } from 'lodash'
 
 interface IProps {
   placeholder: string
@@ -14,19 +13,22 @@ interface IProps {
 const SearchForm = ({ placeholder, formStyle }: IProps) => {
   const router = useRouter()
   const { control, watch } = useForm()
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const queryString = buildQueryString({
     status: router.query.status || '',
     type: router.query.type ?? '',
   })
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
   useEffect(() => {
     let timerId: any
 
     // Use useEffect to set up a timer to make the API call after 3 seconds
-    if (watch('name')?.length > 3) {
+    if (!isFirstRender && watch('name')?.length >= 3) {
       timerId = setTimeout(() => {
-        router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
+        !isSubmitting &&
+          router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
       }, 2000)
     }
 
@@ -34,19 +36,24 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     return () => {
       clearTimeout(timerId)
     }
-  }, [queryString, watch('name')])
+  }, [queryString, watch('name'), isSubmitting, isFirstRender])
 
-  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleReset = debounce((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    setIsFirstRender(false)
+    setIsSubmitting(false)
     // Check if 'name' is empty and perform search immediately
     if (!watch('name')) {
       router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
     }
-  }
+  }, 500)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    setIsSubmitting(true)
+    setIsFirstRender(false)
     // Redirect to the search results page with the query as a query parameter
     router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
   }

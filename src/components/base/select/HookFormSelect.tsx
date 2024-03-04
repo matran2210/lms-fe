@@ -1,5 +1,6 @@
-import Select from 'react-select'
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
+import Select, { type DropdownIndicatorProps, components } from 'react-select'
+import Icon from '@components/icons'
 
 interface IProps {
   defaultValue?: any
@@ -31,6 +32,14 @@ const HookFormSelect = ({
   classParent = '',
   isClearable = false,
 }: IProps) => {
+  const DropdownIndicator: React.FC<DropdownIndicatorProps> = (props) => {
+    return (
+      <components.DropdownIndicator {...props}>
+        <Icon type="arrow-bottom" />
+      </components.DropdownIndicator>
+    )
+  }
+
   return (
     <div className={`select-options ${classParent}`}>
       <Select
@@ -47,6 +56,7 @@ const HookFormSelect = ({
         isDisabled={isDisabled}
         onMenuScrollToBottom={onMenuScrollToBottom}
         isClearable={isClearable}
+        components={{ DropdownIndicator }}
       />
     </div>
   )

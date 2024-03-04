@@ -18,7 +18,7 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[725px]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-max xl:min-w-[725px]',
   },
   {
     label: 'Type',
@@ -138,7 +138,7 @@ const TableCaseStudyResult = () => {
   return (
     <div className="relative">
       <div
-        className="fixed px-6 py-4 right-0 cursor-pointer"
+        className="fixed px-6 py-4 right-0 cursor-pointer z-20"
         onClick={() => {
           router.back()
         }}
@@ -146,7 +146,7 @@ const TableCaseStudyResult = () => {
         <CloseIcon />
       </div>
       <div className="bg-white max-w-[1144px] max-h-full m-auto pt-8">
-        <div className="flex justify-between mb-10 items-center flex-row">
+        <div className="px-6 xl:px-0 flex justify-between mb-10 items-center flex-row">
           <div className="pr-4">
             <div className="text-xl font-medium text-bw-1 line-clamp-1">
               {topicAttemptDetail?.question_topic?.name}
@@ -215,7 +215,7 @@ const TableCaseStudyResult = () => {
           )}
         </div>
 
-        <div className="block pl-4">
+        <div className="block px-6 xl:pr-0 xl:pl-4">
           <SappTable
             headers={headers}
             loading={true}
@@ -239,7 +239,7 @@ const TableCaseStudyResult = () => {
                           __html: String(e?.question?.question_content ?? '--'),
                         }}
                         onClick={() => {
-                          router.push(`/explanation/${e.id}`)
+                          router.push(`/explanation/${e.id}?title=My Course`)
                         }}
                       ></div>
                     </td>
