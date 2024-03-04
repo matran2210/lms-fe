@@ -85,6 +85,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const listRequirementRef = useRef<HTMLDivElement>(null)
 
     const [isChange, setIsChange] = useState<boolean>(false)
+    const [isUploadFile, setIsUploadFile] = useState<boolean>(false)
 
     useClickOutside({
       ref: listRequirementRef,
@@ -301,12 +302,19 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     }
                   }
                   return false
-                } else if (isChange) {
+                } else if (
+                  isChange ||
+                  (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
+                ) {
                   return true
                 }
                 return false
               } else {
-                if ((value !== undefined && value !== '') || isChange) {
+                if (
+                  (value !== undefined && value !== '') ||
+                  isChange ||
+                  (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
+                ) {
                   return true
                 }
                 return false
@@ -323,7 +331,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               question_id: activeQuestion.id,
               short_answer:
                 (value !== undefined || value !== '') &&
-                isChange &&
+                (isChange ||
+                  (isUploadFile &&
+                    grading_preference === 'AFTER_ALL_QUESTIONS')) &&
                 activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
                   ? ' '
                   : value,
@@ -381,6 +391,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             topic_id: topic_id,
           }),
         )
+        setIsUploadFile(true)
       } catch (error) {
         toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
       }
