@@ -15,16 +15,16 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
   const userSectionLearningStatus = watch('user_section_learning_status')?.value
 
   useEffect(() => {
-    // router.push(
-    //   userSectionLearningStatus !== undefined
-    //     ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
-    //     : apiUrl,
-    // )
+    router.push(
+      userSectionLearningStatus !== undefined
+        ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
+        : apiUrl,
+    )
   }, [watch('user_section_learning_status')])
 
   return (
-    <div className="filter flex">
-      <div className="pr-6 border-r border-gray-1 text-medium-sm font-normal text-gray-1">
+    <div className="filter flex absolute right-0">
+      <div className="pr-6 border-r border-gray-1 text-medium-sm font-normal text-bw-1">
         {totalResult} {totalResult > 1 ? 'results' : 'result'}
       </div>
       <div className="filter pl-6 flex self-center">

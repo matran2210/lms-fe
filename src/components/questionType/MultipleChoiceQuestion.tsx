@@ -33,7 +33,11 @@ const MultiChoiceQuestion = ({
     return answers
   }, [data])
   useEffect(() => {
-    setValue(name, defaultValues)
+    if (defaultValues) {
+      setValue(name, defaultValues)
+    } else {
+      setValue(name, '')
+    }
   }, [defaultValues])
   // useEffect(() => {
   //   if (data) {
@@ -86,7 +90,7 @@ const MultiChoiceQuestion = ({
           name={name || 'multiples'}
           multiple
           corrects={corrects}
-          defaultValue={defaultValues || ''}
+          // defaultValue={defaultValues || ''}
           // justify='start'
           positionCheckBox="start"
         />

@@ -41,6 +41,7 @@ import {
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity } from 'src/type/course/my-course/Activity'
+import { Tooltip } from 'antd'
 
 type Props = {
   activity: IActivity
@@ -67,6 +68,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+
+  const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
+    top: 'calc(50% - 250px)',
+    left: 'calc(50% - 200px)',
+  })
 
   useLayoutEffect(() => {
     if (activity) {
@@ -291,11 +297,18 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     const nextIndex = (currentIndex || 0) + 1
     return selector.tabs?.[nextIndex]?.id
   }
+  const lengthDoc = course_tab_documents?.length || 0
   const handleOpenScratchPad = (
     data: any,
     file?: string,
     fileName?: string,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
+    if (event) {
+      var mouseY = event.pageY - 300
+      setExhibitsPopupPosition({ top: mouseY + 'px', left: '33%' })
+    }
+
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
@@ -336,11 +349,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       return <SappIcon icon="course_quiz"></SappIcon>
     }
   }
-
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
-      <ul className="py-6 flex flex-wrap gap-1">
-        <li className="hover:text-primary cursor-pointer text-gray-1">
+      <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
+        <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
             My Course
           </Link>
@@ -371,11 +383,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 className={`${
                   (activity.breadcumb?.length || 0) - 1 === i
                     ? 'text-bw-1'
-                    : 'hover:text-primary cursor-pointer text-gray-1'
+                    : 'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
                 }`}
+                title={e?.name}
               >
                 <Link href={url} className="breadcrumbs__link" scroll={false}>
-                  {truncateString(e.name, 30)}
+                  {truncateString(e?.name, 25)}
                 </Link>
               </li>
             </React.Fragment>
@@ -399,22 +412,22 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         <div className="bg-gray-3 px-6 ">
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
             <div className="font-medium text-2xl ">{activity.name}</div>
-            <div className="text-base text-gray-1 whitespace-nowrap">
+            <div className="text-sm text-gray-1 whitespace-nowrap">
               {activity?.duration || 0} min estimated
             </div>
           </div>
 
-          <div className="h-[1px] border-b"></div>
+          <div className="h-[1px] border-b borderColor-default"></div>
           {activity?.course_outcomes?.length > 0 && (
             <div
               className={`pt-6 pb-4 ${
-                activity?.files?.length > 0 && 'border-b'
+                activity?.files?.length > 0 && 'border-b borderColor-default'
               }`}
             >
               <div className="font-semibold text-base mb-2">
                 Learning Outcome:
               </div>
-              <ul className="list-disc text-base">
+              <ul className="list-disc text-base ml-3">
                 {activity?.course_outcomes?.map((e) => {
                   return (
                     <li className="ml-4" key={e.id}>
@@ -607,58 +620,60 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!course_tab_documents?.length && <div className="py-3"></div>}
       </div>
       {/* </FadeInOut> */}
-      <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
-        <div className="flex justify-between flex-nowrap gap-5">
-          {activity.previous_activity && (
-            <div className="w-1/2">
-              <div
-                onClick={() => {
-                  router.push({
-                    pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
-                    query: {
-                      classId: router.query.classId,
-                    },
-                  })
-                }}
-                className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
-              >
-                Previous Activity
+      {(activity?.total_activity as Number) > 1 && (
+        <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
+          <div className="flex justify-between flex-nowrap gap-5">
+            {activity.previous_activity && (
+              <div className="w-1/2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
+                      query: {
+                        classId: router.query.classId,
+                      },
+                    })
+                  }}
+                  className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                >
+                  Previous Activity
+                </div>
+                <div className="text-medium-sm text-gray-1 flex">
+                  {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
+                  <span className="ml-2">
+                    {truncateString(activity.previous_activity.name, 100)}
+                  </span>
+                </div>
               </div>
-              <div className="text-medium-sm text-gray-1 flex">
-                {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
-                <span className="ml-2">
-                  {truncateString(activity.previous_activity.name, 100)}
-                </span>
+            )}
+            {!activity.previous_activity && <div></div>}
+            {activity.next_activity && (
+              <div className="w-1/2">
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
+                      query: {
+                        classId: router.query.classId,
+                      },
+                    })
+                  }}
+                  className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                >
+                  Next Activity
+                </div>
+                <div className="text-medium-sm text-gray-1 flex justify-end">
+                  <span className="mr-2">
+                    {truncateString(activity.next_activity.name, 100)}
+                  </span>
+                  {getCourseIcon(activity.next_activity?.display_icon)}
+                </div>
               </div>
-            </div>
-          )}
-          {!activity.previous_activity && <div></div>}
-          {activity.next_activity && (
-            <div className="w-1/2">
-              <div
-                onClick={() => {
-                  router.push({
-                    pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
-                    query: {
-                      classId: router.query.classId,
-                    },
-                  })
-                }}
-                className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-              >
-                Next Activity
-              </div>
-              <div className="text-medium-sm text-gray-1 flex justify-end">
-                <span className="mr-2">
-                  {truncateString(activity.next_activity.name, 100)}
-                </span>
-                {getCourseIcon(activity.next_activity?.display_icon)}
-              </div>
-            </div>
-          )}
-          {!activity.next_activity && <div></div>}
+            )}
+            {!activity.next_activity && <div></div>}
+          </div>
         </div>
-      </div>
+      )}
 
       <div ref={endActivityRef}></div>
       <div className="shadow-activity">
@@ -712,8 +727,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               position={{
                 width: '600px',
                 height: '400px',
-                top: 'calc(50% - 250px)',
-                left: 'calc(50% - 200px)',
+                top: exhibitsPopupPosition.top,
+                left: exhibitsPopupPosition.left,
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
@@ -840,7 +855,7 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage

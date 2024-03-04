@@ -19,6 +19,7 @@ import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,
   showNotification,
+  hideNotification,
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { store, wrapper } from '../redux/store'
@@ -43,14 +44,35 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const gettingNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.loading,
   )
+  const getNotiUnread = useAppSelector(
+    (state) => state.notificationReducer?.total_records,
+  )
 
   const coutNotificationsUnRead = async () => {
     const accessToken = await AsyncStorage.getItem('accessToken')
     if (accessToken && router?.asPath !== '/auth/login') {
       try {
         await dispatch(getCountUnRead())
-      } catch (error) { }
+      } catch (error) {}
     }
+  }
+
+  const getTitleHeader = (pathname: string) => {
+    if (pathname.startsWith('/explanation') && router.query?.title) {
+      return router.query?.title
+    }
+    if (
+      pathname.startsWith('/courses') ||
+      pathname.startsWith('/test') ||
+      pathname.startsWith('/case-study') ||
+      pathname.startsWith('/casestudy')
+    )
+      return 'My Course'
+    if (pathname.startsWith('/notifications')) return 'Notifications'
+    if (pathname.startsWith('/entrance-test')) return 'Entrance Test '
+    if (pathname.startsWith('/profile') || pathname.startsWith('/[page]'))
+      return 'Profile'
+    return 'Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy'
   }
 
   useEffect(() => {
@@ -92,20 +114,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
     // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
     coutNotificationsUnRead()
-    // if (getNotiUnread > 0) {
-    //   dispatch(showNotification())
-    // } else {
-    //   dispatch(hideNotification())
-    // }
   }
   useEffect(() => {
-    handleOnChangePage()
-    router.events.on('routeChangeError', (e) => setLoading(false))
+    // handleOnChangePage()
+    router.events.on('routeChangeError', (e) => setLoading(true))
     router.events.on('routeChangeStart', (e) => setLoading(false))
     router.events.on('routeChangeComplete', (e) => setLoading(true))
 
     return () => {
-      router.events.off('routeChangeError', (e) => setLoading(false))
+      router.events.off('routeChangeError', (e) => setLoading(true))
       router.events.off('routeChangeStart', (e) => setLoading(false))
       router.events.off('routeChangeComplete', (e) => setLoading(true))
     }
@@ -132,37 +149,75 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     handleOnChangePage()
   }, [router.pathname])
 
+  useEffect(() => {
+    if (getNotiUnread > 0) {
+      dispatch(showNotification())
+    } else {
+      dispatch(hideNotification())
+    }
+  }, [getNotiUnread])
+
   return (
     <>
       <Head>
-        <title>Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy</title>
+        <title>{getTitleHeader(router.pathname)}</title>
         <link rel="icon" href="/sapp.svg" />
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta property="og:title" content={"Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy"} key="title" />
-        <meta name="description" content={"Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"} key="desc" />
-        <meta name="og:description" content={"Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"} key="description" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
+        <meta charSet="utf-8"></meta>
+        <meta
+          name="robots"
+          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        />
+        <meta name="analytics" content="G-HRLKW6S3X0" />
+        <meta
+          name="csrf-token"
+          content="Hl4U5KjkBFkHN2m2ptOE1L8QbTGV19yrEINaOrsd"
+        />
+        <meta http-equiv="content-language" content="en" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta property="og:type" content="website" />
+        <meta name="author" content="SAPP Academy" />
+        <meta
+          property="og:title"
+          content="Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy"
+          key="title"
+        />
+        <meta
+          name="description"
+          content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
+          key="desc"
+        />
+        <meta
+          name="og:description"
+          content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
+          key="description"
+        />
         <meta
           property="og:image"
-          content={'https://s3-hn-2.cloud.cmctelecom.vn/lms-production/sapp_default_thumbnail.png'}
+          content="https://sapp-lms-fe-prod.vercel.app/thumbnail.webp"
           key="image"
         />
         <meta name="og:url" content={'https://lms-pro.sapp.edu.vn'} />
         <meta
           name="keywords"
-          content={
-            'sapp, lms, acca, ACCA, CFA, Big4, 3P, SAPP Academy'
-          }
-        ></meta>
+          content="sapp, lms, acca, ACCA, CFA, Big4, 3P, SAPP Academy"
+        />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={"Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy"} />
-        <meta name="twitter:description" content={"Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"} />
+        <meta
+          name="twitter:title"
+          content="Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy"
+        />
+        <meta
+          name="twitter:description"
+          content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
+        />
         <meta
           name="twitter:image"
-          content={'https://s3-hn-2.cloud.cmctelecom.vn/lms-production/sapp_default_thumbnail.png'}
+          content="https://sapp-lms-fe-prod.vercel.app/thumbnail.webp"
         />
-        <meta name="twitter:url" content={'https://lms-pro.sapp.edu.vn'} />
-        <meta name="twitter:site" content="@SAPP_Academy" />
       </Head>
       <main>
         <Toaster />

@@ -16,7 +16,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import CourseAPI from 'src/pages/api/courses'
 import { apiURL } from 'src/redux/services/httpService'
-import { ICourseDetailAll, ICourseSection } from 'src/type/courses'
+import { ICourseDetailAll, ICourseSection, IMeta } from 'src/type/courses'
 import { PageLink } from 'src/constants'
 
 const DEFAULT_PAGESIZE = 18
@@ -42,6 +42,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
   const [data, setData] = useState<ICourseSection[]>(
     courses?.data?.course_sections_with_progress || [],
   )
+  const [metadata, setMetadata] = useState<IMeta>(courses?.metadata ?? {})
   const [class_user_id, setClassUserId] = useState(courses?.class_user_id)
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
@@ -61,6 +62,7 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
         queryString,
       )
       setData(newData?.data?.data?.course_sections_with_progress)
+      setMetadata(newData?.data?.metadata)
       setPage(page + DEFAULT_PAGESIZE)
     } catch (error) {
     } finally {
@@ -69,16 +71,23 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
   }
 
   useEffect(() => {
+    let isFetching = false
+    const isEndPage = page <= metadata?.total_records
+
     const handleScroll = () => {
       if (
+        !isFetching &&
+        isEndPage &&
         window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 10
+          document.documentElement.offsetHeight - 10
       ) {
+        isFetching = true
         loadMore()
       }
     }
 
     window.addEventListener('scroll', handleScroll)
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [loading, router.query.user_section_learning_status])
 
@@ -97,8 +106,8 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
           />
         </div>
       </div>
-      <div className="main max-w-xxl my-0 mx-auto xl-max:container">
-        <div className="flex justify-between py-6">
+      <div className="main max-w-xxl my-0 mx-auto xl-max:container relative">
+        <div className="flex justify-between py-6 w-full items-center">
           <BreadcrumbFilter name={courses?.data?.name} />
           <FilterCourseDetail totalResult={data?.length} />
         </div>
@@ -150,7 +159,7 @@ export async function getServerSideProps(context: any) {
           },
         )
 
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage

@@ -81,13 +81,18 @@ const fetchQuestionById = createAsyncThunk(
     }
 
     if (existingQuestion) {
-      existingQuestion.quiz_position_mapping = [
-        {
-          question_id: existingQuestion.id,
-          answers: existingQuestion?.answers,
+      return {
+        ...result,
+        question: {
+          ...existingQuestion,
+          quiz_position_mapping: [
+            {
+              question_id: existingQuestion.id,
+              answers: existingQuestion?.answers,
+            },
+          ],
         },
-      ]
-      return { ...result, question: existingQuestion }
+      }
     }
 
     try {

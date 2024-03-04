@@ -174,7 +174,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           <EssayQuestionPreview
             data={requirement}
             question_content={question_content}
-            index={1}
+            index={undefined}
             question_data={data}
             control={control}
             handleSaveHighLight={() => {}}
@@ -475,13 +475,52 @@ const CaseStudyDetail = ({ questions }: any) => {
         }
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
-        answers.push({
-          question_id: e.id,
-          short_answer: e.answer || '',
-          response_option: e.response_option ? e.response_option : 'WORD',
-          answer_file: e.answer_file,
-          active: 'SUBMITED',
-        })
+        if (
+          (e.answer !== undefined && e.answer !== '') ||
+          e.answer_file?.file_key
+        ) {
+          if (!e.response_option) {
+            answers.push({
+              question_id: e.id,
+              short_answer: e.answer || '',
+              response_option: e.response_option ? e.response_option : 'WORD',
+              answer_file: e.answer_file,
+              active: 'SUBMITED',
+            })
+          } else {
+            if (e.response_option === 'SHEET') {
+              if (e.answer) {
+                const data = JSON.parse(e.answer)
+                for (let el of data) {
+                  if (el.celldata && el.celldata.length > 0) {
+                    answers.push({
+                      question_id: e.id,
+                      short_answer: e.answer || '',
+                      response_option: e.response_option
+                        ? e.response_option
+                        : 'WORD',
+                      answer_file: e.answer_file,
+                      active: 'SUBMITED',
+                    })
+                    break
+                  }
+                }
+                continue
+              }
+              continue
+            } else {
+              answers.push({
+                question_id: e.id,
+                short_answer: e.answer || '',
+                response_option: e.response_option ? e.response_option : 'WORD',
+                answer_file: e.answer_file,
+                active: 'SUBMITED',
+              })
+            }
+          }
+        } else {
+          continue
+        }
       }
 
       quiz_position_mapping.push({
@@ -497,7 +536,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
         })
-        toast.success('submit success')
+        toast.success('Submitted successfully')
         router.replace(
           `/case-study/table-result/${quizAttempId}?class_user_id=${router.query.class_user_id}`,
         )
@@ -586,6 +625,22 @@ const CaseStudyDetail = ({ questions }: any) => {
       router.events.off('routeChangeStart', handleBrowseAway)
     }
   }, [unsavedChanges])
+  useEffect(() => {
+    if (startResize) {
+      document.body.style.webkitUserSelect = 'none'
+
+      document.body.style.userSelect = 'none'
+    } else {
+      document.body.style.webkitUserSelect = 'unset'
+
+      document.body.style.userSelect = 'unset'
+    }
+    return () => {
+      document.body.style.webkitUserSelect = 'unset'
+
+      document.body.style.userSelect = 'unset'
+    }
+  }, [startResize])
   return (
     <div
       className="h-screen flex flex-col bg-white overflow-hidden relative"
@@ -599,9 +654,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           Loading
         </div>
       )}
-      {startResize && (
+      {/* {startResize && (
         <div className="absolute w-screen h-screen z-[1350]"></div>
-      )}
+      )} */}
       {/* <div
         className={`absolute w-full bg-black h-[200px]`}
         style={{ top: 96 }}

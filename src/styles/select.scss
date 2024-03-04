@@ -13,7 +13,7 @@
   }
 
   .select__placeholder {
-    @apply text-gray-1;
+    @apply text-bw-1;
   }
 
   .select__menu {
@@ -61,4 +61,8 @@
   .select__input {
     @apply shadow-0;
   }
+}
+
+.select-single .select__single-value {
+  @apply text-bw-1;
 }

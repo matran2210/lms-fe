@@ -78,17 +78,21 @@ const LearningNotesList = () => {
   }, [notesListStatus])
 
   useEffect(() => {
-    if (selectedSection?.value !== '') {
+    if (selectedSection?.value !== '' && notesListStatus) {
       getCourseSubsections(DEFAULT_PAGESIZE)
     }
   }, [selectedSection])
 
   useEffect(() => {
-    getCourseUnit()
+    if (notesListStatus) {
+      getCourseUnit()
+    }
   }, [selectedSubsection])
 
   useEffect(() => {
-    getCourseActivity(DEFAULT_PAGESIZE)
+    if (notesListStatus) {
+      getCourseActivity(DEFAULT_PAGESIZE)
+    }
   }, [selectedUnit])
 
   const params = cleanParamsAPI({
@@ -165,7 +169,8 @@ const LearningNotesList = () => {
         containerDiv &&
         containerDiv.clientHeight + containerDiv.scrollTop ===
           containerDiv.scrollHeight &&
-        (courseId || queryId)
+        (courseId || queryId) &&
+        notesListStatus
       ) {
         notesListData?.meta?.total_records > pageIndex && fetchData(params)
       }
@@ -234,7 +239,7 @@ const LearningNotesList = () => {
 
   async function getCourseSections(page_size: number) {
     try {
-      if (!sections.length) {
+      if (!sections.length && notesListStatus) {
         const res = await CourseAPI.getCourseSectionList(
           courseId || queryId,
           page_size || DEFAULT_PAGESIZE,
@@ -439,7 +444,7 @@ const LearningNotesList = () => {
                   paths={[...note?.course_section_path].reverse()}
                 />
               </div>
-              <div className="font-normal text-base">
+              <div className="font-normal text-base text-bw-1">
                 <span
                   className={`whitespace-pre-wrap ${
                     isExpanded ? '' : 'line-clamp-3'

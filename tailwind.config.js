@@ -20,7 +20,8 @@ module.exports = {
       '4xl': '1920px',
     },
     fontSize: {
-      '6px': ['64px', { lineHeight: '76.8px ' }],
+      '6xl': ['64px', { lineHeight: '76.8px ' }],
+      '5.5xl': ['56px', { lineHeight: '67px ' }],
       '5xl': ['40px', { lineHeight: '50px' }],
       '4xl': ['36px', { lineHeight: '45px' }],
       '3xl': ['32px', { lineHeight: '40px' }],
@@ -120,6 +121,7 @@ module.exports = {
         preview: '0px 4px 12px 0px rgba(0, 0, 0, 0.10)',
         select:
           '0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 4px 0px rgba(0, 0, 0, 0.04)',
+        'sidebar-tablet': '0px -2px 7px 0px #0000001A',
       },
       minWidth: {
         4: '16px',
@@ -273,10 +275,12 @@ module.exports = {
       animation: {
         'jump-in': 'jump-in 0.1s ease-in-out',
         'jump-out': 'jump-out 0.1s ease-in-out',
-        'fade-in-overlay': 'fade-in-overlay 0.3s ease-in-out',
-        'fade-out-overlay': 'fade-out-overlay 0.3s ease-out',
+        'fade-in-overlay': 'fade-in-overlay 0.1s ease-in-out',
+        'fade-out-overlay': 'fade-out-overlay 0.1s ease-out',
         'fade-in-sidebar': 'fade-in-sidebar 0.4s ease-in-out',
         'fade-out-sidebar': 'fade-out-sidebar 0.3s ease-in-out',
+        'fade-in-overlay-sidebar': 'fade-in-overlay 0.3s ease-in-out',
+        'fade-out-overlay-sidebar': 'fade-out-overlay 0.3s ease-out',
       },
     },
   },

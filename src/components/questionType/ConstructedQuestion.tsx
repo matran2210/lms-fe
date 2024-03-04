@@ -17,10 +17,12 @@ import { uniqueId } from 'lodash'
 import { IResource } from 'src/type/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
+import { useAppDispatch } from 'src/redux/hook'
+import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 export type IPreviewProp = {
   data: any
   question_content: string
-  index: number
+  index: number | undefined
   question_data: any
   control: any
   name: string
@@ -41,6 +43,7 @@ export type IPreviewProp = {
   setOpenPdf?: any
   handleSaveHighLightRequirement?: any
   setUnsavedChanges?: any
+  handleChange?: () => void
 }
 const EssayQuestionPreview = ({
   data,
@@ -48,7 +51,7 @@ const EssayQuestionPreview = ({
   index,
   question_data,
   control,
-  handleSaveHighLight,
+  handleSaveHighLight = () => {},
   highlighted,
   removeHighlight,
   allowHighLight,
@@ -64,9 +67,11 @@ const EssayQuestionPreview = ({
   handleClearFile,
   setOpenPdf,
   allowUnHighLight,
-  handleSaveHighLightRequirement,
+  handleSaveHighLightRequirement = () => {},
   setUnsavedChanges,
+  handleChange,
 }: IPreviewProp) => {
+  const dispatch = useAppDispatch()
   // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
@@ -93,10 +98,12 @@ const EssayQuestionPreview = ({
   }) => {
     try {
       setUnsavedChanges && setUnsavedChanges(false)
+      dispatch(disableUnsavedChange())
       await UploadAPI.downloadFile(data)
     } catch (error) {
     } finally {
       setUnsavedChanges && setUnsavedChanges(true)
+      dispatch(loginSlice.actions.enableUnsavedChange())
     }
   }
   // useEffect(() => {
@@ -108,7 +115,6 @@ const EssayQuestionPreview = ({
   // },[response_option_custom])
   return (
     <div
-      key={key}
       style={{ background: 'white' }}
       // id="hightlight_area"
       // onMouseUp={(e: any) => {
@@ -196,15 +202,19 @@ const EssayQuestionPreview = ({
               }
             }}
           >
-            <div className="sapp-questions-essay">{`Requirement ${
-              index + 1
-            } : ${data.name}`}</div>
+            <div className="sapp-questions-essay">
+              {index !== undefined
+                ? `Requirement ${index + 1}: ${data.name}`
+                : `Requirement: ${data.name}`}
+            </div>
             <EditorReader
               className="editor-wrap mb-4"
               // className="questions"
               // style={{ borderBottom: "4px solid #F2F2F2" }}
               text_editor_content={data.description}
-              highlighted={question_data?.requirements?.[index]?.highlighted}
+              highlighted={
+                question_data?.requirements?.[index || 0]?.highlighted
+              }
               highlighArea="hightlight_area_require"
             />
 
@@ -315,6 +325,7 @@ const EssayQuestionPreview = ({
               ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
+          key={key}
         >
           {question_data.response_option === RESPONSE_OPTION.WORD ? (
             <HookFormEditor
@@ -325,6 +336,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={fullData?.done || fullData?.confirmed}
+              handleChange={handleChange}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
@@ -362,6 +374,7 @@ const EssayQuestionPreview = ({
                             // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
+                        handleChange && handleChange()
                       }}
                       data={
                         value
@@ -395,6 +408,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={fullData?.done || fullData?.confirmed}
+              handleChange={handleChange}
             />
           ) : (
             <div className="w-full h-[500px] border">
@@ -436,6 +450,7 @@ const EssayQuestionPreview = ({
                             // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
+                        handleChange && handleChange()
                       }}
                       data={
                         value

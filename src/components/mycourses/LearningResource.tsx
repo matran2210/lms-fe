@@ -70,14 +70,16 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseSections(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSectionList(
-        router.query.courseId || router.query.id,
-        page_size || DEFAULT_PAGESIZE,
-      )
-      setSections([...res?.data?.sections].reverse())
-      setSelectedSubsection(null)
-      setSelectedUnit(null)
-      setSelectedActivity(null)
+      if (open) {
+        const res = await CourseAPI.getCourseSectionList(
+          router.query.courseId || router.query.id,
+          page_size || DEFAULT_PAGESIZE,
+        )
+        setSections([...res?.data?.sections].reverse())
+        setSelectedSubsection(null)
+        setSelectedUnit(null)
+        setSelectedActivity(null)
+      }
     } catch (error) {}
   }
 
@@ -103,7 +105,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    if (selectedSection?.value !== '') {
+    if (selectedSection?.value !== '' && open) {
       getCourseSubsections(DEFAULT_PAGESIZE)
     }
   }, [selectedSection])
@@ -123,7 +125,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    getCourseUnit()
+    if (open) {
+      getCourseUnit()
+    }
   }, [selectedSubsection])
 
   const [activity, setActivity] = useState<ISection[]>([])
@@ -140,7 +144,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    getCourseActivity(DEFAULT_PAGESIZE)
+    if (open) {
+      getCourseActivity(DEFAULT_PAGESIZE)
+    }
   }, [selectedUnit])
 
   const params = cleanParamsAPI({
@@ -193,7 +199,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         containerDiv &&
         containerDiv.clientHeight + containerDiv.scrollTop ===
           containerDiv.scrollHeight &&
-        (router.query.courseId || router.query.id)
+        (router.query.courseId || router.query.id) &&
+        open
       ) {
         fetchData(params)
       }
@@ -262,7 +269,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
             sections &&
             DEFAULT_SELECT.concat(
               sections?.map((section) => ({
-                label: section.name,
+                label: (
+                  <>
+                    <span title={section.name}>{section.name}</span>
+                  </>
+                ).props.children,
                 value: section.id,
               })),
             )
@@ -284,7 +295,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedSection
               ? subSections?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []
@@ -307,7 +322,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedSubsection
               ? unit?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []
@@ -326,7 +345,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           options={
             selectedUnit
               ? activity?.map((section) => ({
-                  label: section.name,
+                  label: (
+                    <>
+                      <span title={section.name}>{section.name}</span>
+                    </>
+                  ).props.children,
                   value: section.id,
                 }))
               : []
@@ -339,25 +362,23 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       {resources?.resources?.map((resource) => (
         <div key={resource.id}>
           <div
-            className="mt-6 p-6 h-[92px] last:mb-6"
+            className="mt-6 p-6 h-[92px] last:mb-6 flex justify-between items-center"
             style={{ border: '1px solid #DCDDDD' }}
           >
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="font-normal text-base text-bw-1">
-                  {resource?.name}
-                </div>
-                <div className="text-gray-1 font-normal text-base">
-                  {bytesToKilobyte(resource?.size)}
-                </div>
+            <div>
+              <div className="font-normal text-base text-bw-1">
+                {resource?.name}
               </div>
-              <a
-                className="cursor-pointer"
-                onClick={() => download(resource.name, resource.file_key)}
-              >
-                <DownloadIcon />
-              </a>
+              <div className="text-gray-1 font-normal text-base">
+                {bytesToKilobyte(resource?.size)}
+              </div>
             </div>
+            <a
+              className="cursor-pointer"
+              onClick={() => download(resource.name, resource.file_key)}
+            >
+              <DownloadIcon />
+            </a>
           </div>
         </div>
       ))}

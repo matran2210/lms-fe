@@ -46,7 +46,7 @@ const NotifyList = ({
         const readStatus = notifyItem?.notification_user_instances?.is_read
         return (
           <div
-            key={notifyItem?.id}
+            key={notifyItem?.id + index}
             className={`w-full p-6 pb-5 cursor-pointer relative flex items-center gap-4 ${
               readStatus ? 'bg-white' : 'bg-secondary'
             }`}
@@ -66,17 +66,29 @@ const NotifyList = ({
               />
             )}
             <div className="shrink-0">
-              <Image
-                src={notifyItem?.avatar?.ORIGIN ?? blankAvatar}
-                alt="avatar"
-                className={`rounded-full ${
-                  !notifyItem?.avatar?.ORIGIN ? 'bg-gray-3' : ''
-                }`}
-                width={56}
-                height={56}
-                layout="fixed"
-                objectFit={'cover'}
-              />
+              <>{/*Fix image load slow*/}</>
+              {notifyItem?.avatar?.ORIGIN ? (
+                <img
+                  src={
+                    notifyItem?.avatar['50x50'] || notifyItem?.avatar?.ORIGIN
+                  }
+                  alt="avatar"
+                  className="rounded-full w-14 h-14 object-cover bg-gray-3"
+                  width={56}
+                  height={56}
+                />
+              ) : (
+                <Image
+                  src={blankAvatar}
+                  alt="avatar"
+                  className={`rounded-full`}
+                  width={56}
+                  height={56}
+                  layout="fixed"
+                  objectFit={'cover'}
+                  priority={true}
+                />
+              )}
             </div>
             <div className="block">
               <h4

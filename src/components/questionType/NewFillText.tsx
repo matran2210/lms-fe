@@ -1,5 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { runHighlight } from '@utils/index'
+import { Element, HTMLReactParserOptions } from 'html-react-parser'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -11,6 +13,7 @@ import {
 } from 'react'
 
 interface IProps {
+  control: any
   data: any
   action?: any
   handleSaveHighLight?: any
@@ -27,10 +30,13 @@ interface IProps {
   extenalRef?: any
   solution?: string
   allowUnHighLight?: boolean
+  name?: string
+  setValue?: any
 }
-const AddWordPreview = forwardRef(
+const NewFiltext = forwardRef(
   (
     {
+      control,
       data,
       action,
       handleSaveHighLight,
@@ -42,72 +48,62 @@ const AddWordPreview = forwardRef(
       extenalRef,
       solution,
       allowUnHighLight,
+      name,
+      setValue,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
+    // useEffect(() => {
+    //   if (defaultAnswer) {
+    //     defaultAnswer.forEach((e: any, i: number) => {
+    //       if (e) {
+    //         setValue(`${name}.${i}`, e)
+    //       } else {
+    //         setValue(`${name}.${i}`, '')
+    //       }
+    //     })
+    //   } else {
+    //     setValue(name, '')
+    //   }
+    // }, [defaultAnswer])
     const refEditor = useRef(null) as any
     const [questionContent, setQuestionContent] = useState<any>()
     const [answerContent, setAnswerContent] = useState<any>()
     const str = data?.question_content
     const parser = new DOMParser()
-    const [key, setKey] = useState<string>(uniqueId('key'))
     useImperativeHandle(ref, () => ({
       handleReset() {
-        // setAnswered([])
-        setKey((prev) => {
-          const newKey = uniqueId('key')
-          return newKey
+        const doc = parser.parseFromString(str, 'text/html')
+        const elements = doc.querySelectorAll('.question-content-tag')
+        elements.forEach((element: globalThis.Element, index: number) => {
+          setValue(`${name}.${index}`, '')
         })
-        // setAnswered()
       },
       handleGetResult() {
-        // action()
+        // return getValues()
       },
     }))
-
     useEffect(() => {
       const doc = parser.parseFromString(str, 'text/html')
       const elements = doc.querySelectorAll('.question-content-tag')
       const doc2 = parser.parseFromString(str, 'text/html')
       const elementCorrects = doc2.querySelectorAll('.question-content-tag')
-      elements.forEach((element, index) => {
-        const inputId = element.id
-        const inputValue = defaultAnswer?.[index] || ''
 
-        let inputClass
-        if (corrects) {
-          const correctAnswer = corrects?.find(
-            (ans: any) =>
-              ans.answer_position === index + 1 &&
-              ans.answer.trim().toLowerCase() ===
-                inputValue.trim().toLowerCase(),
-          )
-          inputClass = correctAnswer
-            ? '!border-success text-state-success text-center !font-normal'
-            : '!border-danger text-danger text center !font-normal'
-        }
-
-        element.outerHTML = `
-        <span>
-          <input ${
-            corrects ? 'disabled' : ''
-          } type="text" id="${inputId}" class="sapp-input-preview ${inputClass}" stringHTML="true" value="${inputValue}" />
-        </span>
-      `
+      elements.forEach((element: globalThis.Element, index: number) => {
+        element.setAttribute('index', index.toString())
+        const defaultValue = defaultAnswer?.[index] || ''
+        setValue(`${name}.${index}`, defaultValue)
       })
+
       if (corrects) {
         elementCorrects.forEach((element, index) => {
           const inputId = element.id
-          const inputValue = defaultAnswer?.[index] || ''
-
-          let inputClass
-          // if (corrects) {
+          let inputClass = ''
           const correctAnswer = corrects?.filter(
             (ans: any) => ans.answer_position === index + 1,
           )
           if (correctAnswer) {
             inputClass = 'text-base font-semibold text-state-success'
-            // }
             element.outerHTML = `
                 <span>
                 <span id="${inputId}" class = "${inputClass}">${correctAnswer
@@ -125,36 +121,65 @@ const AddWordPreview = forwardRef(
       }
 
       setQuestionContent(doc)
-    }, [defaultAnswer])
-
-    // const checkError = () => {
-    //   const data = getValueFillText()
-
-    //   const answerMap = Object.fromEntries(
-    //     activeQuestion?.answers?.map((item) => [
-    //       `${item.answer_position}:${item.answer?.trim()}`,
-    //       item.is_correct,
-    //     ]) || [],
-    //   )
-
-    //   const elements = data?.map(
-    //     (element) => answerMap[`${1}:${element?.trim()}`] || false,
-    //   )
-
-    //   const corrects = questionRef?.current?.querySelectorAll(
-    //     '.sapp-input-preview',
-    //   )
-
-    //   if (corrects) {
-    //     corrects.forEach((element, index) => {
-    //       const isCorrect = elements?.[index]
-    //       if (element instanceof HTMLElement) {
-    //         element.classList.add(isCorrect ? 'border-success' : 'border-error')
-    //       }
-    //       element.classList.add('pointer-events-none')
-    //     })
-    //   }
-    // }
+    }, [str, corrects, defaultAnswer])
+    const options: HTMLReactParserOptions = {
+      replace(domNode) {
+        if (!corrects) {
+          if (
+            (domNode as Element).attribs &&
+            (domNode as Element).attribs.class === 'question-content-tag'
+          ) {
+            return (
+              <span
+                className="my-0.5"
+                style={{
+                  display: 'inline-block',
+                  height: ' 35px',
+                  width: '110px',
+                }}
+              >
+                <HookFormTextField
+                  control={control}
+                  name={`${name}.${Number((domNode as Element).attribs.index)}`}
+                  inputClassName="!h-[35px]"
+                />
+              </span>
+            )
+          }
+        } else {
+          if (
+            (domNode as Element).attribs &&
+            (domNode as Element).attribs.class === 'question-content-tag'
+          ) {
+            const index = Number((domNode as Element).attribs.index)
+            const inputValue = defaultAnswer?.[index]
+            let inputClass
+            if (corrects) {
+              const correctAnswer = corrects?.find(
+                (ans: any) =>
+                  ans.answer_position === index + 1 &&
+                  ans.answer?.trim()?.toLowerCase() ===
+                    inputValue?.trim()?.toLowerCase(),
+              )
+              inputClass = correctAnswer
+                ? '!border-success text-state-success text-center !font-normal'
+                : '!border-danger text-danger text center !font-normal'
+            }
+            return (
+              <span>
+                <input
+                  disabled
+                  type="text"
+                  id={(domNode as Element).attribs.id}
+                  className={'sapp-input-preview ' + inputClass}
+                  value={inputValue}
+                />
+              </span>
+            )
+          }
+        }
+      },
+    }
     return (
       <div ref={extenalRef}>
         <EditorReader
@@ -182,18 +207,18 @@ const AddWordPreview = forwardRef(
               }
             }
           }}
-          key={key}
           extenalRef={refEditor}
           className="sapp-questions"
           text_editor_content={
-            questionContent?.documentElement.querySelector('body')?.innerHTML ||
-            ''
+            questionContent?.documentElement?.querySelector('body')
+              ?.innerHTML || ''
           }
           highlighted={highlighted}
+          options={options}
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base pt-[26px]">
+            <div className="font-semibold text-base mt-[30px]">
               Correct Answer
             </div>
             <EditorReader
@@ -215,5 +240,5 @@ const AddWordPreview = forwardRef(
     )
   },
 )
-AddWordPreview.displayName = 'AddWordPreview'
-export default AddWordPreview
+NewFiltext.displayName = 'AddWordPreview'
+export default NewFiltext

@@ -38,10 +38,10 @@ const TestResultDetail = ({ questions, chartData }: any) => {
 
   return (
     <>
-      <div className="main px-4 lg:px-16">
+      <div className="main px-6 xl:px-16">
         <Breadcrumb tabs={breadcrumbs} currentPage={'Results'} />
       </div>
-      <div className="px-4 lg:px-0 mx-auto lg:mx-16 mb-6">
+      <div className="px-6 xl:px-0 mx-auto xl:mx-16 mb-6">
         <TestResultPage
           questions={questions}
           type={questions?.course?.course_categories[0]?.name}
@@ -58,17 +58,6 @@ export async function getServerSideProps(context: any) {
 
   // Lấy accessToken từ cookie
   const accessToken = req.cookies.accessToken
-
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
 
   try {
     const { req } = context
@@ -113,7 +102,7 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
-        const userInfo = res?.data?.tokens
+        const userInfo = refreshResponse?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage

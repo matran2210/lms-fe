@@ -84,6 +84,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       useState<boolean>(false)
     const listRequirementRef = useRef<HTMLDivElement>(null)
 
+    const [isChange, setIsChange] = useState<boolean>(false)
+
     useClickOutside({
       ref: listRequirementRef,
       callback: () => setShowListRequirement(false),
@@ -290,35 +292,41 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             const value = getValues(`${activeQuestion.id}_${document_id}_essay`)
 
             const isSubmitted = (() => {
-              if (grading_preference === 'AFTER_ALL_QUESTIONS') {
-                if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-                  if (value) {
-                    const data = JSON.parse(value)
-                    for (let e of data) {
-                      if (e.celldata && e.celldata.length > 0) {
-                        return true
-                      }
+              if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+                if (value) {
+                  const data = JSON.parse(value)
+                  for (let e of data) {
+                    if (e.celldata && e.celldata.length > 0) {
+                      return true
                     }
-                    return false
                   }
                   return false
-                } else {
-                  if (value !== undefined && value !== '') {
-                    return true
-                  }
-                  return false
+                } else if (isChange) {
+                  return true
                 }
+                return false
+              } else {
+                if ((value !== undefined && value !== '') || isChange) {
+                  return true
+                }
+                return false
               }
             })()
 
             let active = 'UNFINISHED'
-            if (isSubmitted) {
+
+            if (isSubmitted || activeQuestion?.answer_file) {
               active = 'SUBMITED'
             }
 
             myAnswers = {
               question_id: activeQuestion.id,
-              short_answer: value,
+              short_answer:
+                (value !== undefined || value !== '') &&
+                isChange &&
+                activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
+                  ? ' '
+                  : value,
               response_option: activeQuestion.response_option
                 ? activeQuestion.response_option
                 : 'WORD',
@@ -569,9 +577,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                       type: 'exhibits',
                                       description: e.description,
                                       name: e.name,
-                                      index: i + 1,
+                                      index: i,
                                       files: e.files,
                                     },
+                                    null,
+                                    null,
                                     event,
                                   )
                               }}
@@ -639,6 +649,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       question_id: activeQuestion.id,
                     }),
                   )
+                }}
+                handleChange={() => {
+                  setIsChange(true)
                 }}
               />
             </>

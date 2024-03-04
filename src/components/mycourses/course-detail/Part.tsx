@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { countWords, formatTime, truncateString } from '@utils/index'
 import { ICourseSection, CLASS_USER_STATUS } from 'src/type/courses'
 import { useForm } from 'react-hook-form'
+import { Tooltip } from 'antd'
 
 const Part = ({ courses }: { courses: ICourseSection }) => {
   const [open, setOpen] = useState(false)
@@ -58,16 +59,45 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       }
       className="cursor-pointer"
     >
-      <div className={`name-part text-2xl font-semibold h-[60px]`}>
-        {courses?.name}
+      <div className={`name-part text-2xl font-medium h-[60px]`}>
+        {(courses?.name as string)?.length > 50 ? (
+          <Tooltip title={courses?.name} color="#ffffff" placement="top">
+            {truncateString(courses?.name, 50)}
+          </Tooltip>
+        ) : (
+          <>{courses?.name}</>
+        )}
       </div>
       <div className="des mt-6 mb-15">
-        <div
-          dangerouslySetInnerHTML={{
-            __html: truncateString(courses?.description, 250),
-          }}
-          className="text-base h-[120px]"
-        />
+        <div className="line-clamp-5 text-ellipsis h-[120px]">
+          {(courses?.description as string).length > 250 ? (
+            <Tooltip
+              title={
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: courses?.description,
+                  }}
+                />
+              }
+              color="#ffffff"
+              placement="right"
+            >
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: courses?.description,
+                }}
+                className="text-base h-[120px]"
+              />
+            </Tooltip>
+          ) : (
+            <p
+              dangerouslySetInnerHTML={{
+                __html: courses?.description,
+              }}
+              className="text-base h-[120px]"
+            />
+          )}
+        </div>
       </div>
       <div className="mt-auto">
         <div className="progress mb-6">

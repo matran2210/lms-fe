@@ -173,6 +173,7 @@ const ProfileHeader = ({
                   height={108}
                   layout="fixed"
                   objectFit={'cover'}
+                  priority={true}
                 />
               </div>
             </div>
