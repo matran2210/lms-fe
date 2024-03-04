@@ -1776,10 +1776,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         } else if (e.type === 'file') {
           return (
             <MovableWindow
+              className="w-[595px] 2xl:h-[842px] !h-[640px]"
               position={{
-                width: '595px',
-                height: '842px',
-                top: 'calc(50% - 421px)',
+                top: 'calc(50% - 320px)',
                 left: 'calc(50% - 300px)',
               }}
               key={e.id}
