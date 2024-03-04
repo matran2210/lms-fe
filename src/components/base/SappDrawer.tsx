@@ -2,7 +2,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import ButtonPrimary from './button/ButtonPrimary'
 import ButtonText from './button/ButtonText'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import cross from '@assets/images/cross.svg'
 import Image from 'next/image'
 
@@ -52,7 +52,18 @@ const SappDrawer = ({
       handleOnClose()
     }
   }
+  const drawerRef = useRef<HTMLDivElement>(null)
 
+  useEffect(() => {
+    const drawerElement = drawerRef.current
+    if (drawerElement) {
+      const hasScrollBar =
+        drawerElement.scrollHeight > drawerElement.clientHeight
+      drawerElement.classList.toggle('px-8', !hasScrollBar)
+      drawerElement.classList.toggle('pl-8', hasScrollBar)
+      drawerElement.classList.toggle('pr-6', hasScrollBar)
+    }
+  }, [drawerSubId, heightBody, drawerRef, children])
   return (
     <>
       {isOpen && (
@@ -84,10 +95,11 @@ const SappDrawer = ({
           </div>
         </div>
         <div
-          className={`mt-6 mx-6 overflow-y-auto ${heightBody}`}
+          ref={drawerRef}
+          className={`mt-6 px-8 overflow-y-auto ${heightBody}`}
           id={`sapp-drawer${drawerSubId}`}
         >
-          <div className="mx-2 mr-1">{children}</div>
+          <div className="">{children}</div>
         </div>
         {footer && (
           <div className="flex justify-between h-[82px] items-center border-t border-default absolute bottom-0 left-0 right-0 w-full bg-white">

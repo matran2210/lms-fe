@@ -88,25 +88,22 @@ const NewFiltext = forwardRef(
       const elements = doc.querySelectorAll('.question-content-tag')
       const doc2 = parser.parseFromString(str, 'text/html')
       const elementCorrects = doc2.querySelectorAll('.question-content-tag')
+
       elements.forEach((element: globalThis.Element, index: number) => {
         element.setAttribute('index', index.toString())
-        if (defaultAnswer?.[index]) {
-          setValue(`${name}.${index}`, defaultAnswer[index])
-        } else {
-          setValue(`${name}.${index}`, '')
-        }
+        const defaultValue = defaultAnswer?.[index] || ''
+        setValue(`${name}.${index}`, defaultValue)
       })
+
       if (corrects) {
         elementCorrects.forEach((element, index) => {
           const inputId = element.id
-          let inputClass
-          // if (corrects) {
+          let inputClass = ''
           const correctAnswer = corrects?.filter(
             (ans: any) => ans.answer_position === index + 1,
           )
           if (correctAnswer) {
             inputClass = 'text-base font-semibold text-state-success'
-            // }
             element.outerHTML = `
                 <span>
                 <span id="${inputId}" class = "${inputClass}">${correctAnswer
@@ -134,6 +131,7 @@ const NewFiltext = forwardRef(
           ) {
             return (
               <span
+                className="my-0.5"
                 style={{
                   display: 'inline-block',
                   height: ' 35px',
@@ -220,7 +218,7 @@ const NewFiltext = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base mt-[28px]">
+            <div className="font-semibold text-base mt-[30px]">
               Correct Answer
             </div>
             <EditorReader

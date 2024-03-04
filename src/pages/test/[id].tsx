@@ -2029,7 +2029,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               Flag to Review
             </div>
           </button>
-          {/* {!currentTabContent?.done && ( */}
           <button
             disabled={currentTabContent?.done}
             className={`flex items-center gap-3 border border-solid ${
@@ -2042,8 +2041,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="font-medium text-medium-sm">Clear Selection</div>
           </button>
           {/* )} */}
-          {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-          !currentTabContent?.done ? (
+          {(quizDetail?.grading_preference === 'AFTER_EACH_QUESTIONS' &&
+            !currentTabContent?.done) ||
+          quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
                 className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"

@@ -23,7 +23,7 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
   }, [watch('user_section_learning_status')])
 
   return (
-    <div className="filter flex">
+    <div className="filter flex absolute right-0">
       <div className="pr-6 border-r border-gray-1 text-medium-sm font-normal text-bw-1">
         {totalResult} {totalResult > 1 ? 'results' : 'result'}
       </div>

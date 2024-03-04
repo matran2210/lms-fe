@@ -139,9 +139,10 @@ const CoursePartDetail = ({ previewPart }: any) => {
       router.query.id,
       chapterDetail?.id,
     )
-    if (res?.success) {
-      fetchChapterDetail(id, course_section_id)
-    }
+    // 29/2/2023: Temporary comment to fix multiple API calls
+    // if (res?.success) {
+    //   fetchChapterDetail(id, course_section_id)
+    // }
   }
 
   const handleChapterTest = async () => {
@@ -207,10 +208,9 @@ const CoursePartDetail = ({ previewPart }: any) => {
           <span
             className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
             onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
-            title={previewPart?.name}
           >
             /
-            <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5">
+            <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
               {(previewPart?.name as string)?.length > 50 ? (
                 <Tooltip
                   title={previewPart?.name}
@@ -233,7 +233,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
                   color="#ffffff"
                   placement="bottom"
                 >
-                  {truncateString(partDetail?.name, 50)}
+                  {truncateString(partDetail?.name, 100)}
                 </Tooltip>
               ) : (
                 <>{partDetail?.name}</>
