@@ -36,7 +36,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     return () => {
       clearTimeout(timerId)
     }
-  }, [queryString, watch('name'), isSubmitting, isFirstRender])
+  }, [watch('name'), isSubmitting, isFirstRender])
 
   const handleReset = debounce((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
