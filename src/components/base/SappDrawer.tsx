@@ -2,7 +2,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import ButtonPrimary from './button/ButtonPrimary'
 import ButtonText from './button/ButtonText'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { ReactNode, useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import cross from '@assets/images/cross.svg'
 import Image from 'next/image'
 
@@ -59,13 +59,11 @@ const SappDrawer = ({
     if (drawerElement) {
       const hasScrollBar =
         drawerElement.scrollHeight > drawerElement.clientHeight
-      if (hasScrollBar) {
-        drawerElement.classList.remove('px-8')
-        drawerElement.classList.add('px-6', 'ml-2')
-      }
+      drawerElement.classList.toggle('px-8', !hasScrollBar)
+      drawerElement.classList.toggle('pl-8', hasScrollBar)
+      drawerElement.classList.toggle('pr-6', hasScrollBar)
     }
-  }, [drawerSubId, heightBody])
-
+  }, [drawerSubId, heightBody, drawerRef, children])
   return (
     <>
       {isOpen && (
