@@ -4443,10 +4443,10 @@ entities@^4.2.0, entities@^4.4.0, entities@^4.5.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
-entrance-test-result-package@^1.0.20:
-  version "1.0.20"
-  resolved "https://registry.npmjs.org/entrance-test-result-package/-/entrance-test-result-package-1.0.20.tgz#49e0bfa18af2e72670b2f4fba7ece5765c433c77"
-  integrity sha512-4AEwXGHQsAUjKuUkZvBj2VsKhrdbN7sIEMbBIkiN0zUMpPmS4GyYcIdMXxV/dd9Jpgpfaq7xpFm1h8Qe6XiENw==
+entrance-test-result-package@^1.0.21:
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.21.tgz#d451abe78eb4f2da09987f3c192173925a373a5c"
+  integrity sha512-g7ofgi6v2ji6Amv3JyHcM8I6JvMd5gK8wNdejradlUBWzjvXbKJDytHo/pA8c/+wRS432umxwu/0aYuja/v9/Q==
   dependencies:
     sass "^1.69.5"
 
