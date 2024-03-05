@@ -614,6 +614,8 @@ textarea.is-invalid:focus {
 
 .ant-tooltip-inner {
   color: #404041 !important;
+  max-width: 600px;
+  width: max-content;
 }
 
 .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item {
