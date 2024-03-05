@@ -46,8 +46,8 @@ const PartFailed = ({
   }
   const quizAttempt = coursePart?.quiz
 
-  const countTimeSpent = (ratio_score: string | null) => {
-    const parts = ratio_score.split('/')
+  const countTimeSpent = (ratio_score: string) => {
+    const parts = ratio_score?.split('/')
     const firstPoint = parseInt(parts[0], 10)
     const secondPoint = parseInt(parts[1], 10)
     return roundNumber((firstPoint / secondPoint) * 100)
