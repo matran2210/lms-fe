@@ -34,8 +34,9 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
   useEffect(() => {
     const userSectionLearningType = watch('type')?.value
     const userSectionLearningStatus = watch('status')?.value
+    // Check undefined vì nếu để rỗng thì ko filter theo all được
     if (
-      userSectionLearningType !== '' ||
+      userSectionLearningType !== undefined ||
       userSectionLearningStatus !== undefined
     ) {
       router.push(`${apiUrl}?name=${router.query.name || ''}${queryString}`)
