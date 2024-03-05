@@ -346,12 +346,14 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.tokens
+        const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage
-        await AsyncStorage.setItem('accessToken', act)
-        await AsyncStorage.setItem('refreshToken', rft)
+        if (typeof window !== 'undefined') {
+          await AsyncStorage.setItem('accessToken', act)
+          await AsyncStorage.setItem('refreshToken', rft)
+        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
