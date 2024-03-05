@@ -1776,11 +1776,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         } else if (e.type === 'file') {
           return (
             <MovableWindow
+              className="transform -translate-x-1/2 -translate-y-1/2 2xl:!h-[842px]"
               position={{
                 width: '595px',
-                height: '842px',
-                top: 'calc(50% - 421px)',
-                left: 'calc(50% - 300px)',
+                height: '650px',
+                top: 'calc(50%)',
+                left: 'calc(50%)',
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
