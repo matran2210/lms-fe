@@ -209,7 +209,7 @@ const SelectWord = forwardRef(
         <EditorReader
           key={key}
           extenalRef={refEditor}
-          className="sapp-questions pb-[14px]"
+          className="sapp-questions"
           // style={{borderBottom: '1px solid  white'}}
           text_editor_content={
             questionContent?.documentElement.querySelector('body')?.innerHTML ||
@@ -243,7 +243,9 @@ const SelectWord = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base">Correct Answer</div>
+            <div className="font-semibold text-base pt-[18px]">
+              Correct Answer
+            </div>
             <EditorReader
               className="questions mt-2"
               text_editor_content={
