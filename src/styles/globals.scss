@@ -237,15 +237,19 @@ body *::-webkit-scrollbar-thumb:hover {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
   option[value=''][disabled] {
     display: none;
   }
+
   option[disabled] {
     color: #dcdddd;
   }
+
   option {
     color: #404041;
   }
+
   &.sapp-select-confirmed {
     background-image: none;
     text-align: center;
@@ -633,4 +637,40 @@ textarea.is-invalid:focus {
 
 .ant-dropdown-menu-item:hover .ant-dropdown-menu-title-content li span {
   color: #ffb800;
+}
+
+.learningOutcome-description {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    display: block !important;
+    font-weight: bold !important;
+  }
+  h1 {
+    font-size: 2em !important;
+  }
+  h2 {
+    font-size: 1.5em !important;
+  }
+  h3 {
+    font-size: 1.17em !important;
+  }
+  h5 {
+    font-size: 0.83em !important;
+  }
+  h6 {
+    font-size: 0.67em !important;
+  }
+  pre {
+    display: block !important;
+    font-family: monospace !important;
+    white-space: pre !important;
+  }
+  p {
+    display: block;
+    font-size: 14px;
+  }
 }

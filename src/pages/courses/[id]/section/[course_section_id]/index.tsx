@@ -273,18 +273,18 @@ const CoursePartDetail = ({ previewPart }: any) => {
       >
         <div
           style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6  text-bw-1"
+          className="pb-6 text-bw-1 learningOutcome-description"
           dangerouslySetInnerHTML={{
             __html: learningOutcome?.description ?? '',
           }}
         />
         {learningOutcome?.course_outcomes?.map((outcome, index) => (
           <div className="flex mt-6 mr-3" key={outcome.id}>
-            <div className="font-medium leading-6 text-base me-1 text-bw-1">
+            <div className="font-medium leading-5 text-base me-1 text-bw-1">
               LO{index + 1}:
             </div>
-            <p
-              className="text-sm font-normal leading-6 text-bw-1"
+            <div
+              className="text-bw-1 learningOutcome-description"
               dangerouslySetInnerHTML={{ __html: outcome?.description }}
             />
           </div>
