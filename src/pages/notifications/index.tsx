@@ -53,7 +53,7 @@ const Notifications = () => {
   const getNotifications = async (params: Object) => {
     try {
       await dispatch(getNotification(params))
-      await coutNotificationsUnRead()
+      // await coutNotificationsUnRead()
     } catch (error) {}
   }
 

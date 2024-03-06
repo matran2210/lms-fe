@@ -9,6 +9,7 @@ import CourseAPI from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { Tooltip } from 'antd'
 import { truncateString } from '@utils/index'
+import { roundNumber } from '@utils/helpers'
 
 const PartFailed = ({
   coursePart,
@@ -45,37 +46,68 @@ const PartFailed = ({
   }
   const quizAttempt = coursePart?.quiz
 
+  const countTimeSpent = (ratio_score: string) => {
+    const parts = ratio_score?.split('/')
+    const firstPoint = parseInt(parts[0], 10)
+    const secondPoint = parseInt(parts[1], 10)
+    return roundNumber((firstPoint / secondPoint) * 100)
+  }
+
   return (
     <>
-      <div
-        className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-default`}
-      >
-        {(coursePart?.name as string)?.length > 50 ? (
-          <Tooltip title={coursePart?.name} color="#ffffff" placement="top">
-            {truncateString(coursePart?.name, 50)}
-          </Tooltip>
-        ) : (
-          <>{coursePart?.name}</>
-        )}
-      </div>
-      <div className="info mt-6">
-        <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
-          <p className="text-base text-gray-1">Time Allowed:</p>
-          <p className="text-base text-bw-1 font-semibold">{formattedTime}</p>
+      <div>
+        <div
+          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-default`}
+        >
+          {(coursePart?.name as string)?.length > 50 ? (
+            <Tooltip title={coursePart?.name} color="#ffffff" placement="top">
+              {truncateString(coursePart?.name, 50)}
+            </Tooltip>
+          ) : (
+            <>{coursePart?.name}</>
+          )}
         </div>
-        <div className="time-allow flex justify-between pt-4">
-          <p className="text-base text-gray-1">Attempt:</p>
-          <p className="text-base text-bw-1 font-semibold">
-            {`${quizAttempt?.attempt_count || 0} / ${
-              quizAttempt?.limit_count !== 0
-                ? quizAttempt?.limit_count
-                : 'Unlimited'
-            }` ?? ''}
-          </p>
+        <div className="info mt-6">
+          {checkFinished && (
+            <>
+              <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
+                <p className="text-base text-gray-1">Latest Result:</p>
+                <p className="text-base text-bw-1 font-semibold">
+                  {`${countTimeSpent(
+                    coursePart?.quiz?.attempts?.[0]?.ratio_score,
+                  )}%`}
+                </p>
+              </div>
+              <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
+                <p className="text-base text-gray-1">Time Spent:</p>
+                <p className="text-base text-bw-1 font-semibold">
+                  {`${
+                    coursePart?.quiz?.quiz_timed
+                      ? formatTime(
+                          coursePart?.quiz?.attempts[0]?.total_attempt_time ||
+                            0 * 60,
+                        )
+                      : 'Unlimited'
+                  }` ?? ''}
+                </p>
+              </div>
+            </>
+          )}
+          <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
+            <p className="text-base text-gray-1">Time Allowed:</p>
+            <p className="text-base text-bw-1 font-semibold">{formattedTime}</p>
+          </div>
+          <div className="time-allow flex justify-between pt-4">
+            <p className="text-base text-gray-1">Attempt:</p>
+            <p className="text-base text-bw-1 font-semibold">
+              {`${quizAttempt?.attempt_count || 0} / ${
+                quizAttempt?.limit_count !== 0
+                  ? quizAttempt?.limit_count
+                  : 'Unlimited'
+              }` ?? ''}
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="des mt-6">
-        <div className={`text-base h-26`} />
       </div>
       <div className="mt-7">
         <div className="action flex items-center jusity-end relative">

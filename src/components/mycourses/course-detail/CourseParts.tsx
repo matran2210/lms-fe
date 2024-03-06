@@ -15,7 +15,7 @@ const CourseParts = ({
         return (
           <div
             key={coursePart?.id}
-            className={`item bg-white p-[30px] shadow-sidebar flex flex-col aspect-h-16 h-[412px]`}
+            className={`item bg-white p-[30px] shadow-sidebar flex flex-col aspect-h-16 h-[412px] justify-between`}
           >
             {['MID_TERM_TEST', 'FINAL_TEST'].includes(
               coursePart?.course_section_type,

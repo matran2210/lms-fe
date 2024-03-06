@@ -12,10 +12,11 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
-  const totalCourse = courses?.total.reduce(
+  const totalCourse = courses?.total?.reduce(
     (total: number, item: any) => total + parseInt(item.count, 10),
     0,
   )
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
   const defaultCategory = [
     {
@@ -34,9 +35,11 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
   useEffect(() => {
     const userSectionLearningType = watch('type')?.value
     const userSectionLearningStatus = watch('status')?.value
+    // Check undefined vì nếu để rỗng thì ko filter theo all được
     if (
-      userSectionLearningType !== '' ||
-      userSectionLearningStatus !== undefined
+      !isFirstRender &&
+      (userSectionLearningType !== undefined ||
+        userSectionLearningStatus !== undefined)
     ) {
       router.push(`${apiUrl}?name=${router.query.name || ''}${queryString}`)
     }
@@ -44,6 +47,10 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
   useEffect(() => {
     setValue('type', { label: `All (${totalCourse})`, value: '' })
   }, [totalCourse])
+
+  useEffect(() => {
+    setIsFirstRender(false)
+  }, [setIsFirstRender])
 
   return (
     <div className="filter flex">

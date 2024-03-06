@@ -347,7 +347,7 @@ const Course = ({
                     />
                   }
                   color="#ffffff"
-                  placement="right"
+                  placement="bottom"
                 >
                   <p
                     dangerouslySetInnerHTML={{

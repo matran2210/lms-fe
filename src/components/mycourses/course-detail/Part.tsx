@@ -80,7 +80,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
                 />
               }
               color="#ffffff"
-              placement="right"
+              placement="bottom"
             >
               <p
                 dangerouslySetInnerHTML={{
