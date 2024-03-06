@@ -350,8 +350,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     }
   }
 
-  const breadcrumbsMenu = activity.breadcumb?.filter(
-    (breadcumb) => breadcumb.course_section_type !== 'ACTIVITY',
+  const breadcrumbsMenu = activity?.breadcumb?.filter(
+    (breadcumb) => breadcumb?.course_section_type !== 'ACTIVITY',
   )
   const menu = (
     <Menu>
@@ -423,7 +423,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         </Dropdown>
         <li className="text-bw-1">
           <Link href={'#'} className="breadcrumbs__link" scroll={false}>
-            {nameActivity?.name}
+            <span>{nameActivity?.name}</span>
           </Link>
         </li>
       </ul>
@@ -443,7 +443,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       <div className="shadow-activity">
         <div className="bg-gray-3 px-6 ">
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
-            <div className="font-medium text-2xl ">{activity.name}</div>
+            <div className="font-medium text-2xl ">{activity?.name}</div>
             <div className="text-sm text-gray-1 whitespace-nowrap">
               {activity?.duration || 0} min estimated
             </div>

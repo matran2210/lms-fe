@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // components/SearchForm.tsx
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { defaultStatusDetail } from 'src/constants'
 import { useForm } from 'react-hook-form'
@@ -10,17 +10,24 @@ import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
   const router = useRouter()
   let apiUrl = `/courses/my-course/${router.query.courseId}`
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
   const { control, watch } = useForm()
   const userSectionLearningStatus = watch('user_section_learning_status')?.value
 
   useEffect(() => {
-    router.push(
-      userSectionLearningStatus !== undefined
-        ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
-        : apiUrl,
-    )
+    if (!isFirstRender) {
+      router.push(
+        userSectionLearningStatus !== undefined
+          ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
+          : apiUrl,
+      )
+    }
   }, [watch('user_section_learning_status')])
+
+  useEffect(() => {
+    setIsFirstRender(false)
+  }, [setIsFirstRender])
 
   return (
     <div className="filter flex absolute right-0">

@@ -294,19 +294,18 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
             const isSubmitted = (() => {
               if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-                if (value) {
+                if (
+                  isChange ||
+                  (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
+                ) {
+                  return true
+                } else if (value) {
                   const data = JSON.parse(value)
                   for (let e of data) {
                     if (e.celldata && e.celldata.length > 0) {
                       return true
                     }
                   }
-                  return false
-                } else if (
-                  isChange ||
-                  (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
-                ) {
-                  return true
                 }
                 return false
               } else {
