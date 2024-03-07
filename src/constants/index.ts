@@ -178,3 +178,8 @@ export const BUTTON_STATUS = {
   Hidden: 'Hidden',
   Disabled: 'Disabled',
 }
+
+export const ANIMATION = {
+  DURATION: 1000,
+  DATA_AOS: 'fade-up',
+}

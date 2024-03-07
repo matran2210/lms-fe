@@ -22,6 +22,7 @@ import {
 import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
+import { ANIMATION } from 'src/constants'
 
 type Props = {
   class_id: string

@@ -16,7 +16,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleOnClick = () => {
     if (data.attempt_times >= 1) {
-      router.push(`entrance-test/test-result/${data.quiz_attempt_id}`)
+      router.push(`/entrance-test/test-result/${data.quiz_attempt_id}`)
     } else {
       setOpen(true)
     }

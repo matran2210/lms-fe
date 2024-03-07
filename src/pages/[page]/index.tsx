@@ -8,9 +8,12 @@ import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
 import { GetServerSideProps } from 'next'
 import { StaticImageData } from 'next/image'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ITabs } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import { ANIMATION } from 'src/constants'
 
 interface IProps {
   page: IProfilePages
@@ -69,6 +72,10 @@ const ProfilePage = ({ page }: any) => {
     selectedContent = <div>Page not found</div>
   }
 
+  useEffect(() => {
+    AOS.init({ duration: ANIMATION.DURATION })
+  }, [])
+
   return (
     <>
       <div className="header bg-white border-b border-default px-4 lg:px-20">
@@ -83,7 +90,7 @@ const ProfilePage = ({ page }: any) => {
         <div className="main lg:mx-0 sm:mx-4 ">
           <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
         </div>
-        <div className="relative">
+        <div className="relative" data-aos={ANIMATION.DATA_AOS}>
           <ProfileHeader
             reViewImageSrc={reViewImageSrc}
             setReViewImageSrc={setReViewImageSrc}

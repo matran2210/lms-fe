@@ -2,7 +2,10 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import Icon from '@components/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import { ANIMATION } from 'src/constants'
 
 interface MultipleQuestionProps {
   questions: any
@@ -94,9 +97,14 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
     )
   }
 
+  useEffect(() => {
+    AOS.init({ duration: ANIMATION.DURATION })
+  }, [])
+
   return (
     <div
       className={`${className} fixed xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] xl:max-w-smd items-start px-6 py-4 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
+      data-aos={ANIMATION.DATA_AOS}
     >
       <div
         className={`${

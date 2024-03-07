@@ -18,6 +18,7 @@ import {
   BUTTON_STATUS,
   COURSE_STATUS,
   CLASS_STATUS,
+  ANIMATION,
 } from 'src/constants'
 import PopupExtend from './PopupExtend'
 import PopupActive from './PopupActive'
@@ -28,6 +29,8 @@ import { ICourseAll } from 'src/type/courses'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 const Course = ({
   course,
@@ -282,7 +285,7 @@ const Course = ({
         <div
           key={index}
           className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
-          data-aos="zoom-in-up"
+          data-aos={ANIMATION.DATA_AOS}
         >
           <div className="cursor-pointer min-h-352 flex flex-col">
             <div

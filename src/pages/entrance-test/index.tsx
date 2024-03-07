@@ -17,11 +17,18 @@ import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { useAppDispatch } from 'src/redux/hook'
 import { removeJwtToken } from '@utils/helpers/authen'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import { ANIMATION } from 'src/constants'
 
 const EntranceTest = ({ entranceTestLists }: any) => {
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(getEntranceCount())
+  }, [])
+
+  useEffect(() => {
+    AOS.init({ duration: ANIMATION.DURATION })
   }, [])
 
   return (
@@ -42,7 +49,10 @@ const EntranceTest = ({ entranceTestLists }: any) => {
           <EntranceTestFilter count={entranceTestLists?.length || 0} />
         </div>
       </div>
-      <div className="heading bg-white max-w-xxl my-0 flex mx-8 xl:mx-auto lg:mx-8 md:mx-8">
+      <div
+        className="heading bg-white max-w-xxl my-0 flex mx-8 xl:mx-auto lg:mx-8 md:mx-8"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         <Heading
           greeting="Welcome to"
           title="Entrance Test"
