@@ -282,6 +282,7 @@ const Course = ({
         <div
           key={index}
           className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
+          data-aos="zoom-in-up"
         >
           <div className="cursor-pointer min-h-352 flex flex-col">
             <div
