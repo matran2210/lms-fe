@@ -18,6 +18,7 @@ import { removeJwtToken } from '@utils/helpers/authen'
 import TestModal from 'src/pages/courses/test'
 import { PageLink } from 'src/constants'
 import { Tooltip } from 'antd'
+import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -30,6 +31,8 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterData, setChapterData] = useState<any>({})
   const [chapterTestId, setChapterTestId] = useState<string>()
   const [defaultActive, setDefaultActive] = useState<string>()
+  const [loadingLearningOutcome, setLoadingLearningOutcome] =
+    useState<boolean>(false)
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
@@ -57,12 +60,18 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   async function getLearningOutcome() {
+    setLoadingLearningOutcome(true)
     try {
       const res = await CourseAPI.getCourseLearningOutcome(
         chapterDetail?.course_learning_outcome?.id,
       )
       setLearningOutcome(res?.data)
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setTimeout(() => {
+        setLoadingLearningOutcome(false)
+      }, 500)
+    }
   }
 
   useEffect(() => {
@@ -269,26 +278,45 @@ const CoursePartDetail = ({ previewPart }: any) => {
         widthDrawer="w-6/12"
         handleSubmit={handleNextLesson}
         confirmOnClose={false}
-        heightBody="h-[calc(100vh-80px-82px-24px)]"
+        heightBody="h-[calc(100vh-186px)] pb-6"
       >
-        <div
-          style={{ borderBottom: '1px solid #DCDDDD' }}
-          className="pb-6 text-bw-1 learningOutcome-description"
-          dangerouslySetInnerHTML={{
-            __html: learningOutcome?.description ?? '',
-          }}
-        />
-        {learningOutcome?.course_outcomes?.map((outcome, index) => (
-          <div className="flex mt-6 mr-3" key={outcome.id}>
-            <div className="font-medium leading-5 text-base me-1 text-bw-1">
-              LO{index + 1}:
+        <TextSkeleton
+          loading={loadingLearningOutcome}
+          height="4"
+          length={10}
+          className="mb-2"
+          classChild="rounded-none"
+        >
+          <div
+            style={{ borderBottom: '1px solid #DCDDDD' }}
+            className="pb-6 text-bw-1 learningOutcome-description"
+            dangerouslySetInnerHTML={{
+              __html: learningOutcome?.description ?? '',
+            }}
+          />
+        </TextSkeleton>
+        {loadingLearningOutcome && (
+          <div className="h-px w-full bg-gray-2 mt-6"></div>
+        )}
+        <TextSkeleton
+          loading={loadingLearningOutcome}
+          height="6"
+          length={5}
+          className="mt-5 last:mb-5"
+          classChild="rounded-none"
+        >
+          {learningOutcome?.course_outcomes?.map((outcome, index) => (
+            <div className="flex mt-6 mr-3" key={outcome.id}>
+              <div className="font-medium leading-5 text-base me-1 text-bw-1">
+                LO{index + 1}:
+              </div>
+              <div
+                className="text-bw-1 learningOutcome-description"
+                dangerouslySetInnerHTML={{ __html: outcome?.description }}
+              />
             </div>
-            <div
-              className="text-bw-1 learningOutcome-description"
-              dangerouslySetInnerHTML={{ __html: outcome?.description }}
-            />
-          </div>
-        ))}
+          ))}
+        </TextSkeleton>
       </SappDrawer>
       <TestModal
         open={open}
