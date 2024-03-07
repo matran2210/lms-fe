@@ -5,6 +5,9 @@ type Props = {
   loading?: boolean
   height?: string
   width?: string
+  length?: number
+  className?: string
+  classChild?: string
 }
 
 const TextSkeleton = ({
@@ -12,19 +15,32 @@ const TextSkeleton = ({
   loading,
   height = '2.5',
   width = 'full',
+  length = 1,
+  className = '',
+  classChild = '',
 }: Props) => {
+  const mockData = new Array(length).fill(0)
   return (
     <>
       {!loading ? (
         children
       ) : (
-        <div role="status" className="animate-pulse">
-          <div
-            className={` h-${height} max-w-${width} bg-gray-300 rounded-full dark:bg-gray-700`}
-          ></div>
-
-          <span className="sr-only">Loading...</span>
-        </div>
+        <>
+          {mockData.map((data, index) => (
+            <div
+              key={index}
+              role="status"
+              className={`animate-pulse ${className}`}
+            >
+              <div
+                className={`h-${height} max-w-${width} bg-gray-300 ${
+                  classChild ? classChild : 'rounded-full'
+                } dark:bg-gray-700`}
+              ></div>
+              <span className="sr-only">Loading...</span>
+            </div>
+          ))}
+        </>
       )}
     </>
   )
