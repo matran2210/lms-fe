@@ -11,8 +11,6 @@ import { StaticImageData } from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { ITabs } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
 
 interface IProps {
@@ -71,10 +69,6 @@ const ProfilePage = ({ page }: any) => {
   } else {
     selectedContent = <div>Page not found</div>
   }
-
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
 
   return (
     <>

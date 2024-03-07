@@ -18,8 +18,6 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModelSidebar from '@components/base/modal/SappModelSidebar'
 import Router, { useRouter } from 'next/router'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
 
 const Notifications = () => {
@@ -137,10 +135,6 @@ const Notifications = () => {
       }),
     })
   }, [router])
-
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
 
   return (
     <>

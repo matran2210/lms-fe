@@ -18,9 +18,6 @@ const TestEntranceResult = ({ chartData }: any) => {
   const router = useRouter()
   //todo: call api, make UI
   // return <></>
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
 
   return (
     <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>

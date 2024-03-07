@@ -98,10 +98,6 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
     setData(courses?.data?.course_sections_with_progress || [])
   }, [courses?.data?.course_sections_with_progress])
 
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
-
   return (
     <>
       <div className="header bg-white border-b border-default h-[70px]">

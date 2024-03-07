@@ -19,8 +19,6 @@ import TestModal from 'src/pages/courses/test'
 import { ANIMATION, PageLink } from 'src/constants'
 import { Tooltip } from 'antd'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -205,10 +203,6 @@ const CoursePartDetail = ({ previewPart }: any) => {
       setDefaultActive('')
     }
   }, [router?.asPath])
-
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
 
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">

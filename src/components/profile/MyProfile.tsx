@@ -26,8 +26,6 @@ import {
   userReducer,
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 interface IProps {
   isEdit: boolean
@@ -190,10 +188,6 @@ const MyProfile = ({
 
     return sortedUsers
   }
-
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
 
   return (
     <div>

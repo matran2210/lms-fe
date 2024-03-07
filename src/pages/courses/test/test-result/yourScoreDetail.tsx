@@ -127,10 +127,6 @@ const YourScoreDetail = () => {
     getScoreDetail()
   }, [router])
 
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
-
   return (
     <div
       className="bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar"

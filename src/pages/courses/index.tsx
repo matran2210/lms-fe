@@ -21,8 +21,6 @@ import { ICourseAll } from 'src/type/courses'
 import CourseAPI from '../api/courses'
 import { removeJwtToken } from '@utils/helpers/authen'
 import { PageLink } from 'src/constants'
-import Aos from 'aos'
-import 'aos/dist/aos.css'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -128,10 +126,6 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     // Update data when courses?.data?.course_sections_with_progress changes
     setData(courses || [])
   }, [courses])
-
-  useEffect(() => {
-    Aos.init({ duration: ANIMATION.DURATION })
-  }, [])
 
   return (
     <>

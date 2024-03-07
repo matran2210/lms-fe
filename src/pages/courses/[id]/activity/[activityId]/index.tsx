@@ -44,8 +44,6 @@ import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
 
 type Props = {
@@ -409,10 +407,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const nameActivity = activity?.breadcumb?.find(
     (breadcumb) => breadcumb.course_section_type === 'ACTIVITY',
   )
-
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
 
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>

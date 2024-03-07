@@ -23,6 +23,9 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { store, wrapper } from '../redux/store'
+import { ANIMATION } from 'src/constants'
+import Aos from 'aos'
+import 'aos/dist/aos.css'
 
 // import 'antd/dist/antd.css'
 
@@ -156,6 +159,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       dispatch(hideNotification())
     }
   }, [getNotiUnread])
+
+  useEffect(() => {
+    Aos.init({ duration: ANIMATION.DURATION })
+  }, [])
 
   return (
     <>

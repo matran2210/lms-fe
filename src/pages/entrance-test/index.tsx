@@ -17,18 +17,12 @@ import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { useAppDispatch } from 'src/redux/hook'
 import { removeJwtToken } from '@utils/helpers/authen'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
 
 const EntranceTest = ({ entranceTestLists }: any) => {
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(getEntranceCount())
-  }, [])
-
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
   }, [])
 
   return (

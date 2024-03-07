@@ -180,6 +180,6 @@ export const BUTTON_STATUS = {
 }
 
 export const ANIMATION = {
-  DURATION: 1000,
+  DURATION: 500,
   DATA_AOS: 'fade-up',
 }

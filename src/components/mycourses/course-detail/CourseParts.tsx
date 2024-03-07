@@ -1,6 +1,7 @@
 import React from 'react'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
+import { ANIMATION } from 'src/constants'
 
 const CourseParts = ({
   courses,

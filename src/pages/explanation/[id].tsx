@@ -8,8 +8,6 @@ import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
 // import {} from 'explanation-package'
 const Explanation = () => {
@@ -104,10 +102,6 @@ const Explanation = () => {
       await UploadAPI.downloadFile(data)
     } catch (error) {}
   }
-
-  useEffect(() => {
-    AOS.init({ duration: ANIMATION.DURATION })
-  }, [])
 
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
