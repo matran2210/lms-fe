@@ -360,7 +360,7 @@ export async function getServerSideProps(context: any) {
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const newApiResponse = await axios.get(
-          `${apiURL}/course-sections/${query.id}`,
+          `${apiURL}/course-sections/${query.id}?course_section_id=${query.course_section_id}`,
           {
             headers: {
               Authorization: `Bearer ${act}`,

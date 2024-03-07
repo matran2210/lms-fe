@@ -885,7 +885,6 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
-
         // Lưu accessToken mới vào cookie
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
@@ -900,22 +899,17 @@ export async function getServerSideProps(context: any) {
         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const newApiResponse = await axios.get(
-          `${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type}`,
-          {
-            headers: {
-              Authorization: `Bearer ${act}`,
-            },
-          },
+        const activity = await CourseActivityApi.getActivityById(
+          context?.query?.activityId,
+          context?.query.id,
+          act,
         )
 
-        // Xử lý dữ liệu từ API
-        const courses = newApiResponse.data?.data
-
-        // Trả về props cho trang
         return {
           props: {
-            courses: courses,
+            activity,
+            courseId: context.query?.id,
+            sectionId: context.query?.activityId,
           },
         }
       } catch (refreshError) {
