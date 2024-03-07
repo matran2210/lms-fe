@@ -37,7 +37,7 @@
     "babel-plugin-transform-remove-imports": "^1.7.1",
     "cookie": "^0.6.0",
     "date-fns": "^3.0.6",
-    "entrance-test-result-package": "^1.0.21",
+    "entrance-test-result-package": "^1.0.22",
     "explanation-package": "^1.0.36",
     "file-saver": "^2.0.5",
     "firebase": "^10.7.1",
