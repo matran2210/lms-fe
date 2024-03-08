@@ -1,6 +1,6 @@
 // components/SearchForm.tsx
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'
 import { buildQueryString, convertSnakeCaseToHumanReadable } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
@@ -8,23 +8,24 @@ import { useForm } from 'react-hook-form'
 import { ICourseAll } from 'src/type/courses'
 import { defaultStatusCourse } from 'src/constants'
 
-const Filter = ({ courses }: { courses: ICourseAll }) => {
+interface IProps {
+  courses: ICourseAll
+  setPage?: Dispatch<SetStateAction<number>>
+}
+
+const Filter = ({ courses, setPage }: IProps) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
-  const totalCourse = courses?.total?.reduce(
-    (total: number, item: any) => total + parseInt(item.count, 10),
-    0,
-  )
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
+  const totalResults = courses?.metadata?.total_records || 0
 
   const defaultCategory = [
     {
-      label: `All (${totalCourse})`,
+      label: `All`,
       value: '',
     },
   ]
-
   let apiUrl = `/courses`
 
   const queryString = buildQueryString({
@@ -42,18 +43,19 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
         userSectionLearningStatus !== undefined)
     ) {
       router.push(`${apiUrl}?name=${router.query.name || ''}${queryString}`)
+      setPage && setPage(9)
     }
-  }, [apiUrl, queryString, watch('status'), watch('type')])
-  useEffect(() => {
-    setValue('type', { label: `All (${totalCourse})`, value: '' })
-  }, [totalCourse])
+  }, [apiUrl, queryString, watch])
 
   useEffect(() => {
     setIsFirstRender(false)
   }, [setIsFirstRender])
 
   return (
-    <div className="filter flex">
+    <div className="filter flex items-center">
+      <div className="pr-6 border-r border-gray-1 mr-6 text-medium-sm font-normal text-gray-1">
+        {`${totalResults} ${totalResults > 1 ? 'Results' : 'Result'}`}
+      </div>
       <div
         className={`pr-6 border-r border-gray-1 ${
           !activeStatus ? 'inactive-filter' : ''
@@ -64,11 +66,11 @@ const Filter = ({ courses }: { courses: ICourseAll }) => {
           name="type"
           options={defaultCategory.concat(
             courses?.total?.map((category: any) => ({
-              label: `${category?.categoryName} (${category?.count})`,
+              label: `${category?.categoryName}`,
               value: category?.categoryName,
             })),
           )}
-          defaultValue={{ label: `All (${totalCourse})`, value: '' }}
+          defaultValue={{ label: `All`, value: '' }}
           onChange={() => setActiveStatus(true)}
           placeholder="Category"
           className="status-course"
