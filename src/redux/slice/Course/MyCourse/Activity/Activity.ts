@@ -15,12 +15,14 @@ export interface ICourseActivityState extends IActivity {
   loadingDiscussion: boolean
   currentTabId?: string
   discussion?: IDiscussion[]
+  calculator_status?: boolean
 }
 
 const initialState: ICourseActivityState = {
   loading: false,
   loadingDiscussion: false,
   currentTabId: '',
+  calculator_status: false,
   id: '',
   created_at: '',
   updated_at: '',
@@ -142,6 +144,12 @@ export const courseActivitySlice = createSlice({
         ...initialState,
       }
     },
+    openCalculator: (state) => {
+      state.calculator_status = true
+    },
+    closeCalculator: (state) => {
+      state.calculator_status = false
+    },
   },
 
   extraReducers: (builder) => {
@@ -212,5 +220,6 @@ export const courseActivityReducer = (state: RootState) =>
   state.courseActivityReducer
 
 export const courseActivityAction = courseActivitySlice.actions
+export const { openCalculator, closeCalculator } = courseActivitySlice.actions
 
 export default courseActivitySlice.reducer
