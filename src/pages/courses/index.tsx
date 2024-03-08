@@ -136,6 +136,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
+            setPage={setPage}
           />
           {guideStatus && guideStep === 1 && (
             <PopupStep
@@ -159,7 +160,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
               guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
             }`}
           >
-            <Filter courses={data} />
+            <Filter courses={data} setPage={setPage} />
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}

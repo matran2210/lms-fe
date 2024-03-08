@@ -55,7 +55,7 @@ const EditorReader = ({
           var wrapper = document.createElement('div')
           var overLay = document.createElement('span')
           overLay.className = 'sapp_overlay_video'
-          const _video = video.cloneNode(true)
+          const _video = video.cloneNode(true) as HTMLVideoElement
           wrapper.append(_video)
           wrapper.className = 'relative w-fit overflow-clip'
           wrapper.style.cssText = `height:${video.getAttribute(
