@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'
 import Icon from '@components/icons'
 import { buildQueryString } from '@utils/index'
@@ -8,9 +8,10 @@ import { debounce } from 'lodash'
 interface IProps {
   placeholder: string
   formStyle: string
+  setPage?: Dispatch<SetStateAction<number>>
 }
 
-const SearchForm = ({ placeholder, formStyle }: IProps) => {
+const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
   const router = useRouter()
   const { control, watch } = useForm()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -29,6 +30,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
       timerId = setTimeout(() => {
         !isSubmitting &&
           router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
+        setPage && setPage(9)
       }, 2000)
     }
 
@@ -50,6 +52,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     // Check if 'name' is empty and perform search immediately
     if (!watch('name')) {
       router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
+      setPage && setPage(9)
     }
   }, 500)
 
@@ -60,6 +63,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
     setIsFirstRender(false)
     // Redirect to the search results page with the query as a query parameter
     router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
+    setPage && setPage(9)
   }
 
   return (
