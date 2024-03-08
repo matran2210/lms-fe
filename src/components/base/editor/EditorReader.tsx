@@ -58,8 +58,15 @@ const EditorReader = ({
           const _video = video.cloneNode(true)
           wrapper.append(_video)
           wrapper.className = 'relative w-fit overflow-clip'
-          wrapper.style.cssText = `height:${video.getAttribute('height')}px`
+          wrapper.style.cssText = `height:${video.getAttribute(
+            'height',
+          )}px; width:${video.getAttribute('width')}px`
           wrapper.append(overLay)
+          _video.style.cssText = `width:${video.getAttribute(
+            'width',
+          )}px; height:${video.getAttribute(
+            'height',
+          )}px; border: 1px solid gray`
           video?.parentNode?.replaceChild(wrapper, video)
         }
       }

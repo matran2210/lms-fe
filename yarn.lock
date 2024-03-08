@@ -4443,10 +4443,10 @@ entities@^4.2.0, entities@^4.4.0, entities@^4.5.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
-entrance-test-result-package@^1.0.21:
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.21.tgz#d451abe78eb4f2da09987f3c192173925a373a5c"
-  integrity sha512-g7ofgi6v2ji6Amv3JyHcM8I6JvMd5gK8wNdejradlUBWzjvXbKJDytHo/pA8c/+wRS432umxwu/0aYuja/v9/Q==
+entrance-test-result-package@^1.0.23:
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.23.tgz#655f668bcc3c8c36fd26c48953f2e371dd9ebaab"
+  integrity sha512-77/YYlKEfFK2mYWXVrn3jZeKeMmiPVPBg46QFclwP3R1aEKdHhkC0vUvEPewA46ykrkz32u/v4/aXSUHweD70Q==
   dependencies:
     sass "^1.69.5"
 
@@ -7294,10 +7294,10 @@ pretty-bytes@^5.3.0:
   resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-5.6.0.tgz#356256f643804773c82f64723fe78c92c62beaeb"
   integrity sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==
 
-preview-activity@^1.1.35:
-  version "1.1.35"
-  resolved "https://registry.yarnpkg.com/preview-activity/-/preview-activity-1.1.35.tgz#d8b8f87d86f6129f4f28ef543760207de58596d1"
-  integrity sha512-Qlz0pknIgLDGX2YF1iU/+ItNR67BQq9mIz1cCoUaS2ERGZ6CECl0pamje6Oj2I82TOZqLRrd/rXxOjnxP7Bxkw==
+preview-activity@^1.1.36:
+  version "1.1.36"
+  resolved "https://registry.yarnpkg.com/preview-activity/-/preview-activity-1.1.36.tgz#3e7f3b9f1be4f68888a18ae68a17c5bc440567da"
+  integrity sha512-V3OKmy7HUX2S9y1w7x3tPgGsND4ixWhcAh7deu3a33k3FtaUWQQW1/Ss4MfAIHRdNxoai407PvCNkOdxLItJGw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.8.0"
