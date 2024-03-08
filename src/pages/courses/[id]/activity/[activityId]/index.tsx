@@ -37,11 +37,13 @@ import {
   courseActivityReducer,
   getCourseActivityTapById,
   getDiscussion,
+  closeCalculator,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import { Dropdown, Menu } from 'antd'
+import Calculator from '@components/calculator'
 
 type Props = {
   activity: IActivity
@@ -113,9 +115,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     videoRef.current,
   ])
 
-  // Clear notes
+  // Clear notes & calculator
   useEffect(() => {
     dispatch(clearNote())
+    dispatch(closeCalculator())
   }, [])
 
   /**
@@ -439,6 +442,33 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
             />
           )
         })}
+        <>
+          {selector?.calculator_status && (
+            <MovableWindow
+              position={{
+                width: '400px',
+                height: '300px',
+                top: 'calc(25% - 150px)',
+                left: 'calc(25% - 200px)',
+              }}
+              zIndex={1400}
+            >
+              <div className="absolute h-full w-full  top-0 left-0 border">
+                <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                  <div className="text-sm font-normal">Calculator</div>
+                  <button
+                    onClick={() => {
+                      dispatch(closeCalculator())
+                    }}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+                <Calculator />
+              </div>
+            </MovableWindow>
+          )}
+        </>
       </>
       <div className="shadow-activity">
         <div className="bg-gray-3 px-6 ">
