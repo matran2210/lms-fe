@@ -91,15 +91,29 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
-        const userInfo = refreshResponse?.data?.tokens
+        const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage
-        await AsyncStorage.setItem('accessToken', act)
-        await AsyncStorage.setItem('refreshToken', rft)
+        if (typeof window !== 'undefined') {
+          await AsyncStorage.setItem('accessToken', act)
+          await AsyncStorage.setItem('refreshToken', rft)
+        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+
+        // Xử lý dữ liệu từ API
+        const chartData = (await CourseTestApi.getQuizAttemptsChartData(
+          context?.query?.id,
+          act,
+        )) as any
+
+        return {
+          props: {
+            chartData: chartData,
+          },
+        }
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập

@@ -1776,11 +1776,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         } else if (e.type === 'file') {
           return (
             <MovableWindow
+              className="transform -translate-x-1/2 -translate-y-1/2 2xl:!h-[842px]"
               position={{
                 width: '595px',
-                height: '842px',
-                top: 'calc(50% - 421px)',
-                left: 'calc(50% - 300px)',
+                height: '650px',
+                top: 'calc(50%)',
+                left: 'calc(50%)',
               }}
               key={e.id}
               onClick={() => setOnFocusingPad(e.id)}
@@ -2041,8 +2042,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             <div className="font-medium text-medium-sm">Clear Selection</div>
           </button>
           {/* )} */}
-          {(quizDetail?.grading_preference === 'AFTER_EACH_QUESTIONS' &&
-            !currentTabContent?.done) ||
+          {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
+          !currentTabContent?.done &&
           quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
             currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
               <button
@@ -2208,12 +2209,14 @@ export async function getServerSideProps(context: any) {
         )
 
         // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.tokens
+        const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage
-        await AsyncStorage.setItem('accessToken', act)
-        await AsyncStorage.setItem('refreshToken', rft)
+        if (typeof window !== 'undefined') {
+          await AsyncStorage.setItem('accessToken', act)
+          await AsyncStorage.setItem('refreshToken', rft)
+        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)

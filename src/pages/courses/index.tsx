@@ -136,6 +136,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
+            setPage={setPage}
           />
           {guideStatus && guideStep === 1 && (
             <PopupStep
@@ -159,7 +160,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
               guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
             }`}
           >
-            <Filter courses={data} />
+            <Filter courses={data} setPage={setPage} />
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}
@@ -260,12 +261,14 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
-        const userInfo = refreshResponse?.data?.tokens
+        const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage
-        await AsyncStorage.setItem('accessToken', act)
-        await AsyncStorage.setItem('refreshToken', rft)
+        if (typeof window !== 'undefined') {
+          await AsyncStorage.setItem('accessToken', act)
+          await AsyncStorage.setItem('refreshToken', rft)
+        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)

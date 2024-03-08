@@ -193,7 +193,7 @@ const AddWordPreview = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base pt-[26px]">
+            <div className="font-semibold text-base pt-[22px]">
               Correct Answer
             </div>
             <EditorReader

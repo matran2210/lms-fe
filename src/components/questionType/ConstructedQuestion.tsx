@@ -361,6 +361,10 @@ const EssayQuestionPreview = ({
                             const index = old.findIndex(
                               (e: any) => e.id === currentSheet.id,
                             )
+                            // Check event change text of sheet
+                            if (old?.[0]?.celldata?.length > 0) {
+                              handleChange && handleChange()
+                            }
                             if (index >= 0) {
                               old.splice(index, 1, currentSheet)
                             } else {
@@ -374,7 +378,6 @@ const EssayQuestionPreview = ({
                             // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
-                        handleChange && handleChange()
                       }}
                       data={
                         value
@@ -437,6 +440,10 @@ const EssayQuestionPreview = ({
                             const index = old.findIndex(
                               (e: any) => e?.id === currentSheet?.id,
                             )
+                            // Check event change text of sheet
+                            if (old?.[0]?.celldata?.length > 0) {
+                              handleChange && handleChange()
+                            }
                             if (index >= 0) {
                               old.splice(index, 1, currentSheet)
                             } else {
@@ -450,7 +457,6 @@ const EssayQuestionPreview = ({
                             // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
-                        handleChange && handleChange()
                       }}
                       data={
                         value

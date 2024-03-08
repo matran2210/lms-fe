@@ -41,7 +41,7 @@ import {
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity } from 'src/type/course/my-course/Activity'
-import { Tooltip } from 'antd'
+import { Dropdown, Menu } from 'antd'
 
 type Props = {
   activity: IActivity
@@ -349,51 +349,83 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       return <SappIcon icon="course_quiz"></SappIcon>
     }
   }
+
+  const breadcrumbsMenu = activity?.breadcumb?.filter(
+    (breadcumb) => breadcumb?.course_section_type !== 'ACTIVITY',
+  )
+  const menu = (
+    <Menu>
+      {breadcrumbsMenu?.map((e, i) => {
+        let url = ''
+        switch (e.course_section_type) {
+          case 'PART':
+            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${e?.id}`
+            break
+          case 'CHAPTER':
+            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${e?.id}`
+            break
+          case 'UNIT':
+            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${activity.breadcumb?.[2]?.id}`
+            break
+          case 'ACTIVITY':
+            url = '#'
+            break
+          default:
+            url = `/courses/my-course/${e?.id}`
+            break
+        }
+        return (
+          <Menu.Item key={e.id}>
+            <li
+              className={
+                'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
+              }
+              title={e?.name}
+            >
+              <Link href={url}>
+                <span
+                  className={
+                    'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
+                  }
+                >
+                  {e?.course_section_type !== 'ACTIVITY'
+                    ? truncateString(e?.name, 25)
+                    : null}
+                </span>
+              </Link>
+            </li>
+          </Menu.Item>
+        )
+      })}
+    </Menu>
+  )
+
+  const nameActivity = activity?.breadcumb?.find(
+    (breadcumb) => breadcumb.course_section_type === 'ACTIVITY',
+  )
+
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
         <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
-            My Course
+            My Course /
           </Link>
         </li>
-        {activity.breadcumb?.map((e, i) => {
-          let url = ''
-          switch (e.course_section_type) {
-            case 'PART':
-              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${e?.id}`
-              break
-            case 'CHAPTER':
-              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${e?.id}`
-              break
-            case 'UNIT':
-              url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${activity.breadcumb?.[2]?.id}`
-              break
-            case 'ACTIVITY':
-              url = `#`
-              break
-            default:
-              url = `/courses/my-course/${e?.id}`
-              break
-          }
-          return (
-            <React.Fragment key={e.id}>
-              <span className="text-gray-1">/</span>
-              <li
-                className={`${
-                  (activity.breadcumb?.length || 0) - 1 === i
-                    ? 'text-bw-1'
-                    : 'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
-                }`}
-                title={e?.name}
-              >
-                <Link href={url} className="breadcrumbs__link" scroll={false}>
-                  {truncateString(e?.name, 25)}
-                </Link>
-              </li>
-            </React.Fragment>
-          )
-        })}
+
+        <Dropdown overlay={menu} trigger={['click']}>
+          <a
+            className="ant-dropdown-link cursor-pointer"
+            onClick={(e) => e.preventDefault()}
+          >
+            ..... /
+          </a>
+        </Dropdown>
+        <li className="text-bw-1">
+          <Link href={'#'} className="breadcrumbs__link" scroll={false}>
+            <span>{nameActivity?.name}</span>
+          </Link>
+        </li>
       </ul>
       <>
         {getNotesData?.map((e: any, index: number) => {
@@ -411,7 +443,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       <div className="shadow-activity">
         <div className="bg-gray-3 px-6 ">
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
-            <div className="font-medium text-2xl ">{activity.name}</div>
+            <div className="font-medium text-2xl ">{activity?.name}</div>
             <div className="text-sm text-gray-1 whitespace-nowrap">
               {activity?.duration || 0} min estimated
             </div>
@@ -853,35 +885,31 @@ export async function getServerSideProps(context: any) {
             },
           },
         )
-
         // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.tokens
+        const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
         // Save the new access token to the AsyncStorage
-        await AsyncStorage.setItem('accessToken', act)
-        await AsyncStorage.setItem('refreshToken', rft)
+        if (typeof window !== 'undefined') {
+          await AsyncStorage.setItem('accessToken', act)
+          await AsyncStorage.setItem('refreshToken', rft)
+        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const newApiResponse = await axios.get(
-          `${apiURL}/courses?page_index=1&page_size=10&name=${query.name}&type=${query.type}`,
-          {
-            headers: {
-              Authorization: `Bearer ${act}`,
-            },
-          },
+        const activity = await CourseActivityApi.getActivityById(
+          context?.query?.activityId,
+          context?.query.id,
+          act,
         )
 
-        // Xử lý dữ liệu từ API
-        const courses = newApiResponse.data?.data
-
-        // Trả về props cho trang
         return {
           props: {
-            courses: courses,
+            activity,
+            courseId: context.query?.id,
+            sectionId: context.query?.activityId,
           },
         }
       } catch (refreshError) {
