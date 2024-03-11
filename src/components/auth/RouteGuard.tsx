@@ -85,15 +85,13 @@ export const RouteGuard = ({ children }: IProps) => {
           setCookieActToken(act)
           setCookieRefreshToken(rft)
           if (accessToken && refreshToken) {
-            router.push(PageLink.AUTH_LOGIN)
+            router.push(PageLink.DASHBOARD)
           }
         } catch (refreshError) {
           removeJwtToken()
-          // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-          // Chuyển hướng đến trang đăng nhập
           return {
             redirect: {
-              destination: '/auth/login',
+              destination: PageLink.AUTH_LOGIN,
               permanent: false,
             },
           }
