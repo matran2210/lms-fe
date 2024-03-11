@@ -692,18 +692,6 @@ textarea.is-invalid:focus {
   @apply bg-bw-5;
 }
 
-.big-loader {
-  width: 2.5em;
-  height: 2.5em;
-  margin-right: 0.5em;
-
-  circle {
-    opacity: 0.25;
-  }
-
-  path {
-    opacity: 0.75;
-  }
-
-  animation: spin 1s linear infinite;
+.lf-player-container {
+  height: inherit;
 }

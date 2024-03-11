@@ -29,8 +29,6 @@ import { ICourseAll } from 'src/type/courses'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 const Course = ({
   course,
