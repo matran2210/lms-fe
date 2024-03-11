@@ -18,7 +18,7 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
 
   return (
     <SappModalV2
-      open={true}
+      open={open}
       okButtonCaption="Confirm"
       cancelButtonCaption="Cancel"
       onOk={onOk}
