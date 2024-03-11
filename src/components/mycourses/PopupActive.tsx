@@ -1,5 +1,4 @@
 import { ActiveIcon } from '@assets/icons'
-import SappModal from '@components/base/modal/SappModal'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 
 interface IProps {
@@ -19,7 +18,7 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
 
   return (
     <SappModalV2
-      open={open}
+      open={true}
       okButtonCaption="Confirm"
       cancelButtonCaption="Cancel"
       onOk={onOk}

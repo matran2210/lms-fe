@@ -685,12 +685,9 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal-title {
-  font-weight: 600 !important;
-  color: #404041 !important;
-  line-height: 45px !important;
-  font-size: 36px !important;
+  @apply text-bw-1 font-semibold text-4xl;
 }
 
 .ant-modal-root .ant-modal-wrap {
-  background: #000000cc !important;
+  @apply bg-bw-5;
 }

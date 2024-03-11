@@ -1,5 +1,5 @@
 import { Modal } from 'antd'
-import React, { Dispatch, ReactNode, SetStateAction } from 'react'
+import React, { ReactNode } from 'react'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import { IButtonColors } from 'src/type'
 

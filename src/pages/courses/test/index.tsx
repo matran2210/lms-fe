@@ -1,12 +1,8 @@
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import SappModal from '@components/base/modal/SappModal'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
 import { TEST_TYPE } from '@utils/constants'
-import { Button, Modal } from 'antd'
 import { useRouter } from 'next/router'
-import { SetStateAction, useEffect, useMemo, useState } from 'react'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useMemo } from 'react'
 
 interface IProps {
   open: boolean
