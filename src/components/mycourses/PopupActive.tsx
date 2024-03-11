@@ -1,5 +1,5 @@
 import { ActiveIcon } from '@assets/icons'
-import SappModal from '@components/base/modal/SappModal'
+import SappModalV2 from '@components/base/modal/SappModalV2'
 
 interface IProps {
   open: boolean
@@ -15,40 +15,36 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
     setOpen(false)
     activeCourse()
   }
+
   return (
-    <SappModal
+    <SappModalV2
       open={open}
-      setOpen={setOpen}
-      //   cancelButtonCaption="Quit"
       okButtonCaption="Confirm"
-      //   handleCancel={onCancel}
-      handleSubmit={onOk}
+      cancelButtonCaption="Cancel"
+      onOk={onOk}
       handleCancel={handleCancel}
       cancelButtonClass={'no-underline'}
       showHeader={false}
-      refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
-      size="max-w-[646px]"
       footerButtonClassName="flex flex-col-reverse gap-8"
-      childClass="flex flex-col justify-center items-center"
       parentChildClass=""
       position="center"
       fullWidthBtn={true}
       closeAfterSubmit={true}
       buttonSize="extra"
-      scrollbale={false}
       confirmOnclose={false}
+      title={undefined}
     >
-      <div className="mb-6">
+      <div className="mb-6 flex justify-center">
         <ActiveIcon />
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold">
+      <div className="text-2xl md:text-4xl text-bw-1 font-semibold flex justify-center">
         Active Course?
       </div>
       <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 2xl:mb-11">
         You will have {time} {time > 1 ? 'days' : 'day'} from the activation
         date to study this course
       </div>
-    </SappModal>
+    </SappModalV2>
   )
 }
 
