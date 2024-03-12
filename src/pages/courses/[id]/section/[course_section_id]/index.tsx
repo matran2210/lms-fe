@@ -16,7 +16,7 @@ import {
 } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 import TestModal from 'src/pages/courses/test'
-import { PageLink } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import { Tooltip } from 'antd'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 
@@ -251,24 +251,26 @@ const CoursePartDetail = ({ previewPart }: any) => {
           </span>
         </div>
       </div>
-      <PreviewPartDetail
-        chapterMenu={partDetail}
-        fetchChapterDetail={fetchChapterDetail}
-        chapterDetail={chapterDetail}
-        loading={false}
-        loadingChapter={loadingChapter}
-        setLoadingChapter={setLoadingChapter}
-        setOpenLearningOutcome={setOpenLearningOutcome}
-        course_id={router.query.id as any}
-        course_section_id={router.query.course_section_id as any}
-        handleRouterActivity={handleRouterActivity}
-        handleRouterCaseStudy={handleRouterCaseStudy}
-        handleLearningOutCome={handleLearningOutCome}
-        handleRouterChapter={handleRouterChapter}
-        readMore={readMore}
-        setReadMore={setReadMore}
-        defaultActive={defaultActive ? defaultActive : ''}
-      />
+      <div data-aos={ANIMATION.DATA_AOS}>
+        <PreviewPartDetail
+          chapterMenu={partDetail}
+          fetchChapterDetail={fetchChapterDetail}
+          chapterDetail={chapterDetail}
+          loading={false}
+          loadingChapter={loadingChapter}
+          setLoadingChapter={setLoadingChapter}
+          setOpenLearningOutcome={setOpenLearningOutcome}
+          course_id={router.query.id as any}
+          course_section_id={router.query.course_section_id as any}
+          handleRouterActivity={handleRouterActivity}
+          handleRouterCaseStudy={handleRouterCaseStudy}
+          handleLearningOutCome={handleLearningOutCome}
+          handleRouterChapter={handleRouterChapter}
+          readMore={readMore}
+          setReadMore={setReadMore}
+          defaultActive={defaultActive ? defaultActive : ''}
+        />
+      </div>
 
       <SappDrawer
         isOpen={openLearningOutcome}

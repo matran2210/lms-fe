@@ -691,3 +691,7 @@ textarea.is-invalid:focus {
 .ant-modal-root .ant-modal-wrap {
   @apply bg-bw-5;
 }
+
+.lf-player-container {
+  height: inherit;
+}

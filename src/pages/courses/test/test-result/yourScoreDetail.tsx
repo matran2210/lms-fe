@@ -5,7 +5,9 @@ import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { roundNumber, convertSecondsToMinutesSeconds } from '@utils/helpers'
-import { QUESTION_TYPES } from 'src/constants'
+import { ANIMATION, QUESTION_TYPES } from 'src/constants'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 const headers = [
   {
@@ -126,7 +128,10 @@ const YourScoreDetail = () => {
   }, [router])
 
   return (
-    <div className="bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar">
+    <div
+      className="bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar"
+      data-aos={ANIMATION.DATA_AOS}
+    >
       <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
         Your Score Details
       </div>

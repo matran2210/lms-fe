@@ -44,6 +44,7 @@ import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
+import { ANIMATION } from 'src/constants'
 
 type Props = {
   activity: IActivity
@@ -470,7 +471,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           )}
         </>
       </>
-      <div className="shadow-activity">
+      <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
         <div className="bg-gray-3 px-6 ">
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
             <div className="font-medium text-2xl ">{activity?.name}</div>
@@ -682,63 +683,65 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!course_tab_documents?.length && <div className="py-3"></div>}
       </div>
       {/* </FadeInOut> */}
-      {(activity?.total_activity as Number) > 1 && (
-        <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
-          <div className="flex justify-between flex-nowrap gap-5">
-            {activity.previous_activity && (
-              <div className="w-1/2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
-                      query: {
-                        classId: router.query.classId,
-                      },
-                    })
-                  }}
-                  className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
-                >
-                  Previous Activity
+      <div data-aos={ANIMATION.DATA_AOS}>
+        {(activity?.total_activity as Number) > 1 && (
+          <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
+            <div className="flex justify-between flex-nowrap gap-5">
+              {activity.previous_activity && (
+                <div className="w-1/2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
+                        query: {
+                          classId: router.query.classId,
+                        },
+                      })
+                    }}
+                    className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                  >
+                    Previous Activity
+                  </div>
+                  <div className="text-medium-sm text-gray-1 flex">
+                    {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
+                    <span className="ml-2">
+                      {truncateString(activity.previous_activity.name, 100)}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-medium-sm text-gray-1 flex">
-                  {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
-                  <span className="ml-2">
-                    {truncateString(activity.previous_activity.name, 100)}
-                  </span>
+              )}
+              {!activity.previous_activity && <div></div>}
+              {activity.next_activity && (
+                <div className="w-1/2">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
+                        query: {
+                          classId: router.query.classId,
+                        },
+                      })
+                    }}
+                    className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                  >
+                    Next Activity
+                  </div>
+                  <div className="text-medium-sm text-gray-1 flex justify-end">
+                    <span className="mr-2">
+                      {truncateString(activity.next_activity.name, 100)}
+                    </span>
+                    {getCourseIcon(activity.next_activity?.display_icon)}
+                  </div>
                 </div>
-              </div>
-            )}
-            {!activity.previous_activity && <div></div>}
-            {activity.next_activity && (
-              <div className="w-1/2">
-                <div
-                  onClick={() => {
-                    router.push({
-                      pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
-                      query: {
-                        classId: router.query.classId,
-                      },
-                    })
-                  }}
-                  className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                >
-                  Next Activity
-                </div>
-                <div className="text-medium-sm text-gray-1 flex justify-end">
-                  <span className="mr-2">
-                    {truncateString(activity.next_activity.name, 100)}
-                  </span>
-                  {getCourseIcon(activity.next_activity?.display_icon)}
-                </div>
-              </div>
-            )}
-            {!activity.next_activity && <div></div>}
+              )}
+              {!activity.next_activity && <div></div>}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div ref={endActivityRef}></div>
-      <div className="shadow-activity">
+      <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
         <Discussion class_id={(router.query.classId as string) || ''} />
       </div>
       {openScratchPad.map((e, index: number) => {

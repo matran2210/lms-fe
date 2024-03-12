@@ -8,20 +8,23 @@ import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import QuizResult from 'entrance-test-result-package'
 import 'entrance-test-result-package/dist/index.css'
 import { useRouter } from 'next/router'
-import TableEntranceResult from '../table-result/[id]'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import { useEffect } from 'react'
+import { ANIMATION } from 'src/constants'
 const TestEntranceResult = ({ chartData }: any) => {
   const router = useRouter()
   //todo: call api, make UI
   // return <></>
 
   return (
-    <div className="bg-gray-4">
+    <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>
       <div
         className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
         onClick={() => {
-          router.back()
+          router.push('/entrance-test')
         }}
       >
         <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
@@ -29,7 +32,7 @@ const TestEntranceResult = ({ chartData }: any) => {
       <QuizResult
         dataChart={chartData.chart_data}
         onClick={() => {
-          router.push(`/entrance-test/table-result/${router.query.id}`)
+          router.push(`entrance-test/table-result/${router.query.id}`)
         }}
         dataTable={chartData}
       />
