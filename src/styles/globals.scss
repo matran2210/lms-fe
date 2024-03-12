@@ -684,7 +684,7 @@ textarea.is-invalid:focus {
   width: 614px;
 }
 
-.ant-modal-title {
+.sapp-modal .ant-modal-content .ant-modal-header .ant-modal-title {
   @apply text-bw-1 font-semibold text-4xl;
 }
 

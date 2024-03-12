@@ -30,7 +30,7 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
       position="center"
       fullWidthBtn={true}
       closeAfterSubmit={true}
-      buttonSize="extra"
+      buttonSize="medium"
       confirmOnclose={false}
       title={undefined}
     >
