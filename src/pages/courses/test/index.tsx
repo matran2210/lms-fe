@@ -58,13 +58,13 @@ const TestModal = ({
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
     >
-      <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
+      <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
         <div className="text-gray-1">Name:</div>
         <div className="text-bw-1 line-clamp-2 pr-0.5 font-medium">
           {data?.name}
         </div>
       </div>
-      <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
+      <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
         <div className="text-gray-1">Pass Point:</div>
         <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.is_graded ? (
@@ -74,7 +74,7 @@ const TestModal = ({
           )}
         </div>
       </div>
-      <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
+      <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
         <div className="text-gray-1">Time Allowed:</div>
         <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.quiz_timed
@@ -82,7 +82,7 @@ const TestModal = ({
             : 'Unlimited'}
         </div>
       </div>
-      <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
+      <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
         <div className="text-gray-1">No of Attempts:</div>
         <div className="text-bw-1 pr-0.5 font-medium">
           {data?.quiz?.attempt_count || 0}/
@@ -90,7 +90,7 @@ const TestModal = ({
         </div>
       </div>
       {data?.quiz?.attempts?.[0] && (
-        <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
+        <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
           <div className="text-gray-1">Latest Result:</div>
           <div
             className={`text-state-info pr-0.5 font-medium ${
