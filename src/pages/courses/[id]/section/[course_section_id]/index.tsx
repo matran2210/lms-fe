@@ -283,9 +283,9 @@ const CoursePartDetail = ({ previewPart }: any) => {
         <TextSkeleton
           loading={loadingLearningOutcome}
           height="4"
-          length={10}
-          className="mb-2"
-          classChild="rounded-none"
+          widths={['70', '100', '100', '50', '100']}
+          className="mb-4"
+          classChild="rounded"
         >
           <div
             style={{ borderBottom: '1px solid #DCDDDD' }}
@@ -296,14 +296,14 @@ const CoursePartDetail = ({ previewPart }: any) => {
           />
         </TextSkeleton>
         {loadingLearningOutcome && (
-          <div className="h-px w-full bg-gray-2 mt-6"></div>
+          <div className="h-px w-full bg-gray-2 mt-4 mb-2"></div>
         )}
         <TextSkeleton
           loading={loadingLearningOutcome}
           height="6"
-          length={5}
-          className="mt-5 last:mb-5"
-          classChild="rounded-none"
+          className="mt-4 last:mb-4"
+          classChild="rounded"
+          widths={['70', '100', '100', '50', '100']}
         >
           {learningOutcome?.course_outcomes?.map((outcome, index) => (
             <div className="flex mt-6 mr-3" key={outcome.id}>
