@@ -126,7 +126,7 @@ const ProfileSideBar = ({ page }: IProps) => {
 
           return (
             <li
-              className={`${className} cursor-pointer relative group`}
+              className={`${className} cursor-pointer relative group border-b-[1px] border-gray-2`}
               key={key}
             >
               <a
@@ -182,7 +182,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                       key={childLabel}
                       className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-bold hover-transition-font-weight ${
                         childIsActive
-                          ? 'bg-secondary font-bold text-primary'
+                          ? 'bg-white font-bold text-primary'
                           : 'hover:left-[-0.5px]'
                       }`}
                     >
