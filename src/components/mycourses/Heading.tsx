@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Tooltip } from 'antd'
 import { truncateString } from '@utils/index'
+import { ANIMATION } from 'src/constants'
 
 interface IProps {
   greeting: string

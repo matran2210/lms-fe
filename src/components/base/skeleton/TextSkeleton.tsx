@@ -8,6 +8,7 @@ type Props = {
   length?: number
   className?: string
   classChild?: string
+  widths?: string[]
 }
 
 const TextSkeleton = ({
@@ -18,8 +19,9 @@ const TextSkeleton = ({
   length = 1,
   className = '',
   classChild = '',
+  widths,
 }: Props) => {
-  const mockData = new Array(length).fill(0)
+  const mockData = new Array(widths?.length ? widths.length : length).fill(0)
   return (
     <>
       {!loading ? (
@@ -33,6 +35,9 @@ const TextSkeleton = ({
               className={`animate-pulse ${className}`}
             >
               <div
+                style={{
+                  width: `${widths?.[index]}%`,
+                }}
                 className={`h-${height} max-w-${width} bg-gray-300 ${
                   classChild ? classChild : 'rounded-full'
                 } dark:bg-gray-700`}

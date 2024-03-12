@@ -3,7 +3,7 @@ import { PROFILE_PAGES } from '@utils/constants/User'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { PageLink } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { IProfilePages } from 'src/type/Profile'
@@ -106,7 +106,10 @@ const ProfileSideBar = ({ page }: IProps) => {
   }
 
   return (
-    <div className="md:w-[22.8rem] w-100 shadow-box">
+    <div
+      className="md:w-[22.8rem] w-100 shadow-box"
+      data-aos={ANIMATION.DATA_AOS}
+    >
       <ul className="px-3 py-4 bg-white h-full">
         {Object.entries(PROFILE_PAGES).map(([key, value]) => {
           const urlPage = key.toLowerCase()
@@ -126,7 +129,7 @@ const ProfileSideBar = ({ page }: IProps) => {
 
           return (
             <li
-              className={`${className} cursor-pointer relative group`}
+              className={`${className} cursor-pointer relative group border-b-[1px] border-gray-2`}
               key={key}
             >
               <a
@@ -182,7 +185,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                       key={childLabel}
                       className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-bold hover-transition-font-weight ${
                         childIsActive
-                          ? 'bg-secondary font-bold text-primary'
+                          ? 'bg-white font-bold text-primary'
                           : 'hover:left-[-0.5px]'
                       }`}
                     >

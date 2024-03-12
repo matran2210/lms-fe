@@ -90,8 +90,8 @@ function SappModelSidebar({
               aria-modal="true"
             >
               {showHeader && (
-                <div className="bg-bw-2 px-8 py-6 relative">
-                  <div className="text-2xl font-semibold text-white pr-10">
+                <div className="bg-bw-1 px-8 py-6 relative">
+                  <div className="text-2xl font-medium text-white pr-10">
                     {title}
                   </div>
                   <div

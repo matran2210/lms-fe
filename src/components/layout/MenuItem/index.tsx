@@ -144,7 +144,7 @@ export default function MenuItem({
         )}
         {Icon === 'avatar' ? (
           <div
-            className={`label transition-all duration-150 invisible opacity-0 text-base font-semibold pl-2 avatar ${
+            className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-2 avatar ${
               selected ? 'text-primary' : 'text-gray-2'
             } group-hover:text-primary`}
           >
@@ -159,7 +159,7 @@ export default function MenuItem({
           <>
             {Icon === 'profile-detail' ? (
               <span
-                className={`label transition-all duration-150 invisible opacity-0 text-base font-semibold pl-4 line-clamp-1 ${
+                className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 line-clamp-1 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary`}
               >
@@ -167,7 +167,7 @@ export default function MenuItem({
               </span>
             ) : (
               <span
-                className={`label transition-all duration-150 invisible opacity-0 text-base font-semibold pl-4 line-clamp-1 ${
+                className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 line-clamp-1 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary`}
               >

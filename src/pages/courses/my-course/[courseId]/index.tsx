@@ -17,7 +17,9 @@ import React, { useEffect, useState } from 'react'
 import CourseAPI from 'src/pages/api/courses'
 import { apiURL } from 'src/redux/services/httpService'
 import { ICourseDetailAll, ICourseSection, IMeta } from 'src/type/courses'
-import { PageLink } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -112,10 +114,16 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
           <FilterCourseDetail totalResult={data?.length} />
         </div>
       </div>
-      <div className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6">
+      <div
+        className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         <Heading greeting="Welcome to" title={courses?.data?.name} />
       </div>
-      <div className="pt-6 max-w-xxl my-0 mx-auto xl-max:container">
+      <div
+        className="pt-6 max-w-xxl my-0 mx-auto xl-max:container"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         <CourseParts courses={data} class_user_id={class_user_id} />
       </div>
     </>

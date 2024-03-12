@@ -31,11 +31,11 @@ const UserApi = {
     const uri = url.user
     // Sử dụng httpService để gửi yêu cầu PUT
     return httpService.PUT<
-      { full_name: string },
+      { full_name: string; avatar?: { [key: string]: string } | null },
       IResponse<{ message: string }>
     >({
       uri,
-      request: { full_name },
+      request: { full_name, avatar },
     })
   },
 

@@ -15,7 +15,7 @@ import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { PageLink } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
@@ -191,7 +191,11 @@ const MyProfile = ({
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="block min-h-[40.3rem]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="block min-h-[40.3rem]"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         <div className="relative ">
           <div className="flex items-center justify-between pb-6 mb-6 border-b border-b-gray-3">
             <div className="text-xl font-medium text-bw-1">Overview</div>

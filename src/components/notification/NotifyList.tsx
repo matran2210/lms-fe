@@ -4,6 +4,7 @@ import blankAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { calculateTimeAgo } from '@utils/helpers'
 import { useAppDispatch } from 'src/redux/hook'
+import { ANIMATION } from 'src/constants'
 
 interface IProps {
   notifyLists: any[]
@@ -41,7 +42,7 @@ const NotifyList = ({
   }
 
   return (
-    <>
+    <div data-aos={ANIMATION.DATA_AOS}>
       {notifyLists.map((notifyItem, index) => {
         const readStatus = notifyItem?.notification_user_instances?.is_read
         return (
@@ -58,6 +59,7 @@ const NotifyList = ({
                 (e.target as HTMLElement).tagName,
               )
             }}
+            data-aos={ANIMATION.DATA_AOS}
           >
             {!readStatus && (
               <Icon
@@ -106,7 +108,7 @@ const NotifyList = ({
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
 

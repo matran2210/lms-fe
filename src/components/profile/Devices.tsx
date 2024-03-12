@@ -17,7 +17,7 @@ const Devices = ({}: any) => {
   }, [])
   return (
     <div className="bg-white py-6 flex-1 shadow-box">
-      <div className="text-xl font-bold border-b pb-5 border-gray-3 mx-6">{`Devices (${
+      <div className="text-xl font-medium text-bw-1 border-b pb-5 border-gray-3 mx-6">{`Devices (${
         listDevices?.length || 0
       })`}</div>
       {listDevices?.map((e: any) => {
