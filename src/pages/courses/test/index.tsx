@@ -101,7 +101,7 @@ const TestModal = ({
           </div>
         </div>
       )}
-      <div className="flex justify-between py-6 gap-8">
+      <div className="flex justify-between py-6 gap-8 text-base">
         <div className="text-gray-1">Status:</div>
         <div
           className={`${
