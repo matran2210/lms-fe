@@ -104,7 +104,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
 
   useEffect(() => {
     let isFetching = false
-    const isEndPage = page <= data?.metadata?.total_records
+    const isEndPage = page <= courses?.metadata?.total_records
 
     const handleScroll = () => {
       if (
