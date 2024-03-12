@@ -56,6 +56,7 @@ const TestModal = ({
       onOk={onSubmit}
       okButtonCaption={checkFinished ? 'Retake' : 'Start'}
       cancelButtonCaption={'Cancel'}
+      buttonSize="medium"
     >
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8">
         <div className="text-gray-1">Name:</div>
