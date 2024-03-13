@@ -240,7 +240,7 @@ const ProfileHeader = ({
                   strokeLinejoin="round"
                 />
               </svg>
-              35 Enrolled Courses
+              {user.courses} Enrolled Courses
             </div>
 
             <div className="flex justify-start items-center gap-1">
@@ -266,7 +266,7 @@ const ProfileHeader = ({
                   strokeLinejoin="round"
                 />
               </svg>
-              25 Certificates
+              {user.certificates} Certificates
             </div>
           </div>
         </div>

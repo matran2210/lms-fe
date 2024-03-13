@@ -18,6 +18,17 @@ const UserApi = {
     })
   },
   /**
+   * Một hàm để lấy khóa học và certificate của người dùng hiện tại
+   */
+  getUserInformation: (): Promise<any> => {
+    // Đường dẫn api để lấy khóa học và certificate của người dùng người dùng
+    const uri = url.coursesAndCertificates
+    // Sử dụng httpService để gửi yêu cầu GET
+    return httpService.GET<any, any>({
+      uri,
+    })
+  },
+  /**
    * Một hàm để cập nhật thông tin của người dùng
    * @param {string} full_name - Tên đầy đủ của người dùng
    * @param {{[key: string]: string} | null} avatar - Đối tượng chứa thông tin avatar của người dùng
