@@ -203,7 +203,7 @@ export const userSlice = createSlice({
     builder.addCase(getMe.fulfilled, (state, action) => {
       state.loading = false
       if (action.payload) {
-        state.user = action.payload
+        state.user = { ...state.user, ...action.payload }
       }
     })
     builder.addCase(getMe.rejected, (state) => {
