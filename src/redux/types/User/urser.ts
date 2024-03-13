@@ -21,6 +21,8 @@ export interface IUser {
   university_program?: any
   major?: any
   english_level?: any
+  certificates: number
+  courses: number
 }
 interface IUserContact {
   id: string

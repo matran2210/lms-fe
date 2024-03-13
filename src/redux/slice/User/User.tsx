@@ -68,6 +68,8 @@ const initialState: UserState = {
       settings: null,
     },
     user_contacts: [],
+    certificates: 0,
+    courses: 0,
   },
   loginHistory: {
     meta: {},
@@ -81,11 +83,12 @@ export const getMe = createAsyncThunk(
   async ({}, thunkAPI) => {
     try {
       const res = await UserApi.getMe()
-      if (!res) {
+      const res2 = await UserApi.getCoursesAndCertificates()
+      if (!res && !res2) {
         // toast.error(res.error.message)
         return
       }
-      return { ...res }
+      return { ...res, ...res2.data.data }
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
     }
