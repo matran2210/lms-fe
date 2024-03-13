@@ -19,10 +19,9 @@ const UserApi = {
   },
   /**
    * Một hàm để lấy khóa học và certificate của người dùng hiện tại
-   * @returns {Promise<IUser>} Một promise chứa đối tượng IUser
    */
   getCoursesAndCertificates: (): Promise<any> => {
-    // Đường dẫn api để lấy thông tin người dùng
+    // Đường dẫn api để lấy khóa học và certificate của người dùng người dùng
     const uri = url.coursesAndCertificates
     // Sử dụng httpService để gửi yêu cầu GET
     return httpService.GET<any, any>({
