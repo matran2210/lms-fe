@@ -16,7 +16,7 @@ import {
 } from '@utils/index'
 import { removeJwtToken } from '@utils/helpers/authen'
 import TestModal from 'src/pages/courses/test'
-import { PageLink } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import { Tooltip } from 'antd'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 
@@ -251,24 +251,26 @@ const CoursePartDetail = ({ previewPart }: any) => {
           </span>
         </div>
       </div>
-      <PreviewPartDetail
-        chapterMenu={partDetail}
-        fetchChapterDetail={fetchChapterDetail}
-        chapterDetail={chapterDetail}
-        loading={false}
-        loadingChapter={loadingChapter}
-        setLoadingChapter={setLoadingChapter}
-        setOpenLearningOutcome={setOpenLearningOutcome}
-        course_id={router.query.id as any}
-        course_section_id={router.query.course_section_id as any}
-        handleRouterActivity={handleRouterActivity}
-        handleRouterCaseStudy={handleRouterCaseStudy}
-        handleLearningOutCome={handleLearningOutCome}
-        handleRouterChapter={handleRouterChapter}
-        readMore={readMore}
-        setReadMore={setReadMore}
-        defaultActive={defaultActive ? defaultActive : ''}
-      />
+      <div data-aos={ANIMATION.DATA_AOS}>
+        <PreviewPartDetail
+          chapterMenu={partDetail}
+          fetchChapterDetail={fetchChapterDetail}
+          chapterDetail={chapterDetail}
+          loading={false}
+          loadingChapter={loadingChapter}
+          setLoadingChapter={setLoadingChapter}
+          setOpenLearningOutcome={setOpenLearningOutcome}
+          course_id={router.query.id as any}
+          course_section_id={router.query.course_section_id as any}
+          handleRouterActivity={handleRouterActivity}
+          handleRouterCaseStudy={handleRouterCaseStudy}
+          handleLearningOutCome={handleLearningOutCome}
+          handleRouterChapter={handleRouterChapter}
+          readMore={readMore}
+          setReadMore={setReadMore}
+          defaultActive={defaultActive ? defaultActive : ''}
+        />
+      </div>
 
       <SappDrawer
         isOpen={openLearningOutcome}
@@ -283,9 +285,9 @@ const CoursePartDetail = ({ previewPart }: any) => {
         <TextSkeleton
           loading={loadingLearningOutcome}
           height="4"
-          length={10}
-          className="mb-2"
-          classChild="rounded-none"
+          widths={['70', '100', '100', '50', '100']}
+          className="mb-4"
+          classChild="rounded"
         >
           <div
             style={{ borderBottom: '1px solid #DCDDDD' }}
@@ -296,14 +298,14 @@ const CoursePartDetail = ({ previewPart }: any) => {
           />
         </TextSkeleton>
         {loadingLearningOutcome && (
-          <div className="h-px w-full bg-gray-2 mt-6"></div>
+          <div className="h-px w-full bg-gray-2 mt-4 mb-2"></div>
         )}
         <TextSkeleton
           loading={loadingLearningOutcome}
           height="6"
-          length={5}
-          className="mt-5 last:mb-5"
-          classChild="rounded-none"
+          className="mt-4 last:mb-4"
+          classChild="rounded"
+          widths={['70', '100', '100', '50', '100']}
         >
           {learningOutcome?.course_outcomes?.map((outcome, index) => (
             <div className="flex mt-6 mr-3" key={outcome.id}>

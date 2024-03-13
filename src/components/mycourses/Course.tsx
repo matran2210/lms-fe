@@ -18,6 +18,7 @@ import {
   BUTTON_STATUS,
   COURSE_STATUS,
   CLASS_STATUS,
+  ANIMATION,
 } from 'src/constants'
 import PopupExtend from './PopupExtend'
 import PopupActive from './PopupActive'
@@ -282,6 +283,7 @@ const Course = ({
         <div
           key={index}
           className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
+          data-aos={ANIMATION.DATA_AOS}
         >
           <div className="cursor-pointer min-h-352 flex flex-col">
             <div

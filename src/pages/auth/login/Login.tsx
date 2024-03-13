@@ -4,7 +4,6 @@ import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import SappButton from '@components/base/button/SappButton'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
@@ -29,14 +28,6 @@ import PopUpLimit from './PopupLimit'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
-import { parse } from 'cookie'
-import axios from 'axios'
-import { apiURL } from 'src/redux/services/httpService'
-import {
-  removeJwtToken,
-  setCookieActToken,
-  setCookieRefreshToken,
-} from '@utils/index'
 interface IInputProps {
   login: string
   password: string
@@ -239,83 +230,3 @@ const LoginPage = () => {
 // eslint-disable-next-line import/no-unused-modules
 export default LoginPage
 LoginPage.layout = LAYOUT.SINGLE_DIALOG_LAYOUT
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
-
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
-
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
-
-  try {
-    const { req } = context
-
-    // Parse cookies from the request headers
-    const cookies = parse(req.headers.cookie || '')
-
-    if (!context?.query?.activityId) {
-      return {
-        notFound: true,
-      }
-    }
-  } catch (error: any) {
-    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-    if (error.response && error.response.status === 401) {
-      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-      const refreshToken = req.cookies.refreshToken
-
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-        // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
-      } catch (refreshError) {
-        removeJwtToken()
-        // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-        // Chuyển hướng đến trang đăng nhập
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      }
-    } else {
-      // Xử lý lỗi khác khi sử dụng accessToken
-
-      // Chuyển hướng đến trang đăng nhập
-      return {
-        redirect: {
-          destination: '/404',
-          permanent: false,
-        },
-      }
-    }
-  }
-}

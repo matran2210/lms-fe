@@ -674,3 +674,24 @@ textarea.is-invalid:focus {
     font-size: 14px;
   }
 }
+
+.ant-modal .ant-modal-content {
+  border-radius: 0px !important;
+}
+
+.sapp-modal .ant-modal-content {
+  padding: 70px 76px !important;
+  width: 614px;
+}
+
+.sapp-modal .ant-modal-content .ant-modal-header .ant-modal-title {
+  @apply text-bw-1 font-semibold text-4xl;
+}
+
+.ant-modal-root .ant-modal-wrap {
+  @apply bg-bw-5;
+}
+
+.lf-player-container {
+  height: inherit;
+}

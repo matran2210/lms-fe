@@ -10,7 +10,7 @@ import PopupStep from '@components/user-guide/PopupStep'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
-import { UserGuide } from 'src/constants'
+import { ANIMATION, UserGuide } from 'src/constants'
 import { useRouter } from 'next/router'
 import {
   buildQueryString,
@@ -104,7 +104,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
 
   useEffect(() => {
     let isFetching = false
-    const isEndPage = page <= data?.metadata?.total_records
+    const isEndPage = page <= courses?.metadata?.total_records
 
     const handleScroll = () => {
       if (
@@ -126,6 +126,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     // Update data when courses?.data?.course_sections_with_progress changes
     setData(courses || [])
   }, [courses])
+
   return (
     <>
       <div className="header bg-white border-b border-default">
@@ -179,6 +180,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
         className={`heading bg-white max-w-xxl my-0 mx-auto flex relative xl-max:mx-6
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
+        data-aos={ANIMATION.DATA_AOS}
       >
         <Heading
           greeting="Welcome to"

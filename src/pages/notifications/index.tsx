@@ -18,6 +18,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModelSidebar from '@components/base/modal/SappModelSidebar'
 import Router, { useRouter } from 'next/router'
+import { ANIMATION } from 'src/constants'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -150,13 +151,19 @@ const Notifications = () => {
           />
         </div>
       </div>
-      <div className="lg:px-20">
-        <div className="main max-w-xxl my-0 mx-auto pt-6 px-4 lg:px-0">
+      <div className="lg:px-20" data-aos={ANIMATION.DATA_AOS}>
+        <div
+          className="main max-w-xxl my-0 mx-auto pt-6 px-4 lg:px-0"
+          data-aos={ANIMATION.DATA_AOS}
+        >
           <h2 className="text-medium-sm font-medium text-bw-1 pb-6">
             Notifications
           </h2>
         </div>
-        <div className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between border-b border-gray-2">
+        <div
+          className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between border-b border-gray-2"
+          data-aos={ANIMATION.DATA_AOS}
+        >
           <NotifyTab tabs={tabs} />
           <div className="settings flex items-center relative">
             <ActionCell open={openToolTip} setOpen={setOpenToolTip}>
@@ -164,7 +171,7 @@ const Notifications = () => {
             </ActionCell>
           </div>
         </div>
-        <div className="max-w-xxl my-0 mx-auto">
+        <div className="max-w-xxl my-0 mx-auto" data-aos={ANIMATION.DATA_AOS}>
           <NotifyList
             notifyLists={notifyLists}
             open={openModel}

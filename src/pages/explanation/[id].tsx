@@ -8,6 +8,7 @@ import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
+import { ANIMATION } from 'src/constants'
 // import {} from 'explanation-package'
 const Explanation = () => {
   const router = useRouter()
@@ -103,7 +104,7 @@ const Explanation = () => {
   }
 
   return (
-    <div>
+    <div data-aos={ANIMATION.DATA_AOS}>
       {loading && (
         <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
           Loading
@@ -123,12 +124,14 @@ const Explanation = () => {
       >
         <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
       </div>
-      <ExplanationPackage
-        getActiveQuestion={getActiveQuestion}
-        activeQuestion={activeQuestion}
-        document_id={''}
-        handleDownload={handleDownload}
-      />
+      <div data-aos={ANIMATION.DATA_AOS}>
+        <ExplanationPackage
+          getActiveQuestion={getActiveQuestion}
+          activeQuestion={activeQuestion}
+          document_id={''}
+          handleDownload={handleDownload}
+        />
+      </div>
     </div>
   )
 }

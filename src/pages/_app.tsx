@@ -23,8 +23,11 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { store, wrapper } from '../redux/store'
-
-// import 'antd/dist/antd.css'
+import { ANIMATION } from 'src/constants'
+import Aos from 'aos'
+import 'aos/dist/aos.css'
+import { Controls, Player } from '@lottiefiles/react-lottie-player'
+import animation from 'src/assets/images/animation.json'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -39,7 +42,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   // const [show, setShow] = useState(false)
   const router = useRouter()
   const [openResource, setOpenResource] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const dispatch = useAppDispatch()
   const gettingNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.loading,
@@ -81,6 +84,22 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     })
   })
 
+  useEffect(() => {
+    const handleStart = (url: string) =>
+      url !== router.asPath && setLoading(true)
+    const handleComplete = () => setLoading(false)
+
+    router.events.on('routeChangeStart', handleStart)
+    router.events.on('routeChangeComplete', handleComplete)
+    router.events.on('routeChangeError', handleComplete)
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart)
+      router.events.off('routeChangeComplete', handleComplete)
+      router.events.off('routeChangeError', handleComplete)
+    }
+  })
+
   switch (layout) {
     case LAYOUT.ERROR_LAYOUT:
       content = <Component {...pageProps} />
@@ -115,35 +134,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
     coutNotificationsUnRead()
   }
-  useEffect(() => {
-    // handleOnChangePage()
-    router.events.on('routeChangeError', (e) => setLoading(true))
-    router.events.on('routeChangeStart', (e) => setLoading(false))
-    router.events.on('routeChangeComplete', (e) => setLoading(true))
-
-    return () => {
-      router.events.off('routeChangeError', (e) => setLoading(true))
-      router.events.off('routeChangeStart', (e) => setLoading(false))
-      router.events.off('routeChangeComplete', (e) => setLoading(true))
-    }
-  }, [])
-  useEffect(() => {
-    const loader = document.getElementById('globalLoader')
-
-    if (typeof window !== 'undefined') {
-      if (loader) loader.className = '!hidden'
-    }
-  }, [])
-  useEffect(() => {
-    const loader = document.getElementById('globalLoader')
-    if (loading && !gettingNotiUnread) {
-      if (loader) loader.className = '!hidden'
-    } else {
-      if (loader) {
-        loader.className = ''
-      }
-    }
-  }, [loading, gettingNotiUnread])
 
   useEffect(() => {
     handleOnChangePage()
@@ -156,6 +146,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       dispatch(hideNotification())
     }
   }, [getNotiUnread])
+
+  useEffect(() => {
+    Aos.init({ duration: ANIMATION.DURATION })
+  }, [])
 
   return (
     <>
@@ -222,6 +216,21 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Toaster />
         <SappConfirmDialogContainer />
+        {loading ? (
+          <div className="bg-white backdrop-blur-3xl w-full h-full fixed block z-[9999]">
+            <Player
+              src={animation}
+              autoplay
+              loop
+              className="w-[125px] h-full top-0 left-0 z-[9999]backdrop-blur-3xl bg-white"
+              speed={3}
+            >
+              <Controls />
+            </Player>
+          </div>
+        ) : (
+          <></>
+        )}
         <RouteGuard>
           <>
             {content}

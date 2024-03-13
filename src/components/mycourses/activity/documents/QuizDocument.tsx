@@ -24,6 +24,7 @@ import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import SappButton from '@components/base/button/SappButton'
+import { ANIMATION } from 'src/constants'
 
 type Props = {
   questions: IQuestion[]
@@ -280,7 +281,7 @@ const QuizDocument = ({
         handleCancel={() => {}}
       ></ConFirmSubmit>
 
-      <div className="border border-gray-3 p-6">
+      <div className="border border-gray-3 p-6" data-aos={ANIMATION.DATA_AOS}>
         {activeQuestion && (
           <QuizComponent
             activityId={activityId}
