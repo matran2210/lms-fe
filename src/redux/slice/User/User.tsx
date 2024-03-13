@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { USER_STATUS, USER_TYPE } from '@utils/constants/User'
 import toast from 'react-hot-toast'
 import UserApi from 'src/redux/services/User/user'
@@ -83,17 +83,33 @@ export const getMe = createAsyncThunk(
   async ({}, thunkAPI) => {
     try {
       const res = await UserApi.getMe()
-      const res2 = await UserApi.getCoursesAndCertificates()
-      if (!res && !res2) {
+      if (!res) {
         // toast.error(res.error.message)
         return
       }
-      return { ...res, ...res2.data.data }
+      return { ...res }
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
     }
   },
 )
+
+export const getUserInformation = createAsyncThunk(
+  'userReducer/getUserInformation',
+  async ({}, thunkAPI) => {
+    try {
+      const res = await UserApi.getUserInformation()
+      if (!res) {
+        // toast.error(res.error.message)
+        return
+      }
+      return { ...res.data.data }
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 export const updateUser = createAsyncThunk(
   'userReducer/updateUser',
   async (
@@ -193,7 +209,25 @@ export const userSlice = createSlice({
     builder.addCase(getMe.rejected, (state) => {
       state.loading = false
     })
-
+    builder.addCase(getUserInformation.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(
+      getUserInformation.fulfilled,
+      (
+        state,
+        action: PayloadAction<{ courses: number; certificates: number }>,
+      ) => {
+        state.loading = false
+        if (action.payload) {
+          state.user.courses = action.payload.courses
+          state.user.certificates = action.payload.certificates
+        }
+      },
+    )
+    builder.addCase(getUserInformation.rejected, (state) => {
+      state.loading = false
+    })
     builder.addCase(updateUser.pending, (state) => {
       state.loadingEditName = true
     })
