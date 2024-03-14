@@ -10,6 +10,7 @@ interface IProps {
   state?: 'default' | 'error' | 'success' | 'primary' // Thêm prop state
   size?: 'small' | 'medium' | 'lager' // Thêm prop size
   lowerOptions?: boolean
+  inputStyle?: string
 }
 
 const STATE = {
@@ -37,13 +38,14 @@ const SAPPCheckbox = ({
   state = 'default', // Gán giá trị mặc định cho prop state
   size = 'medium', // Gán giá trị mặc định cho prop size
   lowerOptions = false,
+  inputStyle = 'border-bw-1',
 }: IProps) => {
   return (
     <div className={`inline-block ${className}`}>
       <input
         className={`block ${
           SIZES[size]
-        } border-1.5 border-bw-1  outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
+        } border-1.5 outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${inputStyle} ${
           STATE[state]
         } ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'} ${
           lowerOptions && 'border-none'

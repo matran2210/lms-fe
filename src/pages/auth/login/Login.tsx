@@ -161,7 +161,7 @@ const LoginPage = () => {
   return (
     <>
       <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
-        <div className="text-4xl font-bold text-bw-1 mb-2">Log In</div>
+        <div className="text-4xl font-semibold text-bw-1 mb-2">Log In</div>
         <div className="text-medium-sm text-gray-1 mb-10">
           Login to Continue Learning
         </div>
@@ -185,8 +185,8 @@ const LoginPage = () => {
             <SappButton
               title="Log In"
               full={true}
-              className="mb-6"
-              size="lager"
+              className="mb-6 !font-semibold"
+              size="medium"
               loading={loading ? loading : userLogin.loading}
               type="submit"
               disabled={loading}
@@ -200,6 +200,7 @@ const LoginPage = () => {
               title="Keep me logged in"
               classNameTitle="text-medium-sm text-gray-1"
               state="primary"
+              inputStyle="border-[#DCDDDD]"
             />
             <span className="text-medium-sm text-gray-1 hover:underline">
               <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>

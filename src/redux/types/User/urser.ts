@@ -17,6 +17,8 @@ export interface IUser {
   detail_id: string
   detail: IUserDetail
   user_contacts: IUserContact[]
+  certificates: number
+  courses: number
   university?: any
   university_program?: any
   major?: any

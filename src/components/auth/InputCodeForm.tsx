@@ -155,7 +155,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
       <SappButton
         title="Verify Code"
         full={true}
-        className="mb-5"
+        className="mb-5 !font-semibold"
         size="lager"
         loading={loading}
         onClick={handleVerifyCode}
@@ -167,7 +167,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         disabled={!canResend}
         onClick={onResendCode}
         className="no-underline pt-3 pb-3.25"
-        size="lager"
+        size="medium"
         loading={loading}
       />
     </>

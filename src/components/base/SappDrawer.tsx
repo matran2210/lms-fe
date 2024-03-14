@@ -20,6 +20,7 @@ interface IProps {
   confirmOnClose?: boolean
   showSubmitButton?: boolean
   heightBody?: string
+  sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
 }
 
 const SappDrawer = ({
@@ -36,6 +37,7 @@ const SappDrawer = ({
   confirmOnClose = true,
   showSubmitButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
+  sizeTextBtn = 'lager',
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -107,14 +109,14 @@ const SappDrawer = ({
               title="Cancel"
               className="ms-[4px]"
               onClick={handleMaskClick}
-              size="lager"
+              size={sizeTextBtn}
             />
             {showSubmitButton && (
               <ButtonPrimary
                 title={btnSubmitTile}
                 className="me-[32px]"
                 onClick={handleSubmit}
-                size="lager"
+                size={sizeTextBtn}
               />
             )}
           </div>

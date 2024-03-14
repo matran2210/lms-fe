@@ -1,6 +1,6 @@
 import React from 'react'
 import EntranceTest from './EntranceTest'
-import { ANIMATION } from 'src/constants'
+// import { ANIMATION } from 'src/constants'
 
 interface EntranceTestListProps {
   entranceTestLists: any[]
@@ -12,7 +12,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
   return (
     <div
       className="grid grid-cols-1 md:grid-cols-3 gap-6"
-      data-aos={ANIMATION.DATA_AOS}
+      // data-aos={ANIMATION.DATA_AOS}
     >
       {entranceTestLists.map((e, index) => (
         <div

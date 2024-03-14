@@ -24,7 +24,7 @@ const TestEntranceResult = ({ chartData }: any) => {
       <div
         className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
         onClick={() => {
-          router.push('/entrance-test')
+          router.back()
         }}
       >
         <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
@@ -32,7 +32,7 @@ const TestEntranceResult = ({ chartData }: any) => {
       <QuizResult
         dataChart={chartData.chart_data}
         onClick={() => {
-          router.push(`entrance-test/table-result/${router.query.id}`)
+          router.push(`/entrance-test/table-result/${router.query.id}`)
         }}
         dataTable={chartData}
       />

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { USER_STATUS, USER_TYPE } from '@utils/constants/User'
 import toast from 'react-hot-toast'
 import UserApi from 'src/redux/services/User/user'
@@ -68,6 +68,8 @@ const initialState: UserState = {
       settings: null,
     },
     user_contacts: [],
+    certificates: 0,
+    courses: 0,
   },
   loginHistory: {
     meta: {},
@@ -91,6 +93,23 @@ export const getMe = createAsyncThunk(
     }
   },
 )
+
+export const getUserInformation = createAsyncThunk(
+  'userReducer/getUserInformation',
+  async ({}, thunkAPI) => {
+    try {
+      const res = await UserApi.getUserInformation()
+      if (!res) {
+        // toast.error(res.error.message)
+        return
+      }
+      return { ...res.data.data }
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 export const updateUser = createAsyncThunk(
   'userReducer/updateUser',
   async (
@@ -184,13 +203,31 @@ export const userSlice = createSlice({
     builder.addCase(getMe.fulfilled, (state, action) => {
       state.loading = false
       if (action.payload) {
-        state.user = action.payload
+        state.user = { ...state.user, ...action.payload }
       }
     })
     builder.addCase(getMe.rejected, (state) => {
       state.loading = false
     })
-
+    builder.addCase(getUserInformation.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(
+      getUserInformation.fulfilled,
+      (
+        state,
+        action: PayloadAction<{ courses: number; certificates: number }>,
+      ) => {
+        state.loading = false
+        if (action.payload) {
+          state.user.courses = action.payload.courses
+          state.user.certificates = action.payload.certificates
+        }
+      },
+    )
+    builder.addCase(getUserInformation.rejected, (state) => {
+      state.loading = false
+    })
     builder.addCase(updateUser.pending, (state) => {
       state.loadingEditName = true
     })
