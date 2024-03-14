@@ -82,7 +82,7 @@ export const exceptions = {
   '403|000000': 'Forbidden',
   '400|000000': 'Bad Request',
   '403|000005': 'Forbidden Inactive',
-  '403|000008': 'Forbidden Blocked',
+  '403|000008': 'Your account has been deactivated',
   '403|000010': 'The Number Of Logins Has Been Exceeded',
   '404|000304': 'Event Not Found',
   '422|000405': 'Unprocess Entity',

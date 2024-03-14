@@ -78,7 +78,7 @@ const SAPPTextFiled = ({
         {type == 'password' && (
           <div
             className={`${
-              showPassword ? 'bg-hide-password' : 'bg-show-password'
+              showPassword ? 'bg-show-password' : 'bg-hide-password'
             } absolute top-2/4 -translate-y-2/4 right-4 h-4 w-4 max-w-4 min-w-4 min-h-4 max-h-4 cursor-pointer`}
             onClick={() => setShowPassword(!showPassword)}
           ></div>

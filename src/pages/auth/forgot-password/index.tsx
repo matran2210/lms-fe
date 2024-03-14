@@ -53,7 +53,9 @@ const ForgotPasswordPage = () => {
   return (
     <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="font-bold text-bw-1 mb-2 text-4xl">Forgot Password</div>
+        <div className="font-semibold text-bw-1 mb-2 text-4xl">
+          Forgot Password
+        </div>
         <span className="text-medium-sm text-gray-1 mb-10">
           Enter the email you used to create your account so we can send you 6
           digits code to reset your password.
@@ -71,14 +73,14 @@ const ForgotPasswordPage = () => {
           title="Send"
           size="lager"
           type="submit"
-          className="w-full mt-[27px]"
+          className="w-full mt-[27px] !font-semibold"
         ></SappButton>
         <div className="mt-8">
           <SappButton
             title="Back to Login"
             size="lager"
             type="submit"
-            className="w-full"
+            className="w-full !font-semibold"
             color="text"
             isUnderLine={false}
             isPadding={false}
