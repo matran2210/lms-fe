@@ -303,10 +303,11 @@ export default function Icon({ type, className }: IconsPros) {
       {type === 'completed' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="13"
+          width="14"
           height="14"
           fill="none"
           viewBox="0 0 13 14"
+          className="top-1"
         >
           <g clipPath="url(#clip0_5_9473)">
             <path
@@ -321,6 +322,8 @@ export default function Icon({ type, className }: IconsPros) {
           <defs>
             <clipPath id="clip0_5_9473">
               <path
+                width="14"
+                height="14"
                 fill="#fff"
                 d="M0 0H13V13H0z"
                 transform="translate(0 .5)"
