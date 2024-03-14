@@ -281,6 +281,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         handleSubmit={handleNextLesson}
         confirmOnClose={false}
         heightBody="h-[calc(100vh-186px)] pb-6"
+        sizeTextBtn="medium"
       >
         <TextSkeleton
           loading={loadingLearningOutcome}
