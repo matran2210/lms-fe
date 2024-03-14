@@ -11,7 +11,7 @@ interface IProps {
 
 const Heading = ({ greeting, title, des }: IProps) => {
   return (
-    <div className="2xl-min:flex justify-between 2xl-min:py-4.5 py-7.5 px-7.5 w-full">
+    <div className="2xl-min:flex justify-between 2xl-min:py-4.5 py-7.5 px-7.5 w-full shadow-md">
       <h1 className="text-2xl font-light text-bw-1 line-clamp-1">
         {greeting}
         <span className="font-medium ml-1.5">

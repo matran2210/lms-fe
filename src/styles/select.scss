@@ -17,7 +17,7 @@
   }
 
   .select__menu {
-    @apply border-0 shadow-select px-2 text-sm;
+    @apply border-0 shadow-select px-2 py-1 rounded-none text-sm;
   }
 
   .select__option {
