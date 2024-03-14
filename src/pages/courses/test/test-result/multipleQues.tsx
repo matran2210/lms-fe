@@ -41,12 +41,12 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
       <div className="w-full">
         {data.length > 0 && (
           <>
-            <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium mb-4">
+            <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium mb-6 text-bw-1">
               {type}
             </div>
             <div
               className={`flex flex-row flex-wrap gap-3 w-full items-start ${
-                type === 'Multiple Questions' ? 'mb-6' : ''
+                type === 'Multiple Questions' ? 'mb-10' : ''
               }`}
             >
               {renderBoxItems}
@@ -99,7 +99,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
 
   return (
     <div
-      className={`${className} fixed xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] xl:max-w-smd items-start px-6 py-4 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
+      className={`${className} fixed xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] xl:max-w-smd items-start px-[27px] py-6 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
       data-aos={ANIMATION.DATA_AOS}
     >
       <div
