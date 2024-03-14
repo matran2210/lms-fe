@@ -120,7 +120,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   useEffect(() => {
     dispatch(clearNote())
     dispatch(closeCalculator())
-  }, [])
+  }, [router.asPath])
 
   /**
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.

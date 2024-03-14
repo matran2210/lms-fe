@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
+  getUserInformation,
   makeContactDefault,
   updateUser,
   updateUserAvatar,
@@ -63,6 +64,7 @@ const MyProfile = ({
 
   useEffect(() => {
     dispatch(getMe())
+    dispatch(getUserInformation())
   }, [])
 
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
