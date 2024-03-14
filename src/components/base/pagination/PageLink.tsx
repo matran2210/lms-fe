@@ -77,7 +77,7 @@ const PageLink = ({
       ${
         active
           ? 'bg-primary text-white border-active'
-          : 'text-gray-5 border-gray-1 hover:bg-primary hover:text-white hover:border-active'
+          : 'text-gray-1 border-gray-2 hover:bg-primary hover:text-white hover:border-active'
       }
       `}
       aria-current={active ? 'page' : undefined}

@@ -117,3 +117,9 @@ export const buildOneChoiceQueryString = (params: Object) => {
 
   return queryParams ? `${queryParams}` : ''
 }
+
+export const parseHTMLToString = (htmlContent: string) => {
+  const tempElement = document.createElement('div')
+  tempElement.innerHTML = htmlContent
+  return tempElement.textContent || tempElement.innerText
+}

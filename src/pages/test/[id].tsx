@@ -58,6 +58,9 @@ import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
+import Image from 'next/image'
+import SAPP_Logo from '@assets/images/sapp_logo.svg'
+
 type Window = {
   userAgreed: any
 }
@@ -1398,7 +1401,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       {/* Header */}
       {(loading || !currentTabContent?.id) && (
         <div className="absolute w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[1350]">
-          Loading
+          <Image src={SAPP_Logo} alt="SAPP Logo" priority={true} />
         </div>
       )}
       {/* {startResize && (
@@ -1430,6 +1433,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
               size: 'medium',
               loading: false,
               disabled: submited,
+              className: 'border border-bw-1',
+              color: 'secondary',
               onClick: () => {
                 setOpenSubmit(true)
                 dispatch(disableUnsavedChange())
@@ -1439,6 +1444,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             cancel={{
               title: 'Quit',
               size: 'medium',
+              className: 'border border-bw-1 w-[109px]',
+              color: 'secondary',
               onClick: () => {
                 setOpenQuit(true)
                 dispatch(disableUnsavedChange())
@@ -1470,7 +1477,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       {/* <div className=''> */}
       {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
         <div
-          className={`flex bg-gray-3 flex-1 overflow-auto`}
+          className={`flex bg-gray-3 flex-1 overflow-auto text-bw-1`}
           id={'preview-question'}
         >
           <div

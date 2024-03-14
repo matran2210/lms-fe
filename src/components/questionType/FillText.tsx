@@ -208,7 +208,10 @@ const AddWordPreview = forwardRef(
         {solution && (
           <div className="bg-gray-4 mt-6 p-6">
             <div className="font-semibold text-base text-bw-1 ">Solution</div>
-            <EditorReader className="mt-4" text_editor_content={solution} />
+            <EditorReader
+              className="mt-4 text-bw-1"
+              text_editor_content={solution}
+            />
           </div>
         )}
       </div>
