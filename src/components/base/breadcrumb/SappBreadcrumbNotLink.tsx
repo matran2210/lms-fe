@@ -38,17 +38,9 @@ const SappBreadcrumbNotLink = ({ paths }: { paths: IProps[] }) => {
           >
             <Link href={url} className="breadcrumbs__link" scroll={false}>
               <span className="font-normal text-sm text-gray-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
-                {(path?.name as string)?.length > 50 ? (
-                  <Tooltip
-                    title={path?.name}
-                    color="#ffffff"
-                    placement="bottom"
-                  >
-                    {path?.name}
-                  </Tooltip>
-                ) : (
-                  <>{path?.name}</>
-                )}
+                <Tooltip title={path?.name} color="#ffffff" placement="bottom">
+                  {path?.name}
+                </Tooltip>
               </span>
             </Link>
             {index < paths.length - 1 && (

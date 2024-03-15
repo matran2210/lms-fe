@@ -30,7 +30,7 @@ const ChangePasswordSuccess = () => {
                   />
                 </div>
                 <div className="text-center mb-16">
-                  <h1 className="text-bw-1 fw-bolder font-bold mb-4 text-4xl">
+                  <h1 className="text-bw-1 fw-bolder font-semibold mb-4 text-4xl">
                     Successfully
                   </h1>
                   <div className="text-gray-1 text-medium-sm font-normal not-italic">
@@ -41,7 +41,7 @@ const ChangePasswordSuccess = () => {
                 {/* Start Button Login */}
                 <div className="d-grid">
                   <SappButton
-                    size="lager"
+                    size="medium"
                     full
                     title="Login"
                     onClick={redirectLogin}

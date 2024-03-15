@@ -94,13 +94,36 @@ const CoursePartDetail = ({ previewPart }: any) => {
     sectionId?: string | undefined,
     caseStudyId?: string | undefined,
   ) => {
-    if (sectionId && caseStudyId) {
-      await handleCaseStudyProcess(sectionId, caseStudyId)
+    const filteredData = chapterDetail?.children?.filter(
+      (item: any) => item?.id === sectionId,
+    )
+    const getCaseStudy =
+      filteredData?.[0]?.quiz?.case_study_story?.instances?.filter(
+        (item: any) => item?.id === caseStudyId,
+      )
+
+    const totalCourseSections =
+      getCaseStudy?.[0]?.learning_progress?.total_course_sections
+    const totalCourseSectionsCompleted =
+      getCaseStudy?.[0]?.learning_progress?.total_course_sections_completed
+    if (
+      totalCourseSections === totalCourseSectionsCompleted &&
+      totalCourseSections !== undefined &&
+      totalCourseSectionsCompleted !== undefined
+    ) {
+      router.push({
+        pathname: `/case-study/table-result/${getCaseStudy?.[0]?.question_topic?.attempts[0]?.id}`,
+        query: { class_user_id: previewPart.class_user_id },
+      })
+    } else {
+      if (sectionId && caseStudyId) {
+        await handleCaseStudyProcess(sectionId, caseStudyId)
+      }
+      router.push({
+        pathname: `/case-study/${topicId}`,
+        query: { quiz_id: quizId, class_user_id: previewPart.class_user_id },
+      })
     }
-    router.push({
-      pathname: `/case-study/${topicId}`,
-      query: { quiz_id: quizId, class_user_id: previewPart.class_user_id },
-    })
   }
 
   const handleRouterChapter = (id: string) => {
@@ -281,6 +304,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
         handleSubmit={handleNextLesson}
         confirmOnClose={false}
         heightBody="h-[calc(100vh-186px)] pb-6"
+        sizeTextBtn="medium"
       >
         <TextSkeleton
           loading={loadingLearningOutcome}

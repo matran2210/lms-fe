@@ -369,7 +369,7 @@ const QuizDocument = ({
                 handleNextQuestion()
               }
             }}
-            color="quizActivity"
+            color="primary"
             loading={loading}
           />
         )}

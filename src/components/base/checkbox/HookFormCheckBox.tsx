@@ -16,6 +16,7 @@ interface IHookFormCheckBoxProps {
   classNameTitle?: string
   state?: 'default' | 'error' | 'success' | 'primary' // Thêm prop state
   size?: 'small' | 'medium' | 'lager' // Thêm prop size
+  inputStyle?: string
 }
 
 const HookFormCheckBox = ({
@@ -32,6 +33,7 @@ const HookFormCheckBox = ({
   classNameTitle,
   size = 'small',
   state,
+  inputStyle,
 }: IHookFormCheckBoxProps) => {
   return (
     <Controller
@@ -55,6 +57,7 @@ const HookFormCheckBox = ({
               disabled={disabled}
               size={size}
               state={state}
+              inputStyle={inputStyle}
             />
             <span
               className={`${classNameTitle ?? ''} form-check-label fw-semibold`}

@@ -31,7 +31,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   return (
     <>
       <div className="name">
-        <h2 className="text-2xl font-medium mb-4 text-bw-1 line-clamp-2">
+        <h2 className="text-2xl font-medium mb-5 text-bw-1 line-clamp-2">
           {data?.name}
         </h2>
       </div>
@@ -41,12 +41,12 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
             {data.is_attempt ? (
               <>
                 <p>Time taken:</p>
-                <p className="text-bw-1">{timeTakenFormatted}</p>
+                <p className="text-bw-1 font-medium">{timeTakenFormatted}</p>
               </>
             ) : (
               <>
                 <p>Time allowed: </p>
-                <p className="text-bw-1">{timeAllowFormatted}</p>
+                <p className="text-bw-1 font-medium">{timeAllowFormatted}</p>
               </>
             )}
           </div>

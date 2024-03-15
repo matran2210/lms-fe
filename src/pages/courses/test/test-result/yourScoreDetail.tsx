@@ -8,6 +8,7 @@ import { roundNumber, convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { ANIMATION, QUESTION_TYPES } from 'src/constants'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import { parseHTMLToString } from '@utils/index'
 
 const headers = [
   {
@@ -158,12 +159,18 @@ const YourScoreDetail = () => {
                       dangerouslySetInnerHTML={{
                         __html: String(e?.question?.question_content ?? '--'),
                       }}
+                      title={
+                        parseHTMLToString(e?.question?.question_content) ?? '--'
+                      }
                       onClick={() => {
                         router.push(`/explanation/${e.id}?title=My Course`)
                       }}
                     ></div>
                   </td>
-                  <td className="text-start my-6 pr-4 text-bw-1 line-clamp-1">
+                  <td
+                    className="text-start my-6 pr-4 text-bw-1 line-clamp-1"
+                    title={e?.question?.question_filter_id?.part?.name ?? '--'}
+                  >
                     {e?.question?.question_filter_id?.part?.name ?? '--'}
                   </td>
                   <td className="text-start m-6 pr-4 text-bw-1">
@@ -172,7 +179,7 @@ const YourScoreDetail = () => {
                     </div>
                   </td>
                   <td
-                    className={`text-start m-6 pr-1
+                    className={`text-start m-6 pr-7
                       ${
                         e?.is_correct || e?.active === 'SUBMITED'
                           ? ' text-state-success'

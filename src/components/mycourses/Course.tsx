@@ -319,7 +319,7 @@ const Course = ({
                   <span className="ml-1 text-bw-1 font-medium" />
                 </div>
               )}
-              <div className="time-class text-medium-sm text-gray-1">
+              <div className="time-class text-medium-sm text-gray-2">
                 {determineButtonToShow !== 'Active' && (
                   <span>
                     <span
@@ -356,7 +356,7 @@ const Course = ({
                       __html: course?.description,
                     }}
                     className={`text-bas h-24 ${
-                      enableCourse ? 'text-bw-1' : 'text-gray-1 '
+                      enableCourse ? 'text-bw-1' : 'text-gray-2 '
                     }`}
                   />
                 </Tooltip>
@@ -366,7 +366,7 @@ const Course = ({
                     __html: course?.description,
                   }}
                   className={`text-bas h-24 ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-1 '
+                    enableCourse ? 'text-bw-1' : 'text-gray-2 '
                   }`}
                 />
               )}
@@ -374,17 +374,17 @@ const Course = ({
             <div className="mt-auto">
               <div className="progress mb-6 h-8">
                 <div className="info flex items-center justify-between mb-2">
-                  <div className="text flex items-baseline">
+                  <div className="text flex items-center">
                     <Icon
                       type={enableCourse ? iconType : 'expired'}
-                      className={`relative top-0.5 ${
+                      className={`relative ${
                         enableCourse ? 'text-bw-1' : 'text-gray-2'
                       }`}
                     />
                     <p
                       className={`text-medium-sm font-medium ${
                         enableCourse ? 'text-bw-1' : 'text-gray-2 '
-                      } pl-1 ml-px`}
+                      } pl-2 ml-px`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
                     </p>
