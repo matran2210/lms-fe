@@ -13,7 +13,7 @@ interface IProps {
 
 const ChartACCAScore = ({ data }: IProps) => {
   return (
-    <div className="block bg-white mb-6 py-6 pr-5 pl-6 xl:pl-24 shadow-sidebar max-w-[1144px]">
+    <div className="block bg-white mb-6 pt-6 pb-5 pr-5 pl-6 xl:pl-[99px] shadow-sidebar max-w-[1144px]">
       <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-5">
         Your Score by Topic
       </div>

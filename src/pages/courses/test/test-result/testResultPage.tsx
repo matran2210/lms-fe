@@ -46,7 +46,7 @@ const TestResultPage = ({
           <div className="max-h-full w-full xl:max-w-smd">
             <TotalScore
               score={highestValue}
-              className="px-7 pt-6 pb-4 mb-5 shadow-sidebar"
+              className="py-6 pl-[27px] pr-[37px] mb-5 shadow-sidebar"
               classScore="pt-2"
               classGlobal="mt-3 mb-3.5 !items-end"
               classCountAll="relative top-0.5"
