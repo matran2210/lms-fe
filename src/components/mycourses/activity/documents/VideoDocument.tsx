@@ -416,7 +416,7 @@ const VideoDocument = ({
         handleCancel={() => {}}
       ></ConFirmSubmit>
 
-      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-3">
+      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-[10px]">
         <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
           {videos?.map((v, i) => {
             return (

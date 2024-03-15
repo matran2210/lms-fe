@@ -167,7 +167,10 @@ const YourScoreDetail = () => {
                       }}
                     ></div>
                   </td>
-                  <td className="text-start my-6 pr-4 text-bw-1 line-clamp-1">
+                  <td
+                    className="text-start my-6 pr-4 text-bw-1 line-clamp-1"
+                    title={e?.question?.question_filter_id?.part?.name ?? '--'}
+                  >
                     {e?.question?.question_filter_id?.part?.name ?? '--'}
                   </td>
                   <td className="text-start m-6 pr-4 text-bw-1">
