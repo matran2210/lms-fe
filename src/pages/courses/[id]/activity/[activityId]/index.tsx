@@ -536,14 +536,15 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           <div className="flex gap-2 px-6 flex-wrap">
             {selector.tabs?.map((e) => {
               return (
-                <SappButton
-                  key={e.id}
-                  size="small"
-                  className="py-2.5 !px-3 text-medium-sm !font-normal"
-                  color={tabButtonColor(e.id)}
-                  title={truncateString(e.name, 60)}
-                  onClick={() => handleChangeTab(e.id)}
-                ></SappButton>
+                <div title={e.name} key={e.id}>
+                  <SappButton
+                    size="small"
+                    className="py-2.5 !px-3 text-medium-sm !font-normal"
+                    color={tabButtonColor(e.id)}
+                    title={truncateString(e.name, 60)}
+                    onClick={() => handleChangeTab(e.id)}
+                  ></SappButton>
+                </div>
               )
             })}
           </div>
@@ -684,7 +685,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       </div>
       {/* </FadeInOut> */}
       <div data-aos={ANIMATION.DATA_AOS}>
-        {(activity?.total_activity as Number) > 1 && (
+        {(activity?.total_activity as number) > 1 && (
           <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
             <div className="flex justify-between flex-nowrap gap-5">
               {activity.previous_activity && (

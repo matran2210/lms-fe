@@ -1444,7 +1444,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             cancel={{
               title: 'Quit',
               size: 'medium',
-              className: 'border border-bw-1 w-[109px]',
+              className: 'border border-bw-1 !w-[109px]',
               color: 'secondary',
               onClick: () => {
                 setOpenQuit(true)
