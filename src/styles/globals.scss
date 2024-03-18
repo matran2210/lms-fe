@@ -694,6 +694,7 @@ textarea.is-invalid:focus {
 
 .lf-player-container {
   height: inherit;
+  @apply flex justify-center items-center;
 }
 
 // Animate the size, inside
