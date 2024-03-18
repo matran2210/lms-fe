@@ -85,8 +85,8 @@ const SappModalV2 = ({
       onCancel={handleCancel}
     >
       {children}
-      <div className={`md:pt-9 pt-5 relative`}>
-        {showFooter && (
+      {showFooter && (
+        <div className={`md:pt-9 pt-5 relative`}>
           <ButtonCancelSubmit
             revertFunction={revertFunction}
             className={footerButtonClassName}
@@ -112,8 +112,8 @@ const SappModalV2 = ({
               className: cancelButtonClass,
             }}
           ></ButtonCancelSubmit>
-        )}
-      </div>
+        </div>
+      )}
     </Modal>
   )
 }

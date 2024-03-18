@@ -448,14 +448,21 @@ const VideoDocument = ({
           })}
         </div>
         <div className="flex items-center select-none cursor-pointer relative z-30 group">
-          <span className="mr-2 text-bw-1 group-hover:text-primary">
-            Timeline
-          </span>
-          {/* Icon for course video timeline */}
-          <SappIcon
-            className="fill-bw-1 group-hover:fill-primary"
-            icon="course_video_timeline"
-          ></SappIcon>
+          {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
+            <>
+              <span className="mr-2 text-bw-1 group-hover:text-primary">
+                Timeline
+              </span>
+              {/* Icon for course video timeline */}
+              <SappIcon
+                className="fill-bw-1 group-hover:fill-primary"
+                icon="course_video_timeline"
+              ></SappIcon>
+            </>
+          ) : (
+            <></>
+          )}
+
           <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100px]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
             <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
               {[...(currentVideo?.file?.resource?.time_line || [])]
