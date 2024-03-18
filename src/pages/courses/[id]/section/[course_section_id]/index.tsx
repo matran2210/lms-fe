@@ -308,7 +308,6 @@ const CoursePartDetail = ({ previewPart }: any) => {
       >
         <TextSkeleton
           loading={loadingLearningOutcome}
-          height="4"
           widths={['70', '100', '100', '50', '100']}
           className="mb-4"
           classChild="rounded"
@@ -326,7 +325,6 @@ const CoursePartDetail = ({ previewPart }: any) => {
         )}
         <TextSkeleton
           loading={loadingLearningOutcome}
-          height="6"
           className="mt-4 last:mb-4"
           classChild="rounded"
           widths={['70', '100', '100', '50', '100']}

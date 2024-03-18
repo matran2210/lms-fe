@@ -450,13 +450,7 @@ const LearningNotesList = () => {
       </div>
 
       <div>
-        <TextSkeleton
-          loading={loading}
-          height="full"
-          length={10}
-          className="mt-6 h-32 last:mb-6"
-          classChild="rounded-none"
-        >
+        <TextSkeleton loading={loading} length={10}>
           {notesListData?.notes?.map((note: any, index: number) => {
             const isExpanded = expandedNotes.includes(note?.id)
             return (
