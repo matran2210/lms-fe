@@ -424,7 +424,7 @@ const Course = ({
                     }
                     full={false}
                     size={'small'}
-                    className="hover:bg-primary hover:text-white ml-auto"
+                    className="ml-auto"
                     onClick={() => {
                       if (isActiveStudent) {
                         courseAction()

@@ -9,7 +9,7 @@ const SIZES = {
 }
 
 const COLORS = {
-  primary: 'bg-primary hover:bg-primary-2 disabled:bg-primary-2 text-white',
+  primary: 'primary',
   info: 'bg-info hover:bg-info-2 disabled:bg-info-2 text-white',
   success: 'bg-success hover:bg-success-2 disabled:bg-success-2 text-white',
   secondary: 'bg-gray-3 hover:bg-secondary-4 disabled:bg-secondary-4 text-bw-1',
@@ -36,7 +36,7 @@ const PADDINGS = {
 }
 
 const COLOR_LOADING = {
-  primary: 'bg-white',
+  primary: '',
   info: 'bg-white',
   success: 'bg-white',
   secondary: 'bg-bw-1',
@@ -84,12 +84,8 @@ const SappButton = ({
       onClick={onClick}
       disabled={disabled || loading}
     >
-      <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
-        {' '}
-        {title}
-      </span>
-      {loading && (
-        <div className="absolute w-100 h-100 top-0 left-0 right-0 bottom-0 flex space-x-2 justify-center items-center bg-none dark:invert">
+      {loading ? (
+        <>
           <span className="sr-only">Loading...</span>
           <div
             className={`h-2 w-2 rounded-full animate-bounce [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
@@ -100,7 +96,12 @@ const SappButton = ({
           <div
             className={`h-2 w-2 rounded-full animate-bounce ${COLOR_LOADING[color]}`}
           ></div>
-        </div>
+        </>
+      ) : (
+        <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
+          {' '}
+          {title}
+        </span>
       )}
     </button>
   )

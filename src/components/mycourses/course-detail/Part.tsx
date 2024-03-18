@@ -135,7 +135,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
             }
             full={false}
             size={'small'}
-            className="hover:bg-primary hover:text-white ml-auto"
+            className="ml-auto"
             onClick={() =>
               courses?.course_section_type === 'PART'
                 ? router.push(

@@ -126,8 +126,7 @@ const PartFailed = ({
                 size={'small'}
                 className={`${
                   coursePart?.quiz?.attempts?.length !==
-                    coursePart?.quiz?.limit_count &&
-                  'hover:bg-primary hover:text-white'
+                    coursePart?.quiz?.limit_count && ''
                 } ml-auto`}
                 onClick={() => setOpen(true)}
               />
@@ -158,8 +157,7 @@ const PartFailed = ({
                 size={'small'}
                 className={`${
                   coursePart?.quiz?.attempt_count !==
-                    coursePart?.quiz?.limit_count &&
-                  'hover:bg-primary hover:text-white'
+                    coursePart?.quiz?.limit_count && ''
                 } ml-auto`}
                 onClick={() => setOpen(true)}
               />
