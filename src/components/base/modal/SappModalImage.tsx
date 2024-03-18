@@ -1,6 +1,6 @@
 import Image from 'next/future/image'
 import React from 'react'
-import SappModal from './SappModal'
+import SappModalV2 from './SappModalV2'
 
 type Props = {
   src?: string
@@ -14,7 +14,7 @@ function SappModalImage({ src, setSrc }: Props) {
 
   return (
     <div>
-      <SappModal
+      <SappModalV2
         open={!!src}
         okButtonCaption={'Yes'}
         cancelButtonCaption={'No'}
@@ -23,9 +23,15 @@ function SappModalImage({ src, setSrc }: Props) {
         position="center"
         showFooter={false}
         isContentFull={false}
-        title="Preview image"
-        refClass="md:px-6 w-fit md:w-fit px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        title=""
+        onOk={() => {}}
+        classNameModal="sapp-preview--image"
       >
+        <div className="bg-white md:pb-5 pb-5 relative">
+          <div className="flex">
+            <div className="text-xl font-bold text-bw-1">Preview image</div>
+          </div>
+        </div>
         <div className="w-fit max-w-full min-w-[100%] mx-auto md:min-h-[350px]">
           {src && (
             <Image
@@ -39,7 +45,7 @@ function SappModalImage({ src, setSrc }: Props) {
             />
           )}
         </div>
-      </SappModal>
+      </SappModalV2>
     </div>
   )
 }
