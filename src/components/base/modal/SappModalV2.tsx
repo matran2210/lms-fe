@@ -82,6 +82,7 @@ const SappModalV2 = ({
       open={open}
       closeIcon={false}
       className={classNameModal ?? 'sapp-modal'}
+      onCancel={handleCancel}
     >
       {children}
       <div className={`md:pt-9 pt-5 relative`}>
