@@ -108,7 +108,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
                 {showStatus}
               </p>
               <span className="text-medium-sm font-medium text-gray-1 pl-1 ml-px">
-                {formattedTime} left
+                {courses?.remaining_time > 0 ? `${formattedTime} left` : ''}
               </span>
             </div>
             <div className="number">
