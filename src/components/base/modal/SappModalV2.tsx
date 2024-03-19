@@ -48,6 +48,7 @@ interface IProps {
   disabled?: boolean
   onOk: () => void
   classNameModal?: string | undefined
+  width?: string
 }
 
 const SappModalV2 = ({
@@ -73,6 +74,7 @@ const SappModalV2 = ({
   cancelButtonCaption,
   cancelButtonClass,
   classNameModal,
+  width,
 }: IProps) => {
   return (
     <Modal
@@ -83,6 +85,7 @@ const SappModalV2 = ({
       closeIcon={false}
       className={classNameModal ?? 'sapp-modal'}
       onCancel={handleCancel}
+      width={width}
     >
       {children}
       {showFooter && (

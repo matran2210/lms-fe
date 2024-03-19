@@ -144,7 +144,7 @@ export default function MenuItem({
         )}
         {Icon === 'avatar' ? (
           <div
-            className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-2 avatar ${
+            className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 avatar ${
               selected ? 'text-primary' : 'text-gray-2'
             } group-hover:text-primary`}
           >
