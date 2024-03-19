@@ -1,12 +1,11 @@
 import SearchForm from '@components/mycourses/Search'
 import NotifyTab from '@components/notification/NotifyTab'
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ActionCell from '@components/base/action/ActionCell'
 import NotifyList from '@components/notification/NotifyList'
 import NotifyDetail from '@components/notification//NotifyDetail'
 import NotifyActions from '@components/notification/NotifyActions'
 import {
-  notificationReducer,
   getNotification,
   getCountUnRead,
   getNotificationDetail,
@@ -16,9 +15,9 @@ import {
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import SappModelSidebar from '@components/base/modal/SappModelSidebar'
 import Router, { useRouter } from 'next/router'
 import { ANIMATION } from 'src/constants'
+import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -179,14 +178,14 @@ const Notifications = () => {
             getApiNotificationDetail={getApiNotificationDetail}
           />
         </div>
-        <SappModelSidebar
-          open={openModel}
-          setOpen={setOpenModel}
-          title={'Notification Detail'}
-        >
-          <NotifyDetail notifyDetail={notifyDetail} />
-        </SappModelSidebar>
       </div>
+      <SappDrawerV2
+        open={openModel}
+        setOpen={setOpenModel}
+        title={'Notification Detail'}
+      >
+        <NotifyDetail notifyDetail={notifyDetail} />
+      </SappDrawerV2>
     </>
   )
 }
