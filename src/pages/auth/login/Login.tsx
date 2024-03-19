@@ -203,7 +203,9 @@ const LoginPage = () => {
               inputStyle="border-[#DCDDDD]"
             />
             <span className="text-medium-sm text-gray-1 hover:underline">
-              <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
+              <Link href={PageLink.AUTH_FORGOT_PASSWORD}>
+                Forgot Password ?
+              </Link>
             </span>
           </div>
           {/* <div className="flex justify-between items-center">

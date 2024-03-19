@@ -38,7 +38,7 @@ const Dashboard = () => {
       >
         <div className="sapp-dashboard justify-center flex flex-col relative boxShadow-activity">
           <div className="flex flex-col">
-            <div className="flex justify-center sapp-text-coming">
+            <div className="flex justify-center mb-2.5">
               <div className="text-gray-1 font-normal text-xl">Hi,</div>
               <div className="font-semibold text-bw-1 ms-2 text-xl">
                 {user?.detail?.full_name}
