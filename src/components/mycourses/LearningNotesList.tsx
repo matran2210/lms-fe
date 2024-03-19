@@ -98,7 +98,7 @@ const LearningNotesList = () => {
   }, [selectedUnit])
 
   const params = cleanParamsAPI({
-    course_id: courseId || queryId,
+    class_id: courseId || queryId,
     course_section_id:
       selectedActivity?.value ||
       selectedUnit?.value ||
@@ -110,7 +110,7 @@ const LearningNotesList = () => {
   // Lấy danh sách notes và fill tự động activity khi lần đầu mở trong activity
   useEffect(() => {
     const objectParams = cleanParamsAPI({
-      course_id: courseId || queryId,
+      class_id: courseId || queryId,
       course_section_id: activityId || '',
     })
 
