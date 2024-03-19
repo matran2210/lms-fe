@@ -765,3 +765,22 @@ $focus: (
     @apply text-white;
   }
 }
+
+.ant-drawer .ant-drawer-body {
+  padding: 0 !important;
+}
+
+.sapp-notifcation.text-bw-1 a:hover {
+  @apply text-primary;
+}
+
+.ant-drawer {
+  position: unset;
+}
+
+.ant-drawer .ant-drawer-mask,
+.ant-drawer .ant-drawer-mask,
+.ant-drawer .ant-drawer-content-wrapper {
+  position: fixed;
+  background-color: #000000cc;
+}
