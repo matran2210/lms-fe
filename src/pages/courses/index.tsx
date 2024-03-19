@@ -153,11 +153,11 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
       </div>
       <div className="main max-w-xxl my-0 mx-auto">
         <div className="flex justify-between xl-max:mx-6">
-          <h2 className="text-medium-sm font-medium text-bw-1 py-6">
+          <h2 className="text-medium-sm font-medium text-bw-1 pt-6 pb-4">
             My Course
           </h2>
           <div
-            className={`py-6 relative ${
+            className={`pt-6 pb-4 relative ${
               guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
             }`}
           >

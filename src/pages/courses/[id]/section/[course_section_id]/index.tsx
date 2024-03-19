@@ -230,7 +230,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
-        <div className="flex pt-6 pb-1 items-center">
+        <div className="flex pt-6 items-center">
           <span
             onClick={() => router.push('/courses')}
             className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
