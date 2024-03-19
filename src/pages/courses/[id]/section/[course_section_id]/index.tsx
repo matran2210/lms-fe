@@ -83,9 +83,6 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const handleRouterActivity = (id: string) => {
     router.push({
       pathname: `/courses/${router.query.id}/activity/${id}`,
-      query: {
-        classId: previewPart.class_id,
-      },
     })
   }
   const handleRouterCaseStudy = async (

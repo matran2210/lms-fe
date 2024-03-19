@@ -223,6 +223,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     (state) => state.caseStudyTestReducer,
   )
   const [quizAttempId, setQuizAttempId] = useState('')
+  const [classId, setClassId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
   const [openUpload, setOpenUpload] = useState<any>({})
   const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
@@ -263,10 +264,12 @@ const CaseStudyDetail = ({ questions }: any) => {
       )
       if (res?.success === false) {
         setBreadCrumb(res?.data?.breadcumb)
+        setClassId(res?.data?.class_id)
         setUnsavedChanges(false)
         setOpenLimit(true)
       } else {
         setBreadCrumb(res?.data?.breadcumb)
+        setClassId(res?.data?.class_id)
         setQuizAttempId(res.data.id)
       }
     } catch (err) {}
@@ -283,7 +286,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const backToPart = () => {
     router.replace(
-      `/courses/${breadCrumb?.[0]?.id}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
+      `/courses/${classId}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
     )
   }
 

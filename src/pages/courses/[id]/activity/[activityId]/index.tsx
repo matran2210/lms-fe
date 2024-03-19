@@ -82,9 +82,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       dispatch(resetQuizActivity({}))
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(
-          getDiscussion({ id: router.query.classId, sectionId: sectionId }),
-        )
+        dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
         // ;(async () => {
         //   await CourseActivityApi.startCourseSectionProgress(
         //     courseId,
@@ -363,19 +361,19 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         let url = ''
         switch (e.course_section_type) {
           case 'PART':
-            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${e?.id}`
+            url = `/courses/${router.query.id}/section/${e?.id}`
             break
           case 'CHAPTER':
-            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${e?.id}`
+            url = `/courses/${router.query.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${e?.id}`
             break
           case 'UNIT':
-            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${activity.breadcumb?.[2]?.id}`
+            url = `/courses/${router.query.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${activity.breadcumb?.[2]?.id}`
             break
           case 'ACTIVITY':
             url = '#'
             break
           default:
-            url = `/courses/my-course/${e?.id}`
+            url = `/courses/my-course/${router.query.id}`
             break
         }
         return (
@@ -695,9 +693,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     onClick={() => {
                       router.push({
                         pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
-                        query: {
-                          classId: router.query.classId,
-                        },
                       })
                     }}
                     className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
@@ -719,9 +714,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     onClick={() => {
                       router.push({
                         pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
-                        query: {
-                          classId: router.query.classId,
-                        },
                       })
                     }}
                     className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
@@ -744,7 +736,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-        <Discussion class_id={(router.query.classId as string) || ''} />
+        <Discussion class_id={(router.query.id as string) || ''} />
       </div>
       {openScratchPad.map((e, index: number) => {
         if (e.type === 'file') {

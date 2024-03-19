@@ -241,7 +241,7 @@ const Course = ({
         : setOpenExtend(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
-        ? router.push(`/courses/my-course/${course.id}`)
+        ? router.push(`/courses/my-course/${classInstance.id}`)
         : {}
     }
   }
