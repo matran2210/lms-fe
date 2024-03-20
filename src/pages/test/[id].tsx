@@ -1457,7 +1457,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         </div>
         {/* End Header */}
         {tabs?.length > 0 && (
-          <div className="px-6 bg-gray-4 shadow-solution relative py-4 w-full z-10">
+          <div className="px-6 bg-gray-4 shadow-solution relative py-2 w-full z-10">
             <TabSlide
               data={filteredTabs}
               currentTab={currentPage}
