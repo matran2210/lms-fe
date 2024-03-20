@@ -1,6 +1,7 @@
 import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
-import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, ReactNode } from 'react'
+import Icon from '@components/icons'
 
 interface TimeLineItem {
   time: number
@@ -14,6 +15,8 @@ interface IProp {
   hideVideo?: boolean
   openQuestion?: boolean
   timeLine?: TimeLineItem[]
+  openFinishQuiz?: boolean
+  children?: ReactNode
 }
 
 const SAPPVideo = ({
@@ -21,8 +24,10 @@ const SAPPVideo = ({
   pauseOnSeek = false,
   streamRef,
   hideVideo = false,
-  openQuestion,
+  openQuestion = false,
   timeLine,
+  openFinishQuiz = false,
+  children,
 }: IProp) => {
   const [valueVolume, setValueVolume] = useState<number>(1)
   const playbackAnimationRef = useRef<HTMLDivElement>(null)
@@ -140,7 +145,21 @@ const SAPPVideo = ({
         }
       }
     }
-  }, [options?.src, streamRef.current])
+  }, [options?.src, streamRef.current, playbackAnimationRef.current])
+
+  // Listen for changes in the 'openFinishQuiz' state.
+  useEffect(() => {
+    if (openFinishQuiz) {
+      if (document?.fullscreenElement) {
+        document.exitFullscreen()
+      } else if (
+        document?.fullscreenElement === undefined &&
+        document?.fullscreenElement
+      ) {
+        document.exitFullscreen()
+      }
+    }
+  }, [openFinishQuiz])
 
   // togglePlay toggles the playback state of the video.
   // If the video playback is paused or ended, the video is played
@@ -224,17 +243,19 @@ const SAPPVideo = ({
   // updateTimeElapsed indicates how far through the video
   // the current playback is by updating the timeElapsed element
   function updateTimeElapsed() {
-    const time = formatTime(Math.round(video.currentTime))
-    if (timeElapsed) {
-      timeElapsed.innerText = `${time.hours !== '00' ? time.hours + ':' : ''}${
-        time.minutes
-      }:${time.seconds}`
-      timeElapsed.setAttribute(
-        'datetime',
-        `${time.hours !== '00' ? time.hours + 'h ' : ''}${time.minutes}m ${
-          time.seconds
-        }s`,
-      )
+    if (video && video.readyState) {
+      const time = formatTime(Math.round(video?.currentTime || 0))
+      if (timeElapsed) {
+        timeElapsed.innerText = `${
+          time.hours !== '00' ? time.hours + ':' : ''
+        }${time.minutes}:${time.seconds}`
+        timeElapsed.setAttribute(
+          'datetime',
+          `${time.hours !== '00' ? time.hours + 'h ' : ''}${time.minutes}m ${
+            time.seconds
+          }s`,
+        )
+      }
     }
   }
 
@@ -298,29 +319,21 @@ const SAPPVideo = ({
   // updateVolumeIcon updates the volume icon so that it correctly reflects
   // the volume of the video
   function updateVolumeIcon() {
-    if (volumeButton) {
-      volumeButton.setAttribute('data-title', 'Mute (m)')
-      const volumeMute = volumeButton.querySelector('.volume-mute')
-      const volumeLow = volumeButton.querySelector('.volume-low')
-      const volumeHigh = volumeButton.querySelector('.volume-high')
+    if (!volumeButton) return
 
-      if (volumeMute && volumeLow && volumeHigh) {
-        if (video.muted || video.volume === 0) {
-          volumeMute.classList.remove('hidden')
-          volumeLow.classList.add('hidden')
-          volumeHigh.classList.add('hidden')
-          volumeButton.setAttribute('data-title', 'Unmute (m)')
-        } else if (video.volume > 0 && video.volume <= 0.5) {
-          volumeMute.classList.add('hidden')
-          volumeLow.classList.remove('hidden')
-          volumeHigh.classList.add('hidden')
-        } else {
-          volumeMute.classList.add('hidden')
-          volumeLow.classList.add('hidden')
-          volumeHigh.classList.remove('hidden')
-        }
-      }
-    }
+    const volumeMute = volumeButton.querySelector('.volume-mute')
+    const volumeLow = volumeButton.querySelector('.volume-low')
+    const volumeHigh = volumeButton.querySelector('.volume-high')
+
+    if (!volumeMute || !volumeLow || !volumeHigh) return
+
+    const isMuted = video.muted || video.volume === 0
+    const isLowVolume = video.volume > 0 && video.volume <= 0.5
+
+    volumeButton.setAttribute('data-title', isMuted ? 'Unmute (m)' : 'Mute (m)')
+    volumeMute.classList.toggle('hidden', !isMuted)
+    volumeLow.classList.toggle('hidden', isMuted || !isLowVolume)
+    volumeHigh.classList.toggle('hidden', isMuted || isLowVolume)
   }
 
   // toggleMute mutes or unmutes the video when executed
@@ -397,21 +410,14 @@ const SAPPVideo = ({
     const fullScreenExitIcon =
       fullscreenButton?.querySelector('.fullscreen-exit')
 
-    if (fullScreenIcon && fullScreenExitIcon) {
-      if (
-        document.fullscreenElement &&
-        fullscreenButton &&
-        fullScreenIcon &&
-        fullScreenExitIcon
-      ) {
-        fullscreenButton.setAttribute('data-title', 'Exit full screen (f)')
-        fullScreenIcon.classList.add('hidden')
-        fullScreenExitIcon.classList.remove('hidden')
-      } else if (fullscreenButton && fullScreenIcon && fullScreenExitIcon) {
-        fullscreenButton.setAttribute('data-title', 'Full screen (f)')
-        fullScreenIcon.classList.remove('hidden')
-        fullScreenExitIcon.classList.add('hidden')
-      }
+    if (fullscreenButton && fullScreenIcon && fullScreenExitIcon) {
+      const isFullScreen = document.fullscreenElement !== null
+      fullscreenButton.setAttribute(
+        'data-title',
+        `${isFullScreen ? 'Exit' : 'Enter'} full screen (f)`,
+      )
+      fullScreenIcon.classList.toggle('hidden', isFullScreen)
+      fullScreenExitIcon.classList.toggle('hidden', !isFullScreen)
     }
   }
 
@@ -467,6 +473,7 @@ const SAPPVideo = ({
           }`}
           ref={videoContainerRef}
         >
+          <div className={`test`}>{children}</div>
           <div
             className="playback-animation flex-center"
             ref={playbackAnimationRef}
@@ -494,6 +501,8 @@ const SAPPVideo = ({
               }
             }}
             autoPlay={false}
+            disablePictureInPicture
+            controlsList="nodownload"
           />
           <div
             className="video-controls absolute right-0 left-0 bottom-0 py-3 px-4 h-14 w-full flex-center hidden"
@@ -573,31 +582,17 @@ const SAPPVideo = ({
                     <svg className="volume-low w-5.5 h-6 ml-3 hidden">
                       <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
                     </svg>
-                    <svg
-                      className="volume-high ml-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="none"
-                      viewBox="0 0 16 16"
-                    >
-                      <g fill="#fff" clipPath="url(#clip0_246_5900)">
-                        <path d="M9.298.586a.532.532 0 00-.564.064L3.546 4.8h-2.48C.48 4.8 0 5.28 0 5.867v4.267c0 .588.479 1.066 1.067 1.066h2.479l5.187 4.15a.539.539 0 00.565.064.532.532 0 00.302-.48V1.067a.535.535 0 00-.302-.481zM12.3 4.229a.535.535 0 00-.75.759A4.197 4.197 0 0112.8 8a4.197 4.197 0 01-1.25 3.013.534.534 0 10.75.757A5.246 5.246 0 0013.867 8 5.254 5.254 0 0012.3 4.23z"></path>
-                        <path d="M13.805 2.726a.534.534 0 00-.752.757A6.315 6.315 0 0114.933 8c0 1.711-.668 3.314-1.88 4.517a.536.536 0 00-.004.755.536.536 0 00.756.002A7.367 7.367 0 0016 8c0-1.998-.779-3.87-2.195-5.274z"></path>
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_246_5900">
-                          <path fill="#fff" d="M0 0H16V16H0z"></path>
-                        </clipPath>
-                      </defs>
-                    </svg>
+                    <Icon
+                      type={'volume'}
+                      className={'volume-high ml-4 text-white'}
+                    />
                   </button>
 
                   <div className="volume-process">
                     <input
                       ref={volumeRef}
                       className="volume w-full opacity-100"
-                      value={valueVolume}
+                      defaultValue={valueVolume}
                       type="range"
                       max="1"
                       min="0"
@@ -611,31 +606,10 @@ const SAPPVideo = ({
                   className="fullscreen-button"
                   onClick={toggleFullScreen}
                 >
-                  <svg
-                    className="fullscreen ml-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                  >
-                    <path
-                      d="M5.45457 16H0.363649C0.162648 16 0 15.8374 0 15.6364V10.5455C0 10.3445 0.162648 10.1818 0.363649 10.1818H1.09091C1.29191 10.1818 1.45456 10.3445 1.45456 10.5455V14.5454H5.45457C5.65557 14.5454 5.81822 14.7081 5.81822 14.9091V15.6364C5.81822 15.8374 5.65557 16 5.45457 16Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M15.6364 16H10.5455C10.3445 16 10.1818 15.8374 10.1818 15.6364V14.9091C10.1818 14.7081 10.3445 14.5454 10.5455 14.5454H14.5454V10.5455C14.5454 10.3445 14.7081 10.1818 14.9091 10.1818H15.6364C15.8374 10.1818 16 10.3445 16 10.5455V15.6364C16 15.8374 15.8374 16 15.6364 16Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M15.6364 5.81819H14.9091C14.7081 5.81819 14.5455 5.65554 14.5455 5.45454V1.45456H10.5455C10.3445 1.45456 10.1818 1.29191 10.1818 1.09091V0.363648C10.1818 0.162648 10.3445 0 10.5455 0H15.6364C15.8374 0 16 0.162648 16 0.363648V5.45457C16 5.65557 15.8374 5.81819 15.6364 5.81819Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M5.45457 1.45455H1.45456V5.45457C1.45456 5.65557 1.29191 5.81822 1.09091 5.81822H0.363649C0.162648 5.81819 0 5.65557 0 5.45457V0.363682C0 0.162682 0.162648 3.37299e-05 0.363649 3.37299e-05H5.45457C5.65557 3.37299e-05 5.81822 0.162682 5.81822 0.363682V1.09094C5.81822 1.29191 5.65557 1.45455 5.45457 1.45455Z"
-                      fill="white"
-                    />
-                  </svg>
+                  <Icon
+                    type={'fullscreen'}
+                    className={'fullscreen ml-4 text-white'}
+                  />
                   <svg className="fullscreen-exit ml-3 w-5.5 h-6 hidden">
                     <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
                   </svg>
