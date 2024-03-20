@@ -577,6 +577,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           document_id={e.id}
                           is_graded={e.quiz?.is_graded || false}
                           setOpenFile={handleOpenScratchPad}
+                          class_user_id={activity.class_user_id}
                         ></QuizDocument>
                       </div>
                     )
@@ -613,6 +614,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           grading_preference={
                             e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
                           }
+                          class_user_id={activity.class_user_id}
                         ></VideoDocument>
                       </div>
                     )
