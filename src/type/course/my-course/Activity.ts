@@ -38,6 +38,7 @@ export interface IActivity {
   files: File[]
   tabs?: ITab[]
   class_id?: string
+  class_user_id?: string
   next_activity?: {
     id: string
     display_icon: string

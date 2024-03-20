@@ -35,6 +35,7 @@ type Props = {
   document_id: string
   is_graded?: boolean
   setOpenFile?: any
+  class_user_id?: string
 }
 
 const QuizDocument = ({
@@ -46,6 +47,7 @@ const QuizDocument = ({
   document_id,
   is_graded,
   setOpenFile,
+  class_user_id,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -195,6 +197,7 @@ const QuizDocument = ({
         submitQuiz({
           id: quizId,
           data: { answers, quiz_position_mapping },
+          class_user_id,
         }),
       )
         .unwrap()
