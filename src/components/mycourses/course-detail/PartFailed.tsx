@@ -139,7 +139,7 @@ const PartFailed = ({
                 title="Result"
                 isUnderLine
                 color="text"
-                className="!font-semibold underline !p-0"
+                className="font-medium underline !p-0"
                 onClick={() =>
                   router.push(
                     `/courses/test/test-result/${quizAttempt?.attempts[0].id}`,
