@@ -25,7 +25,7 @@ const Notifications = () => {
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const loading = useAppSelector((state) => state.notificationReducer.loading)
+  const [loading, setLoading] = useState(false)
 
   const notifyLists = useAppSelector(
     (state) => state.notificationReducer.list_notifications,
@@ -58,10 +58,14 @@ const Notifications = () => {
   }
 
   const loadMore = async (params: Object) => {
+    setLoading(true)
     try {
       await dispatch(loadMoreNotification(params))
       await coutNotificationsUnRead()
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   const getApiNotificationDetail = async (
@@ -94,33 +98,31 @@ const Notifications = () => {
     setOpenToolTip(false)
     markAllRead()
   }
-
-  const handleScroll = () => {
-    const scrollPosition =
-      window.innerHeight + document.documentElement.scrollTop
-    const documentHeight = document.documentElement.offsetHeight
-
-    if (
-      scrollPosition !== documentHeight &&
-      scrollPosition + 1 < documentHeight
-    ) {
-      return
-    }
-    const totalPages = pagination?.total_pages
-    const pageIndex = pagination?.page_index
-    const pageSize = pagination?.page_size
-    if (totalPages && pageIndex < totalPages) {
-      loadMore({
-        page_index: pageIndex + 1,
-        page_size: pageSize,
-        ...(router.asPath.includes('unread') && {
-          is_read: false,
-        }),
-      })
-    }
-  }
+  const DEFAULT_PAGESIZE = 10
+  const [page, setPage] = useState(DEFAULT_PAGESIZE)
 
   useEffect(() => {
+    let isFetching = false
+    const isEndPage = page <= pagination?.total_records
+    const handleScroll = () => {
+      if (
+        !isFetching &&
+        isEndPage &&
+        window.innerHeight + document.documentElement.scrollTop >=
+          document.documentElement.offsetHeight - 10
+      ) {
+        isFetching = true
+        const pageIndex = pagination?.page_index
+        const pageSize = pagination?.page_size
+        loadMore({
+          page_index: pageIndex + 1,
+          page_size: pageSize,
+          ...(router.asPath.includes('unread') && {
+            is_read: false,
+          }),
+        })
+      }
+    }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [pagination])
@@ -128,7 +130,7 @@ const Notifications = () => {
   useEffect(() => {
     getNotifications({
       page_index: 1,
-      page_size: 30,
+      page_size: 10,
       ...(router.asPath.includes('unread') && {
         is_read: false,
       }),
