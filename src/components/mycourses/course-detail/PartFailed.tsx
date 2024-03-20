@@ -72,7 +72,7 @@ const PartFailed = ({
             <>
               <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
                 <p className="text-base text-gray-1">Latest Result:</p>
-                <p className="text-base text-bw-1 font-semibold">
+                <p className="text-base text-bw-1 font-medium">
                   {`${countTimeSpent(
                     coursePart?.quiz?.attempts?.[0]?.ratio_score,
                   )}%`}
@@ -80,7 +80,7 @@ const PartFailed = ({
               </div>
               <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
                 <p className="text-base text-gray-1">Time Spent:</p>
-                <p className="text-base text-bw-1 font-semibold">
+                <p className="text-base text-bw-1 font-medium">
                   {`${
                     coursePart?.quiz?.quiz_timed
                       ? formatTime(
@@ -95,11 +95,11 @@ const PartFailed = ({
           )}
           <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
             <p className="text-base text-gray-1">Time Allowed:</p>
-            <p className="text-base text-bw-1 font-semibold">{formattedTime}</p>
+            <p className="text-base text-bw-1 font-medium">{formattedTime}</p>
           </div>
           <div className="time-allow flex justify-between pt-4">
             <p className="text-base text-gray-1">Attempt:</p>
-            <p className="text-base text-bw-1 font-semibold">
+            <p className="text-base text-bw-1 font-medium">
               {`${quizAttempt?.attempt_count || 0} / ${
                 quizAttempt?.limit_count !== 0
                   ? quizAttempt?.limit_count
