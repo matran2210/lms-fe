@@ -266,9 +266,9 @@ const ProfileHeader = ({
             </div>
           </div>
         </div>
-        <div>
+        {/* <div>
           <SappButton size="lager" title={'Enroll New Course'}></SappButton>
-        </div>
+        </div> */}
       </div>
     </div>
   )
