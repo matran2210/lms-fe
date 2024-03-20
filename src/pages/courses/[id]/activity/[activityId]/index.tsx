@@ -532,7 +532,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         </div>
 
         <div className="bg-gray-3">
-          <div className={`flex gap-2 px-6 flex-wrap ${activity?.files?.length === 0 || activity?.course_outcomes?.length === 0 ? 'pt-6' : ''}`}>
+          <div
+            className={`flex gap-2 px-6 flex-wrap ${
+              activity?.files?.length === 0 ||
+              activity?.course_outcomes?.length === 0
+                ? 'pt-6'
+                : ''
+            }`}
+          >
             {selector.tabs?.map((e) => {
               return (
                 <div title={e.name} key={e.id}>
