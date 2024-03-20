@@ -11,7 +11,6 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import { CloseIcon } from '@assets/icons'
-import { StreamPlayerApi } from '@cloudflare/stream-react'
 import SappModal from '@components/base/modal/SappModal'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
@@ -34,7 +33,7 @@ type Props = {
   videos?: IVideo[]
   activityId: string
   tabId: string
-  streamRefProp?: StreamPlayerApi | any
+  streamRefProp?: any
   handleProcess?: () => void
   document_id: string
   quizId: string
@@ -73,7 +72,7 @@ const VideoDocument = ({
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
   const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
-  const internalRef = useRef<StreamPlayerApi>()
+  const internalRef = useRef<any>()
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
   const dispatch = useAppDispatch()
   const [modalResult, setModalResult] = useState<{
@@ -96,11 +95,14 @@ const VideoDocument = ({
     }
   }, [])
   useEffect(() => {
-    handleProcess &&
-      streamRef?.current !== null &&
-      streamRef?.current !== undefined &&
+    if (
+      handleProcess &&
+      !streamRef?.current?.paused &&
+      streamRef?.current?.paused !== undefined
+    ) {
       handleProcess()
-  }, [streamRef?.current])
+    }
+  }, [streamRef?.current?.paused])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
@@ -407,6 +409,10 @@ const VideoDocument = ({
     setShowQuestionResultDetail({ id: data.id, isOpen: true })
   }
 
+  const timeLine = [...(currentVideo?.file?.resource?.time_line || [])].sort(
+    (a, b) => (Number(a.time) || 0) - (Number(b.time) || 0),
+  )
+
   return (
     <div>
       <ConFirmSubmit
@@ -465,26 +471,24 @@ const VideoDocument = ({
 
           <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100px]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
             <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
-              {[...(currentVideo?.file?.resource?.time_line || [])]
-                .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0))
-                .map((e, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid p-3 hover:text-primary-2 text-bw-1 grid-cols-[1.3fr,6fr]"
-                      onClick={() => {
-                        handleGoTimeline(e.time)
-                      }}
-                    >
-                      <div className="text-state-info mim-w-[62px]">
-                        {formatTime(e.time)}
-                      </div>
-                      <div className="text-bw-1 line-clamp-2 text-inherit">
-                        {htmlToRaw(e.text)}
-                      </div>
+              {timeLine.map((e, i) => {
+                return (
+                  <div
+                    key={i}
+                    className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid p-3 hover:text-primary-2 text-bw-1 grid-cols-[1.3fr,6fr]"
+                    onClick={() => {
+                      handleGoTimeline(e.time)
+                    }}
+                  >
+                    <div className="text-state-info mim-w-[62px]">
+                      {formatTime(e.time)}
                     </div>
-                  )
-                })}
+                    <div className="text-bw-1 line-clamp-2 text-inherit">
+                      {htmlToRaw(e.text)}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -501,6 +505,8 @@ const VideoDocument = ({
           }}
           pauseOnSeek={true}
           hideVideo={hideVideo}
+          openQuestion={modalOpen}
+          timeLine={timeLine}
         ></SAPPVideo>
         {/* Modal for quiz questions */}
         <SappModal

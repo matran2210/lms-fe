@@ -5,6 +5,7 @@
 @import 'select.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
+@import 'video.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -783,4 +784,8 @@ $focus: (
 .ant-drawer .ant-drawer-content-wrapper {
   position: fixed;
   background-color: #000000cc;
+}
+
+.shadow-activity.aos-init.aos-animate {
+  transform: none !important;
 }
