@@ -28,7 +28,7 @@ const COLORS = {
 }
 
 const PADDINGS = {
-  small: 'px-7 py-2',
+  small: 'px-7 h-8',
   medium: 'px-8 py-2',
   lager: 'px-9 py-2.8',
   extra: 'px-17.5 py-2.8',
