@@ -146,21 +146,20 @@ const PartFailed = ({
                   )
                 }
               ></SappButton>
-              <ButtonSecondary
-                disabled={
-                  coursePart?.quiz?.is_limited &&
-                  coursePart?.quiz?.attempt_count ===
-                    coursePart?.quiz?.limit_count
-                }
-                title={'Retake'}
-                full={false}
-                size={'small'}
-                className={`${
-                  coursePart?.quiz?.attempt_count !==
-                    coursePart?.quiz?.limit_count && ''
-                } ml-auto`}
-                onClick={() => setOpen(true)}
-              />
+              {coursePart?.quiz?.is_limited &&
+              coursePart?.quiz?.attempt_count ===
+                coursePart?.quiz?.limit_count ? null : (
+                <ButtonSecondary
+                  title="Retake"
+                  full={false}
+                  size="small"
+                  className={`${
+                    coursePart?.quiz?.attempt_count !==
+                      coursePart?.quiz?.limit_count && ''
+                  } ml-auto`}
+                  onClick={() => setOpen(true)}
+                />
+              )}
             </div>
           )}
         </div>
