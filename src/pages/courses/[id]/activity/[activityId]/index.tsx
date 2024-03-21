@@ -555,7 +555,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {/* <FadeInOut show={!selector.loading}> */}
         {!!course_tab_documents?.length && (
           <div className="bg-white pb-6 mb-6">
-            <div className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6`}>
+            <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
               <div className="tab-content">
                 {course_tab_documents?.map((e, i) => {
                   const marginBottom =
