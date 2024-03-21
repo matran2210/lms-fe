@@ -32,6 +32,7 @@ export default function MenuItem({
     router.pathname.includes('/my-course') ||
     router.pathname.includes('/section') ||
     router.pathname.includes('/activity')
+
   const isProfile =
     Icon === 'avatar' &&
     (router.asPath === '/myprofile' ||
@@ -39,10 +40,9 @@ export default function MenuItem({
       router.asPath === '/settings' ||
       router.asPath === '/login_history' ||
       router.asPath === '/devices')
-  const selected =
-    router.pathname === url ||
-    (Icon === 'stats-chart-sharp' && isDetailCourse) ||
-    isProfile
+
+  const selected = router.pathname === url
+
   const isNested = subItems && subItems?.length > 0
 
   const onClick = () => {
