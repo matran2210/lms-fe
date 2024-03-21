@@ -23,15 +23,15 @@
   }
 
   progress::-webkit-progress-bar {
-    @apply bg-bw-1;
+    @apply bg-overlay-white;
   }
 
   progress::-webkit-progress-value {
-    @apply bg-white;
+    @apply bg-gray-8;
   }
 
   progress::-moz-progress-bar {
-    @apply bg-white border border-white;
+    @apply bg-overlay-white border border-gray-4;
   }
 
   .seek:hover + .seek-tooltip {
@@ -59,26 +59,26 @@
     @apply w-full opacity-100;
   }
 
-  button {
+  .btn-video {
     @apply cursor-pointer relative text-ssm p-0 border-0 outline-0;
   }
 
-  button * {
+  .btn-video * {
     @apply pointer-events-none;
   }
 
-  button.volume-button::before {
+  .btn-video.volume-button::before {
     @apply right-7;
   }
 
-  button::before {
+  .btn-video::before {
     @apply absolute hidden right-0 top-[-50px] bg-overlay-control text-white font-semibold py-1 px-1.5;
     content: attr(data-title);
     word-break: keep-all;
     white-space: pre;
   }
 
-  button:hover::before {
+  .btn-video:hover::before {
     @apply inline-block;
   }
 
@@ -103,26 +103,19 @@
 
   input[type='range']::-webkit-slider-runnable-track {
     @apply w-full cursor-pointer;
+    border-radius: 1.3px;
     -webkit-appearance: none;
     transition: all 0.4s ease;
   }
 
   input[type='range']::-webkit-slider-thumb {
-    @apply w-4 h-4 rounded-full bg-gray-3 cursor-pointer -ml-px;
+    @apply w-4 h-4 bg-gray-3 cursor-pointer -ml-px;
     -webkit-appearance: none;
+    border-radius: 16px;
   }
 
   input[type='range']:focus::-webkit-slider-runnable-track {
-    @apply bg-transparent;
-  }
-
-  .volume-button {
-    @apply mr-0;
-  }
-
-  .volume-process {
-    @apply bg-overlay-play px-2 pt-1 pb-2 rounded-sm absolute bottom-[200%] right-[-150%] w-[115px] hidden z-20;
-    transform: rotate(270deg);
+    background: transparent;
   }
 
   input[type='range'].volume {
@@ -138,11 +131,14 @@
   }
 
   input[type='range']::-moz-range-track {
-    @apply w-full h-1.5 cursor-pointer border border-transparent bg-transparent;
+    @apply w-full h-1.5 h-1.5 cursor-pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 1.3px;
   }
 
   input[type='range']::-moz-range-thumb {
-    @apply w-full h-1.5 bg-white border border-white cursor-pointer mt-1;
+    @apply h-3.5 w-3.5 border border-gray-4 bg-gray-8 cursor-pointer;
     border-radius: 50px;
   }
 
@@ -151,10 +147,19 @@
   }
 
   input[type='range'].volume::-moz-range-thumb {
-    @apply bg-white border border-white;
+    @apply border border-white bg-white;
   }
 
-  svg {
+  .volume-button {
+    @apply mr-0;
+  }
+
+  .volume-process {
+    @apply bg-overlay-play px-2 pt-1 pb-2 rounded-sm absolute bottom-[200%] right-[-150%] w-[115px] hidden z-20;
+    transform: rotate(270deg);
+  }
+
+  .icon-svg {
     @apply cursor-pointer;
     fill: #ffffff;
     stroke: #ffffff;

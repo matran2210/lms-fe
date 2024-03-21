@@ -86,6 +86,7 @@ module.exports = {
           5: '#7E8299',
           6: '#D8D8E5',
           7: '#E3E3E3',
+          8: '#F3F3F3',
           900: '#181C32',
         },
         overlay: {
@@ -105,6 +106,7 @@ module.exports = {
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
         'gray-3': '#F8F8F8',
+        'gray-4': '#F3F3F3',
         active: '#FFB800',
         dark: '#1C2039',
       },

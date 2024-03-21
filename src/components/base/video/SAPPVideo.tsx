@@ -35,29 +35,13 @@ const SAPPVideo = ({
   const playButtonRef = useRef<HTMLButtonElement>(null)
   const seekRef = useRef<HTMLInputElement>(null)
   const seekTooltipRef = useRef<HTMLDivElement>(null)
-  const volumeButtonRef = useRef<any>(null)
-  const volumeRef = useRef<any>(null)
+  const volumeButtonRef = useRef<HTMLButtonElement>(null)
+  const volumeRef = useRef<HTMLInputElement>(null)
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null)
   const videoContainerRef = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLProgressElement>(null)
   const timeElapsedRef = useRef<HTMLTimeElement>(null)
   const durationRef = useRef<HTMLTimeElement>(null)
-  const playbackIconsRef = useRef<NodeListOf<SVGElement>>(null)
-
-  const video = streamRef.current
-  const playbackAnimation = playbackAnimationRef.current
-  const videoControls = videoControlsRef.current
-  const playButton = playButtonRef.current
-  const seek = seekRef.current
-  const seekTooltip = seekTooltipRef.current
-  const volumeButton = volumeButtonRef.current
-  const volume = volumeRef.current
-  const fullscreenButton = fullscreenButtonRef.current
-  const videoContainer = videoContainerRef.current
-  const progressBar = progressBarRef.current
-  const timeElapsed = timeElapsedRef.current
-  const duration = durationRef.current
-  const playbackIcons = playbackIconsRef.current
 
   useEffect(() => {
     let player: any
@@ -72,40 +56,40 @@ const SAPPVideo = ({
         )
 
         // Add eventlisteners
-        if (video) {
-          video.addEventListener('play', updatePlayButton)
-          video.addEventListener('pause', updatePlayButton)
-          video.addEventListener('loadedmetadata', initializeVideo)
-          video.addEventListener('timeupdate', updateTimeElapsed)
-          video.addEventListener('timeupdate', updateProgress)
-          video.addEventListener('volumechange', updateVolumeIcon)
-          video.addEventListener('click', togglePlay)
-          video.addEventListener('click', animatePlayback)
-          video.addEventListener('mouseenter', showControls)
-          video.addEventListener('mouseleave', hideControls)
+        if (streamRef.current) {
+          streamRef.current.addEventListener('play', updatePlayButton)
+          streamRef.current.addEventListener('pause', updatePlayButton)
+          streamRef.current.addEventListener('loadedmetadata', initializeVideo)
+          streamRef.current.addEventListener('timeupdate', updateTimeElapsed)
+          streamRef.current.addEventListener('timeupdate', updateProgress)
+          streamRef.current.addEventListener('volumechange', updateVolumeIcon)
+          streamRef.current.addEventListener('click', togglePlay)
+          streamRef.current.addEventListener('click', animatePlayback)
+          streamRef.current.addEventListener('mouseenter', showControls)
+          streamRef.current.addEventListener('mouseleave', hideControls)
         }
-        if (videoControls) {
-          videoControls.addEventListener('mouseenter', showControls)
-          videoControls.addEventListener('mouseleave', hideControls)
+        if (videoControlsRef.current) {
+          videoControlsRef.current.addEventListener('mouseenter', showControls)
+          videoControlsRef.current.addEventListener('mouseleave', hideControls)
         }
-        if (seek) {
-          seek.addEventListener('mousemove', updateSeekTooltip)
-          seek.addEventListener('input', skipAhead)
+        if (seekRef.current) {
+          seekRef.current.addEventListener('mousemove', updateSeekTooltip)
+          seekRef.current.addEventListener('input', skipAhead)
         }
-        if (volume) {
-          volume.addEventListener('input', updateVolume)
+        if (volumeRef.current) {
+          volumeRef.current.addEventListener('input', updateVolume)
         }
-        if (videoContainer) {
-          videoContainer.addEventListener(
+        if (videoContainerRef.current) {
+          videoContainerRef.current.addEventListener(
             'fullscreenchange',
             updateFullscreenButton,
           )
         }
         document.addEventListener('keyup', keyboardShortcuts)
-        const videoWorks = !!video?.canPlayType
-        if (videoWorks && videoControls) {
-          video.controls = false
-          videoControls.classList.remove('hidden')
+        const videoWorks = !!streamRef.current?.canPlayType
+        if (videoWorks && videoControlsRef.current) {
+          streamRef.current.controls = false
+          videoControlsRef.current.classList.remove('hidden')
         }
       }
     }
@@ -114,38 +98,50 @@ const SAPPVideo = ({
     return () => {
       if (player) {
         player.reset()
-        if (video) {
-          video.removeEventListener('play', updatePlayButton)
-          video.removeEventListener('pause', updatePlayButton)
-          video.removeEventListener('loadedmetadata', initializeVideo)
-          video.removeEventListener('timeupdate', updateTimeElapsed)
-          video.removeEventListener('timeupdate', updateProgress)
-          video.removeEventListener('volumechange', updateVolumeIcon)
-          video.removeEventListener('click', togglePlay)
-          video.removeEventListener('click', animatePlayback)
-          video.removeEventListener('mouseenter', showControls)
-          video.removeEventListener('mouseleave', hideControls)
+        if (streamRef.current) {
+          streamRef.current.removeEventListener('play', updatePlayButton)
+          streamRef.current.removeEventListener('pause', updatePlayButton)
+          streamRef.current.removeEventListener(
+            'loadedmetadata',
+            initializeVideo,
+          )
+          streamRef.current.removeEventListener('timeupdate', updateTimeElapsed)
+          streamRef.current.removeEventListener('timeupdate', updateProgress)
+          streamRef.current.removeEventListener(
+            'volumechange',
+            updateVolumeIcon,
+          )
+          streamRef.current.removeEventListener('click', togglePlay)
+          streamRef.current.removeEventListener('click', animatePlayback)
+          streamRef.current.removeEventListener('mouseenter', showControls)
+          streamRef.current.removeEventListener('mouseleave', hideControls)
         }
-        if (videoControls) {
-          videoControls.removeEventListener('mouseenter', showControls)
-          videoControls.removeEventListener('mouseleave', hideControls)
+        if (videoControlsRef.current) {
+          videoControlsRef.current.removeEventListener(
+            'mouseenter',
+            showControls,
+          )
+          videoControlsRef.current.removeEventListener(
+            'mouseleave',
+            hideControls,
+          )
         }
-        if (seek) {
-          seek.removeEventListener('mousemove', updateSeekTooltip)
-          seek.removeEventListener('input', skipAhead)
+        if (seekRef.current) {
+          seekRef.current.removeEventListener('mousemove', updateSeekTooltip)
+          seekRef.current.removeEventListener('input', skipAhead)
         }
-        if (volume) {
-          volume.removeEventListener('input', updateVolume)
+        if (volumeRef.current) {
+          volumeRef.current.removeEventListener('input', updateVolume)
         }
-        if (videoContainer) {
-          videoContainer.removeEventListener(
+        if (videoContainerRef.current) {
+          videoContainerRef.current.removeEventListener(
             'fullscreenchange',
             updateFullscreenButton,
           )
         }
       }
     }
-  }, [options?.src, streamRef.current, playbackAnimationRef.current])
+  }, [options?.src, streamRef?.current, playbackAnimationRef?.current])
 
   // Listen for changes in the 'openFinishQuiz' state.
   useEffect(() => {
@@ -158,6 +154,9 @@ const SAPPVideo = ({
       ) {
         document.exitFullscreen()
       }
+      if (streamRef?.current) {
+        streamRef.current.pause()
+      }
     }
   }, [openFinishQuiz])
 
@@ -165,25 +164,25 @@ const SAPPVideo = ({
   // If the video playback is paused or ended, the video is played
   // otherwise, the video is paused
   function togglePlay() {
-    if (video?.paused || video?.ended) {
-      video?.play()
+    if (streamRef?.current?.paused || streamRef?.current?.ended) {
+      streamRef.current?.play()
     } else {
-      video?.pause()
+      streamRef.current?.pause()
     }
   }
 
   // updatePlayButton updates the playback icon and tooltip
   // depending on the playback state
   function updatePlayButton() {
-    const playIcon = playButton?.querySelector('.play')
-    const pauseIcon = playButton?.querySelector('.pause')
+    const playIcon = playButtonRef?.current?.querySelector('.play')
+    const pauseIcon = playButtonRef?.current?.querySelector('.pause')
 
-    if (video?.paused) {
-      playButton?.setAttribute('data-title', 'Play (k)')
+    if (streamRef?.current?.paused) {
+      playButtonRef?.current?.setAttribute('data-title', 'Play (k)')
       playIcon?.classList?.remove('hidden')
       pauseIcon?.classList?.add('hidden')
     } else {
-      playButton?.setAttribute('data-title', 'Pause (k)')
+      playButtonRef?.current?.setAttribute('data-title', 'Pause (k)')
       playIcon?.classList?.add('hidden')
       pauseIcon?.classList?.remove('hidden')
     }
@@ -210,22 +209,22 @@ const SAPPVideo = ({
   // initializeVideo sets the video duration, and maximum value of the
   // progressBar
   function initializeVideo() {
-    const videoDuration = Math.round(video.duration)
-    seek?.setAttribute('max', String(videoDuration))
-    progressBar?.setAttribute('max', String(videoDuration))
+    const videoDuration = Math.round(streamRef?.current?.duration)
+    seekRef?.current?.setAttribute('max', String(videoDuration))
+    progressBarRef?.current?.setAttribute('max', String(videoDuration))
     const time = formatTime(videoDuration)
-    if (duration) {
-      duration.innerText = `${time.hours !== '00' ? time.hours + ':' : ''}${
-        time.minutes
-      }:${time.seconds}`
-      duration.setAttribute(
+    if (durationRef?.current) {
+      durationRef.current.innerText = `${
+        time.hours !== '00' ? time.hours + ':' : ''
+      }${time.minutes}:${time.seconds}`
+      durationRef.current.setAttribute(
         'datetime',
         `${time.hours !== '00' ? time.hours + 'h ' : ''}${time.minutes}m ${
           time.seconds
         }s`,
       )
     }
-    const markers = videoControls?.querySelectorAll('.marker')
+    const markers = videoControlsRef.current?.querySelectorAll('.marker')
 
     // Lặp qua từng điểm đánh dấu trong mảng
     if (timeLine && markers) {
@@ -243,13 +242,13 @@ const SAPPVideo = ({
   // updateTimeElapsed indicates how far through the video
   // the current playback is by updating the timeElapsed element
   function updateTimeElapsed() {
-    if (video && video.readyState) {
-      const time = formatTime(Math.round(video?.currentTime || 0))
-      if (timeElapsed) {
-        timeElapsed.innerText = `${
+    if (streamRef?.current && streamRef?.current?.readyState) {
+      const time = formatTime(Math.round(streamRef.current?.currentTime || 0))
+      if (timeElapsedRef.current) {
+        timeElapsedRef.current.innerText = `${
           time.hours !== '00' ? time.hours + ':' : ''
         }${time.minutes}:${time.seconds}`
-        timeElapsed.setAttribute(
+        timeElapsedRef.current.setAttribute(
           'datetime',
           `${time.hours !== '00' ? time.hours + 'h ' : ''}${time.minutes}m ${
             time.seconds
@@ -262,12 +261,12 @@ const SAPPVideo = ({
   // updateProgress indicates how far through the video
   // the current playback is by updating the progress bar
   function updateProgress() {
-    let currentTime = Math.floor(video.currentTime)
-    if (seek) {
-      seek.value = String(currentTime)
+    let currentTime = Math.floor(streamRef?.current?.currentTime || 0)
+    if (seekRef?.current) {
+      seekRef.current.value = String(currentTime)
     }
-    if (progressBar) {
-      progressBar.value = currentTime
+    if (progressBarRef?.current) {
+      progressBarRef.current.value = currentTime
     }
   }
 
@@ -280,13 +279,17 @@ const SAPPVideo = ({
         parseInt((event.target as HTMLElement).getAttribute('max') || '0', 10),
     )
     const t = formatTime(skipTo)
-    if (progressBar && seek && seekTooltip) {
-      const rect = progressBar.getBoundingClientRect()
-      seek.setAttribute('data-seek', String(skipTo))
-      seekTooltip.textContent = `${t.hours !== '00' ? t.hours + ':' : ''}${
-        t.minutes
-      }:${t.seconds}`
-      seekTooltip.style.left = `${event.pageX - rect.left}px`
+    if (
+      progressBarRef?.current &&
+      seekRef?.current &&
+      seekTooltipRef?.current
+    ) {
+      const rect = progressBarRef.current.getBoundingClientRect()
+      seekRef.current.setAttribute('data-seek', String(skipTo))
+      seekTooltipRef.current.textContent = `${
+        t.hours !== '00' ? t.hours + ':' : ''
+      }${t.minutes}:${t.seconds}`
+      seekTooltipRef.current.style.left = `${event.pageX - rect.left}px`
     }
   }
 
@@ -295,42 +298,46 @@ const SAPPVideo = ({
   function skipAhead(event: Event) {
     const skipTo =
       event.target instanceof HTMLInputElement ? event.target.value : '0'
-    video.currentTime = parseInt(skipTo, 10)
-    if (progressBar) {
-      progressBar.value = Number(skipTo)
+    streamRef.current.currentTime = parseInt(skipTo, 10)
+    if (progressBarRef?.current) {
+      progressBarRef.current.value = Number(skipTo)
     }
-    if (seek) {
-      seek.value = skipTo
+    if (seekRef?.current) {
+      seekRef.current.value = skipTo
     }
   }
 
   // updateVolume updates the video's volume
   // and disables the muted state if active
   function updateVolume() {
-    if (video.muted) {
-      video.muted = false
+    if (streamRef?.current?.muted) {
+      streamRef.current.muted = false
     }
-    if (volume) {
-      video.volume = Number(volume.value)
-      setValueVolume(Number(volume.value))
+    if (volumeRef?.current) {
+      streamRef.current.volume = Number(volumeRef.current.value)
+      setValueVolume(Number(volumeRef.current.value))
     }
   }
 
   // updateVolumeIcon updates the volume icon so that it correctly reflects
   // the volume of the video
   function updateVolumeIcon() {
-    if (!volumeButton) return
+    if (!volumeButtonRef.current) return
 
-    const volumeMute = volumeButton.querySelector('.volume-mute')
-    const volumeLow = volumeButton.querySelector('.volume-low')
-    const volumeHigh = volumeButton.querySelector('.volume-high')
+    const volumeMute = volumeButtonRef.current.querySelector('.volume-mute')
+    const volumeLow = volumeButtonRef.current.querySelector('.volume-low')
+    const volumeHigh = volumeButtonRef.current.querySelector('.volume-high')
 
     if (!volumeMute || !volumeLow || !volumeHigh) return
 
-    const isMuted = video.muted || video.volume === 0
-    const isLowVolume = video.volume > 0 && video.volume <= 0.5
+    const isMuted = streamRef.current.muted || streamRef.current.volume === 0
+    const isLowVolume =
+      streamRef.current.volume > 0 && streamRef.current.volume <= 0.5
 
-    volumeButton.setAttribute('data-title', isMuted ? 'Unmute (m)' : 'Mute (m)')
+    volumeButtonRef.current.setAttribute(
+      'data-title',
+      isMuted ? 'Unmute (m)' : 'Mute (m)',
+    )
     volumeMute.classList.toggle('hidden', !isMuted)
     volumeLow.classList.toggle('hidden', isMuted || !isLowVolume)
     volumeHigh.classList.toggle('hidden', isMuted || isLowVolume)
@@ -340,31 +347,32 @@ const SAPPVideo = ({
   // When the video is unmuted, the volume is returned to the value
   // it was set to before the video was muted
   function toggleMute() {
-    video.muted = !video.muted
-
-    if (video.muted && volume) {
-      volume.setAttribute('data-volume', volume.value)
-      volume.value = 0
-      setValueVolume(0)
-    } else if (volume) {
-      volume.value = volume.dataset.volume
-      setValueVolume(volume.dataset.volume)
+    if (streamRef?.current) {
+      streamRef.current.muted = !streamRef.current.muted
+      if (streamRef.current.muted && volumeRef.current) {
+        volumeRef.current.setAttribute('data-volume', volumeRef.current.value)
+        volumeRef.current.value = '0'
+        setValueVolume(0)
+      } else if (volumeRef.current) {
+        volumeRef.current.value = String(volumeRef.current.dataset.volume)
+        setValueVolume(Number(volumeRef.current.dataset.volume))
+      }
     }
   }
 
   // animatePlayback displays an animation when
   // the video is played or paused
   function animatePlayback() {
-    const playIcon = playbackAnimation?.querySelector('.play')
-    const pauseIcon = playbackAnimation?.querySelector('.pause')
+    const playIcon = playbackAnimationRef?.current?.querySelector('.play')
+    const pauseIcon = playbackAnimationRef?.current?.querySelector('.pause')
 
     if (playIcon && pauseIcon) {
       playIcon.classList.toggle('hidden')
       pauseIcon.classList.toggle('hidden')
     }
 
-    if (playbackAnimation) {
-      playbackAnimation.animate(
+    if (playbackAnimationRef?.current) {
+      playbackAnimationRef.current.animate(
         [
           {
             opacity: 1,
@@ -394,25 +402,26 @@ const SAPPVideo = ({
     ) {
       document.exitFullscreen()
     } else if (
-      videoContainer instanceof HTMLVideoElement &&
-      videoContainer.requestFullscreen
+      videoContainerRef.current instanceof HTMLVideoElement &&
+      videoContainerRef.current.requestFullscreen
     ) {
-      videoContainer.requestFullscreen()
-    } else if (videoContainer?.requestFullscreen) {
-      videoContainer.requestFullscreen()
+      videoContainerRef.current.requestFullscreen()
+    } else if (videoContainerRef.current?.requestFullscreen) {
+      videoContainerRef.current.requestFullscreen()
     }
   }
 
   // updateFullscreenButton changes the icon of the full screen button
   // and tooltip to reflect the current full screen state of the video
   function updateFullscreenButton() {
-    const fullScreenIcon = fullscreenButton?.querySelector('.fullscreen')
+    const fullScreenIcon =
+      fullscreenButtonRef?.current?.querySelector('.fullscreen')
     const fullScreenExitIcon =
-      fullscreenButton?.querySelector('.fullscreen-exit')
+      fullscreenButtonRef?.current?.querySelector('.fullscreen-exit')
 
-    if (fullscreenButton && fullScreenIcon && fullScreenExitIcon) {
+    if (fullscreenButtonRef?.current && fullScreenIcon && fullScreenExitIcon) {
       const isFullScreen = document.fullscreenElement !== null
-      fullscreenButton.setAttribute(
+      fullscreenButtonRef.current.setAttribute(
         'data-title',
         `${isFullScreen ? 'Exit' : 'Enter'} full screen (f)`,
       )
@@ -424,10 +433,10 @@ const SAPPVideo = ({
   // hideControls hides the video controls when not in use
   // if the video is paused, the controls must remain visible
   function hideControls() {
-    if (video.paused) {
+    if (streamRef?.current?.paused) {
       return
     }
-    if (videoControlsRef.current) {
+    if (videoControlsRef?.current) {
       videoControlsRef.current.classList.add('hide')
     }
   }
@@ -447,7 +456,7 @@ const SAPPVideo = ({
       case 'k':
         togglePlay()
         animatePlayback()
-        if (video.paused) {
+        if (streamRef.current.paused) {
           showControls()
         } else {
           setTimeout(() => {
@@ -478,7 +487,7 @@ const SAPPVideo = ({
             className="playback-animation flex-center"
             ref={playbackAnimationRef}
           >
-            <svg className="playback-icons w-6 h-6">
+            <svg className="icon-svg playback-icons w-6 h-6">
               <path
                 className="hidden play"
                 d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"
@@ -511,7 +520,7 @@ const SAPPVideo = ({
             <div className="flex-center w-full">
               <div className="left-controls flex items-center text-white">
                 <button
-                  className="bg-overlay-play w-8 h-8 mr-4 flex items-center justify-center before:-right-4"
+                  className="btn-video bg-overlay-play w-8 h-8 mr-4 flex items-center justify-center before:-right-4"
                   data-title="Play (k)"
                   ref={playButtonRef}
                   onClick={() => {
@@ -519,7 +528,7 @@ const SAPPVideo = ({
                     animatePlayback()
                   }}
                 >
-                  <svg className="playback-icons w-6 h-6">
+                  <svg className="icon-svg playback-icons w-6 h-6">
                     <path
                       className="play"
                       d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"
@@ -548,6 +557,7 @@ const SAPPVideo = ({
                   type="range"
                   step="1"
                   ref={seekRef}
+                  defaultValue="0"
                 />
                 <div
                   className="seek-tooltip hidden absolute top-[-50px] -ml-5 text-xsm p-1 font-semibold text-white bg-overlay-dark"
@@ -561,7 +571,7 @@ const SAPPVideo = ({
                       return (
                         <div
                           key={i}
-                          className="marker absolute top-0 w-1.5 h-1.5 bg-primary"
+                          className="marker absolute top-0 w-1.5 h-1.5 bg-primary z-[5]"
                           title={e?.text}
                         ></div>
                       )
@@ -572,19 +582,19 @@ const SAPPVideo = ({
                 <div className="volume-controls w-8 h-8 relative flex items-center">
                   <button
                     data-title="Mute (m)"
-                    className="volume-button"
+                    className="btn-video volume-button"
                     ref={volumeButtonRef}
                     onClick={toggleMute}
                   >
-                    <svg className="volume-mute w-5.5 h-5.5 ml-3 scale-[0.8] hidden">
+                    <svg className="icon-svg volume-mute w-5.5 h-5.5 ml-3 scale-[0.8] hidden">
                       <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
                     </svg>
-                    <svg className="volume-low w-5.5 h-6 ml-3 hidden">
+                    <svg className="icon-svg volume-low w-5.5 h-6 ml-3 hidden">
                       <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
                     </svg>
                     <Icon
                       type={'volume'}
-                      className={'volume-high ml-4 text-white'}
+                      className={'icon-svg volume-high ml-4 text-white'}
                     />
                   </button>
 
@@ -603,14 +613,14 @@ const SAPPVideo = ({
                 <button
                   ref={fullscreenButtonRef}
                   data-title="Full screen (f)"
-                  className="fullscreen-button"
+                  className="btn-video fullscreen-button"
                   onClick={toggleFullScreen}
                 >
                   <Icon
                     type={'fullscreen'}
-                    className={'fullscreen ml-4 text-white'}
+                    className={'icon-svg fullscreen ml-4 text-white'}
                   />
-                  <svg className="fullscreen-exit ml-3 w-5.5 h-6 hidden">
+                  <svg className="icon-svg fullscreen-exit ml-3 w-5.5 h-6 hidden">
                     <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
                   </svg>
                 </button>
