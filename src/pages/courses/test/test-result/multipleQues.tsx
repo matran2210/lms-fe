@@ -176,7 +176,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
                 {showMore ? 'View Less' : 'View All'}
               </div>
             )}
-            <Link href={`/courses/my-course/${questions?.course?.id}`}>
+            <Link href={`/courses/my-course/${questions?.class_id ?? ''}`}>
               <ButtonPrimary
                 title={'Quit'}
                 size={'medium'}

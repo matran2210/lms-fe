@@ -38,7 +38,7 @@ const CourseAPI = {
     page_size: number,
   ): Promise<any> => {
     const response = await httpService.GET<any, any>({
-      uri: `course-sections/short/list?page_index=1&page_size=${page_size}&courseId=${id}&type=PART`,
+      uri: `course-sections/short/list?page_index=1&page_size=${page_size}&classId=${id}&type=PART`,
     })
     return response
   },

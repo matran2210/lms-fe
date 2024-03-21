@@ -1,5 +1,6 @@
 import { ConfirmIcon } from '@assets/icons'
-import SappModal from '@components/base/modal/SappModal'
+import SappButton from '@components/base/button/SappButton'
+import SappModalV2 from '@components/base/modal/SappModalV2'
 
 interface IProps {
   open: boolean
@@ -25,39 +26,44 @@ const ConFirmSubmit = ({
     setOpen(false)
   }
   return (
-    <SappModal
+    <SappModalV2
       open={open}
-      setOpen={setOpen}
       //   cancelButtonCaption="Quit"
       okButtonCaption="Submit"
       okButtonClass="!text-base"
       cancelButtonClass="!text-base"
       handleCancel={onCancel}
-      handleSubmit={onSubmit}
-      handleCloseOnly={onClose}
-      //   showCancelButton={false}
-      showHeader={false}
-      refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
-      size="max-w-[614px]"
-      footerButtonClassName="flex flex-col-reverse gap-6"
-      childClass="flex flex-col justify-center items-center"
-      parentChildClass=""
-      position="center"
-      fullWidthBtn={true}
-      closeAfterSubmit={true}
-      buttonSize="extra"
-      scrollbale={false}
+      onOk={onSubmit}
+      title={''}
+      showFooter={false}
     >
       <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
         <ConfirmIcon />
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6">
+      <div className="text-bw-1 text-4xl font-semibold mt-6 flex justify-center">
         Confirm Submission
       </div>
       <div className="text-gray-1 text-sm font-normal mt-4 mb-11 text-center">
         Are you sure you are done here and ready to view the report?
       </div>
-    </SappModal>
+      <div className="md:pt-5 pt-5 relative">
+        <div className="flex flex-col-reverse gap-6">
+          <SappButton
+            title="Cancel"
+            size="medium"
+            color="textUnderline"
+            className="w-full"
+            onClick={onCancel}
+          />
+          <SappButton
+            title={'Submit'}
+            size="medium"
+            className="w-full"
+            onClick={onSubmit}
+          />
+        </div>
+      </div>
+    </SappModalV2>
   )
 }
 

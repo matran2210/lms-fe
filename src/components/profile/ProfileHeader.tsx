@@ -208,11 +208,7 @@ const ProfileHeader = ({
 
         <div className="flex-1 mb-6 lg:mb-0">
           <div className="font-bold text-2xl mb-4 truncate max-w-[600px] text-bw-1">
-            <TextSkeleton
-              loading={loading || loadingEditName}
-              height="6"
-              width="[300px]"
-            >
+            <TextSkeleton loading={loading || loadingEditName}>
               {user.detail.full_name}
             </TextSkeleton>
           </div>
@@ -270,9 +266,9 @@ const ProfileHeader = ({
             </div>
           </div>
         </div>
-        <div>
+        {/* <div>
           <SappButton size="lager" title={'Enroll New Course'}></SappButton>
-        </div>
+        </div> */}
       </div>
     </div>
   )

@@ -71,7 +71,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
                 full={false}
                 size={'small'}
                 onClick={handleOnClick}
-                className="hover:bg-primary hover:text-white ml-auto"
+                className="ml-auto"
               />
             ) : (
               <></>
@@ -81,7 +81,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
               title="Begin"
               full={false}
               size={'small'}
-              className="hover:bg-primary hover:text-white ml-auto"
+              className="ml-auto"
               onClick={handleOnClick}
             />
           )}

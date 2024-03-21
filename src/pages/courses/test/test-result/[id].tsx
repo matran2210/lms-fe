@@ -23,7 +23,7 @@ const TestResultDetail = ({ questions, chartData }: any) => {
       title: 'Courses',
     },
     {
-      link: `/courses/my-course/${questions?.course?.id ?? ''}`,
+      link: `/courses/my-course/${questions?.class_id ?? ''}`,
       title: `${questions?.course?.name ?? 'Course Detail'}`,
     },
     {

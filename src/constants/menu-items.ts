@@ -4,7 +4,7 @@ const MENU_OPTIONS: MenuOption[] = [
   {
     name: `${TitleSidebar.DASHBOARD}`,
     icon: 'grid',
-    url: `/`,
+    url: PageLink.DASHBOARD,
     type: 'level-1',
   },
   {
@@ -44,7 +44,7 @@ const MENU_OPTIONS: MenuOption[] = [
   {
     name: `${TitleSidebar.DASHBOARD}`,
     icon: 'stats-chart-sharp',
-    url: '/',
+    url: PageLink.DASHBOARD,
     type: 'level-1',
   },
   {

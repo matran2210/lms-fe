@@ -45,6 +45,7 @@ import { IActivity } from 'src/type/course/my-course/Activity'
 import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
+import SappTooltip from 'src/common/SappTooltip'
 
 type Props = {
   activity: IActivity
@@ -82,9 +83,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       dispatch(resetQuizActivity({}))
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(
-          getDiscussion({ id: router.query.classId, sectionId: sectionId }),
-        )
+        dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
         // ;(async () => {
         //   await CourseActivityApi.startCourseSectionProgress(
         //     courseId,
@@ -363,19 +362,19 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         let url = ''
         switch (e.course_section_type) {
           case 'PART':
-            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${e?.id}`
+            url = `/courses/${router.query.id}/section/${e?.id}`
             break
           case 'CHAPTER':
-            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${e?.id}`
+            url = `/courses/${router.query.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${e?.id}`
             break
           case 'UNIT':
-            url = `/courses/${activity.breadcumb?.[0]?.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${activity.breadcumb?.[2]?.id}`
+            url = `/courses/${router.query.id}/section/${activity.breadcumb?.[1]?.id}?unit_id=${activity.breadcumb?.[2]?.id}`
             break
           case 'ACTIVITY':
             url = '#'
             break
           default:
-            url = `/courses/my-course/${e?.id}`
+            url = `/courses/my-course/${router.query.id}`
             break
         }
         return (
@@ -471,7 +470,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           )}
         </>
       </>
-      <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+      <div className="shadow-activity">
         <div className="bg-gray-3 px-6 ">
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
             <div className="font-medium text-2xl ">{activity?.name}</div>
@@ -533,7 +532,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         </div>
 
         <div className="bg-gray-3">
-          <div className="flex gap-2 px-6 flex-wrap">
+          <div
+            className={`flex gap-2 px-6 flex-wrap ${
+              activity?.files?.length === 0 ||
+              activity?.course_outcomes?.length === 0
+                ? 'pt-6'
+                : ''
+            }`}
+          >
             {selector.tabs?.map((e) => {
               return (
                 <div title={e.name} key={e.id}>
@@ -579,6 +585,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           document_id={e.id}
                           is_graded={e.quiz?.is_graded || false}
                           setOpenFile={handleOpenScratchPad}
+                          class_user_id={activity.class_user_id}
                         ></QuizDocument>
                       </div>
                     )
@@ -600,6 +607,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                       <div
                         className={marginBottom}
                         key={i + '_' + selector.currentTabId}
+                        data-aos={ANIMATION.DATA_AOS}
                       >
                         <VideoDocument
                           videos={e.videos}
@@ -614,6 +622,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           grading_preference={
                             e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
                           }
+                          class_user_id={activity.class_user_id}
                         ></VideoDocument>
                       </div>
                     )
@@ -694,9 +703,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     onClick={() => {
                       router.push({
                         pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
-                        query: {
-                          classId: router.query.classId,
-                        },
                       })
                     }}
                     className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
@@ -704,10 +710,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Previous Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex">
-                    {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
-                    <span className="ml-2">
-                      {truncateString(activity.previous_activity.name, 100)}
-                    </span>
+                    {getCourseIcon(activity.previous_activity?.display_icon)}
+                    <SappTooltip title={activity.previous_activity.name}>
+                      <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                        {activity.previous_activity.name}
+                      </span>
+                    </SappTooltip>
                   </div>
                 </div>
               )}
@@ -718,9 +726,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     onClick={() => {
                       router.push({
                         pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
-                        query: {
-                          classId: router.query.classId,
-                        },
                       })
                     }}
                     className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
@@ -728,9 +733,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Next Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex justify-end">
-                    <span className="mr-2">
-                      {truncateString(activity.next_activity.name, 100)}
-                    </span>
+                    <SappTooltip title={activity.next_activity.name}>
+                      <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                        {activity.next_activity.name}
+                      </span>
+                    </SappTooltip>
                     {getCourseIcon(activity.next_activity?.display_icon)}
                   </div>
                 </div>
@@ -743,7 +750,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-        <Discussion class_id={(router.query.classId as string) || ''} />
+        <Discussion class_id={(router.query.id as string) || ''} />
       </div>
       {openScratchPad.map((e, index: number) => {
         if (e.type === 'file') {

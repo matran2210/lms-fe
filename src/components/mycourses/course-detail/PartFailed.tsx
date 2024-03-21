@@ -72,7 +72,7 @@ const PartFailed = ({
             <>
               <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
                 <p className="text-base text-gray-1">Latest Result:</p>
-                <p className="text-base text-bw-1 font-semibold">
+                <p className="text-base text-bw-1 font-medium">
                   {`${countTimeSpent(
                     coursePart?.quiz?.attempts?.[0]?.ratio_score,
                   )}%`}
@@ -80,7 +80,7 @@ const PartFailed = ({
               </div>
               <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
                 <p className="text-base text-gray-1">Time Spent:</p>
-                <p className="text-base text-bw-1 font-semibold">
+                <p className="text-base text-bw-1 font-medium">
                   {`${
                     coursePart?.quiz?.quiz_timed
                       ? formatTime(
@@ -95,11 +95,11 @@ const PartFailed = ({
           )}
           <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
             <p className="text-base text-gray-1">Time Allowed:</p>
-            <p className="text-base text-bw-1 font-semibold">{formattedTime}</p>
+            <p className="text-base text-bw-1 font-medium">{formattedTime}</p>
           </div>
           <div className="time-allow flex justify-between pt-4">
             <p className="text-base text-gray-1">Attempt:</p>
-            <p className="text-base text-bw-1 font-semibold">
+            <p className="text-base text-bw-1 font-medium">
               {`${quizAttempt?.attempt_count || 0} / ${
                 quizAttempt?.limit_count !== 0
                   ? quizAttempt?.limit_count
@@ -126,8 +126,7 @@ const PartFailed = ({
                 size={'small'}
                 className={`${
                   coursePart?.quiz?.attempts?.length !==
-                    coursePart?.quiz?.limit_count &&
-                  'hover:bg-primary hover:text-white'
+                    coursePart?.quiz?.limit_count && ''
                 } ml-auto`}
                 onClick={() => setOpen(true)}
               />
@@ -140,29 +139,27 @@ const PartFailed = ({
                 title="Result"
                 isUnderLine
                 color="text"
-                className="!font-semibold underline !p-0"
+                className="font-medium underline !p-0"
                 onClick={() =>
                   router.push(
                     `/courses/test/test-result/${quizAttempt?.attempts[0].id}`,
                   )
                 }
               ></SappButton>
-              <ButtonSecondary
-                disabled={
-                  coursePart?.quiz?.is_limited &&
-                  coursePart?.quiz?.attempt_count ===
-                    coursePart?.quiz?.limit_count
-                }
-                title={'Retake'}
-                full={false}
-                size={'small'}
-                className={`${
-                  coursePart?.quiz?.attempt_count !==
-                    coursePart?.quiz?.limit_count &&
-                  'hover:bg-primary hover:text-white'
-                } ml-auto`}
-                onClick={() => setOpen(true)}
-              />
+              {coursePart?.quiz?.is_limited &&
+              coursePart?.quiz?.attempt_count ===
+                coursePart?.quiz?.limit_count ? null : (
+                <ButtonSecondary
+                  title="Retake"
+                  full={false}
+                  size="small"
+                  className={`${
+                    coursePart?.quiz?.attempt_count !==
+                      coursePart?.quiz?.limit_count && ''
+                  } ml-auto`}
+                  onClick={() => setOpen(true)}
+                />
+              )}
             </div>
           )}
         </div>
