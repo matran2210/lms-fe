@@ -1,11 +1,11 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import SappButton from '@components/base/button/SappButton'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Image, { StaticImageData } from 'next/image'
 import { Dispatch, MutableRefObject, SetStateAction } from 'react'
 import toast from 'react-hot-toast'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
+import profile from 'src/assets/images/bg_profile.svg'
 
 interface IProps {
   isEdit: boolean
@@ -96,7 +96,7 @@ const ProfileHeader = ({
   }
 
   return (
-    <div className="shadow-box  block pr-8.25 py-10 pl-10 bg-white mb-6">
+    <div className="shadow-box block pl-10 bg-white mb-6 relative">
       <div className="lg:flex block justify-start items-center gap-6">
         <div className="relative">
           <div className="w-30 pt-29.2 rounded-full border-2 w border-primary  shrink mb-6 lg:mb-0 relative">
@@ -269,6 +269,7 @@ const ProfileHeader = ({
         {/* <div>
           <SappButton size="lager" title={'Enroll New Course'}></SappButton>
         </div> */}
+        <Image src={profile} className="absolute right-0" />
       </div>
     </div>
   )
