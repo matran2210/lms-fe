@@ -254,8 +254,15 @@ const CourseActivityApi = {
    * @param {any} data - Dữ liệu sẽ được gửi kèm theo câu hỏi.
    * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi từ máy chủ.
    */
-  submitQuiz: async (id: string, data: any): Promise<IResponse<any>> => {
-    const quizAttemptResponse = await CourseTestApi.createQuizAttempt(id)
+  submitQuiz: async (
+    id: string,
+    data: any,
+    class_user_id?: string,
+  ): Promise<IResponse<any>> => {
+    const quizAttemptResponse = await CourseTestApi.createQuizAttempt(
+      id,
+      class_user_id,
+    )
 
     const quizAttemptId = quizAttemptResponse.data?.id
     if (quizAttemptId) {

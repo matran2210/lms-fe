@@ -38,6 +38,7 @@ type Props = {
   document_id: string
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
+  class_user_id?: string
 }
 
 /**
@@ -55,6 +56,7 @@ const VideoDocument = ({
   document_id,
   quizId,
   grading_preference,
+  class_user_id,
 }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
@@ -337,6 +339,7 @@ const VideoDocument = ({
         submitQuiz({
           id: currentVideo?.quiz?.id || '',
           data: { answers, quiz_position_mapping },
+          class_user_id,
         }),
       )
         .unwrap()

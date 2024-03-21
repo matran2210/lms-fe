@@ -110,21 +110,21 @@ const Explanation = () => {
           Loading
         </div>
       )}
-      <div
-        className="ml-auto cursor-pointer absolute  right-6 top-[14px]"
-        onClick={() => {
-          if (activeQuestion?.answer?.quiz_attempt?.id) {
-            router.push(
-              `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
-            )
-          } else {
-            router.back()
-          }
-        }}
-      >
-        <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
-      </div>
       <div data-aos={ANIMATION.DATA_AOS}>
+        <div
+          className="ml-auto cursor-pointer absolute right-6 top-[14px]"
+          onClick={() => {
+            if (activeQuestion?.answer?.quiz_attempt?.id) {
+              router.push(
+                `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
+              )
+            } else {
+              router.back()
+            }
+          }}
+        >
+          <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+        </div>
         <ExplanationPackage
           getActiveQuestion={getActiveQuestion}
           activeQuestion={activeQuestion}

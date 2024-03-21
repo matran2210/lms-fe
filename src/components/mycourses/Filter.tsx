@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'
-import { buildQueryString, convertSnakeCaseToHumanReadable } from '@utils/index'
+import { buildQueryString } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useForm } from 'react-hook-form'
 import { ICourseAll } from 'src/type/courses'
 import { defaultStatusCourse } from 'src/constants'
+import TotalResullt from 'src/common/TotalResullt'
 
 interface IProps {
   courses: ICourseAll
@@ -15,7 +16,7 @@ interface IProps {
 
 const Filter = ({ courses, setPage }: IProps) => {
   const router = useRouter()
-  const { control, watch, setValue } = useForm()
+  const { control, watch } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
   const totalResults = courses?.metadata?.total_records || 0
@@ -53,9 +54,7 @@ const Filter = ({ courses, setPage }: IProps) => {
 
   return (
     <div className="filter flex items-center">
-      <div className="pr-6 border-r border-gray-1 mr-6 text-medium-sm font-normal text-gray-1">
-        {`${totalResults} ${totalResults > 1 ? 'Results' : 'Result'}`}
-      </div>
+      <TotalResullt total={totalResults} className="mr-6" />
       <div
         className={`pr-6 border-r border-gray-1 ${
           !activeStatus ? 'inactive-filter' : ''

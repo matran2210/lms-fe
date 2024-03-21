@@ -4,6 +4,7 @@ import { buildOneChoiceQueryString } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useForm } from 'react-hook-form'
 import { defaultStatusEnstraceTest } from 'src/constants'
+import TotalResullt from 'src/common/TotalResullt'
 
 const EntranceTestFilter = ({ count }: { count: number }) => {
   const router = useRouter()
@@ -25,9 +26,7 @@ const EntranceTestFilter = ({ count }: { count: number }) => {
 
   return (
     <div className="filter flex">
-      <div className="pr-6 border-r border-gray-1 text-medium-sm font-normal text-gray-1">
-        {count} {count > 1 ? 'results' : 'result'}
-      </div>
+      <TotalResullt total={count} />
       <div className="filter pl-6 flex self-center">
         <SappHookFormSelect
           control={control}

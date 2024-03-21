@@ -44,6 +44,7 @@ import { IActivity } from 'src/type/course/my-course/Activity'
 import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
+import SappTooltip from 'src/common/SappTooltip'
 
 type Props = {
   activity: IActivity
@@ -528,7 +529,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         </div>
 
         <div className="bg-gray-3">
-          <div className="flex gap-2 px-6 flex-wrap">
+          <div
+            className={`flex gap-2 px-6 flex-wrap ${
+              activity?.files?.length === 0 ||
+              activity?.course_outcomes?.length === 0
+                ? 'pt-6'
+                : ''
+            }`}
+          >
             {selector.tabs?.map((e) => {
               return (
                 <SappButton
@@ -573,6 +581,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           document_id={e.id}
                           is_graded={e.quiz?.is_graded || false}
                           setOpenFile={handleOpenScratchPad}
+                          class_user_id={activity.class_user_id}
                         ></QuizDocument>
                       </div>
                     )
@@ -608,6 +617,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                           grading_preference={
                             e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
                           }
+                          class_user_id={activity.class_user_id}
                         ></VideoDocument>
                       </div>
                     )
@@ -695,10 +705,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Previous Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex">
-                    {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
-                    <span className="ml-2">
-                      {truncateString(activity.previous_activity.name, 100)}
-                    </span>
+                    {getCourseIcon(activity.previous_activity?.display_icon)}
+                    <SappTooltip title={activity.previous_activity.name}>
+                      <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                        {activity.previous_activity.name}
+                      </span>
+                    </SappTooltip>
                   </div>
                 </div>
               )}
@@ -716,9 +728,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Next Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex justify-end">
-                    <span className="mr-2">
-                      {truncateString(activity.next_activity.name, 100)}
-                    </span>
+                    <SappTooltip title={activity.next_activity.name}>
+                      <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                        {activity.next_activity.name}
+                      </span>
+                    </SappTooltip>
                     {getCourseIcon(activity.next_activity?.display_icon)}
                   </div>
                 </div>

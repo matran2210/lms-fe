@@ -736,8 +736,7 @@ $focus: (
     transition: background-color 0.3s ease; // Hiệu ứng transition cho màu nền
   }
 
-  .#{$button}:hover,
-  .#{$button}:focus {
+  .#{$button}:hover {
     --color: map-get(
       $hover,
       $button
@@ -788,4 +787,8 @@ $focus: (
 
 .shadow-activity.aos-init.aos-animate {
   transform: none !important;
+}
+
+.sapp-dashboard {
+  height: 80vh;
 }
