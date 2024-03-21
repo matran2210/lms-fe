@@ -36,7 +36,7 @@ const PADDINGS = {
 }
 
 const COLOR_LOADING = {
-  primary: '',
+  primary: 'bg-white',
   info: 'bg-white',
   success: 'bg-white',
   secondary: 'bg-bw-1',
@@ -85,7 +85,7 @@ const SappButton = ({
       disabled={disabled || loading}
     >
       {loading ? (
-        <>
+        <div className="flex justify-center">
           <span className="sr-only">Loading...</span>
           <div
             className={`h-2 w-2 rounded-full animate-bounce [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
@@ -96,10 +96,9 @@ const SappButton = ({
           <div
             className={`h-2 w-2 rounded-full animate-bounce ${COLOR_LOADING[color]}`}
           ></div>
-        </>
+        </div>
       ) : (
         <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
-          {' '}
           {title}
         </span>
       )}
