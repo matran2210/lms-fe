@@ -151,7 +151,7 @@ export default function MenuItem({
             <div className="text-base font-semibold text-bw-1 group-hover:text-primary line-clamp-1">
               {user?.detail?.full_name}
             </div>
-            <div className="text-medium-sm font-normal line-clamp-1">
+            <div className="text-medium-sm text-gray-1 font-normal line-clamp-1 capitalize group-hover:text-primary">
               {user?.type?.toLowerCase()}
             </div>
           </div>
