@@ -53,7 +53,10 @@ const EntranceTest = ({ entranceTestLists }: any) => {
           des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
         />
       </div>
-      <div className="pt-6 max-w-xxl my-0 mx-8 xl:mx-auto lg:mx-8">
+      <div
+        className="pt-6 max-w-xxl my-0 mx-8 xl:mx-auto lg:mx-8"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         <EntranceTestList entranceTestLists={entranceTestLists} />
       </div>
       <PopUpRemindEntrance />
