@@ -9,6 +9,7 @@ import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { ANIMATION } from 'src/constants'
+import SappLoading from 'src/common/SappLoading'
 // import {} from 'explanation-package'
 const Explanation = () => {
   const router = useRouter()
@@ -104,35 +105,34 @@ const Explanation = () => {
   }
 
   return (
-    <div data-aos={ANIMATION.DATA_AOS}>
-      {loading && (
-        <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
-          Loading
+    <>
+      {loading ? (
+        <SappLoading />
+      ) : (
+        <div data-aos={ANIMATION.DATA_AOS}>
+          <div
+            className="ml-auto cursor-pointer absolute right-6 top-[14px]"
+            onClick={() => {
+              if (activeQuestion?.answer?.quiz_attempt?.id) {
+                router.push(
+                  `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
+                )
+              } else {
+                router.back()
+              }
+            }}
+          >
+            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+          </div>
+          <ExplanationPackage
+            getActiveQuestion={getActiveQuestion}
+            activeQuestion={activeQuestion}
+            document_id={''}
+            handleDownload={handleDownload}
+          />
         </div>
       )}
-      <div data-aos={ANIMATION.DATA_AOS}>
-        <div
-          className="ml-auto cursor-pointer absolute right-6 top-[14px]"
-          onClick={() => {
-            if (activeQuestion?.answer?.quiz_attempt?.id) {
-              router.push(
-                `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
-              )
-            } else {
-              router.back()
-            }
-          }}
-        >
-          <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
-        </div>
-        <ExplanationPackage
-          getActiveQuestion={getActiveQuestion}
-          activeQuestion={activeQuestion}
-          document_id={''}
-          handleDownload={handleDownload}
-        />
-      </div>
-    </div>
+    </>
   )
 }
 export default Explanation
