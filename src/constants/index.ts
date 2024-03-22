@@ -1,5 +1,5 @@
 export const PageLink = {
-  DASHBOARD: '/',
+  DASHBOARD: '/dashboard',
   COURSES: '/courses',
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',

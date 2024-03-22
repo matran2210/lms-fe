@@ -1,20 +1,14 @@
-import React, { useState, Dispatch, SetStateAction } from 'react'
-import Icon from '@components/icons'
-import blankAvatar from '@assets/images/blank_avatar.webp'
-import Image from 'next/image'
-import { calculateTimeAgo } from '@utils/helpers'
-import { useAppDispatch } from 'src/redux/hook'
+import React from 'react'
 
 interface IProps {
   notifyDetail: any
 }
 
 const NotifyDetail = ({ notifyDetail }: IProps) => {
-  const dispatch = useAppDispatch()
   return (
     <div key={notifyDetail?.id} className="w-full">
       <div
-        className="text-bw-1"
+        className="text-bw-1 sapp-notifcation text-base"
         dangerouslySetInnerHTML={{ __html: notifyDetail?.content }}
       ></div>
     </div>

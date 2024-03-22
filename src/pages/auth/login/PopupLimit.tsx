@@ -1,5 +1,6 @@
 import { AlertIcon } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
+import SappModalV2 from '@components/base/modal/SappModalV2'
 import { TimeIcon } from '@components/icons'
 import { useEffect } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
@@ -20,16 +21,12 @@ const PopUpLimit = ({ open, setOpen }: IProps) => {
     setOpen(false)
   }
   return (
-    <SappModal
+    <SappModalV2
       open={open}
-      setOpen={setOpen}
-      //   cancelButtonCaption="Quit"
       okButtonCaption="Back to Login"
-      //   handleCancel={onCancel}
-      handleSubmit={onOk}
+      onOk={onOk}
       showCancelButton={false}
       showHeader={false}
-      refClass="md:px-19 py-17.5 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
       size="max-w-[646px]"
       footerButtonClassName="flex flex-col-reverse gap-6"
       childClass="flex flex-col justify-center items-center"
@@ -38,16 +35,25 @@ const PopUpLimit = ({ open, setOpen }: IProps) => {
       fullWidthBtn={true}
       closeAfterSubmit={true}
       buttonSize="extra"
+      title={undefined}
+      handleCancel={() => setOpen(false)}
     >
-      <div className="p-8 rounded-full bg-secondary">
-        <AlertIcon />
+      <div className="flex justify-center">
+        <div
+          className="p-8 rounded-full bg-secondary"
+          style={{ width: 'fit-content' }}
+        >
+          <AlertIcon />
+        </div>
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6">Access Limits</div>
+      <div className="text-bw-1 text-4xl font-semibold mt-6 flex justify-center">
+        Access Limits
+      </div>
       <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-7 text-center">
         You can only access a maximum of 3 devices, please contact our support
         at 0889 662 276.
       </div>
-    </SappModal>
+    </SappModalV2>
   )
 }
 

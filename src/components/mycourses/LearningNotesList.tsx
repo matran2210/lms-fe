@@ -98,7 +98,7 @@ const LearningNotesList = () => {
   }, [selectedUnit])
 
   const params = cleanParamsAPI({
-    course_id: courseId || queryId,
+    class_id: courseId || queryId,
     course_section_id:
       selectedActivity?.value ||
       selectedUnit?.value ||
@@ -110,7 +110,7 @@ const LearningNotesList = () => {
   // Lấy danh sách notes và fill tự động activity khi lần đầu mở trong activity
   useEffect(() => {
     const objectParams = cleanParamsAPI({
-      course_id: courseId || queryId,
+      class_id: courseId || queryId,
       course_section_id: activityId || '',
     })
 
@@ -450,13 +450,7 @@ const LearningNotesList = () => {
       </div>
 
       <div>
-        <TextSkeleton
-          loading={loading}
-          height="full"
-          length={10}
-          className="mt-6 h-32 last:mb-6"
-          classChild="rounded-none"
-        >
+        <TextSkeleton loading={loading} length={10}>
           {notesListData?.notes?.map((note: any, index: number) => {
             const isExpanded = expandedNotes.includes(note?.id)
             return (

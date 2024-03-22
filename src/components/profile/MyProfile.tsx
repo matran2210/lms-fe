@@ -245,7 +245,7 @@ const MyProfile = ({
               Code
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-              <TextSkeleton loading={loading && !isEdit} height="4">
+              <TextSkeleton loading={loading && !isEdit}>
                 {user.code?.toString() ?? user.key?.toString()}
               </TextSkeleton>
             </div>
@@ -275,7 +275,7 @@ const MyProfile = ({
               ></HookFormTextField>
             ) : (
               <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-                <TextSkeleton loading={loading && !isEdit} height="4">
+                <TextSkeleton loading={loading && !isEdit}>
                   {user.detail.full_name}
                 </TextSkeleton>
               </div>
@@ -292,7 +292,7 @@ const MyProfile = ({
               Username
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-              <TextSkeleton loading={loading && !isEdit} height="4">
+              <TextSkeleton loading={loading && !isEdit}>
                 {user.username}
               </TextSkeleton>
             </div>
@@ -309,7 +309,7 @@ const MyProfile = ({
               Role
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-              <TextSkeleton loading={loading && !isEdit} height="4">
+              <TextSkeleton loading={loading && !isEdit}>
                 {USER_TYPE[user.type]?.label}
               </TextSkeleton>
             </div>
@@ -322,7 +322,7 @@ const MyProfile = ({
               Status
             </div>
             <div className={`flex-auto max-w-[300px] font-medium`}>
-              <TextSkeleton loading={loading && !isEdit} height="4">
+              <TextSkeleton loading={loading && !isEdit}>
                 <span className={`${USER_STATUS[user.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
                 </span>
@@ -338,7 +338,7 @@ const MyProfile = ({
                 Updated At
               </div>
               <div className="flex-auto max-w-[300px] font-medium text-bw-1">
-                <TextSkeleton loading={loading && !isEdit} height="4">
+                <TextSkeleton loading={loading && !isEdit}>
                   {formatDate(user?.updated_at)}
                 </TextSkeleton>
               </div>

@@ -185,8 +185,8 @@ const LoginPage = () => {
             <SappButton
               title="Log In"
               full={true}
-              className="mb-6 !font-semibold"
-              size="medium"
+              className="mb-6 !font-semibold h-12.5"
+              size="lager"
               loading={loading ? loading : userLogin.loading}
               type="submit"
               disabled={loading}
@@ -203,7 +203,9 @@ const LoginPage = () => {
               inputStyle="border-[#DCDDDD]"
             />
             <span className="text-medium-sm text-gray-1 hover:underline">
-              <Link href={PageLink.AUTH_FORGOT_PASSWORD}>Forgot Password</Link>
+              <Link href={PageLink.AUTH_FORGOT_PASSWORD}>
+                Forgot Password ?
+              </Link>
             </span>
           </div>
           {/* <div className="flex justify-between items-center">

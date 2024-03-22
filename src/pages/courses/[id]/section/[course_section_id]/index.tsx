@@ -83,9 +83,6 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const handleRouterActivity = (id: string) => {
     router.push({
       pathname: `/courses/${router.query.id}/activity/${id}`,
-      query: {
-        classId: previewPart.class_id,
-      },
     })
   }
   const handleRouterCaseStudy = async (
@@ -230,7 +227,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
-        <div className="flex pt-6 pb-1 items-center">
+        <div className="flex pt-6 items-center">
           <span
             onClick={() => router.push('/courses')}
             className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
@@ -308,7 +305,6 @@ const CoursePartDetail = ({ previewPart }: any) => {
       >
         <TextSkeleton
           loading={loadingLearningOutcome}
-          height="4"
           widths={['70', '100', '100', '50', '100']}
           className="mb-4"
           classChild="rounded"
@@ -326,7 +322,6 @@ const CoursePartDetail = ({ previewPart }: any) => {
         )}
         <TextSkeleton
           loading={loadingLearningOutcome}
-          height="6"
           className="mt-4 last:mb-4"
           classChild="rounded"
           widths={['70', '100', '100', '50', '100']}

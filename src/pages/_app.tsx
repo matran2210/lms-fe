@@ -26,8 +26,8 @@ import { store, wrapper } from '../redux/store'
 import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
-import { Controls, Player } from '@lottiefiles/react-lottie-player'
-import animation from 'src/assets/images/animation.json'
+import { Player } from '@lottiefiles/react-lottie-player'
+import SappLoading from 'src/common/SappLoading'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -167,7 +167,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           name="csrf-token"
           content="Hl4U5KjkBFkHN2m2ptOE1L8QbTGV19yrEINaOrsd"
         />
-        <meta http-equiv="content-language" content="en" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -216,21 +215,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Toaster />
         <SappConfirmDialogContainer />
-        {loading ? (
-          <div className="bg-white backdrop-blur-3xl w-full h-full fixed block z-[9999]">
-            <Player
-              src={animation}
-              autoplay
-              loop
-              className="w-[125px] h-full top-0 left-0 z-[9999]backdrop-blur-3xl bg-white"
-              speed={3}
-            >
-              <Controls />
-            </Player>
-          </div>
-        ) : (
-          <></>
-        )}
+        {loading ? <SappLoading /> : <></>}
         <RouteGuard>
           <>
             {content}

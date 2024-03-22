@@ -86,7 +86,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
                 dangerouslySetInnerHTML={{
                   __html: courses?.description,
                 }}
-                className="text-base h-[120px]"
+                className="text-base h-[120px] text-bw-1"
               />
             </Tooltip>
           ) : (
@@ -94,7 +94,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
               dangerouslySetInnerHTML={{
                 __html: courses?.description,
               }}
-              className="text-base h-[120px]"
+              className="text-base h-[120px] text-bw-1"
             />
           )}
         </div>
@@ -102,13 +102,13 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
       <div className="mt-auto">
         <div className="progress mb-6">
           <div className="info flex justify-between mb-2">
-            <div className="text flex items-baseline">
-              <Icon type={`${iconType}`} className="relative top-0.5" />
-              <p className="text-medium-sm font-medium text-bw-1 pl-1 ml-px">
+            <div className="text flex items-end">
+              <Icon type={`${iconType}`} />
+              <p className="text-medium-sm font-medium text-bw-1 pl-1 ml-px leading-[14px]">
                 {showStatus}
               </p>
               <span className="text-medium-sm font-medium text-gray-1 pl-1 ml-px">
-                {formattedTime} left
+                {courses?.remaining_time > 0 ? `${formattedTime} left` : ''}
               </span>
             </div>
             <div className="number">
@@ -135,7 +135,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
             }
             full={false}
             size={'small'}
-            className="hover:bg-primary hover:text-white ml-auto"
+            className="ml-auto"
             onClick={() =>
               courses?.course_section_type === 'PART'
                 ? router.push(

@@ -374,13 +374,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToActivity}
         />
       </div>
-      <TextSkeleton
-        loading={loading}
-        height="full"
-        length={10}
-        className="mt-6 h-[92px] last:mb-6"
-        classChild="rounded-none"
-      >
+      <TextSkeleton loading={loading} length={10}>
         {resources?.resources?.map((resource) => (
           <div key={resource.id}>
             <div

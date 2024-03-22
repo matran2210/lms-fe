@@ -157,27 +157,36 @@ const submitQuiz = createAsyncThunk(
     {
       id,
       data,
-    }: { id: string; data: { answers: any[]; quiz_position_mapping: any } },
+      class_user_id,
+    }: {
+      id: string
+      data: { answers: any[]; quiz_position_mapping: any }
+      class_user_id?: string
+    },
 
     { rejectWithValue },
   ) => {
     try {
-      const result = await CourseActivityApi.submitQuiz(id, {
-        ...data,
-        answers:
-          (data.answers || [])
-            .map((e) => {
-              let value = e?.[0] || e
-              return value
-            })
-            ?.filter(
-              (e) =>
-                e.answer ||
-                e.question_answer_id ||
-                e.short_answer ||
-                e.answer_file,
-            ) || undefined,
-      })
+      const result = await CourseActivityApi.submitQuiz(
+        id,
+        {
+          ...data,
+          answers:
+            (data.answers || [])
+              .map((e) => {
+                let value = e?.[0] || e
+                return value
+              })
+              ?.filter(
+                (e) =>
+                  e.answer ||
+                  e.question_answer_id ||
+                  e.short_answer ||
+                  e.answer_file,
+              ) || undefined,
+        },
+        class_user_id,
+      )
 
       if (result.success) {
         return { ...result }
