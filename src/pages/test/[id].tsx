@@ -1436,7 +1436,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 // color={color}
                 submit={{
                   title: 'Finish',
-                  size: 'medium',
+                  size: 'small',
                   loading: false,
                   disabled: submited,
                   className: 'border border-bw-1',
@@ -1449,7 +1449,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 }}
                 cancel={{
                   title: 'Quit',
-                  size: 'medium',
+                  size: 'small',
                   className: 'border border-bw-1 !w-[109px]',
                   color: 'secondary',
                   onClick: () => {
