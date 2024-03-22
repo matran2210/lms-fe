@@ -1,10 +1,10 @@
-import React, { useState, Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import Icon from '@components/icons'
 import blankAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { calculateTimeAgo } from '@utils/helpers'
-import { useAppDispatch } from 'src/redux/hook'
 import { ANIMATION } from 'src/constants'
+import Aos from 'aos'
 
 interface IProps {
   notifyLists: any[]
@@ -23,8 +23,6 @@ const NotifyList = ({
   setOpen,
   getApiNotificationDetail,
 }: IProps) => {
-  const dispatch = useAppDispatch()
-
   const handleOpen = async (
     id: string,
     redirect: string | null,
@@ -40,6 +38,10 @@ const NotifyList = ({
       setOpen(!open)
     }
   }
+
+  useEffect(() => {
+    Aos.init({ duration: ANIMATION.DURATION })
+  })
 
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
