@@ -58,9 +58,8 @@ import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
-import Image from 'next/image'
-import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import SappLoading from 'src/common/SappLoading'
+import toast from 'react-hot-toast'
 
 type Window = {
   userAgreed: any
@@ -383,10 +382,16 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return arr
     })
   }
+
   const handleFlagQuestion = (tab: any) => {
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
         if (tab === item.id) {
+          if (!item.flaged) {
+            toast.success('The question has been marked!')
+          } else {
+            toast.success('The question has been unmaked!')
+          }
           return { ...item, flaged: !item.flaged }
         }
         return item
@@ -394,6 +399,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return newData
     })
   }
+
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
