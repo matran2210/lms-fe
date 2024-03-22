@@ -104,7 +104,7 @@ const SappDrawer = ({
           <div className="">{children}</div>
         </div>
         {footer && (
-          <div className="flex justify-between h-[82px] items-center border-t border-default absolute bottom-0 left-0 right-0 w-full bg-white">
+          <div className="flex justify-between h-[66px] items-center border-t border-default absolute bottom-0 left-0 right-0 w-full bg-white">
             <ButtonText
               title="Cancel"
               className="ms-[4px]"
