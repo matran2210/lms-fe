@@ -139,28 +139,27 @@ const PartFailed = ({
                 title="Result"
                 isUnderLine
                 color="text"
-                className="!font-semibold underline !p-0"
+                className="font-medium underline !p-0"
                 onClick={() =>
                   router.push(
                     `/courses/test/test-result/${quizAttempt?.attempts[0].id}`,
                   )
                 }
               ></SappButton>
-              <ButtonSecondary
-                disabled={
-                  coursePart?.quiz?.is_limited &&
-                  coursePart?.quiz?.attempt_count ===
-                    coursePart?.quiz?.limit_count
-                }
-                title={'Retake'}
-                full={false}
-                size={'small'}
-                className={`${
-                  coursePart?.quiz?.attempt_count !==
-                    coursePart?.quiz?.limit_count && ''
-                } ml-auto`}
-                onClick={() => setOpen(true)}
-              />
+              {coursePart?.quiz?.is_limited &&
+              coursePart?.quiz?.attempt_count ===
+                coursePart?.quiz?.limit_count ? null : (
+                <ButtonSecondary
+                  title="Retake"
+                  full={false}
+                  size="small"
+                  className={`${
+                    coursePart?.quiz?.attempt_count !==
+                      coursePart?.quiz?.limit_count && ''
+                  } ml-auto`}
+                  onClick={() => setOpen(true)}
+                />
+              )}
             </div>
           )}
         </div>

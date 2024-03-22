@@ -57,7 +57,7 @@ const PageLink = ({
       <li
         className={`flex items-center justify-center ${
           type === 'table'
-            ? 'text-gray-5 min-w-8 min-h-8 text-gray-5'
+            ? 'text-gray-5 min-w-8 min-h-8'
             : 'min-h-default text-3xl leading-8.5 text-gray-1 font-thin '
         }`}
       >
@@ -77,7 +77,7 @@ const PageLink = ({
       ${
         active
           ? 'bg-primary text-white border-active'
-          : 'text-gray-1 border-gray-2 hover:bg-primary hover:text-white hover:border-active'
+          : 'text-gray-1 border-gray-2 hover:bg-primary hover:text-white hover:border-active bg-gray-3'
       }
       `}
       aria-current={active ? 'page' : undefined}

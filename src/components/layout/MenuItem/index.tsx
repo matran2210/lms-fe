@@ -32,6 +32,7 @@ export default function MenuItem({
     router.pathname.includes('/my-course') ||
     router.pathname.includes('/section') ||
     router.pathname.includes('/activity')
+
   const isProfile =
     Icon === 'avatar' &&
     (router.asPath === '/myprofile' ||
@@ -39,10 +40,9 @@ export default function MenuItem({
       router.asPath === '/settings' ||
       router.asPath === '/login_history' ||
       router.asPath === '/devices')
-  const selected =
-    router.pathname === url ||
-    (Icon === 'stats-chart-sharp' && isDetailCourse) ||
-    isProfile
+
+  const selected = router.pathname === url
+
   const isNested = subItems && subItems?.length > 0
 
   const onClick = () => {
@@ -151,7 +151,7 @@ export default function MenuItem({
             <div className="text-base font-semibold text-bw-1 group-hover:text-primary line-clamp-1">
               {user?.detail?.full_name}
             </div>
-            <div className="text-medium-sm font-normal line-clamp-1">
+            <div className="text-medium-sm text-gray-1 font-normal line-clamp-1 capitalize group-hover:text-primary">
               {user?.type?.toLowerCase()}
             </div>
           </div>
