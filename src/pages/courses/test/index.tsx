@@ -55,7 +55,6 @@ const TestModal = ({
       handleCancel={() => setOpen(false)}
       onOk={onSubmit}
       okButtonCaption={checkFinished ? 'Retake' : 'Start'}
-      okButtonClass="py-[13px] px-9"
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
     >

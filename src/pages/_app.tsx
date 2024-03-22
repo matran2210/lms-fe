@@ -27,7 +27,7 @@ import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import { Player } from '@lottiefiles/react-lottie-player'
-import animation from 'src/assets/images/animation.json'
+import SappLoading from 'src/common/SappLoading'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -215,19 +215,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Toaster />
         <SappConfirmDialogContainer />
-        {loading ? (
-          <div className="backdrop-blur-3xl w-full h-full fixed block z-[9999]">
-            <Player
-              src={animation}
-              autoplay
-              loop
-              className="top-0 left-0 z-[9999] backdrop-blur-3xl bg-white"
-              speed={3}
-            />
-          </div>
-        ) : (
-          <></>
-        )}
+        {loading ? <SappLoading /> : <></>}
         <RouteGuard>
           <>
             {content}
