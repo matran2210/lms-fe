@@ -47,58 +47,68 @@ const SAPPVideo = ({
   useEffect(() => {
     let player: any
     const initTerminal = async () => {
-      const dashjs = await import('dashjs')
-      if (options?.src && dashjs) {
-        player = dashjs.MediaPlayer().create()
-        player.initialize(
-          streamRef.current,
-          `${video_url}${options?.src}/manifest/video.mpd`,
-          false,
-        )
-
-        // Add eventlisteners
-        if (streamRef.current) {
-          streamRef.current.addEventListener('play', updatePlayButton)
-          streamRef.current.addEventListener('pause', updatePlayButton)
-          streamRef.current.addEventListener('loadedmetadata', initializeVideo)
-          streamRef.current.addEventListener('timeupdate', updateTimeElapsed)
-          streamRef.current.addEventListener('timeupdate', updateProgress)
-          streamRef.current.addEventListener('volumechange', updateVolumeIcon)
-          streamRef.current.addEventListener('click', togglePlay)
-          streamRef.current.addEventListener('click', animatePlayback)
-          streamRef.current.addEventListener('mouseenter', showControls)
-          streamRef.current.addEventListener('mouseleave', hideControls)
-        }
-        if (videoControlsRef.current) {
-          videoControlsRef.current.addEventListener('mouseenter', showControls)
-          videoControlsRef.current.addEventListener('mouseleave', hideControls)
-        }
-        if (seekRef.current) {
-          seekRef.current.addEventListener('mousemove', updateSeekTooltip)
-          seekRef.current.addEventListener('input', skipAhead)
-        }
-        if (volumeRef.current) {
-          volumeRef.current.addEventListener('input', updateVolume)
-        }
-        if (videoContainerRef.current) {
-          videoContainerRef.current.addEventListener(
-            'fullscreenchange',
-            updateFullscreenButton,
+      if (options?.src) {
+        const dashjs = await import('dashjs')
+        if (dashjs) {
+          player = dashjs.MediaPlayer().create()
+          player.initialize(
+            streamRef.current,
+            `${video_url}${options?.src}/manifest/video.mpd`,
+            false,
           )
-        }
-        document.addEventListener('keyup', keyboardShortcuts)
-        const videoWorks = !!streamRef.current?.canPlayType
-        if (videoWorks && videoControlsRef.current) {
-          streamRef.current.controls = false
-          videoControlsRef.current.classList.remove('hidden')
         }
       }
     }
     initTerminal()
-
     return () => {
       if (player) {
         player.reset()
+      }
+    }
+  }, [options?.src])
+
+  useEffect(() => {
+    // Add eventlisteners
+    if (options?.src) {
+      if (streamRef.current) {
+        streamRef.current.addEventListener('play', updatePlayButton)
+        streamRef.current.addEventListener('pause', updatePlayButton)
+        streamRef.current.addEventListener('loadedmetadata', initializeVideo)
+        streamRef.current.addEventListener('timeupdate', updateTimeElapsed)
+        streamRef.current.addEventListener('timeupdate', updateProgress)
+        streamRef.current.addEventListener('volumechange', updateVolumeIcon)
+        streamRef.current.addEventListener('click', togglePlay)
+        streamRef.current.addEventListener('click', animatePlayback)
+        streamRef.current.addEventListener('mouseenter', showControls)
+        streamRef.current.addEventListener('mouseleave', hideControls)
+      }
+      if (videoControlsRef.current) {
+        videoControlsRef.current.addEventListener('mouseenter', showControls)
+        videoControlsRef.current.addEventListener('mouseleave', hideControls)
+      }
+      if (seekRef.current) {
+        seekRef.current.addEventListener('mousemove', updateSeekTooltip)
+        seekRef.current.addEventListener('input', skipAhead)
+      }
+      if (volumeRef.current) {
+        volumeRef.current.addEventListener('input', updateVolume)
+      }
+      if (videoContainerRef.current) {
+        videoContainerRef.current.addEventListener(
+          'fullscreenchange',
+          updateFullscreenButton,
+        )
+      }
+      document.addEventListener('keyup', keyboardShortcuts)
+      const videoWorks = !!streamRef.current?.canPlayType
+      if (videoWorks && videoControlsRef.current) {
+        streamRef.current.controls = false
+        videoControlsRef.current.classList.remove('hidden')
+      }
+    }
+
+    return () => {
+      if (options?.src) {
         if (streamRef.current) {
           streamRef.current.removeEventListener('play', updatePlayButton)
           streamRef.current.removeEventListener('pause', updatePlayButton)
