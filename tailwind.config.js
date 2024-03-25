@@ -122,6 +122,7 @@ module.exports = {
         select:
           '0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 4px 0px rgba(0, 0, 0, 0.04)',
         'sidebar-tablet': '0px -2px 7px 0px #0000001A',
+        pagination: '0px 2px 7px 0px #00000021',
       },
       minWidth: {
         4: '16px',

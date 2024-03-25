@@ -675,7 +675,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 // color={color}
                 submit={{
                   title: 'Finish',
-                  size: 'medium',
+                  size: 'small',
                   loading: false,
                   disabled: false,
                   onClick: () => {
@@ -685,7 +685,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 }}
                 cancel={{
                   title: 'Quit',
-                  size: 'medium',
+                  size: 'small',
                   onClick: () => {
                     setOpenQuit(true)
                     setUnsavedChanges(false)
