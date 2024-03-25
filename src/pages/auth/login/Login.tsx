@@ -185,8 +185,8 @@ const LoginPage = () => {
             <SappButton
               title="Log In"
               full={true}
-              className="mb-6 !font-semibold"
-              size="medium"
+              className="mb-6 !font-semibold h-12.5"
+              size="lager"
               loading={loading ? loading : userLogin.loading}
               type="submit"
               disabled={loading}
