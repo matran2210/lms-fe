@@ -2,6 +2,7 @@ import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
+import { formatTimeToHourMinuteSecond } from '@utils/helpers'
 
 interface TimeLineItem {
   time: number
@@ -148,12 +149,8 @@ const SAPPVideo = ({
     if (openFinishQuiz) {
       if (document?.fullscreenElement) {
         document.exitFullscreen()
-      } else if (
-        document?.fullscreenElement === undefined &&
-        document?.fullscreenElement
-      ) {
-        document.exitFullscreen()
       }
+
       if (streamRef?.current) {
         streamRef.current.pause()
       }
@@ -188,31 +185,13 @@ const SAPPVideo = ({
     }
   }
 
-  // formatTime takes a time length in seconds and returns the time in
-  // minutes and seconds
-  function formatTime(timeInSeconds: number) {
-    const hours = Math.floor(timeInSeconds / 3600)
-    const minutes = Math.floor((timeInSeconds % 3600) / 60)
-    const seconds = Math.floor(timeInSeconds % 60)
-
-    const formattedHours = String(hours).padStart(2, '0')
-    const formattedMinutes = String(minutes).padStart(2, '0')
-    const formattedSeconds = String(seconds).padStart(2, '0')
-
-    return {
-      hours: formattedHours,
-      minutes: formattedMinutes,
-      seconds: formattedSeconds,
-    }
-  }
-
   // initializeVideo sets the video duration, and maximum value of the
   // progressBar
   function initializeVideo() {
     const videoDuration = Math.round(streamRef?.current?.duration)
     seekRef?.current?.setAttribute('max', String(videoDuration))
     progressBarRef?.current?.setAttribute('max', String(videoDuration))
-    const time = formatTime(videoDuration)
+    const time = formatTimeToHourMinuteSecond(videoDuration)
     if (durationRef?.current) {
       durationRef.current.innerText = `${
         time.hours !== '00' ? time.hours + ':' : ''
@@ -243,7 +222,9 @@ const SAPPVideo = ({
   // the current playback is by updating the timeElapsed element
   function updateTimeElapsed() {
     if (streamRef?.current && streamRef?.current?.readyState) {
-      const time = formatTime(Math.round(streamRef.current?.currentTime || 0))
+      const time = formatTimeToHourMinuteSecond(
+        Math.round(streamRef.current?.currentTime || 0),
+      )
       if (timeElapsedRef.current) {
         timeElapsedRef.current.innerText = `${
           time.hours !== '00' ? time.hours + ':' : ''
@@ -278,7 +259,7 @@ const SAPPVideo = ({
       (event.offsetX / (event.target as HTMLElement).clientWidth) *
         parseInt((event.target as HTMLElement).getAttribute('max') || '0', 10),
     )
-    const t = formatTime(skipTo)
+    const t = formatTimeToHourMinuteSecond(skipTo)
     if (
       progressBarRef?.current &&
       seekRef?.current &&
@@ -397,17 +378,10 @@ const SAPPVideo = ({
     if (document?.fullscreenElement) {
       document.exitFullscreen()
     } else if (
-      document?.fullscreenElement === undefined &&
-      document?.fullscreenElement
+      videoContainerRef?.current &&
+      videoContainerRef?.current?.requestFullscreen
     ) {
-      document.exitFullscreen()
-    } else if (
-      videoContainerRef.current instanceof HTMLVideoElement &&
-      videoContainerRef.current.requestFullscreen
-    ) {
-      videoContainerRef.current.requestFullscreen()
-    } else if (videoContainerRef.current?.requestFullscreen) {
-      videoContainerRef.current.requestFullscreen()
+      videoContainerRef?.current?.requestFullscreen()
     }
   }
 

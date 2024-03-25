@@ -97,11 +97,7 @@ const VideoDocument = ({
     }
   }, [])
   useEffect(() => {
-    if (
-      handleProcess &&
-      !streamRef?.current?.paused &&
-      streamRef?.current?.paused !== undefined
-    ) {
+    if (handleProcess && streamRef?.current?.paused === false) {
       handleProcess()
     }
   }, [streamRef?.current?.paused])
