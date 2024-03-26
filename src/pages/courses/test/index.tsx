@@ -51,7 +51,7 @@ const TestModal = ({
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
   const runOutAttemp = data?.quiz?.attempt_count / data?.quiz?.is_limited
   useEffect(() => {
-    if (runOutAttemp === 1) {
+    if (runOutAttemp >= 1) {
       setIsRunoutAttemp(false)
     }
   }, [runOutAttemp])
