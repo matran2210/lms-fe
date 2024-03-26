@@ -37,6 +37,7 @@ const LearningNotesList = () => {
   const courseId = router.query.courseId
   const queryId = router.query.id
   const activityId = router.query.activityId
+  const courseSectionId = router.query.course_section_id
   const [selectedSection, setSelectedSection] = useState<any>(null)
   const [selectedSubsection, setSelectedSubsection] = useState<any>(null)
   const [selectedUnit, setSelectedUnit] = useState<any>(null)
@@ -111,10 +112,12 @@ const LearningNotesList = () => {
   useEffect(() => {
     const objectParams = cleanParamsAPI({
       class_id: courseId || queryId,
-      course_section_id: activityId || '',
+      course_section_id: activityId || courseSectionId || '',
     })
-
-    if (router?.query?.activityId && notesListStatus) {
+    if (
+      router?.query?.activityId ||
+      (router?.query?.course_section_id && notesListStatus)
+    ) {
       setLoading(true)
       CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
         .then((res) => {
