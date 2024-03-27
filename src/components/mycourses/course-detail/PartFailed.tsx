@@ -57,7 +57,8 @@ const PartFailed = ({
     <>
       <div>
         <div
-          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-default`}
+          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-pointer`}
+          onClick={() => setOpen(true)}
         >
           {(coursePart?.name as string)?.length > 50 ? (
             <Tooltip title={coursePart?.name} color="#ffffff" placement="top">
