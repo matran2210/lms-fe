@@ -19,6 +19,7 @@ import { format } from 'date-fns'
 import PreviewNoteList from './PreviewNoteList'
 import { v4 as uuidv4 } from 'uuid'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import Link from 'next/link'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -51,7 +52,6 @@ const LearningNotesList = () => {
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
-
   const toggleExpand = (noteId: string) => {
     setExpandedNotes((prevExpanded: any) => {
       if (prevExpanded.includes(noteId)) {
@@ -530,14 +530,18 @@ const LearningNotesList = () => {
                               setOpen={closePreview}
                             />
                           )}
-                          <span
-                            className="notes-list-icon"
-                            onClick={() => {
-                              setViewActivity(`note.${index}.value`)
-                            }}
+                          <Link
+                            href={
+                              queryId
+                                ? `/courses/${queryId}/activity/${note?.course_section_id}`
+                                : '#'
+                            }
+                            passHref
                           >
-                            <ViewIcon />
-                          </span>
+                            <span className="notes-list-icon">
+                              <ViewIcon />
+                            </span>
+                          </Link>
                         </>
                       )}
                     </div>
