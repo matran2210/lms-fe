@@ -521,7 +521,6 @@ const LearningNotesList = () => {
                                 ? `/courses/${queryId}/activity/${note?.course_section_id}`
                                 : '#'
                             }
-                            passHref
                           >
                             <span className="notes-list-icon">
                               <ViewIcon />
