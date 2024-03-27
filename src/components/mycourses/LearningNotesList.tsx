@@ -16,7 +16,6 @@ import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { resetNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
-import PreviewNoteList from './PreviewNoteList'
 import { v4 as uuidv4 } from 'uuid'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Link from 'next/link'
@@ -48,7 +47,6 @@ const LearningNotesList = () => {
   const [unit, setUnit] = useState<ISection[]>([])
   const [activity, setActivity] = useState<ISection[]>([])
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
-  const [viewActivity, setViewActivity] = useState<string>()
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -161,7 +159,6 @@ const LearningNotesList = () => {
       CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
         .then((res) => {
           setNotesListData(res?.data)
-          setViewActivity('')
         })
         .catch((err) => {})
         .finally(() => {
@@ -317,7 +314,6 @@ const LearningNotesList = () => {
     try {
       const res = await CourseAPI.getCourseNotesList(pageIndex, params)
       setNotesListData(res?.data)
-      setViewActivity('')
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } catch (error) {
       // Handle error if needed
@@ -334,10 +330,6 @@ const LearningNotesList = () => {
       fetchData(params)
       toast.success('Xóa thành công!')
     } catch (error) {}
-  }
-
-  const closePreview = () => {
-    setViewActivity('')
   }
 
   const handleEditNote = (id: string, description: string, index: number) => {
@@ -523,13 +515,6 @@ const LearningNotesList = () => {
                         </span>
                       ) : (
                         <>
-                          {viewActivity === `note.${index}.value` && (
-                            <PreviewNoteList
-                              title={note?.name}
-                              content={note?.description}
-                              setOpen={closePreview}
-                            />
-                          )}
                           <Link
                             href={
                               queryId
