@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { ICourseSection } from 'src/type/courses'
@@ -52,7 +52,14 @@ const PartFailed = ({
     const secondPoint = parseInt(parts[1], 10)
     return roundNumber((firstPoint / secondPoint) * 100)
   }
-
+  const runOutAttemp =
+    coursePart?.quiz?.attempt_count / coursePart?.quiz?.limit_count
+  const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
+  useEffect(() => {
+    if (runOutAttemp >= 1) {
+      setIsRunoutAttemp(false)
+    }
+  }, [runOutAttemp])
   return (
     <>
       <div>
@@ -114,8 +121,9 @@ const PartFailed = ({
         <div className="action flex items-center jusity-end relative">
           {!checkFinished ? (
             !coursePart?.quiz?.is_limited ||
-            coursePart?.quiz?.attempts?.length !==
-              coursePart?.quiz?.limit_count ? (
+            (coursePart?.quiz?.attempts?.length !==
+              coursePart?.quiz?.limit_count &&
+              isRunoutAttemp) ? (
               <ButtonSecondary
                 disabled={
                   coursePart?.quiz?.is_limited &&
