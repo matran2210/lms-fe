@@ -146,7 +146,7 @@ const YourScoreDetail = () => {
           hasCheck={false}
         >
           <>
-            {scoreDetail.answers?.map((e: any, index: number) => {
+            {scoreDetail?.answers?.map((e: any, index: number) => {
               return (
                 <tr
                   className="border-dashed border-b border-gray-2"
