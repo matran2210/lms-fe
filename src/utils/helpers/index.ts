@@ -185,3 +185,21 @@ export const convertHourToDayLeft = (hours: number) => {
   const days = Math.ceil(hours / 24)
   return days
 }
+
+// formatTime takes a time length in seconds and returns the time in
+// minutes and seconds
+export const formatTimeToHourMinuteSecond = (timeInSeconds: number) => {
+  const hours = Math.floor(timeInSeconds / 3600)
+  const minutes = Math.floor((timeInSeconds % 3600) / 60)
+  const seconds = Math.floor(timeInSeconds % 60)
+
+  const formattedHours = String(hours).padStart(2, '0')
+  const formattedMinutes = String(minutes).padStart(2, '0')
+  const formattedSeconds = String(seconds).padStart(2, '0')
+
+  return {
+    hours: formattedHours,
+    minutes: formattedMinutes,
+    seconds: formattedSeconds,
+  }
+}
