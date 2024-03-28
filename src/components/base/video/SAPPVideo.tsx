@@ -16,7 +16,6 @@ interface IProp {
   hideVideo?: boolean
   openQuestion?: boolean
   timeLine?: TimeLineItem[]
-  openFinishQuiz?: boolean
   children?: ReactNode
 }
 
@@ -27,7 +26,6 @@ const SAPPVideo = ({
   hideVideo = false,
   openQuestion = false,
   timeLine,
-  openFinishQuiz = false,
   children,
 }: IProp) => {
   const [valueVolume, setValueVolume] = useState<number>(1)
@@ -153,19 +151,6 @@ const SAPPVideo = ({
       }
     }
   }, [options?.src, streamRef?.current, playbackAnimationRef?.current])
-
-  // Listen for changes in the 'openFinishQuiz' state.
-  useEffect(() => {
-    if (openFinishQuiz) {
-      if (document?.fullscreenElement) {
-        document.exitFullscreen()
-      }
-
-      if (streamRef?.current) {
-        streamRef.current.pause()
-      }
-    }
-  }, [openFinishQuiz])
 
   // togglePlay toggles the playback state of the video.
   // If the video playback is paused or ended, the video is played
