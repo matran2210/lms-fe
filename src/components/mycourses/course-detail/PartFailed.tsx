@@ -56,7 +56,7 @@ const PartFailed = ({
     coursePart?.quiz?.attempt_count / coursePart?.quiz?.limit_count
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
   useEffect(() => {
-    if (runOutAttemp >= 1) {
+    if (runOutAttemp >= 1 && coursePart?.quiz?.is_limited === true) {
       setIsRunoutAttemp(false)
     }
   }, [runOutAttemp])
