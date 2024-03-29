@@ -31,7 +31,10 @@
 
 *:not(math, math *),
 *:not(math, math *)::after,
-*:not(math, math *)::before {
+*:not(math, math *)::before,
+*:not(math, math *):not(.editor-wrap),
+*:not(math, math *)::after:not(.editor-wrap),
+*:not(math, math *)::before:not(.editor-wrap) {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -136,12 +139,21 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .editor-wrap {
+  color: #5e6278;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
   hr {
     @apply hidden;
   }
 
   p {
     @apply break-words mb-2;
+    font-family: Roboto, sans-serif;
+    color: #5e6278;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
   }
 
   thead,
