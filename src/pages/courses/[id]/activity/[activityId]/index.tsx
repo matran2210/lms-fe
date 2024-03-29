@@ -1,5 +1,4 @@
 import { CloseIcon } from '@assets/icons'
-import { StreamPlayerApi } from '@cloudflare/stream-react'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
@@ -62,7 +61,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
-  const streamRef = useRef<StreamPlayerApi[]>(null)
   const videoRef = useRef<any>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
@@ -111,7 +109,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     endActivityRef.current,
     quizDocumentRef.current,
     observerRef.current,
-    streamRef.current,
     videoRef.current,
   ])
 
@@ -470,7 +467,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           )}
         </>
       </>
-      <div className="shadow-activity">
+      <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
         <div className="bg-gray-3 px-6 ">
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
             <div className="font-medium text-2xl ">{activity?.name}</div>
@@ -542,15 +539,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           >
             {selector.tabs?.map((e) => {
               return (
-                <div title={e.name} key={e.id}>
-                  <SappButton
-                    size="small"
-                    className="py-2.5 !px-3 text-medium-sm !font-normal"
-                    color={tabButtonColor(e.id)}
-                    title={truncateString(e.name, 60)}
-                    onClick={() => handleChangeTab(e.id)}
-                  ></SappButton>
-                </div>
+                <SappButton
+                  key={e.id}
+                  size="small"
+                  className="py-2.5 !px-3 text-medium-sm !font-normal"
+                  color={tabButtonColor(e.id)}
+                  title={truncateString(e.name, 60)}
+                  onClick={() => handleChangeTab(e.id)}
+                ></SappButton>
               )
             })}
           </div>
@@ -607,7 +603,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                       <div
                         className={marginBottom}
                         key={i + '_' + selector.currentTabId}
-                        data-aos={ANIMATION.DATA_AOS}
                       >
                         <VideoDocument
                           videos={e.videos}
@@ -694,7 +689,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       </div>
       {/* </FadeInOut> */}
       <div data-aos={ANIMATION.DATA_AOS}>
-        {(activity?.total_activity as number) > 1 && (
+        {(activity?.total_activity as Number) > 1 && (
           <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
             <div className="flex justify-between flex-nowrap gap-5">
               {activity.previous_activity && (
@@ -750,7 +745,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-        <Discussion class_id={(router.query.id as string) || ''} />
+        <Discussion class_id={(router.query.classId as string) || ''} />
       </div>
       {openScratchPad.map((e, index: number) => {
         if (e.type === 'file') {

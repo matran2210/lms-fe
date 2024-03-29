@@ -1436,7 +1436,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 // color={color}
                 submit={{
                   title: 'Finish',
-                  size: 'medium',
+                  size: 'small',
                   loading: false,
                   disabled: submited,
                   className: 'border border-bw-1',
@@ -1449,7 +1449,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 }}
                 cancel={{
                   title: 'Quit',
-                  size: 'medium',
+                  size: 'small',
                   className: 'border border-bw-1 !w-[109px]',
                   color: 'secondary',
                   onClick: () => {
@@ -1463,7 +1463,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             </div>
             {/* End Header */}
             {tabs?.length > 0 && (
-              <div className="px-6 bg-gray-4 shadow-solution relative py-2 w-full z-10">
+              <div className="px-6 bg-gray-4 shadow-pagination relative py-2 w-full z-10">
                 <TabSlide
                   data={filteredTabs}
                   currentTab={currentPage}

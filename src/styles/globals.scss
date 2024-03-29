@@ -5,6 +5,7 @@
 @import 'select.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
+@import 'video.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -784,6 +785,14 @@ $focus: (
   background-color: #000000cc;
 }
 
+.shadow-activity.aos-init.aos-animate {
+  transform: none !important;
+}
+
 .sapp-dashboard {
   height: 80vh;
+}
+
+textarea:focus {
+  --tw-ring-color: #ffb800;
 }

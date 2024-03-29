@@ -16,9 +16,9 @@ import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { resetNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
-import PreviewNoteList from './PreviewNoteList'
 import { v4 as uuidv4 } from 'uuid'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import Link from 'next/link'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -37,6 +37,7 @@ const LearningNotesList = () => {
   const courseId = router.query.courseId
   const queryId = router.query.id
   const activityId = router.query.activityId
+  const courseSectionId = router.query.course_section_id
   const [selectedSection, setSelectedSection] = useState<any>(null)
   const [selectedSubsection, setSelectedSubsection] = useState<any>(null)
   const [selectedUnit, setSelectedUnit] = useState<any>(null)
@@ -46,11 +47,9 @@ const LearningNotesList = () => {
   const [unit, setUnit] = useState<ISection[]>([])
   const [activity, setActivity] = useState<ISection[]>([])
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
-  const [viewActivity, setViewActivity] = useState<string>()
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
-
   const toggleExpand = (noteId: string) => {
     setExpandedNotes((prevExpanded: any) => {
       if (prevExpanded.includes(noteId)) {
@@ -111,10 +110,12 @@ const LearningNotesList = () => {
   useEffect(() => {
     const objectParams = cleanParamsAPI({
       class_id: courseId || queryId,
-      course_section_id: activityId || '',
+      course_section_id: activityId || courseSectionId || '',
     })
-
-    if (router?.query?.activityId && notesListStatus) {
+    if (
+      router?.query?.activityId ||
+      (router?.query?.course_section_id && notesListStatus)
+    ) {
       setLoading(true)
       CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
         .then((res) => {
@@ -158,7 +159,6 @@ const LearningNotesList = () => {
       CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
         .then((res) => {
           setNotesListData(res?.data)
-          setViewActivity('')
         })
         .catch((err) => {})
         .finally(() => {
@@ -314,7 +314,6 @@ const LearningNotesList = () => {
     try {
       const res = await CourseAPI.getCourseNotesList(pageIndex, params)
       setNotesListData(res?.data)
-      setViewActivity('')
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } catch (error) {
       // Handle error if needed
@@ -331,10 +330,6 @@ const LearningNotesList = () => {
       fetchData(params)
       toast.success('Xóa thành công!')
     } catch (error) {}
-  }
-
-  const closePreview = () => {
-    setViewActivity('')
   }
 
   const handleEditNote = (id: string, description: string, index: number) => {
@@ -520,21 +515,17 @@ const LearningNotesList = () => {
                         </span>
                       ) : (
                         <>
-                          {viewActivity === `note.${index}.value` && (
-                            <PreviewNoteList
-                              title={note?.name}
-                              content={note?.description}
-                              setOpen={closePreview}
-                            />
-                          )}
-                          <span
-                            className="notes-list-icon"
-                            onClick={() => {
-                              setViewActivity(`note.${index}.value`)
-                            }}
+                          <Link
+                            href={
+                              queryId
+                                ? `/courses/${queryId}/activity/${note?.course_section_id}`
+                                : '#'
+                            }
                           >
-                            <ViewIcon />
-                          </span>
+                            <span className="notes-list-icon">
+                              <ViewIcon />
+                            </span>
+                          </Link>
                         </>
                       )}
                     </div>
