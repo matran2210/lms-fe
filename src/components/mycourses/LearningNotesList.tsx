@@ -105,7 +105,6 @@ const LearningNotesList = () => {
       selectedSection?.value ||
       '',
   })
-
   // Lấy danh sách notes và fill tự động activity khi lần đầu mở trong activity
   useEffect(() => {
     const objectParams = cleanParamsAPI({
@@ -517,8 +516,10 @@ const LearningNotesList = () => {
                         <>
                           <Link
                             href={
-                              queryId
-                                ? `/courses/${queryId}/activity/${note?.course_section_id}`
+                              queryId || courseId
+                                ? `/courses/${
+                                    queryId || courseId
+                                  }/activity/${note?.course_section_id}`
                                 : '#'
                             }
                           >
