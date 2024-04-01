@@ -472,7 +472,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
             <div className="font-medium text-2xl ">{activity?.name}</div>
             <div className="text-sm text-gray-1 whitespace-nowrap">
-              {activity?.duration || 0} min estimated
+              {activity?.duration || 0}{' '}
+              {activity?.duration > 1 ? 'mins' : 'min'} estimated
             </div>
           </div>
 
