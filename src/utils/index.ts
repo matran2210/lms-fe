@@ -123,3 +123,12 @@ export const parseHTMLToString = (htmlContent: string) => {
   tempElement.innerHTML = htmlContent
   return tempElement.textContent || tempElement.innerText
 }
+
+// Hàm thay thế style text-align: center thành style text-align: -webkit-center trong chuỗi HTML
+export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
+  // Sử dụng biểu thức chính quy để thay thế
+  return htmlString.replace(
+    /text-align:\s*center/g,
+    'text-align: -webkit-center',
+  )
+}
