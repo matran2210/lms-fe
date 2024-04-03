@@ -58,7 +58,7 @@ const ConFirmSubmit = ({
           <SappButton
             title={'Submit'}
             size="medium"
-            className="w-full"
+            className="w-full h-12.5"
             onClick={onSubmit}
           />
         </div>

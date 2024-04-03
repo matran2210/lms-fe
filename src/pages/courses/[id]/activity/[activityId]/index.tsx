@@ -1,5 +1,4 @@
 import { CloseIcon } from '@assets/icons'
-import { StreamPlayerApi } from '@cloudflare/stream-react'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
@@ -45,6 +44,7 @@ import { IActivity } from 'src/type/course/my-course/Activity'
 import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
+import SappTooltip from 'src/common/SappTooltip'
 
 type Props = {
   activity: IActivity
@@ -61,7 +61,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
-  const streamRef = useRef<StreamPlayerApi[]>(null)
   const videoRef = useRef<any>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
@@ -110,7 +109,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     endActivityRef.current,
     quizDocumentRef.current,
     observerRef.current,
-    streamRef.current,
     videoRef.current,
   ])
 
@@ -469,12 +467,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           )}
         </>
       </>
-      <div className="shadow-activity">
+      <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
         <div className="bg-gray-3 px-6 ">
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
             <div className="font-medium text-2xl ">{activity?.name}</div>
             <div className="text-sm text-gray-1 whitespace-nowrap">
-              {activity?.duration || 0} min estimated
+              {activity?.duration || 0}{' '}
+              {activity?.duration > 1 ? 'mins' : 'min'} estimated
             </div>
           </div>
 
@@ -531,18 +530,24 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         </div>
 
         <div className="bg-gray-3">
-          <div className="flex gap-2 px-6 flex-wrap">
+          <div
+            className={`flex gap-2 px-6 flex-wrap ${
+              activity?.files?.length === 0 ||
+              activity?.course_outcomes?.length === 0
+                ? 'pt-6'
+                : ''
+            }`}
+          >
             {selector.tabs?.map((e) => {
               return (
-                <div title={e.name} key={e.id}>
-                  <SappButton
-                    size="small"
-                    className="py-2.5 !px-3 text-medium-sm !font-normal"
-                    color={tabButtonColor(e.id)}
-                    title={truncateString(e.name, 60)}
-                    onClick={() => handleChangeTab(e.id)}
-                  ></SappButton>
-                </div>
+                <SappButton
+                  key={e.id}
+                  size="small"
+                  className="py-2.5 !px-3 text-medium-sm !font-normal"
+                  color={tabButtonColor(e.id)}
+                  title={truncateString(e.name, 60)}
+                  onClick={() => handleChangeTab(e.id)}
+                ></SappButton>
               )
             })}
           </div>
@@ -551,7 +556,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {/* <FadeInOut show={!selector.loading}> */}
         {!!course_tab_documents?.length && (
           <div className="bg-white pb-6 mb-6">
-            <div className={`pt-6 max-w-[998px] w-full my-0 mx-auto px-6`}>
+            <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
               <div className="tab-content">
                 {course_tab_documents?.map((e, i) => {
                   const marginBottom =
@@ -599,7 +604,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                       <div
                         className={marginBottom}
                         key={i + '_' + selector.currentTabId}
-                        data-aos={ANIMATION.DATA_AOS}
                       >
                         <VideoDocument
                           videos={e.videos}
@@ -686,7 +690,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       </div>
       {/* </FadeInOut> */}
       <div data-aos={ANIMATION.DATA_AOS}>
-        {(activity?.total_activity as number) > 1 && (
+        {(activity?.total_activity as Number) > 1 && (
           <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
             <div className="flex justify-between flex-nowrap gap-5">
               {activity.previous_activity && (
@@ -702,10 +706,12 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Previous Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex">
-                    {getCourseIcon(activity.previous_activity?.display_icon)}{' '}
-                    <span className="ml-2">
-                      {truncateString(activity.previous_activity.name, 100)}
-                    </span>
+                    {getCourseIcon(activity.previous_activity?.display_icon)}
+                    <SappTooltip title={activity.previous_activity.name}>
+                      <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                        {activity.previous_activity.name}
+                      </span>
+                    </SappTooltip>
                   </div>
                 </div>
               )}
@@ -723,9 +729,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Next Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex justify-end">
-                    <span className="mr-2">
-                      {truncateString(activity.next_activity.name, 100)}
-                    </span>
+                    <SappTooltip title={activity.next_activity.name}>
+                      <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                        {activity.next_activity.name}
+                      </span>
+                    </SappTooltip>
                     {getCourseIcon(activity.next_activity?.display_icon)}
                   </div>
                 </div>
@@ -738,7 +746,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-        <Discussion class_id={(router.query.id as string) || ''} />
+        <Discussion class_id={(router.query.classId as string) || ''} />
       </div>
       {openScratchPad.map((e, index: number) => {
         if (e.type === 'file') {

@@ -2,7 +2,7 @@ import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
 import { TEST_TYPE } from '@utils/constants'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface IProps {
   open: boolean
@@ -21,6 +21,7 @@ const TestModal = ({
   activeCourse,
 }: IProps) => {
   const router = useRouter()
+
   const onSubmit = async () => {
     //to do: start test
     try {
@@ -47,15 +48,26 @@ const TestModal = ({
     }
     return false
   }, [data?.quiz?.attempts])
+  const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
 
+  const runOutAttemp = data?.quiz?.attempt_count / data?.quiz?.limit_count
+  useEffect(() => {
+    setIsRunoutAttemp(
+      data?.quiz?.limit_count > 0 &&
+        runOutAttemp >= 1 &&
+        data?.quiz?.is_limited === true
+        ? false
+        : isNaN(runOutAttemp),
+    )
+  }, [runOutAttemp, data?.quiz?.limit_count, data?.quiz?.is_limited])
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}
       open={open}
       handleCancel={() => setOpen(false)}
+      showOkButton={isRunoutAttemp}
       onOk={onSubmit}
       okButtonCaption={checkFinished ? 'Retake' : 'Start'}
-      okButtonClass="py-[13px] px-9"
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
     >

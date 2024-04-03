@@ -5,6 +5,7 @@
 @import 'select.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
+@import 'video.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -30,7 +31,10 @@
 
 *:not(math, math *),
 *:not(math, math *)::after,
-*:not(math, math *)::before {
+*:not(math, math *)::before,
+*:not(math, math *):not(.editor-wrap),
+*:not(math, math *)::after:not(.editor-wrap),
+*:not(math, math *)::before:not(.editor-wrap) {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -135,8 +139,13 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .editor-wrap {
+  @apply font-sans font-medium text-sm text-[#5e6278];
   hr {
     @apply hidden;
+  }
+
+  table {
+    border-color: gray;
   }
 
   p {
@@ -784,6 +793,42 @@ $focus: (
   background-color: #000000cc;
 }
 
+.shadow-activity.aos-init.aos-animate {
+  transform: none !important;
+}
+
 .sapp-dashboard {
   height: 80vh;
+}
+
+textarea:focus {
+  --tw-ring-color: #ffb800;
+}
+
+.editor-wrap {
+  img:not([id]) {
+    width: 100%;
+    height: auto;
+  }
+
+  font-family: Roboto, sans-serif;
+  color: #5e6278;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  appearance: none;
+
+  math {
+    mrow {
+      font-size: inherit;
+      padding: 6px 0px;
+    }
+    mo.empty-mo {
+      width: 0px;
+      margin: 0 -2px;
+    }
+    mi[mathvariant='bold-italic'] {
+      font-weight: bold;
+    }
+  }
 }

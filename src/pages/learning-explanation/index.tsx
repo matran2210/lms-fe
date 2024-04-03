@@ -5,6 +5,7 @@ import prev from '@assets/images/prev.svg'
 import next from '@assets/images/next.svg'
 import arrows from '@assets/images/arrows.svg'
 import Image from 'next/image'
+import { MY_COURSES } from 'src/constants/lang'
 
 const LearningExplanation = () => {
   return (
@@ -67,7 +68,9 @@ const LearningExplanation = () => {
         </div>
         <div className="mt-6">
           <div className="bg-gray-4 px-6 pt-6 py-11">
-            <div className="text-bw-1 font-semibold text-base">Solution</div>
+            <div className="text-bw-1 font-semibold text-base">
+              {MY_COURSES.explanations}
+            </div>
             <div className="mt-4 text-bw-1 font-normal text-base">
               The total cost could be reduced with lower input rates or an
               increase in productivity of the inputs. Productivity vip gains

@@ -85,11 +85,16 @@ module.exports = {
           4: '#F9F9F9',
           5: '#7E8299',
           6: '#D8D8E5',
+          7: '#E3E3E3',
+          8: '#F3F3F3',
           900: '#181C32',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
           'dark-sidebar': 'rgba(0, 0, 0, 0.8)',
+          play: 'rgba(189, 189, 189, 0.7)',
+          control: 'rgba(0, 0, 0, 0.6)',
+          white: 'rgba(255, 255, 255, 0.4)',
         },
       },
       borderColor: {
@@ -101,6 +106,7 @@ module.exports = {
         'gray-1': '#A1A1A1',
         'gray-2': '#F1F1F1',
         'gray-3': '#F8F8F8',
+        'gray-4': '#F3F3F3',
         active: '#FFB800',
         dark: '#1C2039',
       },
@@ -122,6 +128,7 @@ module.exports = {
         select:
           '0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 4px 0px rgba(0, 0, 0, 0.04)',
         'sidebar-tablet': '0px -2px 7px 0px #0000001A',
+        pagination: '0px 2px 7px 0px #00000021',
       },
       minWidth: {
         4: '16px',
@@ -186,6 +193,7 @@ module.exports = {
         empty: '""',
       },
       width: {
+        5.5: '22px',
         12.5: '50px',
         16.75: '4.188rem',
         18: '72px',
@@ -226,6 +234,7 @@ module.exports = {
       },
       height: {
         4.5: '1.125rem', // 18px
+        5.5: '22px',
         8.5: '2.125rem',
         12.5: '50px',
         16.75: '4.188rem',

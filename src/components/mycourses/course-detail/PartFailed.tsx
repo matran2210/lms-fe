@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { ICourseSection } from 'src/type/courses'
@@ -52,12 +52,20 @@ const PartFailed = ({
     const secondPoint = parseInt(parts[1], 10)
     return roundNumber((firstPoint / secondPoint) * 100)
   }
-
+  const runOutAttemp =
+    coursePart?.quiz?.attempt_count / coursePart?.quiz?.limit_count
+  const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
+  useEffect(() => {
+    if (runOutAttemp >= 1 && coursePart?.quiz?.is_limited === true) {
+      setIsRunoutAttemp(false)
+    }
+  }, [runOutAttemp])
   return (
     <>
       <div>
         <div
-          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-default`}
+          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-pointer`}
+          onClick={() => setOpen(true)}
         >
           {(coursePart?.name as string)?.length > 50 ? (
             <Tooltip title={coursePart?.name} color="#ffffff" placement="top">
@@ -113,8 +121,9 @@ const PartFailed = ({
         <div className="action flex items-center jusity-end relative">
           {!checkFinished ? (
             !coursePart?.quiz?.is_limited ||
-            coursePart?.quiz?.attempts?.length !==
-              coursePart?.quiz?.limit_count ? (
+            (coursePart?.quiz?.attempts?.length !==
+              coursePart?.quiz?.limit_count &&
+              isRunoutAttemp) ? (
               <ButtonSecondary
                 disabled={
                   coursePart?.quiz?.is_limited &&
@@ -139,28 +148,27 @@ const PartFailed = ({
                 title="Result"
                 isUnderLine
                 color="text"
-                className="!font-semibold underline !p-0"
+                className="font-medium underline !p-0"
                 onClick={() =>
                   router.push(
                     `/courses/test/test-result/${quizAttempt?.attempts[0].id}`,
                   )
                 }
               ></SappButton>
-              <ButtonSecondary
-                disabled={
-                  coursePart?.quiz?.is_limited &&
-                  coursePart?.quiz?.attempt_count ===
-                    coursePart?.quiz?.limit_count
-                }
-                title={'Retake'}
-                full={false}
-                size={'small'}
-                className={`${
-                  coursePart?.quiz?.attempt_count !==
-                    coursePart?.quiz?.limit_count && ''
-                } ml-auto`}
-                onClick={() => setOpen(true)}
-              />
+              {coursePart?.quiz?.is_limited &&
+              coursePart?.quiz?.attempt_count ===
+                coursePart?.quiz?.limit_count ? null : (
+                <ButtonSecondary
+                  title="Retake"
+                  full={false}
+                  size="small"
+                  className={`${
+                    coursePart?.quiz?.attempt_count !==
+                      coursePart?.quiz?.limit_count && ''
+                  } ml-auto`}
+                  onClick={() => setOpen(true)}
+                />
+              )}
             </div>
           )}
         </div>

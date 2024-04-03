@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { useRouter } from 'next/router'
+import SappModalV2 from '@components/base/modal/SappModalV2'
 
 const EntranceTestFillForm = ({
   open,
@@ -167,26 +168,24 @@ const EntranceTestFillForm = ({
   }
 
   return (
-    <SappModal
+    <SappModalV2
       open={open}
-      setOpen={setOpen}
       cancelButtonCaption="Cancel"
       okButtonCaption="Start"
       handleCancel={handleOnClick}
-      handleSubmit={handleSubmit(onSubmit)}
+      onOk={handleSubmit(onSubmit)}
       showHeader={false}
-      refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
-      size="max-w-screen-sm"
       footerButtonClassName="justify-between flex"
       childClass=""
       parentChildClass=""
       position="center"
-      buttonSize="extra"
+      buttonSize="medium"
       scrollbale={false}
       closeAfterSubmit={false}
+      title={undefined}
     >
       <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
-        Fill this form
+        Fill This Form
       </h2>
       <div className="mt-10">
         <SappHookFormSelect
@@ -230,7 +229,7 @@ const EntranceTestFillForm = ({
           options={listEngLevel}
         />
       </div>
-    </SappModal>
+    </SappModalV2>
   )
 }
 export default EntranceTestFillForm

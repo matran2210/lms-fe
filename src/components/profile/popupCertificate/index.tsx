@@ -42,6 +42,7 @@ const PopUpCertificate = ({
       position="center"
       buttonSize="extra"
       isContentFull={true}
+      scrollbale={false}
     >
       <div className="w-full">
         <div className="border-b border-solid border-gray-3 w-full flex justify-between pb-6">
@@ -54,7 +55,7 @@ const PopUpCertificate = ({
         </div>
         {/* <div>{data?.certificate_url}</div> */}
         <div className="flex justify-center pt-6">
-          <img src={data?.certificate_url} className="w-full h-full"></img>
+          <img src={data?.certificate_url} className="w-full h-auto"></img>
         </div>
       </div>
     </SappModalCerti>

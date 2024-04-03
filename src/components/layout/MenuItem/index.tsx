@@ -32,6 +32,7 @@ export default function MenuItem({
     router.pathname.includes('/my-course') ||
     router.pathname.includes('/section') ||
     router.pathname.includes('/activity')
+
   const isProfile =
     Icon === 'avatar' &&
     (router.asPath === '/myprofile' ||
@@ -39,10 +40,9 @@ export default function MenuItem({
       router.asPath === '/settings' ||
       router.asPath === '/login_history' ||
       router.asPath === '/devices')
-  const selected =
-    router.pathname === url ||
-    (Icon === 'stats-chart-sharp' && isDetailCourse) ||
-    isProfile
+
+  const selected = router.pathname === url
+
   const isNested = subItems && subItems?.length > 0
 
   const onClick = () => {
@@ -117,7 +117,7 @@ export default function MenuItem({
         ) : (
           <>
             {Icon === 'profile-detail' ? (
-              <div className="min-w-6 min-h-6 shrink-0 flex items-center">
+              <div className="w-10 h-10 shrink-0">
                 <Image
                   src={
                     user.detail.avatar['40x40'] ||
@@ -125,9 +125,9 @@ export default function MenuItem({
                     blankAvatar
                   }
                   alt="avatar"
-                  className="rounded-full"
-                  width={24}
-                  height={24}
+                  className="rounded-full w-10 h-10 object-cover"
+                  width={40}
+                  height={40}
                   priority={true}
                 />
               </div>
@@ -151,7 +151,7 @@ export default function MenuItem({
             <div className="text-base font-semibold text-bw-1 group-hover:text-primary line-clamp-1">
               {user?.detail?.full_name}
             </div>
-            <div className="text-medium-sm font-normal line-clamp-1">
+            <div className="text-medium-sm text-gray-1 font-normal line-clamp-1 capitalize group-hover:text-primary">
               {user?.type?.toLowerCase()}
             </div>
           </div>
@@ -224,7 +224,7 @@ export default function MenuItem({
       >
         <div
           className={`sidebar-item flex items-center ${
-            Icon === 'avatar' ? '-ml-2' : ''
+            Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
           }`}
           onClick={() => closeSideBar()}
         >
