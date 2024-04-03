@@ -29,6 +29,8 @@ const EditorReader = ({
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   const [content, setContent] = useState<any>()
+  const editorRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (extenalRef) {
       extenalRef.current?.addEventListener('click', handleOnclick)
@@ -88,6 +90,24 @@ const EditorReader = ({
   //   setContent(text_editor_content)
   // }, [text_editor_content])
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (editorRef?.current) {
+        const listMoElement = editorRef?.current?.querySelectorAll('mo')
+        listMoElement?.forEach((element: any) => {
+          const getMo = element?.innerHTML
+          if (
+            getMo.includes('&nbsp;') &&
+            getMo.indexOf('&nbsp;') === getMo.lastIndexOf('&nbsp;')
+          ) {
+            getMo.replace('&nbsp;', '')
+            element.classList.add('empty-mo')
+          }
+        })
+      }
+    }, 1000)
+  }, [editorRef?.current])
+
   const handleOnclick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement
     if (target.className === 'sapp_overlay_video') {
@@ -123,6 +143,7 @@ const EditorReader = ({
         className={`${className} editor-wrap`}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
+        ref={editorRef}
       >
         <div ref={extenalRef || refDocument}>
           {parseHTML(content || '', options)}
