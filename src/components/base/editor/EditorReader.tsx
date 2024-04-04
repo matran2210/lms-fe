@@ -17,7 +17,7 @@ type Props = {
 
 const EditorReader = ({
   text_editor_content,
-  className,
+  className = '',
   extenalRef,
   id,
   onMouseUp,
@@ -90,20 +90,18 @@ const EditorReader = ({
   //   setContent(text_editor_content)
   // }, [text_editor_content])
 
+  const convertMathToImage = async (element: any) => {
+    const viewer = com.wiris.js.JsPluginViewer
+    try {
+      await viewer.parseElement(element, true, function () {})
+    } catch (error) {}
+  }
+
   useEffect(() => {
     setTimeout(() => {
       if (editorRef?.current) {
-        const listMoElement = editorRef?.current?.querySelectorAll('mo')
-        listMoElement?.forEach((element: any) => {
-          const getMo = element?.innerHTML
-          if (
-            getMo.includes('&nbsp;') &&
-            getMo.indexOf('&nbsp;') === getMo.lastIndexOf('&nbsp;')
-          ) {
-            getMo.replace('&nbsp;', '')
-            element.classList.add('empty-mo')
-          }
-        })
+        const formElement = editorRef?.current
+        convertMathToImage(formElement)
       }
     }, 1000)
   }, [editorRef?.current])
