@@ -3,6 +3,7 @@ import parseHTML from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
+import 'src/utils/global.d.ts'
 
 type Props = {
   text_editor_content: string | undefined
@@ -92,9 +93,11 @@ const EditorReader = ({
 
   const convertMathToImage = async (element: any) => {
     const viewer = com.wiris.js.JsPluginViewer
-    try {
-      await viewer.parseElement(element, true, function () {})
-    } catch (error) {}
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {})
+      } catch (error) {}
+    }
   }
 
   useEffect(() => {
