@@ -285,22 +285,20 @@ const Course = ({
           className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
           data-aos={ANIMATION.DATA_AOS}
         >
-          <div
-            className={`${
-              enableCourse ? 'cursor-pointer' : ''
-            } min-h-352 flex flex-col`}
-          >
+          <div className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}>
             <div
               className={`name-course text-2xl font-medium mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
               }`}
-              onClick={() => {
-                if (isActiveStudent && enableCourse) {
-                  courseAction()
-                }
-              }}
             >
-              <div className="line-clamp-2 text-ellipsis">
+              <div
+                className="line-clamp-2 text-ellipsis cursor-pointer "
+                onClick={() => {
+                  if (isActiveStudent && enableCourse) {
+                    courseAction()
+                  }
+                }}
+              >
                 {(course?.name as string)?.length > 50 ? (
                   <Tooltip title={course?.name} color="#ffffff" placement="top">
                     {truncateString(course?.name, 50)}
