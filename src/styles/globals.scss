@@ -201,8 +201,14 @@ body *::-webkit-scrollbar-thumb:hover {
     }
   }
 
-  .Wirisformula {
+  img.Wirisformula {
+    width: auto !important;
     display: unset;
+  }
+
+  img:not([id]) {
+    width: 100%;
+    height: auto;
   }
 }
 
