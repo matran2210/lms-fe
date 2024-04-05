@@ -146,6 +146,7 @@ body *::-webkit-scrollbar-thumb:hover {
 
   table {
     border-color: gray;
+    border-style: inset;
   }
 
   p {
@@ -159,7 +160,7 @@ body *::-webkit-scrollbar-thumb:hover {
   th {
     border-width: 1px;
     border-style: inset;
-    @apply border-gray-1;
+    border-color: #a1a1a1;
     /* Add this line to set the border color to gray-2 */
   }
 
