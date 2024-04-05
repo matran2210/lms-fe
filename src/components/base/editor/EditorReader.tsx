@@ -99,7 +99,7 @@ const EditorReader = ({
 
     if (element && viewer) {
       try {
-        await viewer.parseElement(element, true, function (e) {})
+        await viewer.parseElement(element, true, function () {})
       } catch (error) {}
     }
   }
