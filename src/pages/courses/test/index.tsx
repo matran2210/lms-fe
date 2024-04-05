@@ -50,13 +50,19 @@ const TestModal = ({
   }, [data?.quiz?.attempts])
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
 
-  const runOutAttemp = data?.quiz?.attempt_count / data?.quiz?.limit_count
-
   useEffect(() => {
-    if (runOutAttemp >= 1 && data?.quiz?.is_limited === true) {
-      setIsRunoutAttemp(false)
+    if (data?.quiz?.is_limited) {
+      const runOutAttempt =
+        data.quiz.limit_count === 0
+          ? false
+          : data.quiz.attempt_count < data.quiz.limit_count
+      setIsRunoutAttemp(runOutAttempt)
     }
-  }, [runOutAttemp])
+  }, [
+    data?.quiz?.attempt_count,
+    data?.quiz?.limit_count,
+    data?.quiz?.is_limited,
+  ])
 
   return (
     <SappModalV2

@@ -53,13 +53,15 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
   const iconType = renderStatusIcon(courses?.user_section_learning_status ?? '')
 
   return (
-    <div
-      onClick={() =>
-        courses?.course_section_type === 'PART' ? onClickPart(courses?.id) : {}
-      }
-      className="cursor-pointer"
-    >
-      <div className={`name-part text-2xl font-medium h-[60px]`}>
+    <div>
+      <div
+        className={`name-part text-2xl font-medium h-[60px] cursor-pointer`}
+        onClick={() =>
+          courses?.course_section_type === 'PART'
+            ? onClickPart(courses?.id)
+            : {}
+        }
+      >
         {(courses?.name as string)?.length > 50 ? (
           <Tooltip title={courses?.name} color="#ffffff" placement="top">
             {truncateString(courses?.name, 50)}
@@ -138,10 +140,8 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
             className="ml-auto"
             onClick={() =>
               courses?.course_section_type === 'PART'
-                ? router.push(
-                    `/courses/${router.query.courseId}/section/${courses.id}`,
-                  )
-                : setOpen(true)
+                ? onClickPart(courses.id)
+                : {}
             }
           />
         </div>
