@@ -92,7 +92,8 @@ const EditorReader = ({
   // }, [text_editor_content])
 
   const convertMathToImage = async (element: any) => {
-    const viewer = com.wiris.js.JsPluginViewer
+    const viewer = com?.wiris?.js?.JsPluginViewer
+
     if (element && viewer) {
       try {
         await viewer.parseElement(element, true, function () {})
@@ -107,7 +108,7 @@ const EditorReader = ({
         convertMathToImage(formElement)
       }
     }, 1000)
-  }, [editorRef?.current])
+  }, [editorRef?.current, text_editor_content])
 
   const handleOnclick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement
@@ -141,7 +142,7 @@ const EditorReader = ({
   return (
     <>
       <div
-        className={`${className} editor-wrap`}
+        className={`${className} editor-wrap mce-content-body `}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
