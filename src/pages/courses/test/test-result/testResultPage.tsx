@@ -59,7 +59,7 @@ const TestResultPage = ({
           </div>
           <div className="max-h-full w-full xl:w-auto">
             <ChartACCAScore data={chartData?.chart_data} />
-            <YourScoreDetail />
+            <YourScoreDetail className={'xl:h-[815px]'} />
           </div>
         </div>
       ) : (
@@ -68,7 +68,7 @@ const TestResultPage = ({
             <div className="flex gap-6 overflow-y-auto flex-wrap">
               <div className="max-h-full w-full xl:w-auto">
                 <YourScore chartData={chartData} />
-                <YourScoreDetail />
+                <YourScoreDetail className={'xl:h-[991px]'} />
               </div>
               <MultipleQuestion
                 questions={questions}
@@ -82,7 +82,7 @@ const TestResultPage = ({
                 className={'xl:h-[991px]'}
               />
               <div className="max-h-full w-full xl:w-auto">
-                <YourScoreDetail />
+                <YourScoreDetail className={'xl:h-[991px]'} />
               </div>
             </div>
           )}

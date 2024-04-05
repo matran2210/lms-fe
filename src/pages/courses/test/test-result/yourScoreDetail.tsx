@@ -48,7 +48,11 @@ const headers = [
   },
 ]
 
-const YourScoreDetail = () => {
+interface YourScoreDetailProps {
+  className?: string
+}
+
+const YourScoreDetail = ({ className }: YourScoreDetailProps) => {
   const [scoreDetail, setScoreDetail] = useState<any>({
     answers: [],
     meta: {},
@@ -130,7 +134,7 @@ const YourScoreDetail = () => {
 
   return (
     <div
-      className="overflow-y-auto xl:h-[815px] bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar"
+      className={`overflow-y-auto bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar ${className}`}
       data-aos={ANIMATION.DATA_AOS}
     >
       <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
