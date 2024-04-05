@@ -22,10 +22,7 @@ class MyDocument extends Document {
             src={`https://cdn.tiny.cloud/1/${process.env.NEXT_PUBLIC_TINY_EDITDER_API_KEY}/tinymce/6/tinymce.min.js`}
             referrerPolicy="origin"
           ></script>
-          <script
-            src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
-            defer="defer"
-          ></script>
+          <script src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"></script>
         </Head>
         <body>
           <Main />
