@@ -50,9 +50,13 @@ const headers = [
 
 interface YourScoreDetailProps {
   className?: string
+  yourScoreDetailRef?: React.RefObject<HTMLDivElement>
 }
 
-const YourScoreDetail = ({ className }: YourScoreDetailProps) => {
+const YourScoreDetail = ({
+  className,
+  yourScoreDetailRef,
+}: YourScoreDetailProps) => {
   const [scoreDetail, setScoreDetail] = useState<any>({
     answers: [],
     meta: {},
@@ -136,6 +140,7 @@ const YourScoreDetail = ({ className }: YourScoreDetailProps) => {
     <div
       className={`overflow-y-auto bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar ${className}`}
       data-aos={ANIMATION.DATA_AOS}
+      ref={yourScoreDetailRef}
     >
       <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
         Your Score Details
