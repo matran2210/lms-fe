@@ -5,12 +5,19 @@ import { ITabs } from 'src/type'
 interface BreadcrumbProps {
   tabs: ITabs[]
   currentPage: string
+  className?: string
 }
 
-const Breadcrumb: React.FC<BreadcrumbProps> = ({ tabs, currentPage }) => {
+const Breadcrumb: React.FC<BreadcrumbProps> = ({
+  tabs,
+  currentPage,
+  className,
+}) => {
   return (
     <nav className="breadcrumb" aria-label="breadcrumbs">
-      <ul className="breadcrumb flex flex-row py-6 font-medium text-sm">
+      <ul
+        className={`breadcrumb flex flex-row py-6 font-medium text-sm ${className}`}
+      >
         {tabs.map((tab, index) => (
           <li className="flex items-center gap-0.5 text-medium-sm" key={index}>
             {index !== tabs.length - 1 ? (
