@@ -29,6 +29,8 @@ const SAPPVideo = ({
   children,
 }: IProp) => {
   const [valueVolume, setValueVolume] = useState<number>(1)
+  const [playbackRate, setPlaybackRate] = useState<number>(1)
+  const [playbackQuality, setPlaybackQuality] = useState<number>(1)
   const playbackAnimationRef = useRef<HTMLDivElement>(null)
   const videoControlsRef = useRef<HTMLDivElement>(null)
   const playButtonRef = useRef<HTMLButtonElement>(null)
@@ -42,8 +44,26 @@ const SAPPVideo = ({
   const timeElapsedRef = useRef<HTMLTimeElement>(null)
   const durationRef = useRef<HTMLTimeElement>(null)
 
+  const playbackQualitys = [
+    { value: '0', label: '360p' },
+    { value: '1', label: '480p' },
+    { value: '2', label: '720p' },
+    { value: '3', label: '1080p' },
+  ]
+
+  const playbackSpeeds = [
+    { value: '0.25', label: '0.25' },
+    { value: '0.5', label: '0.5' },
+    { value: '0.75', label: '0.75' },
+    { value: '1', label: 'Normal' },
+    { value: '1.25', label: '1.25' },
+    { value: '1.5', label: '1.5' },
+    { value: '1.75', label: '1.75' },
+    { value: '2', label: '2' },
+  ]
+  let player: any
+
   useEffect(() => {
-    let player: any
     const initTerminal = async () => {
       if (options?.src) {
         const dashjs = await import('dashjs')
@@ -97,7 +117,6 @@ const SAPPVideo = ({
           updateFullscreenButton,
         )
       }
-      document.addEventListener('keyup', keyboardShortcuts)
       const videoWorks = !!streamRef.current?.canPlayType
       if (videoWorks && videoControlsRef.current) {
         streamRef.current.controls = false
@@ -170,11 +189,11 @@ const SAPPVideo = ({
     const pauseIcon = playButtonRef?.current?.querySelector('.pause')
 
     if (streamRef?.current?.paused) {
-      playButtonRef?.current?.setAttribute('data-title', 'Play (k)')
+      playButtonRef?.current?.setAttribute('data-title', 'Play')
       playIcon?.classList?.remove('hidden')
       pauseIcon?.classList?.add('hidden')
     } else {
-      playButtonRef?.current?.setAttribute('data-title', 'Pause (k)')
+      playButtonRef?.current?.setAttribute('data-title', 'Pause')
       playIcon?.classList?.add('hidden')
       pauseIcon?.classList?.remove('hidden')
     }
@@ -312,7 +331,7 @@ const SAPPVideo = ({
 
     volumeButtonRef.current.setAttribute(
       'data-title',
-      isMuted ? 'Unmute (m)' : 'Mute (m)',
+      isMuted ? 'Unmute' : 'Mute',
     )
     volumeMute.classList.toggle('hidden', !isMuted)
     volumeLow.classList.toggle('hidden', isMuted || !isLowVolume)
@@ -392,7 +411,7 @@ const SAPPVideo = ({
       const isFullScreen = document.fullscreenElement !== null
       fullscreenButtonRef.current.setAttribute(
         'data-title',
-        `${isFullScreen ? 'Exit' : 'Enter'} full screen (f)`,
+        `${isFullScreen ? 'Exit' : 'Enter'} full screen`,
       )
       fullScreenIcon.classList.toggle('hidden', isFullScreen)
       fullScreenExitIcon.classList.toggle('hidden', !isFullScreen)
@@ -417,29 +436,22 @@ const SAPPVideo = ({
     }
   }
 
-  // keyboardShortcuts executes the relevant functions for
-  // each supported shortcut key
-  function keyboardShortcuts(event: KeyboardEvent) {
-    const { key } = event
-    switch (key) {
-      case 'k':
-        togglePlay()
-        animatePlayback()
-        if (streamRef.current.paused) {
-          showControls()
-        } else {
-          setTimeout(() => {
-            hideControls()
-          }, 2000)
-        }
-        break
-      case 'm':
-        toggleMute()
-        break
-      case 'f':
-        toggleFullScreen()
-        break
+  // Event handler for changing video speed
+  const handlePlaybackRateChange = (event: React.MouseEvent<HTMLLIElement>) => {
+    const target = event.target as HTMLLIElement
+    const selectedSpeed = target?.dataset?.speed
+    if (selectedSpeed) {
+      const newPlaybackRate = parseFloat(selectedSpeed)
+      setPlaybackRate(newPlaybackRate)
+      if (streamRef?.current?.playbackRate) {
+        streamRef.current.playbackRate = newPlaybackRate
+      }
     }
+  }
+
+  const changeQuantily = (number: number) => {
+    player?.setQualityFor('video', number)
+    setPlaybackQuality(number)
   }
 
   return (
@@ -451,7 +463,7 @@ const SAPPVideo = ({
           }`}
           ref={videoContainerRef}
         >
-          <div className={`test`}>{children}</div>
+          <div className={`popup-question`}>{children}</div>
           <div
             className="playback-animation flex-center"
             ref={playbackAnimationRef}
@@ -490,7 +502,7 @@ const SAPPVideo = ({
               <div className="left-controls flex items-center text-white">
                 <button
                   className="btn-video bg-overlay-play w-8 h-8 mr-4 flex items-center justify-center before:-right-4"
-                  data-title="Play (k)"
+                  data-title="Play"
                   ref={playButtonRef}
                   onClick={() => {
                     togglePlay()
@@ -550,7 +562,7 @@ const SAPPVideo = ({
               <div className="right-controls flex-center">
                 <div className="volume-controls w-8 h-8 relative flex items-center">
                   <button
-                    data-title="Mute (m)"
+                    data-title="Mute"
                     className="btn-video volume-button"
                     ref={volumeButtonRef}
                     onClick={toggleMute}
@@ -579,9 +591,67 @@ const SAPPVideo = ({
                     />
                   </div>
                 </div>
+                <div className="settings-control ml-4 text-white icon-svg relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 256 256"
+                  >
+                    <path
+                      fill="currentColor"
+                      strokeMiterlimit="10"
+                      strokeWidth="1"
+                      d="M52.1 90H37.9a5.206 5.206 0 01-5.2-5.2v-2.114c0-.329-.191-.634-.454-.725a38.833 38.833 0 01-4.375-1.816c-.246-.118-.576-.046-.802.18l-1.516 1.516a5.165 5.165 0 01-3.677 1.523 5.163 5.163 0 01-3.677-1.524L8.16 71.799a5.207 5.207 0 010-7.354l1.516-1.516c.223-.223.299-.56.181-.8a38.922 38.922 0 01-1.818-4.377c-.092-.262-.396-.452-.725-.452H5.2A5.206 5.206 0 010 52.1V37.9c0-2.867 2.333-5.2 5.2-5.2h2.115c.329 0 .633-.19.724-.454a39.153 39.153 0 011.817-4.374c.12-.246.046-.576-.181-.802L8.16 25.555a5.207 5.207 0 010-7.354L18.201 8.159a5.165 5.165 0 013.677-1.522 5.17 5.17 0 013.677 1.522l1.516 1.517c.224.223.559.3.801.18a39.096 39.096 0 014.375-1.818c.263-.091.453-.395.453-.724V5.2c0-2.867 2.333-5.2 5.2-5.2h14.2c2.867 0 5.2 2.333 5.2 5.2v2.115c0 .329.19.633.453.724a39.111 39.111 0 014.375 1.818c.247.118.575.045.802-.181l1.516-1.516a5.207 5.207 0 017.354 0L81.84 18.2a5.207 5.207 0 010 7.354l-1.516 1.516c-.227.227-.301.556-.181.802a38.6 38.6 0 011.818 4.376c.09.262.395.452.724.452H84.8c2.867 0 5.2 2.333 5.2 5.2v14.2c0 2.867-2.333 5.2-5.2 5.2h-2.114c-.329 0-.634.19-.725.454a39.153 39.153 0 01-1.815 4.373c-.119.244-.044.58.179.803l1.516 1.516a5.207 5.207 0 010 7.354L71.799 81.84a5.166 5.166 0 01-3.677 1.523 5.165 5.165 0 01-3.678-1.525l-1.514-1.513c-.228-.226-.557-.302-.803-.182a38.6 38.6 0 01-4.376 1.818c-.262.09-.452.395-.452.724V84.8A5.205 5.205 0 0152.1 90zm-12.4-7h10.6v-.314c0-3.322 2.076-6.272 5.167-7.34a31.94 31.94 0 003.588-1.491c2.936-1.434 6.481-.822 8.824 1.521l.243.242 7.495-7.495-.242-.243c-2.345-2.344-2.955-5.891-1.519-8.825a31.997 31.997 0 001.488-3.585c1.068-3.093 4.019-5.169 7.341-5.169H83V39.7h-.314c-3.322 0-6.272-2.076-7.34-5.167a31.94 31.94 0 00-1.491-3.588c-1.434-2.936-.823-6.482 1.521-8.825l.242-.243-7.495-7.495-.243.243c-2.344 2.344-5.89 2.953-8.824 1.52a32.08 32.08 0 00-3.587-1.491c-3.091-1.067-5.168-4.017-5.168-7.34V7H39.7v.314c0 3.323-2.077 6.272-5.168 7.34-1.217.42-2.424.922-3.587 1.491-2.936 1.434-6.481.823-8.825-1.52l-.243-.243-7.495 7.495.243.243c2.343 2.344 2.954 5.89 1.52 8.825a31.98 31.98 0 00-1.49 3.587c-1.068 3.092-4.018 5.168-7.34 5.168H7v10.6h.314c3.323 0 6.272 2.077 7.34 5.168a31.985 31.985 0 001.491 3.588c1.435 2.933.824 6.479-1.52 8.823l-.243.243 7.496 7.495.242-.242c2.344-2.346 5.891-2.954 8.826-1.52a31.99 31.99 0 003.585 1.489c3.092 1.068 5.168 4.019 5.168 7.341V83zm5.328-12.598a25.41 25.41 0 01-17.991-7.439c-5.265-5.265-7.947-12.561-7.359-20.016.97-12.296 10.974-22.3 23.27-23.27 7.457-.588 14.751 2.095 20.016 7.359 5.265 5.266 7.947 12.561 7.36 20.017-.971 12.297-10.975 22.3-23.271 23.27-.677.053-1.352.079-2.025.079zm-.059-43.804c-.489 0-.979.02-1.471.058-8.899.702-16.14 7.943-16.842 16.843-.427 5.41 1.516 10.7 5.331 14.515s9.1 5.761 14.516 5.331c8.899-.701 16.141-7.941 16.843-16.842a18.442 18.442 0 00-5.331-14.516 18.427 18.427 0 00-13.046-5.389z"
+                      transform="matrix(2.81 0 0 2.81 1.407 1.407)"
+                    ></path>
+                  </svg>
+                  <>
+                    <div className="settings-control-popup hidden absolute bottom-4 -right-8 text-center rounded text-white py-1 text-white bg-overlay-control w-20">
+                      <h4 className="text-base font-semibold px-1.5">
+                        Quanlity
+                      </h4>
+                      <ul className="quanlity-options mb-2 text-ssm font-normal">
+                        {playbackQualitys.map((quality: any) => (
+                          <li
+                            key={quality.value}
+                            onClick={() =>
+                              changeQuantily(parseFloat(quality.value))
+                            }
+                            data-quality={quality.value}
+                            className={`hover:bg-white hover:text-black ${
+                              parseFloat(quality.value) === playbackQuality
+                                ? 'bg-white text-black'
+                                : ''
+                            }`}
+                          >
+                            {quality.label}
+                          </li>
+                        ))}
+                      </ul>
+                      <h4 className="text-base font-semibold px-1.5">Speed</h4>
+                      <ul className="speed-options text-ssm font-normal">
+                        {playbackSpeeds.map((speed: any) => (
+                          <li
+                            key={speed.value}
+                            onClick={handlePlaybackRateChange}
+                            data-speed={speed.value}
+                            className={`hover:bg-white hover:text-black ${
+                              parseFloat(speed.value) === playbackRate
+                                ? 'bg-white text-black'
+                                : ''
+                            }`}
+                          >
+                            {speed.label}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </>
+                </div>
                 <button
                   ref={fullscreenButtonRef}
-                  data-title="Full screen (f)"
+                  data-title="Full screen"
                   className="btn-video fullscreen-button"
                   onClick={toggleFullScreen}
                 >
