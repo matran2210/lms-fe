@@ -65,6 +65,15 @@ import ScratchPatch from './scratchPatch'
 type Window = {
   userAgreed: any
 }
+type ScratchPadValue = {
+  id: string
+  value: string
+}
+type ScratchPad = {
+  question_id: string
+  id: string
+  scratch_pad: string
+}
 declare global {
   interface Window {
     userAgreed: any
@@ -1162,9 +1171,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setLoading(false)
     return
   }
-  const [scratchPadValues, setScratchPadValues] = useState<any>({})
+  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue>()
 
-  const handleChangeScratchPad = (e: any, id?: any) => {
+  const handleChangeScratchPad = (e: any, id?: string) => {
     const { value } = e.target
     setScratchPadValues((prevState: any) => ({
       ...prevState,
@@ -1179,7 +1188,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       const currentPageScratchPadId = scratchPadValues?.id ?? ''
       if (currentPageScratchPadValues) {
         const index = scratchPads.findIndex(
-          (item: any) => item.question_id === currentPage,
+          (item: ScratchPad) => item.question_id === currentPage,
         )
         if (index !== -1) {
           setScratchPads((prevScratchPads: any) => {
@@ -1761,7 +1770,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                       scratchPadValues={scratchPadValues}
                       control={controlScratch}
                       scratchPads={scratchPads.find(
-                        (item: any) => item.id === currentPage,
+                        (item: ScratchPad) => item.id === currentPage,
                       )}
                       handleChangeScratchPad={(event) =>
                         handleChangeScratchPad(event, currentPage)
