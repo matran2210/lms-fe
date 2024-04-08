@@ -1612,9 +1612,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 }}
                 className="editor-wrap mb-3 max-w-[950px] w-full m-auto"
               >
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   {currentTabContent?.topicDescription?.name}
-                </div>
+                </div> */}
                 <EditorReader
                   className="mb-4"
                   text_editor_content={
