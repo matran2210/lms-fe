@@ -16,9 +16,9 @@ type ScratchPad = {
   scratch_pad: string
 }
 interface IProps {
-  scratchPadValues?: ScratchPadValue
+  scratchPadValues?: ScratchPadValue | null | undefined
   control: Control<any>
-  scratchPads: ScratchPad
+  scratchPads: ScratchPad | null | undefined
   handleChangeScratchPad: React.ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   >

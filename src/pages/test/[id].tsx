@@ -45,7 +45,7 @@ import axios from 'axios'
 import { parse } from 'cookie'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -65,11 +65,11 @@ import ScratchPatch from './scratchPatch'
 type Window = {
   userAgreed: any
 }
-type ScratchPadValue = {
+interface ScratchPadValue {
   id: string
   value: string
 }
-type ScratchPad = {
+interface ScratchPad {
   question_id: string
   id: string
   scratch_pad: string
@@ -895,7 +895,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
-    setScratchPadValues(scratchPads.scratch_pad ?? '')
+    setScratchPadValues(null)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
@@ -1176,9 +1176,14 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setLoading(false)
     return
   }
-  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue>()
+  const [scratchPadValues, setScratchPadValues] = useState<
+    ScratchPadValue | null | undefined
+  >()
 
-  const handleChangeScratchPad = (e: any, id?: string) => {
+  const handleChangeScratchPad = (
+    e: ChangeEvent<HTMLInputElement>,
+    id?: string,
+  ) => {
     const { value } = e.target
     setScratchPadValues((prevState: any) => ({
       ...prevState,
@@ -1186,7 +1191,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       value,
     }))
   }
-  const [scratchPads, setScratchPads] = useState<any>([])
+  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
   useEffect(() => {
     if (currentPage) {
       const currentPageScratchPadValues = scratchPadValues?.value ?? ''
@@ -1780,9 +1785,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                       scratchPads={scratchPads.find(
                         (item: ScratchPad) => item.id === currentPage,
                       )}
-                      handleChangeScratchPad={(event) =>
-                        handleChangeScratchPad(event, currentPage)
-                      }
+                      handleChangeScratchPad={(
+                        event: ChangeEvent<HTMLInputElement>,
+                      ) => handleChangeScratchPad(event, currentPage)}
                     />
                   </div>
                 </MovableWindow>
