@@ -5,10 +5,20 @@ import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import { Control } from 'react-hook-form'
 
+type ScratchPadValue = {
+  id: string
+  value: string
+}
+
+type ScratchPad = {
+  question_id: string
+  id: string
+  scratch_pad: string
+}
 interface IProps {
-  scratchPadValues?: any
+  scratchPadValues?: ScratchPadValue
   control: Control<any>
-  scratchPads: any
+  scratchPads: ScratchPad
   handleChangeScratchPad: React.ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   >
