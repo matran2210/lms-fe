@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
@@ -35,6 +35,22 @@ const TestResultPage = ({
   chartData,
   courseDifficulty,
 }: IProps) => {
+  const multipleQuestionRef = useRef<HTMLDivElement>(null)
+  const yourScoreDetailRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const multipleQuestionElem = multipleQuestionRef?.current
+    const yourScoreDetailElem = yourScoreDetailRef?.current
+    if (multipleQuestionElem && yourScoreDetailElem) {
+      const maxHeight = Math.max(
+        multipleQuestionElem.offsetHeight,
+        yourScoreDetailElem.offsetHeight,
+      )
+      multipleQuestionElem.style.height = `calc(100vh - ${maxHeight}px)`
+      yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
+    }
+  }, [multipleQuestionRef?.current, yourScoreDetailRef?.current])
+
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,
   )
@@ -42,11 +58,11 @@ const TestResultPage = ({
   return (
     <>
       {type === 'ACCA' && courseDifficulty <= 4 ? (
-        <div className="flex xl:gap-6 overflow-y-auto flex-wrap">
+        <div className="flex xl:gap-6 flex-wrap">
           <div className="max-h-full w-full xl:max-w-smd">
             <TotalScore
               score={highestValue}
-              className="py-6 pl-[27px] pr-[37px] mb-5 shadow-sidebar"
+              className="mb-4 pt-6 pb-5 px-[27px] shadow-sidebar"
               classScore="pt-2"
               classGlobal="mt-3 mb-3.5 !items-end"
               classCountAll="relative top-0.5"
@@ -54,35 +70,47 @@ const TestResultPage = ({
             />
             <MultipleQuestion
               questions={questions}
-              className={'xl:h-[815px]'}
+              className={'xl:min-h-[815px]'}
+              multipleQuestionRef={multipleQuestionRef}
             />
           </div>
           <div className="max-h-full w-full xl:w-auto">
             <ChartACCAScore data={chartData?.chart_data} />
-            <YourScoreDetail />
+            <YourScoreDetail
+              className={'min-h-[815px] 2xl-max:pb-10'}
+              yourScoreDetailRef={yourScoreDetailRef}
+            />
           </div>
         </div>
       ) : (
         <>
           {type === 'CFA' ? (
-            <div className="flex gap-6 overflow-y-auto flex-wrap">
+            <div className="flex gap-6 flex-wrap">
               <div className="max-h-full w-full xl:w-auto">
                 <YourScore chartData={chartData} />
-                <YourScoreDetail />
+                <YourScoreDetail
+                  className={'min-h-[466px] 2xl-max:pb-10'}
+                  yourScoreDetailRef={yourScoreDetailRef}
+                />
               </div>
               <MultipleQuestion
                 questions={questions}
-                className={'xl:h-[991px]'}
+                className={'xl:min-h-[991px]'}
+                multipleQuestionRef={multipleQuestionRef}
               />
             </div>
           ) : (
-            <div className="flex gap-6 overflow-y-auto flex-wrap">
+            <div className="flex gap-6 flex-wrap">
               <MultipleQuestion
                 questions={questions}
-                className={'xl:h-[991px]'}
+                className={'xl:min-h-[991px]'}
+                multipleQuestionRef={multipleQuestionRef}
               />
               <div className="max-h-full w-full xl:w-auto">
-                <YourScoreDetail />
+                <YourScoreDetail
+                  className={'min-h-[991px] 2xl-max:pb-10'}
+                  yourScoreDetailRef={yourScoreDetailRef}
+                />
               </div>
             </div>
           )}

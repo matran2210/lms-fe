@@ -532,6 +532,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         answers: e?.answers,
       })
     }
+
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
       try {
@@ -539,6 +540,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           answers: answers,
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
+          topic_scratch_pad: scratchPadValues.value,
         })
         toast.success('Submitted successfully')
         router.replace(
@@ -645,6 +647,15 @@ const CaseStudyDetail = ({ questions }: any) => {
       document.body.style.userSelect = 'unset'
     }
   }, [startResize])
+  const [scratchPadValues, setScratchPadValues] = useState<any>({})
+
+  const handleChangeScratchPad = (e: any, id: any) => {
+    const { value } = e.target
+    setScratchPadValues((prevState: any) => ({
+      ...prevState,
+      value,
+    }))
+  }
   return (
     <>
       {loading ? (
@@ -912,6 +923,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                         placeholder="Take a note..."
                         control={controlScratch}
                         name={e.id}
+                        onChange={(event) =>
+                          handleChangeScratchPad(event, e.id)
+                        }
                         className="w-full h-[calc(100%-40px)] sapp-text-area p-5"
                       />
                       {/* </div> */}
