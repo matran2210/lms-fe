@@ -245,12 +245,14 @@ const CoursePartDetail = ({ previewPart }: any) => {
 
   // Lưu trữ mảng đã được biến đổi vào sessionStorage khi loadingChapter thay đổi
   useEffect(() => {
-    // Chuyển đổi mảng thành chuỗi JSON và lưu vào sessionStorage với key 'aaaa'
-    window.sessionStorage.setItem(
-      'activityId',
-      JSON.stringify(transformedArray),
-    )
-  }, [loadingChapter])
+    // Chuyển đổi mảng thành chuỗi JSON và lưu vào sessionStorage với key 'activityId'
+    if (chapterDetail) {
+      window.sessionStorage.setItem(
+        'activityId',
+        JSON.stringify(transformedArray),
+      )
+    }
+  }, [loadingChapter, chapterDetail])
 
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
