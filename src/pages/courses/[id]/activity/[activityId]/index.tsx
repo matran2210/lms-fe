@@ -404,6 +404,50 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     (breadcumb) => breadcumb.course_section_type === 'ACTIVITY',
   )
 
+  const [sessionData, setSessionData] = useState<Array<any>>([])
+
+  useEffect(() => {
+    // Lấy giá trị từ sessionStorage với key 'activityId'
+    const storedValue = window.sessionStorage.getItem('activityId')
+
+    // Kiểm tra nếu storedValue không null và không phải là undefined
+    if (storedValue !== null && storedValue !== undefined) {
+      // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+      const parsedValue = JSON.parse(storedValue)
+
+      // Kiểm tra xem parsedValue có phải là một mảng hay không
+      if (Array.isArray(parsedValue)) {
+        // Nếu parsedValue là một mảng, cập nhật state sessionData với giá trị từ sessionStorage
+        setSessionData(parsedValue)
+      }
+    }
+  }, [])
+
+  // Tạo một mảng chứa các id của các hoạt động từ sessionData
+  const activityIds = sessionData?.map((activity: IActivity) => activity.id)
+
+  // Lấy id của hoạt động tiếp theo
+  const nextActivityId = activity.next_activity?.id
+
+  // Tìm vị trí của hoạt động tiếp theo trong mảng activityIds
+  const nextActivityIndex = activityIds?.indexOf(
+    nextActivityId || router.query.activityId,
+  )
+
+  // Lấy id của hoạt động trước đó
+  const previousActivityId = activity.previous_activity?.id
+
+  // Tìm vị trí của hoạt động trước đó trong mảng activityIds
+  const previousActivityIndex = activityIds?.indexOf(
+    previousActivityId || router.query.activityId,
+  )
+
+  const findActivityByIndex = (previousIndex: number) => {
+    return sessionData?.find(
+      (activity: IActivity) => activity.id === activityIds[previousIndex],
+    )
+  }
+
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
@@ -573,7 +617,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                             ...(e.quiz?.multiple_choice_questions || []),
                             ...(e.quiz?.constructed_questions || []),
                           ]}
-                          activityId={activity.id}
+                          activityId={activity.id as string}
                           tabId={selector.currentTabId || ''}
                           quizId={e.quiz?.id || ''}
                           grading_preference={
@@ -607,7 +651,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                       >
                         <VideoDocument
                           videos={e.videos}
-                          activityId={activity.id}
+                          activityId={activity.id as string}
                           tabId={selector.currentTabId || ''}
                           streamRefProp={(el: any) =>
                             (videoRef.current[i || 0] = el)
@@ -689,16 +733,25 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!course_tab_documents?.length && <div className="py-3"></div>}
       </div>
       {/* </FadeInOut> */}
-      <div data-aos={ANIMATION.DATA_AOS}>
-        {(activity?.total_activity as Number) > 1 && (
+      {(activity.previous_activity ||
+        activity.next_activity ||
+        (nextActivityIndex !== -1 &&
+          nextActivityIndex !== sessionData?.length - 1) ||
+        (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
+        <div data-aos={ANIMATION.DATA_AOS}>
           <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
             <div className="flex justify-between flex-nowrap gap-5">
-              {activity.previous_activity && (
+              {(activity.previous_activity ||
+                (previousActivityIndex !== -1 &&
+                  previousActivityIndex !== 0)) && (
                 <div className="w-1/2">
                   <div
                     onClick={() => {
                       router.push({
-                        pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
+                        pathname: `/courses/${router.query.id}/activity/${
+                          activity.previous_activity?.id ||
+                          activityIds[previousActivityIndex - 1]
+                        }`,
                       })
                     }}
                     className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
@@ -706,22 +759,42 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Previous Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex">
-                    {getCourseIcon(activity.previous_activity?.display_icon)}
-                    <SappTooltip title={activity.previous_activity.name}>
+                    {getCourseIcon(
+                      activity.previous_activity
+                        ? activity.previous_activity?.display_icon
+                        : findActivityByIndex(previousActivityIndex - 1)
+                            ?.display_icon,
+                    )}
+                    <SappTooltip
+                      title={
+                        activity.previous_activity
+                          ? activity.previous_activity.name
+                          : findActivityByIndex(previousActivityIndex - 1)?.name
+                      }
+                    >
                       <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
-                        {activity.previous_activity.name}
+                        {activity.previous_activity
+                          ? activity.previous_activity.name
+                          : findActivityByIndex(previousActivityIndex - 1)
+                              ?.name}
                       </span>
                     </SappTooltip>
                   </div>
                 </div>
               )}
               {!activity.previous_activity && <div></div>}
-              {activity.next_activity && (
+              {(activity.next_activity ||
+                (nextActivityIndex !== -1 &&
+                  nextActivityIndex !== sessionData?.length - 1)) && (
                 <div className="w-1/2">
                   <div
                     onClick={() => {
                       router.push({
-                        pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
+                        pathname: `/courses/${router.query.id}/activity/${
+                          activity.next_activity
+                            ? activity.next_activity?.id
+                            : activityIds[nextActivityIndex + 1]
+                        }`,
                       })
                     }}
                     className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
@@ -729,20 +802,33 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Next Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex justify-end">
-                    <SappTooltip title={activity.next_activity.name}>
-                      <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1">
-                        {activity.next_activity.name}
+                    <SappTooltip
+                      title={
+                        activity.next_activity
+                          ? activity.next_activity.name
+                          : findActivityByIndex(nextActivityIndex + 1)?.name
+                      }
+                    >
+                      <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
+                        {activity.next_activity
+                          ? activity.next_activity.name
+                          : findActivityByIndex(nextActivityIndex + 1)?.name}
                       </span>
                     </SappTooltip>
-                    {getCourseIcon(activity.next_activity?.display_icon)}
+                    {getCourseIcon(
+                      activity.next_activity
+                        ? activity.next_activity?.display_icon
+                        : findActivityByIndex(nextActivityIndex + 1)
+                            ?.display_icon,
+                    )}
                   </div>
                 </div>
               )}
               {!activity.next_activity && <div></div>}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>

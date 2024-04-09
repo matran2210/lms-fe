@@ -648,12 +648,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         ],
       }
     }
-    return { corrects: corrects, solution: res.data[0].solution }
+    return {
+      corrects: corrects,
+      solution: res.data[0].solution,
+      isSelfReflection: res.data[0]?.is_self_reflection,
+    }
   }
   const confirmAnswer = async (
     corrects: any,
     solution: any,
     currentTabContent: any,
+    isSelfReflection: boolean,
   ) => {
     setLoading(true)
     // setStartTime(Date.now())
@@ -2138,6 +2143,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         data.corrects,
                         data.solution,
                         currentTabContent,
+                        data.isSelfReflection,
                       )
                     }}
                   >
