@@ -70,15 +70,15 @@ a {
 
 * {
   &::-webkit-scrollbar {
-    @apply h-4 w-2 border bg-bw-3;
+    @apply h-4 w-1.5 border bg-bw-3;
   }
 
   &::-webkit-scrollbar-track {
-    @apply bg-bw-3 border;
+    @apply border;
   }
 
   &::-webkit-scrollbar-thumb {
-    @apply border bg-gray-5;
+    @apply border bg-primary;
   }
 }
 

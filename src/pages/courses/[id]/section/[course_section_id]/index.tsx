@@ -224,6 +224,34 @@ const CoursePartDetail = ({ previewPart }: any) => {
     }
   }, [router?.asPath])
 
+  // Tạo một mảng chứa tất cả các child của chapterDetail (nếu có)
+  const childArrays = chapterDetail?.children?.map(
+    (child: any) => child?.children,
+  )
+
+  // Kết hợp tất cả các mảng con thành một mảng lớn
+  const concatenatedArray: any[] = chapterDetail
+    ? [].concat(...childArrays)
+    : []
+
+  // Tạo một mảng mới chỉ chứa các trường cần thiết từ mỗi phần tử trong concatenatedArray
+  const transformedArray = concatenatedArray?.map((item: any) => {
+    return {
+      id: item.id,
+      name: item.name,
+      display_icon: item.display_icon,
+    }
+  })
+
+  // Lưu trữ mảng đã được biến đổi vào sessionStorage khi loadingChapter thay đổi
+  useEffect(() => {
+    // Chuyển đổi mảng thành chuỗi JSON và lưu vào sessionStorage với key 'aaaa'
+    window.sessionStorage.setItem(
+      'activityId',
+      JSON.stringify(transformedArray),
+    )
+  }, [loadingChapter])
+
   return (
     <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
