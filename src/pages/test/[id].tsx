@@ -2025,6 +2025,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                                     top: 0,
                                     behavior: 'smooth',
                                   })
+                                handleClearSelection(currentTabContent)
                               }}
                             >{`Requirement (${index + 1})`}</button>
                           )
