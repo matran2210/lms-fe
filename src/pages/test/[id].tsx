@@ -1453,6 +1453,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       document.body.style.userSelect = 'unset'
     }
   }, [startResize])
+
+  const firstExhibitFiles = currentTabContent?.data?.exhibits?.[0]?.files?.[0]
+
   return (
     <>
       {loading || !currentTabContent?.id ? (
@@ -1665,9 +1668,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 }}
                 className="editor-wrap mb-3 max-w-[950px] w-full m-auto"
               >
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   {currentTabContent?.topicDescription?.name}
-                </div>
+                </div> */}
                 <EditorReader
                   className="mb-4"
                   text_editor_content={
@@ -1820,7 +1823,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
-                        className=" w-full "
+                        className=" w-full"
                       />
                       {exhibitsDes?.files?.length > 0 &&
                         exhibitsDes?.files.map((e: any, index: number) => {
@@ -1957,7 +1960,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     <div
                       className="flex items-center gap-3 px-4 3xl:px-6 border-l"
                       onClick={() => {
-                        setShowListExhibits(!showListExhibits)
+                        // setShowListExhibits(!showListExhibits)
+                        handleOpenScratchPad(
+                          'file',
+                          firstExhibitFiles?.resource?.url,
+                          firstExhibitFiles?.resource?.name,
+                        )
                       }}
                     >
                       <ExhibitsIcon />
@@ -1966,10 +1974,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                           <span className="hidden 3xl:inline-block 3xl:me-1">
                             Exhibits
                           </span>
-                          <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span>
+                          {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
                         </div>
                         {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
-                        <ArrowUpIcon />
+                        {/* <ArrowUpIcon /> */}
                       </div>
                     </div>
                     {showListExhibits && (

@@ -1,4 +1,7 @@
-import { DeserializeHighlight } from '@utils/index'
+import {
+  DeserializeHighlight,
+  replaceTextAlignCenterToWebKitCenter,
+} from '@utils/index'
 import parseHTML from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
@@ -148,7 +151,10 @@ const EditorReader = ({
         ref={editorRef}
       >
         <div ref={extenalRef || refDocument}>
-          {parseHTML(content || '', options)}
+          {parseHTML(
+            replaceTextAlignCenterToWebKitCenter(content || ''),
+            options,
+          )}
         </div>
       </div>
       {type === 'IMG' && (
