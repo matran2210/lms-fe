@@ -45,7 +45,7 @@ import axios from 'axios'
 import { parse } from 'cookie'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -60,9 +60,19 @@ import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
 import SappLoading from 'src/common/SappLoading'
 import toast from 'react-hot-toast'
+import ScratchPatch from './scratchPatch'
 
 type Window = {
   userAgreed: any
+}
+interface ScratchPadValue {
+  id: string
+  value: string
+}
+interface ScratchPad {
+  question_id: string
+  id: string
+  scratch_pad: string
 }
 declare global {
   interface Window {
@@ -242,6 +252,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
+  const { control: controlScratch } = useForm()
   const {
     control,
     handleSubmit,
@@ -358,7 +369,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       if (type === 'scratch_pad') {
-        arr.push({ id: uniqueId('scratchPad'), type: type })
+        arr.push({ id: currentPage, type: type })
       } else if (type === 'calculator') {
         // for (let i in arr) {
         if (checkCalExist > -1) {
@@ -884,6 +895,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
+    setScratchPadValues(null)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
@@ -1127,8 +1139,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:
-          quizDetail.quiz_timed * 60 -
-          (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+          quizDetail?.quiz_timed * 60 -
+          (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+        scratch_pads: scratchPads || [],
       })
       if (res) {
         if (type === 'entrance') {
@@ -1163,6 +1176,49 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setLoading(false)
     return
   }
+  const [scratchPadValues, setScratchPadValues] = useState<
+    ScratchPadValue | null | undefined
+  >()
+
+  const handleChangeScratchPad = (
+    e: ChangeEvent<HTMLInputElement>,
+    id?: string,
+  ) => {
+    const { value } = e.target
+    setScratchPadValues((prevState: any) => ({
+      ...prevState,
+      id,
+      value,
+    }))
+  }
+  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+  useEffect(() => {
+    if (currentPage) {
+      const currentPageScratchPadValues = scratchPadValues?.value ?? ''
+      const currentPageScratchPadId = scratchPadValues?.id ?? ''
+      if (currentPageScratchPadValues) {
+        const index = scratchPads.findIndex(
+          (item: ScratchPad) => item.question_id === currentPage,
+        )
+        if (index !== -1) {
+          setScratchPads((prevScratchPads: any) => {
+            const newScratchPads = [...prevScratchPads]
+            newScratchPads[index].scratch_pad = currentPageScratchPadValues
+            return newScratchPads
+          })
+        } else {
+          setScratchPads((prevScratchPads: any) => [
+            ...prevScratchPads,
+            {
+              question_id: currentPage,
+              id: currentPageScratchPadId,
+              scratch_pad: currentPageScratchPadValues,
+            },
+          ])
+        }
+      }
+    }
+  }, [currentPage, scratchPadValues])
   const handleClearSelection = (currentTabContent: any) => {
     const data = currentTabContent.data
     if (!currentTabContent.done) {
@@ -1354,7 +1410,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         )
         setQuizAttempId(res.data.id)
       } catch (err: any) {
-        if (err.response.data.error.code === '400|060710') {
+        if (err.response?.data?.error.code === '400|060710') {
           dispatch(disableUnsavedChange())
           setOpenLimit(true)
         }
@@ -1617,9 +1673,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 }}
                 className="editor-wrap mb-3 max-w-[950px] w-full m-auto"
               >
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   {currentTabContent?.topicDescription?.name}
-                </div>
+                </div> */}
                 <EditorReader
                   className="mb-4"
                   text_editor_content={
@@ -1707,7 +1763,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     top: 'calc(50% - 150px)',
                     left: 'calc(50% - 200px)',
                   }}
-                  key={e.id}
+                  key={currentPage}
                   onClick={() => setOnFocusingPad(e.id)}
                   zIndex={
                     onFocusingPad === e.id
@@ -1723,14 +1779,16 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         <CloseIcon />
                       </button>
                     </div>
-                    {/* <div className='flex flex-'> */}
-                    <HookFormTextArea
-                      placeholder="Take a note..."
-                      control={control}
-                      name={e.id}
-                      className="w-full h-[calc(100%-40px)] sapp-text-area px-5 py-3 placeholder:text-sm placeholder:font-normal not-resizer"
+                    <ScratchPatch
+                      scratchPadValues={scratchPadValues}
+                      control={controlScratch}
+                      scratchPads={scratchPads.find(
+                        (item: ScratchPad) => item.id === currentPage,
+                      )}
+                      handleChangeScratchPad={(
+                        event: ChangeEvent<HTMLInputElement>,
+                      ) => handleChangeScratchPad(event, currentPage)}
                     />
-                    {/* </div> */}
                   </div>
                 </MovableWindow>
               )
