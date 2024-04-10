@@ -1581,9 +1581,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     }
                   }}
                 >
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     {currentTabContent?.topicDescription?.name}
-                  </div>
+                  </div> */}
                   <EditorReader
                     className="mb-4"
                     text_editor_content={
