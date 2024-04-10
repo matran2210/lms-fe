@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
@@ -45,6 +45,8 @@ import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
+import CourseAPI from 'src/pages/api/courses'
+import SAPPBorder from 'src/common/SAPPBorder'
 
 type Props = {
   activity: IActivity
@@ -448,6 +450,17 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     )
   }
 
+  const download = async (name: string, file_key: string) => {
+    await CourseAPI.downloadResource({
+      files: [
+        {
+          name: name,
+          file_key: file_key,
+        },
+      ],
+    })
+  }
+
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
@@ -521,7 +534,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
             </div>
           </div>
 
-          <div className="h-[1px] border-b borderColor-default"></div>
           {activity?.course_outcomes?.length > 0 && (
             <div
               className={`pt-6 pb-4 ${
@@ -545,43 +557,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               </ul>
             </div>
           )}
-          {activity?.files?.length > 0 && (
-            <div className="pt-6 pb-4">
-              <div className="font-semibold text-base mb-2">Resource:</div>
-              <ul className="list-disc text-base">
-                {activity?.files.map((e: any, index: number) => {
-                  return (
-                    <div
-                      className="cursor-pointer text-state-info hover:underline"
-                      onClick={() => {
-                        handleOpenScratchPad(
-                          {
-                            type: 'file',
-                          },
-                          e.resource.url,
-                          e?.resource?.name,
-                        )
-                      }}
-                      key={index}
-                    >
-                      {e?.resource?.name}
-                    </div>
-                  )
-                })}
-              </ul>
-            </div>
-          )}
         </div>
 
         <div className="bg-gray-3">
-          <div
-            className={`flex gap-2 px-6 flex-wrap ${
-              activity?.files?.length === 0 ||
-              activity?.course_outcomes?.length === 0
-                ? 'pt-6'
-                : ''
-            }`}
-          >
+          <div className="flex gap-2 px-6 flex-wrap">
             {selector.tabs?.map((e) => {
               return (
                 <SappButton
@@ -670,6 +649,60 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                   return null
                 })}
               </div>
+
+              {activity?.files?.length > 0 && (
+                <>
+                  <SAPPBorder />
+                  <div
+                    className={`pt-8 ${getPreviousTabId() ? 'pb-4' : 'pb-0'} `}
+                  >
+                    <div className="font-semibold text-base">Resource:</div>
+                    <ul className="list-disc text-base">
+                      {activity?.files.map((e: any, index: number) => {
+                        return (
+                          <div
+                            className={`flex justify-between group cursor-pointer ${
+                              index === 0 ? 'mt-4' : 'mt-5'
+                            }`}
+                            key={index}
+                          >
+                            <div className="flex">
+                              <div className="mr-2 group-hover:text-primary flex self-center">
+                                <LinkIcon />
+                              </div>
+                              <div
+                                className="cursor-pointer text-gray-1 group-hover:text-primary"
+                                onClick={() => {
+                                  handleOpenScratchPad(
+                                    {
+                                      type: 'file',
+                                    },
+                                    e.resource.url,
+                                    e?.resource?.name,
+                                  )
+                                }}
+                              >
+                                {e?.resource?.name}
+                              </div>
+                            </div>
+                            <a
+                              onClick={() =>
+                                download(
+                                  e?.resource?.name,
+                                  e?.resource?.file_key,
+                                )
+                              }
+                            >
+                              <DownloadIcon />
+                            </a>
+                          </div>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                  {getPreviousTabId() && <SAPPBorder className="mt-4" />}
+                </>
+              )}
 
               <div className="flex justify-between flex-wrap gap-5 mt-8">
                 {getPreviousTabId() && (
