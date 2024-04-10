@@ -748,32 +748,30 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         )}
       </div>
       <div>
-        <div>
-          {activity?.course_section_notes?.map((note: any, index: number) => {
-            if (viewActivity) {
-              return (
-                <MovableWindow
+        {activity?.course_section_notes?.map((note: any, index: number) => {
+          if (viewActivity) {
+            return (
+              <MovableWindow
+                key={index}
+                position={{
+                  top: 'calc(50% - 121px)',
+                  left: 'calc(50% - 20px)',
+                }}
+                zIndex={1500}
+                not_resizable={true}
+              >
+                <PreviewNoteList
                   key={index}
-                  position={{
-                    top: 'calc(50% - 121px)',
-                    left: 'calc(50% - 20px)',
-                  }}
-                  zIndex={1500}
-                  not_resizable={true}
-                >
-                  <PreviewNoteList
-                    key={index}
-                    title={note.name}
-                    content={note.description}
-                    setOpen={closePreview}
-                  />
-                </MovableWindow>
-              )
-            } else {
-              return null // Hoặc bạn có thể trả về một phần tử khác, tuỳ thuộc vào yêu cầu của bạn
-            }
-          })}
-        </div>
+                  title={note.name}
+                  content={note.description}
+                  setOpen={closePreview}
+                />
+              </MovableWindow>
+            )
+          } else {
+            return null
+          }
+        })}
       </div>
       {/* </MovableWindow> */}
       <div ref={endActivityRef}></div>
