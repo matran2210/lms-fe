@@ -1498,6 +1498,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   className: 'border border-bw-1',
                   color: 'secondary',
                   onClick: () => {
+                    setOpenScratchPad([])
                     setOpenSubmit(true)
                     dispatch(disableUnsavedChange())
                   },
