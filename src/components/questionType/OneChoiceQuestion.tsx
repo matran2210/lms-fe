@@ -44,11 +44,13 @@ const OneChoiceQuestion = ({
   }, [defaultValues])
   const convertAnswer = useMemo(() => {
     let answers = []
+
     if (data?.answers) {
-      data.answers.sort(
-        (a: IAnswers, b: IAnswers) => a.answer_position - b.answer_position,
+      const dataAnswers = [...data?.answers]
+      dataAnswers.sort(
+        (a: IAnswers, b: IAnswers) => a?.answer_position - b?.answer_position,
       )
-      for (let e of data?.answers) {
+      for (let e of dataAnswers) {
         answers.push({ label: e.answer, value: e.id })
       }
     }
