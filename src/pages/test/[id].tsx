@@ -921,6 +921,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
+      setValueExhibits('exhibits', [])
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
