@@ -45,6 +45,7 @@ import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
+import PreviewNoteList from '@components/mycourses/PreviewNoteList'
 
 type Props = {
   activity: IActivity
@@ -70,6 +71,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+  const [viewActivity, setViewActivity] = useState<boolean>(true)
 
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
@@ -96,6 +98,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       dispatch(resetQuizActivity({}))
     }
   }, [activity])
+  const closePreview = () => {
+    setViewActivity(false)
+  }
 
   // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
   //   return breadcumb
@@ -742,7 +747,35 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           </div>
         )}
       </div>
-
+      <div>
+        <div>
+          {activity?.course_section_notes?.map((note: any, index: number) => {
+            if (viewActivity) {
+              return (
+                <MovableWindow
+                  key={index}
+                  position={{
+                    top: 'calc(50% - 121px)',
+                    left: 'calc(50% - 20px)',
+                  }}
+                  zIndex={1500}
+                  not_resizable={true}
+                >
+                  <PreviewNoteList
+                    key={index}
+                    title={note.name}
+                    content={note.description}
+                    setOpen={closePreview}
+                  />
+                </MovableWindow>
+              )
+            } else {
+              return null // Hoặc bạn có thể trả về một phần tử khác, tuỳ thuộc vào yêu cầu của bạn
+            }
+          })}
+        </div>
+      </div>
+      {/* </MovableWindow> */}
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
         <Discussion class_id={(router.query.classId as string) || ''} />
@@ -765,8 +798,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                   : index + 1400
               }
               fixed
-              // not_resizable
-              // className='pointer-events-none'
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
@@ -896,8 +927,8 @@ export async function getServerSideProps(context: any) {
       context?.query?.activityId,
       context?.query.id,
       cookies.accessToken,
+      context?.query?.note_id,
     )
-
     return {
       props: {
         activity,
@@ -939,6 +970,7 @@ export async function getServerSideProps(context: any) {
           context?.query?.activityId,
           context?.query.id,
           act,
+          context?.query?.note_id,
         )
 
         return {
