@@ -689,6 +689,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   loading: false,
                   disabled: false,
                   onClick: () => {
+                    setOpenScratchPad([])
                     setOpenSubmit(true)
                     setUnsavedChanges(false)
                   },
