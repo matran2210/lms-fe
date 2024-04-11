@@ -78,7 +78,7 @@
   }
 
   .btn-video::before {
-    @apply absolute hidden right-0 top-[-50px] bg-overlay-control text-white font-semibold py-1 px-1.5;
+    @apply absolute hidden right-0 top-[-50px] bg-overlay-control text-white font-semibold py-1 px-1.5 z-10;
     content: attr(data-title);
     word-break: keep-all;
     white-space: pre;
@@ -172,7 +172,7 @@
   }
 
   .settings-control {
-    &:hover {
+    &.active {
       .settings-control-popup {
         @apply block;
       }

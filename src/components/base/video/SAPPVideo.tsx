@@ -2,12 +2,9 @@ import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
-import { formatTimeToHourMinuteSecond } from '@utils/helpers'
-
-interface TimeLineItem {
-  time: number
-  text: string
-}
+import { formatTimeToHourMinuteSecond, getResolution } from '@utils/helpers'
+import useClickOutside from '@components/base/clickoutside/HookClick'
+import ArrowIcon from '@components/base/pagination/ArrowIcon'
 
 interface IProp {
   options: any
@@ -15,7 +12,7 @@ interface IProp {
   streamRef?: any
   hideVideo?: boolean
   openQuestion?: boolean
-  timeLine?: TimeLineItem[]
+  timeQuiz?: any
   children?: ReactNode
 }
 
@@ -25,12 +22,18 @@ const SAPPVideo = ({
   streamRef,
   hideVideo = false,
   openQuestion = false,
-  timeLine,
+  timeQuiz,
   children,
 }: IProp) => {
+  const [playerFunction, setPlayerFunction] = useState<any>()
   const [valueVolume, setValueVolume] = useState<number>(1)
   const [playbackRate, setPlaybackRate] = useState<number>(1)
-  const [playbackQuality, setPlaybackQuality] = useState<number>(1)
+  const [playbackQuality, setPlaybackQuality] = useState<number>(0)
+  const [listQualitys, setListQualitys] = useState<any>([])
+  const [activeSettings, setActiveSettings] = useState<boolean>(false)
+  const [activeQuality, setActiveQuality] = useState<boolean>(false)
+  const [activeSpeed, setActiveSpeed] = useState<boolean>(false)
+
   const playbackAnimationRef = useRef<HTMLDivElement>(null)
   const videoControlsRef = useRef<HTMLDivElement>(null)
   const playButtonRef = useRef<HTMLButtonElement>(null)
@@ -43,13 +46,7 @@ const SAPPVideo = ({
   const progressBarRef = useRef<HTMLProgressElement>(null)
   const timeElapsedRef = useRef<HTMLTimeElement>(null)
   const durationRef = useRef<HTMLTimeElement>(null)
-
-  const playbackQualitys = [
-    { value: '0', label: '360p' },
-    { value: '1', label: '480p' },
-    { value: '2', label: '720p' },
-    { value: '3', label: '1080p' },
-  ]
+  const listSettingsRef = useRef<HTMLDivElement>(null)
 
   const playbackSpeeds = [
     { value: '0.25', label: '0.25' },
@@ -61,26 +58,46 @@ const SAPPVideo = ({
     { value: '1.75', label: '1.75' },
     { value: '2', label: '2' },
   ]
-  let player: any
 
   useEffect(() => {
+    let player: any
     const initTerminal = async () => {
       if (options?.src) {
         const dashjs = await import('dashjs')
         if (dashjs) {
           player = dashjs.MediaPlayer().create()
+
+          const audioVideoSettings = player.getSettings().streaming.abr
+          audioVideoSettings.autoSwitchBitrate.video = false
+
           player.initialize(
             streamRef.current,
             `${video_url}${options?.src}/manifest/video.mpd`,
             false,
           )
+
+          setTimeout(() => {
+            const getListBit = player.getBitrateInfoListFor('video')
+            player.setQualityFor('video', getListBit?.[0]?.qualityIndex, true)
+            setListQualitys(getListBit)
+            setPlaybackQuality(getListBit?.[0]?.bitrate)
+          }, 1000)
+
+          // player.updateSettings({
+          //   streaming: {
+          //     abr: {
+          //       video: audioVideoSettings
+          //     }
+          //   }
+          // })
+          setPlayerFunction(player)
         }
       }
     }
     initTerminal()
     return () => {
       if (player) {
-        player.reset()
+        // player.reset()
       }
     }
   }, [options?.src])
@@ -219,10 +236,10 @@ const SAPPVideo = ({
     }
     const markers = videoControlsRef.current?.querySelectorAll('.marker')
 
-    // Lặp qua từng điểm đánh dấu trong mảng
-    if (timeLine && markers) {
-      timeLine.forEach((marker: TimeLineItem, index: number) => {
-        const percentage = (Number(marker?.time) / videoDuration) * 100
+    // Loop through each marker in the array
+    if (timeQuiz && markers) {
+      timeQuiz.forEach((marker: any, index: number) => {
+        const percentage = (Number(marker[0]?.time) / videoDuration) * 100
         const leftStyle = `${percentage}%`
         const markerElement = markers[index] as HTMLElement
 
@@ -449,10 +466,23 @@ const SAPPVideo = ({
     }
   }
 
-  const changeQuantily = (number: number) => {
-    player?.setQualityFor('video', number)
-    setPlaybackQuality(number)
+  const changeQuantily = (number: number, bit: number) => {
+    updatePlayButton()
+    setTimeout(() => {
+      playerFunction.setQualityFor('video', number, true)
+      updatePlayButton()
+    }, 1000)
+    setPlaybackQuality(bit)
   }
+
+  const toggleSettings = () => {
+    setActiveSettings(!activeSettings)
+  }
+
+  useClickOutside({
+    ref: listSettingsRef,
+    callback: () => setActiveSettings(false),
+  })
 
   return (
     <>
@@ -547,13 +577,13 @@ const SAPPVideo = ({
                   00:00
                 </div>
                 <>
-                  {timeLine &&
-                    timeLine.map((e: TimeLineItem, i: number) => {
+                  {timeQuiz &&
+                    timeQuiz.map((e: any, i: number) => {
                       return (
                         <div
                           key={i}
                           className="marker absolute top-0 w-1.5 h-1.5 bg-primary z-[5]"
-                          title={e?.text}
+                          title={e[0]?.question_topic?.name}
                         ></div>
                       )
                     })}
@@ -591,12 +621,18 @@ const SAPPVideo = ({
                     />
                   </div>
                 </div>
-                <div className="settings-control ml-4 text-white icon-svg relative">
+                <div
+                  className={`settings-control ml-4 text-white icon-svg relative ${
+                    activeSettings ? 'active' : ''
+                  }`}
+                  ref={listSettingsRef}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
                     viewBox="0 0 256 256"
+                    onClick={() => toggleSettings()}
                   >
                     <path
                       fill="currentColor"
@@ -607,45 +643,113 @@ const SAPPVideo = ({
                     ></path>
                   </svg>
                   <>
-                    <div className="settings-control-popup hidden absolute bottom-4 -right-8 text-center rounded text-white py-1 text-white bg-overlay-control w-20">
-                      <h4 className="text-base font-semibold px-1.5">
-                        Quanlity
-                      </h4>
-                      <ul className="quanlity-options mb-2 text-ssm font-normal">
-                        {playbackQualitys.map((quality: any) => (
-                          <li
-                            key={quality.value}
-                            onClick={() =>
-                              changeQuantily(parseFloat(quality.value))
-                            }
-                            data-quality={quality.value}
-                            className={`hover:bg-white hover:text-black ${
-                              parseFloat(quality.value) === playbackQuality
-                                ? 'bg-white text-black'
-                                : ''
-                            }`}
+                    <div className="settings-control-popup hidden absolute bottom-5 -right-8 text-center rounded text-white py-1 text-white bg-overlay-control w-44">
+                      {!activeQuality && !activeSpeed && (
+                        <div className="px-4 py-1">
+                          <div
+                            className="flex items-center justify-between"
+                            onClick={() => setActiveQuality(true)}
                           >
-                            {quality.label}
-                          </li>
-                        ))}
-                      </ul>
-                      <h4 className="text-base font-semibold px-1.5">Speed</h4>
-                      <ul className="speed-options text-ssm font-normal">
-                        {playbackSpeeds.map((speed: any) => (
-                          <li
-                            key={speed.value}
-                            onClick={handlePlaybackRateChange}
-                            data-speed={speed.value}
-                            className={`hover:bg-white hover:text-black ${
-                              parseFloat(speed.value) === playbackRate
-                                ? 'bg-white text-black'
-                                : ''
-                            }`}
+                            <span className="block w-16 text-sm font-semibold text-left">
+                              Quality:
+                            </span>
+                            <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                              {getResolution(playbackQuality)}
+                              <ArrowIcon
+                                className={'w-3 h-4'}
+                                right={true}
+                                iconType={'chervon'}
+                              ></ArrowIcon>
+                            </span>
+                          </div>
+                          <div
+                            className="flex items-center justify-between"
+                            onClick={() => setActiveSpeed(true)}
                           >
-                            {speed.label}
-                          </li>
-                        ))}
-                      </ul>
+                            <span className="block w-16 text-sm font-semibold text-left">
+                              Speed:
+                            </span>
+                            <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                              {playbackRate === 1 ? 'Normal' : playbackRate}
+                              <ArrowIcon
+                                className={'w-3 h-4'}
+                                right={true}
+                                iconType={'chervon'}
+                              ></ArrowIcon>
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                      {activeQuality && (
+                        <>
+                          <h4
+                            className="text-base font-semibold px-1.5 relative"
+                            onClick={() => setActiveQuality(false)}
+                          >
+                            <ArrowIcon
+                              className={'absolute left-1 top-1 w-4 h-4'}
+                              iconType={'chervon'}
+                            ></ArrowIcon>
+                            Quality
+                          </h4>
+                          <ul
+                            className="quality-options text-ssm font-normal"
+                            onClick={() => setActiveQuality(false)}
+                          >
+                            {listQualitys.map((quality: any) => (
+                              <li
+                                key={quality.qualityIndex}
+                                onClick={() =>
+                                  changeQuantily(
+                                    parseFloat(quality?.qualityIndex),
+                                    quality?.bitrate,
+                                  )
+                                }
+                                className={`hover:bg-white hover:text-black text-xsm ${
+                                  quality?.bitrate === playbackQuality
+                                    ? 'bg-white text-black'
+                                    : ''
+                                }`}
+                              >
+                                {getResolution(quality?.bitrate)}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                      {activeSpeed && (
+                        <>
+                          <h4
+                            className="text-base font-semibold px-1.5 relative"
+                            onClick={() => setActiveSpeed(false)}
+                          >
+                            <ArrowIcon
+                              className={'absolute left-1 top-1 w-4 h-4'}
+                              iconType={'chervon'}
+                            ></ArrowIcon>
+                            Speed
+                          </h4>
+                          <ul
+                            className="speed-options text-ssm font-normal"
+                            onClick={() => setActiveSpeed(false)}
+                          >
+                            {playbackSpeeds.map((speed: any) => (
+                              <li
+                                key={speed.value}
+                                onClick={handlePlaybackRateChange}
+                                data-speed={speed.value}
+                                className={`hover:bg-white hover:text-black text-xsm ${
+                                  parseFloat(speed.value) === playbackRate
+                                    ? 'bg-white text-black'
+                                    : ''
+                                }`}
+                              >
+                                {speed.label}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
                     </div>
                   </>
                 </div>
