@@ -889,6 +889,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   }
 
   const handleChangeTab = async (currentTab: any) => {
+    setValueExhibits('exhibits', [])
     setLoading(true)
     setScratchPadValues(null)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
@@ -921,7 +922,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
-      setValueExhibits('exhibits', [])
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
@@ -1819,7 +1819,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="w-full bg-white h-[calc(100%-40px)] overflow-auto p-5 cursor-text not-resizer">
+                    <div className="w-full bg-white h-[calc(100%-40px)] overflow-auto p-5 cursor-text not-resizer sapp-text-area">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
                         className=" w-full "
@@ -2128,13 +2128,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
                     onClick={async () => {
+                      setValueExhibits('exhibits', [])
                       const data = await getResult(currentTabContent)
                       confirmAnswer(
                         data.corrects,
                         data.solution,
                         currentTabContent,
                       )
-                      setValueExhibits('exhibits', [])
                     }}
                   >
                     <div className="font-medium text-medium-sm">
@@ -2146,6 +2146,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
                     onClick={() => {
+                      setValueExhibits('exhibits', [])
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
                       )
@@ -2153,7 +2154,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         currentPage,
                         filteredTabs[index + 1].id,
                       )
-                      setValueExhibits('exhibits', [])
                     }}
                   >
                     <div className="font-medium text-medium-sm">
@@ -2177,11 +2177,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
                     onClick={() => {
+                      setValueExhibits('exhibits', [])
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
                       )
                       handleChangeTab(filteredTabs[index + 1].id)
-                      setValueExhibits('exhibits', [])
                     }}
                   >
                     <div className="font-medium text-medium-sm">
