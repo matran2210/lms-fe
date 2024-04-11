@@ -97,7 +97,7 @@ const SAPPVideo = ({
     initTerminal()
     return () => {
       if (player) {
-        // player.reset()
+        player.reset()
       }
     }
   }, [options?.src])
