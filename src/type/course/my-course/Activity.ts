@@ -1,7 +1,7 @@
 import { IFile, IVideo, IQuestion } from '../Question'
 
 export interface IActivity {
-  id: string
+  id: string[] | undefined | string
   created_at: string
   updated_at: string
   deleted_at: null

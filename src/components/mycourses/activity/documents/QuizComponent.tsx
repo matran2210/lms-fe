@@ -471,9 +471,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             <>
               <div>
                 <div>
-                  <div className="font-semibold text-bw-1">
+                  {/* <div className="font-semibold text-bw-1">
                     Topic Description:
-                  </div>
+                  </div> */}
                   <div>
                     <EditorReader
                       className="editor-wrap mt-1.5"
