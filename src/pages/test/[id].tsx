@@ -1170,6 +1170,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const [scratchPadValues, setScratchPadValues] = useState<
     ScratchPadValue | null | undefined
   >()
+  const [scratchPads, setScratchPads] = useState<ScratchPadValue[]>([])
 
   const handleChangeScratchPad = (
     e: ChangeEvent<HTMLInputElement>,
@@ -1182,7 +1183,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       value,
     }))
   }
-  const [scratchPads, setScratchPads] = useState<ScratchPadValue[]>([])
 
   useEffect(() => {
     if (currentPage) {
