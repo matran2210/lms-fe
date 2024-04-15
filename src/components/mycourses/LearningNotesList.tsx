@@ -519,7 +519,7 @@ const LearningNotesList = () => {
                               queryId || courseId
                                 ? `/courses/${
                                     queryId || courseId
-                                  }/activity/${note?.course_section_id}`
+                                  }/activity/${note?.course_section_id}?note_id=${note?.id}`
                                 : '#'
                             }
                           >
