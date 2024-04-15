@@ -648,7 +648,6 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
   }, [startResize])
   const [scratchPadValues, setScratchPadValues] = useState<any>({})
-
   const handleChangeScratchPad = (e: any, id: any) => {
     const { value } = e.target
     setScratchPadValues((prevState: any) => ({
@@ -690,6 +689,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   loading: false,
                   disabled: false,
                   onClick: () => {
+                    setOpenScratchPad([])
                     setOpenSubmit(true)
                     setUnsavedChanges(false)
                   },
@@ -920,6 +920,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       </div>
                       {/* <div className='flex flex-'> */}
                       <HookFormTextArea
+                        defaultValue={scratchPadValues?.value}
                         placeholder="Take a note..."
                         control={controlScratch}
                         name={e.id}

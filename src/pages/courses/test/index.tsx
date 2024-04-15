@@ -48,28 +48,19 @@ const TestModal = ({
     }
     return false
   }, [data?.quiz?.attempts])
-  const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
-
-  useEffect(() => {
-    if (data?.quiz?.is_limited) {
-      const runOutAttempt =
-        data.quiz.limit_count === 0
-          ? false
-          : data.quiz.attempt_count < data.quiz.limit_count
-      setIsRunoutAttemp(runOutAttempt)
-    }
-  }, [
-    data?.quiz?.attempt_count,
-    data?.quiz?.limit_count,
-    data?.quiz?.is_limited,
-  ])
 
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}
       open={open}
       handleCancel={() => setOpen(false)}
-      showOkButton={isRunoutAttemp}
+      showOkButton={
+        !data?.quiz?.is_limited
+          ? true
+          : data?.quiz?.attempt_count < data?.quiz?.limit_count
+            ? true
+            : false
+      }
       onOk={onSubmit}
       okButtonCaption={checkFinished ? 'Retake' : 'Start'}
       cancelButtonCaption={'Cancel'}
