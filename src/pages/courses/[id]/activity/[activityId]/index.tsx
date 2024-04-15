@@ -45,6 +45,7 @@ import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
+import PreviewNoteList from '@components/mycourses/PreviewNoteList'
 
 type Props = {
   activity: IActivity
@@ -70,6 +71,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+  const [viewActivity, setViewActivity] = useState<boolean>(true)
 
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
@@ -96,6 +98,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       dispatch(resetQuizActivity({}))
     }
   }, [activity])
+  const closePreview = () => {
+    setViewActivity(false)
+  }
 
   // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
   //   return breadcumb
@@ -829,7 +834,33 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           </div>
         </div>
       )}
-
+      <div>
+        {activity?.course_section_notes?.map((note: any, index: number) => {
+          if (viewActivity) {
+            return (
+              <MovableWindow
+                key={index}
+                position={{
+                  top: 'calc(50% - 121px)',
+                  left: 'calc(50% - 20px)',
+                }}
+                zIndex={1500}
+                not_resizable={true}
+              >
+                <PreviewNoteList
+                  key={index}
+                  title={note.name}
+                  content={note.description}
+                  setOpen={closePreview}
+                />
+              </MovableWindow>
+            )
+          } else {
+            return null
+          }
+        })}
+      </div>
+      {/* </MovableWindow> */}
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
         <Discussion class_id={(router.query.id as string) || ''} />
@@ -983,8 +1014,8 @@ export async function getServerSideProps(context: any) {
       context?.query?.activityId,
       context?.query.id,
       cookies.accessToken,
+      context?.query?.note_id,
     )
-
     return {
       props: {
         activity,
@@ -1026,6 +1057,7 @@ export async function getServerSideProps(context: any) {
           context?.query?.activityId,
           context?.query.id,
           act,
+          context?.query?.note_id,
         )
 
         return {

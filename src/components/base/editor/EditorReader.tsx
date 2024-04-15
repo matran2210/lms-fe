@@ -142,10 +142,17 @@ const EditorReader = ({
       }
     }
   }
+
+  const preprocessContent = (htmlContent: any) => {
+    return htmlContent
+      .replace(/'Times New Roman'/g, `times-new-roman`)
+      .replace(/'Courier New'/g, `courier-new`)
+  }
+
   return (
     <>
       <div
-        className={`${className} editor-wrap mce-content-body `}
+        className={`${className} editor-wrap mce-content-body`}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}

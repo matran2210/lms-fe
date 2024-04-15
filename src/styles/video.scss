@@ -43,7 +43,7 @@
   }
 
   .left-controls button::before {
-    @apply -right-4;
+    @apply -right-1;
   }
 
   .volume-controls:hover .volume-process {
@@ -67,12 +67,18 @@
     @apply pointer-events-none;
   }
 
-  .btn-video.volume-button::before {
-    @apply right-7;
+  .btn-video.volume-button {
+    &:before {
+      @apply right-8;
+    }
+
+    &[data-title='Unmute']:before {
+      top: -47px;
+    }
   }
 
   .btn-video::before {
-    @apply absolute hidden right-0 top-[-50px] bg-overlay-control text-white font-semibold py-1 px-1.5;
+    @apply absolute hidden right-0 top-[-50px] bg-overlay-control text-white font-semibold py-1 px-1.5 z-10;
     content: attr(data-title);
     word-break: keep-all;
     white-space: pre;
@@ -163,5 +169,13 @@
     @apply cursor-pointer;
     fill: #ffffff;
     stroke: #ffffff;
+  }
+
+  .settings-control {
+    &.active {
+      .settings-control-popup {
+        @apply block;
+      }
+    }
   }
 }
