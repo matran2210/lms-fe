@@ -606,7 +606,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!!course_tab_documents?.length && (
           <div className="bg-white pb-6 mb-6">
             <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
-              <div className="tab-content">
+              <div className="tab-content overflow-x-auto">
                 {course_tab_documents?.map((e, i) => {
                   const marginBottom =
                     i < course_tab_documents?.length - 1 ? 'mb-6' : ''
