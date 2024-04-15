@@ -51,6 +51,7 @@ const AddWordPreview = forwardRef(
     const [answerContent, setAnswerContent] = useState<any>()
     const str = data?.question_content
     const parser = new DOMParser()
+    const isSelfReflection = data?.is_self_reflection
     const [key, setKey] = useState<string>(uniqueId('key'))
     useImperativeHandle(ref, () => ({
       handleReset() {
@@ -83,9 +84,10 @@ const AddWordPreview = forwardRef(
               ans.answer.trim().toLowerCase() ===
                 inputValue.trim().toLowerCase(),
           )
-          inputClass = correctAnswer
-            ? '!border-success text-state-success text-center !font-normal'
-            : '!border-danger text-danger text center !font-normal'
+          inputClass =
+            correctAnswer || isSelfReflection === true
+              ? '!border-success text-state-success text-center !font-normal'
+              : '!border-danger text-danger text center !font-normal'
         }
 
         element.outerHTML = `
