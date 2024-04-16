@@ -69,11 +69,6 @@ interface ScratchPadValue {
   id: string
   value: string
 }
-interface ScratchPad {
-  question_id: string
-  id: string
-  scratch_pad: string
-}
 declare global {
   interface Window {
     userAgreed: any
@@ -896,7 +891,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   const handleChangeTab = async (currentTab: any) => {
     setValueExhibits('exhibits', [])
     setLoading(true)
-    setScratchPadValues(null)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
@@ -1177,13 +1171,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setLoading(false)
     return
   }
+
   const [scratchPadValues, setScratchPadValues] = useState<
     ScratchPadValue | null | undefined
   >()
+  const [scratchPads, setScratchPads] = useState<ScratchPadValue[]>([])
 
   const handleChangeScratchPad = (
     e: ChangeEvent<HTMLInputElement>,
-    id?: string,
+    id: string,
   ) => {
     const { value } = e.target
     setScratchPadValues((prevState: any) => ({
@@ -1192,34 +1188,47 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       value,
     }))
   }
-  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+
   useEffect(() => {
     if (currentPage) {
-      const currentPageScratchPadValues = scratchPadValues?.value ?? ''
-      const currentPageScratchPadId = scratchPadValues?.id ?? ''
-      if (currentPageScratchPadValues) {
-        const index = scratchPads.findIndex(
-          (item: ScratchPad) => item.question_id === currentPage,
-        )
-        if (index !== -1) {
-          setScratchPads((prevScratchPads: any) => {
-            const newScratchPads = [...prevScratchPads]
-            newScratchPads[index].scratch_pad = currentPageScratchPadValues
-            return newScratchPads
-          })
-        } else {
-          setScratchPads((prevScratchPads: any) => [
-            ...prevScratchPads,
-            {
-              question_id: currentPage,
-              id: currentPageScratchPadId,
-              scratch_pad: currentPageScratchPadValues,
-            },
-          ])
-        }
+      const item = scratchPads.find(
+        (item: ScratchPadValue) => item.id === currentPage,
+      )
+      item
+        ? setScratchPadValues({ id: item.id, value: item.value })
+        : setScratchPadValues({ id: currentPage, value: '' })
+    }
+  }, [currentPage])
+
+  useEffect(() => {
+    if (scratchPadValues) {
+      const currentPageScratchPadId = scratchPadValues?.id
+      const currentPageScratchPadValues = scratchPadValues?.value
+
+      const index = scratchPads.findIndex(
+        (item: ScratchPadValue) => item.id === currentPageScratchPadId,
+      )
+      // nếu tìm thấy ScratchPad đã tồn tại thì cập nhật giá trị
+      if (index !== -1) {
+        setScratchPads((prevScratchPads: ScratchPadValue[]) => {
+          const newScratchPads = [...prevScratchPads]
+          newScratchPads[index].value = currentPageScratchPadValues
+          return newScratchPads
+        })
+      }
+      // tạo mới scratchPad
+      else {
+        setScratchPads((prevScratchPads: ScratchPadValue[]) => [
+          ...prevScratchPads,
+          {
+            id: currentPageScratchPadId,
+            value: currentPageScratchPadValues,
+          },
+        ])
       }
     }
-  }, [currentPage, scratchPadValues])
+  }, [scratchPadValues])
+
   const handleClearSelection = (currentTabContent: any) => {
     const data = currentTabContent.data
     if (!currentTabContent.done) {
@@ -1784,12 +1793,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     <ScratchPatch
                       scratchPadValues={scratchPadValues}
                       control={controlScratch}
-                      scratchPads={scratchPads.find(
-                        (item: ScratchPad) => item.id === currentPage,
-                      )}
                       handleChangeScratchPad={(
                         event: ChangeEvent<HTMLInputElement>,
-                      ) => handleChangeScratchPad(event, currentPage)}
+                      ) => handleChangeScratchPad(event, currentPage as string)}
                     />
                   </div>
                 </MovableWindow>
