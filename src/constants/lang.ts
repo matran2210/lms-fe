@@ -18,3 +18,7 @@ export const LANG_SIGNIN = {
   plans: 'Plans',
   contactUs: 'Contact Us',
 }
+
+export const MY_COURSES = {
+  explanations: 'Explanations',
+}
