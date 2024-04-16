@@ -2,7 +2,7 @@ import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
 import { TEST_TYPE } from '@utils/constants'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface IProps {
   open: boolean
@@ -21,6 +21,7 @@ const TestModal = ({
   activeCourse,
 }: IProps) => {
   const router = useRouter()
+
   const onSubmit = async () => {
     //to do: start test
     try {
@@ -53,6 +54,13 @@ const TestModal = ({
       title={TEST_TYPE[data?.course_section_type]}
       open={open}
       handleCancel={() => setOpen(false)}
+      showOkButton={
+        !data?.quiz?.is_limited
+          ? true
+          : data?.quiz?.attempt_count < data?.quiz?.limit_count
+            ? true
+            : false
+      }
       onOk={onSubmit}
       okButtonCaption={checkFinished ? 'Retake' : 'Start'}
       cancelButtonCaption={'Cancel'}

@@ -1,5 +1,4 @@
 import { CloseIcon } from '@assets/icons'
-import { StreamPlayerApi } from '@cloudflare/stream-react'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
@@ -46,6 +45,7 @@ import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
+import PreviewNoteList from '@components/mycourses/PreviewNoteList'
 
 type Props = {
   activity: IActivity
@@ -62,7 +62,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
-  const streamRef = useRef<StreamPlayerApi[]>(null)
   const videoRef = useRef<any>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
@@ -72,6 +71,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+  const [viewActivity, setViewActivity] = useState<boolean>(true)
 
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
@@ -98,6 +98,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       dispatch(resetQuizActivity({}))
     }
   }, [activity])
+  const closePreview = () => {
+    setViewActivity(false)
+  }
 
   // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
   //   return breadcumb
@@ -111,7 +114,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     endActivityRef.current,
     quizDocumentRef.current,
     observerRef.current,
-    streamRef.current,
     videoRef.current,
   ])
 
@@ -407,6 +409,50 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     (breadcumb) => breadcumb.course_section_type === 'ACTIVITY',
   )
 
+  const [sessionData, setSessionData] = useState<Array<any>>([])
+
+  useEffect(() => {
+    // Lấy giá trị từ sessionStorage với key 'activityId'
+    const storedValue = window.sessionStorage.getItem('activityId')
+
+    // Kiểm tra nếu storedValue không null và không phải là undefined
+    if (storedValue !== null && storedValue !== undefined) {
+      // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+      const parsedValue = JSON.parse(storedValue)
+
+      // Kiểm tra xem parsedValue có phải là một mảng hay không
+      if (Array.isArray(parsedValue)) {
+        // Nếu parsedValue là một mảng, cập nhật state sessionData với giá trị từ sessionStorage
+        setSessionData(parsedValue)
+      }
+    }
+  }, [])
+
+  // Tạo một mảng chứa các id của các hoạt động từ sessionData
+  const activityIds = sessionData?.map((activity: IActivity) => activity.id)
+
+  // Lấy id của hoạt động tiếp theo
+  const nextActivityId = activity.next_activity?.id
+
+  // Tìm vị trí của hoạt động tiếp theo trong mảng activityIds
+  const nextActivityIndex = activityIds?.indexOf(
+    nextActivityId || router.query.activityId,
+  )
+
+  // Lấy id của hoạt động trước đó
+  const previousActivityId = activity.previous_activity?.id
+
+  // Tìm vị trí của hoạt động trước đó trong mảng activityIds
+  const previousActivityIndex = activityIds?.indexOf(
+    previousActivityId || router.query.activityId,
+  )
+
+  const findActivityByIndex = (previousIndex: number) => {
+    return sessionData?.find(
+      (activity: IActivity) => activity.id === activityIds[previousIndex],
+    )
+  }
+
   return (
     <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
@@ -470,12 +516,13 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           )}
         </>
       </>
-      <div className="shadow-activity">
+      <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
         <div className="bg-gray-3 px-6 ">
           <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
             <div className="font-medium text-2xl ">{activity?.name}</div>
             <div className="text-sm text-gray-1 whitespace-nowrap">
-              {activity?.duration || 0} min estimated
+              {activity?.duration || 0}{' '}
+              {activity?.duration > 1 ? 'mins' : 'min'} estimated
             </div>
           </div>
 
@@ -542,15 +589,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           >
             {selector.tabs?.map((e) => {
               return (
-                <div title={e.name} key={e.id}>
-                  <SappButton
-                    size="small"
-                    className="py-2.5 !px-3 text-medium-sm !font-normal"
-                    color={tabButtonColor(e.id)}
-                    title={truncateString(e.name, 60)}
-                    onClick={() => handleChangeTab(e.id)}
-                  ></SappButton>
-                </div>
+                <SappButton
+                  key={e.id}
+                  size="small"
+                  className="py-2.5 !px-3 text-medium-sm !font-normal"
+                  color={tabButtonColor(e.id)}
+                  title={truncateString(e.name, 60)}
+                  onClick={() => handleChangeTab(e.id)}
+                ></SappButton>
               )
             })}
           </div>
@@ -560,7 +606,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!!course_tab_documents?.length && (
           <div className="bg-white pb-6 mb-6">
             <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
-              <div className="tab-content">
+              <div className="tab-content overflow-x-auto">
                 {course_tab_documents?.map((e, i) => {
                   const marginBottom =
                     i < course_tab_documents?.length - 1 ? 'mb-6' : ''
@@ -576,7 +622,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                             ...(e.quiz?.multiple_choice_questions || []),
                             ...(e.quiz?.constructed_questions || []),
                           ]}
-                          activityId={activity.id}
+                          activityId={activity.id as string}
                           tabId={selector.currentTabId || ''}
                           quizId={e.quiz?.id || ''}
                           grading_preference={
@@ -607,11 +653,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                       <div
                         className={marginBottom}
                         key={i + '_' + selector.currentTabId}
-                        data-aos={ANIMATION.DATA_AOS}
                       >
                         <VideoDocument
                           videos={e.videos}
-                          activityId={activity.id}
+                          activityId={activity.id as string}
                           tabId={selector.currentTabId || ''}
                           streamRefProp={(el: any) =>
                             (videoRef.current[i || 0] = el)
@@ -693,16 +738,25 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!course_tab_documents?.length && <div className="py-3"></div>}
       </div>
       {/* </FadeInOut> */}
-      <div data-aos={ANIMATION.DATA_AOS}>
-        {(activity?.total_activity as number) > 1 && (
+      {(activity.previous_activity ||
+        activity.next_activity ||
+        (nextActivityIndex !== -1 &&
+          nextActivityIndex !== sessionData?.length - 1) ||
+        (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
+        <div data-aos={ANIMATION.DATA_AOS}>
           <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
             <div className="flex justify-between flex-nowrap gap-5">
-              {activity.previous_activity && (
+              {(activity.previous_activity ||
+                (previousActivityIndex !== -1 &&
+                  previousActivityIndex !== 0)) && (
                 <div className="w-1/2">
                   <div
                     onClick={() => {
                       router.push({
-                        pathname: `/courses/${router.query.id}/activity/${activity.previous_activity?.id}`,
+                        pathname: `/courses/${router.query.id}/activity/${
+                          activity.previous_activity?.id ||
+                          activityIds[previousActivityIndex - 1]
+                        }`,
                       })
                     }}
                     className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
@@ -710,22 +764,42 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Previous Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex">
-                    {getCourseIcon(activity.previous_activity?.display_icon)}
-                    <SappTooltip title={activity.previous_activity.name}>
+                    {getCourseIcon(
+                      activity.previous_activity
+                        ? activity.previous_activity?.display_icon
+                        : findActivityByIndex(previousActivityIndex - 1)
+                            ?.display_icon,
+                    )}
+                    <SappTooltip
+                      title={
+                        activity.previous_activity
+                          ? activity.previous_activity.name
+                          : findActivityByIndex(previousActivityIndex - 1)?.name
+                      }
+                    >
                       <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
-                        {activity.previous_activity.name}
+                        {activity.previous_activity
+                          ? activity.previous_activity.name
+                          : findActivityByIndex(previousActivityIndex - 1)
+                              ?.name}
                       </span>
                     </SappTooltip>
                   </div>
                 </div>
               )}
               {!activity.previous_activity && <div></div>}
-              {activity.next_activity && (
+              {(activity.next_activity ||
+                (nextActivityIndex !== -1 &&
+                  nextActivityIndex !== sessionData?.length - 1)) && (
                 <div className="w-1/2">
                   <div
                     onClick={() => {
                       router.push({
-                        pathname: `/courses/${router.query.id}/activity/${activity.next_activity?.id}`,
+                        pathname: `/courses/${router.query.id}/activity/${
+                          activity.next_activity
+                            ? activity.next_activity?.id
+                            : activityIds[nextActivityIndex + 1]
+                        }`,
                       })
                     }}
                     className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
@@ -733,21 +807,60 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     Next Activity
                   </div>
                   <div className="text-medium-sm text-gray-1 flex justify-end">
-                    <SappTooltip title={activity.next_activity.name}>
-                      <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1">
-                        {activity.next_activity.name}
+                    <SappTooltip
+                      title={
+                        activity.next_activity
+                          ? activity.next_activity.name
+                          : findActivityByIndex(nextActivityIndex + 1)?.name
+                      }
+                    >
+                      <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
+                        {activity.next_activity
+                          ? activity.next_activity.name
+                          : findActivityByIndex(nextActivityIndex + 1)?.name}
                       </span>
                     </SappTooltip>
-                    {getCourseIcon(activity.next_activity?.display_icon)}
+                    {getCourseIcon(
+                      activity.next_activity
+                        ? activity.next_activity?.display_icon
+                        : findActivityByIndex(nextActivityIndex + 1)
+                            ?.display_icon,
+                    )}
                   </div>
                 </div>
               )}
               {!activity.next_activity && <div></div>}
             </div>
           </div>
-        )}
+        </div>
+      )}
+      <div>
+        {activity?.course_section_notes?.map((note: any, index: number) => {
+          if (viewActivity) {
+            return (
+              <MovableWindow
+                key={index}
+                position={{
+                  top: 'calc(50% - 121px)',
+                  left: 'calc(50% - 20px)',
+                }}
+                zIndex={1500}
+                not_resizable={true}
+              >
+                <PreviewNoteList
+                  key={index}
+                  title={note.name}
+                  content={note.description}
+                  setOpen={closePreview}
+                />
+              </MovableWindow>
+            )
+          } else {
+            return null
+          }
+        })}
       </div>
-
+      {/* </MovableWindow> */}
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
         <Discussion class_id={(router.query.id as string) || ''} />
@@ -901,8 +1014,8 @@ export async function getServerSideProps(context: any) {
       context?.query?.activityId,
       context?.query.id,
       cookies.accessToken,
+      context?.query?.note_id,
     )
-
     return {
       props: {
         activity,
@@ -944,6 +1057,7 @@ export async function getServerSideProps(context: any) {
           context?.query?.activityId,
           context?.query.id,
           act,
+          context?.query?.note_id,
         )
 
         return {

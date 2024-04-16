@@ -9,6 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { MY_COURSES } from 'src/constants/lang'
 interface IProps {
   data: any
   action?: any
@@ -49,6 +50,8 @@ const SelectWord = forwardRef(
     const [answerContent, setAnswerContent] = useState<any>()
     const str = data?.question_content
     const [key, setKey] = useState<string>(uniqueId('key'))
+    const isSelfReflection = data?.is_self_reflection
+
     useImperativeHandle(ref, () => ({
       handleReset() {
         const inputs = document.querySelectorAll(
@@ -102,7 +105,10 @@ const SelectWord = forwardRef(
               correct.id === defaultAnswerValue &&
               correct.is_correct,
           )
-          optionClass = isCorrect ? '!border-success' : '!border-danger'
+          optionClass =
+            isCorrect || isSelfReflection === true
+              ? '!border-success'
+              : '!border-danger'
           const textClass = isCorrect
             ? 'text-state-success'
             : 'text-state-error'
@@ -257,7 +263,9 @@ const SelectWord = forwardRef(
         )}
         {solution && (
           <div className="bg-gray-4 mt-6 p-6 ">
-            <div className="font-semibold text-base text-bw-1 ">Solution</div>
+            <div className="font-semibold text-base text-bw-1 ">
+              {MY_COURSES.explanations}
+            </div>
             <EditorReader
               className="mt-4 text-bw-1"
               text_editor_content={solution}

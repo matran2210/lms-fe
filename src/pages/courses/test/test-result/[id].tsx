@@ -39,7 +39,11 @@ const TestResultDetail = ({ questions, chartData }: any) => {
   return (
     <>
       <div className="main px-6 xl:px-16">
-        <Breadcrumb tabs={breadcrumbs} currentPage={'Results'} />
+        <Breadcrumb
+          tabs={breadcrumbs}
+          currentPage={'Results'}
+          className="2xl-max:py-4"
+        />
       </div>
       <div className="px-6 xl:px-0 mx-auto xl:mx-16 mb-6">
         <TestResultPage

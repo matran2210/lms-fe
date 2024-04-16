@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { MY_COURSES } from 'src/constants/lang'
 
 interface IProps {
   control: any
@@ -71,6 +72,7 @@ const NewFiltext = forwardRef(
     const [answerContent, setAnswerContent] = useState<any>()
     const str = data?.question_content
     const parser = new DOMParser()
+    const isSelfReflection = data?.is_self_reflection
     useImperativeHandle(ref, () => ({
       handleReset() {
         const doc = parser.parseFromString(str, 'text/html')
@@ -161,9 +163,10 @@ const NewFiltext = forwardRef(
                   ans.answer?.trim()?.toLowerCase() ===
                     inputValue?.trim()?.toLowerCase(),
               )
-              inputClass = correctAnswer
-                ? '!border-success text-state-success text-center !font-normal'
-                : '!border-danger text-danger text center !font-normal'
+              inputClass =
+                correctAnswer || isSelfReflection === true
+                  ? '!border-success text-state-success text-center !font-normal'
+                  : '!border-danger text-danger text center !font-normal'
             }
             return (
               <span>
@@ -232,7 +235,9 @@ const NewFiltext = forwardRef(
         )}
         {solution && (
           <div className="bg-gray-4 mt-6 p-6">
-            <div className="font-semibold text-base text-bw-1 ">Solution</div>
+            <div className="font-semibold text-base text-bw-1 ">
+              {MY_COURSES.explanations}
+            </div>
             <EditorReader
               className="mt-4 text-bw-1"
               text_editor_content={solution}

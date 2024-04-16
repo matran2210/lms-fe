@@ -33,6 +33,7 @@ const CourseActivityApi = {
     id: string,
     course_id: string,
     accessToken: string,
+    note_id?: string,
   ): Promise<IActivity> => {
     const headers = {
       Authorization: 'Bearer ' + accessToken,
@@ -41,9 +42,14 @@ const CourseActivityApi = {
     const responseActivity = await axios.get<
       {},
       IResponse<{ data: IActivity }>
-    >(`${apiURL}/courses/${course_id}/activity/${id}`, {
-      headers,
-    })
+    >(
+      note_id
+        ? `${apiURL}/courses/${course_id}/activity/${id}?note_id=${note_id}`
+        : `${apiURL}/courses/${course_id}/activity/${id}`,
+      {
+        headers,
+      },
+    )
     const responseTabs = await axios.get<{}, IResponse<{ data: ITab[] }>>(
       `${apiURL}/course-sections/activity/${id}/tabs`,
       {

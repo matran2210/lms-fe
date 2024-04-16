@@ -2,6 +2,7 @@ import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
 import { memo, useEffect, useMemo } from 'react'
+import { MY_COURSES } from 'src/constants/lang'
 export type IPreviewProp = {
   data: any
   control: any
@@ -15,6 +16,10 @@ export type IPreviewProp = {
   allowHighLight?: boolean
   solution?: any
   allowUnHighLight?: boolean
+}
+
+type IAnswers = {
+  answer_position: number
 }
 const OneChoiceQuestion = ({
   data,
@@ -39,8 +44,13 @@ const OneChoiceQuestion = ({
   }, [defaultValues])
   const convertAnswer = useMemo(() => {
     let answers = []
+
     if (data?.answers) {
-      for (let e of data?.answers) {
+      const dataAnswers = [...data?.answers]
+      dataAnswers.sort(
+        (a: IAnswers, b: IAnswers) => a?.answer_position - b?.answer_position,
+      )
+      for (let e of dataAnswers) {
         answers.push({ label: e.answer, value: e.id })
       }
     }
@@ -102,7 +112,9 @@ const OneChoiceQuestion = ({
       </div>
       {solution && (
         <div className="bg-gray-4 mt-6 p-6">
-          <div className="font-semibold text-base text-bw-1 ">Solution</div>
+          <div className="font-semibold text-base text-bw-1 ">
+            {MY_COURSES.explanations}
+          </div>
           <EditorReader
             className="mt-4 text-bw-1"
             text_editor_content={solution}

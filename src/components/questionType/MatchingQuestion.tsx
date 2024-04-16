@@ -10,6 +10,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { MY_COURSES } from 'src/constants/lang'
 
 interface IProps {
   data: any
@@ -56,6 +57,7 @@ const MatchingQuestion = forwardRef(
     const [correctAnswer, setCorrectAnswer] = useState<any>()
     const [storageId, setStoreId] = useState(uniqueId('storage'))
     const matchingQuestionRef = useRef<HTMLDivElement>(null)
+    const isSelfReflection = data?.is_self_reflection
 
     function allowDrop(ev: any) {
       ev.preventDefault()
@@ -344,7 +346,8 @@ const MatchingQuestion = forwardRef(
                 return (
                   <div className="flex flex-nowrap justify-between" key={index}>
                     {defaultValue?.[e?.id]?.answer?.id ===
-                    correctAnswer?.[e?.id]?.id ? (
+                      correctAnswer?.[e?.id]?.id ||
+                    isSelfReflection === true ? (
                       <>
                         <QuestionCard
                           value={e?.content}
@@ -424,7 +427,9 @@ const MatchingQuestion = forwardRef(
         )}
         {solution && (
           <div className="bg-gray-4 mt-6 p-6">
-            <div className="font-semibold text-base text-bw-1 ">Solution</div>
+            <div className="font-semibold text-base text-bw-1 ">
+              {MY_COURSES.explanations}
+            </div>
             <EditorReader
               className="mt-4 text-bw-1"
               text_editor_content={solution}

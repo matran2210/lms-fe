@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { MY_COURSES } from 'src/constants/lang'
 
 interface IProps {
   data?: any
@@ -47,6 +48,7 @@ const DragNDropPreivew = forwardRef(
   ) => {
     const storageId = uniqueId('storage')
     const [answered, setAnswered] = useState<any>([])
+    const isSelfReflection = data?.is_self_reflection
 
     useEffect(() => {
       if (resetDefaultAnswer) {
@@ -177,7 +179,8 @@ const DragNDropPreivew = forwardRef(
               element.outerHTML = `<span  id="${
                 element.id
               }" class="sapp-input-dragNDrop-answer ${
-                defaultAnswer[index].idAnswer === corrects[index].id
+                defaultAnswer[index].idAnswer === corrects[index].id ||
+                isSelfReflection === true
                   ? 'corrects'
                   : 'wrongs'
               }">
@@ -188,13 +191,21 @@ const DragNDropPreivew = forwardRef(
             }</span>
             </span>`
             } else {
-              element.outerHTML = `<span id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs">
+              element.outerHTML = `<span id="${
+                element.id
+              }" class= "sapp-input-dragNDrop-answer ${
+                isSelfReflection === true ? 'corrects' : 'wrongs'
+              }">
               <span class="sapp-input-dragNDrop-empty"></span>
             </span>`
               //   })
             }
           } else {
-            element.outerHTML = `<span id="${element.id}" class= "sapp-input-dragNDrop-answer wrongs">
+            element.outerHTML = `<span id="${
+              element.id
+            }" class= "sapp-input-dragNDrop-answer ${
+              isSelfReflection === true ? 'corrects' : 'wrongs'
+            }">
             <span class="sapp-input-dragNDrop-empty"></span>
           </span>`
           }
@@ -379,7 +390,9 @@ const DragNDropPreivew = forwardRef(
         )}
         {solution && (
           <div className="bg-gray-4 mt-6 p-6">
-            <div className="font-semibold text-base text-bw-1 ">Solution</div>
+            <div className="font-semibold text-base text-bw-1 ">
+              {MY_COURSES.explanations}
+            </div>
             <EditorReader
               className="mt-4 text-bw-1"
               text_editor_content={solution}

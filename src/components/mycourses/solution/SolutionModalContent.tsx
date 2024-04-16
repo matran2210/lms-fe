@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import SolutionListAnswer from './SolutionListAnswer'
+import { MY_COURSES } from 'src/constants/lang'
 
 interface SolutionModalContentProps {
   topic: string
@@ -58,7 +59,9 @@ const SolutionModalContent = ({
             />
           </div>
           <div className="solution-part bg-gray-4 p-6 pb-5">
-            <h3 className="text-base text-bw-1 mb-4 font-semibold">Solution</h3>
+            <h3 className="text-base text-bw-1 mb-4 font-semibold">
+              {MY_COURSES.explanations}
+            </h3>
             <div
               className="solution text-base text-bw-1 [&>p]:mb-6"
               dangerouslySetInnerHTML={{ __html: solution }}
