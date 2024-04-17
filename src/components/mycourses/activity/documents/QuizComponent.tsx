@@ -481,6 +481,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         activeQuestion?.question_topic?.description
                       }
                     />
+                    <EditorReader
+                      className="editor-wrap mt-1.5"
+                      text_editor_content={activeQuestion?.question_content}
+                    />
                   </div>
                 </div>
                 <div className="border border-b-gray-2 my-6"></div>
