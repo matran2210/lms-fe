@@ -166,29 +166,36 @@ export const moveAndResizeElement = (
   element.addEventListener(
     'mousedown',
     function (e: MouseEvent) {
-      // Check phần tử not-resizer, nếu tồn tại thì không kéo thả ở phần này
-      if (!(e.target as HTMLElement).classList.contains('not-resizer')) {
+      // Use closest to check the target itself or its parents for the 'not-resizer' class
+      const target = e.target as HTMLElement | null
+      if (!target?.closest('.not-resizer')) {
         document.addEventListener('mousemove', handleMoveMouse, true)
         isDown = true
         offset = [element.offsetLeft - e.clientX, element.offsetTop - e.clientY]
-      }
 
-      if ((e.target as HTMLElement).classList.contains('resizer')) {
-        currentResizer = (e.target as HTMLElement)?.classList[1]
-        original_width = parseFloat(
-          getComputedStyle(element, null)
-            .getPropertyValue('width')
-            .replace('px', ''),
-        )
-        original_height = parseFloat(
-          getComputedStyle(element, null)
-            .getPropertyValue('height')
-            .replace('px', ''),
-        )
-        original_x = element.getBoundingClientRect().left
-        original_y = element.getBoundingClientRect().top
-        original_mouse_x = e.pageX
-        original_mouse_y = e.pageY
+        // Handling resizers should also be inside this check to ensure 'not-resizer' is respected
+        if (
+          target &&
+          'classList' in target &&
+          target.classList.contains('resizer')
+        ) {
+          const resizer = target as HTMLElement // Type assertion to HTMLElement
+          currentResizer = resizer.classList[1] // Ensure correct class index or use another method to identify the resizer type
+          original_width = parseFloat(
+            getComputedStyle(element)
+              .getPropertyValue('width')
+              .replace('px', ''),
+          )
+          original_height = parseFloat(
+            getComputedStyle(element)
+              .getPropertyValue('height')
+              .replace('px', ''),
+          )
+          original_x = element.getBoundingClientRect().left
+          original_y = element.getBoundingClientRect().top
+          original_mouse_x = e.pageX
+          original_mouse_y = e.pageY
+        }
       }
     },
     true,
