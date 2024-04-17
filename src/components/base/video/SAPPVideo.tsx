@@ -47,6 +47,7 @@ const SAPPVideo = ({
   const timeElapsedRef = useRef<HTMLTimeElement>(null)
   const durationRef = useRef<HTMLTimeElement>(null)
   const listSettingsRef = useRef<HTMLDivElement>(null)
+  const hideTimerRef = useRef<any>(null)
 
   const playbackSpeeds = [
     { value: '0.25', label: '0.25' },
@@ -81,7 +82,7 @@ const SAPPVideo = ({
             player.setQualityFor('video', getListBit?.[0]?.qualityIndex, true)
             setListQualitys(getListBit)
             setPlaybackQuality(getListBit?.[0]?.bitrate)
-          }, 1000)
+          }, 3000)
 
           // player.updateSettings({
           //   streaming: {
@@ -114,11 +115,11 @@ const SAPPVideo = ({
         streamRef.current.addEventListener('volumechange', updateVolumeIcon)
         streamRef.current.addEventListener('click', togglePlay)
         streamRef.current.addEventListener('click', animatePlayback)
-        streamRef.current.addEventListener('mouseenter', showControls)
+        streamRef.current.addEventListener('mousemove', showControls)
         streamRef.current.addEventListener('mouseleave', hideControls)
       }
       if (videoControlsRef.current) {
-        videoControlsRef.current.addEventListener('mouseenter', showControls)
+        videoControlsRef.current.addEventListener('mousemove', showControls)
         videoControlsRef.current.addEventListener('mouseleave', hideControls)
       }
       if (seekRef.current) {
@@ -450,6 +451,8 @@ const SAPPVideo = ({
   function showControls() {
     if (videoControlsRef.current) {
       videoControlsRef.current.classList.remove('hide')
+      clearTimeout(hideTimerRef.current)
+      hideTimerRef.current = setTimeout(hideControls, 3000)
     }
   }
 
