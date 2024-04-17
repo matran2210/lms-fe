@@ -66,8 +66,8 @@ type Window = {
   userAgreed: any
 }
 interface ScratchPadValue {
-  id: string
-  value: string
+  question_id: string
+  scratch_pad: string
 }
 declare global {
   interface Window {
@@ -1187,27 +1187,30 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   useEffect(() => {
     if (currentPage) {
       const item = scratchPads.find(
-        (item: ScratchPadValue) => item.id === currentPage,
+        (item: ScratchPadValue) => item.question_id === currentPage,
       )
       item
-        ? setScratchPadValues({ id: item.id, value: item.value })
-        : setScratchPadValues({ id: currentPage, value: '' })
+        ? setScratchPadValues({
+            question_id: item.question_id,
+            scratch_pad: item.scratch_pad,
+          })
+        : setScratchPadValues({ question_id: currentPage, scratch_pad: '' })
     }
   }, [currentPage])
 
   useEffect(() => {
     if (scratchPadValues) {
-      const currentPageScratchPadId = scratchPadValues?.id
-      const currentPageScratchPadValues = scratchPadValues?.value
+      const currentPageScratchPadId = scratchPadValues?.question_id
+      const currentPageScratchPadValues = scratchPadValues?.scratch_pad
 
       const index = scratchPads.findIndex(
-        (item: ScratchPadValue) => item.id === currentPageScratchPadId,
+        (item: ScratchPadValue) => item.question_id === currentPageScratchPadId,
       )
       // nếu tìm thấy ScratchPad đã tồn tại thì cập nhật giá trị
       if (index !== -1) {
         setScratchPads((prevScratchPads: ScratchPadValue[]) => {
           const newScratchPads = [...prevScratchPads]
-          newScratchPads[index].value = currentPageScratchPadValues
+          newScratchPads[index].scratch_pad = currentPageScratchPadValues
           return newScratchPads
         })
       }
@@ -1216,8 +1219,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         setScratchPads((prevScratchPads: ScratchPadValue[]) => [
           ...prevScratchPads,
           {
-            id: currentPageScratchPadId,
-            value: currentPageScratchPadValues,
+            question_id: currentPageScratchPadId,
+            scratch_pad: currentPageScratchPadValues,
           },
         ])
       }
@@ -1382,6 +1385,41 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   // useEffect(() => {
 
   // }, [currentPage])
+  const [classId, setClassId] = useState('')
+  const [breadCrumb, setBreadCrumb] = useState<any>()
+  const backToPartDetailChapter = () => {
+    router.replace(
+      `/courses/${classId}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
+    )
+  }
+  const backToPartDetail = () => {
+    router.replace(`/courses/${classId}/section/${breadCrumb?.[1]?.id}`)
+  }
+  const backToEntranceTestList = () => {
+    router.replace(`/entrance-test`)
+  }
+  const backToCourseDetail = () => {
+    router.replace(`/courses/my-course/${classId}`)
+  }
+  const handleBack = () => {
+    if (breadCrumb && breadCrumb?.length >= 2) {
+      const lastItem = breadCrumb[breadCrumb?.length - 1]
+      if (
+        lastItem.course_section_type === 'MID_TERM_TEST' ||
+        lastItem.course_section_type === 'FINAL_TEST'
+      ) {
+        backToCourseDetail()
+      } else if (lastItem.course_section_type === 'TOPIC_TEST') {
+        backToPartDetail()
+      } else if (lastItem.course_section_type === 'CHAPTER_TEST') {
+        backToPartDetailChapter()
+      }
+    } else if (breadCrumb && breadCrumb.length === 0) {
+      backToCourseDetail()
+    } else if (!breadCrumb) {
+      backToEntranceTestList()
+    }
+  }
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
     for (let e in currentTabContent?.data?.exhibits) {
@@ -1413,9 +1451,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           router.query.id as string,
           router.query.class_user_id as string,
         )
+        if (res?.data?.success === false) {
+          setOpenLimit(true)
+        }
         setQuizAttempId(res.data.id)
+        setBreadCrumb(res?.data?.data?.breadcumb)
+        setClassId(res?.data?.data?.class_id)
       } catch (err: any) {
-        if (err.response?.data?.error.code === '400|060710') {
+        if (
+          err.response?.data?.error.code === '400|060710' ||
+          err.response?.data?.error.code === '400|060910'
+        ) {
           dispatch(disableUnsavedChange())
           setOpenLimit(true)
         }
@@ -2227,7 +2273,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           <LimitQuizModal
             open={openLimit}
             setOpen={setOpenLimit}
-            handleQuit={() => router.back()}
+            handleQuit={handleBack}
           />
           <ConFirmSubmit
             open={openSubmit}
