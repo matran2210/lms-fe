@@ -72,15 +72,13 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
           Entrance Test Info
         </h2>
-        <div className="cursor-pointer">
-          <EntrancePopupContent
-            name={entrancePopupContent?.name || ''}
-            score={entrancePopupContent?.score}
-            timeAllow={entrancePopupContent?.quiz_timed}
-            attemps={`${entrancePopupContent?.attempt_times || '0'}`}
-            status={entrancePopupContent.is_attempt}
-          />
-        </div>
+        <EntrancePopupContent
+          name={entrancePopupContent?.name || ''}
+          score={entrancePopupContent?.score}
+          timeAllow={entrancePopupContent?.quiz_timed}
+          attemps={`${entrancePopupContent?.attempt_times || '0'}`}
+          status={entrancePopupContent.is_attempt}
+        />
       </SappModalV2>
       <EntranceTestFillForm
         open={openFillForn}

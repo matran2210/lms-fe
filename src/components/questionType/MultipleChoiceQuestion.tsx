@@ -3,6 +3,8 @@ import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
 import { IPreviewProp } from './OneChoiceQuestion'
+import { MY_COURSES } from 'src/constants/lang'
+import { SappTitleSolution } from 'src/common/SappTitleSolution'
 // import {IPreviewProp} from '../true-false-question'
 
 const MultiChoiceQuestion = ({
@@ -97,7 +99,7 @@ const MultiChoiceQuestion = ({
       </div>
       {solution && (
         <div className="bg-gray-4 mt-6 p-6">
-          <div className="font-semibold text-base text-bw-1 ">Solution</div>
+          <SappTitleSolution title={MY_COURSES.explanations} />
           <EditorReader
             className="mt-4 text-bw-1"
             text_editor_content={solution}

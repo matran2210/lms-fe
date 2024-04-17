@@ -2,6 +2,8 @@ import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
 import { memo, useEffect, useMemo } from 'react'
+import { SappTitleSolution } from 'src/common/SappTitleSolution'
+import { MY_COURSES } from 'src/constants/lang'
 export type IPreviewProp = {
   data: any
   control: any
@@ -97,7 +99,7 @@ const OneChoiceQuestion = ({
       </div>
       {solution && (
         <div className="bg-gray-4 mt-6 p-6">
-          <div className="font-semibold text-base text-bw-1 ">Solution</div>
+          <SappTitleSolution title={MY_COURSES.explanations} />
           <EditorReader
             className="mt-4 text-bw-1"
             text_editor_content={solution}

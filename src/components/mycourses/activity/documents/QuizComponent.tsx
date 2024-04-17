@@ -27,6 +27,7 @@ import {
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { v4 as uuidv4 } from 'uuid'
+import { MY_COURSES } from 'src/constants/lang'
 
 export type QuizComponentRef = {
   onSubmit: ({
@@ -470,9 +471,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             <>
               <div>
                 <div>
-                  <div className="font-semibold text-bw-1">
+                  {/* <div className="font-semibold text-bw-1">
                     Topic Description:
-                  </div>
+                  </div> */}
                   <div>
                     <EditorReader
                       className="editor-wrap mt-1.5"
@@ -682,7 +683,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             activeQuestion.qType !== 'ESSAY' &&
             showCorrect && (
               <div className="p-4 mt-8 bg-gray-4">
-                <div className="font-semibold">Solution</div>
+                <div className="font-semibold">{MY_COURSES.explanations}</div>
                 {activeQuestion?.solution && (
                   <EditorReader
                     text_editor_content={activeQuestion?.solution}
