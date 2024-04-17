@@ -16,6 +16,28 @@ interface IProp {
   children?: ReactNode
 }
 
+type ResolutionTypes =
+  | '144p'
+  | '240p'
+  | '360p'
+  | '480p'
+  | '720p'
+  | '900p'
+  | '1080p'
+  | '1440p'
+  | '2k'
+  | '2k+'
+  | '4k'
+  | '4k+'
+
+interface Quality {
+  bitrate: number
+  width: number
+  height: number
+}
+
+type ResolutionMap = Record<ResolutionTypes, Quality | undefined>
+
 const SAPPVideo = ({
   options,
   pauseOnSeek = false,
@@ -492,15 +514,17 @@ const SAPPVideo = ({
   })
 
   // Filter function to remove duplicate resolutions from the qualities list
-  const filterUniqueResolutions = (qualities: any) => {
-    const resolutionMap = {}
+  const filterUniqueResolutions = (qualities: Quality[]): Quality[] => {
+    const resolutionMap: ResolutionMap = {} as ResolutionMap
 
     for (const quality of qualities) {
-      const resolution = getResolution(quality?.bitrate)
+      const resolution = getResolution(quality.bitrate) as ResolutionTypes
       resolutionMap[resolution] = quality
     }
 
-    return Object.values(resolutionMap)
+    return Object.values(resolutionMap).filter(
+      (quality): quality is Quality => quality !== undefined,
+    )
   }
 
   return (
