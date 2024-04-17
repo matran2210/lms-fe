@@ -77,21 +77,22 @@ const SAPPVideo = ({
             false,
           )
 
-          setTimeout(() => {
-            const getListBit = player.getBitrateInfoListFor('video')
-            player.setQualityFor('video', getListBit?.[0]?.qualityIndex, true)
-            setListQualitys(getListBit)
-            setPlaybackQuality(getListBit?.[0]?.bitrate)
-          }, 3000)
-
-          // player.updateSettings({
-          //   streaming: {
-          //     abr: {
-          //       video: audioVideoSettings
-          //     }
-          //   }
-          // })
-          setPlayerFunction(player)
+          player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
+            setTimeout(() => {
+              const currentVideoQualityIndex = player.getQualityFor('video')
+              const getListBit = player.getBitrateInfoListFor('video')
+              player.setQualityFor(
+                'video',
+                getListBit?.[currentVideoQualityIndex]?.qualityIndex,
+                true,
+              )
+              setListQualitys(getListBit)
+              setPlaybackQuality(
+                getListBit?.[currentVideoQualityIndex]?.bitrate,
+              )
+            }, 1000)
+            setPlayerFunction(player)
+          })
         }
       }
     }
@@ -469,6 +470,7 @@ const SAPPVideo = ({
     }
   }
 
+  // Function to change the video quality based on the selected option
   const changeQuantily = (number: number, bit: number) => {
     updatePlayButton()
     setTimeout(() => {
@@ -478,14 +480,28 @@ const SAPPVideo = ({
     setPlaybackQuality(bit)
   }
 
+  // Hook to handle clicks outside of the settings panel to close it
   const toggleSettings = () => {
     setActiveSettings(!activeSettings)
   }
 
+  // Hook to handle clicks outside of the settings panel to close it
   useClickOutside({
     ref: listSettingsRef,
     callback: () => setActiveSettings(false),
   })
+
+  // Filter function to remove duplicate resolutions from the qualities list
+  const filterUniqueResolutions = (qualities: any) => {
+    const resolutionMap = {}
+
+    for (const quality of qualities) {
+      const resolution = getResolution(quality?.bitrate)
+      resolutionMap[resolution] = quality
+    }
+
+    return Object.values(resolutionMap)
+  }
 
   return (
     <>
@@ -657,7 +673,7 @@ const SAPPVideo = ({
                               Quality:
                             </span>
                             <span className="flex items-center justify-between gap-1 text-xsm font-medium">
-                              {getResolution(playbackQuality)}
+                              {getResolution(Number(playbackQuality))}
                               <ArrowIcon
                                 className={'w-3 h-4'}
                                 right={true}
@@ -699,24 +715,26 @@ const SAPPVideo = ({
                             className="quality-options text-ssm font-normal"
                             onClick={() => setActiveQuality(false)}
                           >
-                            {listQualitys.map((quality: any) => (
-                              <li
-                                key={quality.qualityIndex}
-                                onClick={() =>
-                                  changeQuantily(
-                                    parseFloat(quality?.qualityIndex),
-                                    quality?.bitrate,
-                                  )
-                                }
-                                className={`hover:bg-white hover:text-black text-xsm ${
-                                  quality?.bitrate === playbackQuality
-                                    ? 'bg-white text-black'
-                                    : ''
-                                }`}
-                              >
-                                {getResolution(quality?.bitrate)}
-                              </li>
-                            ))}
+                            {filterUniqueResolutions(listQualitys).map(
+                              (quality: any) => (
+                                <li
+                                  key={quality?.qualityIndex}
+                                  onClick={() =>
+                                    changeQuantily(
+                                      parseFloat(quality?.qualityIndex),
+                                      quality?.bitrate,
+                                    )
+                                  }
+                                  className={`hover:bg-white hover:text-black text-xsm ${
+                                    quality?.bitrate === playbackQuality
+                                      ? 'bg-white text-black'
+                                      : ''
+                                  }`}
+                                >
+                                  {getResolution(quality?.bitrate || 0)}
+                                </li>
+                              ),
+                            )}
                           </ul>
                         </>
                       )}
