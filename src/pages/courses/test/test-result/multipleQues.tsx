@@ -10,9 +10,14 @@ import { ANIMATION } from 'src/constants'
 interface MultipleQuestionProps {
   questions: any
   className?: string
+  multipleQuestionRef?: React.RefObject<HTMLDivElement>
 }
 
-const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
+const MultipleQuestion = ({
+  questions,
+  className,
+  multipleQuestionRef,
+}: MultipleQuestionProps) => {
   const router = useRouter()
   const [showMore, setShowMore] = useState<boolean>(false)
 
@@ -99,8 +104,9 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
 
   return (
     <div
-      className={`${className} fixed xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] xl:max-w-smd items-start px-[27px] py-6 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
+      className={`${className} 2xl-max:!min-h-[88px] fixed xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] xl:max-w-smd items-start px-[27px] py-6 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
       data-aos={ANIMATION.DATA_AOS}
+      ref={multipleQuestionRef}
     >
       <div
         className={`${
@@ -108,7 +114,7 @@ const MultipleQuestion = ({ questions, className }: MultipleQuestionProps) => {
             ? 'opacity-100 visible mb-4 xl:mb-0 h-auto'
             : 'opacity-0 xl:opacity-100 invisible xl:visible h-0 xl:h-auto'
         }
-        duration-300 max-h-[300px] xl:max-h-auto overflow-y-auto xl:overflow-visible flex flex-col gap-10 w-full items-start`}
+        duration-300 xl:max-h-auto overflow-y-auto xl:overflow-visible flex flex-col gap-10 w-full items-start`}
       >
         <div className="flex flex-col w-full items-start">
           {renderBoxes(

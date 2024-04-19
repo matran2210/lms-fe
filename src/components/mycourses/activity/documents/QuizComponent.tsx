@@ -19,6 +19,7 @@ import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
 import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import { MY_COURSES } from 'src/constants/lang'
 import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
@@ -27,7 +28,6 @@ import {
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { v4 as uuidv4 } from 'uuid'
-import { MY_COURSES } from 'src/constants/lang'
 
 export type QuizComponentRef = {
   onSubmit: ({
@@ -480,6 +480,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       text_editor_content={
                         activeQuestion?.question_topic?.description
                       }
+                    />
+                    <EditorReader
+                      className="editor-wrap mt-1.5"
+                      text_editor_content={activeQuestion?.question_content}
                     />
                   </div>
                 </div>

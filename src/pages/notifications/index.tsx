@@ -137,6 +137,10 @@ const Notifications = () => {
     })
   }, [router])
 
+  const handleCancel = () => {
+    setOpenModel(false)
+  }
+
   return (
     <>
       {loadingRedirect && (
@@ -161,6 +165,7 @@ const Notifications = () => {
             Notifications
           </h2>
         </div>
+
         <div
           className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between border-b border-gray-2"
           data-aos={ANIMATION.DATA_AOS}
@@ -183,7 +188,7 @@ const Notifications = () => {
       </div>
       <SappDrawerV2
         open={openModel}
-        setOpen={setOpenModel}
+        handleCancel={handleCancel}
         title={'Notification Detail'}
       >
         <NotifyDetail notifyDetail={notifyDetail} />

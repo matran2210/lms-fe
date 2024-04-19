@@ -14,41 +14,49 @@ const headers = [
   {
     label: '#',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[44px] xl:min-w-62px',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[44px] xl:min-w-62px',
   },
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
   },
   {
     label: 'Section (Part)',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[117px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[117px]',
   },
   {
     label: 'Result',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[70px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[70px]',
   },
   {
     label: '',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[117px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[117px]',
   },
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[95px] !pr-0 text-center',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[95px] !pr-0 text-center',
   },
 ]
 
-const YourScoreDetail = () => {
+interface YourScoreDetailProps {
+  className?: string
+  yourScoreDetailRef?: React.RefObject<HTMLDivElement>
+}
+
+const YourScoreDetail = ({
+  className,
+  yourScoreDetailRef,
+}: YourScoreDetailProps) => {
   const [scoreDetail, setScoreDetail] = useState<any>({
     answers: [],
     meta: {},
@@ -130,8 +138,9 @@ const YourScoreDetail = () => {
 
   return (
     <div
-      className="bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar"
+      className={`overflow-y-auto bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar ${className}`}
       data-aos={ANIMATION.DATA_AOS}
+      ref={yourScoreDetailRef}
     >
       <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
         Your Score Details
@@ -144,16 +153,17 @@ const YourScoreDetail = () => {
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}
+          classTableRes="!overflow-x-hidden"
         >
           <>
-            {scoreDetail.answers?.map((e: any, index: number) => {
+            {scoreDetail?.answers?.map((e: any, index: number) => {
               return (
                 <tr
                   className="border-dashed border-b border-gray-2"
                   key={e?.id}
                 >
-                  <td className="pr-1 text-bw-1">{index + 1}</td>
-                  <td className="text-start m-6 pr-4 max-w-[210px]">
+                  <td className="p-0 pr-1 text-bw-1">{index + 1}</td>
+                  <td className="p-0 pr-4 text-start max-w-[210px]">
                     <div
                       className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
                       dangerouslySetInnerHTML={{
@@ -168,18 +178,18 @@ const YourScoreDetail = () => {
                     ></div>
                   </td>
                   <td
-                    className="text-start my-6 pr-4 text-bw-1 line-clamp-1"
+                    className="p-0 my-5 text-starttext-bw-1 line-clamp-1"
                     title={e?.question?.question_filter_id?.part?.name ?? '--'}
                   >
                     {e?.question?.question_filter_id?.part?.name ?? '--'}
                   </td>
-                  <td className="text-start m-6 pr-4 text-bw-1">
-                    <div className="mt-6 mr-6 mb-6 min-w-[111px]">
+                  <td className="p-0 pr-4 text-start text-bw-1">
+                    <div className="min-w-[111px]">
                       {getTypeName(e?.question?.qType ?? '--')}
                     </div>
                   </td>
                   <td
-                    className={`text-start m-6 pr-7
+                    className={`text-start pr-7
                       ${
                         e?.is_correct || e?.active === 'SUBMITED'
                           ? ' text-state-success'
@@ -195,7 +205,7 @@ const YourScoreDetail = () => {
                       </>
                     )}
                   </td>
-                  <td className="text-start m-6 text-gray-1 pr-4">
+                  <td className="p-0 pr-4 text-start m-6 text-gray-1">
                     {e?.question?.qType !== 'ESSAY' && (
                       <div className="flex items-center ml-1">
                         <img
@@ -207,7 +217,7 @@ const YourScoreDetail = () => {
                       </div>
                     )}
                   </td>
-                  <td className="text-start m-6">
+                  <td className="p-0 text-start m-6">
                     <div className="text-center">
                       {(() => {
                         if (e?.time_spent !== null) {

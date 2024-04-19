@@ -1,0 +1,181 @@
+/* ==========================================================================
+   #Custom Video Player
+   ========================================================================== */
+
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.sapp-video-custom {
+  .video-controls {
+    transition: all 0.2s ease;
+    background: rgba(104, 104, 104, 0.6);
+  }
+
+  .video-controls.hide {
+    @apply opacity-0 pointer-events-none;
+  }
+
+  progress {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  progress::-webkit-progress-bar {
+    @apply bg-overlay-white;
+  }
+
+  progress::-webkit-progress-value {
+    @apply bg-gray-8;
+  }
+
+  progress::-moz-progress-bar {
+    @apply bg-overlay-white border border-gray-4;
+  }
+
+  .seek:hover + .seek-tooltip {
+    @apply block;
+  }
+
+  .seek-tooltip {
+    content: attr(data-title);
+  }
+
+  .left-controls button::before {
+    @apply -right-1;
+  }
+
+  .volume-controls:hover .volume-process {
+    @apply block;
+  }
+
+  .volume-controls input {
+    transition: all 0.4s ease;
+  }
+
+  .volume-controls:hover input,
+  .volume-controls input:focus {
+    @apply w-full opacity-100;
+  }
+
+  .btn-video {
+    @apply cursor-pointer relative text-ssm p-0 border-0 outline-0;
+  }
+
+  .btn-video * {
+    @apply pointer-events-none;
+  }
+
+  .btn-video.volume-button {
+    &:before {
+      @apply right-8;
+    }
+
+    &[data-title='Unmute']:before {
+      top: -47px;
+    }
+  }
+
+  .btn-video::before {
+    @apply absolute hidden right-0 top-[-50px] bg-overlay-control text-white font-semibold py-1 px-1.5 z-10;
+    content: attr(data-title);
+    word-break: keep-all;
+    white-space: pre;
+  }
+
+  .btn-video:hover::before {
+    @apply inline-block;
+  }
+
+  .fullscreen-button {
+    @apply mr-0;
+  }
+
+  .playback-animation {
+    @apply bg-overlay-control pointer-events-none absolute top-1/2 left-1/2 -ml-10 -mt-10 w-20 h-20 rounded-full opacity-0 z-20;
+    border-radius: 80px;
+  }
+
+  input[type='range'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    @apply bg-overlay-white h-1.5 cursor-pointer;
+  }
+
+  input[type='range']:focus {
+    outline: none;
+  }
+
+  input[type='range']::-webkit-slider-runnable-track {
+    @apply w-full cursor-pointer;
+    border-radius: 1.3px;
+    -webkit-appearance: none;
+    transition: all 0.4s ease;
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    @apply w-4 h-4 bg-gray-3 cursor-pointer -ml-px;
+    -webkit-appearance: none;
+    border-radius: 16px;
+  }
+
+  input[type='range']:focus::-webkit-slider-runnable-track {
+    background: transparent;
+  }
+
+  input[type='range'].volume {
+    @apply h-1.5 bg-white;
+  }
+
+  input[type='range'].volume::-webkit-slider-runnable-track {
+    @apply bg-transparent;
+  }
+
+  input[type='range'].volume::-webkit-slider-thumb {
+    @apply ml-0 h-3.5 w-3.5 bg-white;
+  }
+
+  input[type='range']::-moz-range-track {
+    @apply w-full h-1.5 h-1.5 cursor-pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 1.3px;
+  }
+
+  input[type='range']::-moz-range-thumb {
+    @apply h-3.5 w-3.5 border border-gray-4 bg-gray-8 cursor-pointer;
+    border-radius: 50px;
+  }
+
+  input[type='range']:focus::-moz-range-track {
+    outline: none;
+  }
+
+  input[type='range'].volume::-moz-range-thumb {
+    @apply border border-white bg-white;
+  }
+
+  .volume-button {
+    @apply mr-0;
+  }
+
+  .volume-process {
+    @apply bg-overlay-play px-2 pt-1 pb-2 rounded-sm absolute bottom-[200%] right-[-150%] w-[115px] hidden z-20;
+    transform: rotate(270deg);
+  }
+
+  .icon-svg {
+    @apply cursor-pointer;
+    fill: #ffffff;
+    stroke: #ffffff;
+  }
+
+  .settings-control {
+    &.active {
+      .settings-control-popup {
+        @apply block;
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 .select-single {
   .select__control {
-    @apply h-12.5 border-default focus:border-focus hover:border-focus shadow-0 focus:shadow-0 focus:outline-none;
+    @apply h-12.5 border-default focus:border-primary hover:border-primary shadow-0 focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
