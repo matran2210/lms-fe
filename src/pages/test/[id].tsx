@@ -1666,8 +1666,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   position={{
                     width: '400px',
                     height: '300px',
-                    top: 'calc(25% - 150px)',
-                    left: 'calc(25% - 200px)',
+                    top: 'calc(75% - 150px)',
+                    left: 'calc(0px)',
                   }}
                   key={e.id}
                   onClick={() => setOnFocusingPad(e.id)}
