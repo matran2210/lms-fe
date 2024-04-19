@@ -6,6 +6,7 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+
 export const getActToken = (): string => {
   return Cookies.get('accessToken') || ''
 }
@@ -25,6 +26,27 @@ export const setCookieRefreshToken = (refreshToken: string) => {
 export const removeJwtToken = () => {
   Cookies.remove('accessToken')
   Cookies.remove('refreshToken')
+}
+
+export const removeLocalStorageJwtToken = () => {
+  localStorage.removeItem('actToken')
+  localStorage.removeItem('refreshToken')
+}
+
+export const setActToken = (accToken: string) => {
+  localStorage.setItem('actToken', accToken)
+}
+
+export const setRefreshToken = (refreshToken: string) => {
+  localStorage.setItem('refreshToken', refreshToken)
+}
+
+export const getLocalStorgeActToken = (): string => {
+  return localStorage.getItem('actToken') || ''
+}
+
+export const getLocalStorgeRefreshToken = (): string => {
+  return localStorage.getItem('refreshToken') || ''
 }
 
 export function truncateString(str: string, maxLength: number) {
