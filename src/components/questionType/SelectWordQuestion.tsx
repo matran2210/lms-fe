@@ -51,6 +51,8 @@ const SelectWord = forwardRef(
     const [answerContent, setAnswerContent] = useState<any>()
     const str = data?.question_content
     const [key, setKey] = useState<string>(uniqueId('key'))
+    const isSelfReflection = data?.is_self_reflection
+
     useImperativeHandle(ref, () => ({
       handleReset() {
         const inputs = document.querySelectorAll(
@@ -104,7 +106,10 @@ const SelectWord = forwardRef(
               correct.id === defaultAnswerValue &&
               correct.is_correct,
           )
-          optionClass = isCorrect ? '!border-success' : '!border-danger'
+          optionClass =
+            isCorrect || isSelfReflection === true
+              ? '!border-success'
+              : '!border-danger'
           const textClass = isCorrect
             ? 'text-state-success'
             : 'text-state-error'

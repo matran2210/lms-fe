@@ -10,7 +10,7 @@ const SappLoading = () => {
         autoplay
         loop
         className="top-0 left-0 z-[9999] backdrop-blur-[2000px] bg-white"
-        speed={2}
+        speed={3}
       />
     </div>
   )

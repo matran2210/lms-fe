@@ -18,6 +18,10 @@ export type IPreviewProp = {
   solution?: any
   allowUnHighLight?: boolean
 }
+
+type IAnswers = {
+  answer_position: number
+}
 const OneChoiceQuestion = ({
   data,
   control,
@@ -41,8 +45,13 @@ const OneChoiceQuestion = ({
   }, [defaultValues])
   const convertAnswer = useMemo(() => {
     let answers = []
+
     if (data?.answers) {
-      for (let e of data?.answers) {
+      const dataAnswers = [...data?.answers]
+      dataAnswers.sort(
+        (a: IAnswers, b: IAnswers) => a?.answer_position - b?.answer_position,
+      )
+      for (let e of dataAnswers) {
         answers.push({ label: e.answer, value: e.id })
       }
     }
@@ -77,6 +86,11 @@ const OneChoiceQuestion = ({
           }
         }}
       >
+        <EditorReader
+          text_editor_content={data?.question_topic?.description}
+          className="sapp-questions"
+          highlighted={highlighted}
+        />
         <EditorReader
           text_editor_content={data?.question_content}
           className="sapp-questions"

@@ -1,7 +1,7 @@
 import { IFile, IVideo, IQuestion } from '../Question'
 
 export interface IActivity {
-  id: string
+  id: string[] | undefined | string
   created_at: string
   updated_at: string
   deleted_at: null
@@ -14,6 +14,10 @@ export interface IActivity {
   duration: number
   is_peer_review: boolean
   is_graded: boolean
+  course_section_notes: {
+    name: string
+    description: string
+  }[]
   course_section_type: string
   activity_type: string
   position: string
