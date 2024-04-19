@@ -26,8 +26,9 @@ import { store, wrapper } from '../redux/store'
 import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
-import { Player } from '@lottiefiles/react-lottie-player'
 import SappLoading from 'src/common/SappLoading'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -50,6 +51,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const getNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.total_records,
   )
+
+  const [queryClient] = useState(() => new QueryClient())
 
   const coutNotificationsUnRead = async () => {
     const accessToken = await AsyncStorage.getItem('accessToken')
@@ -213,19 +216,22 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         />
       </Head>
       <main>
-        <Toaster />
-        <SappConfirmDialogContainer />
-        {loading ? <SappLoading /> : <></>}
-        <RouteGuard>
-          <>
-            {content}
-            <LearningResource
-              open={openResource}
-              setOpenResource={setOpenResource}
-            />
-            <LearningNotesList />
-          </>
-        </RouteGuard>
+        <QueryClientProvider client={queryClient}>
+          <Toaster />
+          <SappConfirmDialogContainer />
+          {loading ? <SappLoading /> : <></>}
+          <RouteGuard>
+            <>
+              {content}
+              <LearningResource
+                open={openResource}
+                setOpenResource={setOpenResource}
+              />
+              <LearningNotesList />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </>
+          </RouteGuard>
+        </QueryClientProvider>
       </main>
     </>
   )
