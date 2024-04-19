@@ -498,6 +498,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 left: 'calc(25% - 200px)',
               }}
               zIndex={1400}
+              fixed
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
