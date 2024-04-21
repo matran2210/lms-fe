@@ -25,7 +25,7 @@ const EntranceTest = () => {
   }
 
   const router = useRouter()
-  const { data: entranceTestLists } = useGetData('data', {attempt_status: router?.query?.attempt_status})
+  const { data: entranceTestLists } = useGetData('entrance-test', {attempt_status: router?.query?.attempt_status})
 
   return (
     <>

@@ -52,7 +52,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     (state) => state.notificationReducer?.total_records,
   )
 
-  const [queryClient] = useState(() => new QueryClient())
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 545550, // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
+      },
+    },
+  });
 
   // const coutNotificationsUnRead = async () => {
   //   const accessToken = await AsyncStorage.getItem('accessToken')

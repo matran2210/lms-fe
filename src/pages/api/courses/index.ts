@@ -1,3 +1,4 @@
+import { fetcher } from '@services/requestV2'
 import { apiURL, httpService } from 'src/redux/services/httpService'
 
 const CourseAPI = {
@@ -172,3 +173,12 @@ const CourseAPI = {
 }
 
 export default CourseAPI
+
+
+export class CoursesAPI {
+  static get(page_index: number, page_size: number,params: Object): Promise<any> {
+    return fetcher(`${apiURL}/courses?page_index=${page_index}&page_size=${page_size}`, {
+      params: params,
+    })
+  }
+}

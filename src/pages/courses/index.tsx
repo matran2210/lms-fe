@@ -18,30 +18,15 @@ import {
   setCookieRefreshToken,
 } from '@utils/index'
 import { ICourseAll } from 'src/type/courses'
-import CourseAPI from '../api/courses'
+import CourseAPI, { CoursesAPI } from '../api/courses'
 import { removeJwtToken } from '@utils/helpers/authen'
 import { PageLink } from 'src/constants'
+import { useQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 
 const DEFAULT_PAGESIZE = 9
 
-const fetchData = async (
-  page: number,
-  pageSize: number,
-  token: string,
-  queryString?: string,
-) => {
-  const apiResponse = await axios.get(
-    `${apiURL}/courses?page_index=${page}&page_size=${pageSize}${queryString}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  )
-  return apiResponse?.data?.data
-}
-
-const MyCourse = ({ courses }: { courses: ICourseAll }) => {
+const MyCourse = () => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideIsActive = useAppSelector(
@@ -77,13 +62,30 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     }
   }, [userGuideLine])
 
+  const useGetData = (queryKey: string, params: Object) => {
+    const fetchData = async () => {
+      const { data } = await CoursesAPI.get(1, DEFAULT_PAGESIZE, params);
+      return data;
+    };
+  
+    return useQuery([queryKey, params], fetchData);
+  }
+
+  const params = {
+    name: router.query.name || undefined,
+    status: router.query.status || undefined,
+    type: router.query.type || undefined
+  }
+
+  const { data: courses, isLoading } = useGetData('courses', params)
+
   const [data, setData] = useState<ICourseAll>(courses || [])
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
   const queryString = buildQueryString({
-    name: router.query.name || '',
-    status: router.query.status || '',
-    type: router.query.type || '',
+    name: router.query.name || undefined,
+    status: router.query.status || undefined,
+    type: router.query.type || undefined,
   })
 
   const loadMore = async () => {
@@ -228,76 +230,76 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
 
 export default MyCourse
 
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
-  const accessToken = req.cookies.accessToken
-  const queryString = buildQueryString({
-    name: query.name || '',
-    status: query.status || '',
-    type: query.type || '',
-  })
-  try {
-    const courses = await fetchData(
-      1,
-      DEFAULT_PAGESIZE,
-      accessToken,
-      queryString,
-    )
+// export async function getServerSideProps(context: any) {
+//   const { req, res, query } = context
+//   const accessToken = req.cookies.accessToken
+//   const queryString = buildQueryString({
+//     name: query.name || '',
+//     status: query.status || '',
+//     type: query.type || '',
+//   })
+//   try {
+//     const courses = await fetchData(
+//       1,
+//       DEFAULT_PAGESIZE,
+//       accessToken,
+//       queryString,
+//     )
 
-    return {
-      props: {
-        courses: courses,
-      },
-    }
-  } catch (error: any) {
-    if (error.response && error.response.status === 401) {
-      const refreshToken = req.cookies.refreshToken
+//     return {
+//       props: {
+//         courses: courses,
+//       },
+//     }
+//   } catch (error: any) {
+//     if (error.response && error.response.status === 401) {
+//       const refreshToken = req.cookies.refreshToken
 
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+//       try {
+//         const refreshResponse = await axios.post(
+//           `${apiURL}/auth/rotate`,
+//           {},
+//           {
+//             headers: {
+//               Authorization: `Bearer ${refreshToken}`,
+//             },
+//           },
+//         )
+//         const userInfo = refreshResponse?.data?.data?.tokens
+//         const act = userInfo?.act
+//         const rft = userInfo?.rft
+//         // Save the new access token to the AsyncStorage
+//         if (typeof window !== 'undefined') {
+//           await AsyncStorage.setItem('accessToken', act)
+//           await AsyncStorage.setItem('refreshToken', rft)
+//         }
+//         setCookieActToken(act)
+//         setCookieRefreshToken(rft)
+//         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
-        const courses = await fetchData(1, DEFAULT_PAGESIZE, act, queryString)
+//         const courses = await fetchData(1, DEFAULT_PAGESIZE, act, queryString)
 
-        return {
-          props: {
-            courses: courses,
-          },
-        }
-      } catch (refreshError) {
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: PageLink.AUTH_LOGIN,
-            permanent: false,
-          },
-        }
-      }
-    }
+//         return {
+//           props: {
+//             courses: courses,
+//           },
+//         }
+//       } catch (refreshError) {
+//         removeJwtToken()
+//         return {
+//           redirect: {
+//             destination: PageLink.AUTH_LOGIN,
+//             permanent: false,
+//           },
+//         }
+//       }
+//     }
 
-    return {
-      redirect: {
-        destination: PageLink.AUTH_LOGIN,
-        permanent: false,
-      },
-    }
-  }
-}
+//     return {
+//       redirect: {
+//         destination: PageLink.AUTH_LOGIN,
+//         permanent: false,
+//       },
+//     }
+//   }
+// }
