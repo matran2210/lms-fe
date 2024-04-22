@@ -1,6 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   removeJwtToken,
+  getActToken,
+  getRefreshToken,
   setCookieActToken,
   setCookieRefreshToken,
 } from '@utils/index'
@@ -48,8 +49,8 @@ export const RouteGuard = ({ children }: IProps) => {
     // not logged in
 
     const path = url?.split('?')?.[0]
-    const accessToken = await AsyncStorage.getItem('accessToken')
-    const refreshToken = await AsyncStorage.getItem('refreshToken')
+    const accessToken = getActToken()
+    const refreshToken = getRefreshToken()
     if (!accessToken && !refreshToken && !PUBLIC_PATHS[path]) {
       setAuthorized(false)
       router.push(PageLink.AUTH_LOGIN)
@@ -77,11 +78,6 @@ export const RouteGuard = ({ children }: IProps) => {
           const userInfo = refreshResponse?.data?.data?.tokens
           const act = userInfo?.act
           const rft = userInfo?.rft
-          // Save the new access token to the AsyncStorage
-          if (typeof window !== 'undefined') {
-            await AsyncStorage.setItem('accessToken', act)
-            await AsyncStorage.setItem('refreshToken', rft)
-          }
           setCookieActToken(act)
           setCookieRefreshToken(rft)
           if (accessToken && refreshToken) {
