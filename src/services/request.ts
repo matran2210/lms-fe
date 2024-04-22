@@ -1,8 +1,10 @@
 import {
   removeJwtToken,
-  setAccessToken,
-  setRefreshToken,
-} from '@utils/helpers/authen'
+  getActToken,
+  getRefreshToken,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from '@utils/index'
 import axios, { AxiosRequestConfig } from 'axios'
 import { PageLink } from 'src/constants'
 import { apiURL } from 'src/redux/services/httpService'
@@ -18,11 +20,6 @@ export const getBaseUrl = () => {
 
   return apiURL
 }
-
-const getActToken =
-  typeof window !== 'undefined' ? localStorage.getItem('accessToken') : ''
-const getRefreshToken =
-  typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : ''
 
 export const request = axios.create({
   baseURL: getBaseUrl(),
@@ -51,7 +48,7 @@ request.interceptors.request.use(
 
 request.interceptors.request.use((config: any) => {
   config.headers = {
-    Authorization: 'Bearer ' + `${getActToken}`,
+    Authorization: 'Bearer ' + `${getActToken()}`,
     ...config.headers,
   }
 
@@ -84,25 +81,23 @@ request.interceptors.response.use(
             {},
             {
               headers: {
-                Authorization: 'Bearer ' + `${getRefreshToken}`,
+                Authorization: 'Bearer ' + `${getRefreshToken()}`,
               },
             },
           )
           .then((res: any) => {
             const userInfo = res?.data?.data?.tokens
-            localStorage.setItem('accessToken', userInfo?.act)
-            localStorage.setItem('refreshToken', userInfo?.rft)
-            setAccessToken(userInfo?.act)
-            setRefreshToken(userInfo?.rft)
+            setCookieActToken(userInfo?.act)
+            setCookieRefreshToken(userInfo?.rft)
 
             // update new token to axios
             request.defaults.headers.common['Authorization'] = `Bearer ${
-              getActToken as string
+              getActToken() as string
             }`
 
             // Callback to unauth API calls
             refreshSubscribers.forEach((callback) =>
-              callback(getActToken as string),
+              callback(getActToken() as string),
             )
             refreshSubscribers = []
             isRefreshing = false

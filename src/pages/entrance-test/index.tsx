@@ -7,8 +7,8 @@ import EntranceTestList from '@components/entrance-test/EntranceTestList'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import axios from 'axios'
 import { apiURL } from '@components/mycourses/LearningResource'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
+  removeJwtToken,
   setCookieActToken,
   setCookieRefreshToken,
   buildQueryString,
@@ -16,7 +16,6 @@ import {
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { useAppDispatch } from 'src/redux/hook'
-import { removeJwtToken } from '@utils/helpers/authen'
 import { ANIMATION } from 'src/constants'
 
 const EntranceTest = ({ entranceTestLists }: any) => {
@@ -106,14 +105,9 @@ export async function getServerSideProps(context: any) {
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const queryString = buildQueryString({
