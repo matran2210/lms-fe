@@ -96,16 +96,16 @@ const LoginPage = () => {
     }
   }
 
-  async function getListEntranceTest() {
-    try {
-      const res = await EntranceApi.getListEntranceTestLogin()
-      if (res?.data?.length > 0) {
-        router.push(PageLink.ENTRANCE_TEST)
-      } else {
-        router.push(PageLink.COURSES)
-      }
-    } catch (error) {}
-  }
+  // async function getListEntranceTest() {
+  //   try {
+  //     const res = await EntranceApi.getListEntranceTestLogin()
+  //     if (res?.data?.length > 0) {
+  //       router.push(PageLink.ENTRANCE_TEST)
+  //     } else {
+  //       router.push(PageLink.COURSES)
+  //     }
+  //   } catch (error) {}
+  // }
 
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
@@ -124,9 +124,10 @@ const LoginPage = () => {
         // dispatch(getEntranceCount())
         .unwrap()
         .then((payload) => {
-          getListEntranceTest()
+          // getListEntranceTest()
           dispatch(clearGuideState())
-          dispatch(getEntranceCount())
+          // dispatch(getEntranceCount())
+          router.push('/courses')
           localStorage.setItem('enstranceTest', 'true')
         })
         .catch((error) => {

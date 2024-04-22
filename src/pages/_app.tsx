@@ -54,14 +54,14 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   const [queryClient] = useState(() => new QueryClient())
 
-  const coutNotificationsUnRead = async () => {
-    const accessToken = await AsyncStorage.getItem('accessToken')
-    if (accessToken && router?.asPath !== '/auth/login') {
-      try {
-        await dispatch(getCountUnRead())
-      } catch (error) {}
-    }
-  }
+  // const coutNotificationsUnRead = async () => {
+  //   const accessToken = await AsyncStorage.getItem('accessToken')
+  //   if (accessToken && router?.asPath !== '/auth/login') {
+  //     try {
+  //       await dispatch(getCountUnRead())
+  //     } catch (error) {}
+  //   }
+  // }
 
   const getTitleHeader = (pathname: string) => {
     if (pathname.startsWith('/explanation') && router.query?.title) {
@@ -135,7 +135,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       }
     }
     // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
-    coutNotificationsUnRead()
+    // coutNotificationsUnRead()
   }
 
   useEffect(() => {

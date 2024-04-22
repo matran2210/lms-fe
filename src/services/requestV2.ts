@@ -1,23 +1,22 @@
-import axios, {AxiosRequestConfig} from 'axios'
-import {PageLink} from 'src/constants'
-import {toast} from 'react-hot-toast'
+import axios, { AxiosRequestConfig } from 'axios'
+import { PageLink } from 'src/constants'
+import { toast } from 'react-hot-toast'
 import exceptions from './en.exceptions.json'
-import { getLocalStorgeActToken, getLocalStorgeRefreshToken, removeLocalStorageJwtToken, setActToken, setRefreshToken } from '@utils/index'
+import {
+  getLocalStorgeActToken,
+  getLocalStorgeRefreshToken,
+  removeLocalStorageJwtToken,
+  setActToken,
+  setRefreshToken,
+} from '@utils/index'
+import { apiURL } from 'src/redux/services/httpService'
 
 // Variable to track whether the refresh token API has been called
 let isRefreshing = false
 let refreshSubscribers: ((token: string) => void)[] = []
 
-export const getBaseUrl = () => {
-  if (typeof window !== 'undefined') {
-    return process.env.REACT_APP_API_PUBLIC
-  }
-
-  return process.env.REACT_APP_API_PUBLIC
-}
-
 export const request = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: apiURL,
 })
 
 export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
@@ -35,7 +34,7 @@ request.interceptors.request.use(
   (error) => {
     // Handle request error
     return Promise.reject(error)
-  }
+  },
 )
 
 request.interceptors.request.use((config: any) => {
@@ -67,7 +66,7 @@ request.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true
 
-        axios(`${process.env.REACT_APP_API_PUBLIC}/auth/rotate`, {
+        axios(`${apiURL}/auth/rotate`, {
           method: 'POST',
           headers: {
             Authorization: 'Bearer ' + getLocalStorgeRefreshToken(),
@@ -79,16 +78,19 @@ request.interceptors.response.use(
             setRefreshToken(userInfo?.rft)
 
             // update new token to axios
-            request.defaults.headers.common['Authorization'] = `Bearer ${getLocalStorgeActToken()}`
+            request.defaults.headers.common['Authorization'] =
+              `Bearer ${getLocalStorgeActToken()}`
 
             // Callback to unauth API calls
-            refreshSubscribers.forEach((callback) => callback(getLocalStorgeActToken()))
+            refreshSubscribers.forEach((callback) =>
+              callback(getLocalStorgeActToken()),
+            )
             refreshSubscribers = []
             isRefreshing = false
           })
           .catch(() => {
             removeLocalStorageJwtToken()
-            window.location.href = PageLink.AUTH_LOGIN
+            // window.location.href = PageLink.AUTH_LOGIN
           })
       }
 
@@ -104,7 +106,7 @@ request.interceptors.response.use(
       return retryOriginalRequest
     }
     return Promise.reject(error)
-  }
+  },
 )
 
 request.interceptors.response.use(
@@ -114,7 +116,12 @@ request.interceptors.response.use(
   function (error: any) {
     const errorCode: string = error?.response?.data?.error?.code
     const errorMessage = exceptions[errorCode as keyof typeof exceptions]
-    toast.error(errorMessage || error?.response?.statusText || error?.message || 'Unknown error!')
+    toast.error(
+      errorMessage ||
+        error?.response?.statusText ||
+        error?.message ||
+        'Unknown error!',
+    )
     return Promise.reject(error)
-  }
+  },
 )

@@ -6,6 +6,7 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import { useQuery } from 'react-query'
 
 export const getActToken = (): string => {
   return Cookies.get('accessToken') || ''
@@ -29,12 +30,12 @@ export const removeJwtToken = () => {
 }
 
 export const removeLocalStorageJwtToken = () => {
-  localStorage.removeItem('actToken')
+  localStorage.removeItem('accessToken')
   localStorage.removeItem('refreshToken')
 }
 
 export const setActToken = (accToken: string) => {
-  localStorage.setItem('actToken', accToken)
+  localStorage.setItem('accessToken', accToken)
 }
 
 export const setRefreshToken = (refreshToken: string) => {
@@ -42,7 +43,7 @@ export const setRefreshToken = (refreshToken: string) => {
 }
 
 export const getLocalStorgeActToken = (): string => {
-  return localStorage.getItem('actToken') || ''
+  return localStorage.getItem('accessToken') || ''
 }
 
 export const getLocalStorgeRefreshToken = (): string => {
@@ -153,4 +154,8 @@ export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
     /text-align:\s*center/g,
     'text-align: -webkit-center',
   )
+}
+
+export const useGetData = (queryKey: string, params: Object, fetchData: any) => {
+  return useQuery([queryKey, params], () => fetchData(params));
 }
