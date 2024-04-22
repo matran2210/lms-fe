@@ -3,6 +3,8 @@ version: '3'
 services:
   next-app:
     image: gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next
+    options:
+      --always-pull
     container_name: lms-fe-app
     build:
       context: ./
