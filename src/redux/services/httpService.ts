@@ -11,9 +11,15 @@ import url from './Authen/url'
 
 import toast from 'react-hot-toast'
 import { exceptions } from './en.exceptions'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
-import { removeJwtToken } from '@utils/helpers/authen'
+import {
+  removeJwtToken,
+  getActToken,
+  getRefreshToken,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from '@utils/index'
 import { capitalize } from 'lodash'
+import Cookies from 'js-cookie'
 
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -42,7 +48,7 @@ let refreshSubscribers: any[] = []
 
 const refreshAccessToken = async (): Promise<string | null> => {
   try {
-    const refreshToken = await AsyncStorage.getItem('refreshToken')
+    const refreshToken = getRefreshToken()
 
     const response = await axios.post(
       `${apiURL}/auth/rotate`,
@@ -57,9 +63,6 @@ const refreshAccessToken = async (): Promise<string | null> => {
     const userInfo = response?.data?.data?.tokens
     const act = userInfo?.act
     const rft = userInfo?.rft
-    // Save the new access token to the AsyncStorage
-    await AsyncStorage.setItem('accessToken', act)
-    await AsyncStorage.setItem('refreshToken', rft)
     setCookieActToken(act)
     setCookieRefreshToken(rft)
     // Resolve all the subscribers with the new access token
@@ -87,8 +90,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
 }
 // Set the authorization header for the Axios instance
 const setAuthorizationHeader = async (config: any) => {
-  // Get the access token from the AsyncStorage
-  const accessToken = await AsyncStorage.getItem('accessToken')
+  const accessToken = getActToken()
   // If there is an access token, set the authorization header
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
@@ -118,9 +120,7 @@ axiosInstance.interceptors.request.use(
 
     // If the access token is present and the refresh flag is true, block the request and add it to the subscribers array
     await new Promise((resolve) => refreshSubscribers.push(resolve))
-    config.headers.Authorization = `Bearer ${await AsyncStorage.getItem(
-      'accessToken',
-    )}`
+    config.headers.Authorization = `Bearer ${getActToken()}`
     return config
   },
   (error: AxiosError) => {

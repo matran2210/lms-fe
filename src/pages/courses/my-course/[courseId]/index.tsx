@@ -4,9 +4,8 @@ import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { removeJwtToken } from '@utils/helpers/authen'
 import {
+  removeJwtToken,
   buildQueryString,
   setCookieActToken,
   setCookieRefreshToken,
@@ -170,14 +169,9 @@ export async function getServerSideProps(context: any) {
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
         const courses = await fetchData(
           query.courseId,
           DEFAULT_PAGESIZE,
