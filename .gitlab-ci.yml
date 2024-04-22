@@ -25,6 +25,7 @@ build_master:
   tags:
     - exec-shell  
 
+
 deploy_staging:
   stage: deploy
   only:
