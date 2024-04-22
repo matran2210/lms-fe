@@ -10,9 +10,11 @@ import axios from 'axios'
 import { parse } from 'cookie'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { apiURL } from 'src/redux/services/httpService'
-import { removeJwtToken } from '@utils/helpers/authen'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import {
+  setCookieActToken,
+  setCookieRefreshToken,
+  removeJwtToken,
+} from '@utils/index'
 import { TEST_TYPE } from '@utils/constants'
 
 const TestResultDetail = ({ questions, chartData }: any) => {
@@ -109,14 +111,9 @@ export async function getServerSideProps(context: any) {
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
       } catch (refreshError) {
         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
         // Chuyển hướng đến trang đăng nhập

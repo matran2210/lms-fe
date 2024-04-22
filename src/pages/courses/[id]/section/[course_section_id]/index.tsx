@@ -8,13 +8,12 @@ import SappDrawer from '@components/base/SappDrawer'
 import axios from 'axios'
 import { apiURL } from 'src/redux/services/httpService'
 import { useRouter } from 'next/router'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   setCookieActToken,
   setCookieRefreshToken,
   truncateString,
+  removeJwtToken,
 } from '@utils/index'
-import { removeJwtToken } from '@utils/helpers/authen'
 import TestModal from 'src/pages/courses/test'
 import { ANIMATION, PageLink } from 'src/constants'
 import { Tooltip } from 'antd'
@@ -404,7 +403,7 @@ export async function getServerSideProps(context: any) {
     // Trả về props cho trang
     return {
       props: {
-        previewPart: nodeList || null,
+        previewPart: nodeList || {},
       },
     }
   } catch (error: any) {
@@ -428,14 +427,9 @@ export async function getServerSideProps(context: any) {
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const newApiResponse = await axios.get(

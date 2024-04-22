@@ -8,12 +8,11 @@ import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { removeJwtToken } from '@utils/helpers/authen'
 import {
   setCookieActToken,
   setCookieRefreshToken,
   truncateString,
+  removeJwtToken,
 } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
@@ -1044,14 +1043,9 @@ export async function getServerSideProps(context: any) {
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const activity = await CourseActivityApi.getActivityById(

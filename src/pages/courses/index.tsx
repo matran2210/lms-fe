@@ -8,7 +8,6 @@ import CoursesList from '@components/mycourses/CoursesList'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
 import PopupStep from '@components/user-guide/PopupStep'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { ANIMATION, UserGuide } from 'src/constants'
 import { useRouter } from 'next/router'
@@ -16,10 +15,10 @@ import {
   buildQueryString,
   setCookieActToken,
   setCookieRefreshToken,
+  removeJwtToken,
 } from '@utils/index'
 import { ICourseAll } from 'src/type/courses'
 import CourseAPI from '../api/courses'
-import { removeJwtToken } from '@utils/helpers/authen'
 import { PageLink } from 'src/constants'
 
 const DEFAULT_PAGESIZE = 9
@@ -266,14 +265,9 @@ export async function getServerSideProps(context: any) {
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
 
         const courses = await fetchData(1, DEFAULT_PAGESIZE, act, queryString)
 
