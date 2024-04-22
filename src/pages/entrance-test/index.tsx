@@ -17,15 +17,17 @@ const EntranceTest = () => {
 
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
-      const { data } = await EntranceTestAPI.get(params);
-      return data;
-    };
-  
-    return useQuery([queryKey, params], fetchData);
+      const { data } = await EntranceTestAPI.get(params)
+      return data
+    }
+
+    return useQuery([queryKey, params], fetchData)
   }
 
   const router = useRouter()
-  const { data: entranceTestLists } = useGetData('entrance-test', {attempt_status: router?.query?.attempt_status})
+  const { data: entranceTestLists } = useGetData('entrance-test', {
+    attempt_status: router?.query?.attempt_status,
+  })
 
   return (
     <>

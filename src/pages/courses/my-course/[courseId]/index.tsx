@@ -1,46 +1,43 @@
-import Filter from '@components/mycourses/Filter'
 import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { removeJwtToken } from '@utils/helpers/authen'
-import {
-  buildQueryString,
-  setCookieActToken,
-  setCookieRefreshToken,
-} from '@utils/index'
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import CourseAPI from 'src/pages/api/courses'
-import { apiURL } from 'src/redux/services/httpService'
-import { ICourseDetailAll, ICourseSection, IMeta } from 'src/type/courses'
-import { ANIMATION, PageLink } from 'src/constants'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
+import { CoursesAPI } from 'src/pages/api/courses'
+import { ICourseSection, IMeta } from 'src/type/courses'
+import { ANIMATION } from 'src/constants'
+import { useQuery } from 'react-query'
 
 const DEFAULT_PAGESIZE = 18
 
-const fetchData = async (
-  id: string | string[] | undefined,
-  pageSize: number,
-  token: string,
-  queryString?: string,
-) => {
-  const apiResponse = await axios.get(
-    `${apiURL}/courses/${id}?page_index=1&page_size=${pageSize}${queryString}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  )
-  return apiResponse?.data?.data
-}
+const CourseDetail = () => {
+  const router = useRouter()
 
-const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
+  const useGetData = (queryKey: string, params: Object) => {
+    const fetchData = async () => {
+      const { data } = await CoursesAPI.getCourseDetail(
+        router.query.courseId,
+        1,
+        DEFAULT_PAGESIZE,
+        params,
+      )
+      return data
+    }
+
+    return useQuery([queryKey, params], fetchData, {
+      enabled: router.query.courseId !== undefined,
+    })
+  }
+
+  const params = {
+    user_section_learning_status:
+      router.query.user_section_learning_status || undefined,
+  }
+
+  const { data: courses } = useGetData('courses-detail', params)
+
   const [data, setData] = useState<ICourseSection[]>(
     courses?.data?.course_sections_with_progress || [],
   )
@@ -48,20 +45,16 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
   const [class_user_id, setClassUserId] = useState(courses?.class_user_id)
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const queryString = buildQueryString({
-    user_section_learning_status:
-      router.query.user_section_learning_status || '',
-  })
 
   const loadMore = async () => {
     if (loading) return
     setLoading(true)
     try {
-      const newData = await CourseAPI.getCourseDetail(
+      const newData = await CoursesAPI.getCourseDetail(
         router.query.courseId,
+        1,
         page + DEFAULT_PAGESIZE,
-        queryString,
+        params,
       )
       setData(newData?.data?.data?.course_sections_with_progress)
       setMetadata(newData?.data?.metadata)
@@ -131,80 +124,3 @@ const CourseDetail = ({ courses }: { courses: ICourseDetailAll }) => {
 }
 
 export default CourseDetail
-
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
-  const accessToken = req.cookies.accessToken
-  const queryString = buildQueryString({
-    user_section_learning_status: query.user_section_learning_status || '',
-  })
-
-  try {
-    const courses = await fetchData(
-      query.courseId,
-      DEFAULT_PAGESIZE,
-      accessToken,
-      queryString,
-    )
-
-    return {
-      props: {
-        courses: courses || {},
-      },
-    }
-  } catch (error: any) {
-    if (error.response && error.response.status === 401) {
-      const refreshToken = req.cookies.refreshToken
-
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
-        const courses = await fetchData(
-          query.courseId,
-          DEFAULT_PAGESIZE,
-          act,
-          queryString,
-        )
-
-        return {
-          props: {
-            courses: courses || {},
-          },
-        }
-      } catch (refreshError) {
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: PageLink.AUTH_LOGIN,
-            permanent: false,
-          },
-        }
-      }
-    }
-    return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
-    }
-  }
-}

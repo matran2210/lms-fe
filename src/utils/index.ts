@@ -156,6 +156,10 @@ export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
   )
 }
 
-export const useGetData = (queryKey: string, params: Object, fetchData: any) => {
-  return useQuery([queryKey, params], () => fetchData(params));
+export const useGetData = (
+  queryKey: string,
+  params: Object,
+  fetchData: any,
+) => {
+  return useQuery([queryKey, params], () => fetchData(params))
 }

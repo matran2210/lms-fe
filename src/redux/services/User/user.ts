@@ -3,6 +3,7 @@ import { apiURL, httpService } from '../httpService'
 import url from './url'
 import { IResponse } from 'src/redux/types'
 import axios from 'axios'
+import { AuthAPI } from 'src/pages/api/profile'
 
 const UserApi = {
   /**
@@ -11,11 +12,8 @@ const UserApi = {
    */
   getMe: (): Promise<IUser> => {
     // Đường dẫn api để lấy thông tin người dùng
-    const uri = url.me
     // Sử dụng httpService để gửi yêu cầu GET
-    return httpService.GET<any, IUser>({
-      uri,
-    })
+    return AuthAPI.me()
   },
   /**
    * Một hàm để lấy khóa học và certificate của người dùng hiện tại

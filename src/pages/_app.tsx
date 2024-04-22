@@ -55,10 +55,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 545550, // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
+        staleTime: 3000000, // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
       },
     },
-  });
+  })
 
   // const coutNotificationsUnRead = async () => {
   //   const accessToken = await AsyncStorage.getItem('accessToken')

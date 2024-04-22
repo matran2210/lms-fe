@@ -1,3 +1,4 @@
+import { fetcher } from '@services/requestV2'
 import { apiURL, httpService } from 'src/redux/services/httpService'
 
 const MyProfileAPI = {
@@ -16,3 +17,9 @@ const MyProfileAPI = {
 }
 
 export default MyProfileAPI
+
+export class AuthAPI {
+  static me() {
+    return fetcher('me')
+  }
+}

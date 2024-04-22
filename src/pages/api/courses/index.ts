@@ -174,11 +174,31 @@ const CourseAPI = {
 
 export default CourseAPI
 
-
 export class CoursesAPI {
-  static get(page_index: number, page_size: number,params: Object): Promise<any> {
-    return fetcher(`${apiURL}/courses?page_index=${page_index}&page_size=${page_size}`, {
-      params: params,
-    })
+  static get(
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/courses?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
+  }
+
+  static getCourseDetail(
+    id: string | string[] | undefined,
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/courses/${id}?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
   }
 }
