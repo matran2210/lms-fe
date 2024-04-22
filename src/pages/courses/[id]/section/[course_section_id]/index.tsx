@@ -19,6 +19,7 @@ import TestModal from 'src/pages/courses/test'
 import { ANIMATION, PageLink } from 'src/constants'
 import { Tooltip } from 'antd'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import { CoursesAPI } from '../../../../api/courses/index';
 
 const CoursePartDetail = ({ previewPart }: any) => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -164,7 +165,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ) => {
-    const res = await CourseAPI.learningOutcomeProgress(
+    const res = await CoursesAPI.learningOutcomeProgress(
       router.query.id,
       chapterDetail?.id,
     )
@@ -175,7 +176,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   const handleChapterTest = async () => {
-    await CourseAPI.learningOutcomeProgress(router.query.id, chapterTestId)
+    await CoursesAPI.learningOutcomeProgress(router.query.id, chapterTestId)
   }
 
   const handleCaseStudyProcess = async (

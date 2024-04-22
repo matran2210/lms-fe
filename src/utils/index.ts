@@ -163,3 +163,14 @@ export const useGetData = (
 ) => {
   return useQuery([queryKey, params], () => fetchData(params))
 }
+
+export const useGetDataQuery = (queryKey: string, params: Object, fetchFunction: () => Promise<any>, enabled?: boolean) => {
+  const fetchData = async () => {
+    const { data } = await fetchFunction();
+    return data;
+  };
+
+  return useQuery([queryKey, params], fetchData, {
+    enabled: enabled,
+  });
+};

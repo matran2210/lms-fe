@@ -16,6 +16,7 @@ import {
 import { apiURL, httpService } from '../../../httpService'
 import url from './url'
 import CourseTestApi from '../Test'
+import { CoursesAPI } from '../../../../../pages/api/courses/index';
 
 /**
  * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.
@@ -107,34 +108,6 @@ const CourseActivityApi = {
       uri: `quiz/${id}/questions?page_index=1&page_size=99999 `,
     })
     return response
-  },
-
-  /**
-   * @description Lấy thông tin câu hỏi theo ID.
-   * @async
-   * @param {string[]} question_ids - Mảng chứa các ID của câu hỏi.
-   * @returns {Promise<IResponse<IQuestion[]>>} - Dữ liệu câu hỏi.
-   */
-  getQuestionsById: async (
-    question_ids: string[],
-  ): Promise<IResponse<IQuestion[]>> => {
-    const response = await httpService.GET<any, any>({
-      uri: `question?question_ids=${question_ids?.join(',')}`,
-    })
-
-    return {
-      ...response,
-      data: response.data?.map((e: { id: string }) => {
-        return {
-          ...e,
-          quiz_position_mapping: [
-            {
-              question_id: e.id,
-            },
-          ],
-        }
-      }),
-    }
   },
 
   /**
@@ -259,7 +232,7 @@ const CourseActivityApi = {
     data: any,
     class_user_id?: string,
   ): Promise<IResponse<any>> => {
-    const quizAttemptResponse = await CourseTestApi.createQuizAttempt(
+    const quizAttemptResponse = await CoursesAPI.createQuizAttempt(
       id,
       class_user_id,
     )
@@ -283,18 +256,6 @@ const CourseActivityApi = {
    * @param {string} sectionId - id của section.
    * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi về tiến độ.
    */
-  startCourseSectionProgress: async (
-    courseId: string,
-    sectionId: string,
-  ): Promise<IResponse<any> | undefined> => {
-    const uri = `${url.courseSections}/${courseId}/section/${sectionId}/progress`
-    try {
-      const response = await httpService.GET<any, any>({
-        uri,
-      })
-      return response
-    } catch (error) {}
-  },
 
   /**
    * Kết thúc tiến độ cho một phần của khóa học cụ thể.
