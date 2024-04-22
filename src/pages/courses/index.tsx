@@ -64,17 +64,17 @@ const MyCourse = () => {
 
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
-      const { data } = await CoursesAPI.get(1, DEFAULT_PAGESIZE, params);
-      return data;
-    };
-  
-    return useQuery([queryKey, params], fetchData);
+      const { data } = await CoursesAPI.get(1, DEFAULT_PAGESIZE, params)
+      return data
+    }
+
+    return useQuery([queryKey, params], fetchData)
   }
 
   const params = {
     name: router.query.name || undefined,
     status: router.query.status || undefined,
-    type: router.query.type || undefined
+    type: router.query.type || undefined,
   }
 
   const { data: courses, isLoading } = useGetData('courses', params)
