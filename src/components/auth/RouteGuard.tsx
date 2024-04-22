@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   removeJwtToken,
   getActToken,
@@ -79,11 +78,6 @@ export const RouteGuard = ({ children }: IProps) => {
           const userInfo = refreshResponse?.data?.data?.tokens
           const act = userInfo?.act
           const rft = userInfo?.rft
-          // Save the new access token to the AsyncStorage
-          // if (typeof window !== 'undefined') {
-          //   await AsyncStorage.setItem('accessToken', act)
-          //   await AsyncStorage.setItem('refreshToken', rft)
-          // }
           setCookieActToken(act)
           setCookieRefreshToken(rft)
           if (accessToken && refreshToken) {
