@@ -56,6 +56,7 @@ deploy_master:
       ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$PROD_IP "
       echo $IMAGE_PRODUCT_LMS_FE &&
       cd /var/www/lms-fe &&
+      git fetch -a &&
       git reset --hard origin/hotfix/gitlab-ci &&
       sed -i '/^\s*next-app\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_PRODUCT_LMS_FE"@' docker-compose.prod.yml &&
       docker compose -f docker-compose.prod.yml pull next-app &&
