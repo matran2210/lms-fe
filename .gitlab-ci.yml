@@ -1,3 +1,4 @@
+# New CI-CD
 stages:
   - build
   - deploy
@@ -57,3 +58,32 @@ deploy_master:
   environment: production 
   tags:
     - exec-shell
+
+# Old CI-CD
+# stages:
+#   - deploy
+
+# default:
+#   image: node:16.17.0-alpine
+
+# deploy_staging:
+#   stage: deploy
+#   only:
+#     - staging
+#   script:
+#     - yarn global add vercel
+#     - yarn install
+#     - vercel deploy --prod --token=$VERCEL_TOKEN
+#   environment: staging
+
+
+# deploy_master:
+#   stage: deploy
+#   only:
+#     - master
+#   script:
+#     - yarn global add vercel
+#     - yarn install
+#     - VERCEL_TOKEN=$VERCEL_TOKEN_PROD && VERCEL_ORG_ID=$VERCEL_ORG_ID_PROD && VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_PROD && vercel deploy --prod --token=$VERCEL_TOKEN
+#   environment: production
+
