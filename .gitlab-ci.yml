@@ -23,8 +23,7 @@ build_master:
     - echo "IMAGE_PRODUCT_LMS_FE=gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID" > /home/gitlab-runner/image_version.txt
   environment: production
   tags:
-    - exec-shell
-    
+    - exec-shell  
 
 deploy_staging:
   stage: deploy
@@ -35,7 +34,6 @@ deploy_staging:
     - yarn install
     - vercel deploy --prod --token=$VERCEL_TOKEN
   environment: staging
-
 
 deploy_master:
   stage: deploy
