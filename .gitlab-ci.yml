@@ -20,6 +20,7 @@ build_master:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $REGISTRY
     - docker build -t gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID -f prod.Dockerfile .
     - docker push gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID
+    - echo "gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID build success"
     - echo "IMAGE_PRODUCT_LMS_FE=gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID" > /home/gitlab-runner/image_version.txt
   environment: production
   tags:
@@ -46,23 +47,26 @@ deploy_master:
     refs:
       - hotfix/gitlab-ci
   script:
-    - source /home/gitlab-runner/image_version.txt
-    - echo $IMAGE_PRODUCT_LMS_FE
+    - IMAGE_PRODUCT_LMS_FE_LATEST=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next' | sort -k4 -r | head -n 1 | awk '{print $1}')
+    - echo $IMAGE_PRODUCT_LMS_FE_LATEST
     - |
-      if [[ -z "$IMAGE_PRODUCT_LMS_FE" ]]; then
-          echo "IMAGE_PRODUCT_LMS_FE is not available. Please ensure a previous build job exists."
+      if [[ -z "$IMAGE_PRODUCT_LMS_FE_LATEST" ]]; then
+          echo "IMAGE_PRODUCT_LMS_FE_LATEST is not available. Please ensure a previous build job exists."
           exit 1
       fi
       ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$PROD_IP "
-      echo $IMAGE_PRODUCT_LMS_FE &&
+      echo $IMAGE_PRODUCT_LMS_FE_LATEST &&
       cd /var/www/lms-fe &&
       git reset --hard origin/hotfix/gitlab-ci &&
-      sed -i '/^\s*next-app\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_PRODUCT_LMS_FE"@' docker-compose.prod.yml &&
+      sed -i '/^\s*next-app\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_PRODUCT_LMS_FE_LATEST"@' docker-compose.prod.yml &&
       docker compose -f docker-compose.prod.yml pull next-app &&
-      docker compose -f docker-compose.prod.yml up -d --build"
+      docker compose -f docker-compose.prod.yml up -d"
   environment: production 
   tags:
     - exec-shell
+
+
+
 
 # Old CI-CD
 # stages:
