@@ -4,37 +4,6 @@ import { apiURL, httpService } from '../../../httpService'
 import url from './url'
 
 const CourseTestApi = {
-  getQuestionTabsById: async (
-    id: string,
-    accessToken: string,
-  ): Promise<IResponse<any>> => {
-    const headers = {
-      Authorization: 'Bearer ' + accessToken,
-    }
-    const response = await axios.get<{}, IResponse<{ data: any }>>(
-      `${apiURL}${url.getQuestionTabs}/${id}/shuffle`,
-      {
-        headers,
-      },
-    )
-    return response.data?.data
-  },
-  getDetailQuizById: async (
-    id: string,
-    accessToken: string,
-  ): Promise<IResponse<any>> => {
-    const headers = {
-      Authorization: 'Bearer ' + accessToken,
-    }
-    const response = await axios.get<{}, IResponse<{ data: any }>>(
-      `${apiURL}${url.getQuestionTabs}/${id}`,
-      {
-        headers,
-      },
-    )
-    return response.data?.data
-  },
-
   getQuestionCaseStudiesById: async (
     id: string,
     page_index: number,
@@ -47,16 +16,6 @@ const CourseTestApi = {
         page_index,
         page_size,
       },
-    })
-    return response
-  },
-  getTopicQuiz: async (
-    id: string,
-    quiz_id: string,
-  ): Promise<IResponse<any>> => {
-    const uri = url.getTopicQuiz + `/${id}?quiz_id=${quiz_id}`
-    const response = await httpService.GET<any, any>({
-      uri,
     })
     return response
   },
@@ -130,16 +89,6 @@ const CourseTestApi = {
     )
     return response.data?.data
   },
-  getQuestionsDetail: async (id: string): Promise<IResponse<any>> => {
-    const uri = url.getQuestionDetail
-    const response = await httpService.GET<any, any>({
-      uri,
-      params: {
-        question_ids: id,
-      },
-    })
-    return response
-  },
   getQuizDetail: async (id: string): Promise<IResponse<any>> => {
     const uri = url.getQuestionTabs + `/${id}`
     const response = await httpService.GET<any, any>({
@@ -154,16 +103,6 @@ const CourseTestApi = {
       params: {
         question_ids: id,
       },
-    })
-    return response
-  },
-  getTopicDescription: async (
-    id: string,
-    quiz_id?: string,
-  ): Promise<IResponse<any>> => {
-    const uri = url.getTopicDescription + `/${id}?quiz_id=${quiz_id}`
-    const response = await httpService.GET<any, any>({
-      uri,
     })
     return response
   },
@@ -252,20 +191,6 @@ const CourseTestApi = {
       },
     )
     return response.data?.data
-  },
-  createQuizAttempt: async (
-    id: string,
-    class_user_id?: string,
-  ): Promise<IResponse<any>> => {
-    const uri = url.createQuizAttemp
-    const response = await httpService.POST<any, any>({
-      uri,
-      request: {
-        quiz_id: id,
-        class_user_id: class_user_id || undefined,
-      },
-    })
-    return response
   },
   getAnswerData: async (
     id: string,

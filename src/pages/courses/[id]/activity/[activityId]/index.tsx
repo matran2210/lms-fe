@@ -45,7 +45,7 @@ import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
-import CourseAPI from 'src/pages/api/courses'
+import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
 import SAPPBorder from 'src/common/SAPPBorder'
 
 type Props = {
@@ -200,7 +200,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
    */
   const handleFinishedCourseSectionProgress = async () => {
     if (!isFinishRef.current) {
-      await CourseActivityApi.startCourseSectionProgress(courseId, sectionId)
+      await CoursesAPI.startCourseSectionProgress(courseId, sectionId)
       isFinishRef.current = true
     }
   }

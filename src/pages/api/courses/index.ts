@@ -1,4 +1,5 @@
 import { fetcher } from '@services/requestV2'
+import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL, httpService } from 'src/redux/services/httpService'
 
 const CourseAPI = {
@@ -143,17 +144,6 @@ const CourseAPI = {
     })
     return response
   },
-  learningOutcomeProgress: (
-    course_id: string | string[] | undefined,
-    section_id: string | string[] | undefined,
-    params?: Object,
-  ): Promise<any> => {
-    const response = httpService.GET<any, any>({
-      uri: `course-sections/course/${course_id}/section/${section_id}/progress`,
-      request: params,
-    })
-    return response
-  },
   caseStudyProgress: (
     course_id: string | string[] | undefined,
     section_id: string | string[] | undefined,
@@ -200,5 +190,69 @@ export class CoursesAPI {
         params: params,
       },
     )
+  }
+
+  static getQuestionTabsById( id: string | string[] | undefined): Promise<any> {
+    return fetcher(`${apiURL}${url.getQuestionTabs}/${id}/shuffle`)
+  }
+
+  static getDetailQuizById( id: string | string[] | undefined): Promise<any> {
+    return fetcher(`${apiURL}${url.getQuestionTabs}/${id}`)
+  }
+
+  static createQuizAttempt( id: string | string[] | undefined, class_user_id : string | undefined): Promise<any> {
+    return fetcher(`${apiURL}${url.createQuizAttemp}`, {
+      method: 'POST',
+      data: {
+        quiz_id: id,
+        class_user_id: class_user_id || undefined,
+      }
+    })
+  }
+
+  static getTopicDescription( id: string | string[] | undefined, quiz_id? : string): Promise<any> {
+    const uri = url.getTopicDescription + `/${id}?quiz_id=${quiz_id}`
+    return fetcher(`${apiURL}${uri}`,)
+  }
+
+  static startCourseSectionProgress(courseId: string, sectionId: string,): Promise<any> {
+    const uri = `/course-sections/course/${courseId}/section/${sectionId}/progress`
+    return fetcher(`${apiURL}${uri}`)
+  }
+
+  static learningOutcomeProgress(course_id: string | string[] | undefined, section_id: string | string[] | undefined, params?: Object,): Promise<any> {
+    const uri = `course-sections/course/${course_id}/section/${section_id}/progress`
+    return fetcher(`${apiURL}/${uri}`, {
+      params: params
+    })
+  }
+
+  static getQuestionsDetail(id: string): Promise<any> {
+    const uri = url.getQuestionDetail
+    return fetcher(`${apiURL}${uri}`, {
+      params: {
+        question_ids: id,
+      },
+    })
+  }
+}
+
+export const getQuestionsById = async (
+  question_ids: string[],
+): Promise<any> => {
+  const response =  await fetcher(`question?question_ids=${question_ids?.join(',')}`)
+
+  return {
+    ...response,
+    data: response.data?.map((e: { id: string }) => {
+      return {
+        ...e,
+        quiz_position_mapping: [
+          {
+            question_id: e.id,
+          },
+        ],
+      }
+    }),
   }
 }

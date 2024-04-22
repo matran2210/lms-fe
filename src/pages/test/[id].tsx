@@ -22,7 +22,6 @@ import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import PDFViewer from '@components/base/pdf/pdf-viewer'
 import TabSlide from '@components/base/tabSlide/TabSlide'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
@@ -33,16 +32,11 @@ import NewFiltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
-import { removeJwtToken } from '@utils/helpers/authen'
 import {
   runHighlight,
-  setCookieActToken,
-  setCookieRefreshToken,
+  useGetDataQuery,
 } from '@utils/index'
-import axios from 'axios'
-import { parse } from 'cookie'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
@@ -50,7 +44,6 @@ import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import { apiURL } from 'src/redux/services/httpService'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
@@ -61,6 +54,7 @@ import LimitQuizModal from './limitQuizModal'
 import SappLoading from 'src/common/SappLoading'
 import toast from 'react-hot-toast'
 import ScratchPatch from './scratchPatch'
+import { CoursesAPI } from '../api/courses'
 
 type Window = {
   userAgreed: any
@@ -79,7 +73,7 @@ declare global {
     userAgreed: any
   }
 }
-const TestDetail = ({ questions, quizDetail }: any) => {
+const TestDetail = () => {
   const checkType = (
     data: any,
     type: string,
@@ -246,7 +240,23 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return <div></div>
     }
   }
+
   const router = useRouter()
+  
+  const useGetQuizDetail = (queryKey: string, params: Object) => {
+    return useGetDataQuery(queryKey, params, () => CoursesAPI.getDetailQuizById(router.query.id), router.query.id !== undefined);
+  };
+  
+  const useGetQuestionTabs = (queryKey: string, params: Object) => {
+    return useGetDataQuery(queryKey, params, () => CoursesAPI.getQuestionTabsById(router.query.id), router.query.id !== undefined);
+  };
+  
+  // Sử dụng hook useGetQuizDetail trong component
+  const { data: quizDetail } = useGetQuizDetail('quiz-detail', {});
+  
+  // Sử dụng hook useGetQuestionTabs trong component
+  const { data: questions } = useGetQuestionTabs('question-detail', {});
+
   const type = router.query.type
 
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
@@ -881,12 +891,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
   async function getDetail(currentPage: string) {
     try {
-      const topicDescription = await CourseTestApi.getTopicDescription(
+      const topicDescription = await CoursesAPI.getTopicDescription(
         questions[questions.findIndex((e: any) => e.id === currentPage)]
           .question_topic_id,
         quizDetail?.id,
       )
-      const res = await CourseTestApi.getQuestionsDetail(currentPage)
+      const res = await CoursesAPI.getQuestionsDetail(currentPage)
       return { topicDescription, res }
     } catch (err) {
       return { topicDescription: { data: {} }, res: { data: [] } }
@@ -1404,7 +1414,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   useEffect(() => {
     async function createQuizAttempt() {
       try {
-        const res = await CourseTestApi.createQuizAttempt(
+        const res = await CoursesAPI.createQuizAttempt(
           router.query.id as string,
           router.query.class_user_id as string,
         )
@@ -2262,112 +2272,3 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 // eslint-disable-next-line import/no-unused-modules
 export default TestDetail
 TestDetail.layout = LAYOUT.FULLSCREEN_LAYOUT
-
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
-
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
-
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
-
-  try {
-    // Parse cookies from the request headers
-    const cookies = parse(req.headers.cookie || '')
-
-    if (!context?.query?.id) {
-      return {
-        notFound: true,
-      }
-    }
-    const questions = (await CourseTestApi.getQuestionTabsById(
-      context?.query?.id,
-      cookies.accessToken,
-    )) as any
-    const quizDetail = (await CourseTestApi.getDetailQuizById(
-      context?.query?.id,
-      cookies.accessToken,
-    )) as any
-    return {
-      props: { questions, quizDetail },
-    }
-  } catch (error: any) {
-    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-    if (error.response && error.response.status === 401) {
-      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-      const refreshToken = req.cookies.refreshToken
-
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-
-        // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
-
-        // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const questions = (await CourseTestApi.getQuestionTabsById(
-          context?.query?.id,
-          act,
-        )) as any
-
-        return {
-          props: { questions },
-        }
-      } catch (refreshError) {
-        // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-        // Chuyển hướng đến trang đăng nhập
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      }
-    } else {
-      // Xử lý lỗi khác khi sử dụng accessToken
-      if (error.response && error.response.status === 403) {
-        // Chuyển hướng đến trang đăng nhập
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      } else
-        return {
-          redirect: {
-            destination: '/404',
-            permanent: false,
-          },
-        }
-    }
-  }
-}
