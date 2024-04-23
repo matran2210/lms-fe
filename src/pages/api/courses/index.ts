@@ -227,6 +227,11 @@ export class CoursesAPI {
     })
   }
 
+  static getQuizAttemptsChartData(id: string | string[] | undefined): Promise<any> {
+    const uri = url.getQuestionDetail
+    return fetcher(`${apiURL}${url.getQuizAttemptsChartData}/${id}`)
+  }
+
   static getPartDetail(id: string | string[] | undefined, course_section_id: string | string[] | undefined): Promise<any> {
     return fetcher(`${apiURL}/course-sections/${id}?course_section_id=${course_section_id}`)
   }
