@@ -214,6 +214,11 @@ const SelectWord = forwardRef(
     return (
       <div ref={extenalRef}>
         <EditorReader
+          text_editor_content={data?.question_topic?.description}
+          className="sapp-questions"
+          highlighted={highlighted}
+        />
+        <EditorReader
           key={key}
           extenalRef={refEditor}
           className="sapp-questions"

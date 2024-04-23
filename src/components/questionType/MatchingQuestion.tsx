@@ -279,6 +279,11 @@ const MatchingQuestion = forwardRef(
           }}
         >
           <EditorReader
+            text_editor_content={data?.question_topic?.description}
+            className="sapp-questions"
+            highlighted={highlighted}
+          />
+          <EditorReader
             className="sapp-questions !mb-[32px]"
             text_editor_content={data?.question_content}
             highlighted={highlighted}
