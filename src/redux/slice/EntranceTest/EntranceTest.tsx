@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import { RootState } from 'src/redux/store'
 
@@ -18,7 +19,7 @@ export const getEntranceCount = createAsyncThunk(
   'entranceTestReducer/getEntranceCount',
   async ({}, thunkAPI) => {
     try {
-      const res = await EntranceApi.getEntranceCount()
+      const res = await EntranceTestAPI.getEntranceCount()
       return res
     } catch (error) {
       return thunkAPI.rejectWithValue(error)

@@ -7,8 +7,28 @@ export class EntranceTestAPI {
       params: params,
     })
   }
-}
 
-export const getEntranceTest = () => {
-  return fetcher(`entrance-test`)
+  static getListUnivers(): Promise<any> {
+    return fetcher(`${apiURL}/universities`)
+  }
+
+  static getListUniversProgram(): Promise<any> {
+    return fetcher(`${apiURL}/university-programs`)
+  }
+
+  static getListMajors(): Promise<any> {
+    return fetcher(`${apiURL}/majors`)
+  }
+
+  static getListEngLevel(): Promise<any> {
+    return fetcher(`${apiURL}/english-levels`)
+  }
+
+  static getEntranceCount(): Promise<any> {
+    return fetcher(`${apiURL}/users/entrance-test/count`)
+  }
+
+  static getListEntranceTestLogin(): Promise<any> {
+    return fetcher(`${apiURL}/entrance-test`)
+  }
 }

@@ -4,34 +4,6 @@ import { apiURL, httpService } from '../httpService'
 import axios from 'axios'
 
 const EntranceApi = {
-  getListUnivers: async (): Promise<IResponse<any>> => {
-    const uri = url.getListUnivers
-    const res = await httpService.GET<any, any>({
-      uri,
-    })
-    return res
-  },
-  getListUniversProgram: async (): Promise<IResponse<any>> => {
-    const uri = url.getListUniversProgram
-    const res = await httpService.GET<any, any>({
-      uri,
-    })
-    return res
-  },
-  getListMajors: async (): Promise<IResponse<any>> => {
-    const uri = url.getListMajors
-    const res = await httpService.GET<any, any>({
-      uri,
-    })
-    return res
-  },
-  getListEngLevel: async (): Promise<IResponse<any>> => {
-    const uri = url.getListEngLevel
-    const res = await httpService.GET<any, any>({
-      uri,
-    })
-    return res
-  },
   putLevel: async (data: any): Promise<IResponse<any>> => {
     const uri = url.putLevel
     const res = await httpService.PUT<any, any>({
@@ -54,20 +26,6 @@ const EntranceApi = {
       },
     )
     return response?.data?.data
-  },
-  getEntranceCount: async (): Promise<IResponse<any>> => {
-    const uri = url.getEntranceCount
-    const res = await httpService.GET<any, any>({
-      uri,
-    })
-    return res
-  },
-  getListEntranceTestLogin: async (): Promise<IResponse<any>> => {
-    const uri = url.getListEntranceTest
-    const res = await httpService.GET<any, any>({
-      uri,
-    })
-    return res
   },
 }
 export default EntranceApi
