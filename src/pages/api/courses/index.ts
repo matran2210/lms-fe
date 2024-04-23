@@ -236,9 +236,20 @@ export class CoursesAPI {
     return fetcher(`${apiURL}/course-sections/${id}?course_section_id=${course_section_id}`)
   }
 
-  static getQuizAttemptsChartData(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${apiURL}${url.getQuizAttemptsChartData}/${id}`)
+  static getQuizAttemptsTable(id: string,
+    { page_index, page_size }: { page_index: number; page_size: number }): Promise<any> {
+    return fetcher(`${apiURL}/quiz-attempts/table/${id}`, {
+      params: {
+        page_index: page_index || 1,
+        page_size: page_size || 10,
+      }
+    })
   }
+
+  static getQuizAttempts(id: string | string[] | undefined): Promise<any> {
+    return fetcher(`${apiURL}${url.getQuizAttempts}/${id}`)
+  }
+
 }
 
 export const getQuestionsById = async (

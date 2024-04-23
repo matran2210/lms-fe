@@ -2,13 +2,7 @@ import React from 'react'
 import { ITabs } from 'src/type'
 import TestResultPage from './testResultPage'
 import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
-import axios from 'axios'
-import { parse } from 'cookie'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import { apiURL } from 'src/redux/services/httpService'
-import { removeJwtToken } from '@utils/helpers/authen'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setCookieActToken, setCookieRefreshToken, useGetDataQuery } from '@utils/index'
+import { useGetDataQuery } from '@utils/index'
 import { TEST_TYPE } from '@utils/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useRouter } from 'next/router'
@@ -28,7 +22,7 @@ const TestResultDetail = () => {
   const { data: questions } = useGetQuizAttempts('quiz-attempts', {});
   
   // Sử dụng hook useGetQuestionTabs trong component
-  const { data: chartData  } = useGetQuizAttemptsChart('quiz-attempts', {});
+  const { data: chartData  } = useGetQuizAttemptsChart('quiz-attempts-chart', {});
 
   // Config Courses
   const breadcrumbs: ITabs[] = [
