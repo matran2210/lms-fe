@@ -9,15 +9,6 @@ const CourseAPI = {
     })
     return response
   },
-  getCoursePartDetail: async (
-    id: string | string[] | undefined,
-    course_section_id: string | string[] | undefined,
-  ): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `course-sections/${id}?course_section_id=${course_section_id}`,
-    })
-    return response
-  },
 
   getCourseDetail: async (
     id: string | string[] | undefined,
@@ -234,6 +225,10 @@ export class CoursesAPI {
         question_ids: id,
       },
     })
+  }
+
+  static getPartDetail(id: string | string[] | undefined, course_section_id: string | string[] | undefined): Promise<any> {
+    return fetcher(`${apiURL}/course-sections/${id}?course_section_id=${course_section_id}`)
   }
 }
 

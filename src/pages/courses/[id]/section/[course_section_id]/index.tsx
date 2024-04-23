@@ -5,23 +5,17 @@ import { TreeHelper } from 'src/helper/tree'
 import CourseAPI from 'src/pages/api/courses'
 import { ILearningOutcome } from 'src/type/courses'
 import SappDrawer from '@components/base/SappDrawer'
-import axios from 'axios'
-import { apiURL } from 'src/redux/services/httpService'
 import { useRouter } from 'next/router'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import {
-  setCookieActToken,
-  setCookieRefreshToken,
-  truncateString,
-} from '@utils/index'
-import { removeJwtToken } from '@utils/helpers/authen'
+import { truncateString } from '@utils/index'
 import TestModal from 'src/pages/courses/test'
-import { ANIMATION, PageLink } from 'src/constants'
+import { ANIMATION } from 'src/constants'
 import { Tooltip } from 'antd'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { CoursesAPI } from '../../../../api/courses/index';
+import { useQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 
-const CoursePartDetail = ({ previewPart }: any) => {
+const CoursePartDetail = () => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(false)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
@@ -35,6 +29,19 @@ const CoursePartDetail = ({ previewPart }: any) => {
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
 
+  const useGetData = (queryKey: string, params: Object) => {
+    const fetchData = async () => {
+      const { data } = await CoursesAPI.getPartDetail(router.query.id, router.query.course_section_id)
+      return data
+    }
+
+    return useQuery([queryKey, params], fetchData, {
+      enabled: router.query.id !== undefined && router.query.course_section_id !== undefined,
+    })
+  }
+
+  const { data: previewPart, isLoading } = useGetData('course-part-detail', {})
+
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
 
@@ -44,7 +51,7 @@ const CoursePartDetail = ({ previewPart }: any) => {
   ) => {
     setLoadingChapter(true)
     try {
-      const res = await CourseAPI.getCoursePartDetail(id, course_section_id)
+      const res = await CoursesAPI.getPartDetail(id, course_section_id)
       const nodeList = res?.data?.course_section_tree
       const tree = TreeHelper.convertFromArray(nodeList)
       const detail = tree[0]
@@ -191,39 +198,41 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }
 
   useEffect(() => {
-    if (router.query.unit_id) {
-      setDefaultActive(String(router?.query?.unit_id) || '')
-    } else if (partDetail.children.learning_progress !== '') {
-      const filteredChildren = partDetail.children.filter(
-        (child: any) => child.course_section_type === 'CHAPTER',
-      )
-      const matchingChild = filteredChildren.find(
-        (child: {
-          learning_progress: {
-            total_course_sections: any
-            total_course_sections_completed: any
-          }
-        }) => {
-          if (child.learning_progress) {
-            const { total_course_sections, total_course_sections_completed } =
-              child.learning_progress
-            const progressRatio =
-              (total_course_sections_completed / total_course_sections) * 100
-            return progressRatio < 100
-          }
-          return false
-        },
-      )
-
-      if (matchingChild) {
-        setDefaultActive(matchingChild.id)
-      } else if (filteredChildren.length > 0) {
-        setDefaultActive(filteredChildren[0].id) // Set default to the first child
+    if(partDetail?.id) {
+      if (router.query.unit_id) {
+        setDefaultActive(String(router?.query?.unit_id) || '')
+      } else if (partDetail?.children?.learning_progress !== '') {
+        const filteredChildren = partDetail?.children.filter(
+          (child: any) => child?.course_section_type === 'CHAPTER',
+        )
+        const matchingChild = filteredChildren?.find(
+          (child: {
+            learning_progress: {
+              total_course_sections: any
+              total_course_sections_completed: any
+            }
+          }) => {
+            if (child.learning_progress) {
+              const { total_course_sections, total_course_sections_completed } =
+                child.learning_progress
+              const progressRatio =
+                (total_course_sections_completed / total_course_sections) * 100
+              return progressRatio < 100
+            }
+            return false
+          },
+        )
+  
+        if (matchingChild) {
+          setDefaultActive(matchingChild.id)
+        } else if (filteredChildren?.length > 0) {
+          setDefaultActive(filteredChildren[0].id) // Set default to the first child
+        }
+      } else {
+        setDefaultActive('')
       }
-    } else {
-      setDefaultActive('')
     }
-  }, [router?.asPath])
+  }, [router?.asPath, partDetail?.id])
 
   // Tạo một mảng chứa tất cả các child của chapterDetail (nếu có)
   const childArrays = chapterDetail?.children?.map(
@@ -254,7 +263,8 @@ const CoursePartDetail = ({ previewPart }: any) => {
   }, [loadingChapter])
 
   return (
-    <div className="main max-w-xxl my-0 mx-auto default-content-editor">
+    <SappLoadingGlobal loading={isLoading}>
+      <div className="main max-w-xxl my-0 mx-auto default-content-editor">
       <div className="w-full">
         <div className="flex pt-6 items-center">
           <span
@@ -372,111 +382,12 @@ const CoursePartDetail = ({ previewPart }: any) => {
         open={open}
         setOpen={setOpen}
         data={chapterData}
-        class_user_id={previewPart.class_user_id}
+        class_user_id={previewPart?.class_user_id}
         activeCourse={handleChapterTest}
       />
     </div>
+    </SappLoadingGlobal>
   )
-}
-
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
-
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
-
-  try {
-    // Thực hiện yêu cầu API với accessToken
-    const apiResponse = await axios.get(
-      `${apiURL}/course-sections/${query.id}?course_section_id=${query.course_section_id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    )
-    // Xử lý dữ liệu từ API
-    const nodeList = apiResponse?.data?.data
-    // const tree = TreeHelper.convertFromArray(nodeList)
-    // const previewPart = tree[0]
-
-    // Trả về props cho trang
-    return {
-      props: {
-        previewPart: nodeList || null,
-      },
-    }
-  } catch (error: any) {
-    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-    if (error.response && error.response.status === 401) {
-      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-      const refreshToken = req.cookies.refreshToken
-
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-
-        // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
-
-        // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const newApiResponse = await axios.get(
-          `${apiURL}/course-sections/${query.id}?course_section_id=${query.course_section_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${act}`,
-            },
-          },
-        )
-
-        // Xử lý dữ liệu từ API
-        const nodeList = newApiResponse?.data?.data
-        // const tree = TreeHelper.convertFromArray(nodeList)
-        // const previewPart = tree[0]
-
-        // Trả về props cho trang
-        return {
-          props: {
-            previewPart: nodeList || {},
-          },
-        }
-      } catch (refreshError) {
-        removeJwtToken()
-        // Chuyển hướng đến trang đăng nhập
-        return {
-          redirect: {
-            destination: PageLink.AUTH_LOGIN,
-            permanent: false,
-          },
-        }
-      }
-    } else {
-      // Chuyển hướng đến trang đăng nhập
-      return {
-        redirect: {
-          destination: '/404',
-          permanent: false,
-        },
-      }
-    }
-  }
 }
 
 export default CoursePartDetail
