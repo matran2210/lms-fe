@@ -1145,7 +1145,7 @@ const TestDetail = () => {
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
+      const res = await CoursesAPI.submitQuestion(quizAttempId as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:
@@ -1167,7 +1167,7 @@ const TestDetail = () => {
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
+      const res = await CoursesAPI.submitQuestion(quizAttempId as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:

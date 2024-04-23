@@ -7,11 +7,10 @@ import { QUESTION_TYPES } from 'src/type/course/Question'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { ANIMATION } from 'src/constants'
 import SappLoading from 'src/common/SappLoading'
+import { CoursesAPI } from '../api/courses'
 // import {} from 'explanation-package'
-import { CoursesAPI } from '../api/courses/index';
 const Explanation = () => {
   const router = useRouter()
   const [activeQuestion, setActiveQuestion] = useState<any>()

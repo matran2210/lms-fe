@@ -183,38 +183,51 @@ export class CoursesAPI {
     )
   }
 
-  static getQuestionTabsById( id: string | string[] | undefined): Promise<any> {
+  static getQuestionTabsById(id: string | string[] | undefined): Promise<any> {
     return fetcher(`${apiURL}${url.getQuestionTabs}/${id}/shuffle`)
   }
 
-  static getDetailQuizById( id: string | string[] | undefined): Promise<any> {
+  static getDetailQuizById(id: string | string[] | undefined): Promise<any> {
     return fetcher(`${apiURL}${url.getQuestionTabs}/${id}`)
   }
 
-  static createQuizAttempt( id: string | string[] | undefined, class_user_id : string | undefined): Promise<any> {
+  static createQuizAttempt(
+    id: string | string[] | undefined,
+    class_user_id: string | undefined,
+  ): Promise<any> {
     return fetcher(`${apiURL}${url.createQuizAttemp}`, {
       method: 'POST',
       data: {
         quiz_id: id,
         class_user_id: class_user_id || undefined,
-      }
+      },
     })
   }
 
-  static getTopicDescription( id: string | string[] | undefined, quiz_id? : string): Promise<any> {
+  static getTopicDescription(
+    id: string | string[] | undefined,
+    quiz_id?: string,
+  ): Promise<any> {
     const uri = url.getTopicDescription + `/${id}?quiz_id=${quiz_id}`
-    return fetcher(`${apiURL}${uri}`,)
+    return fetcher(`${apiURL}${uri}`)
   }
 
-  static startCourseSectionProgress(courseId: string, sectionId: string,): Promise<any> {
+  static startCourseSectionProgress(
+    courseId: string,
+    sectionId: string,
+  ): Promise<any> {
     const uri = `/course-sections/course/${courseId}/section/${sectionId}/progress`
     return fetcher(`${apiURL}${uri}`)
   }
 
-  static learningOutcomeProgress(course_id: string | string[] | undefined, section_id: string | string[] | undefined, params?: Object,): Promise<any> {
+  static learningOutcomeProgress(
+    course_id: string | string[] | undefined,
+    section_id: string | string[] | undefined,
+    params?: Object,
+  ): Promise<any> {
     const uri = `course-sections/course/${course_id}/section/${section_id}/progress`
     return fetcher(`${apiURL}/${uri}`, {
-      params: params
+      params: params,
     })
   }
 
@@ -227,20 +240,61 @@ export class CoursesAPI {
     })
   }
 
-  static getQuizAttemptsChartData(id: string | string[] | undefined): Promise<any> {
+  static getQuizAttemptsChartData(
+    id: string | string[] | undefined,
+  ): Promise<any> {
     const uri = url.getQuestionDetail
     return fetcher(`${apiURL}${url.getQuizAttemptsChartData}/${id}`)
   }
 
-  static getPartDetail(id: string | string[] | undefined, course_section_id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${apiURL}/course-sections/${id}?course_section_id=${course_section_id}`)
+  static getPartDetail(
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/course-sections/${id}?course_section_id=${course_section_id}`,
+    )
+  }
+
+  static getQuizAttemptsTable(
+    id: string,
+    { page_index, page_size }: { page_index: number; page_size: number },
+  ): Promise<any> {
+    return fetcher(`${apiURL}/quiz-attempts/table/${id}`, {
+      params: {
+        page_index: page_index || 1,
+        page_size: page_size || 10,
+      },
+    })
+  }
+
+  static getQuizAttempts(id: string | string[] | undefined): Promise<any> {
+    return fetcher(`${apiURL}${url.getQuizAttempts}/${id}`)
+  }
+
+  static submitQuestion(id: string, data: any): Promise<any> {
+    const uri = url.submitQuestion + `/${id}` + '/submit'
+    return fetcher(`${uri}`, {
+      data: data,
+      method: 'POST'
+    })
+  }
+
+  static submitCaseStudy(id: string, data: any): Promise<any> {
+    const uri = url.submitCaseStudy + `/${id}` + '/submit'
+    return fetcher(`${uri}`, {
+      data: data,
+      method: 'POST'
+    })
   }
 }
 
 export const getQuestionsById = async (
   question_ids: string[],
 ): Promise<any> => {
-  const response =  await fetcher(`question?question_ids=${question_ids?.join(',')}`)
+  const response = await fetcher(
+    `question?question_ids=${question_ids?.join(',')}`,
+  )
 
   return {
     ...response,
@@ -254,5 +308,25 @@ export const getQuestionsById = async (
         ],
       }
     }),
+  }
+}
+
+export const submitQuizTest = async (
+  id: string,
+  data: any,
+  class_user_id?: string,
+): Promise<any> => {
+  const quizAttemptResponse = await CoursesAPI.createQuizAttempt(
+    id,
+    class_user_id,
+  )
+
+  const quizAttemptId = quizAttemptResponse.data?.id
+  if (quizAttemptId) {
+    const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
+    const response = await fetcher(`${uri}`, {
+      data: data
+    })
+    return { ...response, quizAttemptId }
   }
 }

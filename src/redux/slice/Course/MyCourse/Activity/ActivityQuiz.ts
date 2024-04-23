@@ -4,7 +4,7 @@ import { QUESTION_TYPES } from 'src/constants'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { RootState } from 'src/redux/store'
 import { IQuestion } from 'src/type/course/Question'
-import { CoursesAPI, getQuestionsById } from '../../../../../pages/api/courses/index';
+import { CoursesAPI, getQuestionsById, submitQuizTest } from '../../../../../pages/api/courses/index';
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -168,7 +168,7 @@ const submitQuiz = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const result = await CourseActivityApi.submitQuiz(
+      const result = await submitQuizTest(
         id,
         {
           ...data,

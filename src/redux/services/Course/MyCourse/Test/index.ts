@@ -106,37 +106,8 @@ const CourseTestApi = {
     })
     return response
   },
-  submitQuestion: async (id: string, data: any): Promise<IResponse<any>> => {
-    const uri = url.submitQuestion + `/${id}` + '/submit'
-    const response = await httpService.POST<any, any>({
-      uri,
-      request: data,
-    })
-    return response
-  },
-  submitCaseStudy: async (id: string, data: any): Promise<IResponse<any>> => {
-    const uri = url.submitCaseStudy + `/${id}` + '/submit'
-    const response = await httpService.POST<any, any>({
-      uri,
-      request: data,
-    })
-    return response
-  },
   getResource: async (id: string): Promise<IResponse<any>> => {
     const uri = url.getResource + `/${id}`
-    const response = await httpService.GET<any, any>({
-      uri,
-    })
-    return response
-  },
-  getQuizAttemptsTable: async (
-    id: string,
-    page_index: number,
-    page_size: number,
-  ): Promise<IResponse<any>> => {
-    const uri =
-      url.getQuizAttemptsTable +
-      `/${id}?page_index=${page_index}&page_size=${page_size}`
     const response = await httpService.GET<any, any>({
       uri,
     })

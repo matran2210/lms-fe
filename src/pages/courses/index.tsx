@@ -130,7 +130,7 @@ const MyCourse = () => {
   }, [courses])
 
   return (
-    <>
+    <SappLoadingGlobal loading={isLoading}>
       <div className="header bg-white border-b border-default">
         <div
           className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
@@ -224,7 +224,7 @@ const MyCourse = () => {
           className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
         ></div>
       )}
-    </>
+    </SappLoadingGlobal>
   )
 }
 

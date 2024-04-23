@@ -102,25 +102,25 @@ const ProfilePage = ({ page }: any) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps<IProps> = async (
-  context,
-) => {
-  const params = context.query
-  if (
-    !params?.page ||
-    typeof params?.page !== 'string'
-    // ||
-    // !PROFILE_PAGES[
-    //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
-    // ]
-  ) {
-    return {
-      notFound: true,
-    }
-  }
+// export const getServerSideProps: GetServerSideProps<IProps> = async (
+//   context,
+// ) => {
+//   const params = context.query
+//   if (
+//     !params?.page ||
+//     typeof params?.page !== 'string'
+//     // ||
+//     // !PROFILE_PAGES[
+//     //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
+//     // ]
+//   ) {
+//     return {
+//       notFound: true,
+//     }
+//   }
 
-  return {
-    props: { page: params?.page as IProfilePages },
-  }
-}
+//   return {
+//     props: { page: params?.page as IProfilePages },
+//   }
+// }
 export default ProfilePage
