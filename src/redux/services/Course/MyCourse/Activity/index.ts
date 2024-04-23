@@ -278,19 +278,6 @@ const CourseActivityApi = {
     } catch (error) {}
   },
 
-  getQuizAttemptsTable: (
-    id: string,
-    { page_index, page_size }: { page_index: number; page_size: number },
-  ) => {
-    return httpService.GET<any, any>({
-      uri: `quiz-attempts/table/${id}`,
-      params: {
-        page_index: page_index || 1,
-        page_size: page_size || 10,
-      },
-    })
-  },
-
   getQuizAttemptsAnswer: (id: string) => {
     return httpService.GET<any, any>({
       uri: `quiz-attempts/answers/${id}`,

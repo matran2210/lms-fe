@@ -235,6 +235,10 @@ export class CoursesAPI {
   static getPartDetail(id: string | string[] | undefined, course_section_id: string | string[] | undefined): Promise<any> {
     return fetcher(`${apiURL}/course-sections/${id}?course_section_id=${course_section_id}`)
   }
+
+  static getQuizAttemptsChartData(id: string | string[] | undefined): Promise<any> {
+    return fetcher(`${apiURL}${url.getQuizAttemptsChartData}/${id}`)
+  }
 }
 
 export const getQuestionsById = async (

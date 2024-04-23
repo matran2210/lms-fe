@@ -7,7 +7,7 @@ import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import { CoursesAPI } from '../../../pages/api/courses/index';
+import { CoursesAPI } from 'src/pages/api/courses'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',

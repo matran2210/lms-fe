@@ -129,19 +129,6 @@ const CourseTestApi = {
     })
     return response
   },
-  getQuizAttemptsTable: async (
-    id: string,
-    page_index: number,
-    page_size: number,
-  ): Promise<IResponse<any>> => {
-    const uri =
-      url.getQuizAttemptsTable +
-      `/${id}?page_index=${page_index}&page_size=${page_size}`
-    const response = await httpService.GET<any, any>({
-      uri,
-    })
-    return response
-  },
   getCaseStudyAttemptsTable: async (
     id: string,
     page_index: number,
