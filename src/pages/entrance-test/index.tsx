@@ -8,6 +8,7 @@ import { ANIMATION } from 'src/constants'
 import { useQuery } from 'react-query'
 import { EntranceTestAPI } from '../api/entrance-test'
 import { useRouter } from 'next/router'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 
 const EntranceTest = () => {
   // const dispatch = useAppDispatch()
@@ -25,12 +26,12 @@ const EntranceTest = () => {
   }
 
   const router = useRouter()
-  const { data: entranceTestLists } = useGetData('entrance-test', {
+  const { data: entranceTestLists, isLoading } = useGetData('entrance-test', {
     attempt_status: router?.query?.attempt_status,
   })
 
   return (
-    <>
+    <SappLoadingGlobal loading={isLoading}>
       <div className="header bg-white border-b border-default">
         <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
           <SearchForm
@@ -64,7 +65,7 @@ const EntranceTest = () => {
         <EntranceTestList entranceTestLists={entranceTestLists} />
       </div>
       <PopUpRemindEntrance />
-    </>
+    </SappLoadingGlobal>
   )
 }
 
