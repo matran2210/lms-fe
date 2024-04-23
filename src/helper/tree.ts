@@ -34,7 +34,7 @@ export class TreeHelper {
     const nodeMap: NodeMap = new Map<string, Node>()
     const childrenMap: ChildrenMap = new Map<string, string[]>()
 
-    list.forEach((node) => {
+    list && list?.forEach((node) => {
       node.children = []
       if (!node.is_original) {
         node.is_linked_section = true

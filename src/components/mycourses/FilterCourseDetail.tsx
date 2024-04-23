@@ -30,6 +30,9 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
     setIsFirstRender(false)
   }, [setIsFirstRender])
 
+  // defailtvalue của status
+  const statusDetail = defaultStatusDetail.find(item => item.value === router.query.user_section_learning_status);
+
   return (
     <div className="filter flex absolute right-0">
       <TotalResullt total={totalResult} />
@@ -41,6 +44,7 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
           className={'status-course'}
           placeholder="Status"
           isSearchable={false}
+          defaultValue={statusDetail}
         />
       </div>
     </div>

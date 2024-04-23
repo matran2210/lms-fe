@@ -7,6 +7,7 @@ import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
+import { CoursesAPI } from '../../../pages/api/courses/index';
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -53,7 +54,7 @@ const ModalExplanationPackage = ({
     setLoading(true)
     try {
       const resultResponse = await CourseActivityApi.getQuizAttemptsAnswer(id)
-      const topicDescription = await CourseTestApi.getTopicDescription(
+      const topicDescription = await CoursesAPI.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       )

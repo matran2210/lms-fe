@@ -43,7 +43,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   // const [show, setShow] = useState(false)
   const router = useRouter()
   const [openResource, setOpenResource] = useState(false)
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
   const dispatch = useAppDispatch()
   const gettingNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.loading,
@@ -93,21 +93,21 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     })
   })
 
-  useEffect(() => {
-    const handleStart = (url: string) =>
-      url !== router.asPath && setLoading(true)
-    const handleComplete = () => setLoading(false)
+  // useEffect(() => {
+  //   const handleStart = (url: string) =>
+  //     url !== router.asPath && setLoading(true)
+  //   const handleComplete = () => setLoading(false)
 
-    router.events.on('routeChangeStart', handleStart)
-    router.events.on('routeChangeComplete', handleComplete)
-    router.events.on('routeChangeError', handleComplete)
+  //   router.events.on('routeChangeStart', handleStart)
+  //   router.events.on('routeChangeComplete', handleComplete)
+  //   router.events.on('routeChangeError', handleComplete)
 
-    return () => {
-      router.events.off('routeChangeStart', handleStart)
-      router.events.off('routeChangeComplete', handleComplete)
-      router.events.off('routeChangeError', handleComplete)
-    }
-  })
+  //   return () => {
+  //     router.events.off('routeChangeStart', handleStart)
+  //     router.events.off('routeChangeComplete', handleComplete)
+  //     router.events.off('routeChangeError', handleComplete)
+  //   }
+  // })
 
   switch (layout) {
     case LAYOUT.ERROR_LAYOUT:
@@ -225,7 +225,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <QueryClientProvider client={queryClient}>
           <Toaster />
           <SappConfirmDialogContainer />
-          {loading ? <SappLoading /> : <></>}
+          {/* {loading ? <SappLoading /> : <></>} */}
           <RouteGuard>
             <>
               {content}

@@ -9,6 +9,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ICourseSection, IMeta } from 'src/type/courses'
 import { ANIMATION } from 'src/constants'
 import { useQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -36,7 +37,7 @@ const CourseDetail = () => {
       router.query.user_section_learning_status || undefined,
   }
 
-  const { data: courses } = useGetData('courses-detail', params)
+  const { data: courses, isLoading } = useGetData('courses-detail', params)
 
   const [data, setData] = useState<ICourseSection[]>(
     courses?.data?.course_sections_with_progress || [],
@@ -92,7 +93,7 @@ const CourseDetail = () => {
   }, [courses?.data?.course_sections_with_progress])
 
   return (
-    <>
+    <SappLoadingGlobal loading={isLoading}>
       <div className="header bg-white border-b border-default h-[70px]">
         <div className="max-w-xxl my-0 mx-auto flex py-6 xl-max:mx-5">
           <SearchForm
@@ -119,7 +120,7 @@ const CourseDetail = () => {
       >
         <CourseParts courses={data} class_user_id={class_user_id} />
       </div>
-    </>
+    </SappLoadingGlobal>
   )
 }
 

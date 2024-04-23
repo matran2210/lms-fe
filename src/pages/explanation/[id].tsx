@@ -11,6 +11,7 @@ import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { ANIMATION } from 'src/constants'
 import SappLoading from 'src/common/SappLoading'
 // import {} from 'explanation-package'
+import { CoursesAPI } from '../api/courses/index';
 const Explanation = () => {
   const router = useRouter()
   const [activeQuestion, setActiveQuestion] = useState<any>()
@@ -50,7 +51,7 @@ const Explanation = () => {
       const resultResponse = (await httpService.GET({
         uri: 'quiz-attempts/answers/' + id,
       })) as any
-      const topicDescription = await CourseTestApi.getTopicDescription(
+      const topicDescription = await CoursesAPI.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
