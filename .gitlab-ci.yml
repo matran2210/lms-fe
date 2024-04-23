@@ -65,6 +65,7 @@ deploy_master:
   tags:
     - exec-shell
 
+
 # Old CI-CD
 # stages:
 #   - deploy
