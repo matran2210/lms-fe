@@ -221,35 +221,6 @@ const CourseActivityApi = {
   },
 
   /**
-   * Submit câu hỏi.
-   *
-   * @param {string} id - id câu hỏi.
-   * @param {any} data - Dữ liệu sẽ được gửi kèm theo câu hỏi.
-   * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi từ máy chủ.
-   */
-  submitQuiz: async (
-    id: string,
-    data: any,
-    class_user_id?: string,
-  ): Promise<IResponse<any>> => {
-    const quizAttemptResponse = await CoursesAPI.createQuizAttempt(
-      id,
-      class_user_id,
-    )
-
-    const quizAttemptId = quizAttemptResponse.data?.id
-    if (quizAttemptId) {
-      const uri = url.submitQuiz + `/${quizAttemptId}` + '/submit'
-      const response = await httpService.POST<any, any>({
-        uri,
-        request: data,
-      })
-      return { ...response, quizAttemptId }
-    }
-    throw new Error('')
-  },
-
-  /**
    * Bắt đầu tiến độ cho một phần của khóa học cụ thể.
    *
    * @param {string} courseId - id của khóa học.

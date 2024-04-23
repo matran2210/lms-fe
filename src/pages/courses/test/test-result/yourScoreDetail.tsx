@@ -61,8 +61,8 @@ const YourScoreDetail = ({
 }: YourScoreDetailProps) => {
   const router = useRouter()
 
-  const { data: scoreDetail, isLoading } = useQuery(
-    ['scoreDeta3333il', router.query.id],
+  const { data: scoreDetail } = useQuery(
+    ['scoreDetail', router.query.id],
     async () => {
       const res = await CoursesAPI.getQuizAttemptsTable(router.query.id as string, {
         page_index: 1,

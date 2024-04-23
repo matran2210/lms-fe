@@ -40,6 +40,7 @@ import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
 import useMousePosition from '@utils/hookMouseMove'
 import SappLoading from 'src/common/SappLoading'
+import { CoursesAPI } from '../api/courses/index';
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -536,7 +537,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
       try {
-        await CourseTestApi.submitCaseStudy(quizAttempId as string, {
+        await CoursesAPI.submitCaseStudy(quizAttempId as string, {
           answers: answers,
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,

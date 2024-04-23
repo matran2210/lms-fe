@@ -55,7 +55,7 @@ const TestResultPage = ({
     (chartData?.correct_answer / chartData?.total_question) * 100,
   )
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
-  
+
   return (
     <>
       {type === 'ACCA' && courseDifficulty <= 4 ? (
@@ -107,16 +107,12 @@ const TestResultPage = ({
                 className={'xl:min-h-[991px]'}
                 multipleQuestionRef={multipleQuestionRef}
               />
-              {
-                type !== 'ACCA' && courseDifficulty >4 && (
-                  <div className="max-h-full w-full xl:w-auto">
-                    <YourScoreDetail
-                      className={'min-h-[991px] 2xl-max:pb-10'}
-                      yourScoreDetailRef={yourScoreDetailRef}
-                    />
-                </div>
-                )
-              }
+              <div className="max-h-full w-full xl:w-auto">
+                <YourScoreDetail
+                  className={'min-h-[991px] 2xl-max:pb-10'}
+                  yourScoreDetailRef={yourScoreDetailRef}
+                />
+              </div>
             </div>
           )}
         </>
