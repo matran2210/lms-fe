@@ -21,51 +21,6 @@ import url from './url'
  * @namespace CourseActivityApi
  */
 const CourseActivityApi = {
-  /**
-   * @description Lấy thông tin hoạt động bằng ID.
-   * @async
-   * @param {string} id - ID của hoạt động.
-   * @param {string} accessToken - Token truy cập của người dùng.
-   * @returns {Promise<IActivity>} - Dữ liệu hoạt động.
-   */
-  getActivityById: async (
-    id: string,
-    course_id: string,
-    accessToken: string,
-  ): Promise<IActivity> => {
-    const headers = {
-      Authorization: 'Bearer ' + accessToken,
-    }
-
-    const responseActivity = await axios.get<
-      {},
-      IResponse<{ data: IActivity }>
-    >(`${apiURL}/courses/${course_id}/activity/${id}`, {
-      headers,
-    })
-    const responseTabs = await axios.get<{}, IResponse<{ data: ITab[] }>>(
-      `${apiURL}/course-sections/activity/${id}/tabs`,
-      {
-        headers,
-      },
-    )
-
-    if (responseActivity.data && responseTabs?.data.data?.[0]) {
-      responseActivity.data.data.tabs = responseTabs.data.data
-
-      const responseTab = await axios.get<{}, IResponse<{ data: ITab }>>(
-        `${apiURL}/course-sections/tab/${responseTabs.data?.data?.[0].id}`,
-        {
-          headers,
-        },
-      )
-
-      if (responseTab.data?.data) {
-        responseActivity.data.data.tabs[0] = responseTab.data.data
-      }
-    }
-    return responseActivity.data.data
-  },
 
   /**
    * @description Lấy Breadcrumb ID.
@@ -74,19 +29,6 @@ const CourseActivityApi = {
    * @returns {Promise<IResponse<ITab>>} - Dữ liệu tab.
    */
   setBreadcrumb: async (id: string): Promise<IResponse<IBreadcrumb>> => {
-    const response = await httpService.GET<any, any>({
-      uri: `course-sections/tab/${id}`,
-    })
-    return response
-  },
-
-  /**
-   * @description Lấy thông tin tab hoạt động theo ID.
-   * @async
-   * @param {string} id - ID của tab.
-   * @returns {Promise<IResponse<ITab>>} - Dữ liệu tab.
-   */
-  getCourseActivityTapById: async (id: string): Promise<IResponse<ITab>> => {
     const response = await httpService.GET<any, any>({
       uri: `course-sections/tab/${id}`,
     })
@@ -104,65 +46,6 @@ const CourseActivityApi = {
   ): Promise<IResponse<{ questions: IQuestion[] }>> => {
     const response = await httpService.GET<any, any>({
       uri: `quiz/${id}/questions?page_index=1&page_size=99999 `,
-    })
-    return response
-  },
-
-  /**
-   * @description Lấy kết quả câu hỏi theo ID.
-   * @async
-   * @param {string} id - ID của câu hỏi.
-   * @returns {Promise<IResponse<IQuestion[]>>} - Dữ liệu kết quả câu hỏi.
-   */
-  getQuestionResults: async (id: string): Promise<IResponse<IQuestion[]>> => {
-    const response = await httpService.GET<any, any>({
-      uri: `question/results?question_ids=${id}`,
-    })
-    return response
-  },
-
-  /**
-   * @description Lấy thông tin cuộc thảo luận theo ID.
-   * @async
-   * @param {string} id - ID của cuộc thảo luận.
-   * @returns {Promise<IResponseMeta<IDiscussion, 'discussions'>>} - Dữ liệu cuộc thảo luận.
-   */
-  getDiscussion: async (
-    class_id: string,
-    course_section_id: string,
-  ): Promise<IResponseMeta<IDiscussion, 'discussions'>> => {
-    const uri = url.createDiscussion
-    const response = await httpService.GET<
-      {},
-      IResponseMeta<IDiscussion, 'discussions'>
-    >({
-      uri,
-      params: {
-        page_index: 1,
-        page_size: 9999,
-        class_id,
-        course_section_id,
-      },
-    })
-    return response
-  },
-
-  /**
-   * @description Tạo mới một cuộc thảo luận.
-   * @async
-   * @param {ICreateDiscussionRequest} request - Dữ liệu yêu cầu tạo cuộc thảo luận.
-   * @returns {Promise<IResponse<IDiscussion>>} - Dữ liệu cuộc thảo luận đã tạo.
-   */
-  createDiscussion: async (
-    request: ICreateDiscussionRequest,
-  ): Promise<IResponse<IDiscussion>> => {
-    const uri = url.createDiscussion
-    const response = await httpService.POST<
-      ICreateDiscussionRequest,
-      IResponse<IDiscussion>
-    >({
-      uri,
-      request,
     })
     return response
   },

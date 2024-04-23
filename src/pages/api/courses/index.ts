@@ -58,24 +58,6 @@ const CourseAPI = {
     })
     return response
   },
-  downloadResource: async (data: {
-    files: { name: string; file_key: string }[]
-  }): Promise<any> => {
-    const uri = '/resource/get-token-download'
-    const res = await httpService.POST<any, any>({
-      uri,
-      request: data,
-    })
-    if (res?.success) {
-      const link = document.createElement('a')
-      link.href = `${apiURL}/resource/download?token=${res?.data}`
-      link.download = data.files[0].name
-      link.style.display = 'none'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    }
-  },
   getCourseNotesList: async (
     page_size: number,
     params?: Object,
@@ -213,8 +195,8 @@ export class CoursesAPI {
   }
 
   static startCourseSectionProgress(
-    courseId: string,
-    sectionId: string,
+    courseId: string | string[] | undefined,
+    sectionId: string | string[] | undefined,
   ): Promise<any> {
     const uri = `/course-sections/course/${courseId}/section/${sectionId}/progress`
     return fetcher(`${apiURL}${uri}`)
@@ -301,6 +283,25 @@ export class CoursesAPI {
   static getTopicAttemptsDetail(id: string): Promise<any> {
     return fetcher(`${apiURL}/quiz-attempts/topic/${id}/score`)
   }
+
+    /**
+   * @description Lấy thông tin cuộc thảo luận theo ID.
+   * @async
+   * @param {string} id - ID của cuộc thảo luận.
+   * @returns {Promise<IResponseMeta<IDiscussion, 'discussions'>>} - Dữ liệu cuộc thảo luận.
+   */
+    static getDiscussion(class_id: string,
+      course_section_id: string): Promise<any> {
+      
+      return fetcher(`/course-discussions`, {
+        params: {
+          page_index: 1,
+          page_size: 9999,
+          class_id,
+          course_section_id,
+        },
+      })
+    }
 }
 
 export const getQuestionsById = async (
@@ -340,7 +341,36 @@ export const submitQuizTest = async (
     const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
     const response = await fetcher(`${uri}`, {
       data: data,
+      method: 'POST',
     })
     return { ...response, quizAttemptId }
   }
+}
+
+/**
+ * @description Lấy thông tin hoạt động bằng ID.
+ * @async
+ * @param {string} id - ID của hoạt động.
+ * @param {string} accessToken - Token truy cập của người dùng.
+ * @returns {Promise<IActivity>} - Dữ liệu hoạt động.
+ */
+export const getActivityById = async (
+  id: string | string[] | undefined,
+  course_id: string | string[] | undefined,
+): Promise<any> => {
+  const responseActivity = await fetcher(`courses/${course_id}/activity/${id}`)
+  const responseTabs = await fetcher(`course-sections/activity/${id}/tabs`)
+
+  if (responseActivity?.data && responseTabs?.data?.[0]) {
+    responseActivity.data.tabs = responseTabs.data
+
+    const responseTab = await fetcher(
+      `course-sections/tab/${responseTabs.data?.[0].id}`,
+    )
+
+    if (responseTab.data) {
+      responseActivity.data.tabs[0] = responseTab.data
+    }
+  }
+  return responseActivity.data
 }

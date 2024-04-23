@@ -14,7 +14,7 @@ import {
 } from '../../types/Login/login'
 import { setActToken, setRefreshToken } from '@utils/index'
 import { PageLink } from 'src/constants'
-import { AuthAPI } from '../../../pages/api/profile/index';
+import { AuthAPI } from 'src/pages/api/profile'
 
 const initialState: LoginState = {
   accessToken: '',

@@ -1,5 +1,6 @@
 import { fetcher } from '@services/requestV2'
 import { apiURL, httpService } from 'src/redux/services/httpService'
+import { LoginReq } from 'src/redux/types/Login/login'
 import {
   ChangePasswordReq,
   LoginReq,

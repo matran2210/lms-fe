@@ -14,6 +14,7 @@ import {
   setCookieActToken,
   setCookieRefreshToken,
   truncateString,
+  useGetDataQuery,
 } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
@@ -47,6 +48,10 @@ import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
 import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
 import SAPPBorder from 'src/common/SAPPBorder'
+import { getActivityById } from '../../../../api/courses/index';
+import { useQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { downloadResource } from 'src/pages/api/activity'
 
 type Props = {
   activity: IActivity
@@ -54,7 +59,20 @@ type Props = {
   sectionId: string
 }
 
-const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
+const ActivityPage = () => {
+  const router = useRouter()
+  // console.log({activity, courseId, sectionId})
+  const useGetActivityById = (id: string | string[] | undefined, course_id: string | string[] | undefined) => {
+    return useQuery(['activity', id, course_id], () => getActivityById(id, course_id), {
+      enabled: id !== undefined && course_id !== undefined
+    });
+  };
+
+  const { data: activity, isLoading, isError } = useGetActivityById(router.query.activityId, router.query.id);
+
+  const courseId = router.query?.id
+  const sectionId = router.query?.activityId
+
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
   const getNotesData = useAppSelector(
@@ -66,7 +84,6 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const videoRef = useRef<any>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
-  const router = useRouter()
   const activityType = activity?.display_icon
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
@@ -90,7 +107,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         //     sectionId,
         //   )
         // })()
-      } catch (error) {}
+      } catch (error) { }
     }
 
     return () => {
@@ -250,7 +267,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
     try {
       dispatch(getCourseActivityTapById({ id }))
       setActiveButtonId(id)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -353,11 +370,11 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   }
 
   const breadcrumbsMenu = activity?.breadcumb?.filter(
-    (breadcumb) => breadcumb?.course_section_type !== 'ACTIVITY',
+    (breadcumb: any) => breadcumb?.course_section_type !== 'ACTIVITY',
   )
   const menu = (
     <Menu>
-      {breadcrumbsMenu?.map((e, i) => {
+      {breadcrumbsMenu?.map((e: any) => {
         let url = ''
         switch (e.course_section_type) {
           case 'PART':
@@ -403,7 +420,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   )
 
   const nameActivity = activity?.breadcumb?.find(
-    (breadcumb) => breadcumb.course_section_type === 'ACTIVITY',
+    (breadcumb: any) => breadcumb.course_section_type === 'ACTIVITY',
   )
 
   const [sessionData, setSessionData] = useState<Array<any>>([])
@@ -429,7 +446,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   const activityIds = sessionData?.map((activity: IActivity) => activity.id)
 
   // Lấy id của hoạt động tiếp theo
-  const nextActivityId = activity.next_activity?.id
+  const nextActivityId = activity?.next_activity?.id
 
   // Tìm vị trí của hoạt động tiếp theo trong mảng activityIds
   const nextActivityIndex = activityIds?.indexOf(
@@ -437,7 +454,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   )
 
   // Lấy id của hoạt động trước đó
-  const previousActivityId = activity.previous_activity?.id
+  const previousActivityId = activity?.previous_activity?.id
 
   // Tìm vị trí của hoạt động trước đó trong mảng activityIds
   const previousActivityIndex = activityIds?.indexOf(
@@ -451,7 +468,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   }
 
   const download = async (name: string, file_key: string) => {
-    await CourseAPI.downloadResource({
+    await downloadResource({
       files: [
         {
           name: name,
@@ -462,7 +479,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   }
 
   return (
-    <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
+    <SappLoadingGlobal loading={isLoading}>
+<div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
       <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
         <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
@@ -536,15 +554,14 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
 
           {activity?.course_outcomes?.length > 0 && (
             <div
-              className={`pt-6 pb-4 ${
-                activity?.files?.length > 0 && 'border-b borderColor-default'
-              }`}
+              className={`pt-6 pb-4 ${activity?.files?.length > 0 && 'border-b borderColor-default'
+                }`}
             >
               <div className="font-semibold text-base mb-2">
                 Learning Outcome:
               </div>
               <ul className="list-disc text-base ml-3">
-                {activity?.course_outcomes?.map((e) => {
+                {activity?.course_outcomes?.map((e: any) => {
                   return (
                     <li className="ml-4" key={e.id}>
                       <EditorReader
@@ -614,10 +631,10 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     return (
                       <div
                         className={marginBottom}
-                        key={e.id + '_' + i + '_' + selector.currentTabId}
+                        key={e?.id + '_' + i + '_' + selector?.currentTabId}
                       >
                         <TextDocument
-                          text_editor_content={e.text_editor_content}
+                          text_editor_content={e?.text_editor_content}
                         ></TextDocument>
                       </div>
                     )
@@ -626,18 +643,18 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                     return (
                       <div
                         className={marginBottom}
-                        key={i + '_' + selector.currentTabId}
+                        key={i + '_' + selector?.currentTabId}
                       >
                         <VideoDocument
-                          videos={e.videos}
-                          activityId={activity.id as string}
-                          tabId={selector.currentTabId || ''}
+                          videos={e?.videos}
+                          activityId={activity?.id as string}
+                          tabId={selector?.currentTabId || ''}
                           streamRefProp={(el: any) =>
                             (videoRef.current[i || 0] = el)
                           }
                           handleProcess={handleFinishedCourseSectionProgress}
-                          document_id={e.id}
-                          quizId={e.quiz?.id || ''}
+                          document_id={e?.id}
+                          quizId={e?.quiz?.id || ''}
                           grading_preference={
                             e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
                           }
@@ -661,9 +678,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                       {activity?.files.map((e: any, index: number) => {
                         return (
                           <div
-                            className={`flex justify-between group cursor-pointer ${
-                              index === 0 ? 'mt-4' : 'mt-5'
-                            }`}
+                            className={`flex justify-between group cursor-pointer ${index === 0 ? 'mt-4' : 'mt-5'
+                              }`}
                             key={index}
                           >
                             <div className="flex">
@@ -766,102 +782,102 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!course_tab_documents?.length && <div className="py-3"></div>}
       </div>
       {/* </FadeInOut> */}
-      {(activity.previous_activity ||
-        activity.next_activity ||
+      {(activity?.previous_activity ||
+        activity?.next_activity ||
         (nextActivityIndex !== -1 &&
           nextActivityIndex !== sessionData?.length - 1) ||
         (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
-        <div data-aos={ANIMATION.DATA_AOS}>
-          <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
-            <div className="flex justify-between flex-nowrap gap-5">
-              {(activity.previous_activity ||
-                (previousActivityIndex !== -1 &&
-                  previousActivityIndex !== 0)) && (
-                <div className="w-1/2">
-                  <div
-                    onClick={() => {
-                      router.push({
-                        pathname: `/courses/${router.query.id}/activity/${
-                          activity.previous_activity?.id ||
-                          activityIds[previousActivityIndex - 1]
-                        }`,
-                      })
-                    }}
-                    className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
-                  >
-                    Previous Activity
-                  </div>
-                  <div className="text-medium-sm text-gray-1 flex">
-                    {getCourseIcon(
-                      activity.previous_activity
-                        ? activity.previous_activity?.display_icon
-                        : findActivityByIndex(previousActivityIndex - 1)
-                            ?.display_icon,
-                    )}
-                    <SappTooltip
-                      title={
-                        activity.previous_activity
-                          ? activity.previous_activity.name
-                          : findActivityByIndex(previousActivityIndex - 1)?.name
-                      }
-                    >
-                      <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
-                        {activity.previous_activity
-                          ? activity.previous_activity.name
-                          : findActivityByIndex(previousActivityIndex - 1)
-                              ?.name}
-                      </span>
-                    </SappTooltip>
-                  </div>
-                </div>
-              )}
-              {!activity.previous_activity && <div></div>}
-              {(activity.next_activity ||
-                (nextActivityIndex !== -1 &&
-                  nextActivityIndex !== sessionData?.length - 1)) && (
-                <div className="w-1/2">
-                  <div
-                    onClick={() => {
-                      router.push({
-                        pathname: `/courses/${router.query.id}/activity/${
-                          activity.next_activity
-                            ? activity.next_activity?.id
-                            : activityIds[nextActivityIndex + 1]
-                        }`,
-                      })
-                    }}
-                    className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                  >
-                    Next Activity
-                  </div>
-                  <div className="text-medium-sm text-gray-1 flex justify-end">
-                    <SappTooltip
-                      title={
-                        activity.next_activity
-                          ? activity.next_activity.name
-                          : findActivityByIndex(nextActivityIndex + 1)?.name
-                      }
-                    >
-                      <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
-                        {activity.next_activity
-                          ? activity.next_activity.name
-                          : findActivityByIndex(nextActivityIndex + 1)?.name}
-                      </span>
-                    </SappTooltip>
-                    {getCourseIcon(
-                      activity.next_activity
-                        ? activity.next_activity?.display_icon
-                        : findActivityByIndex(nextActivityIndex + 1)
-                            ?.display_icon,
-                    )}
-                  </div>
-                </div>
-              )}
-              {!activity.next_activity && <div></div>}
+          <div data-aos={ANIMATION.DATA_AOS}>
+            <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
+              <div className={`flex flex-nowrap gap-5 justify-${(activity?.previous_activity ||
+                  (previousActivityIndex !== -1 &&
+                    previousActivityIndex !== 0)) ? 'between' : 'end'}`}>
+                {(activity?.previous_activity ||
+                  (previousActivityIndex !== -1 &&
+                    previousActivityIndex !== 0)) && (
+                    <div className="w-1/2">
+                      <div
+                        onClick={() => {
+                          router.push({
+                            pathname: `/courses/${router.query.id}/activity/${activity?.previous_activity?.id ||
+                              activityIds[previousActivityIndex - 1]
+                              }`,
+                          })
+                        }}
+                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                      >
+                        Previous Activity
+                      </div>
+                      <div className="text-medium-sm text-gray-1 flex">
+                        {getCourseIcon(
+                          activity?.previous_activity
+                            ? activity?.previous_activity?.display_icon
+                            : findActivityByIndex(previousActivityIndex - 1)
+                              ?.display_icon,
+                        )}
+                        <SappTooltip
+                          title={
+                            activity?.previous_activity
+                              ? activity?.previous_activity.name
+                              : findActivityByIndex(previousActivityIndex - 1)?.name
+                          }
+                        >
+                          <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                            {activity?.previous_activity
+                              ? activity?.previous_activity.name
+                              : findActivityByIndex(previousActivityIndex - 1)
+                                ?.name}
+                          </span>
+                        </SappTooltip>
+                      </div>
+                    </div>
+                  )}
+                {!activity?.previous_activity && <div></div>}
+                {(activity?.next_activity ||
+                  (nextActivityIndex !== -1 &&
+                    nextActivityIndex !== sessionData?.length - 1)) && (
+                    <div className="w-1/2">
+                      <div
+                        onClick={() => {
+                          router.push({
+                            pathname: `/courses/${router.query.id}/activity/${activity?.next_activity
+                                ? activity?.next_activity?.id
+                                : activityIds[nextActivityIndex + 1]
+                              }`,
+                          })
+                        }}
+                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                      >
+                        Next Activity
+                      </div>
+                      <div className="text-medium-sm text-gray-1 flex justify-end">
+                        <SappTooltip
+                          title={
+                            activity?.next_activity
+                              ? activity?.next_activity.name
+                              : findActivityByIndex(nextActivityIndex + 1)?.name
+                          }
+                        >
+                          <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
+                            {activity?.next_activity
+                              ? activity?.next_activity.name
+                              : findActivityByIndex(nextActivityIndex + 1)?.name}
+                          </span>
+                        </SappTooltip>
+                        {getCourseIcon(
+                          activity?.next_activity
+                            ? activity?.next_activity?.display_icon
+                            : findActivityByIndex(nextActivityIndex + 1)
+                              ?.display_icon,
+                        )}
+                      </div>
+                    </div>
+                  )}
+                {!activity?.next_activity && <div></div>}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
@@ -885,8 +901,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                   : index + 1400
               }
               fixed
-              // not_resizable
-              // className='pointer-events-none'
+            // not_resizable
+            // className='pointer-events-none'
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
@@ -929,9 +945,8 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
                   <div className="truncate">
-                    <span className="font-semibold text-base text-bw-1">{`Exhibit ${
-                      e?.index + 1
-                    }: `}</span>
+                    <span className="font-semibold text-base text-bw-1">{`Exhibit ${e?.index + 1
+                      }: `}</span>
                     {e?.name}
                   </div>
                   <button onClick={() => handleCloseScratchPad(e)}>
@@ -973,6 +988,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         url={openPdf?.url || ''}
       /> */}
     </div>
+    </SappLoadingGlobal>
   )
 }
 
@@ -983,112 +999,112 @@ export default ActivityPage
  * @param {Object} context - Đối tượng context phía máy chủ.
  * @returns {Object} - Props phía máy chủ.
  */
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
+// export async function getServerSideProps(context: any) {
+//   const { req, res, query } = context
 
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
+//   // Lấy accessToken từ cookie
+//   const accessToken = req.cookies.accessToken
 
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+//   // Kiểm tra accessToken
+//   if (!accessToken) {
+//     // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
+//     return {
+//       redirect: {
+//         destination: '/auth/login',
+//         permanent: false,
+//       },
+//     }
+//   }
 
-  try {
-    const { req } = context
+//   try {
+//     const { req } = context
 
-    // Parse cookies from the request headers
-    const cookies = parse(req.headers.cookie || '')
+//     // Parse cookies from the request headers
+//     const cookies = parse(req.headers.cookie || '')
 
-    if (!context?.query?.activityId) {
-      return {
-        notFound: true,
-      }
-    }
+//     if (!context?.query?.activityId) {
+//       return {
+//         notFound: true,
+//       }
+//     }
 
-    const activity = await CourseActivityApi.getActivityById(
-      context?.query?.activityId,
-      context?.query.id,
-      cookies.accessToken,
-    )
+//     const activity = await CourseActivityApi.getActivityById(
+//       context?.query?.activityId,
+//       context?.query.id,
+//       cookies.accessToken,
+//     )
 
-    return {
-      props: {
-        activity,
-        courseId: context.query?.id,
-        sectionId: context.query?.activityId,
-      },
-    }
-  } catch (error: any) {
-    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-    if (error.response && error.response.status === 401) {
-      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-      const refreshToken = req.cookies.refreshToken
+//     return {
+//       props: {
+//         activity,
+//         courseId: context.query?.id,
+//         sectionId: context.query?.activityId,
+//       },
+//     }
+//   } catch (error: any) {
+//     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
+//     if (error.response && error.response.status === 401) {
+//       // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
+//       const refreshToken = req.cookies.refreshToken
 
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-        // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+//       try {
+//         const refreshResponse = await axios.post(
+//           `${apiURL}/auth/rotate`,
+//           {},
+//           {
+//             headers: {
+//               Authorization: `Bearer ${refreshToken}`,
+//             },
+//           },
+//         )
+//         // Lưu accessToken mới vào cookie
+//         const userInfo = refreshResponse?.data?.data?.tokens
+//         const act = userInfo?.act
+//         const rft = userInfo?.rft
+//         // Save the new access token to the AsyncStorage
+//         if (typeof window !== 'undefined') {
+//           await AsyncStorage.setItem('accessToken', act)
+//           await AsyncStorage.setItem('refreshToken', rft)
+//         }
+//         setCookieActToken(act)
+//         setCookieRefreshToken(rft)
+//         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
-        // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const activity = await CourseActivityApi.getActivityById(
-          context?.query?.activityId,
-          context?.query.id,
-          act,
-        )
+//         // Tiếp tục thực hiện yêu cầu API với accessToken mới
+//         const activity = await CourseActivityApi.getActivityById(
+//           context?.query?.activityId,
+//           context?.query.id,
+//           act,
+//         )
 
-        return {
-          props: {
-            activity,
-            courseId: context.query?.id,
-            sectionId: context.query?.activityId,
-          },
-        }
-      } catch (refreshError) {
-        removeJwtToken()
-        // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-        // Chuyển hướng đến trang đăng nhập
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      }
-    } else {
-      // Xử lý lỗi khác khi sử dụng accessToken
+//         return {
+//           props: {
+//             activity,
+//             courseId: context.query?.id,
+//             sectionId: context.query?.activityId,
+//           },
+//         }
+//       } catch (refreshError) {
+//         removeJwtToken()
+//         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
+//         // Chuyển hướng đến trang đăng nhập
+//         return {
+//           redirect: {
+//             destination: '/auth/login',
+//             permanent: false,
+//           },
+//         }
+//       }
+//     } else {
+//       // Xử lý lỗi khác khi sử dụng accessToken
 
-      // Chuyển hướng đến trang đăng nhập
-      return {
-        redirect: {
-          destination: '/404',
-          permanent: false,
-        },
-      }
-    }
-  }
-}
+//       // Chuyển hướng đến trang đăng nhập
+//       return {
+//         redirect: {
+//           destination: '/404',
+//           permanent: false,
+//         },
+//       }
+//     }
+//   }
+// }

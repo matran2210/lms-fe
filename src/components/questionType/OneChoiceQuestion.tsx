@@ -45,9 +45,9 @@ const OneChoiceQuestion = ({
   const convertAnswer = useMemo(() => {
     let answers = []
     if (data?.answers) {
-      data.answers.sort(
-        (a: IAnswers, b: IAnswers) => a.answer_position - b.answer_position,
-      )
+      // data.answers.sort(
+      //   (a: IAnswers, b: IAnswers) => a.answer_position - b.answer_position,
+      // )
       for (let e of data?.answers) {
         answers.push({ label: e.answer, value: e.id })
       }

@@ -141,7 +141,7 @@ const confirmQuestion = createAsyncThunk(
         quizId,
         myAnswers,
       }
-      const question = await CourseActivityApi.getQuestionResults(questionId)
+      const question = await CoursesAPI.getQuestionResults(questionId)
       if (question?.data?.[0]) {
         return { ...result, question: question.data[0] }
       }
