@@ -14,7 +14,7 @@ build_master:
     variables:
       - $CI_COMMIT_MESSAGE =~ /build/
     refs:
-      - hotfix/gitlab-ci
+      - master
   script:
     - cp $ENV_PRODUCT_FILE .env
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $REGISTRY
@@ -45,7 +45,7 @@ deploy_master:
     variables:
       - $CI_COMMIT_MESSAGE =~ /deploy/
     refs:
-      - hotfix/gitlab-ci
+      - master
   script:
     - IMAGE_PRODUCT_LMS_FE_LATEST=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next' | sort -k4 -r | head -n 1 | awk '{print $1}')
     - echo $IMAGE_PRODUCT_LMS_FE_LATEST
@@ -57,14 +57,13 @@ deploy_master:
       ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$PROD_IP "
       echo $IMAGE_PRODUCT_LMS_FE_LATEST &&
       cd /var/www/lms-fe &&
-      git reset --hard origin/hotfix/gitlab-ci &&
+      git reset --hard origin/master &&
       sed -i '/^\s*next-app\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_PRODUCT_LMS_FE_LATEST"@' docker-compose.prod.yml &&
       docker compose -f docker-compose.prod.yml pull next-app &&
       docker compose -f docker-compose.prod.yml up -d"
   environment: production 
   tags:
     - exec-shell
-
 
 # Old CI-CD
 # stages:
