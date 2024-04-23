@@ -1,4 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { NotificationAPI } from 'src/pages/api/notification'
 import NotificationApi from 'src/redux/services/Notification'
 import { RootState } from 'src/redux/store'
 
@@ -55,7 +56,7 @@ export const getCountUnRead = createAsyncThunk(
   'notificationReducer/getCountUnRead',
   async ({}, thunkAPI) => {
     try {
-      const res = await NotificationApi.getCountUnRead()
+      const res = await NotificationAPI.getCountUnRead()
       if (!res?.data) {
         return
       }
@@ -73,7 +74,7 @@ export const getNotification = createAsyncThunk(
   'notificationReducer/getNotification',
   async (params: Object, thunkAPI) => {
     try {
-      const res = await NotificationApi.getNotification(params)
+      const res = await NotificationAPI.getNotification(params)
       if (!res?.data) {
         return
       }
@@ -88,7 +89,7 @@ export const loadMoreNotification = createAsyncThunk(
   'notificationReducer/loadMoreNotification',
   async (params: Object, thunkAPI) => {
     try {
-      const res = await NotificationApi.getNotification(params)
+      const res = await NotificationAPI.getNotification(params)
       if (!res?.data) {
         return
       }
@@ -103,7 +104,7 @@ export const getNotificationDetail = createAsyncThunk(
   'courseActivityReducer/getNotificationDetail',
   async (id: string, thunkAPI) => {
     try {
-      const res = await NotificationApi.getDetail(id)
+      const res = await NotificationAPI.getDetail(id)
       if (!res?.data) {
         return
       }
@@ -118,7 +119,7 @@ export const markAllNotifications = createAsyncThunk(
   'notificationReducer/markAll',
   async (thunkAPI) => {
     try {
-      const res = await NotificationApi.markAll()
+      const res = await NotificationAPI.markAll()
       if (!res?.data) {
         return
       }
