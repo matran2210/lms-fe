@@ -313,13 +313,23 @@ export class CoursesAPI {
   static getCourseActivityTapById(id: string): Promise<any> {
     return fetcher(`${apiURL}/course-sections/tab/${id}`)
   }
+
+  /**
+   * @description Lấy kết quả câu hỏi theo ID.
+   * @async
+   * @param {string} id - ID của câu hỏi.
+   * @returns {Promise<IResponse<IQuestion[]>>} - Dữ liệu kết quả câu hỏi.
+   */
+  static getQuestionResults(id: string): Promise<any> {
+    return fetcher(`${apiURL}/question/results?question_ids=${id}}`)
+  }
 }
 
 export const getQuestionsById = async (
   question_ids: string[],
 ): Promise<any> => {
   const response = await fetcher(
-    `question?question_ids=${question_ids?.join(',')}`,
+    `${apiURL}question?question_ids=${question_ids?.join(',')}`,
   )
 
   return {
