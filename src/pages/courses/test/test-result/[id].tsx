@@ -11,18 +11,28 @@ const TestResultDetail = () => {
   const router = useRouter()
 
   const useGetQuizAttempts = (queryKey: string, params: Object) => {
-    return useGetDataQuery(queryKey, params, () => CoursesAPI.getQuizAttempts(router.query.id), router.query.id !== undefined);
-  };
-  
+    return useGetDataQuery(
+      queryKey,
+      params,
+      () => CoursesAPI.getQuizAttempts(router.query.id),
+      router.query.id !== undefined,
+    )
+  }
+
   const useGetQuizAttemptsChart = (queryKey: string, params: Object) => {
-    return useGetDataQuery(queryKey, params, () => CoursesAPI.getQuizAttemptsChartData(router.query.id), router.query.id !== undefined);
-  };
-  
+    return useGetDataQuery(
+      queryKey,
+      params,
+      () => CoursesAPI.getQuizAttemptsChartData(router.query.id),
+      router.query.id !== undefined,
+    )
+  }
+
   // Sử dụng hook useGetQuizDetail trong component
-  const { data: questions } = useGetQuizAttempts('quiz-attempts', {});
-  
+  const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
+
   // Sử dụng hook useGetQuestionTabs trong component
-  const { data: chartData  } = useGetQuizAttemptsChart('quiz-attempts-chart', {});
+  const { data: chartData } = useGetQuizAttemptsChart('quiz-attempts-chart', {})
 
   // Config Courses
   const breadcrumbs: ITabs[] = [

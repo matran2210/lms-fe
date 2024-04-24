@@ -40,7 +40,7 @@ import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
 import useMousePosition from '@utils/hookMouseMove'
 import SappLoading from 'src/common/SappLoading'
-import { CoursesAPI } from '../api/courses/index';
+import { CoursesAPI } from '../api/courses/index'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (

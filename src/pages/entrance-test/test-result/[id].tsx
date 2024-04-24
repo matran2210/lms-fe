@@ -17,7 +17,7 @@ const TestEntranceResult = () => {
     'QuizAttemptsChart',
     {},
     () => CoursesAPI.getQuizAttemptsChartData(router.query.id),
-    router.query.id !== undefined
+    router.query.id !== undefined,
   )
 
   return (

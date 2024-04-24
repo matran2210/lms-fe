@@ -5,7 +5,7 @@ import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { CoursesAPI } from '../../api/courses/index';
+import { CoursesAPI } from '../../api/courses/index'
 const TableEntranceResult = () => {
   const router = useRouter()
   const { id } = router.query

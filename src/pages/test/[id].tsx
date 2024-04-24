@@ -33,10 +33,7 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { LAYOUT } from '@utils/constants'
-import {
-  runHighlight,
-  useGetDataQuery,
-} from '@utils/index'
+import { runHighlight, useGetDataQuery } from '@utils/index'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
@@ -242,20 +239,30 @@ const TestDetail = () => {
   }
 
   const router = useRouter()
-  
+
   const useGetQuizDetail = (queryKey: string, params: Object) => {
-    return useGetDataQuery(queryKey, params, () => CoursesAPI.getDetailQuizById(router.query.id), router.query.id !== undefined);
-  };
-  
+    return useGetDataQuery(
+      queryKey,
+      params,
+      () => CoursesAPI.getDetailQuizById(router.query.id),
+      router.query.id !== undefined,
+    )
+  }
+
   const useGetQuestionTabs = (queryKey: string, params: Object) => {
-    return useGetDataQuery(queryKey, params, () => CoursesAPI.getQuestionTabsById(router.query.id), router.query.id !== undefined);
-  };
-  
+    return useGetDataQuery(
+      queryKey,
+      params,
+      () => CoursesAPI.getQuestionTabsById(router.query.id),
+      router.query.id !== undefined,
+    )
+  }
+
   // Sử dụng hook useGetQuizDetail trong component
-  const { data: quizDetail } = useGetQuizDetail('quiz-detail', {});
-  
+  const { data: quizDetail } = useGetQuizDetail('quiz-detail', {})
+
   // Sử dụng hook useGetQuestionTabs trong component
-  const { data: questions } = useGetQuestionTabs('question-detail', {});
+  const { data: questions } = useGetQuestionTabs('question-detail', {})
 
   const type = router.query.type
 

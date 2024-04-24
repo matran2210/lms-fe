@@ -276,7 +276,7 @@ export class CoursesAPI {
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
-      method: 'POST'
+      method: 'POST',
     })
   }
 
@@ -284,8 +284,22 @@ export class CoursesAPI {
     const uri = url.submitCaseStudy + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
-      method: 'POST'
+      method: 'POST',
     })
+  }
+
+  static getCaseStudyAttemptsTable(
+    id: string,
+    page_index: number,
+    page_size: number,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/quiz-attempts/case-study/table/${id}?page_index=${page_index}&page_size=${page_size}`,
+    )
+  }
+
+  static getTopicAttemptsDetail(id: string): Promise<any> {
+    return fetcher(`${apiURL}/quiz-attempts/topic/${id}/score`)
   }
 }
 
@@ -325,7 +339,7 @@ export const submitQuizTest = async (
   if (quizAttemptId) {
     const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
     const response = await fetcher(`${uri}`, {
-      data: data
+      data: data,
     })
     return { ...response, quizAttemptId }
   }

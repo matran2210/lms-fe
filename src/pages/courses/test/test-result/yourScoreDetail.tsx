@@ -9,7 +9,7 @@ import { ANIMATION, QUESTION_TYPES } from 'src/constants'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
-import { CoursesAPI } from '../../../api/courses/index';
+import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
 
 const headers = [
@@ -64,15 +64,19 @@ const YourScoreDetail = ({
   const { data: scoreDetail } = useQuery(
     ['scoreDetail', router.query.id],
     async () => {
-      const res = await CoursesAPI.getQuizAttemptsTable(router.query.id as string, {
-        page_index: 1,
-        page_size: 20,
-      });
-      return res.data;
-    }, {
-      enabled: router.query.id !== undefined
-    }
-  );
+      const res = await CoursesAPI.getQuizAttemptsTable(
+        router.query.id as string,
+        {
+          page_index: 1,
+          page_size: 20,
+        },
+      )
+      return res.data
+    },
+    {
+      enabled: router.query.id !== undefined,
+    },
+  )
 
   // const handleScroll = () => {
   //   if (
@@ -126,7 +130,6 @@ const YourScoreDetail = ({
         return '--'
     }
   }
-
 
   return (
     <div
