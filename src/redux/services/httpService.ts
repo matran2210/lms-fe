@@ -7,7 +7,6 @@ import {
   getLogoutUser,
   loginSlice,
 } from '../slice/Login/Login'
-import url from './Authen/url'
 
 import toast from 'react-hot-toast'
 import { exceptions } from './en.exceptions'
@@ -102,7 +101,7 @@ axiosInstance.interceptors.request.use(
     await setAuthorizationHeader(config)
 
     // If the request is a refresh token request, return the config
-    if (config.url === url.refreshToken) {
+    if (config.url === '/auth/rotate') {
       return config
     }
 

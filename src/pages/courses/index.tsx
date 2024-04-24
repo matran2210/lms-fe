@@ -130,7 +130,7 @@ const MyCourse = () => {
   }, [courses])
 
   return (
-    <SappLoadingGlobal loading={isLoading}>
+    <>
       <div className="header bg-white border-b border-default">
         <div
           className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
@@ -224,82 +224,8 @@ const MyCourse = () => {
           className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
         ></div>
       )}
-    </SappLoadingGlobal>
+    </>
   )
 }
 
 export default MyCourse
-
-// export async function getServerSideProps(context: any) {
-//   const { req, res, query } = context
-//   const accessToken = req.cookies.accessToken
-//   const queryString = buildQueryString({
-//     name: query.name || '',
-//     status: query.status || '',
-//     type: query.type || '',
-//   })
-//   try {
-//     const courses = await fetchData(
-//       1,
-//       DEFAULT_PAGESIZE,
-//       accessToken,
-//       queryString,
-//     )
-
-//     return {
-//       props: {
-//         courses: courses,
-//       },
-//     }
-//   } catch (error: any) {
-//     if (error.response && error.response.status === 401) {
-//       const refreshToken = req.cookies.refreshToken
-
-//       try {
-//         const refreshResponse = await axios.post(
-//           `${apiURL}/auth/rotate`,
-//           {},
-//           {
-//             headers: {
-//               Authorization: `Bearer ${refreshToken}`,
-//             },
-//           },
-//         )
-//         const userInfo = refreshResponse?.data?.data?.tokens
-//         const act = userInfo?.act
-//         const rft = userInfo?.rft
-//         // Save the new access token to the AsyncStorage
-//         if (typeof window !== 'undefined') {
-//           await AsyncStorage.setItem('accessToken', act)
-//           await AsyncStorage.setItem('refreshToken', rft)
-//         }
-//         setCookieActToken(act)
-//         setCookieRefreshToken(rft)
-//         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
-
-//         const courses = await fetchData(1, DEFAULT_PAGESIZE, act, queryString)
-
-//         return {
-//           props: {
-//             courses: courses,
-//           },
-//         }
-//       } catch (refreshError) {
-//         removeJwtToken()
-//         return {
-//           redirect: {
-//             destination: PageLink.AUTH_LOGIN,
-//             permanent: false,
-//           },
-//         }
-//       }
-//     }
-
-//     return {
-//       redirect: {
-//         destination: PageLink.AUTH_LOGIN,
-//         permanent: false,
-//       },
-//     }
-//   }
-// }

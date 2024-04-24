@@ -12,6 +12,7 @@ import { IResourceDetail, ISection } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import { downloadResource } from 'src/pages/api/activity'
 
 interface IProps {
   open: boolean
@@ -230,7 +231,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
   const download = async (name: string, file_key: string) => {
-    await CourseAPI.downloadResource({
+    await downloadResource({
       files: [
         {
           name: name,

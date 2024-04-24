@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import NotificationApi from 'src/redux/services/Notification'
+import { NotificationAPI } from 'src/pages/api/notification'
 import { RootState } from 'src/redux/store'
 
 // Tạo một đối tượng Notification với giá trị mặc định
@@ -55,7 +55,7 @@ export const getCountUnRead = createAsyncThunk(
   'notificationReducer/getCountUnRead',
   async ({}, thunkAPI) => {
     try {
-      const res = await NotificationApi.getCountUnRead()
+      const res = await NotificationAPI.getCountUnRead()
       if (!res?.data) {
         return
       }
@@ -73,7 +73,7 @@ export const getNotification = createAsyncThunk(
   'notificationReducer/getNotification',
   async (params: Object, thunkAPI) => {
     try {
-      const res = await NotificationApi.getNotification(params)
+      const res = await NotificationAPI.getNotification(params)
       if (!res?.data) {
         return
       }
@@ -88,7 +88,7 @@ export const loadMoreNotification = createAsyncThunk(
   'notificationReducer/loadMoreNotification',
   async (params: Object, thunkAPI) => {
     try {
-      const res = await NotificationApi.getNotification(params)
+      const res = await NotificationAPI.getNotification(params)
       if (!res?.data) {
         return
       }
@@ -103,7 +103,7 @@ export const getNotificationDetail = createAsyncThunk(
   'courseActivityReducer/getNotificationDetail',
   async (id: string, thunkAPI) => {
     try {
-      const res = await NotificationApi.getDetail(id)
+      const res = await NotificationAPI.getDetail(id)
       if (!res?.data) {
         return
       }
@@ -118,7 +118,7 @@ export const markAllNotifications = createAsyncThunk(
   'notificationReducer/markAll',
   async (thunkAPI) => {
     try {
-      const res = await NotificationApi.markAll()
+      const res = await NotificationAPI.markAll()
       if (!res?.data) {
         return
       }
@@ -129,20 +129,20 @@ export const markAllNotifications = createAsyncThunk(
   },
 )
 
-export const getDeviceToken = createAsyncThunk(
-  'notificationReducer/getDeviceToken',
-  async (thunkAPI) => {
-    try {
-      const res = await NotificationApi.createDevice()
-      if (!res?.data) {
-        return
-      }
-      return { ...res.data }
-    } catch (error: any) {
-      return false
-    }
-  },
-)
+// export const getDeviceToken = createAsyncThunk(
+//   'notificationReducer/getDeviceToken',
+//   async (thunkAPI) => {
+//     try {
+//       const res = await NotificationApi.createDevice()
+//       if (!res?.data) {
+//         return
+//       }
+//       return { ...res.data }
+//     } catch (error: any) {
+//       return false
+//     }
+//   },
+// )
 
 export const notificationSlice = createSlice({
   name: 'notificationReducer',
@@ -250,15 +250,15 @@ export const notificationSlice = createSlice({
     builder.addCase(markAllNotifications.rejected, (state) => {
       state.loading = false
     })
-    builder.addCase(getDeviceToken.pending, (state) => {
-      state.loading = true
-    })
-    builder.addCase(getDeviceToken.fulfilled, (state, action) => {
-      state.loading = false
-    })
-    builder.addCase(getDeviceToken.rejected, (state) => {
-      state.loading = false
-    })
+    // builder.addCase(getDeviceToken.pending, (state) => {
+    //   state.loading = true
+    // })
+    // builder.addCase(getDeviceToken.fulfilled, (state, action) => {
+    //   state.loading = false
+    // })
+    // builder.addCase(getDeviceToken.rejected, (state) => {
+    //   state.loading = false
+    // })
   },
 })
 

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {
   removeJwtToken,
   setAccessToken,
-  setRefreshToken,
 } from '@utils/helpers/authen'
 import { toast } from 'react-hot-toast'
 import { RootState } from '../../store'
@@ -13,10 +12,9 @@ import {
   LoginReq,
   LoginState,
 } from '../../types/Login/login'
-import AuthApi from '../../services/Authen'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
-import EntranceApi from 'src/redux/services/EntranceTest'
+import { setActToken, setRefreshToken } from '@utils/index'
 import { PageLink } from 'src/constants'
+import { AuthAPI } from 'src/pages/api/profile'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -34,7 +32,7 @@ export const getLoginUser = createAsyncThunk(
   'loginReducer/handleLogin',
   async (body: LoginReq, thunkAPI) => {
     try {
-      const res = await AuthApi.login(body)
+      const res = await AuthAPI.login(body)
 
       if (!res.success) {
         return
@@ -51,7 +49,7 @@ export const getLogoutUser = createAsyncThunk(
   'loginReducer/handleLogout',
   async ({}, thunkAPI) => {
     try {
-      const res = await AuthApi.logout()
+      const res = await AuthAPI.logout()
       if (!res.success) {
         toast.error(res.error.message)
         return
@@ -67,7 +65,7 @@ export const changePassword = createAsyncThunk(
   'loginReducer/changePassword',
   async (body: ChangePasswordReq, thunkAPI) => {
     try {
-      const res: ChangePasswordRes = await AuthApi.changePassword(body)
+      const res: ChangePasswordRes = await AuthAPI.changePassword(body)
       return { ...res }
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
@@ -110,8 +108,10 @@ export const loginSlice = createSlice({
         state.accessToken = accessToken
         state.user = action.payload.data.user
 
-        setCookieActToken(accessToken)
-        setCookieRefreshToken(refreshToken)
+        setActToken(accessToken)
+        setRefreshToken(refreshToken)
+        // setCookieActToken(accessToken)
+        // setCookieRefreshToken(refreshToken)
       }
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {
