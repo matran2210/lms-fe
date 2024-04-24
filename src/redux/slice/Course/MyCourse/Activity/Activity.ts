@@ -120,7 +120,7 @@ export const reactDiscussion = createAsyncThunk(
   'courseActivityReducer/reactDiscussion',
   async (data: ICreateDiscussionResReact, thunkAPI) => {
     try {
-      const res = await CourseActivityApi.reactDiscussion(data)
+      const res = await ActivityAPI.reactDiscussion(data)
       if (!res?.data) {
         return
       }

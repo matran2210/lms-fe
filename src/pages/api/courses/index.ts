@@ -375,6 +375,7 @@ export const submitQuizTest = async (
  * @param {string} accessToken - Token truy cập của người dùng.
  * @returns {Promise<IActivity>} - Dữ liệu hoạt động.
  */
+
 export const getActivityById = async (
   id: string | string[] | undefined,
   course_id: string | string[] | undefined,

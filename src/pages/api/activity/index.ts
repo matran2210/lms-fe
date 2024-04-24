@@ -1,6 +1,9 @@
 import { fetcher } from '@services/requestV2'
 import { apiURL } from 'src/redux/services/httpService'
-import { ICreateDiscussionRequest } from 'src/redux/types/Course/MyCourse/Activity/activity'
+import {
+  ICreateDiscussionRequest,
+  ICreateDiscussionResReact,
+} from 'src/redux/types/Course/MyCourse/Activity/activity'
 
 export class ActivityAPI {
   /**
@@ -9,11 +12,62 @@ export class ActivityAPI {
    * @param {ICreateDiscussionRequest} request - Dữ liệu yêu cầu tạo cuộc thảo luận.
    * @returns {Promise<IResponse<IDiscussion>>} - Dữ liệu cuộc thảo luận đã tạo.
    */
-  static createDiscussionComment(request: ICreateDiscussionRequest): Promise<any> {
-    return fetcher(`/course-discussions`, {
+  static createDiscussionComment(
+    request: ICreateDiscussionRequest,
+  ): Promise<any> {
+    return fetcher(`${apiURL}/course-discussions`, {
       data: request,
       method: 'POST',
     })
+  }
+
+  static getQuizAttemptsAnswer(id: string): Promise<any> {
+    return fetcher(`${apiURL}/quiz-attempts/answers/${id}`)
+  }
+
+  /**
+   * @description Lấy danh sách câu hỏi của một bài kiểm tra.
+   * @async
+   * @param {string} id - ID của bài kiểm tra.
+   * @returns {Promise<IResponse<{ questions: IQuestion[] }>>} - Dữ liệu câu hỏi.
+   */
+  static getQuestions(id: string): Promise<any> {
+    return fetcher(
+      `${apiURL}/quiz/${id}/questions?page_index=1&page_size=99999`,
+    )
+  }
+
+  /**
+   * @description Phản ứng vào một cuộc thảo luận.
+   * @async
+   * @param {ICreateDiscussionResReact} request - Dữ liệu yêu cầu phản ứng.
+   * @returns {Promise<IResponse<ICreateDiscussionRepReact>>} - Dữ liệu phản ứng.
+   */
+  static reactDiscussion(data: ICreateDiscussionResReact): Promise<any> {
+    return fetcher(`${apiURL}/course-discussions/react`, {
+      data: data,
+    })
+  }
+
+  /**
+   * Kết thúc tiến độ cho một phần của khóa học cụ thể.
+   *
+   * @param {string} courseId - id của khóa học.
+   * @param {string} sectionId - id của section.
+   * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi về tiến độ.
+   */
+  static finishedCourseSectionProgress(
+    courseId: string,
+    sectionId: string,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/course-sections/course/${courseId}/section/${sectionId}/progress`,
+      {
+        params: {
+          status: 'FINISHED',
+        },
+      },
+    )
   }
 }
 
