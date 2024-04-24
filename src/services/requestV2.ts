@@ -15,8 +15,14 @@ import { apiURL } from 'src/redux/services/httpService'
 let isRefreshing = false
 let refreshSubscribers: ((token: string) => void)[] = []
 
+export const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return apiURL
+  }
+}
+
 export const request = axios.create({
-  baseURL: apiURL,
+  baseURL: getBaseUrl(),
 })
 
 export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>

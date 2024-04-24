@@ -13,7 +13,7 @@ export class NotificationAPI {
     }
 
     static getDetail(id: string): Promise<any> {
-        return fetcher(`${apiURL}/${id}`)
+        return fetcher(`${apiURL}/notifications/${id}`)
     }
 
     static markAll(): Promise<any> {
