@@ -331,11 +331,6 @@ const DragNDropPreivew = forwardRef(
               }}
             >
               <EditorReader
-                text_editor_content={data?.question_topic?.description}
-                className="sapp-questions"
-                highlighted={highlighted}
-              />
-              <EditorReader
                 className="questions"
                 text_editor_content={
                   questionContent?.documentElement.querySelector('body')

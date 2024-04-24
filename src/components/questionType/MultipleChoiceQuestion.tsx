@@ -75,11 +75,6 @@ const MultiChoiceQuestion = ({
         }}
       >
         <EditorReader
-          text_editor_content={data?.question_topic?.description}
-          className="sapp-questions"
-          highlighted={highlighted}
-        />
-        <EditorReader
           text_editor_content={data?.question_content}
           className="sapp-questions"
           highlighted={highlighted}
