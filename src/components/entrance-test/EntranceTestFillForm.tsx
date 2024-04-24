@@ -152,7 +152,7 @@ const EntranceTestFillForm = ({
     ) {
       return
     } else {
-      await EntranceApi.putLevel({
+      await EntranceTestAPI.putLevel({
         university_program_id: dataValue.univers_program_id.value,
         major_id: dataValue.majors_id.value,
         english_level_id: dataValue.englishLevel_id.value,

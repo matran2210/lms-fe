@@ -31,4 +31,11 @@ export class EntranceTestAPI {
   static getListEntranceTestLogin(): Promise<any> {
     return fetcher(`${apiURL}/entrance-test`)
   }
+
+  static putLevel(data: any) {
+    return fetcher(`${apiURL}/users/input-level`, {
+      method: 'PUT',
+      data: data,
+    })
+  }
 }

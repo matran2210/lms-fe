@@ -84,20 +84,22 @@ export class AuthAPI {
     return fetcher(`${apiURL}/users/course-certificate/count`)
   }
 
-  static updateUser( full_name: string,
-    avatar?: { [key: string]: string } | null, ) {
+  static updateUser(
+    full_name: string,
+    avatar?: { [key: string]: string } | null,
+  ) {
     return fetcher(`${apiURL}/users`, {
       method: 'PUT',
       data: {
         full_name,
-        avatar
-      }
+        avatar,
+      },
     })
   }
 
   static makeContactDefault(id: string) {
     return fetcher(`${apiURL}/users/contacts/${id}/make-this-default`, {
-      method: 'POST'
+      method: 'POST',
     })
   }
 
@@ -107,7 +109,8 @@ export class AuthAPI {
 
   static getListHistory(params: Object) {
     return fetcher(`${apiURL}/users/activities`, {
-      params: params
+      params: params,
     })
   }
+
 }

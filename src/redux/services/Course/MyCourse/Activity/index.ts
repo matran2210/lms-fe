@@ -15,8 +15,6 @@ import {
 } from 'src/type/course/my-course/Activity'
 import { apiURL, httpService } from '../../../httpService'
 import url from './url'
-import CourseTestApi from '../Test'
-import { CoursesAPI } from '../../../../../pages/api/courses/index'
 
 /**
  * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.
