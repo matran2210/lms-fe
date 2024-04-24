@@ -79,4 +79,35 @@ export class AuthAPI {
       data: data,
     })
   }
+
+  static getUserInformation() {
+    return fetcher(`${apiURL}/users/course-certificate/count`)
+  }
+
+  static updateUser( full_name: string,
+    avatar?: { [key: string]: string } | null, ) {
+    return fetcher(`${apiURL}/users`, {
+      method: 'PUT',
+      data: {
+        full_name,
+        avatar
+      }
+    })
+  }
+
+  static makeContactDefault(id: string) {
+    return fetcher(`${apiURL}/users/contacts/${id}/make-this-default`, {
+      method: 'POST'
+    })
+  }
+
+  static getListDevices() {
+    return fetcher(`${apiURL}/users/devices`)
+  }
+
+  static getListHistory(params: Object) {
+    return fetcher(`${apiURL}/users/activities`, {
+      params: params
+    })
+  }
 }

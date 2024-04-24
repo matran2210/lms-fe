@@ -1,6 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { NotificationAPI } from 'src/pages/api/notification'
-import NotificationApi from 'src/redux/services/Notification'
 import { RootState } from 'src/redux/store'
 
 // Tạo một đối tượng Notification với giá trị mặc định
@@ -130,20 +129,20 @@ export const markAllNotifications = createAsyncThunk(
   },
 )
 
-export const getDeviceToken = createAsyncThunk(
-  'notificationReducer/getDeviceToken',
-  async (thunkAPI) => {
-    try {
-      const res = await NotificationApi.createDevice()
-      if (!res?.data) {
-        return
-      }
-      return { ...res.data }
-    } catch (error: any) {
-      return false
-    }
-  },
-)
+// export const getDeviceToken = createAsyncThunk(
+//   'notificationReducer/getDeviceToken',
+//   async (thunkAPI) => {
+//     try {
+//       const res = await NotificationApi.createDevice()
+//       if (!res?.data) {
+//         return
+//       }
+//       return { ...res.data }
+//     } catch (error: any) {
+//       return false
+//     }
+//   },
+// )
 
 export const notificationSlice = createSlice({
   name: 'notificationReducer',
@@ -251,15 +250,15 @@ export const notificationSlice = createSlice({
     builder.addCase(markAllNotifications.rejected, (state) => {
       state.loading = false
     })
-    builder.addCase(getDeviceToken.pending, (state) => {
-      state.loading = true
-    })
-    builder.addCase(getDeviceToken.fulfilled, (state, action) => {
-      state.loading = false
-    })
-    builder.addCase(getDeviceToken.rejected, (state) => {
-      state.loading = false
-    })
+    // builder.addCase(getDeviceToken.pending, (state) => {
+    //   state.loading = true
+    // })
+    // builder.addCase(getDeviceToken.fulfilled, (state, action) => {
+    //   state.loading = false
+    // })
+    // builder.addCase(getDeviceToken.rejected, (state) => {
+    //   state.loading = false
+    // })
   },
 })
 

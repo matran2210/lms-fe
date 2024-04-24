@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import UserApi from 'src/redux/services/User/user'
 import { RootState } from 'src/redux/store'
 import { IUserStatus, IUserType, UserState } from 'src/redux/types/User/urser'
+import { AuthAPI } from '../../../pages/api/profile/index';
 
 const initialState: UserState = {
   loading: false,
@@ -159,7 +160,7 @@ export const makeContactDefault = createAsyncThunk(
   'userReducer/makeContactDefault',
   async (id: string, thunkAPI) => {
     try {
-      const res = await UserApi.makeContactDefault(id)
+      const res = await AuthAPI.makeContactDefault(id)
       if (!res) {
         return
       }
