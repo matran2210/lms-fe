@@ -284,24 +284,35 @@ export class CoursesAPI {
     return fetcher(`${apiURL}/quiz-attempts/topic/${id}/score`)
   }
 
-    /**
+  /**
    * @description Lấy thông tin cuộc thảo luận theo ID.
    * @async
    * @param {string} id - ID của cuộc thảo luận.
    * @returns {Promise<IResponseMeta<IDiscussion, 'discussions'>>} - Dữ liệu cuộc thảo luận.
    */
-    static getDiscussion(class_id: string,
-      course_section_id: string): Promise<any> {
-      
-      return fetcher(`/course-discussions`, {
-        params: {
-          page_index: 1,
-          page_size: 9999,
-          class_id,
-          course_section_id,
-        },
-      })
-    }
+  static getDiscussion(
+    class_id: string,
+    course_section_id: string,
+  ): Promise<any> {
+    return fetcher(`/course-discussions`, {
+      params: {
+        page_index: 1,
+        page_size: 9999,
+        class_id,
+        course_section_id,
+      },
+    })
+  }
+
+  /**
+   * @description Lấy thông tin tab hoạt động theo ID.
+   * @async
+   * @param {string} id - ID của tab.
+   * @returns {Promise<IResponse<ITab>>} - Dữ liệu tab.
+   */
+  static getCourseActivityTapById(id: string): Promise<any> {
+    return fetcher(`${apiURL}/course-sections/tab/${id}`)
+  }
 }
 
 export const getQuestionsById = async (
