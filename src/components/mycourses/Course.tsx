@@ -1,8 +1,6 @@
 import React, {
   useEffect,
   useState,
-  Dispatch,
-  SetStateAction,
   useMemo,
 } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
@@ -25,7 +23,6 @@ import PopupActive from './PopupActive'
 import PopupLesson from './PopupLesson'
 import CourseAPI from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
-import { ICourseAll } from 'src/type/courses'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
@@ -33,13 +30,17 @@ import { Tooltip } from 'antd'
 const Course = ({
   course,
   index,
-  setData,
-  setLoading,
+  // setData,
+  // setLoading,
+  lastElementRef,
+  refetch
 }: {
   course: ICourse
   index: number
-  setData: Dispatch<SetStateAction<ICourseAll>>
-  setLoading: Dispatch<SetStateAction<boolean>>
+  lastElementRef: (node: HTMLDivElement) => void
+  refetch: () => void
+  // setData: Dispatch<SetStateAction<ICourseAll>>
+  // setLoading: Dispatch<SetStateAction<boolean>>
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
@@ -176,16 +177,16 @@ const Course = ({
     type: router.query.type || '',
   })
 
-  async function fetchCourseList() {
-    setLoading(true)
-    try {
-      const newData = await CourseAPI.getCourse(18, queryString)
-      setData(newData?.data)
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
+  // async function fetchCourseList() {
+  //   setLoading(true)
+  //   try {
+  //     const newData = await CourseAPI.getCourse(18, queryString)
+  //     setData(newData?.data)
+  //   } catch (error) {
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   async function activeCourse() {
     try {
@@ -193,7 +194,8 @@ const Course = ({
         classId: `${classInstance?.id}`,
       }
       const res = await CourseAPI.activeCourse(params)
-      await fetchCourseList()
+      // await fetchCourseList()
+      refetch()
       toast.success('Active thành công!')
     } catch (error) {}
   }
@@ -213,7 +215,8 @@ const Course = ({
         })
       }
       const res = await CourseAPI.extendCourse(params)
-      await fetchCourseList()
+      // await fetchCourseList()
+      refetch()
       toast.success('Gia hạn hành công!')
     } catch (error) {}
   }
@@ -284,6 +287,7 @@ const Course = ({
           key={index}
           className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
           data-aos={ANIMATION.DATA_AOS}
+          ref={lastElementRef}
         >
           <div className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}>
             <div

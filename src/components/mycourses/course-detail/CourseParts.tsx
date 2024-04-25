@@ -2,19 +2,20 @@ import React from 'react'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
 import { ANIMATION } from 'src/constants'
+import { ICourseDetail } from 'src/type/courses'
 
 const CourseParts = ({
   courses,
   class_user_id,
   lastElementRef
 }: {
-  courses: any
+  courses: ICourseDetail[] | undefined
   class_user_id?: string
-  lastElementRef: any
+  lastElementRef: (node: HTMLDivElement) => void
 }) => {
   return (
     <div className="grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-10">
-      {courses?.map((coursePart: any, index: number) => {
+      {courses && courses?.map((coursePart, index: number) => {
         return (
           <div
             key={coursePart?.id}

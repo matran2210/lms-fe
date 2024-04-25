@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
-import { ICourseSection } from 'src/type/courses'
+import { ICourseDetail, ICourseSection } from 'src/type/courses'
 import TestModal from 'src/pages/courses/test'
 import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
@@ -15,7 +15,7 @@ const PartFailed = ({
   coursePart,
   class_user_id,
 }: {
-  coursePart: ICourseSection
+  coursePart: ICourseDetail
   class_user_id?: string
 }) => {
   const formattedTime = coursePart?.quiz?.quiz_timed

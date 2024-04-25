@@ -14,12 +14,16 @@ const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
   const router = useRouter()
+  const observer = useRef<IntersectionObserver>()
 
   const params = {
     user_section_learning_status:
       router.query.user_section_learning_status || undefined,
   }
 
+  /**
+  * @description config API course detail
+  */
   const fecthCourseDetail = async ({
     pageParam,
     params,
@@ -36,14 +40,15 @@ const CourseDetail = () => {
     return { data: data?.data?.course_sections_with_progress || [], courseDetail: data }
   }
 
-  const observer = useRef<IntersectionObserver>()
-
+  /**
+  * @description sử dụng react-query để lấy data sau khi call API
+  */
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery({
-      queryKey: ['mycourse-detail'],
+      queryKey: ['courseDetail'],
       queryFn: ({ pageParam }) => fecthCourseDetail({ pageParam, params }),
       getNextPageParam: (lastPage, allPages) => {
-        if (params.user_section_learning_status) {
+        if (params.user_section_learning_status || params.user_section_learning_status === undefined) {
           return undefined; // Prevent fetching more pages if params change
         }
         return lastPage?.data?.length ? allPages.length + 1 : undefined
@@ -51,14 +56,16 @@ const CourseDetail = () => {
       enabled: router.query.courseId !== undefined
     })
 
-    useEffect(() => {
-      if(router.query.courseId !== undefined) {
-        refetch();
-      }
-    }, [params.user_section_learning_status, refetch]);
+  /**
+* @description gọi lại API khi courseID khác undefined
+*/
+  useEffect(() => {
+    if (router.query.courseId !== undefined) {
+      refetch();
+    }
+  }, [params.user_section_learning_status, refetch]);
 
   // Use useEffect to refetch data when params change
-
   const lastElementRef = useCallback(
     (node: HTMLDivElement) => {
       if (isLoading) return
@@ -76,13 +83,24 @@ const CourseDetail = () => {
     [fetchNextPage, hasNextPage, isFetching, isLoading],
   )
 
+  /**
+  * @description lấy data khi call API course detail
+  */
   const courses = useMemo(() => {
     return data?.pages.reduce((acc: any, page: any) => {
       return [...acc, ...page?.data]
     }, [])
   }, [data])
 
+  /**
+  * @description biến này lấy name của course
+  */
   const courseNameDetail = data?.pages?.[0]?.courseDetail?.data?.name
+  
+  /**
+  * @description biến này lấy name của course
+  */
+  const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -112,8 +130,8 @@ const CourseDetail = () => {
       >
         <CourseParts
           courses={courses}
-        //  class_user_id={class_user_id}
-        lastElementRef={lastElementRef}
+           class_user_id={class_user_id}
+          lastElementRef={lastElementRef}
         />
       </div>
     </SappLoadingGlobal>
