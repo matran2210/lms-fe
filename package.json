@@ -56,7 +56,7 @@
     "next-with-less": "^3.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^9.3.0",
-    "preview-activity": "^1.1.37",
+    "preview-activity": "^1.1.39",
     "preview-part": "^1.2.53",
     "quiz-result-package": "^1.1.25",
     "react": "^18.2.0",
