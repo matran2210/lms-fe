@@ -53,6 +53,7 @@ module.exports = removeImports(
         'cdn-dev.sapp.edu.vn',
         'media.zim.vn',
         'cdn-staging.sapp.edu.vn',
+        'cdn.sapp.edu.vn',
       ],
     },
     swcMinify: true,
