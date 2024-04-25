@@ -329,7 +329,7 @@ export const getQuestionsById = async (
   question_ids: string[],
 ): Promise<any> => {
   const response = await fetcher(
-    `${apiURL}question?question_ids=${question_ids?.join(',')}`,
+    `${apiURL}/question?question_ids=${question_ids?.join(',')}`,
   )
 
   return {
@@ -380,14 +380,14 @@ export const getActivityById = async (
   id: string | string[] | undefined,
   course_id: string | string[] | undefined,
 ): Promise<any> => {
-  const responseActivity = await fetcher(`courses/${course_id}/activity/${id}`)
-  const responseTabs = await fetcher(`course-sections/activity/${id}/tabs`)
+  const responseActivity = await fetcher(`${apiURL}/courses/${course_id}/activity/${id}`)
+  const responseTabs = await fetcher(`${apiURL}/course-sections/activity/${id}/tabs`)
 
   if (responseActivity?.data && responseTabs?.data?.[0]) {
     responseActivity.data.tabs = responseTabs.data
 
     const responseTab = await fetcher(
-      `course-sections/tab/${responseTabs.data?.[0].id}`,
+      `${apiURL}/course-sections/tab/${responseTabs.data?.[0].id}`,
     )
 
     if (responseTab.data) {

@@ -1,27 +1,16 @@
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React, { useEffect, useState, useRef } from 'react'
-import axios from 'axios'
-import { apiURL } from 'src/redux/services/httpService'
+import React, { useEffect, useRef, useMemo, useCallback } from 'react'
 import CoursesList from '@components/mycourses/CoursesList'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
 import PopupStep from '@components/user-guide/PopupStep'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { ANIMATION, UserGuide } from 'src/constants'
 import { useRouter } from 'next/router'
-import {
-  buildQueryString,
-  setCookieActToken,
-  setCookieRefreshToken,
-} from '@utils/index'
-import { ICourseAll } from 'src/type/courses'
-import CourseAPI, { CoursesAPI } from '../api/courses'
-import { removeJwtToken } from '@utils/helpers/authen'
-import { PageLink } from 'src/constants'
-import { useQuery } from 'react-query'
+import { CoursesAPI } from '../api/courses'
+import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 
 const DEFAULT_PAGESIZE = 9
@@ -39,6 +28,7 @@ const MyCourse = () => {
   )
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
+  const observer = useRef<IntersectionObserver>()
 
   const nextStep = () => {
     dispatch(increment())
@@ -62,75 +52,85 @@ const MyCourse = () => {
     }
   }, [userGuideLine])
 
-  const useGetData = (queryKey: string, params: Object) => {
-    const fetchData = async () => {
-      const { data } = await CoursesAPI.get(1, DEFAULT_PAGESIZE, params)
-      return data
-    }
-
-    return useQuery([queryKey, params], fetchData)
+  /**
+ * @description Gọi API My Course
+ * @param {pageParam, params} pageParam: number, params: Object
+ */
+  const fetchMyCourse = async ({
+    pageParam,
+    params,
+  }: {
+    pageParam: number
+    params: Object
+  }) => {
+    const { data } = await CoursesAPI.get(
+      pageParam || 1,
+      DEFAULT_PAGESIZE,
+      params,
+    )
+    return { data: data?.courses || [], category: data }
   }
 
+  /**
+  * @description config params khi filter
+  */
   const params = {
     name: router.query.name || undefined,
     status: router.query.status || undefined,
     type: router.query.type || undefined,
   }
 
-  const { data: courses, isLoading } = useGetData('courses', params)
+  /**
+  * @description sử dụng react-query để lấy data sau khi call API
+  */
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
+    useInfiniteQuery({
+      queryKey: ['myCourse'],
+      queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
+      getNextPageParam: (lastPage, allPages) => {
+        if (params.status || params.type || params.status === undefined || params.type === undefined) {
+          return undefined; // Prevent fetching more pages if params change
+        }
+        return lastPage?.data.length ? allPages.length + 1 : undefined
+      },
+    })
 
-  const [data, setData] = useState<ICourseAll>(courses || [])
-  const [page, setPage] = useState(DEFAULT_PAGESIZE)
-  const [loading, setLoading] = useState(false)
-  const queryString = buildQueryString({
-    name: router.query.name || undefined,
-    status: router.query.status || undefined,
-    type: router.query.type || undefined,
-  })
+  /**
+  * @description check ref khi scroll đến cuối page thì call API
+  */
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isLoading) return
 
-  const loadMore = async () => {
-    if (loading) return
-    setLoading(true)
-    try {
-      const newData = await CourseAPI.getCourse(
-        page + DEFAULT_PAGESIZE,
-        queryString,
-      )
-      setData(newData?.data)
-      setPage(page + DEFAULT_PAGESIZE)
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
+      if (observer.current) observer.current.disconnect()
 
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage()
+        }
+      })
+
+      if (node) observer.current.observe(node)
+    },
+    [fetchNextPage, hasNextPage, isFetching, isLoading],
+  )
+
+  /**
+  * @description lấy data của course khi call API get course
+  */
+  const courses = useMemo(() => {
+    return data?.pages.reduce((acc: any, page) => {
+      return [...acc, ...page?.data]
+    }, [])
+  }, [data])
+
+  // Use useEffect to refetch data when params change
   useEffect(() => {
-    let isFetching = false
-    const isEndPage = page <= courses?.metadata?.total_records
-
-    const handleScroll = () => {
-      if (
-        !isFetching &&
-        isEndPage &&
-        window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 10
-      ) {
-        isFetching = true
-        loadMore()
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [loading, router.query.name, router.query.type, router.query.status])
-
-  useEffect(() => {
-    // Update data when courses?.data?.course_sections_with_progress changes
-    setData(courses || [])
-  }, [courses])
+    refetch()
+  }, [params.name, params.status, params.type]);
 
   return (
-    <>
+    <SappLoadingGlobal loading={isLoading}>
       <div className="header bg-white border-b border-default">
         <div
           className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
@@ -139,7 +139,7 @@ const MyCourse = () => {
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
-            setPage={setPage}
+          // setPage={setPage}
           />
           {guideStatus && guideStep === 1 && (
             <PopupStep
@@ -159,11 +159,10 @@ const MyCourse = () => {
             My Course
           </h2>
           <div
-            className={`pt-6 pb-4 relative ${
-              guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
-            }`}
+            className={`pt-6 pb-4 relative ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
+              }`}
           >
-            <Filter courses={data} setPage={setPage} />
+            <Filter courses={data?.pages?.[0]?.category} />
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}
@@ -215,7 +214,7 @@ const MyCourse = () => {
             handleCancel={closeUserGuide}
           />
         )}
-        <CoursesList courses={data} setData={setData} setLoading={setLoading} />
+        <CoursesList courses={courses} lastElementRef={lastElementRef} refetch={refetch} />
       </div>
       {guideStatus && guideStep == 0 && <PopupWelcome />}
       {guideStatus && (
@@ -224,7 +223,7 @@ const MyCourse = () => {
           className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
         ></div>
       )}
-    </>
+    </SappLoadingGlobal>
   )
 }
 
