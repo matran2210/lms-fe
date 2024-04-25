@@ -775,7 +775,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       {/* </MovableWindow> */}
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-        <Discussion class_id={(router.query.classId as string) || ''} />
+        <Discussion class_id={(courseId as string) || ''} />
       </div>
       {openScratchPad.map((e, index: number) => {
         if (e.type === 'file') {
