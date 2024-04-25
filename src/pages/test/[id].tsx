@@ -1103,17 +1103,20 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
         if (checkAnswered(e)) {
-          answers.push({
-            question_id: e.id,
-            short_answer: e.answer || '',
-            response_option: e.data.response_option
-              ? e.data.response_option
-              : e.response_type === 0
-                ? 'WORD'
-                : 'SHEET',
-            time_spent: Math.ceil(e.timeSpent / 1000),
-            active: 'SUBMITED',
-            answer_file: e.answer_file,
+          e?.requirements?.forEach((requirement: any) => {
+            answers.push({
+              question_id: e.id,
+              short_answer: e.answer || '',
+              requirement_id: requirement.id || '',
+              response_option: e.data.response_option
+                ? e.data.response_option
+                : e.response_type === 0
+                  ? 'WORD'
+                  : 'SHEET',
+              time_spent: Math.ceil(e.timeSpent / 1000),
+              active: 'SUBMITED',
+              answer_file: e.answer_file,
+            })
           })
         }
       }

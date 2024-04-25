@@ -130,6 +130,7 @@ const SAPPVideo = ({
     // Add eventlisteners
     if (options?.src) {
       if (streamRef.current) {
+        resetStreamHandlers()
         streamRef.current.addEventListener('play', updatePlayButton)
         streamRef.current.addEventListener('pause', updatePlayButton)
         streamRef.current.addEventListener('loadedmetadata', initializeVideo)
@@ -211,6 +212,20 @@ const SAPPVideo = ({
       }
     }
   }, [options?.src, streamRef?.current, playbackAnimationRef?.current])
+
+  // Time and btn will be reset to its original state
+  function resetStreamHandlers() {
+    if (timeElapsedRef.current) {
+      timeElapsedRef.current.innerText = `00:00`
+    }
+    const playIcon = playButtonRef?.current?.querySelector('.play')
+    const pauseIcon = playButtonRef?.current?.querySelector('.pause')
+    if (playIcon && pauseIcon) {
+      playButtonRef?.current?.setAttribute('data-title', 'Play')
+      playIcon?.classList?.remove('hidden')
+      pauseIcon?.classList?.add('hidden')
+    }
+  }
 
   // togglePlay toggles the playback state of the video.
   // If the video playback is paused or ended, the video is played
