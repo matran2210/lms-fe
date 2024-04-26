@@ -82,9 +82,9 @@ export class UploadAPI {
       const responseToken: IResponse<{
         data: string
         success: boolean
-      }> = await fetcher(`${apiURL}/resource/get-token-download`, {
-        data: data,
-        method: 'POST',
+      }> = await httpService.POST({
+        uri: 'resource/get-token-download',
+        request: data,
       })
       if (responseToken?.success) {
         const link = document.createElement('a')

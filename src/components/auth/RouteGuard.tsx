@@ -4,6 +4,8 @@ import {
   getRefreshToken,
   setCookieActToken,
   setCookieRefreshToken,
+  getLocalStorgeActToken,
+  getLocalStorgeRefreshToken,
 } from '@utils/index'
 import axios from 'axios'
 import { useRouter } from 'next/router'
@@ -49,13 +51,23 @@ export const RouteGuard = ({ children }: IProps) => {
     // not logged in
 
     const path = url?.split('?')?.[0]
-    const accessToken = getActToken()
-    const refreshToken = getRefreshToken()
+    const accessToken = getLocalStorgeActToken()
+    const refreshToken = getLocalStorgeRefreshToken()
     if (!accessToken && !refreshToken && !PUBLIC_PATHS[path]) {
       setAuthorized(false)
       router.push(PageLink.AUTH_LOGIN)
     } else {
       setAuthorized(true)
+    }
+
+    // Chặn vào login page khi đã đăng nhập
+    const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
+    if (isLoginPage && accessToken) {
+      try {
+        await dispatch(getMe()).unwrap()
+        router.push(PageLink.DASHBOARD)
+      } catch (error) {
+      }
     }
   }
 

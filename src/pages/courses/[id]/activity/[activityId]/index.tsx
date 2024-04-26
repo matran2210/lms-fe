@@ -49,8 +49,6 @@ import SAPPBorder from 'src/common/SAPPBorder'
 import { getActivityById } from '../../../../api/courses/index';
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { downloadResource } from 'src/pages/api/activity'
-import PreviewNoteList from '@components/mycourses/PreviewNoteList'
 
 type Props = {
   activity: IActivity
@@ -471,7 +469,7 @@ const ActivityPage = () => {
   }
 
   const download = async (name: string, file_key: string) => {
-    await downloadResource({
+    await CourseAPI.downloadResource({
       files: [
         {
           name: name,
@@ -483,515 +481,515 @@ const ActivityPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-<div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
-      <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
-        <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
-          <Link href="/courses" className="breadcrumbs__link" scroll={false}>
-            My Course /
-          </Link>
-        </li>
+      <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
+        <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
+          <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
+            <Link href="/courses" className="breadcrumbs__link" scroll={false}>
+              My Course /
+            </Link>
+          </li>
 
-        <Dropdown overlay={menu} trigger={['click']}>
-          <a
-            className="ant-dropdown-link cursor-pointer"
-            onClick={(e) => e.preventDefault()}
-          >
-            ..... /
-          </a>
-        </Dropdown>
-        <li className="text-bw-1">
-          <Link href={'#'} className="breadcrumbs__link" scroll={false}>
-            <span>{nameActivity?.name}</span>
-          </Link>
-        </li>
-      </ul>
-      <>
-        {getNotesData?.map((e: any, index: number) => {
-          return (
-            <CreateNote
-              id={e?.id}
-              content={e?.description}
-              uuid={e?.uuid}
-              count={index}
-              key={e?.uuid}
-            />
-          )
-        })}
+          <Dropdown overlay={menu} trigger={['click']}>
+            <a
+              className="ant-dropdown-link cursor-pointer"
+              onClick={(e) => e.preventDefault()}
+            >
+              ..... /
+            </a>
+          </Dropdown>
+          <li className="text-bw-1">
+            <Link href={'#'} className="breadcrumbs__link" scroll={false}>
+              <span>{nameActivity?.name}</span>
+            </Link>
+          </li>
+        </ul>
         <>
-          {selector?.calculator_status && (
-            <MovableWindow
-              position={{
-                width: '400px',
-                height: '300px',
-                top: 'calc(25% - 150px)',
-                left: 'calc(25% - 200px)',
-              }}
-              zIndex={1400}
-              fixed
-            >
-              <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
-                  <div className="text-sm font-normal">Calculator</div>
-                  <button
-                    onClick={() => {
-                      dispatch(closeCalculator())
-                    }}
-                  >
-                    <CloseIcon />
-                  </button>
+          {getNotesData?.map((e: any, index: number) => {
+            return (
+              <CreateNote
+                id={e?.id}
+                content={e?.description}
+                uuid={e?.uuid}
+                count={index}
+                key={e?.uuid}
+              />
+            )
+          })}
+          <>
+            {selector?.calculator_status && (
+              <MovableWindow
+                position={{
+                  width: '400px',
+                  height: '300px',
+                  top: 'calc(25% - 150px)',
+                  left: 'calc(25% - 200px)',
+                }}
+                zIndex={1400}
+                fixed
+              >
+                <div className="absolute h-full w-full  top-0 left-0 border">
+                  <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div className="text-sm font-normal">Calculator</div>
+                    <button
+                      onClick={() => {
+                        dispatch(closeCalculator())
+                      }}
+                    >
+                      <CloseIcon />
+                    </button>
+                  </div>
+                  <Calculator />
                 </div>
-                <Calculator />
-              </div>
-            </MovableWindow>
-          )}
+              </MovableWindow>
+            )}
+          </>
         </>
-      </>
-      <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-        <div className="bg-gray-3 px-6 ">
-          <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
-            <div className="font-medium text-2xl ">{activity?.name}</div>
-            <div className="text-sm text-gray-1 whitespace-nowrap">
-              {activity?.duration || 0}{' '}
-              {activity?.duration > 1 ? 'mins' : 'min'} estimated
+        <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+          <div className="bg-gray-3 px-6 ">
+            <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
+              <div className="font-medium text-2xl ">{activity?.name}</div>
+              <div className="text-sm text-gray-1 whitespace-nowrap">
+                {activity?.duration || 0}{' '}
+                {activity?.duration > 1 ? 'mins' : 'min'} estimated
+              </div>
+            </div>
+
+            {activity?.course_outcomes?.length > 0 && (
+              <div
+                className={`pt-6 pb-4 ${activity?.files?.length > 0 && 'border-b borderColor-default'
+                  }`}
+              >
+                <div className="font-semibold text-base mb-2">
+                  Learning Outcome:
+                </div>
+                <ul className="list-disc text-base ml-3">
+                  {activity?.course_outcomes?.map((e: any) => {
+                    return (
+                      <li className="ml-4" key={e?.id}>
+                        <EditorReader
+                          className="editor-wrap mt-1.5"
+                          text_editor_content={e.description}
+                        />
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          <div className="bg-gray-3">
+            <div className="flex gap-2 px-6 flex-wrap">
+              {selector.tabs?.map((e) => {
+                return (
+                  <SappButton
+                    key={e?.id}
+                    size="small"
+                    className="py-2.5 !px-3 text-medium-sm !font-normal"
+                    color={tabButtonColor(e?.id)}
+                    title={truncateString(e?.name, 60)}
+                    onClick={() => handleChangeTab(e?.id)}
+                  ></SappButton>
+                )
+              })}
             </div>
           </div>
 
-          {activity?.course_outcomes?.length > 0 && (
-            <div
-              className={`pt-6 pb-4 ${activity?.files?.length > 0 && 'border-b borderColor-default'
-                }`}
-            >
-              <div className="font-semibold text-base mb-2">
-                Learning Outcome:
+          {/* <FadeInOut show={!selector.loading}> */}
+          {!!course_tab_documents?.length && (
+            <div className="bg-white pb-6 mb-6">
+              <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
+                <div className="tab-content overflow-x-auto">
+                  {course_tab_documents?.map((e, i) => {
+                    const marginBottom =
+                      i < course_tab_documents?.length - 1 ? 'mb-6' : ''
+                    if (e.type === 'QUIZ') {
+                      return (
+                        <div
+                          className={marginBottom}
+                          key={e?.id + '_' + i + '_' + selector.currentTabId}
+                          ref={quizDocumentRef}
+                        >
+                          <QuizDocument
+                            questions={[
+                              ...(e.quiz?.multiple_choice_questions || []),
+                              ...(e.quiz?.constructed_questions || []),
+                            ]}
+                            activityId={activity?.id as string}
+                            tabId={selector.currentTabId || ''}
+                            quizId={e?.quiz?.id || ''}
+                            grading_preference={
+                              e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
+                            }
+                            document_id={e?.id}
+                            is_graded={e?.quiz?.is_graded || false}
+                            setOpenFile={handleOpenScratchPad}
+                            class_user_id={activity?.class_user_id}
+                          ></QuizDocument>
+                        </div>
+                      )
+                    }
+                    if (e.type === 'TEXT') {
+                      return (
+                        <div
+                          className={marginBottom}
+                          key={i + '_' + selector?.currentTabId}
+                        >
+                          <TextDocument
+                            text_editor_content={e?.text_editor_content}
+                          ></TextDocument>
+                        </div>
+                      )
+                    }
+                    if (e.type === 'VIDEO') {
+                      return (
+                        <div
+                          className={marginBottom}
+                          key={i + '_' + selector?.currentTabId}
+                        >
+                          <VideoDocument
+                            videos={e?.videos}
+                            activityId={activity?.id as string}
+                            tabId={selector?.currentTabId || ''}
+                            streamRefProp={(el: any) =>
+                              (videoRef.current[i || 0] = el)
+                            }
+                            handleProcess={handleFinishedCourseSectionProgress}
+                            document_id={e?.id}
+                            quizId={e?.quiz?.id || ''}
+                            grading_preference={
+                              e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
+                            }
+                            class_user_id={activity?.class_user_id}
+                          ></VideoDocument>
+                        </div>
+                      )
+                    }
+                    return null
+                  })}
+                </div>
+
+                {activity?.files?.length > 0 && (
+                  <>
+                    <SAPPBorder />
+                    <div
+                      className={`pt-8 ${getPreviousTabId() ? 'pb-4' : 'pb-0'} `}
+                    >
+                      <div className="font-semibold text-base">Resource:</div>
+                      <ul className="list-disc text-base">
+                        {activity?.files.map((e: any, index: number) => {
+                          return (
+                            <div
+                              className={`flex justify-between group cursor-pointer ${index === 0 ? 'mt-4' : 'mt-5'
+                                }`}
+                              key={index}
+                            >
+                              <div className="flex">
+                                <div className="mr-2 group-hover:text-primary flex self-center">
+                                  <LinkIcon />
+                                </div>
+                                <div
+                                  className="cursor-pointer text-gray-1 group-hover:text-primary"
+                                  onClick={() => {
+                                    handleOpenScratchPad(
+                                      {
+                                        type: 'file',
+                                      },
+                                      e.resource.url,
+                                      e?.resource?.name,
+                                    )
+                                  }}
+                                >
+                                  {e?.resource?.name}
+                                </div>
+                              </div>
+                              <a
+                                onClick={() =>
+                                  download(
+                                    e?.resource?.name,
+                                    e?.resource?.file_key,
+                                  )
+                                }
+                              >
+                                <DownloadIcon />
+                              </a>
+                            </div>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                    {getPreviousTabId() && <SAPPBorder className="mt-4" />}
+                  </>
+                )}
+
+                <div className="flex justify-between flex-wrap gap-5 mt-8">
+                  {getPreviousTabId() && (
+                    <div className="w-auto">
+                      <div className="relative">
+                        <div
+                          onClick={() =>
+                            handleChangeTab(getPreviousTabId() || '')
+                          }
+                          className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={20}
+                            height={20}
+                            fill="none"
+                          >
+                            <path
+                              className="fill-bw-1 group-hover:fill-primary"
+                              fillRule="evenodd"
+                              d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          Previous Tab
+                        </div>
+                        <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+                      </div>
+                    </div>
+                  )}
+                  {getNextTabId() && (
+                    <div className="w-auto relative ml-auto">
+                      <div className="relative">
+                        <div
+                          onClick={() => handleChangeTab(getNextTabId() || '')}
+                          className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                        >
+                          Next Tab
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={20}
+                            height={20}
+                            fill="none"
+                          >
+                            <path
+                              className="fill-bw-1 group-hover:fill-primary"
+                              fillRule="evenodd"
+                              d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-              <ul className="list-disc text-base ml-3">
-                {activity?.course_outcomes?.map((e: any) => {
-                  return (
-                    <li className="ml-4" key={e?.id}>
-                      <EditorReader
-                        className="editor-wrap mt-1.5"
-                        text_editor_content={e.description}
-                      />
-                    </li>
-                  )
-                })}
-              </ul>
             </div>
           )}
+          {!course_tab_documents?.length && <div className="py-3"></div>}
         </div>
-
-        <div className="bg-gray-3">
-          <div className="flex gap-2 px-6 flex-wrap">
-            {selector.tabs?.map((e) => {
-              return (
-                <SappButton
-                  key={e?.id}
-                  size="small"
-                  className="py-2.5 !px-3 text-medium-sm !font-normal"
-                  color={tabButtonColor(e?.id)}
-                  title={truncateString(e?.name, 60)}
-                  onClick={() => handleChangeTab(e?.id)}
-                ></SappButton>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* <FadeInOut show={!selector.loading}> */}
-        {!!course_tab_documents?.length && (
-          <div className="bg-white pb-6 mb-6">
-            <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
-              <div className="tab-content overflow-x-auto">
-                {course_tab_documents?.map((e, i) => {
-                  const marginBottom =
-                    i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                  if (e.type === 'QUIZ') {
-                    return (
-                      <div
-                        className={marginBottom}
-                        key={e?.id + '_' + i + '_' + selector.currentTabId}
-                        ref={quizDocumentRef}
-                      >
-                        <QuizDocument
-                          questions={[
-                            ...(e.quiz?.multiple_choice_questions || []),
-                            ...(e.quiz?.constructed_questions || []),
-                          ]}
-                          activityId={activity?.id as string}
-                          tabId={selector.currentTabId || ''}
-                          quizId={e?.quiz?.id || ''}
-                          grading_preference={
-                            e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
-                          }
-                          document_id={e?.id}
-                          is_graded={e?.quiz?.is_graded || false}
-                          setOpenFile={handleOpenScratchPad}
-                          class_user_id={activity?.class_user_id}
-                        ></QuizDocument>
+        {/* </FadeInOut> */}
+        {(activity?.previous_activity ||
+          activity?.next_activity ||
+          (nextActivityIndex !== -1 &&
+            nextActivityIndex !== sessionData?.length - 1) ||
+          (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
+            <div data-aos={ANIMATION.DATA_AOS}>
+              <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
+                <div className={`flex flex-nowrap gap-5 justify-${(activity?.previous_activity ||
+                  (previousActivityIndex !== -1 &&
+                    previousActivityIndex !== 0)) ? 'between' : 'end'}`}>
+                  {(activity?.previous_activity ||
+                    (previousActivityIndex !== -1 &&
+                      previousActivityIndex !== 0)) && (
+                      <div className="w-1/2">
+                        <div
+                          onClick={() => {
+                            router.push({
+                              pathname: `/courses/${router.query.id}/activity/${activity?.previous_activity?.id ||
+                                activityIds[previousActivityIndex - 1]
+                                }`,
+                            })
+                          }}
+                          className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                        >
+                          Previous Activity
+                        </div>
+                        <div className="text-medium-sm text-gray-1 flex">
+                          {getCourseIcon(
+                            activity?.previous_activity
+                              ? activity?.previous_activity?.display_icon
+                              : findActivityByIndex(previousActivityIndex - 1)
+                                ?.display_icon,
+                          )}
+                          <SappTooltip
+                            title={
+                              activity?.previous_activity
+                                ? activity?.previous_activity.name
+                                : findActivityByIndex(previousActivityIndex - 1)?.name
+                            }
+                          >
+                            <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                              {activity?.previous_activity
+                                ? activity?.previous_activity.name
+                                : findActivityByIndex(previousActivityIndex - 1)
+                                  ?.name}
+                            </span>
+                          </SappTooltip>
+                        </div>
                       </div>
-                    )
-                  }
-                  if (e.type === 'TEXT') {
-                    return (
-                      <div
-                        className={marginBottom}
-                        key={i + '_' + selector?.currentTabId}
-                      >
-                        <TextDocument
-                          text_editor_content={e?.text_editor_content}
-                        ></TextDocument>
+                    )}
+                  {!activity?.previous_activity && <div></div>}
+                  {(activity?.next_activity ||
+                    (nextActivityIndex !== -1 &&
+                      nextActivityIndex !== sessionData?.length - 1)) && (
+                      <div className="w-1/2">
+                        <div
+                          onClick={() => {
+                            router.push({
+                              pathname: `/courses/${router.query.id}/activity/${activity?.next_activity
+                                ? activity?.next_activity?.id
+                                : activityIds[nextActivityIndex + 1]
+                                }`,
+                            })
+                          }}
+                          className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                        >
+                          Next Activity
+                        </div>
+                        <div className="text-medium-sm text-gray-1 flex justify-end">
+                          <SappTooltip
+                            title={
+                              activity?.next_activity
+                                ? activity?.next_activity.name
+                                : findActivityByIndex(nextActivityIndex + 1)?.name
+                            }
+                          >
+                            <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
+                              {activity?.next_activity
+                                ? activity?.next_activity.name
+                                : findActivityByIndex(nextActivityIndex + 1)?.name}
+                            </span>
+                          </SappTooltip>
+                          {getCourseIcon(
+                            activity?.next_activity
+                              ? activity?.next_activity?.display_icon
+                              : findActivityByIndex(nextActivityIndex + 1)
+                                ?.display_icon,
+                          )}
+                        </div>
                       </div>
-                    )
-                  }
-                  if (e.type === 'VIDEO') {
-                    return (
-                      <div
-                        className={marginBottom}
-                        key={i + '_' + selector?.currentTabId}
-                      >
-                        <VideoDocument
-                          videos={e?.videos}
-                          activityId={activity?.id as string}
-                          tabId={selector?.currentTabId || ''}
-                          streamRefProp={(el: any) =>
-                            (videoRef.current[i || 0] = el)
-                          }
-                          handleProcess={handleFinishedCourseSectionProgress}
-                          document_id={e?.id}
-                          quizId={e?.quiz?.id || ''}
-                          grading_preference={
-                            e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
-                          }
-                          class_user_id={activity?.class_user_id}
-                        ></VideoDocument>
-                      </div>
-                    )
-                  }
-                  return null
-                })}
+                    )}
+                  {!activity?.next_activity && <div></div>}
+                </div>
               </div>
+            </div>
+          )}
 
-              {activity?.files?.length > 0 && (
-                <>
-                  <SAPPBorder />
+        <div ref={endActivityRef}></div>
+        <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+          <Discussion class_id={(router.query.id as string) || ''} />
+        </div>
+        {openScratchPad.map((e, index: number) => {
+          if (e.type === 'file') {
+            return (
+              <MovableWindow
+                position={{
+                  width: '595px',
+                  height: '842px',
+                  top: 'calc(50% - 421px)',
+                  left: 'calc(50% - 300px)',
+                }}
+                key={e?.id}
+                onClick={() => setOnFocusingPad(e?.id)}
+                zIndex={
+                  onFocusingPad === e?.id
+                    ? openScratchPad.length + 1400
+                    : index + 1400
+                }
+                fixed
+              // not_resizable
+              // className='pointer-events-none'
+              >
+                <div className="absolute h-full w-full  top-0 left-0 border">
+                  <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div className="text-sm font-normal truncate">
+                      {e.fileName}
+                    </div>
+                    {/* <CloseIcon */}
+                    <button onClick={() => handleCloseScratchPad(e)}>
+                      <CloseIcon />
+                    </button>
+                  </div>
                   <div
-                    className={`pt-8 ${getPreviousTabId() ? 'pb-4' : 'pb-0'} `}
+                    className="overflow-auto p-4 bg-white"
+                    style={{ height: 'calc(100% - 40px' }}
                   >
-                    <div className="font-semibold text-base">Resource:</div>
-                    <ul className="list-disc text-base">
-                      {activity?.files.map((e: any, index: number) => {
+                    {/* <div className='flex flex-'> */}
+                    <PdfViewer file={e.file} />
+                  </div>
+                  {/* </div> */}
+                </div>
+              </MovableWindow>
+            )
+          } else if (e.type === 'exhibits') {
+            return (
+              <MovableWindow
+                position={{
+                  width: '600px',
+                  height: '400px',
+                  top: exhibitsPopupPosition.top,
+                  left: exhibitsPopupPosition.left,
+                }}
+                key={e?.id}
+                onClick={() => setOnFocusingPad(e?.id)}
+                zIndex={
+                  onFocusingPad === e?.id
+                    ? openScratchPad.length + 1400
+                    : index + 1400
+                }
+              >
+                <div className="absolute h-full w-full  top-0 left-0 border">
+                  <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
+                    <div className="truncate">
+                      <span className="font-semibold text-base text-bw-1">{`Exhibit ${e?.index + 1
+                        }: `}</span>
+                      {e?.name}
+                    </div>
+                    <button onClick={() => handleCloseScratchPad(e)}>
+                      <CloseIcon />
+                    </button>
+                  </div>
+                  <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                    <EditorReader
+                      text_editor_content={e?.description}
+                      className=" w-full "
+                    />
+                    {e?.files?.length > 0 &&
+                      e?.files.map((e: any, index: number) => {
                         return (
                           <div
-                            className={`flex justify-between group cursor-pointer ${index === 0 ? 'mt-4' : 'mt-5'
-                              }`}
                             key={index}
+                            className="cursor-pointer text-state-info hover:underline"
+                            onClick={() =>
+                              handleOpenScratchPad(
+                                { type: 'file' },
+                                e.resource.url,
+                                e?.resource?.name,
+                              )
+                            }
                           >
-                            <div className="flex">
-                              <div className="mr-2 group-hover:text-primary flex self-center">
-                                <LinkIcon />
-                              </div>
-                              <div
-                                className="cursor-pointer text-gray-1 group-hover:text-primary"
-                                onClick={() => {
-                                  handleOpenScratchPad(
-                                    {
-                                      type: 'file',
-                                    },
-                                    e.resource.url,
-                                    e?.resource?.name,
-                                  )
-                                }}
-                              >
-                                {e?.resource?.name}
-                              </div>
-                            </div>
-                            <a
-                              onClick={() =>
-                                download(
-                                  e?.resource?.name,
-                                  e?.resource?.file_key,
-                                )
-                              }
-                            >
-                              <DownloadIcon />
-                            </a>
+                            {e?.resource?.name}
                           </div>
                         )
                       })}
-                    </ul>
                   </div>
-                  {getPreviousTabId() && <SAPPBorder className="mt-4" />}
-                </>
-              )}
-
-              <div className="flex justify-between flex-wrap gap-5 mt-8">
-                {getPreviousTabId() && (
-                  <div className="w-auto">
-                    <div className="relative">
-                      <div
-                        onClick={() =>
-                          handleChangeTab(getPreviousTabId() || '')
-                        }
-                        className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width={20}
-                          height={20}
-                          fill="none"
-                        >
-                          <path
-                            className="fill-bw-1 group-hover:fill-primary"
-                            fillRule="evenodd"
-                            d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        Previous Tab
-                      </div>
-                      <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
-                    </div>
-                  </div>
-                )}
-                {getNextTabId() && (
-                  <div className="w-auto relative ml-auto">
-                    <div className="relative">
-                      <div
-                        onClick={() => handleChangeTab(getNextTabId() || '')}
-                        className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                      >
-                        Next Tab
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width={20}
-                          height={20}
-                          fill="none"
-                        >
-                          <path
-                            className="fill-bw-1 group-hover:fill-primary"
-                            fillRule="evenodd"
-                            d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-        {!course_tab_documents?.length && <div className="py-3"></div>}
-      </div>
-      {/* </FadeInOut> */}
-      {(activity?.previous_activity ||
-        activity?.next_activity ||
-        (nextActivityIndex !== -1 &&
-          nextActivityIndex !== sessionData?.length - 1) ||
-        (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
-          <div data-aos={ANIMATION.DATA_AOS}>
-            <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
-              <div className={`flex flex-nowrap gap-5 justify-${(activity?.previous_activity ||
-                  (previousActivityIndex !== -1 &&
-                    previousActivityIndex !== 0)) ? 'between' : 'end'}`}>
-                {(activity?.previous_activity ||
-                  (previousActivityIndex !== -1 &&
-                    previousActivityIndex !== 0)) && (
-                    <div className="w-1/2">
-                      <div
-                        onClick={() => {
-                          router.push({
-                            pathname: `/courses/${router.query.id}/activity/${activity?.previous_activity?.id ||
-                              activityIds[previousActivityIndex - 1]
-                              }`,
-                          })
-                        }}
-                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
-                      >
-                        Previous Activity
-                      </div>
-                      <div className="text-medium-sm text-gray-1 flex">
-                        {getCourseIcon(
-                          activity?.previous_activity
-                            ? activity?.previous_activity?.display_icon
-                            : findActivityByIndex(previousActivityIndex - 1)
-                              ?.display_icon,
-                        )}
-                        <SappTooltip
-                          title={
-                            activity?.previous_activity
-                              ? activity?.previous_activity.name
-                              : findActivityByIndex(previousActivityIndex - 1)?.name
-                          }
-                        >
-                          <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
-                            {activity?.previous_activity
-                              ? activity?.previous_activity.name
-                              : findActivityByIndex(previousActivityIndex - 1)
-                                ?.name}
-                          </span>
-                        </SappTooltip>
-                      </div>
-                    </div>
-                  )}
-                {!activity?.previous_activity && <div></div>}
-                {(activity?.next_activity ||
-                  (nextActivityIndex !== -1 &&
-                    nextActivityIndex !== sessionData?.length - 1)) && (
-                    <div className="w-1/2">
-                      <div
-                        onClick={() => {
-                          router.push({
-                            pathname: `/courses/${router.query.id}/activity/${activity?.next_activity
-                                ? activity?.next_activity?.id
-                                : activityIds[nextActivityIndex + 1]
-                              }`,
-                          })
-                        }}
-                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                      >
-                        Next Activity
-                      </div>
-                      <div className="text-medium-sm text-gray-1 flex justify-end">
-                        <SappTooltip
-                          title={
-                            activity?.next_activity
-                              ? activity?.next_activity.name
-                              : findActivityByIndex(nextActivityIndex + 1)?.name
-                          }
-                        >
-                          <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
-                            {activity?.next_activity
-                              ? activity?.next_activity.name
-                              : findActivityByIndex(nextActivityIndex + 1)?.name}
-                          </span>
-                        </SappTooltip>
-                        {getCourseIcon(
-                          activity?.next_activity
-                            ? activity?.next_activity?.display_icon
-                            : findActivityByIndex(nextActivityIndex + 1)
-                              ?.display_icon,
-                        )}
-                      </div>
-                    </div>
-                  )}
-                {!activity?.next_activity && <div></div>}
-              </div>
-            </div>
-          </div>
-        )}
-
-      <div ref={endActivityRef}></div>
-      <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-        <Discussion class_id={(router.query.id as string) || ''} />
-      </div>
-      {openScratchPad.map((e, index: number) => {
-        if (e.type === 'file') {
-          return (
-            <MovableWindow
-              position={{
-                width: '595px',
-                height: '842px',
-                top: 'calc(50% - 421px)',
-                left: 'calc(50% - 300px)',
-              }}
-              key={e?.id}
-              onClick={() => setOnFocusingPad(e?.id)}
-              zIndex={
-                onFocusingPad === e?.id
-                  ? openScratchPad.length + 1400
-                  : index + 1400
-              }
-              fixed
-            // not_resizable
-            // className='pointer-events-none'
-            >
-              <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
-                  <div className="text-sm font-normal truncate">
-                    {e.fileName}
-                  </div>
-                  {/* <CloseIcon */}
-                  <button onClick={() => handleCloseScratchPad(e)}>
-                    <CloseIcon />
-                  </button>
                 </div>
-                <div
-                  className="overflow-auto p-4 bg-white"
-                  style={{ height: 'calc(100% - 40px' }}
-                >
-                  {/* <div className='flex flex-'> */}
-                  <PdfViewer file={e.file} />
-                </div>
-                {/* </div> */}
-              </div>
-            </MovableWindow>
-          )
-        } else if (e.type === 'exhibits') {
-          return (
-            <MovableWindow
-              position={{
-                width: '600px',
-                height: '400px',
-                top: exhibitsPopupPosition.top,
-                left: exhibitsPopupPosition.left,
-              }}
-              key={e?.id}
-              onClick={() => setOnFocusingPad(e?.id)}
-              zIndex={
-                onFocusingPad === e?.id
-                  ? openScratchPad.length + 1400
-                  : index + 1400
-              }
-            >
-              <div className="absolute h-full w-full  top-0 left-0 border">
-                <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
-                  <div className="truncate">
-                    <span className="font-semibold text-base text-bw-1">{`Exhibit ${e?.index + 1
-                      }: `}</span>
-                    {e?.name}
-                  </div>
-                  <button onClick={() => handleCloseScratchPad(e)}>
-                    <CloseIcon />
-                  </button>
-                </div>
-                <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
-                  <EditorReader
-                    text_editor_content={e?.description}
-                    className=" w-full "
-                  />
-                  {e?.files?.length > 0 &&
-                    e?.files.map((e: any, index: number) => {
-                      return (
-                        <div
-                          key={index}
-                          className="cursor-pointer text-state-info hover:underline"
-                          onClick={() =>
-                            handleOpenScratchPad(
-                              { type: 'file' },
-                              e.resource.url,
-                              e?.resource?.name,
-                            )
-                          }
-                        >
-                          {e?.resource?.name}
-                        </div>
-                      )
-                    })}
-                </div>
-              </div>
-            </MovableWindow>
-          )
-        }
-      })}
-      {/* <PopupViewPdf
+              </MovableWindow>
+            )
+          }
+        })}
+        {/* <PopupViewPdf
         open={openPdf?.status || false}
         setOpen={setOpenPdf}
         url={openPdf?.url || ''}
       /> */}
-    </div>
+      </div>
     </SappLoadingGlobal>
   )
 }

@@ -7,12 +7,11 @@ import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import { CoursesAPI } from 'src/pages/api/courses'
+import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
 import { IResourceDetail, ISection } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import { downloadResource } from 'src/pages/api/activity'
 
 interface IProps {
   open: boolean
@@ -231,7 +230,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
   const download = async (name: string, file_key: string) => {
-    await downloadResource({
+    await CourseAPI.downloadResource({
       files: [
         {
           name: name,

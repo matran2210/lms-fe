@@ -107,20 +107,20 @@ export class ActivityAPI {
  */
 
 
-export const downloadResource = async (data: {
-  files: { name: string; file_key: string }[]
-}): Promise<any> => {
-  const res = await fetcher(`${apiURL}/resource/get-token-download`, {
-    method: 'POST',
-    data: data,
-  })
-  if (res?.success) {
-    const link = document.createElement('a')
-    link.href = `${apiURL}/resource/download?token=${res?.data}`
-    link.download = data.files[0].name
-    link.style.display = 'none'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-}
+// export const downloadResource = async (data: {
+//   files: { name: string; file_key: string }[]
+// }): Promise<any> => {
+//   const res = await fetcher(`${apiURL}/resource/get-token-download`, {
+//     method: 'POST',
+//     data: data,
+//   })
+//   if (res?.success) {
+//     const link = document.createElement('a')
+//     link.href = `${apiURL}/resource/download?token=${res?.data}`
+//     link.download = data.files[0].name
+//     link.style.display = 'none'
+//     document.body.appendChild(link)
+//     link.click()
+//     document.body.removeChild(link)
+//   }
+// }
