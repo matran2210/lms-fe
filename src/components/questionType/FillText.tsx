@@ -160,11 +160,6 @@ const AddWordPreview = forwardRef(
     return (
       <div ref={extenalRef}>
         <EditorReader
-          text_editor_content={data?.question_topic?.description}
-          className="sapp-questions"
-          highlighted={highlighted}
-        />
-        <EditorReader
           id="hightlight_area"
           onMouseUp={(e: any) => {
             if (
