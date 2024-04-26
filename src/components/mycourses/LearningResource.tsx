@@ -7,7 +7,7 @@ import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import CourseAPI from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { IResourceDetail, ISection } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -74,7 +74,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   async function getCourseSections(page_size: number) {
     try {
       if (open) {
-        const res = await CourseAPI.getCourseSectionList(
+        const res = await CoursesAPI.getCourseSectionList(
           router.query.courseId || router.query.id,
           page_size || DEFAULT_PAGESIZE,
         )
@@ -96,7 +96,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseSubsections(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'CHAPTER',
         selectedSection.value,
@@ -117,7 +117,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseUnit() {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
@@ -137,7 +137,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseActivity(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'ACTIVITY',
         selectedUnit.value,
@@ -164,7 +164,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   useEffect(() => {
     if (open && (router.query.courseId || router.query.id)) {
       setLoading(true)
-      CourseAPI.getCourseResource(
+      CoursesAPI.getCourseResource(
         router.query.courseId || router.query.id,
         DEFAULT_PAGESIZE,
         params,
@@ -190,7 +190,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const fetchData = async (params?: Object) => {
     setLoading(true)
     try {
-      const res = await CourseAPI.getCourseResource(
+      const res = await CoursesAPI.getCourseResource(
         router.query.courseId || router.query.id,
         pageIndex,
         params,

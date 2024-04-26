@@ -82,9 +82,9 @@ export class UploadAPI {
       const responseToken: IResponse<{
         data: string
         success: boolean
-      }> = await httpService.POST({
-        uri: 'resource/get-token-download',
-        request: data,
+      }> = await fetcher(`${apiURL}/resource/get-token-download`, {
+        data: data,
+        method: 'POST',
       })
       if (responseToken?.success) {
         const link = document.createElement('a')
@@ -117,8 +117,7 @@ const preUpload = async ({
     name: string
   }>
 > => {
-  return httpService.GET({
-    uri: `/resource/pre-upload/metadata`,
+  return fetcher(`${apiURL}/resource/pre-upload/metadata`, {
     params: {
       content_type,
       name,

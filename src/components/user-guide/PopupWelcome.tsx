@@ -5,7 +5,7 @@ import SappButton from '@components/base/button/SappButton'
 import { UserGuide } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { increment } from 'src/redux/slice/Course/UserGuide'
-import CourseAPI from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 
 type Props = {}
 
@@ -18,7 +18,7 @@ const PopupWelcome = ({}: Props) => {
 
   async function activeUserGuide() {
     try {
-      await CourseAPI.userGuideActive()
+      await CoursesAPI.userGuideActive()
     } catch (error) {}
   }
 

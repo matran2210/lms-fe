@@ -88,7 +88,7 @@ const MyCourse = () => {
       queryKey: ['myCourse'],
       queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
       getNextPageParam: (lastPage, allPages) => {
-        if (params.status || params.type || params.status === undefined || params.type === undefined) {
+        if (params.status || params.type) {
           return undefined; // Prevent fetching more pages if params change
         }
         return lastPage?.data.length ? allPages.length + 1 : undefined

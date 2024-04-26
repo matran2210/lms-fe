@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { PageLink } from 'src/constants'
 import { toast } from 'react-hot-toast'
 import exceptions from './en.exceptions.json'
@@ -11,6 +11,14 @@ import {
 } from '@utils/index'
 import { apiURL } from 'src/redux/services/httpService'
 
+type ApiConfig<T = any> = {
+  uri: string
+  params?: Object
+  data?: Object
+  request?: any
+  token?: String
+}
+
 // Variable to track whether the refresh token API has been called
 let isRefreshing = false
 let refreshSubscribers: ((token: string) => void)[] = []
@@ -21,18 +29,18 @@ export const getBaseUrl = () => {
   }
 }
 
-export const request = axios.create({
+export const request1: AxiosInstance = axios.create({
   baseURL: getBaseUrl(),
 })
 
 export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
-  request(url, config)
+request1(url, config)
     .then((res) => res?.data)
     .catch((err) => {
       throw err
     })
 
-request.interceptors.request.use(
+    request1.interceptors.request.use(
   (config) => {
     config.headers['Content-Type'] = 'application/json' // Change to your preferred content type
     return config
@@ -43,7 +51,7 @@ request.interceptors.request.use(
   },
 )
 
-request.interceptors.request.use((config: any) => {
+request1.interceptors.request.use((config: any) => {
   config.headers = {
     Authorization: 'Bearer ' + getLocalStorgeActToken(),
     ...config.headers,
@@ -52,8 +60,8 @@ request.interceptors.request.use((config: any) => {
   return config
 })
 
-request.interceptors.response.use(
-  function (response) {
+request1.interceptors.response.use(
+  function (response: AxiosResponse) {
     return response
   },
   async (error: any) => {
@@ -84,7 +92,7 @@ request.interceptors.response.use(
             setRefreshToken(userInfo?.rft)
 
             // update new token to axios
-            request.defaults.headers.common['Authorization'] =
+            request1.defaults.headers.common['Authorization'] =
               `Bearer ${getLocalStorgeActToken()}`
 
             // Callback to unauth API calls
@@ -115,7 +123,7 @@ request.interceptors.response.use(
   },
 )
 
-request.interceptors.response.use(
+request1.interceptors.response.use(
   function (response: any) {
     return response
   },
@@ -131,3 +139,21 @@ request.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+
+export const httpService11 = {
+  async POST_FORM_DATA<T, O>(apiConfig: ApiConfig<T>) {
+    const { uri, request } = apiConfig
+
+    try {
+      const res = await request1.post<any>(uri, request, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      return res.data
+    } catch (error) {
+      throw error
+    }
+  },
+
+}

@@ -56,48 +56,6 @@ export const RouteGuard = ({ children }: IProps) => {
     } else {
       setAuthorized(true)
     }
-
-    // Chặn vào login page khi đã đăng nhập
-    const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
-    if (isLoginPage && accessToken) {
-      try {
-        await dispatch(getMe()).unwrap()
-        router.push(PageLink.DASHBOARD)
-      } catch (error) {
-        try {
-          const refreshResponse = await axios.post(
-            `${apiURL}/auth/rotate`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${refreshToken}`,
-              },
-            },
-          )
-          const userInfo = refreshResponse?.data?.data?.tokens
-          const act = userInfo?.act
-          const rft = userInfo?.rft
-          // Save the new access token to the AsyncStorage
-          if (typeof window !== 'undefined') {
-            await AsyncStorage.setItem('accessToken', act)
-            await AsyncStorage.setItem('refreshToken', rft)
-          }
-          setCookieActToken(act)
-          setCookieRefreshToken(rft)
-          if (accessToken && refreshToken) {
-            router.push(PageLink.DASHBOARD)
-          }
-        } catch (refreshError) {
-          removeJwtToken()
-          return {
-            redirect: {
-              destination: PageLink.AUTH_LOGIN,
-              permanent: false,
-            },
-          }
-        }
-      }
-    }
   }
 
   return authorized ? children : <></>

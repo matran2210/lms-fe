@@ -95,38 +95,38 @@ const setAuthorizationHeader = async (config: any) => {
 }
 
 // Add a request interceptor to the Axios instance
-axiosInstance.interceptors.request.use(
-  async (config: any) => {
-    // Set the authorization header
-    await setAuthorizationHeader(config)
+// axiosInstance.interceptors.request.use(
+//   async (config: any) => {
+//     // Set the authorization header
+//     await setAuthorizationHeader(config)
 
-    // If the request is a refresh token request, return the config
-    if (config.url === '/auth/rotate') {
-      return config
-    }
+//     // If the request is a refresh token request, return the config
+//     if (config.url === '/auth/rotate') {
+//       return config
+//     }
 
-    // If the access token is not present, return the config
-    if (!config.headers.Authorization) {
-      return config
-    }
+//     // If the access token is not present, return the config
+//     if (!config.headers.Authorization) {
+//       return config
+//     }
 
-    // If the access token is present and the refresh flag is false, return the config
-    if (!isRefreshing) {
-      return config
-    }
+//     // If the access token is present and the refresh flag is false, return the config
+//     if (!isRefreshing) {
+//       return config
+//     }
 
-    // If the access token is present and the refresh flag is true, block the request and add it to the subscribers array
-    await new Promise((resolve) => refreshSubscribers.push(resolve))
-    config.headers.Authorization = `Bearer ${await AsyncStorage.getItem(
-      'accessToken',
-    )}`
-    return config
-  },
-  (error: AxiosError) => {
-    // If there is an error, return the Promise.reject() method
-    return Promise.reject(error)
-  },
-)
+//     // If the access token is present and the refresh flag is true, block the request and add it to the subscribers array
+//     await new Promise((resolve) => refreshSubscribers.push(resolve))
+//     config.headers.Authorization = `Bearer ${await AsyncStorage.getItem(
+//       'accessToken',
+//     )}`
+//     return config
+//   },
+//   (error: AxiosError) => {
+//     // If there is an error, return the Promise.reject() method
+//     return Promise.reject(error)
+//   },
+// )
 
 // Add a response interceptor to the Axios instance
 axiosInstance.interceptors.response.use(
@@ -332,7 +332,7 @@ export const httpService = {
       const res = await axiosInstance.post<O>(uri, request, {
         ...params,
         headers: {
-          ...(params as any)?.headers,
+          // ...(params as any)?.headers,
           'Content-Type': 'multipart/form-data',
         },
       })
