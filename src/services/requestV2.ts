@@ -139,21 +139,3 @@ request1.interceptors.response.use(
     return Promise.reject(error)
   },
 )
-
-export const httpService11 = {
-  async POST_FORM_DATA<T, O>(apiConfig: ApiConfig<T>) {
-    const { uri, request } = apiConfig
-
-    try {
-      const res = await request1.post<any>(uri, request, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      return res.data
-    } catch (error) {
-      throw error
-    }
-  },
-
-}
