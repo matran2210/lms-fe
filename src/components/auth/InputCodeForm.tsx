@@ -7,6 +7,7 @@ import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
 import AuthApi from 'src/redux/services/Authen'
 import useCountdown from './Countdown'
+import { AuthAPI } from '../../pages/api/profile/index';
 
 interface IInputCodeFormProps {
   error?: string
@@ -67,7 +68,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const onResendCode = async () => {
     setLoading(true)
     try {
-      const response = await AuthApi.sendEmail({ email })
+      const response = await AuthAPI.sendEmail({ email })
       if (!response.success) {
         setErrorMessage('Resend code failed. Please try again')
         return
@@ -95,7 +96,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const handleVerifyCode = async () => {
     try {
       setLoading(true)
-      const response = await AuthApi.verifyOtp({
+      const response = await AuthAPI.verifyOtp({
         code: code?.join(''),
         token: currentToken,
       })

@@ -1,6 +1,6 @@
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { useEffect, useState } from 'react'
-import MyProfileAPI from 'src/pages/api/profile'
+import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
 
 const Certificate = () => {
@@ -11,7 +11,7 @@ const Certificate = () => {
 
   const fetchChapterDetail = async () => {
     try {
-      const res = await MyProfileAPI.getCertificate(1, 10)
+      const res = await AuthAPI.getCertificate(1, 10)
       const certificate = res.data.certificates
       const totalCertificate = res.data.meta.total_records
       const userDetail = res.username

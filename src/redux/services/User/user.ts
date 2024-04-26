@@ -1,8 +1,8 @@
 import { IUser } from 'src/redux/types/User/urser'
-import { apiURL, httpService } from '../httpService'
+import { httpService } from '../httpService'
 import url from './url'
 import { IResponse } from 'src/redux/types'
-import axios from 'axios'
+import { AuthAPI } from 'src/pages/api/profile'
 
 const UserApi = {
   /**
@@ -11,11 +11,8 @@ const UserApi = {
    */
   getMe: (): Promise<IUser> => {
     // Đường dẫn api để lấy thông tin người dùng
-    const uri = url.me
     // Sử dụng httpService để gửi yêu cầu GET
-    return httpService.GET<any, IUser>({
-      uri,
-    })
+    return AuthAPI.me()
   },
   /**
    * Một hàm để lấy khóa học và certificate của người dùng hiện tại
@@ -24,9 +21,7 @@ const UserApi = {
     // Đường dẫn api để lấy khóa học và certificate của người dùng người dùng
     const uri = url.coursesAndCertificates
     // Sử dụng httpService để gửi yêu cầu GET
-    return httpService.GET<any, any>({
-      uri,
-    })
+    return AuthAPI.getUserInformation()
   },
   /**
    * Một hàm để cập nhật thông tin của người dùng
@@ -38,16 +33,8 @@ const UserApi = {
     full_name: string,
     avatar?: { [key: string]: string } | null,
   ): Promise<IResponse<{ message: string }>> => {
-    // Đường dẫn api để cập nhật thông tin người dùng
-    const uri = url.user
     // Sử dụng httpService để gửi yêu cầu PUT
-    return httpService.PUT<
-      { full_name: string; avatar?: { [key: string]: string } | null },
-      IResponse<{ message: string }>
-    >({
-      uri,
-      request: { full_name, avatar },
-    })
+    return AuthAPI.updateUser(full_name, avatar)
   },
 
   /**
@@ -67,44 +54,25 @@ const UserApi = {
       request: formData,
     })
   },
-
-  makeContactDefault: (id: string): Promise<any> => {
-    const uri = `${url.makeContactDefault}/${id}/make-this-default`
-    return httpService.POST<{}, IResponse<{ message: string }>>({
-      uri,
-    })
-  },
-  getListDevicesServerSide: async (
-    accessToken: string,
-  ): Promise<IResponse<any>> => {
-    const headers = {
-      Authorization: 'Bearer ' + accessToken,
-    }
-    const response = await axios.get<{}, IResponse<{ data: any }>>(
-      `${apiURL}${url.devices}`,
-      {
-        headers,
-      },
-    )
-    return response.data?.data
-  },
+  // getListDevicesServerSide: async (
+  //   accessToken: string,
+  // ): Promise<IResponse<any>> => {
+  //   const headers = {
+  //     Authorization: 'Bearer ' + accessToken,
+  //   }
+  //   const response = await axios.get<{}, IResponse<{ data: any }>>(
+  //     `${apiURL}${url.devices}`,
+  //     {
+  //       headers,
+  //     },
+  //   )
+  //   return response.data?.data
+  // },
   getListDevices: async (): Promise<IResponse<any>> => {
-    const uri = url.devices
-    const res = httpService.GET<any, any>({
-      uri,
-    })
-    return res
+    return AuthAPI.getListDevices()
   },
   getListHistory: async ({ page_index, page_size }: any): Promise<any> => {
-    const uri = url.history
-    const res = httpService.GET<any, any>({
-      uri,
-      params: {
-        page_index: page_index,
-        page_size: page_size,
-      },
-    })
-    return res
+    return AuthAPI.getListHistory({page_index, page_size})
   },
 }
 

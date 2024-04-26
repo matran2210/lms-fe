@@ -28,6 +28,7 @@ import PopUpLimit from './PopupLimit'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
+import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 interface IInputProps {
   login: string
   password: string
@@ -98,7 +99,7 @@ const LoginPage = () => {
 
   async function getListEntranceTest() {
     try {
-      const res = await EntranceApi.getListEntranceTestLogin()
+      const res = await EntranceTestAPI.getListEntranceTestLogin()
       if (res?.data?.length > 0) {
         router.push(PageLink.ENTRANCE_TEST)
       } else {
@@ -121,7 +122,7 @@ const LoginPage = () => {
           device_id: getFireBaseToken,
         }),
       )
-        // dispatch(getEntranceCount())
+        dispatch(getEntranceCount())
         .unwrap()
         .then((payload) => {
           getListEntranceTest()

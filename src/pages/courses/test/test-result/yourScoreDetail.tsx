@@ -9,6 +9,8 @@ import { ANIMATION, QUESTION_TYPES } from 'src/constants'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
+import { CoursesAPI } from '../../../api/courses/index'
+import { useQuery } from 'react-query'
 
 const headers = [
   {
@@ -57,56 +59,53 @@ const YourScoreDetail = ({
   className,
   yourScoreDetailRef,
 }: YourScoreDetailProps) => {
-  const [scoreDetail, setScoreDetail] = useState<any>({
-    answers: [],
-    meta: {},
-  })
   const router = useRouter()
 
-  const fetchScoreDetail = async (page_index: number, page_size: number) => {
-    try {
-      const res = await CourseTestApi.getQuizAttemptsTable(
+  const { data: scoreDetail } = useQuery(
+    ['scoreDetail', router.query.id],
+    async () => {
+      const res = await CoursesAPI.getQuizAttemptsTable(
         router.query.id as string,
-        page_index,
-        page_size,
+        {
+          page_index: 1,
+          page_size: 20,
+        },
       )
-      return res
-    } catch (error) {}
-  }
+      return res.data
+    },
+    {
+      enabled: router.query.id !== undefined,
+    },
+  )
 
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-      document.documentElement.offsetHeight
-    ) {
-      return
-    }
-    handlNextPage()
-  }
+  // const handleScroll = () => {
+  //   if (
+  //     window.innerHeight + document.documentElement.scrollTop !==
+  //     document.documentElement.offsetHeight
+  //   ) {
+  //     return
+  //   }
+  //   handlNextPage()
+  // }
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [scoreDetail])
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => window.removeEventListener('scroll', handleScroll)
+  // }, [scoreDetail])
 
-  const handlNextPage = async () => {
-    const totalPages = scoreDetail?.meta?.total_pages
-    const pageIndex = scoreDetail?.meta?.page_index
-    const pageSize = scoreDetail?.meta?.page_size
-    if (totalPages && pageIndex < totalPages) {
-      const res = await fetchScoreDetail(pageIndex + 1, pageSize)
-      const results = scoreDetail?.answers?.concat(res?.data?.answers)
-      setScoreDetail({
-        meta: res?.data?.meta,
-        answers: results,
-      })
-    }
-  }
-
-  const getScoreDetail = async () => {
-    const res = await fetchScoreDetail(1, 10)
-    setScoreDetail(res?.data)
-  }
+  // const handlNextPage = async () => {
+  //   const totalPages = scoreDetail?.meta?.total_pages
+  //   const pageIndex = scoreDetail?.meta?.page_index
+  //   const pageSize = scoreDetail?.meta?.page_size
+  //   if (totalPages && pageIndex < totalPages) {
+  //     const res = await fetchScoreDetail(pageIndex + 1, pageSize)
+  //     const results = scoreDetail?.answers?.concat(res?.data?.answers)
+  //     setScoreDetail({
+  //       meta: res?.data?.meta,
+  //       answers: results,
+  //     })
+  //   }
+  // }
 
   // Hàm ánh xạ giá trị enum với tên tương ứng
   const getTypeName = (type: QUESTION_TYPES): string => {
@@ -131,10 +130,6 @@ const YourScoreDetail = ({
         return '--'
     }
   }
-
-  useEffect(() => {
-    getScoreDetail()
-  }, [router])
 
   return (
     <div

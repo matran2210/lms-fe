@@ -1,37 +1,33 @@
 import Course from './Course'
-import { ICourseAll } from 'src/type/courses'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { ICourse } from 'src/type/courses'
+import React from 'react'
 
 interface CoursesProps {
-  courses: ICourseAll
-  setData: Dispatch<SetStateAction<ICourseAll>>
-  setLoading: Dispatch<SetStateAction<boolean>>
+  courses: ICourse[]
+  // setData: Dispatch<SetStateAction<ICourseAll>>
+  // setLoading: Dispatch<SetStateAction<boolean>>
+  lastElementRef: (node: HTMLDivElement) => void
+  refetch: () => void
 }
 
 const CoursesList: React.FC<CoursesProps> = ({
   courses,
-  setData,
-  setLoading,
+  lastElementRef,
+  refetch
 }) => {
   return (
     <>
-      {courses?.courses?.length > 0 ? (
+      {courses && (
         <div className="grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-6 xl-max:px-6">
-          {courses?.courses?.map((course, index: number) => (
+          {courses?.map((course, index: number) => (
             <Course
               key={index}
               course={course}
               index={index}
-              setData={setData}
-              setLoading={setLoading}
+              lastElementRef={lastElementRef}
+              refetch={refetch}
             />
           ))}
-        </div>
-      ) : (
-        <div className="mx-6 lg:mx-0">
-          <div className="bg-white flex items-center justify-center py-4.5 px-7.5 w-full">
-            Course not found!
-          </div>
         </div>
       )}
     </>

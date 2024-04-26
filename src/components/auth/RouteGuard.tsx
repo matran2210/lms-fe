@@ -4,6 +4,8 @@ import {
   getRefreshToken,
   setCookieActToken,
   setCookieRefreshToken,
+  getLocalStorgeActToken,
+  getLocalStorgeRefreshToken,
 } from '@utils/index'
 import axios from 'axios'
 import { useRouter } from 'next/router'
@@ -49,8 +51,8 @@ export const RouteGuard = ({ children }: IProps) => {
     // not logged in
 
     const path = url?.split('?')?.[0]
-    const accessToken = getActToken()
-    const refreshToken = getRefreshToken()
+    const accessToken = getLocalStorgeActToken()
+    const refreshToken = getLocalStorgeRefreshToken()
     if (!accessToken && !refreshToken && !PUBLIC_PATHS[path]) {
       setAuthorized(false)
       router.push(PageLink.AUTH_LOGIN)
@@ -65,33 +67,6 @@ export const RouteGuard = ({ children }: IProps) => {
         await dispatch(getMe()).unwrap()
         router.push(PageLink.DASHBOARD)
       } catch (error) {
-        try {
-          const refreshResponse = await axios.post(
-            `${apiURL}/auth/rotate`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${refreshToken}`,
-              },
-            },
-          )
-          const userInfo = refreshResponse?.data?.data?.tokens
-          const act = userInfo?.act
-          const rft = userInfo?.rft
-          setCookieActToken(act)
-          setCookieRefreshToken(rft)
-          if (accessToken && refreshToken) {
-            router.push(PageLink.DASHBOARD)
-          }
-        } catch (refreshError) {
-          removeJwtToken()
-          return {
-            redirect: {
-              destination: PageLink.AUTH_LOGIN,
-              permanent: false,
-            },
-          }
-        }
       }
     }
   }
