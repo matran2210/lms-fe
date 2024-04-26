@@ -221,9 +221,11 @@ const TestDetail = ({ questions, quizDetail }: any) => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
-            name={`${currentTabID}_answer`}
+            name={`${currentTabID}_${essayData?.index}_answer`}
             setValue={setValue}
-            defaultValue={getValues(`${currentTabID}_answer`)}
+            defaultValue={getValues(
+              `${currentTabID}_${essayData?.index}_answer`,
+            )}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -495,7 +497,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value = getValues(`${currentContent.id}_answer`)
+      const value = getValues(`${currentContent.id}_${essayData?.index}_answer`)
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
@@ -857,7 +859,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return answers
       } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
         const answers = handleSaveAnswer(
-          getValues(`${currentPage}_answer`),
+          getValues(`${currentPage}_${essayData?.index}_answer`),
           currentContent.id,
           tabs,
         )
@@ -1014,10 +1016,40 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       return arr
     })
   }
+  const [answerList, setAnswerList] = useState<{ answer: any }[]>([])
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
+
+  const setAnswerListValue = (id: string, index: number) => {
+    if (answerList[index]) {
+      setValue(`${currentPage}_answer`, answerList[index].answer)
+    }
+    setAnswerList((prevAnswerList) => {
+      const updatedList = [...prevAnswerList]
+
+      updatedList[currentIndex] = {
+        answer: getValues(`${currentPage}_${essayData?.index}_answer`) || '',
+      }
+
+      setCurrentIndex(index)
+
+      return updatedList
+    })
+  }
+
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
-    let answers = []
+    let answers: {
+      question_id: any
+      question_answer_id?: any
+      time_spent: number
+      answer?: any
+      short_answer?: any
+      requirement_id?: any
+      response_option?: any
+      active?: string
+      answer_file?: any
+    }[] = []
     let reformTabs: any[] = []
     setLoading(true)
     setSubmited(true)
@@ -1098,10 +1130,10 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
         if (checkAnswered(e)) {
-          e?.requirements?.forEach((requirement: any) => {
+          e?.data?.requirements?.forEach((requirement: any, index: any) => {
             answers.push({
               question_id: e.id,
-              short_answer: e.answer || '',
+              short_answer: answerList[index]?.answer || e.answer || '',
               requirement_id: requirement.id || '',
               response_option: e.data.response_option
                 ? e.data.response_option
@@ -2075,6 +2107,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                                 essayData.index !== index && 'text-gray-1'
                               }`}
                               onClick={() => {
+                                setAnswerListValue(e.id, index)
                                 setEssayData({ req: e, index: index })
                                 rightSideRef?.current &&
                                   rightSideRef.current.scrollTo({
