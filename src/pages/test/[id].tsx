@@ -22,7 +22,6 @@ import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import PDFViewer from '@components/base/pdf/pdf-viewer'
 import TabSlide from '@components/base/tabSlide/TabSlide'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
@@ -34,14 +33,7 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { LAYOUT } from '@utils/constants'
-import {
-  runHighlight,
-  setCookieActToken,
-  setCookieRefreshToken,
-  removeJwtToken,
-} from '@utils/index'
-import axios from 'axios'
-import { parse } from 'cookie'
+import { runHighlight, useGetDataQuery } from '@utils/index'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
@@ -49,7 +41,6 @@ import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
-import { apiURL } from 'src/redux/services/httpService'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
@@ -60,12 +51,19 @@ import LimitQuizModal from './limitQuizModal'
 import SappLoading from 'src/common/SappLoading'
 import toast from 'react-hot-toast'
 import ScratchPatch from './scratchPatch'
+import { CoursesAPI } from '../api/courses'
+import { TestAPI } from '../api/test'
 
 type Window = {
   userAgreed: any
 }
 interface ScratchPadValue {
+  id: string
+  value: string
+}
+interface ScratchPad {
   question_id: string
+  id: string
   scratch_pad: string
 }
 declare global {
@@ -73,7 +71,7 @@ declare global {
     userAgreed: any
   }
 }
-const TestDetail = ({ questions, quizDetail }: any) => {
+const TestDetail = () => {
   const checkType = (
     data: any,
     type: string,
@@ -240,10 +238,37 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return <div></div>
     }
   }
+
   const router = useRouter()
+
+  const useGetQuizDetail = (queryKey: string, params: Object) => {
+    return useGetDataQuery(
+      queryKey,
+      params,
+      () => CoursesAPI.getDetailQuizById(router.query.id),
+      router.query.id !== undefined,
+    )
+  }
+
+  const useGetQuestionTabs = (queryKey: string, params: Object) => {
+    return useGetDataQuery(
+      queryKey,
+      params,
+      () => CoursesAPI.getQuestionTabsById(router.query.id),
+      router.query.id !== undefined,
+    )
+  }
+
+  // Sử dụng hook useGetQuizDetail trong component
+  const { data: quizDetail } = useGetQuizDetail('quiz-detail', {})
+
+  // Sử dụng hook useGetQuestionTabs trong component
+  const { data: questions } = useGetQuestionTabs('question-detail', {})
+
   const type = router.query.type
 
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
+
   // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control: controlScratch } = useForm()
@@ -610,7 +635,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     return value
   }
   const getResult = async (currentTabContent: any) => {
-    const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
+    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -790,7 +815,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     // setLoading(false)
   }
   const getResultAll = async (currentTabContent: any) => {
-    const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
+    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -875,12 +900,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 
   async function getDetail(currentPage: string) {
     try {
-      const topicDescription = await CourseTestApi.getTopicDescription(
+      const topicDescription = await CoursesAPI.getTopicDescription(
         questions[questions.findIndex((e: any) => e.id === currentPage)]
           .question_topic_id,
         quizDetail?.id,
       )
-      const res = await CourseTestApi.getQuestionsDetail(currentPage)
+      const res = await CoursesAPI.getQuestionsDetail(currentPage)
       return { topicDescription, res }
     } catch (err) {
       return { topicDescription: { data: {} }, res: { data: [] } }
@@ -888,8 +913,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   }
 
   const handleChangeTab = async (currentTab: any) => {
-    setValueExhibits('exhibits', [])
     setLoading(true)
+    setScratchPadValues(null)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
@@ -1103,20 +1128,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
         if (checkAnswered(e)) {
-          e?.requirements?.forEach((requirement: any) => {
-            answers.push({
-              question_id: e.id,
-              short_answer: e.answer || '',
-              requirement_id: requirement.id || '',
-              response_option: e.data.response_option
-                ? e.data.response_option
-                : e.response_type === 0
-                  ? 'WORD'
-                  : 'SHEET',
-              time_spent: Math.ceil(e.timeSpent / 1000),
-              active: 'SUBMITED',
-              answer_file: e.answer_file,
-            })
+          answers.push({
+            question_id: e.id,
+            short_answer: e.answer || '',
+            response_option: e.data.response_option
+              ? e.data.response_option
+              : e.response_type === 0
+                ? 'WORD'
+                : 'SHEET',
+            time_spent: Math.ceil(e.timeSpent / 1000),
+            active: 'SUBMITED',
+            answer_file: e.answer_file,
           })
         }
       }
@@ -1132,7 +1154,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
+      const res = await CoursesAPI.submitQuestion(quizAttempId as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:
@@ -1154,7 +1176,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CourseTestApi.submitQuestion(quizAttempId as string, {
+      const res = await CoursesAPI.submitQuestion(quizAttempId as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:
@@ -1173,15 +1195,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setLoading(false)
     return
   }
-
   const [scratchPadValues, setScratchPadValues] = useState<
     ScratchPadValue | null | undefined
   >()
-  const [scratchPads, setScratchPads] = useState<ScratchPadValue[]>([])
 
   const handleChangeScratchPad = (
     e: ChangeEvent<HTMLInputElement>,
-    id: string,
+    id?: string,
   ) => {
     const { value } = e.target
     setScratchPadValues((prevState: any) => ({
@@ -1190,50 +1210,34 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       value,
     }))
   }
-
+  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
   useEffect(() => {
     if (currentPage) {
-      const item = scratchPads.find(
-        (item: ScratchPadValue) => item.question_id === currentPage,
-      )
-      item
-        ? setScratchPadValues({
-            question_id: item.question_id,
-            scratch_pad: item.scratch_pad,
+      const currentPageScratchPadValues = scratchPadValues?.value ?? ''
+      const currentPageScratchPadId = scratchPadValues?.id ?? ''
+      if (currentPageScratchPadValues) {
+        const index = scratchPads.findIndex(
+          (item: ScratchPad) => item.question_id === currentPage,
+        )
+        if (index !== -1) {
+          setScratchPads((prevScratchPads: any) => {
+            const newScratchPads = [...prevScratchPads]
+            newScratchPads[index].scratch_pad = currentPageScratchPadValues
+            return newScratchPads
           })
-        : setScratchPadValues({ question_id: currentPage, scratch_pad: '' })
-    }
-  }, [currentPage])
-
-  useEffect(() => {
-    if (scratchPadValues) {
-      const currentPageScratchPadId = scratchPadValues?.question_id
-      const currentPageScratchPadValues = scratchPadValues?.scratch_pad
-
-      const index = scratchPads.findIndex(
-        (item: ScratchPadValue) => item.question_id === currentPageScratchPadId,
-      )
-      // nếu tìm thấy ScratchPad đã tồn tại thì cập nhật giá trị
-      if (index !== -1) {
-        setScratchPads((prevScratchPads: ScratchPadValue[]) => {
-          const newScratchPads = [...prevScratchPads]
-          newScratchPads[index].scratch_pad = currentPageScratchPadValues
-          return newScratchPads
-        })
-      }
-      // tạo mới scratchPad
-      else {
-        setScratchPads((prevScratchPads: ScratchPadValue[]) => [
-          ...prevScratchPads,
-          {
-            question_id: currentPageScratchPadId,
-            scratch_pad: currentPageScratchPadValues,
-          },
-        ])
+        } else {
+          setScratchPads((prevScratchPads: any) => [
+            ...prevScratchPads,
+            {
+              question_id: currentPage,
+              id: currentPageScratchPadId,
+              scratch_pad: currentPageScratchPadValues,
+            },
+          ])
+        }
       }
     }
-  }, [scratchPadValues])
-
+  }, [currentPage, scratchPadValues])
   const handleClearSelection = (currentTabContent: any) => {
     const data = currentTabContent.data
     if (!currentTabContent.done) {
@@ -1392,41 +1396,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   // useEffect(() => {
 
   // }, [currentPage])
-  const [classId, setClassId] = useState('')
-  const [breadCrumb, setBreadCrumb] = useState<any>()
-  const backToPartDetailChapter = () => {
-    router.replace(
-      `/courses/${classId}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
-    )
-  }
-  const backToPartDetail = () => {
-    router.replace(`/courses/${classId}/section/${breadCrumb?.[1]?.id}`)
-  }
-  const backToEntranceTestList = () => {
-    router.replace(`/entrance-test`)
-  }
-  const backToCourseDetail = () => {
-    router.replace(`/courses/my-course/${classId}`)
-  }
-  const handleBack = () => {
-    if (breadCrumb && breadCrumb?.length >= 2) {
-      const lastItem = breadCrumb[breadCrumb?.length - 1]
-      if (
-        lastItem.course_section_type === 'MID_TERM_TEST' ||
-        lastItem.course_section_type === 'FINAL_TEST'
-      ) {
-        backToCourseDetail()
-      } else if (lastItem.course_section_type === 'TOPIC_TEST') {
-        backToPartDetail()
-      } else if (lastItem.course_section_type === 'CHAPTER_TEST') {
-        backToPartDetailChapter()
-      }
-    } else if (breadCrumb && breadCrumb.length === 0) {
-      backToCourseDetail()
-    } else if (!breadCrumb) {
-      backToEntranceTestList()
-    }
-  }
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
     for (let e in currentTabContent?.data?.exhibits) {
@@ -1454,21 +1423,13 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   useEffect(() => {
     async function createQuizAttempt() {
       try {
-        const res = await CourseTestApi.createQuizAttempt(
+        const res = await CoursesAPI.createQuizAttempt(
           router.query.id as string,
           router.query.class_user_id as string,
         )
-        if (res?.data?.success === false) {
-          setOpenLimit(true)
-        }
         setQuizAttempId(res.data.id)
-        setBreadCrumb(res?.data?.data?.breadcumb)
-        setClassId(res?.data?.data?.class_id)
       } catch (err: any) {
-        if (
-          err.response?.data?.error.code === '400|060710' ||
-          err.response?.data?.error.code === '400|060910'
-        ) {
+        if (err.response?.data?.error.code === '400|060710') {
           dispatch(disableUnsavedChange())
           setOpenLimit(true)
         }
@@ -1564,7 +1525,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   className: 'border border-bw-1',
                   color: 'secondary',
                   onClick: () => {
-                    setOpenScratchPad([])
                     setOpenSubmit(true)
                     dispatch(disableUnsavedChange())
                   },
@@ -1640,9 +1600,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     }
                   }}
                 >
-                  {/* <div className="mb-4">
+                  <div className="mb-4">
                     {currentTabContent?.topicDescription?.name}
-                  </div> */}
+                  </div>
                   <EditorReader
                     className="mb-4"
                     text_editor_content={
@@ -1789,8 +1749,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   position={{
                     width: '400px',
                     height: '300px',
-                    top: 'calc(75% - 150px)',
-                    left: 'calc(0px)',
+                    top: 'calc(25% - 150px)',
+                    left: 'calc(25% - 200px)',
                   }}
                   key={e.id}
                   onClick={() => setOnFocusingPad(e.id)}
@@ -1841,9 +1801,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     <ScratchPatch
                       scratchPadValues={scratchPadValues}
                       control={controlScratch}
+                      scratchPads={scratchPads.find(
+                        (item: ScratchPad) => item.id === currentPage,
+                      )}
                       handleChangeScratchPad={(
                         event: ChangeEvent<HTMLInputElement>,
-                      ) => handleChangeScratchPad(event, currentPage as string)}
+                      ) => handleChangeScratchPad(event, currentPage)}
                     />
                   </div>
                 </MovableWindow>
@@ -1881,7 +1844,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="w-full bg-white h-[calc(100%-40px)] overflow-auto p-5 cursor-text not-resizer sapp-text-area">
+                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
                         className=" w-full"
@@ -2094,7 +2057,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                                     top: 0,
                                     behavior: 'smooth',
                                   })
-                                handleClearSelection(currentTabContent)
                               }}
                             >{`Requirement (${index + 1})`}</button>
                           )
@@ -2195,7 +2157,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
                     onClick={async () => {
-                      setValueExhibits('exhibits', [])
                       const data = await getResult(currentTabContent)
                       confirmAnswer(
                         data.corrects,
@@ -2214,7 +2175,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
                     onClick={() => {
-                      setValueExhibits('exhibits', [])
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
                       )
@@ -2233,7 +2193,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
                     onClick={() => {
                       handleConfirmEssay()
-                      setValueExhibits('exhibits', [])
                     }}
                   >
                     <div className="font-medium text-medium-sm">Confirm</div>
@@ -2245,7 +2204,6 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
                     onClick={() => {
-                      setValueExhibits('exhibits', [])
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
                       )
@@ -2289,7 +2247,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           <LimitQuizModal
             open={openLimit}
             setOpen={setOpenLimit}
-            handleQuit={handleBack}
+            handleQuit={() => router.back()}
           />
           <ConFirmSubmit
             open={openSubmit}
@@ -2323,107 +2281,3 @@ const TestDetail = ({ questions, quizDetail }: any) => {
 // eslint-disable-next-line import/no-unused-modules
 export default TestDetail
 TestDetail.layout = LAYOUT.FULLSCREEN_LAYOUT
-
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
-
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
-
-  // Kiểm tra accessToken
-  if (!accessToken) {
-    // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
-
-  try {
-    // Parse cookies from the request headers
-    const cookies = parse(req.headers.cookie || '')
-
-    if (!context?.query?.id) {
-      return {
-        notFound: true,
-      }
-    }
-    const questions = (await CourseTestApi.getQuestionTabsById(
-      context?.query?.id,
-      cookies.accessToken,
-    )) as any
-    const quizDetail = (await CourseTestApi.getDetailQuizById(
-      context?.query?.id,
-      cookies.accessToken,
-    )) as any
-    return {
-      props: { questions, quizDetail },
-    }
-  } catch (error: any) {
-    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-    if (error.response && error.response.status === 401) {
-      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-      const refreshToken = req.cookies.refreshToken
-
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-
-        // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
-
-        // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const questions = (await CourseTestApi.getQuestionTabsById(
-          context?.query?.id,
-          act,
-        )) as any
-
-        return {
-          props: { questions },
-        }
-      } catch (refreshError) {
-        // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-        // Chuyển hướng đến trang đăng nhập
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      }
-    } else {
-      // Xử lý lỗi khác khi sử dụng accessToken
-      if (error.response && error.response.status === 403) {
-        // Chuyển hướng đến trang đăng nhập
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      } else
-        return {
-          redirect: {
-            destination: '/404',
-            permanent: false,
-          },
-        }
-    }
-  }
-}

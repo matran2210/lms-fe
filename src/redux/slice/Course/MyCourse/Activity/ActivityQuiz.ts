@@ -4,6 +4,11 @@ import { QUESTION_TYPES } from 'src/constants'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { RootState } from 'src/redux/store'
 import { IQuestion } from 'src/type/course/Question'
+import {
+  CoursesAPI,
+  getQuestionsById,
+  submitQuizTest,
+} from '../../../../../pages/api/courses/index'
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -96,7 +101,7 @@ const fetchQuestionById = createAsyncThunk(
     }
 
     try {
-      const response = await CourseActivityApi.getQuestionsById([questionId])
+      const response = await getQuestionsById([questionId])
       if (response.success) {
         // Đảm bảo đối tượng trả về khớp với kiểu hành động đã được fulfill dự kiến
         return { ...result, question: response.data?.[0] }
@@ -136,7 +141,7 @@ const confirmQuestion = createAsyncThunk(
         quizId,
         myAnswers,
       }
-      const question = await CourseActivityApi.getQuestionResults(questionId)
+      const question = await CoursesAPI.getQuestionResults(questionId)
       if (question?.data?.[0]) {
         return { ...result, question: question.data[0] }
       }
@@ -167,7 +172,7 @@ const submitQuiz = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const result = await CourseActivityApi.submitQuiz(
+      const result = await submitQuizTest(
         id,
         {
           ...data,

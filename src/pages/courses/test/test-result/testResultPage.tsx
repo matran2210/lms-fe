@@ -55,6 +55,7 @@ const TestResultPage = ({
     (chartData?.correct_answer / chartData?.total_question) * 100,
   )
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
+
   return (
     <>
       {type === 'ACCA' && courseDifficulty <= 4 ? (

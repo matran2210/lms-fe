@@ -25,6 +25,7 @@ import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import SappButton from '@components/base/button/SappButton'
 import { ANIMATION } from 'src/constants'
+import { CoursesAPI } from '../../../../pages/api/courses/index'
 
 type Props = {
   questions: IQuestion[]
@@ -235,7 +236,7 @@ const QuizDocument = ({
   }) => {
     setLoading(true)
     try {
-      const response = await CourseActivityApi.getQuizAttemptsTable(
+      const response = await CoursesAPI.getQuizAttemptsTable(
         id || modalResult?.id || '',
         {
           page_index,

@@ -24,6 +24,11 @@ const EntranceTestFilter = ({ count }: { count: number }) => {
     }
   }, [apiUrl, queryString, watch('attempt_status')])
 
+  // defailtvalue của attempt_status
+  const attempt_status = defaultStatusEnstraceTest.find(
+    (item) => item.value === router.query.attempt_status,
+  )
+
   return (
     <div className="filter flex">
       <TotalResullt total={count} />
@@ -35,6 +40,7 @@ const EntranceTestFilter = ({ count }: { count: number }) => {
           placeholder="Status"
           className="status-course"
           isSearchable={false}
+          defaultValue={attempt_status}
         />
       </div>
     </div>

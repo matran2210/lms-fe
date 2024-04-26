@@ -117,8 +117,7 @@ const preUpload = async ({
     name: string
   }>
 > => {
-  return httpService.GET({
-    uri: `/resource/pre-upload/metadata`,
+  return fetcher(`${apiURL}/resource/pre-upload/metadata`, {
     params: {
       content_type,
       name,

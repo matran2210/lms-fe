@@ -6,6 +6,8 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import { useQuery } from 'react-query'
+
 export const getActToken = (): string => {
   return Cookies.get('accessToken') || ''
 }
@@ -25,6 +27,27 @@ export const setCookieRefreshToken = (refreshToken: string) => {
 export const removeJwtToken = () => {
   Cookies.remove('accessToken')
   Cookies.remove('refreshToken')
+}
+
+export const removeLocalStorageJwtToken = () => {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
+}
+
+export const setActToken = (accToken: string) => {
+  localStorage.setItem('accessToken', accToken)
+}
+
+export const setRefreshToken = (refreshToken: string) => {
+  localStorage.setItem('refreshToken', refreshToken)
+}
+
+export const getLocalStorgeActToken = (): string => {
+  return localStorage.getItem('accessToken') || ''
+}
+
+export const getLocalStorgeRefreshToken = (): string => {
+  return localStorage.getItem('refreshToken') || ''
 }
 
 export function truncateString(str: string, maxLength: number) {
@@ -131,4 +154,28 @@ export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
     /text-align:\s*center/g,
     'text-align: -webkit-center',
   )
+}
+
+export const useGetData = (
+  queryKey: string,
+  params: Object,
+  fetchData: any,
+) => {
+  return useQuery([queryKey, params], () => fetchData(params))
+}
+
+export const useGetDataQuery = (
+  queryKey: string,
+  params: Object,
+  fetchFunction: () => Promise<any>,
+  enabled?: boolean,
+) => {
+  const fetchData = async () => {
+    const { data } = await fetchFunction()
+    return data
+  }
+
+  return useQuery([queryKey, params], fetchData, {
+    enabled: enabled,
+  })
 }

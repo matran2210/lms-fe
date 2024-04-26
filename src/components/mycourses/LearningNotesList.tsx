@@ -2,12 +2,12 @@ import { DeleteIcon, EditIcon, ViewIcon } from '@assets/icons'
 import SappDrawer from '@components/base/SappDrawer'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
+import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import React, { Dispatch, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import CourseAPI from 'src/pages/api/courses'
+import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
 import { ISection } from 'src/type/courses'
 import { DEFAULT_SELECT_SECTION } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
@@ -116,7 +116,7 @@ const LearningNotesList = () => {
       (router?.query?.course_section_id && notesListStatus)
     ) {
       setLoading(true)
-      CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
+      CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
         .then((res) => {
           setNotesListData(res?.data)
           const course_section_path = res?.data?.notes[0]?.course_section_path
@@ -155,7 +155,7 @@ const LearningNotesList = () => {
   useEffect(() => {
     if (notesListStatus && (courseId || queryId) && firstLoadActity) {
       setLoading(true)
-      CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
+      CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
         .then((res) => {
           setNotesListData(res?.data)
         })
@@ -255,7 +255,7 @@ const LearningNotesList = () => {
   async function getCourseSections(page_size: number) {
     try {
       if (!sections.length && notesListStatus) {
-        const res = await CourseAPI.getCourseSectionList(
+        const res = await CoursesAPI.getCourseSectionList(
           courseId || queryId,
           page_size || DEFAULT_PAGESIZE,
         )
@@ -269,7 +269,7 @@ const LearningNotesList = () => {
 
   async function getCourseSubsections(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'CHAPTER',
         selectedSection.value,
@@ -282,7 +282,7 @@ const LearningNotesList = () => {
 
   async function getCourseUnit() {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
@@ -297,7 +297,7 @@ const LearningNotesList = () => {
 
   async function getCourseActivity(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'ACTIVITY',
         selectedUnit.value,
@@ -311,7 +311,7 @@ const LearningNotesList = () => {
   const fetchData = async (params?: Object) => {
     setLoading(true)
     try {
-      const res = await CourseAPI.getCourseNotesList(pageIndex, params)
+      const res = await CoursesAPI.getCourseNotesList(pageIndex, params)
       setNotesListData(res?.data)
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } catch (error) {
@@ -325,7 +325,7 @@ const LearningNotesList = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await CourseAPI.deleteCourseNoteList(id)
+      const res = await CoursesAPI.deleteCourseNoteList(id)
       fetchData(params)
       toast.success('Xóa thành công!')
     } catch (error) {}
