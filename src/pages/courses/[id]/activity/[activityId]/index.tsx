@@ -8,8 +8,6 @@ import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { removeJwtToken } from '@utils/helpers/authen'
 import {
   setCookieActToken,
   setCookieRefreshToken,
@@ -52,6 +50,7 @@ import { getActivityById } from '../../../../api/courses/index';
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { downloadResource } from 'src/pages/api/activity'
+import PreviewNoteList from '@components/mycourses/PreviewNoteList'
 
 type Props = {
   activity: IActivity
@@ -89,6 +88,7 @@ const ActivityPage = () => {
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+  const [viewActivity, setViewActivity] = useState<boolean>(true)
 
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
@@ -115,6 +115,9 @@ const ActivityPage = () => {
       dispatch(resetQuizActivity({}))
     }
   }, [activity])
+  const closePreview = () => {
+    setViewActivity(false)
+  }
 
   // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
   //   return breadcumb
@@ -524,6 +527,7 @@ const ActivityPage = () => {
                 left: 'calc(25% - 200px)',
               }}
               zIndex={1400}
+              fixed
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
@@ -597,7 +601,7 @@ const ActivityPage = () => {
         {!!course_tab_documents?.length && (
           <div className="bg-white pb-6 mb-6">
             <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
-              <div className="tab-content">
+              <div className="tab-content overflow-x-auto">
                 {course_tab_documents?.map((e, i) => {
                   const marginBottom =
                     i < course_tab_documents?.length - 1 ? 'mb-6' : ''

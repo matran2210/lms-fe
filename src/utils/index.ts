@@ -17,11 +17,11 @@ export const getRefreshToken = (): string => {
 }
 
 export const setCookieActToken = (accToken: string) => {
-  Cookies.set('accessToken', accToken)
+  Cookies.set('accessToken', accToken, { path: '/' })
 }
 
 export const setCookieRefreshToken = (refreshToken: string) => {
-  Cookies.set('refreshToken', refreshToken)
+  Cookies.set('refreshToken', refreshToken, { path: '/' })
 }
 
 export const removeJwtToken = () => {

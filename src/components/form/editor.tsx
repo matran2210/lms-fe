@@ -1,7 +1,6 @@
 import { Editor } from '@tinymce/tinymce-react'
 import { useEffect, useRef, useState } from 'react'
 import tinymce from 'tinymce/tinymce'
-// import * from '@wiris/mathtype-tinymce6'
 import { Spin } from 'antd'
 import { VALID_UPLOAD_EDITOR } from 'src/constants'
 // import {
@@ -96,9 +95,6 @@ const TinyEditor = ({
   //   }
   useEffect(() => setInitialValue(valueText), [])
   const [loading, setLoading] = useState(false)
-  if (typeof window !== 'undefined') {
-    require('@wiris/mathtype-tinymce6')
-  }
   const handleFilePicker = (cb: any) => {
     const input = document.createElement('input')
     input.setAttribute('type', 'file')
@@ -219,11 +215,6 @@ const TinyEditor = ({
             selector: 'textarea' as any,
             font_family_formats:
               'Roboto=Roboto; Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
-            external_plugins: math
-              ? {
-                  tiny_mce_wiris: `${window.location.href}/node_modules/@wiris/mathtype-tinymce6/plugin.min.js`,
-                }
-              : {},
             image_advtab: true,
             image_uploadtab: true,
             paste_data_images: true,

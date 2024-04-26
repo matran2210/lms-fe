@@ -19,6 +19,7 @@ import { PageLink } from 'src/constants'
 import AuthApi from 'src/redux/services/Authen'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index';
+import { removeJwtToken } from '@utils/index'
 
 interface IInputProps {
   password: string
@@ -81,8 +82,7 @@ const ChangePasswordPage = () => {
     }
   }
   const redirectLogin = () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
+    removeJwtToken()
     router.push(PageLink.AUTH_LOGIN)
   }
 

@@ -39,6 +39,7 @@ const initialState: ICourseActivityState = {
   is_peer_review: false,
   is_graded: false,
   course_section_type: '',
+  course_section_notes: [],
   activity_type: '',
   position: '',
   parent_id: '',

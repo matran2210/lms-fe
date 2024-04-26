@@ -1,7 +1,7 @@
 import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
-import { setAccessToken } from '@utils/helpers/authen'
+import { setCookieActToken } from '@utils/index'
 import { useRouter } from 'next/router'
 import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
@@ -101,7 +101,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         token: currentToken,
       })
       if (response.success && response.data.success) {
-        setAccessToken(response.data.act)
+        setCookieActToken(response.data.act)
         setTimeout(() => {
           router.push(PageLink.AUTH_CHANGE_PASSWORD)
         }, 1000)

@@ -6,7 +6,6 @@ import SingleDialogLayout from '@components/layout/SingleDialog'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
 import LearningResource from '@components/mycourses/LearningResource'
 import '@fortune-sheet/react/dist/index.css'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import '@styles/globals.scss'
 import { LAYOUT } from '@utils/constants'
 import type { AppProps } from 'next/app'
@@ -29,6 +28,7 @@ import 'aos/dist/aos.css'
 import SappLoading from 'src/common/SappLoading'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { getActToken, getLocalStorgeActToken } from '@utils/index'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -61,7 +61,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   })
 
   const coutNotificationsUnRead = async () => {
-    const accessToken = await AsyncStorage.getItem('accessToken')
+    const accessToken = getActToken()
     if (accessToken && router?.asPath !== '/auth/login') {
       try {
         await dispatch(getCountUnRead())
@@ -136,7 +136,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }
   const handleOnChangePage = () => {
     if (typeof window !== 'undefined') {
-      if (window.localStorage.getItem('accessToken') === '') {
+      if (getLocalStorgeActToken() === '') {
         setOpenResource(false)
       }
     }
