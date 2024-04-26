@@ -122,7 +122,7 @@ const LoginPage = () => {
           device_id: getFireBaseToken,
         }),
       )
-        dispatch(getEntranceCount())
+        // dispatch(getEntranceCount())
         .unwrap()
         .then((payload) => {
           getListEntranceTest()
