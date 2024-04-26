@@ -15,12 +15,6 @@ const MyProfileAPI = {
     })
     return response
   },
-  getCertificate: async (pageSize: number, pageIndex: number): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `certificate?page_size=${pageIndex}&page_index=${pageSize}`,
-    })
-    return response
-  },
 }
 
 export default MyProfileAPI
@@ -111,6 +105,10 @@ export class AuthAPI {
     return fetcher(`${apiURL}/users/activities`, {
       params: params,
     })
+  }
+
+  static getCertificate(pageSize: number, pageIndex: number) {
+    return fetcher(`${apiURL}/certificate?page_size=${pageIndex}&page_index=${pageSize}`)
   }
 
 }

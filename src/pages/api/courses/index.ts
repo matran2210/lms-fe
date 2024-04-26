@@ -1,143 +1,64 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
-import { apiURL, httpService } from 'src/redux/services/httpService'
+import { apiURL } from 'src/redux/services/httpService'
 
-const CourseAPI = {
-  getCourseLearningOutcome: async (id: string): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `course_learning_outcomes/${id}`,
-    })
-    return response
-  },
-
-  getCourseDetail: async (
-    id: string | string[] | undefined,
-    page_size: number,
-    queryString?: string,
-  ): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `courses/${id}?page_index=1&page_size=${page_size}${queryString}`,
-    })
-    return response
-  },
-  getCourse: async (page_size: number, queryString?: string): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `courses?page_index=1&page_size=${page_size}${queryString}`,
-    })
-    return response
-  },
-  getCourseSectionList: async (
-    id: string | string[] | undefined,
-    page_size: number,
-  ): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `course-sections/short/list?page_index=1&page_size=${page_size}&classId=${id}&type=PART`,
-    })
-    return response
-  },
-  getCourseSubsectionList: async (
-    page_size: number,
-    type: 'CHAPTER' | 'UNIT' | 'ACTIVITY',
-    parentId?: string,
-  ): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `/course-sections/short/list?page_index=1&page_size=${
-        page_size || 10
-      }&type=${type}&parentId=${parentId ?? ''}`,
-    })
-    return response
-  },
-  getCourseResource: async (
-    id: string | string[] | undefined,
-    page_size: number,
-    params?: Object,
-  ): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `courses/${id}/resources?page_index=1&page_size=${page_size}&attachment_type=attached`,
-      params: params,
-    })
-    return response
-  },
-  getCourseNotesList: async (
-    page_size: number,
-    params?: Object,
-  ): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `course-section-notes?page_index=1&page_size=${page_size}`,
-      params: params,
-    })
-    return response
-  },
-  updateCourseNotesList: (
-    id: string | undefined,
-    params?: Object,
-  ): Promise<any> => {
-    const response = httpService.PUT<any, any>({
-      uri: `course-section-notes/${id}`,
-      request: params,
-    })
-    return response
-  },
-  deleteCourseNoteList: (id: string): Promise<any> => {
-    const response = httpService.DELETE<any, any>({
-      uri: `course-section-notes/${id}`,
-    })
-    return response
-  },
-  getNoteDetail: async (
-    course_section_id: string | number,
-    course_id?: string | number,
-  ): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `course-section-notes/${course_section_id}`,
-      params: {
-        course_id: course_id,
-      },
-    })
-    return response
-  },
-  createNote: (params: Object): Promise<any> => {
-    const response = httpService.POST<any, any>({
-      uri: `course-section-notes`,
-      request: params,
-    })
-    return response
-  },
-  activeCourse: (params: Object): Promise<any> => {
-    const response = httpService.POST<any, any>({
-      uri: `courses/active`,
-      request: params,
-    })
-    return response
-  },
-  extendCourse: (params: Object): Promise<any> => {
-    const response = httpService.POST<any, any>({
-      uri: `courses/extend`,
-      request: params,
-    })
-    return response
-  },
-  caseStudyProgress: (
-    course_id: string | string[] | undefined,
-    section_id: string | string[] | undefined,
-    caseStudyId: string | string[] | undefined,
-  ): Promise<any> => {
-    const response = httpService.GET<any, any>({
-      uri: `course-sections/course/${course_id}/section/${section_id}/progress?story_topic_id=${caseStudyId}`,
-    })
-    return response
-  },
-  userGuideActive: async (): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `guide-active`,
-    })
-    return response
-  },
-}
+const CourseAPI = {}
 
 export default CourseAPI
 
 export class CoursesAPI {
+  static getNoteDetail(
+    course_section_id: string | number,
+    course_id?: string | number,
+  ): Promise<any> {
+    return fetcher(`${apiURL}/course-section-notes/${course_section_id}`, {
+      params: {
+        course_id: course_id,
+      },
+    })
+  }
+
+  static createNote(params: Object): Promise<any> {
+    return fetcher(`${apiURL}/course-section-notes`, {
+      method: 'POST',
+      data: params,
+    })
+  }
+
+  static activeCourse(params: Object): Promise<any> {
+    return fetcher(`${apiURL}/courses/active`, {
+      method: 'POST',
+      data: params,
+    })
+  }
+
+  static extendCourse(params: Object): Promise<any> {
+    return fetcher(`${apiURL}/courses/extend`, {
+      method: 'POST',
+      data: params,
+    })
+  }
+
+  static caseStudyProgress(
+    course_id: string | string[] | undefined,
+    section_id: string | string[] | undefined,
+    caseStudyId: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/course-sections/course/${course_id}/section/${section_id}/progress?story_topic_id=${caseStudyId}`,
+    )
+  }
+
+  static userGuideActive(): Promise<any> {
+    return fetcher(`${apiURL}/guide-active`)
+  }
+
+  static deleteCourseNoteList(id: string): Promise<any> {
+    return fetcher(`${apiURL}/course-section-notes/${id}`, {
+      method: 'DELETE',
+    })
+  }
+
   static get(
     page_index: number,
     page_size: number,
@@ -264,7 +185,7 @@ export class CoursesAPI {
 
   static submitCaseStudy(id: string, data: any): Promise<any> {
     const uri = url.submitCaseStudy + `/${id}` + '/submit'
-    return fetcher(`${uri}`, {
+    return fetcher(`${apiURL}${uri}`, {
       data: data,
       method: 'POST',
     })
@@ -294,7 +215,7 @@ export class CoursesAPI {
     class_id: string,
     course_section_id: string,
   ): Promise<any> {
-    return fetcher(`/course-discussions`, {
+    return fetcher(`${apiURL}/course-discussions`, {
       params: {
         page_index: 1,
         page_size: 9999,
@@ -321,7 +242,70 @@ export class CoursesAPI {
    * @returns {Promise<IResponse<IQuestion[]>>} - Dữ liệu kết quả câu hỏi.
    */
   static getQuestionResults(id: string): Promise<any> {
-    return fetcher(`${apiURL}/question/results?question_ids=${id}}`)
+    return fetcher(`${apiURL}/question/results?question_ids=${id}`)
+  }
+
+  static getCourseLearningOutcome(id: string): Promise<any> {
+    return fetcher(`${apiURL}/course_learning_outcomes/${id}`)
+  }
+
+  static getCourse(page_size: number, queryString?: string): Promise<any> {
+    return fetcher(
+      `${apiURL}/courses?page_index=1&page_size=${page_size}${queryString}`,
+    )
+  }
+
+  static getCourseSectionList(
+    id: string | string[] | undefined,
+    page_size: number,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/course-sections/short/list?page_index=1&page_size=${page_size}&classId=${id}&type=PART`,
+    )
+  }
+
+  static getCourseSubsectionList(
+    page_size: number,
+    type: 'CHAPTER' | 'UNIT' | 'ACTIVITY',
+    parentId?: string,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/course-sections/short/list?page_index=1&page_size=${
+        page_size || 10
+      }&type=${type}&parentId=${parentId ?? ''}`,
+    )
+  }
+
+  static getCourseResource(
+    id: string | string[] | undefined,
+    page_size: number,
+    params?: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/courses/${id}/resources?page_index=1&page_size=${page_size}&attachment_type=attached`,
+      {
+        params: params,
+      },
+    )
+  }
+
+  static getCourseNotesList(page_size: number, params?: Object): Promise<any> {
+    return fetcher(
+      `${apiURL}/course-section-notes?page_index=1&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
+  }
+
+  static updateCourseNotesList(
+    id: string | undefined,
+    params?: Object,
+  ): Promise<any> {
+    return fetcher(`${apiURL}/course-section-notes/${id}`, {
+      data: params,
+      method: 'PUT',
+    })
   }
 }
 
@@ -380,8 +364,12 @@ export const getActivityById = async (
   id: string | string[] | undefined,
   course_id: string | string[] | undefined,
 ): Promise<any> => {
-  const responseActivity = await fetcher(`${apiURL}/courses/${course_id}/activity/${id}`)
-  const responseTabs = await fetcher(`${apiURL}/course-sections/activity/${id}/tabs`)
+  const responseActivity = await fetcher(
+    `${apiURL}/courses/${course_id}/activity/${id}`,
+  )
+  const responseTabs = await fetcher(
+    `${apiURL}/course-sections/activity/${id}/tabs`,
+  )
 
   if (responseActivity?.data && responseTabs?.data?.[0]) {
     responseActivity.data.tabs = responseTabs.data

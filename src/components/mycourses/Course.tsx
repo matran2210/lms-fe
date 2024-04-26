@@ -21,7 +21,7 @@ import {
 import PopupExtend from './PopupExtend'
 import PopupActive from './PopupActive'
 import PopupLesson from './PopupLesson'
-import CourseAPI from 'src/pages/api/courses'
+import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
@@ -193,7 +193,7 @@ const Course = ({
       const params = {
         classId: `${classInstance?.id}`,
       }
-      const res = await CourseAPI.activeCourse(params)
+      const res = await CoursesAPI.activeCourse(params)
       // await fetchCourseList()
       refetch()
       toast.success('Active thành công!')
@@ -214,7 +214,7 @@ const Course = ({
           is_student_in_class: false,
         })
       }
-      const res = await CourseAPI.extendCourse(params)
+      const res = await CoursesAPI.extendCourse(params)
       // await fetchCourseList()
       refetch()
       toast.success('Gia hạn hành công!')

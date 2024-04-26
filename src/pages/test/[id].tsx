@@ -52,6 +52,7 @@ import SappLoading from 'src/common/SappLoading'
 import toast from 'react-hot-toast'
 import ScratchPatch from './scratchPatch'
 import { CoursesAPI } from '../api/courses'
+import { TestAPI } from '../api/test'
 
 type Window = {
   userAgreed: any
@@ -634,7 +635,7 @@ const TestDetail = () => {
     return value
   }
   const getResult = async (currentTabContent: any) => {
-    const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
+    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -814,7 +815,7 @@ const TestDetail = () => {
     // setLoading(false)
   }
   const getResultAll = async (currentTabContent: any) => {
-    const res = await CourseTestApi.getQuestionAnswer(currentTabContent.id)
+    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||

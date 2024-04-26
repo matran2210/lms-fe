@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
 import { TreeHelper } from 'src/helper/tree'
-import CourseAPI from 'src/pages/api/courses'
 import { ILearningOutcome } from 'src/type/courses'
 import SappDrawer from '@components/base/SappDrawer'
 import { useRouter } from 'next/router'
@@ -75,7 +74,7 @@ const CoursePartDetail = () => {
   async function getLearningOutcome() {
     setLoadingLearningOutcome(true)
     try {
-      const res = await CourseAPI.getCourseLearningOutcome(
+      const res = await CoursesAPI.getCourseLearningOutcome(
         chapterDetail?.course_learning_outcome?.id,
       )
       setLearningOutcome(res?.data)
@@ -195,7 +194,7 @@ const CoursePartDetail = () => {
     courseId: string,
     caseStudyId: string,
   ) => {
-    const res = await CourseAPI.caseStudyProgress(
+    const res = await CoursesAPI.caseStudyProgress(
       router.query.id,
       courseId,
       caseStudyId,

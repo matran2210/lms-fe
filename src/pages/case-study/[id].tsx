@@ -41,6 +41,7 @@ import LimitQuizModal from '../test/limitQuizModal'
 import useMousePosition from '@utils/hookMouseMove'
 import SappLoading from 'src/common/SappLoading'
 import { CoursesAPI } from '../api/courses/index'
+import { TestAPI } from '../api/test'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -259,7 +260,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     class_user_id: string,
   ) {
     try {
-      const res = await CourseTestApi.createTopicAttempt(
+      const res = await TestAPI.createTopicAttempt(
         quiz_id,
         id,
         class_user_id,

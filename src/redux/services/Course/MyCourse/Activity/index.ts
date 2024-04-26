@@ -5,8 +5,9 @@ import {
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IBreadcrumb } from 'src/type/course/my-course/Activity'
-import { httpService } from '../../../httpService'
+import { apiURL, httpService } from '../../../httpService'
 import url from './url'
+import { httpService11 } from '@services/requestV2'
 
 /**
  * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.
@@ -51,8 +52,8 @@ const CourseActivityApi = {
     })
 
     // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
-    return httpService.POST_FORM_DATA<any, any>({
-      uri,
+    return httpService11.POST_FORM_DATA<any, any>({
+      uri: `${apiURL}/course-discussions/detail/upload`,
       request: formData,
     })
   },
