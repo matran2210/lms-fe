@@ -289,7 +289,7 @@ const ActivityPage = () => {
    * Giá trị được memoized cho course_tab_documents.
    */
   const course_tab_documents = useMemo(() => {
-    return selector.tabs?.find((e) => e.id === selector.currentTabId)
+    return selector.tabs?.find((e) => e?.id === selector.currentTabId)
       ?.course_tab_documents
   }, [selector.tabs])
 
@@ -299,7 +299,7 @@ const ActivityPage = () => {
    */
   const getPreviousTabId = () => {
     const currentIndex = selector.tabs?.findIndex(
-      (tab) => tab.id === selector.currentTabId,
+      (tab) => tab?.id === selector.currentTabId,
     )
     const previousIndex = (currentIndex || 0) - 1
     return selector.tabs?.[previousIndex]?.id
@@ -311,7 +311,7 @@ const ActivityPage = () => {
    */
   const getNextTabId = () => {
     const currentIndex = selector.tabs?.findIndex(
-      (tab) => tab.id === selector.currentTabId,
+      (tab) => tab?.id === selector.currentTabId,
     )
     const nextIndex = (currentIndex || 0) + 1
     return selector.tabs?.[nextIndex]?.id
@@ -350,7 +350,7 @@ const ActivityPage = () => {
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      const newArr = arr.filter((e) => e.id !== pad.id)
+      const newArr = arr.filter((e) => e?.id !== pad?.id)
       return newArr
     })
   }
@@ -394,7 +394,7 @@ const ActivityPage = () => {
             break
         }
         return (
-          <Menu.Item key={e.id}>
+          <Menu.Item key={e?.id}>
             <li
               className={
                 'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
@@ -463,7 +463,7 @@ const ActivityPage = () => {
 
   const findActivityByIndex = (previousIndex: number) => {
     return sessionData?.find(
-      (activity: IActivity) => activity.id === activityIds[previousIndex],
+      (activity: IActivity) => activity?.id === activityIds[previousIndex],
     )
   }
 
@@ -563,7 +563,7 @@ const ActivityPage = () => {
               <ul className="list-disc text-base ml-3">
                 {activity?.course_outcomes?.map((e: any) => {
                   return (
-                    <li className="ml-4" key={e.id}>
+                    <li className="ml-4" key={e?.id}>
                       <EditorReader
                         className="editor-wrap mt-1.5"
                         text_editor_content={e.description}
@@ -581,12 +581,12 @@ const ActivityPage = () => {
             {selector.tabs?.map((e) => {
               return (
                 <SappButton
-                  key={e.id}
+                  key={e?.id}
                   size="small"
                   className="py-2.5 !px-3 text-medium-sm !font-normal"
-                  color={tabButtonColor(e.id)}
-                  title={truncateString(e.name, 60)}
-                  onClick={() => handleChangeTab(e.id)}
+                  color={tabButtonColor(e?.id)}
+                  title={truncateString(e?.name, 60)}
+                  onClick={() => handleChangeTab(e?.id)}
                 ></SappButton>
               )
             })}
@@ -605,7 +605,7 @@ const ActivityPage = () => {
                     return (
                       <div
                         className={marginBottom}
-                        key={e.id + '_' + i + '_' + selector.currentTabId}
+                        key={e?.id + '_' + i + '_' + selector.currentTabId}
                         ref={quizDocumentRef}
                       >
                         <QuizDocument
@@ -613,16 +613,16 @@ const ActivityPage = () => {
                             ...(e.quiz?.multiple_choice_questions || []),
                             ...(e.quiz?.constructed_questions || []),
                           ]}
-                          activityId={activity.id as string}
+                          activityId={activity?.id as string}
                           tabId={selector.currentTabId || ''}
-                          quizId={e.quiz?.id || ''}
+                          quizId={e?.quiz?.id || ''}
                           grading_preference={
                             e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
                           }
-                          document_id={e.id}
-                          is_graded={e.quiz?.is_graded || false}
+                          document_id={e?.id}
+                          is_graded={e?.quiz?.is_graded || false}
                           setOpenFile={handleOpenScratchPad}
-                          class_user_id={activity.class_user_id}
+                          class_user_id={activity?.class_user_id}
                         ></QuizDocument>
                       </div>
                     )
@@ -631,7 +631,7 @@ const ActivityPage = () => {
                     return (
                       <div
                         className={marginBottom}
-                        key={e?.id + '_' + i + '_' + selector?.currentTabId}
+                        key={i + '_' + selector?.currentTabId}
                       >
                         <TextDocument
                           text_editor_content={e?.text_editor_content}
@@ -658,7 +658,7 @@ const ActivityPage = () => {
                           grading_preference={
                             e.quiz?.grading_preference || 'AFTER_EACH_QUESTION'
                           }
-                          class_user_id={activity.class_user_id}
+                          class_user_id={activity?.class_user_id}
                         ></VideoDocument>
                       </div>
                     )
@@ -893,10 +893,10 @@ const ActivityPage = () => {
                 top: 'calc(50% - 421px)',
                 left: 'calc(50% - 300px)',
               }}
-              key={e.id}
-              onClick={() => setOnFocusingPad(e.id)}
+              key={e?.id}
+              onClick={() => setOnFocusingPad(e?.id)}
               zIndex={
-                onFocusingPad === e.id
+                onFocusingPad === e?.id
                   ? openScratchPad.length + 1400
                   : index + 1400
               }
@@ -934,10 +934,10 @@ const ActivityPage = () => {
                 top: exhibitsPopupPosition.top,
                 left: exhibitsPopupPosition.left,
               }}
-              key={e.id}
-              onClick={() => setOnFocusingPad(e.id)}
+              key={e?.id}
+              onClick={() => setOnFocusingPad(e?.id)}
               zIndex={
-                onFocusingPad === e.id
+                onFocusingPad === e?.id
                   ? openScratchPad.length + 1400
                   : index + 1400
               }
