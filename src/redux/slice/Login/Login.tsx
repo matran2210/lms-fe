@@ -1,9 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import {
-  removeJwtToken,
-  setAccessToken,
-  setRefreshToken,
-} from '@utils/helpers/authen'
 import { toast } from 'react-hot-toast'
 import { RootState } from '../../store'
 
@@ -14,7 +9,11 @@ import {
   LoginState,
 } from '../../types/Login/login'
 import AuthApi from '../../services/Authen'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
+import {
+  removeJwtToken,
+  setCookieActToken,
+  setCookieRefreshToken,
+} from '@utils/index'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import { PageLink } from 'src/constants'
 
@@ -39,8 +38,8 @@ export const getLoginUser = createAsyncThunk(
       if (!res.success) {
         return
       }
-      await setAccessToken(res.data.tokens.act)
-      await setRefreshToken(res.data.tokens.rft)
+      setCookieActToken(res.data.tokens.act)
+      setCookieRefreshToken(res.data.tokens.rft)
       return { ...res }
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
@@ -154,8 +153,7 @@ export const loginSlice = createSlice({
       state.loading = false
       if (action.payload.code === 200) {
         state.changePass = true
-        window.localStorage.removeItem('accessToken')
-        window.localStorage.removeItem('refreshToken')
+        removeJwtToken()
       }
     })
     builder.addCase(changePassword.rejected, (state, action) => {

@@ -8,12 +8,11 @@ import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { removeJwtToken } from '@utils/helpers/authen'
 import {
   setCookieActToken,
   setCookieRefreshToken,
   truncateString,
+  removeJwtToken,
 } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
@@ -45,6 +44,7 @@ import { Dropdown, Menu } from 'antd'
 import Calculator from '@components/calculator'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
+import PreviewNoteList from '@components/mycourses/PreviewNoteList'
 
 type Props = {
   activity: IActivity
@@ -70,6 +70,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
   // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
+  const [viewActivity, setViewActivity] = useState<boolean>(true)
 
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
@@ -96,6 +97,9 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
       dispatch(resetQuizActivity({}))
     }
   }, [activity])
+  const closePreview = () => {
+    setViewActivity(false)
+  }
 
   // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
   //   return breadcumb
@@ -493,6 +497,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
                 left: 'calc(25% - 200px)',
               }}
               zIndex={1400}
+              fixed
             >
               <div className="absolute h-full w-full  top-0 left-0 border">
                 <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
@@ -601,7 +606,7 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
         {!!course_tab_documents?.length && (
           <div className="bg-white pb-6 mb-6">
             <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
-              <div className="tab-content">
+              <div className="tab-content overflow-x-auto">
                 {course_tab_documents?.map((e, i) => {
                   const marginBottom =
                     i < course_tab_documents?.length - 1 ? 'mb-6' : ''
@@ -829,10 +834,36 @@ const ActivityPage = ({ activity, courseId, sectionId }: Props) => {
           </div>
         </div>
       )}
-
+      <div>
+        {activity?.course_section_notes?.map((note: any, index: number) => {
+          if (viewActivity) {
+            return (
+              <MovableWindow
+                key={index}
+                position={{
+                  top: 'calc(50% - 121px)',
+                  left: 'calc(50% - 20px)',
+                }}
+                zIndex={1500}
+                not_resizable={true}
+              >
+                <PreviewNoteList
+                  key={index}
+                  title={note.name}
+                  content={note.description}
+                  setOpen={closePreview}
+                />
+              </MovableWindow>
+            )
+          } else {
+            return null
+          }
+        })}
+      </div>
+      {/* </MovableWindow> */}
       <div ref={endActivityRef}></div>
       <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-        <Discussion class_id={(router.query.id as string) || ''} />
+        <Discussion class_id={(courseId as string) || ''} />
       </div>
       {openScratchPad.map((e, index: number) => {
         if (e.type === 'file') {
@@ -983,8 +1014,8 @@ export async function getServerSideProps(context: any) {
       context?.query?.activityId,
       context?.query.id,
       cookies.accessToken,
+      context?.query?.note_id,
     )
-
     return {
       props: {
         activity,
@@ -1012,20 +1043,16 @@ export async function getServerSideProps(context: any) {
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const activity = await CourseActivityApi.getActivityById(
           context?.query?.activityId,
           context?.query.id,
           act,
+          context?.query?.note_id,
         )
 
         return {

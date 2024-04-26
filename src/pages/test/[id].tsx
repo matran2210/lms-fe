@@ -33,13 +33,12 @@ import NewFiltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
-import { removeJwtToken } from '@utils/helpers/authen'
 import {
   runHighlight,
   setCookieActToken,
   setCookieRefreshToken,
+  removeJwtToken,
 } from '@utils/index'
 import axios from 'axios'
 import { parse } from 'cookie'
@@ -66,12 +65,7 @@ type Window = {
   userAgreed: any
 }
 interface ScratchPadValue {
-  id: string
-  value: string
-}
-interface ScratchPad {
   question_id: string
-  id: string
   scratch_pad: string
 }
 declare global {
@@ -894,8 +888,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   }
 
   const handleChangeTab = async (currentTab: any) => {
+    setValueExhibits('exhibits', [])
     setLoading(true)
-    setScratchPadValues(null)
     const currentContent = tabs.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
@@ -1109,17 +1103,20 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
         if (checkAnswered(e)) {
-          answers.push({
-            question_id: e.id,
-            short_answer: e.answer || '',
-            response_option: e.data.response_option
-              ? e.data.response_option
-              : e.response_type === 0
-                ? 'WORD'
-                : 'SHEET',
-            time_spent: Math.ceil(e.timeSpent / 1000),
-            active: 'SUBMITED',
-            answer_file: e.answer_file,
+          e?.requirements?.forEach((requirement: any) => {
+            answers.push({
+              question_id: e.id,
+              short_answer: e.answer || '',
+              requirement_id: requirement.id || '',
+              response_option: e.data.response_option
+                ? e.data.response_option
+                : e.response_type === 0
+                  ? 'WORD'
+                  : 'SHEET',
+              time_spent: Math.ceil(e.timeSpent / 1000),
+              active: 'SUBMITED',
+              answer_file: e.answer_file,
+            })
           })
         }
       }
@@ -1176,13 +1173,15 @@ const TestDetail = ({ questions, quizDetail }: any) => {
     setLoading(false)
     return
   }
+
   const [scratchPadValues, setScratchPadValues] = useState<
     ScratchPadValue | null | undefined
   >()
+  const [scratchPads, setScratchPads] = useState<ScratchPadValue[]>([])
 
   const handleChangeScratchPad = (
     e: ChangeEvent<HTMLInputElement>,
-    id?: string,
+    id: string,
   ) => {
     const { value } = e.target
     setScratchPadValues((prevState: any) => ({
@@ -1191,34 +1190,50 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       value,
     }))
   }
-  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+
   useEffect(() => {
     if (currentPage) {
-      const currentPageScratchPadValues = scratchPadValues?.value ?? ''
-      const currentPageScratchPadId = scratchPadValues?.id ?? ''
-      if (currentPageScratchPadValues) {
-        const index = scratchPads.findIndex(
-          (item: ScratchPad) => item.question_id === currentPage,
-        )
-        if (index !== -1) {
-          setScratchPads((prevScratchPads: any) => {
-            const newScratchPads = [...prevScratchPads]
-            newScratchPads[index].scratch_pad = currentPageScratchPadValues
-            return newScratchPads
+      const item = scratchPads.find(
+        (item: ScratchPadValue) => item.question_id === currentPage,
+      )
+      item
+        ? setScratchPadValues({
+            question_id: item.question_id,
+            scratch_pad: item.scratch_pad,
           })
-        } else {
-          setScratchPads((prevScratchPads: any) => [
-            ...prevScratchPads,
-            {
-              question_id: currentPage,
-              id: currentPageScratchPadId,
-              scratch_pad: currentPageScratchPadValues,
-            },
-          ])
-        }
+        : setScratchPadValues({ question_id: currentPage, scratch_pad: '' })
+    }
+  }, [currentPage])
+
+  useEffect(() => {
+    if (scratchPadValues) {
+      const currentPageScratchPadId = scratchPadValues?.question_id
+      const currentPageScratchPadValues = scratchPadValues?.scratch_pad
+
+      const index = scratchPads.findIndex(
+        (item: ScratchPadValue) => item.question_id === currentPageScratchPadId,
+      )
+      // nếu tìm thấy ScratchPad đã tồn tại thì cập nhật giá trị
+      if (index !== -1) {
+        setScratchPads((prevScratchPads: ScratchPadValue[]) => {
+          const newScratchPads = [...prevScratchPads]
+          newScratchPads[index].scratch_pad = currentPageScratchPadValues
+          return newScratchPads
+        })
+      }
+      // tạo mới scratchPad
+      else {
+        setScratchPads((prevScratchPads: ScratchPadValue[]) => [
+          ...prevScratchPads,
+          {
+            question_id: currentPageScratchPadId,
+            scratch_pad: currentPageScratchPadValues,
+          },
+        ])
       }
     }
-  }, [currentPage, scratchPadValues])
+  }, [scratchPadValues])
+
   const handleClearSelection = (currentTabContent: any) => {
     const data = currentTabContent.data
     if (!currentTabContent.done) {
@@ -1377,6 +1392,41 @@ const TestDetail = ({ questions, quizDetail }: any) => {
   // useEffect(() => {
 
   // }, [currentPage])
+  const [classId, setClassId] = useState('')
+  const [breadCrumb, setBreadCrumb] = useState<any>()
+  const backToPartDetailChapter = () => {
+    router.replace(
+      `/courses/${classId}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
+    )
+  }
+  const backToPartDetail = () => {
+    router.replace(`/courses/${classId}/section/${breadCrumb?.[1]?.id}`)
+  }
+  const backToEntranceTestList = () => {
+    router.replace(`/entrance-test`)
+  }
+  const backToCourseDetail = () => {
+    router.replace(`/courses/my-course/${classId}`)
+  }
+  const handleBack = () => {
+    if (breadCrumb && breadCrumb?.length >= 2) {
+      const lastItem = breadCrumb[breadCrumb?.length - 1]
+      if (
+        lastItem.course_section_type === 'MID_TERM_TEST' ||
+        lastItem.course_section_type === 'FINAL_TEST'
+      ) {
+        backToCourseDetail()
+      } else if (lastItem.course_section_type === 'TOPIC_TEST') {
+        backToPartDetail()
+      } else if (lastItem.course_section_type === 'CHAPTER_TEST') {
+        backToPartDetailChapter()
+      }
+    } else if (breadCrumb && breadCrumb.length === 0) {
+      backToCourseDetail()
+    } else if (!breadCrumb) {
+      backToEntranceTestList()
+    }
+  }
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
     for (let e in currentTabContent?.data?.exhibits) {
@@ -1408,9 +1458,17 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           router.query.id as string,
           router.query.class_user_id as string,
         )
+        if (res?.data?.success === false) {
+          setOpenLimit(true)
+        }
         setQuizAttempId(res.data.id)
+        setBreadCrumb(res?.data?.data?.breadcumb)
+        setClassId(res?.data?.data?.class_id)
       } catch (err: any) {
-        if (err.response?.data?.error.code === '400|060710') {
+        if (
+          err.response?.data?.error.code === '400|060710' ||
+          err.response?.data?.error.code === '400|060910'
+        ) {
           dispatch(disableUnsavedChange())
           setOpenLimit(true)
         }
@@ -1506,6 +1564,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   className: 'border border-bw-1',
                   color: 'secondary',
                   onClick: () => {
+                    setOpenScratchPad([])
                     setOpenSubmit(true)
                     dispatch(disableUnsavedChange())
                   },
@@ -1581,9 +1640,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     }
                   }}
                 >
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     {currentTabContent?.topicDescription?.name}
-                  </div>
+                  </div> */}
                   <EditorReader
                     className="mb-4"
                     text_editor_content={
@@ -1730,8 +1789,8 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   position={{
                     width: '400px',
                     height: '300px',
-                    top: 'calc(25% - 150px)',
-                    left: 'calc(25% - 200px)',
+                    top: 'calc(75% - 150px)',
+                    left: 'calc(0px)',
                   }}
                   key={e.id}
                   onClick={() => setOnFocusingPad(e.id)}
@@ -1782,12 +1841,9 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     <ScratchPatch
                       scratchPadValues={scratchPadValues}
                       control={controlScratch}
-                      scratchPads={scratchPads.find(
-                        (item: ScratchPad) => item.id === currentPage,
-                      )}
                       handleChangeScratchPad={(
                         event: ChangeEvent<HTMLInputElement>,
-                      ) => handleChangeScratchPad(event, currentPage)}
+                      ) => handleChangeScratchPad(event, currentPage as string)}
                     />
                   </div>
                 </MovableWindow>
@@ -1825,7 +1881,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                    <div className="w-full bg-white h-[calc(100%-40px)] overflow-auto p-5 cursor-text not-resizer sapp-text-area">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
                         className=" w-full"
@@ -2038,6 +2094,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                                     top: 0,
                                     behavior: 'smooth',
                                   })
+                                handleClearSelection(currentTabContent)
                               }}
                             >{`Requirement (${index + 1})`}</button>
                           )
@@ -2138,6 +2195,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
                     onClick={async () => {
+                      setValueExhibits('exhibits', [])
                       const data = await getResult(currentTabContent)
                       confirmAnswer(
                         data.corrects,
@@ -2156,6 +2214,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
                     onClick={() => {
+                      setValueExhibits('exhibits', [])
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
                       )
@@ -2174,6 +2233,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
                     onClick={() => {
                       handleConfirmEssay()
+                      setValueExhibits('exhibits', [])
                     }}
                   >
                     <div className="font-medium text-medium-sm">Confirm</div>
@@ -2185,6 +2245,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
                     onClick={() => {
+                      setValueExhibits('exhibits', [])
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
                       )
@@ -2228,7 +2289,7 @@ const TestDetail = ({ questions, quizDetail }: any) => {
           <LimitQuizModal
             open={openLimit}
             setOpen={setOpenLimit}
-            handleQuit={() => router.back()}
+            handleQuit={handleBack}
           />
           <ConFirmSubmit
             open={openSubmit}
@@ -2321,14 +2382,9 @@ export async function getServerSideProps(context: any) {
         const userInfo = refreshResponse?.data?.data?.tokens
         const act = userInfo?.act
         const rft = userInfo?.rft
-        // Save the new access token to the AsyncStorage
-        if (typeof window !== 'undefined') {
-          await AsyncStorage.setItem('accessToken', act)
-          await AsyncStorage.setItem('refreshToken', rft)
-        }
         setCookieActToken(act)
         setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
+        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
 
         // Tiếp tục thực hiện yêu cầu API với accessToken mới
         const questions = (await CourseTestApi.getQuestionTabsById(

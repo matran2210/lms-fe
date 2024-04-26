@@ -106,11 +106,29 @@ const EditorReader = ({
 
   useEffect(() => {
     setTimeout(() => {
-      if (editorRef?.current) {
-        const formElement = editorRef?.current
-        convertMathToImage(formElement)
+      const editor = editorRef?.current
+      if (editor) {
+        const mfencedElements = editor.querySelectorAll('mfenced')
+        mfencedElements.forEach((el: any) => {
+          const openAttr = el.getAttribute('open')
+          const closeAttr = el.getAttribute('close')
+          if (openAttr !== null && closeAttr) {
+            const replacements: { [key: string]: string } = {
+              '|': '|',
+              '||': '||',
+              '>': '<',
+              '}': '{',
+              ']': '[',
+              '&#62;': '&#60;',
+            }
+            if (replacements[closeAttr]) {
+              el.setAttribute('open', replacements[closeAttr])
+            }
+          }
+        })
+        convertMathToImage(editor)
       }
-    }, 1000)
+    }, 100)
   }, [editorRef?.current, text_editor_content])
 
   const handleOnclick = async (e: MouseEvent) => {
@@ -142,17 +160,26 @@ const EditorReader = ({
       }
     }
   }
+
+  const preprocessContent = (htmlContent: any) => {
+    return htmlContent
+      .replace(/'Times New Roman'/g, `times-new-roman`)
+      .replace(/'Courier New'/g, `courier-new`)
+  }
+
   return (
     <>
       <div
-        className={`${className} editor-wrap mce-content-body `}
+        className={`${className} editor-wrap mce-content-body`}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
       >
         <div ref={extenalRef || refDocument}>
           {parseHTML(
-            replaceTextAlignCenterToWebKitCenter(content || ''),
+            preprocessContent(
+              replaceTextAlignCenterToWebKitCenter(content || ''),
+            ),
             options,
           )}
         </div>

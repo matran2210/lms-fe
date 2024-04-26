@@ -119,6 +119,7 @@ const VideoDocument = ({
       ...(v?.quiz?.constructed_questions || []),
       ...(v?.quiz?.multiple_choice_questions || []),
     ]
+
     if (listQuestion.length) {
       setLastQuestion(listQuestion[listQuestion.length - 1])
     }
@@ -324,6 +325,8 @@ const VideoDocument = ({
     (a, b) => (Number(a.time) || 0) - (Number(b.time) || 0),
   )
 
+  const timeQuiz = Object.values(quizTimed?.current || [])
+
   return (
     <div>
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-2.5">
@@ -410,7 +413,7 @@ const VideoDocument = ({
           pauseOnSeek={true}
           hideVideo={hideVideo}
           openQuestion={modalOpen}
-          timeLine={timeLine}
+          timeQuiz={timeQuiz}
         >
           {/* Modal for quiz questions */}
           <SappModal
