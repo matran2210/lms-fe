@@ -24,7 +24,7 @@ export class TestAPI {
       },
     })
   }
-  
+
   static getResource(id: string) {
     return fetcher(`${apiURL}/resource/${id}`)
   }

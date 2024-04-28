@@ -13,7 +13,7 @@ interface CoursesProps {
 const CoursesList: React.FC<CoursesProps> = ({
   courses,
   lastElementRef,
-  refetch
+  refetch,
 }) => {
   return (
     <>

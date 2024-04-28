@@ -40,7 +40,7 @@ export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
       throw err
     })
 
-    request.interceptors.request.use(
+request.interceptors.request.use(
   (config) => {
     config.headers['Content-Type'] = 'application/json' // Change to your preferred content type
     return config
@@ -74,8 +74,8 @@ request.interceptors.response.use(
     if (
       error.response &&
       error.response.status === 401 &&
-      error.config.url !== PageLink.AUTH_LOGIN &&
-      error.config.url !== PageLink.AUTH_FORGOT_PASSWORD
+      error.config.url !== `${apiURL}${PageLink.AUTH_LOGIN}` &&
+      error.config.url !== `${apiURL}${PageLink.AUTH_LOGIN}`
     ) {
       if (!isRefreshing) {
         isRefreshing = true

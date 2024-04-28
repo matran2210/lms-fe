@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import AuthApi from 'src/redux/services/Authen'
 import { z } from 'zod'
-import { AuthAPI } from '../../api/profile/index';
+import { AuthAPI } from '../../api/profile/index'
 import { removeJwtToken } from '@utils/index'
 
 interface IInputProps {

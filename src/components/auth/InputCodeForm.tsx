@@ -7,7 +7,7 @@ import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
 import AuthApi from 'src/redux/services/Authen'
 import useCountdown from './Countdown'
-import { AuthAPI } from '../../pages/api/profile/index';
+import { AuthAPI } from '../../pages/api/profile/index'
 
 interface IInputCodeFormProps {
   error?: string

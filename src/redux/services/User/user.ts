@@ -72,7 +72,7 @@ const UserApi = {
     return AuthAPI.getListDevices()
   },
   getListHistory: async ({ page_index, page_size }: any): Promise<any> => {
-    return AuthAPI.getListHistory({page_index, page_size})
+    return AuthAPI.getListHistory({ page_index, page_size })
   },
 }
 

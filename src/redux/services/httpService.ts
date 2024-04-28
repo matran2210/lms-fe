@@ -1,9 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import getConfig from 'next/config'
 import { PageLink } from 'src/constants'
-import {
-  disableUnsavedChange,
-} from '../slice/Login/Login'
+import { disableUnsavedChange } from '../slice/Login/Login'
 
 import toast from 'react-hot-toast'
 import { exceptions } from './en.exceptions'

@@ -8,7 +8,7 @@ import {
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
-import { CoursesAPI } from '../../../../../pages/api/courses/index';
+import { CoursesAPI } from '../../../../../pages/api/courses/index'
 import { ActivityAPI } from 'src/pages/api/activity'
 
 // Tạo một đối tượng activity với giá trị mặc định

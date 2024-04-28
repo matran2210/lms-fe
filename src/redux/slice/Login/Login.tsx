@@ -8,7 +8,12 @@ import {
   LoginReq,
   LoginState,
 } from '../../types/Login/login'
-import { removeJwtToken, removeLocalStorageJwtToken, setActToken, setRefreshToken } from '@utils/index'
+import {
+  removeJwtToken,
+  removeLocalStorageJwtToken,
+  setActToken,
+  setRefreshToken,
+} from '@utils/index'
 import { PageLink } from 'src/constants'
 import { AuthAPI } from 'src/pages/api/profile'
 

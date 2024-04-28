@@ -21,7 +21,6 @@ const CourseAPI = {
       document.body.removeChild(link)
     }
   },
-
 }
 
 export default CourseAPI

@@ -68,9 +68,9 @@ const LoginPage = () => {
   })
 
   // Using validate for input
-  const { control, setError, getValues, handleSubmit } = useForm<IInputProps>({
+  const { control, setError, handleSubmit } = useForm<IInputProps>({
     resolver: zodResolver(validationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
     defaultValues: {
       login: '',
       password: '',
