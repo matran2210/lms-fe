@@ -66,8 +66,7 @@ export const RouteGuard = ({ children }: IProps) => {
       try {
         await dispatch(getMe()).unwrap()
         router.push(PageLink.DASHBOARD)
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   }
 

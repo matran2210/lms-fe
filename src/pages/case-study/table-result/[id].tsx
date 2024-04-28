@@ -7,7 +7,7 @@ import { roundNumber } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, QUESTION_TYPES } from 'src/constants'
-import { CoursesAPI } from '../../api/courses/index';
+import { CoursesAPI } from '../../api/courses/index'
 
 const headers = [
   {
@@ -76,7 +76,7 @@ const TableCaseStudyResult = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [scoreDetail])
-  
+
   const handlNextPage = async () => {
     const totalPages = scoreDetail?.meta?.total_pages
     const pageIndex = scoreDetail?.meta?.page_index

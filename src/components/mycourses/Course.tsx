@@ -1,8 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useMemo,
-} from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
@@ -33,7 +29,7 @@ const Course = ({
   // setData,
   // setLoading,
   lastElementRef,
-  refetch
+  refetch,
 }: {
   course: ICourse
   index: number

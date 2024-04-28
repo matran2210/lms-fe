@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import UserApi from 'src/redux/services/User/user'
 import { RootState } from 'src/redux/store'
 import { IUserStatus, IUserType, UserState } from 'src/redux/types/User/urser'
-import { AuthAPI } from '../../../pages/api/profile/index';
+import { AuthAPI } from '../../../pages/api/profile/index'
 
 const initialState: UserState = {
   loading: false,

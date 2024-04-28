@@ -108,7 +108,8 @@ export class AuthAPI {
   }
 
   static getCertificate(pageSize: number, pageIndex: number) {
-    return fetcher(`${apiURL}/certificate?page_size=${pageIndex}&page_index=${pageSize}`)
+    return fetcher(
+      `${apiURL}/certificate?page_size=${pageIndex}&page_index=${pageSize}`,
+    )
   }
-
 }

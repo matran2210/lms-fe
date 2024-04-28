@@ -22,8 +22,8 @@ const CourseDetail = () => {
   }
 
   /**
-  * @description config API course detail
-  */
+   * @description config API course detail
+   */
   const fecthCourseDetail = async ({
     pageParam,
     params,
@@ -37,33 +37,39 @@ const CourseDetail = () => {
       DEFAULT_PAGESIZE,
       params,
     )
-    return { data: data?.data?.course_sections_with_progress || [], courseDetail: data }
+    return {
+      data: data?.data?.course_sections_with_progress || [],
+      courseDetail: data,
+    }
   }
 
   /**
-  * @description sử dụng react-query để lấy data sau khi call API
-  */
+   * @description sử dụng react-query để lấy data sau khi call API
+   */
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ['courseDetail'],
       queryFn: ({ pageParam }) => fecthCourseDetail({ pageParam, params }),
       getNextPageParam: (lastPage, allPages) => {
-        if (params.user_section_learning_status || params.user_section_learning_status === undefined) {
-          return undefined; // Prevent fetching more pages if params change
+        if (
+          params.user_section_learning_status ||
+          params.user_section_learning_status === undefined
+        ) {
+          return undefined // Prevent fetching more pages if params change
         }
         return lastPage?.data?.length ? allPages.length + 1 : undefined
       },
-      enabled: router.query.courseId !== undefined
+      enabled: router.query.courseId !== undefined,
     })
 
   /**
-* @description gọi lại API khi courseID khác undefined
-*/
+   * @description gọi lại API khi courseID khác undefined
+   */
   useEffect(() => {
     if (router.query.courseId !== undefined) {
-      refetch();
+      refetch()
     }
-  }, [params.user_section_learning_status, refetch]);
+  }, [params.user_section_learning_status, refetch])
 
   // Use useEffect to refetch data when params change
   const lastElementRef = useCallback(
@@ -84,8 +90,8 @@ const CourseDetail = () => {
   )
 
   /**
-  * @description lấy data khi call API course detail
-  */
+   * @description lấy data khi call API course detail
+   */
   const courses = useMemo(() => {
     return data?.pages.reduce((acc: any, page: any) => {
       return [...acc, ...page?.data]
@@ -93,13 +99,13 @@ const CourseDetail = () => {
   }, [data])
 
   /**
-  * @description biến này lấy name của course
-  */
+   * @description biến này lấy name của course
+   */
   const courseNameDetail = data?.pages?.[0]?.courseDetail?.data?.name
-  
+
   /**
-  * @description biến này lấy name của course
-  */
+   * @description biến này lấy name của course
+   */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
 
   return (
@@ -130,7 +136,7 @@ const CourseDetail = () => {
       >
         <CourseParts
           courses={courses}
-           class_user_id={class_user_id}
+          class_user_id={class_user_id}
           lastElementRef={lastElementRef}
         />
       </div>
