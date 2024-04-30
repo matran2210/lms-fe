@@ -196,7 +196,7 @@ export class CoursesAPI {
 
   static submitQuestion(id: string, data: any): Promise<any> {
     const uri = url.submitQuestion + `/${id}` + '/submit'
-    return fetcher(`${uri}`, {
+    return fetcher(`${apiURL}${uri}`, {
       data: data,
       method: 'POST',
     })
