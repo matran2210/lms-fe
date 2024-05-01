@@ -1,11 +1,10 @@
 import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
-import { setCookieActToken } from '@utils/index'
+import { setActToken } from '@utils/index'
 import { useRouter } from 'next/router'
 import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
-import AuthApi from 'src/redux/services/Authen'
 import useCountdown from './Countdown'
 import { AuthAPI } from '../../pages/api/profile/index'
 
@@ -101,7 +100,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         token: currentToken,
       })
       if (response.success && response.data.success) {
-        setCookieActToken(response.data.act)
+        setActToken(response.data.act)
         setTimeout(() => {
           router.push(PageLink.AUTH_CHANGE_PASSWORD)
         }, 1000)
