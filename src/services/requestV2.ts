@@ -74,7 +74,6 @@ request.interceptors.response.use(
     if (
       error.response &&
       error.response.status === 401 &&
-      error.config.url !== `${apiURL}${PageLink.AUTH_LOGIN}` &&
       error.config.url !== `${apiURL}${PageLink.AUTH_LOGIN}`
     ) {
       if (!isRefreshing) {
