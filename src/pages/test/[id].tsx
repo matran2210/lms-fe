@@ -34,7 +34,7 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { LAYOUT } from '@utils/constants'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { uniqueId } from 'lodash'
+import { isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -46,13 +46,14 @@ import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
-import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
 import SappLoading from 'src/common/SappLoading'
 import toast from 'react-hot-toast'
 import ScratchPatch from './scratchPatch'
 import { CoursesAPI } from '../api/courses'
 import { TestAPI } from '../api/test'
+import Countdown from 'react-countdown'
+import { renderer, useCountdown } from 'src/hooks/useCountdown'
 
 type Window = {
   userAgreed: any
@@ -1479,6 +1480,7 @@ const TestDetail = () => {
   }, [startResize])
 
   const firstExhibitFiles = currentTabContent?.data?.exhibits?.[0]?.files?.[0]
+  const { data, onStart, onComplete } = useCountdown(quizDetail)
 
   return (
     <>
@@ -1502,16 +1504,28 @@ const TestDetail = () => {
                 {quizDetail?.name}
               </div>
               {quizDetail?.quiz_timed && (
-                <CountDown
-                  remainTime={quizDetail?.quiz_timed}
-                  onTimeOut={() => {
+                // <CountDown
+                //   remainTime={quizDetail?.quiz_timed}
+                //   onTimeOut={() => {
+                //     if (!openLimit) {
+                //       dispatch(disableUnsavedChange())
+                //       handleSubmitQuestion('timeout')
+                //       // setOpenTimeOut(true)
+                //     }
+                //   }}
+                //   ref={timeRef}
+                // />
+                <Countdown
+                  date={data.date + data.delay}
+                  renderer={renderer}
+                  onStart={onStart}
+                  onComplete={() => {
                     if (!openLimit) {
                       dispatch(disableUnsavedChange())
                       handleSubmitQuestion('timeout')
                       // setOpenTimeOut(true)
                     }
                   }}
-                  ref={timeRef}
                 />
               )}
               <ButtonCancelSubmit
