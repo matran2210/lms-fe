@@ -1480,8 +1480,11 @@ const TestDetail = () => {
   }, [startResize])
 
   const firstExhibitFiles = currentTabContent?.data?.exhibits?.[0]?.files?.[0]
-  
-  const { data, onStart } = useCountdown(quizDetail?.quiz_timed)
+
+  /**
+   * @description sử dụng hook countdown
+   */
+  const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
 
   return (
     <>
@@ -1526,6 +1529,7 @@ const TestDetail = () => {
                       handleSubmitQuestion('timeout')
                       // setOpenTimeOut(true)
                     }
+                    onComplete()
                   }}
                 />
               )}

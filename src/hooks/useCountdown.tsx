@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react'
 
+interface ICountdown {
+  date: number
+  delay: number
+}
+
+/**
+   * @description render ra coutdown
+   */
 export const renderer = ({ hours, minutes, seconds }: { hours: number, minutes: number, seconds: number }) => {
+  /**
+   * @description function này để check nếu time < 10 thì add thêm '0'
+   */
   const formatNumber = (num: number) => {
     return num < 10 ? '0' + num : num.toString()
   }
@@ -13,12 +24,19 @@ export const renderer = ({ hours, minutes, seconds }: { hours: number, minutes: 
 }
 
 export const useCountdown = (time_ended: number) => {
-  const [data, setData] = useState<any>({
+  /**
+   * @description state này lưu data của time hiện tại và time hết hạn
+   */
+  const [data, setData] = useState<ICountdown>({
     date: Date.now(),
-    delay: undefined,
+    delay: 0,
   })
+
   const wantedDelay = 60000 // 10 ms
 
+   /**
+   * @description check điều kiện nếu tồn tại time_ended thì tính lại
+   */
   useEffect(() => {
     if (time_ended) {
       const newDelay = time_ended * 60 * 1000
@@ -26,16 +44,20 @@ export const useCountdown = (time_ended: number) => {
     }
   }, [time_ended])
 
+   /**
+   * @description xử lí countdown
+   */
   useEffect(() => {
     const getLocalStorageValue = (s: string) => localStorage.getItem(s)
 
-    const savedDate = getLocalStorageValue('end_date')
-    if (savedDate != null && !isNaN(savedDate as any)) {
+    const savedDate = getLocalStorageValue('end_date') as number | string | null
+
+    if (savedDate != null && !isNaN(Number(savedDate))) {
       const currentTime = Date.now()
       const delta = parseInt(savedDate as string, 10) - currentTime
 
       if (delta > wantedDelay) {
-        if ((localStorage.getItem('end_date') as any).length > 0)
+        if (String(localStorage.getItem('end_date')).length > 0)
           localStorage.removeItem('end_date')
       } else {
         setData({ date: currentTime, delay: delta })

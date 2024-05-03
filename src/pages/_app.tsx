@@ -173,7 +173,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <Head>
         <title>{getTitleHeader(router.pathname)}</title>
         <link rel="icon" href="/sapp.svg" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
         <meta charSet="utf-8"></meta>
         <meta
           name="robots"
