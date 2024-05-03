@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
-export const renderer = ({ hours, minutes, seconds }: any) => {
+export const renderer = ({ hours, minutes, seconds }: { hours: number, minutes: number, seconds: number }) => {
   const formatNumber = (num: number) => {
     return num < 10 ? '0' + num : num.toString()
   }
+
   return (
     <div className="text-bw-1 text-[21px] font-bold w-1/3 justify-center flex font-tech tracking-[2px]">
       {formatNumber(hours)}:{formatNumber(minutes)}:{formatNumber(seconds)}
@@ -11,7 +12,7 @@ export const renderer = ({ hours, minutes, seconds }: any) => {
   )
 }
 
-export const useCountdown = (quizDetail: any) => {
+export const useCountdown = (time_ended: number) => {
   const [data, setData] = useState<any>({
     date: Date.now(),
     delay: undefined,
@@ -19,11 +20,11 @@ export const useCountdown = (quizDetail: any) => {
   const wantedDelay = 60000 // 10 ms
 
   useEffect(() => {
-    if (quizDetail?.quiz_timed) {
-      const newDelay = quizDetail?.quiz_timed * 60 * 1000
+    if (time_ended) {
+      const newDelay = time_ended * 60 * 1000
       setData({ date: Date.now(), delay: newDelay })
     }
-  }, [quizDetail?.quiz_timed])
+  }, [time_ended])
 
   useEffect(() => {
     const getLocalStorageValue = (s: string) => localStorage.getItem(s)

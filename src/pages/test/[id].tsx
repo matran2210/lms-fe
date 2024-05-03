@@ -1480,7 +1480,8 @@ const TestDetail = () => {
   }, [startResize])
 
   const firstExhibitFiles = currentTabContent?.data?.exhibits?.[0]?.files?.[0]
-  const { data, onStart, onComplete } = useCountdown(quizDetail)
+  
+  const { data, onStart } = useCountdown(quizDetail?.quiz_timed)
 
   return (
     <>
