@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import { CoursesAPI } from '../api/courses'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import Aos from 'aos'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -129,6 +130,22 @@ const MyCourse = () => {
     refetch()
   }, [params.name, params.status, params.type])
 
+  /**
+   * @description gọi lại animation khi reload lại component
+   */
+  useEffect(() => {
+    Aos.init({ duration: ANIMATION.DURATION })
+  })
+
+  /**
+   * @description lưu tổng số course vào session mỗi khi course thay đổi
+   */
+  useEffect(() => {
+    if (courses) {
+      window.sessionStorage.setItem('totalCourse', courses?.length)
+    }
+  }, [courses])
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <div className="header bg-white border-b border-default">
@@ -139,7 +156,7 @@ const MyCourse = () => {
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
-            // setPage={setPage}
+          // setPage={setPage}
           />
           {guideStatus && guideStep === 1 && (
             <PopupStep
@@ -159,9 +176,8 @@ const MyCourse = () => {
             My Course
           </h2>
           <div
-            className={`pt-6 pb-4 relative ${
-              guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
-            }`}
+            className={`pt-6 pb-4 relative ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
+              }`}
           >
             <Filter courses={data?.pages?.[0]?.category} />
             {guideStatus && guideStep === 6 && (
