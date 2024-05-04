@@ -22,7 +22,7 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { store, wrapper } from '../redux/store'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import SappLoading from 'src/common/SappLoading'
@@ -60,12 +60,20 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     },
   })
 
+  const excludedPaths = [
+    PageLink.AUTH_LOGIN,
+    PageLink.AUTH_CHANGE_PASSWORD,
+    PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
+    PageLink.AUTH_FORGOT_PASSWORD,
+    PageLink.AUTH_FORGOT_PASSWORD_RECOVER
+  ];
+
   const coutNotificationsUnRead = async () => {
     const accessToken = getActToken()
-    if (accessToken && router?.asPath !== '/auth/login') {
+    if (accessToken && excludedPaths.every(path => router?.asPath !== path)) {
       try {
         await dispatch(getCountUnRead())
-      } catch (error) {}
+      } catch (error) { }
     }
   }
 
@@ -165,7 +173,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <Head>
         <title>{getTitleHeader(router.pathname)}</title>
         <link rel="icon" href="/sapp.svg" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
         <meta charSet="utf-8"></meta>
         <meta
           name="robots"

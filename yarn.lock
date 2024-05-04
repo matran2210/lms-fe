@@ -4940,10 +4940,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.42:
-  version "1.0.42"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.42.tgz#1da5de541ef93e2b5b29ae30a8d1683ab9dccd49"
-  integrity sha512-fdi9/fnlbeOMINmk/XM5WhEvCsQ05l8n47JaDHoNrc9diz36wDnUNS1NWydDdcFhFTXIGiHOcvXtWtD7jtLotQ==
+explanation-package@^1.0.43:
+  version "1.0.43"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.43.tgz#54d624311632d49e256698b32563654517aaac01"
+  integrity sha512-1rx82bGg6c7gHmNGQQQSjUk+MHGAnnudfnYzTwMJOChkFM+egDKt5Ei2055gMoR4d6Lg6CNtIP+OQdiLDE0MUg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -7507,10 +7507,10 @@ preview-activity@^1.1.37:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.2.53:
-  version "1.2.53"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.53.tgz#db698c44cd40cfb3a2848288470ce505016a9fb5"
-  integrity sha512-XiJRuHrdaBls53vcEprFWxiTcjNOLZgq+ZT2kEa8EoAF3JB8XRwDLoitCzyxi83aD1/6cRfBHk4WcAboG+GoZA==
+preview-part@^1.2.54:
+  version "1.2.54"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.54.tgz#e0b471c29da30b9695205ab7e88527033fd6cefa"
+  integrity sha512-G8DvUWRpLqzb3BxSfo0JJPs/yBhwjlZYRhsLpkTVuj619a2o62pScdFkXUdCuTSf+a3NI5hWZ3xPLLhRmSgvoA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/aos" "^3.0.7"
@@ -7559,7 +7559,7 @@ prop-types-extra@^1.1.0:
     react-is "^16.3.2"
     warning "^4.0.0"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.8.1:
+prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -8186,6 +8186,13 @@ react-bootstrap@^2.9.1:
     react-transition-group "^4.4.5"
     uncontrollable "^7.2.1"
     warning "^4.0.3"
+
+react-countdown@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/react-countdown/-/react-countdown-2.3.5.tgz#70c035b5cbc7e8fdb4ad91fe5f44afd7a7933a68"
+  integrity sha512-K26ENYEesMfPxhRRtm1r+Pf70SErrvW3g4CArLi/x6MPFjgfDFYePT4UghEj8p2nI0cqVV7/JjDgjyr//U60Og==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-dom@^18.2.0:
   version "18.2.0"

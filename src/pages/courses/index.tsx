@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import { CoursesAPI } from '../api/courses'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import Aos from 'aos'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -53,9 +54,9 @@ const MyCourse = () => {
   }, [userGuideLine])
 
   /**
- * @description Gọi API My Course
- * @param {pageParam, params} pageParam: number, params: Object
- */
+   * @description Gọi API My Course
+   * @param {pageParam, params} pageParam: number, params: Object
+   */
   const fetchMyCourse = async ({
     pageParam,
     params,
@@ -72,8 +73,8 @@ const MyCourse = () => {
   }
 
   /**
-  * @description config params khi filter
-  */
+   * @description config params khi filter
+   */
   const params = {
     name: router.query.name || undefined,
     status: router.query.status || undefined,
@@ -81,23 +82,23 @@ const MyCourse = () => {
   }
 
   /**
-  * @description sử dụng react-query để lấy data sau khi call API
-  */
+   * @description sử dụng react-query để lấy data sau khi call API
+   */
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ['myCourse'],
       queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
       getNextPageParam: (lastPage, allPages) => {
         if (params.status || params.type) {
-          return undefined; // Prevent fetching more pages if params change
+          return undefined // Prevent fetching more pages if params change
         }
         return lastPage?.data.length ? allPages.length + 1 : undefined
       },
     })
 
   /**
-  * @description check ref khi scroll đến cuối page thì call API
-  */
+   * @description check ref khi scroll đến cuối page thì call API
+   */
   const lastElementRef = useCallback(
     (node: HTMLDivElement) => {
       if (isLoading) return
@@ -116,8 +117,8 @@ const MyCourse = () => {
   )
 
   /**
-  * @description lấy data của course khi call API get course
-  */
+   * @description lấy data của course khi call API get course
+   */
   const courses = useMemo(() => {
     return data?.pages.reduce((acc: any, page) => {
       return [...acc, ...page?.data]
@@ -127,7 +128,23 @@ const MyCourse = () => {
   // Use useEffect to refetch data when params change
   useEffect(() => {
     refetch()
-  }, [params.name, params.status, params.type]);
+  }, [params.name, params.status, params.type])
+
+  /**
+   * @description gọi lại animation khi reload lại component
+   */
+  useEffect(() => {
+    Aos.init({ duration: ANIMATION.DURATION })
+  })
+
+  /**
+   * @description lưu tổng số course vào session mỗi khi course thay đổi
+   */
+  useEffect(() => {
+    if (courses) {
+      window.sessionStorage.setItem('totalCourse', courses?.length)
+    }
+  }, [courses])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -214,7 +231,11 @@ const MyCourse = () => {
             handleCancel={closeUserGuide}
           />
         )}
-        <CoursesList courses={courses} lastElementRef={lastElementRef} refetch={refetch} />
+        <CoursesList
+          courses={courses}
+          lastElementRef={lastElementRef}
+          refetch={refetch}
+        />
       </div>
       {guideStatus && guideStep == 0 && <PopupWelcome />}
       {guideStatus && (

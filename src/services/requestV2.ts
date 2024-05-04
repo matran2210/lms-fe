@@ -29,18 +29,18 @@ export const getBaseUrl = () => {
   }
 }
 
-export const request1: AxiosInstance = axios.create({
+export const request: AxiosInstance = axios.create({
   baseURL: getBaseUrl(),
 })
 
 export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
-request1(url, config)
+  request(url, config)
     .then((res) => res?.data)
     .catch((err) => {
       throw err
     })
 
-    request1.interceptors.request.use(
+request.interceptors.request.use(
   (config) => {
     config.headers['Content-Type'] = 'application/json' // Change to your preferred content type
     return config
@@ -51,7 +51,7 @@ request1(url, config)
   },
 )
 
-request1.interceptors.request.use((config: any) => {
+request.interceptors.request.use((config: any) => {
   config.headers = {
     Authorization: 'Bearer ' + getLocalStorgeActToken(),
     ...config.headers,
@@ -60,7 +60,7 @@ request1.interceptors.request.use((config: any) => {
   return config
 })
 
-request1.interceptors.response.use(
+request.interceptors.response.use(
   function (response: AxiosResponse) {
     return response
   },
@@ -74,8 +74,7 @@ request1.interceptors.response.use(
     if (
       error.response &&
       error.response.status === 401 &&
-      error.config.url !== PageLink.AUTH_LOGIN &&
-      error.config.url !== PageLink.AUTH_FORGOT_PASSWORD
+      error.config.url !== `${apiURL}${PageLink.AUTH_LOGIN}`
     ) {
       if (!isRefreshing) {
         isRefreshing = true
@@ -92,7 +91,7 @@ request1.interceptors.response.use(
             setRefreshToken(userInfo?.rft)
 
             // update new token to axios
-            request1.defaults.headers.common['Authorization'] =
+            request.defaults.headers.common['Authorization'] =
               `Bearer ${getLocalStorgeActToken()}`
 
             // Callback to unauth API calls
@@ -104,7 +103,7 @@ request1.interceptors.response.use(
           })
           .catch(() => {
             removeLocalStorageJwtToken()
-            // window.location.href = PageLink.AUTH_LOGIN
+            window.location.href = PageLink.AUTH_LOGIN
           })
       }
 
@@ -123,7 +122,7 @@ request1.interceptors.response.use(
   },
 )
 
-request1.interceptors.response.use(
+request.interceptors.response.use(
   function (response: any) {
     return response
   },

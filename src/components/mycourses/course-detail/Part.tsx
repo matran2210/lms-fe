@@ -5,7 +5,11 @@ import TestModal from 'src/pages/courses/test'
 import { round, truncate } from 'lodash'
 import { useRouter } from 'next/router'
 import { countWords, formatTime, truncateString } from '@utils/index'
-import { ICourseSection, CLASS_USER_STATUS, ICourseDetail } from 'src/type/courses'
+import {
+  ICourseSection,
+  CLASS_USER_STATUS,
+  ICourseDetail,
+} from 'src/type/courses'
 import { useForm } from 'react-hook-form'
 import { Tooltip } from 'antd'
 

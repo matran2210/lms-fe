@@ -21,7 +21,6 @@ const CourseAPI = {
       document.body.removeChild(link)
     }
   },
-
 }
 
 export default CourseAPI
@@ -197,7 +196,7 @@ export class CoursesAPI {
 
   static submitQuestion(id: string, data: any): Promise<any> {
     const uri = url.submitQuestion + `/${id}` + '/submit'
-    return fetcher(`${uri}`, {
+    return fetcher(`${apiURL}${uri}`, {
       data: data,
       method: 'POST',
     })
@@ -327,6 +326,16 @@ export class CoursesAPI {
       method: 'PUT',
     })
   }
+
+  /**
+ * @description Lấy thông tin của breadcrumb
+ * @async
+ * @param {string | string[] | undefined} id - truyền class_id.
+ * @param {string | string[] | undefined} course_section_id - truyền activity_id.
+ */
+  static getBreadcumb(id: string | string[] | undefined, course_section_id: string | string[] | undefined): Promise<any> {
+    return fetcher(`${apiURL}/courses/${id}/section/${course_section_id}/breadcumb`)
+  }
 }
 
 export const getQuestionsById = async (
@@ -364,7 +373,7 @@ export const submitQuizTest = async (
   const quizAttemptId = quizAttemptResponse.data?.id
   if (quizAttemptId) {
     const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
-    const response = await fetcher(`${uri}`, {
+    const response = await fetcher(`${apiURL}${uri}`, {
       data: data,
       method: 'POST',
     })

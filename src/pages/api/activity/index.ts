@@ -71,30 +71,30 @@ export class ActivityAPI {
       },
     )
   }
-  
+
   static uploadImageDiscussion = ({
     discussion_id,
     new_discussion_file,
     discussion_file_ids,
   }: ICreateDiscussionUploadRequest) => {
     const formData = new FormData()
-  
-      formData.append('discussion_id', discussion_id)
-  
-      new_discussion_file?.forEach((file, index) => {
-        formData.append(`discussion_images[${index}]`, file)
-      })
-  
-      discussion_file_ids?.forEach((discussion_file_id, index) => {
-        formData.append(`discussion_file_ids[${index}]`, discussion_file_id)
-      })
-  
+
+    formData.append('discussion_id', discussion_id)
+
+    new_discussion_file?.forEach((file, index) => {
+      formData.append(`discussion_images[${index}]`, file)
+    })
+
+    discussion_file_ids?.forEach((discussion_file_id, index) => {
+      formData.append(`discussion_file_ids[${index}]`, discussion_file_id)
+    })
+
     return fetcher(`${apiURL}/course-discussions/detail/upload`, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
       data: formData,
-      method: 'POST'
+      method: 'POST',
     })
   }
 }
@@ -105,7 +105,6 @@ export class ActivityAPI {
  * @param {ICreateDiscussionUploadRequest} request - Dữ liệu yêu cầu upload cuộc thảo luận.
  * @returns {Promise<IResponse<IDiscussion>>} - Dữ liệu cuộc thảo luận đã upload.
  */
-
 
 // export const downloadResource = async (data: {
 //   files: { name: string; file_key: string }[]
