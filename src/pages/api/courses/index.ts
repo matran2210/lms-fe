@@ -373,7 +373,7 @@ export const submitQuizTest = async (
   const quizAttemptId = quizAttemptResponse.data?.id
   if (quizAttemptId) {
     const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
-    const response = await fetcher(`${uri}`, {
+    const response = await fetcher(`${apiURL}${uri}`, {
       data: data,
       method: 'POST',
     })
