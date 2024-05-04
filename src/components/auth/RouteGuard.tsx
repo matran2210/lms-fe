@@ -1,18 +1,11 @@
 import {
-  removeJwtToken,
-  getActToken,
-  getRefreshToken,
-  setCookieActToken,
-  setCookieRefreshToken,
   getLocalStorgeActToken,
   getLocalStorgeRefreshToken,
 } from '@utils/index'
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PUBLIC_PATHS, PageLink } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
-import { apiURL } from 'src/redux/services/httpService'
 import { getMe } from 'src/redux/slice/User/User'
 
 interface IProps {
@@ -53,7 +46,7 @@ export const RouteGuard = ({ children }: IProps) => {
     const path = url?.split('?')?.[0]
     const accessToken = getLocalStorgeActToken()
     const refreshToken = getLocalStorgeRefreshToken()
-    if (!accessToken && !refreshToken && !PUBLIC_PATHS[path]) {
+    if (!accessToken && !refreshToken && !PUBLIC_PATHS[path] && router?.pathname !== '/certificates/[id]') {
       setAuthorized(false)
       router.push(PageLink.AUTH_LOGIN)
     } else {
@@ -62,7 +55,7 @@ export const RouteGuard = ({ children }: IProps) => {
 
     // Chặn vào login page khi đã đăng nhập
     const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
-    if (isLoginPage && accessToken) {
+    if ((isLoginPage && accessToken)) {
       try {
         await dispatch(getMe()).unwrap()
         router.push(PageLink.DASHBOARD)

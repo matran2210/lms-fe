@@ -328,13 +328,25 @@ export class CoursesAPI {
   }
 
   /**
- * @description Lấy thông tin của breadcrumb
- * @async
- * @param {string | string[] | undefined} id - truyền class_id.
- * @param {string | string[] | undefined} course_section_id - truyền activity_id.
- */
-  static getBreadcumb(id: string | string[] | undefined, course_section_id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${apiURL}/courses/${id}/section/${course_section_id}/breadcumb`)
+   * @description Lấy thông tin của breadcrumb
+   * @async
+   * @param {string | string[] | undefined} id - truyền class_id.
+   * @param {string | string[] | undefined} course_section_id - truyền activity_id.
+   */
+  static getBreadcumb(
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/courses/${id}/section/${course_section_id}/breadcumb`,
+    )
+  }
+
+  /**
+   * @description lấy thông tin Certificate
+   */
+  static getCertificate(id: string | string[] | undefined): Promise<any> {
+    return fetcher(`${apiURL}/certificate/public/${id}`)
   }
 }
 
