@@ -29,6 +29,7 @@ import SappLoading from 'src/common/SappLoading'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { getActToken, getLocalStorgeActToken } from '@utils/index'
+import SinglePageLayout from '@components/layout/SinglePage'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -134,6 +135,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           <Component {...pageProps} />
         </FullScreenLayout>
       )
+      break
+    case LAYOUT.SINGLE_PAGE_LAYOUT:
+        content = (
+          <SinglePageLayout>
+            <Component {...pageProps} />
+          </SinglePageLayout>
+        )
       break
     default:
       content = (
