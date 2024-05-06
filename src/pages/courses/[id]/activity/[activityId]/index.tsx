@@ -906,9 +906,11 @@ const ActivityPage = () => {
                             }
                           >
                             <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
-                              {activity?.next_activity
-                                ? activity?.next_activity.name
-                                : findActivityByIndex(nextActivityIndex + 1)?.name}
+                              {
+                                activity?.next_activity
+                                  ? truncateString(activity?.next_activity.name, 80)
+                                  : truncateString(findActivityByIndex(nextActivityIndex + 1)?.name, 80)
+                              }
                             </span>
                           </SappTooltip>
                           {getCourseIcon(
