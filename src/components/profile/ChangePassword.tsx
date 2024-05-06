@@ -1,6 +1,5 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import SappButton from '@components/base/button/SappButton'
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
@@ -9,14 +8,18 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
+import { AuthAPI } from 'src/pages/api/profile'
 
-interface IInputProps {
+export interface IChangePassword {
   password: string
   newPassword: string
   confirmPassword: string
 }
 
 const ChangePassword = () => {
+  /**
+ * @description validate password
+ */
   const validationSchema = z
     .object({
       password: z
@@ -44,18 +47,33 @@ const ChangePassword = () => {
       path: ['confirmPassword'],
     })
 
-  const { control, handleSubmit, reset } = useForm<IInputProps>({
+  /**
+* @description sử dụng useForm
+*/
+  const { control, handleSubmit, reset, getValues } = useForm<IChangePassword>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
   })
 
+  /**
+ * @description state này dùng để disable form
+ */
   const [editPassword, setEditPassword] = useState(false)
 
+  /**
+* @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
+*/
   const [openPopup, setOpenPopup] = useState(false)
 
-  const onSubmit = async (data: IInputProps) => {
-    console.log(data)
-    setOpenPopup(true)
+  /**
+* @description call API submit mật khẩu hiện tại
+*/
+  const onSubmit = async (data: IChangePassword) => {
+    try {
+      await AuthAPI.changeUserPassword(data.password)
+      setOpenPopup(true)
+    } catch (error) {
+    }
   }
 
   return (
@@ -135,7 +153,7 @@ const ChangePassword = () => {
           </div>
         </div>
       </div>
-      <PasswordProfile open={openPopup} setOpen={setOpenPopup} reset={reset} setEditPassword={setEditPassword}/>
+      <PasswordProfile open={openPopup} setOpen={setOpenPopup} reset={reset} setEditPassword={setEditPassword} getValues={getValues} />
     </React.Fragment>
   )
 }

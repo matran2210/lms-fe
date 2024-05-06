@@ -188,7 +188,6 @@ const ProfileSideBar = ({ page }: IProps) => {
                   )
                   const childIsActive =
                     childActivationStates[childLabel] || false
-                    console.log(child)
                   return (
                     <div
                       key={childLabel}
