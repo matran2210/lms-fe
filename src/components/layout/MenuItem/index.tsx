@@ -205,7 +205,7 @@ export default function MenuItem({
           !isInCourse &&
           (name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
-            name === TitleSidebar.RESULTS ||
+            // name === TitleSidebar.RESULTS ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
             ? 'hidden'
