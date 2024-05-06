@@ -206,5 +206,6 @@
   "400|200201": "Revision Class For This Exam Has Already Existed",
   "400|210002": "Otp Code Not Found",
   "400|190001": "Question Topic Name Already Exist",
-  "400|210005": "Invalid Otp Code"
+  "400|210005": "Invalid Otp Code",
+  "400|010833": "Incorrect Password!"
 }

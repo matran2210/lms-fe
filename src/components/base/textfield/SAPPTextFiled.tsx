@@ -68,7 +68,7 @@ const SAPPTextFiled = ({
             onChange={onChange}
             className={`${inputClassName} ${TEXT_SIZES[textSize]} ${
               isError ? '!border-error' : ''
-            } h-[50px] border-solid form-control w-full border-default bg-transparent border py-3 px-4 shadow-0 focus:shadow-0 focus:border-primary focus:outline-none font-medium text-bw-1 placeholder:font-medium placeholder:text-gray-1`}
+            } h-[50px] border-solid form-control w-full border-default border py-3 px-4 shadow-0 focus:shadow-0 focus:border-primary focus:outline-none font-medium text-bw-1 placeholder:font-medium placeholder:text-gray-1 ${disabled ? 'bg-gray-4' : 'bg-transparent'}`}
             placeholder={placeholder}
             disabled={disabled}
             maxLength={maxLength}

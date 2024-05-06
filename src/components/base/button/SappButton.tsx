@@ -65,6 +65,7 @@ const SappButton = ({
   isUnderLine,
   isPadding = true,
   childClass = '',
+  classNameLoading= ''
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
@@ -85,7 +86,7 @@ const SappButton = ({
       disabled={disabled || loading}
     >
       {loading ? (
-        <div className="flex justify-center">
+        <div className={`flex justify-center items-center ${classNameLoading}`}>
           <span className="sr-only">Loading...</span>
           <div
             className={`h-2 w-2 rounded-full animate-bounce [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
