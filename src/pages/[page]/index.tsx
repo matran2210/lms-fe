@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ITabs } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
 import { ANIMATION } from 'src/constants'
+import ChangePassword from '@components/profile/ChangePassword'
 
 interface IProps {
   page: IProfilePages
@@ -66,6 +67,8 @@ const ProfilePage = ({ page }: any) => {
     selectedContent = <Devices />
   } else if (page === 'login_history') {
     selectedContent = <LoginHistory />
+  } else if (page === 'change_password') {
+    selectedContent = <ChangePassword />
   } else {
     selectedContent = <div>Page not found</div>
   }
