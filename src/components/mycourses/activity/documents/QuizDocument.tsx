@@ -298,6 +298,7 @@ const QuizDocument = ({
             document_id={document_id}
             setOpenFile={setOpenFile}
             grading_preference={grading_preference}
+            showQuestionContent={false}
           />
         )}
       </div>

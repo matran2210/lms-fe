@@ -44,6 +44,7 @@ export type IPreviewProp = {
   handleSaveHighLightRequirement?: any
   setUnsavedChanges?: any
   handleChange?: () => void
+  isShowContent?: boolean
 }
 const EssayQuestionPreview = ({
   data,
@@ -70,6 +71,7 @@ const EssayQuestionPreview = ({
   handleSaveHighLightRequirement = () => {},
   setUnsavedChanges,
   handleChange,
+  isShowContent = true
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   // console.log(response_option_custom)
@@ -141,7 +143,7 @@ const EssayQuestionPreview = ({
       //   }
       // }}
     >
-      {question_content && (
+      {question_content && isShowContent && (
         <div
           id="hightlight_area"
           onMouseUp={(e: any) => {
