@@ -114,29 +114,27 @@ export class AuthAPI {
   }
 
   static changeUserPassword(current_password: string) {
-    return fetcher(
-      `${apiURL}/users/change-password/send-otp`,
-      {
-        data: {
-          type:"CHANGE_PASSWORD",
-          current_password: current_password
-        },
-        method: 'POST'
+    return fetcher(`${apiURL}/users/change-password/send-otp`, {
+      data: {
+        type: 'CHANGE_PASSWORD',
+        current_password: current_password,
       },
-    )
+      method: 'POST',
+    })
   }
 
-  static verifyOTPPassword(current_password: string, new_password: string, otp_code: string) {
-    return fetcher(
-      `${apiURL}/users/change-password`,
-      {
-        data: {
-          current_password: current_password,
-          new_password: new_password,
-          otp_code: otp_code
-        },
-        method: 'POST'
+  static verifyOTPPassword(
+    current_password: string,
+    new_password: string,
+    otp_code: string,
+  ) {
+    return fetcher(`${apiURL}/users/change-password`, {
+      data: {
+        current_password: current_password,
+        new_password: new_password,
+        otp_code: otp_code,
       },
-    )
+      method: 'POST',
+    })
   }
 }

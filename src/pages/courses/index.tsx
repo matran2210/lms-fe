@@ -156,7 +156,7 @@ const MyCourse = () => {
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
-          // setPage={setPage}
+            // setPage={setPage}
           />
           {guideStatus && guideStep === 1 && (
             <PopupStep
@@ -176,8 +176,9 @@ const MyCourse = () => {
             My Course
           </h2>
           <div
-            className={`pt-6 pb-4 relative ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
-              }`}
+            className={`pt-6 pb-4 relative ${
+              guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
+            }`}
           >
             <Filter courses={data?.pages?.[0]?.category} />
             {guideStatus && guideStep === 6 && (

@@ -65,7 +65,7 @@ const SappButton = ({
   isUnderLine,
   isPadding = true,
   childClass = '',
-  classNameLoading= ''
+  classNameLoading = '',
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']

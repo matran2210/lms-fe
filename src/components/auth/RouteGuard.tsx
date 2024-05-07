@@ -46,7 +46,12 @@ export const RouteGuard = ({ children }: IProps) => {
     const path = url?.split('?')?.[0]
     const accessToken = getLocalStorgeActToken()
     const refreshToken = getLocalStorgeRefreshToken()
-    if (!accessToken && !refreshToken && !PUBLIC_PATHS[path] && router?.pathname !== '/certificates/[id]') {
+    if (
+      !accessToken &&
+      !refreshToken &&
+      !PUBLIC_PATHS[path] &&
+      router?.pathname !== '/certificates/[id]'
+    ) {
       setAuthorized(false)
       router.push(PageLink.AUTH_LOGIN)
     } else {
@@ -55,24 +60,24 @@ export const RouteGuard = ({ children }: IProps) => {
 
     // Chặn vào login page khi đã đăng nhập
     const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
-    if ((isLoginPage && accessToken)) {
+    if (isLoginPage && accessToken) {
       try {
         await dispatch(getMe()).unwrap()
         router.push(PageLink.DASHBOARD)
-      } catch (error) { }
+      } catch (error) {}
     }
   }
 
   /**
- * @description Check if the current pathname is '/' redirect to '/dashboard'
- */
+   * @description Check if the current pathname is '/' redirect to '/dashboard'
+   */
   useEffect(() => {
     // Check if the current pathname is '/'
     if (router.pathname === '/' && authorized) {
       // Redirect to '/dashboard'
-      router.replace(PageLink.DASHBOARD);
+      router.replace(PageLink.DASHBOARD)
     }
-  }, []); // Empty dependency array ensures this effect runs only once on component mount
+  }, []) // Empty dependency array ensures this effect runs only once on component mount
 
   return authorized ? children : <></>
 }

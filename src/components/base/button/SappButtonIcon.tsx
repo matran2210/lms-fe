@@ -27,25 +27,51 @@ const SappButtonIcon = ({
   isBgPrimary = false,
   isTextPrimary = false,
   download,
-  target
+  target,
 }: IProps) => {
   if (link) {
     return (
-      <a onClick={onClick} target={target} href={link} download={download} className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${isBgPrimary ? 'primary' : 'border border-solid border-[#404041] button-icon'} flex items-center h-8 min-w-[120px] justify-center`}>
+      <a
+        onClick={onClick}
+        target={target}
+        href={link}
+        download={download}
+        className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${
+          isBgPrimary
+            ? 'primary'
+            : 'border border-solid border-[#404041] button-icon'
+        } flex items-center h-8 min-w-[120px] justify-center`}
+      >
         {children}
-        <div className={`${classTitle} font-medium text-sm ms-2 ${isTextPrimary ? 'text-white' : 'text-bw-1'}`}>{title}</div>
+        <div
+          className={`${classTitle} font-medium text-sm ms-2 ${
+            isTextPrimary ? 'text-white' : 'text-bw-1'
+          }`}
+        >
+          {title}
+        </div>
       </a>
     )
   }
 
   return (
     <button
-      className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${isBgPrimary ? 'primary' : 'border border-solid border-[#404041] button-icon'} flex items-center h-8 min-w-[120px] justify-center`}
+      className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${
+        isBgPrimary
+          ? 'primary'
+          : 'border border-solid border-[#404041] button-icon'
+      } flex items-center h-8 min-w-[120px] justify-center`}
       onClick={onClick}
       disabled={loading || disabled}
     >
       {children}
-      <div className={`${classTitle} font-medium text-sm ms-2 ${isTextPrimary ? 'text-white' : 'text-bw-1'}`}>{title}</div>
+      <div
+        className={`${classTitle} font-medium text-sm ms-2 ${
+          isTextPrimary ? 'text-white' : 'text-bw-1'
+        }`}
+      >
+        {title}
+      </div>
     </button>
   )
 }

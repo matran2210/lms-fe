@@ -34,7 +34,11 @@ interface ChildWithChangePassword {
   }
 }
 
-type Child = ChildWithLabel | ChildWithDevices | ChildWithLoginHistory | ChildWithChangePassword
+type Child =
+  | ChildWithLabel
+  | ChildWithDevices
+  | ChildWithLoginHistory
+  | ChildWithChangePassword
 
 const ProfileSideBar = ({ page }: IProps) => {
   const dispatch = useAppDispatch()

@@ -3,7 +3,11 @@ import SappButton from '@components/base/button/SappButton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
-import { VALIDATE_MIN_LENGTH_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG, VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import {
+  VALIDATE_MIN_LENGTH_PASSWORD,
+  VALIDATE_PASSWORD_REGEX_MSG,
+  VALIDATE_REQUIRED,
+} from '@utils/helpers/ValidateMessage'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -18,8 +22,8 @@ export interface IChangePassword {
 
 const ChangePassword = () => {
   /**
- * @description validate password
- */
+   * @description validate password
+   */
   const validationSchema = z
     .object({
       password: z
@@ -48,41 +52,37 @@ const ChangePassword = () => {
     })
 
   /**
-* @description sử dụng useForm
-*/
+   * @description sử dụng useForm
+   */
   const { control, handleSubmit, reset, getValues } = useForm<IChangePassword>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
   })
 
   /**
- * @description state này dùng để disable form
- */
+   * @description state này dùng để disable form
+   */
   const [editPassword, setEditPassword] = useState(false)
 
   /**
-* @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
-*/
+   * @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
+   */
   const [openPopup, setOpenPopup] = useState(false)
 
   /**
-* @description call API submit mật khẩu hiện tại
-*/
+   * @description call API submit mật khẩu hiện tại
+   */
   const onSubmit = async (data: IChangePassword) => {
     try {
       await AuthAPI.changeUserPassword(data.password)
       setOpenPopup(true)
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   return (
     <React.Fragment>
       <div className="bg-white p-6 flex-1 shadow-box">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="block"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="relative">
             <div className="flex items-center justify-between pb-6 border-b border-b-gray-3">
               <div className="text-xl font-medium text-bw-1">Overview</div>
@@ -99,7 +99,10 @@ const ChangePassword = () => {
                     className="gap-12 flex"
                     cancel={{
                       title: 'Cancel',
-                      onClick: () => setEditPassword(false),
+                      onClick: () => {
+                        reset()
+                        setEditPassword(false)
+                      },
                       size: 'medium',
                       isPaddingHorizontal: false,
                       className: 'min-w-fit !px-0 text-base w-30',
@@ -115,45 +118,56 @@ const ChangePassword = () => {
               </div>
             </div>
           </div>
-
         </form>
-        <div className='grid grid-cols-2 mt-6'>
-          <div className='flex items-center text-gray-1 text-base'>Current Password</div>
+        <div className="grid grid-cols-2 mt-6">
+          <div className="flex items-center text-gray-1 text-base">
+            Current Password
+          </div>
           <div>
             <HookFormTextField
               control={control}
-              name='password'
-              type='password'
+              name="password"
+              type="password"
               disabled={!editPassword}
             />
           </div>
         </div>
 
-        <div className='grid grid-cols-2 mt-6'>
-          <div className='flex items-center text-gray-1 text-base'>New Password</div>
+        <div className="grid grid-cols-2 mt-6">
+          <div className="flex items-center text-gray-1 text-base">
+            New Password
+          </div>
           <div>
             <HookFormTextField
               control={control}
-              name='newPassword'
-              type='password'
+              name="newPassword"
+              type="password"
               disabled={!editPassword}
             />
           </div>
         </div>
 
-        <div className='grid grid-cols-2 mt-6'>
-          <div className='flex items-center text-gray-1 text-base'>Confirm New Password</div>
+        <div className="grid grid-cols-2 mt-6">
+          <div className="flex items-center text-gray-1 text-base">
+            Confirm New Password
+          </div>
           <div>
             <HookFormTextField
               control={control}
-              name='confirmPassword'
-              type='password'
+              name="confirmPassword"
+              type="password"
               disabled={!editPassword}
             />
           </div>
         </div>
       </div>
-      <PasswordProfile open={openPopup} setOpen={setOpenPopup} reset={reset} setEditPassword={setEditPassword} getValues={getValues} />
+      <PasswordProfile
+        open={openPopup}
+        setOpen={setOpenPopup}
+        reset={reset}
+        setEditPassword={setEditPassword}
+        getValues={getValues}
+      />
     </React.Fragment>
   )
 }

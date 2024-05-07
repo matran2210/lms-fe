@@ -66,15 +66,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     PageLink.AUTH_CHANGE_PASSWORD,
     PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
     PageLink.AUTH_FORGOT_PASSWORD,
-    PageLink.AUTH_FORGOT_PASSWORD_RECOVER
-  ];
+    PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
+  ]
 
   const coutNotificationsUnRead = async () => {
     const accessToken = getActToken()
-    if (accessToken && excludedPaths.every(path => router?.asPath !== path)) {
+    if (accessToken && excludedPaths.every((path) => router?.asPath !== path)) {
       try {
         await dispatch(getCountUnRead())
-      } catch (error) { }
+      } catch (error) {}
     }
   }
 
@@ -137,11 +137,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       )
       break
     case LAYOUT.SINGLE_PAGE_LAYOUT:
-        content = (
-          <SinglePageLayout>
-            <Component {...pageProps} />
-          </SinglePageLayout>
-        )
+      content = (
+        <SinglePageLayout>
+          <Component {...pageProps} />
+        </SinglePageLayout>
+      )
       break
     default:
       content = (

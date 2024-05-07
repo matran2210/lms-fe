@@ -56,9 +56,9 @@ const Dashboard = () => {
               />
             </div>
           </div>
-        <div className="absolute bottom-0">
-          <Image src={dashboard} />
-        </div>
+          <div className="absolute bottom-0">
+            <Image src={dashboard} />
+          </div>
         </div>
       </div>
     </React.Fragment>
