@@ -73,10 +73,10 @@ const ChangePassword = () => {
    * @description call API submit mật khẩu hiện tại
    */
   const onSubmit = async (data: IChangePassword) => {
-    try {
-      await AuthAPI.changeUserPassword(data.password)
-      setOpenPopup(true)
-    } catch (error) {}
+    setOpenPopup(true)
+    // try {
+    //   await AuthAPI.changeUserPassword(data.password)
+    // } catch (error) {}
   }
 
   return (

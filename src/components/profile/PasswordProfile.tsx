@@ -194,7 +194,7 @@ const PasswordProfile = ({
           loading={loading}
           onClick={verifyCode}
           disabled={code.some((e) => e === '') || time <= 0}
-          classNameLoading="h-[50px]"
+          classNameLoading="h-8"
         />
         <ButtonText
           title="Resend Code"
