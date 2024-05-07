@@ -24,6 +24,11 @@ export const PROFILE_PAGES = {
           label: 'Login History',
         },
       },
+      {
+        CHANGE_PASSWORD: {
+          label: 'Change Password',
+        },
+      },
     ],
   },
 }

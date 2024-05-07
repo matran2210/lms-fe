@@ -60,7 +60,12 @@ const Certificate = () => {
             <div key={certificate.id}>
               <div
                 className="hover:bg-secondary hover:text-primary group relative flex flex-row gap-2 w-full items-start self-center pt-5 px-6 cursor-pointer min-h-[88px]  border-b border-gray-2"
-                onClick={() => window.open(`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`, '_blank')}
+                onClick={() =>
+                  window.open(
+                    `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`,
+                    '_blank',
+                  )
+                }
               >
                 <div className=" flex flex-row justify-center mb-5  items-start bg-gray-4 border border-bottom ">
                   <a className="hover:text-primary group-hover:bg-secondary group-hover:border-active border-solid border px-5 py-1 h-[48px] w-[80px] ">

@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 
 interface LayoutProps {
-    children: ReactNode
+  children: ReactNode
 }
 
 export default function SinglePageLayout(props: LayoutProps): ReactElement {

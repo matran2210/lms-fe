@@ -50,7 +50,7 @@ function DiscussionElement({
       </div>
       <div>
         <div className="text-base font-semibold mb-1">
-          {discussion.username}
+          {discussion.full_name}
         </div>
         <div className="flex gap-3 flex-wrap">
           {discussion.course_discussion_files?.map((e) => {

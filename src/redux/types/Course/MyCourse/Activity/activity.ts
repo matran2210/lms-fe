@@ -47,6 +47,7 @@ export interface IDiscussion {
   parent_id: string | null
 
   username: string
+  full_name: string
   avatar: { [key: string]: string }
   is_like: boolean
   children: IDiscussion[]

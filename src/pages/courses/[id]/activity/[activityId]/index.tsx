@@ -8,9 +8,7 @@ import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import {
-  truncateString,
-} from '@utils/index'
+import { truncateString } from '@utils/index'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -71,10 +69,10 @@ const ActivityPage = () => {
     )
   }
 
-  const {
-    data: activity,
-    isLoading,
-  } = useGetActivityById(router.query.activityId, router.query.id)
+  const { data: activity, isLoading } = useGetActivityById(
+    router.query.activityId,
+    router.query.id,
+  )
 
   const courseId = router.query?.id
   const sectionId = router.query?.activityId
@@ -114,7 +112,7 @@ const ActivityPage = () => {
         //     sectionId,
         //   )
         // })()
-      } catch (error) { }
+      } catch (error) {}
     }
 
     return () => {
@@ -277,7 +275,7 @@ const ActivityPage = () => {
     try {
       dispatch(getCourseActivityTapById({ id }))
       setActiveButtonId(id)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -380,8 +378,8 @@ const ActivityPage = () => {
   }
 
   /**
- * @description call API lấy data của breadcrumbs
- */
+   * @description call API lấy data của breadcrumbs
+   */
   const useGetBreadcrumb = (
     id: string | string[] | undefined,
     section_id: string | string[] | undefined,
@@ -396,61 +394,63 @@ const ActivityPage = () => {
   }
 
   /**
- * @description lấy data breadcrumb using react-query
- */
-  const {
-    data: breadcrumbsMenu,
-  } = useGetBreadcrumb(router.query.id, router.query.activityId)
+   * @description lấy data breadcrumb using react-query
+   */
+  const { data: breadcrumbsMenu } = useGetBreadcrumb(
+    router.query.id,
+    router.query.activityId,
+  )
 
   /**
- * @description config menu breadcrumbs trong activity
- */
+   * @description config menu breadcrumbs trong activity
+   */
   const menu = (
     <Menu>
-      {breadcrumbsMenu?.data && breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-        let url = ''
-        switch (e.course_section_type) {
-          case 'PART':
-            url = `/courses/${router.query.id}/section/${e?.id}`
-            break
-          case 'CHAPTER':
-            url = `/courses/${router.query.id}/section/${e?.id}?unit_id=${e?.id}`
-            break
-          case 'UNIT':
-            url = `/courses/${router.query.id}/section/${e?.id}?unit_id=${e?.id}`
-            break
-          case 'ACTIVITY':
-            url = '#'
-            break
-          default:
-            url = `/courses/my-course/${router.query.id}`
-            break
-        }
-        return (
-          <React.Fragment>
-            {e?.course_section_type !== 'ACTIVITY' ?
-              <Menu.Item key={e?.id} onClick={() => router.push(url)}>
-                <li
-                  className={
-                    'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
-                  }
-                  title={e?.name}
-                >
-                  <Link href={url}>
-                    <span
-                      className={
-                        'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
-                      }
-                    >
-                      {truncateString(e?.name, 25)}
-                    </span>
-                  </Link>
-                </li>
-              </Menu.Item>
-              : null}
-          </React.Fragment>
-        )
-      })}
+      {breadcrumbsMenu?.data &&
+        breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
+          let url = ''
+          switch (e.course_section_type) {
+            case 'PART':
+              url = `/courses/${router.query.id}/section/${e?.id}`
+              break
+            case 'CHAPTER':
+              url = `/courses/${router.query.id}/section/${e?.id}?unit_id=${e?.id}`
+              break
+            case 'UNIT':
+              url = `/courses/${router.query.id}/section/${e?.id}?unit_id=${e?.id}`
+              break
+            case 'ACTIVITY':
+              url = '#'
+              break
+            default:
+              url = `/courses/my-course/${router.query.id}`
+              break
+          }
+          return (
+            <React.Fragment key={e?.id}>
+              {e?.course_section_type !== 'ACTIVITY' ? (
+                <Menu.Item onClick={() => router.push(url)}>
+                  <li
+                    className={
+                      'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
+                    }
+                    title={e?.name}
+                  >
+                    <Link href={url}>
+                      <span
+                        className={
+                          'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
+                        }
+                      >
+                        {truncateString(e?.name, 25)}
+                      </span>
+                    </Link>
+                  </li>
+                </Menu.Item>
+              ) : null}
+            </React.Fragment>
+          )
+        })}
     </Menu>
   )
 
@@ -593,8 +593,9 @@ const ActivityPage = () => {
 
             {activity?.course_outcomes?.length > 0 && (
               <div
-                className={`pt-6 pb-4 ${activity?.files?.length > 0 && 'border-b borderColor-default'
-                  }`}
+                className={`pt-6 pb-4 ${
+                  activity?.files?.length > 0 && 'border-b borderColor-default'
+                }`}
               >
                 <div className="font-semibold text-base mb-2">
                   Learning Outcome:
@@ -712,16 +713,18 @@ const ActivityPage = () => {
                   <>
                     <SAPPBorder />
                     <div
-                      className={`pt-8 ${getPreviousTabId() ? 'pb-4' : 'pb-0'
-                        } `}
+                      className={`pt-8 ${
+                        getPreviousTabId() ? 'pb-4' : 'pb-0'
+                      } `}
                     >
                       <div className="font-semibold text-base">Resource:</div>
                       <ul className="list-disc text-base">
                         {activity?.files.map((e: any, index: number) => {
                           return (
                             <div
-                              className={`flex justify-between group cursor-pointer ${index === 0 ? 'mt-4' : 'mt-5'
-                                }`}
+                              className={`flex justify-between group cursor-pointer ${
+                                index === 0 ? 'mt-4' : 'mt-5'
+                              }`}
                               key={index}
                             >
                               <div className="flex">
@@ -829,11 +832,12 @@ const ActivityPage = () => {
           (nextActivityIndex !== -1 &&
             nextActivityIndex !== sessionData?.length - 1) ||
           (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
-            <div data-aos={ANIMATION.DATA_AOS}>
-              <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
-                <div
-                  className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity ||
-                    (previousActivityIndex !== -1 && previousActivityIndex !== 0)
+          <div data-aos={ANIMATION.DATA_AOS}>
+            <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
+              <div
+                className={`flex flex-nowrap gap-5 justify-${
+                  activity?.previous_activity ||
+                  (previousActivityIndex !== -1 && previousActivityIndex !== 0)
                     ? 'between'
                     : 'end'
                     }`}
@@ -915,18 +919,43 @@ const ActivityPage = () => {
                           </SappTooltip>
                           {getCourseIcon(
                             activity?.next_activity
-                              ? activity?.next_activity?.display_icon
-                              : findActivityByIndex(nextActivityIndex + 1)
-                                ?.display_icon,
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  {!activity?.next_activity && <div></div>}
-                </div>
+                              ? activity?.next_activity?.id
+                              : activityIds[nextActivityIndex + 1]
+                          }`,
+                        })
+                      }}
+                      className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                    >
+                      Next Activity
+                    </div>
+                    <div className="text-medium-sm text-gray-1 flex justify-end">
+                      <SappTooltip
+                        title={
+                          activity?.next_activity
+                            ? activity?.next_activity.name
+                            : findActivityByIndex(nextActivityIndex + 1)?.name
+                        }
+                      >
+                        <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
+                          {activity?.next_activity
+                            ? activity?.next_activity.name
+                            : findActivityByIndex(nextActivityIndex + 1)?.name}
+                        </span>
+                      </SappTooltip>
+                      {getCourseIcon(
+                        activity?.next_activity
+                          ? activity?.next_activity?.display_icon
+                          : findActivityByIndex(nextActivityIndex + 1)
+                              ?.display_icon,
+                      )}
+                    </div>
+                  </div>
+                )}
+                {!activity?.next_activity && <div></div>}
               </div>
             </div>
-          )}
+          </div>
+        )}
 
         <div ref={endActivityRef}></div>
         <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
@@ -950,8 +979,8 @@ const ActivityPage = () => {
                     : index + 1400
                 }
                 fixed
-              // not_resizable
-              // className='pointer-events-none'
+                // not_resizable
+                // className='pointer-events-none'
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
                   <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
@@ -994,8 +1023,9 @@ const ActivityPage = () => {
                 <div className="absolute h-full w-full  top-0 left-0 border">
                   <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
                     <div className="truncate">
-                      <span className="font-semibold text-base text-bw-1">{`Exhibit ${e?.index + 1
-                        }: `}</span>
+                      <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                        e?.index + 1
+                      }: `}</span>
                       {e?.name}
                     </div>
                     <button onClick={() => handleCloseScratchPad(e)}>

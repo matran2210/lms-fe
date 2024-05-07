@@ -6,9 +6,17 @@ interface ICountdown {
 }
 
 /**
-   * @description render ra coutdown
-   */
-export const renderer = ({ hours, minutes, seconds }: { hours: number, minutes: number, seconds: number }) => {
+ * @description render ra coutdown
+ */
+export const renderer = ({
+  hours,
+  minutes,
+  seconds,
+}: {
+  hours: number
+  minutes: number
+  seconds: number
+}) => {
   /**
    * @description function này để check nếu time < 10 thì add thêm '0'
    */
@@ -34,7 +42,7 @@ export const useCountdown = (time_ended: number) => {
 
   const wantedDelay = 60000 // 10 ms
 
-   /**
+  /**
    * @description check điều kiện nếu tồn tại time_ended thì tính lại
    */
   useEffect(() => {
@@ -44,7 +52,7 @@ export const useCountdown = (time_ended: number) => {
     }
   }, [time_ended])
 
-   /**
+  /**
    * @description xử lí countdown
    */
   useEffect(() => {

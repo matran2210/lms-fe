@@ -102,7 +102,11 @@ export default function Sidebar({
               className="max-w-365px bottom-full left-full mb-3 ml-3 w-screen"
               index={3}
               total={6}
-              handleNext={Number(window.sessionStorage.getItem('totalCourse')) > 0 ? nextStep : closeUserGuide}
+              handleNext={
+                Number(window.sessionStorage.getItem('totalCourse')) > 0
+                  ? nextStep
+                  : closeUserGuide
+              }
               handleCancel={closeUserGuide}
             />
           )}

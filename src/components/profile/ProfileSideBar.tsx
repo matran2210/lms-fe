@@ -28,7 +28,17 @@ interface ChildWithLoginHistory {
   }
 }
 
-type Child = ChildWithLabel | ChildWithDevices | ChildWithLoginHistory
+interface ChildWithChangePassword {
+  CHANGE_PASSWORD: {
+    label: string
+  }
+}
+
+type Child =
+  | ChildWithLabel
+  | ChildWithDevices
+  | ChildWithLoginHistory
+  | ChildWithChangePassword
 
 const ProfileSideBar = ({ page }: IProps) => {
   const dispatch = useAppDispatch()
@@ -41,6 +51,8 @@ const ProfileSideBar = ({ page }: IProps) => {
       return child.DEVICES.label
     } else if ('LOGIN_HISTORY' in child) {
       return child.LOGIN_HISTORY.label
+    } else if ('CHANGE_PASSWORD' in child) {
+      return child.CHANGE_PASSWORD.label
     }
 
     // Mặc định trả về chuỗi rỗng nếu không tìm thấy
@@ -50,7 +62,7 @@ const ProfileSideBar = ({ page }: IProps) => {
   const handleLogout = async () => {
     try {
       await dispatch(getLogoutUser())
-      router.push(PageLink.AUTH_LOGIN)
+      // router.push(PageLink.AUTH_LOGIN)
     } catch (error) {}
   }
 

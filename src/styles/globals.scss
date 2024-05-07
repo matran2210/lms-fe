@@ -770,8 +770,7 @@ $focus: (
   transition: 0.25s;
   @apply bg-gray-3;
 
-  &:hover,
-  &:focus {
+  &:hover {
     @apply text-white;
   }
 }
@@ -780,8 +779,7 @@ $focus: (
   transition: 0.25s;
   @apply bg-primary text-white;
 
-  &:hover,
-  &:focus {
+  &:hover {
     @apply text-white;
   }
 }
@@ -820,8 +818,11 @@ textarea:focus {
 .button-icon {
   transition: 0.25s;
 
-  &:hover,
-  &:focus {
-    @apply  bg-primary-2;
+  &:hover {
+    @apply bg-primary-2;
   }
+}
+
+:where(.css-dev-only-do-not-override-1xg9z9n).ant-modal {
+  font-family: 'Roboto' !important;
 }
