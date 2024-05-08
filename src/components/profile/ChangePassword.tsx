@@ -21,6 +21,8 @@ export interface IChangePassword {
 }
 
 const ChangePassword = () => {
+  const [loading, setLoading] = useState(false)
+
   /**
    * @description validate password
    */
@@ -73,10 +75,14 @@ const ChangePassword = () => {
    * @description call API submit mật khẩu hiện tại
    */
   const onSubmit = async (data: IChangePassword) => {
+    setLoading(true)
     try {
       await AuthAPI.changeUserPassword(data.password)
       setOpenPopup(true)
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -114,6 +120,7 @@ const ChangePassword = () => {
                       size: 'medium',
                       className: 'min-w-fit px-0 text-sm w-30',
                       type: 'submit',
+                      disabled: loading,
                     }}
                   ></ButtonCancelSubmit>
                 )}
