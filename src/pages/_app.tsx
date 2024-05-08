@@ -22,12 +22,14 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { store, wrapper } from '../redux/store'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
-import { Player } from '@lottiefiles/react-lottie-player'
 import SappLoading from 'src/common/SappLoading'
-import { getActToken } from '@utils/index'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import { getActToken, getLocalStorgeActToken } from '@utils/index'
+import SinglePageLayout from '@components/layout/SinglePage'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -51,12 +53,28 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     (state) => state.notificationReducer?.total_records,
   )
 
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 3000000, // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
+      },
+    },
+  })
+
+  const excludedPaths = [
+    PageLink.AUTH_LOGIN,
+    PageLink.AUTH_CHANGE_PASSWORD,
+    PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
+    PageLink.AUTH_FORGOT_PASSWORD,
+    PageLink.AUTH_FORGOT_PASSWORD_RECOVER
+  ];
+
   const coutNotificationsUnRead = async () => {
     const accessToken = getActToken()
-    if (accessToken && router?.asPath !== '/auth/login') {
+    if (accessToken && excludedPaths.every(path => router?.asPath !== path)) {
       try {
         await dispatch(getCountUnRead())
-      } catch (error) {}
+      } catch (error) { }
     }
   }
 
@@ -118,6 +136,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         </FullScreenLayout>
       )
       break
+    case LAYOUT.SINGLE_PAGE_LAYOUT:
+        content = (
+          <SinglePageLayout>
+            <Component {...pageProps} />
+          </SinglePageLayout>
+        )
+      break
     default:
       content = (
         <Layout openDrawer={openResource} setOpenResource={setOpenResource}>
@@ -127,7 +152,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }
   const handleOnChangePage = () => {
     if (typeof window !== 'undefined') {
-      if (getActToken() === '') {
+      if (getLocalStorgeActToken() === '') {
         setOpenResource(false)
       }
     }
@@ -156,7 +181,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <Head>
         <title>{getTitleHeader(router.pathname)}</title>
         <link rel="icon" href="/sapp.svg" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
         <meta charSet="utf-8"></meta>
         <meta
           name="robots"
@@ -213,19 +238,22 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         />
       </Head>
       <main>
-        <Toaster />
-        <SappConfirmDialogContainer />
-        {loading ? <SappLoading /> : <></>}
-        <RouteGuard>
-          <>
-            {content}
-            <LearningResource
-              open={openResource}
-              setOpenResource={setOpenResource}
-            />
-            <LearningNotesList />
-          </>
-        </RouteGuard>
+        <QueryClientProvider client={queryClient}>
+          <Toaster />
+          <SappConfirmDialogContainer />
+          {loading ? <SappLoading /> : <></>}
+          <RouteGuard>
+            <>
+              {content}
+              <LearningResource
+                open={openResource}
+                setOpenResource={setOpenResource}
+              />
+              <LearningNotesList />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </>
+          </RouteGuard>
+        </QueryClientProvider>
       </main>
     </>
   )

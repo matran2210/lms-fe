@@ -5,6 +5,7 @@
     "no-console": "error",
     // "no-unused-vars": "error",
     "@next/next/no-document-import-in-page": "off",
+    "ignoreDuringBuilds": true,
     // "import/no-unused-modules": [1, { "unusedExports": true }]
   }
 }

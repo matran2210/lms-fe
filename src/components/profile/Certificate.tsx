@@ -1,17 +1,35 @@
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { useEffect, useState } from 'react'
-import MyProfileAPI from 'src/pages/api/profile'
+import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
 
+interface ICertificate {
+  certificate: {
+    id: string
+    name: string
+  }
+  certificate_id: string
+  certificate_url: string
+  class_id: string
+  course: {
+    id: string
+    name: string
+  }
+  course_id: string
+  id: string
+  user_id: string
+  pass_point: number
+}
+
 const Certificate = () => {
-  const [certificateData, setCertificateData] = useState<any>([])
+  const [certificateData, setCertificateData] = useState<ICertificate[]>([])
   const [totalCertificateData, setTotalCertificateData] = useState<any>()
   const [modalOpen, setOpenModal] = useState(false)
   const [userDetail, setUserDetail] = useState('')
 
   const fetchChapterDetail = async () => {
     try {
-      const res = await MyProfileAPI.getCertificate(1, 10)
+      const res = await AuthAPI.getCertificate(1, 10)
       const certificate = res.data.certificates
       const totalCertificate = res.data.meta.total_records
       const userDetail = res.username
@@ -25,6 +43,7 @@ const Certificate = () => {
     fetchChapterDetail()
   }, [])
   const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
+
   return (
     <div>
       <div className="relative">
@@ -36,15 +55,12 @@ const Certificate = () => {
       <div
         style={{ maxHeight: '478px', overflowY: 'auto', minHeight: '400px' }}
       >
-        {certificateData.map((certificate: any, index: any) => {
+        {certificateData.map((certificate: ICertificate) => {
           return (
             <div key={certificate.id}>
               <div
                 className="hover:bg-secondary hover:text-primary group relative flex flex-row gap-2 w-full items-start self-center pt-5 px-6 cursor-pointer min-h-[88px]  border-b border-gray-2"
-                onClick={() => {
-                  setCertificateDataPopup(certificate)
-                  setOpenModal(true)
-                }}
+                onClick={() => window.open(`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`, '_blank')}
               >
                 <div className=" flex flex-row justify-center mb-5  items-start bg-gray-4 border border-bottom ">
                   <a className="hover:text-primary group-hover:bg-secondary group-hover:border-active border-solid border px-5 py-1 h-[48px] w-[80px] ">

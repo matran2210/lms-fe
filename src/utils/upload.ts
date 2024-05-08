@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
+import { TestAPI } from 'src/pages/api/test'
 
 export const mergeImageToEditor = async (data: string) => {
   const div = document.createElement('div')
@@ -11,7 +11,7 @@ export const mergeImageToEditor = async (data: string) => {
   for (const element of media) {
     const src = element.getAttribute('resource_id')
     if (src && element.tagName === 'VIDEO') {
-      const res = await CourseTestApi.getResource(src)
+      const res = await TestAPI.getResource(src)
       const source = element.querySelector('source')
       const linkVideo = source?.getAttribute('src')
       var iframe = document.createElement('iframe')

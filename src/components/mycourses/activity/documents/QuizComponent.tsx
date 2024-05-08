@@ -680,6 +680,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     return (
       <div>
         <div ref={questionRef}>
+          <EditorReader
+            text_editor_content={activeQuestion?.question_topic?.description}
+            className="sapp-questions"
+          />
           <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
         <div>

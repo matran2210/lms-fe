@@ -11,6 +11,7 @@ import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { useRouter } from 'next/router'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 
 const EntranceTestFillForm = ({
   open,
@@ -54,7 +55,7 @@ const EntranceTestFillForm = ({
       .refine((data) => data?.value && data?.label, VALIDATE_REQUIRED),
   })
   const getListUniversities = async () => {
-    const res = await EntranceApi.getListUnivers()
+    const res = await EntranceTestAPI.getListUnivers()
     let optionUnivers = []
     for (let e of res.data) {
       optionUnivers.push({ value: e.code, label: e.name })
@@ -63,7 +64,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   }
   const getListUniverPrograms = async () => {
-    const res = await EntranceApi.getListUniversProgram()
+    const res = await EntranceTestAPI.getListUniversProgram()
     let optionUniverProgram = []
     for (let e of res.data) {
       optionUniverProgram.push({ value: e.id, label: e.name })
@@ -72,7 +73,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   }
   const getListMajors = async () => {
-    const res = await EntranceApi.getListMajors()
+    const res = await EntranceTestAPI.getListMajors()
     let optionMajors = []
     for (let e of res.data) {
       optionMajors.push({ value: e.id, label: e.name })
@@ -81,7 +82,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   }
   const getListEngLevel = async () => {
-    const res = await EntranceApi.getListEngLevel()
+    const res = await EntranceTestAPI.getListEngLevel()
     let optionEngLevel = []
     for (let e of res.data) {
       optionEngLevel.push({ value: e.id, label: e.name })
@@ -151,7 +152,7 @@ const EntranceTestFillForm = ({
     ) {
       return
     } else {
-      await EntranceApi.putLevel({
+      await EntranceTestAPI.putLevel({
         university_program_id: dataValue.univers_program_id.value,
         major_id: dataValue.majors_id.value,
         english_level_id: dataValue.englishLevel_id.value,

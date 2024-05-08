@@ -1,31 +1,37 @@
 import EntranceTestFilter from '@components/entrance-test/EntranceTestFilter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React, { useEffect } from 'react'
-import { parse } from 'cookie'
+import React from 'react'
 import EntranceTestList from '@components/entrance-test/EntranceTestList'
-import EntranceApi from 'src/redux/services/EntranceTest'
-import axios from 'axios'
-import { apiURL } from '@components/mycourses/LearningResource'
-import {
-  removeJwtToken,
-  setCookieActToken,
-  setCookieRefreshToken,
-  buildQueryString,
-} from '@utils/index'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
-import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
-import { useAppDispatch } from 'src/redux/hook'
 import { ANIMATION } from 'src/constants'
+import { useQuery } from 'react-query'
+import { EntranceTestAPI } from '../api/entrance-test'
+import { useRouter } from 'next/router'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 
-const EntranceTest = ({ entranceTestLists }: any) => {
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    dispatch(getEntranceCount())
-  }, [])
+const EntranceTest = () => {
+  // const dispatch = useAppDispatch()
+  // useEffect(() => {
+  //   dispatch(getEntranceCount())
+  // }, [])
+
+  const useGetData = (queryKey: string, params: Object) => {
+    const fetchData = async () => {
+      const { data } = await EntranceTestAPI.get(params)
+      return data
+    }
+
+    return useQuery([queryKey, params], fetchData)
+  }
+
+  const router = useRouter()
+  const { data: entranceTestLists, isLoading } = useGetData('entrance-test', {
+    attempt_status: router?.query?.attempt_status,
+  })
 
   return (
-    <>
+    <SappLoadingGlobal loading={isLoading}>
       <div className="header bg-white border-b border-default">
         <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
           <SearchForm
@@ -59,96 +65,101 @@ const EntranceTest = ({ entranceTestLists }: any) => {
         <EntranceTestList entranceTestLists={entranceTestLists} />
       </div>
       <PopUpRemindEntrance />
-    </>
+    </SappLoadingGlobal>
   )
 }
 
 export default EntranceTest
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
+// export async function getServerSideProps(context: any) {
+//   const { req, res, query } = context
 
-  // Lấy accessToken từ cookie
-  const accessToken = req.cookies.accessToken
+//   // Lấy accessToken từ cookie
+//   const accessToken = req.cookies.accessToken
 
-  try {
-    // Parse cookies from the request headers
-    const cookies = parse(req.headers.cookie || '')
-    const queryString = buildQueryString({
-      attempt_status: query.attempt_status || '',
-    })
-    const entranceTestLists = (await EntranceApi.getListEntranceTest(
-      cookies.accessToken,
-      queryString,
-    )) as any
+//   try {
+//     // Parse cookies from the request headers
+//     const cookies = parse(req.headers.cookie || '')
+//     const queryString = buildQueryString({
+//       attempt_status: query.attempt_status || '',
+//     })
+//     const entranceTestLists = (await EntranceApi.getListEntranceTest(
+//       cookies.accessToken,
+//       queryString,
+//     )) as any
 
-    return {
-      props: { entranceTestLists },
-    }
-  } catch (error: any) {
-    // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-    if (error.response && error.response.status === 401) {
-      // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-      const refreshToken = req.cookies.refreshToken
+//     return {
+//       props: { entranceTestLists },
+//     }
+//   } catch (error: any) {
+//     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
+//     if (error.response && error.response.status === 401) {
+//       // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
+//       const refreshToken = req.cookies.refreshToken
 
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
+//       try {
+//         const refreshResponse = await axios.post(
+//           `${apiURL}/auth/rotate`,
+//           {},
+//           {
+//             headers: {
+//               Authorization: `Bearer ${refreshToken}`,
+//             },
+//           },
+//         )
 
-        // Lưu accessToken mới vào cookie
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
+//         // Lưu accessToken mới vào cookie
+//         const userInfo = refreshResponse?.data?.data?.tokens
+//         const act = userInfo?.act
+//         const rft = userInfo?.rft
+//         // Save the new access token to the AsyncStorage
+//         if (typeof window !== 'undefined') {
+//           await AsyncStorage.setItem('accessToken', act)
+//           await AsyncStorage.setItem('refreshToken', rft)
+//         }
+//         setCookieActToken(act)
+//         setCookieRefreshToken(rft)
+//         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
 
-        // Tiếp tục thực hiện yêu cầu API với accessToken mới
-        const queryString = buildQueryString({
-          attempt_status: query.attempt_status || '',
-        })
-        const entranceTestLists = (await EntranceApi.getListEntranceTest(
-          act,
-          queryString,
-        )) as any
+//         // Tiếp tục thực hiện yêu cầu API với accessToken mới
+//         const queryString = buildQueryString({
+//           attempt_status: query.attempt_status || '',
+//         })
+//         const entranceTestLists = (await EntranceApi.getListEntranceTest(
+//           act,
+//           queryString,
+//         )) as any
 
-        return {
-          props: { entranceTestLists },
-        }
-      } catch (refreshError) {
-        // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-        removeJwtToken()
-        // Chuyển hướng đến trang đăng nhập
-        return {
-          redirect: {
-            destination: '/',
-            permanent: false,
-          },
-        }
-      }
-    } else {
-      // Xử lý lỗi khác khi sử dụng accessToken
-      if (error.response && error.response.status === 403) {
-        // Chuyển hướng đến trang đăng nhập
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-      } else
-        return {
-          redirect: {
-            destination: '/auth/login',
-            permanent: false,
-          },
-        }
-    }
-  }
-}
+//         return {
+//           props: { entranceTestLists },
+//         }
+//       } catch (refreshError) {
+//         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
+//         removeJwtToken()
+//         // Chuyển hướng đến trang đăng nhập
+//         return {
+//           redirect: {
+//             destination: '/',
+//             permanent: false,
+//           },
+//         }
+//       }
+//     } else {
+//       // Xử lý lỗi khác khi sử dụng accessToken
+//       if (error.response && error.response.status === 403) {
+//         // Chuyển hướng đến trang đăng nhập
+//         return {
+//           redirect: {
+//             destination: '/auth/login',
+//             permanent: false,
+//           },
+//         }
+//       } else
+//         return {
+//           redirect: {
+//             destination: '/auth/login',
+//             permanent: false,
+//           },
+//         }
+//     }
+//   }
+// }

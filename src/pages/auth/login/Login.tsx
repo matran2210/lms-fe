@@ -28,6 +28,7 @@ import PopUpLimit from './PopupLimit'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
+import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 interface IInputProps {
   login: string
   password: string
@@ -67,9 +68,9 @@ const LoginPage = () => {
   })
 
   // Using validate for input
-  const { control, setError, getValues, handleSubmit } = useForm<IInputProps>({
+  const { control, setError, handleSubmit } = useForm<IInputProps>({
     resolver: zodResolver(validationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
     defaultValues: {
       login: '',
       password: '',
@@ -98,7 +99,7 @@ const LoginPage = () => {
 
   async function getListEntranceTest() {
     try {
-      const res = await EntranceApi.getListEntranceTestLogin()
+      const res = await EntranceTestAPI.getListEntranceTestLogin()
       if (res?.data?.length > 0) {
         router.push(PageLink.ENTRANCE_TEST)
       } else {

@@ -141,46 +141,42 @@ const EssayQuestionPreview = ({
       //   }
       // }}
     >
-      {data && (
-        <>
-          <div
-            id="hightlight_area"
-            onMouseUp={(e: any) => {
-              if (
-                e.target.tagName.charAt(0) !== 'm' &&
-                e.target.firstChild?.tagName !== 'math'
-              ) {
-                if (e) {
-                  if (allowHighLight) {
-                    runHighlight(
-                      handleSaveHighLight,
-                      allowHighLight || false,
-                      'hightlight_area',
-                    )
-                  } else if (allowUnHighLight) {
-                    runHighlight(
-                      handleSaveHighLight,
-                      allowUnHighLight || false,
-                      'hightlight_area',
-                      { color: 'white' },
-                    )
-                  }
+      {question_content && (
+        <div
+          id="hightlight_area"
+          onMouseUp={(e: any) => {
+            if (
+              e.target.tagName.charAt(0) !== 'm' &&
+              e.target.firstChild?.tagName !== 'math'
+            ) {
+              if (e) {
+                if (allowHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowHighLight || false,
+                    'hightlight_area',
+                  )
+                } else if (allowUnHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowUnHighLight || false,
+                    'hightlight_area',
+                    { color: 'white' },
+                  )
                 }
               }
-            }}
-          >
-            <EditorReader
-              text_editor_content={data?.question_topic?.description}
-              className="sapp-questions"
-              highlighted={highlighted}
-            />
-            <EditorReader
-              className="sapp-questions"
-              text_editor_content={question_content}
-              highlighted={highlighted}
-            />
-          </div>
-
+            }
+          }}
+        >
+          <EditorReader
+            className="sapp-questions"
+            text_editor_content={question_content}
+            highlighted={highlighted}
+          />
+        </div>
+      )}
+      {data && (
+        <>
           <div
             id="hightlight_area_require"
             onMouseUp={(e: any) => {

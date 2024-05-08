@@ -1,9 +1,7 @@
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React, { useEffect, useState, useRef } from 'react'
-import axios from 'axios'
-import { apiURL } from 'src/redux/services/httpService'
+import React, { useEffect, useRef, useMemo, useCallback } from 'react'
 import CoursesList from '@components/mycourses/CoursesList'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
 import PopupStep from '@components/user-guide/PopupStep'
@@ -11,36 +9,14 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { ANIMATION, UserGuide } from 'src/constants'
 import { useRouter } from 'next/router'
-import {
-  buildQueryString,
-  setCookieActToken,
-  setCookieRefreshToken,
-  removeJwtToken,
-} from '@utils/index'
-import { ICourseAll } from 'src/type/courses'
-import CourseAPI from '../api/courses'
-import { PageLink } from 'src/constants'
+import { CoursesAPI } from '../api/courses'
+import { useInfiniteQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import Aos from 'aos'
 
 const DEFAULT_PAGESIZE = 9
 
-const fetchData = async (
-  page: number,
-  pageSize: number,
-  token: string,
-  queryString?: string,
-) => {
-  const apiResponse = await axios.get(
-    `${apiURL}/courses?page_index=${page}&page_size=${pageSize}${queryString}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  )
-  return apiResponse?.data?.data
-}
-
-const MyCourse = ({ courses }: { courses: ICourseAll }) => {
+const MyCourse = () => {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideIsActive = useAppSelector(
@@ -53,6 +29,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
   )
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
+  const observer = useRef<IntersectionObserver>()
 
   const nextStep = () => {
     dispatch(increment())
@@ -76,58 +53,101 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
     }
   }, [userGuideLine])
 
-  const [data, setData] = useState<ICourseAll>(courses || [])
-  const [page, setPage] = useState(DEFAULT_PAGESIZE)
-  const [loading, setLoading] = useState(false)
-  const queryString = buildQueryString({
-    name: router.query.name || '',
-    status: router.query.status || '',
-    type: router.query.type || '',
-  })
-
-  const loadMore = async () => {
-    if (loading) return
-    setLoading(true)
-    try {
-      const newData = await CourseAPI.getCourse(
-        page + DEFAULT_PAGESIZE,
-        queryString,
-      )
-      setData(newData?.data)
-      setPage(page + DEFAULT_PAGESIZE)
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
+  /**
+   * @description Gọi API My Course
+   * @param {pageParam, params} pageParam: number, params: Object
+   */
+  const fetchMyCourse = async ({
+    pageParam,
+    params,
+  }: {
+    pageParam: number
+    params: Object
+  }) => {
+    const { data } = await CoursesAPI.get(
+      pageParam || 1,
+      DEFAULT_PAGESIZE,
+      params,
+    )
+    return { data: data?.courses || [], category: data }
   }
 
-  useEffect(() => {
-    let isFetching = false
-    const isEndPage = page <= courses?.metadata?.total_records
+  /**
+   * @description config params khi filter
+   */
+  const params = {
+    name: router.query.name || undefined,
+    status: router.query.status || undefined,
+    type: router.query.type || undefined,
+  }
 
-    const handleScroll = () => {
-      if (
-        !isFetching &&
-        isEndPage &&
-        window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 10
-      ) {
-        isFetching = true
-        loadMore()
-      }
+  /**
+   * @description sử dụng react-query để lấy data sau khi call API
+   */
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
+    useInfiniteQuery({
+      queryKey: ['myCourse'],
+      queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
+      getNextPageParam: (lastPage, allPages) => {
+        if (params.status || params.type) {
+          return undefined // Prevent fetching more pages if params change
+        }
+        return lastPage?.data.length ? allPages.length + 1 : undefined
+      },
+    })
+
+  /**
+   * @description check ref khi scroll đến cuối page thì call API
+   */
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isLoading) return
+
+      if (observer.current) observer.current.disconnect()
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage()
+        }
+      })
+
+      if (node) observer.current.observe(node)
+    },
+    [fetchNextPage, hasNextPage, isFetching, isLoading],
+  )
+
+  /**
+   * @description lấy data của course khi call API get course
+   */
+  const courses = useMemo(() => {
+    return data?.pages.reduce((acc: any, page) => {
+      return [...acc, ...page?.data]
+    }, [])
+  }, [data])
+
+  // Use useEffect to refetch data when params change
+  useEffect(() => {
+    refetch()
+  }, [params.name, params.status, params.type])
+
+  /**
+   * @description gọi lại animation khi reload lại component
+   */
+  useEffect(() => {
+    Aos.init({ duration: ANIMATION.DURATION })
+  })
+
+  /**
+   * @description lưu tổng số course vào session mỗi khi course thay đổi
+   */
+  useEffect(() => {
+    if (courses) {
+      window.sessionStorage.setItem('totalCourse', courses?.length)
     }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [loading, router.query.name, router.query.type, router.query.status])
-
-  useEffect(() => {
-    // Update data when courses?.data?.course_sections_with_progress changes
-    setData(courses || [])
   }, [courses])
 
   return (
-    <>
+    <SappLoadingGlobal loading={isLoading}>
       <div className="header bg-white border-b border-default">
         <div
           className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
@@ -136,7 +156,7 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
-            setPage={setPage}
+          // setPage={setPage}
           />
           {guideStatus && guideStep === 1 && (
             <PopupStep
@@ -156,11 +176,10 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
             My Course
           </h2>
           <div
-            className={`pt-6 pb-4 relative ${
-              guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
-            }`}
+            className={`pt-6 pb-4 relative ${guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
+              }`}
           >
-            <Filter courses={data} setPage={setPage} />
+            <Filter courses={data?.pages?.[0]?.category} />
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}
@@ -212,7 +231,11 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
             handleCancel={closeUserGuide}
           />
         )}
-        <CoursesList courses={data} setData={setData} setLoading={setLoading} />
+        <CoursesList
+          courses={courses}
+          lastElementRef={lastElementRef}
+          refetch={refetch}
+        />
       </div>
       {guideStatus && guideStep == 0 && <PopupWelcome />}
       {guideStatus && (
@@ -221,77 +244,8 @@ const MyCourse = ({ courses }: { courses: ICourseAll }) => {
           className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
         ></div>
       )}
-    </>
+    </SappLoadingGlobal>
   )
 }
 
 export default MyCourse
-
-export async function getServerSideProps(context: any) {
-  const { req, res, query } = context
-  const accessToken = req.cookies.accessToken
-  const queryString = buildQueryString({
-    name: query.name || '',
-    status: query.status || '',
-    type: query.type || '',
-  })
-  try {
-    const courses = await fetchData(
-      1,
-      DEFAULT_PAGESIZE,
-      accessToken,
-      queryString,
-    )
-
-    return {
-      props: {
-        courses: courses,
-      },
-    }
-  } catch (error: any) {
-    if (error.response && error.response.status === 401) {
-      const refreshToken = req.cookies.refreshToken
-
-      try {
-        const refreshResponse = await axios.post(
-          `${apiURL}/auth/rotate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          },
-        )
-        const userInfo = refreshResponse?.data?.data?.tokens
-        const act = userInfo?.act
-        const rft = userInfo?.rft
-        setCookieActToken(act)
-        setCookieRefreshToken(rft)
-        res.setHeader('Set-Cookie', `accessToken=${act}; Path=/;`)
-
-        const courses = await fetchData(1, DEFAULT_PAGESIZE, act, queryString)
-
-        return {
-          props: {
-            courses: courses,
-          },
-        }
-      } catch (refreshError) {
-        removeJwtToken()
-        return {
-          redirect: {
-            destination: PageLink.AUTH_LOGIN,
-            permanent: false,
-          },
-        }
-      }
-    }
-
-    return {
-      redirect: {
-        destination: PageLink.AUTH_LOGIN,
-        permanent: false,
-      },
-    }
-  }
-}

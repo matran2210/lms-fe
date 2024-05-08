@@ -1,12 +1,12 @@
 import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
-import { setCookieActToken } from '@utils/index'
+import { setActToken } from '@utils/index'
 import { useRouter } from 'next/router'
 import { createRef, useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
-import AuthApi from 'src/redux/services/Authen'
 import useCountdown from './Countdown'
+import { AuthAPI } from '../../pages/api/profile/index'
 
 interface IInputCodeFormProps {
   error?: string
@@ -67,7 +67,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const onResendCode = async () => {
     setLoading(true)
     try {
-      const response = await AuthApi.sendEmail({ email })
+      const response = await AuthAPI.sendEmail({ email })
       if (!response.success) {
         setErrorMessage('Resend code failed. Please try again')
         return
@@ -95,12 +95,12 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const handleVerifyCode = async () => {
     try {
       setLoading(true)
-      const response = await AuthApi.verifyOtp({
+      const response = await AuthAPI.verifyOtp({
         code: code?.join(''),
         token: currentToken,
       })
       if (response.success && response.data.success) {
-        setCookieActToken(response.data.act)
+        setActToken(response.data.act)
         setTimeout(() => {
           router.push(PageLink.AUTH_CHANGE_PASSWORD)
         }, 1000)
