@@ -56,8 +56,8 @@ type Props = {
   tabId: string
   quizId: string
   setOpenFile?: any
-  grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS',
-  showQuestionContent?:boolean
+  grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
+  showQuestionContent?: boolean
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -71,7 +71,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       quizId,
       setOpenFile,
       grading_preference,
-      showQuestionContent = true
+      showQuestionContent = true,
     }: Props,
     ref,
   ) => {
@@ -480,8 +480,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     />
                   </div>
                 </div>
-                {!!activeQuestion?.requirements?.length &&
-                  (<>
+                {!!activeQuestion?.requirements?.length && (
+                  <>
                     <div className="border border-b-gray-2 my-6"></div>
                     <div className="flex items-center cursor-pointer select-none">
                       <div className="relative">
@@ -528,8 +528,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         <span className="text-state-error">* </span>
                         <span className="text-gray-1">
                           You must finished{' '}
-                          {activeQuestion.requirements?.length || 0} requirements to
-                          complete this question (Your answer is auto save)
+                          {activeQuestion.requirements?.length || 0}{' '}
+                          requirements to complete this question (Your answer is
+                          auto save)
                         </span>
                       </div>
                     </div>
@@ -561,7 +562,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                           )
                         })}
                     </div>
-                  </>)}
+                  </>
+                )}
                 {activeQuestion?.exhibits &&
                   activeQuestion?.exhibits?.length > 0 && (
                     <>

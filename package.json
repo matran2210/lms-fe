@@ -58,7 +58,7 @@
     "postcss-preset-env": "^9.3.0",
     "preview-activity": "^1.1.39",
     "preview-part": "^1.2.54",
-    "quiz-result-package": "^1.1.25",
+    "quiz-result-package": "^1.1.26",
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
