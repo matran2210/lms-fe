@@ -1399,10 +1399,10 @@ const TestDetail = () => {
   // }, [currentPage])
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
-    for (let e in currentTabContent?.data?.exhibits) {
+    for (let e in currentTabContent?.topicDescription?.exhibits) {
       exhibitsOptions.push({
         label: `Exhibit ${+e + 1}`,
-        value: currentTabContent?.data?.exhibits[e].id,
+        value: currentTabContent?.topicDescription?.exhibits[e].id,
       })
     }
     return exhibitsOptions
@@ -1831,10 +1831,10 @@ const TestDetail = () => {
                 </MovableWindow>
               )
             } else if (e.type === 'exhibits') {
-              const i = currentTabContent?.data?.exhibits?.findIndex(
+              const i = currentTabContent?.topicDescription?.exhibits?.findIndex(
                 (el: any) => el.id === e.id,
               )
-              const exhibitsDes = currentTabContent?.data?.exhibits?.[i]
+              const exhibitsDes = currentTabContent?.topicDescription?.exhibits?.[i]
               return (
                 <MovableWindow
                   position={{
@@ -1997,18 +1997,17 @@ const TestDetail = () => {
                   </div>
                 </div>
               </button>
-              {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
-                currentTabContent?.data?.exhibits?.length > 0 && (
+              {currentTabContent?.topicDescription?.exhibits?.length > 0 && (
                   <button className="h-full relative" ref={dropUpRef}>
                     <div
                       className="flex items-center gap-3 px-4 3xl:px-6 border-l"
                       onClick={() => {
-                        // setShowListExhibits(!showListExhibits)
-                        handleOpenScratchPad(
-                          'file',
-                          firstExhibitFiles?.resource?.url,
-                          firstExhibitFiles?.resource?.name,
-                        )
+                        setShowListExhibits(!showListExhibits)
+                        // handleOpenScratchPad(
+                        //   'file',
+                        //   firstExhibitFiles?.resource?.url,
+                        //   firstExhibitFiles?.resource?.name,
+                        // )
                       }}
                     >
                       <ExhibitsIcon />
