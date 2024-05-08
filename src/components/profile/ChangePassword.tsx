@@ -73,10 +73,10 @@ const ChangePassword = () => {
    * @description call API submit mật khẩu hiện tại
    */
   const onSubmit = async (data: IChangePassword) => {
-    setOpenPopup(true)
-    // try {
-    //   await AuthAPI.changeUserPassword(data.password)
-    // } catch (error) {}
+    try {
+      await AuthAPI.changeUserPassword(data.password)
+      setOpenPopup(true)
+    } catch (error) {}
   }
 
   return (
@@ -85,7 +85,9 @@ const ChangePassword = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="relative">
             <div className="flex items-center justify-between pb-6 border-b border-b-gray-3">
-              <div className="text-xl font-medium text-bw-1">Overview</div>
+              <div className="text-xl font-medium text-bw-1">
+                Change Password
+              </div>
               <div>
                 {!editPassword ? (
                   <SappButton

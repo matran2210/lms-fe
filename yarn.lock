@@ -7619,10 +7619,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.1.25:
-  version "1.1.25"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.25.tgz#23633325e81c424f95c72b924e3daf8e0964d658"
-  integrity sha512-KmP8HVhQi7DRXnda3eHd7Mpafabbvnp8Bt170nPNn2OMjlMeL+Q3NFhaYjFlT4hEz8Tpmasi2QLfy8TacfCBlw==
+quiz-result-package@^1.1.26:
+  version "1.1.26"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.26.tgz#fa60b0eddfc27be66f1b3918e4b5fa11e8820673"
+  integrity sha512-akSBrRZb0IV5Yme8IS0PqYDW0HRiBVfsEL71UTFn/awUhY/rf515h0aPSS5Li3y9+6y4lsKN6sTbmq37fkB4Kw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 

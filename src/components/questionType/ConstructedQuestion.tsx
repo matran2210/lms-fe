@@ -71,7 +71,7 @@ const EssayQuestionPreview = ({
   handleSaveHighLightRequirement = () => {},
   setUnsavedChanges,
   handleChange,
-  isShowContent = true
+  isShowContent = true,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   // console.log(response_option_custom)
