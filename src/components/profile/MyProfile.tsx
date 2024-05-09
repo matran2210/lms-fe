@@ -148,7 +148,7 @@ const MyProfile = ({
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
         await dispatch(getLogoutUser())
-        // router.push(PageLink.AUTH_LOGIN)
+        router.push(PageLink.AUTH_LOGIN)
       }
     }
   }

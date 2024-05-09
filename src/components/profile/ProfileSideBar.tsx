@@ -62,7 +62,7 @@ const ProfileSideBar = ({ page }: IProps) => {
   const handleLogout = async () => {
     try {
       await dispatch(getLogoutUser())
-      // router.push(PageLink.AUTH_LOGIN)
+      router.push(PageLink.AUTH_LOGIN)
     } catch (error) {}
   }
 
