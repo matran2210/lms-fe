@@ -173,7 +173,9 @@ const YourScoreDetail = ({
                         parseHTMLToString(e?.question?.question_content) ?? '--'
                       }
                       onClick={() => {
-                        router.push(`/explanation/${e.id}?title=My Course`)
+                        if (e.id) {
+                          router.push(`/explanation/${e.id}?title=My Course`)
+                        }
                       }}
                     ></div>
                   </td>

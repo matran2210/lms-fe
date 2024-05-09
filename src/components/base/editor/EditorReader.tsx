@@ -123,6 +123,16 @@ const EditorReader = ({
             }
           }
         })
+
+        // Replace quote in font family
+        const mathElement = editor.querySelectorAll('math')
+        mathElement.forEach((el: any) => {
+          if (el.hasAttribute('style')) {
+            let styleValue = el.getAttribute('style')
+            styleValue = styleValue.replaceAll('"', '')
+            el.setAttribute('style', styleValue)
+          }
+        })
         convertMathToImage(editor)
       }
     }, 100)
@@ -158,12 +168,6 @@ const EditorReader = ({
     }
   }
 
-  const preprocessContent = (htmlContent: any) => {
-    return htmlContent
-      .replace(/'Times New Roman'/g, `times-new-roman`)
-      .replace(/'Courier New'/g, `courier-new`)
-  }
-
   return (
     <>
       <div
@@ -173,7 +177,7 @@ const EditorReader = ({
         ref={editorRef}
       >
         <div ref={extenalRef || refDocument}>
-          {parseHTML(preprocessContent(content || ''), options)}
+          {parseHTML(content || '', options)}
         </div>
       </div>
       {type === 'IMG' && (
