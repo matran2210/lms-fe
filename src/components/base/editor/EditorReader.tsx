@@ -181,7 +181,8 @@ const EditorReader = ({
       >
         <div ref={extenalRef || refDocument}>
           {parseHTML(
-            replaceTextAlignCenterToWebKitCenter(content || '', options),
+            replaceTextAlignCenterToWebKitCenter(content || ''),
+            options,
           )}
         </div>
       </div>
