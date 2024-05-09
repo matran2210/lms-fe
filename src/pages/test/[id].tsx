@@ -60,6 +60,8 @@ import CountDown from './countdown'
 import LimitQuizModal from './limitQuizModal'
 import SappLoading from 'src/common/SappLoading'
 import toast from 'react-hot-toast'
+import Countdown from 'react-countdown'
+import { renderer, useCountdown } from 'src/hooks/useCountdown'
 
 type Window = {
   userAgreed: any
@@ -1397,6 +1399,12 @@ const TestDetail = ({ questions, quizDetail }: any) => {
       document.body.style.userSelect = 'unset'
     }
   }, [startResize])
+
+  /**
+   * @description sử dụng hook countdown
+   */
+  const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
+
   return (
     <>
       {loading || !currentTabContent?.id ? (
@@ -1419,16 +1427,18 @@ const TestDetail = ({ questions, quizDetail }: any) => {
                 {quizDetail?.name}
               </div>
               {quizDetail?.quiz_timed && (
-                <CountDown
-                  remainTime={quizDetail?.quiz_timed}
-                  onTimeOut={() => {
+                <Countdown
+                  date={data.date + data.delay}
+                  renderer={renderer}
+                  onStart={onStart}
+                  onComplete={() => {
                     if (!openLimit) {
                       dispatch(disableUnsavedChange())
                       handleSubmitQuestion('timeout')
                       // setOpenTimeOut(true)
                     }
+                    onComplete()
                   }}
-                  ref={timeRef}
                 />
               )}
               <ButtonCancelSubmit

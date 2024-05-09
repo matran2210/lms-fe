@@ -60,6 +60,7 @@
     "preview-part": "1.2.52",
     "quiz-result-package": "^1.1.25",
     "react": "^18.2.0",
+    "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
     "react-hook-form": "7.48.2",
     "react-hot-toast": "^2.4.1",
