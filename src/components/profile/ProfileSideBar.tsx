@@ -63,7 +63,7 @@ const ProfileSideBar = ({ page }: IProps) => {
     try {
       await dispatch(getLogoutUser())
       router.push(PageLink.AUTH_LOGIN)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   // Sử dụng useState để lưu trạng thái active của từng child
