@@ -923,27 +923,6 @@ const ActivityPage = () => {
                       </SappTooltip>
                       {getCourseIcon(
                         activity?.next_activity
-                          ? activity?.next_activity?.id
-                          : activityIds[nextActivityIndex + 1],
-                      )}
-                      Next Activity
-                    </div>
-                    <div className="text-medium-sm text-gray-1 flex justify-end">
-                      <SappTooltip
-                        title={
-                          activity?.next_activity
-                            ? activity?.next_activity.name
-                            : findActivityByIndex(nextActivityIndex + 1)?.name
-                        }
-                      >
-                        <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
-                          {activity?.next_activity
-                            ? activity?.next_activity.name
-                            : findActivityByIndex(nextActivityIndex + 1)?.name}
-                        </span>
-                      </SappTooltip>
-                      {getCourseIcon(
-                        activity?.next_activity
                           ? activity?.next_activity?.display_icon
                           : findActivityByIndex(nextActivityIndex + 1)
                               ?.display_icon,
