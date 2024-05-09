@@ -787,3 +787,7 @@ $focus: (
 .sapp-dashboard {
   height: 80vh;
 }
+
+:where(.css-dev-only-do-not-override-1xg9z9n).ant-modal {
+  font-family: 'Roboto' !important;
+}

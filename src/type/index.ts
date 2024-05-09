@@ -28,6 +28,7 @@ export interface IButtonProps {
   color?: IButtonColors
   isUnderLine?: boolean
   childClass?: string
+  classNameLoading?: string
 }
 
 export interface ITabs {
