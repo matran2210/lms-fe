@@ -220,9 +220,11 @@ const TestDetail = () => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
-            name={`${currentTabID}_answer`}
+            name={`${currentTabID}_${essayData?.index}_answer`}
             setValue={setValue}
-            defaultValue={getValues(`${currentTabID}_answer`)}
+            defaultValue={getValues(
+              `${currentTabID}_${essayData?.index}_answer`,
+            )}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -521,7 +523,7 @@ const TestDetail = () => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value = getValues(`${currentContent.id}_answer`)
+      const value = getValues(`${currentContent.id}_${essayData?.index}_answer`)
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
@@ -888,7 +890,7 @@ const TestDetail = () => {
         return answers
       } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
         const answers = handleSaveAnswer(
-          getValues(`${currentPage}_answer`),
+          getValues(`${currentPage}_${essayData?.index}_answer`),
           currentContent.id,
           tabs,
         )
@@ -1045,10 +1047,40 @@ const TestDetail = () => {
       return arr
     })
   }
+  const [answerList, setAnswerList] = useState<{ answer: any }[]>([])
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
+
+  const setAnswerListValue = (id: string, index: number) => {
+    if (answerList[index]) {
+      setValue(`${currentPage}_answer`, answerList[index].answer)
+    }
+    setAnswerList((prevAnswerList) => {
+      const updatedList = [...prevAnswerList]
+
+      updatedList[currentIndex] = {
+        answer: getValues(`${currentPage}_${essayData?.index}_answer`) || '',
+      }
+
+      setCurrentIndex(index)
+
+      return updatedList
+    })
+  }
+
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
-    let answers = []
+    let answers: {
+      question_id: any
+      question_answer_id?: any
+      time_spent: number
+      answer?: any
+      short_answer?: any
+      requirement_id?: any
+      response_option?: any
+      active?: string
+      answer_file?: any
+    }[] = []
     let reformTabs: any[] = []
     setLoading(true)
     setSubmited(true)
@@ -1129,17 +1161,20 @@ const TestDetail = () => {
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
         if (checkAnswered(e)) {
-          answers.push({
-            question_id: e.id,
-            short_answer: e.answer || '',
-            response_option: e.data.response_option
-              ? e.data.response_option
-              : e.response_type === 0
-                ? 'WORD'
-                : 'SHEET',
-            time_spent: Math.ceil(e.timeSpent / 1000),
-            active: 'SUBMITED',
-            answer_file: e.answer_file,
+          e?.data?.requirements?.forEach((requirement: any, index: any) => {
+            answers.push({
+              question_id: e.id,
+              short_answer: answerList[index]?.answer || e.answer || '',
+              requirement_id: requirement.id || '',
+              response_option: e.data.response_option
+                ? e.data.response_option
+                : e.response_type === 0
+                  ? 'WORD'
+                  : 'SHEET',
+              time_spent: Math.ceil(e.timeSpent / 1000),
+              active: 'SUBMITED',
+              answer_file: e.answer_file,
+            })
           })
         }
       }
@@ -1831,10 +1866,12 @@ const TestDetail = () => {
                 </MovableWindow>
               )
             } else if (e.type === 'exhibits') {
-              const i = currentTabContent?.topicDescription?.exhibits?.findIndex(
-                (el: any) => el.id === e.id,
-              )
-              const exhibitsDes = currentTabContent?.topicDescription?.exhibits?.[i]
+              const i =
+                currentTabContent?.topicDescription?.exhibits?.findIndex(
+                  (el: any) => el.id === e.id,
+                )
+              const exhibitsDes =
+                currentTabContent?.topicDescription?.exhibits?.[i]
               return (
                 <MovableWindow
                   position={{
@@ -1998,47 +2035,47 @@ const TestDetail = () => {
                 </div>
               </button>
               {currentTabContent?.topicDescription?.exhibits?.length > 0 && (
-                  <button className="h-full relative" ref={dropUpRef}>
-                    <div
-                      className="flex items-center gap-3 px-4 3xl:px-6 border-l"
-                      onClick={() => {
-                        setShowListExhibits(!showListExhibits)
-                        // handleOpenScratchPad(
-                        //   'file',
-                        //   firstExhibitFiles?.resource?.url,
-                        //   firstExhibitFiles?.resource?.name,
-                        // )
-                      }}
-                    >
-                      <ExhibitsIcon />
-                      <div className="font-normal flex text-sm items-center gap-3">
-                        <div>
-                          <span className="hidden 3xl:inline-block 3xl:me-1">
-                            Exhibits
-                          </span>
-                          {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
-                        </div>
-                        {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
-                        {/* <ArrowUpIcon /> */}
+                <button className="h-full relative" ref={dropUpRef}>
+                  <div
+                    className="flex items-center gap-3 px-4 3xl:px-6 border-l"
+                    onClick={() => {
+                      setShowListExhibits(!showListExhibits)
+                      // handleOpenScratchPad(
+                      //   'file',
+                      //   firstExhibitFiles?.resource?.url,
+                      //   firstExhibitFiles?.resource?.name,
+                      // )
+                    }}
+                  >
+                    <ExhibitsIcon />
+                    <div className="font-normal flex text-sm items-center gap-3">
+                      <div>
+                        <span className="hidden 3xl:inline-block 3xl:me-1">
+                          Exhibits
+                        </span>
+                        {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
                       </div>
+                      {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
+                      {/* <ArrowUpIcon /> */}
                     </div>
-                    {showListExhibits && (
-                      <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
-                        <HookFormCheckBoxGroup
-                          control={controlExhibits}
-                          name="exhibits"
-                          options={exhibits}
-                          multiple
-                          lowerOptions={true}
-                          // gap="0"
-                          widthOptions="w-full"
-                          seprateLine={true} // classNameTitle='text-gray-2'
-                          maxWidthContent
-                        />
-                      </div>
-                    )}
-                  </button>
-                )}
+                  </div>
+                  {showListExhibits && (
+                    <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
+                      <HookFormCheckBoxGroup
+                        control={controlExhibits}
+                        name="exhibits"
+                        options={exhibits}
+                        multiple
+                        lowerOptions={true}
+                        // gap="0"
+                        widthOptions="w-full"
+                        seprateLine={true} // classNameTitle='text-gray-2'
+                        maxWidthContent
+                      />
+                    </div>
+                  )}
+                </button>
+              )}
               {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
                 <button className="h-full relative" ref={dropUpRequire}>
                   <div
@@ -2069,6 +2106,7 @@ const TestDetail = () => {
                                 essayData.index !== index && 'text-gray-1'
                               }`}
                               onClick={() => {
+                                setAnswerListValue(e.id, index)
                                 setEssayData({ req: e, index: index })
                                 rightSideRef?.current &&
                                   rightSideRef.current.scrollTo({
