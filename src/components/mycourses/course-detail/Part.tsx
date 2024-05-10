@@ -9,17 +9,18 @@ import {
   ICourseSection,
   CLASS_USER_STATUS,
   ICourseDetail,
+  IMyCourseDetail,
 } from 'src/type/courses'
 import { useForm } from 'react-hook-form'
 import { Tooltip } from 'antd'
 
-const Part = ({ courses }: { courses: ICourseDetail }) => {
+const Part = ({ course }: { course: IMyCourseDetail }) => {
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
   const percentProgress = round(
-    (courses?.learning_progress?.total_course_sections_completed /
-      courses?.learning_progress?.total_course_sections) *
+    (course?.learning_progress?.total_course_sections_completed /
+      course?.learning_progress?.total_course_sections) *
       100,
     2,
   )
@@ -28,7 +29,12 @@ const Part = ({ courses }: { courses: ICourseDetail }) => {
     router.push(`/courses/${router.query.courseId}/section/${id}`)
   }
 
-  const formattedTime = formatTime(courses?.remaining_time || 0)
+  const formattedTime = Number(
+    formatTime(
+      course?.learning_progress?.duration -
+        course?.learning_progress?.time_spent || 0,
+    ),
+  )
 
   const statusMap = {
     [CLASS_USER_STATUS.READY_TO_LEARN]: 'Ready to learn',
@@ -37,7 +43,7 @@ const Part = ({ courses }: { courses: ICourseDetail }) => {
     [CLASS_USER_STATUS.CANCELED]: '',
   } as any
 
-  const showStatus = statusMap[courses?.user_section_learning_status || '']
+  const showStatus = statusMap[course?.user_section_learning_status || '']
 
   const renderStatusIcon = (status: string) => {
     switch (status) {
@@ -54,34 +60,32 @@ const Part = ({ courses }: { courses: ICourseDetail }) => {
         return ''
     }
   }
-  const iconType = renderStatusIcon(courses?.user_section_learning_status ?? '')
+  const iconType = renderStatusIcon(course?.user_section_learning_status ?? '')
 
   return (
     <div>
       <div
         className={`name-part text-2xl font-medium h-[60px] cursor-pointer`}
         onClick={() =>
-          courses?.course_section_type === 'PART'
-            ? onClickPart(courses?.id)
-            : {}
+          course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
         }
       >
-        {(courses?.name as string)?.length > 50 ? (
-          <Tooltip title={courses?.name} color="#ffffff" placement="top">
-            {truncateString(courses?.name, 50)}
+        {(course?.name as string)?.length > 50 ? (
+          <Tooltip title={course?.name} color="#ffffff" placement="top">
+            {truncateString(course?.name, 50)}
           </Tooltip>
         ) : (
-          <>{courses?.name}</>
+          <>{course?.name}</>
         )}
       </div>
       <div className="des mt-6 mb-15">
         <div className="line-clamp-5 text-ellipsis h-[120px]">
-          {(courses?.description as string).length > 250 ? (
+          {(course?.description as string)?.length > 250 ? (
             <Tooltip
               title={
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: courses?.description,
+                    __html: course?.description,
                   }}
                 />
               }
@@ -90,7 +94,7 @@ const Part = ({ courses }: { courses: ICourseDetail }) => {
             >
               <p
                 dangerouslySetInnerHTML={{
-                  __html: courses?.description,
+                  __html: course?.description,
                 }}
                 className="text-base h-[120px] text-bw-1"
               />
@@ -98,7 +102,7 @@ const Part = ({ courses }: { courses: ICourseDetail }) => {
           ) : (
             <p
               dangerouslySetInnerHTML={{
-                __html: courses?.description,
+                __html: course?.description,
               }}
               className="text-base h-[120px] text-bw-1"
             />
@@ -114,7 +118,7 @@ const Part = ({ courses }: { courses: ICourseDetail }) => {
                 {showStatus}
               </p>
               <span className="text-medium-sm font-medium text-gray-1 pl-1 ml-px">
-                {courses?.remaining_time > 0 ? `${formattedTime} left` : ''}
+                {formattedTime > 0 ? `${formattedTime} left` : ''}
               </span>
             </div>
             <div className="number">
@@ -143,8 +147,8 @@ const Part = ({ courses }: { courses: ICourseDetail }) => {
             size={'small'}
             className="ml-auto"
             onClick={() =>
-              courses?.course_section_type === 'PART'
-                ? onClickPart(courses.id)
+              course?.course_section_type === 'PART'
+                ? onClickPart(course.id)
                 : {}
             }
           />

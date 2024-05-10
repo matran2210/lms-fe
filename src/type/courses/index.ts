@@ -185,3 +185,33 @@ export interface ISectionDetail {
   meta: IMeta
   sections: ISection[]
 }
+
+export interface IMyCourseDetail {
+  course_section_type: string
+  description: string
+  duration: number
+  id: string
+  name: string
+  position: number
+  learning_progress: {
+    duration: number
+    time_spent: number
+    total_course_sections: number
+    total_course_sections_completed: number
+  }
+  quiz: {
+    attempt: {
+      id: string
+      number_of_attempts: number
+      ratio_score: string
+      total_attempt_time: number
+    }
+    id: string
+    is_graded: boolean
+    is_limited: boolean
+    limit_count: number
+    quiz_timed: number
+    required_percent_score: number
+  }
+  user_section_learning_status: string
+}
