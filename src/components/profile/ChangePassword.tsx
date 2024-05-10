@@ -21,6 +21,8 @@ export interface IChangePassword {
 }
 
 const ChangePassword = () => {
+  const [loading, setLoading] = useState(false)
+
   /**
    * @description validate password
    */
@@ -28,7 +30,12 @@ const ChangePassword = () => {
     .object({
       password: z
         .string({ required_error: VALIDATE_REQUIRED })
-        .min(8, { message: VALIDATE_REQUIRED }),
+        .trim()
+        .min(1, {
+          message: VALIDATE_REQUIRED,
+        })
+        .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
+        .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
       newPassword: z
         .string({ required_error: VALIDATE_REQUIRED })
         .trim()
@@ -73,10 +80,14 @@ const ChangePassword = () => {
    * @description call API submit mật khẩu hiện tại
    */
   const onSubmit = async (data: IChangePassword) => {
-    setOpenPopup(true)
-    // try {
-    //   await AuthAPI.changeUserPassword(data.password)
-    // } catch (error) {}
+    setLoading(true)
+    try {
+      await AuthAPI.changeUserPassword(data.password)
+      setOpenPopup(true)
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -85,7 +96,9 @@ const ChangePassword = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="relative">
             <div className="flex items-center justify-between pb-6 border-b border-b-gray-3">
-              <div className="text-xl font-medium text-bw-1">Overview</div>
+              <div className="text-xl font-medium text-bw-1">
+                Change Password
+              </div>
               <div>
                 {!editPassword ? (
                   <SappButton
@@ -112,6 +125,7 @@ const ChangePassword = () => {
                       size: 'medium',
                       className: 'min-w-fit px-0 text-sm w-30',
                       type: 'submit',
+                      disabled: loading,
                     }}
                   ></ButtonCancelSubmit>
                 )}

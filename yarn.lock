@@ -7493,10 +7493,10 @@ pretty-bytes@^5.3.0:
   resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-5.6.0.tgz#356256f643804773c82f64723fe78c92c62beaeb"
   integrity sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==
 
-preview-activity@^1.1.37:
-  version "1.1.37"
-  resolved "https://registry.yarnpkg.com/preview-activity/-/preview-activity-1.1.37.tgz#280e141de5497542d2a0885141f2ea2a4eaaa9d1"
-  integrity sha512-2cQd24ga0iI6uDy6H4R/FUq0YzJ9csmbEqEhKW+oVUOhTUSaf390sQtX+L62u6lSB/bCf455FfxLN4mc/8iB6g==
+preview-activity@^1.1.39:
+  version "1.1.39"
+  resolved "https://registry.yarnpkg.com/preview-activity/-/preview-activity-1.1.39.tgz#171c5fc493b2c7ea6736e0e88bc8fd67df5ac965"
+  integrity sha512-wtO5WsMg/Nw6Y/3Nsp9SkHdlJxrnJTCR/V+etKME+BurqO+D2EabiZ65CXcjgsP7BLss6AnNaMMeq1hZ0JFZAQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.8.0"
@@ -7619,10 +7619,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.1.25:
-  version "1.1.25"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.25.tgz#23633325e81c424f95c72b924e3daf8e0964d658"
-  integrity sha512-KmP8HVhQi7DRXnda3eHd7Mpafabbvnp8Bt170nPNn2OMjlMeL+Q3NFhaYjFlT4hEz8Tpmasi2QLfy8TacfCBlw==
+quiz-result-package@^1.1.26:
+  version "1.1.26"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.26.tgz#fa60b0eddfc27be66f1b3918e4b5fa11e8820673"
+  integrity sha512-akSBrRZb0IV5Yme8IS0PqYDW0HRiBVfsEL71UTFn/awUhY/rf515h0aPSS5Li3y9+6y4lsKN6sTbmq37fkB4Kw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 
