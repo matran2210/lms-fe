@@ -48,12 +48,11 @@ module.exports = removeImports(
     },
     images: {
       minimumCacheTTL: 43200,
-      domains: [
-        'd3s1adm34w18qs.cloudfront.net',
-        'cdn-dev.sapp.edu.vn',
-        'media.zim.vn',
-        'cdn-staging.sapp.edu.vn',
-        'cdn.sapp.edu.vn',
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: '**',
+        },
       ],
     },
     swcMinify: true,
