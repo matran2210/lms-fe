@@ -2,14 +2,14 @@ import React from 'react'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
 import { ANIMATION } from 'src/constants'
-import { ICourseDetail } from 'src/type/courses'
+import { ICourseDetail, IMyCourseDetail } from 'src/type/courses'
 
 const CourseParts = ({
   courses,
   class_user_id,
   lastElementRef,
 }: {
-  courses: ICourseDetail[] | undefined
+  courses: IMyCourseDetail[] | undefined
   class_user_id?: string
   lastElementRef: (node: HTMLDivElement) => void
 }) => {
@@ -33,7 +33,7 @@ const CourseParts = ({
                   class_user_id={class_user_id}
                 />
               ) : (
-                <Part key={index} courses={coursePart} />
+                <Part key={index} course={coursePart} />
               )}
             </div>
           )

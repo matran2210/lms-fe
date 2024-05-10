@@ -341,7 +341,7 @@ const Course = ({
               </div>
             </div>
             <div className="des mt-6 mb-8 line-clamp-5 text-ellipsis h-[116px]">
-              {(course?.description as string).length > 250 ? (
+              {(course?.description as string)?.length > 250 ? (
                 <Tooltip
                   title={
                     <p

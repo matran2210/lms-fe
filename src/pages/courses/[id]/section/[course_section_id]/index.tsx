@@ -14,6 +14,37 @@ import { CoursesAPI } from '../../../../api/courses/index'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 
+interface IProps {
+  course_section_type: string
+  description: string
+  duration: number
+  id: string
+  learning_progress: {
+    duration: number
+    time_spent: number
+    total_course_sections: number
+    total_course_sections_completed: number
+  }
+  quiz: {
+    case_study_story: null
+    id: string
+    is_graded: boolean
+    is_limited: boolean
+    limit_count: number
+    number_of_essay_questions: number
+    number_of_multiple_choice_questions: number
+    quiz_timed: number
+    required_percent_score: number
+    attempt: {
+      id: string
+      number_of_attempts: number
+      ratio_score: string
+      total_attempt_time: number
+    }
+  }
+  parent_id: string
+}
+
 const CoursePartDetail = () => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(false)
@@ -57,7 +88,15 @@ const CoursePartDetail = () => {
     try {
       const res = await CoursesAPI.getPartDetail(id, course_section_id)
       const nodeList = res?.data?.course_section_tree
-      const tree = TreeHelper.convertFromArray(nodeList)
+      const newData = nodeList.map((item: IProps) => {
+        if (item.id === course_section_id) {
+          const { parent_id, ...rest } = item
+          return rest
+        }
+        return item
+      })
+      const tree = TreeHelper.convertFromArray(newData)
+
       const detail = tree[0]
       setChapterDetail(detail)
     } catch (error) {
@@ -264,7 +303,7 @@ const CoursePartDetail = () => {
       'activityId',
       JSON.stringify(transformedArray),
     )
-  }, [loadingChapter])
+  })
 
   return (
     <SappLoadingGlobal loading={isLoading}>

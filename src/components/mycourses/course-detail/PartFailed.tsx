@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
-import { ICourseDetail, ICourseSection } from 'src/type/courses'
+import {
+  ICourseDetail,
+  ICourseSection,
+  IMyCourseDetail,
+} from 'src/type/courses'
 import TestModal from 'src/pages/courses/test'
 import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
@@ -15,7 +19,7 @@ const PartFailed = ({
   coursePart,
   class_user_id,
 }: {
-  coursePart: ICourseDetail
+  coursePart: IMyCourseDetail
   class_user_id?: string
 }) => {
   const formattedTime = coursePart?.quiz?.quiz_timed
@@ -24,15 +28,16 @@ const PartFailed = ({
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const checkFinished = useMemo(() => {
-    if (!coursePart?.quiz?.attempts) {
+    if (coursePart?.quiz?.attempt?.ratio_score === '0/0') {
       return false
     }
-    if (coursePart?.quiz?.attempts?.length > 0) {
+    if (coursePart?.quiz?.attempt?.ratio_score !== '0/0') {
       return true
     }
 
     return false
-  }, [coursePart?.quiz?.attempts])
+  }, [coursePart?.quiz?.attempt?.ratio_score])
+
   const handleChapterTest = async () => {
     try {
       await CoursesAPI.learningOutcomeProgress(
@@ -52,14 +57,21 @@ const PartFailed = ({
     const secondPoint = parseInt(parts[1], 10)
     return roundNumber((firstPoint / secondPoint) * 100)
   }
+
   const runOutAttemp =
-    coursePart?.quiz?.attempt_count / coursePart?.quiz?.limit_count
+    Number(
+      coursePart?.quiz?.attempt?.number_of_attempts /
+        coursePart?.quiz?.limit_count,
+    ) || 0
+
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
+
   useEffect(() => {
     if (runOutAttemp >= 1 && coursePart?.quiz?.is_limited === true) {
       setIsRunoutAttemp(false)
     }
   }, [runOutAttemp])
+
   return (
     <>
       <div>
@@ -81,9 +93,7 @@ const PartFailed = ({
               <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
                 <p className="text-base text-gray-1">Latest Result:</p>
                 <p className="text-base text-bw-1 font-medium">
-                  {`${countTimeSpent(
-                    coursePart?.quiz?.attempts?.[0]?.ratio_score,
-                  )}%`}
+                  {`${countTimeSpent(coursePart?.quiz?.attempt?.ratio_score)}%`}
                 </p>
               </div>
               <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
@@ -91,10 +101,7 @@ const PartFailed = ({
                 <p className="text-base text-bw-1 font-medium">
                   {`${
                     coursePart?.quiz?.quiz_timed
-                      ? formatTime(
-                          coursePart?.quiz?.attempts[0]?.total_attempt_time ||
-                            0 * 60,
-                        )
+                      ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
                       : 'Unlimited'
                   }` ?? ''}
                 </p>
@@ -108,7 +115,7 @@ const PartFailed = ({
           <div className="time-allow flex justify-between pt-4">
             <p className="text-base text-gray-1">Attempt:</p>
             <p className="text-base text-bw-1 font-medium">
-              {`${quizAttempt?.attempt_count || 0} / ${
+              {`${quizAttempt?.attempt?.number_of_attempts || 0} / ${
                 quizAttempt?.limit_count !== 0
                   ? quizAttempt?.limit_count
                   : 'Unlimited'
@@ -121,20 +128,20 @@ const PartFailed = ({
         <div className="action flex items-center jusity-end relative">
           {!checkFinished ? (
             !coursePart?.quiz?.is_limited ||
-            (coursePart?.quiz?.attempts?.length !==
+            (coursePart?.quiz?.attempt?.number_of_attempts !==
               coursePart?.quiz?.limit_count &&
               isRunoutAttemp) ? (
               <ButtonSecondary
                 disabled={
                   coursePart?.quiz?.is_limited &&
-                  coursePart?.quiz?.attempts?.length ===
+                  coursePart?.quiz?.attempt?.number_of_attempts ===
                     coursePart?.quiz?.limit_count
                 }
                 title={`Start`}
                 full={false}
                 size={'small'}
                 className={`${
-                  coursePart?.quiz?.attempts?.length !==
+                  coursePart?.quiz?.attempt?.number_of_attempts !==
                     coursePart?.quiz?.limit_count && ''
                 } ml-auto`}
                 onClick={() => setOpen(true)}
@@ -151,19 +158,19 @@ const PartFailed = ({
                 className="font-medium underline !p-0"
                 onClick={() =>
                   router.push(
-                    `/courses/test/test-result/${quizAttempt?.attempts[0].id}`,
+                    `/courses/test/test-result/${quizAttempt?.attempt?.id}`,
                   )
                 }
               ></SappButton>
               {coursePart?.quiz?.is_limited &&
-              coursePart?.quiz?.attempt_count ===
+              coursePart?.quiz?.attempt?.number_of_attempts ===
                 coursePart?.quiz?.limit_count ? null : (
                 <ButtonSecondary
                   title="Retake"
                   full={false}
                   size="small"
                   className={`${
-                    coursePart?.quiz?.attempt_count !==
+                    coursePart?.quiz?.attempt?.number_of_attempts !==
                       coursePart?.quiz?.limit_count && ''
                   } ml-auto`}
                   onClick={() => setOpen(true)}
