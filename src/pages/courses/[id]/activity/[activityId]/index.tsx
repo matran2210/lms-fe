@@ -840,84 +840,59 @@ const ActivityPage = () => {
                   (previousActivityIndex !== -1 && previousActivityIndex !== 0)
                     ? 'between'
                     : 'end'
-                    }`}
-                >
-                  {(activity?.previous_activity ||
-                    (previousActivityIndex !== -1 &&
-                      previousActivityIndex !== 0)) && (
-                      <div className="w-1/2">
-                        <div
-                          onClick={() => {
-                            router.push({
-                              pathname: `/courses/${router.query.id}/activity/${activity?.previous_activity?.id ||
-                                activityIds[previousActivityIndex - 1]
-                                }`,
-                            })
-                          }}
-                          className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
-                        >
-                          Previous Activity
-                        </div>
-                        <div className="text-medium-sm text-gray-1 flex">
-                          {getCourseIcon(
-                            activity?.previous_activity
-                              ? activity?.previous_activity?.display_icon
-                              : findActivityByIndex(previousActivityIndex - 1)
-                                ?.display_icon,
-                          )}
-                          <SappTooltip
-                            title={
-                              activity?.previous_activity
-                                ? activity?.previous_activity.name
-                                : findActivityByIndex(previousActivityIndex - 1)
-                                  ?.name
-                            }
-                          >
-                            <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
-                              {activity?.previous_activity
-                                ? activity?.previous_activity.name
-                                : findActivityByIndex(previousActivityIndex - 1)
-                                  ?.name}
-                            </span>
-                          </SappTooltip>
-                        </div>
-                      </div>
-                    )}
-                  {!activity?.previous_activity && <div></div>}
-                  {(activity?.next_activity ||
-                    (nextActivityIndex !== -1 &&
-                      nextActivityIndex !== sessionData?.length - 1)) && (
-                      <div className="w-1/2">
-                        <div
-                          onClick={() => {
-                            router.push({
-                              pathname: `/courses/${router.query.id}/activity/${activity?.next_activity
-                                ? activity?.next_activity?.id
-                                : activityIds[nextActivityIndex + 1]
-                                }`,
-                            })
-                          }}
-                          className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                        >
-                          Next Activity
-                        </div>
-                        <div className="text-medium-sm text-gray-1 flex justify-end">
-                          <SappTooltip
-                            title={
-                              activity?.next_activity
-                                ? activity?.next_activity.name
-                                : findActivityByIndex(nextActivityIndex + 1)?.name
-                            }
-                          >
-                            <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
-                              {
-                                activity?.next_activity
-                                  ? truncateString(activity?.next_activity.name, 80)
-                                  : truncateString(findActivityByIndex(nextActivityIndex + 1)?.name, 80)
-                              }
-                            </span>
-                          </SappTooltip>
-                          {getCourseIcon(
+                }`}
+              >
+                {(activity?.previous_activity ||
+                  (previousActivityIndex !== -1 &&
+                    previousActivityIndex !== 0)) && (
+                  <div className="w-1/2">
+                    <div
+                      onClick={() => {
+                        router.push({
+                          pathname: `/courses/${router.query.id}/activity/${
+                            activity?.previous_activity?.id ||
+                            activityIds[previousActivityIndex - 1]
+                          }`,
+                        })
+                      }}
+                      className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                    >
+                      Previous Activity
+                    </div>
+                    <div className="text-medium-sm text-gray-1 flex">
+                      {getCourseIcon(
+                        activity?.previous_activity
+                          ? activity?.previous_activity?.display_icon
+                          : findActivityByIndex(previousActivityIndex - 1)
+                              ?.display_icon,
+                      )}
+                      <SappTooltip
+                        title={
+                          activity?.previous_activity
+                            ? activity?.previous_activity.name
+                            : findActivityByIndex(previousActivityIndex - 1)
+                                ?.name
+                        }
+                      >
+                        <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                          {activity?.previous_activity
+                            ? activity?.previous_activity.name
+                            : findActivityByIndex(previousActivityIndex - 1)
+                                ?.name}
+                        </span>
+                      </SappTooltip>
+                    </div>
+                  </div>
+                )}
+                {!activity?.previous_activity && <div></div>}
+                {(activity?.next_activity ||
+                  (nextActivityIndex !== -1 &&
+                    nextActivityIndex !== sessionData?.length - 1)) && (
+                  <div className="w-1/2">
+                    <div
+                      onClick={() => {
+                        router.push({
+                          pathname: `/courses/${router.query.id}/activity/${
                             activity?.next_activity
                               ? activity?.next_activity?.id
                               : activityIds[nextActivityIndex + 1]
@@ -938,8 +913,12 @@ const ActivityPage = () => {
                       >
                         <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
                           {activity?.next_activity
-                            ? activity?.next_activity.name
-                            : findActivityByIndex(nextActivityIndex + 1)?.name}
+                            ? truncateString(activity?.next_activity.name, 80)
+                            : truncateString(
+                                findActivityByIndex(nextActivityIndex + 1)
+                                  ?.name,
+                                80,
+                              )}
                         </span>
                       </SappTooltip>
                       {getCourseIcon(
