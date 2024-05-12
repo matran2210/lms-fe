@@ -38,17 +38,17 @@ const PartFailed = ({
     return false
   }, [coursePart?.quiz?.attempt?.ratio_score])
 
-  const handleChapterTest = async () => {
-    try {
-      await CoursesAPI.learningOutcomeProgress(
-        router.query.courseId,
-        coursePart.id,
-      )
-    } catch (err) {
-      toast.error('Cannot progress Test')
-      throw err
-    }
-  }
+  // const handleChapterTest = async () => {
+  //   try {
+  //     await CoursesAPI.learningOutcomeProgress(
+  //       router.query.courseId,
+  //       coursePart.id,
+  //     )
+  //   } catch (err) {
+  //     toast.error('Cannot progress Test')
+  //     throw err
+  //   }
+  // }
   const quizAttempt = coursePart?.quiz
 
   const countTimeSpent = (ratio_score: string) => {
@@ -186,7 +186,7 @@ const PartFailed = ({
         title={coursePart?.name}
         data={coursePart}
         class_user_id={class_user_id}
-        activeCourse={handleChapterTest}
+        activeCourse={() => {}}
       />
     </>
   )
