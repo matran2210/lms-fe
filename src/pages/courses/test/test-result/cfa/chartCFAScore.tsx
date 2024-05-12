@@ -27,7 +27,7 @@ const ChartCFAScore = ({ data }: IProps) => {
           <div
             className="flex items-center min-w-full mt-10"
             style={{
-              width: `${data.length > 0 && 17.5 * (data.length + 3)}%`,
+              width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`,
             }}
           >
             <span className="text-medium-sm text-bw-1 font-normal pr-7">
@@ -38,7 +38,7 @@ const ChartCFAScore = ({ data }: IProps) => {
           <div
             className="flex items-center min-w-full mt-4"
             style={{
-              width: `${data.length > 0 && 17.5 * (data.length + 3)}%`,
+              width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`,
             }}
           >
             <span className="text-medium-sm text-bw-1 font-normal pr-7">

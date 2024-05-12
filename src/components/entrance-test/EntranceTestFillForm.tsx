@@ -183,8 +183,8 @@ const EntranceTestFillForm = ({
       position="center"
       buttonSize="medium"
       scrollbale={false}
-      closeAfterSubmit={false} 
-      title={undefined}    
+      closeAfterSubmit={false}
+      title={undefined}
     >
       <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
         Fill This Form
