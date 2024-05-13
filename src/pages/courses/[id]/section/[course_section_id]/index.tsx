@@ -136,31 +136,31 @@ const CoursePartDetail = () => {
       pathname: `/courses/${router.query.id}/activity/${id}`,
     })
   }
+
   const handleRouterCaseStudy = async (
     quizId: string,
     topicId: string,
     sectionId?: string | undefined,
     caseStudyId?: string | undefined,
   ) => {
-    const filteredData = chapterDetail?.children?.filter(
+    const filteredData = chapterDetail?.children?.find(
       (item: any) => item?.id === sectionId,
     )
-    const getCaseStudy =
-      filteredData?.[0]?.quiz?.case_study_story?.instances?.filter(
-        (item: any) => item?.id === caseStudyId,
-      )
+    const getCaseStudy = filteredData?.quiz?.case_study_story?.instances?.find(
+      (item: any) => item?.id === caseStudyId,
+    )
 
     const totalCourseSections =
-      getCaseStudy?.[0]?.learning_progress?.total_course_sections
+      getCaseStudy?.learning_progress?.total_course_sections
     const totalCourseSectionsCompleted =
-      getCaseStudy?.[0]?.learning_progress?.total_course_sections_completed
+      getCaseStudy?.learning_progress?.total_course_sections_completed
     if (
       totalCourseSections === totalCourseSectionsCompleted &&
       totalCourseSections !== undefined &&
       totalCourseSectionsCompleted !== undefined
     ) {
       router.push({
-        pathname: `/case-study/table-result/${getCaseStudy?.[0]?.question_topic?.attempts[0]?.id}`,
+        pathname: `/case-study/table-result/${getCaseStudy?.attempt?.id}`,
         query: { class_user_id: previewPart.class_user_id },
       })
     } else {
@@ -169,7 +169,11 @@ const CoursePartDetail = () => {
       }
       router.push({
         pathname: `/case-study/${topicId}`,
-        query: { quiz_id: quizId, class_user_id: previewPart.class_user_id },
+        query: {
+          quiz_id: quizId,
+          class_user_id: previewPart.class_user_id,
+          caseStudyId: caseStudyId,
+        },
       })
     }
   }
@@ -428,7 +432,7 @@ const CoursePartDetail = () => {
           setOpen={setOpen}
           data={chapterData}
           class_user_id={previewPart?.class_user_id}
-          activeCourse={handleChapterTest}
+          activeCourse={() => {}}
         />
       </div>
     </SappLoadingGlobal>

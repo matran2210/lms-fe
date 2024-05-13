@@ -276,6 +276,8 @@ const Course = ({
   }
   const iconType = renderStatusIcon(classUserStatus ?? '')
 
+  const progressPart = percentProgress > 100 ? 100 : percentProgress
+
   return (
     <>
       {determineButtonToShow !== 'Hidden' && (
@@ -397,7 +399,7 @@ const Course = ({
                         enableCourse ? 'text-bw-1' : 'text-gray-2 '
                       }`}
                     >
-                      {percentProgress}%
+                      {progressPart}%
                     </p>
                   </div>
                 </div>
@@ -406,7 +408,7 @@ const Course = ({
                     className={`progress-percentage ${
                       enableCourse ? 'bg-primary ' : 'bg-gray-2'
                     } h-1.5`}
-                    style={{ width: `${percentProgress}%` }}
+                    style={{ width: `${progressPart}%` }}
                   ></div>
                 </div>
               </div>

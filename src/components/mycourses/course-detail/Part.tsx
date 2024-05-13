@@ -62,6 +62,8 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   }
   const iconType = renderStatusIcon(course?.user_section_learning_status ?? '')
 
+  const progressPart = percentProgress > 100 ? 100 : percentProgress
+
   return (
     <div>
       <div
@@ -123,14 +125,14 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             </div>
             <div className="number">
               <p className="text-medium-sm font-medium text-bw-1">
-                {percentProgress}%
+                {progressPart}%
               </p>
             </div>
           </div>
           <div className="progressbar bg-gray-3 h-1.5">
             <div
               className="progress-percentage bg-primary h-1.5"
-              style={{ width: `${percentProgress}%` }}
+              style={{ width: `${progressPart}%` }}
             ></div>
           </div>
         </div>

@@ -1,19 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
-import {
-  ICourseDetail,
-  ICourseSection,
-  IMyCourseDetail,
-} from 'src/type/courses'
+import { IMyCourseDetail } from 'src/type/courses'
 import TestModal from 'src/pages/courses/test'
 import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
 import { Tooltip } from 'antd'
 import { truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
-import { CoursesAPI } from '../../../pages/api/courses/index'
 
 const PartFailed = ({
   coursePart,
@@ -38,23 +32,23 @@ const PartFailed = ({
     return false
   }, [coursePart?.quiz?.attempt?.ratio_score])
 
-  const handleChapterTest = async () => {
-    try {
-      await CoursesAPI.learningOutcomeProgress(
-        router.query.courseId,
-        coursePart.id,
-      )
-    } catch (err) {
-      toast.error('Cannot progress Test')
-      throw err
-    }
-  }
+  // const handleChapterTest = async () => {
+  //   try {
+  //     await CoursesAPI.learningOutcomeProgress(
+  //       router.query.courseId,
+  //       coursePart.id,
+  //     )
+  //   } catch (err) {
+  //     toast.error('Cannot progress Test')
+  //     throw err
+  //   }
+  // }
   const quizAttempt = coursePart?.quiz
 
   const countTimeSpent = (ratio_score: string) => {
     const parts = ratio_score?.split('/')
-    const firstPoint = parseInt(parts[0], 10)
-    const secondPoint = parseInt(parts[1], 10)
+    const firstPoint = parseInt(parts?.[0] || '0', 10)
+    const secondPoint = parseInt(parts?.[1] || '0', 10)
     return roundNumber((firstPoint / secondPoint) * 100)
   }
 
@@ -186,7 +180,7 @@ const PartFailed = ({
         title={coursePart?.name}
         data={coursePart}
         class_user_id={class_user_id}
-        activeCourse={handleChapterTest}
+        activeCourse={() => {}}
       />
     </>
   )
