@@ -17,7 +17,7 @@ import {
 import PopupExtend from './PopupExtend'
 import PopupActive from './PopupActive'
 import PopupLesson from './PopupLesson'
-import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
@@ -279,7 +279,7 @@ const Course = ({
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
   return (
-    <>
+    <div data-aos={ANIMATION.DATA_AOS}>
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
@@ -287,7 +287,10 @@ const Course = ({
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}>
+          <div
+            className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}
+            data-aos={ANIMATION.DATA_AOS}
+          >
             <div
               className={`name-course text-2xl font-medium mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
@@ -453,7 +456,7 @@ const Course = ({
         activeCourse={activeCourse}
       />
       <PopupLesson open={openLesson} setOpen={setOpenLesson} />
-    </>
+    </div>
   )
 }
 

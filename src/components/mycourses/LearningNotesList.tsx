@@ -7,7 +7,7 @@ import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { ISection } from 'src/type/courses'
 import { DEFAULT_SELECT_SECTION } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
@@ -19,6 +19,8 @@ import { format } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Link from 'next/link'
+import { isEmpty } from 'lodash'
+import NoData from 'src/common/NoData'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -444,107 +446,117 @@ const LearningNotesList = () => {
       </div>
 
       <div>
-        <TextSkeleton loading={loading} length={10}>
-          {notesListData?.notes?.map((note: any, index: number) => {
-            const isExpanded = expandedNotes.includes(note?.id)
-            return (
-              <div
-                className="mt-6 p-6 border border-default last:mb-6"
-                key={note?.id}
-              >
+        {!isEmpty(notesListData?.notes) ? (
+          <TextSkeleton loading={loading} length={10}>
+            {notesListData?.notes?.map((note: any, index: number) => {
+              const isExpanded = expandedNotes.includes(note?.id)
+              return (
                 <div
-                  className="flex items-center mb-1.5 pb-px"
-                  onClick={() => onClose()}
+                  className="mt-6 p-6 border border-default last:mb-6"
+                  key={note?.id}
                 >
-                  <SappBreadcrumbNotLink
-                    paths={[...note?.course_section_path].reverse()}
-                  />
-                </div>
-                <div className="font-normal text-base text-bw-1">
-                  <span
-                    className={`whitespace-pre-wrap ${
-                      isExpanded ? '' : 'line-clamp-3'
-                    }`}
+                  <div
+                    className="flex items-center mb-1.5 pb-px"
+                    onClick={() => onClose()}
                   >
-                    {note?.description}
-                  </span>
-                  {!isExpanded && note?.description?.length > 230 ? (
-                    <button
-                      className="block font-normal text-base text-gray-1"
-                      onClick={() => toggleExpand(note?.id)}
-                    >
-                      Show more
-                    </button>
-                  ) : (
-                    <>
-                      {note?.description?.length > 230 ? (
-                        <button
-                          className="block font-normal text-base text-gray-1"
-                          onClick={() => toggleExpand(note?.id)}
-                        >
-                          Show less
-                        </button>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  )}
-                </div>
-                <div className="mt-5 flex justify-between">
-                  <div className="font-normal text-sm text-gray-1">
-                    {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
+                    <SappBreadcrumbNotLink
+                      paths={[...note?.course_section_path].reverse()}
+                    />
                   </div>
-                  <div className="flex">
-                    <div className="cursor-pointer relative">
-                      {activityId === note?.course_section_id ? (
+                  <div className="font-normal text-base text-bw-1">
+                    <span
+                      className={`whitespace-pre-wrap ${
+                        isExpanded ? '' : 'line-clamp-3'
+                      }`}
+                    >
+                      {note?.description}
+                    </span>
+                    {!isExpanded && note?.description?.length > 230 ? (
+                      <button
+                        className="block font-normal text-base text-gray-1"
+                        onClick={() => toggleExpand(note?.id)}
+                      >
+                        Show more
+                      </button>
+                    ) : (
+                      <>
+                        {note?.description?.length > 230 ? (
+                          <button
+                            className="block font-normal text-base text-gray-1"
+                            onClick={() => toggleExpand(note?.id)}
+                          >
+                            Show less
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <div className="mt-5 flex justify-between">
+                    <div className="font-normal text-sm text-gray-1">
+                      {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
+                    </div>
+                    <div className="flex">
+                      <div className="cursor-pointer relative">
+                        {activityId === note?.course_section_id ? (
+                          <span
+                            className="notes-list-icon"
+                            onClick={() => {
+                              if (
+                                !getNotesData.some((item) =>
+                                  item.id.includes(note?.id),
+                                )
+                              ) {
+                                handleEditNote(
+                                  note?.id,
+                                  note?.description,
+                                  index,
+                                )
+                                onClose()
+                              }
+                            }}
+                          >
+                            <EditIcon />
+                          </span>
+                        ) : (
+                          <>
+                            <Link
+                              href={
+                                queryId || courseId
+                                  ? `/courses/${
+                                      queryId || courseId
+                                    }/activity/${note?.course_section_id}?note_id=${note?.id}`
+                                  : '#'
+                              }
+                            >
+                              <span className="notes-list-icon">
+                                <ViewIcon />
+                              </span>
+                            </Link>
+                          </>
+                        )}
+                      </div>
+                      <div className="ms-4 cursor-pointer">
                         <span
-                          className="notes-list-icon"
                           onClick={() => {
-                            if (
-                              !getNotesData.some((item) =>
-                                item.id.includes(note?.id),
-                              )
-                            ) {
-                              handleEditNote(note?.id, note?.description, index)
-                              onClose()
-                            }
+                            handleDelete(note?.id)
                           }}
                         >
-                          <EditIcon />
+                          <DeleteIcon />
                         </span>
-                      ) : (
-                        <>
-                          <Link
-                            href={
-                              queryId || courseId
-                                ? `/courses/${
-                                    queryId || courseId
-                                  }/activity/${note?.course_section_id}?note_id=${note?.id}`
-                                : '#'
-                            }
-                          >
-                            <span className="notes-list-icon">
-                              <ViewIcon />
-                            </span>
-                          </Link>
-                        </>
-                      )}
-                    </div>
-                    <div className="ms-4 cursor-pointer">
-                      <span
-                        onClick={() => {
-                          handleDelete(note?.id)
-                        }}
-                      >
-                        <DeleteIcon />
-                      </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
-        </TextSkeleton>
+              )
+            })}
+          </TextSkeleton>
+        ) : (
+          <div className="flex justify-center items-center min-h-[calc(100vh-12rem)]">
+            <NoData />
+          </div>
+        )}
       </div>
     </SappDrawer>
   )

@@ -12,6 +12,8 @@ import { IResourceDetail, ISection } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import { isEmpty } from 'lodash'
+import NoData from 'src/common/NoData'
 
 interface IProps {
   open: boolean
@@ -374,31 +376,37 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToActivity}
         />
       </div>
-      <TextSkeleton loading={loading} length={10}>
-        {resources?.resources?.map((resource) => (
-          <div key={resource.id}>
-            <div
-              className="mt-6 p-6 h-[92px] last:mb-6 flex justify-between items-center"
-              style={{ border: '1px solid #DCDDDD' }}
-            >
-              <div>
-                <div className="font-normal text-base text-bw-1">
-                  {resource?.name}
-                </div>
-                <div className="text-gray-1 font-normal text-base">
-                  {bytesToKilobyte(resource?.size)}
-                </div>
-              </div>
-              <a
-                className="cursor-pointer"
-                onClick={() => download(resource.name, resource.file_key)}
+      {!isEmpty(resources?.resources) ? (
+        <TextSkeleton loading={loading} length={10}>
+          {resources?.resources?.map((resource) => (
+            <div key={resource.id}>
+              <div
+                className="mt-6 p-6 h-[92px] last:mb-6 flex justify-between items-center"
+                style={{ border: '1px solid #DCDDDD' }}
               >
-                <DownloadIcon />
-              </a>
+                <div>
+                  <div className="font-normal text-base text-bw-1">
+                    {resource?.name}
+                  </div>
+                  <div className="text-gray-1 font-normal text-base">
+                    {bytesToKilobyte(resource?.size)}
+                  </div>
+                </div>
+                <a
+                  className="cursor-pointer"
+                  onClick={() => download(resource.name, resource.file_key)}
+                >
+                  <DownloadIcon />
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
-      </TextSkeleton>
+          ))}
+        </TextSkeleton>
+      ) : (
+        <div className="flex justify-center items-center min-h-[calc(100vh-12rem)]">
+          <NoData />
+        </div>
+      )}
     </SappDrawer>
   )
 }

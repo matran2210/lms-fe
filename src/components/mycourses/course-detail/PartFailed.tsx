@@ -8,6 +8,8 @@ import { useRouter } from 'next/router'
 import { Tooltip } from 'antd'
 import { truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
+import { CoursesAPI } from '../../../pages/api/courses/index'
+import { ANIMATION } from 'src/constants'
 
 const PartFailed = ({
   coursePart,
@@ -68,7 +70,7 @@ const PartFailed = ({
 
   return (
     <>
-      <div>
+      <div data-aos={ANIMATION.DATA_AOS}>
         <div
           className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-pointer`}
           onClick={() => setOpen(true)}
