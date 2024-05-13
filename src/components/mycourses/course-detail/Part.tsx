@@ -13,6 +13,7 @@ import {
 } from 'src/type/courses'
 import { useForm } from 'react-hook-form'
 import { Tooltip } from 'antd'
+import { ANIMATION } from 'src/constants'
 
 const Part = ({ course }: { course: IMyCourseDetail }) => {
   const [open, setOpen] = useState(false)
@@ -65,7 +66,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
   return (
-    <div>
+    <div data-aos={ANIMATION.DATA_AOS}>
       <div
         className={`name-part text-2xl font-medium h-[60px] cursor-pointer`}
         onClick={() =>

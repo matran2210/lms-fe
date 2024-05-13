@@ -720,6 +720,7 @@ textarea.is-invalid:focus {
 
 // Animate the size, inside
 .secondary:hover,
+// .secondary:focus,
 .primary:hover {
   box-shadow: inset 0 0 0 2em var(--hover);
 }
