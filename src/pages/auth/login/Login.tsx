@@ -161,9 +161,11 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
-        <div className="text-4xl font-semibold text-bw-1 mb-2">Log In</div>
-        <div className="text-medium-sm text-gray-1 mb-10">
+      <div className="block max-w-[38.375rem] md:py-17.5 xs:py-20 py-10 px-8 md:px-19 mx-auto shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
+        <div className="md:text-4xl text-3xl font-semibold text-bw-1 mb-2">
+          Log In
+        </div>
+        <div className="text-medium-sm text-gray-1 md:mb-10 mb-8">
           Login to Continue Learning
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
@@ -193,7 +195,7 @@ const LoginPage = () => {
               disabled={loading}
             />
           </div>
-          <div className="flex justify-between mb-15">
+          <div className="flex justify-between 2xl:mb-15">
             <HookFormCheckBox
               control={control}
               name="remember_me"
