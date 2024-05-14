@@ -10,6 +10,7 @@ import { truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
 import { CoursesAPI } from '../../../pages/api/courses/index'
 import { ANIMATION } from 'src/constants'
+import { isNull } from 'lodash'
 
 const PartFailed = ({
   coursePart,
@@ -25,7 +26,7 @@ const PartFailed = ({
   const router = useRouter()
 
   const checkFinished = useMemo(() => {
-    if (coursePart?.quiz?.attempt) {
+    if (isNull(coursePart?.quiz?.attempt)) {
       return false
     }
     if (coursePart?.quiz?.attempt) {
