@@ -10,6 +10,7 @@ import { truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
 import { CoursesAPI } from '../../../pages/api/courses/index'
 import { ANIMATION } from 'src/constants'
+import { isNull } from 'lodash'
 
 const PartFailed = ({
   coursePart,
@@ -24,15 +25,15 @@ const PartFailed = ({
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const checkFinished = useMemo(() => {
-    if (coursePart?.quiz?.attempt?.ratio_score === '0/0') {
+    if (isNull(coursePart?.quiz?.attempt)) {
       return false
     }
-    if (coursePart?.quiz?.attempt?.ratio_score !== '0/0') {
+    if (coursePart?.quiz?.attempt) {
       return true
     }
 
     return false
-  }, [coursePart?.quiz?.attempt?.ratio_score])
+  }, [coursePart?.quiz?.attempt])
 
   // const handleChapterTest = async () => {
   //   try {
