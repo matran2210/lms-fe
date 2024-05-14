@@ -13,6 +13,7 @@ import { CoursesAPI } from '../api/courses'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Aos from 'aos'
+import { isEmpty } from 'lodash'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -218,9 +219,12 @@ const MyCourse = () => {
         )}
       </div>
       <div
-        className={`pt-6 max-w-xxl my-0 mx-auto relative
-        ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}
-      `}
+        data-aos={ANIMATION.DATA_AOS}
+        className={`pt-6 max-w-xxl my-0 mx-auto relative ${
+          isEmpty(courses)
+            ? 'flex justify-center min-h-[calc(100vh-13rem)] items-center'
+            : ''
+        } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
       >
         {guideStatus && guideStep === 5 && (
           <PopupStep

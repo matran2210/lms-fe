@@ -260,7 +260,12 @@ const CaseStudyDetail = ({ questions }: any) => {
     class_user_id: string,
   ) {
     try {
-      const res = await TestAPI.createTopicAttempt(quiz_id, id, class_user_id)
+      const res = await TestAPI.createTopicAttempt(
+        quiz_id,
+        id,
+        class_user_id,
+        router.query.caseStudyId,
+      )
       if (res?.success === false) {
         setBreadCrumb(res?.data?.breadcumb)
         setClassId(res?.data?.class_id)

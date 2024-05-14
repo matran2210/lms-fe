@@ -3,6 +3,8 @@ import Part from './Part'
 import PartMiddleTest from './PartFailed'
 import { ANIMATION } from 'src/constants'
 import { ICourseDetail, IMyCourseDetail } from 'src/type/courses'
+import { isEmpty } from 'lodash'
+import NoData from 'src/common/NoData'
 
 const CourseParts = ({
   courses,
@@ -14,8 +16,14 @@ const CourseParts = ({
   lastElementRef: (node: HTMLDivElement) => void
 }) => {
   return (
-    <div className="grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-10">
-      {courses &&
+    <div
+      className={`${
+        isEmpty(courses)
+          ? 'flex justify-center min-h-[calc(100vh-15rem)] items-center'
+          : 'grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-10'
+      }`}
+    >
+      {!isEmpty(courses) ? (
         courses?.map((coursePart, index: number) => {
           return (
             <div
@@ -37,7 +45,10 @@ const CourseParts = ({
               )}
             </div>
           )
-        })}
+        })
+      ) : (
+        <NoData />
+      )}
     </div>
   )
 }

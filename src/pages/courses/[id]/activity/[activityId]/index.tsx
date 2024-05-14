@@ -402,6 +402,13 @@ const ActivityPage = () => {
   )
 
   /**
+   * @description tìm kiếm id của Part
+   */
+  const partId = breadcrumbsMenu?.data?.find(
+    (e: IBreadCrumbs) => e?.course_section_type === 'PART',
+  )?.id
+
+  /**
    * @description config menu breadcrumbs trong activity
    */
   const menu = (
@@ -409,15 +416,16 @@ const ActivityPage = () => {
       {breadcrumbsMenu?.data &&
         breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
           let url = ''
+          const urlCourseDetail = `/courses/${router.query.id}/section/${partId}`
           switch (e.course_section_type) {
             case 'PART':
-              url = `/courses/${router.query.id}/section/${e?.id}`
+              url = urlCourseDetail
               break
             case 'CHAPTER':
-              url = `/courses/${router.query.id}/section/${e?.id}?unit_id=${e?.id}`
+              url = urlCourseDetail
               break
             case 'UNIT':
-              url = `/courses/${router.query.id}/section/${e?.id}?unit_id=${e?.id}`
+              url = urlCourseDetail
               break
             case 'ACTIVITY':
               url = '#'

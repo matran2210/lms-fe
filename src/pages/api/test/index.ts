@@ -6,6 +6,7 @@ export class TestAPI {
     quiz_id: string,
     question_topic_id: string,
     class_user_id?: string,
+    story_topic_id?: string | string[] | undefined,
   ) {
     return fetcher(`${apiURL}/quiz/case-study/topic-attempt`, {
       method: 'POST',
@@ -13,6 +14,7 @@ export class TestAPI {
         quiz_id,
         question_topic_id,
         class_user_id,
+        story_topic_id,
       },
     })
   }

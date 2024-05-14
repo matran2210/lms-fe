@@ -119,3 +119,7 @@
     @apply border-default;
   }
 }
+
+.w-fill--available {
+  width: -webkit-fill-available;
+}

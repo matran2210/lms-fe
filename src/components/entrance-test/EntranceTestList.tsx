@@ -1,5 +1,7 @@
 import React from 'react'
 import EntranceTest from './EntranceTest'
+import { isEmpty } from 'lodash'
+import NoData from 'src/common/NoData'
 // import { ANIMATION } from 'src/constants'
 
 interface EntranceTestListProps {
@@ -11,17 +13,25 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
 }) => {
   return (
     <div
-      className="grid grid-cols-1 md:grid-cols-3 gap-6"
+      className={`${
+        !isEmpty(entranceTestLists)
+          ? 'grid grid-cols-1 md:grid-cols-3 gap-6'
+          : 'flex justify-center min-h-[calc(100vh-15rem)] items-center'
+      }`}
       // data-aos={ANIMATION.DATA_AOS}
     >
-      {entranceTestLists?.map((e, index) => (
-        <div
-          key={index}
-          className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
-        >
-          <EntranceTest data={e} />
-        </div>
-      ))}
+      {!isEmpty(entranceTestLists) ? (
+        entranceTestLists?.map((e, index) => (
+          <div
+            key={index}
+            className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
+          >
+            <EntranceTest data={e} />
+          </div>
+        ))
+      ) : (
+        <NoData />
+      )}
     </div>
   )
 }

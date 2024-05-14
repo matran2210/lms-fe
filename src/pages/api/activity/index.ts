@@ -58,19 +58,19 @@ export class ActivityAPI {
    * @param {string} sectionId - id của section.
    * @returns {Promise<IResponse<any>>} Một Promise nhận phản hồi về tiến độ.
    */
-  static finishedCourseSectionProgress(
-    courseId: string,
-    sectionId: string,
-  ): Promise<any> {
-    return fetcher(
-      `${apiURL}/course-sections/course/${courseId}/section/${sectionId}/progress`,
-      {
-        params: {
-          status: 'FINISHED',
-        },
-      },
-    )
-  }
+  // static finishedCourseSectionProgress(
+  //   courseId: string,
+  //   sectionId: string,
+  // ): Promise<any> {
+  //   return fetcher(
+  //     `${apiURL}/course-sections/course/${courseId}/section/${sectionId}/progress`,
+  //     {
+  //       params: {
+  //         status: 'FINISHED',
+  //       },
+  //     },
+  //   )
+  // }
 
   static uploadImageDiscussion = ({
     discussion_id,
