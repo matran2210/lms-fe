@@ -30,6 +30,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { getActToken, getLocalStorgeActToken } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
+import { CourseProvider, useCourseContext } from '@contexts/index'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -238,22 +239,24 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         />
       </Head>
       <main>
-        <QueryClientProvider client={queryClient}>
-          <Toaster />
-          <SappConfirmDialogContainer />
-          {loading ? <SappLoading /> : <></>}
-          <RouteGuard>
-            <>
-              {content}
-              <LearningResource
-                open={openResource}
-                setOpenResource={setOpenResource}
-              />
-              <LearningNotesList />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </>
-          </RouteGuard>
-        </QueryClientProvider>
+        <CourseProvider>
+          <QueryClientProvider client={queryClient}>
+            <Toaster />
+            <SappConfirmDialogContainer />
+            {loading ? <SappLoading /> : <></>}
+            <RouteGuard>
+              <>
+                {content}
+                <LearningResource
+                  open={openResource}
+                  setOpenResource={setOpenResource}
+                />
+                <LearningNotesList />
+                <ReactQueryDevtools initialIsOpen={false} />
+              </>
+            </RouteGuard>
+          </QueryClientProvider>
+        </CourseProvider>
       </main>
     </>
   )
