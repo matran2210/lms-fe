@@ -33,25 +33,25 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="bg-white max-w-xxl mx-auto sapp-dashboard shadow-activity"
+        className="bg-white max-w-xxl mx-auto shadow-activity min-h-[calc(100vh-9rem)]"
         data-aos={ANIMATION.DATA_AOS}
       >
-        <div className="sapp-dashboard justify-center flex flex-col relative boxShadow-activity">
+        <div className="min-h-[calc(100vh-9rem)] justify-center flex flex-col relative boxShadow-activity">
           <div className="flex flex-col">
             <div className="flex justify-center mb-2.5">
-              <div className="text-gray-1 font-normal text-xl">Hi,</div>
+              <div className="text-gray-1 font-light text-xl">Hi,</div>
               <div className="font-semibold text-bw-1 ms-2 text-xl">
                 {user?.detail?.full_name}
               </div>
-              <div className="text-gray-1 font-normal text-xl">. Welcome!</div>
+              <div className="text-gray-1 font-light text-xl">. Welcome!</div>
             </div>
-            <div className="flex justify-center text-gray-1 text-xl">
+            <div className="flex justify-center text-gray-1 text-xl font-light">
               We are launching this site very soon. Please come back later.
             </div>
             <div className="mt-10 flex justify-center">
               <SappButton
                 title="Go to Your Course"
-                size="lager"
+                size="medium"
                 onClick={() => router.push(PageLink.COURSES)}
               />
             </div>

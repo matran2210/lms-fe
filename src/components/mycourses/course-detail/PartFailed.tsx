@@ -51,7 +51,7 @@ const PartFailed = ({
     const parts = ratio_score?.split('/')
     const firstPoint = parseInt(parts?.[0] || '0', 10)
     const secondPoint = parseInt(parts?.[1] || '0', 10)
-    return roundNumber((firstPoint / secondPoint) * 100)
+    return roundNumber((firstPoint / secondPoint) * 100) || 0
   }
 
   const runOutAttemp =
