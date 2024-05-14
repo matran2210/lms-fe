@@ -87,9 +87,11 @@ const ChangePasswordPage = () => {
   }
 
   return (
-    <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
-      <div className="text-4xl font-bold text-bw-1 mb-2">New password</div>
-      <div className="text-medium-sm text-gray-1 mb-10">
+    <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
+      <div className="md:text-4xl text-3xl font-bold text-bw-1 mb-2">
+        New password
+      </div>
+      <div className="text-medium-sm text-gray-1 md:mb-10 mb-8">
         Set the new password for your account.
       </div>
       <div>

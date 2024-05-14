@@ -52,16 +52,16 @@ const ForgotPasswordPage = () => {
   }
 
   return (
-    <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
+    <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="font-semibold text-bw-1 mb-2 text-4xl">
+        <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
           Forgot Password
         </div>
         <span className="text-medium-sm text-gray-1 mb-10">
           Enter the email you used to create your account so we can send you 6
           digits code to reset your password.
         </span>
-        <div className="mt-15">
+        <div className="md:mt-15 mt-8">
           <HookFormTextField
             name="email"
             control={control}
