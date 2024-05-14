@@ -23,16 +23,17 @@ const PartFailed = ({
     : 'Unlimited'
   const [open, setOpen] = useState(false)
   const router = useRouter()
+
   const checkFinished = useMemo(() => {
-    if (coursePart?.quiz?.attempt?.ratio_score === '0/0') {
+    if (coursePart?.quiz?.attempt) {
       return false
     }
-    if (coursePart?.quiz?.attempt?.ratio_score !== '0/0') {
+    if (coursePart?.quiz?.attempt) {
       return true
     }
 
     return false
-  }, [coursePart?.quiz?.attempt?.ratio_score])
+  }, [coursePart?.quiz?.attempt])
 
   // const handleChapterTest = async () => {
   //   try {
