@@ -169,7 +169,7 @@ export const useGetDataQuery = (
   params: Object,
   fetchFunction: () => Promise<any>,
   enabled?: boolean,
-  onError?:((err: unknown) => void) | undefined
+  onError?: ((err: unknown) => void) | undefined,
 ) => {
   const fetchData = async () => {
     const { data } = await fetchFunction()
@@ -179,13 +179,13 @@ export const useGetDataQuery = (
   return useQuery([queryKey, params], fetchData, {
     enabled: enabled,
     onError: onError,
-    retry: false
+    retry: false,
   })
 }
 
 export const convertFractionToPercentage = (fraction: string) => {
-  const [numerator, denominator] = fraction.split('/').map(Number);
-  if (denominator === 0) return 0; // Tránh chia cho 0
-  const percentage = (numerator / denominator) * 100;
-  return percentage;
-};
+  const [numerator, denominator] = fraction.split('/').map(Number)
+  if (denominator === 0) return 0 // Tránh chia cho 0
+  const percentage = (numerator / denominator) * 100
+  return percentage
+}

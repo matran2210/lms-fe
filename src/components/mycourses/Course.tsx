@@ -22,6 +22,7 @@ import toast from 'react-hot-toast'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
+import PopupOpenClass from './PopupOpenClass'
 
 const Course = ({
   course,
@@ -43,6 +44,7 @@ const Course = ({
   const [openActive, setOpenActive] = useState<boolean>(false)
   const [timeActive, setTimeActive] = useState<number>()
   const [openLesson, setOpenLesson] = useState<boolean>(false)
+  const [openClass, setOpenClass] = useState<boolean>(false)
   const router = useRouter()
   const student = course?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = course?.classes[0]
@@ -238,6 +240,8 @@ const Course = ({
       student?.extend_count === 0 || !student
         ? extendCourse()
         : setOpenExtend(true)
+    } else if (!classInstance.class_user_instances[0].is_opened) {
+      setOpenClass(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
         ? router.push(`/courses/my-course/${classInstance.id}`)
@@ -456,6 +460,11 @@ const Course = ({
         activeCourse={activeCourse}
       />
       <PopupLesson open={openLesson} setOpen={setOpenLesson} />
+      <PopupOpenClass
+        open={openClass}
+        setOpen={setOpenClass}
+        started_at={classInstance.class_user_instances[0].started_at}
+      />
     </div>
   )
 }

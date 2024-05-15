@@ -118,6 +118,7 @@ export interface IClassUserInstances {
   updated_at: Date
   started_at: Date
   finished_at: Date
+  is_opened: boolean
 }
 
 export interface IClasses {
