@@ -17,9 +17,7 @@ const TestResultDetail = () => {
       params,
       () => CoursesAPI.getQuizAttempts(router.query.id),
       router.query.id !== undefined,
-      () =>
-        router.replace('/courses')
-
+      () => router.replace('/courses'),
     )
   }
 

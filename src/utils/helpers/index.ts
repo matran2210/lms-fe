@@ -21,7 +21,10 @@ export function isMobile() {
  * @param {string} dateString - Chuỗi ngày giờ đầu vào
  * @return {string} - Chuỗi ngày giờ đã định dạng hoặc - nếu không hợp lệ
  */
-export const formatDate = (dateString: string): string => {
+export const formatDate = (
+  dateString: string,
+  withoutTime?: boolean,
+): string => {
   // Kiểm tra nếu dateString không có hoặc không phải date
   if (!dateString || isNaN(Date.parse(dateString))) {
     // Trả về -
@@ -41,6 +44,9 @@ export const formatDate = (dateString: string): string => {
   const hourStr = hour < 10 ? '0' + hour : hour
   const minuteStr = minute < 10 ? '0' + minute : minute
   // Trả về chuỗi định dạng mong muốn
+  if (withoutTime === true) {
+    return `${dayStr}/${monthStr}/${year}`
+  }
   return `${dayStr}/${monthStr}/${year} ${hourStr}:${minuteStr}`
 }
 

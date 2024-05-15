@@ -129,17 +129,14 @@ request.interceptors.response.use(
   function (error: any) {
     const errorCode: string = error?.response?.data?.error?.code
     const errorMessage = exceptions[errorCode as keyof typeof exceptions]
-    if (
-      errorCode !== '400|060915' &&
-      errorCode !== '400|060904'
-    ) {
-    toast.error(
-      errorMessage ||
-        error?.response?.statusText ||
-        error?.message ||
-        'Unknown error!',
-    )
-  }
+    if (errorCode !== '400|060915' && errorCode !== '400|060904') {
+      toast.error(
+        errorMessage ||
+          error?.response?.statusText ||
+          error?.message ||
+          'Unknown error!',
+      )
+    }
     return Promise.reject(error)
   },
 )
