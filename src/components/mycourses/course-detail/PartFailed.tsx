@@ -10,6 +10,7 @@ import { convertFractionToPercentage, truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
 import { ANIMATION } from 'src/constants'
 import { isNull, round } from 'lodash'
+import { useCourseContext } from '@contexts/index'
 
 const PartFailed = ({
   coursePart,
@@ -69,6 +70,8 @@ const PartFailed = ({
     }
   }, [runOutAttemp])
 
+  const { courseType } = useCourseContext()
+
   /**
    * @description check điều kiện pass Final Test
    */
@@ -79,7 +82,8 @@ const PartFailed = ({
       ),
       2,
     ) > coursePart?.quiz?.required_percent_score &&
-    coursePart?.course_section_type === 'FINAL_TEST'
+    coursePart?.course_section_type === 'FINAL_TEST' &&
+    courseType === 'FOUNDATION_COURSE'
 
   return (
     <>
@@ -158,6 +162,8 @@ const PartFailed = ({
           ) : (
             <div className="flex justify-between flex-1">
               {(passFinalTest ||
+                (coursePart?.course_section_type === 'FINAL_TEST' &&
+                  courseType !== 'FOUNDATION_COURSE') ||
                 coursePart?.course_section_type === 'MID_TERM_TEST') && (
                 <SappButton
                   title="Result"
