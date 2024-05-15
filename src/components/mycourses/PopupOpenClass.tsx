@@ -16,10 +16,18 @@ const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
   return (
     <SappModalV2
       open={open}
+      okButtonCaption="Back to my course"
       onOk={onOk}
       handleCancel={() => setOpen(false)}
+      showHeader={false}
+      footerButtonClassName="flex flex-col-reverse gap-8"
+      parentChildClass=""
+      position="center"
+      fullWidthBtn={true}
+      closeAfterSubmit={true}
+      buttonSize="medium"
+      confirmOnclose={false}
       title={undefined}
-      showFooter={false}
     >
       <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
         <AlertIcon />
