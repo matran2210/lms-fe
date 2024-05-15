@@ -50,7 +50,7 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
    * @description mở popup khi khóa là Foundation và submit bài Final Test
    */
   useEffect(() => {
-    if (courseType && submitTest) {
+    if (courseType === 'FOUNDATION_COURSE' && submitTest) {
       setOpenPopupCongrats(true)
     } else {
       setOpenPopupCongrats(false)
