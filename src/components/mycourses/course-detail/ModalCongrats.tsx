@@ -16,54 +16,86 @@ interface IProps {
 }
 
 const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
+  /**
+   * @description lấy giá trị của router
+   */
   const router = useRouter()
+
+  /**
+   * @description lấy state trong context
+   */
   const {
     setCourseType,
     courseType,
     setOpenPopupCongrats,
     openPopupCongrats,
     scoreQuestion,
-    setScoreQuestion,
+    submitTest,
+    setSubmitTest,
   } = useCourseContext()
 
+  /**
+   * @description biến này check xem có điểm có pass khóa Foundation hay không?
+   */
+  const passFoundation = scoreQuestion >= quiz?.required_percent_score
+
+  /**
+   * @description set type của khóa học khi lần đầu tiên vào màn Course Detail
+   */
   useEffect(() => {
     setCourseType(course_type)
   }, [])
 
+  /**
+   * @description mở popup khi khóa là Foundation và submit bài Final Test
+   */
   useEffect(() => {
-    if (courseType && scoreQuestion >= quiz?.required_percent_score) {
+    if (courseType && submitTest) {
       setOpenPopupCongrats(true)
     } else {
       setOpenPopupCongrats(false)
     }
-  }, [courseType])
+  }, [courseType, submitTest])
+
+  /**
+   * @description function đóng popup và set lại state submit bài test
+   */
+  const handleClosePopup = () => {
+    setSubmitTest(false)
+    setOpenPopupCongrats(false)
+  }
 
   return (
     <SappModalV2
       open={openPopupCongrats}
-      okButtonCaption="View Your Result"
+      okButtonCaption={passFoundation ? 'View Results' : 'Quit'}
       onOk={() => {
-        router.replace(`/courses/test/test-result/${quiz?.attempt?.id}`)
-        setScoreQuestion(0)
-        setOpenPopupCongrats(false)
+        router.replace(
+          `${
+            passFoundation
+              ? `/courses/test/test-result/${quiz?.attempt?.id}`
+              : `/courses/my-course/${router.query.courseId}`
+          }`,
+        )
+        handleClosePopup()
       }}
-      showCancelButton={true}
+      showCancelButton={passFoundation}
+      showOkButton={true}
       showHeader={false}
       size="max-w-[646px]"
       footerButtonClassName="flex flex-col-reverse gap-6"
       childClass="flex flex-col justify-center items-center"
-      parentChildClass=""
       position="center"
       fullWidthBtn={true}
       closeAfterSubmit={true}
       buttonSize="extra"
       title={undefined}
-      cancelButtonCaption="Back to My Course"
+      cancelButtonCaption={'Back to My Course'}
       handleCancel={() => {
         router.replace('/courses')
-        setScoreQuestion(0)
-        setOpenPopupCongrats(false)
+        handleClosePopup()
       }}
+      handleClose={handleClosePopup}
     >
       <div className="flex justify-center">
         <div
@@ -74,7 +106,7 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
         </div>
       </div>
       <div className="text-bw-1 text-4xl font-semibold mt-6 flex justify-center">
-        Congrats
+        Congratulations
       </div>
       <div className="text-center mt-4 mb-3">
         <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center">

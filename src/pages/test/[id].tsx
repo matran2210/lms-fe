@@ -1068,7 +1068,7 @@ const TestDetail = () => {
     })
   }
 
-  const { setScoreQuestion } = useCourseContext()
+  const { setScoreQuestion, setSubmitTest } = useCourseContext()
 
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
@@ -1210,6 +1210,7 @@ const TestDetail = () => {
           } else {
             router.back()
             setScoreQuestion(res?.data?.score)
+            setSubmitTest(true)
           }
         }
       }

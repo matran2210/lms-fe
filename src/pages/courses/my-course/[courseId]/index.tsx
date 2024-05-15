@@ -9,9 +9,6 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ANIMATION } from 'src/constants'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import SappModalV2 from '@components/base/modal/SappModalV2'
-import { AlertIcon, IconCongrats } from '@assets/icons'
-import { CourseProvider, useCourseContext } from '@contexts/index'
 import ModalCongrats from '@components/mycourses/course-detail/ModalCongrats'
 
 const DEFAULT_PAGESIZE = 18
@@ -112,8 +109,11 @@ const CourseDetail = () => {
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
 
-  const courseQuiz = courses?.find(
-    (course) => course?.course_section_type === 'FINAL_TEST',
+  /**
+   * @description biến này tìm kiếm bài Final Test
+   */
+  const sectionFinalTest = courses?.find(
+    (section) => section?.course_section_type === 'FINAL_TEST',
   )?.quiz
 
   return (
@@ -151,7 +151,7 @@ const CourseDetail = () => {
       <ModalCongrats
         name={courseNameDetail}
         course_type={data?.pages?.[0]?.courseDetail?.data?.course_type}
-        quiz={courseQuiz}
+        quiz={sectionFinalTest}
       />
     </SappLoadingGlobal>
   )
