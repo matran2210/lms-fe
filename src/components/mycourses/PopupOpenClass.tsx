@@ -2,10 +2,11 @@ import { AlertIcon } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatDate } from '@utils/helpers'
+import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
-  setOpen: any
+  setOpen: Dispatch<SetStateAction<boolean>>
   started_at: Date
 }
 const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
