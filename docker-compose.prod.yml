@@ -2,22 +2,30 @@ version: '3'
 
 services:
   next-app:
+    image: gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next
     container_name: lms-fe-app
     build:
       context: ./
       dockerfile: prod.Dockerfile
-      # args:
-      #   NEXTAUTH_URL: ${NEXTAUTH_URL}
-      #   NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
     restart: always
     ports:
-      - ${EXPOSE_PORT}:${PORT}
-    environment:
-      REACT_APP_API_PUBLIC: ${REACT_APP_API_PUBLIC}
+      - '3000:3000'
     networks:
-      - my_network
-    
+      - local
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - local
+    volumes:
+      - /var/www/vhost:/etc/nginx/conf.d
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.crt:/etc/nginx/uat-ops-be.sapp.edu.vn.crt
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.key:/etc/nginx/uat-ops-be.sapp.edu.vn.key
+
 networks:
-  my_network:
-    driver: bridge
-        
+  local:
