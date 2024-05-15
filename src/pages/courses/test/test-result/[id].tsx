@@ -6,6 +6,7 @@ import { useGetDataQuery } from '@utils/index'
 import { TEST_TYPE } from '@utils/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -16,6 +17,9 @@ const TestResultDetail = () => {
       params,
       () => CoursesAPI.getQuizAttempts(router.query.id),
       router.query.id !== undefined,
+      () =>
+        router.replace('/courses')
+
     )
   }
 

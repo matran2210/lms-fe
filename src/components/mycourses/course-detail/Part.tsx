@@ -68,10 +68,10 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
       <div
-        className={`name-part text-2xl font-medium h-[60px] cursor-pointer`}
-        onClick={() =>
-          course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
-        }
+        className={`name-part text-2xl font-medium h-[60px]`}
+        // onClick={() =>
+        //   course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
+        // }
       >
         {(course?.name as string)?.length > 50 ? (
           <Tooltip title={course?.name} color="#ffffff" placement="top">

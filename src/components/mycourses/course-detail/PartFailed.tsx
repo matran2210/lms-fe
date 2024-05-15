@@ -6,11 +6,10 @@ import TestModal from 'src/pages/courses/test'
 import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
 import { Tooltip } from 'antd'
-import { truncateString } from '@utils/index'
+import { convertFractionToPercentage, truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
-import { CoursesAPI } from '../../../pages/api/courses/index'
 import { ANIMATION } from 'src/constants'
-import { isNull } from 'lodash'
+import { isNull, round } from 'lodash'
 
 const PartFailed = ({
   coursePart,
@@ -70,13 +69,22 @@ const PartFailed = ({
     }
   }, [runOutAttemp])
 
+  /**
+   * @description check điều kiện pass Final Test
+   */
+  const passFinalTest =
+    round(
+      convertFractionToPercentage(
+        coursePart?.quiz?.attempt?.ratio_score || '0/0',
+      ),
+      2,
+    ) > coursePart?.quiz?.required_percent_score &&
+    coursePart?.course_section_type === 'FINAL_TEST'
+
   return (
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
-        <div
-          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-pointer`}
-          onClick={() => setOpen(true)}
-        >
+        <div className={`name-part text-2xl font-medium h-[60px] line-clamp-2`}>
           {(coursePart?.name as string)?.length > 50 ? (
             <Tooltip title={coursePart?.name} color="#ffffff" placement="top">
               {truncateString(coursePart?.name, 50)}
@@ -149,20 +157,26 @@ const PartFailed = ({
             )
           ) : (
             <div className="flex justify-between flex-1">
-              <SappButton
-                title="Result"
-                isUnderLine
-                color="text"
-                className="font-medium underline !p-0"
-                onClick={() =>
-                  router.push(
-                    `/courses/test/test-result/${quizAttempt?.attempt?.id}`,
-                  )
-                }
-              ></SappButton>
-              {coursePart?.quiz?.is_limited &&
-              coursePart?.quiz?.attempt?.number_of_attempts ===
-                coursePart?.quiz?.limit_count ? null : (
+              {(passFinalTest ||
+                coursePart?.course_section_type === 'MID_TERM_TEST') && (
+                <SappButton
+                  title="Result"
+                  isUnderLine
+                  color="text"
+                  className="font-medium underline !p-0"
+                  onClick={() =>
+                    router.push(
+                      `/courses/test/test-result/${quizAttempt?.attempt?.id}`,
+                    )
+                  }
+                />
+              )}
+
+              {(coursePart?.quiz?.is_limited &&
+                coursePart?.quiz?.attempt?.number_of_attempts ===
+                  coursePart?.quiz?.limit_count &&
+                coursePart?.course_section_type !== 'FINAL_TEST') ||
+              passFinalTest ? null : (
                 <ButtonSecondary
                   title="Retake"
                   full={false}
