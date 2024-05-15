@@ -33,7 +33,7 @@ const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
         <AlertIcon />
       </div>
       <div className="text-2xl md:text-4xl text-bw-1 font-semibold flex justify-center">
-        Course
+        Unstarted Course
       </div>
       <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 xl:mb-7 px-1">
         This Course will start on{' '}
