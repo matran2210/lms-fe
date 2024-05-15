@@ -90,12 +90,8 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
       closeAfterSubmit={true}
       buttonSize="extra"
       title={undefined}
-      cancelButtonCaption={'Back to My Course'}
-      handleCancel={() => {
-        router.replace('/courses')
-        handleClosePopup()
-      }}
-      handleClose={handleClosePopup}
+      cancelButtonCaption="Quit"
+      handleCancel={handleClosePopup}
     >
       <div className="flex justify-center">
         <div
