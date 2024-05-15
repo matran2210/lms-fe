@@ -2,12 +2,12 @@ import { DeleteIcon, EditIcon, ViewIcon } from '@assets/icons'
 import SappDrawer from '@components/base/SappDrawer'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
+import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import React, { Dispatch, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import CourseAPI from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { ISection } from 'src/type/courses'
 import { DEFAULT_SELECT_SECTION } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
@@ -16,9 +16,11 @@ import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { resetNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
-import PreviewNoteList from './PreviewNoteList'
 import { v4 as uuidv4 } from 'uuid'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import Link from 'next/link'
+import { isEmpty } from 'lodash'
+import NoData from 'src/common/NoData'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -37,6 +39,7 @@ const LearningNotesList = () => {
   const courseId = router.query.courseId
   const queryId = router.query.id
   const activityId = router.query.activityId
+  const courseSectionId = router.query.course_section_id
   const [selectedSection, setSelectedSection] = useState<any>(null)
   const [selectedSubsection, setSelectedSubsection] = useState<any>(null)
   const [selectedUnit, setSelectedUnit] = useState<any>(null)
@@ -46,11 +49,9 @@ const LearningNotesList = () => {
   const [unit, setUnit] = useState<ISection[]>([])
   const [activity, setActivity] = useState<ISection[]>([])
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
-  const [viewActivity, setViewActivity] = useState<string>()
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
-
   const toggleExpand = (noteId: string) => {
     setExpandedNotes((prevExpanded: any) => {
       if (prevExpanded.includes(noteId)) {
@@ -106,17 +107,18 @@ const LearningNotesList = () => {
       selectedSection?.value ||
       '',
   })
-
   // Lấy danh sách notes và fill tự động activity khi lần đầu mở trong activity
   useEffect(() => {
     const objectParams = cleanParamsAPI({
       class_id: courseId || queryId,
-      course_section_id: activityId || '',
+      course_section_id: activityId || courseSectionId || '',
     })
-
-    if (router?.query?.activityId && notesListStatus) {
+    if (
+      router?.query?.activityId ||
+      (router?.query?.course_section_id && notesListStatus)
+    ) {
       setLoading(true)
-      CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
+      CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
         .then((res) => {
           setNotesListData(res?.data)
           const course_section_path = res?.data?.notes[0]?.course_section_path
@@ -155,10 +157,9 @@ const LearningNotesList = () => {
   useEffect(() => {
     if (notesListStatus && (courseId || queryId) && firstLoadActity) {
       setLoading(true)
-      CourseAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
+      CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
         .then((res) => {
           setNotesListData(res?.data)
-          setViewActivity('')
         })
         .catch((err) => {})
         .finally(() => {
@@ -256,7 +257,7 @@ const LearningNotesList = () => {
   async function getCourseSections(page_size: number) {
     try {
       if (!sections.length && notesListStatus) {
-        const res = await CourseAPI.getCourseSectionList(
+        const res = await CoursesAPI.getCourseSectionList(
           courseId || queryId,
           page_size || DEFAULT_PAGESIZE,
         )
@@ -270,7 +271,7 @@ const LearningNotesList = () => {
 
   async function getCourseSubsections(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'CHAPTER',
         selectedSection.value,
@@ -283,7 +284,7 @@ const LearningNotesList = () => {
 
   async function getCourseUnit() {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
@@ -298,7 +299,7 @@ const LearningNotesList = () => {
 
   async function getCourseActivity(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'ACTIVITY',
         selectedUnit.value,
@@ -312,9 +313,8 @@ const LearningNotesList = () => {
   const fetchData = async (params?: Object) => {
     setLoading(true)
     try {
-      const res = await CourseAPI.getCourseNotesList(pageIndex, params)
+      const res = await CoursesAPI.getCourseNotesList(pageIndex, params)
       setNotesListData(res?.data)
-      setViewActivity('')
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } catch (error) {
       // Handle error if needed
@@ -327,14 +327,10 @@ const LearningNotesList = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await CourseAPI.deleteCourseNoteList(id)
+      const res = await CoursesAPI.deleteCourseNoteList(id)
       fetchData(params)
       toast.success('Xóa thành công!')
     } catch (error) {}
-  }
-
-  const closePreview = () => {
-    setViewActivity('')
   }
 
   const handleEditNote = (id: string, description: string, index: number) => {
@@ -450,109 +446,117 @@ const LearningNotesList = () => {
       </div>
 
       <div>
-        <TextSkeleton loading={loading} length={10}>
-          {notesListData?.notes?.map((note: any, index: number) => {
-            const isExpanded = expandedNotes.includes(note?.id)
-            return (
-              <div
-                className="mt-6 p-6 border border-default last:mb-6"
-                key={note?.id}
-              >
+        {!isEmpty(notesListData?.notes) ? (
+          <TextSkeleton loading={loading} length={10}>
+            {notesListData?.notes?.map((note: any, index: number) => {
+              const isExpanded = expandedNotes.includes(note?.id)
+              return (
                 <div
-                  className="flex items-center mb-1.5 pb-px"
-                  onClick={() => onClose()}
+                  className="mt-6 p-6 border border-default last:mb-6"
+                  key={note?.id}
                 >
-                  <SappBreadcrumbNotLink
-                    paths={[...note?.course_section_path].reverse()}
-                  />
-                </div>
-                <div className="font-normal text-base text-bw-1">
-                  <span
-                    className={`whitespace-pre-wrap ${
-                      isExpanded ? '' : 'line-clamp-3'
-                    }`}
+                  <div
+                    className="flex items-center mb-1.5 pb-px"
+                    onClick={() => onClose()}
                   >
-                    {note?.description}
-                  </span>
-                  {!isExpanded && note?.description?.length > 230 ? (
-                    <button
-                      className="block font-normal text-base text-gray-1"
-                      onClick={() => toggleExpand(note?.id)}
-                    >
-                      Show more
-                    </button>
-                  ) : (
-                    <>
-                      {note?.description?.length > 230 ? (
-                        <button
-                          className="block font-normal text-base text-gray-1"
-                          onClick={() => toggleExpand(note?.id)}
-                        >
-                          Show less
-                        </button>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  )}
-                </div>
-                <div className="mt-5 flex justify-between">
-                  <div className="font-normal text-sm text-gray-1">
-                    {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
+                    <SappBreadcrumbNotLink
+                      paths={[...note?.course_section_path].reverse()}
+                    />
                   </div>
-                  <div className="flex">
-                    <div className="cursor-pointer relative">
-                      {activityId === note?.course_section_id ? (
-                        <span
-                          className="notes-list-icon"
-                          onClick={() => {
-                            if (
-                              !getNotesData.some((item) =>
-                                item.id.includes(note?.id),
-                              )
-                            ) {
-                              handleEditNote(note?.id, note?.description, index)
-                              onClose()
-                            }
-                          }}
-                        >
-                          <EditIcon />
-                        </span>
-                      ) : (
-                        <>
-                          {viewActivity === `note.${index}.value` && (
-                            <PreviewNoteList
-                              title={note?.name}
-                              content={note?.description}
-                              setOpen={closePreview}
-                            />
-                          )}
+                  <div className="font-normal text-base text-bw-1">
+                    <span
+                      className={`whitespace-pre-wrap ${
+                        isExpanded ? '' : 'line-clamp-3'
+                      }`}
+                    >
+                      {note?.description}
+                    </span>
+                    {!isExpanded && note?.description?.length > 230 ? (
+                      <button
+                        className="block font-normal text-base text-gray-1"
+                        onClick={() => toggleExpand(note?.id)}
+                      >
+                        Show more
+                      </button>
+                    ) : (
+                      <>
+                        {note?.description?.length > 230 ? (
+                          <button
+                            className="block font-normal text-base text-gray-1"
+                            onClick={() => toggleExpand(note?.id)}
+                          >
+                            Show less
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <div className="mt-5 flex justify-between">
+                    <div className="font-normal text-sm text-gray-1">
+                      {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
+                    </div>
+                    <div className="flex">
+                      <div className="cursor-pointer relative">
+                        {activityId === note?.course_section_id ? (
                           <span
                             className="notes-list-icon"
                             onClick={() => {
-                              setViewActivity(`note.${index}.value`)
+                              if (
+                                !getNotesData.some((item) =>
+                                  item.id.includes(note?.id),
+                                )
+                              ) {
+                                handleEditNote(
+                                  note?.id,
+                                  note?.description,
+                                  index,
+                                )
+                                onClose()
+                              }
                             }}
                           >
-                            <ViewIcon />
+                            <EditIcon />
                           </span>
-                        </>
-                      )}
-                    </div>
-                    <div className="ms-4 cursor-pointer">
-                      <span
-                        onClick={() => {
-                          handleDelete(note?.id)
-                        }}
-                      >
-                        <DeleteIcon />
-                      </span>
+                        ) : (
+                          <>
+                            <Link
+                              href={
+                                queryId || courseId
+                                  ? `/courses/${
+                                      queryId || courseId
+                                    }/activity/${note?.course_section_id}?note_id=${note?.id}`
+                                  : '#'
+                              }
+                            >
+                              <span className="notes-list-icon">
+                                <ViewIcon />
+                              </span>
+                            </Link>
+                          </>
+                        )}
+                      </div>
+                      <div className="ms-4 cursor-pointer">
+                        <span
+                          onClick={() => {
+                            handleDelete(note?.id)
+                          }}
+                        >
+                          <DeleteIcon />
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
-        </TextSkeleton>
+              )
+            })}
+          </TextSkeleton>
+        ) : (
+          <div className="flex justify-center items-center min-h-[calc(100vh-12rem)]">
+            <NoData />
+          </div>
+        )}
       </div>
     </SappDrawer>
   )

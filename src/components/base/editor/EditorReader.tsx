@@ -1,8 +1,12 @@
-import { DeserializeHighlight } from '@utils/index'
+import {
+  DeserializeHighlight,
+  replaceTextAlignCenterToWebKitCenter,
+} from '@utils/index'
 import parseHTML from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
+import 'src/utils/global.d.ts'
 
 type Props = {
   text_editor_content: string | undefined
@@ -17,7 +21,7 @@ type Props = {
 
 const EditorReader = ({
   text_editor_content,
-  className,
+  className = '',
   extenalRef,
   id,
   onMouseUp,
@@ -29,6 +33,8 @@ const EditorReader = ({
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   const [content, setContent] = useState<any>()
+  const editorRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (extenalRef) {
       extenalRef.current?.addEventListener('click', handleOnclick)
@@ -88,6 +94,53 @@ const EditorReader = ({
   //   setContent(text_editor_content)
   // }, [text_editor_content])
 
+  const convertMathToImage = async (element: any) => {
+    const viewer = com?.wiris?.js?.JsPluginViewer
+
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {})
+      } catch (error) {}
+    }
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      const editor = editorRef?.current
+      if (editor) {
+        const mfencedElements = editor.querySelectorAll('mfenced')
+        mfencedElements.forEach((el: any) => {
+          const openAttr = el.getAttribute('open')
+          const closeAttr = el.getAttribute('close')
+          if (openAttr !== null && closeAttr) {
+            const replacements: { [key: string]: string } = {
+              '|': '|',
+              '||': '||',
+              '>': '<',
+              '}': '{',
+              ']': '[',
+              '&#62;': '&#60;',
+            }
+            if (replacements[closeAttr]) {
+              el.setAttribute('open', replacements[closeAttr])
+            }
+          }
+        })
+
+        // Replace quote in font family
+        const mathElement = editor.querySelectorAll('math')
+        mathElement.forEach((el: any) => {
+          if (el.hasAttribute('style')) {
+            let styleValue = el.getAttribute('style')
+            styleValue = styleValue.replaceAll('"', '')
+            el.setAttribute('style', styleValue)
+          }
+        })
+        convertMathToImage(editor)
+      }
+    }, 100)
+  }, [editorRef?.current, text_editor_content])
+
   const handleOnclick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement
     if (target.className === 'sapp_overlay_video') {
@@ -117,15 +170,20 @@ const EditorReader = ({
       }
     }
   }
+
   return (
     <>
       <div
-        className={`${className} editor-wrap`}
+        className={`${className} editor-wrap mce-content-body`}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
+        ref={editorRef}
       >
         <div ref={extenalRef || refDocument}>
-          {parseHTML(content || '', options)}
+          {parseHTML(
+            replaceTextAlignCenterToWebKitCenter(content || ''),
+            options,
+          )}
         </div>
       </div>
       {type === 'IMG' && (

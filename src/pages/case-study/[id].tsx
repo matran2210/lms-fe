@@ -40,6 +40,8 @@ import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
 import useMousePosition from '@utils/hookMouseMove'
 import SappLoading from 'src/common/SappLoading'
+import { CoursesAPI } from '../api/courses/index'
+import { TestAPI } from '../api/test'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -258,10 +260,11 @@ const CaseStudyDetail = ({ questions }: any) => {
     class_user_id: string,
   ) {
     try {
-      const res = await CourseTestApi.createTopicAttempt(
+      const res = await TestAPI.createTopicAttempt(
         quiz_id,
         id,
         class_user_id,
+        router.query.caseStudyId,
       )
       if (res?.success === false) {
         setBreadCrumb(res?.data?.breadcumb)
@@ -532,13 +535,15 @@ const CaseStudyDetail = ({ questions }: any) => {
         answers: e?.answers,
       })
     }
+
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
       try {
-        await CourseTestApi.submitCaseStudy(quizAttempId as string, {
+        await CoursesAPI.submitCaseStudy(quizAttempId as string, {
           answers: answers,
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
+          topic_scratch_pad: scratchPadValues.value,
         })
         toast.success('Submitted successfully')
         router.replace(
@@ -645,6 +650,14 @@ const CaseStudyDetail = ({ questions }: any) => {
       document.body.style.userSelect = 'unset'
     }
   }, [startResize])
+  const [scratchPadValues, setScratchPadValues] = useState<any>({})
+  const handleChangeScratchPad = (e: any, id: any) => {
+    const { value } = e.target
+    setScratchPadValues((prevState: any) => ({
+      ...prevState,
+      value,
+    }))
+  }
   return (
     <>
       {loading ? (
@@ -675,17 +688,18 @@ const CaseStudyDetail = ({ questions }: any) => {
                 // color={color}
                 submit={{
                   title: 'Finish',
-                  size: 'medium',
+                  size: 'small',
                   loading: false,
                   disabled: false,
                   onClick: () => {
+                    setOpenScratchPad([])
                     setOpenSubmit(true)
                     setUnsavedChanges(false)
                   },
                 }}
                 cancel={{
                   title: 'Quit',
-                  size: 'medium',
+                  size: 'small',
                   onClick: () => {
                     setOpenQuit(true)
                     setUnsavedChanges(false)
@@ -909,9 +923,13 @@ const CaseStudyDetail = ({ questions }: any) => {
                       </div>
                       {/* <div className='flex flex-'> */}
                       <HookFormTextArea
+                        defaultValue={scratchPadValues?.value}
                         placeholder="Take a note..."
                         control={controlScratch}
                         name={e.id}
+                        onChange={(event) =>
+                          handleChangeScratchPad(event, e.id)
+                        }
                         className="w-full h-[calc(100%-40px)] sapp-text-area p-5"
                       />
                       {/* </div> */}

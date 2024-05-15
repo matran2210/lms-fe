@@ -44,6 +44,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
     }
     return false
   }, [entrancePopupContent])
+
   return (
     <>
       <SappModalV2
@@ -62,6 +63,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
             })
           } else {
             setOpenFillForm(true)
+            setOpen && setOpen(false)
           }
         }}
         showOkButton={!checkLimit}

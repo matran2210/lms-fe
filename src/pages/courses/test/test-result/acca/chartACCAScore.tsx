@@ -13,18 +13,18 @@ interface IProps {
 
 const ChartACCAScore = ({ data }: IProps) => {
   return (
-    <div className="block bg-white mb-6 pt-6 pb-5 pr-5 pl-6 xl:pl-[99px] shadow-sidebar max-w-[1144px]">
+    <div className="block bg-white xl:mb-6 mb-4 pt-6 pb-5 pr-5 pl-6 xl:pl-[99px] shadow-sidebar max-w-[1144px] h-[161.8px] overflow-y-scroll">
       <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-5">
         Your Score by Topic
       </div>
-      <div className="w-full overflow-x-auto">
+      <div className="w-full overflow-x-auto pb-3">
         <div className="flex flex-row gap-14 flex-start">
           {data?.map((item: any) => (
             <div
               key={item?.id}
               className="flex flex-col w-1/3 max-w-78 justify-end shrink-0 items-start gap-1"
             >
-              <div className="text-bw-1 font-medium line-clamp-2">
+              <div className="text-bw-1 font-normal line-clamp-2">
                 {item?.title}
               </div>
               <div className="h-2 bg-gray-3 w-full relative">

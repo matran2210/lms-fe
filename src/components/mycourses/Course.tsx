@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  Dispatch,
-  SetStateAction,
-  useMemo,
-} from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
@@ -23,9 +17,8 @@ import {
 import PopupExtend from './PopupExtend'
 import PopupActive from './PopupActive'
 import PopupLesson from './PopupLesson'
-import CourseAPI from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
-import { ICourseAll } from 'src/type/courses'
 import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
@@ -33,13 +26,17 @@ import { Tooltip } from 'antd'
 const Course = ({
   course,
   index,
-  setData,
-  setLoading,
+  // setData,
+  // setLoading,
+  lastElementRef,
+  refetch,
 }: {
   course: ICourse
   index: number
-  setData: Dispatch<SetStateAction<ICourseAll>>
-  setLoading: Dispatch<SetStateAction<boolean>>
+  lastElementRef: (node: HTMLDivElement) => void
+  refetch: () => void
+  // setData: Dispatch<SetStateAction<ICourseAll>>
+  // setLoading: Dispatch<SetStateAction<boolean>>
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
@@ -176,24 +173,25 @@ const Course = ({
     type: router.query.type || '',
   })
 
-  async function fetchCourseList() {
-    setLoading(true)
-    try {
-      const newData = await CourseAPI.getCourse(18, queryString)
-      setData(newData?.data)
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
+  // async function fetchCourseList() {
+  //   setLoading(true)
+  //   try {
+  //     const newData = await CourseAPI.getCourse(18, queryString)
+  //     setData(newData?.data)
+  //   } catch (error) {
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   async function activeCourse() {
     try {
       const params = {
         classId: `${classInstance?.id}`,
       }
-      const res = await CourseAPI.activeCourse(params)
-      await fetchCourseList()
+      const res = await CoursesAPI.activeCourse(params)
+      // await fetchCourseList()
+      refetch()
       toast.success('Active thành công!')
     } catch (error) {}
   }
@@ -212,8 +210,9 @@ const Course = ({
           is_student_in_class: false,
         })
       }
-      const res = await CourseAPI.extendCourse(params)
-      await fetchCourseList()
+      const res = await CoursesAPI.extendCourse(params)
+      // await fetchCourseList()
+      refetch()
       toast.success('Gia hạn hành công!')
     } catch (error) {}
   }
@@ -277,30 +276,34 @@ const Course = ({
   }
   const iconType = renderStatusIcon(classUserStatus ?? '')
 
+  const progressPart = percentProgress > 100 ? 100 : percentProgress
+
   return (
-    <>
+    <div data-aos={ANIMATION.DATA_AOS}>
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
           className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
           data-aos={ANIMATION.DATA_AOS}
+          ref={lastElementRef}
         >
           <div
-            className={`${
-              enableCourse ? 'cursor-pointer' : ''
-            } min-h-352 flex flex-col`}
+            className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}
+            data-aos={ANIMATION.DATA_AOS}
           >
             <div
               className={`name-course text-2xl font-medium mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
               }`}
-              onClick={() => {
-                if (isActiveStudent && enableCourse) {
-                  courseAction()
-                }
-              }}
             >
-              <div className="line-clamp-2 text-ellipsis">
+              <div
+                className="line-clamp-2 text-ellipsis cursor-pointer "
+                onClick={() => {
+                  if (isActiveStudent && enableCourse) {
+                    courseAction()
+                  }
+                }}
+              >
                 {(course?.name as string)?.length > 50 ? (
                   <Tooltip title={course?.name} color="#ffffff" placement="top">
                     {truncateString(course?.name, 50)}
@@ -343,7 +346,7 @@ const Course = ({
               </div>
             </div>
             <div className="des mt-6 mb-8 line-clamp-5 text-ellipsis h-[116px]">
-              {(course?.description as string).length > 250 ? (
+              {(course?.description as string)?.length > 250 ? (
                 <Tooltip
                   title={
                     <p
@@ -399,7 +402,7 @@ const Course = ({
                         enableCourse ? 'text-bw-1' : 'text-gray-2 '
                       }`}
                     >
-                      {percentProgress}%
+                      {progressPart}%
                     </p>
                   </div>
                 </div>
@@ -408,7 +411,7 @@ const Course = ({
                     className={`progress-percentage ${
                       enableCourse ? 'bg-primary ' : 'bg-gray-2'
                     } h-1.5`}
-                    style={{ width: `${percentProgress}%` }}
+                    style={{ width: `${progressPart}%` }}
                   ></div>
                 </div>
               </div>
@@ -453,7 +456,7 @@ const Course = ({
         activeCourse={activeCourse}
       />
       <PopupLesson open={openLesson} setOpen={setOpenLesson} />
-    </>
+    </div>
   )
 }
 

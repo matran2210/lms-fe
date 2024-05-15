@@ -148,7 +148,7 @@ const MyProfile = ({
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
         await dispatch(getLogoutUser())
-        router.push(PageLink.AUTH_LOGIN)
+        // router.push(PageLink.AUTH_LOGIN)
       }
     }
   }
@@ -447,33 +447,33 @@ const MyProfile = ({
 
 export default MyProfile
 
-export async function getServerSideProps(context: any) {
-  try {
-    const { req, res, query } = context
+// export async function getServerSideProps(context: any) {
+//   try {
+//     const { req, res, query } = context
 
-    // Lấy accessToken từ cookie
-    const accessToken = req.cookies.accessToken
+//     // Lấy accessToken từ cookie
+//     const accessToken = req.cookies.accessToken
 
-    // Kiểm tra accessToken
-    if (!accessToken) {
-      // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-      return {
-        redirect: {
-          destination: '/auth/login',
-          permanent: false,
-        },
-      }
-    }
+//     // Kiểm tra accessToken
+//     if (!accessToken) {
+//       // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
+//       return {
+//         redirect: {
+//           destination: '/auth/login',
+//           permanent: false,
+//         },
+//       }
+//     }
 
-    return {
-      props: {},
-    }
-  } catch (err) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
-}
+//     return {
+//       props: {},
+//     }
+//   } catch (err) {
+//     return {
+//       redirect: {
+//         destination: '/auth/login',
+//         permanent: false,
+//       },
+//     }
+//   }
+// }

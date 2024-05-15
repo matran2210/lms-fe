@@ -11,9 +11,9 @@ import React, {
   useState,
 } from 'react'
 import { UseFormGetValues, UseFormReset } from 'react-hook-form'
+import { AuthAPI } from 'src/pages/api/profile'
 import { IChangePassword } from './ChangePassword'
 import toast from 'react-hot-toast'
-import MyProfileAPI from 'src/pages/api/profile'
 
 interface IProps {
   open: boolean
@@ -40,8 +40,6 @@ const PasswordProfile = ({
     .map(() => createRef<HTMLInputElement>())
 
   const [loading, setLoading] = useState<boolean>(false)
-
-  // const [currentToken, setCurrentToken] = useState(token)
 
   /**
    * @description mở popup set lại countdown và message error
@@ -110,7 +108,7 @@ const PasswordProfile = ({
   const verifyCode = async () => {
     setLoading(true)
     try {
-      await MyProfileAPI.verifyOTPPassword(
+      await AuthAPI.verifyOTPPassword(
         getValues('password'),
         getValues('newPassword'),
         code?.join(''),
@@ -131,7 +129,7 @@ const PasswordProfile = ({
    */
   const onResendCode = async () => {
     try {
-      await MyProfileAPI.changeUserPassword(getValues('password'))
+      await AuthAPI.changeUserPassword(getValues('password'))
       setErrorMessage('')
       setCanResend(false)
       settimeCountDownResent(() => {
@@ -146,25 +144,20 @@ const PasswordProfile = ({
     } catch (error) {}
   }
 
-  const handleCancel = () => {
-    reset()
-    setOpen(false)
-  }
-
   return (
     <SappModalV2
       title={undefined}
       open={open}
-      handleCancel={handleCancel}
+      handleCancel={() => setOpen(false)}
       onOk={() => {}}
       showFooter={false}
     >
       <div className="">
         <div className="font-semibold text-bw-1 mb-2 text-4xl">
-          Forgot Password
+          Change Password
         </div>
         <span className="text-medium-sm text-gray-1 mb-10">
-          Enter your 6 digits code that you received on your email.
+          Enter your 6-digit code that you received on your email.
         </span>
         <div className="grid grid-cols-6 grid-rows-1 gap-3 mb-2 mt-12">
           {code.map((code, index) => (
@@ -201,7 +194,7 @@ const PasswordProfile = ({
           loading={loading}
           onClick={verifyCode}
           disabled={code.some((e) => e === '') || time <= 0}
-          classNameLoading="h-[50px]"
+          classNameLoading="h-8"
         />
         <ButtonText
           title="Resend Code"

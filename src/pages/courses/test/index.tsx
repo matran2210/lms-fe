@@ -2,7 +2,7 @@ import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
 import { TEST_TYPE } from '@utils/constants'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface IProps {
   open: boolean
@@ -21,6 +21,7 @@ const TestModal = ({
   activeCourse,
 }: IProps) => {
   const router = useRouter()
+
   const onSubmit = async () => {
     //to do: start test
     try {
@@ -33,26 +34,26 @@ const TestModal = ({
       })
     } catch (err) {}
   }
+
   const checkFinished = useMemo(() => {
-    if (data?.quiz?.attempts) {
-      if (data?.quiz?.attempts?.length > 0) {
-        return true
-      }
-      // for (let i in data?.quiz?.attempts) {
-      //   if (data?.quiz?.attempts[i]?.status === 'SUBMITTED') {
-      //     return true
-      //   }
-      // }
-      return false
+    if (data?.quiz?.attempt) {
+      return true
     }
     return false
-  }, [data?.quiz?.attempts])
+  }, [data?.quiz?.attempt])
 
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}
       open={open}
       handleCancel={() => setOpen(false)}
+      showOkButton={
+        !data?.quiz?.is_limited
+          ? true
+          : data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count
+            ? true
+            : false
+      }
       onOk={onSubmit}
       okButtonCaption={checkFinished ? 'Retake' : 'Start'}
       cancelButtonCaption={'Cancel'}
@@ -85,19 +86,19 @@ const TestModal = ({
       <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
         <div className="text-gray-1">No of Attempts:</div>
         <div className="text-bw-1 pr-0.5 font-medium">
-          {data?.quiz?.attempt_count || 0}/
+          {data?.quiz?.attempt?.number_of_attempts || 0}/
           {data?.quiz?.is_limited ? data?.quiz?.limit_count : 'Unlimited'}
         </div>
       </div>
-      {data?.quiz?.attempts?.[0] && (
+      {data?.quiz && (
         <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
           <div className="text-gray-1">Latest Result:</div>
           <div
             className={`text-state-info pr-0.5 font-medium ${
-              data?.quiz?.attempts?.[0]?.ratio_score ? 'underline' : ''
+              data?.quiz?.attempt?.ratio_score ? 'underline' : ''
             }`}
           >
-            {data?.quiz?.attempts?.[0]?.ratio_score ?? '--'}
+            {data?.quiz?.attempt?.ratio_score ?? '--'}
           </div>
         </div>
       )}

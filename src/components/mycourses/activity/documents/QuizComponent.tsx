@@ -19,6 +19,7 @@ import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
 import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import { MY_COURSES } from 'src/constants/lang'
 import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
@@ -27,7 +28,6 @@ import {
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { v4 as uuidv4 } from 'uuid'
-import { MY_COURSES } from 'src/constants/lang'
 
 export type QuizComponentRef = {
   onSubmit: ({
@@ -57,6 +57,7 @@ type Props = {
   quizId: string
   setOpenFile?: any
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
+  showQuestionContent?: boolean
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -70,6 +71,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       quizId,
       setOpenFile,
       grading_preference,
+      showQuestionContent = true,
     }: Props,
     ref,
   ) => {
@@ -471,97 +473,97 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             <>
               <div>
                 <div>
-                  {/* <div className="font-semibold text-bw-1">
-                    Topic Description:
-                  </div> */}
                   <div>
                     <EditorReader
                       className="editor-wrap mt-1.5"
-                      text_editor_content={
-                        activeQuestion?.question_topic?.description
-                      }
+                      text_editor_content={activeQuestion?.question_content}
                     />
                   </div>
                 </div>
-                <div className="border border-b-gray-2 my-6"></div>
-                <div className="flex items-center cursor-pointer select-none">
-                  <div className="relative">
-                    <div
-                      className="flex items-center hover:text-primary group"
-                      onClick={() => setShowListRequirement(true)}
-                    >
-                      <div className="font-semibold">
-                        Requirement {showRequirement?.index}/
-                        {activeQuestion.requirements?.length || 0}
+                {!!activeQuestion?.requirements?.length && (
+                  <>
+                    <div className="border border-b-gray-2 my-6"></div>
+                    <div className="flex items-center cursor-pointer select-none">
+                      <div className="relative">
+                        <div
+                          className="flex items-center hover:text-primary group"
+                          onClick={() => setShowListRequirement(true)}
+                        >
+                          <div className="font-semibold">
+                            Requirement {showRequirement?.index}/
+                            {activeQuestion.requirements?.length || 0}
+                          </div>
+                          <div>
+                            <SappIcon
+                              className="ml-2 -mt-1 group-hover:fill-primary fill-bw-1"
+                              icon="arrow_down"
+                            ></SappIcon>
+                          </div>
+                        </div>
+                        {showListRequirement && (
+                          <div
+                            ref={listRequirementRef}
+                            className="absolute z-50 text-over  left-0 bottom-0 bg-white w-max max-w-md translate-y-full shadow-md py-1"
+                          >
+                            {activeQuestion.requirements?.map((e, i) => {
+                              return (
+                                <div
+                                  onClick={() => {
+                                    handleShowRequirement({
+                                      description: e.description,
+                                      index: i + 1,
+                                      name: e.name,
+                                      files: e.files,
+                                    })
+                                  }}
+                                  className="font-semibold hover:text-primary truncate py-1.5 px-3"
+                                  key={e.id}
+                                >{`${e.name}`}</div>
+                              )
+                            })}
+                          </div>
+                        )}
                       </div>
-                      <div>
-                        <SappIcon
-                          className="ml-2 -mt-1 group-hover:fill-primary fill-bw-1"
-                          icon="arrow_down"
-                        ></SappIcon>
+                      <div className="ml-4">
+                        <span className="text-state-error">* </span>
+                        <span className="text-gray-1">
+                          You must finished{' '}
+                          {activeQuestion.requirements?.length || 0}{' '}
+                          requirements to complete this question (Your answer is
+                          auto save)
+                        </span>
                       </div>
                     </div>
-                    {showListRequirement && (
-                      <div
-                        ref={listRequirementRef}
-                        className="absolute z-50 text-over  left-0 bottom-0 bg-white w-max max-w-md translate-y-full shadow-md py-1"
-                      >
-                        {activeQuestion.requirements?.map((e, i) => {
+                    <div className="mt-4">
+                      <div className="font-semibold">{`${showRequirement?.name}`}</div>
+                      {showRequirement?.description && (
+                        <EditorReader
+                          className="editor-wrap mt-1.5"
+                          text_editor_content={showRequirement?.description}
+                        />
+                      )}
+                      {showRequirement?.files?.length > 0 &&
+                        showRequirement?.files.map((e: any, index: number) => {
                           return (
                             <div
-                              onClick={() => {
-                                handleShowRequirement({
-                                  description: e.description,
-                                  index: i + 1,
-                                  name: e.name,
-                                  files: e.files,
-                                })
-                              }}
-                              className="font-semibold hover:text-primary truncate py-1.5 px-3"
-                              key={e.id}
-                            >{`${e.name}`}</div>
+                              className="cursor-pointer text-state-info hover:underline"
+                              onClick={() =>
+                                setOpenFile &&
+                                setOpenFile(
+                                  { type: 'file' },
+                                  e.resource.url,
+                                  e?.resource?.name,
+                                )
+                              }
+                              key={index}
+                            >
+                              {e?.resource?.name}
+                            </div>
                           )
                         })}
-                      </div>
-                    )}
-                  </div>
-                  <div className="ml-4">
-                    <span className="text-state-error">* </span>
-                    <span className="text-gray-1">
-                      You must finished{' '}
-                      {activeQuestion.requirements?.length || 0} requirements to
-                      complete this question (Your answer is auto save)
-                    </span>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div className="font-semibold">{`${showRequirement?.name}`}</div>
-                  {showRequirement?.description && (
-                    <EditorReader
-                      className="editor-wrap mt-1.5"
-                      text_editor_content={showRequirement?.description}
-                    />
-                  )}
-                  {showRequirement?.files?.length > 0 &&
-                    showRequirement?.files.map((e: any, index: number) => {
-                      return (
-                        <div
-                          className="cursor-pointer text-state-info hover:underline"
-                          onClick={() =>
-                            setOpenFile &&
-                            setOpenFile(
-                              { type: 'file' },
-                              e.resource.url,
-                              e?.resource?.name,
-                            )
-                          }
-                          key={index}
-                        >
-                          {e?.resource?.name}
-                        </div>
-                      )
-                    })}
-                </div>
+                    </div>
+                  </>
+                )}
                 {activeQuestion?.exhibits &&
                   activeQuestion?.exhibits?.length > 0 && (
                     <>
@@ -664,6 +666,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 handleChange={() => {
                   setIsChange(true)
                 }}
+                isShowContent={showQuestionContent}
               />
             </>
           )
@@ -676,6 +679,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     return (
       <div>
         <div ref={questionRef}>
+          <EditorReader
+            text_editor_content={activeQuestion?.question_topic?.description}
+            className="sapp-questions"
+          />
           <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
         <div>

@@ -6,8 +6,8 @@ import { LAYOUT } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { QUESTION_TYPES } from 'src/constants'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
+import { ANIMATION, QUESTION_TYPES } from 'src/constants'
+import { CoursesAPI } from '../../api/courses/index'
 
 const headers = [
   {
@@ -47,7 +47,7 @@ const TableCaseStudyResult = () => {
 
   const fetchScoreDetail = async (page_index: number, page_size: number) => {
     try {
-      const res = await CourseTestApi.getCaseStudyAttemptsTable(
+      const res = await CoursesAPI.getCaseStudyAttemptsTable(
         router.query.id as string,
         page_index,
         page_size,
@@ -57,7 +57,7 @@ const TableCaseStudyResult = () => {
   }
   const fetchTopicAttemptDetail = async (id: string) => {
     try {
-      const res = await CourseTestApi.getTopicAttemptsDetail(id)
+      const res = await CoursesAPI.getTopicAttemptsDetail(id)
       return res
     } catch (error) {}
   }
@@ -76,6 +76,7 @@ const TableCaseStudyResult = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [scoreDetail])
+
   const handlNextPage = async () => {
     const totalPages = scoreDetail?.meta?.total_pages
     const pageIndex = scoreDetail?.meta?.page_index
@@ -136,7 +137,7 @@ const TableCaseStudyResult = () => {
   }, [router.query.id])
 
   return (
-    <div className="relative">
+    <div className="relative" data-aos={ANIMATION.DATA_AOS}>
       <div
         className="fixed px-6 py-4 right-0 cursor-pointer z-20"
         onClick={() => {
@@ -225,7 +226,7 @@ const TableCaseStudyResult = () => {
             hasCheck={false}
           >
             <>
-              {scoreDetail.answers?.map((e: any, index: number) => {
+              {scoreDetail?.answers?.map((e: any, index: number) => {
                 return (
                   <tr
                     className="border-dashed border-b border-gray-2"

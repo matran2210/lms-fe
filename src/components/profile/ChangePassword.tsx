@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
-import MyProfileAPI from 'src/pages/api/profile'
+import { AuthAPI } from 'src/pages/api/profile'
 
 export interface IChangePassword {
   password: string
@@ -22,6 +22,7 @@ export interface IChangePassword {
 
 const ChangePassword = () => {
   const [loading, setLoading] = useState(false)
+
   /**
    * @description validate password
    */
@@ -35,7 +36,6 @@ const ChangePassword = () => {
         })
         .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
         .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
-
       newPassword: z
         .string({ required_error: VALIDATE_REQUIRED })
         .trim()
@@ -82,7 +82,7 @@ const ChangePassword = () => {
   const onSubmit = async (data: IChangePassword) => {
     setLoading(true)
     try {
-      await MyProfileAPI.changeUserPassword(data.password)
+      await AuthAPI.changeUserPassword(data.password)
       setOpenPopup(true)
     } catch (error) {
     } finally {
@@ -96,7 +96,9 @@ const ChangePassword = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="relative">
             <div className="flex items-center justify-between pb-6 border-b border-b-gray-3">
-              <div className="text-xl font-medium text-bw-1">Overview</div>
+              <div className="text-xl font-medium text-bw-1">
+                Change Password
+              </div>
               <div>
                 {!editPassword ? (
                   <SappButton
@@ -107,10 +109,13 @@ const ChangePassword = () => {
                   ></SappButton>
                 ) : (
                   <ButtonCancelSubmit
-                    className="gap-12 flex h-[40px]"
+                    className="gap-12 flex"
                     cancel={{
                       title: 'Cancel',
-                      onClick: () => setEditPassword(false),
+                      onClick: () => {
+                        reset()
+                        setEditPassword(false)
+                      },
                       size: 'medium',
                       isPaddingHorizontal: false,
                       className: 'min-w-fit !px-0 text-base w-30',
@@ -120,7 +125,7 @@ const ChangePassword = () => {
                       size: 'medium',
                       className: 'min-w-fit px-0 text-sm w-30',
                       type: 'submit',
-                      loading: loading,
+                      disabled: loading,
                     }}
                   ></ButtonCancelSubmit>
                 )}

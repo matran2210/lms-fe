@@ -9,6 +9,8 @@ import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import AuthApi from 'src/redux/services/Authen'
 import { z } from 'zod'
+import { AuthAPI } from '../../api/profile/index'
+import { removeJwtToken } from '@utils/index'
 
 const schema = z.object({
   email: z
@@ -30,7 +32,7 @@ const ForgotPasswordPage = () => {
 
   const onSubmit = async ({ email }: { email: string }) => {
     try {
-      const response = await AuthApi.sendEmail({ email })
+      const response = await AuthAPI.sendEmail({ email })
       if (response.success) {
         router.push(
           {
@@ -45,8 +47,7 @@ const ForgotPasswordPage = () => {
     }
   }
   const redirectLogin = () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
+    removeJwtToken()
     router.push(PageLink.AUTH_LOGIN)
   }
 

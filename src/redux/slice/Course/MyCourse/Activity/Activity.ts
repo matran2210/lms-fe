@@ -8,6 +8,8 @@ import {
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
+import { CoursesAPI } from '../../../../../pages/api/courses/index'
+import { ActivityAPI } from 'src/pages/api/activity'
 
 // Tạo một đối tượng activity với giá trị mặc định
 export interface ICourseActivityState extends IActivity {
@@ -37,6 +39,7 @@ const initialState: ICourseActivityState = {
   is_peer_review: false,
   is_graded: false,
   course_section_type: '',
+  course_section_notes: [],
   activity_type: '',
   position: '',
   parent_id: '',
@@ -60,7 +63,7 @@ export const getCourseActivityTapById = createAsyncThunk(
   'courseActivityReducer/getTapById',
   async ({ id }: { id: string }, thunkAPI) => {
     try {
-      const res = await CourseActivityApi.getCourseActivityTapById(id)
+      const res = await CoursesAPI.getCourseActivityTapById(id)
       if (!res?.data) {
         return
       }
@@ -75,7 +78,7 @@ export const getDiscussion = createAsyncThunk(
   'courseActivityReducer/getDiscussion',
   async ({ id, sectionId }: any, thunkAPI) => {
     try {
-      const res = await CourseActivityApi.getDiscussion(id, sectionId)
+      const res = await CoursesAPI.getDiscussion(id, sectionId)
       if (!res?.data) {
         return
       }
@@ -89,7 +92,7 @@ export const createDiscussion = createAsyncThunk(
   'courseActivityReducer/createDiscussion',
   async (data: ICreateDiscussionRequest, thunkAPI) => {
     try {
-      const res = await CourseActivityApi.createDiscussion(data)
+      const res = await ActivityAPI.createDiscussionComment(data)
       if (!res?.data) {
         return
       }
@@ -118,7 +121,7 @@ export const reactDiscussion = createAsyncThunk(
   'courseActivityReducer/reactDiscussion',
   async (data: ICreateDiscussionResReact, thunkAPI) => {
     try {
-      const res = await CourseActivityApi.reactDiscussion(data)
+      const res = await ActivityAPI.reactDiscussion(data)
       if (!res?.data) {
         return
       }

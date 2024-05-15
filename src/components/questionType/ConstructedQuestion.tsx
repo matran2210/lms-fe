@@ -44,6 +44,7 @@ export type IPreviewProp = {
   handleSaveHighLightRequirement?: any
   setUnsavedChanges?: any
   handleChange?: () => void
+  isShowContent?: boolean
 }
 const EssayQuestionPreview = ({
   data,
@@ -70,6 +71,7 @@ const EssayQuestionPreview = ({
   handleSaveHighLightRequirement = () => {},
   setUnsavedChanges,
   handleChange,
+  isShowContent = true,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   // console.log(response_option_custom)
@@ -141,41 +143,42 @@ const EssayQuestionPreview = ({
       //   }
       // }}
     >
-      {data && (
-        <>
-          <div
-            id="hightlight_area"
-            onMouseUp={(e: any) => {
-              if (
-                e.target.tagName.charAt(0) !== 'm' &&
-                e.target.firstChild?.tagName !== 'math'
-              ) {
-                if (e) {
-                  if (allowHighLight) {
-                    runHighlight(
-                      handleSaveHighLight,
-                      allowHighLight || false,
-                      'hightlight_area',
-                    )
-                  } else if (allowUnHighLight) {
-                    runHighlight(
-                      handleSaveHighLight,
-                      allowUnHighLight || false,
-                      'hightlight_area',
-                      { color: 'white' },
-                    )
-                  }
+      {question_content && isShowContent && (
+        <div
+          id="hightlight_area"
+          onMouseUp={(e: any) => {
+            if (
+              e.target.tagName.charAt(0) !== 'm' &&
+              e.target.firstChild?.tagName !== 'math'
+            ) {
+              if (e) {
+                if (allowHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowHighLight || false,
+                    'hightlight_area',
+                  )
+                } else if (allowUnHighLight) {
+                  runHighlight(
+                    handleSaveHighLight,
+                    allowUnHighLight || false,
+                    'hightlight_area',
+                    { color: 'white' },
+                  )
                 }
               }
-            }}
-          >
-            <EditorReader
-              className="sapp-questions"
-              text_editor_content={question_content}
-              highlighted={highlighted}
-            />
-          </div>
-
+            }
+          }}
+        >
+          <EditorReader
+            className="sapp-questions"
+            text_editor_content={question_content}
+            highlighted={highlighted}
+          />
+        </div>
+      )}
+      {data && (
+        <>
           <div
             id="hightlight_area_require"
             onMouseUp={(e: any) => {

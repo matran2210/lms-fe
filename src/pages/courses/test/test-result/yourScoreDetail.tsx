@@ -9,96 +9,103 @@ import { ANIMATION, QUESTION_TYPES } from 'src/constants'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
+import { CoursesAPI } from '../../../api/courses/index'
+import { useQuery } from 'react-query'
 
 const headers = [
   {
     label: '#',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[44px] xl:min-w-62px',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[44px] xl:min-w-62px',
   },
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
   },
   {
     label: 'Section (Part)',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[117px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[117px]',
   },
   {
     label: 'Result',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[70px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[70px]',
   },
   {
     label: '',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[117px]',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[117px]',
   },
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[95px] !pr-0 text-center',
+      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[95px] !pr-0 text-center',
   },
 ]
 
-const YourScoreDetail = () => {
-  const [scoreDetail, setScoreDetail] = useState<any>({
-    answers: [],
-    meta: {},
-  })
+interface YourScoreDetailProps {
+  className?: string
+  yourScoreDetailRef?: React.RefObject<HTMLDivElement>
+}
+
+const YourScoreDetail = ({
+  className,
+  yourScoreDetailRef,
+}: YourScoreDetailProps) => {
   const router = useRouter()
 
-  const fetchScoreDetail = async (page_index: number, page_size: number) => {
-    try {
-      const res = await CourseTestApi.getQuizAttemptsTable(
+  const { data: scoreDetail } = useQuery(
+    ['scoreDetail', router.query.id],
+    async () => {
+      const res = await CoursesAPI.getQuizAttemptsTable(
         router.query.id as string,
-        page_index,
-        page_size,
+        {
+          page_index: 1,
+          page_size: 20,
+        },
       )
-      return res
-    } catch (error) {}
-  }
+      return res.data
+    },
+    {
+      enabled: router.query.id !== undefined,
+    },
+  )
 
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-      document.documentElement.offsetHeight
-    ) {
-      return
-    }
-    handlNextPage()
-  }
+  // const handleScroll = () => {
+  //   if (
+  //     window.innerHeight + document.documentElement.scrollTop !==
+  //     document.documentElement.offsetHeight
+  //   ) {
+  //     return
+  //   }
+  //   handlNextPage()
+  // }
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [scoreDetail])
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => window.removeEventListener('scroll', handleScroll)
+  // }, [scoreDetail])
 
-  const handlNextPage = async () => {
-    const totalPages = scoreDetail?.meta?.total_pages
-    const pageIndex = scoreDetail?.meta?.page_index
-    const pageSize = scoreDetail?.meta?.page_size
-    if (totalPages && pageIndex < totalPages) {
-      const res = await fetchScoreDetail(pageIndex + 1, pageSize)
-      const results = scoreDetail?.answers?.concat(res?.data?.answers)
-      setScoreDetail({
-        meta: res?.data?.meta,
-        answers: results,
-      })
-    }
-  }
-
-  const getScoreDetail = async () => {
-    const res = await fetchScoreDetail(1, 10)
-    setScoreDetail(res?.data)
-  }
+  // const handlNextPage = async () => {
+  //   const totalPages = scoreDetail?.meta?.total_pages
+  //   const pageIndex = scoreDetail?.meta?.page_index
+  //   const pageSize = scoreDetail?.meta?.page_size
+  //   if (totalPages && pageIndex < totalPages) {
+  //     const res = await fetchScoreDetail(pageIndex + 1, pageSize)
+  //     const results = scoreDetail?.answers?.concat(res?.data?.answers)
+  //     setScoreDetail({
+  //       meta: res?.data?.meta,
+  //       answers: results,
+  //     })
+  //   }
+  // }
 
   // Hàm ánh xạ giá trị enum với tên tương ứng
   const getTypeName = (type: QUESTION_TYPES): string => {
@@ -124,14 +131,11 @@ const YourScoreDetail = () => {
     }
   }
 
-  useEffect(() => {
-    getScoreDetail()
-  }, [router])
-
   return (
     <div
-      className="bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar"
+      className={`overflow-y-auto bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar ${className}`}
       data-aos={ANIMATION.DATA_AOS}
+      ref={yourScoreDetailRef}
     >
       <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
         Your Score Details
@@ -144,16 +148,17 @@ const YourScoreDetail = () => {
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}
+          classTableRes="!overflow-x-hidden"
         >
           <>
-            {scoreDetail.answers?.map((e: any, index: number) => {
+            {scoreDetail?.answers?.map((e: any, index: number) => {
               return (
                 <tr
                   className="border-dashed border-b border-gray-2"
                   key={e?.id}
                 >
-                  <td className="pr-1 text-bw-1">{index + 1}</td>
-                  <td className="text-start m-6 pr-4 max-w-[210px]">
+                  <td className="p-0 pr-1 text-bw-1">{index + 1}</td>
+                  <td className="p-0 pr-4 text-start max-w-[210px]">
                     <div
                       className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
                       dangerouslySetInnerHTML={{
@@ -163,23 +168,25 @@ const YourScoreDetail = () => {
                         parseHTMLToString(e?.question?.question_content) ?? '--'
                       }
                       onClick={() => {
-                        router.push(`/explanation/${e.id}?title=My Course`)
+                        if (e.id) {
+                          router.push(`/explanation/${e.id}?title=My Course`)
+                        }
                       }}
                     ></div>
                   </td>
                   <td
-                    className="text-start my-6 pr-4 text-bw-1 line-clamp-1"
+                    className="p-0 my-5 text-starttext-bw-1 line-clamp-1"
                     title={e?.question?.question_filter_id?.part?.name ?? '--'}
                   >
                     {e?.question?.question_filter_id?.part?.name ?? '--'}
                   </td>
-                  <td className="text-start m-6 pr-4 text-bw-1">
-                    <div className="mt-6 mr-6 mb-6 min-w-[111px]">
+                  <td className="p-0 pr-4 text-start text-bw-1">
+                    <div className="min-w-[111px]">
                       {getTypeName(e?.question?.qType ?? '--')}
                     </div>
                   </td>
                   <td
-                    className={`text-start m-6 pr-7
+                    className={`text-start pr-7
                       ${
                         e?.is_correct || e?.active === 'SUBMITED'
                           ? ' text-state-success'
@@ -195,7 +202,7 @@ const YourScoreDetail = () => {
                       </>
                     )}
                   </td>
-                  <td className="text-start m-6 text-gray-1 pr-4">
+                  <td className="p-0 pr-4 text-start m-6 text-gray-1">
                     {e?.question?.qType !== 'ESSAY' && (
                       <div className="flex items-center ml-1">
                         <img
@@ -207,7 +214,7 @@ const YourScoreDetail = () => {
                       </div>
                     )}
                   </td>
-                  <td className="text-start m-6">
+                  <td className="p-0 text-start m-6">
                     <div className="text-center">
                       {(() => {
                         if (e?.time_spent !== null) {

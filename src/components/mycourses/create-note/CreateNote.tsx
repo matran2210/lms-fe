@@ -7,10 +7,10 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import CourseAPI from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { pushNotes, closeNote } from 'src/redux/slice/Course/NotesList'
-import { useAppSelector, useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
 
 interface IProps {
@@ -60,7 +60,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         name: 'Note',
         description: data?.[`description_${id ? id : uuid}`],
       }
-      const res = await CourseAPI.createNote(params)
+      const res = await CoursesAPI.createNote(params)
       setActiveSectionId(res?.data?.id)
       toast.success('Tạo thành công!')
     } catch (error) {
@@ -74,7 +74,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         name: 'Note',
         description: data?.[`description_${id ? id : uuid}`],
       }
-      const res = await CourseAPI.updateCourseNotesList(
+      const res = await CoursesAPI.updateCourseNotesList(
         id || activeSectionId,
         params,
       )

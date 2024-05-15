@@ -5,17 +5,23 @@ import TestModal from 'src/pages/courses/test'
 import { round, truncate } from 'lodash'
 import { useRouter } from 'next/router'
 import { countWords, formatTime, truncateString } from '@utils/index'
-import { ICourseSection, CLASS_USER_STATUS } from 'src/type/courses'
+import {
+  ICourseSection,
+  CLASS_USER_STATUS,
+  ICourseDetail,
+  IMyCourseDetail,
+} from 'src/type/courses'
 import { useForm } from 'react-hook-form'
 import { Tooltip } from 'antd'
+import { ANIMATION } from 'src/constants'
 
-const Part = ({ courses }: { courses: ICourseSection }) => {
+const Part = ({ course }: { course: IMyCourseDetail }) => {
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
   const percentProgress = round(
-    (courses?.learning_progress?.total_course_sections_completed /
-      courses?.learning_progress?.total_course_sections) *
+    (course?.learning_progress?.total_course_sections_completed /
+      course?.learning_progress?.total_course_sections) *
       100,
     2,
   )
@@ -24,7 +30,12 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
     router.push(`/courses/${router.query.courseId}/section/${id}`)
   }
 
-  const formattedTime = formatTime(courses?.remaining_time || 0)
+  const formattedTime = Number(
+    formatTime(
+      course?.learning_progress?.duration -
+        course?.learning_progress?.time_spent || 0,
+    ),
+  )
 
   const statusMap = {
     [CLASS_USER_STATUS.READY_TO_LEARN]: 'Ready to learn',
@@ -33,7 +44,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
     [CLASS_USER_STATUS.CANCELED]: '',
   } as any
 
-  const showStatus = statusMap[courses?.user_section_learning_status || '']
+  const showStatus = statusMap[course?.user_section_learning_status || '']
 
   const renderStatusIcon = (status: string) => {
     switch (status) {
@@ -50,32 +61,34 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
         return ''
     }
   }
-  const iconType = renderStatusIcon(courses?.user_section_learning_status ?? '')
+  const iconType = renderStatusIcon(course?.user_section_learning_status ?? '')
+
+  const progressPart = percentProgress > 100 ? 100 : percentProgress
 
   return (
-    <div
-      onClick={() =>
-        courses?.course_section_type === 'PART' ? onClickPart(courses?.id) : {}
-      }
-      className="cursor-pointer"
-    >
-      <div className={`name-part text-2xl font-medium h-[60px]`}>
-        {(courses?.name as string)?.length > 50 ? (
-          <Tooltip title={courses?.name} color="#ffffff" placement="top">
-            {truncateString(courses?.name, 50)}
+    <div data-aos={ANIMATION.DATA_AOS}>
+      <div
+        className={`name-part text-2xl font-medium h-[60px] cursor-pointer`}
+        onClick={() =>
+          course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
+        }
+      >
+        {(course?.name as string)?.length > 50 ? (
+          <Tooltip title={course?.name} color="#ffffff" placement="top">
+            {truncateString(course?.name, 50)}
           </Tooltip>
         ) : (
-          <>{courses?.name}</>
+          <>{course?.name}</>
         )}
       </div>
       <div className="des mt-6 mb-15">
         <div className="line-clamp-5 text-ellipsis h-[120px]">
-          {(courses?.description as string).length > 250 ? (
+          {(course?.description as string)?.length > 250 ? (
             <Tooltip
               title={
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: courses?.description,
+                    __html: course?.description,
                   }}
                 />
               }
@@ -84,7 +97,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
             >
               <p
                 dangerouslySetInnerHTML={{
-                  __html: courses?.description,
+                  __html: course?.description,
                 }}
                 className="text-base h-[120px] text-bw-1"
               />
@@ -92,7 +105,7 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
           ) : (
             <p
               dangerouslySetInnerHTML={{
-                __html: courses?.description,
+                __html: course?.description,
               }}
               className="text-base h-[120px] text-bw-1"
             />
@@ -108,19 +121,19 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
                 {showStatus}
               </p>
               <span className="text-medium-sm font-medium text-gray-1 pl-1 ml-px">
-                {courses?.remaining_time > 0 ? `${formattedTime} left` : ''}
+                {formattedTime > 0 ? `${formattedTime} left` : ''}
               </span>
             </div>
             <div className="number">
               <p className="text-medium-sm font-medium text-bw-1">
-                {percentProgress}%
+                {progressPart}%
               </p>
             </div>
           </div>
           <div className="progressbar bg-gray-3 h-1.5">
             <div
               className="progress-percentage bg-primary h-1.5"
-              style={{ width: `${percentProgress}%` }}
+              style={{ width: `${progressPart}%` }}
             ></div>
           </div>
         </div>
@@ -137,11 +150,9 @@ const Part = ({ courses }: { courses: ICourseSection }) => {
             size={'small'}
             className="ml-auto"
             onClick={() =>
-              courses?.course_section_type === 'PART'
-                ? router.push(
-                    `/courses/${router.query.courseId}/section/${courses.id}`,
-                  )
-                : setOpen(true)
+              course?.course_section_type === 'PART'
+                ? onClickPart(course.id)
+                : {}
             }
           />
         </div>

@@ -18,6 +18,8 @@ import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import AuthApi from 'src/redux/services/Authen'
 import { z } from 'zod'
+import { AuthAPI } from '../../api/profile/index'
+import { removeJwtToken } from '@utils/index'
 
 interface IInputProps {
   password: string
@@ -67,7 +69,7 @@ const ChangePasswordPage = () => {
   const onSubmit = async ({ password }: IInputProps) => {
     setLoading(true)
     try {
-      const response = await AuthApi.resetPassword({ new_password: password })
+      const response = await AuthAPI.resetPassword({ new_password: password })
       if (response.success) {
         setTimeout(() => {
           router.push(PageLink.AUTH_CHANGE_PASSWORD_SUCCESS)
@@ -80,8 +82,7 @@ const ChangePasswordPage = () => {
     }
   }
   const redirectLogin = () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
+    removeJwtToken()
     router.push(PageLink.AUTH_LOGIN)
   }
 

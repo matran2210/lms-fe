@@ -7,11 +7,13 @@ import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import CourseAPI from 'src/pages/api/courses'
+import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
 import { IResourceDetail, ISection } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import { isEmpty } from 'lodash'
+import NoData from 'src/common/NoData'
 
 interface IProps {
   open: boolean
@@ -73,7 +75,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   async function getCourseSections(page_size: number) {
     try {
       if (open) {
-        const res = await CourseAPI.getCourseSectionList(
+        const res = await CoursesAPI.getCourseSectionList(
           router.query.courseId || router.query.id,
           page_size || DEFAULT_PAGESIZE,
         )
@@ -95,7 +97,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseSubsections(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'CHAPTER',
         selectedSection.value,
@@ -116,7 +118,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseUnit() {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
@@ -136,7 +138,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseActivity(page_size: number) {
     try {
-      const res = await CourseAPI.getCourseSubsectionList(
+      const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'ACTIVITY',
         selectedUnit.value,
@@ -163,7 +165,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   useEffect(() => {
     if (open && (router.query.courseId || router.query.id)) {
       setLoading(true)
-      CourseAPI.getCourseResource(
+      CoursesAPI.getCourseResource(
         router.query.courseId || router.query.id,
         DEFAULT_PAGESIZE,
         params,
@@ -189,7 +191,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const fetchData = async (params?: Object) => {
     setLoading(true)
     try {
-      const res = await CourseAPI.getCourseResource(
+      const res = await CoursesAPI.getCourseResource(
         router.query.courseId || router.query.id,
         pageIndex,
         params,
@@ -374,31 +376,37 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           onMenuScrollToBottom={handleMenuScrollToActivity}
         />
       </div>
-      <TextSkeleton loading={loading} length={10}>
-        {resources?.resources?.map((resource) => (
-          <div key={resource.id}>
-            <div
-              className="mt-6 p-6 h-[92px] last:mb-6 flex justify-between items-center"
-              style={{ border: '1px solid #DCDDDD' }}
-            >
-              <div>
-                <div className="font-normal text-base text-bw-1">
-                  {resource?.name}
-                </div>
-                <div className="text-gray-1 font-normal text-base">
-                  {bytesToKilobyte(resource?.size)}
-                </div>
-              </div>
-              <a
-                className="cursor-pointer"
-                onClick={() => download(resource.name, resource.file_key)}
+      {!isEmpty(resources?.resources) ? (
+        <TextSkeleton loading={loading} length={10}>
+          {resources?.resources?.map((resource) => (
+            <div key={resource.id}>
+              <div
+                className="mt-6 p-6 h-[92px] last:mb-6 flex justify-between items-center"
+                style={{ border: '1px solid #DCDDDD' }}
               >
-                <DownloadIcon />
-              </a>
+                <div>
+                  <div className="font-normal text-base text-bw-1">
+                    {resource?.name}
+                  </div>
+                  <div className="text-gray-1 font-normal text-base">
+                    {bytesToKilobyte(resource?.size)}
+                  </div>
+                </div>
+                <a
+                  className="cursor-pointer"
+                  onClick={() => download(resource.name, resource.file_key)}
+                >
+                  <DownloadIcon />
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
-      </TextSkeleton>
+          ))}
+        </TextSkeleton>
+      ) : (
+        <div className="flex justify-center items-center min-h-[calc(100vh-12rem)]">
+          <NoData />
+        </div>
+      )}
     </SappDrawer>
   )
 }

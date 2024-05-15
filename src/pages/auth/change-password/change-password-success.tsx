@@ -4,12 +4,13 @@ import { LAYOUT } from '@utils/constants'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants'
+import { removeJwtToken, removeLocalStorageJwtToken } from '@utils/index'
 
 const ChangePasswordSuccess = () => {
   const router = useRouter()
   const redirectLogin = () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
+    removeJwtToken()
+    removeLocalStorageJwtToken()
     router.push(PageLink.AUTH_LOGIN)
   }
   return (

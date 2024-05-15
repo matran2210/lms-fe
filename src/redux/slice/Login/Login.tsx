@@ -1,9 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import {
-  removeJwtToken,
-  setAccessToken,
-  setRefreshToken,
-} from '@utils/helpers/authen'
 import { toast } from 'react-hot-toast'
 import { RootState } from '../../store'
 
@@ -13,10 +8,14 @@ import {
   LoginReq,
   LoginState,
 } from '../../types/Login/login'
-import AuthApi from '../../services/Authen'
-import { setCookieActToken, setCookieRefreshToken } from '@utils/index'
-import EntranceApi from 'src/redux/services/EntranceTest'
+import {
+  removeJwtToken,
+  removeLocalStorageJwtToken,
+  setActToken,
+  setRefreshToken,
+} from '@utils/index'
 import { PageLink } from 'src/constants'
+import { AuthAPI } from 'src/pages/api/profile'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -34,13 +33,14 @@ export const getLoginUser = createAsyncThunk(
   'loginReducer/handleLogin',
   async (body: LoginReq, thunkAPI) => {
     try {
-      const res = await AuthApi.login(body)
+      const res = await AuthAPI.login(body)
 
       if (!res.success) {
         return
       }
-      await setAccessToken(res.data.tokens.act)
-      await setRefreshToken(res.data.tokens.rft)
+      setActToken(res.data.tokens.act)
+      setRefreshToken(res.data.tokens.rft)
+
       return { ...res }
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
@@ -51,7 +51,7 @@ export const getLogoutUser = createAsyncThunk(
   'loginReducer/handleLogout',
   async ({}, thunkAPI) => {
     try {
-      const res = await AuthApi.logout()
+      const res = await AuthAPI.logout()
       if (!res.success) {
         toast.error(res.error.message)
         return
@@ -67,7 +67,7 @@ export const changePassword = createAsyncThunk(
   'loginReducer/changePassword',
   async (body: ChangePasswordReq, thunkAPI) => {
     try {
-      const res: ChangePasswordRes = await AuthApi.changePassword(body)
+      const res: ChangePasswordRes = await AuthAPI.changePassword(body)
       return { ...res }
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
@@ -110,8 +110,10 @@ export const loginSlice = createSlice({
         state.accessToken = accessToken
         state.user = action.payload.data.user
 
-        setCookieActToken(accessToken)
-        setCookieRefreshToken(refreshToken)
+        setActToken(accessToken)
+        setRefreshToken(refreshToken)
+        // setCookieActToken(accessToken)
+        // setCookieRefreshToken(refreshToken)
       }
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {
@@ -131,7 +133,7 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
-      removeJwtToken()
+      removeLocalStorageJwtToken()
 
       window.location.href = PageLink.AUTH_LOGIN
     })
@@ -144,7 +146,7 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
-      removeJwtToken()
+      removeLocalStorageJwtToken()
     })
 
     builder.addCase(changePassword.pending, (state) => {
@@ -154,8 +156,7 @@ export const loginSlice = createSlice({
       state.loading = false
       if (action.payload.code === 200) {
         state.changePass = true
-        window.localStorage.removeItem('accessToken')
-        window.localStorage.removeItem('refreshToken')
+        removeJwtToken()
       }
     })
     builder.addCase(changePassword.rejected, (state, action) => {

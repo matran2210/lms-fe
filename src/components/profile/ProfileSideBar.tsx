@@ -62,8 +62,8 @@ const ProfileSideBar = ({ page }: IProps) => {
   const handleLogout = async () => {
     try {
       await dispatch(getLogoutUser())
-      router.push(PageLink.AUTH_LOGIN)
-    } catch (error) { }
+      // router.push(PageLink.AUTH_LOGIN)
+    } catch (error) {}
   }
 
   // Sử dụng useState để lưu trạng thái active của từng child

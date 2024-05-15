@@ -39,6 +39,17 @@ export interface ICourseSection {
   user_section_learning_status: string
 }
 
+export interface IAttempts {
+  constructed_score: number
+  id: string
+  is_graded: boolean
+  multiple_choice_score: number
+  ratio_score: string
+  score: number
+  status: string
+  total_attempt_time: number
+  updated_at: Date
+}
 export interface ICourseDetail {
   certificate_id: string
   code: string
@@ -46,6 +57,32 @@ export interface ICourseDetail {
   name: string
   status: string
   course_sections_with_progress: ICourseSection[]
+  course_section_type: string
+  description: string
+  duration: number | null
+  learning_progress: {
+    total_course_sections: number
+    total_course_sections_completed: 1
+  }
+  position: number | null
+  user_section_learning_status: string
+  quiz: {
+    attempt_count: number
+    id: string
+    is_graded: boolean
+    is_limited: boolean
+    limit_count: number
+    name: number
+    quiz_report: {
+      average_time: number
+      ratio: number
+    }
+    quiz_timed: number | null
+    quiz_type: string
+    required_percent_score: number
+    attempts: IAttempts[]
+  }
+  remaining_time: number
 }
 
 export interface IMeta {
@@ -147,4 +184,34 @@ export interface ISection {
 export interface ISectionDetail {
   meta: IMeta
   sections: ISection[]
+}
+
+export interface IMyCourseDetail {
+  course_section_type: string
+  description: string
+  duration: number
+  id: string
+  name: string
+  position: number
+  learning_progress: {
+    duration: number
+    time_spent: number
+    total_course_sections: number
+    total_course_sections_completed: number
+  }
+  quiz: {
+    attempt: {
+      id: string
+      number_of_attempts: number
+      ratio_score: string
+      total_attempt_time: number
+    }
+    id: string
+    is_graded: boolean
+    is_limited: boolean
+    limit_count: number
+    quiz_timed: number
+    required_percent_score: number
+  }
+  user_section_learning_status: string
 }

@@ -117,7 +117,7 @@ export default function MenuItem({
         ) : (
           <>
             {Icon === 'profile-detail' ? (
-              <div className="min-w-6 min-h-6 shrink-0 flex items-center">
+              <div className="w-10 h-10 shrink-0">
                 <Image
                   src={
                     user.detail.avatar['40x40'] ||
@@ -125,9 +125,9 @@ export default function MenuItem({
                     blankAvatar
                   }
                   alt="avatar"
-                  className="rounded-full"
-                  width={24}
-                  height={24}
+                  className="rounded-full w-10 h-10 object-cover"
+                  width={40}
+                  height={40}
                   priority={true}
                 />
               </div>
@@ -224,7 +224,7 @@ export default function MenuItem({
       >
         <div
           className={`sidebar-item flex items-center ${
-            Icon === 'avatar' ? '-ml-2' : ''
+            Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
           }`}
           onClick={() => closeSideBar()}
         >

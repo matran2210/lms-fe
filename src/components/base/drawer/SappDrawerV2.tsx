@@ -4,18 +4,24 @@ import React, { Dispatch, ReactNode, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
+  handleCancel: () => void
   width?: number
   title: string
   children: ReactNode
 }
 
-const SappDrawerV2 = ({ open, setOpen, width, title, children }: IProps) => {
+const SappDrawerV2 = ({
+  open,
+  handleCancel,
+  width,
+  title,
+  children,
+}: IProps) => {
   return (
     <Drawer
       open={open}
       title={undefined}
-      onClose={() => setOpen(false)}
+      onClose={handleCancel}
       width={width ?? '45%'}
       closeIcon={false}
     >
@@ -24,7 +30,7 @@ const SappDrawerV2 = ({ open, setOpen, width, title, children }: IProps) => {
           <div className="text-2xl font-medium text-white pr-10">{title}</div>
           <div
             className="absolute right-8 top-1/2 -translate-y-2/4 cursor-pointer"
-            onClick={() => setOpen(false)}
+            onClick={handleCancel}
           >
             <Icon type="cross" className="text-white" />
           </div>

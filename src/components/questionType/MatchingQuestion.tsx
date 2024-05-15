@@ -58,6 +58,7 @@ const MatchingQuestion = forwardRef(
     const [correctAnswer, setCorrectAnswer] = useState<any>()
     const [storageId, setStoreId] = useState(uniqueId('storage'))
     const matchingQuestionRef = useRef<HTMLDivElement>(null)
+    const isSelfReflection = data?.is_self_reflection
 
     function allowDrop(ev: any) {
       ev.preventDefault()
@@ -346,7 +347,8 @@ const MatchingQuestion = forwardRef(
                 return (
                   <div className="flex flex-nowrap justify-between" key={index}>
                     {defaultValue?.[e?.id]?.answer?.id ===
-                    correctAnswer?.[e?.id]?.id ? (
+                      correctAnswer?.[e?.id]?.id ||
+                    isSelfReflection === true ? (
                       <>
                         <QuestionCard
                           value={e?.content}
