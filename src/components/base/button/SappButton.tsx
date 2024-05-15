@@ -80,7 +80,7 @@ const SappButton = ({
     )
   return (
     <button
-      className={`${componentClass}`}
+      className={`${componentClass} ${classNameLoading}`}
       type={type ?? 'button'}
       onClick={onClick}
       disabled={disabled || loading}
