@@ -2,7 +2,7 @@ import React from 'react'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
 import { ANIMATION } from 'src/constants'
-import { ICourseDetail, IMyCourseDetail } from 'src/type/courses'
+import { IMyCourseDetail } from 'src/type/courses'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
 
