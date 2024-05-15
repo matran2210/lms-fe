@@ -54,6 +54,7 @@ import { CoursesAPI } from '../api/courses'
 import { TestAPI } from '../api/test'
 import Countdown from 'react-countdown'
 import { renderer, useCountdown } from 'src/hooks/useCountdown'
+import { CourseProvider, useCourseContext } from '@contexts/index'
 
 type Window = {
   userAgreed: any
@@ -1067,6 +1068,8 @@ const TestDetail = () => {
     })
   }
 
+  const { setScoreQuestion, setSubmitTest } = useCourseContext()
+
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
@@ -1202,7 +1205,13 @@ const TestDetail = () => {
         if (type === 'entrance') {
           router.replace(`/entrance-test/test-result/${res?.data?.id}`)
         } else {
-          router.replace(`/courses/test/test-result/${res?.data?.id}`)
+          if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
+            router.replace(`/courses/test/test-result/${res?.data?.id}`)
+          } else {
+            router.back()
+            setScoreQuestion(res?.data?.score)
+            setSubmitTest(true)
+          }
         }
       }
     } else {
@@ -1522,7 +1531,7 @@ const TestDetail = () => {
   const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
 
   return (
-    <>
+    <CourseProvider>
       {loading || !currentTabContent?.id ? (
         <SappLoading />
       ) : (
@@ -2327,7 +2336,7 @@ const TestDetail = () => {
       /> */}
         </div>
       )}
-    </>
+    </CourseProvider>
   )
 }
 

@@ -50,7 +50,8 @@ const TestModal = ({
       showOkButton={
         !data?.quiz?.is_limited
           ? true
-          : data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count
+          : data?.quiz?.attempt?.number_of_attempts ||
+              0 < data?.quiz?.limit_count
             ? true
             : false
       }
