@@ -108,14 +108,14 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
         <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center">
           Congratulations on completing the Final Test of
         </span>
-        <span className="text-bw-1 text-medium-sm font-normal mt-4 mb-3 text-center ms-1">
-          [{name}]
+        <span className="text-bw-1 text-medium-sm font-semibold mt-4 mb-3 text-center ms-1">
+          {name}
         </span>
         <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center ms-1">
           with a score of
         </span>
-        <span className="text-bw-1 text-medium-sm font-normal mt-4 mb-3 text-center ms-1">
-          [{scoreQuestion}]
+        <span className="text-bw-1 text-medium-sm font-semibold mt-4 mb-3 text-center ms-1">
+          {scoreQuestion}
         </span>
         <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center">
           . The system will calculate your overall grade for this course and
