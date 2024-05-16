@@ -1,8 +1,31 @@
+# New CI-CD
 stages:
+  - build
   - deploy
 
 default:
   image: node:16.17.0-alpine
+
+build_master:
+  stage: build
+  before_script:
+    - docker info
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master
+  script:
+    - cp $ENV_PRODUCT_FILE .env
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $REGISTRY
+    - docker build -t gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID -f prod.Dockerfile .
+    - docker push gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID
+    - echo "gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID build success"
+    - echo "IMAGE_PRODUCT_LMS_FE=gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next:$CI_PIPELINE_IID" > /home/gitlab-runner/image_version.txt
+  environment: production
+  tags:
+    - exec-shell  
+
 
 deploy_staging:
   stage: deploy
@@ -14,13 +37,59 @@ deploy_staging:
     - vercel deploy --prod --token=$VERCEL_TOKEN
   environment: staging
 
-
 deploy_master:
   stage: deploy
+  before_script:
+    - chmod 400 $SSH_KEY
   only:
-    - master
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /deploy/
+    refs:
+      - master
   script:
-    - yarn global add vercel
-    - yarn install
-    - VERCEL_TOKEN=$VERCEL_TOKEN_PROD && VERCEL_ORG_ID=$VERCEL_ORG_ID_PROD && VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_PROD && vercel deploy --prod --token=$VERCEL_TOKEN
-  environment: production
+    - IMAGE_PRODUCT_LMS_FE_LATEST=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next' | sort -k4 -r | head -n 1 | awk '{print $1}')
+    - echo $IMAGE_PRODUCT_LMS_FE_LATEST
+    - |
+      if [[ -z "$IMAGE_PRODUCT_LMS_FE_LATEST" ]]; then
+          echo "IMAGE_PRODUCT_LMS_FE_LATEST is not available. Please ensure a previous build job exists."
+          exit 1
+      fi
+      ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$PROD_IP "
+      echo $IMAGE_PRODUCT_LMS_FE_LATEST &&
+      cd /var/www/lms-fe &&
+      git reset --hard origin/master &&
+      sed -i '/^\s*next-app\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_PRODUCT_LMS_FE_LATEST"@' docker-compose.prod.yml &&
+      docker compose -f docker-compose.prod.yml pull next-app &&
+      docker compose -f docker-compose.prod.yml up -d"
+  environment: production 
+  tags:
+    - exec-shell
+
+# Old CI-CD
+# stages:
+#   - deploy
+
+# default:
+#   image: node:16.17.0-alpine
+
+# deploy_staging:
+#   stage: deploy
+#   only:
+#     - staging
+#   script:
+#     - yarn global add vercel
+#     - yarn install
+#     - vercel deploy --prod --token=$VERCEL_TOKEN
+#   environment: staging
+
+
+# deploy_master:
+#   stage: deploy
+#   only:
+#     - master
+#   script:
+#     - yarn global add vercel
+#     - yarn install
+#     - VERCEL_TOKEN=$VERCEL_TOKEN_PROD && VERCEL_ORG_ID=$VERCEL_ORG_ID_PROD && VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_PROD && vercel deploy --prod --token=$VERCEL_TOKEN
+#   environment: production
+

@@ -50,7 +50,7 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
    * @description mở popup khi khóa là Foundation và submit bài Final Test
    */
   useEffect(() => {
-    if (courseType && submitTest) {
+    if (courseType === 'FOUNDATION_COURSE' && submitTest) {
       setOpenPopupCongrats(true)
     } else {
       setOpenPopupCongrats(false)
@@ -90,12 +90,8 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
       closeAfterSubmit={true}
       buttonSize="extra"
       title={undefined}
-      cancelButtonCaption={'Back to My Course'}
-      handleCancel={() => {
-        router.replace('/courses')
-        handleClosePopup()
-      }}
-      handleClose={handleClosePopup}
+      cancelButtonCaption="Quit"
+      handleCancel={handleClosePopup}
     >
       <div className="flex justify-center">
         <div
@@ -110,7 +106,7 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
       </div>
       <div className="text-center mt-4 mb-3">
         <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center">
-          Congratulations on completing{' '}
+          Congratulations on completing the Final Test of
         </span>
         <span className="text-bw-1 text-medium-sm font-semibold mt-4 mb-3 text-center ms-1">
           {name}
