@@ -1070,6 +1070,8 @@ const TestDetail = () => {
 
   const { setScoreQuestion, setSubmitTest } = useCourseContext()
 
+  const [scoreFinalTest, setScoreFinalTest] = useState(0)
+
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
@@ -1229,6 +1231,7 @@ const TestDetail = () => {
           (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       })
       if (res) {
+        setScoreFinalTest(res?.data?.score)
         setQuizResultId(() => {
           setOpenTimeOut(true)
           return res?.data?.id
@@ -2290,7 +2293,18 @@ const TestDetail = () => {
                   if (type === 'entrance') {
                     router.replace(`/entrance-test/test-result/${QuizResultId}`)
                   } else {
-                    router.replace(`/courses/test/test-result/${QuizResultId}`)
+                    if (
+                      type !== 'entrance' &&
+                      quizDetail?.quiz_type !== 'FINAL_TEST'
+                    ) {
+                      router.replace(
+                        `/courses/test/test-result/${QuizResultId}`,
+                      )
+                    } else {
+                      router.back()
+                      setScoreQuestion(scoreFinalTest)
+                      setSubmitTest(true)
+                    }
                   }
                 })
             }}
