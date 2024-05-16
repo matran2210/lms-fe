@@ -1068,7 +1068,7 @@ const TestDetail = () => {
     })
   }
 
-  const { setScoreQuestion, setSubmitTest } = useCourseContext()
+  const { setScoreQuestion, setSubmitTest, courseType } = useCourseContext()
 
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
@@ -1208,9 +1208,17 @@ const TestDetail = () => {
           if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
             router.replace(`/courses/test/test-result/${res?.data?.id}`)
           } else {
-            router.back()
-            setScoreQuestion(res?.data?.score)
-            setSubmitTest(true)
+            if (
+              courseType === 'FOUNDATION_COURSE' &&
+              quizDetail?.quiz_type == 'FINAL_TEST'
+            ) {
+              router.back()
+              setScoreQuestion(res?.data?.score)
+              setSubmitTest(true)
+            } else {
+              router.back()
+              setSubmitTest(false)
+            }
           }
         }
       }
