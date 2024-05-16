@@ -11,8 +11,8 @@ build_master:
   before_script:
     - docker info
   only:
-    variables:
-      - $CI_COMMIT_MESSAGE =~ /build/
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
     refs:
       - master
   script:
@@ -42,8 +42,8 @@ deploy_master:
   before_script:
     - chmod 400 $SSH_KEY
   only:
-    variables:
-      - $CI_COMMIT_MESSAGE =~ /deploy/
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /deploy/
     refs:
       - master
   script:
