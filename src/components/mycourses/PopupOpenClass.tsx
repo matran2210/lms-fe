@@ -37,8 +37,8 @@ const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
       </div>
       <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 xl:mb-7 px-1">
         This Course will start on{' '}
-        {formatDate(new Date(started_at).toLocaleDateString(), true)}. Please
-        come back later or contact our Support at 0889 662 276.
+        {formatDate(new Date(started_at).toString(), true)}. Please come back
+        later or contact our Support at 0889 662 276.
       </div>
     </SappModalV2>
   )
