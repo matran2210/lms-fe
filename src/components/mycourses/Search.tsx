@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Icon from '@components/icons'
 import { buildQueryString } from '@utils/index'
 import { Controller, useForm } from 'react-hook-form'
-import { debounce } from 'lodash'
+import { debounce, isEmpty } from 'lodash'
 
 interface IProps {
   placeholder: string
@@ -13,7 +13,7 @@ interface IProps {
 
 const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
   const router = useRouter()
-  const { control, watch } = useForm()
+  const { control, watch, setValue } = useForm()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const queryString = buildQueryString({
@@ -65,6 +65,15 @@ const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
     router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
     setPage && setPage(9)
   }
+
+  /**
+   * @description set lại value của name khi router query rỗng
+   */
+  useEffect(() => {
+    if (isEmpty(router?.query?.name)) {
+      setValue('name', '')
+    }
+  }, [router?.query?.name])
 
   return (
     <form className={formStyle} onSubmit={handleSubmit} onChange={handleReset}>

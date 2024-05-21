@@ -19,17 +19,10 @@ interface IProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   reset: UseFormReset<any>
-  setEditPassword: Dispatch<SetStateAction<boolean>>
   getValues: UseFormGetValues<IChangePassword>
 }
 
-const PasswordProfile = ({
-  open,
-  reset,
-  setOpen,
-  setEditPassword,
-  getValues,
-}: IProps) => {
+const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
   const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
@@ -115,7 +108,6 @@ const PasswordProfile = ({
       )
       reset()
       setOpen(false)
-      setEditPassword(false)
       setCode(['', '', '', '', '', ''])
       toast.success('Change Password Successfully!')
     } catch (error) {
@@ -189,12 +181,11 @@ const PasswordProfile = ({
         <SappButton
           title="Verify Code"
           full={true}
-          className="mb-5 !font-semibold"
+          className="mb-5 !font-semibold h-12.5"
           size="lager"
           loading={loading}
           onClick={verifyCode}
           disabled={code.some((e) => e === '') || time <= 0}
-          classNameLoading="h-8"
         />
         <ButtonText
           title="Resend Code"

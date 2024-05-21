@@ -180,8 +180,7 @@ const PartFailed = ({
 
               {(coursePart?.quiz?.is_limited &&
                 coursePart?.quiz?.attempt?.number_of_attempts ===
-                  coursePart?.quiz?.limit_count &&
-                coursePart?.course_section_type !== 'FINAL_TEST') ||
+                  coursePart?.quiz?.limit_count) ||
               passFinalTest ? null : (
                 <ButtonSecondary
                   title="Retake"
