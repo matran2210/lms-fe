@@ -1,5 +1,4 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import SappButton from '@components/base/button/SappButton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
@@ -13,6 +12,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
 import { AuthAPI } from 'src/pages/api/profile'
+import { isEmpty } from 'lodash'
 
 export interface IChangePassword {
   password: string
@@ -61,15 +61,17 @@ const ChangePassword = () => {
   /**
    * @description sử dụng useForm
    */
-  const { control, handleSubmit, reset, getValues } = useForm<IChangePassword>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    getValues,
+    watch,
+    formState: { errors },
+  } = useForm<IChangePassword>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
   })
-
-  /**
-   * @description state này dùng để disable form
-   */
-  const [editPassword, setEditPassword] = useState(false)
 
   /**
    * @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
@@ -100,35 +102,25 @@ const ChangePassword = () => {
                 Change Password
               </div>
               <div>
-                {!editPassword ? (
-                  <SappButton
-                    onClick={() => setEditPassword(true)}
-                    size="medium"
-                    title={'Edit'}
-                    className="min-w-[120px] text-base"
-                  ></SappButton>
-                ) : (
-                  <ButtonCancelSubmit
-                    className="gap-12 flex"
-                    cancel={{
-                      title: 'Cancel',
-                      onClick: () => {
-                        reset()
-                        setEditPassword(false)
-                      },
-                      size: 'medium',
-                      isPaddingHorizontal: false,
-                      className: 'min-w-fit !px-0 text-base w-30',
-                    }}
-                    submit={{
-                      title: 'Save',
-                      size: 'medium',
-                      className: 'min-w-fit px-0 text-sm w-30',
-                      type: 'submit',
-                      disabled: loading,
-                    }}
-                  ></ButtonCancelSubmit>
-                )}
+                <ButtonCancelSubmit
+                  className="gap-12 flex"
+                  cancel={{
+                    title: '',
+                    onClick: () => {},
+                    size: 'medium',
+                  }}
+                  submit={{
+                    title: 'Save',
+                    size: 'medium',
+                    className: 'min-w-fit px-0 text-sm w-30',
+                    type: 'submit',
+                    disabled:
+                      loading ||
+                      isEmpty(watch('confirmPassword')) ||
+                      isEmpty(watch('newPassword')) ||
+                      isEmpty(watch('password')),
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -142,7 +134,6 @@ const ChangePassword = () => {
               control={control}
               name="password"
               type="password"
-              disabled={!editPassword}
             />
           </div>
         </div>
@@ -156,7 +147,6 @@ const ChangePassword = () => {
               control={control}
               name="newPassword"
               type="password"
-              disabled={!editPassword}
             />
           </div>
         </div>
@@ -170,7 +160,6 @@ const ChangePassword = () => {
               control={control}
               name="confirmPassword"
               type="password"
-              disabled={!editPassword}
             />
           </div>
         </div>
@@ -179,7 +168,6 @@ const ChangePassword = () => {
         open={openPopup}
         setOpen={setOpenPopup}
         reset={reset}
-        setEditPassword={setEditPassword}
         getValues={getValues}
       />
     </React.Fragment>
