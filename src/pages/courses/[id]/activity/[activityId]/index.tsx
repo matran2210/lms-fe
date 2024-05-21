@@ -679,7 +679,7 @@ const ActivityPage = () => {
                     if (e.type === 'TEXT') {
                       return (
                         <div
-                          className={marginBottom}
+                          className={`${marginBottom} select-none`}
                           key={i + '_' + selector?.currentTabId}
                         >
                           <TextDocument
