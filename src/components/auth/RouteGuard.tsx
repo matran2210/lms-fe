@@ -73,11 +73,11 @@ export const RouteGuard = ({ children }: IProps) => {
    */
   useEffect(() => {
     // Check if the current pathname is '/'
-    if (router.pathname === '/' && authorized) {
-      // Redirect to '/dashboard'
-      router.replace(PageLink.DASHBOARD)
+    if (router.pathname === '/' && getLocalStorgeActToken()) {
+      // Redirect to '/courses'
+      router.replace(PageLink.COURSES)
     }
-  }, []) // Empty dependency array ensures this effect runs only once on component mount
+  })
 
   return authorized ? children : <></>
 }
