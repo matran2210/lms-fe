@@ -290,7 +290,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const backToPart = () => {
     router.replace(
-      `/courses/${classId}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
+      `/courses/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
     )
   }
 
