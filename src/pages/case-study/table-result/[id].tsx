@@ -100,10 +100,17 @@ const TableCaseStudyResult = () => {
     topicId: string,
     quizId: string,
     class_user_id?: string,
+    class_id?: string,
+    course_section_id?: string,
   ) => {
     router.replace({
       pathname: `/case-study/${topicId}`,
-      query: { quiz_id: quizId, class_user_id: class_user_id },
+      query: {
+        quiz_id: quizId,
+        class_user_id: class_user_id,
+        class_id: class_id,
+        course_section_id: course_section_id,
+      },
     })
   }
   // Hàm ánh xạ giá trị enum với tên tương ứng
@@ -178,6 +185,8 @@ const TableCaseStudyResult = () => {
                       topicAttemptDetail?.question_topic?.id,
                       topicAttemptDetail?.quiz?.id,
                       topicAttemptDetail?.class_user_id as string,
+                      router?.query?.class_id as string,
+                      router?.query?.course_section_id as string,
                     )
                   }
                 />
