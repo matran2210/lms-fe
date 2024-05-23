@@ -63,7 +63,7 @@ export const RouteGuard = ({ children }: IProps) => {
     if (isLoginPage && accessToken) {
       try {
         await dispatch(getMe()).unwrap()
-        router.push(PageLink.DASHBOARD)
+        // router.push(PageLink.DASHBOARD)
       } catch (error) {}
     }
   }
@@ -75,7 +75,7 @@ export const RouteGuard = ({ children }: IProps) => {
     // Check if the current pathname is '/'
     if (router.pathname === '/' && authorized) {
       // Redirect to '/dashboard'
-      router.replace(PageLink.DASHBOARD)
+      router.replace(PageLink.COURSES)
     }
   }, []) // Empty dependency array ensures this effect runs only once on component mount
 
