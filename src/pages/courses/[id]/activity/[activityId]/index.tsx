@@ -892,7 +892,7 @@ const ActivityPage = () => {
                     </div>
                   </div>
                 )}
-                {!activity?.previous_activity && <div></div>}
+                {!activity?.previous_activity && <></>}
                 {(activity?.next_activity ||
                   (nextActivityIndex !== -1 &&
                     nextActivityIndex !== sessionData?.length - 1)) && (
@@ -938,7 +938,7 @@ const ActivityPage = () => {
                     </div>
                   </div>
                 )}
-                {!activity?.next_activity && <div></div>}
+                {!activity?.next_activity && <></>}
               </div>
             </div>
           </div>
