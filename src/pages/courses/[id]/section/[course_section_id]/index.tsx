@@ -161,7 +161,11 @@ const CoursePartDetail = () => {
     ) {
       router.push({
         pathname: `/case-study/table-result/${getCaseStudy?.attempt?.id}`,
-        query: { class_user_id: previewPart.class_user_id },
+        query: {
+          class_user_id: previewPart.class_user_id,
+          class_id: router?.query?.id,
+          course_section_id: router?.query?.course_section_id,
+        },
       })
     } else {
       if (sectionId && caseStudyId) {
@@ -173,6 +177,8 @@ const CoursePartDetail = () => {
           quiz_id: quizId,
           class_user_id: previewPart.class_user_id,
           caseStudyId: caseStudyId,
+          class_id: router?.query?.id,
+          course_section_id: router?.query?.course_section_id,
         },
       })
     }

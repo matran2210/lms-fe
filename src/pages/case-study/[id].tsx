@@ -290,7 +290,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const backToPart = () => {
     router.replace(
-      `/courses/${classId}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
+      `/courses/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
     )
   }
 
@@ -940,14 +940,14 @@ const CaseStudyDetail = ({ questions }: any) => {
             })}
             <div className=" bg-gray-3 flex items-center justify-between shadow-question-footer h-[48px] relative">
               <div className="flex items-center h-full">
-                <button className="h-full">
+                {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                     <HelpIcon />
                     <div className="hidden font-normal text-sm 3xl:inline-block">
                       Help
                     </div>
                   </div>
-                </button>
+                </button> */}
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
                   onClick={() => {

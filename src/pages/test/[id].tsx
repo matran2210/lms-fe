@@ -1070,6 +1070,8 @@ const TestDetail = () => {
 
   const { setScoreQuestion, setSubmitTest, courseType } = useCourseContext()
 
+  const [scoreFinalTest, setScoreFinalTest] = useState(0)
+
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
@@ -1237,6 +1239,7 @@ const TestDetail = () => {
           (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       })
       if (res) {
+        setScoreFinalTest(res?.data?.score)
         setQuizResultId(() => {
           setOpenTimeOut(true)
           return res?.data?.id
@@ -1987,14 +1990,14 @@ const TestDetail = () => {
           {/* </div> */}
           <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px]  z-10">
             <div className="flex items-center h-full">
-              <button className="h-full">
+              {/* <button className="h-full">
                 <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                   <HelpIcon />
                   <div className="hidden font-normal text-sm 3xl:inline-block">
                     Help
                   </div>
                 </div>
-              </button>
+              </button> */}
               <button
                 className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
                 onClick={() => {
@@ -2298,7 +2301,18 @@ const TestDetail = () => {
                   if (type === 'entrance') {
                     router.replace(`/entrance-test/test-result/${QuizResultId}`)
                   } else {
-                    router.replace(`/courses/test/test-result/${QuizResultId}`)
+                    if (
+                      type !== 'entrance' &&
+                      quizDetail?.quiz_type !== 'FINAL_TEST'
+                    ) {
+                      router.replace(
+                        `/courses/test/test-result/${QuizResultId}`,
+                      )
+                    } else {
+                      router.back()
+                      setScoreQuestion(scoreFinalTest)
+                      setSubmitTest(true)
+                    }
                   }
                 })
             }}
