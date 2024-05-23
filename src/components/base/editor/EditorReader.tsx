@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
 import 'src/utils/global.d.ts'
+import { isUndefined } from 'lodash'
 
 type Props = {
   text_editor_content: string | undefined
@@ -20,7 +21,7 @@ type Props = {
 }
 
 const EditorReader = ({
-  text_editor_content,
+  text_editor_content = '',
   className = '',
   extenalRef,
   id,
@@ -50,6 +51,7 @@ const EditorReader = ({
       }
     }
   }, [refDocument?.current, extenalRef?.current])
+
   useEffect(() => {
     if (text_editor_content) {
       const parser = new DOMParser()
@@ -81,6 +83,7 @@ const EditorReader = ({
       setContent(text_editor_content)
     }
   }, [text_editor_content])
+
   useEffect(() => {
     if (highlighArea === 'hightlight_area_topic') {
       DeserializeHighlight(highlighted, highlighArea)
@@ -97,7 +100,7 @@ const EditorReader = ({
   const convertMathToImage = async (element: any) => {
     const viewer = com?.wiris?.js?.JsPluginViewer
 
-    if (element && viewer) {
+    if (element && !isUndefined(viewer?.e)) {
       try {
         await viewer.parseElement(element, true, function () {})
       } catch (error) {}
@@ -129,14 +132,16 @@ const EditorReader = ({
 
         // Replace quote in font family
         const mathElement = editor.querySelectorAll('math')
-        mathElement.forEach((el: any) => {
-          if (el.hasAttribute('style')) {
-            let styleValue = el.getAttribute('style')
-            styleValue = styleValue.replaceAll('"', '')
-            el.setAttribute('style', styleValue)
-          }
-        })
-        convertMathToImage(editor)
+        if (mathElement) {
+          mathElement?.forEach((el: any) => {
+            if (el.hasAttribute('style')) {
+              let styleValue = el.getAttribute('style')
+              styleValue = styleValue.replaceAll('"', '')
+              el.setAttribute('style', styleValue)
+            }
+          })
+          editor && convertMathToImage(editor)
+        }
       }
     }, 100)
   }, [editorRef?.current, text_editor_content])
