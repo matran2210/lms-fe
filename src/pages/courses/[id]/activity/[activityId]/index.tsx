@@ -591,7 +591,13 @@ const ActivityPage = () => {
         </>
         <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
           <div className="bg-gray-3 px-6 ">
-            <div className="flex justify-between w-full gap-4 py-6  border-b border-gray-2 bg-none">
+            <div
+              className={`flex justify-between w-full gap-4 py-6 ${
+                activity?.course_outcomes?.length > 0
+                  ? 'border-b borderColor-default'
+                  : ''
+              }`}
+            >
               <div className="font-medium text-2xl ">{activity?.name}</div>
               <div className="text-sm text-gray-1 whitespace-nowrap">
                 {activity?.duration || 0}{' '}
@@ -600,11 +606,7 @@ const ActivityPage = () => {
             </div>
 
             {activity?.course_outcomes?.length > 0 && (
-              <div
-                className={`pt-6 pb-4 ${
-                  activity?.files?.length > 0 && 'border-b borderColor-default'
-                }`}
-              >
+              <div className={`pt-6 pb-4`}>
                 <div className="font-semibold text-base mb-2">
                   Learning Outcome:
                 </div>
