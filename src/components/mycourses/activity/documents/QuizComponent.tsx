@@ -518,7 +518,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                   }}
                                   className="font-semibold hover:text-primary truncate py-1.5 px-3"
                                   key={e.id}
-                                >{`${e.name}`}</div>
+                                >{`Requirement ${i + 1}: ${e.name}`}</div>
                               )
                             })}
                           </div>
