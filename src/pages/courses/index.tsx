@@ -135,7 +135,7 @@ const MyCourse = () => {
    * @description gọi lại animation khi reload lại component
    */
   useEffect(() => {
-    Aos.init({ duration: ANIMATION.DURATION })
+    Aos.init({ duration: ANIMATION.DURATION, once: true })
   })
 
   /**
