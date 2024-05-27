@@ -11,6 +11,7 @@ import React, {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
+import { IExhibitData } from 'src/type/exhibit'
 interface IProps {
   data: any
   action?: any
@@ -28,6 +29,8 @@ interface IProps {
   extenalRef?: any
   solution?: string
   allowUnHighLight?: boolean
+  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isHideExhibit?: boolean
 }
 const SelectWord = forwardRef(
   (
@@ -43,6 +46,8 @@ const SelectWord = forwardRef(
       extenalRef,
       solution,
       allowUnHighLight,
+      setOpenFile,
+      isHideExhibit = true,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -120,12 +125,11 @@ const SelectWord = forwardRef(
           selectElement.innerHTML = `
         <option value="" disabled selected ></option>
         ${answerObj[+index + 1].map((e: any) => {
-          const isSelected = e.value === defaultAnswerValue
+            const isSelected = e.value === defaultAnswerValue
 
-          return `<option value="${e.value}" ${isSelected ? 'selected' : ''} >${
-            e.label
-          }</option>`
-        })}
+            return `<option value="${e.value}" ${isSelected ? 'selected' : ''} >${e.label
+              }</option>`
+          })}
       `
         } else {
           selectElement.innerHTML = `
@@ -154,21 +158,18 @@ const SelectWord = forwardRef(
               return arr
                 .map((el, i) => {
                   if (i === 0) {
-                    return `<option value="${e.value}" ${
-                      isSelected ? 'selected' : ''
-                    } class="w-[50px] break-all">${el}</option>`
+                    return `<option value="${e.value}" ${isSelected ? 'selected' : ''
+                      } class="w-[50px] break-all">${el}</option>`
                   }
-                  return `<option disabled value="${e.value}" ${
-                    isSelected ? 'selected' : ''
-                  } class="w-[50px] break-all">${el}</option>`
+                  return `<option disabled value="${e.value}" ${isSelected ? 'selected' : ''
+                    } class="w-[50px] break-all">${el}</option>`
                 })
                 .join('')
 
               // return arr
             } else {
-              return `<option value="${e.value}" ${
-                isSelected ? 'selected' : ''
-              } class="w-[50px] break-all">${e.label}</option>
+              return `<option value="${e.value}" ${isSelected ? 'selected' : ''
+                } class="w-[50px] break-all">${e.label}</option>
               `
             }
           })}
@@ -213,6 +214,50 @@ const SelectWord = forwardRef(
     // }, [questionContent])
     return (
       <div ref={extenalRef}>
+        {data?.question_topic?.exhibits &&
+          !isHideExhibit &&
+          data?.question_topic?.exhibits?.length > 0 && (
+            <>
+              <div className="border border-b-gray-2 my-6"></div>
+              <div className="flex items-center mb-4">
+                <div className="font-semibold">
+                  Exhibits ({data.question_topic.exhibits?.length || 0})
+                </div>
+                <div className="ml-4">
+                  <span className="text-state-error">* </span>
+                  <span className="text-gray-1">Click to view</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                {data.question_topic.exhibits?.map((e: any, i: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer hover:text-primary"
+                      key={e.id}
+                      onClick={(event) => {
+                        setOpenFile &&
+                          setOpenFile(
+                            {
+                              type: 'exhibits',
+                              description: e.description,
+                              name: e.name,
+                              index: i,
+                              files: e.files,
+                            },
+                            null,
+                            null,
+                            event,
+                          )
+                      }}
+                    >
+                      Exhibit {i + 1}: {e.name}
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="border border-b-gray-2 my-6"></div>
+            </>
+          )}
         <EditorReader
           key={key}
           extenalRef={refEditor}

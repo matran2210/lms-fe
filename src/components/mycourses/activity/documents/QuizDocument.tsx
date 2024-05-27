@@ -299,6 +299,7 @@ const QuizDocument = ({
             setOpenFile={setOpenFile}
             grading_preference={grading_preference}
             showQuestionContent={false}
+            isHideExhibit={false}
           />
         )}
       </div>

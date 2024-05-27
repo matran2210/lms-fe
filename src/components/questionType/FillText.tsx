@@ -11,6 +11,7 @@ import {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
+import { IExhibitData } from 'src/type/exhibit'
 
 interface IProps {
   data: any
@@ -29,6 +30,8 @@ interface IProps {
   extenalRef?: any
   solution?: string
   allowUnHighLight?: boolean
+  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isHideExhibit?: boolean
 }
 const AddWordPreview = forwardRef(
   (
@@ -44,6 +47,8 @@ const AddWordPreview = forwardRef(
       extenalRef,
       solution,
       allowUnHighLight,
+      setOpenFile,
+      isHideExhibit = true,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -83,7 +88,7 @@ const AddWordPreview = forwardRef(
             (ans: any) =>
               ans.answer_position === index + 1 &&
               ans.answer.trim().toLowerCase() ===
-                inputValue.trim().toLowerCase(),
+              inputValue.trim().toLowerCase(),
           )
           inputClass =
             correctAnswer || isSelfReflection === true
@@ -93,8 +98,7 @@ const AddWordPreview = forwardRef(
 
         element.outerHTML = `
         <span>
-          <input ${
-            corrects ? 'disabled' : ''
+          <input ${corrects ? 'disabled' : ''
           } type="text" id="${inputId}" class="sapp-input-preview ${inputClass}" stringHTML="true" value="${inputValue}" />
         </span>
       `
@@ -115,12 +119,12 @@ const AddWordPreview = forwardRef(
             element.outerHTML = `
                 <span>
                 <span id="${inputId}" class = "${inputClass}">${correctAnswer
-                  .map((e, i) => {
-                    if (i < correctAnswer.length - 1) {
-                      return e.answer + ' / '
-                    } else return e.answer
-                  })
-                  .join('')} <span/>
+                .map((e, i) => {
+                  if (i < correctAnswer.length - 1) {
+                    return e.answer + ' / '
+                  } else return e.answer
+                })
+                .join('')} <span/>
                 </span>
                 `
           }
@@ -161,6 +165,50 @@ const AddWordPreview = forwardRef(
     // }
     return (
       <div ref={extenalRef}>
+        {data?.question_topic.exhibits &&
+          !isHideExhibit &&
+          data?.question_topic?.exhibits?.length > 0 && (
+            <>
+              <div className="border border-b-gray-2 my-6"></div>
+              <div className="flex items-center mb-4">
+                <div className="font-semibold">
+                  Exhibits ({data.question_topic.exhibits?.length || 0})
+                </div>
+                <div className="ml-4">
+                  <span className="text-state-error">* </span>
+                  <span className="text-gray-1">Click to view</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                {data?.question_topic?.exhibits?.map((e: any, i: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer hover:text-primary"
+                      key={e.id}
+                      onClick={(event) => {
+                        setOpenFile &&
+                          setOpenFile(
+                            {
+                              type: 'exhibits',
+                              description: e.description,
+                              name: e.name,
+                              index: i,
+                              files: e.files,
+                            },
+                            null,
+                            null,
+                            event,
+                          )
+                      }}
+                    >
+                      Exhibit {i + 1}: {e.name}
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="border border-b-gray-2 my-6"></div>
+            </>
+          )}
         <EditorReader
           id="hightlight_area"
           onMouseUp={(e: any) => {

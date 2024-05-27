@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
+import { IExhibitData } from 'src/type/exhibit'
 
 interface IProps {
   data?: any
@@ -25,6 +26,8 @@ interface IProps {
   resetDefaultAnswer?: boolean
   allowUnHighLight?: boolean
   uuid?: string
+  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isHideExhibit?: boolean
 }
 let dragParentIdRef: string
 const DragNDropPreivew = forwardRef(
@@ -43,6 +46,8 @@ const DragNDropPreivew = forwardRef(
       resetDefaultAnswer = false,
       allowUnHighLight,
       uuid,
+      setOpenFile,
+      isHideExhibit = true,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -176,36 +181,28 @@ const DragNDropPreivew = forwardRef(
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span  id="${
-                element.id
-              }" class="sapp-input-dragNDrop-answer ${
-                defaultAnswer[index].idAnswer === corrects[index].id ||
-                isSelfReflection === true
+              element.outerHTML = `<span  id="${element.id
+                }" class="sapp-input-dragNDrop-answer ${defaultAnswer[index].idAnswer === corrects[index].id ||
+                  isSelfReflection === true
                   ? 'corrects'
                   : 'wrongs'
-              }">
-            <span id="${
-              defaultAnswer[index].idAnswer
-            }" class="flex justify-center w-full">${
-              defaultAnswer[index].value
-            }</span>
+                }">
+            <span id="${defaultAnswer[index].idAnswer
+                }" class="flex justify-center w-full">${defaultAnswer[index].value
+                }</span>
             </span>`
             } else {
-              element.outerHTML = `<span id="${
-                element.id
-              }" class= "sapp-input-dragNDrop-answer ${
-                isSelfReflection === true ? 'corrects' : 'wrongs'
-              }">
+              element.outerHTML = `<span id="${element.id
+                }" class= "sapp-input-dragNDrop-answer ${isSelfReflection === true ? 'corrects' : 'wrongs'
+                }">
               <span class="sapp-input-dragNDrop-empty"></span>
             </span>`
               //   })
             }
           } else {
-            element.outerHTML = `<span id="${
-              element.id
-            }" class= "sapp-input-dragNDrop-answer ${
-              isSelfReflection === true ? 'corrects' : 'wrongs'
-            }">
+            element.outerHTML = `<span id="${element.id
+              }" class= "sapp-input-dragNDrop-answer ${isSelfReflection === true ? 'corrects' : 'wrongs'
+              }">
             <span class="sapp-input-dragNDrop-empty"></span>
           </span>`
           }
@@ -216,23 +213,19 @@ const DragNDropPreivew = forwardRef(
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span id="${
-                element.id
-              }" class="sapp-input-dragNDrop" indexBox="${index + 1}">
-                <span class="answer-box" id="${
-                  defaultAnswer[index].idAnswer
+              element.outerHTML = `<span id="${element.id
+                }" class="sapp-input-dragNDrop" indexBox="${index + 1}">
+                <span class="answer-box" id="${defaultAnswer[index].idAnswer
                 }">${defaultAnswer[index].value}</span>
                </span>
               `
             } else {
-              element.outerHTML = `<span id="${
-                element.id
-              }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
+              element.outerHTML = `<span id="${element.id
+                }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
             }
           } else {
-            element.outerHTML = `<span  id="${
-              element.id
-            }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
+            element.outerHTML = `<span  id="${element.id
+              }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
           }
         })
         setQuestionContent(doc)
@@ -330,6 +323,52 @@ const DragNDropPreivew = forwardRef(
                 }
               }}
             >
+              {data?.question_topic?.exhibits &&
+                !isHideExhibit &&
+                data?.question_topic?.exhibits?.length > 0 && (
+                  <>
+                    <div className="border border-b-gray-2 my-6"></div>
+                    <div className="flex items-center mb-4">
+                      <div className="font-semibold">
+                        Exhibits ({data.question_topic.exhibits?.length || 0})
+                      </div>
+                      <div className="ml-4">
+                        <span className="text-state-error">* </span>
+                        <span className="text-gray-1">Click to view</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {data.question_topic.exhibits?.map(
+                        (e: any, i: number) => {
+                          return (
+                            <div
+                              className="cursor-pointer hover:text-primary"
+                              key={e.id}
+                              onClick={(event) => {
+                                setOpenFile &&
+                                  setOpenFile(
+                                    {
+                                      type: 'exhibits',
+                                      description: e.description,
+                                      name: e.name,
+                                      index: i,
+                                      files: e.files,
+                                    },
+                                    null,
+                                    null,
+                                    event,
+                                  )
+                              }}
+                            >
+                              Exhibit {i + 1}: {e.name}
+                            </div>
+                          )
+                        },
+                      )}
+                    </div>
+                    <div className="border border-b-gray-2 my-6"></div>
+                  </>
+                )}
               <EditorReader
                 className="questions"
                 text_editor_content={

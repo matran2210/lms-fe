@@ -12,6 +12,7 @@ import {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
+import { IExhibitData } from 'src/type/exhibit'
 
 interface IProps {
   data: any
@@ -28,6 +29,8 @@ interface IProps {
   solution?: string
   allowUnHighLight?: boolean
   uuid?: string
+  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isHideExhibit?: boolean
 }
 type IProp = {
   value: string
@@ -50,6 +53,8 @@ const MatchingQuestion = forwardRef(
       solution,
       allowUnHighLight,
       uuid,
+      setOpenFile,
+      isHideExhibit = true,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -209,11 +214,11 @@ const MatchingQuestion = forwardRef(
         // Pick a remaining element
         randomIndex = Math.floor(Math.random() * currentIndex)
         currentIndex--
-        // And swap it with the current element
-        ;[array[currentIndex], array[randomIndex]] = [
-          array[randomIndex],
-          array[currentIndex],
-        ]
+          // And swap it with the current element
+          ;[array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
+          ]
       }
       return array
     }
@@ -278,6 +283,50 @@ const MatchingQuestion = forwardRef(
             }
           }}
         >
+          {data?.question_topic.exhibits &&
+            !isHideExhibit &&
+            data?.question_topic?.exhibits?.length > 0 && (
+              <>
+                <div className="border border-b-gray-2 my-6"></div>
+                <div className="flex items-center mb-4">
+                  <div className="font-semibold">
+                    Exhibits ({data?.question_topic?.exhibits?.length || 0})
+                  </div>
+                  <div className="ml-4">
+                    <span className="text-state-error">* </span>
+                    <span className="text-gray-1">Click to view</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {data?.question_topic?.exhibits?.map((e: any, i: number) => {
+                    return (
+                      <div
+                        className="cursor-pointer hover:text-primary"
+                        key={e.id}
+                        onClick={(event) => {
+                          setOpenFile &&
+                            setOpenFile(
+                              {
+                                type: 'exhibits',
+                                description: e.description,
+                                name: e.name,
+                                index: i,
+                                files: e.files,
+                              },
+                              null,
+                              null,
+                              event,
+                            )
+                        }}
+                      >
+                        Exhibit {i + 1}: {e.name}
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="border border-b-gray-2 my-6"></div>
+              </>
+            )}
           <EditorReader
             className="sapp-questions !mb-[32px]"
             text_editor_content={data?.question_content}
@@ -348,7 +397,7 @@ const MatchingQuestion = forwardRef(
                   <div className="flex flex-nowrap justify-between" key={index}>
                     {defaultValue?.[e?.id]?.answer?.id ===
                       correctAnswer?.[e?.id]?.id ||
-                    isSelfReflection === true ? (
+                      isSelfReflection === true ? (
                       <>
                         <QuestionCard
                           value={e?.content}
@@ -362,7 +411,7 @@ const MatchingQuestion = forwardRef(
                             <div
                               // className="w-fit"
                               className="sapp-notched-container-corrects text-bw-1 min-w-132px !border-gray-6 before:!border-gray-6"
-                              // id={defaultValue[e?.id]?.answer.id}
+                            // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
                             </div>
@@ -383,7 +432,7 @@ const MatchingQuestion = forwardRef(
                             <div
                               // className="w-fit"
                               className="sapp-notched-container-incorrects min-w-132px text-state-error"
-                              // id={defaultValue[e?.id]?.answer.id}
+                            // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id].answer?.answer}
                             </div>
