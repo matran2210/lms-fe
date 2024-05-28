@@ -29,7 +29,12 @@ interface IProps {
   extenalRef?: any
   solution?: string
   allowUnHighLight?: boolean
-  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  setOpenFile?: (
+    data: IExhibitData,
+    file?: string | null,
+    fileName?: string | null,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
   isHideExhibit?: boolean
 }
 const SelectWord = forwardRef(
@@ -125,11 +130,12 @@ const SelectWord = forwardRef(
           selectElement.innerHTML = `
         <option value="" disabled selected ></option>
         ${answerObj[+index + 1].map((e: any) => {
-            const isSelected = e.value === defaultAnswerValue
+          const isSelected = e.value === defaultAnswerValue
 
-            return `<option value="${e.value}" ${isSelected ? 'selected' : ''} >${e.label
-              }</option>`
-          })}
+          return `<option value="${e.value}" ${isSelected ? 'selected' : ''} >${
+            e.label
+          }</option>`
+        })}
       `
         } else {
           selectElement.innerHTML = `
@@ -158,18 +164,21 @@ const SelectWord = forwardRef(
               return arr
                 .map((el, i) => {
                   if (i === 0) {
-                    return `<option value="${e.value}" ${isSelected ? 'selected' : ''
-                      } class="w-[50px] break-all">${el}</option>`
-                  }
-                  return `<option disabled value="${e.value}" ${isSelected ? 'selected' : ''
+                    return `<option value="${e.value}" ${
+                      isSelected ? 'selected' : ''
                     } class="w-[50px] break-all">${el}</option>`
+                  }
+                  return `<option disabled value="${e.value}" ${
+                    isSelected ? 'selected' : ''
+                  } class="w-[50px] break-all">${el}</option>`
                 })
                 .join('')
 
               // return arr
             } else {
-              return `<option value="${e.value}" ${isSelected ? 'selected' : ''
-                } class="w-[50px] break-all">${e.label}</option>
+              return `<option value="${e.value}" ${
+                isSelected ? 'selected' : ''
+              } class="w-[50px] break-all">${e.label}</option>
               `
             }
           })}

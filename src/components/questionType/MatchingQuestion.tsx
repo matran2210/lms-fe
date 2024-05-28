@@ -29,7 +29,12 @@ interface IProps {
   solution?: string
   allowUnHighLight?: boolean
   uuid?: string
-  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  setOpenFile?: (
+    data: IExhibitData,
+    file?: string | null,
+    fileName?: string | null,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
   isHideExhibit?: boolean
 }
 type IProp = {
@@ -214,11 +219,11 @@ const MatchingQuestion = forwardRef(
         // Pick a remaining element
         randomIndex = Math.floor(Math.random() * currentIndex)
         currentIndex--
-          // And swap it with the current element
-          ;[array[currentIndex], array[randomIndex]] = [
-            array[randomIndex],
-            array[currentIndex],
-          ]
+        // And swap it with the current element
+        ;[array[currentIndex], array[randomIndex]] = [
+          array[randomIndex],
+          array[currentIndex],
+        ]
       }
       return array
     }
@@ -290,7 +295,7 @@ const MatchingQuestion = forwardRef(
                 <div className="border border-b-gray-2 my-6"></div>
                 <div className="flex items-center mb-4">
                   <div className="font-semibold">
-                    Exhibits ({data?.question_topic?.exhibits?.length || 0})
+                    Exhibits({data?.question_topic?.exhibits?.length || 0})
                   </div>
                   <div className="ml-4">
                     <span className="text-state-error">* </span>
@@ -397,7 +402,7 @@ const MatchingQuestion = forwardRef(
                   <div className="flex flex-nowrap justify-between" key={index}>
                     {defaultValue?.[e?.id]?.answer?.id ===
                       correctAnswer?.[e?.id]?.id ||
-                      isSelfReflection === true ? (
+                    isSelfReflection === true ? (
                       <>
                         <QuestionCard
                           value={e?.content}
@@ -411,7 +416,7 @@ const MatchingQuestion = forwardRef(
                             <div
                               // className="w-fit"
                               className="sapp-notched-container-corrects text-bw-1 min-w-132px !border-gray-6 before:!border-gray-6"
-                            // id={defaultValue[e?.id]?.answer.id}
+                              // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
                             </div>
@@ -432,7 +437,7 @@ const MatchingQuestion = forwardRef(
                             <div
                               // className="w-fit"
                               className="sapp-notched-container-incorrects min-w-132px text-state-error"
-                            // id={defaultValue[e?.id]?.answer.id}
+                              // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id].answer?.answer}
                             </div>

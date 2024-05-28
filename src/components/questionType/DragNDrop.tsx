@@ -26,7 +26,12 @@ interface IProps {
   resetDefaultAnswer?: boolean
   allowUnHighLight?: boolean
   uuid?: string
-  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  setOpenFile?: (
+    data: IExhibitData,
+    file?: string | null,
+    fileName?: string | null,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
   isHideExhibit?: boolean
 }
 let dragParentIdRef: string
@@ -181,28 +186,36 @@ const DragNDropPreivew = forwardRef(
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span  id="${element.id
-                }" class="sapp-input-dragNDrop-answer ${defaultAnswer[index].idAnswer === corrects[index].id ||
-                  isSelfReflection === true
+              element.outerHTML = `<span  id="${
+                element.id
+              }" class="sapp-input-dragNDrop-answer ${
+                defaultAnswer[index].idAnswer === corrects[index].id ||
+                isSelfReflection === true
                   ? 'corrects'
                   : 'wrongs'
-                }">
-            <span id="${defaultAnswer[index].idAnswer
-                }" class="flex justify-center w-full">${defaultAnswer[index].value
-                }</span>
+              }">
+            <span id="${
+              defaultAnswer[index].idAnswer
+            }" class="flex justify-center w-full">${
+              defaultAnswer[index].value
+            }</span>
             </span>`
             } else {
-              element.outerHTML = `<span id="${element.id
-                }" class= "sapp-input-dragNDrop-answer ${isSelfReflection === true ? 'corrects' : 'wrongs'
-                }">
+              element.outerHTML = `<span id="${
+                element.id
+              }" class= "sapp-input-dragNDrop-answer ${
+                isSelfReflection === true ? 'corrects' : 'wrongs'
+              }">
               <span class="sapp-input-dragNDrop-empty"></span>
             </span>`
               //   })
             }
           } else {
-            element.outerHTML = `<span id="${element.id
-              }" class= "sapp-input-dragNDrop-answer ${isSelfReflection === true ? 'corrects' : 'wrongs'
-              }">
+            element.outerHTML = `<span id="${
+              element.id
+            }" class= "sapp-input-dragNDrop-answer ${
+              isSelfReflection === true ? 'corrects' : 'wrongs'
+            }">
             <span class="sapp-input-dragNDrop-empty"></span>
           </span>`
           }
@@ -213,19 +226,23 @@ const DragNDropPreivew = forwardRef(
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span id="${element.id
-                }" class="sapp-input-dragNDrop" indexBox="${index + 1}">
-                <span class="answer-box" id="${defaultAnswer[index].idAnswer
+              element.outerHTML = `<span id="${
+                element.id
+              }" class="sapp-input-dragNDrop" indexBox="${index + 1}">
+                <span class="answer-box" id="${
+                  defaultAnswer[index].idAnswer
                 }">${defaultAnswer[index].value}</span>
                </span>
               `
             } else {
-              element.outerHTML = `<span id="${element.id
-                }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
+              element.outerHTML = `<span id="${
+                element.id
+              }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
             }
           } else {
-            element.outerHTML = `<span  id="${element.id
-              }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
+            element.outerHTML = `<span  id="${
+              element.id
+            }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
           }
         })
         setQuestionContent(doc)

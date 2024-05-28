@@ -30,7 +30,12 @@ interface IProps {
   extenalRef?: any
   solution?: string
   allowUnHighLight?: boolean
-  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  setOpenFile?: (
+    data: IExhibitData,
+    file?: string | null,
+    fileName?: string | null,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
   isHideExhibit?: boolean
 }
 const AddWordPreview = forwardRef(
@@ -88,7 +93,7 @@ const AddWordPreview = forwardRef(
             (ans: any) =>
               ans.answer_position === index + 1 &&
               ans.answer.trim().toLowerCase() ===
-              inputValue.trim().toLowerCase(),
+                inputValue.trim().toLowerCase(),
           )
           inputClass =
             correctAnswer || isSelfReflection === true
@@ -98,7 +103,8 @@ const AddWordPreview = forwardRef(
 
         element.outerHTML = `
         <span>
-          <input ${corrects ? 'disabled' : ''
+          <input ${
+            corrects ? 'disabled' : ''
           } type="text" id="${inputId}" class="sapp-input-preview ${inputClass}" stringHTML="true" value="${inputValue}" />
         </span>
       `
@@ -119,12 +125,12 @@ const AddWordPreview = forwardRef(
             element.outerHTML = `
                 <span>
                 <span id="${inputId}" class = "${inputClass}">${correctAnswer
-                .map((e, i) => {
-                  if (i < correctAnswer.length - 1) {
-                    return e.answer + ' / '
-                  } else return e.answer
-                })
-                .join('')} <span/>
+                  .map((e, i) => {
+                    if (i < correctAnswer.length - 1) {
+                      return e.answer + ' / '
+                    } else return e.answer
+                  })
+                  .join('')} <span/>
                 </span>
                 `
           }

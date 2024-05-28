@@ -1461,11 +1461,10 @@ const TestDetail = () => {
     }
 
     setExhibitData(exhibitsOptions)
-    return exhibitsOptions?.map((exhibit, index: number) => (
-      {
-        label: `Exhibit ${+index + 1}`,
-        value: exhibit.id,
-      }))
+    return exhibitsOptions?.map((exhibit, index: number) => ({
+      label: `Exhibit ${+index + 1}`,
+      value: exhibit.id,
+    }))
   }, [currentTabContent])
   useEffect(() => {
     if (watch('exhibits')) {
@@ -1888,11 +1887,10 @@ const TestDetail = () => {
                 </MovableWindow>
               )
             } else if (e.type === 'exhibits') {
-              const i =
-                exhibitData?.findIndex(
-                  (el: any) => el.id === e.id,
-                )
-              const exhibitsDes = exhibitData?.find(exhibit => exhibit.id === e.id)
+              const i = exhibitData?.findIndex((el: any) => el.id === e.id)
+              const exhibitsDes = exhibitData?.find(
+                (exhibit) => exhibit.id === e.id,
+              )
               return (
                 <MovableWindow
                   position={{
@@ -1912,8 +1910,9 @@ const TestDetail = () => {
                   <div className="absolute h-full w-full  top-0 left-0 border">
                     <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
                       <div className="truncate">
-                        <span className="font-semibold text-base text-bw-1">{`Exhibit ${(i ?? 0) + 1
-                          }: `}</span>
+                        <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                          (i ?? 0) + 1
+                        }: `}</span>
                         {exhibitsDes?.name}
                       </div>
                       <button onClick={() => handleCloseScratchPad(e)}>
@@ -1925,7 +1924,8 @@ const TestDetail = () => {
                         text_editor_content={exhibitsDes?.description}
                         className=" w-full"
                       />
-                      {exhibitsDes && exhibitsDes?.files?.length > 0 &&
+                      {exhibitsDes &&
+                        exhibitsDes?.files?.length > 0 &&
                         exhibitsDes?.files.map((e: any, index: number) => {
                           return (
                             <div
@@ -1964,8 +1964,8 @@ const TestDetail = () => {
                       ? openScratchPad.length + 1400
                       : index + 1400
                   }
-                // not_resizable
-                // className='pointer-events-none'
+                  // not_resizable
+                  // className='pointer-events-none'
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
                     <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
@@ -2041,8 +2041,9 @@ const TestDetail = () => {
                 </div>
               </button>
               <button
-                className={`h-full ${checkCalExist > -1 && 'sapp-disable-button'
-                  }`}
+                className={`h-full ${
+                  checkCalExist > -1 && 'sapp-disable-button'
+                }`}
                 onClick={() => handleOpenScratchPad('calculator')}
                 disabled={checkCalExist > -1}
               >
@@ -2121,8 +2122,9 @@ const TestDetail = () => {
                           return (
                             <button
                               key={e.id}
-                              className={`p-3 ${essayData.index !== index && 'text-gray-1'
-                                }`}
+                              className={`p-3 ${
+                                essayData.index !== index && 'text-gray-1'
+                              }`}
                               onClick={() => {
                                 setAnswerListValue(e.id, index)
                                 setEssayData({ req: e, index: index })
@@ -2172,8 +2174,9 @@ const TestDetail = () => {
                         //   callHandleCancel()
                         // }
                       }}
-                      className={`${currentTabContent.response_type === 0 && 'active'
-                        }`}
+                      className={`${
+                        currentTabContent.response_type === 0 && 'active'
+                      }`}
                     >
                       <WordIcon />
                     </button>
@@ -2192,8 +2195,9 @@ const TestDetail = () => {
                           }),
                         )
                       }}
-                      className={`${currentTabContent.response_type === 1 && 'active'
-                        }`}
+                      className={`${
+                        currentTabContent.response_type === 1 && 'active'
+                      }`}
                     >
                       <ExcelIcon />
                     </button>
@@ -2210,10 +2214,11 @@ const TestDetail = () => {
               </button>
               <button
                 disabled={currentTabContent?.done}
-                className={`flex items-center gap-3 border border-solid ${!currentTabContent?.done
-                  ? 'border-gray-1 text-bw-1'
-                  : 'border-default text-gray-2'
-                  } justify-center p-1 w-[150px] py-2`}
+                className={`flex items-center gap-3 border border-solid ${
+                  !currentTabContent?.done
+                    ? 'border-gray-1 text-bw-1'
+                    : 'border-default text-gray-2'
+                } justify-center p-1 w-[150px] py-2`}
                 onClick={() => handleClearSelection(currentTabContent)}
               >
                 <div className="font-medium text-medium-sm">
@@ -2222,8 +2227,8 @@ const TestDetail = () => {
               </button>
               {/* )} */}
               {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-                !currentTabContent?.done &&
-                quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
+              !currentTabContent?.done &&
+              quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
@@ -2271,7 +2276,7 @@ const TestDetail = () => {
                 )
               ) : (
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                filteredTabs.length - 1 && (
+                  filteredTabs.length - 1 && (
                   <button
                     className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
                     onClick={() => {

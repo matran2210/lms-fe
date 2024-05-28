@@ -18,7 +18,12 @@ export type IPreviewProp = {
   allowHighLight?: boolean
   solution?: any
   allowUnHighLight?: boolean
-  setOpenFile?: (data: IExhibitData, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  setOpenFile?: (
+    data: IExhibitData,
+    file?: string | null,
+    fileName?: string | null,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
   isHideExhibit?: boolean
 }
 
@@ -104,7 +109,7 @@ const OneChoiceQuestion = ({
             <div className="border border-b-gray-2 my-6"></div>
             <div className="flex items-center mb-4">
               <div className="font-semibold">
-                Exhibits ({data.question_topic?.exhibits?.length || 0})
+                Exhibits({data.question_topic?.exhibits?.length || 0})
               </div>
               <div className="ml-4">
                 <span className="text-state-error">* </span>
@@ -112,7 +117,7 @@ const OneChoiceQuestion = ({
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              {data?.question_topic.exhibits?.map((e: any, i: number) => {
+              {data?.question_topic?.exhibits?.map((e: any, i: number) => {
                 return (
                   <div
                     className="cursor-pointer hover:text-primary"

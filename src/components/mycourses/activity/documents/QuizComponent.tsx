@@ -27,7 +27,7 @@ import {
   confirmQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { IExhibit } from 'src/type/exhibit'
+import { IExhibit, IExhibitData } from 'src/type/exhibit'
 import { v4 as uuidv4 } from 'uuid'
 
 export type QuizComponentRef = {
@@ -56,7 +56,12 @@ type Props = {
   activityId: string
   tabId: string
   quizId: string
-  setOpenFile?: (data: any, file?: string | null, fileName?: string | null, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  setOpenFile?: (
+    data: IExhibitData,
+    file?: string | null,
+    fileName?: string | null,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   showQuestionContent?: boolean
   isHideExhibit?: boolean
@@ -139,7 +144,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       }
       let exhibitOption = []
 
-      if (activeQuestion?.exhibits?.length && 0 < activeQuestion?.exhibits?.length) {
+      if (
+        activeQuestion?.exhibits?.length &&
+        0 < activeQuestion?.exhibits?.length
+      ) {
         exhibitOption.push(...activeQuestion?.exhibits)
       }
 
@@ -148,7 +156,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       }
 
       setExhibitData(exhibitOption)
-
     }, [activeQuestion])
 
     const handleShowRequirement = (data: {
@@ -597,9 +604,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     <div className="border border-b-gray-2 my-6"></div>
                     <div className="flex items-center mb-4">
                       <div className="font-semibold">
-                        Exhibits (
-                        {exhibitData?.length || 0}
-                        )
+                        Exhibits ({exhibitData?.length || 0})
                       </div>
                       <div className="ml-4">
                         <span className="text-state-error">* </span>
@@ -607,33 +612,31 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                      {exhibitData?.map(
-                        (e: any, i: number) => {
-                          return (
-                            <div
-                              className="cursor-pointer hover:text-primary"
-                              key={e.id}
-                              onClick={(event) => {
-                                setOpenFile &&
-                                  setOpenFile(
-                                    {
-                                      type: 'exhibits',
-                                      description: e.description,
-                                      name: e.name,
-                                      index: i,
-                                      files: e.files,
-                                    },
-                                    null,
-                                    null,
-                                    event,
-                                  )
-                              }}
-                            >
-                              Exhibit {i + 1}: {e.name}
-                            </div>
-                          )
-                        },
-                      )}
+                      {exhibitData?.map((e: any, i: number) => {
+                        return (
+                          <div
+                            className="cursor-pointer hover:text-primary"
+                            key={e.id}
+                            onClick={(event) => {
+                              setOpenFile &&
+                                setOpenFile(
+                                  {
+                                    type: 'exhibits',
+                                    description: e.description,
+                                    name: e.name,
+                                    index: i,
+                                    files: e.files,
+                                  },
+                                  null,
+                                  null,
+                                  event,
+                                )
+                            }}
+                          >
+                            Exhibit {i + 1}: {e.name}
+                          </div>
+                        )
+                      })}
                     </div>
                   </>
                 )}

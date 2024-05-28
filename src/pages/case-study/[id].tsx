@@ -316,20 +316,20 @@ const CaseStudyDetail = ({ questions }: any) => {
     if (exhibitTopic?.length) {
       exhibitsOptions.push(...exhibitTopic)
     }
-
-    for (let question of topics.questions) {
-      if (question.exhibits?.length) {
-        exhibitsOptions.push(...question.exhibits)
+    if (topics?.questions && topics?.questions?.length > 0) {
+      for (let question of topics?.questions) {
+        if (question?.exhibits?.length) {
+          exhibitsOptions.push(...question.exhibits)
+        }
       }
     }
 
     setExhibitData(exhibitsOptions)
 
-    return exhibitsOptions?.map((exhibit, index: number) => (
-      {
-        label: `Exhibit ${+index + 1}`,
-        value: exhibit.id,
-      }))
+    return exhibitsOptions?.map((exhibit, index: number) => ({
+      label: `Exhibit ${+index + 1}`,
+      value: exhibit.id,
+    }))
   }, [topics])
 
   /**
@@ -1008,7 +1008,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                 const i = exhibitData?.findIndex(
                   (el: IExhibit) => el.id === e.id,
                 )
-                const exhibitsDes = exhibitData?.find(exhibit => exhibit.id === e.id)
+                const exhibitsDes = exhibitData?.find(
+                  (exhibit) => exhibit.id === e.id,
+                )
                 return (
                   <MovableWindow
                     position={{
@@ -1041,8 +1043,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                           text_editor_content={exhibitsDes?.description}
                           className=" w-full"
                         />
-                        {exhibitsDes && exhibitsDes?.files?.length > 0 &&
-                          exhibitsDes?.files.map((e: any, index: number) => {
+                        {exhibitsDes &&
+                          exhibitsDes?.files?.length > 0 &&
+                          exhibitsDes?.files?.map((e: any, index: number) => {
                             return (
                               <div
                                 key={index}
