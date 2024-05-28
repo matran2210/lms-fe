@@ -87,7 +87,11 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
    */
   const handlePaste = (index: number, e: any) => {
     e.preventDefault() // Ngăn chặn hành động paste mặc định
-    const pasted = e.clipboardData.getData('text/plain').split(' ').slice(0, 6)
+    const pasted = e.clipboardData
+      .getData('text/plain')
+      .replace(/\n/g, '')
+      .split(' ')
+      .slice(0, 6)
 
     // Update the OTP array
     const newOtp = [...code]
