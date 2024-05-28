@@ -44,6 +44,8 @@ deploy_staging:
     - yarn install
     - vercel deploy --prod --token=$VERCEL_TOKEN
   environment: staging
+  tags:
+    - shell-docker-lms
 
 deploy_master:
   stage: deploy
