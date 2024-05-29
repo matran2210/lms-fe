@@ -356,10 +356,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               question_id: activeQuestion.id,
               short_answer:
                 (value !== undefined || value !== '') &&
-                  (isChange ||
-                    (isUploadFile &&
-                      grading_preference === 'AFTER_ALL_QUESTIONS')) &&
-                  activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
+                (isChange ||
+                  (isUploadFile &&
+                    grading_preference === 'AFTER_ALL_QUESTIONS')) &&
+                activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
                   ? ' '
                   : value,
               response_option: activeQuestion.response_option
@@ -677,7 +677,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 index={essayData?.index}
                 question_data={activeQuestion}
                 control={controlAnswer}
-                handleSaveHighLight={() => { }}
+                handleSaveHighLight={() => {}}
                 forCaseStudy={true}
                 name={`${activeQuestion.id}_${document_id}_essay`}
                 fullData={activeQuestion}
