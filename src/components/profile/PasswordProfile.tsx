@@ -90,6 +90,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
     const pasted = e.clipboardData
       .getData('text/plain')
       .replace(/\n/g, '')
+      .replace(/\r/g, '')
       .split(' ')
       .slice(0, 6)
 

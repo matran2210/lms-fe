@@ -70,7 +70,7 @@ const TestResultDetail = () => {
           questions={questions}
           type={questions?.course?.course_categories[0]?.name}
           chartData={chartData}
-          courseDifficulty={questions?.course?.course_difficulty ?? 0}
+          subjectCode={questions?.course?.subject?.code ?? ''}
         />
       </div>
     </>
