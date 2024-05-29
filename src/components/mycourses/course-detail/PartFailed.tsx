@@ -88,7 +88,10 @@ const PartFailed = ({
   return (
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
-        <div className={`name-part text-2xl font-medium h-[60px] line-clamp-2`}>
+        <div
+          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-pointer`}
+          onClick={() => setOpen(true)}
+        >
           {(coursePart?.name as string)?.length > 50 ? (
             <Tooltip title={coursePart?.name} color="#ffffff" placement="top">
               {truncateString(coursePart?.name, 50)}
