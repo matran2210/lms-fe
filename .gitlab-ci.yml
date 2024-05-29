@@ -60,7 +60,7 @@ deploy_master:
     - cp $ENV_PRODUCT_FILE .env
     - source .env
     - |
-      ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$PROD_IP "
+      ssh -o StrictHostKeyChecking=no root@$PROD_IP "
       docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
       cd /var/www/lms-fe &&
       git fetch origin --prune &&
@@ -71,7 +71,7 @@ deploy_master:
 
   environment: production 
   tags:
-    - shell-docker-lms
+    - shell
 
 # Old CI-CD
 # stages:
