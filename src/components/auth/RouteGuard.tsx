@@ -63,7 +63,7 @@ export const RouteGuard = ({ children }: IProps) => {
     if (isLoginPage && accessToken) {
       try {
         await dispatch(getMe()).unwrap()
-        router.push(PageLink.DASHBOARD)
+        // router.push(PageLink.DASHBOARD)
       } catch (error) {}
     }
   }

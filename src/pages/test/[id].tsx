@@ -2004,14 +2004,14 @@ const TestDetail = () => {
           {/* </div> */}
           <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px]  z-10">
             <div className="flex items-center h-full">
-              <button className="h-full">
+              {/* <button className="h-full">
                 <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                   <HelpIcon />
                   <div className="hidden font-normal text-sm 3xl:inline-block">
                     Help
                   </div>
                 </div>
-              </button>
+              </button> */}
               <button
                 className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
                 onClick={() => {
