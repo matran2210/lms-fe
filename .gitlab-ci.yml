@@ -49,8 +49,6 @@ deploy_staging:
 deploy_master:
   stage: deploy
   extends: .prepare
-  before_script:
-    - chmod 400 $SSH_KEY
   only:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /deploy/
