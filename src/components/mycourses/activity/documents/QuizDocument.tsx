@@ -285,7 +285,10 @@ const QuizDocument = ({
         handleCancel={() => {}}
       ></ConFirmSubmit>
 
-      <div className="border border-gray-3 p-6" data-aos={ANIMATION.DATA_AOS}>
+      <div
+        className="border border-gray-3 p-6 select-none"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         {activeQuestion && (
           <QuizComponent
             activityId={activityId}
@@ -299,6 +302,7 @@ const QuizDocument = ({
             setOpenFile={setOpenFile}
             grading_preference={grading_preference}
             showQuestionContent={false}
+            isHideExhibit={false}
           />
         )}
       </div>
