@@ -99,7 +99,7 @@ const TableCaseStudyResult = () => {
   const handleRetake = (
     topicId: string,
     quizId: string,
-    class_user_id?: string,
+    class_user_id: string,
     class_id?: string,
     course_section_id?: string,
   ) => {
@@ -218,6 +218,8 @@ const TableCaseStudyResult = () => {
                   topicAttemptDetail?.question_topic?.id,
                   topicAttemptDetail?.quiz?.id,
                   topicAttemptDetail?.class_user_id as string,
+                  router?.query?.class_id as string,
+                  router?.query?.course_section_id as string,
                 )
               }
               className={'!font-medium shrink-0'}

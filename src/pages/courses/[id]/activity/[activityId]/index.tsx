@@ -592,7 +592,7 @@ const ActivityPage = () => {
         <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
           <div className="bg-gray-3 px-6 ">
             <div
-              className={`flex justify-between w-full gap-4 py-6 ${
+              className={`flex justify-between w-full gap-4 py-6 select-none ${
                 activity?.course_outcomes?.length > 0
                   ? 'border-b borderColor-default'
                   : ''
@@ -607,10 +607,10 @@ const ActivityPage = () => {
 
             {activity?.course_outcomes?.length > 0 && (
               <div className={`pt-6 pb-4`}>
-                <div className="font-semibold text-base mb-2">
+                <div className="font-semibold text-base mb-2 select-none">
                   Learning Outcome:
                 </div>
-                <ul className="list-disc text-base ml-3">
+                <ul className="list-disc text-base ml-3 select-none">
                   {activity?.course_outcomes?.map((e: any) => {
                     return (
                       <li className="ml-4" key={e?.id}>
