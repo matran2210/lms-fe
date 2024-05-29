@@ -27,6 +27,7 @@ import {
   confirmQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import { IExhibit, IExhibitData } from 'src/type/exhibit'
 import { v4 as uuidv4 } from 'uuid'
 
 export type QuizComponentRef = {
@@ -55,9 +56,15 @@ type Props = {
   activityId: string
   tabId: string
   quizId: string
-  setOpenFile?: any
+  setOpenFile?: (
+    data: IExhibitData,
+    file?: string | null,
+    fileName?: string | null,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   showQuestionContent?: boolean
+  isHideExhibit?: boolean
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -72,6 +79,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       setOpenFile,
       grading_preference,
       showQuestionContent = true,
+      isHideExhibit = true,
     }: Props,
     ref,
   ) => {
@@ -86,6 +94,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const [showListRequirement, setShowListRequirement] =
       useState<boolean>(false)
     const listRequirementRef = useRef<HTMLDivElement>(null)
+    const [exhibitData, setExhibitData] = useState<IExhibit[]>()
 
     const [isChange, setIsChange] = useState<boolean>(false)
     const [isUploadFile, setIsUploadFile] = useState<boolean>(false)
@@ -133,6 +142,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           index: 0,
         })
       }
+      let exhibitOption = []
+
+      if (
+        activeQuestion?.exhibits?.length &&
+        0 < activeQuestion?.exhibits?.length
+      ) {
+        exhibitOption.push(...activeQuestion?.exhibits)
+      }
+
+      if (activeQuestion?.question_topic.exhibits.length) {
+        exhibitOption.push(...activeQuestion?.question_topic.exhibits)
+      }
+
+      setExhibitData(exhibitOption)
     }, [activeQuestion])
 
     const handleShowRequirement = (data: {
@@ -333,10 +356,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               question_id: activeQuestion.id,
               short_answer:
                 (value !== undefined || value !== '') &&
-                (isChange ||
-                  (isUploadFile &&
-                    grading_preference === 'AFTER_ALL_QUESTIONS')) &&
-                activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
+                  (isChange ||
+                    (isUploadFile &&
+                      grading_preference === 'AFTER_ALL_QUESTIONS')) &&
+                  activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
                   ? ' '
                   : value,
               response_option: activeQuestion.response_option
@@ -409,6 +432,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               setValue={setValue}
+              setOpenFile={setOpenFile}
+              isHideExhibit={isHideExhibit}
               name={`${activeQuestion.id}_${document_id}_answer`}
             />
           )
@@ -420,6 +445,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               setValue={setValue}
+              setOpenFile={setOpenFile}
+              isHideExhibit={isHideExhibit}
               name={`${activeQuestion.id}_${document_id}_answer`}
             />
           )
@@ -431,6 +458,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
+              setOpenFile={setOpenFile}
+              isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
             />
           )
@@ -441,6 +470,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getValueFillText}
               defaultAnswer={activeQuestion?.defaultValue}
+              setOpenFile={setOpenFile}
+              isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
             />
           )
@@ -453,7 +484,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               resetDefaultAnswer={false}
+              setOpenFile={setOpenFile}
               ref={DragDropRef}
+              isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
             />
           )
@@ -464,6 +497,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getValueSelectText}
               defaultAnswer={activeQuestion?.defaultValue}
+              setOpenFile={setOpenFile}
+              isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
             />
           )
@@ -564,48 +599,47 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     </div>
                   </>
                 )}
-                {activeQuestion?.exhibits &&
-                  activeQuestion?.exhibits?.length > 0 && (
-                    <>
-                      <div className="border border-b-gray-2 my-6"></div>
-                      <div className="flex items-center mb-4">
-                        <div className="font-semibold">
-                          Exhibits ({activeQuestion.exhibits?.length || 0})
-                        </div>
-                        <div className="ml-4">
-                          <span className="text-state-error">* </span>
-                          <span className="text-gray-1">Click to view</span>
-                        </div>
+                {exhibitData && exhibitData?.length > 0 && (
+                  <>
+                    <div className="border border-b-gray-2 my-6"></div>
+                    <div className="flex items-center mb-4">
+                      <div className="font-semibold">
+                        Exhibits ({exhibitData?.length || 0})
                       </div>
-                      <div className="flex flex-col gap-2">
-                        {activeQuestion.exhibits?.map((e, i) => {
-                          return (
-                            <div
-                              className="cursor-pointer hover:text-primary"
-                              key={e.id}
-                              onClick={(event) => {
-                                setOpenFile &&
-                                  setOpenFile(
-                                    {
-                                      type: 'exhibits',
-                                      description: e.description,
-                                      name: e.name,
-                                      index: i,
-                                      files: e.files,
-                                    },
-                                    null,
-                                    null,
-                                    event,
-                                  )
-                              }}
-                            >
-                              Exhibit {i + 1}: {e.name}
-                            </div>
-                          )
-                        })}
+                      <div className="ml-4">
+                        <span className="text-state-error">* </span>
+                        <span className="text-gray-1">Click to view</span>
                       </div>
-                    </>
-                  )}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {exhibitData?.map((e: any, i: number) => {
+                        return (
+                          <div
+                            className="cursor-pointer hover:text-primary"
+                            key={e.id}
+                            onClick={(event) => {
+                              setOpenFile &&
+                                setOpenFile(
+                                  {
+                                    type: 'exhibits',
+                                    description: e.description,
+                                    name: e.name,
+                                    index: i,
+                                    files: e.files,
+                                  },
+                                  null,
+                                  null,
+                                  event,
+                                )
+                            }}
+                          >
+                            Exhibit {i + 1}: {e.name}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </>
+                )}
 
                 {activeQuestion.question_topic?.files?.length > 0 && (
                   <div>
@@ -643,7 +677,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 index={essayData?.index}
                 question_data={activeQuestion}
                 control={controlAnswer}
-                handleSaveHighLight={() => {}}
+                handleSaveHighLight={() => { }}
                 forCaseStudy={true}
                 name={`${activeQuestion.id}_${document_id}_essay`}
                 fullData={activeQuestion}
