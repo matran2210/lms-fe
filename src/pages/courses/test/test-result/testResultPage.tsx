@@ -9,6 +9,7 @@ import MultipleQuestion from './multipleQues'
 import ChartACCAScore from './acca/chartACCAScore'
 import TotalScore from '@components/mycourses/test/TotalScore'
 import { roundNumber } from '@utils/helpers'
+import { F_LOW_CODES } from '@utils/constants'
 
 interface QuizReport {
   ratio: number
@@ -26,14 +27,14 @@ interface IProps {
   questions: Object
   type: string
   chartData: DataItem
-  courseDifficulty: number
+  subjectCode: string
 }
 
 const TestResultPage = ({
   questions,
   type,
   chartData,
-  courseDifficulty,
+  subjectCode,
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
@@ -58,7 +59,7 @@ const TestResultPage = ({
 
   return (
     <>
-      {type === 'ACCA' && courseDifficulty <= 4 ? (
+      {type === 'ACCA' && F_LOW_CODES.includes(subjectCode) ? (
         <div className="flex xl:gap-6 flex-wrap">
           <div className="max-h-full w-full xl:max-w-smd">
             <TotalScore
