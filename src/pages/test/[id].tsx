@@ -1224,7 +1224,7 @@ const TestDetail = () => {
               setScoreQuestion(res?.data?.score)
               setSubmitTest(true)
             } else {
-              router.back()
+              router.replace(`/courses/test/test-result/${res?.data?.id}`)
               setSubmitTest(false)
             }
           }

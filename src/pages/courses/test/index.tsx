@@ -1,6 +1,7 @@
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
 import { TEST_TYPE } from '@utils/constants'
+import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -50,8 +51,10 @@ const TestModal = ({
       showOkButton={
         !data?.quiz?.is_limited
           ? true
-          : data?.quiz?.attempt?.number_of_attempts ||
-              0 < data?.quiz?.limit_count
+          : (data?.quiz?.is_limited &&
+                data?.quiz?.attempt?.number_of_attempts <
+                  data?.quiz?.limit_count) ||
+              isNull(data?.quiz?.attempt)
             ? true
             : false
       }
