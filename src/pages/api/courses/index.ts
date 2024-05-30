@@ -126,12 +126,25 @@ export class CoursesAPI {
     })
   }
 
-  static getTopicDescription(
+  static CACHE_GET_TOPIC_DESCRIPTION = {} as { [key: string]: any }
+
+  static async getTopicDescription(
     id: string | string[] | undefined,
     quiz_id?: string,
+    cache = false,
   ): Promise<any> {
-    const uri = url.getTopicDescription + `/${id}?quiz_id=${quiz_id}`
-    return fetcher(`${apiURL}${uri}`)
+    const uri =
+      apiURL +
+      url.getTopicDescription +
+      `/${id}?quiz_id=${quiz_id}&include_questions=false`
+
+    if (!cache) return fetcher(uri)
+
+    if (!this.CACHE_GET_TOPIC_DESCRIPTION[uri]) {
+      this.CACHE_GET_TOPIC_DESCRIPTION[uri] = await fetcher(uri)
+    }
+
+    return this.CACHE_GET_TOPIC_DESCRIPTION[uri]
   }
 
   static startCourseSectionProgress(
@@ -153,6 +166,9 @@ export class CoursesAPI {
     })
   }
 
+  /**
+   * @deprecated
+   */
   static getQuestionsDetail(id: string): Promise<any> {
     const uri = url.getQuestionDetail
     return fetcher(`${apiURL}${uri}`, {
@@ -244,14 +260,21 @@ export class CoursesAPI {
     })
   }
 
+  CACHE_GET_COURSE_ACTIVITY_TAP_BY_ID = {}
+
   /**
    * @description Lấy thông tin tab hoạt động theo ID.
    * @async
    * @param {string} id - ID của tab.
    * @returns {Promise<IResponse<ITab>>} - Dữ liệu tab.
    */
-  static getCourseActivityTapById(id: string): Promise<any> {
-    return fetcher(`${apiURL}/course-sections/tab/${id}`)
+  static async getCourseActivityTapById(id: string): Promise<any> {
+    if (!this.CACHE_GET_TOPIC_DESCRIPTION[id]) {
+      this.CACHE_GET_TOPIC_DESCRIPTION[id] = await fetcher(
+        `${apiURL}/course-sections/tab/${id}`,
+      )
+    }
+    return this.CACHE_GET_TOPIC_DESCRIPTION[id]
   }
 
   /**
@@ -259,6 +282,7 @@ export class CoursesAPI {
    * @async
    * @param {string} id - ID của câu hỏi.
    * @returns {Promise<IResponse<IQuestion[]>>} - Dữ liệu kết quả câu hỏi.
+   * @deprecated replace by replace by QuestionAPI.getQuestionDetail with query after-test = true
    */
   static getQuestionResults(id: string): Promise<any> {
     return fetcher(`${apiURL}/question/results?question_ids=${id}`)
@@ -350,6 +374,9 @@ export class CoursesAPI {
   }
 }
 
+/**
+ * @deprecated
+ */
 export const getQuestionsById = async (
   question_ids: string[],
 ): Promise<any> => {
