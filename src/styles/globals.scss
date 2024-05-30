@@ -208,11 +208,6 @@ body *::-webkit-scrollbar-thumb:hover {
     display: unset;
     max-width: max-content;
   }
-
-  img:not([id]) {
-    width: 100%;
-    height: auto;
-  }
 }
 
 .sapp-questions .sapp-input-preview {
