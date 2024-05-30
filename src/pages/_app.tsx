@@ -175,7 +175,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
-  }, [])
+  })
 
   return (
     <>
