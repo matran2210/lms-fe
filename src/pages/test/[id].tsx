@@ -34,13 +34,12 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { LAYOUT } from '@utils/constants'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { isUndefined, uniqueId } from 'lodash'
+import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
@@ -55,6 +54,7 @@ import { TestAPI } from '../api/test'
 import Countdown from 'react-countdown'
 import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
+import { QuestionAPI } from '../api/question'
 import { IExhibit } from 'src/type/exhibit'
 
 type Window = {
@@ -759,7 +759,7 @@ const TestDetail = () => {
           } else {
             return {
               ...item,
-              data: res.data[0],
+              data: res.data,
               topicDescription: topicDescription.data,
               viewed: true,
             }
@@ -906,15 +906,19 @@ const TestDetail = () => {
 
   async function getDetail(currentPage: string) {
     try {
-      const topicDescription = await CoursesAPI.getTopicDescription(
+      const question =
         questions[questions.findIndex((e: any) => e.id === currentPage)]
-          .question_topic_id,
+
+      const topicDescription = await CoursesAPI.getTopicDescription(
+        question.question_topic_id,
         quizDetail?.id,
+        true,
       )
-      const res = await CoursesAPI.getQuestionsDetail(currentPage)
+
+      const res = await QuestionAPI.getQuestionDetail(currentPage)
       return { topicDescription, res }
     } catch (err) {
-      return { topicDescription: { data: {} }, res: { data: [] } }
+      return { topicDescription: { data: {} }, res: { data: null } }
     }
   }
 
@@ -934,7 +938,7 @@ const TestDetail = () => {
             return {
               ...item,
               viewed: true,
-              data: res.data[0],
+              data: res.data,
               topicDescription: topicDescription.data,
             }
           }
@@ -1426,7 +1430,7 @@ const TestDetail = () => {
               flaged: false,
               done: false,
               index: +i,
-              data: res.data[0],
+              data: res.data,
               topicDescription: topicDescription.data,
               response_type: 0,
             })
