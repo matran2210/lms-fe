@@ -1930,7 +1930,7 @@ const TestDetail = () => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5 not-resizer cursor-text">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
                         className=" w-full"
