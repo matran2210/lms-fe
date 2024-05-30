@@ -12,5 +12,4 @@ BRANCH_NAME=$1
 git fetch --prune origin
 git reset --hard origin/$BRANCH_NAME
 
-docker compose -f docker-compose.dev.yml up -d --build
-
+docker compose -f docker-compose.aht.dev.yml up -d --build
