@@ -1,6 +1,7 @@
 import {
   CalculatorIcon,
   CloseIcon,
+  ExhibitsIcon,
   HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
@@ -42,6 +43,9 @@ import useMousePosition from '@utils/hookMouseMove'
 import SappLoading from 'src/common/SappLoading'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
+import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
+import PDFViewer from '@components/base/pdf/pdf-viewer'
+import { IExhibit } from 'src/type/exhibit'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -217,6 +221,9 @@ const CaseStudyDetail = ({ questions }: any) => {
   const { control: controlScratch } = useForm()
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
+  // handle show exhibit list
+  const [showListExhibits, setShowListExhibits] = useState(false)
+  const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
@@ -288,9 +295,64 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
   }, [router.query.id])
 
+  /**
+   * Declare form to handle exhibit
+   */
+  const {
+    control: controlExhibits,
+    getValues: getValuesExhibits,
+    setValue: setValueExhibits,
+    watch,
+    reset,
+  } = useForm()
+
+  /**
+   * Handle generate exhibit selections for exhibit button
+   */
+  const exhibits = useMemo(() => {
+    let exhibitsOptions = []
+    const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
+
+    if (exhibitTopic?.length) {
+      exhibitsOptions.push(...exhibitTopic)
+    }
+    if (topics?.questions && topics?.questions?.length > 0) {
+      for (let question of topics?.questions) {
+        if (question?.exhibits?.length) {
+          exhibitsOptions.push(...question.exhibits)
+        }
+      }
+    }
+
+    setExhibitData(exhibitsOptions)
+
+    return exhibitsOptions?.map((exhibit, index: number) => ({
+      label: `Exhibit ${+index + 1}`,
+      value: exhibit.id,
+    }))
+  }, [topics])
+
+  /**
+   * Check value of exhibit to open ScratchPad
+   */
+  useEffect(() => {
+    if (watch('exhibits')) {
+      setOpenScratchPad((prev) => {
+        let arr = [...prev]
+        const newArr = arr.filter((e) => {
+          return e.type !== 'exhibits'
+        })
+        for (let e of watch('exhibits')) {
+          newArr.push({ id: e, type: 'exhibits' })
+        }
+        return newArr
+      })
+    }
+  }, [watch('exhibits')])
+
   const backToPart = () => {
     router.replace(
-      `/courses/${classId}/section/${breadCrumb?.[1]?.id}?unit_id=${breadCrumb?.[2]?.id}`,
+      `/courses/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
     )
   }
 
@@ -561,6 +623,12 @@ const CaseStudyDetail = ({ questions }: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       const newArr = arr.filter((e) => e.id !== pad.id)
+      if (pad.type === 'exhibits') {
+        setValueExhibits(
+          'exhibits',
+          getValuesExhibits('exhibits').filter((e: string) => e !== pad.id),
+        )
+      }
       return newArr
     })
   }
@@ -658,6 +726,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       value,
     }))
   }
+
   return (
     <>
       {loading ? (
@@ -936,18 +1005,118 @@ const CaseStudyDetail = ({ questions }: any) => {
                     </div>
                   </MovableWindow>
                 )
+              } else if (e.type === 'exhibits') {
+                const i = exhibitData?.findIndex(
+                  (el: IExhibit) => el.id === e.id,
+                )
+                const exhibitsDes = exhibitData?.find(
+                  (exhibit) => exhibit.id === e.id,
+                )
+                return (
+                  <MovableWindow
+                    position={{
+                      width: '600px',
+                      height: '400px',
+                      top: 'calc(75% - 250px)',
+                      left: 'calc(0%)',
+                    }}
+                    key={e.id}
+                    onClick={() => setOnFocusingPad(e.id)}
+                    zIndex={
+                      onFocusingPad === e.id
+                        ? openScratchPad.length + 1400
+                        : index + 1400
+                    }
+                  >
+                    <div className="absolute h-full w-full  top-0 left-0 border">
+                      <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
+                        <div className="truncate">
+                          <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                            (i ?? 0) + 1
+                          }: `}</span>
+                          {exhibitsDes?.name}
+                        </div>
+                        <button onClick={() => handleCloseScratchPad(e)}>
+                          <CloseIcon />
+                        </button>
+                      </div>
+                      <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                        <EditorReader
+                          text_editor_content={exhibitsDes?.description}
+                          className=" w-full"
+                        />
+                        {exhibitsDes &&
+                          exhibitsDes?.files?.length > 0 &&
+                          exhibitsDes?.files?.map((e: any, index: number) => {
+                            return (
+                              <div
+                                key={index}
+                                className="cursor-pointer text-state-info hover:underline"
+                                onClick={() =>
+                                  handleOpenScratchPad(
+                                    'file',
+                                    e.resource.url,
+                                    e?.resource?.name,
+                                  )
+                                }
+                              >
+                                {e?.resource?.name}
+                              </div>
+                            )
+                          })}
+                      </div>
+                    </div>
+                  </MovableWindow>
+                )
+              } else if (e.type === 'file') {
+                return (
+                  <MovableWindow
+                    className="transform -translate-x-1/2 -translate-y-1/2 2xl:!h-[842px]"
+                    position={{
+                      width: '595px',
+                      height: '650px',
+                      top: 'calc(50%)',
+                      left: 'calc(50%)',
+                    }}
+                    key={e.id}
+                    onClick={() => setOnFocusingPad(e.id)}
+                    zIndex={
+                      onFocusingPad === e.id
+                        ? openScratchPad.length + 1400
+                        : index + 1400
+                    }
+                  >
+                    <div className="absolute h-full w-full  top-0 left-0 border">
+                      <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
+                        <div className="text-sm font-normal truncate">
+                          {e.fileName}
+                        </div>
+                        {/* <CloseIcon */}
+                        <button onClick={() => handleCloseScratchPad(e)}>
+                          <CloseIcon />
+                        </button>
+                      </div>
+                      <div
+                        className="overflow-auto p-4 bg-white"
+                        style={{ height: 'calc(100% - 40px' }}
+                      >
+                        <PDFViewer file={e.file} />
+                      </div>
+                    </div>
+                  </MovableWindow>
+                )
               }
             })}
             <div className=" bg-gray-3 flex items-center justify-between shadow-question-footer h-[48px] relative">
               <div className="flex items-center h-full">
-                <button className="h-full">
+                {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                     <HelpIcon />
                     <div className="hidden font-normal text-sm 3xl:inline-block">
                       Help
                     </div>
                   </div>
-                </button>
+                </button> */}
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
@@ -1001,6 +1170,39 @@ const CaseStudyDetail = ({ questions }: any) => {
                     </div>
                   </div>
                 </button>
+                {exhibits.length > 0 && (
+                  <button className="h-full relative">
+                    <div
+                      className="flex items-center gap-3 px-4 3xl:px-6 border-l"
+                      onClick={() => {
+                        setShowListExhibits(!showListExhibits)
+                      }}
+                    >
+                      <ExhibitsIcon />
+                      <div className="font-normal flex text-sm items-center gap-3">
+                        <div>
+                          <span className="hidden 3xl:inline-block 3xl:me-1">
+                            Exhibits
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {showListExhibits && (
+                      <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
+                        <HookFormCheckBoxGroup
+                          control={controlExhibits}
+                          name="exhibits"
+                          options={exhibits}
+                          multiple
+                          lowerOptions={true}
+                          widthOptions="w-full"
+                          seprateLine={true}
+                          maxWidthContent
+                        />
+                      </div>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </div>

@@ -20,7 +20,7 @@ build_master:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/
     refs:
-      - master
+      - hotfix/SAPP-2170/update-CI-CD
   script:
     - cp $ENV_PRODUCT_FILE .env
     - source .env
@@ -48,12 +48,11 @@ deploy_staging:
 
 deploy_master:
   stage: deploy
-  extends: .prepare
   only:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /deploy/
     refs:
-      - master
+      - hotfix/SAPP-2170/update-CI-CD
   script:
     - cp $ENV_PRODUCT_FILE .env
     - source .env

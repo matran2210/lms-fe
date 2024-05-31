@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { ICourseAll } from 'src/type/courses'
 import { defaultStatusCourse } from 'src/constants'
 import TotalResullt from 'src/common/TotalResullt'
+import { isEmpty } from 'lodash'
 
 interface IProps {
   courses: ICourseAll
@@ -16,7 +17,7 @@ interface IProps {
 
 const Filter = ({ courses, setPage }: IProps) => {
   const router = useRouter()
-  const { control, watch } = useForm()
+  const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
   const totalResults = courses?.metadata?.total_records || 0
@@ -51,6 +52,24 @@ const Filter = ({ courses, setPage }: IProps) => {
   useEffect(() => {
     setIsFirstRender(false)
   }, [setIsFirstRender])
+
+  /**
+   * @description set lại value của status khi router query rỗng
+   */
+  useEffect(() => {
+    if (isEmpty(router?.query?.status)) {
+      setValue('status', '')
+    }
+  }, [router?.query?.status])
+
+  /**
+   * @description set lại value của type khi router query rỗng
+   */
+  useEffect(() => {
+    if (isEmpty(router?.query?.type)) {
+      setValue('type', '')
+    }
+  }, [router?.query?.type])
 
   return (
     <div className="filter flex items-center">

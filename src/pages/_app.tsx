@@ -174,8 +174,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [getNotiUnread])
 
   useEffect(() => {
-    Aos.init({ duration: ANIMATION.DURATION })
-  }, [])
+    Aos.init({ duration: ANIMATION.DURATION, once: true })
+  })
 
   return (
     <>

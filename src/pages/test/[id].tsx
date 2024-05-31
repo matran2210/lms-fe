@@ -34,13 +34,12 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { LAYOUT } from '@utils/constants'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { isUndefined, uniqueId } from 'lodash'
+import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
@@ -55,6 +54,8 @@ import { TestAPI } from '../api/test'
 import Countdown from 'react-countdown'
 import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
+import { QuestionAPI } from '../api/question'
+import { IExhibit } from 'src/type/exhibit'
 
 type Window = {
   userAgreed: any
@@ -304,6 +305,7 @@ const TestDetail = () => {
   const [showListRequirement, setShowLisRequirement] = useState(false)
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
+  const [exhibitData, setExhibitData] = useState<IExhibit[]>()
 
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
@@ -757,7 +759,7 @@ const TestDetail = () => {
           } else {
             return {
               ...item,
-              data: res.data[0],
+              data: res.data,
               topicDescription: topicDescription.data,
               viewed: true,
             }
@@ -904,15 +906,19 @@ const TestDetail = () => {
 
   async function getDetail(currentPage: string) {
     try {
-      const topicDescription = await CoursesAPI.getTopicDescription(
+      const question =
         questions[questions.findIndex((e: any) => e.id === currentPage)]
-          .question_topic_id,
+
+      const topicDescription = await CoursesAPI.getTopicDescription(
+        question.question_topic_id,
         quizDetail?.id,
+        true,
       )
-      const res = await CoursesAPI.getQuestionsDetail(currentPage)
+
+      const res = await QuestionAPI.getQuestionDetail(currentPage)
       return { topicDescription, res }
     } catch (err) {
-      return { topicDescription: { data: {} }, res: { data: [] } }
+      return { topicDescription: { data: {} }, res: { data: null } }
     }
   }
 
@@ -932,7 +938,7 @@ const TestDetail = () => {
             return {
               ...item,
               viewed: true,
-              data: res.data[0],
+              data: res.data,
               topicDescription: topicDescription.data,
             }
           }
@@ -1069,6 +1075,8 @@ const TestDetail = () => {
   }
 
   const { setScoreQuestion, setSubmitTest, courseType } = useCourseContext()
+
+  const [scoreFinalTest, setScoreFinalTest] = useState(0)
 
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
@@ -1216,7 +1224,7 @@ const TestDetail = () => {
               setScoreQuestion(res?.data?.score)
               setSubmitTest(true)
             } else {
-              router.back()
+              router.replace(`/courses/test/test-result/${res?.data?.id}`)
               setSubmitTest(false)
             }
           }
@@ -1237,6 +1245,7 @@ const TestDetail = () => {
           (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       })
       if (res) {
+        setScoreFinalTest(res?.data?.score)
         setQuizResultId(() => {
           setOpenTimeOut(true)
           return res?.data?.id
@@ -1421,7 +1430,7 @@ const TestDetail = () => {
               flaged: false,
               done: false,
               index: +i,
-              data: res.data[0],
+              data: res.data,
               topicDescription: topicDescription.data,
               response_type: 0,
             })
@@ -1451,13 +1460,26 @@ const TestDetail = () => {
   // }, [currentPage])
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
-    for (let e in currentTabContent?.topicDescription?.exhibits) {
-      exhibitsOptions.push({
-        label: `Exhibit ${+e + 1}`,
-        value: currentTabContent?.topicDescription?.exhibits[e].id,
-      })
+    const topics = currentTabContent?.topicDescription
+    const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
+
+    if (exhibitTopic?.length) {
+      exhibitsOptions.push(...exhibitTopic)
     }
-    return exhibitsOptions
+
+    if (topics?.question?.length) {
+      for (let question of topics?.questions) {
+        if (question.exhibits?.length) {
+          exhibitsOptions.push(...question.exhibits)
+        }
+      }
+    }
+
+    setExhibitData(exhibitsOptions)
+    return exhibitsOptions?.map((exhibit, index: number) => ({
+      label: `Exhibit ${+index + 1}`,
+      value: exhibit.id,
+    }))
   }, [currentTabContent])
   useEffect(() => {
     if (watch('exhibits')) {
@@ -1880,12 +1902,10 @@ const TestDetail = () => {
                 </MovableWindow>
               )
             } else if (e.type === 'exhibits') {
-              const i =
-                currentTabContent?.topicDescription?.exhibits?.findIndex(
-                  (el: any) => el.id === e.id,
-                )
-              const exhibitsDes =
-                currentTabContent?.topicDescription?.exhibits?.[i]
+              const i = exhibitData?.findIndex((el: any) => el.id === e.id)
+              const exhibitsDes = exhibitData?.find(
+                (exhibit) => exhibit.id === e.id,
+              )
               return (
                 <MovableWindow
                   position={{
@@ -1906,7 +1926,7 @@ const TestDetail = () => {
                     <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
                       <div className="truncate">
                         <span className="font-semibold text-base text-bw-1">{`Exhibit ${
-                          i + 1
+                          (i ?? 0) + 1
                         }: `}</span>
                         {exhibitsDes?.name}
                       </div>
@@ -1914,12 +1934,13 @@ const TestDetail = () => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5 not-resizer cursor-text">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
                         className=" w-full"
                       />
-                      {exhibitsDes?.files?.length > 0 &&
+                      {exhibitsDes &&
+                        exhibitsDes?.files?.length > 0 &&
                         exhibitsDes?.files.map((e: any, index: number) => {
                           return (
                             <div
@@ -1987,14 +2008,14 @@ const TestDetail = () => {
           {/* </div> */}
           <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px]  z-10">
             <div className="flex items-center h-full">
-              <button className="h-full">
+              {/* <button className="h-full">
                 <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                   <HelpIcon />
                   <div className="hidden font-normal text-sm 3xl:inline-block">
                     Help
                   </div>
                 </div>
-              </button>
+              </button> */}
               <button
                 className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
                 onClick={() => {
@@ -2048,7 +2069,7 @@ const TestDetail = () => {
                   </div>
                 </div>
               </button>
-              {currentTabContent?.topicDescription?.exhibits?.length > 0 && (
+              {exhibitData && exhibitData?.length > 0 && (
                 <button className="h-full relative" ref={dropUpRef}>
                   <div
                     className="flex items-center gap-3 px-4 3xl:px-6 border-l"
@@ -2298,7 +2319,18 @@ const TestDetail = () => {
                   if (type === 'entrance') {
                     router.replace(`/entrance-test/test-result/${QuizResultId}`)
                   } else {
-                    router.replace(`/courses/test/test-result/${QuizResultId}`)
+                    if (
+                      type !== 'entrance' &&
+                      quizDetail?.quiz_type !== 'FINAL_TEST'
+                    ) {
+                      router.replace(
+                        `/courses/test/test-result/${QuizResultId}`,
+                      )
+                    } else {
+                      router.back()
+                      setScoreQuestion(scoreFinalTest)
+                      setSubmitTest(true)
+                    }
                   }
                 })
             }}

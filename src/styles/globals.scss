@@ -61,6 +61,7 @@ html {
 
 body {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -206,11 +207,6 @@ body *::-webkit-scrollbar-thumb:hover {
     width: auto !important;
     display: unset;
     max-width: max-content;
-  }
-
-  img:not([id]) {
-    width: 100%;
-    height: auto;
   }
 }
 
