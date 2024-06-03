@@ -108,6 +108,25 @@ const TabSlide = ({
     }
     return undefined
   }, [data])
+
+  // const [arrowDisable, setArrowDisable] = useState(true);
+
+  const handleHorizantalScroll = (element: any, speed: any, distance: any, step: any) => {
+    let scrollAmount = 0;
+    const slideTimer = setInterval(() => {
+      element.scrollLeft += step;
+      scrollAmount += Math.abs(step);
+      if (scrollAmount >= distance) {
+        clearInterval(slideTimer);
+      }
+      // if (element.scrollLeft === 0) {
+      //   setArrowDisable(true);
+      // } else {
+      //   setArrowDisable(false);
+      // }
+    }, speed);
+  };
+
   return (
     <ul
       className={`pagination flex items-center flex-wrap w-full gap-3 min-h-[40px]`}
@@ -129,17 +148,13 @@ const TabSlide = ({
             }`}
           >
             <PageLink
-              disabled={
-                (data.length > 0 &&
-                  data.findIndex((e) => e.id === currentTab) === 0) ||
-                data.length === 0
-              }
               arrow={true}
               onClick={() => {
-                if (setCurrentTab !== undefined) {
-                  const index = data.findIndex((e) => e.id === currentTab)
-                  handleChangeTab(data[index - 1].id)
-                }
+                // if (setCurrentTab !== undefined) {
+                //   const index = data.findIndex((e) => e.id === currentTab)
+                //   handleChangeTab(data[index - 1].id)
+                // }
+                handleHorizantalScroll(elementRef.current, 25, 100, -10);
               }}
               // type={type}
             >
@@ -163,9 +178,10 @@ const TabSlide = ({
                       active={currentTab === pageNum.id}
                       // disabled={isNaN(pageNum)}
                       onClick={() => {
-                        if (setCurrentTab !== undefined) {
-                          handleChangeTab(pageNum.id)
-                        }
+                        // if (setCurrentTab !== undefined) {
+                        //   handleChangeTab(pageNum.id)
+                        // }
+                        console.log('bbb')
                       }}
                       isViewedProp={pageNum.attempted || pageNum.done}
                       isFlagedProp={pageNum.flaged}
@@ -183,6 +199,7 @@ const TabSlide = ({
                       if (setCurrentTab !== undefined) {
                         handleChangeTab(pageNum.id)
                       }
+                      console.log('ccc')
                     }}
                     isViewedProp={pageNum.attempted}
                     isFlagedProp={pageNum.flaged}
@@ -204,9 +221,9 @@ const TabSlide = ({
                           active={currentTab === pageNum[0].id}
                           // disabled={isNaN(pageNum)}
                           onClick={() => {
-                            if (setCurrentTab !== undefined) {
-                              handleChangeTab(pageNum[0].id)
-                            }
+                            // if (setCurrentTab !== undefined) {
+                            //   handleChangeTab(pageNum[0].id)
+                            // }
                           }}
                           isViewedProp={pageNum[0].attempted}
                           isFlagedProp={pageNum[0].flaged}
@@ -229,9 +246,10 @@ const TabSlide = ({
                           active={currentTab === pageNum[1].id}
                           // disabled={isNaN(pageNum)}
                           onClick={() => {
-                            if (setCurrentTab !== undefined) {
-                              handleChangeTab(pageNum[1].id)
-                            }
+                            // if (setCurrentTab !== undefined) {
+                            //   handleChangeTab(pageNum[1].id)
+                            // }
+                            console.log('dđ')
                           }}
                           isViewedProp={pageNum[1].attempted}
                           isFlagedProp={pageNum[1].flaged}
@@ -270,10 +288,12 @@ const TabSlide = ({
               }
               arrow={true}
               onClick={() => {
-                if (setCurrentTab !== undefined) {
-                  const index = data.findIndex((e) => e.id === currentTab)
-                  handleChangeTab(data[index + 1].id)
-                }
+                // if (setCurrentTab !== undefined) {
+                //   const index = data.findIndex((e) => e.id === currentTab)
+                //   handleChangeTab(data[index + 1].id)
+                // }
+                handleHorizantalScroll(elementRef.current, 25, 100, 10);
+                console.log('eee')
               }}
               // type={type}
             >
