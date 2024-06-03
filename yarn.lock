@@ -4940,10 +4940,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.47:
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.47.tgz#15978749e2bc6d3bef2bf64680190dc203854bca"
-  integrity sha512-AyEWI1aszFPnS6w1L3eyW0PZkYWYRT6KTGtHaRdIt8jkHFpmmQiowJR0cEa78CR+FsRpDwXzoZtTx4N1e+AEnw==
+explanation-package@^1.0.49:
+  version "1.0.49"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.49.tgz#30f104f1607a15d8026d45dd4768680ca493eccd"
+  integrity sha512-PR/1oM0XHAw0k6pJO6NY6ipMLh3/q1sI9ONnpDRzJ0YN0qNmizPvgA/2OfnEv9CIV/d8QHapGTDOPZOLpA8aKQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -4956,6 +4956,7 @@ explanation-package@^1.0.47:
     "@wiris/mathtype-tinymce6" "^8.5.0"
     autoprefixer "^10.4.16"
     css-loader "^6.8.1"
+    dashjs "^4.7.4"
     lodash "^4.17.21"
     react-hook-form "7.46.0"
     react-shadow "^20.4.0"
