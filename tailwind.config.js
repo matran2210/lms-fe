@@ -97,6 +97,9 @@ module.exports = {
           control: 'rgba(0, 0, 0, 0.6)',
           white: 'rgba(255, 255, 255, 0.4)',
         },
+        blue: {
+          1: '#0000EE',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
