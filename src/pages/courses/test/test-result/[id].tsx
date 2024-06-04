@@ -47,7 +47,7 @@ const TestResultDetail = () => {
       title: `${questions?.course?.name ?? 'Course Detail'}`,
     },
     {
-      link: `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`,
+      link: `/courses/my-course/${questions?.class_id ?? ''}`,
       title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
     },
     {
