@@ -817,3 +817,7 @@ textarea:focus {
 p a {
   @apply text-blue-1 underline;
 }
+
+.ant-dropdown {
+  z-index: 2000 !important;
+}
