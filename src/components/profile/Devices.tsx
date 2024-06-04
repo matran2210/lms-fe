@@ -4,6 +4,7 @@ import { apiURL } from '@components/mycourses/LearningResource'
 import axios from 'axios'
 import { parse } from 'cookie'
 import { useEffect, useState } from 'react'
+import { MY_COURSES } from 'src/constants/lang'
 import UserApi from 'src/redux/services/User/user'
 
 const Devices = ({}: any) => {
@@ -35,7 +36,7 @@ const Devices = ({}: any) => {
           <span>Maximum limit of 3 devices: Please contact support team </span>
           <span>
             <a href="#" className="text-state-info underline">
-              0889 662 276
+              {MY_COURSES.hotline}
             </a>
           </span>
           <span> to remove one before accessing your account on another.</span>

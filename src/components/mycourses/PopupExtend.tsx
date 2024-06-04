@@ -1,5 +1,6 @@
 import { AlertIcon } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { MY_COURSES } from 'src/constants/lang'
 
 interface IProps {
   open: boolean
@@ -39,8 +40,8 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
         Expired Course
       </div>
       <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 xl:mb-7 px-1">
-        You can only extend a trial course once, please contact our Support at
-        0889 662 276.
+        You can only extend a trial course once, please contact our Support at{' '}
+        {MY_COURSES.hotline}.
       </div>
     </SappModalV2>
   )
