@@ -52,7 +52,6 @@ const VideoDocument = ({
   document_id,
   quizId,
   grading_preference,
-  class_user_id,
 }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
@@ -192,6 +191,7 @@ const VideoDocument = ({
    * @returns {boolean} - Returns true if a quiz question is opened; otherwise, false.
    */
   const [hideVideo, setHideVideo] = useState(false)
+
   const handleTrackTime = (time: number, questionId?: string) => {
     const quizAtTime = quizTimed.current?.[time]
     if (quizAtTime && quizAtTime.length > 0) {
@@ -327,6 +327,14 @@ const VideoDocument = ({
 
   const timeQuiz = Object.values(quizTimed?.current || [])
 
+  /**
+   * @description check điều kiện xem có phải câu hỏi cuối cùng không
+   */
+  const finishQuestion =
+    timeQuiz?.[timeQuiz?.length - 1]?.find(
+      (quiz) => quiz?.id === activeQuestion?.id,
+    )?.id === activeQuestion?.id
+
   return (
     <div>
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-2.5">
@@ -423,11 +431,11 @@ const VideoDocument = ({
             }
             parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
             okButtonCaption={`${
-              isConfirmQuestion || activeQuestion?.corrects
-                ? lastQuestion?.id === activeQuestion?.id
-                  ? 'Finish'
-                  : 'Next'
-                : 'Confirm'
+              finishQuestion
+                ? 'Finish'
+                : isConfirmQuestion || activeQuestion?.corrects
+                  ? 'Next'
+                  : 'Submit'
             }`}
             buttonSize="small"
             size="max-w-full"
@@ -454,7 +462,7 @@ const VideoDocument = ({
             }}
             closeAfterSubmit={false}
             colorCancel="textUnderline"
-            cancelButtonCaption="Skip"
+            cancelButtonCaption={`${finishQuestion ? '' : 'Skip'}`}
           >
             <div className="py-5">
               <QuizComponent
