@@ -5,7 +5,6 @@ import {
   IActivityStateQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
-  removeQuizFinished,
   selectQuestions,
   submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
@@ -280,28 +279,15 @@ const VideoDocument = ({
 
   /**
    * Handles form submission.
-   * @param {Object} _data - Form data.
+   * @param {boolean} isCorrect - Check the correct or incorrect answers.
    */
-  const onSubmit = async (
-    _data: any,
-    isCorrect: boolean = false,
-    isFinish: boolean = false,
-  ) => {
+  const onSubmit = async (isCorrect: boolean = false) => {
     try {
       if (isConfirmQuestion || isCorrect) {
         handleClose({
           questionId: activeQuestion?.id,
           listQuestion: currentListQuestion,
         })
-        if (isFinish) {
-          dispatch(
-            removeQuizFinished({
-              activityId,
-              tabId,
-              quizId: currentVideo?.quiz?.id || '',
-            }),
-          )
-        }
       } else {
         questionRef.current?.onSubmit({
           activityId: activityId,
@@ -445,15 +431,9 @@ const VideoDocument = ({
             okButtonClass="!w-20 h-8.5 !px-0"
             cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
             footerButtonClassName="!justify-between flex"
-            handleSubmit={
-              lastQuestion?.id === activeQuestion?.id
-                ? handleSubmit((e) =>
-                    onSubmit(e, activeQuestion?.corrects ? true : false, true),
-                  )
-                : handleSubmit((e) =>
-                    onSubmit(e, activeQuestion?.corrects ? true : false),
-                  )
-            }
+            handleSubmit={handleSubmit((e) =>
+              onSubmit(activeQuestion?.corrects ? true : false),
+            )}
             handleCancel={() => {
               handleClose({
                 questionId: activeQuestion?.id,
