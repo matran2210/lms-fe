@@ -159,7 +159,7 @@ body *::-webkit-scrollbar-thumb:hover {
   tfoot,
   td,
   th {
-    border-width: 1px;
+    // border-width: 1px;
     border-style: inset;
     border-color: #a1a1a1;
     /* Add this line to set the border color to gray-2 */
@@ -818,15 +818,6 @@ p a {
   @apply text-blue-1 underline;
 }
 
-.button-contianer {
-  display: flex;
-  justify-content: space-between;
-}
-
-.img-container {
-  display: flex;
-  overflow: hidden;
-  width: 100%;
-  border: 5px solid #ffffff;
-  border-radius: 10px;
+.ant-dropdown {
+  z-index: 2000 !important;
 }

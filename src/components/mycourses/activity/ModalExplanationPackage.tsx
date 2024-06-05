@@ -129,7 +129,9 @@ const ModalExplanationPackage = ({
   return (
     <div>
       {/* {loading && (
-        <SappLoading />
+        <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
+          Loading
+        </div>
       )} */}
       <SappModal
         open={open}

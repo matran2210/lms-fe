@@ -34,12 +34,19 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { LAYOUT } from '@utils/constants'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { uniqueId } from 'lodash'
+import { isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import {
+  DISPLAY_TYPE,
+  PageLink,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  TEST_TYPE,
+} from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
@@ -54,7 +61,6 @@ import { TestAPI } from '../api/test'
 import Countdown from 'react-countdown'
 import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
-import { QuestionAPI } from '../api/question'
 import { IExhibit } from 'src/type/exhibit'
 
 type Window = {
@@ -306,7 +312,8 @@ const TestDetail = () => {
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
-
+  const [routeBack, setRouteBack] = useState(false)
+  const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [quizAttempId, setQuizAttempId] = useState('')
@@ -759,7 +766,7 @@ const TestDetail = () => {
           } else {
             return {
               ...item,
-              data: res.data,
+              data: res.data[0],
               topicDescription: topicDescription.data,
               viewed: true,
             }
@@ -906,19 +913,15 @@ const TestDetail = () => {
 
   async function getDetail(currentPage: string) {
     try {
-      const question =
-        questions[questions.findIndex((e: any) => e.id === currentPage)]
-
       const topicDescription = await CoursesAPI.getTopicDescription(
-        question.question_topic_id,
+        questions[questions.findIndex((e: any) => e.id === currentPage)]
+          .question_topic_id,
         quizDetail?.id,
-        true,
       )
-
-      const res = await QuestionAPI.getQuestionDetail(currentPage)
+      const res = await CoursesAPI.getQuestionsDetail(currentPage)
       return { topicDescription, res }
     } catch (err) {
-      return { topicDescription: { data: {} }, res: { data: null } }
+      return { topicDescription: { data: {} }, res: { data: [] } }
     }
   }
 
@@ -938,7 +941,7 @@ const TestDetail = () => {
             return {
               ...item,
               viewed: true,
-              data: res.data,
+              data: res.data[0],
               topicDescription: topicDescription.data,
             }
           }
@@ -1224,7 +1227,7 @@ const TestDetail = () => {
               setScoreQuestion(res?.data?.score)
               setSubmitTest(true)
             } else {
-              router.replace(`/courses/test/test-result/${res?.data?.id}`)
+              router.back()
               setSubmitTest(false)
             }
           }
@@ -1430,7 +1433,7 @@ const TestDetail = () => {
               flaged: false,
               done: false,
               index: +i,
-              data: res.data,
+              data: res.data[0],
               topicDescription: topicDescription.data,
               response_type: 0,
             })
@@ -1503,10 +1506,30 @@ const TestDetail = () => {
           router.query.class_user_id as string,
         )
         setQuizAttempId(res.data.id)
+        setIsQuizAttemptCreated(true) // Mark the attempt as created
       } catch (err: any) {
         if (err.response?.data?.error.code === '400|060710') {
           dispatch(disableUnsavedChange())
           setOpenLimit(true)
+        }
+        if (err.response?.data?.success === false) {
+          setRouteBack(true)
+          setIsQuizAttemptCreated(true) // Mark the attempt as created even on error
+          switch (
+            quizDetail?.quiz_type ||
+            quizDetail?.quiz_type === undefined
+          ) {
+            case TEST_TYPE.MID_TERM_TEST:
+            case TEST_TYPE.FINAL_TEST:
+            case TEST_TYPE.TOPIC_TEST:
+            case TEST_TYPE.CHAPTER_TEST:
+            case TEST_TYPE.PART_TEST:
+              return router.push(PageLink.COURSES)
+            case TEST_TYPE.ENTRANCE_TEST:
+              return router.push(PageLink.ENTRANCE_TEST)
+            default:
+              return router.push(PageLink.COURSES)
+          }
         }
       }
     }
@@ -1516,26 +1539,31 @@ const TestDetail = () => {
   }, [router.query.id])
   const warningText =
     'You have unsaved changes - are you sure you wish to leave this page?'
-
   useEffect(() => {
+    if (!isQuizAttemptCreated) return
+
     const handleWindowClose = (e: any) => {
       if (!unsavedChange) return
       e.preventDefault()
       return (e.returnValue = warningText)
     }
+
     const handleBrowseAway = () => {
-      if (!unsavedChange) return
-      if (window.confirm(warningText)) return
-      router.events.emit('routeChangeError')
-      throw 'routeChange aborted.'
+      if (unsavedChange === true && routeBack === false) {
+        if (!unsavedChange) return
+        if (window.confirm(warningText)) return
+        router.events.emit('routeChangeError')
+        throw 'routeChange aborted.'
+      }
     }
+
     window.addEventListener('beforeunload', handleWindowClose)
     router.events.on('routeChangeStart', handleBrowseAway)
     return () => {
       window.removeEventListener('beforeunload', handleWindowClose)
       router.events.off('routeChangeStart', handleBrowseAway)
     }
-  }, [unsavedChange])
+  }, [unsavedChange, isQuizAttemptCreated])
   useEffect(() => {
     if (startResize) {
       document.body.style.webkitUserSelect = 'none'
@@ -1559,7 +1587,6 @@ const TestDetail = () => {
    * @description sử dụng hook countdown
    */
   const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
-
   return (
     <CourseProvider>
       {loading || !currentTabContent?.id ? (
@@ -1934,7 +1961,7 @@ const TestDetail = () => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5 not-resizer cursor-text">
+                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
                         className=" w-full"

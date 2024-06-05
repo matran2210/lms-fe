@@ -144,7 +144,9 @@ const Notifications = () => {
   return (
     <>
       {/* {loadingRedirect && (
-        <SappLoading />
+        <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
+          Loading
+        </div>
       )} */}
       <div className="header bg-white border-b border-default px-4 lg:px-20">
         <div className="max-w-xxl my-0 mx-auto flex py-4.5">
