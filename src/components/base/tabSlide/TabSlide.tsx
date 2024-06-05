@@ -108,6 +108,56 @@ const TabSlide = ({
     }
     return undefined
   }, [data])
+
+  // const [arrowDisable, setArrowDisable] = useState(true);
+
+  const handleHorizantalScroll = (
+    element: HTMLElement,
+    speed: number,
+    distance: number,
+    step: number,
+  ) => {
+    let scrollAmount = 0
+    const slideTimer = setInterval(() => {
+      element.scrollLeft += step
+      scrollAmount += Math.abs(step)
+      if (scrollAmount >= distance) {
+        clearInterval(slideTimer)
+      }
+      // if (element.scrollLeft === 0) {
+      //   setArrowDisable(true);
+      // } else {
+      //   setArrowDisable(false);
+      // }
+    }, speed)
+  }
+
+  /**
+   * @description Sử dụng state để theo dõi trạng thái của việc kéo
+   */
+  const [isDragging, setIsDragging] = useState(false)
+  /**
+   * @description Lưu trữ vị trí x của chuột khi bắt đầu kéo
+   */
+  const [startX, setStartX] = useState(0)
+  /**
+   * @description Lưu trữ giá trị scrollLeft của menu container khi bắt đầu kéo
+   */
+  const [scrollLeft, setScrollLeft] = useState(0)
+
+  const handleMouseDown = (event: React.MouseEvent<any>) => {
+    setIsDragging(true) // Đánh dấu rằng việc kéo đã bắt đầu
+    setStartX(event.pageX - elementRef.current.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
+    setScrollLeft(elementRef.current.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
+  }
+
+  const handleMouseMove = (event: React.MouseEvent<any>) => {
+    if (!isDragging) return // Nếu không đang kéo, không thực hiện gì cả
+    const x = event.pageX - elementRef.current.offsetLeft // Tính toán vị trí x mới của chuột
+    const distance = (x - startX) * 2 // Tính khoảng cách di chuyển của chuột từ vị trí bắt đầu kéo
+    elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
+  }
+
   return (
     <ul
       className={`pagination flex items-center flex-wrap w-full gap-3 min-h-[40px]`}
@@ -129,17 +179,13 @@ const TabSlide = ({
             }`}
           >
             <PageLink
-              disabled={
-                (data.length > 0 &&
-                  data.findIndex((e) => e.id === currentTab) === 0) ||
-                data.length === 0
-              }
               arrow={true}
               onClick={() => {
-                if (setCurrentTab !== undefined) {
-                  const index = data.findIndex((e) => e.id === currentTab)
-                  handleChangeTab(data[index - 1].id)
-                }
+                // if (setCurrentTab !== undefined) {
+                //   const index = data.findIndex((e) => e.id === currentTab)
+                //   handleChangeTab(data[index - 1].id)
+                // }
+                handleHorizantalScroll(elementRef.current, 25, 100, -10)
               }}
               // type={type}
             >
@@ -148,8 +194,12 @@ const TabSlide = ({
           </div>
         )}
         <div
-          className={`${'flex gap-2 overflow-auto w-full'}`}
+          className={'flex gap-2 overflow-hidden w-full select-none'}
           ref={elementRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={() => setIsDragging(false)}
+          onMouseLeave={() => setIsDragging(false)}
         >
           {data.length > 0 ? (
             !activeShowAll ? (
@@ -270,10 +320,11 @@ const TabSlide = ({
               }
               arrow={true}
               onClick={() => {
-                if (setCurrentTab !== undefined) {
-                  const index = data.findIndex((e) => e.id === currentTab)
-                  handleChangeTab(data[index + 1].id)
-                }
+                // if (setCurrentTab !== undefined) {
+                //   const index = data.findIndex((e) => e.id === currentTab)
+                //   handleChangeTab(data[index + 1].id)
+                // }
+                handleHorizantalScroll(elementRef.current, 25, 100, 10)
               }}
               // type={type}
             >
