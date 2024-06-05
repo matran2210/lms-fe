@@ -111,21 +111,52 @@ const TabSlide = ({
 
   // const [arrowDisable, setArrowDisable] = useState(true);
 
-  const handleHorizantalScroll = (element: any, speed: any, distance: any, step: any) => {
-    let scrollAmount = 0;
+  const handleHorizantalScroll = (
+    element: any,
+    speed: any,
+    distance: any,
+    step: any,
+  ) => {
+    let scrollAmount = 0
     const slideTimer = setInterval(() => {
-      element.scrollLeft += step;
-      scrollAmount += Math.abs(step);
+      element.scrollLeft += step
+      scrollAmount += Math.abs(step)
       if (scrollAmount >= distance) {
-        clearInterval(slideTimer);
+        clearInterval(slideTimer)
       }
       // if (element.scrollLeft === 0) {
       //   setArrowDisable(true);
       // } else {
       //   setArrowDisable(false);
       // }
-    }, speed);
-  };
+    }, speed)
+  }
+
+  /**
+   * @description Sử dụng state để theo dõi trạng thái của việc kéo
+   */
+  const [isDragging, setIsDragging] = useState(false)
+  /**
+   * @description Lưu trữ vị trí x của chuột khi bắt đầu kéo
+   */
+  const [startX, setStartX] = useState(0)
+  /**
+   * @description Lưu trữ giá trị scrollLeft của menu container khi bắt đầu kéo
+   */
+  const [scrollLeft, setScrollLeft] = useState(0)
+
+  const handleMouseDown = (event: any) => {
+    setIsDragging(true) // Đánh dấu rằng việc kéo đã bắt đầu
+    setStartX(event.pageX - elementRef.current.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
+    setScrollLeft(elementRef.current.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
+  }
+
+  const handleMouseMove = (event: any) => {
+    if (!isDragging) return // Nếu không đang kéo, không thực hiện gì cả
+    const x = event.pageX - elementRef.current.offsetLeft // Tính toán vị trí x mới của chuột
+    const distance = (x - startX) * 2 // Tính khoảng cách di chuyển của chuột từ vị trí bắt đầu kéo
+    elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
+  }
 
   return (
     <ul
@@ -154,7 +185,7 @@ const TabSlide = ({
                 //   const index = data.findIndex((e) => e.id === currentTab)
                 //   handleChangeTab(data[index - 1].id)
                 // }
-                handleHorizantalScroll(elementRef.current, 25, 100, -10);
+                handleHorizantalScroll(elementRef.current, 25, 100, -10)
               }}
               // type={type}
             >
@@ -163,8 +194,12 @@ const TabSlide = ({
           </div>
         )}
         <div
-          className={`${'flex gap-2 overflow-auto w-full'}`}
+          className={'flex gap-2 overflow-hidden w-full select-none'}
           ref={elementRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={() => setIsDragging(false)}
+          onMouseLeave={() => setIsDragging(false)}
         >
           {data.length > 0 ? (
             !activeShowAll ? (
@@ -178,10 +213,9 @@ const TabSlide = ({
                       active={currentTab === pageNum.id}
                       // disabled={isNaN(pageNum)}
                       onClick={() => {
-                        // if (setCurrentTab !== undefined) {
-                        //   handleChangeTab(pageNum.id)
-                        // }
-                        console.log('bbb')
+                        if (setCurrentTab !== undefined) {
+                          handleChangeTab(pageNum.id)
+                        }
                       }}
                       isViewedProp={pageNum.attempted || pageNum.done}
                       isFlagedProp={pageNum.flaged}
@@ -199,7 +233,6 @@ const TabSlide = ({
                       if (setCurrentTab !== undefined) {
                         handleChangeTab(pageNum.id)
                       }
-                      console.log('ccc')
                     }}
                     isViewedProp={pageNum.attempted}
                     isFlagedProp={pageNum.flaged}
@@ -221,9 +254,9 @@ const TabSlide = ({
                           active={currentTab === pageNum[0].id}
                           // disabled={isNaN(pageNum)}
                           onClick={() => {
-                            // if (setCurrentTab !== undefined) {
-                            //   handleChangeTab(pageNum[0].id)
-                            // }
+                            if (setCurrentTab !== undefined) {
+                              handleChangeTab(pageNum[0].id)
+                            }
                           }}
                           isViewedProp={pageNum[0].attempted}
                           isFlagedProp={pageNum[0].flaged}
@@ -246,10 +279,9 @@ const TabSlide = ({
                           active={currentTab === pageNum[1].id}
                           // disabled={isNaN(pageNum)}
                           onClick={() => {
-                            // if (setCurrentTab !== undefined) {
-                            //   handleChangeTab(pageNum[1].id)
-                            // }
-                            console.log('dđ')
+                            if (setCurrentTab !== undefined) {
+                              handleChangeTab(pageNum[1].id)
+                            }
                           }}
                           isViewedProp={pageNum[1].attempted}
                           isFlagedProp={pageNum[1].flaged}
@@ -292,8 +324,7 @@ const TabSlide = ({
                 //   const index = data.findIndex((e) => e.id === currentTab)
                 //   handleChangeTab(data[index + 1].id)
                 // }
-                handleHorizantalScroll(elementRef.current, 25, 100, 10);
-                console.log('eee')
+                handleHorizantalScroll(elementRef.current, 25, 100, 10)
               }}
               // type={type}
             >

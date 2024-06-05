@@ -1577,7 +1577,7 @@ const TestDetail = () => {
         <div className="absolute w-screen h-screen z-[1350]"></div>
       )} */}
           <div>
-            <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
+            <div className="flex justify-between py-2 px-6 items-center bg-gray-3 relative z-50">
               <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
                 {quizDetail?.name}
               </div>
