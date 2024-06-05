@@ -112,10 +112,10 @@ const TabSlide = ({
   // const [arrowDisable, setArrowDisable] = useState(true);
 
   const handleHorizantalScroll = (
-    element: any,
-    speed: any,
-    distance: any,
-    step: any,
+    element: HTMLElement,
+    speed: number,
+    distance: number,
+    step: number,
   ) => {
     let scrollAmount = 0
     const slideTimer = setInterval(() => {
@@ -145,13 +145,13 @@ const TabSlide = ({
    */
   const [scrollLeft, setScrollLeft] = useState(0)
 
-  const handleMouseDown = (event: any) => {
+  const handleMouseDown = (event: React.MouseEvent<any>) => {
     setIsDragging(true) // Đánh dấu rằng việc kéo đã bắt đầu
     setStartX(event.pageX - elementRef.current.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
     setScrollLeft(elementRef.current.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
   }
 
-  const handleMouseMove = (event: any) => {
+  const handleMouseMove = (event: React.MouseEvent<any>) => {
     if (!isDragging) return // Nếu không đang kéo, không thực hiện gì cả
     const x = event.pageX - elementRef.current.offsetLeft // Tính toán vị trí x mới của chuột
     const distance = (x - startX) * 2 // Tính khoảng cách di chuyển của chuột từ vị trí bắt đầu kéo
