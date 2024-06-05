@@ -5,7 +5,13 @@ import HookFormSelect from '@components/base/select/HookFormSelect'
 import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
 import { IResourceDetail, ISection } from 'src/type/courses'
@@ -20,6 +26,7 @@ interface IProps {
   setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
+const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
@@ -59,6 +66,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     setSelectedUnit(null)
     setSelectedActivity(null)
     setSelectedSection(null)
+    setPageIndex(DEFAULT_PAGE_INDEX)
+    setResources(undefined)
     const pageStateVariables = [
       setPageSection,
       setPageSubsection,
@@ -162,22 +171,32 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       '',
   })
 
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
+
   useEffect(() => {
-    if (open && (router.query.courseId || router.query.id)) {
-      setLoading(true)
-      CoursesAPI.getCourseResource(
-        router.query.courseId || router.query.id,
-        DEFAULT_PAGESIZE,
-        params,
-      )
-        .then((res) => setResources(res?.data))
-        .catch((err) => {})
-        .finally(() => {
+    const initFetchData = async () => {
+      if (open && (router.query.courseId || router.query.id)) {
+        setLoading(true)
+        try {
+          const resources = await CoursesAPI.getCourseResource(
+            router.query.courseId || router.query.id,
+
+            {
+              page_index: DEFAULT_PAGE_INDEX,
+              page_size: DEFAULT_PAGESIZE,
+            },
+          )
+
+          setResources(resources.data)
+        } catch (err) {
+        } finally {
           setTimeout(() => {
             setLoading(false)
           }, 500)
-        })
+        }
+      }
     }
+    initFetchData()
   }, [
     open,
     selectedSection?.value,
@@ -186,31 +205,39 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     selectedActivity?.value,
   ])
 
-  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
-
-  const fetchData = async (params?: Object) => {
+  const requestOngoingRef = useRef(false)
+  const fetchData = async (nextPageIndex: number) => {
     setLoading(true)
     try {
+      if (requestOngoingRef.current) return
+      requestOngoingRef.current = true
       const res = await CoursesAPI.getCourseResource(
         router.query.courseId || router.query.id,
-        pageIndex,
-        params,
+        {
+          page_index: nextPageIndex,
+          page_size: DEFAULT_PAGESIZE,
+        },
       )
-      setResources(res?.data)
-      setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
+
+      if (resources && res?.data.resources) {
+        setResources((prevResources: any) => ({
+          ...prevResources,
+          resources: [...prevResources.resources, ...res.data.resources],
+        }))
+        setPageIndex(nextPageIndex)
+        requestOngoingRef.current = false
+      }
     } catch (error) {
       // Handle error if needed
-    } finally {
-      setTimeout(() => {
-        setLoading(false)
-      }, 500)
     }
+    setTimeout(() => {
+      setLoading(false)
+    }, 500)
   }
 
   // Attach a scroll event listener to fetch more data when scrolling to the bottom
   useEffect(() => {
-    const containerDiv: any = document.getElementById('sapp-drawer') // Replace 'your-container-id' with the actual ID of your container div
-
+    const containerDiv = document.getElementById('sapp-drawer') // Replace 'your-container-id' with the actual ID of your container div
     const handleScroll = () => {
       if (
         containerDiv &&
@@ -219,15 +246,21 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         (router.query.courseId || router.query.id) &&
         open
       ) {
-        ;(resources?.meta?.total_records as Number) > pageIndex &&
-          fetchData(params)
+        const nextPageIndex = pageIndex + 1
+        if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
+          if (nextPageIndex === 2) {
+            // Check lần đầu scroll thì đặt lại vị trí lên giữa
+            containerDiv.scrollTop = containerDiv.scrollTop - 10
+          }
+          fetchData(nextPageIndex)
+        }
       }
     }
 
     containerDiv?.addEventListener('scroll', handleScroll)
 
     return () => containerDiv?.removeEventListener('scroll', handleScroll)
-  }, [pageIndex])
+  }, [resources, pageIndex])
 
   const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 

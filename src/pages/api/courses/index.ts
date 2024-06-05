@@ -321,11 +321,10 @@ export class CoursesAPI {
 
   static getCourseResource(
     id: string | string[] | undefined,
-    page_size: number,
     params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/courses/${id}/resources?page_index=1&page_size=${page_size}&attachment_type=attached`,
+      `${apiURL}/courses/${id}/resources?&attachment_type=attached`,
       {
         params: params,
       },
