@@ -283,7 +283,7 @@ const Course = ({
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
   return (
-    <div data-aos={ANIMATION.DATA_AOS}>
+    <>
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
@@ -291,10 +291,7 @@ const Course = ({
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div
-            className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}
-            data-aos={ANIMATION.DATA_AOS}
-          >
+          <div className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}>
             <div
               className={`name-course text-2xl font-medium mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
@@ -465,7 +462,7 @@ const Course = ({
         setOpen={setOpenClass}
         started_at={classInstance.class_user_instances[0].started_at}
       />
-    </div>
+    </>
   )
 }
 
