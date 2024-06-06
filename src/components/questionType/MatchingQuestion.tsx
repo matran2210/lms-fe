@@ -288,7 +288,7 @@ const MatchingQuestion = forwardRef(
             }
           }}
         >
-          {data?.question_topic.exhibits &&
+          {data?.question_topic?.exhibits &&
             !isHideExhibit &&
             data?.question_topic?.exhibits?.length > 0 && (
               <>
