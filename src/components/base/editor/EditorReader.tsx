@@ -100,7 +100,7 @@ const EditorReader = ({
   const convertMathToImage = async (element: any) => {
     const viewer = com?.wiris?.js?.JsPluginViewer
 
-    if (element && !isUndefined(viewer?.e)) {
+    if (element && (!isUndefined(viewer?.e) || viewer)) {
       try {
         await viewer.parseElement(element, true, function () {})
       } catch (error) {}
