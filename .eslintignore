@@ -1,6 +1,7 @@
 package.json
 package-lock.json
 tsconfig.json
+src/services/en.exceptions.json
 src/styles/*
 next-env.d.ts
 public/*
