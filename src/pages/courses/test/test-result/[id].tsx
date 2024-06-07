@@ -36,6 +36,16 @@ const TestResultDetail = () => {
   // Sử dụng hook useGetQuestionTabs trong component
   const { data: chartData } = useGetQuizAttemptsChart('quiz-attempts-chart', {})
 
+  let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
+  const quiz = questions?.quizAttempt?.quiz
+  if (
+    quiz?.is_limited &&
+    quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
+  ) {
+    // Nếu bài test đã quá số lần làm bài thì chỉ cho link đến trang kết quả, không cho làm lại
+    linkTest = `/courses/test/test-result/${router.query.id}`
+  }
+
   // Config Courses
   const breadcrumbs: ITabs[] = [
     {
@@ -47,7 +57,7 @@ const TestResultDetail = () => {
       title: `${questions?.course?.name ?? 'Course Detail'}`,
     },
     {
-      link: `/courses/my-course/${questions?.class_id ?? ''}`,
+      link: linkTest,
       title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
     },
     {
