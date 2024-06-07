@@ -176,6 +176,26 @@ const EditorReader = ({
     }
   }
 
+  /**
+   * @description add class border theo editor khi border style khác none và hidden ở lần đầu component render
+   */
+  useEffect(() => {
+    const tableElement = document.querySelector('table')
+    if (tableElement) {
+      const style = window.getComputedStyle(tableElement)
+      const newBorderStyle = style.borderStyle
+
+      const thElements = document.querySelectorAll('.editor-wrap td')
+      thElements.forEach((td) => {
+        if (newBorderStyle !== 'none' && newBorderStyle !== 'hidden') {
+          td.classList.add(`border-[${style?.borderWidth}]`)
+        } else {
+          td.classList.remove(`border-[${style?.borderWidth}]`)
+        }
+      })
+    }
+  }, [])
+
   return (
     <>
       <div

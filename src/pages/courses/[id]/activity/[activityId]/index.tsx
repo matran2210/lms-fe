@@ -499,6 +499,10 @@ const ActivityPage = () => {
     nextActivityId || router.query.activityId,
   )
 
+  const idNextActivity = activity?.next_activity
+    ? activity?.next_activity?.id
+    : activityIds[nextActivityIndex + 1]
+
   // Lấy id của hoạt động trước đó
   const previousActivityId = activity?.previous_activity?.id
 
@@ -506,6 +510,9 @@ const ActivityPage = () => {
   const previousActivityIndex = activityIds?.indexOf(
     previousActivityId || router.query.activityId,
   )
+
+  const idPreviousActivity =
+    activity?.previous_activity?.id || activityIds[previousActivityIndex - 1]
 
   const findActivityByIndex = (previousIndex: number) => {
     return sessionData?.find(
@@ -857,13 +864,14 @@ const ActivityPage = () => {
                     previousActivityIndex !== 0)) && (
                   <div className="w-1/2">
                     <div
-                      onClick={() => {
+                      onClick={async () => {
                         router.push({
-                          pathname: `/courses/${router.query.id}/activity/${
-                            activity?.previous_activity?.id ||
-                            activityIds[previousActivityIndex - 1]
-                          }`,
+                          pathname: `/courses/${router.query.id}/activity/${idPreviousActivity}`,
                         })
+                        await CoursesAPI.startCourseSectionProgress(
+                          router?.query?.id,
+                          idPreviousActivity,
+                        )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
                     >
@@ -900,14 +908,14 @@ const ActivityPage = () => {
                     nextActivityIndex !== sessionData?.length - 1)) && (
                   <div className="w-1/2">
                     <div
-                      onClick={() => {
+                      onClick={async () => {
                         router.push({
-                          pathname: `/courses/${router.query.id}/activity/${
-                            activity?.next_activity
-                              ? activity?.next_activity?.id
-                              : activityIds[nextActivityIndex + 1]
-                          }`,
+                          pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
                         })
+                        await CoursesAPI.startCourseSectionProgress(
+                          router?.query?.id,
+                          idNextActivity,
+                        )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                     >

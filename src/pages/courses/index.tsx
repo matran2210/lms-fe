@@ -219,7 +219,7 @@ const MyCourse = () => {
         )}
       </div>
       <div
-        data-aos={ANIMATION.DATA_AOS}
+        // data-aos={ANIMATION.DATA_AOS}
         className={`pt-6 max-w-xxl my-0 mx-auto relative ${
           isEmpty(courses)
             ? 'flex justify-center min-h-[calc(100vh-13rem)] items-center'
