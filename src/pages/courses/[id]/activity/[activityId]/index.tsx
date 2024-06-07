@@ -887,14 +887,19 @@ const ActivityPage = () => {
                       <SappTooltip
                         title={
                           activity?.previous_activity
-                            ? activity?.previous_activity.name
+                            ? activity?.previous_activity?.name
                             : findActivityByIndex(previousActivityIndex - 1)
                                 ?.name
+                        }
+                        showTooltip={
+                          activity?.previous_activity?.name?.length > 80 ||
+                          findActivityByIndex(previousActivityIndex - 1)?.name
+                            ?.length > 80
                         }
                       >
                         <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
                           {activity?.previous_activity
-                            ? activity?.previous_activity.name
+                            ? activity?.previous_activity?.name
                             : findActivityByIndex(previousActivityIndex - 1)
                                 ?.name}
                         </span>
@@ -927,6 +932,11 @@ const ActivityPage = () => {
                           activity?.next_activity
                             ? activity?.next_activity.name
                             : findActivityByIndex(nextActivityIndex + 1)?.name
+                        }
+                        showTooltip={
+                          activity?.next_activity.name?.length > 80 ||
+                          findActivityByIndex(nextActivityIndex + 1)?.name
+                            ?.length > 80
                         }
                       >
                         <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">

@@ -7508,10 +7508,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.2.76:
-  version "1.2.76"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.76.tgz#d29a0dcd38a83ef19c102a14e2f13bc8c95c8db5"
-  integrity sha512-1dU06LxjLQZNrttS3jNRZ13ukPGXdrKFWB7vyDgLg7tWYyQJxNZrRKzYAA7TxUPph56nMKr2P7AFAmSic80/BQ==
+preview-part@^1.2.77:
+  version "1.2.77"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.77.tgz#51022798075bd363db0404b806b6de3754109b40"
+  integrity sha512-5lRiObVHMaMo6rN7IQwMQpAqV3JSX0gxBspyAi34OTvxcHoLoCL6hxESLuuCSoUUPMUNQzP1rqdh5FdR9jaDpg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/aos" "^3.0.7"
