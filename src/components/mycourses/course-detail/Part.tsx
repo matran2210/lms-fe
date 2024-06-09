@@ -77,9 +77,9 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
         <div className="line-clamp-2 text-ellipsis cursor-pointer ">
           <SappTooltip
             title={course?.name}
-            showTooltip={(course?.name as string)?.length > 50}
+            showTooltip={(course?.name as string)?.length > 40}
           >
-            {truncateString(course?.name, 50)}
+            {truncateString(course?.name, 40)}
           </SappTooltip>
         </div>
       </div>
