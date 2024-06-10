@@ -135,26 +135,27 @@ const YourScoreDetail = ({
 
   // Xử lý sự kiện scroll
   useEffect(() => {
-    const containerDiv = document.getElementById('sapp-drawer')
+    const divElement = document.getElementById('sapp-drawer-test-result-list')
+    if (!divElement) return
     const handleScroll = () => {
-      if (
-        containerDiv &&
-        containerDiv.clientHeight + containerDiv.scrollTop ===
-          containerDiv.scrollHeight
-      ) {
+      const { scrollTop, scrollHeight, clientHeight } = divElement
+      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
         const nextPageIndex = pageIndex + 1
         if (Number(scoreDetails?.meta?.total_pages) >= nextPageIndex) {
           fetchData(nextPageIndex)
         }
       }
     }
-    containerDiv?.addEventListener('scroll', handleScroll)
-    return () => containerDiv?.removeEventListener('scroll', handleScroll)
-  }, [scoreDetails, pageIndex])
+    divElement.addEventListener('scroll', handleScroll)
+    // Cleanup function
+    return () => {
+      divElement.removeEventListener('scroll', handleScroll)
+    }
+  }, [fetchData, pageIndex])
 
   return (
     <div
-      id="sapp-drawer"
+      id="sapp-drawer-test-result-list"
       className={`overflow-y-auto bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}

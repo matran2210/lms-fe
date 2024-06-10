@@ -235,32 +235,26 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     }, 500)
   }
 
-  // Attach a scroll event listener to fetch more data when scrolling to the bottom
   useEffect(() => {
-    const containerDiv = document.getElementById('sapp-drawer') // Replace 'your-container-id' with the actual ID of your container div
+    const divElement = document.getElementById('sapp-drawer-resource-list')
+    if (!divElement) return
     const handleScroll = () => {
-      if (
-        containerDiv &&
-        containerDiv.clientHeight + containerDiv.scrollTop ===
-          containerDiv.scrollHeight &&
-        (router.query.courseId || router.query.id) &&
-        open
-      ) {
-        const nextPageIndex = pageIndex + 1
-        if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
-          if (nextPageIndex === 2) {
-            // Check lần đầu scroll thì đặt lại vị trí lên giữa
-            containerDiv.scrollTop = containerDiv.scrollTop - 10
+      const { scrollTop, scrollHeight, clientHeight } = divElement
+      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
+        if ((router.query.courseId || router.query.id) && open) {
+          const nextPageIndex = pageIndex + 1
+          if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
+            fetchData(nextPageIndex)
           }
-          fetchData(nextPageIndex)
         }
       }
     }
-
-    containerDiv?.addEventListener('scroll', handleScroll)
-
-    return () => containerDiv?.removeEventListener('scroll', handleScroll)
-  }, [resources, pageIndex])
+    divElement.addEventListener('scroll', handleScroll)
+    // Cleanup function
+    return () => {
+      divElement.removeEventListener('scroll', handleScroll)
+    }
+  }, [fetchData, pageIndex])
 
   const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
@@ -295,6 +289,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   return (
     <SappDrawer
+      drawerSubId={'-resource-list'}
       isOpen={open}
       message="Bạn có chắc chán muốn hủy không?"
       onClose={onClose}
