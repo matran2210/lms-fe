@@ -95,9 +95,9 @@ const PartFailed = ({
         >
           <SappTooltip
             title={coursePart?.name}
-            showTooltip={(coursePart?.name as string)?.length > 50}
+            showTooltip={(coursePart?.name as string)?.length > 40}
           >
-            {truncateString(coursePart?.name, 50)}
+            {truncateString(coursePart?.name, 40)}
           </SappTooltip>
         </div>
         <div className="info mt-6">
