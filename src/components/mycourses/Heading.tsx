@@ -1,6 +1,7 @@
 import React from 'react'
 import { Tooltip } from 'antd'
 import { truncateString } from '@utils/index'
+import SappTooltip from 'src/common/SappTooltip'
 
 interface IProps {
   greeting: string
@@ -14,13 +15,12 @@ const Heading = ({ greeting, title, des }: IProps) => {
       <h1 className="text-2xl font-light text-bw-1 line-clamp-1">
         {greeting}
         <span className="font-medium ml-1.5">
-          {(title as string)?.length > 50 ? (
-            <Tooltip title={title} color="#ffffff" placement="bottom">
-              {truncateString(title, 80)}
-            </Tooltip>
-          ) : (
-            <>{title}</>
-          )}
+          <SappTooltip
+            title={title}
+            showTooltip={(title as string)?.length > 50}
+          >
+            {truncateString(title, 80)}
+          </SappTooltip>
         </span>
       </h1>
       <div className="filter flex 2xl-min:mt-0 mt-2">
