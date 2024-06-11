@@ -69,6 +69,10 @@ interface ScratchPad {
   id: string
   scratch_pad: string
 }
+
+interface AnswerItem {
+  done: boolean
+}
 declare global {
   interface Window {
     userAgreed: any
@@ -1397,18 +1401,18 @@ const TestDetail = () => {
     })
   }
   const checkUnSubmitAnswer = () => {
-    const answers = handleSaveCurrentAnswer(tabs, currentTabContent);
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
     const unSubmitAnswers = answers
-    .map((item: any, index: number) => {
+      .map((item: AnswerItem, index: number) => {
         if (item.done == false) {
-            return index + 1
+          return index + 1
         }
         return -1
-    })
-    .filter((index: number) => index !== -1)
-    setUnSubmitAnswerData(unSubmitAnswers)    
-    if (unSubmitAnswers.length === 0) {      
-      setOpenSubmit(true)      
+      })
+      .filter((index: number) => index !== -1)
+    setUnSubmitAnswerData(unSubmitAnswers)
+    if (unSubmitAnswers.length === 0) {
+      setOpenSubmit(true)
     } else {
       setUnSubmitAnswer(true)
     }
@@ -2356,9 +2360,8 @@ const TestDetail = () => {
               setOpenSubmit(true)
               setUnSubmitAnswer(false)
             }}
-            handleCancel={() => setUnSubmitAnswer(false)}
             caseStudy={false}
-          />          
+          />
           <ModalUploadFile
             open={openUpload.status}
             isMultiple={false}

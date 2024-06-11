@@ -38,15 +38,15 @@ import {
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-import UnSubmitAnswerModal from '../test/unSubmitAnswerModal' 
+import UnSubmitAnswerModal from '../test/unSubmitAnswerModal'
 import useMousePosition from '@utils/hookMouseMove'
 import SappLoading from 'src/common/SappLoading'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 
 interface Question {
-  id: string; // Assuming id is a string, you can adjust the type accordingly
-  question_content: string; // Assuming question_content is a string
+  id: string // Assuming id is a string, you can adjust the type accordingly
+  question_content: string // Assuming question_content is a string
 }
 
 const CaseStudyDetail = ({ questions }: any) => {
@@ -428,35 +428,38 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const checkUnSubmitAnswer = () => {
     const listUnSubmitAnswerIds = new Set(
-        getAllValue().filter(item => item.answer === "").map(item => item.id)
+      getAllValue()
+        .filter((item) => item.answer === '')
+        .map((item) => item.id),
     )
     const unSubmittedQuestions = listQuestions
-    .filter((questionObject: Record<string, Question>) => {
-        const question = Object.values<Question>(questionObject)[0];
-        const questionHTML = question.question_content;
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(questionHTML, "text/html");
-        const paragraphs = doc.querySelectorAll("p");
-        return paragraphs.length > 0 && listUnSubmitAnswerIds.has(question.id);
-    })
-    .map((questionObject: Record<string, Question>) => {
-        const question = Object.values<Question>(questionObject)[0];
-        const questionHTML = question.question_content;
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(questionHTML, "text/html");
-        const paragraphs = doc.querySelectorAll("p");
-        const paragraphContents = Array.from(paragraphs).map(p => p.textContent || "").join("\n");
-        return paragraphContents;
-    });
-    setUnSubmitAnswerData(unSubmittedQuestions);
-    console.log(unSubmitAnswerData);
-    
-    if (unSubmittedQuestions.length === 0) {      
-      setOpenSubmit(true)      
+      .filter((questionObject: Record<string, Question>) => {
+        const question = Object.values<Question>(questionObject)[0]
+        const questionHTML = question.question_content
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(questionHTML, 'text/html')
+        const paragraphs = doc.querySelectorAll('p')
+        return paragraphs.length > 0 && listUnSubmitAnswerIds.has(question.id)
+      })
+      .map((questionObject: Record<string, Question>) => {
+        const question = Object.values<Question>(questionObject)[0]
+        const questionHTML = question.question_content
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(questionHTML, 'text/html')
+        const paragraphs = doc.querySelectorAll('p')
+        const paragraphContents = Array.from(paragraphs)
+          .map((p) => p.textContent || '')
+          .join('\n')
+        return paragraphContents
+      })
+    setUnSubmitAnswerData(unSubmittedQuestions)
+
+    if (unSubmittedQuestions.length === 0) {
+      setOpenSubmit(true)
     } else {
       setUnSubmitAnswer(true)
     }
-  };
+  }
   const handleSubmitQuestion = async () => {
     let allQuest = getAllValue()
     let quiz_position_mapping = []
@@ -1058,7 +1061,6 @@ const CaseStudyDetail = ({ questions }: any) => {
               setOpenSubmit(true)
               setUnSubmitAnswer(false)
             }}
-            handleCancel={() => setUnSubmitAnswer(false)}
           />
           <QuitTestModal
             open={openQuit}
