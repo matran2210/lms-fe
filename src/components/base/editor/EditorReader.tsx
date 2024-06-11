@@ -188,9 +188,9 @@ const EditorReader = ({
       const thElements = document.querySelectorAll('.editor-wrap td')
       thElements.forEach((td) => {
         if (newBorderStyle !== 'none' && newBorderStyle !== 'hidden') {
-          td.classList.add(`border-[${style?.borderWidth}]`)
+          td.classList.add(`border-[1px]`)
         } else {
-          td.classList.remove(`border-[${style?.borderWidth}]`)
+          td.classList.remove(`border-[1px]`)
         }
       })
     }
