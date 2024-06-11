@@ -52,6 +52,7 @@ import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
+import UnSubmitAnswerModal from './unSubmitAnswerModal'
 import LimitQuizModal from './limitQuizModal'
 import SappLoading from 'src/common/SappLoading'
 import toast from 'react-hot-toast'
@@ -74,6 +75,10 @@ interface ScratchPad {
   question_id: string
   id: string
   scratch_pad: string
+}
+
+interface AnswerItem {
+  done: boolean
 }
 declare global {
   interface Window {
@@ -327,6 +332,8 @@ const TestDetail = () => {
   const [QuizResultId, setQuizResultId] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
+  const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<any>>([])
   const [loading, setLoading] = useState(false)
   const [openLimit, setOpenLimit] = useState(false)
   const [openUpload, setOpenUpload] = useState<any>({})
@@ -1405,6 +1412,24 @@ const TestDetail = () => {
       return newData
     })
   }
+  const checkUnSubmitAnswer = () => {
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
+    const unSubmitAnswers = answers
+      .map((item: AnswerItem, index: number) => {
+        if (item.done == false) {
+          return index + 1
+        }
+        return -1
+      })
+      .filter((index: number) => index !== -1)
+    setUnSubmitAnswerData(unSubmitAnswers)
+    if (unSubmitAnswers.length === 0) {
+      setOpenSubmit(true)
+    } else {
+      setUnSubmitAnswer(true)
+    }
+  }
+
   useEffect(() => {
     if (currentTabContent?.data?.requirements) {
       setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })
@@ -1645,7 +1670,7 @@ const TestDetail = () => {
                   className: 'border border-bw-1',
                   color: 'secondary',
                   onClick: () => {
-                    setOpenSubmit(true)
+                    checkUnSubmitAnswer()
                     dispatch(disableUnsavedChange())
                   },
                   //   full: fullWidthBtn,
@@ -2385,6 +2410,16 @@ const TestDetail = () => {
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
             }
+          />
+          <UnSubmitAnswerModal
+            open={openUnSubmitAnswer}
+            setOpen={setUnSubmitAnswer}
+            data={unSubmitAnswerData}
+            handleSubmit={() => {
+              setOpenSubmit(true)
+              setUnSubmitAnswer(false)
+            }}
+            caseStudy={false}
           />
           <ModalUploadFile
             open={openUpload.status}
