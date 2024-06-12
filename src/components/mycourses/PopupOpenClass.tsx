@@ -3,6 +3,7 @@ import SappModal from '@components/base/modal/SappModal'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatDate } from '@utils/helpers'
 import { Dispatch, SetStateAction } from 'react'
+import { MY_COURSES } from 'src/constants/lang'
 
 interface IProps {
   open: boolean
@@ -38,7 +39,7 @@ const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
       <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 xl:mb-7 px-1">
         This Course will start on{' '}
         {formatDate(new Date(started_at).toString(), true)}. Please come back
-        later or contact our Support at 0889 662 276.
+        later or contact our Support at {MY_COURSES.hotline}.
       </div>
     </SappModalV2>
   )

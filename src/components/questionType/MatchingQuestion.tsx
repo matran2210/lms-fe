@@ -12,6 +12,7 @@ import {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
+import { IExhibitData } from 'src/type/exhibit'
 
 interface IProps {
   data: any
@@ -28,6 +29,13 @@ interface IProps {
   solution?: string
   allowUnHighLight?: boolean
   uuid?: string
+  setOpenFile?: (
+    data: IExhibitData,
+    file?: string | null,
+    fileName?: string | null,
+    event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
+  isHideExhibit?: boolean
 }
 type IProp = {
   value: string
@@ -50,6 +58,8 @@ const MatchingQuestion = forwardRef(
       solution,
       allowUnHighLight,
       uuid,
+      setOpenFile,
+      isHideExhibit = true,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -278,6 +288,50 @@ const MatchingQuestion = forwardRef(
             }
           }}
         >
+          {data?.question_topic?.exhibits &&
+            !isHideExhibit &&
+            data?.question_topic?.exhibits?.length > 0 && (
+              <>
+                <div className="border border-b-gray-2 my-6"></div>
+                <div className="flex items-center mb-4">
+                  <div className="font-semibold">
+                    Exhibits({data?.question_topic?.exhibits?.length || 0})
+                  </div>
+                  <div className="ml-4">
+                    <span className="text-state-error">* </span>
+                    <span className="text-gray-1">Click to view</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {data?.question_topic?.exhibits?.map((e: any, i: number) => {
+                    return (
+                      <div
+                        className="cursor-pointer hover:text-primary"
+                        key={e.id}
+                        onClick={(event) => {
+                          setOpenFile &&
+                            setOpenFile(
+                              {
+                                type: 'exhibits',
+                                description: e.description,
+                                name: e.name,
+                                index: i,
+                                files: e.files,
+                              },
+                              null,
+                              null,
+                              event,
+                            )
+                        }}
+                      >
+                        Exhibit {i + 1}: {e.name}
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="border border-b-gray-2 my-6"></div>
+              </>
+            )}
           <EditorReader
             className="sapp-questions !mb-[32px]"
             text_editor_content={data?.question_content}

@@ -14,6 +14,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { Tooltip } from 'antd'
 import { ANIMATION } from 'src/constants'
+import SappTooltip from 'src/common/SappTooltip'
 
 const Part = ({ course }: { course: IMyCourseDetail }) => {
   const [open, setOpen] = useState(false)
@@ -68,48 +69,39 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
       <div
-        className={`name-part text-2xl font-medium h-[60px]`}
-        // onClick={() =>
-        //   course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
-        // }
+        className={`name-course text-2xl font-medium xl:h-[60px] text-bw-1`}
+        onClick={() =>
+          course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
+        }
       >
-        {(course?.name as string)?.length > 50 ? (
-          <Tooltip title={course?.name} color="#ffffff" placement="top">
-            {truncateString(course?.name, 50)}
-          </Tooltip>
-        ) : (
-          <>{course?.name}</>
-        )}
+        <div className="line-clamp-2 text-ellipsis cursor-pointer ">
+          <SappTooltip
+            title={course?.name}
+            showTooltip={(course?.name as string)?.length > 40}
+          >
+            {truncateString(course?.name, 40)}
+          </SappTooltip>
+        </div>
       </div>
       <div className="des mt-6 mb-15">
         <div className="line-clamp-5 text-ellipsis h-[120px]">
-          {(course?.description as string)?.length > 250 ? (
-            <Tooltip
-              title={
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: course?.description,
-                  }}
-                />
-              }
-              color="#ffffff"
-              placement="bottom"
-            >
+          <SappTooltip
+            title={
               <p
                 dangerouslySetInnerHTML={{
                   __html: course?.description,
                 }}
-                className="text-base h-[120px] text-bw-1"
               />
-            </Tooltip>
-          ) : (
+            }
+            showTooltip={(course?.description as string)?.length > 250}
+          >
             <p
               dangerouslySetInnerHTML={{
                 __html: course?.description,
               }}
               className="text-base h-[120px] text-bw-1"
             />
-          )}
+          </SappTooltip>
         </div>
       </div>
       <div className="mt-auto">

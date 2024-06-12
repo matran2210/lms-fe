@@ -30,7 +30,8 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { getActToken, getLocalStorgeActToken } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
-import { CourseProvider, useCourseContext } from '@contexts/index'
+import { CourseProvider } from '@contexts/index'
+import BackToTop from '@components/BackToTop'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -175,7 +176,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
-  }, [])
+  })
 
   return (
     <>
@@ -247,6 +248,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             <RouteGuard>
               <>
                 {content}
+                <BackToTop />
                 <LearningResource
                   open={openResource}
                   setOpenResource={setOpenResource}

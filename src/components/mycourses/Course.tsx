@@ -23,6 +23,7 @@ import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
 import PopupOpenClass from './PopupOpenClass'
+import SappTooltip from 'src/common/SappTooltip'
 
 const Course = ({
   course,
@@ -283,7 +284,7 @@ const Course = ({
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
   return (
-    <div data-aos={ANIMATION.DATA_AOS}>
+    <>
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
@@ -291,10 +292,7 @@ const Course = ({
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div
-            className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}
-            data-aos={ANIMATION.DATA_AOS}
-          >
+          <div className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}>
             <div
               className={`name-course text-2xl font-medium mb-4 xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
@@ -308,13 +306,12 @@ const Course = ({
                   }
                 }}
               >
-                {(course?.name as string)?.length > 50 ? (
-                  <Tooltip title={course?.name} color="#ffffff" placement="top">
-                    {truncateString(course?.name, 50)}
-                  </Tooltip>
-                ) : (
-                  <>{course?.name}</>
-                )}
+                <SappTooltip
+                  title={course?.name}
+                  showTooltip={(course?.name as string)?.length > 50}
+                >
+                  {truncateString(course?.name, 50)}
+                </SappTooltip>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -322,7 +319,12 @@ const Course = ({
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
                   <span className="ml-1 text-bw-1 font-medium">
-                    {truncateString(course?.classes?.[0]?.code, 15)}
+                    <SappTooltip
+                      title={course?.classes?.[0]?.code}
+                      showTooltip={course?.classes?.[0]?.code?.length > 15}
+                    >
+                      {truncateString(course?.classes?.[0]?.code, 15)}
+                    </SappTooltip>
                   </span>
                 </div>
               ) : (
@@ -465,7 +467,7 @@ const Course = ({
         setOpen={setOpenClass}
         started_at={classInstance.class_user_instances[0].started_at}
       />
-    </div>
+    </>
   )
 }
 

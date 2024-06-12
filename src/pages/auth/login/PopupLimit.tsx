@@ -1,14 +1,14 @@
 import { AlertIcon } from '@assets/icons'
-import SappModal from '@components/base/modal/SappModal'
 import SappModalV2 from '@components/base/modal/SappModalV2'
-import { TimeIcon } from '@components/icons'
-import { useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
+import { MY_COURSES } from 'src/constants/lang'
 import { useAppDispatch } from 'src/redux/hook'
 
 interface IProps {
   open: boolean
-  setOpen: any
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
+
 const PopUpLimit = ({ open, setOpen }: IProps) => {
   const dispatch = useAppDispatch()
   // const {} = useAppSelector()
@@ -51,7 +51,7 @@ const PopUpLimit = ({ open, setOpen }: IProps) => {
       </div>
       <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-7 text-center">
         You can only access a maximum of 3 devices, please contact our support
-        at 0889 662 276.
+        at {MY_COURSES.hotline}.
       </div>
     </SappModalV2>
   )

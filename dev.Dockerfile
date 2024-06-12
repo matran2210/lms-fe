@@ -1,11 +1,19 @@
 FROM node:14-alpine
 
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy lock files if file exists
-COPY package.json yarn.lock* package-lock.json* ./
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
+RUN npm install -g node-gyp
 
-RUN npm install
+# Copy package.json and package-lock.json from the root of the Nx workspace
+COPY package.json .
+COPY .yarnrc .
+COPY yarn.lock .
+COPY .yarn ./.yarn
+
+# Install app dependencies
+RUN yarn --frozen-lockfile && yarn cache clean
 
 COPY src ./src
 COPY public ./public

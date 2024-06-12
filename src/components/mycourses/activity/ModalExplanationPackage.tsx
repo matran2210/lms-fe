@@ -3,10 +3,8 @@ import { useEffect, useState } from 'react'
 import SappModal from '@components/base/modal/SappModal'
 import { ExplanationPackage } from 'explanation-package'
 // import 'explanation-package/dist/index.css'
-import CourseActivityApi from '../../../redux/services/Course/MyCourse/Activity'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityAPI } from '../../../pages/api/activity/index'
 
@@ -130,11 +128,11 @@ const ModalExplanationPackage = ({
 
   return (
     <div>
-      {loading && (
+      {/* {loading && (
         <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
           Loading
         </div>
-      )}
+      )} */}
       <SappModal
         open={open}
         okButtonCaption={'Yes'}

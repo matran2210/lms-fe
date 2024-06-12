@@ -104,6 +104,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         key={'testtesttest'}
         onClick={() => {}}
         zIndex={40}
+        fixed
       >
         <div className="absolute h-full w-full  top-0 left-0 border bg-white">
           <div className="flex w-6-percent items-center bg-gray-3 w-full h-10 justify-between px-2.5">

@@ -38,7 +38,13 @@ import { isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { DISPLAY_TYPE, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import {
+  DISPLAY_TYPE,
+  PageLink,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  TEST_TYPE,
+} from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
@@ -46,6 +52,7 @@ import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
+import UnSubmitAnswerModal from './unSubmitAnswerModal'
 import LimitQuizModal from './limitQuizModal'
 import SappLoading from 'src/common/SappLoading'
 import toast from 'react-hot-toast'
@@ -55,6 +62,7 @@ import { TestAPI } from '../api/test'
 import Countdown from 'react-countdown'
 import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
+import { IExhibit } from 'src/type/exhibit'
 
 type Window = {
   userAgreed: any
@@ -67,6 +75,10 @@ interface ScratchPad {
   question_id: string
   id: string
   scratch_pad: string
+}
+
+interface AnswerItem {
+  done: boolean
 }
 declare global {
   interface Window {
@@ -304,7 +316,9 @@ const TestDetail = () => {
   const [showListRequirement, setShowLisRequirement] = useState(false)
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
-
+  const [exhibitData, setExhibitData] = useState<IExhibit[]>()
+  const [routeBack, setRouteBack] = useState(false)
+  const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [quizAttempId, setQuizAttempId] = useState('')
@@ -318,6 +332,8 @@ const TestDetail = () => {
   const [QuizResultId, setQuizResultId] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
+  const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<any>>([])
   const [loading, setLoading] = useState(false)
   const [openLimit, setOpenLimit] = useState(false)
   const [openUpload, setOpenUpload] = useState<any>({})
@@ -1218,7 +1234,7 @@ const TestDetail = () => {
               setScoreQuestion(res?.data?.score)
               setSubmitTest(true)
             } else {
-              router.back()
+              router.replace(`/courses/test/test-result/${res?.data?.id}`)
               setSubmitTest(false)
             }
           }
@@ -1396,6 +1412,24 @@ const TestDetail = () => {
       return newData
     })
   }
+  const checkUnSubmitAnswer = () => {
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
+    const unSubmitAnswers = answers
+      .map((item: AnswerItem, index: number) => {
+        if (item.done == false) {
+          return index + 1
+        }
+        return -1
+      })
+      .filter((index: number) => index !== -1)
+    setUnSubmitAnswerData(unSubmitAnswers)
+    if (unSubmitAnswers.length === 0) {
+      setOpenSubmit(true)
+    } else {
+      setUnSubmitAnswer(true)
+    }
+  }
+
   useEffect(() => {
     if (currentTabContent?.data?.requirements) {
       setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })
@@ -1454,13 +1488,26 @@ const TestDetail = () => {
   // }, [currentPage])
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
-    for (let e in currentTabContent?.topicDescription?.exhibits) {
-      exhibitsOptions.push({
-        label: `Exhibit ${+e + 1}`,
-        value: currentTabContent?.topicDescription?.exhibits[e].id,
-      })
+    const topics = currentTabContent?.topicDescription
+    const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
+
+    if (exhibitTopic?.length) {
+      exhibitsOptions.push(...exhibitTopic)
     }
-    return exhibitsOptions
+
+    if (topics?.question?.length) {
+      for (let question of topics?.questions) {
+        if (question.exhibits?.length) {
+          exhibitsOptions.push(...question.exhibits)
+        }
+      }
+    }
+
+    setExhibitData(exhibitsOptions)
+    return exhibitsOptions?.map((exhibit, index: number) => ({
+      label: `Exhibit ${+index + 1}`,
+      value: exhibit.id,
+    }))
   }, [currentTabContent])
   useEffect(() => {
     if (watch('exhibits')) {
@@ -1484,10 +1531,30 @@ const TestDetail = () => {
           router.query.class_user_id as string,
         )
         setQuizAttempId(res.data.id)
+        setIsQuizAttemptCreated(true) // Mark the attempt as created
       } catch (err: any) {
         if (err.response?.data?.error.code === '400|060710') {
           dispatch(disableUnsavedChange())
           setOpenLimit(true)
+        }
+        if (err.response?.data?.success === false) {
+          setRouteBack(true)
+          setIsQuizAttemptCreated(true) // Mark the attempt as created even on error
+          switch (
+            quizDetail?.quiz_type ||
+            quizDetail?.quiz_type === undefined
+          ) {
+            case TEST_TYPE.MID_TERM_TEST:
+            case TEST_TYPE.FINAL_TEST:
+            case TEST_TYPE.TOPIC_TEST:
+            case TEST_TYPE.CHAPTER_TEST:
+            case TEST_TYPE.PART_TEST:
+              return router.push(PageLink.COURSES)
+            case TEST_TYPE.ENTRANCE_TEST:
+              return router.push(PageLink.ENTRANCE_TEST)
+            default:
+              return router.push(PageLink.COURSES)
+          }
         }
       }
     }
@@ -1497,26 +1564,31 @@ const TestDetail = () => {
   }, [router.query.id])
   const warningText =
     'You have unsaved changes - are you sure you wish to leave this page?'
-
   useEffect(() => {
+    if (!isQuizAttemptCreated) return
+
     const handleWindowClose = (e: any) => {
       if (!unsavedChange) return
       e.preventDefault()
       return (e.returnValue = warningText)
     }
+
     const handleBrowseAway = () => {
-      if (!unsavedChange) return
-      if (window.confirm(warningText)) return
-      router.events.emit('routeChangeError')
-      throw 'routeChange aborted.'
+      if (unsavedChange === true && routeBack === false) {
+        if (!unsavedChange) return
+        if (window.confirm(warningText)) return
+        router.events.emit('routeChangeError')
+        throw 'routeChange aborted.'
+      }
     }
+
     window.addEventListener('beforeunload', handleWindowClose)
     router.events.on('routeChangeStart', handleBrowseAway)
     return () => {
       window.removeEventListener('beforeunload', handleWindowClose)
       router.events.off('routeChangeStart', handleBrowseAway)
     }
-  }, [unsavedChange])
+  }, [unsavedChange, isQuizAttemptCreated])
   useEffect(() => {
     if (startResize) {
       document.body.style.webkitUserSelect = 'none'
@@ -1540,7 +1612,6 @@ const TestDetail = () => {
    * @description sử dụng hook countdown
    */
   const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
-
   return (
     <CourseProvider>
       {loading || !currentTabContent?.id ? (
@@ -1558,7 +1629,7 @@ const TestDetail = () => {
         <div className="absolute w-screen h-screen z-[1350]"></div>
       )} */}
           <div>
-            <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
+            <div className="flex justify-between py-2 px-6 items-center bg-gray-3 relative z-50">
               <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
                 {quizDetail?.name}
               </div>
@@ -1599,7 +1670,7 @@ const TestDetail = () => {
                   className: 'border border-bw-1',
                   color: 'secondary',
                   onClick: () => {
-                    setOpenSubmit(true)
+                    checkUnSubmitAnswer()
                     dispatch(disableUnsavedChange())
                   },
                   //   full: fullWidthBtn,
@@ -1883,12 +1954,10 @@ const TestDetail = () => {
                 </MovableWindow>
               )
             } else if (e.type === 'exhibits') {
-              const i =
-                currentTabContent?.topicDescription?.exhibits?.findIndex(
-                  (el: any) => el.id === e.id,
-                )
-              const exhibitsDes =
-                currentTabContent?.topicDescription?.exhibits?.[i]
+              const i = exhibitData?.findIndex((el: any) => el.id === e.id)
+              const exhibitsDes = exhibitData?.find(
+                (exhibit) => exhibit.id === e.id,
+              )
               return (
                 <MovableWindow
                   position={{
@@ -1909,7 +1978,7 @@ const TestDetail = () => {
                     <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
                       <div className="truncate">
                         <span className="font-semibold text-base text-bw-1">{`Exhibit ${
-                          i + 1
+                          (i ?? 0) + 1
                         }: `}</span>
                         {exhibitsDes?.name}
                       </div>
@@ -1922,7 +1991,8 @@ const TestDetail = () => {
                         text_editor_content={exhibitsDes?.description}
                         className=" w-full"
                       />
-                      {exhibitsDes?.files?.length > 0 &&
+                      {exhibitsDes &&
+                        exhibitsDes?.files?.length > 0 &&
                         exhibitsDes?.files.map((e: any, index: number) => {
                           return (
                             <div
@@ -2051,7 +2121,7 @@ const TestDetail = () => {
                   </div>
                 </div>
               </button>
-              {currentTabContent?.topicDescription?.exhibits?.length > 0 && (
+              {exhibitData && exhibitData?.length > 0 && (
                 <button className="h-full relative" ref={dropUpRef}>
                   <div
                     className="flex items-center gap-3 px-4 3xl:px-6 border-l"
@@ -2340,6 +2410,16 @@ const TestDetail = () => {
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
             }
+          />
+          <UnSubmitAnswerModal
+            open={openUnSubmitAnswer}
+            setOpen={setUnSubmitAnswer}
+            data={unSubmitAnswerData}
+            handleSubmit={() => {
+              setOpenSubmit(true)
+              setUnSubmitAnswer(false)
+            }}
+            caseStudy={false}
           />
           <ModalUploadFile
             open={openUpload.status}

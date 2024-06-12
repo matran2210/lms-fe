@@ -499,6 +499,10 @@ const ActivityPage = () => {
     nextActivityId || router.query.activityId,
   )
 
+  const idNextActivity = activity?.next_activity
+    ? activity?.next_activity?.id
+    : activityIds[nextActivityIndex + 1]
+
   // Lấy id của hoạt động trước đó
   const previousActivityId = activity?.previous_activity?.id
 
@@ -523,6 +527,9 @@ const ActivityPage = () => {
       ],
     })
   }
+
+  const idPreviousActivity =
+    activity?.previous_activity?.id || activityIds[previousActivityIndex - 1]
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -592,7 +599,7 @@ const ActivityPage = () => {
         <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
           <div className="bg-gray-3 px-6 ">
             <div
-              className={`flex justify-between w-full gap-4 py-6 ${
+              className={`flex justify-between w-full gap-4 py-6 select-none ${
                 activity?.course_outcomes?.length > 0
                   ? 'border-b borderColor-default'
                   : ''
@@ -607,10 +614,10 @@ const ActivityPage = () => {
 
             {activity?.course_outcomes?.length > 0 && (
               <div className={`pt-6 pb-4`}>
-                <div className="font-semibold text-base mb-2">
+                <div className="font-semibold text-base mb-2 select-none">
                   Learning Outcome:
                 </div>
-                <ul className="list-disc text-base ml-3">
+                <ul className="list-disc text-base ml-3 select-none">
                   {activity?.course_outcomes?.map((e: any) => {
                     return (
                       <li className="ml-4" key={e?.id}>
@@ -857,13 +864,15 @@ const ActivityPage = () => {
                     previousActivityIndex !== 0)) && (
                   <div className="w-1/2">
                     <div
-                      onClick={() => {
+                      onClick={async () => {
                         router.push({
-                          pathname: `/courses/${router.query.id}/activity/${
-                            activity?.previous_activity?.id ||
-                            activityIds[previousActivityIndex - 1]
-                          }`,
+                          pathname: `/courses/${router.query.id}/activity/${idPreviousActivity}`,
                         })
+                        await CoursesAPI.startCourseSectionProgress(
+                          router?.query?.id,
+                          activity?.previous_activity?.id ||
+                            activityIds[previousActivityIndex - 1],
+                        )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
                     >
@@ -879,16 +888,25 @@ const ActivityPage = () => {
                       <SappTooltip
                         title={
                           activity?.previous_activity
-                            ? activity?.previous_activity.name
+                            ? activity?.previous_activity?.name
                             : findActivityByIndex(previousActivityIndex - 1)
                                 ?.name
                         }
+                        showTooltip={
+                          activity?.previous_activity?.name?.length > 80
+                        }
                       >
-                        <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                        <span className="ml-2 w-full overflow-hidden text-ellipsis">
                           {activity?.previous_activity
-                            ? activity?.previous_activity.name
-                            : findActivityByIndex(previousActivityIndex - 1)
-                                ?.name}
+                            ? truncateString(
+                                activity?.previous_activity?.name,
+                                80,
+                              )
+                            : truncateString(
+                                findActivityByIndex(previousActivityIndex - 1)
+                                  ?.name,
+                                80,
+                              )}
                         </span>
                       </SappTooltip>
                     </div>
@@ -900,14 +918,14 @@ const ActivityPage = () => {
                     nextActivityIndex !== sessionData?.length - 1)) && (
                   <div className="w-1/2">
                     <div
-                      onClick={() => {
+                      onClick={async () => {
                         router.push({
-                          pathname: `/courses/${router.query.id}/activity/${
-                            activity?.next_activity
-                              ? activity?.next_activity?.id
-                              : activityIds[nextActivityIndex + 1]
-                          }`,
+                          pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
                         })
+                        await CoursesAPI.startCourseSectionProgress(
+                          router?.query?.id,
+                          idNextActivity,
+                        )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                     >
@@ -917,9 +935,10 @@ const ActivityPage = () => {
                       <SappTooltip
                         title={
                           activity?.next_activity
-                            ? activity?.next_activity.name
+                            ? activity?.next_activity?.name
                             : findActivityByIndex(nextActivityIndex + 1)?.name
                         }
+                        showTooltip={activity?.next_activity?.name?.length > 80}
                       >
                         <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
                           {activity?.next_activity

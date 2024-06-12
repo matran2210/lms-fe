@@ -140,7 +140,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .editor-wrap {
-  @apply font-sans font-medium text-sm text-[#5e6278];
+  @apply font-sans text-sm text-[#5e6278];
   hr {
     @apply hidden;
   }
@@ -159,7 +159,7 @@ body *::-webkit-scrollbar-thumb:hover {
   tfoot,
   td,
   th {
-    border-width: 1px;
+    // border-width: 1px;
     border-style: inset;
     border-color: #a1a1a1;
     /* Add this line to set the border color to gray-2 */
@@ -207,11 +207,6 @@ body *::-webkit-scrollbar-thumb:hover {
     width: auto !important;
     display: unset;
     max-width: max-content;
-  }
-
-  img:not([id]) {
-    width: 100%;
-    height: auto;
   }
 }
 
@@ -817,4 +812,16 @@ textarea:focus {
 
 :where(.css-dev-only-do-not-override-1xg9z9n).ant-modal {
   font-family: 'Roboto' !important;
+}
+
+p a {
+  @apply text-blue-1 underline;
+}
+
+.ant-dropdown {
+  z-index: 2000 !important;
+}
+
+.ant-tooltip .ant-tooltip-inner {
+  padding: 10px 12px !important;
 }
