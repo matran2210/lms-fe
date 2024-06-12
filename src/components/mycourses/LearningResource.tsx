@@ -110,6 +110,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         page_size,
         'CHAPTER',
         selectedSection.value,
+        router.query.courseId as string,
       )
       setSubsections([...res?.data?.sections].reverse())
       setSelectedUnit(null)
@@ -131,6 +132,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
+        router.query.courseId as string,
       )
       setUnit([...res?.data?.sections].reverse())
       setSelectedActivity(null)
@@ -151,6 +153,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         page_size,
         'ACTIVITY',
         selectedUnit.value,
+        router.query.courseId as string,
       )
       setActivity([...res?.data?.sections].reverse())
     } catch (error) {}
@@ -162,6 +165,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     }
   }, [selectedUnit])
 
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
+
   const params = cleanParamsAPI({
     sub_id:
       selectedActivity?.value ||
@@ -169,9 +174,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       selectedSubsection?.value ||
       selectedSection?.value ||
       '',
+    page_index: DEFAULT_PAGE_INDEX,
+    page_size: DEFAULT_PAGESIZE,
   })
-
-  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
 
   useEffect(() => {
     const initFetchData = async () => {
@@ -180,13 +185,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         try {
           const resources = await CoursesAPI.getCourseResource(
             router.query.courseId || router.query.id,
-
-            {
-              page_index: DEFAULT_PAGE_INDEX,
-              page_size: DEFAULT_PAGESIZE,
-            },
+            params,
           )
-
+          setPageIndex(DEFAULT_PAGE_INDEX)
           setResources(resources.data)
         } catch (err) {
         } finally {
@@ -211,12 +212,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     try {
       if (requestOngoingRef.current) return
       requestOngoingRef.current = true
+      params.page_index = nextPageIndex
       const res = await CoursesAPI.getCourseResource(
         router.query.courseId || router.query.id,
-        {
-          page_index: nextPageIndex,
-          page_size: DEFAULT_PAGESIZE,
-        },
+        params,
       )
 
       if (resources && res?.data.resources) {
