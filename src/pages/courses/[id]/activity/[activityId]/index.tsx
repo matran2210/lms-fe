@@ -511,9 +511,6 @@ const ActivityPage = () => {
     previousActivityId || router.query.activityId,
   )
 
-  const idPreviousActivity =
-    activity?.previous_activity?.id || activityIds[previousActivityIndex - 1]
-
   const findActivityByIndex = (previousIndex: number) => {
     return sessionData?.find(
       (activity: IActivity) => activity?.id === activityIds[previousIndex],
@@ -530,6 +527,9 @@ const ActivityPage = () => {
       ],
     })
   }
+
+  const idPreviousActivity =
+    activity?.previous_activity?.id || activityIds[previousActivityIndex - 1]
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -870,7 +870,8 @@ const ActivityPage = () => {
                         })
                         await CoursesAPI.startCourseSectionProgress(
                           router?.query?.id,
-                          idPreviousActivity,
+                          activity?.previous_activity?.id ||
+                            activityIds[previousActivityIndex - 1],
                         )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
