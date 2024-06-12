@@ -8,7 +8,7 @@ import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
 import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
-import { IScoreDetails } from 'src/type/quiz/quiz'
+import { IAnswer, IScoreDetails } from 'src/type/quiz/quiz'
 
 const headers = [
   {
@@ -174,7 +174,7 @@ const YourScoreDetail = ({
           classTableRes="!overflow-x-hidden"
         >
           <>
-            {scoreDetails?.answers?.map((e: any, index: number) => {
+            {scoreDetails?.answers?.map((e: IAnswer, index: number) => {
               return (
                 <tr
                   className="border-dashed border-b border-gray-2"

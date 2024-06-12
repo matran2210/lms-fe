@@ -1,3 +1,4 @@
+import { QUESTION_TYPES } from 'src/constants'
 import { IMeta } from '../courses'
 
 export interface IScoreDetails {
@@ -11,7 +12,7 @@ export interface IAnswer {
   question_id: string
   is_correct: boolean
   time_spent: number
-  active: boolean | null
+  active: string
   topic_attempt_id: string | null
   question: Question
 }
@@ -44,6 +45,6 @@ interface Question {
   question_filter_id: QuestionFilter
   question_content: string
   level: string
-  qType: string
+  qType: QUESTION_TYPES
   question_report: QuestionReport
 }
