@@ -531,6 +531,13 @@ const ActivityPage = () => {
     })
   }
 
+  const idPreviousActivity =
+    activity?.previous_activity?.id || activityIds[previousActivityIndex - 1]
+
+  const idNextActivity = activity?.next_activity
+    ? activity?.next_activity?.id
+    : activityIds[nextActivityIndex + 1]
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
@@ -870,7 +877,8 @@ const ActivityPage = () => {
                         })
                         await CoursesAPI.startCourseSectionProgress(
                           router?.query?.id,
-                          idPreviousActivity,
+                          activity?.previous_activity?.id ||
+                            activityIds[previousActivityIndex - 1],
                         )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
