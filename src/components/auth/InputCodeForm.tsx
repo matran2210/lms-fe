@@ -115,30 +115,40 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
     }
   }
 
+  /**
+   * @description chức năng paste OTP
+   */
   const handlePaste = (index: number, e: any) => {
     e.preventDefault() // Ngăn chặn hành động paste mặc định
-    // const pasted = e.clipboardData.getData('text/plain').split(' ').slice(0, 6)
+    const pasted = e.clipboardData
+      .getData('text/plain')
+      .replace(/\n/g, '')
+      .replace(/\r/g, '')
+      .split(' ')
+      .slice(0, 6)
 
-    // // Update the OTP array
-    // const newOtp = [...code]
-    // newOtp.splice(index, pasted.length, ...pasted)
-    // setCode(newOtp)
+    // Update the OTP array
+    const newOtp = [...code]
+    newOtp.splice(index, pasted.length, ...pasted)
+    setCode(newOtp?.filter((value) => value !== ''))
   }
 
   return (
     <>
       <div className="grid grid-cols-6 grid-rows-1 gap-3 mb-2">
-        {code.map((code, index) => (
+        {code.map((otp, index) => (
           <SAPPTextFiled
             key={index}
             inputRef={inputRefs[index]}
             type="text"
-            value={code}
+            value={otp}
             onChange={(event) => onEnterDigit(index, event)}
             inputClassName={`text-center h-16.75 w-16.75 ${
               errorMessage ? 'border-state-error' : 'border-gray-2'
             } pt-5.25 pb-5 px-0`}
-            onPaste={(e: any) => handlePaste(index, e)}
+            onPaste={(e: any) =>
+              code?.every((data) => data === '') && handlePaste(index, e)
+            }
           />
         ))}
       </div>
