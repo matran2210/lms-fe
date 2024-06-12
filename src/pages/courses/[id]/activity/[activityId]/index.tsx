@@ -499,10 +499,6 @@ const ActivityPage = () => {
     nextActivityId || router.query.activityId,
   )
 
-  const idNextActivity = activity?.next_activity
-    ? activity?.next_activity?.id
-    : activityIds[nextActivityIndex + 1]
-
   // Lấy id của hoạt động trước đó
   const previousActivityId = activity?.previous_activity?.id
 
