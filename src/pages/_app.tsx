@@ -28,9 +28,10 @@ import 'aos/dist/aos.css'
 import SappLoading from 'src/common/SappLoading'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import { getActToken, getLocalStorgeActToken } from '@utils/index'
+import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
-import { CourseProvider, useCourseContext } from '@contexts/index'
+import { CourseProvider } from '@contexts/index'
+import { URL } from 'url'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -176,6 +177,21 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
   })
+
+  /**
+   * @description Sử dụng useEffect để thực hiện các tác vụ liên quan đến việc theo dõi thay đổi trong route của ứng dụng để check GA
+   */
+  useEffect(() => {
+    const handleRouteChange = (url: URL) => {
+      pageview(url)
+    }
+
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
 
   return (
     <>
