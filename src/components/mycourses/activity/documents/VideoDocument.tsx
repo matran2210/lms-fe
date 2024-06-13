@@ -5,7 +5,6 @@ import {
   IActivityStateQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
-  removeQuizFinished,
   selectQuestions,
   submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
@@ -52,7 +51,6 @@ const VideoDocument = ({
   document_id,
   quizId,
   grading_preference,
-  class_user_id,
 }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>()
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
@@ -192,6 +190,7 @@ const VideoDocument = ({
    * @returns {boolean} - Returns true if a quiz question is opened; otherwise, false.
    */
   const [hideVideo, setHideVideo] = useState(false)
+
   const handleTrackTime = (time: number, questionId?: string) => {
     const quizAtTime = quizTimed.current?.[time]
     if (quizAtTime && quizAtTime.length > 0) {
@@ -280,28 +279,15 @@ const VideoDocument = ({
 
   /**
    * Handles form submission.
-   * @param {Object} _data - Form data.
+   * @param {boolean} isCorrect - Check the correct or incorrect answers.
    */
-  const onSubmit = async (
-    _data: any,
-    isCorrect: boolean = false,
-    isFinish: boolean = false,
-  ) => {
+  const onSubmit = async (isCorrect: boolean = false) => {
     try {
       if (isConfirmQuestion || isCorrect) {
         handleClose({
           questionId: activeQuestion?.id,
           listQuestion: currentListQuestion,
         })
-        if (isFinish) {
-          dispatch(
-            removeQuizFinished({
-              activityId,
-              tabId,
-              quizId: currentVideo?.quiz?.id || '',
-            }),
-          )
-        }
       } else {
         questionRef.current?.onSubmit({
           activityId: activityId,
@@ -326,6 +312,14 @@ const VideoDocument = ({
   )
 
   const timeQuiz = Object.values(quizTimed?.current || [])
+
+  /**
+   * @description check điều kiện xem có phải câu hỏi cuối cùng không
+   */
+  const finishQuestion =
+    timeQuiz?.[timeQuiz?.length - 1]?.find(
+      (quiz) => quiz?.id === activeQuestion?.id,
+    )?.id === activeQuestion?.id
 
   return (
     <div>
@@ -423,11 +417,11 @@ const VideoDocument = ({
             }
             parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
             okButtonCaption={`${
-              isConfirmQuestion || activeQuestion?.corrects
-                ? lastQuestion?.id === activeQuestion?.id
-                  ? 'Finish'
-                  : 'Next'
-                : 'Confirm'
+              finishQuestion
+                ? 'Finish'
+                : isConfirmQuestion || activeQuestion?.corrects
+                  ? 'Next'
+                  : 'Submit'
             }`}
             buttonSize="small"
             size="max-w-full"
@@ -437,15 +431,9 @@ const VideoDocument = ({
             okButtonClass="!w-20 h-8.5 !px-0"
             cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
             footerButtonClassName="!justify-between flex"
-            handleSubmit={
-              lastQuestion?.id === activeQuestion?.id
-                ? handleSubmit((e) =>
-                    onSubmit(e, activeQuestion?.corrects ? true : false, true),
-                  )
-                : handleSubmit((e) =>
-                    onSubmit(e, activeQuestion?.corrects ? true : false),
-                  )
-            }
+            handleSubmit={handleSubmit((e) =>
+              onSubmit(activeQuestion?.corrects ? true : false),
+            )}
             handleCancel={() => {
               handleClose({
                 questionId: activeQuestion?.id,
@@ -454,7 +442,7 @@ const VideoDocument = ({
             }}
             closeAfterSubmit={false}
             colorCancel="textUnderline"
-            cancelButtonCaption="Skip"
+            cancelButtonCaption={`${finishQuestion ? '' : 'Skip'}`}
           >
             <div className="py-5">
               <QuizComponent

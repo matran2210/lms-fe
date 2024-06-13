@@ -102,14 +102,14 @@ const OneChoiceQuestion = ({
           highlighted={highlighted}
         />
       </div>
-      {data?.question_topic.exhibits &&
+      {data?.question_topic?.exhibits &&
         !isHideExhibit &&
         data?.question_topic?.exhibits?.length > 0 && (
           <>
             <div className="border border-b-gray-2 my-6"></div>
             <div className="flex items-center mb-4">
               <div className="font-semibold">
-                Exhibits({data.question_topic?.exhibits?.length || 0})
+                Exhibits({data?.question_topic?.exhibits?.length || 0})
               </div>
               <div className="ml-4">
                 <span className="text-state-error">* </span>
