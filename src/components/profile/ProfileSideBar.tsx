@@ -185,32 +185,36 @@ const ProfileSideBar = ({ page }: IProps) => {
                     </div>
                   )}
                 </a>
-                {isExpanded &&
-                  urlChildren.map((child) => {
-                    const childLabel = getLabelFromChild(child).replace(
-                      /\s+/g,
-                      '_',
-                    )
-                    const childIsActive =
-                      childActivationStates[childLabel] || false
-                    return (
-                      <div
-                        key={childLabel}
-                        className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-bold hover-transition-font-weight ${
-                          childIsActive
-                            ? 'bg-white font-bold text-primary'
-                            : 'hover:left-[-0.5px]'
-                        }`}
-                      >
-                        <a
-                          className="p-5 block w-full text-left"
-                          onClick={() => handleChildClick(childLabel)}
-                        >
-                          {getLabelFromChild(child)}
-                        </a>
-                      </div>
-                    )
-                  })}
+                {urlChildren?.length > 0 && (
+                  <div className="border-l border-gray-2 ml-5 my-5">
+                    {isExpanded &&
+                      urlChildren.map((child) => {
+                        const childLabel = getLabelFromChild(child).replace(
+                          /\s+/g,
+                          '_',
+                        )
+                        const childIsActive =
+                          childActivationStates[childLabel] || false
+                        return (
+                          <div
+                            key={childLabel}
+                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-bold hover-transition-font-weight ${
+                              childIsActive
+                                ? 'bg-white font-bold text-primary'
+                                : 'hover:left-[-0.5px]'
+                            }`}
+                          >
+                            <a
+                              className="p-3 block w-full text-left"
+                              onClick={() => handleChildClick(childLabel)}
+                            >
+                              {getLabelFromChild(child)}
+                            </a>
+                          </div>
+                        )
+                      })}
+                  </div>
+                )}
                 <div
                   className={`border-b border-gray-3 relative top-px group-hover:border-secondary ${
                     isActive ? 'border-secondary' : ''
