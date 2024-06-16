@@ -39,7 +39,6 @@ import {
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-import UnSubmitAnswerModal from '../test/unSubmitAnswerModal'
 import useMousePosition from '@utils/hookMouseMove'
 import SappLoading from 'src/common/SappLoading'
 import { CoursesAPI } from '../api/courses/index'
@@ -47,11 +46,6 @@ import { TestAPI } from '../api/test'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import PDFViewer from '@components/base/pdf/pdf-viewer'
 import { IExhibit } from 'src/type/exhibit'
-
-interface Question {
-  id: string // Assuming id is a string, you can adjust the type accordingly
-  question_content: string // Assuming question_content is a string
-}
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -234,8 +228,6 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
-  const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
-  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<any>>([])
   const dispatch = useAppDispatch()
   const { topics, listFullQuestions, listQuestions, loading } = useAppSelector(
     (state) => state.caseStudyTestReducer,
@@ -488,40 +480,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
     return arrAnswer
   }
-  const checkUnSubmitAnswer = () => {
-    const listUnSubmitAnswerIds = new Set(
-      getAllValue()
-        .filter((item) => item.answer === '')
-        .map((item) => item.id),
-    )
-    const unSubmittedQuestions = listQuestions
-      .filter((questionObject: Record<string, Question>) => {
-        const question = Object.values<Question>(questionObject)[0]
-        const questionHTML = question.question_content
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(questionHTML, 'text/html')
-        const paragraphs = doc.querySelectorAll('p')
-        return paragraphs.length > 0 && listUnSubmitAnswerIds.has(question.id)
-      })
-      .map((questionObject: Record<string, Question>) => {
-        const question = Object.values<Question>(questionObject)[0]
-        const questionHTML = question.question_content
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(questionHTML, 'text/html')
-        const paragraphs = doc.querySelectorAll('p')
-        const paragraphContents = Array.from(paragraphs)
-          .map((p) => p.textContent || '')
-          .join('\n')
-        return paragraphContents
-      })
-    setUnSubmitAnswerData(unSubmittedQuestions)
 
-    if (unSubmittedQuestions.length === 0) {
-      setOpenSubmit(true)
-    } else {
-      setUnSubmitAnswer(true)
-    }
-  }
   const handleSubmitQuestion = async () => {
     let allQuest = getAllValue()
     let quiz_position_mapping = []
@@ -804,7 +763,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   disabled: false,
                   onClick: () => {
                     setOpenScratchPad([])
-                    checkUnSubmitAnswer()
+                    setOpenSubmit(true)
                     setUnsavedChanges(false)
                   },
                 }}
@@ -1253,16 +1212,6 @@ const CaseStudyDetail = ({ questions }: any) => {
             setOpen={setOpenSubmit}
             handleSubmit={handleSubmitQuestion}
             handleCancel={() => setUnsavedChanges(true)}
-          />
-          <UnSubmitAnswerModal
-            open={openUnSubmitAnswer}
-            setOpen={setUnSubmitAnswer}
-            data={unSubmitAnswerData}
-            caseStudy={true}
-            handleSubmit={() => {
-              setOpenSubmit(true)
-              setUnSubmitAnswer(false)
-            }}
           />
           <QuitTestModal
             open={openQuit}
