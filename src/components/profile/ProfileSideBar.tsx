@@ -223,7 +223,10 @@ const ProfileSideBar = ({ page }: IProps) => {
           })}
           <li
             className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
-            onClick={handleLogout}
+            onClick={() => {
+              trackGAEvent('Click Logout', 'Click Logout', 'Click Logout')
+              handleLogout()
+            }}
           >
             <div className="absolute inset-0 bottom-0"></div>
             <div>Logout</div>
