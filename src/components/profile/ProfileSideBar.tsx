@@ -1,5 +1,6 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
+import { trackGAEvent } from '@utils/google-analytics'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -124,7 +125,7 @@ const ProfileSideBar = ({ page }: IProps) => {
     >
       <ul className="px-3 py-4 bg-white h-full flex flex-col justify-between">
         <div>
-          {Object.entries(PROFILE_PAGES).map(([key, value]) => {
+          {Object.entries(PROFILE_PAGES).map(([key, value]: any) => {
             const urlPage = key.toLowerCase()
             const urlChildren = (value.children || []) as Child[]
 
@@ -172,6 +173,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                       onClickExpand()
                       setChildActivationStates({ security: true })
                     }
+                    trackGAEvent(value.ga, value.ga, value.ga)
                   }}
                 >
                   {value.label}

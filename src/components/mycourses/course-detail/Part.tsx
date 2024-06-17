@@ -14,6 +14,10 @@ import {
 import { useForm } from 'react-hook-form'
 import { Tooltip } from 'antd'
 import { ANIMATION } from 'src/constants'
+import { trackGAEvent } from '@utils/google-analytics'
+
+const CLICK_NAME_COURSE_DETAIL = 'Click Name Course Detail'
+const CLICK_BUTTON_COURSE_DETAIL = 'Click Button Course Detail'
 
 const Part = ({ course }: { course: IMyCourseDetail }) => {
   const [open, setOpen] = useState(false)
@@ -69,9 +73,15 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
     <div data-aos={ANIMATION.DATA_AOS}>
       <div
         className={`name-part text-2xl font-medium h-[60px] cursor-pointer`}
-        onClick={() =>
+        onClick={() => {
           course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
-        }
+          trackGAEvent(
+            CLICK_NAME_COURSE_DETAIL,
+            CLICK_NAME_COURSE_DETAIL,
+            CLICK_NAME_COURSE_DETAIL,
+          )
+        }}
+        id="course_name_detail"
       >
         {(course?.name as string)?.length > 50 ? (
           <Tooltip title={course?.name} color="#ffffff" placement="top">
@@ -149,11 +159,17 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             full={false}
             size={'small'}
             className="ml-auto"
-            onClick={() =>
+            onClick={() => {
               course?.course_section_type === 'PART'
                 ? onClickPart(course.id)
                 : {}
-            }
+              trackGAEvent(
+                CLICK_BUTTON_COURSE_DETAIL,
+                CLICK_BUTTON_COURSE_DETAIL,
+                CLICK_BUTTON_COURSE_DETAIL,
+              )
+            }}
+            id="button_course_detail"
           />
         </div>
       </div>

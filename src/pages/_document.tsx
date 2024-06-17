@@ -1,11 +1,12 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
-import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
 
 class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <GoogleTagManager gtmId="GTM-TH9L5T43" />
+        {/* <GoogleTagManager gtmId="GTM-TH9L5T43" /> */}
+        <GoogleAnalytics gaId="GTM-TH9L5T43" />
         <Head>
           <script
             async

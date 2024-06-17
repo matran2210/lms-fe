@@ -39,6 +39,7 @@ import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import SAPPBorder from 'src/common/SAPPBorder'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { trackGAEvent } from '@utils/google-analytics'
 
 // type Props = {
 //   activity: IActivity
@@ -787,9 +788,14 @@ const ActivityPage = () => {
                     <div className="w-auto">
                       <div className="relative">
                         <div
-                          onClick={() =>
+                          onClick={() => {
                             handleChangeTab(getPreviousTabId() || '')
-                          }
+                            trackGAEvent(
+                              'Click Previous Tab',
+                              'Click Previous Tab',
+                              'Click Previous Tab',
+                            )
+                          }}
                           className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
                         >
                           <svg
@@ -815,7 +821,14 @@ const ActivityPage = () => {
                     <div className="w-auto relative ml-auto">
                       <div className="relative">
                         <div
-                          onClick={() => handleChangeTab(getNextTabId() || '')}
+                          onClick={() => {
+                            handleChangeTab(getNextTabId() || '')
+                            trackGAEvent(
+                              'Click Next Tab',
+                              'Click Next Tab',
+                              'Click Next Tab',
+                            )
+                          }}
                           className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                         >
                           Next Tab
@@ -873,8 +886,14 @@ const ActivityPage = () => {
                           activity?.previous_activity?.id ||
                             activityIds[previousActivityIndex - 1],
                         )
+                        trackGAEvent(
+                          'Click Previous Activity',
+                          'Click Previous Activity',
+                          'Click Previous Activity',
+                        )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                      id="previous_activity"
                     >
                       Previous Activity
                     </div>
@@ -917,8 +936,14 @@ const ActivityPage = () => {
                           router?.query?.id,
                           idNextActivity,
                         )
+                        trackGAEvent(
+                          'Click Next Activity',
+                          'Click Next Activity',
+                          'Click Next Activity',
+                        )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                      id="next_activity"
                     >
                       Next Activity
                     </div>

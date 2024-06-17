@@ -23,7 +23,7 @@ import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
 import PopupOpenClass from './PopupOpenClass'
-import { sendGTMEvent } from '@next/third-parties/google'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const Course = ({
   course,
@@ -300,12 +300,16 @@ const Course = ({
             >
               <div
                 className="line-clamp-2 text-ellipsis cursor-pointer "
-                id="title_test"
+                id="click_name_course"
                 onClick={() => {
                   if (isActiveStudent && enableCourse) {
                     courseAction()
                   }
-                  sendGTMEvent({ event: 'buttonClicked', value: 'xyz' })
+                  trackGAEvent(
+                    'Click Name Course',
+                    'Click Name Course',
+                    'Click Name Course',
+                  )
                 }}
               >
                 {(course?.name as string)?.length > 50 ? (
@@ -440,6 +444,11 @@ const Course = ({
                       if (isActiveStudent) {
                         courseAction()
                       }
+                      trackGAEvent(
+                        'Click Button My Course',
+                        'Click Button My Course',
+                        'Click Button My Course',
+                      )
                     }}
                     id="click_course"
                   />
