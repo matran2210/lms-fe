@@ -527,6 +527,10 @@ const ActivityPage = () => {
   const idPreviousActivity =
     activity?.previous_activity?.id || activityIds[previousActivityIndex - 1]
 
+  const idNextActivity = activity?.next_activity
+    ? activity?.next_activity?.id
+    : activityIds[nextActivityIndex + 1]
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
