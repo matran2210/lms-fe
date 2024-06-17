@@ -23,6 +23,7 @@ import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
 import PopupOpenClass from './PopupOpenClass'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const Course = ({
   course,
@@ -299,10 +300,12 @@ const Course = ({
             >
               <div
                 className="line-clamp-2 text-ellipsis cursor-pointer "
+                id="title_test"
                 onClick={() => {
                   if (isActiveStudent && enableCourse) {
                     courseAction()
                   }
+                  sendGTMEvent({ event: 'buttonClicked', value: 'xyz' })
                 }}
               >
                 {(course?.name as string)?.length > 50 ? (
@@ -438,6 +441,7 @@ const Course = ({
                         courseAction()
                       }
                     }}
+                    id="click_course"
                   />
                 ) : (
                   <div className="action flex items-center justify-end relative h-8"></div>

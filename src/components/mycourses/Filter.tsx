@@ -78,6 +78,7 @@ const Filter = ({ courses, setPage }: IProps) => {
         className={`pr-6 border-r border-gray-1 ${
           !activeStatus ? 'inactive-filter' : ''
         }`}
+        id="filter_category"
       >
         <SappHookFormSelect
           control={control}

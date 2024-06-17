@@ -11,6 +11,7 @@ const ButtonSecondary = ({
   full = false,
   loading = false,
   disabled = false,
+  id = '',
 }: IButtonProps) => {
   let textSizeClass =
     size === 'small'
@@ -39,6 +40,7 @@ const ButtonSecondary = ({
       className={`${componentClass} secondary`}
       onClick={onClick}
       disabled={disabled || loading}
+      id={id}
     >
       {!loading ? (
         title

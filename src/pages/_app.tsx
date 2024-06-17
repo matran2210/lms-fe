@@ -32,6 +32,7 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
+import TagManager, { TagManagerArgs } from 'react-gtm-module'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -192,6 +193,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       router.events.off('routeChangeComplete', handleRouteChange)
     }
   }, [router.events])
+
+  const gtmId = 'GTM-TH9L5T43'
+  const tagManagerArgs: TagManagerArgs = { gtmId }
+
+  useEffect(() => {
+    TagManager.initialize(tagManagerArgs)
+  }, [])
 
   return (
     <>
