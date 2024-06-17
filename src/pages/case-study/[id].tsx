@@ -480,6 +480,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
     return arrAnswer
   }
+
   const handleSubmitQuestion = async () => {
     let allQuest = getAllValue()
     let quiz_position_mapping = []

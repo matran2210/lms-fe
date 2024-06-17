@@ -1,16 +1,14 @@
 import SappTable from '@components/base/SappTable'
-import { Dispatch } from '@reduxjs/toolkit'
-import { SetStateAction } from 'react'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
+import { useRef } from 'react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { roundNumber, convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { ANIMATION, QUESTION_TYPES } from 'src/constants'
-import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
 import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
+import { IAnswer, IScoreDetails } from 'src/type/quiz/quiz'
 
 const headers = [
   {
@@ -49,6 +47,8 @@ const headers = [
       'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[95px] !pr-0 text-center',
   },
 ]
+const DEFAULT_PAGE_INDEX = 1
+const DEFAULT_PAGESIZE = 20
 
 interface YourScoreDetailProps {
   className?: string
@@ -60,52 +60,26 @@ const YourScoreDetail = ({
   yourScoreDetailRef,
 }: YourScoreDetailProps) => {
   const router = useRouter()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
+  const [scoreDetails, setScoreDetails] = useState<IScoreDetails>()
 
-  const { data: scoreDetail } = useQuery(
-    ['scoreDetail', router.query.id],
+  useQuery(
+    ['scoreDetails', router.query.id],
     async () => {
       const res = await CoursesAPI.getQuizAttemptsTable(
         router.query.id as string,
         {
-          page_index: 1,
-          page_size: 20,
+          page_index: DEFAULT_PAGE_INDEX,
+          page_size: DEFAULT_PAGESIZE,
         },
       )
-      return res.data
+      setScoreDetails(res.data)
     },
     {
       enabled: router.query.id !== undefined,
     },
   )
-
-  // const handleScroll = () => {
-  //   if (
-  //     window.innerHeight + document.documentElement.scrollTop !==
-  //     document.documentElement.offsetHeight
-  //   ) {
-  //     return
-  //   }
-  //   handlNextPage()
-  // }
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll)
-  //   return () => window.removeEventListener('scroll', handleScroll)
-  // }, [scoreDetail])
-
-  // const handlNextPage = async () => {
-  //   const totalPages = scoreDetail?.meta?.total_pages
-  //   const pageIndex = scoreDetail?.meta?.page_index
-  //   const pageSize = scoreDetail?.meta?.page_size
-  //   if (totalPages && pageIndex < totalPages) {
-  //     const res = await fetchScoreDetail(pageIndex + 1, pageSize)
-  //     const results = scoreDetail?.answers?.concat(res?.data?.answers)
-  //     setScoreDetail({
-  //       meta: res?.data?.meta,
-  //       answers: results,
-  //     })
-  //   }
-  // }
 
   // Hàm ánh xạ giá trị enum với tên tương ứng
   const getTypeName = (type: QUESTION_TYPES): string => {
@@ -131,8 +105,57 @@ const YourScoreDetail = ({
     }
   }
 
+  // Xử lý scroll phân trang
+  const requestOngoingRef = useRef(false)
+  const fetchData = async (nextPageIndex: number) => {
+    setLoading(true)
+    try {
+      if (requestOngoingRef.current) return
+      requestOngoingRef.current = true
+      const res = await CoursesAPI.getQuizAttemptsTable(
+        router.query.id as string,
+        {
+          page_index: nextPageIndex,
+          page_size: DEFAULT_PAGESIZE,
+        },
+      )
+      if (scoreDetails && res?.data?.answers) {
+        setScoreDetails((prevStages: any) => ({
+          ...prevStages,
+          answers: [...prevStages.answers, ...res.data.answers],
+        }))
+        setPageIndex(nextPageIndex)
+        requestOngoingRef.current = false
+      }
+    } catch (error) {}
+    setTimeout(() => {
+      setLoading(false)
+    }, 500)
+  }
+
+  // Xử lý sự kiện scroll
+  useEffect(() => {
+    const divElement = document.getElementById('sapp-drawer-test-result-list')
+    if (!divElement) return
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = divElement
+      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
+        const nextPageIndex = pageIndex + 1
+        if (Number(scoreDetails?.meta?.total_pages) >= nextPageIndex) {
+          fetchData(nextPageIndex)
+        }
+      }
+    }
+    divElement.addEventListener('scroll', handleScroll)
+    // Cleanup function
+    return () => {
+      divElement.removeEventListener('scroll', handleScroll)
+    }
+  }, [fetchData, pageIndex])
+
   return (
     <div
+      id="sapp-drawer-test-result-list"
       className={`overflow-y-auto bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
@@ -143,15 +166,15 @@ const YourScoreDetail = ({
       <div className="block pl-4 overflow-x-auto">
         <SappTable
           headers={headers}
-          loading={true}
-          data={scoreDetail?.answers}
+          loading={loading}
+          data={scoreDetails?.answers}
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}
           classTableRes="!overflow-x-hidden"
         >
           <>
-            {scoreDetail?.answers?.map((e: any, index: number) => {
+            {scoreDetails?.answers?.map((e: IAnswer, index: number) => {
               return (
                 <tr
                   className="border-dashed border-b border-gray-2"
