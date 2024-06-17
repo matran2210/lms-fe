@@ -242,6 +242,7 @@ const TestDetail = () => {
             handleClearFile={handleClearFile}
             setOpenPdf={handleOpenScratchPad}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+            showRequiment={showListRequirement}
           />
           // <Luckysheet/>
         )
