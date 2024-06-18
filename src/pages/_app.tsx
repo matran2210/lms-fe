@@ -32,7 +32,6 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
-import BackToTop from '@components/BackToTop'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -264,7 +263,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             <RouteGuard>
               <>
                 {content}
-                <BackToTop />
                 <LearningResource
                   open={openResource}
                   setOpenResource={setOpenResource}
