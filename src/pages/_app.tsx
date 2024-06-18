@@ -193,6 +193,58 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
+  useEffect(() => {
+    // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
+    if (getLocalStorgeActToken()) {
+      // Tạo một thẻ script mới
+      const scriptElement = document.createElement('script')
+      scriptElement.type = 'text/javascript'
+      scriptElement.id = 'hs-script-loader'
+      scriptElement.async = true
+      scriptElement.defer = true
+      scriptElement.src = `//js.hs-scripts.com/1774127.js`
+
+      // Thêm thẻ script vào trong thẻ head của trang
+      document.head.appendChild(scriptElement)
+
+      // Cleanup: Xóa script khi component unmount (nếu cần)
+      return () => {
+        document.head.removeChild(scriptElement)
+      }
+    }
+  })
+
+  const [active, setActive] = useState(false)
+
+  useEffect(() => {
+    // Lấy phần tử có lớp là "hubspot messages-body"
+    const messagesBody = document.querySelector('.hubspot')
+    console.log(messagesBody)
+
+    // Kiểm tra xem phần tử có tồn tại không trước khi thêm lớp
+    if (messagesBody) {
+      messagesBody.classList.add('your-custom-class') // Thêm lớp tùy chỉnh vào phần tử
+    }
+  })
+
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
+  const toggleChat = () => {
+    setIsChatOpen(!isChatOpen)
+    // Trigger HubSpot chat toggle function if available
+    if (
+      window &&
+      (window as any).HubSpotConversations &&
+      (window as any).HubSpotConversations.widget
+    ) {
+      if (isChatOpen) {
+        ;(window as any).HubSpotConversations.widget.close()
+      } else {
+        ;(window as any).HubSpotConversations.widget.open()
+      }
+    }
+  }
+
   return (
     <>
       <Head>
@@ -263,6 +315,36 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             <RouteGuard>
               <>
                 {content}
+                <div
+                  id="container-floating"
+                  className={`${active ? 'clicked' : ''}`}
+                  onClick={() => setActive(!active)}
+                >
+                  <div className="nd4 nds">
+                    <img className="reminder" />
+                    <p className="letter">C</p>
+                  </div>
+
+                  <div className="nd3 nds">
+                    <img
+                      className="reminder"
+                      src="//ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/ic_reminders_speeddial_white_24dp.png"
+                    />
+                  </div>
+
+                  <div className="nd1 nds">
+                    <p className="letter">E</p>
+                  </div>
+
+                  <div id="floating-button">
+                    <p className="plus">+</p>
+                    <img
+                      className="edit"
+                      src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png"
+                    />
+                  </div>
+                </div>
+
                 <LearningResource
                   open={openResource}
                   setOpenResource={setOpenResource}
