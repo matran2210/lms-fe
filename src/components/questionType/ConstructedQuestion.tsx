@@ -19,6 +19,21 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+
+type SheetData = {
+  name: string
+  id: string
+  status: number
+  data: (any[] | null)[]
+  celldata: {
+    r: number
+    c: number
+    v: { v: string; ct: { fa: string; t: string }; m: string }
+  }[]
+  row?: number
+  column?: number
+}
+
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -95,6 +110,31 @@ const EssayQuestionPreview = ({
         }),
     }
   }
+
+  useEffect(() => {
+    if (refSheet.current) {
+      if (defaultValue === undefined) {
+        const emptySheets = refSheet.current
+          ?.getAllSheets()
+          .map((sheet: SheetData) => ({
+            ...sheet,
+            celldata: [],
+            data: Array(sheet.row || 100)
+              .fill(null)
+              .map(() => Array(sheet.column || 50).fill(null)),
+          }))
+        emptySheets.forEach((sheet: SheetData) => {
+          refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+        })
+      } else {
+        const sheetData = defaultValue
+          ? JSON.parse(defaultValue)
+          : [{ name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] }]
+        refSheet?.current?.updateSheet(sheetData)
+      }
+    }
+  }, [defaultValue])
+
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]
   }) => {
