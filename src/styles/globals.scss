@@ -826,12 +826,6 @@ p a {
   padding: 10px 12px !important;
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-  text-align: center;
-  background: #f1f1f1;
-}
-
 #presentation {
   width: 480px;
   height: 120px;
@@ -842,15 +836,6 @@ body {
   box-shadow: 0 3px 15px -5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s;
   border-radius: 10px;
-
-  h1 {
-    font-weight: 400;
-  }
-
-  h3 {
-    font-weight: 400;
-    color: #666;
-  }
 }
 
 #presentation:hover {
@@ -863,19 +848,21 @@ body {
   width: 55px;
   height: 55px;
   border-radius: 50%;
-  background: #db4437;
+  background: white;
   position: fixed;
   bottom: 30px;
   right: 30px;
   cursor: pointer;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  // box-shadow: 0px 2px 4px 0px #00000014;
+
+  box-shadow: 0px 0px 6px 0px #00000005;
 }
 
 .plus {
   color: white;
   position: absolute;
   top: 0;
-  display: block;
+  // display: block;
   bottom: 0;
   left: 0;
   right: 0;
@@ -899,16 +886,10 @@ body {
   z-index: 50px;
 }
 
-#container-floating:hover {
-  height: 400px;
-  width: 90px;
-  padding: 30px;
-}
-
-#container-floating:hover .plus {
-  animation: plus-in 0.15s linear;
-  animation-fill-mode: forwards;
-}
+// #container-floating .plus {
+//   animation: plus-in 0.15s linear;
+//   animation-fill-mode: forwards;
+// }
 
 .edit {
   position: absolute;
@@ -1087,4 +1068,17 @@ body {
   bottom: 0;
   margin: auto;
   right: 20px;
+}
+
+.ant-popover-content {
+  width: 360px !important;
+}
+
+.ant-popover-inner {
+  padding: 24px !important;
+  gap: 10px !important;
+}
+
+.ant-popover {
+  font-family: 'Roboto', sans-serif !important;
 }
