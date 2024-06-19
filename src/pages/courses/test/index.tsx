@@ -103,7 +103,7 @@ const TestModal = ({
             >
               {data?.quiz?.attempt?.ratio_score ?? '--'}
             </div>
-            {data?.quiz?.attempt?.ratio_score && (
+            {checkFinished && (
               <div className='underline ml-2 text-state-info cursor-pointer' onClick={() => router.push(`/courses/test/test-result/${data?.quiz?.attempt?.id}`)}>
               View
             </div>
