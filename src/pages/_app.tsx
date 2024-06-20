@@ -279,9 +279,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         {user?.pinnedNotifications?.data?.content && (
           <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
-            <div><IconLoudSpeaker /></div>
-            <div>{user?.pinnedNotifications?.data?.content}</div>
-            <div className='w-[150px]'><div className='ml-[130px]'><CloseIconNote/></div></div>
+            <div className='flex flex-row'>
+              <div className='pr-2'><IconLoudSpeaker /></div>
+              <div>{user?.pinnedNotifications?.data?.content}</div>
+            </div>
+            <div><CloseIconNote/></div>
           </div>
         )}
         <div className={`${user?.pinnedNotifications?.data?.content ? 'pt-12' : ''}`}>
