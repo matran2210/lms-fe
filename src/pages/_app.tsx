@@ -216,8 +216,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   //   }
   // })
 
-  const [active, setActive] = useState(false)
-
   const [visible, setVisible] = useState(false)
 
   const handleVisibleChange = (newVisible: any) => {
@@ -232,6 +230,19 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }
 
   const [isHoveredFourLevel, setIsHoveredFourLevel] = useState(false)
+
+  useEffect(() => {
+    const container = document.getElementById(
+      'hubspot-messages-iframe-container',
+    )
+    if (container && visible) {
+      container.classList.add('aaaaaaaaaaaa')
+    } else {
+      if (container && !visible) {
+        container.classList.remove('aaaaaaaaaaaa')
+      }
+    }
+  }, [])
 
   return (
     <>
@@ -304,11 +315,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               <>
                 {content}
 
-                <div
-                  id="container-floating"
-                  className={`${active ? 'clicked' : ''}`}
-                  onClick={() => setActive(!active)}
-                >
+                <div id="container-floating">
                   <div>
                     <Popover
                       content={
@@ -320,6 +327,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                               viewBox="0 0 20 20"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
+                              onClick={() => setVisible(false)}
+                              className="cursor-pointer"
                             >
                               <path
                                 fill-rule="evenodd"
@@ -602,8 +611,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       placement="topLeft"
                       arrow={false}
                     >
-                      {/* <Button onClick={handleButtonClick}>Toggle</Button> */}
-                      <div id="floating-button" onClick={handleButtonClick}>
+                      <div
+                        id="floating-button"
+                        onClick={handleButtonClick}
+                        className={`${
+                          visible ? 'bottom-5' : 'bottom-[90px]'
+                        } right-[20px]`}
+                      >
                         <div className="plus flex justify-center items-center hover:bg-primary hover:rounded-full">
                           {/* <svg
                             width="34"
