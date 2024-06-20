@@ -854,6 +854,22 @@ p a {
   // box-shadow: 0px 2px 4px 0px #00000014;
 
   box-shadow: 0px 0px 6px 0px #00000005;
+  animation: moveDown 1s ease-out forwards;
+}
+
+#floating-button.clicked {
+  animation: moveDown 0.5s ease-out forwards;
+}
+
+@keyframes moveDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .plus {
@@ -873,6 +889,8 @@ p a {
   font-weight: 300;
   animation: plus-out 0.3s;
   transition: all 0.3s;
+  width: 60px;
+  height: 60px;
 }
 
 #container-floating {
@@ -880,7 +898,7 @@ p a {
   width: 70px;
   height: 70px;
   bottom: 30px;
-  right: 30px;
+  right: 20px;
   z-index: 50px;
 }
 
@@ -1081,6 +1099,14 @@ p a {
   font-family: 'Roboto', sans-serif !important;
 }
 
-#hubspot-messages-iframe-container.widget-align-right iframe {
+#hubspot-messages-iframe-container.aaaaaaaaaaaa iframe {
   display: none !important;
+}
+
+#hubspot-messages-iframe-container.aaaaaaaaaaaa {
+  position: inherit !important;
+}
+
+#floating-button .plus:hover svg path {
+  fill: white;
 }

@@ -38,13 +38,6 @@ class MyDocument extends Document {
             referrerPolicy="origin"
           ></script>
           <script src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"></script>
-          <script
-            type="text/javascript"
-            id="hs-script-loader"
-            async
-            defer
-            src="//js.hs-scripts.com/1774127.js"
-          ></script>
         </Head>
         <body>
           <Main />

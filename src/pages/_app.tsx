@@ -32,7 +32,7 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
-import { Button, Popover } from 'antd'
+import { Button, Popover, Tooltip } from 'antd'
 import Link from 'next/link'
 
 type MyAppProps = AppProps & {
@@ -195,27 +195,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
-  // useEffect(() => {
-  //   // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
-  //   if (getLocalStorgeActToken()) {
-  //     // Tạo một thẻ script mới
-  //     const scriptElement = document.createElement('script')
-  //     scriptElement.type = 'text/javascript'
-  //     scriptElement.id = 'hs-script-loader'
-  //     scriptElement.async = true
-  //     scriptElement.defer = true
-  //     scriptElement.src = `//js.hs-scripts.com/1774127.js`
-
-  //     // Thêm thẻ script vào trong thẻ head của trang
-  //     document.head.appendChild(scriptElement)
-
-  //     // Cleanup: Xóa script khi component unmount (nếu cần)
-  //     return () => {
-  //       document.head.removeChild(scriptElement)
-  //     }
-  //   }
-  // })
-
   const [visible, setVisible] = useState(false)
 
   const handleVisibleChange = (newVisible: any) => {
@@ -242,7 +221,28 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         container.classList.remove('aaaaaaaaaaaa')
       }
     }
-  }, [])
+  }, [visible])
+
+  useEffect(() => {
+    // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
+    // if (getLocalStorgeActToken()) {
+    // Tạo một thẻ script mới
+    const scriptElement = document.createElement('script')
+    scriptElement.type = 'text/javascript'
+    scriptElement.id = 'hs-script-loader'
+    scriptElement.async = true
+    scriptElement.defer = true
+    scriptElement.src = `//js.hs-scripts.com/1774127.js`
+
+    // Thêm thẻ script vào trong thẻ head của trang
+    document.head.appendChild(scriptElement)
+
+    // Cleanup: Xóa script khi component unmount (nếu cần)
+    return () => {
+      document.head.removeChild(scriptElement)
+    }
+    // }
+  })
 
   return (
     <>
@@ -316,7 +316,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 {content}
 
                 <div id="container-floating">
-                  <div>
+                  <div className="cursor-pointer">
                     <Popover
                       content={
                         <div>
@@ -327,7 +327,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                               viewBox="0 0 20 20"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              onClick={() => setVisible(false)}
+                              onClick={() => setVisible(!visible)}
                               className="cursor-pointer"
                             >
                               <path
@@ -347,7 +347,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             các kênh liên hệ sau:
                           </div>
 
-                          <Link href={'#'} className="mt-3">
+                          <Link
+                            href={'https://knowledge.sapp.edu.vn/knowledge'}
+                            target="_blank"
+                            className="mt-3"
+                          >
                             <div
                               onMouseEnter={() => setIsHoveredFourLevel(true)}
                               onMouseLeave={() => setIsHoveredFourLevel(false)}
@@ -355,7 +359,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             >
                               {isHoveredFourLevel ? (
                                 <div className="w-full flex items-center justify-center">
-                                  dddd
+                                  Tra cứu tại đây
                                 </div>
                               ) : (
                                 <>
@@ -399,7 +403,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             </div>
                           </Link>
 
-                          <Link href={'#'} className="mt-3">
+                          <Link
+                            href={
+                              'https://sapp.edu.vn/dich-vu-cham-soc-hoc-vien-sapp-academy/'
+                            }
+                            target="_blank"
+                            className="mt-3"
+                          >
                             <div className="flex border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer">
                               <div className="flex items-center">
                                 <svg
@@ -432,7 +442,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             </div>
                           </Link>
 
-                          <Link href={'#'} className="mt-3">
+                          <Link
+                            href={'https://www.facebook.com/ServiceofSAPP'}
+                            target="_blank"
+                            className="mt-3"
+                          >
                             <div className="flex border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer">
                               <div className="flex items-center">
                                 <svg
@@ -461,7 +475,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             </div>
                           </Link>
 
-                          <Link href={'#'} className="mt-3">
+                          <Link
+                            href={
+                              'https://www.facebook.com/groups/everydaywithsapp'
+                            }
+                            target="_blank"
+                            className="mt-3"
+                          >
                             <div className="flex border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer">
                               <div className="flex items-center">
                                 <svg
@@ -611,50 +631,71 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       placement="topLeft"
                       arrow={false}
                     >
-                      <div
-                        id="floating-button"
-                        onClick={handleButtonClick}
-                        className={`${
-                          visible ? 'bottom-5' : 'bottom-[90px]'
-                        } right-[20px]`}
-                      >
-                        <div className="plus flex justify-center items-center hover:bg-primary hover:rounded-full">
-                          {/* <svg
-                            width="34"
-                            height="34"
-                            viewBox="0 0 34 34"
-                            fill="red"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              d="M22.3033 11.6969C22.5962 11.9897 22.5962 12.4646 22.3033 12.7575L18.0607 17.0002L22.3033 21.2428C22.5962 21.5357 22.5962 22.0106 22.3033 22.3035C22.0104 22.5964 21.5355 22.5963 21.2426 22.3035L17 18.0608L12.7574 22.3035C12.4645 22.5963 11.9896 22.5964 11.6967 22.3035C11.4038 22.0106 11.4038 21.5357 11.6967 21.2428L15.9393 17.0002L11.6967 12.7575C11.4038 12.4646 11.4038 11.9897 11.6967 11.6969C11.9896 11.404 12.4645 11.404 12.7574 11.6969L17 15.9395L21.2426 11.6969C21.5355 11.404 22.0104 11.404 22.3033 11.6969Z"
-                              fill="red"
-                            />
-                          </svg> */}
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g clip-path="url(#clip0_12924_7136)">
+                      {visible ? (
+                        <div
+                          id="floating-button"
+                          onClick={handleButtonClick}
+                          className={`${
+                            visible ? 'bottom-5 clicked' : 'bottom-[90px]'
+                          } right-[20px]`}
+                        >
+                          <div className="plus flex justify-center items-center bg-primary hover:opacity-75 rounded-full">
+                            <svg
+                              width="34"
+                              height="34"
+                              viewBox="0 0 34 34"
+                              fill="white"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
                               <path
-                                d="M11.9923 23.7656C11.3459 23.7656 10.7472 23.4739 10.3487 22.9645L7.95152 19.9244L3.74944 19.9218C1.68219 19.9218 0 18.2396 0 16.1718V3.93749C0 1.86969 1.68219 0.1875 3.74999 0.1875H20.25C22.3178 0.1875 24 1.86969 24 3.93749V11.4844C24 12.0022 23.5803 12.4219 23.0625 12.4219C22.5446 12.4219 22.125 12.0022 22.125 11.4844V3.93749C22.125 2.90368 21.2838 2.0625 20.25 2.0625H3.74999C2.71618 2.0625 1.875 2.90368 1.875 3.93749V16.1718C1.875 17.2057 2.71618 18.0468 3.74999 18.0468L8.40709 18.0496C8.69401 18.0498 8.96501 18.1814 9.14262 18.4066L11.8235 21.8064C11.8782 21.8765 11.945 21.8906 11.9925 21.8906H11.9934C12.0406 21.8904 12.108 21.8759 12.1604 21.808C12.162 21.8058 12.1637 21.8036 12.1653 21.8016L14.8244 18.4063C15.0022 18.1794 15.2743 18.0468 15.5625 18.0468H20.25C21.284 18.0468 22.125 17.2057 22.125 16.1718C22.125 15.654 22.5446 15.2343 23.0625 15.2343C23.5803 15.2343 24 15.654 24 16.1718C24 18.2396 22.3178 19.9218 20.25 19.9218H16.0191L13.6435 22.955C13.2473 23.4677 12.6489 23.763 12.0007 23.7656C11.998 23.7656 11.995 23.7656 11.9923 23.7656ZM12.9375 14.4843V9.42186C12.9375 8.90404 12.5178 8.48436 12 8.48436C11.4822 8.48436 11.0625 8.90404 11.0625 9.42186V14.4843C11.0625 15.0022 11.4822 15.4218 12 15.4218C12.5178 15.4218 12.9375 15.0022 12.9375 14.4843ZM12 5.24999C11.4822 5.24999 11.0625 5.66967 11.0625 6.18749C11.0625 6.70531 11.4822 7.12499 12 7.12499C12.5178 7.12499 12.9375 6.70531 12.9375 6.18749C12.9375 5.66967 12.5178 5.24999 12 5.24999Z"
-                                fill="#FFB800"
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M22.3033 11.6969C22.5962 11.9897 22.5962 12.4646 22.3033 12.7575L18.0607 17.0002L22.3033 21.2428C22.5962 21.5357 22.5962 22.0106 22.3033 22.3035C22.0104 22.5964 21.5355 22.5963 21.2426 22.3035L17 18.0608L12.7574 22.3035C12.4645 22.5963 11.9896 22.5964 11.6967 22.3035C11.4038 22.0106 11.4038 21.5357 11.6967 21.2428L15.9393 17.0002L11.6967 12.7575C11.4038 12.4646 11.4038 11.9897 11.6967 11.6969C11.9896 11.404 12.4645 11.404 12.7574 11.6969L17 15.9395L21.2426 11.6969C21.5355 11.404 22.0104 11.404 22.3033 11.6969Z"
+                                fill="white"
                               />
-                            </g>
-                            <defs>
-                              <clipPath id="clip0_12924_7136">
-                                <rect width="24" height="24" fill="white" />
-                              </clipPath>
-                            </defs>
-                          </svg>
-                          {/* dsadsa */}
+                            </svg>
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <Tooltip
+                          arrow
+                          title={
+                            <div className="text-white">Support Center</div>
+                          }
+                          color="#FFB800"
+                          placement="left"
+                        >
+                          <div
+                            id="floating-button"
+                            onClick={handleButtonClick}
+                            className={`${
+                              visible ? 'bottom-5 clicked' : 'bottom-[90px]'
+                            } right-[20px]`}
+                          >
+                            <div className="plus flex justify-center items-center hover:bg-primary hover:rounded-full">
+                              <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g clip-path="url(#clip0_12924_7136)">
+                                  <path
+                                    d="M11.9923 23.7656C11.3459 23.7656 10.7472 23.4739 10.3487 22.9645L7.95152 19.9244L3.74944 19.9218C1.68219 19.9218 0 18.2396 0 16.1718V3.93749C0 1.86969 1.68219 0.1875 3.74999 0.1875H20.25C22.3178 0.1875 24 1.86969 24 3.93749V11.4844C24 12.0022 23.5803 12.4219 23.0625 12.4219C22.5446 12.4219 22.125 12.0022 22.125 11.4844V3.93749C22.125 2.90368 21.2838 2.0625 20.25 2.0625H3.74999C2.71618 2.0625 1.875 2.90368 1.875 3.93749V16.1718C1.875 17.2057 2.71618 18.0468 3.74999 18.0468L8.40709 18.0496C8.69401 18.0498 8.96501 18.1814 9.14262 18.4066L11.8235 21.8064C11.8782 21.8765 11.945 21.8906 11.9925 21.8906H11.9934C12.0406 21.8904 12.108 21.8759 12.1604 21.808C12.162 21.8058 12.1637 21.8036 12.1653 21.8016L14.8244 18.4063C15.0022 18.1794 15.2743 18.0468 15.5625 18.0468H20.25C21.284 18.0468 22.125 17.2057 22.125 16.1718C22.125 15.654 22.5446 15.2343 23.0625 15.2343C23.5803 15.2343 24 15.654 24 16.1718C24 18.2396 22.3178 19.9218 20.25 19.9218H16.0191L13.6435 22.955C13.2473 23.4677 12.6489 23.763 12.0007 23.7656C11.998 23.7656 11.995 23.7656 11.9923 23.7656ZM12.9375 14.4843V9.42186C12.9375 8.90404 12.5178 8.48436 12 8.48436C11.4822 8.48436 11.0625 8.90404 11.0625 9.42186V14.4843C11.0625 15.0022 11.4822 15.4218 12 15.4218C12.5178 15.4218 12.9375 15.0022 12.9375 14.4843ZM12 5.24999C11.4822 5.24999 11.0625 5.66967 11.0625 6.18749C11.0625 6.70531 11.4822 7.12499 12 7.12499C12.5178 7.12499 12.9375 6.70531 12.9375 6.18749C12.9375 5.66967 12.5178 5.24999 12 5.24999Z"
+                                    fill="#FFB800"
+                                  />
+                                </g>
+                                <defs>
+                                  <clipPath id="clip0_12924_7136">
+                                    <rect width="24" height="24" fill="white" />
+                                  </clipPath>
+                                </defs>
+                              </svg>
+                            </div>
+                          </div>
+                        </Tooltip>
+                      )}
                     </Popover>
                   </div>
                 </div>
