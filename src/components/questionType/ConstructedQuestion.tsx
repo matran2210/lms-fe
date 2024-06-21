@@ -45,6 +45,7 @@ export type IPreviewProp = {
   setUnsavedChanges?: any
   handleChange?: () => void
   isShowContent?: boolean
+  showRequiment?: boolean
 }
 const EssayQuestionPreview = ({
   data,
@@ -72,6 +73,7 @@ const EssayQuestionPreview = ({
   setUnsavedChanges,
   handleChange,
   isShowContent = true,
+  showRequiment = false,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   // console.log(response_option_custom)
@@ -329,6 +331,7 @@ const EssayQuestionPreview = ({
               : { width: '100%', marginTop: '10px' }
           }
           key={key}
+          className={`${showRequiment ? 'pointer-events-none' : ''}`}
         >
           {question_data.response_option === RESPONSE_OPTION.WORD ? (
             <HookFormEditor
