@@ -24,7 +24,7 @@ type SheetData = {
   name: string
   id: string
   status: number
-  data: (any[] | null)[]
+  data: (string | number | null)[][]
   celldata: {
     r: number
     c: number
@@ -112,7 +112,10 @@ const EssayQuestionPreview = ({
   }
 
   useEffect(() => {
-    if (refSheet.current) {
+    if (
+      refSheet.current &&
+      Number(index) <= question_data?.requirements?.length
+    ) {
       if (defaultValue === undefined) {
         const emptySheets = refSheet.current
           ?.getAllSheets()
@@ -130,7 +133,32 @@ const EssayQuestionPreview = ({
         const sheetData = defaultValue
           ? JSON.parse(defaultValue)
           : [{ name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] }]
-        refSheet?.current?.updateSheet(sheetData)
+
+        // Convert sheetData to constructor with id of refSheet.current
+        const currentSheets = refSheet.current.getAllSheets()
+        const updatedSheetData = sheetData.map(
+          (sheet: SheetData, index: number) => ({
+            ...sheet,
+            id: currentSheets[index]?.id || '',
+          }),
+        )
+
+        const emptySheets = currentSheets.map((sheet: SheetData) => ({
+          ...sheet,
+          celldata: [],
+          data: Array(sheet.row || 100)
+            .fill(null)
+            .map(() => Array(sheet.column || 50).fill(null)),
+        }))
+        emptySheets.forEach((sheet: SheetData, index: number) => {
+          if (sheet?.name === sheetData[index]?.name) {
+            refSheet.current?.updateSheet(
+              JSON.parse(JSON.stringify([updatedSheetData[index]])),
+            )
+          } else {
+            refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+          }
+        })
       }
     }
   }, [defaultValue])
