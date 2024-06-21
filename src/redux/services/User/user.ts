@@ -82,7 +82,7 @@ const UserApi = {
   getPinnedNotifications: (): Promise<IUser> => {
     // Đường dẫn api Pinned Notification
     // Sử dụng httpService để gửi yêu cầu GET
-    return AuthAPI.getPinnedNotifications() as any
+    return AuthAPI.getPinnedNotifications()
   },
 }
 

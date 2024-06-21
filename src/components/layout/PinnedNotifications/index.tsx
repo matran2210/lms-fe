@@ -15,8 +15,8 @@ function PinnedNotifications() {
           <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
           <div className='flex flex-row w-full'>
             <div className='pr-2 pt-3'><IconLoudSpeaker /></div>
-            <div className="marqueeNotifParent">
-              <p className="marqueeNotifContent">{pinnedNotifications?.data?.content}</p>
+            <div className={`${pinnedNotifications?.data?.content?.length > 200 ? 'marqueeNotifParent': 'pt-2 ml-5'}`}>
+              <p className={`${pinnedNotifications?.data?.content?.length > 200 ? 'marqueeNotifContent' : ''}`}>{pinnedNotifications?.data?.content}</p>
             </div>
           </div>
           <div onClick={() => setOpenPinned(false)} className="mr-3"><CloseIconNote/></div>
