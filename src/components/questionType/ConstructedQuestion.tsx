@@ -19,6 +19,21 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+
+type SheetData = {
+  name: string
+  id: string
+  status: number
+  data: (string | number | null)[][]
+  celldata: {
+    r: number
+    c: number
+    v: { v: string; ct: { fa: string; t: string }; m: string }
+  }[]
+  row?: number
+  column?: number
+}
+
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -97,6 +112,59 @@ const EssayQuestionPreview = ({
         }),
     }
   }
+
+  useEffect(() => {
+    if (
+      refSheet.current &&
+      Number(index) <= question_data?.requirements?.length
+    ) {
+      if (defaultValue === undefined) {
+        const emptySheets = refSheet.current
+          ?.getAllSheets()
+          .map((sheet: SheetData) => ({
+            ...sheet,
+            celldata: [],
+            data: Array(sheet.row || 100)
+              .fill(null)
+              .map(() => Array(sheet.column || 50).fill(null)),
+          }))
+        emptySheets.forEach((sheet: SheetData) => {
+          refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+        })
+      } else {
+        const sheetData = defaultValue
+          ? JSON.parse(defaultValue)
+          : [{ name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] }]
+
+        // Convert sheetData to constructor with id of refSheet.current
+        const currentSheets = refSheet.current.getAllSheets()
+        const updatedSheetData = sheetData.map(
+          (sheet: SheetData, index: number) => ({
+            ...sheet,
+            id: currentSheets[index]?.id || '',
+          }),
+        )
+
+        const emptySheets = currentSheets.map((sheet: SheetData) => ({
+          ...sheet,
+          celldata: [],
+          data: Array(sheet.row || 100)
+            .fill(null)
+            .map(() => Array(sheet.column || 50).fill(null)),
+        }))
+        emptySheets.forEach((sheet: SheetData, index: number) => {
+          if (sheet?.name === sheetData[index]?.name) {
+            refSheet.current?.updateSheet(
+              JSON.parse(JSON.stringify([updatedSheetData[index]])),
+            )
+          } else {
+            refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+          }
+        })
+      }
+    }
+  }, [defaultValue])
+
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]
   }) => {
