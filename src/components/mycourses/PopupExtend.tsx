@@ -1,29 +1,35 @@
-import { AlertIcon } from '@assets/icons'
+import { AlertIcon, LockIcon } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { Dispatch, SetStateAction } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 
 interface IProps {
   open: boolean
-  setOpen: any
+  setOpen: Dispatch<SetStateAction<boolean>>
+  extendCourse: () => void
+  extend_count: number
 }
-const PopupExtend = ({ open, setOpen }: IProps) => {
-  const onOk = () => {
+const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
+  const onExtendCourse = () => {
+    extendCourse()
     setOpen(false)
   }
+
+  const onLinkSocial = (link: string) => {
+    window.open(link, '_blank')
+  }
+
   return (
     <SappModalV2
       open={open}
-      //   cancelButtonCaption="Quit"
-      okButtonCaption="Back to My Course"
-      //   handleCancel={onCancel}
-      onOk={onOk}
-      handleCancel={onOk}
-      showCancelButton={false}
+      okButtonCaption={extend_count === 0 ? 'Confirm' : 'Back to My Course'}
+      onOk={extend_count === 0 ? () => onExtendCourse() : () => setOpen(false)}
+      handleCancel={() => setOpen(false)}
+      showCancelButton={extend_count === 0}
       showHeader={false}
       refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
       size="max-w-[646px]"
-      footerButtonClassName="flex flex-col-reverse gap-8"
-      childClass="flex flex-col justify-center items-center"
+      footerButtonClassName="flex flex-col-reverse gap-5"
       parentChildClass=""
       position="center"
       fullWidthBtn={true}
@@ -32,17 +38,44 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       scrollbale={false}
       confirmOnclose={false}
       title={undefined}
+      cancelButtonCaption="Cancel"
     >
       <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
-        <AlertIcon />
+        {extend_count === 0 ? <AlertIcon /> : <LockIcon />}
       </div>
       <div className="text-2xl md:text-4xl text-bw-1 font-semibold text-center">
-        Expired Course
+        Extend Trial Course
       </div>
-      <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 xl:mb-7 px-1">
-        You can only extend a trial course once, please contact our Support at{' '}
-        {MY_COURSES.hotline}.
-      </div>
+      {extend_count === 0 ? (
+        <div className="text-medium-sm  text-center mt-4 mb-1 xl:mb-7 px-1">
+          <span className="text-gray-1">
+            Notice: You can only extend a trial course of
+          </span>{' '}
+          <span className="text-bw-1">1 times</span>
+        </div>
+      ) : (
+        <div className="text-medium-sm text-center mt-4 mb-1 xl:mb-7 px-1">
+          <span className="text-gray-1">
+            You can only extend a trial course once. For further support, please
+            contact SAPP Academy via
+          </span>{' '}
+          <span
+            className="text-primary underline cursor-pointer"
+            onClick={() => onLinkSocial('https://www.facebook.com/sapp.edu.vn')}
+          >
+            Facebook
+          </span>
+          <span className="text-gray-1">,</span>{' '}
+          <span
+            className="text-primary underline cursor-pointer"
+            onClick={() => onLinkSocial('https://zalo.me/3938733079901781176')}
+          >
+            Zalo
+          </span>{' '}
+          <span className="text-gray-1">or hotline</span>
+          <span className="text-primary">{MY_COURSES.hotline}</span>
+        </div>
+      )}
     </SappModalV2>
   )
 }
