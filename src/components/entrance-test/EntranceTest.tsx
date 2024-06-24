@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import Link from 'next/link'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import Icon from '@components/icons'
-import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { formatTime } from '@components/common/timer'
 import EntrancePopup from './EntrancePopup'
 import { useRouter } from 'next/router'
+import SappButton from '@components/base/button/SappButton'
+import PopupExtend from './PopupExtend'
 
 interface EntranceTestProps {
   data: any
@@ -28,6 +27,20 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   const timeAllowFormatted = data?.quiz_timed
     ? formatTime(data?.quiz_timed * 60)
     : 'Unlimited'
+
+  /**
+   * @description state này để đóng mở popup nếu học viên làm 2 lần
+   */
+  const [openExpired, setOpenExpired] = useState(false)
+
+  /**
+   * @description Kiểm tra điều kiện có hiệu lực
+   */
+  const isAttemptValid =
+    data.is_attempt &&
+    (data.attempt_status === 'SUBMITTED' ||
+      data.attempt_status === 'UN_FINISHED')
+
   return (
     <>
       <div className="name">
@@ -63,15 +76,24 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
             )}
           </div>
         </div>
-        <div className="action flex items-center jusity-between relative mt-10">
+        <div className="action flex items-center justify-between relative mt-10">
+          {isAttemptValid && (
+            <ButtonSecondary
+              title="Retake"
+              size="small"
+              full={false}
+              onClick={() => setOpenExpired(true)}
+            />
+          )}
           {data.is_attempt ? (
             data.attempt_status === 'SUBMITTED' || 'UN_FINISHED' ? (
-              <ButtonSecondary
-                title="Detail"
-                full={false}
-                size={'small'}
+              <SappButton
+                title="Result"
                 onClick={handleOnClick}
-                className="ml-auto"
+                isUnderLine
+                color="text"
+                className="font-medium underline !p-0"
+                size="small"
               />
             ) : (
               <></>
@@ -92,6 +114,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
         setOpen={setOpen}
         entrancePopupContent={data}
       />
+      <PopupExtend open={openExpired} setOpen={setOpenExpired} />
     </>
   )
 }

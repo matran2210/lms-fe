@@ -107,7 +107,7 @@
   "400|060505": "Invalid Quiz Type",
   "400|060604": "Quiz Section Category Not Found",
   "400|060711": "Invalid Quiz Setting Minimum Grading",
-  "403|060908": "Quiz Attempt Block Access",
+  "403|060908": "You are not authorized to take this test.",
   "400|060910": "Maximum Quiz Attempt Reached",
   "400|061004": "Quiz Attempt Answer Not Found",
   "400|061101": "Question Already Existed In Quiz Section",

@@ -10,6 +10,7 @@ import ChartACCAScore from './acca/chartACCAScore'
 import TotalScore from '@components/mycourses/test/TotalScore'
 import { roundNumber } from '@utils/helpers'
 import { F_LOW_CODES } from '@utils/constants'
+import SappLoading from 'src/common/SappLoading'
 
 interface QuizReport {
   ratio: number
@@ -42,7 +43,7 @@ const TestResultPage = ({
   useEffect(() => {
     const multipleQuestionElem = multipleQuestionRef?.current
     const yourScoreDetailElem = yourScoreDetailRef?.current
-    if (multipleQuestionElem && yourScoreDetailElem) {
+    if (multipleQuestionElem && yourScoreDetailElem && type !== undefined) {
       const maxHeight = Math.max(
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
@@ -50,7 +51,7 @@ const TestResultPage = ({
       multipleQuestionElem.style.height = `calc(100vh - ${maxHeight}px)`
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
-  }, [multipleQuestionRef?.current, yourScoreDetailRef?.current])
+  }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
 
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,
@@ -102,19 +103,25 @@ const TestResultPage = ({
               />
             </div>
           ) : (
-            <div className="flex gap-6 flex-wrap">
-              <MultipleQuestion
-                questions={questions}
-                className={'xl:min-h-[991px]'}
-                multipleQuestionRef={multipleQuestionRef}
-              />
-              <div className="max-h-full w-full xl:w-auto">
-                <YourScoreDetail
-                  className={'min-h-[991px] 2xl-max:pb-10'}
-                  yourScoreDetailRef={yourScoreDetailRef}
-                />
-              </div>
-            </div>
+            <>
+              {type !== undefined ? (
+                <div className="flex gap-6 flex-wrap">
+                  <MultipleQuestion
+                    questions={questions}
+                    className={'xl:min-h-[991px]'}
+                    multipleQuestionRef={multipleQuestionRef}
+                  />
+                  <div className="max-h-full w-full xl:w-auto">
+                    <YourScoreDetail
+                      className={'min-h-[991px] 2xl-max:pb-10'}
+                      yourScoreDetailRef={yourScoreDetailRef}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <SappLoading />
+              )}
+            </>
           )}
         </>
       )}

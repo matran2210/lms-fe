@@ -3,16 +3,28 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 import React, { ReactNode } from 'react'
 
 interface IProps {
-  title: string
-  children: ReactNode
+  title: React.JSX.Element | string
+  children?: ReactNode
   placement?: TooltipPlacement | undefined
+  showTooltip: boolean
 }
 
-const SappTooltip = ({ title, children, placement = 'bottom' }: IProps) => {
+const SappTooltip = ({
+  title,
+  children,
+  placement = 'bottom',
+  showTooltip,
+}: IProps) => {
   return (
-    <Tooltip title={title} placement={placement} color="white">
-      {children}
-    </Tooltip>
+    <React.Fragment>
+      {showTooltip ? (
+        <Tooltip title={title} placement={placement} color="white">
+          {children}
+        </Tooltip>
+      ) : (
+        <>{children}</>
+      )}
+    </React.Fragment>
   )
 }
 

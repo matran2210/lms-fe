@@ -29,6 +29,7 @@ const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
       buttonSize="medium"
       confirmOnclose={false}
       title={undefined}
+      showCancelButton={false}
     >
       <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
         <AlertIcon />

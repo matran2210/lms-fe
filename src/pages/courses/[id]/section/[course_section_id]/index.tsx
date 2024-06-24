@@ -13,6 +13,7 @@ import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { CoursesAPI } from '../../../../api/courses/index'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import SappTooltip from 'src/common/SappTooltip'
 
 interface IProps {
   course_section_type: string
@@ -334,33 +335,23 @@ const CoursePartDetail = () => {
             >
               /
               <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
-                {(previewPart?.name as string)?.length > 50 ? (
-                  <Tooltip
-                    title={previewPart?.name}
-                    color="#ffffff"
-                    placement="bottom"
-                  >
-                    {truncateString(previewPart?.name, 50)}
-                  </Tooltip>
-                ) : (
-                  <>{previewPart?.name}</>
-                )}
+                <SappTooltip
+                  title={previewPart?.name}
+                  showTooltip={previewPart?.name?.length > 60}
+                >
+                  {truncateString(previewPart?.name, 50)}
+                </SappTooltip>
               </p>
             </span>
             <span className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
               <p className="text-medium-sm font-medium text-bw-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis">
                 /{' '}
-                {(partDetail?.name as string)?.length > 50 ? (
-                  <Tooltip
-                    title={partDetail?.name}
-                    color="#ffffff"
-                    placement="bottom"
-                  >
-                    {truncateString(partDetail?.name, 100)}
-                  </Tooltip>
-                ) : (
-                  <>{partDetail?.name}</>
-                )}
+                <SappTooltip
+                  title={partDetail?.name}
+                  showTooltip={partDetail?.name?.length > 90}
+                >
+                  {truncateString(partDetail?.name, 90)}
+                </SappTooltip>
               </p>
             </span>
           </div>

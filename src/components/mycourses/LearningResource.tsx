@@ -5,7 +5,13 @@ import HookFormSelect from '@components/base/select/HookFormSelect'
 import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
 import { IResourceDetail, ISection } from 'src/type/courses'
@@ -20,6 +26,7 @@ interface IProps {
   setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
+const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
@@ -59,6 +66,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     setSelectedUnit(null)
     setSelectedActivity(null)
     setSelectedSection(null)
+    setPageIndex(DEFAULT_PAGE_INDEX)
+    setResources(undefined)
     const pageStateVariables = [
       setPageSection,
       setPageSubsection,
@@ -101,6 +110,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         page_size,
         'CHAPTER',
         selectedSection.value,
+        router.query.courseId as string,
       )
       setSubsections([...res?.data?.sections].reverse())
       setSelectedUnit(null)
@@ -122,6 +132,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
+        router.query.courseId as string,
       )
       setUnit([...res?.data?.sections].reverse())
       setSelectedActivity(null)
@@ -142,6 +153,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         page_size,
         'ACTIVITY',
         selectedUnit.value,
+        router.query.courseId as string,
       )
       setActivity([...res?.data?.sections].reverse())
     } catch (error) {}
@@ -153,6 +165,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     }
   }, [selectedUnit])
 
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
+
   const params = cleanParamsAPI({
     sub_id:
       selectedActivity?.value ||
@@ -160,24 +174,30 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       selectedSubsection?.value ||
       selectedSection?.value ||
       '',
+    page_index: DEFAULT_PAGE_INDEX,
+    page_size: DEFAULT_PAGESIZE,
   })
 
   useEffect(() => {
-    if (open && (router.query.courseId || router.query.id)) {
-      setLoading(true)
-      CoursesAPI.getCourseResource(
-        router.query.courseId || router.query.id,
-        DEFAULT_PAGESIZE,
-        params,
-      )
-        .then((res) => setResources(res?.data))
-        .catch((err) => {})
-        .finally(() => {
+    const initFetchData = async () => {
+      if (open && (router.query.courseId || router.query.id)) {
+        setLoading(true)
+        try {
+          const resources = await CoursesAPI.getCourseResource(
+            router.query.courseId || router.query.id,
+            params,
+          )
+          setPageIndex(DEFAULT_PAGE_INDEX)
+          setResources(resources.data)
+        } catch (err) {
+        } finally {
           setTimeout(() => {
             setLoading(false)
           }, 500)
-        })
+        }
+      }
     }
+    initFetchData()
   }, [
     open,
     selectedSection?.value,
@@ -186,48 +206,54 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     selectedActivity?.value,
   ])
 
-  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
-
-  const fetchData = async (params?: Object) => {
+  const requestOngoingRef = useRef(false)
+  const fetchData = async (nextPageIndex: number) => {
     setLoading(true)
     try {
+      if (requestOngoingRef.current) return
+      requestOngoingRef.current = true
+      params.page_index = nextPageIndex
       const res = await CoursesAPI.getCourseResource(
         router.query.courseId || router.query.id,
-        pageIndex,
         params,
       )
-      setResources(res?.data)
-      setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
+
+      if (resources && res?.data.resources) {
+        setResources((prevResources: any) => ({
+          ...prevResources,
+          resources: [...prevResources.resources, ...res.data.resources],
+        }))
+        setPageIndex(nextPageIndex)
+        requestOngoingRef.current = false
+      }
     } catch (error) {
       // Handle error if needed
-    } finally {
-      setTimeout(() => {
-        setLoading(false)
-      }, 500)
     }
+    setTimeout(() => {
+      setLoading(false)
+    }, 500)
   }
 
-  // Attach a scroll event listener to fetch more data when scrolling to the bottom
   useEffect(() => {
-    const containerDiv: any = document.getElementById('sapp-drawer') // Replace 'your-container-id' with the actual ID of your container div
-
+    const divElement = document.getElementById('sapp-drawer-resource-list')
+    if (!divElement) return
     const handleScroll = () => {
-      if (
-        containerDiv &&
-        containerDiv.clientHeight + containerDiv.scrollTop ===
-          containerDiv.scrollHeight &&
-        (router.query.courseId || router.query.id) &&
-        open
-      ) {
-        ;(resources?.meta?.total_records as Number) > pageIndex &&
-          fetchData(params)
+      const { scrollTop, scrollHeight, clientHeight } = divElement
+      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
+        if ((router.query.courseId || router.query.id) && open) {
+          const nextPageIndex = pageIndex + 1
+          if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
+            fetchData(nextPageIndex)
+          }
+        }
       }
     }
-
-    containerDiv?.addEventListener('scroll', handleScroll)
-
-    return () => containerDiv?.removeEventListener('scroll', handleScroll)
-  }, [pageIndex])
+    divElement.addEventListener('scroll', handleScroll)
+    // Cleanup function
+    return () => {
+      divElement.removeEventListener('scroll', handleScroll)
+    }
+  }, [fetchData, pageIndex])
 
   const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
@@ -262,6 +288,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   return (
     <SappDrawer
+      drawerSubId={'-resource-list'}
       isOpen={open}
       message="Bạn có chắc chán muốn hủy không?"
       onClose={onClose}

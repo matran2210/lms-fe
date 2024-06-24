@@ -907,16 +907,25 @@ const ActivityPage = () => {
                       <SappTooltip
                         title={
                           activity?.previous_activity
-                            ? activity?.previous_activity.name
+                            ? activity?.previous_activity?.name
                             : findActivityByIndex(previousActivityIndex - 1)
                                 ?.name
                         }
+                        showTooltip={
+                          activity?.previous_activity?.name?.length > 80
+                        }
                       >
-                        <span className="ml-2 w-full overflow-hidden text-ellipsis line-clamp-1">
+                        <span className="ml-2 w-full overflow-hidden text-ellipsis">
                           {activity?.previous_activity
-                            ? activity?.previous_activity.name
-                            : findActivityByIndex(previousActivityIndex - 1)
-                                ?.name}
+                            ? truncateString(
+                                activity?.previous_activity?.name,
+                                80,
+                              )
+                            : truncateString(
+                                findActivityByIndex(previousActivityIndex - 1)
+                                  ?.name,
+                                80,
+                              )}
                         </span>
                       </SappTooltip>
                     </div>
@@ -951,9 +960,10 @@ const ActivityPage = () => {
                       <SappTooltip
                         title={
                           activity?.next_activity
-                            ? activity?.next_activity.name
+                            ? activity?.next_activity?.name
                             : findActivityByIndex(nextActivityIndex + 1)?.name
                         }
+                        showTooltip={activity?.next_activity?.name?.length > 80}
                       >
                         <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
                           {activity?.next_activity

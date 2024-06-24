@@ -23,6 +23,7 @@ import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
 import PopupOpenClass from './PopupOpenClass'
+import SappTooltip from 'src/common/SappTooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 
 const Course = ({
@@ -238,9 +239,9 @@ const Course = ({
       }
       setOpenActive(true)
     } else if (determineButtonToShow === 'Extend') {
-      student?.extend_count === 0 || !student
-        ? extendCourse()
-        : setOpenExtend(true)
+      // if (!student) {
+      setOpenExtend(true)
+      // }
     } else if (!classInstance.class_user_instances[0].is_opened) {
       setOpenClass(true)
     } else {
@@ -312,13 +313,12 @@ const Course = ({
                   )
                 }}
               >
-                {(course?.name as string)?.length > 50 ? (
-                  <Tooltip title={course?.name} color="#ffffff" placement="top">
-                    {truncateString(course?.name, 50)}
-                  </Tooltip>
-                ) : (
-                  <>{course?.name}</>
-                )}
+                <SappTooltip
+                  title={course?.name}
+                  showTooltip={(course?.name as string)?.length > 50}
+                >
+                  {truncateString(course?.name, 50)}
+                </SappTooltip>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -326,7 +326,12 @@ const Course = ({
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
                   <span className="ml-1 text-bw-1 font-medium">
-                    {truncateString(course?.classes?.[0]?.code, 15)}
+                    <SappTooltip
+                      title={course?.classes?.[0]?.code}
+                      showTooltip={course?.classes?.[0]?.code?.length > 15}
+                    >
+                      {truncateString(course?.classes?.[0]?.code, 15)}
+                    </SappTooltip>
                   </span>
                 </div>
               ) : (
@@ -462,7 +467,12 @@ const Course = ({
           </div>
         </div>
       )}
-      <PopupExtend open={openExtend} setOpen={setOpenExtend} />
+      <PopupExtend
+        open={openExtend}
+        setOpen={setOpenExtend}
+        extendCourse={extendCourse}
+        extend_count={student?.extend_count}
+      />
       <PopupActive
         time={timeActive}
         open={openActive}

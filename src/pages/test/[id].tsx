@@ -75,6 +75,7 @@ interface ScratchPad {
   id: string
   scratch_pad: string
 }
+
 declare global {
   interface Window {
     userAgreed: any
@@ -242,6 +243,7 @@ const TestDetail = () => {
             handleClearFile={handleClearFile}
             setOpenPdf={handleOpenScratchPad}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+            showRequiment={showListRequirement}
           />
           // <Luckysheet/>
         )
@@ -1405,6 +1407,7 @@ const TestDetail = () => {
       return newData
     })
   }
+
   useEffect(() => {
     if (currentTabContent?.data?.requirements) {
       setEssayData({ req: currentTabContent?.data?.requirements[0], index: 0 })

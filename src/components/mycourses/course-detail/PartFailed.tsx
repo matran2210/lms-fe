@@ -11,6 +11,7 @@ import { roundNumber } from '@utils/helpers'
 import { ANIMATION } from 'src/constants'
 import { isNull, round } from 'lodash'
 import { useCourseContext } from '@contexts/index'
+import SappTooltip from 'src/common/SappTooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 
 const CLICK_NAME_TEST = 'Click Name Test Paper'
@@ -102,13 +103,12 @@ const PartFailed = ({
           }}
           id="course_test_name"
         >
-          {(coursePart?.name as string)?.length > 50 ? (
-            <Tooltip title={coursePart?.name} color="#ffffff" placement="top">
-              {truncateString(coursePart?.name, 50)}
-            </Tooltip>
-          ) : (
-            <>{coursePart?.name}</>
-          )}
+          <SappTooltip
+            title={coursePart?.name}
+            showTooltip={(coursePart?.name as string)?.length > 40}
+          >
+            {truncateString(coursePart?.name, 40)}
+          </SappTooltip>
         </div>
         <div className="info mt-6">
           {checkFinished && (
