@@ -1,5 +1,6 @@
 import { AlertIcon, LockIcon } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { onLinkSocial } from '@utils/index'
 import { Dispatch, SetStateAction } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 
@@ -16,13 +17,6 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
   const onExtendCourse = () => {
     extendCourse()
     setOpen(false)
-  }
-
-  /**
-   * @description function này để link social
-   */
-  const onLinkSocial = (link: string) => {
-    window.open(link, '_blank')
   }
 
   /**
