@@ -12,6 +12,7 @@ import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
 import { TitleSidebar } from 'src/constants'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { trackGAEvent } from '@utils/google-analytics'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -20,7 +21,7 @@ type MenuItemProps = {
 }
 
 export default function MenuItem({
-  menuItem: { name, icon: Icon, url, type, subItems },
+  menuItem: { name, icon: Icon, url, type, subItems, ga },
   setOpenResource,
   closeSideBar,
 }: MenuItemProps) {
@@ -90,7 +91,13 @@ export default function MenuItem({
 
   const renderMenuContent = () => {
     return (
-      <div className="flex items-center" onClick={handleActive}>
+      <div
+        className="flex items-center"
+        onClick={() => {
+          handleActive()
+          trackGAEvent(ga, ga, ga)
+        }}
+      >
         {Icon === 'avatar' ? (
           <div className="w-10 h-10 shrink-0">
             {user?.detail?.avatar['40x40'] || user.detail.avatar['ORIGIN'] ? (

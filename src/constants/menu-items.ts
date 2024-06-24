@@ -12,6 +12,7 @@ const MENU_OPTIONS: MenuOption[] = [
     icon: 'course',
     url: `${PageLink.COURSES}`,
     type: 'level-1',
+    ga: 'Click Menu My Course',
     // subItems: [
     //   {
     //     name: `${TitleSidebar.COURSE_NEW}`,
@@ -52,18 +53,21 @@ const MENU_OPTIONS: MenuOption[] = [
     icon: 'notes-list',
     url: '#',
     type: 'level-1',
+    ga: 'Click Menu Note List',
   },
   {
     name: `${TitleSidebar.RESOURCES}`,
     icon: 'learning-resource',
     url: '#',
     type: 'level-1',
+    ga: 'Click Menu Learning Resource',
   },
   {
     name: `${TitleSidebar.ENTRANCE_TEST}`,
     icon: 'entrance-test',
     url: `${PageLink.ENTRANCE_TEST}`,
     type: 'level-1',
+    ga: 'Click Menu Entrance Test',
   },
   // {
   //   name: `${TitleSidebar.RESULTS}`,
@@ -76,12 +80,14 @@ const MENU_OPTIONS: MenuOption[] = [
     icon: 'create-note',
     url: '#',
     type: 'level-1',
+    ga: 'Click Menu Create Note',
   },
   {
     name: `${TitleSidebar.CALCULATOR}`,
     icon: 'caculator',
     url: '#',
     type: 'level-1',
+    ga: 'Click Menu Canculator',
   },
 ]
 
@@ -91,18 +97,21 @@ const MENU_OPTIONS_BOTTOM: MenuOption[] = [
     icon: 'notification',
     url: `${PageLink.NOTIFICATION}`,
     type: 'level-1',
+    ga: 'Click Menu Notification',
   },
   {
     name: ``,
     icon: 'avatar',
     url: `${PageLink.MYPROFILE}`,
     type: 'level-1',
+    ga: 'Click Menu My Profile',
   },
   {
     name: ``,
     icon: 'profile-detail',
     url: `${PageLink.MYPROFILE}`,
     type: 'level-1',
+    ga: 'Click Menu Profile Detail',
   },
 ]
 
@@ -114,6 +123,7 @@ export type MenuItem = {
   id: string
   depth: number
   subItems?: MenuItem[]
+  ga: string
 }
 
 type MenuOption = {
@@ -122,6 +132,8 @@ type MenuOption = {
   url: string
   type: string
   subItems?: MenuOption[]
+  id?: string
+  ga: string
 }
 
 function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
@@ -133,6 +145,7 @@ function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
       option.subItems && option.subItems.length > 0
         ? makeMenuLevel(option.subItems, depth + 1)
         : undefined,
+    ga: option?.ga,
   }))
 }
 

@@ -196,3 +196,5 @@ export const ANIMATION = {
   DURATION: 500,
   DATA_AOS: 'fade-up',
 }
+
+export const CLICK_BREADCRUMB_MY_COURSE = 'Click Breadcrumb My Course'
