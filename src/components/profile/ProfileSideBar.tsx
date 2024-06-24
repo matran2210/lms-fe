@@ -131,7 +131,8 @@ const ProfileSideBar = ({ page }: IProps) => {
             const childLabel = getLabelFromChild(value).replace(/\s+/g, '_')
             const isActive = urlPage === page
 
-            let className = 'text-gray-1 relative hover:text-primary font-normal'
+            let className =
+              'text-gray-1 relative hover:text-primary font-normal'
 
             if (isActive) {
               className = 'bg-secondary font-medium text-primary'

@@ -10,22 +10,33 @@ interface IProps {
   extend_count: number
 }
 const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
+  /**
+   * @description function này sẽ extend khóa học lần đầu tiên và đóng popup lại
+   */
   const onExtendCourse = () => {
     extendCourse()
     setOpen(false)
   }
 
+  /**
+   * @description function này để link social
+   */
   const onLinkSocial = (link: string) => {
     window.open(link, '_blank')
   }
 
+  /**
+   * @description check điều kiện xem khóa đã extend bao nhiêu lần
+   */
+  const noExtensions = extend_count === 0
+
   return (
     <SappModalV2
       open={open}
-      okButtonCaption={extend_count === 0 ? 'Confirm' : 'Back to My Course'}
-      onOk={extend_count === 0 ? () => onExtendCourse() : () => setOpen(false)}
+      okButtonCaption={noExtensions ? 'Confirm' : 'Back to My Course'}
+      onOk={noExtensions ? () => onExtendCourse() : () => setOpen(false)}
       handleCancel={() => setOpen(false)}
-      showCancelButton={extend_count === 0}
+      showCancelButton={noExtensions}
       showHeader={false}
       refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
       size="max-w-[646px]"
@@ -41,12 +52,12 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
       cancelButtonCaption="Cancel"
     >
       <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
-        {extend_count === 0 ? <AlertIcon /> : <LockIcon />}
+        {noExtensions ? <AlertIcon /> : <LockIcon />}
       </div>
       <div className="text-2xl md:text-4xl text-bw-1 font-semibold text-center">
         Extend Trial Course
       </div>
-      {extend_count === 0 ? (
+      {noExtensions ? (
         <div className="text-medium-sm  text-center mt-4 mb-1 xl:mb-7 px-1">
           <span className="text-gray-1">
             Notice: You can only extend a trial course of
