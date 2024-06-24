@@ -97,16 +97,21 @@ const TestModal = ({
       {data?.quiz && (
         <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
           <div className="text-gray-1">Latest Result:</div>
-          <div className='flex flex-row'>
-            <div
-              className={` pr-0.5 font-medium`}
-            >
+          <div className="flex flex-row">
+            <div className={` pr-0.5 font-medium`}>
               {data?.quiz?.attempt?.ratio_score ?? '--'}
             </div>
             {checkFinished && (
-              <div className='underline ml-2 text-state-info cursor-pointer' onClick={() => router.push(`/courses/test/test-result/${data?.quiz?.attempt?.id}`)}>
-              View
-            </div>
+              <div
+                className="underline ml-2 text-state-info cursor-pointer"
+                onClick={() =>
+                  router.push(
+                    `/courses/test/test-result/${data?.quiz?.attempt?.id}`,
+                  )
+                }
+              >
+                View
+              </div>
             )}
           </div>
         </div>
