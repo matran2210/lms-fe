@@ -203,7 +203,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
-  const gtmId = 'GTM-TH9L5T43'
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
   const tagManagerArgs: TagManagerArgs = { gtmId }
 
   useEffect(() => {

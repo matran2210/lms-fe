@@ -123,7 +123,7 @@ export type MenuItem = {
   id: string
   depth: number
   subItems?: MenuItem[]
-  ga?: string
+  ga: string
 }
 
 type MenuOption = {
@@ -133,7 +133,7 @@ type MenuOption = {
   type: string
   subItems?: MenuOption[]
   id?: string
-  ga?: string
+  ga: string
 }
 
 function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {

@@ -893,7 +893,6 @@ const ActivityPage = () => {
                         )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
-                      id="previous_activity"
                     >
                       Previous Activity
                     </div>
@@ -952,7 +951,6 @@ const ActivityPage = () => {
                         )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                      id="next_activity"
                     >
                       Next Activity
                     </div>

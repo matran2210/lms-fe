@@ -153,7 +153,6 @@ const MyCourse = () => {
         <div
           className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
           ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
-          id="click_search_course"
         >
           <SearchForm
             placeholder="Enter name of course..."

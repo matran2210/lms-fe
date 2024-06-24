@@ -32,7 +32,7 @@ export const PROFILE_PAGES: any = {
       {
         CHANGE_PASSWORD: {
           label: 'Change Password',
-          ga: 'Click Login History',
+          ga: 'Click Change Password',
         },
       },
     ],

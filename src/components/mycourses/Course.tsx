@@ -301,7 +301,6 @@ const Course = ({
             >
               <div
                 className="line-clamp-2 text-ellipsis cursor-pointer "
-                id="click_name_course"
                 onClick={() => {
                   if (isActiveStudent && enableCourse) {
                     courseAction()
@@ -455,7 +454,6 @@ const Course = ({
                         'Click Button My Course',
                       )
                     }}
-                    id="click_course"
                   />
                 ) : (
                   <div className="action flex items-center justify-end relative h-8"></div>

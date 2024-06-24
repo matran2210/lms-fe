@@ -101,7 +101,6 @@ const PartFailed = ({
             setOpen(true)
             trackGAEvent(CLICK_NAME_TEST, CLICK_NAME_TEST, CLICK_NAME_TEST)
           }}
-          id="course_test_name"
         >
           <SappTooltip
             title={coursePart?.name}
@@ -175,7 +174,6 @@ const PartFailed = ({
                     CLICK_BUTTON_OPEN_POPUP_TEST,
                   )
                 }}
-                id="button_course_test"
               />
             ) : (
               <></>
@@ -201,7 +199,6 @@ const PartFailed = ({
                       CLICK_RESULT_TEST,
                     )
                   }}
-                  id="result_course_detail"
                 />
               )}
 

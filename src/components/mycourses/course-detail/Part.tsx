@@ -74,7 +74,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
     <div data-aos={ANIMATION.DATA_AOS}>
       <div
         className={`name-course text-2xl font-medium xl:h-[60px] text-bw-1`}
-        onClick={() =>
+        onClick={() => {
           course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
           trackGAEvent(
             CLICK_NAME_COURSE_DETAIL,
@@ -82,7 +82,6 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             CLICK_NAME_COURSE_DETAIL,
           )
         }}
-        id="course_name_detail"
       >
         <div className="line-clamp-2 text-ellipsis cursor-pointer ">
           <SappTooltip
@@ -161,7 +160,6 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
                 CLICK_BUTTON_COURSE_DETAIL,
               )
             }}
-            id="button_course_detail"
           />
         </div>
       </div>
