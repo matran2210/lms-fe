@@ -131,13 +131,13 @@ const ProfileSideBar = ({ page }: IProps) => {
             const childLabel = getLabelFromChild(value).replace(/\s+/g, '_')
             const isActive = urlPage === page
 
-            let className = 'text-gray-1 relative hover:text-primary'
+            let className = 'text-gray-1 relative hover:text-primary font-normal'
 
             if (isActive) {
-              className = 'bg-secondary font-bold text-primary'
+              className = 'bg-secondary font-medium text-primary'
             }
             if (childActivationStates[childLabel]) {
-              className = 'bg-secondary hover:font-bold text-primary'
+              className = 'bg-secondary hover:font-medium text-primary'
             }
 
             return (
@@ -146,15 +146,15 @@ const ProfileSideBar = ({ page }: IProps) => {
                 key={key}
               >
                 <a
-                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-bold hover-transition-font-weight ${
+                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-medium hover-transition-font-weight ${
                     isActive ||
                     (urlPage === 'security' &&
                       Object.values(childActivationStates).some(
                         (active) => active,
                       ) &&
                       !childActivationStates[childLabel])
-                      ? 'bg-secondary text-primary font-bold'
-                      : 'hover:left-[-0.5px]'
+                      ? 'bg-secondary text-primary font-medium'
+                      : 'hover:left-[-0.5px] font-normal'
                   }`}
                   style={{
                     position: 'relative', // Đặt position là relative
@@ -198,10 +198,10 @@ const ProfileSideBar = ({ page }: IProps) => {
                         return (
                           <div
                             key={childLabel}
-                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-bold hover-transition-font-weight ${
+                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-medium hover-transition-font-weight ${
                               childIsActive
-                                ? 'bg-white font-bold text-primary'
-                                : 'hover:left-[-0.5px]'
+                                ? 'bg-white font-medium text-primary'
+                                : 'hover:left-[-0.5px] font-normal'
                             }`}
                           >
                             <a
@@ -224,7 +224,7 @@ const ProfileSideBar = ({ page }: IProps) => {
             )
           })}
           <li
-            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
+            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:font-medium hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
             onClick={handleLogout}
           >
             <div className="absolute inset-0 bottom-0"></div>
