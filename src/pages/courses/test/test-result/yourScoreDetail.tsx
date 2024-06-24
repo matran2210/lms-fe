@@ -139,7 +139,7 @@ const YourScoreDetail = ({
     if (!divElement) return
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = divElement
-      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
+      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight - 1) {
         const nextPageIndex = pageIndex + 1
         if (Number(scoreDetails?.meta?.total_pages) >= nextPageIndex) {
           fetchData(nextPageIndex)
