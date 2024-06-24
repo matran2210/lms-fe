@@ -25,7 +25,7 @@ export default function DashboardLayout({
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
 
   return (
-    <div className={` flex flex-nowrap`}>
+    <div className="flex flex-nowrap">
       <Sidebar
         isOpened={isOpened}
         toggleDrawer={toggleDrawer}

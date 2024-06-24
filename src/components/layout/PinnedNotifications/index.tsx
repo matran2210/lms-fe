@@ -1,5 +1,6 @@
 import { CloseIconNote, IconLoudSpeaker } from "@assets/icons";
 import { usePinnedNotifyContext } from "@contexts/PinnedNotifyContext";
+import React from "react";
 
 function PinnedNotifications() {
   const {
@@ -8,23 +9,28 @@ function PinnedNotifications() {
     pinnedNotifications,
   } = usePinnedNotifyContext()
 
+  const handleClosePinned = () => {
+    localStorage.setItem('openPinned', 'false')
+    setOpenPinned(false)
+  }
+
   return (
-    <>
+    <React.Fragment>
       {openPinned && pinnedNotifications?.data?.content && (
-        <div>
+        <React.Fragment>
           <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
           <div className='flex flex-row w-full'>
-            <div className='pr-2 pt-3'><IconLoudSpeaker /></div>
-            <div className={`${pinnedNotifications?.data?.content?.length > 200 ? 'marqueeNotifParent': 'pt-2 ml-5'}`}>
+            <div className='pr-2 pt-2'><IconLoudSpeaker /></div>
+            <div className={`${pinnedNotifications?.data?.content?.length > 200 ? 'marqueeNotifParent': 'pt-1 ml-5'}`}>
               <p className={`${pinnedNotifications?.data?.content?.length > 200 ? 'marqueeNotifContent' : ''}`}>{pinnedNotifications?.data?.content}</p>
             </div>
           </div>
-          <div onClick={() => setOpenPinned(false)} className="mr-3"><CloseIconNote/></div>
+          <div onClick={handleClosePinned} className="mr-3"><CloseIconNote/></div>
         </div>
         <div className="pt-12"></div>
-        </div>
+        </React.Fragment>
       )}
-      </>
+      </React.Fragment>
   )
 }
 

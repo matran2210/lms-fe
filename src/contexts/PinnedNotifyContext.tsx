@@ -62,10 +62,14 @@ import { PinnedNotifications } from 'src/type'
 			}})
 
 		const getPinnedData = async () => {
-			const res:any = await UserApi.getPinnedNotifications()
-			if(res){
-				setPinnedNotifications(res)
-			}
+      const pinnedLocal = localStorage.getItem('openPinned')
+      if(!pinnedLocal){
+        const res: PinnedNotifications = await UserApi.getPinnedNotifications()
+        if(res){
+          setPinnedNotifications(res)
+          localStorage.setItem('openPinned', 'true')
+        }
+      }
 		}
 		useEffect(() => {
 			getPinnedData();

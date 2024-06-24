@@ -3,6 +3,7 @@ import { httpService } from '../httpService'
 import url from './url'
 import { IResponse } from 'src/redux/types'
 import { AuthAPI } from 'src/pages/api/profile'
+import { PinnedNotifications } from 'src/type'
 
 const UserApi = {
   /**
@@ -79,7 +80,7 @@ const UserApi = {
    * Một hàm để lấy Pinned Notification
    * 
    */
-  getPinnedNotifications: (): Promise<IUser> => {
+  getPinnedNotifications: (): Promise<PinnedNotifications> => {
     // Đường dẫn api Pinned Notification
     // Sử dụng httpService để gửi yêu cầu GET
     return AuthAPI.getPinnedNotifications()
