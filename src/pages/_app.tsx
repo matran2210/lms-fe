@@ -32,9 +32,6 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
-import TagManager, { TagManagerArgs } from 'react-gtm-module'
-import initializeGA from '@utils/google-analytics'
-import { GoogleAnalytics } from '@next/third-parties/google'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -87,13 +84,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     if (pathname.startsWith('/explanation') && router.query?.title) {
       return router.query?.title
     }
-    if (pathname === '/courses/my-course/[courseId]') return 'Course Detail'
-    if (pathname === '/courses/[id]/section/[course_section_id]')
-      return 'Course Part Detail'
-    if (pathname === '/courses/[id]/activity/[activityId]') return 'Activity'
-    if (pathname === '/case-study/[id]') return 'Case Study'
-    if (pathname === '/case-study/table-result/[id]') return 'Case Study Result'
-    if (pathname === '/test/[id]') return 'Test Paper'
     if (
       pathname.startsWith('/courses') ||
       pathname.startsWith('/test') ||
@@ -203,20 +193,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
-  const tagManagerArgs: TagManagerArgs = { gtmId }
-
-  useEffect(() => {
-    TagManager.initialize(tagManagerArgs)
-  }, [])
-
-  useEffect(() => {
-    if (!window.GA_INITIALIZED) {
-      initializeGA()
-      window.GA_INITIALIZED = true
-    }
-  }, [])
-
   return (
     <>
       <Head>
@@ -286,7 +262,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             {loading ? <SappLoading /> : <></>}
             <RouteGuard>
               <>
-                {/* <GoogleAnalytics gaId={''} /> */}
                 {content}
                 <LearningResource
                   open={openResource}

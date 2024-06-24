@@ -29,7 +29,6 @@ export interface IButtonProps {
   isUnderLine?: boolean
   childClass?: string
   classNameLoading?: string
-  id?: string
 }
 
 export interface ITabs {

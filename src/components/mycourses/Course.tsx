@@ -24,7 +24,6 @@ import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
 import PopupOpenClass from './PopupOpenClass'
 import SappTooltip from 'src/common/SappTooltip'
-import { trackGAEvent } from '@utils/google-analytics'
 
 const Course = ({
   course,
@@ -305,11 +304,6 @@ const Course = ({
                   if (isActiveStudent && enableCourse) {
                     courseAction()
                   }
-                  trackGAEvent(
-                    'Click Name Course',
-                    'Click Name Course',
-                    'Click Name Course',
-                  )
                 }}
               >
                 <SappTooltip
@@ -448,11 +442,6 @@ const Course = ({
                       if (isActiveStudent) {
                         courseAction()
                       }
-                      trackGAEvent(
-                        'Click Button My Course',
-                        'Click Button My Course',
-                        'Click Button My Course',
-                      )
                     }}
                   />
                 ) : (

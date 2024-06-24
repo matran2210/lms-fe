@@ -23,7 +23,6 @@ import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
 import { ANIMATION } from 'src/constants'
-import { trackGAEvent } from '@utils/google-analytics'
 
 type Props = {
   class_id: string
@@ -89,7 +88,6 @@ const Discussion = ({ class_id }: Props) => {
         // Trước khi gửi, clear lỗi của trường comment và commentRoot
         clearErrors('comment')
         clearErrors('commentRoot')
-        trackGAEvent('Comment Activity', 'Comment Activity', 'Comment Activity')
 
         // Nếu isRoot là true và commentRoot không có giá trị, đặt lỗi cho trường commentRoot
         if (isRoot && !commentRoot?.trim() && !rootSelectedFiles?.[0]) {

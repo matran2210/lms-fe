@@ -1,18 +1,15 @@
-export const PROFILE_PAGES: any = {
+export const PROFILE_PAGES = {
   MYPROFILE: {
     label: 'My Profile',
     children: [] as { label: string }[],
-    ga: 'Click My Profile',
   },
   CERTIFICATES: {
     label: 'Certificates',
     children: [] as { label: string }[],
-    ga: 'Click Certificates',
   },
   SETTINGS: {
     label: 'Settings',
     children: [] as { label: string }[],
-    ga: 'Click Settings',
   },
   SECURITY: {
     label: 'Security',
@@ -20,19 +17,16 @@ export const PROFILE_PAGES: any = {
       {
         DEVICES: {
           label: 'Devices',
-          ga: 'Click Devices',
         },
       },
       {
         LOGIN_HISTORY: {
           label: 'Login History',
-          ga: 'Click Login History',
         },
       },
       {
         CHANGE_PASSWORD: {
           label: 'Change Password',
-          ga: 'Click Change Password',
         },
       },
     ],

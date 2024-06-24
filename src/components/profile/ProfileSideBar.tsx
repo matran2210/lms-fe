@@ -1,6 +1,5 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
-import { trackGAEvent } from '@utils/google-analytics'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -125,7 +124,7 @@ const ProfileSideBar = ({ page }: IProps) => {
     >
       <ul className="px-3 py-4 bg-white h-full flex flex-col justify-between">
         <div>
-          {Object.entries(PROFILE_PAGES).map(([key, value]: any) => {
+          {Object.entries(PROFILE_PAGES).map(([key, value]) => {
             const urlPage = key.toLowerCase()
             const urlChildren = (value.children || []) as Child[]
 
@@ -174,7 +173,6 @@ const ProfileSideBar = ({ page }: IProps) => {
                       onClickExpand()
                       setChildActivationStates({ security: true })
                     }
-                    trackGAEvent(value.ga, value.ga, value.ga)
                   }}
                 >
                   {value.label}
@@ -227,11 +225,8 @@ const ProfileSideBar = ({ page }: IProps) => {
             )
           })}
           <li
-            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
-            onClick={() => {
-              trackGAEvent('Click Logout', 'Click Logout', 'Click Logout')
-              handleLogout()
-            }}
+            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:font-medium hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
+            onClick={handleLogout}
           >
             <div className="absolute inset-0 bottom-0"></div>
             <div>Logout</div>

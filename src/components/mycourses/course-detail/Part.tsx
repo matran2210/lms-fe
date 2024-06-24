@@ -14,11 +14,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { Tooltip } from 'antd'
 import { ANIMATION } from 'src/constants'
-import { trackGAEvent } from '@utils/google-analytics'
 import SappTooltip from 'src/common/SappTooltip'
-
-const CLICK_NAME_COURSE_DETAIL = 'Click Name Course Detail'
-const CLICK_BUTTON_COURSE_DETAIL = 'Click Button Course Detail'
 
 const Part = ({ course }: { course: IMyCourseDetail }) => {
   const [open, setOpen] = useState(false)
@@ -74,14 +70,9 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
     <div data-aos={ANIMATION.DATA_AOS}>
       <div
         className={`name-course text-2xl font-medium xl:h-[60px] text-bw-1`}
-        onClick={() => {
+        onClick={() =>
           course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
-          trackGAEvent(
-            CLICK_NAME_COURSE_DETAIL,
-            CLICK_NAME_COURSE_DETAIL,
-            CLICK_NAME_COURSE_DETAIL,
-          )
-        }}
+        }
       >
         <div className="line-clamp-2 text-ellipsis cursor-pointer ">
           <SappTooltip
@@ -150,16 +141,11 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             full={false}
             size={'small'}
             className="ml-auto"
-            onClick={() => {
+            onClick={() =>
               course?.course_section_type === 'PART'
                 ? onClickPart(course.id)
                 : {}
-              trackGAEvent(
-                CLICK_BUTTON_COURSE_DETAIL,
-                CLICK_BUTTON_COURSE_DETAIL,
-                CLICK_BUTTON_COURSE_DETAIL,
-              )
-            }}
+            }
           />
         </div>
       </div>
