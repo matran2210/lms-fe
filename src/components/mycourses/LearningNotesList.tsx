@@ -465,7 +465,7 @@ const LearningNotesList = () => {
                   </div>
                   <div className="font-normal text-base text-bw-1">
                     <span
-                      className={`whitespace-pre-wrap ${
+                      className={`whitespace-pre-wrap break-all ${
                         isExpanded ? '' : 'line-clamp-3'
                       }`}
                     >
