@@ -19,7 +19,7 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       showHeader={false}
       refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
       size="max-w-[646px]"
-      footerButtonClassName="flex flex-col-reverse gap-5"
+      footerButtonClassName="flex flex-col-reverse gap-8"
       position="center"
       fullWidthBtn={true}
       closeAfterSubmit={true}
