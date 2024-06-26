@@ -79,21 +79,21 @@ const AddWordPreview = forwardRef(
     }))
 
     useEffect(() => {
-      const doc = parser.parseFromString(str, 'text/html')
-      const elements = doc.querySelectorAll('.question-content-tag')
-      const doc2 = parser.parseFromString(str, 'text/html')
-      const elementCorrects = doc2.querySelectorAll('.question-content-tag')
+      const doc = parser?.parseFromString(str, 'text/html')
+      const elements = doc?.querySelectorAll('.question-content-tag')
+      const doc2 = parser?.parseFromString(str, 'text/html')
+      const elementCorrects = doc2?.querySelectorAll('.question-content-tag')
       elements.forEach((element, index) => {
-        const inputId = element.id
+        const inputId = element?.id
         const inputValue = defaultAnswer?.[index] || ''
 
         let inputClass
         if (corrects) {
           const correctAnswer = corrects?.find(
             (ans: any) =>
-              ans.answer_position === index + 1 &&
-              ans.answer.trim().toLowerCase() ===
-                inputValue.trim().toLowerCase(),
+              ans?.answer_position === index + 1 &&
+              ans?.answer?.trim()?.toLowerCase() ===
+                inputValue?.trim()?.toLowerCase(),
           )
           inputClass =
             correctAnswer || isSelfReflection === true
@@ -110,14 +110,14 @@ const AddWordPreview = forwardRef(
       `
       })
       if (corrects) {
-        elementCorrects.forEach((element, index) => {
-          const inputId = element.id
+        elementCorrects?.forEach((element, index) => {
+          const inputId = element?.id
           const inputValue = defaultAnswer?.[index] || ''
 
           let inputClass
           // if (corrects) {
           const correctAnswer = corrects?.filter(
-            (ans: any) => ans.answer_position === index + 1,
+            (ans: any) => ans?.answer_position === index + 1,
           )
           if (correctAnswer) {
             inputClass = 'text-base font-semibold text-state-success'
@@ -127,8 +127,8 @@ const AddWordPreview = forwardRef(
                 <span id="${inputId}" class = "${inputClass}">${correctAnswer
                   .map((e, i) => {
                     if (i < correctAnswer.length - 1) {
-                      return e.answer + ' / '
-                    } else return e.answer
+                      return e?.answer + ' / '
+                    } else return e?.answer
                   })
                   .join('')} <span/>
                 </span>
@@ -190,16 +190,16 @@ const AddWordPreview = forwardRef(
                   return (
                     <div
                       className="cursor-pointer hover:text-primary"
-                      key={e.id}
+                      key={e?.id ?? i}
                       onClick={(event) => {
                         setOpenFile &&
                           setOpenFile(
                             {
                               type: 'exhibits',
-                              description: e.description,
-                              name: e.name,
+                              description: e?.description,
+                              name: e?.name,
                               index: i,
-                              files: e.files,
+                              files: e?.files,
                             },
                             null,
                             null,
@@ -207,7 +207,7 @@ const AddWordPreview = forwardRef(
                           )
                       }}
                     >
-                      Exhibit {i + 1}: {e.name}
+                      Exhibit {i + 1}: {e?.name}
                     </div>
                   )
                 })}
@@ -219,8 +219,8 @@ const AddWordPreview = forwardRef(
           id="hightlight_area"
           onMouseUp={(e: any) => {
             if (
-              e.target.tagName.charAt(0) !== 'm' &&
-              e.target.firstChild?.tagName !== 'math'
+              e?.target?.tagName?.charAt(0) !== 'm' &&
+              e?.target?.firstChild?.tagName !== 'math'
             ) {
               if (e) {
                 if (allowHighLight) {
@@ -244,8 +244,8 @@ const AddWordPreview = forwardRef(
           extenalRef={refEditor}
           className="sapp-questions"
           text_editor_content={
-            questionContent?.documentElement.querySelector('body')?.innerHTML ||
-            ''
+            questionContent?.documentElement?.querySelector('body')
+              ?.innerHTML || ''
           }
           highlighted={highlighted}
         />
@@ -257,7 +257,7 @@ const AddWordPreview = forwardRef(
             <EditorReader
               className="questions mt-2"
               text_editor_content={
-                answerContent?.documentElement.querySelector('body')
+                answerContent?.documentElement?.querySelector('body')
                   ?.innerHTML || ''
               }
             />

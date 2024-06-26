@@ -1,7 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
-import { memo, useEffect, useMemo } from 'react'
+import { runHighlight } from '@utils/index'
+import { useEffect, useMemo } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
@@ -62,19 +62,20 @@ const OneChoiceQuestion = ({
         (a: IAnswers, b: IAnswers) => a?.answer_position - b?.answer_position,
       )
       for (let e of dataAnswers) {
-        answers.push({ label: e.answer, value: e.id })
+        answers.push({ label: e?.answer, value: e?.id })
       }
     }
     return answers
   }, [data])
+
   return (
-    <div>
+    <>
       <div
         id="hightlight_area"
         onMouseUp={(e: any) => {
           if (
-            e.target.tagName.charAt(0) !== 'm' &&
-            e.target.firstChild?.tagName !== 'math'
+            e?.target?.tagName?.charAt(0) !== 'm' &&
+            e?.target?.firstChild?.tagName !== 'math'
           ) {
             if (e) {
               if (allowHighLight) {
@@ -121,16 +122,16 @@ const OneChoiceQuestion = ({
                 return (
                   <div
                     className="cursor-pointer hover:text-primary"
-                    key={e.id}
+                    key={e?.id ?? i}
                     onClick={(event) => {
                       setOpenFile &&
                         setOpenFile(
                           {
                             type: 'exhibits',
-                            description: e.description,
-                            name: e.name,
+                            description: e?.description,
+                            name: e?.name,
                             index: i,
-                            files: e.files,
+                            files: e?.files,
                           },
                           null,
                           null,
@@ -138,12 +139,12 @@ const OneChoiceQuestion = ({
                         )
                     }}
                   >
-                    Exhibit {i + 1}: {e.name}
+                    Exhibit {i + 1}: {e?.name}
                   </div>
                 )
               })}
             </div>
-            <div className="border border-b-gray-2 my-6"></div>
+            <div className="border border-b-gray-2 my-6" />
           </>
         )}
       <div
@@ -169,7 +170,7 @@ const OneChoiceQuestion = ({
           />
         </div>
       )}
-    </div>
+    </>
   )
 }
 export default OneChoiceQuestion

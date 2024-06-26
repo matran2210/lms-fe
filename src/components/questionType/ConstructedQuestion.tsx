@@ -1,20 +1,12 @@
 import HookFormEditor from '@components/base/editor/HookFormEditor'
-import React, {
-  ForwardedRef,
-  forwardRef,
-  memo,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { runHighlight } from '@utils/index'
 import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
 import { uniqueId } from 'lodash'
-import { IResource } from 'src/type/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'

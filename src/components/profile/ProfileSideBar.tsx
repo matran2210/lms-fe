@@ -1,9 +1,8 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { ANIMATION, PageLink } from 'src/constants'
+import { ANIMATION } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { IProfilePages } from 'src/type/Profile'
@@ -125,10 +124,10 @@ const ProfileSideBar = ({ page }: IProps) => {
       <ul className="px-3 py-4 bg-white h-full flex flex-col justify-between">
         <div>
           {Object.entries(PROFILE_PAGES).map(([key, value]) => {
-            const urlPage = key.toLowerCase()
-            const urlChildren = (value.children || []) as Child[]
+            const urlPage = key?.toLowerCase()
+            const urlChildren = (value?.children || []) as Child[]
 
-            const childLabel = getLabelFromChild(value).replace(/\s+/g, '_')
+            const childLabel = getLabelFromChild(value)?.replace(/\s+/g, '_')
             const isActive = urlPage === page
 
             let className =
@@ -150,7 +149,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                   className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-medium hover-transition-font-weight ${
                     isActive ||
                     (urlPage === 'security' &&
-                      Object.values(childActivationStates).some(
+                      Object.values(childActivationStates)?.some(
                         (active) => active,
                       ) &&
                       !childActivationStates[childLabel])
@@ -175,7 +174,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                     }
                   }}
                 >
-                  {value.label}
+                  {value?.label}
                   {urlPage === 'security' && (
                     <div className="mt-2">
                       <ExpandIcon
@@ -189,7 +188,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                 {urlChildren?.length > 0 && (
                   <div className="border-l border-gray-2 ml-5 my-5">
                     {isExpanded &&
-                      urlChildren.map((child) => {
+                      urlChildren?.map((child) => {
                         const childLabel = getLabelFromChild(child).replace(
                           /\s+/g,
                           '_',

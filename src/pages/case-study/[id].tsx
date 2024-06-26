@@ -2,7 +2,6 @@ import {
   CalculatorIcon,
   CloseIcon,
   ExhibitsIcon,
-  HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
   UnHighLightIcon,
@@ -29,7 +28,6 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import {
   clearFileEssay,
   getTopicsCaseStudy,
