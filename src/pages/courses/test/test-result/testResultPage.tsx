@@ -48,8 +48,7 @@ const TestResultPage = ({
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
       )
-      multipleQuestionElem.style.height =
-        window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)'` : '100px'
+      multipleQuestionElem.style.height = `calc(100vh - ${maxHeight}px)`
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
   }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
@@ -74,7 +73,7 @@ const TestResultPage = ({
             />
             <MultipleQuestion
               questions={questions}
-              className={'3.75xl:min-h-[815px]'}
+              className={'xl:min-h-[815px]'}
               multipleQuestionRef={multipleQuestionRef}
             />
           </div>
@@ -99,7 +98,7 @@ const TestResultPage = ({
               </div>
               <MultipleQuestion
                 questions={questions}
-                className={'3.75xl:min-h-[991px]'}
+                className={'xl:min-h-[991px]'}
                 multipleQuestionRef={multipleQuestionRef}
               />
             </div>
@@ -109,7 +108,7 @@ const TestResultPage = ({
                 <div className="flex gap-6 flex-wrap">
                   <MultipleQuestion
                     questions={questions}
-                    className={'3.75xl:min-h-[991px]'}
+                    className={'xl:min-h-[991px]'}
                     multipleQuestionRef={multipleQuestionRef}
                   />
                   <div className="max-h-full w-full xl:w-auto">
