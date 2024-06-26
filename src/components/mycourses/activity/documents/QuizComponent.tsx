@@ -127,9 +127,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       const defaultRequirement = activeQuestion?.requirements?.[0]
       if (defaultRequirement) {
         setShowRequirement({
-          name: defaultRequirement.name,
-          description: defaultRequirement.description,
-          files: defaultRequirement.files,
+          name: defaultRequirement?.name,
+          description: defaultRequirement?.description,
+          files: defaultRequirement?.files,
           index: 1,
         })
       }
@@ -138,7 +138,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     useEffect(() => {
       if (activeQuestion?.requirements) {
         setEssayData({
-          req: activeQuestion.requirements[0],
+          req: activeQuestion?.requirements?.[0],
           index: 0,
         })
       }
@@ -151,8 +151,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         exhibitOption.push(...activeQuestion?.exhibits)
       }
 
-      if (activeQuestion?.question_topic.exhibits.length) {
-        exhibitOption.push(...activeQuestion?.question_topic.exhibits)
+      if (activeQuestion?.question_topic?.exhibits?.length) {
+        exhibitOption?.push(...activeQuestion?.question_topic?.exhibits)
       }
 
       setExhibitData(exhibitOption)
@@ -188,46 +188,46 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const getValueFillText = () => {
       let value = []
-      const inputs = document.querySelectorAll(
+      const inputs = document?.querySelectorAll(
         'input[stringHTML="true"]',
       ) as any
       for (let e of inputs) {
-        value.push(e.value)
+        value?.push(e?.value)
       }
       return value
     }
 
     const getValueSelectText = () => {
       let value = [] as any
-      const inputs = questionRef.current?.querySelectorAll(
+      const inputs = questionRef?.current?.querySelectorAll(
         'select.sapp-select--selectword-preview',
       ) as any
 
       for (let e of inputs) {
-        value.push(e.value)
+        value?.push(e?.value)
       }
       return value
     }
 
     const getAnswerMatching = () => {
       let value = [] as any
-      const inputs = questionRef.current?.querySelectorAll(
+      const inputs = questionRef?.current?.querySelectorAll(
         '.sapp-match-result',
       ) as any
       for (let e of inputs) {
-        const childId = e.querySelector('.sapp-notched-container')
-        value.push({ question_id: e.id, answer_id: childId?.id })
+        const childId = e?.querySelector('.sapp-notched-container')
+        value.push({ question_id: e?.id, answer_id: childId?.id })
       }
       return value
     }
     const getAnswerDragNDrop = () => {
       let value = [] as any
-      const inputs = questionRef.current?.querySelectorAll(
+      const inputs = questionRef?.current?.querySelectorAll(
         '.sapp-input-dragNDrop',
       ) as any
       for (let e of inputs) {
-        const idAnswer = e.querySelector('span')
-        value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
+        const idAnswer = e?.querySelector('span')
+        value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
       }
       return value
     }
@@ -244,7 +244,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const handleResponseResults = () => {
       if (activeQuestion) {
-        if (!activeQuestion.confirmed) {
+        if (!activeQuestion?.confirmed) {
           return
         }
         setTimeout(() => {
@@ -253,8 +253,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             case QUESTION_TYPES.TRUE_FALSE: {
               setValue &&
                 setValue(
-                  `${activeQuestion.id}_${document_id}_answer`,
-                  activeQuestion.defaultValue,
+                  `${activeQuestion?.id}_${document_id}_answer`,
+                  activeQuestion?.defaultValue,
                 )
 
               break
@@ -263,8 +263,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             case QUESTION_TYPES.MULTIPLE_CHOICE: {
               setValue &&
                 setValue(
-                  `${activeQuestion.id}_${document_id}_answer`,
-                  activeQuestion.defaultValue,
+                  `${activeQuestion?.id}_${document_id}_answer`,
+                  activeQuestion?.defaultValue,
                 )
               break
             }
@@ -295,13 +295,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }) => {
       if (activeQuestion) {
         let myAnswers
-        switch (activeQuestion.qType as QUESTION_TYPES) {
+        switch (activeQuestion?.qType as QUESTION_TYPES) {
           case QUESTION_TYPES.ONE_CHOICE:
           case QUESTION_TYPES.TRUE_FALSE:
-            myAnswers = getValues(`${activeQuestion.id}_${document_id}_answer`)
+            myAnswers = getValues(`${activeQuestion?.id}_${document_id}_answer`)
             break
           case QUESTION_TYPES.MULTIPLE_CHOICE:
-            myAnswers = getValues(`${activeQuestion.id}_${document_id}_answer`)
+            myAnswers = getValues(`${activeQuestion?.id}_${document_id}_answer`)
             break
           case QUESTION_TYPES.FILL_WORD:
             myAnswers = getValueFillText()
@@ -316,7 +316,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             myAnswers = getAnswerDragNDrop()
             break
           case QUESTION_TYPES.ESSAY:
-            const value = getValues(`${activeQuestion.id}_${document_id}_essay`)
+            const value = getValues(
+              `${activeQuestion?.id}_${document_id}_essay`,
+            )
 
             const isSubmitted = (() => {
               if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
@@ -328,7 +330,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 } else if (value) {
                   const data = JSON.parse(value)
                   for (let e of data) {
-                    if (e.celldata && e.celldata.length > 0) {
+                    if (e?.celldata && e?.celldata?.length > 0) {
                       return true
                     }
                   }
@@ -353,7 +355,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             }
 
             myAnswers = {
-              question_id: activeQuestion.id,
+              question_id: activeQuestion?.id,
               short_answer:
                 (value !== undefined || value !== '') &&
                 (isChange ||
@@ -362,24 +364,24 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
                   ? ' '
                   : value,
-              response_option: activeQuestion.response_option
-                ? activeQuestion.response_option
+              response_option: activeQuestion?.response_option
+                ? activeQuestion?.response_option
                 : 'WORD',
-              answer_file: activeQuestion.answer_file,
+              answer_file: activeQuestion?.answer_file,
               active,
             }
             break
           default:
             break
         }
-        DragDropRef.current?.handleReset()
+        DragDropRef?.current?.handleReset()
         try {
           dispatch(
             confirmQuestion({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
-              questionId: activeQuestion.id || '',
+              questionId: activeQuestion?.id || '',
               myAnswers: myAnswers,
             }),
           )
@@ -430,11 +432,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             <OneChoiceQuestion
               data={activeQuestion}
               control={controlAnswer}
-              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setValue={setValue}
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
-              name={`${activeQuestion.id}_${document_id}_answer`}
+              name={`${activeQuestion?.id}_${document_id}_answer`}
             />
           )
 
@@ -443,11 +445,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             <MultiChoiceQuestion
               data={activeQuestion}
               control={controlAnswer}
-              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setValue={setValue}
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
-              name={`${activeQuestion.id}_${document_id}_answer`}
+              name={`${activeQuestion?.id}_${document_id}_answer`}
             />
           )
 
@@ -457,7 +459,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
-              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
@@ -472,7 +474,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
-              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              corrects={showCorrect ? activeQuestion?.corrects : undefined}
             />
           )
 
@@ -482,7 +484,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion}
               action={getAnswerDragNDrop}
               defaultAnswer={activeQuestion?.defaultValue}
-              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              corrects={showCorrect ? activeQuestion?.corrects : undefined}
               resetDefaultAnswer={false}
               setOpenFile={setOpenFile}
               ref={DragDropRef}
@@ -526,7 +528,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         >
                           <div className="font-semibold">
                             Requirement {showRequirement?.index}/
-                            {activeQuestion.requirements?.length || 0}
+                            {activeQuestion?.requirements?.length || 0}
                           </div>
                           <div>
                             <SappIcon
@@ -540,20 +542,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                             ref={listRequirementRef}
                             className="absolute z-50 text-over  left-0 bottom-0 bg-white w-max max-w-md translate-y-full shadow-md py-1"
                           >
-                            {activeQuestion.requirements?.map((e, i) => {
+                            {activeQuestion?.requirements?.map((e, i) => {
                               return (
                                 <div
                                   onClick={() => {
                                     handleShowRequirement({
-                                      description: e.description,
+                                      description: e?.description,
                                       index: i + 1,
-                                      name: e.name,
-                                      files: e.files,
+                                      name: e?.name,
+                                      files: e?.files,
                                     })
                                   }}
                                   className="font-semibold hover:text-primary truncate py-1.5 px-3"
                                   key={e.id}
-                                >{`Requirement ${i + 1}: ${e.name}`}</div>
+                                >{`Requirement ${i + 1}: ${e?.name}`}</div>
                               )
                             })}
                           </div>
@@ -563,7 +565,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         <span className="text-state-error">* </span>
                         <span className="text-gray-1">
                           You must finished{' '}
-                          {activeQuestion.requirements?.length || 0}{' '}
+                          {activeQuestion?.requirements?.length || 0}{' '}
                           requirements to complete this question (Your answer is
                           auto save)
                         </span>
@@ -586,7 +588,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                 setOpenFile &&
                                 setOpenFile(
                                   { type: 'file' },
-                                  e.resource.url,
+                                  e?.resource?.url,
                                   e?.resource?.name,
                                 )
                               }
@@ -616,16 +618,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         return (
                           <div
                             className="cursor-pointer hover:text-primary"
-                            key={e.id}
+                            key={e?.id ?? i}
                             onClick={(event) => {
                               setOpenFile &&
                                 setOpenFile(
                                   {
                                     type: 'exhibits',
-                                    description: e.description,
-                                    name: e.name,
+                                    description: e?.description,
+                                    name: e?.name,
                                     index: i,
-                                    files: e.files,
+                                    files: e?.files,
                                   },
                                   null,
                                   null,
@@ -633,7 +635,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                 )
                             }}
                           >
-                            Exhibit {i + 1}: {e.name}
+                            Exhibit {i + 1}: {e?.name}
                           </div>
                         )
                       })}
@@ -641,12 +643,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   </>
                 )}
 
-                {activeQuestion.question_topic?.files?.length > 0 && (
+                {activeQuestion?.question_topic?.files?.length > 0 && (
                   <div>
                     <div className="border border-b-gray-2 my-6"></div>
                     <div>
                       <div className="font-semibold mb-2">Topic Resource:</div>
-                      {activeQuestion.question_topic?.files.map(
+                      {activeQuestion?.question_topic?.files.map(
                         (e: any, index: number) => {
                           return (
                             <div
@@ -655,7 +657,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                 setOpenFile &&
                                   setOpenFile(
                                     { type: 'file' },
-                                    e.resource.url,
+                                    e?.resource?.url,
                                     e?.resource?.name,
                                   )
                               }}
@@ -679,12 +681,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 control={controlAnswer}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
-                name={`${activeQuestion.id}_${document_id}_essay`}
+                name={`${activeQuestion?.id}_${document_id}_essay`}
                 fullData={activeQuestion}
                 openChooseFile={(e: any) =>
                   setOpenUpload({
                     status: true,
-                    question_id: activeQuestion.id,
+                    question_id: activeQuestion?.id,
                   })
                 }
                 handleClearFile={() => {
@@ -693,7 +695,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       activityId,
                       tabId,
                       quizId,
-                      question_id: activeQuestion.id,
+                      question_id: activeQuestion?.id,
                     }),
                   )
                 }}

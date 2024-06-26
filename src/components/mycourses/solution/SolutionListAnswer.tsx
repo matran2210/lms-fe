@@ -16,9 +16,9 @@ const SolutionListAnswer: React.FC<SolutionListAnswerProps> = ({
       {solutionListAnswers.map((solutionListAnswer, index) => (
         <>
           <SolutionAnswer
-            message={solutionListAnswer.message}
-            isYourAnswer={solutionListAnswer.isYourAnswer}
-            isCorrect={solutionListAnswer.isCorrect}
+            message={solutionListAnswer?.message}
+            isYourAnswer={solutionListAnswer?.isYourAnswer}
+            isCorrect={solutionListAnswer?.isCorrect}
           />
         </>
       ))}

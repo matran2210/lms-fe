@@ -64,8 +64,8 @@ const SolutionModal: FC<EntrancePopupProps> = ({ open, setOpen }) => {
         {/* // Demo solution popup 1 column and 2 column */}
         {/* <SolutionModalContent topic={topics1Column.topic} solution={solutions1Column.solution} type1column={true} /> */}
         <SolutionModalContent
-          topic={topics2Column.topic}
-          solution={solutions2Column.solution}
+          topic={topics2Column?.topic}
+          solution={solutions2Column?.solution}
           type1column={false}
         />
       </SappModal>

@@ -65,7 +65,7 @@ const SelectWord = forwardRef(
 
     useImperativeHandle(ref, () => ({
       handleReset() {
-        const inputs = document.querySelectorAll(
+        const inputs = document?.querySelectorAll(
           'select.sapp-select--selectword-preview',
         ) as any
         for (let e of inputs) {
@@ -79,13 +79,13 @@ const SelectWord = forwardRef(
     const formatAnswer = (data: any) => {
       let objAnswer: any = {}
       for (let e of data?.answers) {
-        if (!objAnswer[e.answer_position]) {
-          objAnswer[e.answer_position] = []
+        if (!objAnswer?.[e?.answer_position]) {
+          objAnswer[e?.answer_position] = []
         }
-        objAnswer[e.answer_position].push({
-          label: e.answer,
-          value: e.id,
-          result: e.is_correct,
+        objAnswer[e?.answer_position].push({
+          label: e?.answer,
+          value: e?.id,
+          result: e?.is_correct,
         })
       }
       return objAnswer
@@ -95,16 +95,16 @@ const SelectWord = forwardRef(
     const parser = new DOMParser()
 
     useEffect(() => {
-      const doc = parser.parseFromString(str, 'text/html')
-      const elements = doc.querySelectorAll('.question-content-tag')
-      const doc2 = parser.parseFromString(str, 'text/html')
-      const elementCorrects = doc2.querySelectorAll('.question-content-tag')
+      const doc = parser?.parseFromString(str, 'text/html')
+      const elements = doc?.querySelectorAll('.question-content-tag')
+      const doc2 = parser?.parseFromString(str, 'text/html')
+      const elementCorrects = doc2?.querySelectorAll('.question-content-tag')
 
       elements.forEach((element, index) => {
-        const selectElement = document.createElement('select')
-        selectElement.classList.add('sapp-select--selectword-preview')
+        const selectElement = document?.createElement('select')
+        selectElement.classList?.add('sapp-select--selectword-preview')
         selectElement.setAttribute('required', 'true')
-        selectElement.id = element.id
+        selectElement.id = element?.id
 
         const defaultAnswerValue = defaultAnswer?.[index] || ''
         let optionClass = ''
@@ -112,9 +112,9 @@ const SelectWord = forwardRef(
         if (corrects) {
           const isCorrect = corrects?.some(
             (correct) =>
-              correct.answer_position === index + 1 &&
-              correct.id === defaultAnswerValue &&
-              correct.is_correct,
+              correct?.answer_position === index + 1 &&
+              correct?.id === defaultAnswerValue &&
+              correct?.is_correct,
           )
           optionClass =
             isCorrect || isSelfReflection === true
@@ -123,62 +123,62 @@ const SelectWord = forwardRef(
           const textClass = isCorrect
             ? 'text-state-success'
             : 'text-state-error'
-          selectElement.classList.add(optionClass)
-          selectElement.classList.add('sapp-select-confirmed')
-          selectElement.classList.add(textClass)
-          selectElement.setAttribute('disabled', 'true')
+          selectElement?.classList?.add(optionClass)
+          selectElement?.classList?.add('sapp-select-confirmed')
+          selectElement?.classList?.add(textClass)
+          selectElement?.setAttribute('disabled', 'true')
           selectElement.innerHTML = `
         <option value="" disabled selected ></option>
-        ${answerObj[+index + 1].map((e: any) => {
-          const isSelected = e.value === defaultAnswerValue
+        ${answerObj?.[+index + 1]?.map((e: any) => {
+          const isSelected = e?.value === defaultAnswerValue
 
-          return `<option value="${e.value}" ${isSelected ? 'selected' : ''} >${
-            e.label
-          }</option>`
+          return `<option value="${e?.value}" ${
+            isSelected ? 'selected' : ''
+          } >${e?.label}</option>`
         })}
       `
         } else {
           selectElement.innerHTML = `
           <option value="" disabled selected >Choose</option>
-          ${answerObj[+index + 1].map((e: any) => {
-            const isSelected = e.value === defaultAnswerValue
-            if (e.label.length > 100) {
+          ${answerObj?.[+index + 1]?.map((e: any) => {
+            const isSelected = e?.value === defaultAnswerValue
+            if (e?.label?.length > 100) {
               let arr = []
               var start = 0 // Vị trí bắt đầu của phần tử
               var end = 0 // Vị trí kết thúc của phần tử
-              while (start < e.label.length) {
+              while (start < e?.label?.length) {
                 // Lặp cho đến khi hết chuỗi
                 end = start + 50 // Tính vị trí kết thúc theo số lượng ký tự tối thiểu
-                if (end < e.label.length) {
+                if (end < e?.label?.length) {
                   // Nếu vị trí kết thúc không vượt quá độ dài chuỗi
-                  while (e.label[end] != ' ') {
+                  while (e?.label?.[end] != ' ') {
                     // Lặp cho đến khi tìm được khoảng trắng
                     end-- // Giảm vị trí kết thúc
                   }
                 }
-                var sub = e.label.slice(start, end)
+                var sub = e?.label?.slice(start, end)
                 // Cắt một phần tử từ vị trí bắt đầu đến vị trí kết thúc
-                arr.push(sub) // Thêm phần tử vào mảng
+                arr?.push(sub) // Thêm phần tử vào mảng
                 start = end + 1 // Cập nhật vị trí bắt đầu của phần tử tiếp theo
               }
               return arr
-                .map((el, i) => {
+                ?.map((el, i) => {
                   if (i === 0) {
-                    return `<option value="${e.value}" ${
+                    return `<option value="${e?.value}" ${
                       isSelected ? 'selected' : ''
                     } class="w-[50px] break-all">${el}</option>`
                   }
-                  return `<option disabled value="${e.value}" ${
+                  return `<option disabled value="${e?.value}" ${
                     isSelected ? 'selected' : ''
                   } class="w-[50px] break-all">${el}</option>`
                 })
-                .join('')
+                ?.join('')
 
               // return arr
             } else {
-              return `<option value="${e.value}" ${
+              return `<option value="${e?.value}" ${
                 isSelected ? 'selected' : ''
-              } class="w-[50px] break-all">${e.label}</option>
+              } class="w-[50px] break-all">${e?.label}</option>
               `
             }
           })}
@@ -189,13 +189,13 @@ const SelectWord = forwardRef(
       })
       if (corrects) {
         elementCorrects.forEach((element, index) => {
-          const inputId = element.id
+          const inputId = element?.id
           const inputValue = defaultAnswer?.[index] || ''
 
           let inputClass
           // if (corrects) {
           const correctAnswer = corrects?.find(
-            (ans: any) => ans.answer_position === index + 1 && ans.is_correct,
+            (ans: any) => ans?.answer_position === index + 1 && ans?.is_correct,
           )
           if (correctAnswer) {
             inputClass = 'text-base font-semibold text-state-success'
@@ -203,7 +203,7 @@ const SelectWord = forwardRef(
 
             element.outerHTML = `
                 <span>
-                <span id="${inputId}" class = "${inputClass}">${correctAnswer.answer} <span/>
+                <span id="${inputId}" class = "${inputClass}">${correctAnswer?.answer} <span/>
                 </span>
                 `
           }
@@ -230,7 +230,7 @@ const SelectWord = forwardRef(
               <div className="border border-b-gray-2 my-6"></div>
               <div className="flex items-center mb-4">
                 <div className="font-semibold">
-                  Exhibits ({data.question_topic.exhibits?.length || 0})
+                  Exhibits ({data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
                   <span className="text-state-error">* </span>
@@ -238,20 +238,20 @@ const SelectWord = forwardRef(
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                {data.question_topic.exhibits?.map((e: any, i: number) => {
+                {data?.question_topic?.exhibits?.map((e: any, i: number) => {
                   return (
                     <div
                       className="cursor-pointer hover:text-primary"
-                      key={e.id}
+                      key={e?.id ?? i}
                       onClick={(event) => {
                         setOpenFile &&
                           setOpenFile(
                             {
                               type: 'exhibits',
-                              description: e.description,
-                              name: e.name,
+                              description: e?.description,
+                              name: e?.name,
                               index: i,
-                              files: e.files,
+                              files: e?.files,
                             },
                             null,
                             null,
@@ -259,7 +259,7 @@ const SelectWord = forwardRef(
                           )
                       }}
                     >
-                      Exhibit {i + 1}: {e.name}
+                      Exhibit {i + 1}: {e?.name}
                     </div>
                   )
                 })}
@@ -273,14 +273,14 @@ const SelectWord = forwardRef(
           className="sapp-questions"
           // style={{borderBottom: '1px solid  white'}}
           text_editor_content={
-            questionContent?.documentElement.querySelector('body')?.innerHTML ||
-            ''
+            questionContent?.documentElement?.querySelector('body')
+              ?.innerHTML || ''
           }
           id="hightlight_area"
           onMouseUp={(e: any) => {
             if (
-              e.target.tagName.charAt(0) !== 'm' &&
-              e.target.firstChild?.tagName !== 'math'
+              e?.target?.tagName?.charAt(0) !== 'm' &&
+              e?.target?.firstChild?.tagName !== 'math'
             ) {
               if (e) {
                 if (allowHighLight) {
@@ -310,7 +310,7 @@ const SelectWord = forwardRef(
             <EditorReader
               className="questions mt-2"
               text_editor_content={
-                answerContent?.documentElement.querySelector('body')
+                answerContent?.documentElement?.querySelector('body')
                   ?.innerHTML || ''
               }
             />

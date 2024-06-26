@@ -50,10 +50,10 @@ function DiscussionElement({
       </div>
       <div>
         <div className="text-base font-semibold mb-1">
-          {discussion.full_name}
+          {discussion?.full_name}
         </div>
         <div className="flex gap-3 flex-wrap">
-          {discussion.course_discussion_files?.map((e) => {
+          {discussion?.course_discussion_files?.map((e) => {
             return (
               <div key={e.id}>
                 <Image
@@ -70,8 +70,8 @@ function DiscussionElement({
             )
           })}
         </div>
-        {discussion.content && (
-          <div className={`text-base mb-2 `}>{discussion.content}</div>
+        {discussion?.content && (
+          <div className={`text-base mb-2 `}>{discussion?.content}</div>
         )}
 
         <div className="flex gap-y-1 gap-x-6 font-semibold text-medium-sm">
@@ -96,10 +96,10 @@ function DiscussionElement({
             <div
               role="button"
               className={`${
-                discussion.id === idReply ? 'text-primary' : ''
+                discussion?.id === idReply ? 'text-primary' : ''
               } select-none`}
               onClick={() =>
-                handleChangeIdReply && handleChangeIdReply(discussion.id)
+                handleChangeIdReply && handleChangeIdReply(discussion?.id)
               }
             >
               Reply

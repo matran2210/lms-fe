@@ -1,8 +1,5 @@
 import { SecurityIcon } from '@assets/icons'
 import DeviceItem from '@components/base/deviceItem/DeviceItem'
-import { apiURL } from '@components/mycourses/LearningResource'
-import axios from 'axios'
-import { parse } from 'cookie'
 import { useEffect, useState } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 import UserApi from 'src/redux/services/User/user'

@@ -10,19 +10,25 @@ interface EntranceTestProps {
   data: any
 }
 
+enum EAttemptStatus {
+  UN_SUBMITTED = 'UN_SUBMITTED',
+  SUBMITTED = 'SUBMITTED',
+  UN_FINISHED = 'UN_FINISHED',
+}
+
 const EntranceTest = ({ data }: EntranceTestProps) => {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
   const handleOnClick = () => {
-    if (data.attempt_times >= 1) {
-      router.push(`entrance-test/test-result/${data.quiz_attempt_id}`)
+    if (data?.attempt_times >= 1) {
+      router.push(`entrance-test/test-result/${data?.quiz_attempt_id}`)
     } else {
       setOpen(true)
     }
   }
 
   const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data.total_attempt_time)
+    ? formatTime(data?.total_attempt_time)
     : 0
   const timeAllowFormatted = data?.quiz_timed
     ? formatTime(data?.quiz_timed * 60)
@@ -38,8 +44,11 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
    */
   const isAttemptValid =
     data.is_attempt &&
-    (data.attempt_status === 'SUBMITTED' ||
-      data.attempt_status === 'UN_FINISHED')
+    [
+      EAttemptStatus.SUBMITTED,
+      EAttemptStatus.UN_FINISHED,
+      EAttemptStatus.UN_SUBMITTED,
+    ].includes(data?.attempt_status)
 
   return (
     <>
@@ -51,7 +60,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
       <div className="mt-auto">
         <div className="info">
           <div className="flex justify-between text-base text-gray-1 capitalize pb-4 border-b border-gray-2">
-            {data.is_attempt ? (
+            {data?.is_attempt ? (
               <>
                 <p>Time taken:</p>
                 <p className="text-bw-1 font-medium">{timeTakenFormatted}</p>
@@ -65,10 +74,10 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
           </div>
           <div className="flex justify-between text-base text-gray-1 capitalize pt-4">
             <p>Results:</p>
-            {data.is_attempt ? (
+            {data?.is_attempt ? (
               <>
                 <p className="text-state-success">
-                  {data.total_correct_answer + '/' + data.total_question}
+                  {data?.total_correct_answer + '/' + data?.total_question}
                 </p>
               </>
             ) : (
