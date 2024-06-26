@@ -52,11 +52,11 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
         Extend Trial Course
       </div>
       {noExtensions ? (
-        <div className="text-medium-sm  text-center mt-4 mb-1 xl:mb-7 px-1">
+        <div className="text-medium-sm text-center mt-4 mb-1 xl:mb-7 px-1">
           <span className="text-gray-1">
-            Notice: You can only extend a trial course of
-          </span>{' '}
-          <span className="text-bw-1">1 times</span>
+            This is your final course extension. Would you like to extend it
+            now?
+          </span>
         </div>
       ) : (
         <div className="text-medium-sm text-center mt-4 mb-1 xl:mb-7 px-1">

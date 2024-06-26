@@ -48,7 +48,8 @@ const TestResultPage = ({
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
       )
-      multipleQuestionElem.style.height = window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)'` : '100px'
+      multipleQuestionElem.style.height =
+        window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)'` : '100px'
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
   }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
@@ -71,11 +72,11 @@ const TestResultPage = ({
               classCountAll="relative top-0.5"
               globalAverage={GlobalAverage}
             />
-              <MultipleQuestion
-                questions={questions}
-                className={'3.75xl:min-h-[815px]'}
-                multipleQuestionRef={multipleQuestionRef}
-              />
+            <MultipleQuestion
+              questions={questions}
+              className={'3.75xl:min-h-[815px]'}
+              multipleQuestionRef={multipleQuestionRef}
+            />
           </div>
           <div className="max-h-full w-full xl:w-auto">
             <ChartACCAScore data={chartData?.chart_data} />
