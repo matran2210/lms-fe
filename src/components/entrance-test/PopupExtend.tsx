@@ -37,7 +37,7 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       </div>
       <div className="text-medium-sm text-center mt-4 mb-1 xl:mb-7 px-1">
         <span className="text-gray-1">
-          You can only extend entrance test once. For further support, please
+          You can only take the entrance test once. For further support, please
           contact SAPP Academy via
         </span>{' '}
         <span
