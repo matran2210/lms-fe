@@ -3,6 +3,7 @@ import { apiURL, httpService } from 'src/redux/services/httpService'
 import {
   ChangePasswordReq,
   LoginReq,
+  PostLoginReq,
   ResetPassword,
   SendEmailReq,
   VerifyOtpReq,
@@ -30,6 +31,15 @@ export class AuthAPI {
         login: request.login?.trim(),
         password: request.password?.trim(),
         remember_me: request.remember_me,
+        device_id: request?.device_id,
+      },
+      method: 'POST',
+    })
+  }
+
+  static postLogin(request: PostLoginReq) {
+    return fetcher(`${apiURL}/auth/post-login`, {
+      data: {
         device_id: request?.device_id,
       },
       method: 'POST',

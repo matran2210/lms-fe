@@ -29,6 +29,8 @@ import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
+import { getKeycloakInstance } from '../../keycloak'
+
 interface IInputProps {
   login: string
   password: string
@@ -79,7 +81,7 @@ const LoginPage = () => {
     },
   })
 
-  const handleDeviceToken = async () => {
+  const handleDeviceToken = async (): Promise<string> => {
     try {
       const accessDeviceToken = await AsyncStorage.getItem(
         'firebaseDeviceToken',
@@ -91,7 +93,7 @@ const LoginPage = () => {
       if (token) {
         await AsyncStorage.setItem('firebaseDeviceToken', token)
       }
-      return token
+      return token ?? ''
     } catch (error) {
       return ''
     }
@@ -116,9 +118,6 @@ const LoginPage = () => {
       const getFireBaseToken = await handleDeviceToken()
       dispatch(
         getLoginUser({
-          login,
-          password,
-          remember_me: remember_me ? remember_me : false,
           device_id: getFireBaseToken,
         }),
       )
@@ -158,6 +157,44 @@ const LoginPage = () => {
     }
     registerFirebase()
   }, [])
+
+  useEffect(() => {
+    const keycloak = getKeycloakInstance()
+    setLoading(true)
+    const checkKeycloakAuthentication = async () => {
+      if (keycloak.authenticated) {
+        try {
+          const getFireBaseToken = await handleDeviceToken()
+          dispatch(
+            getLoginUser({
+              device_id: getFireBaseToken,
+            }),
+          )
+            .unwrap()
+            .then((payload) => {
+              getListEntranceTest()
+              dispatch(clearGuideState())
+              dispatch(getEntranceCount())
+              localStorage.setItem('enstranceTest', 'true')
+            })
+            .catch((error) => {
+              if (error?.response?.data?.error?.code === '403|000010') {
+                setOpenLimit(true)
+              } else if (error?.response?.data?.error?.code === '401|0000') {
+                setError('login', { message: SHOW_ERROR_USERNAME_PASSWORD })
+                setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
+              }
+              setTimeout(() => {
+                setLoading(false)
+              }, 1000)
+            })
+        } catch (error) {}
+      } else {
+        setLoading(false)
+      }
+    }
+    checkKeycloakAuthentication()
+  }, [router])
 
   return (
     <>

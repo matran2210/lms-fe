@@ -9,6 +9,10 @@ export interface LoginReq {
   device_id: string | undefined
 }
 
+export interface PostLoginReq {
+  device_id: string | undefined
+}
+
 export interface ChangePasswordReq {
   oldpassword: string
   newpassword: string

@@ -28,10 +28,19 @@ import 'aos/dist/aos.css'
 import SappLoading from 'src/common/SappLoading'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
+import { getKeycloakInstance } from './keycloak'
+import { SessionProvider } from 'next-auth/react'
+import {
+  getLocalStorgeRefreshToken,
+  getLocalStorgeActToken,
+  getActToken,
+  pageview,
+  setActToken,
+  setRefreshToken,
+} from '@utils/index'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -46,7 +55,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   // const [show, setShow] = useState(false)
   const router = useRouter()
   const [openResource, setOpenResource] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const dispatch = useAppDispatch()
   const gettingNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.loading,
@@ -97,6 +106,31 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       return 'Profile'
     return 'Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy'
   }
+
+  useEffect(() => {
+    const keycloak = getKeycloakInstance()
+    const accessToken = getLocalStorgeActToken()
+    const refreshToken = getLocalStorgeRefreshToken()
+
+    if (keycloak) {
+      keycloak
+        .init({ onLoad: 'login-required' })
+        .then((authenticated: boolean) => {
+          if (authenticated) {
+            if (!accessToken && !refreshToken) {
+              setActToken(keycloak.token ?? '')
+              setRefreshToken(keycloak.refreshToken ?? '')
+            }
+          }
+          setLoading(false)
+        })
+        .catch((error: Error) => {
+          setLoading(false)
+        })
+    } else {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     onMessageListener().then((data: any) => {
@@ -192,6 +226,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       router.events.off('routeChangeComplete', handleRouteChange)
     }
   }, [router.events])
+
+  if (loading) {
+    return <>{loading ? <SappLoading /> : <></>}</>
+  }
 
   return (
     <>

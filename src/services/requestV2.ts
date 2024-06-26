@@ -10,6 +10,7 @@ import {
   setRefreshToken,
 } from '@utils/index'
 import { apiURL } from 'src/redux/services/httpService'
+import { getKeycloakInstance } from 'src/pages/keycloak'
 
 type ApiConfig<T = any> = {
   uri: string
@@ -78,33 +79,35 @@ request.interceptors.response.use(
     ) {
       if (!isRefreshing) {
         isRefreshing = true
-
-        axios(`${apiURL}/auth/rotate`, {
-          method: 'POST',
-          headers: {
-            Authorization: 'Bearer ' + getLocalStorgeRefreshToken(),
-          },
-        })
-          .then((res: any) => {
-            const userInfo = res?.data?.data?.tokens
-            setActToken(userInfo?.act)
-            setRefreshToken(userInfo?.rft)
-
-            // update new token to axios
-            request.defaults.headers.common['Authorization'] =
-              `Bearer ${getLocalStorgeActToken()}`
-
-            // Callback to unauth API calls
-            refreshSubscribers.forEach((callback) =>
-              callback(getLocalStorgeActToken()),
-            )
-            refreshSubscribers = []
-            isRefreshing = false
-          })
-          .catch(() => {
-            removeLocalStorageJwtToken()
-            window.location.href = PageLink.AUTH_LOGIN
-          })
+        const keycloak = getKeycloakInstance()
+        if (keycloak) {
+          keycloak
+            .updateToken(30)
+            .then((refreshed) => {
+              if (refreshed) {
+                const newToken = keycloak.token as string
+                setActToken(newToken)
+                request.defaults.headers.common['Authorization'] =
+                  `Bearer ${newToken}`
+                refreshSubscribers.forEach((callback) => callback(newToken))
+                refreshSubscribers = []
+                isRefreshing = false
+              } else {
+                keycloak
+                  .logout({ redirectUri: window.location.origin })
+                  .then(() => {
+                    removeLocalStorageJwtToken()
+                  })
+              }
+            })
+            .catch((error) => {
+              keycloak
+                .logout({ redirectUri: window.location.origin })
+                .then(() => {
+                  removeLocalStorageJwtToken()
+                })
+            })
+        }
       }
 
       // Return a Promise to wait for the initial API callback

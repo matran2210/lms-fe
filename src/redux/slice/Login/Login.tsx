@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-hot-toast'
 import { RootState } from '../../store'
+import { getKeycloakInstance } from 'src/pages/keycloak'
 
 import {
   ChangePasswordReq,
   ChangePasswordRes,
   LoginReq,
+  PostLoginReq,
   LoginState,
 } from '../../types/Login/login'
 import {
@@ -31,15 +33,13 @@ const initialState: LoginState = {
 
 export const getLoginUser = createAsyncThunk(
   'loginReducer/handleLogin',
-  async (body: LoginReq, thunkAPI) => {
+  async (body: PostLoginReq, thunkAPI) => {
     try {
-      const res = await AuthAPI.login(body)
+      const res = await AuthAPI.postLogin(body)
 
       if (!res.success) {
         return
       }
-      setActToken(res.data.tokens.act)
-      setRefreshToken(res.data.tokens.rft)
 
       return { ...res }
     } catch (error: any) {
@@ -51,12 +51,10 @@ export const getLogoutUser = createAsyncThunk(
   'loginReducer/handleLogout',
   async ({}, thunkAPI) => {
     try {
-      const res = await AuthAPI.logout()
-      if (!res.success) {
-        toast.error(res.error.message)
-        return
-      }
-      return { ...res }
+      const keycloak = getKeycloakInstance()
+      keycloak.logout({ redirectUri: window.location.origin }).then(() => {
+        removeLocalStorageJwtToken()
+      })
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
     }
@@ -103,18 +101,6 @@ export const loginSlice = createSlice({
     builder.addCase(getLoginUser.fulfilled, (state, action) => {
       state.loading = false
       state.changePass = false
-
-      if (action?.payload?.data?.tokens?.act) {
-        const accessToken = action.payload?.data.tokens.act
-        const refreshToken = action.payload?.data.tokens.rft
-        state.accessToken = accessToken
-        state.user = action.payload.data.user
-
-        setActToken(accessToken)
-        setRefreshToken(refreshToken)
-        // setCookieActToken(accessToken)
-        // setCookieRefreshToken(refreshToken)
-      }
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {
       state.loading = false
@@ -133,9 +119,11 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
-      removeLocalStorageJwtToken()
 
-      window.location.href = PageLink.AUTH_LOGIN
+      const keycloak = getKeycloakInstance()
+      keycloak.logout({ redirectUri: window.location.origin }).then(() => {
+        removeLocalStorageJwtToken()
+      })
     })
     builder.addCase(getLogoutUser.rejected, (state, action) => {
       state.accessToken = ''
@@ -146,7 +134,10 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
-      removeLocalStorageJwtToken()
+      const keycloak = getKeycloakInstance()
+      keycloak.logout({ redirectUri: window.location.origin }).then(() => {
+        removeLocalStorageJwtToken()
+      })
     })
 
     builder.addCase(changePassword.pending, (state) => {
