@@ -62,14 +62,27 @@ import { PinnedNotifications } from 'src/type'
 			}})
 
 		const getPinnedData = async () => {
-      const pinnedLocal = localStorage.getItem('openPinned')
-      if(pinnedLocal === null || Boolean(pinnedLocal === 'true')){
+      if(localStorage.getItem('accessToken')){
         const res: PinnedNotifications = await UserApi.getPinnedNotifications()
-        if(res){
+        const oldPinnedId = localStorage.getItem('pinnedId')
+        const oldPinnedFlag = localStorage.getItem('openPinned')
+
+        if(oldPinnedId !== res?.data?.id){
           setPinnedNotifications(res)
+          setOpenPinned(true)
+          localStorage.setItem('pinnedId', res?.data?.id)
+          localStorage.setItem('openPinned', "true")
+        } else {
+          if(Boolean(oldPinnedFlag === 'false')){
+            setOpenPinned(false)
+          } else {
+            setOpenPinned(true)
+          }
         }
+        
       }
 		}
+
 		useEffect(() => {
 			getPinnedData();
 		}, [])
