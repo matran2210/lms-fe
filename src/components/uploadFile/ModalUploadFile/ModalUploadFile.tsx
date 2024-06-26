@@ -124,12 +124,12 @@ const ModalUploadFile = ({
         try {
           getProgress(7, u.uid)
           const response = await UploadAPI.startUpload({
-            content_type: u.originFileObj.type,
-            blob: u.originFileObj,
-            size: u.originFileObj.size?.toString() || '',
+            content_type: u?.originFileObj?.type,
+            blob: u?.originFileObj,
+            size: u?.originFileObj.size?.toString() || '',
             description: '',
-            name: u.originFileObj.name || 'undefined',
-            getProgress: (percent) => getProgress(percent, u.uid),
+            name: u?.originFileObj?.name || 'undefined',
+            getProgress: (percent) => getProgress(percent, u?.uid),
             location: location,
           })
           if (response) {
@@ -138,10 +138,10 @@ const ModalUploadFile = ({
 
             setUploadFile((e: any) => {
               e[index] = {
-                ...e[index],
+                ...e?.[index],
                 status: 'done',
-                fileName: response.data.name,
-                file_key: response.data.file_key,
+                fileName: response?.data?.name,
+                file_key: response?.data?.file_key,
               }
               return e
             })

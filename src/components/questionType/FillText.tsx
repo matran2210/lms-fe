@@ -125,7 +125,7 @@ const AddWordPreview = forwardRef(
             element.outerHTML = `
                 <span>
                 <span id="${inputId}" class = "${inputClass}">${correctAnswer
-                  .map((e, i) => {
+                  ?.map((e, i) => {
                     if (i < correctAnswer.length - 1) {
                       return e?.answer + ' / '
                     } else return e?.answer

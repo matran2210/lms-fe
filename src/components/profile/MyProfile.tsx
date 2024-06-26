@@ -310,7 +310,7 @@ const MyProfile = ({
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit}>
-                {USER_TYPE[user.type]?.label}
+                {USER_TYPE[user?.type]?.label}
               </TextSkeleton>
             </div>
           </li>
@@ -323,7 +323,7 @@ const MyProfile = ({
             </div>
             <div className={`flex-auto max-w-[300px] font-medium`}>
               <TextSkeleton loading={loading && !isEdit}>
-                <span className={`${USER_STATUS[user.status]?.color}`}>
+                <span className={`${USER_STATUS[user?.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
                 </span>
               </TextSkeleton>
@@ -346,7 +346,7 @@ const MyProfile = ({
           )}
           {/* end:: Updated At*/}
         </ul>
-        {sortByCreatedAtAndDefault(user.user_contacts || [])?.map((e, i) => {
+        {sortByCreatedAtAndDefault(user?.user_contacts || [])?.map((e, i) => {
           return (
             <div className={`mt-5`} key={e.id}>
               <div
@@ -356,7 +356,7 @@ const MyProfile = ({
               >
                 <div>
                   <span className="text-gray-1">Profile {i + 1}</span>
-                  {e.is_default && (
+                  {e?.is_default && (
                     <span className="ml-[10px] bg-blue-600 bg-opacity-5 text-state-info py-1 px-2 inline-block select-none text-medium-sm leading-4">
                       Default
                     </span>

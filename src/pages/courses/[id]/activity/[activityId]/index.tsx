@@ -156,7 +156,7 @@ const ActivityPage = () => {
     timeoutRef.current = setTimeout(async () => {
       // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
       if (activityType === 'VIDEO' && videoRef?.current) {
-        for (let e of videoRef.current) {
+        for (let e of videoRef?.current) {
           e.addEventListener('playing', async () => {
             await handleFinishedCourseSectionProgress()
           })
@@ -173,10 +173,10 @@ const ActivityPage = () => {
       }
 
       // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-      else if (endActivityRef.current && activityType === 'TEXT') {
+      else if (endActivityRef?.current && activityType === 'TEXT') {
         // Hủy theo dõi nếu đã có observerRef.current
-        if (observerRef.current) {
-          observerRef.current?.unobserve(endActivityRef.current)
+        if (observerRef?.current) {
+          observerRef?.current?.unobserve(endActivityRef?.current)
         }
 
         // Thiết lập các tùy chọn cho IntersectionObserver
@@ -190,11 +190,11 @@ const ActivityPage = () => {
         const handleIntersection = async (
           entries: IntersectionObserverEntry[],
         ) => {
-          const isVisible = entries[0].isIntersecting
+          const isVisible = entries?.[0]?.isIntersecting
 
           // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-          if (isVisible && endActivityRef.current) {
-            observerRef.current?.unobserve(endActivityRef.current)
+          if (isVisible && endActivityRef?.current) {
+            observerRef?.current?.unobserve(endActivityRef?.current)
             await handleFinishedCourseSectionProgress()
           }
         }
@@ -206,14 +206,14 @@ const ActivityPage = () => {
         )
 
         // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-        if (endActivityRef.current) {
-          observerRef.current?.observe(endActivityRef.current)
+        if (endActivityRef?.current) {
+          observerRef?.current?.observe(endActivityRef?.current)
         }
 
         // Trả về hàm cleanup
         return () => {
-          if (endActivityRef.current) {
-            observerRef.current?.unobserve(endActivityRef.current)
+          if (endActivityRef?.current) {
+            observerRef?.current?.unobserve(endActivityRef?.current)
           }
         }
       }
@@ -224,7 +224,7 @@ const ActivityPage = () => {
    * Hàm xử lý khi kết thúc tiến trình phần của khóa học.
    */
   const handleFinishedCourseSectionProgress = async () => {
-    if (!isFinishRef.current) {
+    if (!isFinishRef?.current) {
       await CoursesAPI.startCourseSectionProgress(courseId, sectionId)
       isFinishRef.current = true
     }
@@ -285,10 +285,10 @@ const ActivityPage = () => {
    */
   const tabButtonColor = (id: string) => {
     let currentTabId
-    if (selector.loading) {
+    if (selector?.loading) {
       currentTabId = activeButtonId
     } else {
-      currentTabId = selector.currentTabId
+      currentTabId = selector?.currentTabId
     }
     return id === currentTabId ? 'primary' : 'white'
   }
@@ -297,20 +297,20 @@ const ActivityPage = () => {
    * Giá trị được memoized cho course_tab_documents.
    */
   const course_tab_documents = useMemo(() => {
-    return selector.tabs?.find((e) => e?.id === selector.currentTabId)
+    return selector?.tabs?.find((e) => e?.id === selector?.currentTabId)
       ?.course_tab_documents
-  }, [selector.tabs])
+  }, [selector?.tabs])
 
   /**
    * Hàm để lấy ID của tab trước đó.
    * @returns {string | undefined} - ID của tab trước đó.
    */
   const getPreviousTabId = () => {
-    const currentIndex = selector.tabs?.findIndex(
-      (tab) => tab?.id === selector.currentTabId,
+    const currentIndex = selector?.tabs?.findIndex(
+      (tab) => tab?.id === selector?.currentTabId,
     )
     const previousIndex = (currentIndex || 0) - 1
-    return selector.tabs?.[previousIndex]?.id
+    return selector?.tabs?.[previousIndex]?.id
   }
 
   /**
@@ -318,11 +318,11 @@ const ActivityPage = () => {
    * @returns {string | undefined} - ID của tab tiếp theo.
    */
   const getNextTabId = () => {
-    const currentIndex = selector.tabs?.findIndex(
-      (tab) => tab?.id === selector.currentTabId,
+    const currentIndex = selector?.tabs?.findIndex(
+      (tab) => tab?.id === selector?.currentTabId,
     )
     const nextIndex = (currentIndex || 0) + 1
-    return selector.tabs?.[nextIndex]?.id
+    return selector?.tabs?.[nextIndex]?.id
   }
   const lengthDoc = course_tab_documents?.length || 0
   const handleOpenScratchPad = (
@@ -332,21 +332,21 @@ const ActivityPage = () => {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (event) {
-      var mouseY = event.pageY - 300
+      var mouseY = event?.pageY - 300
       setExhibitsPopupPosition({ top: mouseY + 'px', left: '33%' })
     }
 
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      if (data.type === 'file') {
-        arr.push({
+      if (data?.type === 'file') {
+        arr?.push({
           type: data.type,
           file: file,
           id: uniqueId('file'),
           fileName: fileName,
         })
-      } else if (data.type === 'exhibits') {
+      } else if (data?.type === 'exhibits') {
         arr.push({
           id: uniqueId('exhibits'),
           ...data,
@@ -358,7 +358,7 @@ const ActivityPage = () => {
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      const newArr = arr.filter((e) => e?.id !== pad?.id)
+      const newArr = arr?.filter((e) => e?.id !== pad?.id)
       return newArr
     })
   }
@@ -466,7 +466,7 @@ const ActivityPage = () => {
    * @description biến này để lấy name của activity
    */
   const nameActivity = breadcrumbsMenu?.data?.find(
-    (breadcumb: IBreadCrumbs) => breadcumb.course_section_type === 'ACTIVITY',
+    (breadcumb: IBreadCrumbs) => breadcumb?.course_section_type === 'ACTIVITY',
   )
 
   const [sessionData, setSessionData] = useState<Array<any>>([])
@@ -509,7 +509,7 @@ const ActivityPage = () => {
 
   const findActivityByIndex = (previousIndex: number) => {
     return sessionData?.find(
-      (activity: IActivity) => activity?.id === activityIds[previousIndex],
+      (activity: IActivity) => activity?.id === activityIds?.[previousIndex],
     )
   }
 
@@ -525,11 +525,11 @@ const ActivityPage = () => {
   }
 
   const idPreviousActivity =
-    activity?.previous_activity?.id || activityIds[previousActivityIndex - 1]
+    activity?.previous_activity?.id || activityIds?.[previousActivityIndex - 1]
 
   const idNextActivity = activity?.next_activity
     ? activity?.next_activity?.id
-    : activityIds[nextActivityIndex + 1]
+    : activityIds?.[nextActivityIndex + 1]
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -635,7 +635,7 @@ const ActivityPage = () => {
 
           <div className="bg-gray-3">
             <div className="flex gap-2 px-6 flex-wrap">
-              {selector.tabs?.map((e) => {
+              {selector?.tabs?.map((e) => {
                 return (
                   <SappButton
                     key={e?.id}
@@ -658,20 +658,20 @@ const ActivityPage = () => {
                   {course_tab_documents?.map((e, i) => {
                     const marginBottom =
                       i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                    if (e.type === 'QUIZ') {
+                    if (e?.type === 'QUIZ') {
                       return (
                         <div
                           className={marginBottom}
-                          key={e?.id + '_' + i + '_' + selector.currentTabId}
+                          key={e?.id + '_' + i + '_' + selector?.currentTabId}
                           ref={quizDocumentRef}
                         >
                           <QuizDocument
                             questions={[
-                              ...(e.quiz?.multiple_choice_questions || []),
-                              ...(e.quiz?.constructed_questions || []),
+                              ...(e?.quiz?.multiple_choice_questions || []),
+                              ...(e?.quiz?.constructed_questions || []),
                             ]}
                             activityId={activity?.id as string}
-                            tabId={selector.currentTabId || ''}
+                            tabId={selector?.currentTabId || ''}
                             quizId={e?.quiz?.id || ''}
                             grading_preference={
                               e.quiz?.grading_preference ||
@@ -755,7 +755,7 @@ const ActivityPage = () => {
                                       {
                                         type: 'file',
                                       },
-                                      e.resource.url,
+                                      e?.resource?.url,
                                       e?.resource?.name,
                                     )
                                   }}
@@ -983,7 +983,7 @@ const ActivityPage = () => {
                 onClick={() => setOnFocusingPad(e?.id)}
                 zIndex={
                   onFocusingPad === e?.id
-                    ? openScratchPad.length + 1400
+                    ? openScratchPad?.length + 1400
                     : index + 1400
                 }
                 fixed
@@ -993,7 +993,7 @@ const ActivityPage = () => {
                 <div className="absolute h-full w-full  top-0 left-0 border">
                   <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
                     <div className="text-sm font-normal truncate">
-                      {e.fileName}
+                      {e?.fileName}
                     </div>
                     {/* <CloseIcon */}
                     <button onClick={() => handleCloseScratchPad(e)}>
@@ -1005,7 +1005,7 @@ const ActivityPage = () => {
                     style={{ height: 'calc(100% - 40px' }}
                   >
                     {/* <div className='flex flex-'> */}
-                    <PdfViewer file={e.file} />
+                    <PdfViewer file={e?.file} />
                   </div>
                   {/* </div> */}
                 </div>
@@ -1054,7 +1054,7 @@ const ActivityPage = () => {
                             onClick={() =>
                               handleOpenScratchPad(
                                 { type: 'file' },
-                                e.resource.url,
+                                e?.resource?.url,
                                 e?.resource?.name,
                               )
                             }

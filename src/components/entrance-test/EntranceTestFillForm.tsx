@@ -57,8 +57,8 @@ const EntranceTestFillForm = ({
   const getListUniversities = async () => {
     const res = await EntranceTestAPI.getListUnivers()
     let optionUnivers = []
-    for (let e of res.data) {
-      optionUnivers.push({ value: e.code, label: e.name })
+    for (let e of res?.data) {
+      optionUnivers?.push({ value: e?.code, label: e?.name })
     }
     setListUnivers(optionUnivers)
     // return res?.data?.[0]
@@ -66,8 +66,8 @@ const EntranceTestFillForm = ({
   const getListUniverPrograms = async () => {
     const res = await EntranceTestAPI.getListUniversProgram()
     let optionUniverProgram = []
-    for (let e of res.data) {
-      optionUniverProgram.push({ value: e.id, label: e.name })
+    for (let e of res?.data) {
+      optionUniverProgram?.push({ value: e?.id, label: e?.name })
     }
     setListUniverPrograms(optionUniverProgram)
     // return res?.data?.[0]
@@ -75,8 +75,8 @@ const EntranceTestFillForm = ({
   const getListMajors = async () => {
     const res = await EntranceTestAPI.getListMajors()
     let optionMajors = []
-    for (let e of res.data) {
-      optionMajors.push({ value: e.id, label: e.name })
+    for (let e of res?.data) {
+      optionMajors?.push({ value: e?.id, label: e?.name })
     }
     setListMajors(optionMajors)
     // return res?.data?.[0]
@@ -84,8 +84,8 @@ const EntranceTestFillForm = ({
   const getListEngLevel = async () => {
     const res = await EntranceTestAPI.getListEngLevel()
     let optionEngLevel = []
-    for (let e of res.data) {
-      optionEngLevel.push({ value: e.id, label: e.name })
+    for (let e of res?.data) {
+      optionEngLevel?.push({ value: e?.id, label: e?.name })
     }
     setListEngLevel(optionEngLevel)
     // return res?.data?.[0]
@@ -112,28 +112,28 @@ const EntranceTestFillForm = ({
   }, [open])
   useEffect(() => {
     if (user && open) {
-      if (user.university) {
+      if (user?.university) {
         setValue('univers_id', {
-          value: user.university?.code,
-          label: user.university?.name,
+          value: user?.university?.code,
+          label: user?.university?.name,
         })
       }
-      if (user.university_program) {
+      if (user?.university_program) {
         setValue('univers_program_id', {
-          value: user.university_program?.id,
-          label: user.university_program?.name,
+          value: user?.university_program?.id,
+          label: user?.university_program?.name,
         })
       }
       if (user.major) {
         setValue('majors_id', {
-          value: user.major?.id,
-          label: user.major?.name,
+          value: user?.major?.id,
+          label: user?.major?.name,
         })
       }
       if (user.english_level) {
         setValue('englishLevel_id', {
-          value: user.english_level?.id,
-          label: user.english_level?.name,
+          value: user?.english_level?.id,
+          label: user?.english_level?.name,
         })
       }
     }
@@ -145,22 +145,22 @@ const EntranceTestFillForm = ({
   }
   const onSubmit = async (dataValue: any) => {
     if (
-      user.major &&
-      user.university &&
-      user.english_level &&
-      user.university_program
+      user?.major &&
+      user?.university &&
+      user?.english_level &&
+      user?.university_program
     ) {
       return
     } else {
       await EntranceTestAPI.putLevel({
-        university_program_id: dataValue.univers_program_id.value,
-        major_id: dataValue.majors_id.value,
-        english_level_id: dataValue.englishLevel_id.value,
-        university_id: dataValue.univers_id.value,
+        university_program_id: dataValue?.univers_program_id?.value,
+        major_id: dataValue?.majors_id?.value,
+        english_level_id: dataValue?.englishLevel_id?.value,
+        university_id: dataValue?.univers_id?.value,
       })
       setOpen && setOpen(false)
       router.push({
-        pathname: `/test/${entrancePopupContent.id}`,
+        pathname: `/test/${entrancePopupContent?.id}`,
         query: {
           type: 'entrance',
         },

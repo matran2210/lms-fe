@@ -78,7 +78,7 @@ const TestResultDetail = () => {
       <div className="px-6 xl:px-0 mx-auto xl:mx-16 mb-6">
         <TestResultPage
           questions={questions}
-          type={questions?.course?.course_categories[0]?.name}
+          type={questions?.course?.course_categories?.[0]?.name}
           chartData={chartData}
           subjectCode={questions?.course?.subject?.code ?? ''}
         />

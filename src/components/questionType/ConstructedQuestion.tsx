@@ -210,8 +210,8 @@ const EssayQuestionPreview = ({
           id="hightlight_area"
           onMouseUp={(e: any) => {
             if (
-              e.target.tagName.charAt(0) !== 'm' &&
-              e.target.firstChild?.tagName !== 'math'
+              e?.target?.tagName?.charAt(0) !== 'm' &&
+              e?.target?.firstChild?.tagName !== 'math'
             ) {
               if (e) {
                 if (allowHighLight) {
@@ -269,14 +269,14 @@ const EssayQuestionPreview = ({
           >
             <div className="sapp-questions-essay">
               {index !== undefined
-                ? `Requirement ${index + 1}: ${data.name}`
-                : `Requirement: ${data.name}`}
+                ? `Requirement ${index + 1}: ${data?.name}`
+                : `Requirement: ${data?.name}`}
             </div>
             <EditorReader
               className="editor-wrap mb-4"
               // className="questions"
               // style={{ borderBottom: "4px solid #F2F2F2" }}
-              text_editor_content={data.description}
+              text_editor_content={data?.description}
               highlighted={
                 question_data?.requirements?.[index || 0]?.highlighted
               }
@@ -285,7 +285,7 @@ const EssayQuestionPreview = ({
 
             {data?.files?.length > 0 && (
               <div className="mb-4">
-                {data?.files.map((e: any, index: number) => {
+                {data?.files?.map((e: any, index: number) => {
                   return (
                     <div
                       className="cursor-pointer text-state-info hover:underline w-fit mb-1"
@@ -357,14 +357,14 @@ const EssayQuestionPreview = ({
                     handleDownload({
                       files: [
                         {
-                          name: fullData.answer_file.file_name,
-                          file_key: fullData.answer_file.file_key,
+                          name: fullData?.answer_file?.file_name,
+                          file_key: fullData?.answer_file?.file_key,
                         },
                       ],
                     })
                   }
                 >
-                  {fullData.answer_file.file_name}
+                  {fullData?.answer_file?.file_name}
                 </div>
                 {!fullData?.done && !fullData?.confirmed && (
                   <div
@@ -386,14 +386,15 @@ const EssayQuestionPreview = ({
         )}
         <div
           style={
-            question_data.display_type === DISPLAY_TYPE.VERTICAL || forCaseStudy
+            question_data?.display_type === DISPLAY_TYPE.VERTICAL ||
+            forCaseStudy
               ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
           key={key}
           className={`${showRequiment ? 'pointer-events-none' : ''}`}
         >
-          {question_data.response_option === RESPONSE_OPTION.WORD ? (
+          {question_data?.response_option === RESPONSE_OPTION.WORD ? (
             <HookFormEditor
               control={control}
               name={name}
@@ -496,14 +497,14 @@ const EssayQuestionPreview = ({
                       onChange={(e) => {
                         // const celldata = e.data
                         if (!fullData?.done && !fullData?.confirmed) {
-                          const currentSheet = refSheet.current?.getSheet()
+                          const currentSheet = refSheet?.current?.getSheet()
                           // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
                           // // listSheet.splice(0,1)
                           // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
                           // console.log(listSheet,"test");
                           if (value) {
                             let old = [...JSON.parse(value)]
-                            const index = old.findIndex(
+                            const index = old?.findIndex(
                               (e: any) => e?.id === currentSheet?.id,
                             )
                             // Check event change text of sheet

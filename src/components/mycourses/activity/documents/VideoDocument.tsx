@@ -93,8 +93,8 @@ const VideoDocument = ({
       )
         .unwrap()
         .then((e: any) => {
-          if (e.question) {
-            setActiveQuestion(e.question)
+          if (e?.question) {
+            setActiveQuestion(e?.question)
           }
         })
     }
@@ -125,11 +125,11 @@ const VideoDocument = ({
     setCurrentVideo(v)
     quizTimed.current = listQuestion.reduce(
       (obj, e) => {
-        if (e.time !== undefined && e.id !== undefined) {
-          if (!obj[e.time]) {
+        if (e?.time !== undefined && e?.id !== undefined) {
+          if (!obj?.[e?.time]) {
             obj[e.time] = []
           }
-          obj[e.time].push(e)
+          obj?.[e?.time]?.push(e)
         }
         return obj
       },
@@ -170,7 +170,7 @@ const VideoDocument = ({
           .then((e: any) => {
             if (e.question) {
               setCurrentListQuestion(listQuestion)
-              setActiveQuestion(e.question)
+              setActiveQuestion(e?.question)
               setModalOpen(true)
               setHideVideo(true)
             }
@@ -192,20 +192,20 @@ const VideoDocument = ({
   const [hideVideo, setHideVideo] = useState(false)
 
   const handleTrackTime = (time: number, questionId?: string) => {
-    const quizAtTime = quizTimed.current?.[time]
-    if (quizAtTime && quizAtTime.length > 0) {
+    const quizAtTime = quizTimed?.current?.[time]
+    if (quizAtTime && quizAtTime?.length > 0) {
       let foundQuestion = null
 
       if (questionId) {
-        foundQuestion = quizAtTime.find(
-          (question) => question.id === questionId,
+        foundQuestion = quizAtTime?.find(
+          (question) => question?.id === questionId,
         )
       } else {
-        foundQuestion = quizAtTime[0]
+        foundQuestion = quizAtTime?.[0]
       }
       if (foundQuestion) {
         handleOpenModalQuestions({
-          id: foundQuestion.id || '',
+          id: foundQuestion?.id || '',
           open: true,
           listQuestion: questionId ? [foundQuestion] : quizAtTime,
         })
@@ -223,7 +223,7 @@ const VideoDocument = ({
    * Handles the time update event of the video.
    */
   const handleOnTimeUpdate = () => {
-    const currentTime = Math.floor(streamRef.current?.currentTime || 0)
+    const currentTime = Math.floor(streamRef?.current?.currentTime || 0)
     if (currentTimeRef.current !== currentTime) {
       currentTimeRef.current = currentTime
       handleTrackTime(currentTime)
@@ -244,8 +244,8 @@ const VideoDocument = ({
     listQuestion: IQuestion[]
   }) => {
     if (questionId) {
-      const currentIndex = listQuestion.map((q) => q.id).indexOf(questionId)
-      const nextQuestionId = listQuestion[currentIndex + 1]?.id
+      const currentIndex = listQuestion?.map((q) => q?.id)?.indexOf(questionId)
+      const nextQuestionId = listQuestion?.[currentIndex + 1]?.id
 
       // Close the modal
       handleOpenModalQuestions({
@@ -289,7 +289,7 @@ const VideoDocument = ({
           listQuestion: currentListQuestion,
         })
       } else {
-        questionRef.current?.onSubmit({
+        questionRef?.current?.onSubmit({
           activityId: activityId,
           tabId: tabId,
           quizId: currentVideo?.quiz?.id || '',
@@ -307,8 +307,8 @@ const VideoDocument = ({
     }
   }
 
-  const timeLine = [...(currentVideo?.file?.resource?.time_line || [])].sort(
-    (a, b) => (Number(a.time) || 0) - (Number(b.time) || 0),
+  const timeLine = [...(currentVideo?.file?.resource?.time_line || [])]?.sort(
+    (a, b) => (Number(a?.time) || 0) - (Number(b.time) || 0),
   )
 
   const timeQuiz = Object.values(quizTimed?.current || [])
@@ -329,12 +329,12 @@ const VideoDocument = ({
             return (
               <label
                 className=" flex items-center gap-2 select-none cursor-pointer"
-                key={v.file.id}
+                key={v?.file?.id ?? i}
               >
                 {/* Radio button for video selection */}
                 <SAPPRadio
                   onChange={() => debouncedHandleSetCurrentVideo.current(v)}
-                  {...(v.file.id === currentVideo?.file.id
+                  {...(v?.file?.id === currentVideo?.file?.id
                     ? {
                         checked: true,
                       }
@@ -343,7 +343,7 @@ const VideoDocument = ({
                 ></SAPPRadio>
                 <span
                   className={`radio-item-label  ${
-                    v.file.id === currentVideo?.file.id
+                    v?.file?.id === currentVideo?.file?.id
                       ? 'text-bw-1'
                       : 'text-gray-1'
                   }`}
@@ -372,20 +372,20 @@ const VideoDocument = ({
 
           <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100px]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
             <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
-              {timeLine.map((e, i) => {
+              {timeLine?.map((e, i) => {
                 return (
                   <div
                     key={i}
                     className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid p-3 hover:text-primary-2 text-bw-1 grid-cols-[1.3fr,6fr]"
                     onClick={() => {
-                      handleGoTimeline(e.time)
+                      handleGoTimeline(e?.time)
                     }}
                   >
                     <div className="text-state-info mim-w-[62px]">
-                      {formatTime(e.time)}
+                      {formatTime(e?.time)}
                     </div>
                     <div className="text-bw-1 line-clamp-2 text-inherit">
-                      {htmlToRaw(e.text)}
+                      {htmlToRaw(e?.text)}
                     </div>
                   </div>
                 )

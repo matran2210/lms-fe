@@ -58,25 +58,27 @@ const Explanation = () => {
         ...resultResponse.data.answer.question,
         confirmed: true,
         corrects: getCorrect(
-          resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
-            ? resultResponse.data.answer.question.answers
-            : resultResponse.data.answer.answer_matching_mapping,
-          resultResponse.data.answer.question.qType,
+          resultResponse?.data?.answer?.question?.qType !==
+            QUESTION_TYPES.MATCHING
+            ? resultResponse?.data?.answer?.question?.answers
+            : resultResponse?.data?.answer?.question?.answers,
+          resultResponse?.data?.answer?.question?.qType,
         ),
-        question_matchings: resultResponse.data.answer.answer_matching_mapping,
-        answers: resultResponse.data?.answer?.question.answers || [],
+        question_matchings: resultResponse?.data?.answer?.question?.answers,
+        answers: resultResponse?.data?.answer?.question.answers || [],
         myAnswers: [
           {
-            question_id: resultResponse.data.answer.question.id,
-            question_answer_id: resultResponse.data.answer.question_answer_id,
-            answer: resultResponse.data.answer.answer,
+            question_id: resultResponse?.data?.answer?.question?.id,
+            question_answer_id:
+              resultResponse?.data?.answer?.question_answer_id,
+            answer: resultResponse?.data?.answer?.answer,
           },
         ],
-        defaultValue: resultResponse.data.answer.answer,
-        next: resultResponse.data.next,
-        previous: resultResponse.data.previous,
-        total_question: resultResponse.data.total_question,
-        index: resultResponse.data.index,
+        defaultValue: resultResponse?.data?.answer?.answer,
+        next: resultResponse?.data?.next,
+        previous: resultResponse?.data?.previous,
+        total_question: resultResponse?.data?.total_question,
+        index: resultResponse?.data?.index,
         question_topic: topicDescription?.data,
         short_answer: resultResponse?.data?.answer?.short_answer,
         response_option_answer: resultResponse?.data?.answer?.response_option,
