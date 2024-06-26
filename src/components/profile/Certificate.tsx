@@ -57,7 +57,7 @@ const Certificate = () => {
       >
         {certificateData.map((certificate: ICertificate) => {
           return (
-            <div key={certificate.id}>
+            <div key={certificate?.id}>
               <div
                 className="hover:bg-secondary hover:text-primary group relative flex flex-row gap-2 w-full items-start self-center pt-5 px-6 cursor-pointer min-h-[88px]  border-b border-gray-2"
                 onClick={() =>
@@ -75,10 +75,10 @@ const Certificate = () => {
 
                 <div className="relative flex flex-col gap-1 w-full items-start cursor-pointer">
                   <div className="text-base leading-[24px] text-active hover:text-primary font-medium">
-                    {certificate.course.name}
+                    {certificate?.course?.name}
                   </div>
                   <div className="text-[13px] leading-[16px] cursor-pointer text-gray-1">
-                    <div> Grade Achieved: {certificate.pass_point} %</div>
+                    <div> Grade Achieved: {certificate?.pass_point} %</div>
                   </div>
                 </div>
               </div>

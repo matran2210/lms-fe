@@ -88,7 +88,7 @@ const UploadFileHandle = ({
         <div className="sapp-upload-file-progress items-center mt-2">
           <div className="w-100 sapp-upload-file-content">
             <div className="sapp-upload-file-name">
-              {_file.name ?? _file.originFileObj?.name}
+              {_file?.name ?? _file?.originFileObj?.name}
             </div>
             <Progress
               percent={percent}
@@ -105,7 +105,7 @@ const UploadFileHandle = ({
   const handleChangeUpload = (e: UploadChangeParam<UploadFile<any>>) => {
     const length = e?.fileList?.length || 0
     e.fileList = e?.fileList?.filter((f: any, i) => {
-      if (f.resource_id) {
+      if (f?.resource_id) {
         return true
       }
       if (maxCount && length > maxCount && i >= maxCount) {
@@ -171,7 +171,7 @@ const UploadFileHandle = ({
             <div className="flex w-fit my-0 mx-auto">
               <span className="text-left"> File support:</span>
               <div className="ms-2">
-                {UPLOAD_TYPE[fileType].note?.map((e, i) => {
+                {UPLOAD_TYPE[fileType]?.note?.map((e, i) => {
                   return (
                     <div key={i} className="text-left">
                       {e}

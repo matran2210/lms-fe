@@ -82,7 +82,7 @@ const MyProfile = ({
    */
   const handleChangeToEditForm = () => {
     // Đặt giá trị cho trường full_name bằng tên hiện tại của người dùng
-    setValue('full_name', user.detail.full_name)
+    setValue('full_name', user?.detail?.full_name)
     // Đặt trạng thái isEdit thành true
     setIsEdit(true)
   }
@@ -179,13 +179,13 @@ const MyProfile = ({
     const sortedUsers = [...users]
 
     sortedUsers.sort((a, b) => {
-      if (a.is_default && !b.is_default) return -1
-      if (!a.is_default && b.is_default) return 1
+      if (a?.is_default && !b?.is_default) return -1
+      if (!a?.is_default && b?.is_default) return 1
 
-      const dateA = new Date(a.created_at)
-      const dateB = new Date(b.created_at)
+      const dateA = new Date(a?.created_at)
+      const dateB = new Date(b?.created_at)
 
-      return dateB.getTime() - dateA.getTime()
+      return dateB?.getTime() - dateA?.getTime()
     })
 
     return sortedUsers
@@ -198,7 +198,7 @@ const MyProfile = ({
         className="block min-h-[40.3rem]"
         data-aos={ANIMATION.DATA_AOS}
       >
-        <div className="relative ">
+        <div className="relative">
           <div className="flex items-center justify-between pb-6 mb-6 border-b border-b-gray-3">
             <div className="text-xl font-medium text-bw-1">Overview</div>
             <div>
@@ -246,7 +246,7 @@ const MyProfile = ({
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit}>
-                {user.code?.toString() ?? user.key?.toString()}
+                {user?.code?.toString() ?? user?.key?.toString()}
               </TextSkeleton>
             </div>
           </li>
@@ -293,7 +293,7 @@ const MyProfile = ({
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit}>
-                {user.username}
+                {user?.username}
               </TextSkeleton>
             </div>
           </li>
@@ -310,7 +310,7 @@ const MyProfile = ({
             </div>
             <div className="flex-auto max-w-[300px] font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit}>
-                {USER_TYPE[user.type]?.label}
+                {USER_TYPE[user?.type]?.label}
               </TextSkeleton>
             </div>
           </li>
@@ -323,7 +323,7 @@ const MyProfile = ({
             </div>
             <div className={`flex-auto max-w-[300px] font-medium`}>
               <TextSkeleton loading={loading && !isEdit}>
-                <span className={`${USER_STATUS[user.status]?.color}`}>
+                <span className={`${USER_STATUS[user?.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
                 </span>
               </TextSkeleton>
@@ -346,7 +346,7 @@ const MyProfile = ({
           )}
           {/* end:: Updated At*/}
         </ul>
-        {sortByCreatedAtAndDefault(user.user_contacts || [])?.map((e, i) => {
+        {sortByCreatedAtAndDefault(user?.user_contacts || [])?.map((e, i) => {
           return (
             <div className={`mt-5`} key={e.id}>
               <div
@@ -356,7 +356,7 @@ const MyProfile = ({
               >
                 <div>
                   <span className="text-gray-1">Profile {i + 1}</span>
-                  {e.is_default && (
+                  {e?.is_default && (
                     <span className="ml-[10px] bg-blue-600 bg-opacity-5 text-state-info py-1 px-2 inline-block select-none text-medium-sm leading-4">
                       Default
                     </span>
@@ -364,11 +364,11 @@ const MyProfile = ({
                 </div>
                 <div className="text-bw-1 mt-3 font-medium flex">
                   <div className="w-fit">
-                    {e.phone && e.phone}
-                    {e.email && e.phone && (
+                    {e?.phone && e?.phone}
+                    {e?.email && e?.phone && (
                       <span className="text-gray-1 mx-3">|</span>
                     )}
-                    {e.email && e.email}
+                    {e?.email && e?.email}
                   </div>
                   {!isEdit && (
                     <div
@@ -376,12 +376,12 @@ const MyProfile = ({
                       onClick={() =>
                         setMakeDefaultDrawer({
                           status: true,
-                          email: e.email,
-                          phone: e.phone,
-                          address: e.address,
+                          email: e?.email,
+                          phone: e?.phone,
+                          address: e?.address,
                           index: i + 1,
-                          id: e.id,
-                          is_default: e.is_default,
+                          id: e?.id,
+                          is_default: e?.is_default,
                         })
                       }
                     >

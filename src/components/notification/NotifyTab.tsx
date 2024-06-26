@@ -43,17 +43,17 @@ const NotifyTab: React.FC<TabsProps> = ({
               onClick={() => handleTabClick(index)}
               className={`${tabClass} ${
                 router.asPath.includes(tab.path) ||
-                (activeTab == 0 && tab.label == 'All')
+                (activeTab == 0 && tab?.label == 'All')
                   ? `${tabCurrentClass}`
                   : `${tabNotCurrentClass}`
               }`}
             >
-              {tab.label}
-              {tab.total !== undefined && (
-                <span className="ml-1">{`(${tab.total})`}</span>
+              {tab?.label}
+              {tab?.total !== undefined && (
+                <span className="ml-1">{`(${tab?.total})`}</span>
               )}
               {router.asPath.includes(tab.path) ||
-              (activeTab == 0 && tab.label == 'All') ? (
+              (activeTab == 0 && tab?.label == 'All') ? (
                 <span className={currentClass}></span>
               ) : (
                 <></>

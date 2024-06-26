@@ -54,9 +54,9 @@ const LearningNotesList = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const toggleExpand = (noteId: string) => {
     setExpandedNotes((prevExpanded: any) => {
-      if (prevExpanded.includes(noteId)) {
+      if (prevExpanded?.includes(noteId)) {
         // Nếu noteId đã trong mảng, loại bỏ nó
-        return prevExpanded.filter((id: string) => id !== noteId)
+        return prevExpanded?.filter((id: string) => id !== noteId)
       } else {
         // Nếu noteId chưa có trong mảng, thêm nó vào
         return [...prevExpanded, noteId]
@@ -121,7 +121,7 @@ const LearningNotesList = () => {
       CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
         .then((res) => {
           setNotesListData(res?.data)
-          const course_section_path = res?.data?.notes[0]?.course_section_path
+          const course_section_path = res?.data?.notes?.[0]?.course_section_path
 
           if (res && course_section_path?.length > 0) {
             setSelectedSection(

@@ -1,18 +1,10 @@
 import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
-import TestModal from 'src/pages/courses/test'
-import { round, truncate } from 'lodash'
+import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import { countWords, formatTime, truncateString } from '@utils/index'
-import {
-  ICourseSection,
-  CLASS_USER_STATUS,
-  ICourseDetail,
-  IMyCourseDetail,
-} from 'src/type/courses'
-import { useForm } from 'react-hook-form'
-import { Tooltip } from 'antd'
+import { formatTime, truncateString } from '@utils/index'
+import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
 
@@ -143,7 +135,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             className="ml-auto"
             onClick={() =>
               course?.course_section_type === 'PART'
-                ? onClickPart(course.id)
+                ? onClickPart(course?.id)
                 : {}
             }
           />

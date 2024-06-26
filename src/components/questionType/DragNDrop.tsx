@@ -71,32 +71,32 @@ const DragNDropPreivew = forwardRef(
     }
 
     function drag(ev: any) {
-      ev.dataTransfer.setData('text', ev.target.id)
-      ev.dataTransfer.setData('questionId', data.id)
+      ev?.dataTransfer?.setData('text', ev?.target?.id)
+      ev?.dataTransfer?.setData('questionId', data?.id)
 
       if (uuid) {
-        dragParentIdRef = ev.target.closest(`#${uuid}`)?.id
+        dragParentIdRef = ev?.target?.closest(`#${uuid}`)?.id
       }
     }
     function drop(ev: any, dropId: string, dropItem?: boolean) {
       ev.preventDefault()
 
-      const slotElement = ev.target
+      const slotElement = ev?.target
 
       if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
         return
       }
       dragParentIdRef = ''
 
-      const questionId = ev.dataTransfer.getData('questionId')
+      const questionId = ev?.dataTransfer?.getData('questionId')
 
       let storage
       if (uuid) {
         storage = slotElement
-          .closest(`#${uuid}`)
+          ?.closest(`#${uuid}`)
           ?.querySelector(`.${storageId}`)
       } else {
-        storage = document.querySelector(`.${storageId}`)
+        storage = document?.querySelector(`.${storageId}`)
       }
 
       if (questionId === dropId) {
@@ -106,21 +106,21 @@ const DragNDropPreivew = forwardRef(
 
         if (uuid) {
           draggingItem = slotElement
-            .closest(`#${uuid}`)
+            ?.closest(`#${uuid}`)
             ?.querySelector(`[id="${data}"]`)
         } else {
-          draggingItem = document.getElementById(data)
+          draggingItem = document?.getElementById(data)
         }
 
         if (
-          slotElement?.children.length === 0 &&
-          ev.target.classList.contains('dropable') &&
+          slotElement?.children?.length === 0 &&
+          ev?.target?.classList?.contains('dropable') &&
           !dropItem
         ) {
-          ev.target.appendChild(draggingItem)
+          ev?.target?.appendChild(draggingItem)
         } else if (dropItem) {
-          const parent = ev.target.parentNode
-          storage?.appendChild(ev.target)
+          const parent = ev?.target?.parentNode
+          storage?.appendChild(ev?.target)
           parent.appendChild(draggingItem)
           return
         }
@@ -131,28 +131,28 @@ const DragNDropPreivew = forwardRef(
       // prevent the default behavior of the drop event
       event.preventDefault()
       // get the id of the dragged piece from the dataTransfer object
-      const pieceId = event.dataTransfer.getData('text')
-      const questId = event.dataTransfer.getData('questionId')
+      const pieceId = event?.dataTransfer?.getData('text')
+      const questId = event?.dataTransfer?.getData('questionId')
 
       // get the storage element from the DOM
       let storage
       if (uuid) {
-        storage = event.target
-          .closest(`#${uuid}`)
+        storage = event?.target
+          ?.closest(`#${uuid}`)
           ?.querySelector(`.${storageId}`)
       } else {
-        storage = document.querySelector(`.${storageId}`)
+        storage = document?.querySelector(`.${storageId}`)
       }
       // append the piece element to the storage element
-      if (event.target === storage && questId === id) {
+      if (event?.target === storage && questId === id) {
         if (uuid) {
           storage?.appendChild(
-            event.target
-              .closest(`#${uuid}`)
+            event?.target
+              ?.closest(`#${uuid}`)
               ?.querySelector(`[id="${pieceId}"]`) as any,
           )
         } else {
-          storage?.appendChild(document.getElementById(pieceId) as any)
+          storage?.appendChild(document?.getElementById(pieceId) as any)
         }
       } else return
     }
@@ -172,38 +172,33 @@ const DragNDropPreivew = forwardRef(
     }))
 
     useEffect(() => {
-      const doc = parser.parseFromString(str, 'text/html')
-      const doc2 = parser.parseFromString(str, 'text/html')
+      const doc = parser?.parseFromString(str, 'text/html')
+      const doc2 = parser?.parseFromString(str, 'text/html')
       // if (refContent?.current) {
-      const elements = doc.querySelectorAll('.question-content-tag')
-      const elementsCorrects = doc2.querySelectorAll('.question-content-tag')
+      const elements = doc?.querySelectorAll('.question-content-tag')
+      const elementsCorrects = doc2?.querySelectorAll('.question-content-tag')
       if (corrects) {
         elementsCorrects.forEach((element: any, index: number) => {
-          element.outerHTML = `<span id="${element.id}" class="sapp-input-dragNDrop-answer corrects">
+          element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop-answer corrects">
         <span id="${corrects[index].id}" class="flex justify-center w-full">${corrects[index].answer}</span>
         </span>`
         })
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
-            if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span  id="${
-                element.id
-              }" class="sapp-input-dragNDrop-answer ${
-                defaultAnswer[index].idAnswer === corrects[index].id ||
+            if (defaultAnswer?.[index]?.value !== '') {
+              element.outerHTML = `<span  id="${element?.id}" class="sapp-input-dragNDrop-answer ${
+                defaultAnswer?.[index]?.idAnswer === corrects?.[index]?.id ||
                 isSelfReflection === true
                   ? 'corrects'
                   : 'wrongs'
               }">
-            <span id="${
-              defaultAnswer[index].idAnswer
-            }" class="flex justify-center w-full">${
-              defaultAnswer[index].value
-            }</span>
+            <span id="${defaultAnswer?.[index]
+              ?.idAnswer}" class="flex justify-center w-full">${defaultAnswer?.[
+              index
+            ]?.value}</span>
             </span>`
             } else {
-              element.outerHTML = `<span id="${
-                element.id
-              }" class= "sapp-input-dragNDrop-answer ${
+              element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer ${
                 isSelfReflection === true ? 'corrects' : 'wrongs'
               }">
               <span class="sapp-input-dragNDrop-empty"></span>
@@ -211,9 +206,7 @@ const DragNDropPreivew = forwardRef(
               //   })
             }
           } else {
-            element.outerHTML = `<span id="${
-              element.id
-            }" class= "sapp-input-dragNDrop-answer ${
+            element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer ${
               isSelfReflection === true ? 'corrects' : 'wrongs'
             }">
             <span class="sapp-input-dragNDrop-empty"></span>
@@ -225,79 +218,79 @@ const DragNDropPreivew = forwardRef(
       } else {
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
-            if (defaultAnswer[index].value !== '') {
-              element.outerHTML = `<span id="${
-                element.id
-              }" class="sapp-input-dragNDrop" indexBox="${index + 1}">
-                <span class="answer-box" id="${
-                  defaultAnswer[index].idAnswer
-                }">${defaultAnswer[index].value}</span>
+            if (defaultAnswer?.[index]?.value !== '') {
+              element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
+                index + 1
+              }">
+                <span class="answer-box" id="${defaultAnswer?.[index]
+                  ?.idAnswer}">${defaultAnswer?.[index]?.value}</span>
                </span>
               `
             } else {
-              element.outerHTML = `<span id="${
-                element.id
-              }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
+              element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
+                index + 1
+              }"> </span>`
             }
           } else {
-            element.outerHTML = `<span  id="${
-              element.id
-            }" class="sapp-input-dragNDrop" indexBox="${index + 1}"> </span>`
+            element.outerHTML = `<span  id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
+              index + 1
+            }"> </span>`
           }
         })
         setQuestionContent(doc)
       }
       // }
     }, [defaultAnswer, corrects])
+
     const options = {
       replace(domNode: any) {
         if (
-          domNode.attribs &&
-          domNode.attribs.class === 'sapp-input-dragNDrop'
+          domNode?.attribs &&
+          domNode?.attribs?.class === 'sapp-input-dragNDrop'
         ) {
           if (domNode.children.length > 1) {
-            const children = domNode.children[1]
+            const children = domNode?.children?.[1]
             return (
               <span
-                id={domNode.attribs.id}
+                id={domNode?.attribs?.id}
                 className="sapp-input-dragNDrop dropable"
-                onDrop={() => drop(event, data.id)}
+                onDrop={() => drop(event, data?.id)}
                 onDragOver={allowDrop}
-                {...{ indexBox: domNode.attribs.indexbox }}
+                {...{ indexBox: domNode?.attribs?.indexbox }}
               >
                 <span
-                  id={children.attribs.id}
-                  className={children.attribs.class}
-                  onDrop={() => drop(event, data.id, true)}
+                  id={children?.attribs?.id}
+                  className={children?.attribs?.class}
+                  onDrop={() => drop(event, data?.id, true)}
                   onDragOver={allowDrop}
                   draggable="true"
                   onDragStart={drag}
                 >
-                  {children?.children[0]?.data}
+                  {children?.children?.[0]?.data}
                 </span>
               </span>
             )
           } else {
             return (
               <span
-                id={domNode.attribs.id}
+                id={domNode?.attribs?.id}
                 className="sapp-input-dragNDrop dropable"
-                onDrop={() => drop(event, data.id)}
+                onDrop={() => drop(event, data?.id)}
                 onDragOver={allowDrop}
-                {...{ indexBox: domNode.attribs.indexbox }}
+                {...{ indexBox: domNode?.attribs?.indexbox }}
               ></span>
             )
           }
         }
-        if (domNode.attribs && domNode.attribs.class === 'answer-box') {
+        if (domNode?.attribs && domNode?.attribs?.class === 'answer-box') {
           return (
             <span
-              id={domNode.attribs.id}
-              className={domNode.attribs.class}
-              onDrop={() => drop(event, data.id)}
+              id={domNode?.attribs?.id}
+              className={domNode?.attribs?.class}
+              onDrop={() => drop(event, data?.id)}
               onDragOver={allowDrop}
               draggable="true"
-              {...{ indexBox: domNode.attribs.indexbox }}
+              {...{ indexBox: domNode?.attribs?.indexbox }}
             >
               {domNode?.data}
             </span>
@@ -318,8 +311,8 @@ const DragNDropPreivew = forwardRef(
               id="hightlight_area"
               onMouseUp={(e: any) => {
                 if (
-                  e.target.tagName.charAt(0) !== 'm' &&
-                  e.target.firstChild?.tagName !== 'math'
+                  e?.target?.tagName?.charAt(0) !== 'm' &&
+                  e?.target?.firstChild?.tagName !== 'math'
                 ) {
                   if (e) {
                     if (allowHighLight) {
@@ -347,7 +340,7 @@ const DragNDropPreivew = forwardRef(
                     <div className="border border-b-gray-2 my-6"></div>
                     <div className="flex items-center mb-4">
                       <div className="font-semibold">
-                        Exhibits ({data.question_topic.exhibits?.length || 0})
+                        Exhibits ({data?.question_topic?.exhibits?.length || 0})
                       </div>
                       <div className="ml-4">
                         <span className="text-state-error">* </span>
@@ -355,7 +348,7 @@ const DragNDropPreivew = forwardRef(
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                      {data.question_topic.exhibits?.map(
+                      {data?.question_topic?.exhibits?.map(
                         (e: any, i: number) => {
                           return (
                             <div
@@ -366,10 +359,10 @@ const DragNDropPreivew = forwardRef(
                                   setOpenFile(
                                     {
                                       type: 'exhibits',
-                                      description: e.description,
-                                      name: e.name,
+                                      description: e?.description,
+                                      name: e?.name,
                                       index: i,
-                                      files: e.files,
+                                      files: e?.files,
                                     },
                                     null,
                                     null,
@@ -377,7 +370,7 @@ const DragNDropPreivew = forwardRef(
                                   )
                               }}
                             >
-                              Exhibit {i + 1}: {e.name}
+                              Exhibit {i + 1}: {e?.name}
                             </div>
                           )
                         },
@@ -389,7 +382,7 @@ const DragNDropPreivew = forwardRef(
               <EditorReader
                 className="questions"
                 text_editor_content={
-                  questionContent?.documentElement.querySelector('body')
+                  questionContent?.documentElement?.querySelector('body')
                     ?.innerHTML || ''
                 }
                 options={options}
@@ -407,7 +400,7 @@ const DragNDropPreivew = forwardRef(
                   {data?.answers?.map((e: any) => {
                     if (answered) {
                       for (let as of answered) {
-                        if (as.idAnswer === e.id) {
+                        if (as?.idAnswer === e?.id) {
                           return null
                         }
                       }
@@ -419,9 +412,9 @@ const DragNDropPreivew = forwardRef(
                         id={e?.id}
                         draggable="true"
                         onDragStart={drag}
-                        onDrop={() => drop(event, data.id, true)}
+                        onDrop={() => drop(event, data?.id, true)}
                       >
-                        {e.answer}
+                        {e?.answer}
                       </span>
                     )
                   })}
@@ -438,7 +431,7 @@ const DragNDropPreivew = forwardRef(
             <EditorReader
               className="questions mt-2"
               text_editor_content={
-                answerContent?.documentElement.querySelector('body')
+                answerContent?.documentElement?.querySelector('body')
                   ?.innerHTML || ''
               }
             />

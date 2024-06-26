@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react'
+import React from 'react'
 
 interface IProps {
   handleMarkAll: () => void

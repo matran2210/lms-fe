@@ -241,11 +241,11 @@ const Course = ({
       // if (!student) {
       setOpenExtend(true)
       // }
-    } else if (!classInstance.class_user_instances[0].is_opened) {
+    } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
       setOpenClass(true)
     } else {
       course.status !== CLASS_USER_STATUS.CANCELED
-        ? router.push(`/courses/my-course/${classInstance.id}`)
+        ? router.push(`/courses/my-course/${classInstance?.id}`)
         : {}
     }
   }
@@ -470,7 +470,7 @@ const Course = ({
       <PopupOpenClass
         open={openClass}
         setOpen={setOpenClass}
-        started_at={classInstance.class_user_instances[0].started_at}
+        started_at={classInstance?.class_user_instances?.[0]?.started_at}
       />
     </>
   )

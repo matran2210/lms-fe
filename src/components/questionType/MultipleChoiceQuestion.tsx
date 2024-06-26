@@ -27,11 +27,11 @@ const MultiChoiceQuestion = ({
     let answers = []
     if (data?.answers) {
       const oldData = [...data?.answers]
-      const sorted = oldData.sort(
-        (a: any, b: any) => a.answer_position - b.answer_position,
+      const sorted = oldData?.sort(
+        (a: any, b: any) => a?.answer_position - b?.answer_position,
       )
       for (let e of sorted) {
-        answers.push({ label: e.answer, value: e.id })
+        answers.push({ label: e?.answer, value: e?.id })
       }
     }
     return answers
@@ -54,8 +54,8 @@ const MultiChoiceQuestion = ({
         id="hightlight_area"
         onMouseUp={(e: any) => {
           if (
-            e.target.tagName.charAt(0) !== 'm' &&
-            e.target.firstChild?.tagName !== 'math'
+            e?.target?.tagName?.charAt(0) !== 'm' &&
+            e?.target?.firstChild?.tagName !== 'math'
           ) {
             if (e) {
               if (allowHighLight) {
@@ -83,7 +83,7 @@ const MultiChoiceQuestion = ({
               <div className="border border-b-gray-2 my-6"></div>
               <div className="flex items-center mb-4">
                 <div className="font-semibold">
-                  Exhibits ({data.question_topic.exhibits?.length || 0})
+                  Exhibits ({data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
                   <span className="text-state-error">* </span>
@@ -101,10 +101,10 @@ const MultiChoiceQuestion = ({
                           setOpenFile(
                             {
                               type: 'exhibits',
-                              description: e.description,
-                              name: e.name,
+                              description: e?.description,
+                              name: e?.name,
                               index: i,
-                              files: e.files,
+                              files: e?.files,
                             },
                             null,
                             null,
