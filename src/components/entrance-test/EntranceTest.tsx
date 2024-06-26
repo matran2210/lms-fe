@@ -10,6 +10,12 @@ interface EntranceTestProps {
   data: any
 }
 
+enum EAttemptStatus {
+  UN_SUBMITTED = 'UN_SUBMITTED',
+  SUBMITTED = 'SUBMITTED',
+  UN_FINISHED = 'UN_FINISHED',
+}
+
 const EntranceTest = ({ data }: EntranceTestProps) => {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
@@ -38,8 +44,11 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
    */
   const isAttemptValid =
     data.is_attempt &&
-    (data.attempt_status === 'SUBMITTED' ||
-      data.attempt_status === 'UN_FINISHED')
+    [
+      EAttemptStatus.SUBMITTED,
+      EAttemptStatus.UN_FINISHED,
+      EAttemptStatus.UN_SUBMITTED,
+    ].includes(data.attempt_status)
 
   return (
     <>
