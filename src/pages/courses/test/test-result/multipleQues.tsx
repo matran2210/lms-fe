@@ -27,20 +27,20 @@ const MultipleQuestion = ({
 
   /**
    * handle when scroll x for questions
-  */
+   */
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true)
-    elementRef.current && setStartX(event.pageX - elementRef.current.offsetLeft) 
-    elementRef.current && setScrollLeft(elementRef.current.scrollLeft) 
+    elementRef.current && setStartX(event.pageX - elementRef.current.offsetLeft)
+    elementRef.current && setScrollLeft(elementRef.current.scrollLeft)
   }
-  
+
   /**
    * handle when scroll x for questions
-  */
+   */
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDragging) return 
+    if (!isDragging) return
     if (elementRef.current) {
-      const x =  event.pageX - elementRef.current.offsetLeft
+      const x = event.pageX - elementRef.current.offsetLeft
       const distance = (x - startX) * 2
       elementRef.current.scrollLeft = scrollLeft - distance
     }
@@ -206,9 +206,11 @@ const MultipleQuestion = ({
               <div
                 className="block 3.75xl:hidden text-medium-sm font-medium underline cursor-pointer mr-6"
                 onClick={() => {
-                  setShowMore(!showMore) 
+                  setShowMore(!showMore)
                   if (multipleQuestionRef?.current) {
-                    !showMore ? multipleQuestionRef.current.style.height = '500px' : multipleQuestionRef.current.style.height = '100px'
+                    !showMore
+                      ? (multipleQuestionRef.current.style.height = '500px')
+                      : (multipleQuestionRef.current.style.height = '100px')
                   }
                 }}
               >
