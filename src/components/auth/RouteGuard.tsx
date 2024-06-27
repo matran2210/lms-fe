@@ -61,13 +61,18 @@ export const RouteGuard = ({ children }: IProps) => {
     // Chặn vào login page khi đã đăng nhập
     const isLoginPage = [
       PageLink.AUTH_LOGIN,
-      PageLink.AUTH_CHANGE_PASSWORD,
-      PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
       PageLink.AUTH_FORGOT_PASSWORD,
       PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
     ].includes(window.location.pathname)
 
-    if (accessToken && isLoginPage) {
+    if (
+      accessToken &&
+      isLoginPage &&
+      ![
+        PageLink.AUTH_CHANGE_PASSWORD,
+        PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
+      ].includes(window.location.pathname)
+    ) {
       try {
         await dispatch(getMe()).unwrap()
         router.push(PageLink.COURSES)
