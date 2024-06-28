@@ -23,6 +23,8 @@ COPY next-seo.config.js .
 COPY next-sitemap.config.js .
 COPY tsconfig.json .
 COPY .env .
+COPY server.config.ts .
+COPY sentry.edge.config .
 # COPY postcss.config.js .
 # COPY tailwind.config.js .
 
