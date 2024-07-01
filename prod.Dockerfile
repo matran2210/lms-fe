@@ -17,7 +17,8 @@ COPY next-seo.config.js .
 COPY .env .
 COPY postcss.config.js .
 COPY tailwind.config.js .
-
-
+COPY sentry.client.config.ts .
+COPY sentry.edge.config.ts .
+COPY sentry.server.config.ts .
 RUN yarn build
 CMD ["yarn", "start"]
