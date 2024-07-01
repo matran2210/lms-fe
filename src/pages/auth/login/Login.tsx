@@ -166,11 +166,11 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="block max-w-[38.375rem] md:py-17.5 xs:py-20 py-10 px-8 md:px-19 mx-auto shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
+      <div className="block max-w-[38.375rem] md:py-17.5 xs:py-10 py-8 px-8 md:px-19 mx-auto shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
         <div className="md:text-4xl text-3xl font-semibold text-bw-1 mb-2">
           Log In
         </div>
-        <div className="text-medium-sm text-gray-1 md:mb-10 mb-8">
+        <div className="text-medium-sm text-gray-1 md:mb-10 mb-5">
           Login to Continue Learning
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
@@ -189,7 +189,7 @@ const LoginPage = () => {
             textSize="sm"
             className="mt-6"
           />
-          <div className="mt-10">
+          <div className="mt-6 sm:mt-10">
             <SappButton
               title="Log In"
               full={true}
