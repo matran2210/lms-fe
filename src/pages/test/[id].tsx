@@ -1596,6 +1596,21 @@ const TestDetail = () => {
    * @description sử dụng hook countdown
    */
   const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
+
+  const ButtonContent = ({
+    icon,
+    content,
+  }: {
+    icon: JSX.Element
+    content: string
+  }) => (
+    <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
+      {icon}
+      <div className="hidden font-normal text-sm lg:inline-block">
+        {content}
+      </div>
+    </div>
+  )
   return (
     <CourseProvider>
       {loading || !currentTabContent?.id ? (
@@ -2042,7 +2057,7 @@ const TestDetail = () => {
             }
           })}
           {/* </div> */}
-          <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px]  z-10">
+          <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px] z-10">
             <div className="flex items-center h-full">
               {/* <button className="h-full">
                 <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -2059,12 +2074,7 @@ const TestDetail = () => {
                   setAllowUnHighLight(false)
                 }}
               >
-                <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
-                  <HighlightIcon />
-                  <div className="hidden font-normal text-sm 3xl:inline-block">
-                    Highlight
-                  </div>
-                </div>
+                <ButtonContent icon={<HighlightIcon />} content="Highlight" />
               </button>
               <button
                 className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
@@ -2073,23 +2083,19 @@ const TestDetail = () => {
                     setAllowHighLight(false)
                 }}
               >
-                <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
-                  <UnHighLightIcon />
-                  <div className="hidden font-normal text-sm 3xl:inline-block">
-                    Unhighlight
-                  </div>
-                </div>
+                <ButtonContent
+                  icon={<UnHighLightIcon />}
+                  content="Unhighlight"
+                />
               </button>
               <button
                 className="h-full"
                 onClick={() => handleOpenScratchPad('scratch_pad')}
               >
-                <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l">
-                  <ScratchPadIcon />
-                  <div className="hidden font-normal text-sm 3xl:inline-block">
-                    Scratch Pad
-                  </div>
-                </div>
+                <ButtonContent
+                  icon={<ScratchPadIcon />}
+                  content="ScratchPadIcon"
+                />
               </button>
               <button
                 className={`h-full ${
@@ -2098,12 +2104,7 @@ const TestDetail = () => {
                 onClick={() => handleOpenScratchPad('calculator')}
                 disabled={checkCalExist > -1}
               >
-                <div className="flex items-center gap-3 px-4 3xl:px-6 border-l">
-                  <CalculatorIcon />
-                  <div className="hidden font-normal text-sm 3xl:inline-block">
-                    Calculator
-                  </div>
-                </div>
+                <ButtonContent icon={<CalculatorIcon />} content="Calculator" />
               </button>
               {exhibitData && exhibitData?.length > 0 && (
                 <button className="h-full relative" ref={dropUpRef}>
@@ -2121,7 +2122,7 @@ const TestDetail = () => {
                     <ExhibitsIcon />
                     <div className="font-normal flex text-sm items-center gap-3">
                       <div>
-                        <span className="hidden 3xl:inline-block 3xl:me-1">
+                        <span className="hidden lg:inline-block 3xl:me-1">
                           Exhibits
                         </span>
                         {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
@@ -2158,7 +2159,7 @@ const TestDetail = () => {
                     <TextSquareIcon />
                     <div className="font-normal flex text-sm items-center gap-3">
                       <div>
-                        <span className="hidden 3xl:inline-block 3xl:me-1">
+                        <span className="hidden lg:inline-block 3xl:me-1">
                           Requirement
                         </span>
                         <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
@@ -2259,7 +2260,7 @@ const TestDetail = () => {
                 onClick={() => handleFlagQuestion(currentPage)}
               >
                 <FlagIcon />
-                <div className="font-medium text-medium-sm hidden 3xl:block">
+                <div className="font-medium text-medium-sm hidden lg:block">
                   Flag to Review
                 </div>
               </button>

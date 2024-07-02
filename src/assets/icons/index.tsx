@@ -498,69 +498,20 @@ export const ArrowUpIcon = () => {
 }
 export const ExhibitsIcon = () => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-    >
-      <g clipPath="url(#clip0_4_9790)">
-        <path
-          d="M11.4294 0.571533H1.71512C1.08394 0.571533 0.572266 1.08321 0.572266 1.71439V11.4287C0.572266 12.0599 1.08394 12.5715 1.71512 12.5715H11.4294C12.0606 12.5715 12.5723 12.0599 12.5723 11.4287V1.71439C12.5723 1.08321 12.0606 0.571533 11.4294 0.571533Z"
-          stroke="#404041"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M15.4286 4V14.2857C15.4286 14.5888 15.3081 14.8795 15.0938 15.0938C14.8795 15.3081 14.5888 15.4286 14.2857 15.4286H4"
-          stroke="#404041"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
+      <g stroke="#404041">
+        <path d="M11.43.572H1.714c-.631 0-1.143.511-1.143 1.142v9.715c0 .63.512 1.143 1.143 1.143h9.714c.632 0 1.143-.512 1.143-1.143V1.714c0-.63-.511-1.142-1.143-1.142Z" />
+        <path d="M15.429 4v10.286a1.143 1.143 0 0 1-1.143 1.143H4" />
       </g>
-      <defs>
-        <clipPath id="clip0_4_9790">
-          <rect width="16" height="16" fill="white" />
-        </clipPath>
-      </defs>
     </svg>
   )
 }
 export const TextSquareIcon = () => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-    >
-      <g clipPath="url(#clip0_4_9802)">
-        <path
-          d="M5.14369 14.2858L0.572266 15.4287L1.71512 12.0001V1.71439C1.71512 1.41128 1.83553 1.1206 2.04985 0.906268C2.26419 0.691941 2.55487 0.571533 2.85798 0.571533H14.2866C14.5896 0.571533 14.8804 0.691941 15.0947 0.906268C15.309 1.1206 15.4294 1.41128 15.4294 1.71439V13.143C15.4294 13.446 15.309 13.7368 15.0947 13.9511C14.8804 14.1654 14.5896 14.2858 14.2866 14.2858H5.14369Z"
-          stroke="#404041"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M5.14453 5.71436H12.0017"
-          stroke="#404041"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M5.14453 9.14307H9.71596"
-          stroke="#404041"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
+      <g stroke="#404041">
+        <path d="M5.144 14.286.572 15.429 1.715 12V1.714A1.143 1.143 0 0 1 2.858.572h11.429a1.143 1.143 0 0 1 1.142 1.142v11.429a1.143 1.143 0 0 1-1.142 1.143H5.144ZM5.145 5.714h6.857M5.145 9.143h4.571" />
       </g>
-      <defs>
-        <clipPath id="clip0_4_9802">
-          <rect width="16" height="16" fill="white" />
-        </clipPath>
-      </defs>
     </svg>
   )
 }
