@@ -5,6 +5,8 @@ import Icon from '@components/icons'
 import { formatTimeToHourMinuteSecond, getResolution } from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
+import Image from 'next/image'
+import { Thumbnail } from 'src/type/course/Question'
 
 interface IProp {
   options: any
@@ -13,6 +15,7 @@ interface IProp {
   hideVideo?: boolean
   openQuestion?: boolean
   timeQuiz?: any
+  thumbnail?: Thumbnail
   children?: ReactNode
 }
 
@@ -45,16 +48,20 @@ const SAPPVideo = ({
   hideVideo = false,
   openQuestion = false,
   timeQuiz,
+  thumbnail,
   children,
 }: IProp) => {
   const [playerFunction, setPlayerFunction] = useState<any>()
   const [valueVolume, setValueVolume] = useState<number>(1)
   const [playbackRate, setPlaybackRate] = useState<number>(1)
-  const [playbackQuality, setPlaybackQuality] = useState<number>(0)
+  const [playbackQuality, setPlaybackQuality] = useState<number | string>(0)
   const [listQualitys, setListQualitys] = useState<any>([])
   const [activeSettings, setActiveSettings] = useState<boolean>(false)
   const [activeQuality, setActiveQuality] = useState<boolean>(false)
   const [activeSpeed, setActiveSpeed] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [canPlay, setCanPlay] = useState<boolean>(false)
+  const [loadingPercentage, setLoadingPercentage] = useState<number>(0)
 
   const playbackAnimationRef = useRef<HTMLDivElement>(null)
   const videoControlsRef = useRef<HTMLDivElement>(null)
@@ -99,6 +106,17 @@ const SAPPVideo = ({
             false,
           )
 
+          player.updateSettings({
+            streaming: {
+              abr: audioVideoSettings,
+              buffer: {
+                stableBufferTime: 30,
+                bufferTimeAtTopQuality: 60,
+                bufferTimeAtTopQualityLongForm: 120,
+              },
+            },
+          })
+
           player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
             setTimeout(() => {
               const currentVideoQualityIndex = player.getQualityFor('video')
@@ -108,12 +126,17 @@ const SAPPVideo = ({
                 getListBit?.[currentVideoQualityIndex]?.qualityIndex,
                 true,
               )
+
               setListQualitys(getListBit)
               setPlaybackQuality(
                 getListBit?.[currentVideoQualityIndex]?.bitrate,
               )
             }, 1000)
             setPlayerFunction(player)
+          })
+
+          player.on(dashjs.MediaPlayer.events.CAN_PLAY, () => {
+            setCanPlay(true)
           })
         }
       }
@@ -124,7 +147,7 @@ const SAPPVideo = ({
         player.reset()
       }
     }
-  }, [options?.src])
+  }, [options?.src, loading])
 
   useEffect(() => {
     // Add eventlisteners
@@ -212,6 +235,43 @@ const SAPPVideo = ({
       }
     }
   }, [options?.src, streamRef?.current, playbackAnimationRef?.current])
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    let delayTimeout: NodeJS.Timeout
+
+    const updateLoadingPercentage = () => {
+      setLoadingPercentage((prev) => {
+        if (prev < 90) {
+          return prev + 18
+        } else {
+          clearInterval(interval)
+          return prev
+        }
+      })
+    }
+
+    interval = setInterval(updateLoadingPercentage, 1000)
+
+    delayTimeout = setTimeout(() => {
+      clearInterval(interval)
+      if (loadingPercentage <= 90) {
+        setLoadingPercentage(91)
+      }
+    }, 3000)
+
+    return () => {
+      clearInterval(interval)
+      clearTimeout(delayTimeout)
+    }
+  }, [loadingPercentage])
+
+  useEffect(() => {
+    if (canPlay) {
+      setLoadingPercentage(100)
+      setLoading(false)
+    }
+  }, [canPlay])
 
   // Time and btn will be reset to its original state
   function resetStreamHandlers() {
@@ -508,10 +568,31 @@ const SAPPVideo = ({
   }
 
   // Function to change the video quality based on the selected option
-  const changeQuantily = (number: number, bit: number) => {
+  const changeQuality = (number: number | string, bit: number | string) => {
     updatePlayButton()
     setTimeout(() => {
-      playerFunction.setQualityFor('video', number, true)
+      if (number === 'auto') {
+        playerFunction.updateSettings({
+          streaming: {
+            abr: {
+              autoSwitchBitrate: {
+                video: true,
+              },
+            },
+          },
+        })
+      } else {
+        playerFunction.updateSettings({
+          streaming: {
+            abr: {
+              autoSwitchBitrate: {
+                video: false,
+              },
+            },
+          },
+        })
+        playerFunction.setQualityFor('video', number, true)
+      }
       updatePlayButton()
     }, 1000)
     setPlaybackQuality(bit)
@@ -544,11 +625,66 @@ const SAPPVideo = ({
 
   return (
     <>
+      {loading && (
+        <div className="flex-center w-full h-full relative pt-[56.26%]">
+          <div className="absolute top-0 left-0 bottom-0 right-0 w-full h-full">
+            {thumbnail && (
+              <Image
+                src={thumbnail?.['950x535'] ?? ''}
+                alt={'Thumbnail image'}
+                className="object-contain w-full h-full"
+                width={952}
+                height={535.5}
+                priority
+              />
+            )}
+          </div>
+          <div className="absolute top-0 left-0 bottom-0 right-0 w-full h-full bg-overlay-loading opacity-80 transition-opacity">
+            <svg
+              className="loader-video block absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
+              xmlns="http://www.w3.org/2000/svg"
+              width="85px"
+              height="85px"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid"
+            >
+              <circle
+                cx="50"
+                cy="50"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="5"
+                r="47"
+                strokeDasharray="164.93361431346415 56.97787143782138"
+              >
+                <animateTransform
+                  attributeName="transform"
+                  type="rotate"
+                  repeatCount="indefinite"
+                  dur="1s"
+                  values="0 50 50;360 50 50"
+                  keyTimes="0;1"
+                ></animateTransform>
+              </circle>
+              <text
+                x="50%"
+                y="50%"
+                textAnchor="middle"
+                fill="#ffffff"
+                fontSize="14"
+                dy=".3em"
+              >
+                {loadingPercentage}%
+              </text>
+            </svg>
+          </div>
+        </div>
+      )}
       {options?.src && (
         <div
           className={`group sapp-video-custom video-container ${
             !hideVideo ? styles.wrapper : styles.hideWrapper
-          }`}
+          } ${loading ? 'hidden' : ''}`}
           ref={videoContainerRef}
         >
           <div className={`popup-question`}>{children}</div>
@@ -573,6 +709,7 @@ const SAPPVideo = ({
             ref={streamRef}
             controls={false}
             className={`${styles.content}`}
+            poster={thumbnail?.['950x535'] ?? ''}
             onSeeking={() => {
               if (streamRef?.current && pauseOnSeek && openQuestion) {
                 streamRef.current.pause()
@@ -712,7 +849,9 @@ const SAPPVideo = ({
                               Quality:
                             </span>
                             <span className="flex items-center justify-between gap-1 text-xsm font-medium">
-                              {getResolution(Number(playbackQuality))}
+                              {playbackQuality === 'Auto'
+                                ? 'Auto'
+                                : getResolution(Number(playbackQuality))}
                               <ArrowIcon
                                 className={'w-3 h-4'}
                                 right={true}
@@ -754,12 +893,23 @@ const SAPPVideo = ({
                             className="quality-options text-ssm font-normal"
                             onClick={() => setActiveQuality(false)}
                           >
+                            <li
+                              key={'auto-switch'}
+                              onClick={() => changeQuality('auto', 'Auto')}
+                              className={`hover:bg-white hover:text-black text-xsm ${
+                                'Auto' === playbackQuality
+                                  ? 'bg-white text-black'
+                                  : ''
+                              }`}
+                            >
+                              Auto
+                            </li>
                             {filterUniqueResolutions(listQualitys).map(
                               (quality: any) => (
                                 <li
                                   key={quality?.qualityIndex}
                                   onClick={() =>
-                                    changeQuantily(
+                                    changeQuality(
                                       parseFloat(quality?.qualityIndex),
                                       quality?.bitrate,
                                     )
