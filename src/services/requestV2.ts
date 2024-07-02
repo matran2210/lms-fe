@@ -128,6 +128,7 @@ const toastException = [
   '403|000010',
   '400|010833',
   '400|010433',
+  '400|010008',
 ]
 request.interceptors.response.use(
   function (response: any) {
