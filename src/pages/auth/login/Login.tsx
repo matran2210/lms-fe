@@ -104,7 +104,7 @@ const LoginPage = () => {
     } catch (error) {}
   }
 
-  const incorrectEmailAndPassword = ['400|010433', '400|010833']
+  const incorrectEmailAndPassword = ['400|010433', '400|010833', '400|010008']
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
