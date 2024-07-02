@@ -13,6 +13,7 @@ import {
   VALIDATE_MIN_LENGTH,
   VALIDATE_PASSWORD_REQUIRED,
   VALIDATE_REQUIRED,
+  SHOW_ERROR_ACCOUNT_LOCK,
 } from '@utils/helpers/ValidateMessage'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -103,7 +104,7 @@ const LoginPage = () => {
     } catch (error) {}
   }
 
-  const incorrectEmailAndPassword = ['400|010433', '400|010833', '400|010008']
+  const incorrectEmailAndPassword = ['400|010433', '400|010833']
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
@@ -136,11 +137,7 @@ const LoginPage = () => {
           const codeError = error?.response?.data?.error?.code
           if (codeError === '403|000010') {
             setOpenLimit(true)
-          } else if (
-            incorrectEmailAndPassword.includes(
-              error?.response?.data?.error?.code,
-            )
-          ) {
+          } else if (incorrectEmailAndPassword.includes(codeError)) {
             setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
           } else if (codeError === '400|010008') {
             setError('password', { message: SHOW_ERROR_ACCOUNT_LOCK })
