@@ -6,6 +6,7 @@ import { formatTimeToHourMinuteSecond, getResolution } from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
+import { Thumbnail } from 'src/type/course/Question'
 
 interface IProp {
   options: any
@@ -14,6 +15,7 @@ interface IProp {
   hideVideo?: boolean
   openQuestion?: boolean
   timeQuiz?: any
+  thumbnail?: Thumbnail
   children?: ReactNode
 }
 
@@ -46,6 +48,7 @@ const SAPPVideo = ({
   hideVideo = false,
   openQuestion = false,
   timeQuiz,
+  thumbnail,
   children,
 }: IProp) => {
   const [playerFunction, setPlayerFunction] = useState<any>()
@@ -59,7 +62,6 @@ const SAPPVideo = ({
   const [loading, setLoading] = useState<boolean>(true)
   const [canPlay, setCanPlay] = useState<boolean>(false)
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0)
-  const [thumbnail, setThumbnail] = useState<string>('')
 
   const playbackAnimationRef = useRef<HTMLDivElement>(null)
   const videoControlsRef = useRef<HTMLDivElement>(null)
@@ -97,10 +99,6 @@ const SAPPVideo = ({
 
           const audioVideoSettings = player.getSettings().streaming.abr
           audioVideoSettings.autoSwitchBitrate.video = false
-
-          setThumbnail(
-            `${video_url}${options?.src}/thumbnails/thumbnail.jpg?time=1s&height=535`,
-          )
 
           player.initialize(
             streamRef.current,
@@ -239,43 +237,41 @@ const SAPPVideo = ({
   }, [options?.src, streamRef?.current, playbackAnimationRef?.current])
 
   useEffect(() => {
-    if (canPlay) {
-      let interval: NodeJS.Timeout
-      let delayTimeout: NodeJS.Timeout
+    let interval: NodeJS.Timeout
+    let delayTimeout: NodeJS.Timeout
 
-      const updateLoadingPercentage = () => {
-        setLoadingPercentage((prev) => {
-          if (prev < 90) {
-            return prev + 18
-          } else {
-            clearInterval(interval)
-            return prev
-          }
-        })
-      }
-
-      interval = setInterval(updateLoadingPercentage, 1000)
-
-      delayTimeout = setTimeout(() => {
-        clearInterval(interval)
-        if (loadingPercentage <= 90) {
-          setLoadingPercentage(91)
+    const updateLoadingPercentage = () => {
+      setLoadingPercentage((prev) => {
+        if (prev < 90) {
+          return prev + 18
+        } else {
+          clearInterval(interval)
+          return prev
         }
-      }, 3000)
-
-      return () => {
-        clearInterval(interval)
-        clearTimeout(delayTimeout)
-      }
+      })
     }
-  }, [canPlay, loadingPercentage])
+
+    interval = setInterval(updateLoadingPercentage, 1000)
+
+    delayTimeout = setTimeout(() => {
+      clearInterval(interval)
+      if (loadingPercentage <= 90) {
+        setLoadingPercentage(91)
+      }
+    }, 3000)
+
+    return () => {
+      clearInterval(interval)
+      clearTimeout(delayTimeout)
+    }
+  }, [loadingPercentage])
 
   useEffect(() => {
-    if (loadingPercentage > 90 && canPlay) {
+    if (canPlay) {
       setLoadingPercentage(100)
       setLoading(false)
     }
-  }, [canPlay, loadingPercentage])
+  }, [canPlay])
 
   // Time and btn will be reset to its original state
   function resetStreamHandlers() {
@@ -634,7 +630,7 @@ const SAPPVideo = ({
           <div className="absolute top-0 left-0 bottom-0 right-0 w-full h-full">
             {thumbnail && (
               <Image
-                src={thumbnail}
+                src={thumbnail?.['950x535'] ?? ''}
                 alt={'Thumbnail image'}
                 className="object-contain w-full h-full"
                 width={952}
@@ -713,7 +709,7 @@ const SAPPVideo = ({
             ref={streamRef}
             controls={false}
             className={`${styles.content}`}
-            poster={thumbnail ?? ''}
+            poster={thumbnail?.['950x535'] ?? ''}
             onSeeking={() => {
               if (streamRef?.current && pauseOnSeek && openQuestion) {
                 streamRef.current.pause()

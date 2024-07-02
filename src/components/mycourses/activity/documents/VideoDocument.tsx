@@ -52,7 +52,9 @@ const VideoDocument = ({
   quizId,
   grading_preference,
 }: Props) => {
-  const [currentVideo, setCurrentVideo] = useState<IVideo>()
+  const [currentVideo, setCurrentVideo] = useState<IVideo>(
+    videos && videos.length > 0 ? videos[0] : ({} as IVideo),
+  )
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
   const currentTimeRef = useRef(-1)
   const [currentListQuestion, setCurrentListQuestion] = useState<IQuestion[]>(
@@ -408,6 +410,7 @@ const VideoDocument = ({
           hideVideo={hideVideo}
           openQuestion={modalOpen}
           timeQuiz={timeQuiz}
+          thumbnail={currentVideo?.file?.resource?.thumbnail}
         >
           {/* Modal for quiz questions */}
           <SappModal
