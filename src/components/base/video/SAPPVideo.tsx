@@ -97,56 +97,56 @@ const SAPPVideo = ({
       if (options?.src) {
         const dashjs = await import('dashjs')
 
-        if (dashjs && dashjs.supportsMediaSource()) {
-          const player = dashjs.MediaPlayer().create()
+        if (dashjs) {
+          if (dashjs.supportsMediaSource()) {
+            player = dashjs.MediaPlayer().create()
 
-          const audioVideoSettings = player.getSettings()?.streaming?.abr ?? null;
-          if (audioVideoSettings && audioVideoSettings.autoSwitchBitrate) {
-            audioVideoSettings.autoSwitchBitrate.video = false;
-          }
+            const audioVideoSettings = player.getSettings()?.streaming?.abr
+            audioVideoSettings.autoSwitchBitrate.video = false
 
-          player.initialize(
-            streamRef.current,
-            `${video_url}${options?.src}/manifest/video.mpd`,
-            false,
-          )
+            player.initialize(
+              streamRef.current,
+              `${video_url}${options?.src}/manifest/video.mpd`,
+              false,
+            )
 
-          player.updateSettings({
-            streaming: {
-              abr: audioVideoSettings || undefined,
-              buffer: {
-                stableBufferTime: 30,
-                bufferTimeAtTopQuality: 60,
-                bufferTimeAtTopQualityLongForm: 120,
+            player.updateSettings({
+              streaming: {
+                abr: audioVideoSettings,
+                buffer: {
+                  stableBufferTime: 30,
+                  bufferTimeAtTopQuality: 60,
+                  bufferTimeAtTopQualityLongForm: 120,
+                },
               },
-            },
-          })
+            })
 
-          player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
-            setTimeout(() => {
-              const currentVideoQualityIndex = player.getQualityFor('video')
-              const getListBit = player.getBitrateInfoListFor('video')
-              player.setQualityFor(
-                'video',
-                getListBit?.[currentVideoQualityIndex]?.qualityIndex,
-                true,
-                )
+            player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
+              setTimeout(() => {
+                const currentVideoQualityIndex = player.getQualityFor('video')
+                const getListBit = player.getBitrateInfoListFor('video')
+                player.setQualityFor(
+                  'video',
+                  getListBit?.[currentVideoQualityIndex]?.qualityIndex,
+                  true,
+                  )
 
-              setListQualitys(getListBit)
-              setPlaybackQuality(
-                getListBit?.[currentVideoQualityIndex]?.bitrate,
-                )
-            }, 1000)
-            setPlayerFunction(player)
-          })
+                setListQualitys(getListBit)
+                setPlaybackQuality(
+                  getListBit?.[currentVideoQualityIndex]?.bitrate,
+                  )
+              }, 1000)
+              setPlayerFunction(player)
+            })
 
-          player.on(dashjs.MediaPlayer.events.CAN_PLAY, () => {
+            player.on(dashjs.MediaPlayer.events.CAN_PLAY, () => {
+              setCanPlay(true)
+              setCloudflarePlayer(false)
+            })
+          } else {
             setCanPlay(true)
-            setCloudflarePlayer(false)
-          })
-        } else {
-          setCanPlay(true)
-          setCloudflarePlayer(true)
+            setCloudflarePlayer(true)
+          }
         }
       }
     }
