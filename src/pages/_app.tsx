@@ -250,6 +250,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   // }, [authToken])
 
   useEffect(() => {
+    if(!authToken) return
     getPinnedData()
   }, [authToken])
 
