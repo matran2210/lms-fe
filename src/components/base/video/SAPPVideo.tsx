@@ -2,7 +2,7 @@ import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
-import { formatTimeToHourMinuteSecond, getResolution } from '@utils/helpers'
+import { formatTimeToHourMinuteSecond, getResolution, isAppleDevice, isSafari } from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
@@ -97,56 +97,54 @@ const SAPPVideo = ({
       if (options?.src) {
         const dashjs = await import('dashjs')
 
-        if (dashjs) {
-          if (dashjs.supportsMediaSource()) {
-            player = dashjs.MediaPlayer().create()
+        if (dashjs && dashjs.supportsMediaSource() && !isAppleDevice() && !isSafari()) {
+          player = dashjs.MediaPlayer().create()
 
-            const audioVideoSettings = player.getSettings()?.streaming?.abr
-            audioVideoSettings.autoSwitchBitrate.video = false
+          const audioVideoSettings = player.getSettings()?.streaming?.abr
+          audioVideoSettings.autoSwitchBitrate.video = false
 
-            player.initialize(
-              streamRef.current,
-              `${video_url}${options?.src}/manifest/video.mpd`,
-              false,
+          player.initialize(
+            streamRef.current,
+            `${video_url}${options?.src}/manifest/video.mpd`,
+            false,
             )
 
-            player.updateSettings({
-              streaming: {
-                abr: audioVideoSettings,
-                buffer: {
-                  stableBufferTime: 30,
-                  bufferTimeAtTopQuality: 60,
-                  bufferTimeAtTopQualityLongForm: 120,
-                },
+          player.updateSettings({
+            streaming: {
+              abr: audioVideoSettings,
+              buffer: {
+                stableBufferTime: 30,
+                bufferTimeAtTopQuality: 60,
+                bufferTimeAtTopQualityLongForm: 120,
               },
-            })
+            },
+          })
 
-            player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
-              setTimeout(() => {
-                const currentVideoQualityIndex = player.getQualityFor('video')
-                const getListBit = player.getBitrateInfoListFor('video')
-                player.setQualityFor(
-                  'video',
-                  getListBit?.[currentVideoQualityIndex]?.qualityIndex,
-                  true,
-                  )
+          player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
+            setTimeout(() => {
+              const currentVideoQualityIndex = player.getQualityFor('video')
+              const getListBit = player.getBitrateInfoListFor('video')
+              player.setQualityFor(
+                'video',
+                getListBit?.[currentVideoQualityIndex]?.qualityIndex,
+                true,
+                )
 
-                setListQualitys(getListBit)
-                setPlaybackQuality(
-                  getListBit?.[currentVideoQualityIndex]?.bitrate,
-                  )
-              }, 1000)
-              setPlayerFunction(player)
-            })
+              setListQualitys(getListBit)
+              setPlaybackQuality(
+                getListBit?.[currentVideoQualityIndex]?.bitrate,
+                )
+            }, 1000)
+            setPlayerFunction(player)
+          })
 
-            player.on(dashjs.MediaPlayer.events.CAN_PLAY, () => {
-              setCanPlay(true)
-              setCloudflarePlayer(false)
-            })
-          } else {
+          player.on(dashjs.MediaPlayer.events.CAN_PLAY, () => {
             setCanPlay(true)
-            setCloudflarePlayer(true)
-          }
+            setCloudflarePlayer(false)
+          })
+        } else {
+          setCanPlay(true)
+          setCloudflarePlayer(true)
         }
       }
     }
