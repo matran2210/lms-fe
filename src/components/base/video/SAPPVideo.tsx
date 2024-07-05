@@ -2,12 +2,11 @@ import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
-import { formatTimeToHourMinuteSecond, getResolution } from '@utils/helpers'
+import { formatTimeToHourMinuteSecond, getResolution, isAppleDevice, isSafari } from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
 import { Thumbnail } from 'src/type/course/Question'
-import { Stream } from '@cloudflare/stream-react'
 
 interface IProp {
   options: any
@@ -61,9 +60,7 @@ const SAPPVideo = ({
   const [activeQuality, setActiveQuality] = useState<boolean>(false)
   const [activeSpeed, setActiveSpeed] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
-  const [canPlay, setCanPlay] = useState<boolean>(false)
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0)
-  const [cloudflarePlayer, setCloudflarePlayer] = useState<boolean>(false)
 
   const playbackAnimationRef = useRef<HTMLDivElement>(null)
   const videoControlsRef = useRef<HTMLDivElement>(null)
@@ -98,55 +95,45 @@ const SAPPVideo = ({
         const dashjs = await import('dashjs')
 
         if (dashjs) {
-          if (dashjs.supportsMediaSource()) {
-            player = dashjs.MediaPlayer().create()
+          player = dashjs.MediaPlayer().create()
 
-            const audioVideoSettings = player.getSettings()?.streaming?.abr
-            audioVideoSettings.autoSwitchBitrate.video = false
+          const audioVideoSettings = player.getSettings()?.streaming?.abr
+          audioVideoSettings.autoSwitchBitrate.video = false
 
-            player.initialize(
-              streamRef.current,
-              `${video_url}${options?.src}/manifest/video.mpd`,
-              false,
+          player.initialize(
+            streamRef.current,
+            `${video_url}${options?.src}/manifest/video.mpd`,
+            false,
             )
 
-            player.updateSettings({
-              streaming: {
-                abr: audioVideoSettings,
-                buffer: {
-                  stableBufferTime: 30,
-                  bufferTimeAtTopQuality: 60,
-                  bufferTimeAtTopQualityLongForm: 120,
-                },
+          player.updateSettings({
+            streaming: {
+              abr: audioVideoSettings,
+              buffer: {
+                stableBufferTime: 30,
+                bufferTimeAtTopQuality: 60,
+                bufferTimeAtTopQualityLongForm: 120,
               },
-            })
+            },
+          })
 
-            player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
-              setTimeout(() => {
-                const currentVideoQualityIndex = player.getQualityFor('video')
-                const getListBit = player.getBitrateInfoListFor('video')
-                player.setQualityFor(
-                  'video',
-                  getListBit?.[currentVideoQualityIndex]?.qualityIndex,
-                  true,
-                  )
+          player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
+            setTimeout(() => {
+              const currentVideoQualityIndex = player.getQualityFor('video')
+              const getListBit = player.getBitrateInfoListFor('video')
+              player.setQualityFor(
+                'video',
+                getListBit?.[currentVideoQualityIndex]?.qualityIndex,
+                true,
+                )
 
-                setListQualitys(getListBit)
-                setPlaybackQuality(
-                  getListBit?.[currentVideoQualityIndex]?.bitrate,
-                  )
-              }, 1000)
-              setPlayerFunction(player)
-            })
-
-            player.on(dashjs.MediaPlayer.events.CAN_PLAY, () => {
-              setCanPlay(true)
-              setCloudflarePlayer(false)
-            })
-          } else {
-            setCanPlay(true)
-            setCloudflarePlayer(true)
-          }
+              setListQualitys(getListBit)
+              setPlaybackQuality(
+                getListBit?.[currentVideoQualityIndex]?.bitrate,
+                )
+            }, 1000)
+            setPlayerFunction(player)
+          })
         }
       }
     }
@@ -260,14 +247,14 @@ const SAPPVideo = ({
       })
     }
 
-    interval = setInterval(updateLoadingPercentage, 1000)
+    interval = setInterval(updateLoadingPercentage, 500)
 
     delayTimeout = setTimeout(() => {
       clearInterval(interval)
       if (loadingPercentage <= 90) {
         setLoadingPercentage(91)
       }
-    }, 3000)
+    }, 1500)
 
     return () => {
       clearInterval(interval)
@@ -276,11 +263,11 @@ const SAPPVideo = ({
   }, [loadingPercentage])
 
   useEffect(() => {
-    if (canPlay) {
+    if (loadingPercentage >= 90) {
       setLoadingPercentage(100)
       setLoading(false)
     }
-  }, [canPlay])
+  }, [loadingPercentage])
 
   // Time and btn will be reset to its original state
   function resetStreamHandlers() {
@@ -675,7 +662,7 @@ const SAPPVideo = ({
                   keyTimes="0;1"
                 ></animateTransform>
               </circle>
-              <text
+              {/*<text
                 x="50%"
                 y="50%"
                 textAnchor="middle"
@@ -684,34 +671,13 @@ const SAPPVideo = ({
                 dy=".3em"
               >
                 {loadingPercentage}%
-              </text>
+              </text>*/}
             </svg>
           </div>
         </div>
       )}
       {options?.src && (
         <>
-          {cloudflarePlayer ? (
-            <div className={`group ${
-                !hideVideo ? styles.wrapper : styles.hideWrapper
-              } ${loading ? 'hidden' : ''}`}>
-              <div className={`popup-question`}>{children}</div>
-              <Stream
-                {...options}
-                key={options?.src}
-                streamRef={streamRef}
-                controls
-                responsive={false}
-                className={`${styles.content}`}
-                onSeeking={() => {
-                  if (streamRef.current && pauseOnSeek) {
-                    streamRef.current.pause()
-                  }
-                }}
-                autoplay={false}
-              ></Stream>
-            </div>
-          ) : (
             <div
               className={`group sapp-video-custom video-container ${
                 !hideVideo ? styles.wrapper : styles.hideWrapper
@@ -1012,7 +978,6 @@ const SAPPVideo = ({
                 </div>
               </div>
             </div>
-          )}
         </>
       )}
     </>
