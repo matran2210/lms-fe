@@ -213,7 +213,11 @@ const MyCourse = () => {
             className="top-full w-full max-w-365px left-0 mt-3"
             index={4}
             total={6}
-            handleNext={nextStep}
+            handleNext={
+              Number(window.sessionStorage.getItem('totalCourse')) > 0
+                ? nextStep
+                : closeUserGuide
+            }
             handleCancel={closeUserGuide}
           />
         )}
