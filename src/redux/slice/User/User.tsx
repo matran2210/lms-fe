@@ -77,25 +77,6 @@ const initialState: UserState = {
     userActivities: [],
   },
   loadHistory: false,
-  pinnedNotifications: {
-    showPinned: true,
-    data: {
-      action: '',
-      content: '',
-      created_at: '',
-      created_by: '',
-      created_from: '',
-      deleted_at: '',
-      id: '',
-      mode: '',
-      send_finish_time: '',
-      send_time: '',
-      status: '',
-      title: '',
-      type: '',
-      updated_at: ''
-    }
-  },
 }
 
 export const getMe = createAsyncThunk(
@@ -103,22 +84,6 @@ export const getMe = createAsyncThunk(
   async ({}, thunkAPI) => {
     try {
       const res = await UserApi.getMe()
-      if (!res) {
-        // toast.error(res.error.message)
-        return
-      }
-      return { ...res }
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error)
-    }
-  },
-)
-
-export const getPinnedNotifications = createAsyncThunk(
-  'userReducer/getPinnedNotifications',
-  async ({}, thunkAPI) => {
-    try {
-      const res = await UserApi.getPinnedNotifications()
       if (!res) {
         // toast.error(res.error.message)
         return
@@ -317,19 +282,6 @@ export const userSlice = createSlice({
     })
     builder.addCase(loadMoreLoginHistory.rejected, (state) => {
       state.loadHistory = false
-    })
-    
-    builder.addCase(getPinnedNotifications.pending, (state) => {
-      state.loading = true
-    })
-    builder.addCase(getPinnedNotifications.fulfilled, (state, action) => {
-      state.loading = false
-      if (action.payload) {
-        state.pinnedNotifications = { ...state.pinnedNotifications, ...action.payload }
-      }
-    })
-    builder.addCase(getPinnedNotifications.rejected, (state) => {
-      state.loading = false
     })
   },
 })

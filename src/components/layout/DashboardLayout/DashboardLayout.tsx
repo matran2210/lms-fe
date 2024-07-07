@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import Sidebar from '../Sidebar'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { getPinnedNotifications, userReducer } from 'src/redux/slice/User/User'
+import { useAppSelector } from 'src/redux/hook'
+import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 
 type DashboardLayoutProps = {
   children: React.ReactNode
@@ -15,16 +15,14 @@ export default function DashboardLayout({
   openDrawer,
 }: DashboardLayoutProps) {
   const [isOpened, setOpened] = useState(false)
-  const dispatch = useAppDispatch()
   const toggleDrawer = () => {
     setOpened((prev) => !prev)
   }
+  const {
+    openPinned,
+  } = usePinnedNotifyContext()
+  
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
-  const user = useAppSelector(userReducer)
-
-  useEffect(() => {
-    dispatch(getPinnedNotifications())
-  }, [])
 
   return (
     <div className={` flex flex-nowrap`}>
@@ -33,7 +31,7 @@ export default function DashboardLayout({
         toggleDrawer={toggleDrawer}
         className={`menu-sidebar-left fixed top-0 md:left-0 h-screen bg-white shadow-sidebar w-20 max-w-screen ${
           openDrawer ? 'opacity-5' : ''
-        } ${guideStatus ? '' : 'overflow-hidden'} ${user?.user?.username && user?.pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
+        } ${guideStatus ? '' : 'overflow-hidden'} ${openPinned ? 'pt-12' : ''}`}
         setOpenResource={setOpenResource}
       />
       <div className="w-full min-h-screen">

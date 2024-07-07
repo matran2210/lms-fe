@@ -93,29 +93,6 @@ interface IUserDetail {
   company_rank: null | string
   settings: null | any
 }
-
-interface IPinned {
-  action: string
-  content: string
-  created_at: string
-  created_by: string
-  created_from: string
-  deleted_at: string
-  id: string
-  mode: string
-  send_finish_time: string
-  send_time: string
-  status: string
-  title: string
-  type: string
-  updated_at: string
-}
-
-export interface PinnedNotifications {
-  data: IPinned
-  showPinned: boolean
-}
-
 export interface UserState {
   loading: boolean
   loadingEditName: boolean
@@ -124,5 +101,4 @@ export interface UserState {
   user: IUser
   loginHistory: any
   loadHistory: boolean
-  pinnedNotifications: PinnedNotifications
 }

@@ -32,8 +32,8 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
-import { getPinnedNotifications, userReducer } from 'src/redux/slice/User/User'
-import { CloseIconNote, IconLoudSpeaker } from '@assets/icons'
+import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
+import PinnedNotifications from '@components/layout/PinnedNotifications'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -57,8 +57,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const getNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.total_records,
   )
-
-  const user = useAppSelector(userReducer)
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -295,27 +293,28 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         />
       </Head>
       <main>
-        {showPinnedNotification()}
-        <div className={`${user?.user?.username && user?.pinnedNotifications?.data?.content ? 'pt-12' : ''}`}>
-        <CourseProvider>
-          <QueryClientProvider client={queryClient}>
-            <Toaster />
-            <SappConfirmDialogContainer />
-            {loading ? <SappLoading /> : <></>}
-            <RouteGuard>
-              <>
-                {content}
-                <LearningResource
-                  open={openResource}
-                  setOpenResource={setOpenResource}
-                />
-                <LearningNotesList />
-                <ReactQueryDevtools initialIsOpen={false} />
-              </>
-            </RouteGuard>
-          </QueryClientProvider>
-        </CourseProvider>
-        </div>
+        <PinnedNotifyProvider>
+          <PinnedNotifications/>
+          <CourseProvider>
+            <QueryClientProvider client={queryClient}>
+              <Toaster />
+              <SappConfirmDialogContainer />
+              {loading ? <SappLoading /> : <></>}
+              <RouteGuard>
+                <>
+                  {content}
+                  <LearningResource
+                    open={openResource}
+                    setOpenResource={setOpenResource}
+                  />
+                  <LearningNotesList />
+                  <ReactQueryDevtools initialIsOpen={false} />
+                </>
+              </RouteGuard>
+            </QueryClientProvider>
+          </CourseProvider>
+        </PinnedNotifyProvider>
+        
       </main>
     </>
   )
