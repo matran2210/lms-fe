@@ -32,7 +32,10 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
-import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
+import { io } from 'socket.io-client'
+// import PopupCert from '@components/mycourses/PopupCert'
+// import { ICert } from 'src/type'
+import { PinnedNotifyProvider, usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 
 type MyAppProps = AppProps & {
@@ -65,6 +68,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       },
     },
   })
+
+  const {
+    getPinnedData
+  } = usePinnedNotifyContext()
 
   const excludedPaths = [
     PageLink.AUTH_LOGIN,
@@ -197,10 +204,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [router.events])
 
   useEffect(() => {
-    dispatch(getPinnedNotifications())
-  }, [])
-
-  useEffect(() => {
     const isExclusivePages = [
       PageLink.AUTH_LOGIN,
       PageLink.AUTH_CHANGE_PASSWORD,
@@ -214,22 +217,37 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router])
 
-  const showPinnedNotification = () => {
-    if(!showPinned) return
-    return (
-      <>
-      {user?.user?.username && user?.pinnedNotifications?.data?.content && (
-        <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
-          <div className='flex flex-row'>
-            <div className='pr-2'><IconLoudSpeaker /></div>
-            <div>{user?.pinnedNotifications?.data?.content}</div>
-          </div>
-          <div onClick={() => setShowPinned(false)}><CloseIconNote/></div>
-        </div>
-      )}
-      </>
-    )
-  }
+  // Lấy token từ cokkieStorage (giả sử 'accessToken' là key lưu token)
+  let authToken = getActToken()
+
+  // const [openCert, setOpenCert] = useState(false)
+  // const [dataStudent, setDataStudent] = useState<ICert>()
+
+  // const socket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+  //   extraHeaders: {
+  //     authorization: authToken,
+  //   },
+  // })
+
+  // socket.on('connect', () => console.log('Socket connected'))
+
+  // socket.on('disconnect', () => console.log('Socket disconnected'))
+
+  // // Thực hiện xử lý khi nhận được sự kiện 'STUDENT_COMPLETE_COURSE'
+  // socket.on('STUDENT_COMPLETE_COURSE', (data) => {
+  //   setOpenCert(true)
+  //   setDataStudent(data)
+  // })
+
+  // const handleCancel = () => {
+  //   setOpenCert(false)
+  //   setDataStudent(undefined)
+  // }
+
+  useEffect(() => {
+    if(!authToken) return
+    getPinnedData()
+  }, [authToken])
 
   return (
     <>
@@ -309,11 +327,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   />
                   <LearningNotesList />
                   <ReactQueryDevtools initialIsOpen={false} />
-                  <PopupCert
+                  {/* <PopupCert
                     open={openCert}
                     onCancel={handleCancel}
                     dataStudent={dataStudent}
-                  />
+                  /> */}
                 </>
               </RouteGuard>
             </QueryClientProvider>
