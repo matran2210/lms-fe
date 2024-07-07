@@ -39,11 +39,27 @@ import { PinnedNotifications } from 'src/type'
     }
   }
   
-  const PinnedNotifyContext = createContext<any>(initContext)
+  const PinnedNotifyContext = createContext<Context>(initContext)
   
   export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
     const [openPinned, setOpenPinned] = useState(true)
-    const [pinnedNotifications, setPinnedNotifications] = useState<PinnedNotifications>()
+    const [pinnedNotifications, setPinnedNotifications] = useState<PinnedNotifications>({
+      data: {
+        action: '',
+        content: '',
+        created_at: '',
+        created_by: '',
+        created_from: '',
+        deleted_at: '',
+        id: '',
+        mode: '',
+        send_finish_time: '',
+        send_time: '',
+        status: '',
+        title: '',
+        type: '',
+        updated_at: ''
+			}})
 
 		const getPinnedData = async () => {
 			const res:any = await UserApi.getPinnedNotifications()

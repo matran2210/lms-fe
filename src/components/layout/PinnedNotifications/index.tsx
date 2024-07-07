@@ -13,11 +13,13 @@ function PinnedNotifications() {
       {openPinned && pinnedNotifications?.data?.content && (
         <div>
           <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
-          <div className='flex flex-row'>
-            <div className='pr-2'><IconLoudSpeaker /></div>
-            <div>{pinnedNotifications?.data?.content}</div>
+          <div className='flex flex-row w-full'>
+            <div className='pr-2 pt-3'><IconLoudSpeaker /></div>
+            <div className="marqueeNotifParent">
+              <p className="marqueeNotifContent">{pinnedNotifications?.data?.content}</p>
+            </div>
           </div>
-          <div onClick={() => setOpenPinned(false)}><CloseIconNote/></div>
+          <div onClick={() => setOpenPinned(false)} className="mr-3"><CloseIconNote/></div>
         </div>
         <div className="pt-12"></div>
         </div>

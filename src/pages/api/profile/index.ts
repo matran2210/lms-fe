@@ -152,7 +152,7 @@ export class AuthAPI {
         "mode": "MANUAL",
         "status": "SHOWING",
         "action": "IMMEDIATE",
-        "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make",
+        "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmr took a galley of type and scrambled it to make",
         "send_time": "2024-06-19T21:53:58.200Z",
         "send_finish_time": "2024-06-21T11:52:52.000Z",
         "created_by": null,
