@@ -19,8 +19,11 @@ const VALIDATE_MIN_LENGTH_PASSWORD = (
 
 const VALIDATE_PASSWORD_REGEX_MSG =
   'Password must be at least 8 characters, 1 uppercase letter, 1 number'
+1
+const SHOW_ERROR_USERNAME_PASSWORD =
+  'Invalid username/email or password, please check again'
 
-const SHOW_ERROR_USERNAME_PASSWORD = 'Username/Email or Password is incorrect'
+const SHOW_ERROR_ACCOUNT_LOCK = 'Your account has been locked.'
 
 export {
   VALIDATE_REQUIRED,
@@ -30,4 +33,7 @@ export {
   VALIDATE_MIN_LENGTH_PASSWORD,
   VALIDATE_PASSWORD_REGEX_MSG,
   SHOW_ERROR_USERNAME_PASSWORD,
+  VALIDATE_LOGIN_EMAIL_REQUIRED,
+  VALIDATE_PASSWORD_REQUIRED,
+  SHOW_ERROR_ACCOUNT_LOCK,
 }

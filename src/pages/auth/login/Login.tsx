@@ -108,6 +108,7 @@ const LoginPage = () => {
     } catch (error) {}
   }
 
+  const incorrectEmailAndPassword = ['400|010433', '400|010833']
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
@@ -137,11 +138,13 @@ const LoginPage = () => {
           }
         })
         .catch((error) => {
-          if (error?.response?.data?.error?.code === '403|000010') {
+          const codeError = error?.response?.data?.error?.code
+          if (codeError === '403|000010') {
             setOpenLimit(true)
-          } else if (error?.response?.data?.error?.code === '401|0000') {
-            setError('login', { message: SHOW_ERROR_USERNAME_PASSWORD })
+          } else if (incorrectEmailAndPassword.includes(codeError)) {
             setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
+          } else if (codeError === '400|010008') {
+            setError('password', { message: SHOW_ERROR_ACCOUNT_LOCK })
           }
           setTimeout(() => {
             setLoading(false)
