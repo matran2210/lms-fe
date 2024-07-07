@@ -244,10 +244,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   //   setDataStudent(undefined)
   // }
 
-  useEffect(() => {
-    if(!authToken) return
-    getPinnedData()
-  }, [authToken])
+  // useEffect(() => {
+  //   if(!authToken) return
+  //   getPinnedData()
+  // }, [authToken])
 
   return (
     <>
