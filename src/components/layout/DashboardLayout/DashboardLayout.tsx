@@ -33,7 +33,7 @@ export default function DashboardLayout({
         toggleDrawer={toggleDrawer}
         className={`menu-sidebar-left fixed top-0 md:left-0 h-screen bg-white shadow-sidebar w-20 max-w-screen ${
           openDrawer ? 'opacity-5' : ''
-        } ${guideStatus ? '' : 'overflow-hidden'} ${user?.user?.pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
+        } ${guideStatus ? '' : 'overflow-hidden'} ${user?.user?.username && user?.pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
         setOpenResource={setOpenResource}
       />
       <div className="w-full min-h-screen">

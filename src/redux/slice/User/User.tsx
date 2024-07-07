@@ -71,13 +71,31 @@ const initialState: UserState = {
     user_contacts: [],
     certificates: 0,
     courses: 0,
-    pinnedNotifications: {},
   },
   loginHistory: {
     meta: {},
     userActivities: [],
   },
   loadHistory: false,
+  pinnedNotifications: {
+    showPinned: true,
+    data: {
+      action: '',
+      content: '',
+      created_at: '',
+      created_by: '',
+      created_from: '',
+      deleted_at: '',
+      id: '',
+      mode: '',
+      send_finish_time: '',
+      send_time: '',
+      status: '',
+      title: '',
+      type: '',
+      updated_at: ''
+    }
+  },
 }
 
 export const getMe = createAsyncThunk(
@@ -307,7 +325,7 @@ export const userSlice = createSlice({
     builder.addCase(getPinnedNotifications.fulfilled, (state, action) => {
       state.loading = false
       if (action.payload) {
-        state.user.pinnedNotifications = { ...state.user.pinnedNotifications, ...action.payload }
+        state.pinnedNotifications = { ...state.pinnedNotifications, ...action.payload }
       }
     })
     builder.addCase(getPinnedNotifications.rejected, (state) => {

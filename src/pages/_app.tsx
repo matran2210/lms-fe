@@ -49,6 +49,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const router = useRouter()
   const [openResource, setOpenResource] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [showPinned, setShowPinned] = useState(true)
   const dispatch = useAppDispatch()
   const gettingNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.loading,
@@ -57,7 +58,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     (state) => state.notificationReducer?.total_records,
   )
 
-  const { user } = useAppSelector(userReducer)
+  const user = useAppSelector(userReducer)
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -215,6 +216,23 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router])
 
+  const showPinnedNotification = () => {
+    if(!showPinned) return
+    return (
+      <>
+      {user?.user?.username && user?.pinnedNotifications?.data?.content && (
+        <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
+          <div className='flex flex-row'>
+            <div className='pr-2'><IconLoudSpeaker /></div>
+            <div>{user?.pinnedNotifications?.data?.content}</div>
+          </div>
+          <div onClick={() => setShowPinned(false)}><CloseIconNote/></div>
+        </div>
+      )}
+      </>
+    )
+  }
+
   return (
     <>
       <Head>
@@ -277,16 +295,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         />
       </Head>
       <main>
-        {user?.pinnedNotifications?.data?.content && (
-          <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
-            <div className='flex flex-row'>
-              <div className='pr-2'><IconLoudSpeaker /></div>
-              <div>{user?.pinnedNotifications?.data?.content}</div>
-            </div>
-            <div><CloseIconNote/></div>
-          </div>
-        )}
-        <div className={`${user?.pinnedNotifications?.data?.content ? 'pt-12' : ''}`}>
+        {showPinnedNotification()}
+        <div className={`${user?.user?.username && user?.pinnedNotifications?.data?.content ? 'pt-12' : ''}`}>
         <CourseProvider>
           <QueryClientProvider client={queryClient}>
             <Toaster />
