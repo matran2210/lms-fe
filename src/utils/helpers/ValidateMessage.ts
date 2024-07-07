@@ -1,4 +1,6 @@
 const VALIDATE_REQUIRED = 'This field is required'
+const VALIDATE_LOGIN_EMAIL_REQUIRED = 'The username/email field is required.'
+const VALIDATE_PASSWORD_REQUIRED = 'The password field is required.'
 
 const VALIDATE_MIN = (field: string, least: number) =>
   `${field} must contain at least ${least} character ${least > 1 ? '(s)' : ''}`
@@ -23,7 +25,8 @@ const VALIDATE_PASSWORD_REGEX_MSG =
 const SHOW_ERROR_USERNAME_PASSWORD =
   'Invalid username/email or password, please check again'
 
-const SHOW_ERROR_ACCOUNT_LOCK = 'Your account has been locked.'
+const SHOW_ERROR_USERNAME_PASSWORD =
+  'Invalid username/email or password, please check again'
 
 export {
   VALIDATE_REQUIRED,

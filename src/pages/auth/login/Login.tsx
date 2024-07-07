@@ -1,34 +1,32 @@
 import Google_Logo from '@assets/images/google_logo.svg'
 import Microsoft_Logo from '@assets/images/microsoft_logo.svg'
+import SappButton from '@components/base/button/SappButton'
 import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
-import { useEffect, useState } from 'react'
-import SappButton from '@components/base/button/SappButton'
-import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
-  VALIDATE_MIN_LENGTH,
-  VALIDATE_PASSWORD_REGEX_MSG,
-  VALIDATE_REQUIRED,
-  VALIDATE_MIN_LENGTH_PASSWORD,
   SHOW_ERROR_USERNAME_PASSWORD,
+  VALIDATE_LOGIN_EMAIL_REQUIRED,
+  VALIDATE_MIN_LENGTH,
+  VALIDATE_PASSWORD_REQUIRED,
+  VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants'
+import { EntranceTestAPI } from 'src/pages/api/entrance-test'
+import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
+import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
+import { getMessagingToken } from 'src/utils/firebase'
 import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
-import { getMessagingToken } from 'src/utils/firebase'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import PopUpLimit from './PopupLimit'
-import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
-import EntranceApi from 'src/redux/services/EntranceTest'
-import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
-import { EntranceTestAPI } from 'src/pages/api/entrance-test'
+import { error } from 'console'
 interface IInputProps {
   login: string
   password: string
@@ -53,17 +51,14 @@ const LoginPage = () => {
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
       .min(1, {
-        message: VALIDATE_REQUIRED,
+        message: VALIDATE_LOGIN_EMAIL_REQUIRED,
       })
       .min(5, { message: VALIDATE_MIN_LENGTH('Username or Email', 5) }),
-    password: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, {
-        message: VALIDATE_REQUIRED,
-      })
-      .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
-      .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
+    password: z.string({ required_error: VALIDATE_REQUIRED }).trim().min(1, {
+      message: VALIDATE_PASSWORD_REQUIRED,
+    }),
+    // .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) }),
+    // .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
     remember_me: z.boolean().default(false),
   })
 
@@ -141,19 +136,21 @@ const LoginPage = () => {
           const codeError = error?.response?.data?.error?.code
           if (codeError === '403|000010') {
             setOpenLimit(true)
-          } else if (incorrectEmailAndPassword.includes(codeError)) {
+          } else if (
+            incorrectEmailAndPassword.includes(
+              error?.response?.data?.error?.code,
+            )
+          ) {
             setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
           } else if (codeError === '400|010008') {
             setError('password', { message: SHOW_ERROR_ACCOUNT_LOCK })
           }
+
           setTimeout(() => {
             setLoading(false)
           }, 1000)
         })
     } catch (error: any) {}
-  }
-  const socialLogin = () => {
-    toast.error('Chức năng này sẽ được update vào version sau!')
   }
 
   useEffect(() => {
