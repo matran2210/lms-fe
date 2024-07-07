@@ -74,6 +74,16 @@ const UserApi = {
   getListHistory: async ({ page_index, page_size }: any): Promise<any> => {
     return AuthAPI.getListHistory({ page_index, page_size })
   },
+
+  /**
+   * Một hàm để lấy Pinned Notification
+   * 
+   */
+  getPinnedNotifications: (): Promise<IUser> => {
+    // Đường dẫn api Pinned Notification
+    // Sử dụng httpService để gửi yêu cầu GET
+    return AuthAPI.getPinnedNotifications() as any
+  },
 }
 
 export default UserApi

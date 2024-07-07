@@ -32,6 +32,8 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
+import { getPinnedNotifications, userReducer } from 'src/redux/slice/User/User'
+import { CloseIconNote, IconLoudSpeaker } from '@assets/icons'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -54,6 +56,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const getNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.total_records,
   )
+
+  const { user } = useAppSelector(userReducer)
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -194,6 +198,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [router.events])
 
   useEffect(() => {
+    dispatch(getPinnedNotifications())
+  }, [])
+
+  useEffect(() => {
     const isExclusivePages = [
       PageLink.AUTH_LOGIN,
       PageLink.AUTH_CHANGE_PASSWORD,
@@ -269,6 +277,14 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         />
       </Head>
       <main>
+        {user?.pinnedNotifications?.data?.content && (
+          <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
+            <div><IconLoudSpeaker /></div>
+            <div>{user?.pinnedNotifications?.data?.content}</div>
+            <div className='w-[150px]'><div className='ml-[130px]'><CloseIconNote/></div></div>
+          </div>
+        )}
+        <div className={`${user?.pinnedNotifications?.data?.content ? 'pt-12' : ''}`}>
         <CourseProvider>
           <QueryClientProvider client={queryClient}>
             <Toaster />
@@ -287,6 +303,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             </RouteGuard>
           </QueryClientProvider>
         </CourseProvider>
+        </div>
       </main>
     </>
   )

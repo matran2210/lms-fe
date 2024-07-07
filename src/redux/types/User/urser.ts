@@ -23,6 +23,7 @@ export interface IUser {
   university_program?: any
   major?: any
   english_level?: any
+  pinnedNotifications?: any
 }
 interface IUserContact {
   id: string

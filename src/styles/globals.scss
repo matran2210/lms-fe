@@ -826,6 +826,17 @@ p a {
   padding: 10px 12px !important;
 }
 
+.sapp-noti-header {
+  z-index: 999;
+  position: fixed;
+  display: flex;
+  height: 48px;
+  padding: 12px 24px 12px 233px;
+  justify-content: flex-center;
+  align-items: center;
+  background: #18355D;
+  color: var(--bw-white, #FFF);
+}
 .ant-modal {
   font-family: 'Roboto', sans-serif !important;
 }
