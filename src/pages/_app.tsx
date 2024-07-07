@@ -294,7 +294,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       </Head>
       <main>
         <PinnedNotifyProvider>
-          <PinnedNotifications/>
           <CourseProvider>
             <QueryClientProvider client={queryClient}>
               <Toaster />
@@ -302,6 +301,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               {loading ? <SappLoading /> : <></>}
               <RouteGuard>
                 <>
+                  <PinnedNotifications />
                   {content}
                   <LearningResource
                     open={openResource}
@@ -309,12 +309,16 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   />
                   <LearningNotesList />
                   <ReactQueryDevtools initialIsOpen={false} />
+                  <PopupCert
+                    open={openCert}
+                    onCancel={handleCancel}
+                    dataStudent={dataStudent}
+                  />
                 </>
               </RouteGuard>
             </QueryClientProvider>
           </CourseProvider>
         </PinnedNotifyProvider>
-        
       </main>
     </>
   )
