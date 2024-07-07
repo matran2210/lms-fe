@@ -204,7 +204,7 @@ const EditorReader = ({
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
       >
-        <div ref={extenalRef || refDocument}>
+        <div ref={extenalRef || refDocument} className='text-bw-1'>
           {parseHTML(
             replaceTextAlignCenterToWebKitCenter(content || ''),
             options,

@@ -93,7 +93,6 @@ interface IUserDetail {
   company_rank: null | string
   settings: null | any
 }
-
 export interface UserState {
   loading: boolean
   loadingEditName: boolean

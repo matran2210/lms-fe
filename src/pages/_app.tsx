@@ -32,6 +32,8 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
+import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
+import PinnedNotifications from '@components/layout/PinnedNotifications'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -47,6 +49,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const router = useRouter()
   const [openResource, setOpenResource] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [showPinned, setShowPinned] = useState(true)
   const dispatch = useAppDispatch()
   const gettingNotiUnread = useAppSelector(
     (state) => state.notificationReducer?.loading,
@@ -193,6 +196,41 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
+  useEffect(() => {
+    dispatch(getPinnedNotifications())
+  }, [])
+
+  useEffect(() => {
+    const isExclusivePages = [
+      PageLink.AUTH_LOGIN,
+      PageLink.AUTH_CHANGE_PASSWORD,
+      PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
+      PageLink.AUTH_FORGOT_PASSWORD,
+      PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
+    ].includes(router.asPath)
+
+    if (!isExclusivePages) {
+      localStorage.setItem('beforeLoginPath', router.asPath.toString())
+    }
+  }, [router])
+
+  const showPinnedNotification = () => {
+    if(!showPinned) return
+    return (
+      <>
+      {user?.user?.username && user?.pinnedNotifications?.data?.content && (
+        <div className='sapp-noti-header text-center w-full flex flex-row justify-between'>
+          <div className='flex flex-row'>
+            <div className='pr-2'><IconLoudSpeaker /></div>
+            <div>{user?.pinnedNotifications?.data?.content}</div>
+          </div>
+          <div onClick={() => setShowPinned(false)}><CloseIconNote/></div>
+        </div>
+      )}
+      </>
+    )
+  }
+
   return (
     <>
       <Head>
@@ -255,24 +293,32 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         />
       </Head>
       <main>
-        <CourseProvider>
-          <QueryClientProvider client={queryClient}>
-            <Toaster />
-            <SappConfirmDialogContainer />
-            {loading ? <SappLoading /> : <></>}
-            <RouteGuard>
-              <>
-                {content}
-                <LearningResource
-                  open={openResource}
-                  setOpenResource={setOpenResource}
-                />
-                <LearningNotesList />
-                <ReactQueryDevtools initialIsOpen={false} />
-              </>
-            </RouteGuard>
-          </QueryClientProvider>
-        </CourseProvider>
+        <PinnedNotifyProvider>
+          <CourseProvider>
+            <QueryClientProvider client={queryClient}>
+              <Toaster />
+              <SappConfirmDialogContainer />
+              {loading ? <SappLoading /> : <></>}
+              <RouteGuard>
+                <>
+                  <PinnedNotifications />
+                  {content}
+                  <LearningResource
+                    open={openResource}
+                    setOpenResource={setOpenResource}
+                  />
+                  <LearningNotesList />
+                  <ReactQueryDevtools initialIsOpen={false} />
+                  <PopupCert
+                    open={openCert}
+                    onCancel={handleCancel}
+                    dataStudent={dataStudent}
+                  />
+                </>
+              </RouteGuard>
+            </QueryClientProvider>
+          </CourseProvider>
+        </PinnedNotifyProvider>
       </main>
     </>
   )

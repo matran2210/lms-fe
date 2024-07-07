@@ -434,9 +434,9 @@ body *::-webkit-scrollbar-thumb:hover {
   @apply cursor-pointer flex justify-evenly gap-2 w-max items-center px-2 py-0 border;
 }
 
-// .tox-tinymce {
-//   border: none !important;
-// }
+.tox-tinymce {
+  border: none !important;
+}
 
 .resizable {
   @apply bg-white top-[100px] left-[100px] cursor-move;
@@ -826,6 +826,36 @@ p a {
   padding: 10px 12px !important;
 }
 
+.sapp-pinned-noti-header {
+  padding: 12px 24px 12px 233px;
+  background: #18355D;
+}
 .ant-modal {
   font-family: 'Roboto', sans-serif !important;
+}
+
+
+.pinned-noti-marquee-parent {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+  max-width: 90%;
+}
+
+.pinned-noti-marquee-content {
+  transform: translateX(100%);
+  animation: scroll-left 50s linear infinite;
+}
+
+.pinned-noti-marquee-content:hover {
+  animation: unset !important;
+  transform: unset !important;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
 }
