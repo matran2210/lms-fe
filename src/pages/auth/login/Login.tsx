@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
 import {
+  SHOW_ERROR_ACCOUNT_LOCK,
   SHOW_ERROR_USERNAME_PASSWORD,
   VALIDATE_LOGIN_EMAIL_REQUIRED,
   VALIDATE_MIN_LENGTH,
