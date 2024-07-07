@@ -75,7 +75,13 @@ export const RouteGuard = ({ children }: IProps) => {
     ) {
       try {
         await dispatch(getMe()).unwrap()
-        router.push(PageLink.COURSES)
+
+        const beforeLoginPath = localStorage.getItem('beforeLoginPath')
+        if (beforeLoginPath) {
+          router.push(beforeLoginPath)
+        } else {
+          router.push(PageLink.COURSES)
+        }
       } catch (error) {}
     }
   }

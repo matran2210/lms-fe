@@ -130,6 +130,12 @@ const LoginPage = () => {
           dispatch(getEntranceCount())
           localStorage.setItem('enstranceTest', 'true')
         })
+        .then(() => {
+          const beforeLoginPath = localStorage.getItem('beforeLoginPath')
+          if (beforeLoginPath) {
+            router.push(beforeLoginPath)
+          }
+        })
         .catch((error) => {
           if (error?.response?.data?.error?.code === '403|000010') {
             setOpenLimit(true)
