@@ -63,11 +63,10 @@ import { PinnedNotifications } from 'src/type'
 
 		const getPinnedData = async () => {
       const pinnedLocal = localStorage.getItem('openPinned')
-      if(!pinnedLocal){
+      if(pinnedLocal === null || Boolean(pinnedLocal === 'true')){
         const res: PinnedNotifications = await UserApi.getPinnedNotifications()
         if(res){
           setPinnedNotifications(res)
-          localStorage.setItem('openPinned', 'true')
         }
       }
 		}

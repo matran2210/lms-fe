@@ -101,6 +101,9 @@ module.exports = {
         blue: {
           1: '#0000EE',
         },
+        pinned: {
+         1: '#18355D'
+        }
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
