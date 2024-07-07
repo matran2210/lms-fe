@@ -1,4 +1,5 @@
 import { getActToken, getLocalStorgeActToken } from '@utils/index'
+import { useRouter } from 'next/router'
 import React, {
   PropsWithChildren,
   createContext,
@@ -6,6 +7,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+import { PageLink } from 'src/constants'
 import UserApi from 'src/redux/services/User/user'
 import { PinnedNotifications } from 'src/type'
 
@@ -81,9 +83,21 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
     }
   }
 
+  const router = useRouter()
+
+  const isLoginPage = ![
+    PageLink.AUTH_LOGIN,
+    PageLink.AUTH_FORGOT_PASSWORD,
+    PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
+    PageLink.AUTH_CHANGE_PASSWORD,
+    PageLink.AUTH_CHANGE_PASSWORD_SUCCESS
+  ].includes(router.pathname)
+
   useEffect(() => {
-    getPinnedData()
-  }, [authToken])
+    if (isLoginPage) {
+      getPinnedData()
+    }
+  }, [router.pathname])
 
   return (
     <PinnedNotifyContext.Provider
