@@ -7,6 +7,8 @@ import {
   getLocalStorgeRefreshToken,
   removeLocalStorageJwtToken,
   setActToken,
+  setCookieActToken,
+  setCookieRefreshToken,
   setRefreshToken,
 } from '@utils/index'
 import { apiURL } from 'src/redux/services/httpService'
@@ -89,6 +91,8 @@ request.interceptors.response.use(
             const userInfo = res?.data?.data?.tokens
             setActToken(userInfo?.act)
             setRefreshToken(userInfo?.rft)
+            setCookieActToken(userInfo?.act)
+            setCookieRefreshToken(userInfo?.rft)
 
             // update new token to axios
             request.defaults.headers.common['Authorization'] =
