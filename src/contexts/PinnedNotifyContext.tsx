@@ -90,7 +90,7 @@ import { PinnedNotifications } from 'src/type'
         
       }
     }
-  }
+  
 
   const router = useRouter()
 
