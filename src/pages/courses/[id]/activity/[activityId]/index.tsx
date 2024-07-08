@@ -100,12 +100,6 @@ const ActivityPage = () => {
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
-        // ;(async () => {
-        //   await CourseActivityApi.startCourseSectionProgress(
-        //     courseId,
-        //     sectionId,
-        //   )
-        // })()
       } catch (error) {}
     }
 
@@ -113,7 +107,18 @@ const ActivityPage = () => {
       dispatch(courseActivityAction.resetActivity())
       dispatch(resetQuizActivity({}))
     }
-  }, [activity])
+  }, [activity, dispatch, router.query.id, sectionId])
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', () => {
+      isFinishRef.current = false
+    })
+    return () => {
+      router.events.off('routeChangeComplete', () => {
+        isFinishRef.current = true
+      })
+    }
+  }, [router.events])
 
   useEffect(() => {
     setTimeout(() => {
@@ -130,7 +135,7 @@ const ActivityPage = () => {
   useEffect(() => {
     dispatch(clearNote())
     dispatch(closeCalculator())
-  }, [router.asPath])
+  }, [dispatch, router.asPath])
 
   /**
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
@@ -834,11 +839,6 @@ const ActivityPage = () => {
                         router.push({
                           pathname: `/courses/${router.query.id}/activity/${idPreviousActivity}`,
                         })
-                        await CoursesAPI.startCourseSectionProgress(
-                          router?.query?.id,
-                          activity?.previous_activity?.id ||
-                            activityIds[previousActivityIndex - 1],
-                        )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
                     >
@@ -888,10 +888,6 @@ const ActivityPage = () => {
                         router.push({
                           pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
                         })
-                        await CoursesAPI.startCourseSectionProgress(
-                          router?.query?.id,
-                          idNextActivity,
-                        )
                       }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                     >
