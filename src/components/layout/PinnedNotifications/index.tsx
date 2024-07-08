@@ -23,11 +23,13 @@ function PinnedNotifications() {
             <Row className="flex flex-row">
               <Col span={2}></Col>
               <Col span={21}>
-                <div className="flex flex-row">
-                  <div className='pr-1'><IconLoudSpeaker /></div>
-                  <div className='flex flex-row w-full'>
-                    <div className={`${pinnedNotifications?.data?.content?.length > 200 ? 'pinned-noti-marquee-parent overflow-hidden h-12 whitespace-nowrap': ''} ml-5`}>
-                      <p className={`${pinnedNotifications?.data?.content?.length > 200 ? 'pinned-noti-marquee-content leading-5' : ''}`}>{pinnedNotifications?.data?.content}</p>
+                <div className="flex flex-row justify-items-center">
+                  <div className="mx-auto flex flex-row">
+                    <div className='pr-1'><IconLoudSpeaker /></div>
+                    <div className='flex flex-row w-full'>
+                      <div className={`${pinnedNotifications?.data?.content?.length > 200 ? 'pinned-noti-marquee-parent shadow-pinned overflow-hidden h-12 whitespace-nowrap': ''} ml-5`}>
+                        <p className={`${pinnedNotifications?.data?.content?.length > 200 ? 'pinned-noti-marquee-content leading-5' : ''}`}>{pinnedNotifications?.data?.content}</p>
+                      </div>
                     </div>
                   </div>
                 </div>

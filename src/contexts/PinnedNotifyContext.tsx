@@ -70,15 +70,19 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
 
   const authToken = getActToken()
 
-  const getPinnedData = async () => {
-    if (authToken) {
-      const res: PinnedNotifications = await UserApi.getPinnedNotifications()
-      const oldPinnedId = localStorage.getItem('pinnedId')
-      const oldPinnedFlag = localStorage.getItem('openPinned')
-
-      if (oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')) {
-        setPinnedNotifications(res)
-        setOpenPinned(true)
+        if(oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')){
+          setPinnedNotifications(res)
+          setOpenPinned(true)
+          localStorage.setItem('pinnedId', res?.data?.id)
+          localStorage.setItem('openPinned', "true")
+        } else {
+          if(Boolean(oldPinnedFlag === 'false')){
+            setOpenPinned(false)
+          } else {
+            setOpenPinned(true)
+          }
+        }
+        
       }
     }
   }
