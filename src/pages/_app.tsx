@@ -249,6 +249,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   //   getPinnedData()
   // }, [authToken])
 
+  useEffect(() => {
+    getPinnedData()
+  }, [authToken])
+
   return (
     <>
       <Head>
