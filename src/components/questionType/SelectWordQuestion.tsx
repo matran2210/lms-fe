@@ -227,8 +227,8 @@ const SelectWord = forwardRef(
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
             <>
-              {!!data?.question_topic?.description && (
-                <div className="border border-b-gray-2 my-6"></div>
+              {data?.question_topic?.description && (
+                <div className="border border-b-gray-2 my-6">{data?.question_topic?.id}</div>
               )}
               <div className="flex items-center mb-4">
                 <div className="font-semibold">

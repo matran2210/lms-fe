@@ -18,6 +18,7 @@ module.exports = {
       '2xl-max': { max: '1279px' },
       '3xl': '1536px',
       '3.5xl': '1660px',
+      '3.75xl': '1778px',
       '4xl': '1920px',
     },
     fontSize: {

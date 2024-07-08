@@ -2,7 +2,8 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import Icon from '@components/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
 
@@ -19,6 +20,31 @@ const MultipleQuestion = ({
 }: MultipleQuestionProps) => {
   const router = useRouter()
   const [showMore, setShowMore] = useState<boolean>(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const [startX, setStartX] = useState(0)
+  const [scrollLeft, setScrollLeft] = useState(0)
+  const elementRef = useRef<HTMLDivElement>()
+
+  /**
+   * handle when scroll x for questions
+  */
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    setIsDragging(true)
+    elementRef.current && setStartX(event.pageX - elementRef.current.offsetLeft) 
+    elementRef.current && setScrollLeft(elementRef.current.scrollLeft) 
+  }
+  
+  /**
+   * handle when scroll x for questions
+  */
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging) return 
+    if (elementRef.current) {
+      const x =  event.pageX - elementRef.current.offsetLeft
+      const distance = (x - startX) * 2
+      elementRef.current.scrollLeft = scrollLeft - distance
+    }
+  }
 
   const renderBoxes = (type: string, data: any, totalBefore: number) => {
     const renderBoxItems = data?.map((item: any, index: number) => {
@@ -49,7 +75,7 @@ const MultipleQuestion = ({
               {type}
             </div>
             <div
-              className={`flex flex-row flex-wrap gap-3 w-full items-start ${
+              className={`flex flex-row items-center flex-wrap gap-3 w-full ${
                 type === 'Multiple Questions' ? 'mb-10' : ''
               }`}
             >
@@ -103,7 +129,7 @@ const MultipleQuestion = ({
 
   return (
     <div
-      className={`${className} 2xl-max:!min-h-[88px] fixed xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] xl:max-w-smd items-start px-[27px] py-6 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
+      className={`${className} 2xl-max:!min-h-[88px] fixed 3.75xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] 3.75xl:max-w-smd items-start px-[27px] py-6 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
       data-aos={ANIMATION.DATA_AOS}
       ref={multipleQuestionRef}
     >
@@ -111,7 +137,7 @@ const MultipleQuestion = ({
         className={`${
           showMore
             ? 'opacity-100 visible mb-4 xl:mb-0 h-auto'
-            : 'opacity-0 xl:opacity-100 invisible xl:visible h-0 xl:h-auto'
+            : 'opacity-0 3.75xl:opacity-100 invisible 3.75xl:visible h-0 3.75xl:h-auto hidden'
         }
         duration-300 xl:max-h-auto overflow-y-auto xl:overflow-visible flex flex-col gap-10 w-full items-start`}
       >
@@ -134,7 +160,7 @@ const MultipleQuestion = ({
             showMore ? 'border-t pt-4 xl:pt-6' : 'xl:border-t pt-0 xl:pt-6'
           }`}
         >
-          <div className="hidden xl:flex items-center mr-6 w-20">
+          <div className="hidden 3.75xl:flex items-center mr-6 w-20">
             <Icon
               type={'circle'}
               className="w-4 h-4 text-state-success mr-1.5"
@@ -143,7 +169,7 @@ const MultipleQuestion = ({
               Correct
             </span>
           </div>
-          <div className="hidden xl:flex items-center mr-4 w-20">
+          <div className="hidden 3.75xl:flex items-center mr-4 w-20">
             <Icon
               type={'circle'}
               className="w-4 h-4 text-state-error mr-1.5 shrink-0"
@@ -153,9 +179,14 @@ const MultipleQuestion = ({
             </span>
           </div>
           <div
+            ref={elementRef as React.LegacyRef<HTMLDivElement>}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={() => setIsDragging(false)}
+            onMouseLeave={() => setIsDragging(false)}
             className={`${
               !showMore ? 'opacity-100 visible' : 'opacity-0 invisible'
-            } w-full flex gap-3 overflow-x-auto duration-300 block xl:hidden`}
+            } w-full flex gap-3 overflow-x-auto duration-300 block 3.75xl:hidden !max-h-[1040px]`}
           >
             {renderLines(
               'Multiple Questions',
@@ -173,9 +204,12 @@ const MultipleQuestion = ({
               Number(questions?.constructedResponseAnswers?.length || 0) >=
               8 && (
               <div
-                className="block xl:hidden text-medium-sm font-medium underline cursor-pointer mr-6"
+                className="block 3.75xl:hidden text-medium-sm font-medium underline cursor-pointer mr-6"
                 onClick={() => {
-                  setShowMore(!showMore)
+                  setShowMore(!showMore) 
+                  if (multipleQuestionRef?.current) {
+                    !showMore ? multipleQuestionRef.current.style.height = '500px' : multipleQuestionRef.current.style.height = '100px'
+                  }
                 }}
               >
                 {showMore ? 'View Less' : 'View All'}
