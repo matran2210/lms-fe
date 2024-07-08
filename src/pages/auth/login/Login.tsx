@@ -13,7 +13,6 @@ import {
   VALIDATE_MIN_LENGTH,
   VALIDATE_PASSWORD_REQUIRED,
   VALIDATE_REQUIRED,
-  SHOW_ERROR_ACCOUNT_LOCK,
 } from '@utils/helpers/ValidateMessage'
 import Link from 'next/link'
 import { useRouter } from 'next/router'

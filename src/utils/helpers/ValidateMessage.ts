@@ -25,8 +25,7 @@ const VALIDATE_PASSWORD_REGEX_MSG =
 const SHOW_ERROR_USERNAME_PASSWORD =
   'Invalid username/email or password, please check again'
 
-const SHOW_ERROR_USERNAME_PASSWORD =
-  'Invalid username/email or password, please check again'
+  const SHOW_ERROR_ACCOUNT_LOCK = 'Your account has been locked.'
 
 export {
   VALIDATE_REQUIRED,
