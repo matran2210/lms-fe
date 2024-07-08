@@ -137,7 +137,11 @@ const LoginPage = () => {
           const codeError = error?.response?.data?.error?.code
           if (codeError === '403|000010') {
             setOpenLimit(true)
-          } else if (incorrectEmailAndPassword.includes(codeError)) {
+          } else if (
+            incorrectEmailAndPassword.includes(
+              error?.response?.data?.error?.code,
+            )
+          ) {
             setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
           } else if (codeError === '400|010008') {
             setError('password', { message: SHOW_ERROR_ACCOUNT_LOCK })
