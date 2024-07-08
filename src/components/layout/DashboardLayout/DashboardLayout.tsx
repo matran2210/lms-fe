@@ -37,7 +37,7 @@ export default function DashboardLayout({
       <div className="w-full min-h-screen">
         {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}
         {/* <div> */}
-        <div className="bg-gray-4 min-h-full ">
+        <div className={`${openPinned ? 'pt-12' : ''} bg-gray-4 min-h-full`}>
           <div className="ml-0 md:ml-20 sapp-loading">{children}</div>
         </div>
         {/* </div> */}
