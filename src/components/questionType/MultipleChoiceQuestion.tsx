@@ -31,8 +31,11 @@ const MultiChoiceQuestion = ({
         (a: any, b: any) => a?.answer_position - b?.answer_position,
       )
       for (let e of sorted) {
-        number ++
-        answers.push({ label: `${getUppercaseByNumber(number)}. ${e?.answer}`, value: e?.id })
+        number++
+        answers.push({
+          label: `${getUppercaseByNumber(number)}. ${e?.answer}`,
+          value: e?.id,
+        })
       }
     }
     return answers
@@ -77,6 +80,11 @@ const MultiChoiceQuestion = ({
           }
         }}
       >
+        <EditorReader
+          text_editor_content={data?.question_content}
+          className="sapp-questions"
+          highlighted={highlighted}
+        />
         {data?.question_topic?.exhibits &&
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (

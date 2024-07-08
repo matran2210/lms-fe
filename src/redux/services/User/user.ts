@@ -78,7 +78,7 @@ const UserApi = {
 
   /**
    * Một hàm để lấy Pinned Notification
-   * 
+   *
    */
   getPinnedNotifications: (): Promise<PinnedNotifications> => {
     // Đường dẫn api Pinned Notification

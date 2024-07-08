@@ -78,16 +78,7 @@ import { PinnedNotifications } from 'src/type'
         if(oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')){
           setPinnedNotifications(res)
           setOpenPinned(true)
-          localStorage.setItem('pinnedId', res?.data?.id)
-          localStorage.setItem('openPinned', "true")
-        } else {
-          if(Boolean(oldPinnedFlag === 'false')){
-            setOpenPinned(false)
-          } else {
-            setOpenPinned(true)
-          }
         }
-        
       }
     }
   

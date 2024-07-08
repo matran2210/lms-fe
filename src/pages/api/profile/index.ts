@@ -141,5 +141,4 @@ export class AuthAPI {
   static getPinnedNotifications() {
     return fetcher(`${apiURL}/notifications/pinned`)
   }
-
 }
