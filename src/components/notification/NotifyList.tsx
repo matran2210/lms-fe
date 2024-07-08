@@ -42,8 +42,8 @@ const NotifyList = ({
   }
 
   useEffect(() => {
-    Aos.init({ duration: ANIMATION.DURATION, once: true })
-  })
+    Aos.init({ duration: ANIMATION.DURATION, once: true, offset: 0 })
+  }, [open])
 
   return (
     <div data-aos={ANIMATION.DATA_AOS}>

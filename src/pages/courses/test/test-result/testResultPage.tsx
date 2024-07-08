@@ -44,10 +44,10 @@ const TestResultPage = ({
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
       )
-      multipleQuestionElem.style.height = `calc(100vh - ${maxHeight}px)`
+      multipleQuestionElem.style.height = window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)` : '90px'
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
-  }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
+  }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current, window.innerWidth])
 
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,
@@ -67,11 +67,11 @@ const TestResultPage = ({
               classCountAll="relative top-0.5"
               globalAverage={GlobalAverage}
             />
-            <MultipleQuestion
-              questions={questions}
-              className={'xl:min-h-[815px]'}
-              multipleQuestionRef={multipleQuestionRef}
-            />
+              <MultipleQuestion
+                questions={questions}
+                className={'3.75xl:min-h-[815px]'}
+                multipleQuestionRef={multipleQuestionRef}
+              />
           </div>
           <div className="max-h-full w-full xl:w-auto">
             <ChartACCAScore data={chartData?.chart_data} />
@@ -94,7 +94,7 @@ const TestResultPage = ({
               </div>
               <MultipleQuestion
                 questions={questions}
-                className={'xl:min-h-[991px]'}
+                className={'3.75xl:min-h-[991px]'}
                 multipleQuestionRef={multipleQuestionRef}
               />
             </div>
@@ -104,7 +104,7 @@ const TestResultPage = ({
                 <div className="flex gap-6 flex-wrap">
                   <MultipleQuestion
                     questions={questions}
-                    className={'xl:min-h-[991px]'}
+                    className={'3.75xl:min-h-[991px]'}
                     multipleQuestionRef={multipleQuestionRef}
                   />
                   <div className="max-h-full w-full xl:w-auto">

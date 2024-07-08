@@ -18,7 +18,7 @@ const ChangePasswordSuccess = () => {
       <div className="d-flex flex-column  flex-lg-row justify-content-center">
         <div className="d-flex flex-lg-row-auto justify-content-center justify-content-lg-end">
           <div className="bg-body d-flex flex-column align-items-stretch flex-center">
-            <div className="d-flex flex-center flex-column  px-lg-10">
+            <div className="w-3/4  px-lg-10">
               {/* Start Form Login */}
               <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
                 <div className="swal2-icon swal2-success swal2-icon-show d-flex mb-6 text-center">
@@ -42,7 +42,7 @@ const ChangePasswordSuccess = () => {
                 {/* Start Button Login */}
                 <div className="d-grid">
                   <SappButton
-                    size="medium"
+                    size="lager"
                     full
                     title="Login"
                     onClick={redirectLogin}

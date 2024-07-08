@@ -5,11 +5,8 @@ import { Col, Row } from "antd";
 import React from "react";
 
 function PinnedNotifications() {
-  const {
-    openPinned,
-    setOpenPinned,
-    pinnedNotifications,
-  } = usePinnedNotifyContext()
+  const { openPinned, setOpenPinned, pinnedNotifications } =
+    usePinnedNotifyContext()
 
   const handleClosePinned = () => {
     localStorage.setItem('openPinned', 'false')
@@ -50,4 +47,4 @@ function PinnedNotifications() {
   )
 }
 
-export default PinnedNotifications;
+export default PinnedNotifications

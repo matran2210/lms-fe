@@ -217,43 +217,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router])
 
-  // Lấy token từ cokkieStorage (giả sử 'accessToken' là key lưu token)
-  let authToken = getActToken()
-
-  // const [openCert, setOpenCert] = useState(false)
-  // const [dataStudent, setDataStudent] = useState<ICert>()
-
-  // const socket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-  //   extraHeaders: {
-  //     authorization: authToken,
-  //   },
-  // })
-
-  // socket.on('connect', () => console.log('Socket connected'))
-
-  // socket.on('disconnect', () => console.log('Socket disconnected'))
-
-  // // Thực hiện xử lý khi nhận được sự kiện 'STUDENT_COMPLETE_COURSE'
-  // socket.on('STUDENT_COMPLETE_COURSE', (data) => {
-  //   setOpenCert(true)
-  //   setDataStudent(data)
-  // })
-
-  // const handleCancel = () => {
-  //   setOpenCert(false)
-  //   setDataStudent(undefined)
-  // }
-
-  // useEffect(() => {
-  //   if(!authToken) return
-  //   getPinnedData()
-  // }, [authToken])
-
-  useEffect(() => {
-    if(!authToken) return
-    getPinnedData()
-  }, [authToken])
-
   return (
     <>
       <Head>

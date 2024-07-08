@@ -18,10 +18,8 @@ export default function DashboardLayout({
   const toggleDrawer = () => {
     setOpened((prev) => !prev)
   }
-  const {
-    openPinned,
-  } = usePinnedNotifyContext()
-  
+  const { openPinned } = usePinnedNotifyContext()
+
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
 
   return (
