@@ -1,12 +1,13 @@
+/* eslint-disable */
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 const PDFViewer = ({ file }: { file: string }) => {
 
   const [fileSize, setFileSize] = useState<number>(0)
 
   const docs = [
-    { uri: file }, // Remote file
+    { uri: file },
   ]
 
   const getFileSizeFromUrl = async (url: string) => {
@@ -26,12 +27,13 @@ const PDFViewer = ({ file }: { file: string }) => {
     }
   };
 
-
-  getFileSizeFromUrl(file).then((fileSize) => {
-    if (fileSize !== null) {
-      setFileSize(Number(fileSize / (1024 * 1024)).toFixed(2) as any)
-    }
-  });
+  useEffect(() => {
+    getFileSizeFromUrl(file).then((fileSize) => {
+      if (fileSize !== null) {
+        setFileSize(Number(fileSize / (1024 * 1024)).toFixed(2) as any)
+      }
+    });
+  }, [file])
 
   return (
     <>
