@@ -22,15 +22,15 @@ function PinnedNotifications() {
     <React.Fragment>
       {openPinned && pinnedNotifications?.data?.content && (
         <React.Fragment>
-          <div className="w-full py-4 bg-pinned-1 z-50 fixed h-12 text-white">
+          <div className={`pinned-container w-full bg-pinned-1 z-50 fixed h-12 text-white`}>
             <Row className="flex flex-row">
               <Col span={2}></Col>
               <Col span={21}>
                 <div className="flex flex-row justify-items-center">
                   <div className="mx-auto flex flex-row">
-                    <div className='pr-1'><IconLoudSpeaker /></div>
-                    <div className='flex flex-row w-full'>
-                      <div className={`${showPinNoti ? 'pinned-noti-marquee-parent shadow-pinned overflow-hidden h-12 whitespace-nowrap' : ''} ml-5`}>
+                    <div className='py-4'><IconLoudSpeaker /></div>
+                    <div className='flex flex-row'>
+                      <div className={`${showPinNoti ? 'pinned-noti-marquee-parent shadow-pinned overflow-hidden h-12' : ''} ml-5`}>
                         <p className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}>
                           <EditorReader text_editor_content={pinnedNotifications?.data?.content} />
                         </p>
@@ -40,11 +40,10 @@ function PinnedNotifications() {
                 </div>
               </Col>
               <Col span={1}>
-                <div onClick={handleClosePinned} className="float-right pr-6 cursor-pointer"><CloseIconNote /></div>
+                <div onClick={handleClosePinned} className="float-right pr-6 cursor-pointer py-4"><CloseIconNote /></div>
               </Col>
             </Row>
           </div>
-          <div className="pt-12"></div>
         </React.Fragment>
       )}
     </React.Fragment>

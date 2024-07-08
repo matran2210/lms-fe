@@ -843,6 +843,14 @@ p a {
 .pinned-noti-marquee-content {
   transform: translateX(100%);
   animation: scroll-left 50s linear infinite;
+  & p, h2 {
+    color: white;
+  }
+}
+
+.pinned-noti-marquee-parent:hover, .pinned-container:hover {
+  white-space: pre-wrap;
+  height: auto;
 }
 
 .pinned-noti-marquee-content:hover {
