@@ -341,6 +341,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           return e.type !== 'exhibits'
         })
         for (let e of watch('exhibits')) {
+          setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -949,8 +950,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                     onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
                       onFocusingPad === e?.id
-                        ? openScratchPad?.length + 1400
-                        : index + 1400
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
@@ -979,8 +980,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                     onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
                       onFocusingPad === e?.id
-                        ? openScratchPad?.length + 1400
-                        : index + 1400
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1025,8 +1026,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                     onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
                       onFocusingPad === e?.id
-                        ? openScratchPad?.length + 1400
-                        : index + 1400
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1083,8 +1084,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                     onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
                       onFocusingPad === e?.id
-                        ? openScratchPad.length + 1400
-                        : index + 1400
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1182,8 +1183,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                       <ExhibitsIcon />
                       <div className="font-normal flex text-sm items-center gap-3">
                         <div>
-                          <span className="hidden 3xl:inline-block 3xl:me-1">
-                            Exhibits
+                          <span className="hidden  lg:inline-block 3xl:me-1">
+                            {`Exhibits (${exhibits?.length})`}
                           </span>
                         </div>
                       </div>

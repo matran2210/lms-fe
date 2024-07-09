@@ -530,7 +530,7 @@ const ActivityPage = () => {
                   top: 'calc(25% - 150px)',
                   left: 'calc(25% - 200px)',
                 }}
-                zIndex={1400}
+                zIndex={500}
                 fixed
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
@@ -950,8 +950,8 @@ const ActivityPage = () => {
                 onClick={() => setOnFocusingPad(e?.id)}
                 zIndex={
                   onFocusingPad === e?.id
-                    ? openScratchPad?.length + 1400
-                    : index + 1400
+                    ? openScratchPad?.length + 500
+                    : index + 500
                 }
                 fixed
                 // not_resizable
@@ -991,8 +991,8 @@ const ActivityPage = () => {
                 onClick={() => setOnFocusingPad(e?.id)}
                 zIndex={
                   onFocusingPad === e?.id
-                    ? openScratchPad.length + 1400
-                    : index + 1400
+                    ? openScratchPad?.length + 500
+                    : index + 500
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">

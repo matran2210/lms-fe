@@ -1501,6 +1501,7 @@ const TestDetail = () => {
           return e.type !== 'exhibits'
         })
         for (let e of watch('exhibits')) {
+          setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -1896,9 +1897,9 @@ const TestDetail = () => {
                   key={e.id}
                   onClick={() => setOnFocusingPad(e.id)}
                   zIndex={
-                    onFocusingPad === e.id
-                      ? openScratchPad?.length + 1400
-                      : index + 1400
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
                   }
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1924,11 +1925,13 @@ const TestDetail = () => {
                     left: 'calc(50% - 200px)',
                   }}
                   key={currentPage}
-                  onClick={() => setOnFocusingPad(e.id)}
+                  onClick={() => {
+                    setOnFocusingPad(e?.id)
+                  }}
                   zIndex={
-                    onFocusingPad === e.id
-                      ? openScratchPad?.length + 1400
-                      : index + 1400
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
                   }
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1966,11 +1969,13 @@ const TestDetail = () => {
                     left: 'calc(0%)',
                   }}
                   key={e.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
+                  onClick={() => {
+                    setOnFocusingPad(e?.id)
+                  }}
                   zIndex={
                     onFocusingPad === e?.id
-                      ? openScratchPad?.length + 1400
-                      : index + 1400
+                      ? openScratchPad?.length + 500 + 2
+                      : index + 500
                   }
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
@@ -2027,8 +2032,8 @@ const TestDetail = () => {
                   onClick={() => setOnFocusingPad(e.id)}
                   zIndex={
                     onFocusingPad === e.id
-                      ? openScratchPad.length + 1400
-                      : index + 1400
+                      ? openScratchPad?.length + 500
+                      : index + 500
                   }
                   // not_resizable
                   // className='pointer-events-none'
@@ -2122,8 +2127,8 @@ const TestDetail = () => {
                     <ExhibitsIcon />
                     <div className="font-normal flex text-sm items-center gap-3">
                       <div>
-                        <span className="hidden lg:inline-block 3xl:me-1">
-                          Exhibits
+                        <span className="hidden xl:inline-block 3xl:me-1">
+                          {`Exhibits (${exhibitData?.length || 0})`}
                         </span>
                         {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
                       </div>
