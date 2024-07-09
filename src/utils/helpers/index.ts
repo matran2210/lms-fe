@@ -240,11 +240,15 @@ export const getResolution = (bitrate: number) => {
 }
 
 export const isAppleDevice = () => {
-  return /Mac|iPod|iPhone|iPad/.test(navigator.platform);
-};
+  return /Mac|iPod|iPhone|iPad/.test(navigator.platform)
+}
 
 export const isSafari = () => {
-  const userAgent = navigator.userAgent;
-  const vendor = navigator.vendor;
-  return /Safari/.test(userAgent) && /Apple Computer/.test(vendor) && !/Chrome/.test(userAgent);
-};
+  const userAgent = navigator.userAgent
+  const vendor = navigator.vendor
+  return (
+    /Safari/.test(userAgent) &&
+    /Apple Computer/.test(vendor) &&
+    !/Chrome/.test(userAgent)
+  )
+}
