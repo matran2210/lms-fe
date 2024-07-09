@@ -208,7 +208,10 @@ const ProfileSideBar = ({ page }: IProps) => {
                               className="p-3 block w-full text-left"
                               onClick={() => handleChildClick(childLabel)}
                             >
-                              {getLabelFromChild(child)}
+                              {getLabelFromChild(child).toLowerCase() ===
+                              'devices'
+                                ? 'Browsers'
+                                : getLabelFromChild(child)}
                             </a>
                           </div>
                         )

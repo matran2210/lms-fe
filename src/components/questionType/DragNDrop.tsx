@@ -192,10 +192,11 @@ const DragNDropPreivew = forwardRef(
                   ? 'corrects'
                   : 'wrongs'
               }">
-            <span id="${defaultAnswer?.[index]
-              ?.idAnswer}" class="flex justify-center w-full">${defaultAnswer?.[
-              index
-            ]?.value}</span>
+            <span id="${
+              defaultAnswer?.[index]?.idAnswer
+            }" class="flex justify-center w-full">${
+              defaultAnswer?.[index]?.value
+            }</span>
             </span>`
             } else {
               element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer ${
@@ -222,8 +223,9 @@ const DragNDropPreivew = forwardRef(
               element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
                 index + 1
               }">
-                <span class="answer-box" id="${defaultAnswer?.[index]
-                  ?.idAnswer}">${defaultAnswer?.[index]?.value}</span>
+                <span class="answer-box" id="${
+                  defaultAnswer?.[index]?.idAnswer
+                }">${defaultAnswer?.[index]?.value}</span>
                </span>
               `
             } else {
