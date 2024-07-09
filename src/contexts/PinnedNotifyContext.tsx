@@ -78,6 +78,14 @@ import { PinnedNotifications } from 'src/type'
         if(oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')){
           setPinnedNotifications(res)
           setOpenPinned(true)
+          localStorage.setItem('pinnedId', res?.data?.id)
+          localStorage.setItem('openPinned', "true")
+        } else {
+          if(Boolean(oldPinnedFlag === 'false')){
+            setOpenPinned(false)
+          } else {
+            setOpenPinned(true)
+          }
         }
       }
     }
@@ -90,7 +98,7 @@ import { PinnedNotifications } from 'src/type'
     PageLink.AUTH_FORGOT_PASSWORD,
     PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
     PageLink.AUTH_CHANGE_PASSWORD,
-    PageLink.AUTH_CHANGE_PASSWORD_SUCCESS
+    PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
   ].includes(router.pathname)
 
   useEffect(() => {

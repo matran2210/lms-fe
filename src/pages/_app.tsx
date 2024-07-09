@@ -227,17 +227,19 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const [socket, setSocket] = useState<any>(null);
 
   useEffect(() => {
-    const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-      extraHeaders: {
-        authorization: authToken,
-      },
-    });
-
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
+    if(authToken) {
+      const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+        extraHeaders: {
+          authorization: authToken,
+        },
+      });
+  
+      setSocket(newSocket);
+  
+      return () => {
+        newSocket.disconnect();
+      };
+    }
   }, [authToken]); // reconnect khi authToken thay đổi
 
   useEffect(() => {
