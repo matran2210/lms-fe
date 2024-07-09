@@ -33,10 +33,10 @@ import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
 import { io } from 'socket.io-client'
-import PopupCert from '@components/mycourses/PopupCert'
 import { ICert } from 'src/type'
 import { PinnedNotifyProvider, usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
+import PopupCert from '@components/mycourses/PopupCert'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -334,11 +334,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   />
                   <LearningNotesList />
                   <ReactQueryDevtools initialIsOpen={false} />
-                  {/* <PopupCert
+                  <PopupCert
                     open={openCert}
                     onCancel={handleCancel}
                     dataStudent={dataStudent}
-                  /> */}
+                  />
                 </>
               </RouteGuard>
             </QueryClientProvider>
