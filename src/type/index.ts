@@ -70,6 +70,18 @@ interface IPinned {
   updated_at: string
 }
 
+export interface ICert {
+  user_id: string
+  payload: {
+    content: string
+    created_at: Date
+    id: string
+    title: string
+    certificate_id: string
+  }
+}
+
+
 export interface PinnedNotifications {
   data: IPinned
 }

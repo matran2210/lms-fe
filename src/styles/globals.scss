@@ -867,3 +867,7 @@ p a {
     transform: translateX(-100%);
   }
 }
+
+.content-course div strong {
+  @apply font-medium text-bw-1;
+}

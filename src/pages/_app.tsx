@@ -32,11 +32,11 @@ import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
-// import { io } from 'socket.io-client'
-// import PopupCert from '@components/mycourses/PopupCert'
-// import { ICert } from 'src/type'
+import { io } from 'socket.io-client'
+import { ICert } from 'src/type'
 import { PinnedNotifyProvider, usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
+import PopupCert from '@components/mycourses/PopupCert'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -217,6 +217,45 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router])
 
+  // Lấy token từ cokkieStorage (giả sử 'accessToken' là key lưu token)
+  
+  const [openCert, setOpenCert] = useState(false)
+  const [dataStudent, setDataStudent] = useState<ICert>()
+  
+  let authToken = getActToken()
+
+  const [socket, setSocket] = useState<any>(null);
+
+  useEffect(() => {
+    const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+      extraHeaders: {
+        authorization: authToken,
+      },
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [authToken]); // reconnect khi authToken thay đổi
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('connect', () => {});
+      socket.on('disconnect', () => {});
+      socket.on('STUDENT_COMPLETE_COURSE', (data: ICert) => {
+        setOpenCert(true);
+        setDataStudent(data);
+      });
+    }
+  }, [socket]);
+
+  const handleCancel = () => {
+    setOpenCert(false)
+    setDataStudent(undefined)
+  }
+
   return (
     <>
       <Head>
@@ -295,11 +334,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   />
                   <LearningNotesList />
                   <ReactQueryDevtools initialIsOpen={false} />
-                  {/* <PopupCert
+                  <PopupCert
                     open={openCert}
                     onCancel={handleCancel}
                     dataStudent={dataStudent}
-                  /> */}
+                  />
                 </>
               </RouteGuard>
             </QueryClientProvider>
