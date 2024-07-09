@@ -424,13 +424,13 @@ const TestDetail = () => {
   }, [startResize])
   useEffect(() => {
     dispatch(loginSlice.actions.enableUnsavedChange())
-  }, [])
+  }, [dispatch])
   useEffect(() => {
     if (startResize) {
       const temp = currentLeftWidth
       setLeftWidth(temp + (currentMousePos - (mousePosition.x || 0)))
     }
-  }, [mousePosition.x, startResize])
+  }, [mousePosition.x, startResize, currentLeftWidth, currentMousePos])
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -2061,18 +2061,8 @@ const TestDetail = () => {
                         exhibitsDes?.files?.length > 0 &&
                         exhibitsDes?.files?.map((e: any, index: number) => {
                           return (
-                            <div
-                              key={index}
-                              className="cursor-pointer text-state-info hover:underline"
-                              onClick={() =>
-                                handleOpenScratchPad(
-                                  'file',
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                              }
-                            >
-                              {e?.resource?.name}
+                            <div key={index} className="overflow-auto bg-white">
+                              <PDFViewer file={e?.resource?.url} />
                             </div>
                           )
                         })}
