@@ -2,6 +2,7 @@ import { IconClose } from '@assets/icons'
 import { Popover, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import PopupSupportCenter from './PopupSupportCenter'
+import { getLocalStorgeActToken } from '@utils/index'
 
 const Help = () => {
     const [visible, setVisible] = useState(false)
@@ -69,7 +70,7 @@ const Help = () => {
                             onClick={handleButtonClick}
                             className={`${visible ? 'bottom-5 clicked' : 'bottom-[90px]'} right-[18px]`}
                         >
-                            <div className="plus flex justify-center items-center bg-primary hover:opacity-75 rounded-full">
+                            <div className="plus flex justify-center items-center bg-primary hover:opacity-75 rounded-full transition delay-300">
                                 <svg
                                     width="34"
                                     height="34"
