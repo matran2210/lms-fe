@@ -44,6 +44,7 @@ import { TestAPI } from '../api/test'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import PDFViewer from '@components/base/pdf/pdf-viewer'
 import { IExhibit } from 'src/type/exhibit'
+import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal' 
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -242,6 +243,45 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
+  const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
+
+  /**
+   * handl confirm before submitting
+  */
+  const checkUnSubmitAnswer = () => {
+    const result: number[] = []
+    getAllValue().map((item, index) => {
+        if ( typeof item.answer === 'string' && item?.answer === '') {
+          result.push(index+1)
+          return
+        } 
+        if (Array.isArray(item.answer) ) {
+          const emptyAnswer = item?.answer?.filter((el) =>  {
+            if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
+              return el
+            }
+            if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
+              return el
+            }
+          })
+          const emptyEl =  item.answer.filter((el: string) => typeof el === 'string' && !el)
+          if (emptyAnswer?.length || emptyEl.length) {
+            result.push(index+1)
+          }
+          return 
+        }
+      }
+    )
+    setUnSubmitAnswerData(result);
+    if (result.length === 0) {      
+      setOpenSubmit(true)      
+    } else {
+      setUnSubmitAnswer(true)
+    }
+    return result
+  };
+
   const { x } = useMousePosition()
   useEffect(() => {
     if (startResize) {
@@ -764,7 +804,11 @@ const CaseStudyDetail = ({ questions }: any) => {
                   disabled: false,
                   onClick: () => {
                     setOpenScratchPad([])
-                    setOpenSubmit(true)
+                    if(checkUnSubmitAnswer().length) {
+                      setUnSubmitAnswer(true)
+                    } else {
+                      setOpenSubmit(true)
+                    }
                     setUnsavedChanges(false)
                   },
                 }}
@@ -1211,8 +1255,22 @@ const CaseStudyDetail = ({ questions }: any) => {
           <ConFirmSubmit
             open={openSubmit}
             setOpen={setOpenSubmit}
-            handleSubmit={handleSubmitQuestion}
+            handleSubmit={() => {
+                handleSubmitQuestion()
+                setOpenSubmit(false)
+              }
+            }
             handleCancel={() => setUnsavedChanges(true)}
+          />
+          <UnSubmitAnswerModal
+            open={openUnSubmitAnswer}
+            setOpen={setUnSubmitAnswer}
+            data={unSubmitAnswerData}
+            handleSubmit={() => {
+              handleSubmitQuestion()
+              setUnSubmitAnswer(false)
+            }}
+            handleCancel={() => setUnSubmitAnswer(false)}
           />
           <QuitTestModal
             open={openQuit}
