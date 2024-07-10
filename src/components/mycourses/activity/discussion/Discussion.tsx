@@ -246,8 +246,8 @@ const Discussion = ({ class_id }: Props) => {
 
     if (files) {
       // Kiểm tra và chỉ chấp nhận ảnh từ thiết bị
-      const imageFiles = Array.from(files).filter(
-        (file) => file?.type?.startsWith('image/'),
+      const imageFiles = Array.from(files).filter((file) =>
+        file?.type?.startsWith('image/'),
       )
 
       // Loại bỏ các file có định dạng .webp
