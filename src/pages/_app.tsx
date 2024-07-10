@@ -269,7 +269,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 {content}
 
                 {/* {getLocalStorgeActToken() && <Help />} */}
-                {/* <BackToTop /> */}
+                <BackToTop />
                 <Help />
                 <LearningResource
                   open={openResource}

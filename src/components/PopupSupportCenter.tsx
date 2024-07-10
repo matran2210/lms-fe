@@ -1,6 +1,8 @@
+/* eslint-disable */
 import { IconAccess, IconChat, IconContact, IconEmergency, IconFAQ, IconRequestForm, IconSupportCenter } from '@assets/icons'
 import { onLinkSocial } from '@utils/index'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { useHover } from 'usehooks-ts'
 
 interface IProps {
     visible: boolean
@@ -19,6 +21,9 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
     const [isHoverContact, setIsHoverContact] = useState(false)
 
     const [isHoverEmergency, setIsHoverEmergency] = useState(false)
+
+    const hoverRef = useRef(null)
+  const isHover = useHover(hoverRef)
 
     return (
         <>
@@ -39,11 +44,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
                 className="mt-3"
             >
                 <div
-                    onMouseEnter={() => setIsHoveredFourLevel(true)}
-                    onMouseLeave={() => setIsHoveredFourLevel(false)}
+                    // onMouseEnter={() => setIsHoveredFourLevel(true)}
+                    // onMouseLeave={() => setIsHoveredFourLevel(false)}
                     className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
+                    ref={hoverRef}
                 >
-                    {isHoveredFourLevel ? (
+                    {isHover ? (
                         <Infomation title='Tra cứu tại đây' />
                     ) : (
                         <>

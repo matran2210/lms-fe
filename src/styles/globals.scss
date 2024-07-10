@@ -845,13 +845,13 @@ p a {
 }
 
 #floating-button {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: white;
   position: fixed;
   cursor: pointer;
-  // box-shadow: 0px 2px 4px 0px #00000014;
+  box-shadow: 0px 2px 4px 0px #00000014;
 
   box-shadow: 0px 0px 6px 0px #00000005;
   animation: moveDown 0.3s ease-out forwards;

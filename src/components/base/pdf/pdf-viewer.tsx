@@ -1,3 +1,4 @@
+
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
 import { memo } from 'react'
 const PDFViewer = ({ file }: { file: string }) => {

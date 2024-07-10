@@ -67,7 +67,7 @@ const Help = () => {
                         <div
                             id="floating-button"
                             onClick={handleButtonClick}
-                            className={`${visible ? 'bottom-5 clicked' : 'bottom-[90px]'} right-[20px]`}
+                            className={`${visible ? 'bottom-5 clicked' : 'bottom-[90px]'} right-[18px]`}
                         >
                             <div className="plus flex justify-center items-center bg-primary hover:opacity-75 rounded-full">
                                 <svg
