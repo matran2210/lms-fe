@@ -10,20 +10,23 @@ interface IProps {
 }
 
 const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
-    const [isHoveredFourLevel, setIsHoveredFourLevel] = useState(false)
+    const hoverRefFourLevel = useRef(null)
+    const isHoverFourLevel = useHover(hoverRefFourLevel)
 
-    const [isHoverRequestForm, setIsHoverRequestForm] = useState(false)
+    const hoverRefRequestForm = useRef(null)
+    const isHoverRequestForm = useHover(hoverRefRequestForm)
 
-    const [isHoverChat, setIsHoverChat] = useState(false)
+    const hoverRefChat = useRef(null)
+    const isHoverChat = useHover(hoverRefChat)
 
-    const [isHoverAccess, setIsHoverAccess] = useState(false)
+    const hoverRefAccess = useRef(null)
+    const isHoverAccess = useHover(hoverRefAccess)
 
-    const [isHoverContact, setIsHoverContact] = useState(false)
+    const hoverRefContact = useRef(null)
+    const isHoverContact = useHover(hoverRefContact)
 
-    const [isHoverEmergency, setIsHoverEmergency] = useState(false)
-
-    const hoverRef = useRef(null)
-  const isHover = useHover(hoverRef)
+    const hoverRefEmergency = useRef(null)
+    const isHoverEmergency = useHover(hoverRefEmergency)
 
     return (
         <>
@@ -47,9 +50,9 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
                     // onMouseEnter={() => setIsHoveredFourLevel(true)}
                     // onMouseLeave={() => setIsHoveredFourLevel(false)}
                     className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
-                    ref={hoverRef}
+                    ref={hoverRefFourLevel}
                 >
-                    {isHover ? (
+                    {isHoverFourLevel ? (
                         <Infomation title='Tra cứu tại đây' />
                     ) : (
                         <>
@@ -76,8 +79,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
             >
                 <div
                     className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
-                    onMouseEnter={() => setIsHoverRequestForm(true)}
-                    onMouseLeave={() => setIsHoverRequestForm(false)}
+                    ref={hoverRefRequestForm}
                 >
                     {
                         isHoverRequestForm ? (
@@ -110,8 +112,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
             >
                 <div
                     className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
-                    onMouseEnter={() => setIsHoverChat(true)}
-                    onMouseLeave={() => setIsHoverChat(false)}
+                    ref={hoverRefChat}
                 >
                     {
                         isHoverChat ? (
@@ -140,9 +141,8 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
                 className="mt-3"
             >
                 <div
-                    onMouseEnter={() => setIsHoverAccess(true)}
-                    onMouseLeave={() => setIsHoverAccess(false)}
                     className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
+                    ref={hoverRefAccess}
                 >
                     {
                         isHoverAccess ? (
@@ -171,8 +171,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
 
             <div className="mt-3">
                 <div
-                    onMouseEnter={() => setIsHoverContact(true)}
-                    onMouseLeave={() => setIsHoverContact(false)}
+                    ref={hoverRefContact}
                     className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary"
                 >
                     {
@@ -199,8 +198,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
 
             <div className="mt-3">
                 <div
-                    onMouseEnter={() => setIsHoverEmergency(true)}
-                    onMouseLeave={() => setIsHoverEmergency(false)}
+                    ref={hoverRefEmergency}
                     className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary"
                 >
                     {
