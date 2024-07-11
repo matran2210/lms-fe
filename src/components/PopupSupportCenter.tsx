@@ -229,7 +229,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
 }
 
 const Infomation = ({ title }: { title: string }) => {
-    return <div className="w-full flex items-center justify-center text-white">
+    return <div className="w-full flex items-center justify-center text-white text-ssm">
         {title}
     </div>
 }
