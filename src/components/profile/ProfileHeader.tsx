@@ -1,11 +1,15 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Image, { StaticImageData } from 'next/image'
-import { Dispatch, MutableRefObject, SetStateAction } from 'react'
+import { Dispatch, MutableRefObject, SetStateAction, useEffect } from 'react'
 import toast from 'react-hot-toast'
-import { useAppSelector } from 'src/redux/hook'
-import { userReducer } from 'src/redux/slice/User/User'
 import profile from 'src/assets/images/bg_profile.svg'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import {
+  getMe,
+  getUserInformation,
+  userReducer,
+} from 'src/redux/slice/User/User'
 
 interface IProps {
   isEdit: boolean
@@ -23,6 +27,8 @@ const ProfileHeader = ({
   reViewImageSrc,
   setReViewImageSrc,
 }: IProps) => {
+  const dispatch = useAppDispatch()
+
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
     useAppSelector(userReducer)
@@ -94,6 +100,11 @@ const ProfileHeader = ({
     // Trả về true
     return true
   }
+
+  useEffect(() => {
+    dispatch(getMe())
+    dispatch(getUserInformation())
+  }, [])
 
   return (
     <div className="shadow-box block pl-10 bg-white mb-6 relative">
