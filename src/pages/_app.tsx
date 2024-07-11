@@ -267,10 +267,14 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             <RouteGuard>
               <>
                 {content}
-
-                {/* {getLocalStorgeActToken() && <Help />} */}
-                <BackToTop />
-                <Help />
+                {
+                  getActToken() && (
+                    <>
+                      <BackToTop />
+                      <Help />
+                    </>
+                  )
+                }
                 <LearningResource
                   open={openResource}
                   setOpenResource={setOpenResource}

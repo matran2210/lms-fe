@@ -20,23 +20,23 @@ const Help = () => {
 
     useEffect(() => {
         // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
-        // if (getLocalStorgeActToken()) {
-        // Tạo một thẻ script mới
-        const scriptElement = document.createElement('script')
-        scriptElement.type = 'text/javascript'
-        scriptElement.id = 'hs-script-loader'
-        scriptElement.async = true
-        scriptElement.defer = true
-        scriptElement.src = `//js.hs-scripts.com/1774127.js`
+        if (getLocalStorgeActToken()) {
+            // Tạo một thẻ script mới
+            const scriptElement = document.createElement('script')
+            scriptElement.type = 'text/javascript'
+            scriptElement.id = 'hs-script-loader'
+            scriptElement.async = true
+            scriptElement.defer = true
+            scriptElement.src = `//js.hs-scripts.com/1774127.js`
 
-        // Thêm thẻ script vào trong thẻ head của trang
-        document.head.appendChild(scriptElement)
+            // Thêm thẻ script vào trong thẻ head của trang
+            document.head.appendChild(scriptElement)
 
-        // Cleanup: Xóa script khi component unmount (nếu cần)
-        return () => {
-            document.head.removeChild(scriptElement)
+            // Cleanup: Xóa script khi component unmount (nếu cần)
+            return () => {
+                document.head.removeChild(scriptElement)
+            }
         }
-        // }
     })
 
     useEffect(() => {
@@ -95,6 +95,8 @@ const Help = () => {
                             }
                             color="#FFB800"
                             placement="left"
+                            mouseEnterDelay={0}
+                            mouseLeaveDelay={0}
                         >
                             <div
                                 id="floating-button"
