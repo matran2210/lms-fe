@@ -45,7 +45,6 @@ import {
   TEST_TYPE,
 } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
@@ -63,11 +62,10 @@ import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 
-
 interface Answer {
   answer: string | string[] | Object[]
   attempted?: boolean
-  done?: boolean,
+  done?: boolean
   flaged?: boolean
   id?: string
   index?: string
@@ -78,6 +76,7 @@ interface Answer {
   viewed?: boolean
 }
 
+import { QuestionAPI } from '../api/question'
 
 type Window = {
   userAgreed: any
@@ -269,43 +268,44 @@ const TestDetail = () => {
   }
 
   /**
-   * DES: confirm unfinished questions before submitting 
+   * DES: confirm unfinished questions before submitting
    */
   const checkUnSubmitAnswer = (): number[] => {
-    const answers = handleSaveCurrentAnswer(tabs, currentTabContent);
-    let result: number[] =  []
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
+    let result: number[] = []
     answers?.map((item: Answer, index: number) => {
-        if (!item.done && !validateAnswer({answer: item.answer})) {
-            result.push(index + 1)
-        }
+      if (!item.done && !validateAnswer({ answer: item.answer })) {
+        result.push(index + 1)
+      }
     })
     setUnSubmitAnswerData(result)
     return result
   }
 
   // Validate các câu hỏi xem đã trả lời chưa
-  const validateAnswer = (item: {answer: string | Object[] | string[]}) => {
-    if ( typeof item?.answer === 'string' && !item?.answer) {
+  const validateAnswer = (item: { answer: string | Object[] | string[] }) => {
+    if (typeof item?.answer === 'string' && !item?.answer) {
       return false
-    } 
+    }
     if (!item?.answer?.length) return false
-    if (Array.isArray(item?.answer) ) {
-      const emptyAnswer = item?.answer?.filter((el: { idAnswer?: string, answer_id?: string}  ) =>  {
-        if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
-          return el
-        }
-        if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
-          return el
-        }
-      })
-      const emptyEl =  item.answer.filter((el) => typeof el === 'string' && !el)
+    if (Array.isArray(item?.answer)) {
+      const emptyAnswer = item?.answer?.filter(
+        (el: { idAnswer?: string; answer_id?: string }) => {
+          if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
+            return el
+          }
+          if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
+            return el
+          }
+        },
+      )
+      const emptyEl = item.answer.filter((el) => typeof el === 'string' && !el)
       if (emptyAnswer?.length || emptyEl.length) {
-       return false 
+        return false
       }
     }
     return true
   }
-  
 
   const router = useRouter()
 
@@ -396,7 +396,9 @@ const TestDetail = () => {
   const rightSideRef = useRef<any>(null)
   const [mousePosition, setMousePosition] = useState({ x: null, y: null })
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
-  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>([])
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
+    [],
+  )
 
   useEffect(() => {
     const updateMousePosition = (ev: any) => {
@@ -819,7 +821,7 @@ const TestDetail = () => {
     const previousContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
-      const { topicDescription, res } = await getDetail(nextTab)
+      const { topicDescription, question } = await getDetail(nextTab)
       const newData = tabs?.map((item: any) => {
         if (nextTab === item.id) {
           if (item.viewed) {
@@ -828,7 +830,7 @@ const TestDetail = () => {
           } else {
             return {
               ...item,
-              data: res?.data?.[0],
+              data: question,
               topicDescription: topicDescription?.data,
               viewed: true,
             }
@@ -980,10 +982,10 @@ const TestDetail = () => {
           ?.question_topic_id,
         quizDetail?.id,
       )
-      const res = await CoursesAPI.getQuestionsDetail(currentPage)
-      return { topicDescription, res }
+      const res = await QuestionAPI.getQuestionDetail(currentPage)
+      return { topicDescription, question: res.data }
     } catch (err) {
-      return { topicDescription: { data: {} }, res: { data: [] } }
+      return { topicDescription: { data: {} }, question: null }
     }
   }
 
@@ -993,7 +995,7 @@ const TestDetail = () => {
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
-      const { topicDescription, res } = await getDetail(currentTab)
+      const { topicDescription, question } = await getDetail(currentTab)
       const newData = tabs?.map((item: any) => {
         if (currentTab === item.id) {
           if (item.viewed) {
@@ -1003,7 +1005,7 @@ const TestDetail = () => {
             return {
               ...item,
               viewed: true,
-              data: res?.data?.[0],
+              data: question,
               topicDescription: topicDescription.data,
             }
           }
@@ -1492,7 +1494,7 @@ const TestDetail = () => {
 
         for (let i in questions) {
           if (+i === 0) {
-            const { topicDescription, res } = await getDetail(
+            const { topicDescription, question } = await getDetail(
               questions?.[0]?.id,
             )
             arr.push({
@@ -1501,7 +1503,7 @@ const TestDetail = () => {
               flaged: false,
               done: false,
               index: +i,
-              data: res.data[0],
+              data: question,
               topicDescription: topicDescription?.data,
               response_type: 0,
             })
@@ -2459,16 +2461,15 @@ const TestDetail = () => {
           <ConFirmSubmit
             open={openSubmit}
             setOpen={setOpenSubmit}
-            handleSubmit={() =>{ 
-                handleSubmitQuestion('submit')
-                setOpenSubmit(false)
-              }
-            }
+            handleSubmit={() => {
+              handleSubmitQuestion('submit')
+              setOpenSubmit(false)
+            }}
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
             }
           />
-           <UnSubmitAnswerModal
+          <UnSubmitAnswerModal
             open={openUnSubmitAnswer}
             setOpen={setUnSubmitAnswer}
             data={unSubmitAnswerData}
