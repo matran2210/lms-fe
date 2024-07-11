@@ -35,19 +35,33 @@ const TestResultPage = ({
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
+  
+  const handleResize = () => {
     const multipleQuestionElem = multipleQuestionRef?.current
     const yourScoreDetailElem = yourScoreDetailRef?.current
-    if (multipleQuestionElem && yourScoreDetailElem && type !== undefined) {
+    if (multipleQuestionElem && yourScoreDetailElem  ) {
       const maxHeight = Math.max(
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
       )
-      multipleQuestionElem.style.height = window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)` : '90px'
+      multipleQuestionElem.style.height = window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)`: 'fit-content'
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
-  }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current, window.innerWidth])
+  }
+  useEffect(() => {
+    type !== undefined && handleResize()
+  }, [
+    type,
+    multipleQuestionRef?.current,
+    yourScoreDetailRef?.current
+  ])
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,

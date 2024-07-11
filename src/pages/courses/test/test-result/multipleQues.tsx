@@ -129,15 +129,15 @@ const MultipleQuestion = ({
 
   return (
     <div
-      className={`${className} 2xl-max:!min-h-[88px] fixed 3.75xl:static z-10 right-0 bottom-0 bg-white flex flex-col justify-between w-full max-w-[calc(100vw-80px)] 3.75xl:max-w-smd items-start px-[27px] py-6 xl:overflow-y-auto shadow-sidebar-tablet xl:shadow-sidebar`}
+      className={`${className} 2xl-max:!min-h-[88px] fixed 3.75xl:static z-10 right-0 bottom-0 bg-white flex flex-col gap-y-5 w-full max-w-[calc(100vw-80px)] 3.75xl:max-w-smd items-start px-[27px] py-6 xl:overflow-y-auto shadow-sidebar-tablet 3.75xl:shadow-sidebar`}
       data-aos={ANIMATION.DATA_AOS}
       ref={multipleQuestionRef}
     >
       <div
         className={`${
           showMore
-            ? 'opacity-100 visible mb-4 xl:mb-0 h-auto'
-            : 'opacity-0 3.75xl:opacity-100 invisible 3.75xl:visible h-0 3.75xl:h-auto hidden'
+            ? 'opacity-100 visible mb-4 xl:mb-0 h-fit'
+            : 'opacity-0 3.75xl:opacity-100 invisible 3.75xl:visible h-0 3.75xl:h-auto 3.75xl:block hidden'
         }
         duration-300 xl:max-h-auto overflow-y-auto xl:overflow-visible flex flex-col gap-10 w-full items-start`}
       >
@@ -185,7 +185,7 @@ const MultipleQuestion = ({
             onMouseUp={() => setIsDragging(false)}
             onMouseLeave={() => setIsDragging(false)}
             className={`${
-              !showMore ? 'opacity-100 visible' : 'opacity-0 invisible'
+              !showMore ? 'opacity-100 visible 3.5xl:shadow-sidebar' : 'opacity-0 invisible'
             } w-full flex gap-3 overflow-x-auto duration-300 block 3.75xl:hidden !max-h-[1040px]`}
           >
             {renderLines(
@@ -208,7 +208,7 @@ const MultipleQuestion = ({
                 onClick={() => {
                   setShowMore(!showMore) 
                   if (multipleQuestionRef?.current) {
-                    !showMore ? multipleQuestionRef.current.style.height = '500px' : multipleQuestionRef.current.style.height = '100px'
+                    multipleQuestionRef.current.style.height = 'fit-content'
                   }
                 }}
               >
