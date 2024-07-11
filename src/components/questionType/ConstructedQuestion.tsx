@@ -1,24 +1,31 @@
 import HookFormEditor from '@components/base/editor/HookFormEditor'
-import React, {
-  ForwardedRef,
-  forwardRef,
-  memo,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { runHighlight } from '@utils/index'
 import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
 import { uniqueId } from 'lodash'
-import { IResource } from 'src/type/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+
+type SheetData = {
+  name: string
+  id: string
+  status: number
+  data: (string | number | null)[][]
+  celldata: {
+    r: number
+    c: number
+    v: { v: string; ct: { fa: string; t: string }; m: string }
+  }[]
+  row?: number
+  column?: number
+}
+
 export type IPreviewProp = {
   data: any
   question_content: string
@@ -45,6 +52,7 @@ export type IPreviewProp = {
   setUnsavedChanges?: any
   handleChange?: () => void
   isShowContent?: boolean
+  showRequiment?: boolean
 }
 const EssayQuestionPreview = ({
   data,
@@ -72,6 +80,7 @@ const EssayQuestionPreview = ({
   setUnsavedChanges,
   handleChange,
   isShowContent = true,
+  showRequiment = false,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   // console.log(response_option_custom)
@@ -95,6 +104,59 @@ const EssayQuestionPreview = ({
         }),
     }
   }
+
+  useEffect(() => {
+    if (
+      refSheet.current &&
+      Number(index) <= question_data?.requirements?.length
+    ) {
+      if (defaultValue === undefined) {
+        const emptySheets = refSheet.current
+          ?.getAllSheets()
+          .map((sheet: SheetData) => ({
+            ...sheet,
+            celldata: [],
+            data: Array(sheet.row || 100)
+              .fill(null)
+              .map(() => Array(sheet.column || 50).fill(null)),
+          }))
+        emptySheets.forEach((sheet: SheetData) => {
+          refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+        })
+      } else {
+        const sheetData = defaultValue
+          ? JSON.parse(defaultValue)
+          : [{ name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] }]
+
+        // Convert sheetData to constructor with id of refSheet.current
+        const currentSheets = refSheet.current.getAllSheets()
+        const updatedSheetData = sheetData.map(
+          (sheet: SheetData, index: number) => ({
+            ...sheet,
+            id: currentSheets[index]?.id || '',
+          }),
+        )
+
+        const emptySheets = currentSheets.map((sheet: SheetData) => ({
+          ...sheet,
+          celldata: [],
+          data: Array(sheet.row || 100)
+            .fill(null)
+            .map(() => Array(sheet.column || 50).fill(null)),
+        }))
+        emptySheets.forEach((sheet: SheetData, index: number) => {
+          if (sheet?.name === sheetData[index]?.name) {
+            refSheet.current?.updateSheet(
+              JSON.parse(JSON.stringify([updatedSheetData[index]])),
+            )
+          } else {
+            refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+          }
+        })
+      }
+    }
+  }, [defaultValue])
+
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]
   }) => {
@@ -148,8 +210,8 @@ const EssayQuestionPreview = ({
           id="hightlight_area"
           onMouseUp={(e: any) => {
             if (
-              e.target.tagName.charAt(0) !== 'm' &&
-              e.target.firstChild?.tagName !== 'math'
+              e?.target?.tagName?.charAt(0) !== 'm' &&
+              e?.target?.firstChild?.tagName !== 'math'
             ) {
               if (e) {
                 if (allowHighLight) {
@@ -207,14 +269,14 @@ const EssayQuestionPreview = ({
           >
             <div className="sapp-questions-essay">
               {index !== undefined
-                ? `Requirement ${index + 1}: ${data.name}`
-                : `Requirement: ${data.name}`}
+                ? `Requirement ${index + 1}: ${data?.name}`
+                : `Requirement: ${data?.name}`}
             </div>
             <EditorReader
               className="editor-wrap mb-4"
               // className="questions"
               // style={{ borderBottom: "4px solid #F2F2F2" }}
-              text_editor_content={data.description}
+              text_editor_content={data?.description}
               highlighted={
                 question_data?.requirements?.[index || 0]?.highlighted
               }
@@ -223,7 +285,7 @@ const EssayQuestionPreview = ({
 
             {data?.files?.length > 0 && (
               <div className="mb-4">
-                {data?.files.map((e: any, index: number) => {
+                {data?.files?.map((e: any, index: number) => {
                   return (
                     <div
                       className="cursor-pointer text-state-info hover:underline w-fit mb-1"
@@ -295,14 +357,14 @@ const EssayQuestionPreview = ({
                     handleDownload({
                       files: [
                         {
-                          name: fullData.answer_file.file_name,
-                          file_key: fullData.answer_file.file_key,
+                          name: fullData?.answer_file?.file_name,
+                          file_key: fullData?.answer_file?.file_key,
                         },
                       ],
                     })
                   }
                 >
-                  {fullData.answer_file.file_name}
+                  {fullData?.answer_file?.file_name}
                 </div>
                 {!fullData?.done && !fullData?.confirmed && (
                   <div
@@ -324,13 +386,15 @@ const EssayQuestionPreview = ({
         )}
         <div
           style={
-            question_data.display_type === DISPLAY_TYPE.VERTICAL || forCaseStudy
+            question_data?.display_type === DISPLAY_TYPE.VERTICAL ||
+            forCaseStudy
               ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
           key={key}
+          className={`${showRequiment ? 'pointer-events-none' : ''}`}
         >
-          {question_data.response_option === RESPONSE_OPTION.WORD ? (
+          {question_data?.response_option === RESPONSE_OPTION.WORD ? (
             <HookFormEditor
               control={control}
               name={name}
@@ -433,14 +497,14 @@ const EssayQuestionPreview = ({
                       onChange={(e) => {
                         // const celldata = e.data
                         if (!fullData?.done && !fullData?.confirmed) {
-                          const currentSheet = refSheet.current?.getSheet()
+                          const currentSheet = refSheet?.current?.getSheet()
                           // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
                           // // listSheet.splice(0,1)
                           // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
                           // console.log(listSheet,"test");
                           if (value) {
                             let old = [...JSON.parse(value)]
-                            const index = old.findIndex(
+                            const index = old?.findIndex(
                               (e: any) => e?.id === currentSheet?.id,
                             )
                             // Check event change text of sheet

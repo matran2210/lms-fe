@@ -25,8 +25,8 @@ const EntranceTestFilter = ({ count }: { count: number }) => {
   }, [apiUrl, queryString, watch('attempt_status')])
 
   // defailtvalue của attempt_status
-  const attempt_status = defaultStatusEnstraceTest.find(
-    (item) => item.value === router.query.attempt_status,
+  const attempt_status = defaultStatusEnstraceTest?.find(
+    (item) => item?.value === router.query.attempt_status,
   )
 
   return (

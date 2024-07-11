@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
-import Link from 'next/link'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { formatTime } from '@components/common/timer'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface EntrancePopupContentProps {
   name: string

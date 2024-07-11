@@ -434,9 +434,9 @@ body *::-webkit-scrollbar-thumb:hover {
   @apply cursor-pointer flex justify-evenly gap-2 w-max items-center px-2 py-0 border;
 }
 
-// .tox-tinymce {
-//   border: none !important;
-// }
+.tox-tinymce {
+  border: none !important;
+}
 
 .resizable {
   @apply bg-white top-[100px] left-[100px] cursor-move;
@@ -826,31 +826,8 @@ p a {
   padding: 10px 12px !important;
 }
 
-#presentation {
-  width: 480px;
-  height: 120px;
-  padding: 20px;
-  margin: auto;
-  background: #fff;
-  margin-top: 10px;
-  box-shadow: 0 3px 15px -5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s;
-  border-radius: 10px;
-}
-
-#presentation:hover {
-  box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.13);
-  transition: all 0.3s;
-  transform: translateZ(10px);
-}
-
 #floating-button {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: white;
-  position: fixed;
-  cursor: pointer;
+  @apply w-[60px] h-[60px] bg-white fixed cursor-pointer rounded-full;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px;
   animation: moveDown 0.3s ease-out forwards;
 }
@@ -880,75 +857,70 @@ p a {
   @apply fixed w-[60px] h-[60px] bottom-[30px] right-[20px] z-[50px]
 }
 
-// #container-floating .plus {
-//   animation: plus-in 0.15s linear;
-//   animation-fill-mode: forwards;
+// @keyframes edit-in {
+//   from {
+//     opacity: 0;
+//     transform: rotateZ(-70deg);
+//   }
+//   to {
+//     opacity: 1;
+//     transform: rotateZ(0deg);
+//   }
 // }
 
-@keyframes edit-in {
-  from {
-    opacity: 0;
-    transform: rotateZ(-70deg);
-  }
-  to {
-    opacity: 1;
-    transform: rotateZ(0deg);
-  }
-}
+// @keyframes edit-out {
+//   from {
+//     opacity: 1;
+//     transform: rotateZ(0deg);
+//   }
+//   to {
+//     opacity: 0;
+//     transform: rotateZ(-70deg);
+//   }
+// }
 
-@keyframes edit-out {
-  from {
-    opacity: 1;
-    transform: rotateZ(0deg);
-  }
-  to {
-    opacity: 0;
-    transform: rotateZ(-70deg);
-  }
-}
+// @keyframes plus-in {
+//   from {
+//     opacity: 1;
+//     transform: rotateZ(0deg);
+//   }
+//   to {
+//     opacity: 0;
+//     transform: rotateZ(180deg);
+//   }
+// }
 
-@keyframes plus-in {
-  from {
-    opacity: 1;
-    transform: rotateZ(0deg);
-  }
-  to {
-    opacity: 0;
-    transform: rotateZ(180deg);
-  }
-}
+// @keyframes plus-out {
+//   from {
+//     opacity: 0;
+//     transform: rotateZ(180deg);
+//   }
+//   to {
+//     opacity: 1;
+//     transform: rotateZ(0deg);
+//   }
+// }
 
-@keyframes plus-out {
-  from {
-    opacity: 0;
-    transform: rotateZ(180deg);
-  }
-  to {
-    opacity: 1;
-    transform: rotateZ(0deg);
-  }
-}
+// @keyframes bounce-nds {
+//   from {
+//     opacity: 0;
+//   }
+//   to {
+//     opacity: 1;
+//     transform: scale(1);
+//   }
+// }
 
-@keyframes bounce-nds {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes bounce-out-nds {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0);
-  }
-}
+// @keyframes bounce-out-nds {
+//   from {
+//     opacity: 1;
+//     transform: scale(1);
+//   }
+//   to {
+//     opacity: 0;
+//     transform: scale(0);
+//   }
+// }
 
 .ant-popover-content {
   width: 360px !important;
@@ -972,9 +944,37 @@ p a {
 }
 
 #floating-button .plus:hover svg path {
-  fill: white;
+  @apply fill-white
 }
 
 .svg-container:hover path {
-  fill: #FFB800; /* Đổi màu fill thành màu đỏ khi hover */
+  @apply fill-primary
+}
+
+.ant-modal {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.pinned-noti-marquee-content {
+  transform: translateX(100%);
+  animation: scroll-left 50s linear infinite;
+}
+
+.pinned-noti-marquee-content:hover {
+  animation: unset !important;
+  transform: unset !important;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.content-course div strong {
+  @apply font-medium text-bw-1;
 }

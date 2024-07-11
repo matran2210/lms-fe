@@ -39,12 +39,8 @@ import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import SAPPBorder from 'src/common/SAPPBorder'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-
-// type Props = {
-//   activity: IActivity
-//   courseId: string
-//   sectionId: string
-// }
+import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -90,10 +86,8 @@ const ActivityPage = () => {
   const isFinishRef = useRef<boolean>(false)
   const activityType = activity?.display_icon
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-  const [viewActivity, setViewActivity] = useState<boolean>(true)
 
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
@@ -120,13 +114,6 @@ const ActivityPage = () => {
       dispatch(resetQuizActivity({}))
     }
   }, [activity])
-  const closePreview = () => {
-    setViewActivity(false)
-  }
-
-  // const getBreadcrumb = (breadcumb: IBreadcrumb[]) => {
-  //   return breadcumb
-  // }
 
   useEffect(() => {
     setTimeout(() => {
@@ -156,7 +143,7 @@ const ActivityPage = () => {
     timeoutRef.current = setTimeout(async () => {
       // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
       if (activityType === 'VIDEO' && videoRef?.current) {
-        for (let e of videoRef.current) {
+        for (let e of videoRef?.current) {
           e.addEventListener('playing', async () => {
             await handleFinishedCourseSectionProgress()
           })
@@ -173,10 +160,10 @@ const ActivityPage = () => {
       }
 
       // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-      else if (endActivityRef.current && activityType === 'TEXT') {
+      else if (endActivityRef?.current && activityType === 'TEXT') {
         // Hủy theo dõi nếu đã có observerRef.current
-        if (observerRef.current) {
-          observerRef.current?.unobserve(endActivityRef.current)
+        if (observerRef?.current) {
+          observerRef?.current?.unobserve(endActivityRef?.current)
         }
 
         // Thiết lập các tùy chọn cho IntersectionObserver
@@ -190,11 +177,11 @@ const ActivityPage = () => {
         const handleIntersection = async (
           entries: IntersectionObserverEntry[],
         ) => {
-          const isVisible = entries[0].isIntersecting
+          const isVisible = entries?.[0]?.isIntersecting
 
           // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-          if (isVisible && endActivityRef.current) {
-            observerRef.current?.unobserve(endActivityRef.current)
+          if (isVisible && endActivityRef?.current) {
+            observerRef?.current?.unobserve(endActivityRef?.current)
             await handleFinishedCourseSectionProgress()
           }
         }
@@ -206,14 +193,14 @@ const ActivityPage = () => {
         )
 
         // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-        if (endActivityRef.current) {
-          observerRef.current?.observe(endActivityRef.current)
+        if (endActivityRef?.current) {
+          observerRef?.current?.observe(endActivityRef?.current)
         }
 
         // Trả về hàm cleanup
         return () => {
-          if (endActivityRef.current) {
-            observerRef.current?.unobserve(endActivityRef.current)
+          if (endActivityRef?.current) {
+            observerRef?.current?.unobserve(endActivityRef?.current)
           }
         }
       }
@@ -224,48 +211,11 @@ const ActivityPage = () => {
    * Hàm xử lý khi kết thúc tiến trình phần của khóa học.
    */
   const handleFinishedCourseSectionProgress = async () => {
-    if (!isFinishRef.current) {
+    if (!isFinishRef?.current) {
       await CoursesAPI.startCourseSectionProgress(courseId, sectionId)
       isFinishRef.current = true
     }
   }
-
-  /**
-   * Hàm để lấy ActivityType dựa trên document type.
-   * @param {IActivity} activityReducer - activity.
-   * @returns {string} - ActivityType.
-   */
-  // function getActivityType(activityReducer: IActivity): string {
-  //   const tabs = activityReducer.tabs
-  //   let hasVideo = false
-  //   let hasQuiz = false
-  //   if (!tabs?.[0]) {
-  //     return ACTIVITY_TYPE.NONE
-  //   }
-  //   for (const tab of tabs) {
-  //     const documents = tab.course_tab_documents
-
-  //     if (documents) {
-  //       for (const document of documents) {
-  //         if (document.type === 'QUIZ') {
-  //           hasQuiz = true
-  //         } else if (document.type === 'VIDEO') {
-  //           hasVideo = true
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   if (hasVideo && hasQuiz) {
-  //     return ACTIVITY_TYPE.BOTH
-  //   } else if (hasVideo) {
-  //     return ACTIVITY_TYPE.ONLY_VIDEO
-  //   } else if (hasQuiz) {
-  //     return ACTIVITY_TYPE.ONLY_QUIZ
-  //   } else {
-  //     return ACTIVITY_TYPE.NONE
-  //   }
-  // }
 
   /**
    * Hàm xử lý khi thay đổi tab.
@@ -285,10 +235,10 @@ const ActivityPage = () => {
    */
   const tabButtonColor = (id: string) => {
     let currentTabId
-    if (selector.loading) {
+    if (selector?.loading) {
       currentTabId = activeButtonId
     } else {
-      currentTabId = selector.currentTabId
+      currentTabId = selector?.currentTabId
     }
     return id === currentTabId ? 'primary' : 'white'
   }
@@ -297,20 +247,20 @@ const ActivityPage = () => {
    * Giá trị được memoized cho course_tab_documents.
    */
   const course_tab_documents = useMemo(() => {
-    return selector.tabs?.find((e) => e?.id === selector.currentTabId)
+    return selector?.tabs?.find((e) => e?.id === selector?.currentTabId)
       ?.course_tab_documents
-  }, [selector.tabs])
+  }, [selector?.tabs])
 
   /**
    * Hàm để lấy ID của tab trước đó.
    * @returns {string | undefined} - ID của tab trước đó.
    */
   const getPreviousTabId = () => {
-    const currentIndex = selector.tabs?.findIndex(
-      (tab) => tab?.id === selector.currentTabId,
+    const currentIndex = selector?.tabs?.findIndex(
+      (tab) => tab?.id === selector?.currentTabId,
     )
     const previousIndex = (currentIndex || 0) - 1
-    return selector.tabs?.[previousIndex]?.id
+    return selector?.tabs?.[previousIndex]?.id
   }
 
   /**
@@ -318,13 +268,13 @@ const ActivityPage = () => {
    * @returns {string | undefined} - ID của tab tiếp theo.
    */
   const getNextTabId = () => {
-    const currentIndex = selector.tabs?.findIndex(
-      (tab) => tab?.id === selector.currentTabId,
+    const currentIndex = selector?.tabs?.findIndex(
+      (tab) => tab?.id === selector?.currentTabId,
     )
     const nextIndex = (currentIndex || 0) + 1
-    return selector.tabs?.[nextIndex]?.id
+    return selector?.tabs?.[nextIndex]?.id
   }
-  const lengthDoc = course_tab_documents?.length || 0
+
   const handleOpenScratchPad = (
     data: any,
     file?: string,
@@ -332,21 +282,21 @@ const ActivityPage = () => {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (event) {
-      var mouseY = event.pageY - 300
+      var mouseY = event?.pageY - 300
       setExhibitsPopupPosition({ top: mouseY + 'px', left: '33%' })
     }
 
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      if (data.type === 'file') {
-        arr.push({
+      if (data?.type === 'file') {
+        arr?.push({
           type: data.type,
           file: file,
           id: uniqueId('file'),
           fileName: fileName,
         })
-      } else if (data.type === 'exhibits') {
+      } else if (data?.type === 'exhibits') {
         arr.push({
           id: uniqueId('exhibits'),
           ...data,
@@ -355,13 +305,15 @@ const ActivityPage = () => {
       return arr
     })
   }
+
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      const newArr = arr.filter((e) => e?.id !== pad?.id)
+      const newArr = arr?.filter((e) => e?.id !== pad?.id)
       return newArr
     })
   }
+
   const getCourseIcon = (type: String) => {
     if (type === 'TEXT') {
       return <SappIcon icon="course_text"></SappIcon>
@@ -466,7 +418,7 @@ const ActivityPage = () => {
    * @description biến này để lấy name của activity
    */
   const nameActivity = breadcrumbsMenu?.data?.find(
-    (breadcumb: IBreadCrumbs) => breadcumb.course_section_type === 'ACTIVITY',
+    (breadcumb: IBreadCrumbs) => breadcumb?.course_section_type === 'ACTIVITY',
   )
 
   const [sessionData, setSessionData] = useState<Array<any>>([])
@@ -509,7 +461,7 @@ const ActivityPage = () => {
 
   const findActivityByIndex = (previousIndex: number) => {
     return sessionData?.find(
-      (activity: IActivity) => activity?.id === activityIds[previousIndex],
+      (activity: IActivity) => activity?.id === activityIds?.[previousIndex],
     )
   }
 
@@ -525,15 +477,16 @@ const ActivityPage = () => {
   }
 
   const idPreviousActivity =
-    activity?.previous_activity?.id || activityIds[previousActivityIndex - 1]
+    activity?.previous_activity?.id || activityIds?.[previousActivityIndex - 1]
 
   const idNextActivity = activity?.next_activity
     ? activity?.next_activity?.id
-    : activityIds[nextActivityIndex + 1]
+    : activityIds?.[nextActivityIndex + 1]
 
   return (
     <SappLoadingGlobal loading={isLoading}>
       <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
+        {/* Breadcrumbs */}
         <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
           <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
             <Link href="/courses" className="breadcrumbs__link" scroll={false}>
@@ -555,6 +508,7 @@ const ActivityPage = () => {
             </Link>
           </li>
         </ul>
+        {/* Notes */}
         <>
           {getNotesData?.map((e: any, index: number) => {
             return (
@@ -576,7 +530,7 @@ const ActivityPage = () => {
                   top: 'calc(25% - 150px)',
                   left: 'calc(25% - 200px)',
                 }}
-                zIndex={1400}
+                zIndex={500}
                 fixed
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
@@ -596,7 +550,9 @@ const ActivityPage = () => {
             )}
           </>
         </>
+        {/* Main Activity */}
         <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+          {/* Header */}
           <div className="bg-gray-3 px-6 ">
             <div
               className={`flex justify-between w-full gap-4 py-6 select-none ${
@@ -617,6 +573,7 @@ const ActivityPage = () => {
                 <div className="font-semibold text-base mb-2 select-none">
                   Learning Outcome:
                 </div>
+
                 <ul className="list-disc text-base ml-3 select-none">
                   {activity?.course_outcomes?.map((e: any) => {
                     return (
@@ -633,9 +590,10 @@ const ActivityPage = () => {
             )}
           </div>
 
+          {/* Tabs */}
           <div className="bg-gray-3">
             <div className="flex gap-2 px-6 flex-wrap">
-              {selector.tabs?.map((e) => {
+              {selector?.tabs?.map((e) => {
                 return (
                   <SappButton
                     key={e?.id}
@@ -649,207 +607,215 @@ const ActivityPage = () => {
               })}
             </div>
           </div>
+          <ActivitySkeleton
+            length={1}
+            loading={selector.loading}
+            className="w-4/5 mx-auto"
+          >
+            {!!course_tab_documents?.length && (
+              <div className="bg-white pb-6 mb-6">
+                <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
+                  <div className="tab-content overflow-x-auto overflow-y-hidden">
+                    {course_tab_documents?.map((e, i) => {
+                      const marginBottom =
+                        i < course_tab_documents?.length - 1 ? 'mb-6' : ''
+                      if (e?.type === 'QUIZ') {
+                        return (
+                          <div
+                            className={marginBottom}
+                            key={e?.id + '_' + i + '_' + selector?.currentTabId}
+                            ref={quizDocumentRef}
+                          >
+                            <QuizDocument
+                              questions={[
+                                ...(e?.quiz?.multiple_choice_questions || []),
+                                ...(e?.quiz?.constructed_questions || []),
+                              ]}
+                              activityId={activity?.id as string}
+                              tabId={selector?.currentTabId || ''}
+                              quizId={e?.quiz?.id || ''}
+                              grading_preference={
+                                e.quiz?.grading_preference ||
+                                'AFTER_EACH_QUESTION'
+                              }
+                              document_id={e?.id}
+                              is_graded={e?.quiz?.is_graded || false}
+                              setOpenFile={handleOpenScratchPad}
+                              class_user_id={activity?.class_user_id}
+                            ></QuizDocument>
+                          </div>
+                        )
+                      }
+                      if (e.type === 'TEXT') {
+                        return (
+                          <div
+                            className={`${marginBottom} select-none`}
+                            key={i + '_' + selector?.currentTabId}
+                          >
+                            <TextDocument
+                              text_editor_content={e?.text_editor_content}
+                            ></TextDocument>
+                          </div>
+                        )
+                      }
+                      if (e.type === 'VIDEO') {
+                        return (
+                          <div
+                            className={marginBottom}
+                            key={i + '_' + selector?.currentTabId}
+                          >
+                            <VideoDocument
+                              videos={e?.videos}
+                              activityId={activity?.id as string}
+                              tabId={selector?.currentTabId || ''}
+                              streamRefProp={(el: any) =>
+                                (videoRef.current[i || 0] = el)
+                              }
+                              handleProcess={
+                                handleFinishedCourseSectionProgress
+                              }
+                              document_id={e?.id}
+                              quizId={e?.quiz?.id || ''}
+                              grading_preference={
+                                e.quiz?.grading_preference ||
+                                'AFTER_EACH_QUESTION'
+                              }
+                              class_user_id={activity?.class_user_id}
+                            ></VideoDocument>
+                          </div>
+                        )
+                      }
+                      return null
+                    })}
+                  </div>
 
-          {/* <FadeInOut show={!selector.loading}> */}
-          {!!course_tab_documents?.length && (
-            <div className="bg-white pb-6 mb-6">
-              <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
-                <div className="tab-content overflow-x-auto">
-                  {course_tab_documents?.map((e, i) => {
-                    const marginBottom =
-                      i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                    if (e.type === 'QUIZ') {
-                      return (
-                        <div
-                          className={marginBottom}
-                          key={e?.id + '_' + i + '_' + selector.currentTabId}
-                          ref={quizDocumentRef}
-                        >
-                          <QuizDocument
-                            questions={[
-                              ...(e.quiz?.multiple_choice_questions || []),
-                              ...(e.quiz?.constructed_questions || []),
-                            ]}
-                            activityId={activity?.id as string}
-                            tabId={selector.currentTabId || ''}
-                            quizId={e?.quiz?.id || ''}
-                            grading_preference={
-                              e.quiz?.grading_preference ||
-                              'AFTER_EACH_QUESTION'
-                            }
-                            document_id={e?.id}
-                            is_graded={e?.quiz?.is_graded || false}
-                            setOpenFile={handleOpenScratchPad}
-                            class_user_id={activity?.class_user_id}
-                          ></QuizDocument>
-                        </div>
-                      )
-                    }
-                    if (e.type === 'TEXT') {
-                      return (
-                        <div
-                          className={`${marginBottom} select-none`}
-                          key={i + '_' + selector?.currentTabId}
-                        >
-                          <TextDocument
-                            text_editor_content={e?.text_editor_content}
-                          ></TextDocument>
-                        </div>
-                      )
-                    }
-                    if (e.type === 'VIDEO') {
-                      return (
-                        <div
-                          className={marginBottom}
-                          key={i + '_' + selector?.currentTabId}
-                        >
-                          <VideoDocument
-                            videos={e?.videos}
-                            activityId={activity?.id as string}
-                            tabId={selector?.currentTabId || ''}
-                            streamRefProp={(el: any) =>
-                              (videoRef.current[i || 0] = el)
-                            }
-                            handleProcess={handleFinishedCourseSectionProgress}
-                            document_id={e?.id}
-                            quizId={e?.quiz?.id || ''}
-                            grading_preference={
-                              e.quiz?.grading_preference ||
-                              'AFTER_EACH_QUESTION'
-                            }
-                            class_user_id={activity?.class_user_id}
-                          ></VideoDocument>
-                        </div>
-                      )
-                    }
-                    return null
-                  })}
-                </div>
-
-                {activity?.files?.length > 0 && (
-                  <>
-                    <SAPPBorder />
-                    <div
-                      className={`pt-8 ${
-                        getPreviousTabId() ? 'pb-4' : 'pb-0'
-                      } `}
-                    >
-                      <div className="font-semibold text-base">Resource:</div>
-                      <ul className="list-disc text-base">
-                        {activity?.files.map((e: any, index: number) => {
-                          return (
-                            <div
-                              className={`flex justify-between group cursor-pointer ${
-                                index === 0 ? 'mt-4' : 'mt-5'
-                              }`}
-                              key={index}
-                            >
-                              <div className="flex">
-                                <div className="mr-2 group-hover:text-primary flex self-center">
-                                  <LinkIcon />
-                                </div>
-                                <div
-                                  className="cursor-pointer text-gray-1 group-hover:text-primary"
-                                  onClick={() => {
-                                    handleOpenScratchPad(
-                                      {
-                                        type: 'file',
-                                      },
-                                      e.resource.url,
-                                      e?.resource?.name,
-                                    )
-                                  }}
-                                >
-                                  {e?.resource?.name}
-                                </div>
-                              </div>
-                              <a
-                                onClick={() =>
-                                  download(
-                                    e?.resource?.name,
-                                    e?.resource?.file_key,
-                                  )
-                                }
+                  {activity?.files?.length > 0 && (
+                    <>
+                      <SAPPBorder />
+                      <div
+                        className={`pt-8 ${
+                          getPreviousTabId() ? 'pb-4' : 'pb-0'
+                        } `}
+                      >
+                        <div className="font-semibold text-base">Resource:</div>
+                        <ul className="list-disc text-base">
+                          {activity?.files.map((e: any, index: number) => {
+                            return (
+                              <div
+                                className={`flex justify-between group cursor-pointer ${
+                                  index === 0 ? 'mt-4' : 'mt-5'
+                                }`}
+                                key={index}
                               >
-                                <DownloadIcon />
-                              </a>
-                            </div>
-                          )
-                        })}
-                      </ul>
-                    </div>
-                    {getPreviousTabId() && <SAPPBorder className="mt-4" />}
-                  </>
-                )}
+                                <div className="flex">
+                                  <div className="mr-2 group-hover:text-primary flex self-center">
+                                    <LinkIcon />
+                                  </div>
+                                  <div
+                                    className="cursor-pointer text-gray-1 group-hover:text-primary"
+                                    onClick={() => {
+                                      handleOpenScratchPad(
+                                        {
+                                          type: 'file',
+                                        },
+                                        e?.resource?.url,
+                                        e?.resource?.name,
+                                      )
+                                    }}
+                                  >
+                                    {e?.resource?.name}
+                                  </div>
+                                </div>
+                                <a
+                                  onClick={() =>
+                                    download(
+                                      e?.resource?.name,
+                                      e?.resource?.file_key,
+                                    )
+                                  }
+                                >
+                                  <DownloadIcon />
+                                </a>
+                              </div>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                      {getPreviousTabId() && <SAPPBorder className="mt-4" />}
+                    </>
+                  )}
 
-                <div className="flex justify-between flex-wrap gap-5 mt-8">
-                  {getPreviousTabId() && (
-                    <div className="w-auto">
-                      <div className="relative">
-                        <div
-                          onClick={() =>
-                            handleChangeTab(getPreviousTabId() || '')
-                          }
-                          className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={20}
-                            height={20}
-                            fill="none"
+                  <div className="flex justify-between flex-wrap gap-5 mt-8">
+                    {getPreviousTabId() && (
+                      <div className="w-auto">
+                        <div className="relative">
+                          <div
+                            onClick={() =>
+                              handleChangeTab(getPreviousTabId() || '')
+                            }
+                            className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
                           >
-                            <path
-                              className="fill-bw-1 group-hover:fill-primary"
-                              fillRule="evenodd"
-                              d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Previous Tab
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={20}
+                              height={20}
+                              fill="none"
+                            >
+                              <path
+                                className="fill-bw-1 group-hover:fill-primary"
+                                fillRule="evenodd"
+                                d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Previous Tab
+                          </div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
                         </div>
-                        <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
                       </div>
-                    </div>
-                  )}
-                  {getNextTabId() && (
-                    <div className="w-auto relative ml-auto">
-                      <div className="relative">
-                        <div
-                          onClick={() => handleChangeTab(getNextTabId() || '')}
-                          className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
-                        >
-                          Next Tab
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={20}
-                            height={20}
-                            fill="none"
+                    )}
+                    {getNextTabId() && (
+                      <div className="w-auto relative ml-auto">
+                        <div className="relative">
+                          <div
+                            onClick={() =>
+                              handleChangeTab(getNextTabId() || '')
+                            }
+                            className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                           >
-                            <path
-                              className="fill-bw-1 group-hover:fill-primary"
-                              fillRule="evenodd"
-                              d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
+                            Next Tab
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={20}
+                              height={20}
+                              fill="none"
+                            >
+                              <path
+                                className="fill-bw-1 group-hover:fill-primary"
+                                fillRule="evenodd"
+                                d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
                         </div>
-                        <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {!course_tab_documents?.length && <div className="py-3"></div>}
+            )}
+          </ActivitySkeleton>
         </div>
-        {/* </FadeInOut> */}
+
+        {/* Next/Prev Activities */}
         {(activity?.previous_activity ||
           activity?.next_activity ||
           (nextActivityIndex !== -1 &&
             nextActivityIndex !== sessionData?.length - 1) ||
           (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
-          <div data-aos={ANIMATION.DATA_AOS}>
+          <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
             <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
               <div
                 className={`flex flex-nowrap gap-5 justify-${
@@ -964,11 +930,12 @@ const ActivityPage = () => {
             </div>
           </div>
         )}
-
         <div ref={endActivityRef}></div>
-        <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+        <div className="shadow-activity mt-6" data-aos={ANIMATION.DATA_AOS}>
           <Discussion class_id={(router.query.id as string) || ''} />
         </div>
+
+        {/* Sratchpad */}
         {openScratchPad.map((e, index: number) => {
           if (e.type === 'file') {
             return (
@@ -983,8 +950,8 @@ const ActivityPage = () => {
                 onClick={() => setOnFocusingPad(e?.id)}
                 zIndex={
                   onFocusingPad === e?.id
-                    ? openScratchPad.length + 1400
-                    : index + 1400
+                    ? openScratchPad?.length + 500
+                    : index + 500
                 }
                 fixed
                 // not_resizable
@@ -993,7 +960,7 @@ const ActivityPage = () => {
                 <div className="absolute h-full w-full  top-0 left-0 border">
                   <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
                     <div className="text-sm font-normal truncate">
-                      {e.fileName}
+                      {e?.fileName}
                     </div>
                     {/* <CloseIcon */}
                     <button onClick={() => handleCloseScratchPad(e)}>
@@ -1005,7 +972,7 @@ const ActivityPage = () => {
                     style={{ height: 'calc(100% - 40px' }}
                   >
                     {/* <div className='flex flex-'> */}
-                    <PdfViewer file={e.file} />
+                    <PdfViewer file={e?.file} />
                   </div>
                   {/* </div> */}
                 </div>
@@ -1024,8 +991,8 @@ const ActivityPage = () => {
                 onClick={() => setOnFocusingPad(e?.id)}
                 zIndex={
                   onFocusingPad === e?.id
-                    ? openScratchPad.length + 1400
-                    : index + 1400
+                    ? openScratchPad?.length + 500
+                    : index + 500
                 }
               >
                 <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1054,7 +1021,7 @@ const ActivityPage = () => {
                             onClick={() =>
                               handleOpenScratchPad(
                                 { type: 'file' },
-                                e.resource.url,
+                                e?.resource?.url,
                                 e?.resource?.name,
                               )
                             }
@@ -1069,11 +1036,6 @@ const ActivityPage = () => {
             )
           }
         })}
-        {/* <PopupViewPdf
-        open={openPdf?.status || false}
-        setOpen={setOpenPdf}
-        url={openPdf?.url || ''}
-      /> */}
       </div>
     </SappLoadingGlobal>
   )

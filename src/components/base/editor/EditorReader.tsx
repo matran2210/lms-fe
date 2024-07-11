@@ -18,6 +18,7 @@ type Props = {
   highlighted?: string
   options?: any
   highlighArea?: string
+  pinned?: boolean
 }
 
 const EditorReader = ({
@@ -29,6 +30,7 @@ const EditorReader = ({
   highlighted,
   options,
   highlighArea = 'hightlight_area',
+  pinned
 }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
@@ -38,16 +40,16 @@ const EditorReader = ({
 
   useEffect(() => {
     if (extenalRef) {
-      extenalRef.current?.addEventListener('click', handleOnclick)
+      extenalRef?.current?.addEventListener('click', handleOnclick)
 
       return () => {
-        extenalRef.current?.removeEventListener('click', handleOnclick)
+        extenalRef?.current?.removeEventListener('click', handleOnclick)
       }
     } else {
-      refDocument.current?.addEventListener('click', handleOnclick)
+      refDocument?.current?.addEventListener('click', handleOnclick)
 
       return () => {
-        refDocument.current?.removeEventListener('click', handleOnclick)
+        refDocument?.current?.removeEventListener('click', handleOnclick)
       }
     }
   }, [refDocument?.current, extenalRef?.current])
@@ -55,16 +57,16 @@ const EditorReader = ({
   useEffect(() => {
     if (text_editor_content) {
       const parser = new DOMParser()
-      const doc = parser.parseFromString(text_editor_content, 'text/html')
-      const videos = doc.querySelectorAll('video')
+      const doc = parser?.parseFromString(text_editor_content, 'text/html')
+      const videos = doc?.querySelectorAll('video')
       for (let video of videos) {
-        const src = video.querySelector('source')?.getAttribute('token')
-        if (src && src !== 'null' && video.tagName === 'VIDEO') {
-          var wrapper = document.createElement('div')
-          var overLay = document.createElement('span')
+        const src = video?.querySelector('source')?.getAttribute('token')
+        if (src && src !== 'null' && video?.tagName === 'VIDEO') {
+          var wrapper = document?.createElement('div')
+          var overLay = document?.createElement('span')
           overLay.className = 'sapp_overlay_video'
-          const _video = video.cloneNode(true) as HTMLVideoElement
-          wrapper.append(_video)
+          const _video = video?.cloneNode(true) as HTMLVideoElement
+          wrapper?.append(_video)
           wrapper.className = 'relative w-fit overflow-clip'
           wrapper.style.cssText = `height:${video.getAttribute(
             'height',
@@ -78,7 +80,7 @@ const EditorReader = ({
           video?.parentNode?.replaceChild(wrapper, video)
         }
       }
-      setContent(doc?.documentElement.querySelector('body')?.innerHTML || '')
+      setContent(doc?.documentElement?.querySelector('body')?.innerHTML || '')
     } else {
       setContent(text_editor_content)
     }
@@ -111,10 +113,10 @@ const EditorReader = ({
     setTimeout(() => {
       const editor = editorRef?.current
       if (editor) {
-        const mfencedElements = editor.querySelectorAll('mfenced')
+        const mfencedElements = editor?.querySelectorAll('mfenced')
         mfencedElements.forEach((el: any) => {
-          const openAttr = el.getAttribute('open')
-          const closeAttr = el.getAttribute('close')
+          const openAttr = el?.getAttribute('open')
+          const closeAttr = el?.getAttribute('close')
           if (openAttr !== null && closeAttr) {
             const replacements: { [key: string]: string } = {
               '|': '|',
@@ -125,19 +127,19 @@ const EditorReader = ({
               '&#62;': '&#60;',
             }
             if (replacements[closeAttr]) {
-              el.setAttribute('open', replacements[closeAttr])
+              el?.setAttribute('open', replacements[closeAttr])
             }
           }
         })
 
         // Replace quote in font family
-        const mathElement = editor.querySelectorAll('math')
+        const mathElement = editor?.querySelectorAll('math')
         if (mathElement) {
           mathElement?.forEach((el: any) => {
-            if (el.hasAttribute('style')) {
-              let styleValue = el.getAttribute('style')
-              styleValue = styleValue.replaceAll('"', '')
-              el.setAttribute('style', styleValue)
+            if (el?.hasAttribute('style')) {
+              let styleValue = el?.getAttribute('style')
+              styleValue = styleValue?.replaceAll('"', '')
+              el?.setAttribute('style', styleValue)
             }
           })
           editor && convertMathToImage(editor)
@@ -147,17 +149,17 @@ const EditorReader = ({
   }, [editorRef?.current, text_editor_content])
 
   const handleOnclick = async (e: MouseEvent) => {
-    const target = e.target as HTMLElement
+    const target = e?.target as HTMLElement
     if (target.className === 'sapp_overlay_video') {
       // const overlay = target.nextSibling as any
-      const video = target.previousSibling as any
-      const src = video.querySelector('source')?.getAttribute('token')
+      const video = target?.previousSibling as any
+      const src = video?.querySelector('source')?.getAttribute('token')
       if (src && src !== 'null' && video.tagName === 'VIDEO') {
         var iframe = document.createElement('iframe')
         iframe.src = `${video_url}${src}/iframe?autoplay=true`
-        iframe.id = video.id
-        iframe.className = video.className
-        iframe.style.cssText = video.style.cssText
+        iframe.id = video?.id
+        iframe.className = video?.className
+        iframe.style.cssText = video?.style.cssText
         iframe.allow =
           'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;'
         iframe.allowFullscreen = true
@@ -165,8 +167,8 @@ const EditorReader = ({
         target?.classList.add('hidden')
         // target?.parentNode?.removeChild(target.nextSibling as Node)
       }
-    } else if (target.tagName === 'IMG') {
-      const imageSrc = target.getAttribute('src')
+    } else if (target?.tagName === 'IMG') {
+      const imageSrc = target?.getAttribute('src')
       if (imageSrc) {
         setSrc(() => {
           setType('IMG')
@@ -180,17 +182,17 @@ const EditorReader = ({
    * @description add class border theo editor khi border style khác none và hidden ở lần đầu component render
    */
   useEffect(() => {
-    const tableElement = document.querySelector('table')
+    const tableElement = document?.querySelector('table')
     if (tableElement) {
-      const style = window.getComputedStyle(tableElement)
-      const newBorderStyle = style.borderStyle
+      const style = window?.getComputedStyle(tableElement)
+      const newBorderStyle = style?.borderStyle
 
-      const thElements = document.querySelectorAll('.editor-wrap td')
-      thElements.forEach((td) => {
+      const thElements = document?.querySelectorAll('.editor-wrap td')
+      thElements?.forEach((td) => {
         if (newBorderStyle !== 'none' && newBorderStyle !== 'hidden') {
-          td.classList.add(`border-[1px]`)
+          td?.classList?.add(`border-[1px]`)
         } else {
-          td.classList.remove(`border-[1px]`)
+          td?.classList?.remove(`border-[1px]`)
         }
       })
     }
@@ -204,7 +206,7 @@ const EditorReader = ({
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
       >
-        <div ref={extenalRef || refDocument}>
+        <div ref={extenalRef || refDocument} className={`${pinned ? 'text-white pt-2' : 'text-bw-1'}`}>
           {parseHTML(
             replaceTextAlignCenterToWebKitCenter(content || ''),
             options,

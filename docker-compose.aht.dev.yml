@@ -15,4 +15,8 @@ services:
       - ./public:/app/public
     restart: always
     ports:
-      - 3080:3000
+      - ${NEXT_APP_EXTERNAL_PORT:-3080}:3000
+    logging:
+      options:
+        max-size: '10m'
+        max-file: 3

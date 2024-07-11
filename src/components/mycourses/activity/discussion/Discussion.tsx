@@ -138,7 +138,7 @@ const Discussion = ({ class_id }: Props) => {
 
             dispatch(
               uploadImagesDiscussion({
-                discussion_id: e.id,
+                discussion_id: e?.id,
                 new_discussion_file: isRoot
                   ? getRootSelectedFiles
                   : getSelectedFiles,
@@ -181,10 +181,10 @@ const Discussion = ({ class_id }: Props) => {
     }
     debounceTimeout.current = setTimeout(async () => {
       const currentDiscussion = findDiscussionById(
-        data.course_discussion_id,
-        selector.discussion,
+        data?.course_discussion_id,
+        selector?.discussion,
       )
-      if (currentDiscussion?.is_like === data.is_like) {
+      if (currentDiscussion?.is_like === data?.is_like) {
         return
       }
       try {
@@ -215,13 +215,13 @@ const Discussion = ({ class_id }: Props) => {
     // Duyệt qua danh sách discussion
     for (const item of data) {
       // Nếu ID trùng khớp, trả về discussion
-      if (item.id === idToFind) {
+      if (item?.id === idToFind) {
         return item
       }
 
       // Nếu có discussion con, đệ quy để tìm trong discussion con
-      if (item.children && item.children.length > 0) {
-        const childResult = findDiscussionById(idToFind, item.children)
+      if (item?.children && item?.children?.length > 0) {
+        const childResult = findDiscussionById(idToFind, item?.children)
         if (childResult) {
           return childResult
         }
@@ -242,25 +242,25 @@ const Discussion = ({ class_id }: Props) => {
     e: ChangeEvent<HTMLInputElement>,
     isRoot?: boolean,
   ) => {
-    const files = e.target.files
+    const files = e?.target?.files
 
     if (files) {
       // Kiểm tra và chỉ chấp nhận ảnh từ thiết bị
       const imageFiles = Array.from(files).filter((file) =>
-        file.type.startsWith('image/'),
+        file?.type?.startsWith('image/'),
       )
 
       // Loại bỏ các file có định dạng .webp
-      const filteredFiles = imageFiles.filter(
-        (file) => !file.name.toLowerCase().endsWith('.webp'),
+      const filteredFiles = imageFiles?.filter(
+        (file) => !file?.name?.toLowerCase()?.endsWith('.webp'),
       )
 
       // Kiểm tra kích thước file không vượt quá 20MB
-      const validFiles = filteredFiles.filter(
-        (file) => file.size <= 20 * 1024 * 1024,
+      const validFiles = filteredFiles?.filter(
+        (file) => file?.size <= 20 * 1024 * 1024,
       )
 
-      if (validFiles.length > 0) {
+      if (validFiles?.length > 0) {
         if (isRoot) {
           setRootSetSelectedFiles([...rootSelectedFiles, ...validFiles])
         } else {
@@ -274,11 +274,11 @@ const Discussion = ({ class_id }: Props) => {
     }
 
     // Xóa giá trị của input để làm sạch
-    if (fileInputRef.current) {
+    if (fileInputRef?.current) {
       fileInputRef.current.value = ''
     }
 
-    if (rootFileInputRef.current) {
+    if (rootFileInputRef?.current) {
       rootFileInputRef.current.value = ''
     }
 
@@ -292,11 +292,11 @@ const Discussion = ({ class_id }: Props) => {
     let updatedFiles: File[] = []
     if (isRoot) {
       updatedFiles = [...rootSelectedFiles]
-      updatedFiles.splice(indexToRemove, 1)
+      updatedFiles?.splice(indexToRemove, 1)
       setRootSetSelectedFiles(updatedFiles)
     } else {
       updatedFiles = [...selectedFiles]
-      updatedFiles.splice(indexToRemove, 1)
+      updatedFiles?.splice(indexToRemove, 1)
       setSelectedFiles(updatedFiles)
     }
   }
@@ -304,7 +304,7 @@ const Discussion = ({ class_id }: Props) => {
   return (
     <div className="p-6 bg-white">
       <div className="text-xl font-bold mb-4">Discussion</div>
-      {selector.discussion?.map((e, i) => {
+      {selector?.discussion?.map((e, i) => {
         return (
           <div className={` ${i !== 0 ? 'mt-6' : ''}`} key={e.id}>
             <DiscussionElement
@@ -316,10 +316,10 @@ const Discussion = ({ class_id }: Props) => {
             />
             <div
               className={`${
-                e.children?.[0] ? 'mt-6' : ''
+                e?.children?.[0] ? 'mt-6' : ''
               } ' relative ml-13 pl-5 overflow-hidden`}
             >
-              {e.children?.[0] && (
+              {e?.children?.[0] && (
                 <div>
                   <div
                     className="absolute left-0 top-0 bottom-0 w-0.5 -mt-1 bg-size-100-30"
@@ -328,9 +328,9 @@ const Discussion = ({ class_id }: Props) => {
                         'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
                     }}
                   ></div>
-                  {e.children.map((f, index) => {
+                  {e?.children?.map((f, index) => {
                     return (
-                      <div className={index === 0 ? '' : 'mt-5'} key={f.id}>
+                      <div className={index === 0 ? '' : 'mt-5'} key={f?.id}>
                         <DiscussionElement
                           rank={2}
                           discussion={f}
@@ -353,8 +353,8 @@ const Discussion = ({ class_id }: Props) => {
                     height={40}
                     className="rounded-full"
                     src={
-                      user.detail.avatar['50x50'] ||
-                      user.detail.avatar['ORIGIN'] ||
+                      user?.detail?.avatar['50x50'] ||
+                      user?.detail?.avatar['ORIGIN'] ||
                       blankAvatar
                     }
                     loading="eager"
@@ -366,7 +366,7 @@ const Discussion = ({ class_id }: Props) => {
                   className="flex-1"
                   encType="multipart/form-data"
                 >
-                  {selectedFiles.length > 0 && (
+                  {selectedFiles?.length > 0 && (
                     <div>
                       <ul className="flex gap-4 flex-wrap">
                         {selectedFiles.map((file, index) => (
@@ -410,7 +410,7 @@ const Discussion = ({ class_id }: Props) => {
                   <div className="relative">
                     <HookFormTextField
                       control={control}
-                      name={idReply === e.id ? 'comment' : ''}
+                      name={idReply === e?.id ? 'comment' : ''}
                       textSize="sm"
                       inputClassName={'max-h-10 !pr-9'}
                       placeholder="Your comment..."
@@ -445,8 +445,8 @@ const Discussion = ({ class_id }: Props) => {
             height={40}
             className="rounded-full"
             src={
-              user.detail.avatar['150x150'] ||
-              user.detail.avatar['ORIGIN'] ||
+              user?.detail?.avatar['150x150'] ||
+              user?.detail?.avatar['ORIGIN'] ||
               blankAvatar
             }
             loading="eager"
@@ -458,10 +458,10 @@ const Discussion = ({ class_id }: Props) => {
           className="flex-1 relative"
           encType="multipart/form-data"
         >
-          {rootSelectedFiles.length > 0 && (
+          {rootSelectedFiles?.length > 0 && (
             <div>
               <ul className="flex gap-4 flex-wrap">
-                {rootSelectedFiles.map((file, index) => (
+                {rootSelectedFiles?.map((file, index) => (
                   <li key={index} className="leading-0 relative mb-2">
                     <div
                       className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"

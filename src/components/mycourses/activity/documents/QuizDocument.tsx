@@ -90,7 +90,7 @@ const QuizDocument = ({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
-              questionId: questions[0]?.id || '',
+              questionId: questions?.[0]?.id || '',
             }),
           )
         } catch (error) {}
@@ -105,7 +105,7 @@ const QuizDocument = ({
   }, [runHandleFinishQuiz])
 
   const handleNextQuestion = async () => {
-    if (activeQuestionIndex < questions.length - 1) {
+    if (activeQuestionIndex < questions?.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
 
       // Load the next question if it hasn't been loaded yet
@@ -123,7 +123,7 @@ const QuizDocument = ({
         } catch (error) {}
       }
 
-      questionRef.current?.reset()
+      questionRef?.current?.reset()
     }
   }
 
@@ -132,7 +132,7 @@ const QuizDocument = ({
       setActiveQuestionIndex(activeQuestionIndex - 1)
 
       // Load the previous question if it hasn't been loaded yet
-      const prevQuestionId = questions[activeQuestionIndex - 1]?.id
+      const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
         try {
           await dispatch(
@@ -153,7 +153,7 @@ const QuizDocument = ({
   const handleConfirmQuestion = (isFinish: boolean = false) => {
     setLoading(true)
     if (activeQuestion) {
-      questionRef.current?.onSubmit({
+      questionRef?.current?.onSubmit({
         activityId: activityId,
         tabId: tabId,
         quizId: quizId,
@@ -180,11 +180,11 @@ const QuizDocument = ({
     }: { answers: any[]; quiz_position_mapping: any[] } = questions?.reduce(
       (acc: any, obj: any) => {
         if (obj?.myAnswers) {
-          acc.answers = acc.answers.concat({ ...obj.myAnswers })
+          acc.answers = acc?.answers?.concat({ ...obj.myAnswers })
         }
         if (obj?.quiz_position_mapping) {
-          acc.quiz_position_mapping = acc.quiz_position_mapping.concat(
-            obj.quiz_position_mapping,
+          acc.quiz_position_mapping = acc?.quiz_position_mapping?.concat(
+            obj?.quiz_position_mapping,
           )
         }
 
@@ -245,18 +245,18 @@ const QuizDocument = ({
       )
 
       const newQuestionResponse: IQuestionResultResponse = {
-        meta: response.data.meta,
+        meta: response?.data?.meta,
         data: (modalResult?.questions?.data || []).concat(
-          response.data.answers?.map((e: any) => {
+          response?.data?.answers?.map((e: any) => {
             return {
-              id: e.id,
-              content: e.question.question_content,
-              section: e.question.question_filter_id?.part?.name,
-              type: e.question.qType,
-              is_correct: e.is_correct,
-              time_spent: e.time_spent,
-              question: e.question as any,
-              active: e.active,
+              id: e?.id,
+              content: e?.question?.question_content,
+              section: e?.question?.question_filter_id?.part?.name,
+              type: e?.question?.qType,
+              is_correct: e?.is_correct,
+              time_spent: e?.time_spent,
+              question: e?.question as any,
+              active: e?.active,
             }
           }) || [],
         ),
@@ -273,7 +273,7 @@ const QuizDocument = ({
   }
 
   const handleShowQuestionResultDetail = (data: IQuestionResult) => {
-    setShowQuestionResultDetail({ id: data.id, isOpen: true })
+    setShowQuestionResultDetail({ id: data?.id, isOpen: true })
   }
 
   return (
@@ -286,7 +286,7 @@ const QuizDocument = ({
       ></ConFirmSubmit>
 
       <div
-        className="border border-gray-3 p-6 select-none"
+        className="border border-gray-3 p-6 select-none max-h-[500px] overflow-auto"
         data-aos={ANIMATION.DATA_AOS}
       >
         {activeQuestion && (

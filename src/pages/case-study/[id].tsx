@@ -2,7 +2,6 @@ import {
   CalculatorIcon,
   CloseIcon,
   ExhibitsIcon,
-  HelpIcon,
   HighlightIcon,
   ScratchPadIcon,
   UnHighLightIcon,
@@ -29,7 +28,6 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import {
   clearFileEssay,
   getTopicsCaseStudy,
@@ -46,6 +44,7 @@ import { TestAPI } from '../api/test'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import PDFViewer from '@components/base/pdf/pdf-viewer'
 import { IExhibit } from 'src/type/exhibit'
+import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal' 
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -244,6 +243,45 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
+  const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
+
+  /**
+   * handl confirm before submitting
+  */
+  const checkUnSubmitAnswer = () => {
+    const result: number[] = []
+    getAllValue().map((item, index) => {
+        if ( typeof item.answer === 'string' && item?.answer === '') {
+          result.push(index+1)
+          return
+        } 
+        if (Array.isArray(item.answer) ) {
+          const emptyAnswer = item?.answer?.filter((el) =>  {
+            if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
+              return el
+            }
+            if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
+              return el
+            }
+          })
+          const emptyEl =  item.answer.filter((el: string) => typeof el === 'string' && !el)
+          if (emptyAnswer?.length || emptyEl.length) {
+            result.push(index+1)
+          }
+          return 
+        }
+      }
+    )
+    setUnSubmitAnswerData(result);
+    if (result.length === 0) {      
+      setOpenSubmit(true)      
+    } else {
+      setUnSubmitAnswer(true)
+    }
+    return result
+  };
+
   const { x } = useMousePosition()
   useEffect(() => {
     if (startResize) {
@@ -343,6 +381,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           return e.type !== 'exhibits'
         })
         for (let e of watch('exhibits')) {
+          setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -358,12 +397,12 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const getValueFillText = (index: number) => {
     let value = []
-    if (valueRef.current[index]) {
-      const inputs = valueRef.current[index].querySelectorAll(
+    if (valueRef?.current?.[index]) {
+      const inputs = valueRef?.current?.[index]?.querySelectorAll(
         'input[stringHTML="true"]',
       ) as any
       for (let e of inputs) {
-        value.push(e.value)
+        value.push(e?.value)
       }
     } else {
       value.push('')
@@ -372,8 +411,8 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const getValueSelectText = (index: number) => {
     let value = [] as any
-    if (valueRef.current[index]) {
-      const inputs = valueRef.current[index].querySelectorAll(
+    if (valueRef?.current?.[index]) {
+      const inputs = valueRef?.current?.[index]?.querySelectorAll(
         'select.sapp-select--selectword-preview',
       ) as any
 
@@ -387,17 +426,17 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const getAnswerMatching = (index: number) => {
     let value = [] as any
-    if (valueRef.current[index]) {
-      const inputs = valueRef.current[index].querySelectorAll(
+    if (valueRef.current?.[index]) {
+      const inputs = valueRef?.current?.[index].querySelectorAll(
         '.sapp-match-result',
       ) as any
       for (let e of inputs) {
         const childId = e.querySelector('.sapp-notched-container')
-        value.push({ question_id: e.id, answer_id: childId?.id || undefined })
+        value.push({ question_id: e?.id, answer_id: childId?.id || undefined })
       }
     } else {
       value.push({
-        question_id: listFullQuestions[index].id,
+        question_id: listFullQuestions?.[index]?.id,
         answer_id: '' || undefined,
       })
     }
@@ -406,17 +445,17 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const getAnswerDragNDrop = (index: number) => {
     let value = [] as any
-    if (valueRef.current[index]) {
-      const inputs = valueRef.current[index].querySelectorAll(
+    if (valueRef?.current?.[index]) {
+      const inputs = valueRef?.current?.[index].querySelectorAll(
         '.sapp-input-dragNDrop',
       ) as any
       for (let e of inputs) {
         const idAnswer = e.querySelector('span')
-        value.push({ id: e.id, value: e.innerText, idAnswer: idAnswer?.id })
+        value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
       }
     } else {
       value.push({
-        id: listFullQuestions[index].id,
+        id: listFullQuestions?.[index]?.id,
         value: '',
         idAnswer: '',
       })
@@ -428,52 +467,52 @@ const CaseStudyDetail = ({ questions }: any) => {
     for (let i = 0; i < listQuestions.length; i++) {
       const question = Object.values(listQuestions[i])[0] as any
       if (
-        question.qType === QUESTION_TYPES.ONE_CHOICE ||
-        question.qType === QUESTION_TYPES.TRUE_FALSE ||
-        question.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+        question?.qType === QUESTION_TYPES.ONE_CHOICE ||
+        question?.qType === QUESTION_TYPES.TRUE_FALSE ||
+        question?.qType === QUESTION_TYPES.MULTIPLE_CHOICE
       ) {
         arrAnswer.push({
-          qType: question.qType,
+          qType: question?.qType,
           answer: getValues(`${i}_answer`),
-          id: question.id,
-          answers: question.answers,
+          id: question?.id,
+          answers: question?.answers,
         })
-      } else if (question.qType === QUESTION_TYPES.MATCHING) {
+      } else if (question?.qType === QUESTION_TYPES.MATCHING) {
         arrAnswer.push({
-          qType: question.qType,
+          qType: question?.qType,
           answer: getAnswerMatching(i),
-          id: question.id,
-          answers: question.answers,
+          id: question?.id,
+          answers: question?.answers,
         })
-      } else if (question.qType === QUESTION_TYPES.DRAG_DROP) {
+      } else if (question?.qType === QUESTION_TYPES.DRAG_DROP) {
         arrAnswer.push({
-          qType: question.qType,
+          qType: question?.qType,
           answer: getAnswerDragNDrop(i),
-          id: question.id,
-          answers: question.answers,
+          id: question?.id,
+          answers: question?.answers,
         })
-      } else if (question.qType === QUESTION_TYPES.SELECT_WORD) {
+      } else if (question?.qType === QUESTION_TYPES.SELECT_WORD) {
         arrAnswer.push({
-          qType: question.qType,
+          qType: question?.qType,
           answer: getValueSelectText(i),
-          id: question.id,
-          answers: question.answers,
+          id: question?.id,
+          answers: question?.answers,
         })
-      } else if (question.qType === QUESTION_TYPES.FILL_WORD) {
+      } else if (question?.qType === QUESTION_TYPES.FILL_WORD) {
         arrAnswer.push({
-          qType: question.qType,
+          qType: question?.qType,
           answer: getValueFillText(i),
-          id: question.id,
-          answers: question.answers,
+          id: question?.id,
+          answers: question?.answers,
         })
-      } else if (question.qType == QUESTION_TYPES.ESSAY) {
+      } else if (question?.qType == QUESTION_TYPES.ESSAY) {
         arrAnswer.push({
-          qType: question.qType,
+          qType: question?.qType,
           answer: getValues(`${i}_answer`),
-          id: question.id,
-          answers: question.answers,
-          response_option: question.response_option,
-          answer_file: question.answer_file,
+          id: question?.id,
+          answers: question?.answers,
+          response_option: question?.response_option,
+          answer_file: question?.answer_file,
         })
       }
     }
@@ -488,88 +527,88 @@ const CaseStudyDetail = ({ questions }: any) => {
     let reformTabs: any[] = []
     for (let e of allQuest) {
       reformTabs.push({ ...e, done: true })
-      if (e.answer || e.answer !== '') {
+      if (e?.answer || e?.answer !== '') {
         if (
-          e.qType === QUESTION_TYPES.ONE_CHOICE ||
-          e.qType === QUESTION_TYPES.TRUE_FALSE
+          e?.qType === QUESTION_TYPES.ONE_CHOICE ||
+          e?.qType === QUESTION_TYPES.TRUE_FALSE
         ) {
           answers.push({
-            question_id: e.id,
-            question_answer_id: e.answer || '',
+            question_id: e?.id,
+            question_answer_id: e?.answer || '',
           })
-        } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+        } else if (e?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
           let answer = []
-          if (e.answer) {
-            for (let el of e.answer) {
+          if (e?.answer) {
+            for (let el of e?.answer) {
               if (el) {
                 answer.push({ answer_id: el })
               }
             }
           }
-          answers.push({ question_id: e.id, answer })
-        } else if (e.qType === QUESTION_TYPES.MATCHING) {
-          answers.push({ question_id: e.id, answer: e.answer })
-        } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
+          answers.push({ question_id: e?.id, answer })
+        } else if (e?.qType === QUESTION_TYPES.MATCHING) {
+          answers.push({ question_id: e?.id, answer: e?.answer })
+        } else if (e?.qType === QUESTION_TYPES.DRAG_DROP) {
           let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i].idAnswer) {
+          for (let i in e?.answer) {
+            if (e?.answer[i].idAnswer) {
               answer.push({
-                answer_id: e.answer[i].idAnswer,
+                answer_id: e?.answer[i].idAnswer,
                 answer_position: +i + 1,
               })
             }
           }
-          answers.push({ question_id: e.id, answer })
-        } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
+          answers.push({ question_id: e?.id, answer })
+        } else if (e?.qType === QUESTION_TYPES.SELECT_WORD) {
           let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i] && e.answer[i] !== '') {
+          for (let i in e?.answer) {
+            if (e?.answer[i] && e?.answer[i] !== '') {
               answer.push({
-                answer_id: e.answer[i],
+                answer_id: e?.answer[i],
                 answer_position: +i + 1,
               })
             }
           }
-          answers.push({ question_id: e.id, answer })
-        } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
+          answers.push({ question_id: e?.id, answer })
+        } else if (e?.qType === QUESTION_TYPES.FILL_WORD) {
           let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i] && e.answer[i] !== '') {
+          for (let i in e?.answer) {
+            if (e?.answer[i] && e?.answer[i] !== '') {
               answer.push({
-                answer_text: e.answer[i],
+                answer_text: e?.answer[i],
                 answer_position: +i + 1,
               })
             }
           }
-          answers.push({ question_id: e.id, answer })
+          answers.push({ question_id: e?.id, answer })
         }
       }
-      if (e.qType === QUESTION_TYPES.ESSAY) {
+      if (e?.qType === QUESTION_TYPES.ESSAY) {
         if (
-          (e.answer !== undefined && e.answer !== '') ||
-          e.answer_file?.file_key
+          (e?.answer !== undefined && e?.answer !== '') ||
+          e?.answer_file?.file_key
         ) {
-          if (!e.response_option) {
+          if (!e?.response_option) {
             answers.push({
-              question_id: e.id,
-              short_answer: e.answer || '',
-              response_option: e.response_option ? e.response_option : 'WORD',
-              answer_file: e.answer_file,
+              question_id: e?.id,
+              short_answer: e?.answer || '',
+              response_option: e?.response_option ? e?.response_option : 'WORD',
+              answer_file: e?.answer_file,
               active: 'SUBMITED',
             })
           } else {
-            if (e.response_option === 'SHEET') {
-              if (e.answer) {
-                const data = JSON.parse(e.answer)
+            if (e?.response_option === 'SHEET') {
+              if (e?.answer) {
+                const data = JSON.parse(e?.answer)
                 for (let el of data) {
                   if (el.celldata && el.celldata.length > 0) {
                     answers.push({
-                      question_id: e.id,
-                      short_answer: e.answer || '',
-                      response_option: e.response_option
-                        ? e.response_option
+                      question_id: e?.id,
+                      short_answer: e?.answer || '',
+                      response_option: e?.response_option
+                        ? e?.response_option
                         : 'WORD',
-                      answer_file: e.answer_file,
+                      answer_file: e?.answer_file,
                       active: 'SUBMITED',
                     })
                     break
@@ -580,10 +619,12 @@ const CaseStudyDetail = ({ questions }: any) => {
               continue
             } else {
               answers.push({
-                question_id: e.id,
-                short_answer: e.answer || '',
-                response_option: e.response_option ? e.response_option : 'WORD',
-                answer_file: e.answer_file,
+                question_id: e?.id,
+                short_answer: e?.answer || '',
+                response_option: e?.response_option
+                  ? e?.response_option
+                  : 'WORD',
+                answer_file: e?.answer_file,
                 active: 'SUBMITED',
               })
             }
@@ -594,7 +635,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       }
 
       quiz_position_mapping.push({
-        question_id: e.id,
+        question_id: e?.id,
         answers: e?.answers,
       })
     }
@@ -623,7 +664,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      const newArr = arr.filter((e) => e.id !== pad.id)
+      const newArr = arr.filter((e) => e?.id !== pad.id)
       if (pad.type === 'exhibits') {
         setValueExhibits(
           'exhibits',
@@ -751,7 +792,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           <div className="h-full" ref={containerRef}>
             <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
               <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
-                {topics.case_study_name} - {topics.name}
+                {topics?.case_study_name} - {topics?.name}
               </div>
               <ButtonCancelSubmit
                 className={'flex gap-4 flex-row-reverse w-1/3'}
@@ -763,7 +804,11 @@ const CaseStudyDetail = ({ questions }: any) => {
                   disabled: false,
                   onClick: () => {
                     setOpenScratchPad([])
-                    setOpenSubmit(true)
+                    if(checkUnSubmitAnswer().length) {
+                      setUnSubmitAnswer(true)
+                    } else {
+                      setOpenSubmit(true)
+                    }
                     setUnsavedChanges(false)
                   },
                 }}
@@ -837,7 +882,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                             onClick={() =>
                               handleOpenScratchPad(
                                 'file',
-                                e.resource.url,
+                                e?.resource?.url,
                                 e?.resource?.name,
                               )
                             }
@@ -935,7 +980,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 </div>
               </div>
             </div>
-            {openScratchPad.map((e, index: number) => {
+            {openScratchPad?.map((e, index: number) => {
               if (e.type === 'calculator') {
                 return (
                   <MovableWindow
@@ -945,12 +990,12 @@ const CaseStudyDetail = ({ questions }: any) => {
                       top: 'calc(25% - 150px)',
                       left: 'calc(25% - 200px)',
                     }}
-                    key={e.id}
-                    onClick={() => setOnFocusingPad(e.id)}
+                    key={e?.id}
+                    onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
-                      onFocusingPad === e.id
-                        ? openScratchPad.length + 1400
-                        : index + 1400
+                      onFocusingPad === e?.id
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
@@ -975,12 +1020,12 @@ const CaseStudyDetail = ({ questions }: any) => {
                       top: 'calc(50% - 150px)',
                       left: 'calc(50% - 200px)',
                     }}
-                    key={e.id}
-                    onClick={() => setOnFocusingPad(e.id)}
+                    key={e?.id}
+                    onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
-                      onFocusingPad === e.id
-                        ? openScratchPad.length + 1400
-                        : index + 1400
+                      onFocusingPad === e?.id
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
@@ -996,9 +1041,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                         defaultValue={scratchPadValues?.value}
                         placeholder="Take a note..."
                         control={controlScratch}
-                        name={e.id}
+                        name={e?.id}
                         onChange={(event) =>
-                          handleChangeScratchPad(event, e.id)
+                          handleChangeScratchPad(event, e?.id)
                         }
                         className="w-full h-[calc(100%-40px)] sapp-text-area p-5"
                       />
@@ -1008,10 +1053,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                 )
               } else if (e.type === 'exhibits') {
                 const i = exhibitData?.findIndex(
-                  (el: IExhibit) => el.id === e.id,
+                  (el: IExhibit) => el?.id === e?.id,
                 )
                 const exhibitsDes = exhibitData?.find(
-                  (exhibit) => exhibit.id === e.id,
+                  (exhibit) => exhibit?.id === e?.id,
                 )
                 return (
                   <MovableWindow
@@ -1021,12 +1066,12 @@ const CaseStudyDetail = ({ questions }: any) => {
                       top: 'calc(75% - 250px)',
                       left: 'calc(0%)',
                     }}
-                    key={e.id}
-                    onClick={() => setOnFocusingPad(e.id)}
+                    key={e?.id}
+                    onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
-                      onFocusingPad === e.id
-                        ? openScratchPad.length + 1400
-                        : index + 1400
+                      onFocusingPad === e?.id
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1056,7 +1101,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                                 onClick={() =>
                                   handleOpenScratchPad(
                                     'file',
-                                    e.resource.url,
+                                    e?.resource?.url,
                                     e?.resource?.name,
                                   )
                                 }
@@ -1079,18 +1124,18 @@ const CaseStudyDetail = ({ questions }: any) => {
                       top: 'calc(50%)',
                       left: 'calc(50%)',
                     }}
-                    key={e.id}
-                    onClick={() => setOnFocusingPad(e.id)}
+                    key={e?.id}
+                    onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
-                      onFocusingPad === e.id
-                        ? openScratchPad.length + 1400
-                        : index + 1400
+                      onFocusingPad === e?.id
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
                       <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
                         <div className="text-sm font-normal truncate">
-                          {e.fileName}
+                          {e?.fileName}
                         </div>
                         {/* <CloseIcon */}
                         <button onClick={() => handleCloseScratchPad(e)}>
@@ -1101,7 +1146,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         className="overflow-auto p-4 bg-white"
                         style={{ height: 'calc(100% - 40px' }}
                       >
-                        <PDFViewer file={e.file} />
+                        <PDFViewer file={e?.file} />
                       </div>
                     </div>
                   </MovableWindow>
@@ -1182,8 +1227,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                       <ExhibitsIcon />
                       <div className="font-normal flex text-sm items-center gap-3">
                         <div>
-                          <span className="hidden 3xl:inline-block 3xl:me-1">
-                            Exhibits
+                          <span className="hidden  lg:inline-block 3xl:me-1">
+                            {`Exhibits (${exhibits?.length})`}
                           </span>
                         </div>
                       </div>
@@ -1210,8 +1255,22 @@ const CaseStudyDetail = ({ questions }: any) => {
           <ConFirmSubmit
             open={openSubmit}
             setOpen={setOpenSubmit}
-            handleSubmit={handleSubmitQuestion}
+            handleSubmit={() => {
+                handleSubmitQuestion()
+                setOpenSubmit(false)
+              }
+            }
             handleCancel={() => setUnsavedChanges(true)}
+          />
+          <UnSubmitAnswerModal
+            open={openUnSubmitAnswer}
+            setOpen={setUnSubmitAnswer}
+            data={unSubmitAnswerData}
+            handleSubmit={() => {
+              handleSubmitQuestion()
+              setUnSubmitAnswer(false)
+            }}
+            handleCancel={() => setUnSubmitAnswer(false)}
           />
           <QuitTestModal
             open={openQuit}
@@ -1231,11 +1290,11 @@ const CaseStudyDetail = ({ questions }: any) => {
               setOpenUpload({ status: false, question_id: undefined })
             }}
             fileType={'ESSAY'}
-            location={`question-answer/${openUpload.question_id}`}
+            location={`question-answer/${openUpload?.question_id}`}
             setSelectedFile={(e: any) =>
               handleSaveFileEssay(
-                e[0],
-                openUpload.question_id,
+                e?.[0],
+                openUpload?.question_id,
                 router.query.id as string,
               )
             }

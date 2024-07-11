@@ -1,8 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import Icon from '@components/icons'
+import React, { useEffect, useRef } from 'react'
 import YourScore from './cfa/yourScore'
 import YourScoreDetail from './yourScoreDetail'
 import MultipleQuestion from './multipleQues'
@@ -10,6 +6,7 @@ import ChartACCAScore from './acca/chartACCAScore'
 import TotalScore from '@components/mycourses/test/TotalScore'
 import { roundNumber } from '@utils/helpers'
 import { F_LOW_CODES } from '@utils/constants'
+import SappLoading from 'src/common/SappLoading'
 
 interface QuizReport {
   ratio: number
@@ -38,19 +35,33 @@ const TestResultPage = ({
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
+  
+  const handleResize = () => {
     const multipleQuestionElem = multipleQuestionRef?.current
     const yourScoreDetailElem = yourScoreDetailRef?.current
-    if (multipleQuestionElem && yourScoreDetailElem) {
+    if (multipleQuestionElem && yourScoreDetailElem  ) {
       const maxHeight = Math.max(
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
       )
-      multipleQuestionElem.style.height = `calc(100vh - ${maxHeight}px)`
+      multipleQuestionElem.style.height = window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)`: 'fit-content'
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
-  }, [multipleQuestionRef?.current, yourScoreDetailRef?.current])
+  }
+  useEffect(() => {
+    type !== undefined && handleResize()
+  }, [
+    type,
+    multipleQuestionRef?.current,
+    yourScoreDetailRef?.current
+  ])
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,
@@ -70,11 +81,11 @@ const TestResultPage = ({
               classCountAll="relative top-0.5"
               globalAverage={GlobalAverage}
             />
-            <MultipleQuestion
-              questions={questions}
-              className={'xl:min-h-[815px]'}
-              multipleQuestionRef={multipleQuestionRef}
-            />
+              <MultipleQuestion
+                questions={questions}
+                className={'3.75xl:min-h-[815px]'}
+                multipleQuestionRef={multipleQuestionRef}
+              />
           </div>
           <div className="max-h-full w-full xl:w-auto">
             <ChartACCAScore data={chartData?.chart_data} />
@@ -97,24 +108,30 @@ const TestResultPage = ({
               </div>
               <MultipleQuestion
                 questions={questions}
-                className={'xl:min-h-[991px]'}
+                className={'3.75xl:min-h-[991px]'}
                 multipleQuestionRef={multipleQuestionRef}
               />
             </div>
           ) : (
-            <div className="flex gap-6 flex-wrap">
-              <MultipleQuestion
-                questions={questions}
-                className={'xl:min-h-[991px]'}
-                multipleQuestionRef={multipleQuestionRef}
-              />
-              <div className="max-h-full w-full xl:w-auto">
-                <YourScoreDetail
-                  className={'min-h-[991px] 2xl-max:pb-10'}
-                  yourScoreDetailRef={yourScoreDetailRef}
-                />
-              </div>
-            </div>
+            <>
+              {type !== undefined ? (
+                <div className="flex gap-6 flex-wrap">
+                  <MultipleQuestion
+                    questions={questions}
+                    className={'3.75xl:min-h-[991px]'}
+                    multipleQuestionRef={multipleQuestionRef}
+                  />
+                  <div className="max-h-full w-full xl:w-auto">
+                    <YourScoreDetail
+                      className={'min-h-[991px] 2xl-max:pb-10'}
+                      yourScoreDetailRef={yourScoreDetailRef}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <SappLoading />
+              )}
+            </>
           )}
         </>
       )}

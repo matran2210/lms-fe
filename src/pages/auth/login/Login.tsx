@@ -1,34 +1,32 @@
 import Google_Logo from '@assets/images/google_logo.svg'
 import Microsoft_Logo from '@assets/images/microsoft_logo.svg'
+import SappButton from '@components/base/button/SappButton'
 import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LAYOUT } from '@utils/constants'
-import { useEffect, useState } from 'react'
-import SappButton from '@components/base/button/SappButton'
-import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
-  VALIDATE_MIN_LENGTH,
-  VALIDATE_PASSWORD_REGEX_MSG,
-  VALIDATE_REQUIRED,
-  VALIDATE_MIN_LENGTH_PASSWORD,
+  SHOW_ERROR_ACCOUNT_LOCK,
   SHOW_ERROR_USERNAME_PASSWORD,
+  VALIDATE_LOGIN_EMAIL_REQUIRED,
+  VALIDATE_MIN_LENGTH,
+  VALIDATE_PASSWORD_REQUIRED,
+  VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants'
+import { EntranceTestAPI } from 'src/pages/api/entrance-test'
+import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
+import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
+import { getMessagingToken } from 'src/utils/firebase'
 import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
-import { getMessagingToken } from 'src/utils/firebase'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import PopUpLimit from './PopupLimit'
-import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
-import EntranceApi from 'src/redux/services/EntranceTest'
-import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
-import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 interface IInputProps {
   login: string
   password: string
@@ -53,17 +51,14 @@ const LoginPage = () => {
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
       .min(1, {
-        message: VALIDATE_REQUIRED,
+        message: VALIDATE_LOGIN_EMAIL_REQUIRED,
       })
       .min(5, { message: VALIDATE_MIN_LENGTH('Username or Email', 5) }),
-    password: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, {
-        message: VALIDATE_REQUIRED,
-      })
-      .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
-      .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
+    password: z.string({ required_error: VALIDATE_REQUIRED }).trim().min(1, {
+      message: VALIDATE_PASSWORD_REQUIRED,
+    }),
+    // .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) }),
+    // .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
     remember_me: z.boolean().default(false),
   })
 
@@ -108,6 +103,7 @@ const LoginPage = () => {
     } catch (error) {}
   }
 
+  const incorrectEmailAndPassword = ['400|010433', '400|010833', '400|010008']
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
     const { login, password, remember_me } = data
@@ -130,21 +126,31 @@ const LoginPage = () => {
           dispatch(getEntranceCount())
           localStorage.setItem('enstranceTest', 'true')
         })
-        .catch((error) => {
-          if (error?.response?.data?.error?.code === '403|000010') {
-            setOpenLimit(true)
-          } else if (error?.response?.data?.error?.code === '401|0000') {
-            setError('login', { message: SHOW_ERROR_USERNAME_PASSWORD })
-            setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
+        .then(() => {
+          const beforeLoginPath = localStorage.getItem('beforeLoginPath')
+          if (beforeLoginPath) {
+            router.push(beforeLoginPath)
           }
+        })
+        .catch((error) => {
+          const codeError = error?.response?.data?.error?.code
+          if (codeError === '403|000010') {
+            setOpenLimit(true)
+          } else if (
+            incorrectEmailAndPassword.includes(
+              error?.response?.data?.error?.code,
+            )
+          ) {
+            setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
+          } else if (codeError === '400|010008') {
+            setError('password', { message: SHOW_ERROR_ACCOUNT_LOCK })
+          }
+
           setTimeout(() => {
             setLoading(false)
           }, 1000)
         })
     } catch (error: any) {}
-  }
-  const socialLogin = () => {
-    toast.error('Chức năng này sẽ được update vào version sau!')
   }
 
   useEffect(() => {
@@ -161,11 +167,11 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="block max-w-[38.375rem] md:py-17.5 xs:py-20 py-10 px-8 md:px-19 mx-auto shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
+      <div className="block max-w-[38.375rem] md:py-17.5 xs:py-10 py-8 px-8 md:px-19 mx-auto md:shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
         <div className="md:text-4xl text-3xl font-semibold text-bw-1 mb-2">
           Log In
         </div>
-        <div className="text-medium-sm text-gray-1 md:mb-10 mb-8">
+        <div className="text-medium-sm text-gray-1 md:mb-10 mb-5">
           Login to Continue Learning
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
@@ -184,7 +190,7 @@ const LoginPage = () => {
             textSize="sm"
             className="mt-6"
           />
-          <div className="mt-10">
+          <div className="mt-6 sm:mt-10">
             <SappButton
               title="Log In"
               full={true}

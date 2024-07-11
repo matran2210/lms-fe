@@ -58,28 +58,30 @@ const ModalExplanationPackage = ({
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       )
       setActiveQuestion({
-        ...resultResponse.data.answer.question,
+        ...resultResponse?.data?.answer?.question,
         confirmed: true,
         corrects: getCorrect(
-          resultResponse.data.answer.question.qType !== QUESTION_TYPES.MATCHING
-            ? resultResponse.data.answer.question.answers
-            : resultResponse.data.answer.answer_matching_mapping,
-          resultResponse.data.answer.question.qType,
+          resultResponse?.data?.answer?.question?.qType !==
+            QUESTION_TYPES.MATCHING
+            ? resultResponse?.data?.answer?.question?.answers
+            : resultResponse?.data?.answer?.answer_matching_mapping,
+          resultResponse?.data?.answer?.question?.qType,
         ),
-        question_matchings: resultResponse.data.answer.answer_matching_mapping,
-        answers: resultResponse.data?.answer?.question.answers || [],
+        question_matchings:
+          resultResponse?.data?.answer?.answer_matching_mapping,
+        answers: resultResponse?.data?.answer?.question?.answers || [],
         myAnswers: [
           {
-            question_id: resultResponse.data.answer.question.id,
-            question_answer_id: resultResponse.data.answer.question_answer_id,
-            answer: resultResponse.data.answer.answer,
+            question_id: resultResponse?.data?.answer?.question?.id,
+            question_answer_id: resultResponse.data.answer?.question_answer_id,
+            answer: resultResponse?.data?.answer?.answer,
           },
         ],
-        defaultValue: resultResponse.data.answer.answer,
-        next: resultResponse.data.next,
-        previous: resultResponse.data.previous,
-        total_question: resultResponse.data.total_question,
-        index: resultResponse.data.index,
+        defaultValue: resultResponse?.data?.answer?.answer,
+        next: resultResponse?.data?.next,
+        previous: resultResponse?.data?.previous,
+        total_question: resultResponse?.data?.total_question,
+        index: resultResponse?.data?.index,
         question_topic: topicDescription?.data,
         short_answer: resultResponse?.data?.answer?.short_answer,
         response_option_answer: resultResponse?.data?.answer?.response_option,
@@ -96,14 +98,14 @@ const ModalExplanationPackage = ({
       case QUESTION_TYPES.TRUE_FALSE:
         const correctAnswers = answers
         const corrects = Object.fromEntries(
-          correctAnswers.map((answer: any) => [answer.id, answer.is_correct]),
+          correctAnswers.map((answer: any) => [answer?.id, answer?.is_correct]),
         )
         return corrects
       case QUESTION_TYPES.MULTIPLE_CHOICE:
         return Object.fromEntries(
           (answers || []).map((originalAnswer: any) => [
-            originalAnswer.id,
-            originalAnswer.is_correct,
+            originalAnswer?.id,
+            originalAnswer?.is_correct,
           ]),
         )
       case QUESTION_TYPES.FILL_WORD:

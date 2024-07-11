@@ -1,5 +1,5 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -71,65 +71,65 @@ const MatchingQuestion = forwardRef(
     const isSelfReflection = data?.is_self_reflection
 
     function allowDrop(ev: any) {
-      ev.preventDefault()
+      ev?.preventDefault()
 
-      const slotElement = ev.target
-      slotElement.classList.add('dragging')
+      const slotElement = ev?.target
+      slotElement?.classList?.add('dragging')
 
-      const matchingQuestion = matchingQuestionRef.current
+      const matchingQuestion = matchingQuestionRef?.current
       if (!matchingQuestion) return
 
-      const rect = matchingQuestion.getBoundingClientRect()
+      const rect = matchingQuestion?.getBoundingClientRect()
 
       // Lấy chiều dài của phần tử matchingQuestion
-      const matchingQuestionHeight = matchingQuestion.clientHeight
+      const matchingQuestionHeight = matchingQuestion?.clientHeight
 
       // Lấy tọa độ y của con trỏ chuột tính từ đỉnh của phần tử matchingQuestion
-      const mouseY = ev.clientY - rect.top
+      const mouseY = ev?.clientY - rect?.top
 
       // Thiết lập ngưỡng cho việc cuộn
       const threshold = 200
 
       // Kiểm tra nếu con trỏ chuột nằm ở phía trên ngưỡng
       if (mouseY < threshold) {
-        matchingQuestion.scrollBy(0, -10)
+        matchingQuestion?.scrollBy(0, -10)
       }
 
       // Kiểm tra nếu con trỏ chuột nằm ở phía dưới ngưỡng
       if (mouseY > matchingQuestionHeight - threshold) {
-        matchingQuestion.scrollBy(0, 10)
+        matchingQuestion?.scrollBy(0, 10)
       }
     }
     function allowDropStorage(ev: any) {
-      if (ev.target.classList.contains('dropable')) {
-        ev.preventDefault()
+      if (ev?.target?.classList?.contains('dropable')) {
+        ev?.preventDefault()
       } else {
         return
       }
     }
 
     function drag(ev: any) {
-      ev.dataTransfer.setData('text', ev.target.id)
-      ev.dataTransfer.setData('questionId', data.id)
+      ev?.dataTransfer?.setData('text', ev.target.id)
+      ev?.dataTransfer?.setData('questionId', data.id)
 
       if (uuid) {
-        dragParentIdRef = ev.target.closest(`#${uuid}`)?.id
+        dragParentIdRef = ev?.target?.closest(`#${uuid}`)?.id
       }
     }
 
     function drop(ev: any, dropId: string, dropItem?: boolean) {
       ev.preventDefault()
 
-      const slotElement = ev.target
-      slotElement.classList.remove('dragging')
+      const slotElement = ev?.target
+      slotElement?.classList?.remove('dragging')
 
       if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
         return
       }
       dragParentIdRef = ''
 
-      const questionId = ev.dataTransfer.getData('questionId')
-      var data = ev.dataTransfer.getData('text')
+      const questionId = ev?.dataTransfer.getData('questionId')
+      var data = ev?.dataTransfer?.getData('text')
 
       let draggingItem
 
@@ -138,20 +138,20 @@ const MatchingQuestion = forwardRef(
           .closest(`#${uuid}`)
           ?.querySelector(`[id="${data}"]`)
       } else {
-        draggingItem = document.getElementById(data)
+        draggingItem = document?.getElementById(data)
       }
 
       const oldParent = draggingItem?.parentNode
       if (questionId === dropId) {
         if (
-          slotElement?.children.length === 0 &&
-          ev.target.classList.contains('dropable') &&
+          slotElement?.children?.length === 0 &&
+          ev?.target?.classList?.contains('dropable') &&
           !dropItem
         ) {
-          ev.target.appendChild(draggingItem)
+          ev?.target?.appendChild(draggingItem)
         } else if (dropItem) {
-          const parent = ev.target.parentNode
-          oldParent?.appendChild(ev.target)
+          const parent = ev?.target?.parentNode
+          oldParent?.appendChild(ev?.target)
           parent.appendChild(draggingItem)
           return
         }
@@ -161,13 +161,13 @@ const MatchingQuestion = forwardRef(
       // prevent the default behavior of the drop event
       event.preventDefault()
       // get the id of the dragged piece from the dataTransfer object
-      const pieceId = event.dataTransfer.getData('text')
-      const questId = event.dataTransfer.getData('questionId')
+      const pieceId = event?.dataTransfer.getData('text')
+      const questId = event?.dataTransfer.getData('questionId')
       // get the storage element from the DOM
       let storage
       if (uuid) {
-        storage = event.target
-          .closest(`#${uuid}`)
+        storage = event?.target
+          ?.closest(`#${uuid}`)
           ?.querySelector(`.${storageId}`)
       } else {
         storage = document.querySelector(`.${storageId}`)
@@ -176,7 +176,7 @@ const MatchingQuestion = forwardRef(
       if (event.target === storage && questId === id) {
         if (uuid) {
           storage?.appendChild(
-            event.target
+            event?.target
               .closest(`#${uuid}`)
               ?.querySelector(`[id="${pieceId}"]`) as any,
           )
@@ -212,7 +212,7 @@ const MatchingQuestion = forwardRef(
     //   }
     // }, [data])
     function shuffleArray(array: Array<any>) {
-      let currentIndex = array.length,
+      let currentIndex = array?.length,
         randomIndex
       // While there remain elements to shuffle
       while (currentIndex > 0) {
@@ -232,12 +232,12 @@ const MatchingQuestion = forwardRef(
       let objCorrect = {} as any
       let arr = []
       for (let quest of data?.question_matchings) {
-        arr.push(quest.answer)
+        arr.push(quest?.answer)
         if (defaultAnswer) {
-          obj[quest.id] = data?.question_matchings.find(
+          obj[quest?.id] = data?.question_matchings.find(
             (el: any) =>
-              el.answer?.id ===
-              defaultAnswer.find((e: any) => e.question_id === quest.id)
+              el?.answer?.id ===
+              defaultAnswer.find((e: any) => e?.question_id === quest?.id)
                 ?.answer_id,
           )
         }
@@ -246,7 +246,7 @@ const MatchingQuestion = forwardRef(
       if (corrects) {
         for (let correct of corrects) {
           if (defaultAnswer) {
-            objCorrect[correct.id] = correct.answer
+            objCorrect[correct?.id] = correct?.answer
           }
         }
         setCorrectAnswer(objCorrect)
@@ -254,20 +254,20 @@ const MatchingQuestion = forwardRef(
 
       if (defaultAnswer) {
         for (let e of defaultAnswer) {
-          arr = arr.filter((el) => el.id !== e.answer_id)
+          arr = arr?.filter((el) => el?.id !== e?.answer_id)
         }
       }
       setAnswers(arr)
       setDefaultValue(obj)
-    }, [defaultAnswer, data.question_matchings])
+    }, [defaultAnswer, data?.question_matchings])
     return (
       <div key={key} ref={extenalRef} id={`${uuid}`}>
         <div
           id="hightlight_area"
           onMouseUp={(e: any) => {
             if (
-              e.target.tagName.charAt(0) !== 'm' &&
-              e.target.firstChild?.tagName !== 'math'
+              e?.target?.tagName?.charAt(0) !== 'm' &&
+              e?.target?.firstChild?.tagName !== 'math'
             ) {
               // if(e){
               if (allowHighLight) {
@@ -292,7 +292,9 @@ const MatchingQuestion = forwardRef(
             !isHideExhibit &&
             data?.question_topic?.exhibits?.length > 0 && (
               <>
-                <div className="border border-b-gray-2 my-6"></div>
+                {!!data?.question_topic?.description && (
+                  <div className="border border-b-gray-2 my-6"></div>
+                )}
                 <div className="flex items-center mb-4">
                   <div className="font-semibold">
                     Exhibits({data?.question_topic?.exhibits?.length || 0})
@@ -307,16 +309,16 @@ const MatchingQuestion = forwardRef(
                     return (
                       <div
                         className="cursor-pointer hover:text-primary"
-                        key={e.id}
+                        key={e?.id ?? i}
                         onClick={(event) => {
                           setOpenFile &&
                             setOpenFile(
                               {
                                 type: 'exhibits',
-                                description: e.description,
-                                name: e.name,
+                                description: e?.description,
+                                name: e?.name,
                                 index: i,
-                                files: e.files,
+                                files: e?.files,
                               },
                               null,
                               null,
@@ -324,7 +326,7 @@ const MatchingQuestion = forwardRef(
                             )
                         }}
                       >
-                        Exhibit {i + 1}: {e.name}
+                        Exhibit {i + 1}: {e?.name}
                       </div>
                     )
                   })}
@@ -343,27 +345,27 @@ const MatchingQuestion = forwardRef(
             className="flex flex-col gap-y-5 px-19"
             ref={matchingQuestionRef}
           >
-            {data?.question_matchings.map((e: any) => {
+            {data?.question_matchings?.map((e: any) => {
               return (
                 <div className="flex flex-nowrap gap-x-20 " key={e?.id}>
                   <QuestionCard value={e?.content} />
                   <div
                     id={e?.id}
                     className="flex-1 sapp-match-result dropable"
-                    onDrop={() => drop(event, data.id)}
+                    onDrop={() => drop(event, data?.id)}
                     onDragOver={() => allowDrop(event)}
                   >
                     {defaultValue?.[e?.id]?.id && (
                       <div
                         // className="w-fit"
                         className="sapp-notched-container min-w-132px"
-                        id={defaultValue[e?.id]?.answer.id}
+                        id={defaultValue[e?.id]?.answer?.id}
                         draggable="true"
                         onDragStart={drag}
-                        onDrop={() => drop(event, data.id, true)}
+                        onDrop={() => drop(event, data?.id, true)}
                         onDragOver={() => allowDrop(event)}
                       >
-                        {defaultValue[e?.id].answer?.answer}
+                        {defaultValue[e?.id]?.answer?.answer}
                       </div>
                     )}
                   </div>
@@ -385,7 +387,7 @@ const MatchingQuestion = forwardRef(
                     id={answer?.id}
                     draggable="true"
                     onDragStart={drag}
-                    onDrop={() => drop(event, data.id, true)}
+                    onDrop={() => drop(event, data?.id, true)}
                     onDragOver={() => allowDrop(event)}
                   >
                     {answer?.answer}
@@ -439,7 +441,7 @@ const MatchingQuestion = forwardRef(
                               className="sapp-notched-container-incorrects min-w-132px text-state-error"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
-                              {defaultValue[e?.id].answer?.answer}
+                              {defaultValue[e?.id]?.answer?.answer}
                             </div>
                           )}
                         </div>
@@ -454,7 +456,7 @@ const MatchingQuestion = forwardRef(
                 Correct Answer
               </div>
 
-              {data?.question_matchings.map((e: any, index: number) => {
+              {data?.question_matchings?.map((e: any, index: number) => {
                 return (
                   <div
                     className="flex flex-nowrap justify-between px-[123px]"
@@ -470,7 +472,7 @@ const MatchingQuestion = forwardRef(
                           // className="w-fit"
                           className="sapp-notched-container-corrects min-w-132px text-state-success"
                         >
-                          {correctAnswer[e?.id].answer}
+                          {correctAnswer?.[e?.id]?.answer}
                         </div>
                       )}
                     </div>

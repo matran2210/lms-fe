@@ -209,3 +209,17 @@ export const onLinkSocial = (link: string) => {
   window.open(link, '_blank')
 }
 
+export const getUppercaseByNumber = (num: number): string => {
+  let result = ''
+  while (num > 0) {
+    let remainder = num % 26
+    if (remainder === 0) {
+      remainder = 26
+      num--
+    }
+    let char = String.fromCharCode(remainder + 64)
+    result = char + result
+    num = Math.floor(num / 26)
+  }
+  return result
+}

@@ -42,13 +42,13 @@ const NotifyList = ({
   }
 
   useEffect(() => {
-    Aos.init({ duration: ANIMATION.DURATION, once: true })
-  })
+    Aos.init({ duration: ANIMATION.DURATION, once: true, offset: 0 })
+  }, [open])
 
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
       {!isEmpty(notifyLists) ? (
-        notifyLists.map((notifyItem, index) => {
+        notifyLists?.map((notifyItem, index) => {
           const readStatus = notifyItem?.notification_user_instances?.is_read
           return (
             <div
@@ -61,7 +61,7 @@ const NotifyList = ({
                   notifyItem?.id,
                   notifyItem?.created_by ?? null,
                   notifyItem?.content,
-                  (e.target as HTMLElement).tagName,
+                  (e?.target as HTMLElement)?.tagName,
                 )
               }}
               data-aos={ANIMATION.DATA_AOS}

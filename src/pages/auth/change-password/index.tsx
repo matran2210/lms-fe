@@ -2,11 +2,9 @@ import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 // import { useState } from 'react'
-import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
-  VALIDATE_MIN_LENGTH,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
   VALIDATE_MIN_LENGTH_PASSWORD,
@@ -16,7 +14,6 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
-import AuthApi from 'src/redux/services/Authen'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
 import { removeJwtToken } from '@utils/index'
