@@ -834,23 +834,9 @@ p a {
   font-family: 'Roboto', sans-serif !important;
 }
 
-
-.pinned-noti-marquee-parent {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
-  max-width: 90%;
-}
-
 .pinned-noti-marquee-content {
   transform: translateX(100%);
   animation: scroll-left 50s linear infinite;
-  & p, h2 {
-    color: white;
-  }
-}
-
-.pinned-noti-marquee-parent:hover, .pinned-container:hover {
-  white-space: pre-wrap;
-  height: auto;
 }
 
 .pinned-noti-marquee-content:hover {
