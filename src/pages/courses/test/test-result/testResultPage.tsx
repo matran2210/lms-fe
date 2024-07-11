@@ -39,12 +39,13 @@ const TestResultPage = ({
   const handleResize = () => {
     const multipleQuestionElem = multipleQuestionRef?.current
     const yourScoreDetailElem = yourScoreDetailRef?.current
-    if (multipleQuestionElem && yourScoreDetailElem  ) {
+    if (multipleQuestionElem && yourScoreDetailElem ) {
       const maxHeight = Math.max(
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
       )
       multipleQuestionElem.style.height = window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)`: 'fit-content'
+      yourScoreDetailElem.style.marginBottom = window.innerWidth > 1777 ? '0px' :  `${multipleQuestionElem.offsetHeight}px` 
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
   }
@@ -87,10 +88,10 @@ const TestResultPage = ({
                 multipleQuestionRef={multipleQuestionRef}
               />
           </div>
-          <div className="max-h-full w-full xl:w-auto">
+          <div className="max-h-full w-full xl:w-auto flex flex-col">
             <ChartACCAScore data={chartData?.chart_data} />
             <YourScoreDetail
-              className={'min-h-[815px] 2xl-max:pb-10'}
+              className={'min-h-[815px] 2xl-max:pb-10 grow'}
               yourScoreDetailRef={yourScoreDetailRef}
             />
           </div>
@@ -99,10 +100,10 @@ const TestResultPage = ({
         <>
           {type === 'CFA' ? (
             <div className="flex gap-6 flex-wrap">
-              <div className="max-h-full w-full xl:w-auto">
+              <div className="max-h-full w-full xl:w-auto flex flex-col">
                 <YourScore chartData={chartData} />
                 <YourScoreDetail
-                  className={'min-h-[466px] 2xl-max:pb-10'}
+                  className={'min-h-[466px] grow 2xl-max:pb-10'}
                   yourScoreDetailRef={yourScoreDetailRef}
                 />
               </div>

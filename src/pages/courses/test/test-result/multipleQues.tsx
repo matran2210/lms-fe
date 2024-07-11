@@ -157,7 +157,7 @@ const MultipleQuestion = ({
       <div className="mt-auto w-full">
         <div
           className={`border-default flex justify-between ${
-            showMore ? 'border-t pt-4 xl:pt-6' : 'xl:border-t pt-0 xl:pt-6'
+            showMore ? 'border-t pt-4 xl:pt-6' : '3.75xl:border-t pt-0 3.75xl:pt-6'
           }`}
         >
           <div className="hidden 3.75xl:flex items-center mr-6 w-20">
@@ -185,7 +185,7 @@ const MultipleQuestion = ({
             onMouseUp={() => setIsDragging(false)}
             onMouseLeave={() => setIsDragging(false)}
             className={`${
-              !showMore ? 'opacity-100 visible 3.5xl:shadow-sidebar' : 'opacity-0 invisible'
+              !showMore ? 'opacity-100 visible' : 'opacity-0 invisible'
             } w-full flex gap-3 overflow-x-auto duration-300 block 3.75xl:hidden !max-h-[1040px]`}
           >
             {renderLines(
