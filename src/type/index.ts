@@ -85,3 +85,12 @@ export interface ICert {
 export interface PinnedNotifications {
   data: IPinned
 }
+
+export enum NOTIFICATION_STATUS {
+  SENT = 'SENT',
+  CANCEL = 'CANCEL',
+  RETRIEVE = 'RETRIEVE',
+  TIMER = 'TIMER',
+  SHOWING = 'SHOWING',
+  ENDED = 'ENDED',
+}

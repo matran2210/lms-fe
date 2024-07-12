@@ -1,4 +1,4 @@
-import { getActToken, getLocalStorgeActToken } from '@utils/index'
+import { getActToken, getLocalStorageItem, setLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
 import React, {
   PropsWithChildren,
@@ -72,14 +72,15 @@ import { PinnedNotifications } from 'src/type'
 		const getPinnedData = async () => {
       if(authToken){
         const res: PinnedNotifications = await UserApi.getPinnedNotifications()
-        const oldPinnedId = localStorage.getItem('pinnedId')
-        const oldPinnedFlag = localStorage.getItem('openPinned')
+        const oldPinnedId = getLocalStorageItem('pinnedId')
+        const oldPinnedFlag = getLocalStorageItem('openPinned')
 
         if(oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')){
           setPinnedNotifications(res)
           setOpenPinned(true)
-          localStorage.setItem('pinnedId', res?.data?.id)
-          localStorage.setItem('openPinned', "true")
+          setLocalStorageItem('pinnedId', res?.data?.id)
+          setLocalStorageItem('openPinned', "true")
+          setLocalStorageItem('pinnedStatus', res?.data?.status)
         } else {
           if(Boolean(oldPinnedFlag === 'false')){
             setOpenPinned(false)

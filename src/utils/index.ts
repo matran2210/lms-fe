@@ -223,3 +223,15 @@ export const getUppercaseByNumber = (num: number): string => {
   }
   return result
 }
+
+export const removeLocalStorageItem = (item: string) => {
+  localStorage.removeItem(item)
+}
+
+export const getLocalStorageItem = (name: string) => {
+  return localStorage.getItem(name) || ''
+}
+
+export const setLocalStorageItem = (name: string, value: string) => {
+  localStorage.setItem(name, value)
+}
