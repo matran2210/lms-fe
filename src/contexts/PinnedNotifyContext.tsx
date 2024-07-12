@@ -78,11 +78,11 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
       const oldPinnedFlag = localStorage.getItem('openPinned')
 
       if (oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')) {
-        const start_date = new Date(res.data.send_time)
+        const start_date = new Date(res?.data?.send_time)
         const pin_start = convertUTCToLocalTime(start_date)
         const unix_pin_start = pin_start.getTime()
 
-        const end_date = new Date(res.data.send_time)
+        const end_date = new Date(res?.data?.send_time)
         const pin_end = convertUTCToLocalTime(end_date)
         const unix_pin_end = pin_end.getTime()
 
