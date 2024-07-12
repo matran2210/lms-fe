@@ -18,7 +18,7 @@ export default function DashboardLayout({
   const toggleDrawer = () => {
     setOpened((prev) => !prev)
   }
-  const { pinnedNotifications } = usePinnedNotifyContext()
+  const { openPinned } = usePinnedNotifyContext()
 
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
 
@@ -29,13 +29,13 @@ export default function DashboardLayout({
         toggleDrawer={toggleDrawer}
         className={`menu-sidebar-left fixed top-0 md:left-0 h-screen bg-white shadow-sidebar w-20 max-w-screen ${
           openDrawer ? 'opacity-5' : ''
-        } ${guideStatus ? '' : 'overflow-hidden'} ${pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
+        } ${guideStatus ? '' : 'overflow-hidden'} ${openPinned ? 'pt-12' : ''}`}
         setOpenResource={setOpenResource}
       />
       <div className="w-full min-h-screen">
         {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}
         {/* <div> */}
-        <div className={`${pinnedNotifications?.data?.content ? 'pt-12' : ''} bg-gray-4 min-h-full`}>
+        <div className={`${openPinned ? 'pt-12' : ''} bg-gray-4 min-h-full`}>
           <div className="ml-0 md:ml-20 sapp-loading">{children}</div>
         </div>
         {/* </div> */}
