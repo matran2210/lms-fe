@@ -83,7 +83,7 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
         // const pin_start = convertUTCToLocalTime(start_date)
         // const unix_pin_start = pin_start.getTime()
 
-        // const end_date = new Date(res?.data?.send_time)
+        // const end_date = new Date(res?.data?.send_finish_time)
         // const pin_end = convertUTCToLocalTime(end_date)
         // const unix_pin_end = pin_end.getTime()
 
@@ -91,7 +91,7 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
         const start_date = new Date(res?.data?.send_time)
         const unix_pin_start = start_date.getTime()
 
-        const end_date = new Date(res?.data?.send_time)
+        const end_date = new Date(res?.data?.send_finish_time)
         const unix_pin_end = end_date.getTime()
 
         const now = new Date()
