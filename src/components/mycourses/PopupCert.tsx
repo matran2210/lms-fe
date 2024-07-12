@@ -24,9 +24,9 @@ const PopupCert = ({ dataStudent, onCancel, open }: IProps) => {
 
   const onClickBackCourse = () => {
     onCancel()
-    router.push('/courses')
+    router.push(localStorage.getItem('courseDetail') || '')
   }
-
+  
   return (
     <SappModalV2
       title={undefined}
@@ -49,10 +49,10 @@ const PopupCert = ({ dataStudent, onCancel, open }: IProps) => {
       okButtonCaption={
         !isEmpty(dataStudent?.payload?.certificate_id)
           ? 'View your Certificate'
-          : 'Back to My Course'
+          : 'Back'
       }
-      cancelButtonCaption="Back to My Course"
-      handleClose={onCancel}
+      cancelButtonCaption="Back"
+      handleClose={onClickBackCourse}
       showOkButton
     >
       <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
