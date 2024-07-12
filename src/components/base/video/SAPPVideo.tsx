@@ -12,6 +12,7 @@ import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
 import { Thumbnail } from 'src/type/course/Question'
+import { httpService } from 'src/redux/services/httpService'
 
 interface IProp {
   options: any
@@ -61,6 +62,9 @@ const SAPPVideo = ({
   const [playbackRate, setPlaybackRate] = useState<number>(1)
   const [playbackQuality, setPlaybackQuality] = useState<number | string>(0)
   const [listQualitys, setListQualitys] = useState<any>([])
+  const [listCaptions, setlistCaptions] = useState<any>([])
+  const [activeCC, setActiveCC] = useState<boolean>(false)
+  const [playbackCC, setPlaybackCC] = useState<number>(0)
   const [activeSettings, setActiveSettings] = useState<boolean>(false)
   const [activeQuality, setActiveQuality] = useState<boolean>(false)
   const [activeSpeed, setActiveSpeed] = useState<boolean>(false)
@@ -110,6 +114,7 @@ const SAPPVideo = ({
             `${video_url}${options?.src}/manifest/video.mpd`,
             false,
           )
+          await fetchCaptions(`${video_url}${options?.src}/manifest/video.mpd`)
 
           player.updateSettings({
             streaming: {
@@ -139,6 +144,7 @@ const SAPPVideo = ({
             }, 1000)
             setPlayerFunction(player)
           })
+          player.setTextTrack(playbackCC) 
         }
       }
     }
@@ -149,6 +155,33 @@ const SAPPVideo = ({
       }
     }
   }, [options?.src])
+
+  // Get list captions of video
+  const fetchCaptions = async (url: string) => {
+    try {
+      const response = await httpService.GET<any, any>({
+        uri: url,
+      })
+      const parser = new DOMParser()
+      const xmlDoc = parser.parseFromString(response, 'text/xml')
+      const adaptationSets = xmlDoc.getElementsByTagName('AdaptationSet')
+      const captions = []
+      for (let i = 0; i < adaptationSets.length; i++) {
+        const mimeType = adaptationSets[i].getAttribute('mimeType')
+        if (mimeType === 'text/vtt') {
+          captions.push(adaptationSets[i])
+        }
+      }
+      const newlistCaptions = captions.map((caption, index) => {
+        const lang = caption.getAttribute('lang')
+        return {
+          lang: lang,
+          index: index,
+        }
+      })
+      setlistCaptions(newlistCaptions)
+    } catch (error) {}
+  }
 
   useEffect(() => {
     // Add eventlisteners
@@ -568,6 +601,21 @@ const SAPPVideo = ({
     }
   }
 
+  const handleLanguageChange = (event: React.MouseEvent<HTMLLIElement>) => {
+    const target = event.target as HTMLLIElement;
+    const selectedCC = target?.dataset?.cc;
+    setPlaybackCC(Number(selectedCC));
+    updatePlayButton();
+    setTimeout(() => {
+      if (playerFunction) {
+        playerFunction.setTextTrack(Number(selectedCC));
+        updatePlayButton();
+      } else {
+        console.error("Player function is not initialized yet.");
+      }
+    }, 500);
+  }
+
   // Function to change the video quality based on the selected option
   const changeQuality = (number: number | string, bit: number | string) => {
     updatePlayButton()
@@ -841,7 +889,7 @@ const SAPPVideo = ({
                     </svg>
                     <>
                       <div className="settings-control-popup hidden absolute bottom-5 -right-8 text-center rounded text-white py-1 text-white bg-overlay-control w-44">
-                        {!activeQuality && !activeSpeed && (
+                        {!activeQuality && !activeSpeed && !activeCC && (
                           <div className="px-4 py-1">
                             <div
                               className="flex items-center justify-between"
@@ -877,6 +925,26 @@ const SAPPVideo = ({
                                 ></ArrowIcon>
                               </span>
                             </div>
+                            {listCaptions.length > 0 && (
+                              <div
+                                className="flex items-center justify-between"
+                                onClick={() => setActiveCC(true)}
+                              >
+                                <span className="block w-16 text-sm font-semibold text-left">
+                                  CC:
+                                </span>
+                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                  {playbackCC === -1
+                                    ? 'Off'
+                                    : listCaptions[playbackCC].lang}
+                                  <ArrowIcon
+                                    className={'w-3 h-4'}
+                                    right={true}
+                                    iconType={'chervon'}
+                                  ></ArrowIcon>
+                                </span>
+                              </div>
+                            )}
                           </div>
                         )}
                         {activeQuality && (
@@ -957,6 +1025,49 @@ const SAPPVideo = ({
                                   }`}
                                 >
                                   {speed.label}
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                        {activeCC && listCaptions.length > 0 && (
+                          <>
+                            <h4
+                              className="text-base font-semibold px-1.5 relative"
+                              onClick={() => setActiveCC(false)}
+                            >
+                              <ArrowIcon
+                                className={'absolute left-1 top-1 w-4 h-4'}
+                                iconType={'chervon'}
+                              ></ArrowIcon>
+                              CC
+                            </h4>
+                            <ul
+                              className="cc-options text-ssm font-normal"
+                              onClick={() => setActiveCC(false)}
+                            >
+                              <li
+                                key={-1}
+                                onClick={handleLanguageChange}
+                                data-cc={-1}
+                                className={`hover:bg-white hover:text-black text-xsm ${
+                                  -1 === playbackCC ? 'bg-white text-black' : ''
+                                }`}
+                              >
+                                Off
+                              </li>
+                              {listCaptions.map((cc: any) => (
+                                <li
+                                  key={cc.index}
+                                  onClick={handleLanguageChange}
+                                  data-cc={cc.index}
+                                  className={`hover:bg-white hover:text-black text-xsm ${
+                                    cc.index === playbackCC
+                                      ? 'bg-white text-black'
+                                      : ''
+                                  }`}
+                                >
+                                  {cc.lang}
                                 </li>
                               ))}
                             </ul>
