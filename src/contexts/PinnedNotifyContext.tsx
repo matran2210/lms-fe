@@ -79,20 +79,13 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
 
       if (oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')) {
         // * Logic đúng
-        // const start_date = new Date(res?.data?.send_time)
-        // const pin_start = convertUTCToLocalTime(start_date)
-        // const unix_pin_start = pin_start.getTime()
-
-        // const end_date = new Date(res?.data?.send_finish_time)
-        // const pin_end = convertUTCToLocalTime(end_date)
-        // const unix_pin_end = pin_end.getTime()
-
-        // * Logic fix tạm
         const start_date = new Date(res?.data?.send_time)
-        const unix_pin_start = start_date.getTime()
+        const pin_start = convertUTCToLocalTime(start_date)
+        const unix_pin_start = pin_start.getTime()
 
         const end_date = new Date(res?.data?.send_finish_time)
-        const unix_pin_end = end_date.getTime()
+        const pin_end = convertUTCToLocalTime(end_date)
+        const unix_pin_end = pin_end.getTime()
 
         const now = new Date()
         const unix_now = now.getTime()
