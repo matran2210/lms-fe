@@ -159,7 +159,7 @@ const SAPPVideo = ({
   // Get list captions of video
   const fetchCaptions = async (url: string) => {
     try {
-      const response = await httpService.GET<any, any>({
+      const response = await httpService.GET<string, string>({
         uri: url,
       })
       const parser = new DOMParser()
