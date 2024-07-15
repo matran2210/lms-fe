@@ -63,11 +63,10 @@ import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 
-
 interface Answer {
   answer: string | string[] | Object[]
   attempted?: boolean
-  done?: boolean,
+  done?: boolean
   flaged?: boolean
   id?: string
   index?: string
@@ -77,7 +76,6 @@ interface Answer {
   timeSpent?: number
   viewed?: boolean
 }
-
 
 type Window = {
   userAgreed: any
@@ -269,43 +267,44 @@ const TestDetail = () => {
   }
 
   /**
-   * DES: confirm unfinished questions before submitting 
+   * DES: confirm unfinished questions before submitting
    */
   const checkUnSubmitAnswer = (): number[] => {
-    const answers = handleSaveCurrentAnswer(tabs, currentTabContent);
-    let result: number[] =  []
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
+    let result: number[] = []
     answers?.map((item: Answer, index: number) => {
-        if (!item.done && !validateAnswer({answer: item.answer})) {
-            result.push(index + 1)
-        }
+      if (!item.done && !validateAnswer({ answer: item.answer })) {
+        result.push(index + 1)
+      }
     })
     setUnSubmitAnswerData(result)
     return result
   }
 
   // Validate các câu hỏi xem đã trả lời chưa
-  const validateAnswer = (item: {answer: string | Object[] | string[]}) => {
-    if ( typeof item?.answer === 'string' && !item?.answer) {
+  const validateAnswer = (item: { answer: string | Object[] | string[] }) => {
+    if (typeof item?.answer === 'string' && !item?.answer) {
       return false
-    } 
+    }
     if (!item?.answer?.length) return false
-    if (Array.isArray(item?.answer) ) {
-      const emptyAnswer = item?.answer?.filter((el: { idAnswer?: string, answer_id?: string}  ) =>  {
-        if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
-          return el
-        }
-        if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
-          return el
-        }
-      })
-      const emptyEl =  item.answer.filter((el) => typeof el === 'string' && !el)
+    if (Array.isArray(item?.answer)) {
+      const emptyAnswer = item?.answer?.filter(
+        (el: { idAnswer?: string; answer_id?: string }) => {
+          if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
+            return el
+          }
+          if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
+            return el
+          }
+        },
+      )
+      const emptyEl = item.answer.filter((el) => typeof el === 'string' && !el)
       if (emptyAnswer?.length || emptyEl.length) {
-       return false 
+        return false
       }
     }
     return true
   }
-  
 
   const router = useRouter()
 
@@ -396,7 +395,9 @@ const TestDetail = () => {
   const rightSideRef = useRef<any>(null)
   const [mousePosition, setMousePosition] = useState({ x: null, y: null })
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
-  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>([])
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
+    [],
+  )
 
   useEffect(() => {
     const updateMousePosition = (ev: any) => {
@@ -2456,16 +2457,15 @@ const TestDetail = () => {
           <ConFirmSubmit
             open={openSubmit}
             setOpen={setOpenSubmit}
-            handleSubmit={() =>{ 
-                handleSubmitQuestion('submit')
-                setOpenSubmit(false)
-              }
-            }
+            handleSubmit={() => {
+              handleSubmitQuestion('submit')
+              setOpenSubmit(false)
+            }}
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
             }
           />
-           <UnSubmitAnswerModal
+          <UnSubmitAnswerModal
             open={openUnSubmitAnswer}
             setOpen={setUnSubmitAnswer}
             data={unSubmitAnswerData}

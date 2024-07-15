@@ -62,8 +62,7 @@ const ProfileSideBar = ({ page }: IProps) => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser())
-      .then(() => {
+      await dispatch(getLogoutUser()).then(() => {
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')

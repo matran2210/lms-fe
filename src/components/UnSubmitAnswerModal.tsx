@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>,
+  setOpen: Dispatch<SetStateAction<boolean>>
   data: number[] | []
   handleSubmit: () => void
   handleCancel: () => void
@@ -16,7 +16,7 @@ const UnSubmitAnswerModal = ({
   setOpen,
   data,
   handleSubmit,
-  handleCancel
+  handleCancel,
 }: IProps) => {
   const onSubmit = () => {
     handleSubmit()
@@ -44,9 +44,9 @@ const UnSubmitAnswerModal = ({
       title={title ?? ''}
       cancelButtonCaption="Keep Doing"
     >
-    <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
-       <AlertTriagle />
-    </div>
+      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
+        <AlertTriagle />
+      </div>
       <div className="text-2xl md:text-4xl text-bw-1 font-semibold text-center">
         Are You Sure
       </div>
@@ -58,7 +58,8 @@ const UnSubmitAnswerModal = ({
           {data?.length > 10 ? data?.slice(0, 10)?.join(', ') : data.join(', ')}
         </span>
         <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center ms-1">
-          {data?.length > 10 ? '...' : ''}After you submit, you can&apos;t edit this assignment.
+          {data?.length > 10 ? '...' : ''}After you submit, you can&apos;t edit
+          this assignment.
         </span>
       </div>
     </SappModalV2>
