@@ -1516,6 +1516,8 @@ const TestDetail = () => {
         }
         // setCurrentTabContent(arr[0])
         setTabs(arr)
+      } else {
+        router.push(PageLink.PAGE_NOT_FOUND)
       }
       setCurrentPage(questions?.[0]?.id)
     }
