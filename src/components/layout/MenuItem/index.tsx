@@ -73,12 +73,19 @@ export default function MenuItem({
     dispatch(openCalculator())
   }
 
+  const handleOpenResultsPage = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.courseId}/results`,
+    })
+  }
+
   const handleActive = () => {
     if (router?.query?.courseId || router.query.id) {
       name === TitleSidebar.RESOURCES && handleOpenResource()
       name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
       name === TitleSidebar.NEW_NOTE && handleAddNote()
       name === TitleSidebar.CALCULATOR && handleOpenCalculator()
+      name === TitleSidebar.RESULTS && handleOpenResultsPage()
     }
   }
 
@@ -94,7 +101,7 @@ export default function MenuItem({
         {Icon === 'avatar' ? (
           <div className="w-10 h-10 shrink-0">
             {user?.detail?.avatar['40x40'] || user.detail.avatar['ORIGIN'] ? (
-              <img
+              <Image
                 src={
                   user.detail.avatar['40x40'] || user.detail.avatar['ORIGIN']
                 }
@@ -205,7 +212,7 @@ export default function MenuItem({
           !isInCourse &&
           (name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
-            // name === TitleSidebar.RESULTS ||
+            name === TitleSidebar.RESULTS ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
             ? 'hidden'
