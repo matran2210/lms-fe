@@ -1281,7 +1281,14 @@ const TestDetail = () => {
           if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
             router.replace(`/courses/test/test-result/${res?.data?.id}`)
           } else {
+            if (
+              courseType === 'FOUNDATION_COURSE' &&
+              quizDetail?.quiz_type == 'FINAL_TEST'
+            ) {
               router.push(localStorage.getItem('courseDetail') || '')
+            } else {
+              router.replace(`/courses/test/test-result/${res?.data?.id}`)
+            }
           }
         }
       }
