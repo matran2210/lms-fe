@@ -25,11 +25,22 @@ function PinnedNotifications() {
               <Col span={21}>
                 <div className="flex flex-row justify-items-center">
                   <div className="mx-auto flex flex-row">
-                    <div className='py-4'><IconLoudSpeaker /></div>
-                    <div className='flex flex-row items-center'>
-                      <div className={`${showPinNoti ? 'shadow-pinned overflow-hidden h-12' : ''} ml-2`}>
-                        <p className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}>
-                          <EditorReader text_editor_content={pinnedNotifications?.data?.content} pinned/>
+                    <div className="py-4">
+                      <IconLoudSpeaker />
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <div
+                        className={`${showPinNoti ? 'shadow-pinned overflow-hidden h-12' : ''} ml-2`}
+                      >
+                        <p
+                          className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}
+                        >
+                          <EditorReader
+                            text_editor_content={
+                              pinnedNotifications?.data?.content
+                            }
+                            pinned
+                          />
                         </p>
                       </div>
                     </div>
