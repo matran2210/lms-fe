@@ -12,7 +12,7 @@ import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
 import { Thumbnail } from 'src/type/course/Question'
-import { httpService } from 'src/redux/services/httpService'
+import { fetcher } from '@services/requestV2'
 
 interface IProp {
   options: any
@@ -43,6 +43,11 @@ interface Quality {
   bitrate: number
   width: number
   height: number
+}
+
+interface Caption {
+  index: number
+  lang: string
 }
 
 type ResolutionMap = Record<ResolutionTypes, Quality | undefined>
@@ -159,9 +164,7 @@ const SAPPVideo = ({
   // Get list captions of video
   const fetchCaptions = async (url: string) => {
     try {
-      const response = await httpService.GET<string, string>({
-        uri: url,
-      })
+      const response = await fetcher(url)      
       const parser = new DOMParser()
       const xmlDoc = parser.parseFromString(response, 'text/xml')
       const adaptationSets = xmlDoc.getElementsByTagName('AdaptationSet')
@@ -1056,7 +1059,7 @@ const SAPPVideo = ({
                               >
                                 Off
                               </li>
-                              {listCaptions.map((cc: any) => (
+                              {listCaptions.map((cc: Caption) => (
                                 <li
                                   key={cc.index}
                                   onClick={handleLanguageChange}
