@@ -614,7 +614,7 @@ const SAPPVideo = ({
         playerFunction.setTextTrack(Number(selectedCC));
         updatePlayButton();
       } else {
-        console.error("Player function is not initialized yet.");
+        // console.error("Player function is not initialized yet.");
       }
     }, 500);
   }
