@@ -3,6 +3,7 @@ import { httpService } from '../httpService'
 import url from './url'
 import { IResponse } from 'src/redux/types'
 import { AuthAPI } from 'src/pages/api/profile'
+import { PinnedNotifications } from 'src/type'
 
 const UserApi = {
   /**
@@ -73,6 +74,16 @@ const UserApi = {
   },
   getListHistory: async ({ page_index, page_size }: any): Promise<any> => {
     return AuthAPI.getListHistory({ page_index, page_size })
+  },
+
+  /**
+   * Một hàm để lấy Pinned Notification
+   *
+   */
+  getPinnedNotifications: (): Promise<PinnedNotifications> => {
+    // Đường dẫn api Pinned Notification
+    // Sử dụng httpService để gửi yêu cầu GET
+    return AuthAPI.getPinnedNotifications()
   },
 }
 

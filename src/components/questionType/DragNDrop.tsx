@@ -339,7 +339,9 @@ const DragNDropPreivew = forwardRef(
                 !isHideExhibit &&
                 data?.question_topic?.exhibits?.length > 0 && (
                   <>
-                    <div className="border border-b-gray-2 my-6"></div>
+                    {data?.question_topic?.description && (
+                      <div className="border border-b-gray-2 my-6"></div>
+                    )}
                     <div className="flex items-center mb-4">
                       <div className="font-semibold">
                         Exhibits ({data?.question_topic?.exhibits?.length || 0})

@@ -12,6 +12,8 @@ import {
   removeJwtToken,
   removeLocalStorageJwtToken,
   setActToken,
+  setCookieActToken,
+  setCookieRefreshToken,
   setRefreshToken,
 } from '@utils/index'
 import { PageLink } from 'src/constants'
@@ -40,6 +42,8 @@ export const getLoginUser = createAsyncThunk(
       }
       setActToken(res.data.tokens.act)
       setRefreshToken(res.data.tokens.rft)
+      setCookieActToken(res.data.tokens?.act)
+      setCookieRefreshToken(res.data.tokens?.rft)
 
       return { ...res }
     } catch (error: any) {
@@ -52,6 +56,7 @@ export const getLogoutUser = createAsyncThunk(
   async ({}, thunkAPI) => {
     try {
       const res = await AuthAPI.logout()
+      removeJwtToken()
       if (!res.success) {
         toast.error(res.error.message)
         return

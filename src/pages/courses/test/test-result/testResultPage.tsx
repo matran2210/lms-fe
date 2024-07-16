@@ -35,19 +35,34 @@ const TestResultPage = ({
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
+  
+  const handleResize = () => {
     const multipleQuestionElem = multipleQuestionRef?.current
     const yourScoreDetailElem = yourScoreDetailRef?.current
-    if (multipleQuestionElem && yourScoreDetailElem && type !== undefined) {
+    if (multipleQuestionElem && yourScoreDetailElem ) {
       const maxHeight = Math.max(
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
       )
-      multipleQuestionElem.style.height = `calc(100vh - ${maxHeight}px)`
+      multipleQuestionElem.style.height = window.innerWidth > 1777 ? `calc(100vh - ${maxHeight}px)`: 'fit-content'
+      yourScoreDetailElem.style.marginBottom = window.innerWidth > 1777 ? '0px' :  `${multipleQuestionElem.offsetHeight}px` 
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
-  }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
+  }
+  useEffect(() => {
+    type !== undefined && handleResize()
+  }, [
+    type,
+    multipleQuestionRef?.current,
+    yourScoreDetailRef?.current
+  ])
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,
@@ -67,16 +82,16 @@ const TestResultPage = ({
               classCountAll="relative top-0.5"
               globalAverage={GlobalAverage}
             />
-            <MultipleQuestion
-              questions={questions}
-              className={'xl:min-h-[815px]'}
-              multipleQuestionRef={multipleQuestionRef}
-            />
+              <MultipleQuestion
+                questions={questions}
+                className={'3.75xl:min-h-[815px]'}
+                multipleQuestionRef={multipleQuestionRef}
+              />
           </div>
-          <div className="max-h-full w-full xl:w-auto">
+          <div className="max-h-full w-full xl:w-auto flex flex-col">
             <ChartACCAScore data={chartData?.chart_data} />
             <YourScoreDetail
-              className={'min-h-[815px] 2xl-max:pb-10'}
+              className={'min-h-[815px] 2xl-max:pb-10 grow'}
               yourScoreDetailRef={yourScoreDetailRef}
             />
           </div>
@@ -85,16 +100,16 @@ const TestResultPage = ({
         <>
           {type === 'CFA' ? (
             <div className="flex gap-6 flex-wrap">
-              <div className="max-h-full w-full xl:w-auto">
+              <div className="max-h-full w-full xl:w-auto flex flex-col">
                 <YourScore chartData={chartData} />
                 <YourScoreDetail
-                  className={'min-h-[466px] 2xl-max:pb-10'}
+                  className={'min-h-[466px] grow 2xl-max:pb-10'}
                   yourScoreDetailRef={yourScoreDetailRef}
                 />
               </div>
               <MultipleQuestion
                 questions={questions}
-                className={'xl:min-h-[991px]'}
+                className={'3.75xl:min-h-[991px]'}
                 multipleQuestionRef={multipleQuestionRef}
               />
             </div>
@@ -104,7 +119,7 @@ const TestResultPage = ({
                 <div className="flex gap-6 flex-wrap">
                   <MultipleQuestion
                     questions={questions}
-                    className={'xl:min-h-[991px]'}
+                    className={'3.75xl:min-h-[991px]'}
                     multipleQuestionRef={multipleQuestionRef}
                   />
                   <div className="max-h-full w-full xl:w-auto">

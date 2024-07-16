@@ -61,6 +61,23 @@ import Countdown from 'react-countdown'
 import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
+import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
+
+
+interface Answer {
+  answer: string | string[] | Object[]
+  attempted?: boolean
+  done?: boolean,
+  flaged?: boolean
+  id?: string
+  index?: string
+  qType?: string
+  question_topic_id?: string
+  response_type?: number
+  timeSpent?: number
+  viewed?: boolean
+}
+
 
 type Window = {
   userAgreed: any
@@ -251,6 +268,45 @@ const TestDetail = () => {
     }
   }
 
+  /**
+   * DES: confirm unfinished questions before submitting 
+   */
+  const checkUnSubmitAnswer = (): number[] => {
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent);
+    let result: number[] =  []
+    answers?.map((item: Answer, index: number) => {
+        if (!item.done && !validateAnswer({answer: item.answer})) {
+            result.push(index + 1)
+        }
+    })
+    setUnSubmitAnswerData(result)
+    return result
+  }
+
+  // Validate các câu hỏi xem đã trả lời chưa
+  const validateAnswer = (item: {answer: string | Object[] | string[]}) => {
+    if ( typeof item?.answer === 'string' && !item?.answer) {
+      return false
+    } 
+    if (!item?.answer?.length) return false
+    if (Array.isArray(item?.answer) ) {
+      const emptyAnswer = item?.answer?.filter((el: { idAnswer?: string, answer_id?: string}  ) =>  {
+        if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
+          return el
+        }
+        if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
+          return el
+        }
+      })
+      const emptyEl =  item.answer.filter((el) => typeof el === 'string' && !el)
+      if (emptyAnswer?.length || emptyEl.length) {
+       return false 
+      }
+    }
+    return true
+  }
+  
+
   const router = useRouter()
 
   const useGetQuizDetail = (queryKey: string, params: Object) => {
@@ -339,6 +395,9 @@ const TestDetail = () => {
   const { unsavedChange } = useAppSelector((state) => state.loginReducer)
   const rightSideRef = useRef<any>(null)
   const [mousePosition, setMousePosition] = useState({ x: null, y: null })
+  const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>([])
+
   useEffect(() => {
     const updateMousePosition = (ev: any) => {
       setMousePosition({ x: ev.clientX, y: ev.clientY })
@@ -1226,12 +1285,9 @@ const TestDetail = () => {
               courseType === 'FOUNDATION_COURSE' &&
               quizDetail?.quiz_type == 'FINAL_TEST'
             ) {
-              router.back()
-              setScoreQuestion(res?.data?.score)
-              setSubmitTest(true)
+              router.push(localStorage.getItem('courseDetail') || '')
             } else {
               router.replace(`/courses/test/test-result/${res?.data?.id}`)
-              setSubmitTest(false)
             }
           }
         }
@@ -1501,6 +1557,7 @@ const TestDetail = () => {
           return e.type !== 'exhibits'
         })
         for (let e of watch('exhibits')) {
+          setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -1596,6 +1653,21 @@ const TestDetail = () => {
    * @description sử dụng hook countdown
    */
   const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
+
+  const ButtonContent = ({
+    icon,
+    content,
+  }: {
+    icon: JSX.Element
+    content: string
+  }) => (
+    <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
+      {icon}
+      <div className="hidden font-normal text-sm lg:inline-block">
+        {content}
+      </div>
+    </div>
+  )
   return (
     <CourseProvider>
       {loading || !currentTabContent?.id ? (
@@ -1654,7 +1726,11 @@ const TestDetail = () => {
                   className: 'border border-bw-1',
                   color: 'secondary',
                   onClick: () => {
-                    setOpenSubmit(true)
+                    if (checkUnSubmitAnswer()?.length > 0) {
+                      setUnSubmitAnswer(true)
+                    } else {
+                      setOpenSubmit(true)
+                    }
                     dispatch(disableUnsavedChange())
                   },
                   //   full: fullWidthBtn,
@@ -1881,9 +1957,9 @@ const TestDetail = () => {
                   key={e.id}
                   onClick={() => setOnFocusingPad(e.id)}
                   zIndex={
-                    onFocusingPad === e.id
-                      ? openScratchPad?.length + 1400
-                      : index + 1400
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
                   }
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1909,11 +1985,13 @@ const TestDetail = () => {
                     left: 'calc(50% - 200px)',
                   }}
                   key={currentPage}
-                  onClick={() => setOnFocusingPad(e.id)}
+                  onClick={() => {
+                    setOnFocusingPad(e?.id)
+                  }}
                   zIndex={
-                    onFocusingPad === e.id
-                      ? openScratchPad?.length + 1400
-                      : index + 1400
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
                   }
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
@@ -1951,11 +2029,13 @@ const TestDetail = () => {
                     left: 'calc(0%)',
                   }}
                   key={e.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
+                  onClick={() => {
+                    setOnFocusingPad(e?.id)
+                  }}
                   zIndex={
                     onFocusingPad === e?.id
-                      ? openScratchPad?.length + 1400
-                      : index + 1400
+                      ? openScratchPad?.length + 500 + 2
+                      : index + 500
                   }
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
@@ -2012,8 +2092,8 @@ const TestDetail = () => {
                   onClick={() => setOnFocusingPad(e.id)}
                   zIndex={
                     onFocusingPad === e.id
-                      ? openScratchPad.length + 1400
-                      : index + 1400
+                      ? openScratchPad?.length + 500
+                      : index + 500
                   }
                   // not_resizable
                   // className='pointer-events-none'
@@ -2042,7 +2122,7 @@ const TestDetail = () => {
             }
           })}
           {/* </div> */}
-          <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px]  z-10">
+          <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px] z-10">
             <div className="flex items-center h-full">
               {/* <button className="h-full">
                 <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -2059,12 +2139,7 @@ const TestDetail = () => {
                   setAllowUnHighLight(false)
                 }}
               >
-                <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
-                  <HighlightIcon />
-                  <div className="hidden font-normal text-sm 3xl:inline-block">
-                    Highlight
-                  </div>
-                </div>
+                <ButtonContent icon={<HighlightIcon />} content="Highlight" />
               </button>
               <button
                 className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
@@ -2073,23 +2148,19 @@ const TestDetail = () => {
                     setAllowHighLight(false)
                 }}
               >
-                <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
-                  <UnHighLightIcon />
-                  <div className="hidden font-normal text-sm 3xl:inline-block">
-                    Unhighlight
-                  </div>
-                </div>
+                <ButtonContent
+                  icon={<UnHighLightIcon />}
+                  content="Unhighlight"
+                />
               </button>
               <button
                 className="h-full"
                 onClick={() => handleOpenScratchPad('scratch_pad')}
               >
-                <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l">
-                  <ScratchPadIcon />
-                  <div className="hidden font-normal text-sm 3xl:inline-block">
-                    Scratch Pad
-                  </div>
-                </div>
+                <ButtonContent
+                  icon={<ScratchPadIcon />}
+                  content="ScratchPadIcon"
+                />
               </button>
               <button
                 className={`h-full ${
@@ -2098,12 +2169,7 @@ const TestDetail = () => {
                 onClick={() => handleOpenScratchPad('calculator')}
                 disabled={checkCalExist > -1}
               >
-                <div className="flex items-center gap-3 px-4 3xl:px-6 border-l">
-                  <CalculatorIcon />
-                  <div className="hidden font-normal text-sm 3xl:inline-block">
-                    Calculator
-                  </div>
-                </div>
+                <ButtonContent icon={<CalculatorIcon />} content="Calculator" />
               </button>
               {exhibitData && exhibitData?.length > 0 && (
                 <button className="h-full relative" ref={dropUpRef}>
@@ -2121,8 +2187,8 @@ const TestDetail = () => {
                     <ExhibitsIcon />
                     <div className="font-normal flex text-sm items-center gap-3">
                       <div>
-                        <span className="hidden 3xl:inline-block 3xl:me-1">
-                          Exhibits
+                        <span className="hidden xl:inline-block 3xl:me-1">
+                          {`Exhibits (${exhibitData?.length || 0})`}
                         </span>
                         {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
                       </div>
@@ -2158,7 +2224,7 @@ const TestDetail = () => {
                     <TextSquareIcon />
                     <div className="font-normal flex text-sm items-center gap-3">
                       <div>
-                        <span className="hidden 3xl:inline-block 3xl:me-1">
+                        <span className="hidden lg:inline-block 3xl:me-1">
                           Requirement
                         </span>
                         <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
@@ -2259,7 +2325,7 @@ const TestDetail = () => {
                 onClick={() => handleFlagQuestion(currentPage)}
               >
                 <FlagIcon />
-                <div className="font-medium text-medium-sm hidden 3xl:block">
+                <div className="font-medium text-medium-sm hidden lg:block">
                   Flag to Review
                 </div>
               </button>
@@ -2390,10 +2456,24 @@ const TestDetail = () => {
           <ConFirmSubmit
             open={openSubmit}
             setOpen={setOpenSubmit}
-            handleSubmit={() => handleSubmitQuestion('submit')}
+            handleSubmit={() =>{ 
+                handleSubmitQuestion('submit')
+                setOpenSubmit(false)
+              }
+            }
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
             }
+          />
+           <UnSubmitAnswerModal
+            open={openUnSubmitAnswer}
+            setOpen={setUnSubmitAnswer}
+            data={unSubmitAnswerData}
+            handleSubmit={() => {
+              handleSubmitQuestion('submit')
+              setUnSubmitAnswer(false)
+            }}
+            handleCancel={() => setUnSubmitAnswer(false)}
           />
           <ModalUploadFile
             open={openUpload?.status}

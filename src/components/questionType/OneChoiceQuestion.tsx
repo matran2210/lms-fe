@@ -1,6 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
-import { runHighlight } from '@utils/index'
+import { getUppercaseByNumber, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
@@ -55,6 +55,7 @@ const OneChoiceQuestion = ({
   }, [defaultValues])
   const convertAnswer = useMemo(() => {
     let answers = []
+    let number = 0
 
     if (data?.answers) {
       const dataAnswers = [...data?.answers]
@@ -62,7 +63,11 @@ const OneChoiceQuestion = ({
         (a: IAnswers, b: IAnswers) => a?.answer_position - b?.answer_position,
       )
       for (let e of dataAnswers) {
-        answers.push({ label: e?.answer, value: e?.id })
+        number++
+        answers.push({
+          label: `${getUppercaseByNumber(number)}. ${e?.answer}`,
+          value: e?.id,
+        })
       }
     }
     return answers
@@ -107,7 +112,9 @@ const OneChoiceQuestion = ({
         !isHideExhibit &&
         data?.question_topic?.exhibits?.length > 0 && (
           <>
-            <div className="border border-b-gray-2 my-6"></div>
+            {!!data?.question_topic?.description && (
+              <div className="border border-b-gray-2 my-6"></div>
+            )}
             <div className="flex items-center mb-4">
               <div className="font-semibold">
                 Exhibits({data?.question_topic?.exhibits?.length || 0})

@@ -82,8 +82,8 @@ module.exports = withSentryConfig(module.exports, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
-  org: 'sapp-tg',
-  project: 'debug-lms-pro-production',
+  org: process.env.NEXT_PUBLIC_SENTRY_NAME,
+  project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,

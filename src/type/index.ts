@@ -52,3 +52,45 @@ declare global {
     luckysheet: any
   }
 }
+
+interface IPinned {
+  action: string
+  content: string
+  created_at: string
+  created_by: string
+  created_from: string
+  deleted_at: string
+  id: string
+  mode: string
+  send_finish_time: string
+  send_time: string
+  status: string
+  title: string
+  type: string
+  updated_at: string
+}
+
+export interface ICert {
+  user_id: string
+  payload: {
+    content: string
+    created_at: Date
+    id: string
+    title: string
+    certificate_id: string
+  }
+}
+
+
+export interface PinnedNotifications {
+  data: IPinned
+}
+
+export enum NOTIFICATION_STATUS {
+  SENT = 'SENT',
+  CANCEL = 'CANCEL',
+  RETRIEVE = 'RETRIEVE',
+  TIMER = 'TIMER',
+  SHOWING = 'SHOWING',
+  ENDED = 'ENDED',
+}
