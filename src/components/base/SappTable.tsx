@@ -4,10 +4,9 @@ import SAPPCheckbox from './checkbox/SAPPCheckbox'
 interface IProps {
   headers?: Array<{ label: string; className?: string }>
   children: ReactNode
-  loading: boolean
-  data: Array<any> | undefined
+  loading?: boolean
   isCheckedAll: any
-  onChange: (e: any) => void
+  onChange?: (e: any) => void
   hasCheckAll?: boolean
   hasCheck?: boolean
   showHeader?: boolean
@@ -23,7 +22,6 @@ const SappTable = ({
   children,
   headers,
   loading,
-  data,
   isCheckedAll,
   onChange,
   hasCheckAll = true,
