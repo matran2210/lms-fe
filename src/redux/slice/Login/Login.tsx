@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-hot-toast'
 import { RootState } from '../../store'
-import { getKeycloakInstance } from 'src/pages/keycloak'
+import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
 
 import {
   ChangePasswordReq,

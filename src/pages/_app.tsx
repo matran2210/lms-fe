@@ -31,7 +31,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
-import { getKeycloakInstance } from './keycloak'
+import { getKeycloakInstance } from '../utils/helpers/keycloak'
 import { SessionProvider } from 'next-auth/react'
 import {
   getLocalStorgeRefreshToken,

@@ -10,7 +10,7 @@ import {
   setRefreshToken,
 } from '@utils/index'
 import { apiURL } from 'src/redux/services/httpService'
-import { getKeycloakInstance } from 'src/pages/keycloak'
+import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
 
 type ApiConfig<T = any> = {
   uri: string

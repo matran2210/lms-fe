@@ -29,7 +29,7 @@ import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntranceApi from 'src/redux/services/EntranceTest'
 import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
-import { getKeycloakInstance } from '../../keycloak'
+import { getKeycloakInstance } from '../../../utils/helpers/keycloak'
 
 interface IInputProps {
   login: string
