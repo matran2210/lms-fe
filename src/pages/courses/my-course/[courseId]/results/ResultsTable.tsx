@@ -1,6 +1,8 @@
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
+import HookFormSelect from '@components/base/select/HookFormSelect'
 import { truncateString } from '@utils/index'
+import { Dropdown } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -93,8 +95,48 @@ const ResultsTable = () => {
 
   isLoading && <></>
 
+  const [activity, setActivity] = useState<any>(null)
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+  ]
   return (
     <>
+      <div className="flex gap-6 mb-8">
+        <HookFormSelect
+          classParent="w-full md:max-w-full"
+          placeholder="Section"
+          isClearable={true}
+          value={activity}
+          onChange={(selectedOption) => setActivity(selectedOption)}
+          options={options}
+        />
+        <HookFormSelect
+          classParent="w-full md:max-w-full"
+          placeholder="Subsection"
+          isClearable={true}
+          value={activity}
+          onChange={(selectedOption) => setActivity(selectedOption)}
+          options={options}
+        />
+        <HookFormSelect
+          classParent="w-full md:max-w-full"
+          placeholder="Unit"
+          isClearable={true}
+          value={activity}
+          onChange={(selectedOption) => setActivity(selectedOption)}
+          options={options}
+        />
+        <HookFormSelect
+          classParent="w-full md:max-w-full"
+          placeholder="Activity"
+          isClearable={true}
+          value={activity}
+          onChange={(selectedOption) => setActivity(selectedOption)}
+          options={options}
+        />
+      </div>
       <SappTable headers={headers} hasCheck={false} isCheckedAll={false}>
         {isSuccess &&
           resultData.data?.map((row: any, index: number) => {

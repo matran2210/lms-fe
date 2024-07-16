@@ -77,7 +77,7 @@ const Results = () => {
       <div className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6">
         <Heading greeting="" title={'Results'} />
       </div>
-      <div className="max-w-xxl my-0 mx-auto xl-max:container bg-white px-8 pt-6 pb-3 mt-6 mb-6">
+      <div className="max-w-xxl my-0 mx-auto xl-max:container bg-white px-8 pt-8 pb-3 mt-6 mb-6">
         <ResultsTable />
       </div>
     </SappLoadingGlobal>
