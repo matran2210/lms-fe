@@ -2,8 +2,7 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import Icon from '@components/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import AOS from 'aos'
+import React, { useState } from 'react'
 import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
 
@@ -44,7 +43,7 @@ const MultipleQuestion = ({
 
     return (
       <div className="w-full">
-        {data.length > 0 && (
+        {data?.length > 0 && (
           <>
             <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium mb-6 text-bw-1">
               {type}

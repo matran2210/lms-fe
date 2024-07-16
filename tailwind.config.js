@@ -96,6 +96,7 @@ module.exports = {
           play: 'rgba(189, 189, 189, 0.7)',
           control: 'rgba(0, 0, 0, 0.6)',
           white: 'rgba(255, 255, 255, 0.4)',
+          loading: 'rgba(0, 0, 0, 0.3)',
         },
         blue: {
           1: '#0000EE',

@@ -1,8 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import Icon from '@components/icons'
+import React, { useEffect, useRef } from 'react'
 import YourScore from './cfa/yourScore'
 import YourScoreDetail from './yourScoreDetail'
 import MultipleQuestion from './multipleQues'
@@ -43,7 +39,7 @@ const TestResultPage = ({
   useEffect(() => {
     const multipleQuestionElem = multipleQuestionRef?.current
     const yourScoreDetailElem = yourScoreDetailRef?.current
-    if (multipleQuestionElem && yourScoreDetailElem) {
+    if (multipleQuestionElem && yourScoreDetailElem && type !== undefined) {
       const maxHeight = Math.max(
         multipleQuestionElem.offsetHeight,
         yourScoreDetailElem.offsetHeight,
@@ -51,7 +47,7 @@ const TestResultPage = ({
       multipleQuestionElem.style.height = `calc(100vh - ${maxHeight}px)`
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }
-  }, [multipleQuestionRef?.current, yourScoreDetailRef?.current])
+  }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
 
   const highestValue = roundNumber(
     (chartData?.correct_answer / chartData?.total_question) * 100,

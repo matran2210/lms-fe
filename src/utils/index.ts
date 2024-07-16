@@ -201,3 +201,10 @@ export const pageview = (url: URL) => {
     },
   )
 }
+
+/**
+ * @description function này để link social
+ */
+export const onLinkSocial = (link: string) => {
+  window.open(link, '_blank')
+}

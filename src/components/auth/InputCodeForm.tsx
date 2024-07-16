@@ -136,7 +136,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   return (
     <>
       <div className="grid grid-cols-6 grid-rows-1 gap-3 mb-2">
-        {code.map((otp, index) => (
+        {code?.map((otp, index) => (
           <SAPPTextFiled
             key={index}
             inputRef={inputRefs[index]}

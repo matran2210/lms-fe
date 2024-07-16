@@ -1,9 +1,8 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { ANIMATION, PageLink } from 'src/constants'
+import { ANIMATION } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { IProfilePages } from 'src/type/Profile'
@@ -125,19 +124,20 @@ const ProfileSideBar = ({ page }: IProps) => {
       <ul className="px-3 py-4 bg-white h-full flex flex-col justify-between">
         <div>
           {Object.entries(PROFILE_PAGES).map(([key, value]) => {
-            const urlPage = key.toLowerCase()
-            const urlChildren = (value.children || []) as Child[]
+            const urlPage = key?.toLowerCase()
+            const urlChildren = (value?.children || []) as Child[]
 
-            const childLabel = getLabelFromChild(value).replace(/\s+/g, '_')
+            const childLabel = getLabelFromChild(value)?.replace(/\s+/g, '_')
             const isActive = urlPage === page
 
-            let className = 'text-gray-1 relative hover:text-primary'
+            let className =
+              'text-gray-1 relative hover:text-primary font-normal'
 
             if (isActive) {
-              className = 'bg-secondary font-bold text-primary'
+              className = 'bg-secondary font-medium text-primary'
             }
             if (childActivationStates[childLabel]) {
-              className = 'bg-secondary hover:font-bold text-primary'
+              className = 'bg-secondary hover:font-medium text-primary'
             }
 
             return (
@@ -146,15 +146,15 @@ const ProfileSideBar = ({ page }: IProps) => {
                 key={key}
               >
                 <a
-                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-bold hover-transition-font-weight ${
+                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-medium hover-transition-font-weight ${
                     isActive ||
                     (urlPage === 'security' &&
-                      Object.values(childActivationStates).some(
+                      Object.values(childActivationStates)?.some(
                         (active) => active,
                       ) &&
                       !childActivationStates[childLabel])
-                      ? 'bg-secondary text-primary font-bold'
-                      : 'hover:left-[-0.5px]'
+                      ? 'bg-secondary text-primary font-medium'
+                      : 'hover:left-[-0.5px] font-normal'
                   }`}
                   style={{
                     position: 'relative', // Đặt position là relative
@@ -174,7 +174,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                     }
                   }}
                 >
-                  {value.label}
+                  {value?.label}
                   {urlPage === 'security' && (
                     <div className="mt-2">
                       <ExpandIcon
@@ -185,32 +185,36 @@ const ProfileSideBar = ({ page }: IProps) => {
                     </div>
                   )}
                 </a>
-                {isExpanded &&
-                  urlChildren.map((child) => {
-                    const childLabel = getLabelFromChild(child).replace(
-                      /\s+/g,
-                      '_',
-                    )
-                    const childIsActive =
-                      childActivationStates[childLabel] || false
-                    return (
-                      <div
-                        key={childLabel}
-                        className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-bold hover-transition-font-weight ${
-                          childIsActive
-                            ? 'bg-white font-bold text-primary'
-                            : 'hover:left-[-0.5px]'
-                        }`}
-                      >
-                        <a
-                          className="p-5 block w-full text-left"
-                          onClick={() => handleChildClick(childLabel)}
-                        >
-                          {getLabelFromChild(child)}
-                        </a>
-                      </div>
-                    )
-                  })}
+                {urlChildren?.length > 0 && (
+                  <div className="border-l border-gray-2 ml-5 my-5">
+                    {isExpanded &&
+                      urlChildren?.map((child) => {
+                        const childLabel = getLabelFromChild(child).replace(
+                          /\s+/g,
+                          '_',
+                        )
+                        const childIsActive =
+                          childActivationStates[childLabel] || false
+                        return (
+                          <div
+                            key={childLabel}
+                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-medium hover-transition-font-weight ${
+                              childIsActive
+                                ? 'bg-white font-medium text-primary'
+                                : 'hover:left-[-0.5px] font-normal'
+                            }`}
+                          >
+                            <a
+                              className="p-3 block w-full text-left"
+                              onClick={() => handleChildClick(childLabel)}
+                            >
+                              {getLabelFromChild(child)}
+                            </a>
+                          </div>
+                        )
+                      })}
+                  </div>
+                )}
                 <div
                   className={`border-b border-gray-3 relative top-px group-hover:border-secondary ${
                     isActive ? 'border-secondary' : ''
@@ -220,7 +224,7 @@ const ProfileSideBar = ({ page }: IProps) => {
             )
           })}
           <li
-            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary hover:font-bold hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
+            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:font-medium hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
             onClick={handleLogout}
           >
             <div className="absolute inset-0 bottom-0"></div>
@@ -228,7 +232,7 @@ const ProfileSideBar = ({ page }: IProps) => {
           </li>
         </div>
         <div className="text-center text-sm font-normal text-gray-1">
-          LMS Pro Version 1.2.0
+          LMS Pro Version 1.3.0
         </div>
       </ul>
     </div>

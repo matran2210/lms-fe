@@ -31,8 +31,8 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
   }, [setIsFirstRender])
 
   // defailtvalue của status
-  const statusDetail = defaultStatusDetail.find(
-    (item) => item.value === router.query.user_section_learning_status,
+  const statusDetail = defaultStatusDetail?.find(
+    (item) => item?.value === router.query.user_section_learning_status,
   )
 
   return (

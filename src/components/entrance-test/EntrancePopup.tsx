@@ -29,15 +29,16 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   const router = useRouter()
 
   const checkInfo = useMemo(() => {
-    if (user.university && user.university_program && user.english_level) {
+    if (user?.university && user?.university_program && user?.english_level) {
       return true
     }
     return false
   }, [user])
   const checkLimit = useMemo(() => {
-    if (entrancePopupContent.is_limited) {
+    if (entrancePopupContent?.is_limited) {
       if (
-        entrancePopupContent.attempt_times === entrancePopupContent.limit_count
+        entrancePopupContent?.attempt_times ===
+        entrancePopupContent?.limit_count
       ) {
         return true
       }
@@ -56,7 +57,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
           if (checkInfo) {
             // router.push(`/test/${entrancePopupContent.id}`)
             router.push({
-              pathname: `/test/${entrancePopupContent.id}`,
+              pathname: `/test/${entrancePopupContent?.id}`,
               query: {
                 type: 'entrance',
               },
@@ -79,7 +80,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
           score={entrancePopupContent?.score}
           timeAllow={entrancePopupContent?.quiz_timed}
           attemps={`${entrancePopupContent?.attempt_times || '0'}`}
-          status={entrancePopupContent.is_attempt}
+          status={entrancePopupContent?.is_attempt}
         />
       </SappModalV2>
       <EntranceTestFillForm
