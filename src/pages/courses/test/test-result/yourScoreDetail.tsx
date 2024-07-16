@@ -167,7 +167,6 @@ const YourScoreDetail = ({
         <SappTable
           headers={headers}
           loading={loading}
-          data={scoreDetails?.answers}
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}

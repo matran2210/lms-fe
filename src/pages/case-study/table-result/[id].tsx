@@ -231,7 +231,6 @@ const TableCaseStudyResult = () => {
           <SappTable
             headers={headers}
             loading={true}
-            data={scoreDetail?.answers}
             isCheckedAll={true}
             onChange={() => {}}
             hasCheck={false}
