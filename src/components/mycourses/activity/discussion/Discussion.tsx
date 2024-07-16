@@ -313,6 +313,8 @@ const Discussion = ({ class_id }: Props) => {
               idReply={idReply}
               handleChangeIdReply={handleChangeIdReply}
               setImageSrc={setImageSrc}
+				      classId={class_id}
+              profile={user}
             />
             <div
               className={`${
@@ -336,6 +338,8 @@ const Discussion = ({ class_id }: Props) => {
                           discussion={f}
                           onReact={onReact}
                           setImageSrc={setImageSrc}
+                          classId={class_id}
+                          profile={user}
                         />
                       </div>
                     )
