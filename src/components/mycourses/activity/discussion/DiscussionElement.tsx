@@ -22,7 +22,8 @@ type Props = {
   onReact: (data: ICreateDiscussionResReact) => Promise<void>
   setImageSrc: (value: SetStateAction<string | undefined>) => void
 	classId?: string
-  profile?: IUser			 
+  profile?: IUser
+  setLoading: (isLoading: boolean) => void
 }
 
 type IEventData = {
@@ -35,7 +36,8 @@ function DiscussionElement({
   handleChangeIdReply,
   setImageSrc,
 	classId,
-  profile	 
+  profile,
+  setLoading
 }: Props) {
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
@@ -67,6 +69,7 @@ function DiscussionElement({
   }
 
   const onDeleteComment = async () => {
+    setLoading(true)
     try {
       const res = await ActivityAPI.deleteDiscussion(discussion?.id)
       if(res){
@@ -77,6 +80,7 @@ function DiscussionElement({
           }),
         )
         setIsDelete(false)
+        setLoading(false)
       }
     } catch (error) {}
   }
