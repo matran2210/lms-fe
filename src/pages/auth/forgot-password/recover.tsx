@@ -2,6 +2,7 @@ import { LAYOUT } from '@utils/constants'
 import { GetServerSideProps } from 'next'
 import { PageLink } from 'src/constants'
 import InputCodeForm from '../../../components/auth/InputCodeForm'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 
 type IProps = {
   email: string
@@ -10,6 +11,7 @@ type IProps = {
 
 const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
   return (
+    <SingleDialogLayout title=''>
     <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
       <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
         Forgot Password
@@ -21,11 +23,11 @@ const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
         <InputCodeForm email={email} token={token} />
       </div>
     </div>
+    </SingleDialogLayout>
   )
 }
 
 export default ForgotPasswordRecoverPage
-ForgotPasswordRecoverPage.layout = LAYOUT.SINGLE_DIALOG_LAYOUT
 
 export const getServerSideProps: GetServerSideProps<IProps> = async (
   context,

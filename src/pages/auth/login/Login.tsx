@@ -27,6 +27,8 @@ import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 import PopUpLimit from './PopupLimit'
+import SingleDialogLayout from '@components/layout/SingleDialog'
+
 interface IInputProps {
   login: string
   password: string
@@ -34,10 +36,10 @@ interface IInputProps {
   device_id: string
 }
 
-const SocialLogos = [
-  { url: Microsoft_Logo, alt: 'Microsoft Logo' },
-  { url: Google_Logo, alt: 'Google Logo' },
-]
+// const SocialLogos = [
+//   { url: Microsoft_Logo, alt: 'Microsoft Logo' },
+//   { url: Google_Logo, alt: 'Google Logo' },
+// ]
 
 const LoginPage = () => {
   const router = useRouter()
@@ -166,7 +168,7 @@ const LoginPage = () => {
   }, [])
 
   return (
-    <>
+    <SingleDialogLayout title=''>
       <div className="block max-w-[38.375rem] md:py-17.5 xs:py-10 py-8 px-8 md:px-19 mx-auto md:shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
         <div className="md:text-4xl text-3xl font-semibold text-bw-1 mb-2">
           Log In
@@ -235,7 +237,7 @@ const LoginPage = () => {
         </form>
       </div>
       <PopUpLimit open={openLimit} setOpen={setOpenLimit} />
-    </>
+    </SingleDialogLayout>
   )
 }
 

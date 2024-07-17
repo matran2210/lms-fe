@@ -1,5 +1,4 @@
 import { fetcher } from '@services/requestV2'
-import { isEmpty } from 'lodash'
 import { apiURL } from 'src/redux/services/httpService'
 import {
   ICreateDiscussionRequest,

@@ -1,23 +1,22 @@
-import { Dispatch, ReactElement, ReactNode, SetStateAction } from 'react'
+import { ReactElement, ReactNode } from 'react'
 import DashboardLayout from './DashboardLayout/DashboardLayout'
-import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 interface LayoutProps {
   children: ReactNode
-  setOpenResource: Dispatch<SetStateAction<boolean>>
-  openDrawer: boolean
+  title: string
 }
 
 // eslint-disable-next-line import/no-unused-modules
 export default function Layout(props: LayoutProps): ReactElement {
-  const router = useRouter()
-  const { children, setOpenResource, openDrawer } = props
+  const { children, title } = props
+
   return (
     <>
-      <DashboardLayout
-        setOpenResource={setOpenResource}
-        openDrawer={openDrawer}
-      >
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <DashboardLayout>
         {children}
       </DashboardLayout>
     </>
