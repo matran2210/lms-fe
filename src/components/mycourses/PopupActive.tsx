@@ -1,9 +1,10 @@
 import { ActiveIcon } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
-  setOpen: any
+  setOpen: Dispatch<SetStateAction<boolean>>
   activeCourse: () => void
   time?: number
 }

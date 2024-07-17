@@ -5,8 +5,6 @@ import Icon from '@components/icons'
 import {
   formatTimeToHourMinuteSecond,
   getResolution,
-  isAppleDevice,
-  isSafari,
 } from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'

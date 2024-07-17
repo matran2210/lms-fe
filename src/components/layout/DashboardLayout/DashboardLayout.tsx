@@ -5,13 +5,12 @@ import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 
 type DashboardLayoutProps = {
   children: React.ReactNode
-  setOpenResource: Dispatch<SetStateAction<boolean>>
-  openDrawer: boolean
+  setOpenResource?: Dispatch<SetStateAction<boolean>>
+  openDrawer?: boolean
 }
 
 export default function DashboardLayout({
   children,
-  setOpenResource,
   openDrawer,
 }: DashboardLayoutProps) {
   const [isOpened, setOpened] = useState(false)
@@ -22,6 +21,8 @@ export default function DashboardLayout({
 
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
 
+  const [openResource, setOpenResource] = useState(false)
+
   return (
     <div className="flex flex-nowrap">
       <Sidebar
@@ -31,6 +32,7 @@ export default function DashboardLayout({
           openDrawer ? 'opacity-5' : ''
         } ${guideStatus ? '' : 'overflow-hidden'} ${openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
         setOpenResource={setOpenResource}
+        openResource={openResource}
       />
       <div className="w-full min-h-screen">
         {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}

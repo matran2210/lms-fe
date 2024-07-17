@@ -15,7 +15,7 @@ import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activit
 
 type MenuItemProps = {
   menuItem: MenuItemType
-  setOpenResource: Dispatch<SetStateAction<boolean>>
+  setOpenResource?: Dispatch<SetStateAction<boolean>>
   closeSideBar: () => void
 }
 
@@ -28,18 +28,18 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const isDetailCourse =
-    router.pathname.includes('/my-course') ||
-    router.pathname.includes('/section') ||
-    router.pathname.includes('/activity')
+  // const isDetailCourse =
+  //   router.pathname.includes('/my-course') ||
+  //   router.pathname.includes('/section') ||
+  //   router.pathname.includes('/activity')
 
-  const isProfile =
-    Icon === 'avatar' &&
-    (router.asPath === '/myprofile' ||
-      router.asPath === '/certificates' ||
-      router.asPath === '/settings' ||
-      router.asPath === '/login_history' ||
-      router.asPath === '/devices')
+  // const isProfile =
+  //   Icon === 'avatar' &&
+  //   (router.asPath === '/myprofile' ||
+  //     router.asPath === '/certificates' ||
+  //     router.asPath === '/settings' ||
+  //     router.asPath === '/login_history' ||
+  //     router.asPath === '/devices')
 
   const selected = router.pathname === url
 
@@ -49,8 +49,9 @@ export default function MenuItem({
     toggleExpanded((prev) => !prev)
   }
 
+  
   const handleOpenResource = () => {
-    setOpenResource(true)
+    setOpenResource && setOpenResource(true)
     document.body.style.overflow = 'hidden'
   }
 

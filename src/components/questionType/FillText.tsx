@@ -1,5 +1,5 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,

@@ -31,9 +31,8 @@ import NewFiltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { LAYOUT } from '@utils/constants'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { isUndefined, uniqueId } from 'lodash'
+import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -45,7 +44,6 @@ import {
   TEST_TYPE,
 } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import CourseTestApi from 'src/redux/services/Course/MyCourse/Test'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import QuitTestModal from '../courses/test/quit-test'
@@ -62,6 +60,7 @@ import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 interface Answer {
   answer: string | string[] | Object[]
@@ -1672,7 +1671,8 @@ const TestDetail = () => {
     </div>
   )
   return (
-    <CourseProvider>
+    <FullScreenLayout title={'aaaaaa'}>
+      <CourseProvider>
       {loading || !currentTabContent?.id ? (
         <SappLoading />
       ) : (
@@ -2495,9 +2495,9 @@ const TestDetail = () => {
         </div>
       )}
     </CourseProvider>
+    </FullScreenLayout>
   )
 }
 
 // eslint-disable-next-line import/no-unused-modules
 export default TestDetail
-TestDetail.layout = LAYOUT.FULLSCREEN_LAYOUT

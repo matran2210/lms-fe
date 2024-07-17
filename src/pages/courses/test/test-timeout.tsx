@@ -15,12 +15,12 @@ const TestTimeOutModal = ({
   handleSubmit,
   handleQuit,
 }: IProps) => {
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
   // const {} = useAppSelector()
   //to do: call api to get datail
-  const getData = useEffect(() => {
-    //dispatch(getDetailTest)
-  }, [])
+  // const getData = useEffect(() => {
+  //   //dispatch(getDetailTest)
+  // }, [])
   const onSubmit = () => {
     handleSubmit()
     //to do: start test

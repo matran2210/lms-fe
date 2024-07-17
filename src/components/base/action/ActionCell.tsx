@@ -2,9 +2,7 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
-  useEffect,
   useRef,
-  useState,
 } from 'react'
 import Icon from '@components/icons'
 import useClickOutside from '../clickoutside/HookClick'
