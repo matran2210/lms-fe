@@ -103,12 +103,12 @@ const Explanation = () => {
   }) => {
     try {
       await UploadAPI.downloadFile(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   return (
     <SappLoadingGlobal loading={loading}>
-      <FullScreenLayout title=''>
+      <FullScreenLayout title="">
         <div data-aos={ANIMATION.DATA_AOS}>
           <div
             className="ml-auto cursor-pointer absolute right-6 top-[14px]"

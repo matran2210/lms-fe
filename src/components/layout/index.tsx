@@ -16,9 +16,7 @@ export default function Layout(props: LayoutProps): ReactElement {
       <Head>
         <title>{title}</title>
       </Head>
-      <DashboardLayout>
-        {children}
-      </DashboardLayout>
+      <DashboardLayout>{children}</DashboardLayout>
     </>
   )
 }

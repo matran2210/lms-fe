@@ -282,8 +282,6 @@ const CoursePartDetail = () => {
         } else if (filteredChildren?.length > 0) {
           setDefaultActive(filteredChildren[0].id) // Set default to the first child
         }
-      } else {
-        setDefaultActive('')
       }
     }
   }, [router?.asPath, partDetail?.id])
@@ -318,7 +316,7 @@ const CoursePartDetail = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title=''>
+      <Layout title="">
         <div className="main max-w-xxl my-0 mx-auto default-content-editor">
           <div className="w-full">
             <div className="flex pt-6 items-center">
@@ -374,7 +372,11 @@ const CoursePartDetail = () => {
               handleRouterChapter={handleRouterChapter}
               readMore={readMore}
               setReadMore={setReadMore}
-              defaultActive={defaultActive ? defaultActive : ''}
+              defaultActive={
+                router.query.course_chapter_id
+                  ? router.query.course_chapter_id
+                  : ''
+              }
             />
           </div>
 
@@ -430,11 +432,10 @@ const CoursePartDetail = () => {
             setOpen={setOpen}
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
-            activeCourse={() => { }}
+            activeCourse={() => {}}
           />
         </div>
       </Layout>
-
     </SappLoadingGlobal>
   )
 }

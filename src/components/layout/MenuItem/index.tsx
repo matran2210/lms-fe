@@ -49,7 +49,6 @@ export default function MenuItem({
     toggleExpanded((prev) => !prev)
   }
 
-  
   const handleOpenResource = () => {
     setOpenResource && setOpenResource(true)
     document.body.style.overflow = 'hidden'

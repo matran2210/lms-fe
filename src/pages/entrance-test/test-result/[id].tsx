@@ -22,7 +22,7 @@ const TestEntranceResult = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <FullScreenLayout title=''>
+      <FullScreenLayout title="">
         <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>
           <div
             className="ml-auto cursor-pointer absolute  right-6 top-[18px]"

@@ -88,12 +88,7 @@ const EntranceTestFillForm = ({
     setListEngLevel(optionEngLevel)
     // return res?.data?.[0]
   }
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    reset,
-  } = useForm<any>({
+  const { control, handleSubmit, setValue, reset } = useForm<any>({
     resolver: zodResolver(schema),
     mode: 'onSubmit',
   })
