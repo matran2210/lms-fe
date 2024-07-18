@@ -5,22 +5,20 @@ import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { USER_STATUS, USER_TYPE } from '@utils/constants/User'
-import { formatDate, formatPhoneNumber } from '@utils/helpers'
+import { formatDate } from '@utils/helpers'
 import {
   VALIDATE_MAX,
   VALIDATE_MIN,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import { StaticImageData } from 'next/image'
-import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useState, useEffect, useMemo } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ANIMATION, PageLink } from 'src/constants'
+import { ANIMATION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
-  getUserInformation,
   makeContactDefault,
   updateUser,
   updateUserAvatar,
@@ -53,7 +51,6 @@ const MyProfile = ({
   setReViewImageSrc,
 }: IProps) => {
   const dispatch = useAppDispatch()
-  const router = useRouter()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)
   // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
   const { control, setValue, handleSubmit, reset } = useForm<{
@@ -61,11 +58,6 @@ const MyProfile = ({
   }>({
     resolver: zodResolver(schema),
   })
-
-  useEffect(() => {
-    dispatch(getMe())
-    dispatch(getUserInformation())
-  }, [])
 
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
     status: boolean
