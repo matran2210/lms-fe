@@ -183,11 +183,8 @@ export const convertLocalTimeToUTC = (currentTime: Date) => {
   return utcTime
 }
 
-export const convertUTCToLocalTime = (utc_time: Date) => {
-  const offsetMinutes = utc_time.getTimezoneOffset()
-  const local_time = new Date(utc_time.getTime() - offsetMinutes * 60 * 1000)
-
-  return local_time
+export const convertUTCToLocalTime = (utc_time: Date | string) => {
+  return new Date(utc_time)
 }
 
 export const convertHourToDayLeft = (hours: number) => {
