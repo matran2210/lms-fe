@@ -103,7 +103,7 @@ const Explanation = () => {
   }) => {
     try {
       await UploadAPI.downloadFile(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   return (

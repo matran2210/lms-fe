@@ -8,7 +8,7 @@ import SingleDialogLayout from '@components/layout/SingleDialog'
 
 const ChangePasswordSuccess = () => {
   const router = useRouter()
-  
+
   const redirectLogin = () => {
     removeJwtToken()
     removeLocalStorageJwtToken()

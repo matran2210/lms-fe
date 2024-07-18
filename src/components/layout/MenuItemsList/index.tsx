@@ -23,7 +23,6 @@ export default function MenuItemsList({
           closeSideBar={closeSideBar}
         />
       ))}
-
     </div>
   )
 }

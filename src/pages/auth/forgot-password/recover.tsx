@@ -16,13 +16,6 @@ const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
       <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
         Forgot Password
       </div>
-      <span className="text-medium-sm text-gray-1 mb-10">
-        Enter your 6 digits code that you received on your email.
-      </span>
-      <div className="md:mt-12 mt-8">
-        <InputCodeForm email={email} token={token} />
-      </div>
-    </div>
     </SingleDialogLayout>
   )
 }

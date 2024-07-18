@@ -2,10 +2,7 @@ import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
-import {
-  formatTimeToHourMinuteSecond,
-  getResolution,
-} from '@utils/helpers'
+import { formatTimeToHourMinuteSecond, getResolution } from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
@@ -147,7 +144,7 @@ const SAPPVideo = ({
             }, 1000)
             setPlayerFunction(player)
           })
-          player.setTextTrack(playbackCC) 
+          player.setTextTrack(playbackCC)
         }
       }
     }
@@ -162,7 +159,7 @@ const SAPPVideo = ({
   // Get list captions of video
   const fetchCaptions = async (url: string) => {
     try {
-      const response = await fetcher(url)      
+      const response = await fetcher(url)
       const parser = new DOMParser()
       const xmlDoc = parser.parseFromString(response, 'text/xml')
       const adaptationSets = xmlDoc.getElementsByTagName('AdaptationSet')
@@ -603,18 +600,18 @@ const SAPPVideo = ({
   }
 
   const handleLanguageChange = (event: React.MouseEvent<HTMLLIElement>) => {
-    const target = event.target as HTMLLIElement;
-    const selectedCC = target?.dataset?.cc;
-    setPlaybackCC(Number(selectedCC));
-    updatePlayButton();
+    const target = event.target as HTMLLIElement
+    const selectedCC = target?.dataset?.cc
+    setPlaybackCC(Number(selectedCC))
+    updatePlayButton()
     setTimeout(() => {
       if (playerFunction) {
-        playerFunction.setTextTrack(Number(selectedCC));
-        updatePlayButton();
+        playerFunction.setTextTrack(Number(selectedCC))
+        updatePlayButton()
       } else {
         // console.error("Player function is not initialized yet.");
       }
-    }, 500);
+    }, 500)
   }
 
   // Function to change the video quality based on the selected option

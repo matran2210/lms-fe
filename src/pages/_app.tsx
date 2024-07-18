@@ -26,9 +26,7 @@ import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
 import { io } from 'socket.io-client'
 import { ICert } from 'src/type'
-import {
-  PinnedNotifyProvider,
-} from '@contexts/PinnedNotifyContext'
+import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import PopupCert from '@components/mycourses/PopupCert'
 import Help from '@components/Help'
@@ -76,7 +74,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     if (accessToken && excludedPaths.every((path) => router?.asPath !== path)) {
       try {
         await dispatch(getCountUnRead())
-      } catch (error) { }
+      } catch (error) {}
     }
   }
 
@@ -163,8 +161,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => { })
-      socket.on('disconnect', () => { })
+      socket.on('connect', () => {})
+      socket.on('disconnect', () => {})
       socket.on('STUDENT_COMPLETE_COURSE', (data: ICert) => {
         setOpenCert(true)
         setDataStudent(data)

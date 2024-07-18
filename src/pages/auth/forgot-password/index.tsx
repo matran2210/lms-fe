@@ -79,18 +79,25 @@ const ForgotPasswordPage = () => {
         ></SappButton>
         <div className="mt-8">
           <SappButton
-            title="Back to Login"
+            title="Send"
             size="lager"
             type="submit"
-            className="w-full !font-semibold"
-            color="text"
-            isUnderLine={false}
-            isPadding={false}
-            onClick={redirectLogin}
+            className="w-full mt-[27px] !font-semibold"
           ></SappButton>
-        </div>
-      </form>
-    </div>
+          <div className="mt-8">
+            <SappButton
+              title="Back to Login"
+              size="lager"
+              type="submit"
+              className="w-full !font-semibold"
+              color="text"
+              isUnderLine={false}
+              isPadding={false}
+              onClick={redirectLogin}
+            ></SappButton>
+          </div>
+        </form>
+      </div>
     </SingleDialogLayout>
   )
 }

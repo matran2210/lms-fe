@@ -61,16 +61,11 @@ const ChangePassword = () => {
   /**
    * @description sử dụng useForm
    */
-  const {
-    control,
-    handleSubmit,
-    reset,
-    getValues,
-    watch,
-  } = useForm<IChangePassword>({
-    resolver: zodResolver(validationSchema),
-    mode: 'onSubmit',
-  })
+  const { control, handleSubmit, reset, getValues, watch } =
+    useForm<IChangePassword>({
+      resolver: zodResolver(validationSchema),
+      mode: 'onSubmit',
+    })
 
   /**
    * @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
