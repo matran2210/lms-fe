@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import Router, { useRouter } from 'next/router'
 import { ANIMATION } from 'src/constants'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
+import Layout from '@components/layout'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -142,7 +143,7 @@ const Notifications = () => {
   }
 
   return (
-    <>
+    <Layout title=''>
       {/* {loadingRedirect && (
         <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
           Loading
@@ -193,7 +194,7 @@ const Notifications = () => {
       >
         <NotifyDetail notifyDetail={notifyDetail} />
       </SappDrawerV2>
-    </>
+    </Layout>
   )
 }
 

@@ -3,14 +3,14 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { httpService } from 'src/redux/services/httpService'
 import { QUESTION_TYPES } from 'src/type/course/Question'
-// import 'explanation-package/dist/index.css'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import { ANIMATION } from 'src/constants'
-import SappLoading from 'src/common/SappLoading'
 import { CoursesAPI } from '../api/courses'
-// import {} from 'explanation-package'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
+
 const Explanation = () => {
   const router = useRouter()
   const [activeQuestion, setActiveQuestion] = useState<any>()
@@ -103,14 +103,12 @@ const Explanation = () => {
   }) => {
     try {
       await UploadAPI.downloadFile(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   return (
-    <>
-      {loading ? (
-        <SappLoading />
-      ) : (
+    <SappLoadingGlobal loading={loading}>
+      <FullScreenLayout title=''>
         <div data-aos={ANIMATION.DATA_AOS}>
           <div
             className="ml-auto cursor-pointer absolute right-6 top-[14px]"
@@ -133,8 +131,8 @@ const Explanation = () => {
             handleDownload={handleDownload}
           />
         </div>
-      )}
-    </>
+      </FullScreenLayout>
+    </SappLoadingGlobal>
   )
 }
 export default Explanation

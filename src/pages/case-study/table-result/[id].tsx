@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, QUESTION_TYPES } from 'src/constants'
 import { CoursesAPI } from '../../api/courses/index'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 const headers = [
   {
@@ -53,13 +54,13 @@ const TableCaseStudyResult = () => {
         page_size,
       )
       return res
-    } catch (error) {}
+    } catch (error) { }
   }
   const fetchTopicAttemptDetail = async (id: string) => {
     try {
       const res = await CoursesAPI.getTopicAttemptsDetail(id)
       return res
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleScroll = () => {
@@ -144,164 +145,159 @@ const TableCaseStudyResult = () => {
   }, [router.query.id])
 
   return (
-    <div className="relative" data-aos={ANIMATION.DATA_AOS}>
-      <div
-        className="fixed px-6 py-4 right-0 cursor-pointer z-20"
-        onClick={() => {
-          router.back()
-        }}
-      >
-        <CloseIcon />
-      </div>
-      <div className="bg-white max-w-[1144px] max-h-full m-auto pt-8">
-        <div className="px-6 xl:px-0 flex justify-between mb-10 items-center flex-row">
-          <div className="pr-4">
-            <div className="text-xl font-medium text-bw-1 line-clamp-1">
-              {topicAttemptDetail?.question_topic?.name}
+    <FullScreenLayout title=''>
+      <div className="relative" data-aos={ANIMATION.DATA_AOS}>
+        <div
+          className="fixed px-6 py-4 right-0 cursor-pointer z-20"
+          onClick={() => router.back()}
+        >
+          <CloseIcon />
+        </div>
+        <div className="bg-white max-w-[1144px] max-h-full m-auto pt-8">
+          <div className="px-6 xl:px-0 flex justify-between mb-10 items-center flex-row">
+            <div className="pr-4">
+              <div className="text-xl font-medium text-bw-1 line-clamp-1">
+                {topicAttemptDetail?.question_topic?.name}
+              </div>
+              <div className="text-base pt-2.5">
+                <span className="font-normal text-gray-1 pt-1.5">
+                  Your Score:
+                </span>{' '}
+                <span className="font-bold text-state-error">
+                  {topicAttemptDetail?.score}%
+                </span>
+              </div>
             </div>
-            <div className="text-base pt-2.5">
-              <span className="font-normal text-gray-1 pt-1.5">
-                Your Score:
-              </span>{' '}
-              <span className="font-bold text-state-error">
-                {topicAttemptDetail?.score}%
-              </span>
-            </div>
-          </div>
-          {topicAttemptDetail?.quiz?.is_limited ? (
-            topicAttemptDetail?.quiz?.limit_count > 1 ? (
-              topicAttemptDetail?.quiz?.limit_count >
-              topicAttemptDetail?.retake_times ? (
-                <ButtonPrimary
-                  title={`Retake ${topicAttemptDetail?.retake_times}${
-                    topicAttemptDetail?.quiz?.is_limited
-                      ? `/${topicAttemptDetail?.quiz?.limit_count}`
-                      : '/Unlimited'
-                  }`}
-                  size="medium"
-                  className={'!font-medium shrink-0'}
-                  onClick={() =>
-                    handleRetake(
-                      topicAttemptDetail?.question_topic?.id,
-                      topicAttemptDetail?.quiz?.id,
-                      topicAttemptDetail?.class_user_id as string,
-                      router?.query?.class_id as string,
-                      router?.query?.course_section_id as string,
-                    )
-                  }
-                />
+            {topicAttemptDetail?.quiz?.is_limited ? (
+              topicAttemptDetail?.quiz?.limit_count > 1 ? (
+                topicAttemptDetail?.quiz?.limit_count >
+                  topicAttemptDetail?.retake_times ? (
+                  <ButtonPrimary
+                    title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
+                        ? `/${topicAttemptDetail?.quiz?.limit_count}`
+                        : '/Unlimited'
+                      }`}
+                    size="medium"
+                    className={'!font-medium shrink-0'}
+                    onClick={() =>
+                      handleRetake(
+                        topicAttemptDetail?.question_topic?.id,
+                        topicAttemptDetail?.quiz?.id,
+                        topicAttemptDetail?.class_user_id as string,
+                        router?.query?.class_id as string,
+                        router?.query?.course_section_id as string,
+                      )
+                    }
+                  />
+                ) : (
+                  <ButtonSecondary
+                    disabled={true}
+                    title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
+                        ? `/${topicAttemptDetail?.quiz?.limit_count}`
+                        : '/Unlimited'
+                      }`}
+                    size="medium"
+                    className={'!font-medium shrink-0'}
+                  />
+                )
               ) : (
-                <ButtonSecondary
-                  disabled={true}
-                  title={`Retake ${topicAttemptDetail?.retake_times}${
-                    topicAttemptDetail?.quiz?.is_limited
-                      ? `/${topicAttemptDetail?.quiz?.limit_count}`
-                      : '/Unlimited'
-                  }`}
-                  size="medium"
-                  className={'!font-medium shrink-0'}
-                />
+                <></>
               )
             ) : (
-              <></>
-            )
-          ) : (
-            <ButtonPrimary
-              title={`Retake ${topicAttemptDetail?.retake_times}${
-                topicAttemptDetail?.quiz?.is_limited
-                  ? `/${topicAttemptDetail?.quiz?.limit_count}`
-                  : '/Unlimited'
-              }`}
-              size="medium"
-              onClick={() =>
-                handleRetake(
-                  topicAttemptDetail?.question_topic?.id,
-                  topicAttemptDetail?.quiz?.id,
-                  topicAttemptDetail?.class_user_id as string,
-                  router?.query?.class_id as string,
-                  router?.query?.course_section_id as string,
-                )
-              }
-              className={'!font-medium shrink-0'}
-            />
-          )}
-        </div>
+              <ButtonPrimary
+                title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
+                    ? `/${topicAttemptDetail?.quiz?.limit_count}`
+                    : '/Unlimited'
+                  }`}
+                size="medium"
+                onClick={() =>
+                  handleRetake(
+                    topicAttemptDetail?.question_topic?.id,
+                    topicAttemptDetail?.quiz?.id,
+                    topicAttemptDetail?.class_user_id as string,
+                    router?.query?.class_id as string,
+                    router?.query?.course_section_id as string,
+                  )
+                }
+                className={'!font-medium shrink-0'}
+              />
+            )}
+          </div>
 
-        <div className="block px-6 xl:pr-0 xl:pl-4">
-          <SappTable
-            headers={headers}
-            loading={true}
-            data={scoreDetail?.answers}
-            isCheckedAll={true}
-            onChange={() => {}}
-            hasCheck={false}
-          >
-            <>
-              {scoreDetail?.answers?.map((e: any, index: number) => {
-                return (
-                  <tr
-                    className="border-dashed border-b border-gray-2"
-                    key={e?.id}
-                  >
-                    <td className="pr-1 text-bw-1">{index + 1}</td>
-                    <td className="text-start m-6 pr-4">
-                      <div
-                        className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
-                        dangerouslySetInnerHTML={{
-                          __html: String(e?.question?.question_content ?? '--'),
-                        }}
-                        onClick={() => {
-                          router.push(`/explanation/${e?.id}?title=My Course`)
-                        }}
-                      ></div>
-                    </td>
-                    <td className="text-start m-6 pr-4 text-bw-1">
-                      <div className="mt-6 mr-6 mb-6 min-w-132px">
-                        {getTypeName(e?.question?.qType ?? '--')}
-                      </div>
-                    </td>
-                    <td
-                      className={`text-start m-6 pr-1
-                      ${
-                        e?.is_correct || e?.active === 'SUBMITED'
-                          ? ' text-state-success'
-                          : ' text-state-error'
-                      }
-                    `}
+          <div className="block px-6 xl:pr-0 xl:pl-4">
+            <SappTable
+              headers={headers}
+              loading={true}
+              isCheckedAll={true}
+              onChange={() => { }}
+              hasCheck={false}
+            >
+              <>
+                {scoreDetail?.answers?.map((e: any, index: number) => {
+                  return (
+                    <tr
+                      className="border-dashed border-b border-gray-2"
+                      key={e?.id}
                     >
-                      {e?.question?.qType !== 'ESSAY' ? (
-                        <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
-                      ) : (
-                        <>
-                          {e?.active === 'SUBMITED'
-                            ? 'Submitted'
-                            : 'Unfinished'}
-                        </>
-                      )}
-                    </td>
-                    <td className="text-start m-6 text-gray-1 pr-4">
-                      {e?.question?.qType !== 'ESSAY' && (
-                        <div className="flex items-center ml-1">
-                          <img
-                            src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                            alt="Correct"
-                            className="w-4 text-state-success mr-1"
-                          />
-                          {roundNumber(
-                            e?.question?.question_report?.ratio || 0,
-                          )}
-                          %
+                      <td className="pr-1 text-bw-1">{index + 1}</td>
+                      <td className="text-start m-6 pr-4">
+                        <div
+                          className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
+                          dangerouslySetInnerHTML={{
+                            __html: String(e?.question?.question_content ?? '--'),
+                          }}
+                          onClick={() => {
+                            router.push(`/explanation/${e?.id}?title=My Course`)
+                          }}
+                        ></div>
+                      </td>
+                      <td className="text-start m-6 pr-4 text-bw-1">
+                        <div className="mt-6 mr-6 mb-6 min-w-132px">
+                          {getTypeName(e?.question?.qType ?? '--')}
                         </div>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </>
-          </SappTable>
+                      </td>
+                      <td
+                        className={`text-start m-6 pr-1
+                      ${e?.is_correct || e?.active === 'SUBMITED'
+                            ? ' text-state-success'
+                            : ' text-state-error'
+                          }
+                    `}
+                      >
+                        {e?.question?.qType !== 'ESSAY' ? (
+                          <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
+                        ) : (
+                          <>
+                            {e?.active === 'SUBMITED'
+                              ? 'Submitted'
+                              : 'Unfinished'}
+                          </>
+                        )}
+                      </td>
+                      <td className="text-start m-6 text-gray-1 pr-4">
+                        {e?.question?.qType !== 'ESSAY' && (
+                          <div className="flex items-center ml-1">
+                            <img
+                              src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                              alt="Correct"
+                              className="w-4 text-state-success mr-1"
+                            />
+                            {roundNumber(
+                              e?.question?.question_report?.ratio || 0,
+                            )}
+                            %
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </>
+            </SappTable>
+          </div>
         </div>
       </div>
-    </div>
+    </FullScreenLayout>
   )
 }
 

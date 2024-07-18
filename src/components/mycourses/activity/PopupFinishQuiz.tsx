@@ -1,11 +1,13 @@
 import { ActiveIcon } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
+import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
-  setOpen: any
+  setOpen: Dispatch<SetStateAction<boolean>>
   submitQuiz: () => void
 }
+
 const PopupFinishQuiz = ({ open, setOpen, submitQuiz }: IProps) => {
   const handleCancel = () => {
     setOpen(false)

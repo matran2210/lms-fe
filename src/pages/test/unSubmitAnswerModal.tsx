@@ -1,5 +1,4 @@
 import { AlertTriagle } from '@assets/icons'
-import SappButton from '@components/base/button/SappButton'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { Dispatch, SetStateAction } from 'react'
 

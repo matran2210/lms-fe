@@ -334,6 +334,20 @@ export class CoursesAPI {
     )
   }
 
+  static getCourseResults(
+    id: string | string[] | undefined,
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/courses/${id}/quizzes?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
+  }
+
   static getCourseNotesList(page_size: number, params?: Object): Promise<any> {
     return fetcher(
       `${apiURL}/course-section-notes?page_index=1&page_size=${page_size}`,

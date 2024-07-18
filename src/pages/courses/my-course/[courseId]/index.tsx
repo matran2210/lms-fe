@@ -10,6 +10,7 @@ import { ANIMATION } from 'src/constants'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { useCourseContext } from '@contexts/index'
+import Layout from '@components/layout'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -25,7 +26,7 @@ const CourseDetail = () => {
   /**
    * @description config API course detail
    */
-  const fecthCourseDetail = async ({
+  const fetchCourseDetail = async ({
     pageParam,
     params,
   }: {
@@ -50,7 +51,7 @@ const CourseDetail = () => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ['courseDetail'],
-      queryFn: ({ pageParam }) => fecthCourseDetail({ pageParam, params }),
+      queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
       getNextPageParam: (lastPage, allPages) => {
         if (
           params.user_section_learning_status ||
@@ -105,16 +106,16 @@ const CourseDetail = () => {
   const courseNameDetail = data?.pages?.[0]?.courseDetail?.data?.name
 
   /**
-   * @description biến này lấy name của course
+   * @description biến này lấy class user id
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
 
   /**
    * @description biến này tìm kiếm bài Final Test
    */
-  const sectionFinalTest = courses?.find(
-    (section) => section?.course_section_type === 'FINAL_TEST',
-  )?.quiz
+  // const sectionFinalTest = courses?.find(
+  //   (section) => section?.course_section_type === 'FINAL_TEST',
+  // )?.quiz
 
   const { setCourseType } = useCourseContext()
 
@@ -124,41 +125,38 @@ const CourseDetail = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <div className="header bg-white border-b border-default h-[70px]">
-        <div className="max-w-xxl my-0 mx-auto flex py-6 xl-max:mx-5">
-          <SearchForm
-            placeholder="Enter name of course..."
-            formStyle="w-full flex items-center"
+      <Layout title=''>
+        <div className="header bg-white border-b border-default h-[70px]">
+          <div className="max-w-xxl my-0 mx-auto flex py-6 xl-max:mx-5">
+            <SearchForm
+              placeholder="Enter name of course..."
+              formStyle="w-full flex items-center"
+            />
+          </div>
+        </div>
+        <div className="main max-w-xxl my-0 mx-auto xl-max:container relative">
+          <div className="flex justify-between pt-6 pb-4 w-full items-center">
+            <BreadcrumbFilter name={courseNameDetail} />
+            <FilterCourseDetail totalResult={courses?.length || 0} />
+          </div>
+        </div>
+        <div
+          className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6"
+          data-aos={ANIMATION.DATA_AOS}
+        >
+          <Heading greeting="Welcome to" title={courseNameDetail} />
+        </div>
+        <div
+          className="pt-6 max-w-xxl my-0 mx-auto xl-max:container"
+          data-aos={ANIMATION.DATA_AOS}
+        >
+          <CourseParts
+            courses={courses}
+            class_user_id={class_user_id}
+            lastElementRef={lastElementRef}
           />
         </div>
-      </div>
-      <div className="main max-w-xxl my-0 mx-auto xl-max:container relative">
-        <div className="flex justify-between pt-6 pb-4 w-full items-center">
-          <BreadcrumbFilter name={courseNameDetail} />
-          <FilterCourseDetail totalResult={courses?.length || 0} />
-        </div>
-      </div>
-      <div
-        className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6"
-        data-aos={ANIMATION.DATA_AOS}
-      >
-        <Heading greeting="Welcome to" title={courseNameDetail} />
-      </div>
-      <div
-        className="pt-6 max-w-xxl my-0 mx-auto xl-max:container"
-        data-aos={ANIMATION.DATA_AOS}
-      >
-        <CourseParts
-          courses={courses}
-          class_user_id={class_user_id}
-          lastElementRef={lastElementRef}
-        />
-      </div>
-      {/* <ModalCongrats
-        name={courseNameDetail}
-        course_type={data?.pages?.[0]?.courseDetail?.data?.course_type}
-        quiz={sectionFinalTest}
-      /> */}
+      </Layout>
     </SappLoadingGlobal>
   )
 }

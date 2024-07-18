@@ -5,8 +5,6 @@ import {
   IActivityStateQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
-  selectQuestions,
-  submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import SappModal from '@components/base/modal/SappModal'
@@ -14,12 +12,7 @@ import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { debounce } from '@utils/helpers'
-import {
-  IQuestionResult,
-  IQuestionResultResponse,
-} from 'quiz-result-package/dist/type'
 import SappIcon from 'src/common/SappIcon'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { video_url } from '@utils/constants'
@@ -60,7 +53,7 @@ const VideoDocument = ({
   const [currentListQuestion, setCurrentListQuestion] = useState<IQuestion[]>(
     [],
   )
-  const selector = useAppSelector(courseActivityQuizReducer)
+  // const selector = useAppSelector(courseActivityQuizReducer)
   const questionRef = useRef<QuizComponentRef>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()

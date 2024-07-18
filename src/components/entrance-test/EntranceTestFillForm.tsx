@@ -1,8 +1,6 @@
-import SappModal from '@components/base/modal/SappModal'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import EntranceApi from 'src/redux/services/EntranceTest'
 import { z } from 'zod'
 import { EntrancePopupProps } from './EntrancePopup'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
@@ -93,11 +91,8 @@ const EntranceTestFillForm = ({
   const {
     control,
     handleSubmit,
-    getValues,
     setValue,
     reset,
-    watch,
-    getFieldState,
   } = useForm<any>({
     resolver: zodResolver(schema),
     mode: 'onSubmit',

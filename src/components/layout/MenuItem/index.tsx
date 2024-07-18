@@ -15,7 +15,7 @@ import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activit
 
 type MenuItemProps = {
   menuItem: MenuItemType
-  setOpenResource: Dispatch<SetStateAction<boolean>>
+  setOpenResource?: Dispatch<SetStateAction<boolean>>
   closeSideBar: () => void
 }
 
@@ -28,18 +28,18 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const isDetailCourse =
-    router.pathname.includes('/my-course') ||
-    router.pathname.includes('/section') ||
-    router.pathname.includes('/activity')
+  // const isDetailCourse =
+  //   router.pathname.includes('/my-course') ||
+  //   router.pathname.includes('/section') ||
+  //   router.pathname.includes('/activity')
 
-  const isProfile =
-    Icon === 'avatar' &&
-    (router.asPath === '/myprofile' ||
-      router.asPath === '/certificates' ||
-      router.asPath === '/settings' ||
-      router.asPath === '/login_history' ||
-      router.asPath === '/devices')
+  // const isProfile =
+  //   Icon === 'avatar' &&
+  //   (router.asPath === '/myprofile' ||
+  //     router.asPath === '/certificates' ||
+  //     router.asPath === '/settings' ||
+  //     router.asPath === '/login_history' ||
+  //     router.asPath === '/devices')
 
   const selected = router.pathname === url
 
@@ -49,8 +49,9 @@ export default function MenuItem({
     toggleExpanded((prev) => !prev)
   }
 
+  
   const handleOpenResource = () => {
-    setOpenResource(true)
+    setOpenResource && setOpenResource(true)
     document.body.style.overflow = 'hidden'
   }
 
@@ -73,12 +74,19 @@ export default function MenuItem({
     dispatch(openCalculator())
   }
 
+  const handleOpenResultsPage = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.courseId}/results`,
+    })
+  }
+
   const handleActive = () => {
     if (router?.query?.courseId || router.query.id) {
       name === TitleSidebar.RESOURCES && handleOpenResource()
       name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
       name === TitleSidebar.NEW_NOTE && handleAddNote()
       name === TitleSidebar.CALCULATOR && handleOpenCalculator()
+      name === TitleSidebar.RESULTS && handleOpenResultsPage()
     }
   }
 
@@ -94,7 +102,7 @@ export default function MenuItem({
         {Icon === 'avatar' ? (
           <div className="w-10 h-10 shrink-0">
             {user?.detail?.avatar['40x40'] || user.detail.avatar['ORIGIN'] ? (
-              <img
+              <Image
                 src={
                   user.detail.avatar['40x40'] || user.detail.avatar['ORIGIN']
                 }
@@ -205,7 +213,7 @@ export default function MenuItem({
           !isInCourse &&
           (name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
-            // name === TitleSidebar.RESULTS ||
+            name === TitleSidebar.RESULTS ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
             ? 'hidden'

@@ -1,9 +1,8 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import SappModal from '@components/base/modal/SappModal'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { ChangeEvent, SetStateAction, useRef, useState } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -22,7 +21,6 @@ import {
 import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
-import { ANIMATION } from 'src/constants'
 import { Skeleton } from 'antd'
 
 type Props = {
@@ -41,7 +39,7 @@ const Discussion = ({ class_id }: Props) => {
   const [idReply, setIdReply] = useState<string>()
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
   const { user } = useAppSelector(userReducer)
-  const [stream, setStream] = useState<MediaStream | null>(null)
+  // const [stream, setStream] = useState<MediaStream | null>(null)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [rootSelectedFiles, setRootSetSelectedFiles] = useState<File[]>([])
   const fileInputRef = useRef<HTMLInputElement | null>(null)

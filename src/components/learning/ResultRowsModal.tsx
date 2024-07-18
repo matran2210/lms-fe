@@ -1,8 +1,7 @@
 // ConfirmDialog.tsx
 import SappTable from '@components/base/SappTable'
 import SappModal from '@components/base/modal/SappModal'
-import router from 'next/router'
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, FC, SetStateAction } from 'react'
 import ResultTableRows from './ResultTableRows'
 import Icon from '@components/icons'
 
@@ -232,7 +231,6 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         <SappTable
           headers={headers}
           loading={false}
-          data={[{}]}
           isCheckedAll={false}
           hasCheck={false}
           hasCheckAll={false}

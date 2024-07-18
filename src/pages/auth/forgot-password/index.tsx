@@ -10,6 +10,7 @@ import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
 import { removeJwtToken } from '@utils/index'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 
 const schema = z.object({
   email: z
@@ -51,6 +52,7 @@ const ForgotPasswordPage = () => {
   }
 
   return (
+    <SingleDialogLayout title=''>
     <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
@@ -89,6 +91,7 @@ const ForgotPasswordPage = () => {
         </div>
       </form>
     </div>
+    </SingleDialogLayout>
   )
 }
 

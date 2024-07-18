@@ -3,7 +3,6 @@ import { ICourse } from 'src/type/courses'
 import React from 'react'
 import NoData from 'src/common/NoData'
 import { isEmpty } from 'lodash'
-import { ANIMATION } from 'src/constants'
 
 interface CoursesProps {
   courses: ICourse[]
