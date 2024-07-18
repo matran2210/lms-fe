@@ -76,6 +76,8 @@ interface Answer {
   viewed?: boolean
 }
 
+import { QuestionAPI } from '../api/question'
+
 type Window = {
   userAgreed: any
 }
@@ -819,7 +821,7 @@ const TestDetail = () => {
     const previousContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
-      const { topicDescription, res } = await getDetail(nextTab)
+      const { topicDescription, question } = await getDetail(nextTab)
       const newData = tabs?.map((item: any) => {
         if (nextTab === item.id) {
           if (item.viewed) {
@@ -828,7 +830,7 @@ const TestDetail = () => {
           } else {
             return {
               ...item,
-              data: res?.data?.[0],
+              data: question,
               topicDescription: topicDescription?.data,
               viewed: true,
             }
@@ -980,10 +982,10 @@ const TestDetail = () => {
           ?.question_topic_id,
         quizDetail?.id,
       )
-      const res = await CoursesAPI.getQuestionsDetail(currentPage)
-      return { topicDescription, res }
+      const res = await QuestionAPI.getQuestionDetail(currentPage)
+      return { topicDescription, question: res.data }
     } catch (err) {
-      return { topicDescription: { data: {} }, res: { data: [] } }
+      return { topicDescription: { data: {} }, question: null }
     }
   }
 
@@ -993,7 +995,7 @@ const TestDetail = () => {
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
-      const { topicDescription, res } = await getDetail(currentTab)
+      const { topicDescription, question } = await getDetail(currentTab)
       const newData = tabs?.map((item: any) => {
         if (currentTab === item.id) {
           if (item.viewed) {
@@ -1003,7 +1005,7 @@ const TestDetail = () => {
             return {
               ...item,
               viewed: true,
-              data: res?.data?.[0],
+              data: question,
               topicDescription: topicDescription.data,
             }
           }
@@ -1489,7 +1491,7 @@ const TestDetail = () => {
 
         for (let i in questions) {
           if (+i === 0) {
-            const { topicDescription, res } = await getDetail(
+            const { topicDescription, question } = await getDetail(
               questions?.[0]?.id,
             )
             arr.push({
@@ -1498,7 +1500,7 @@ const TestDetail = () => {
               flaged: false,
               done: false,
               index: +i,
-              data: res.data[0],
+              data: question,
               topicDescription: topicDescription?.data,
               response_type: 0,
             })
