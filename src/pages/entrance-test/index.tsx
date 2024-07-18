@@ -33,7 +33,7 @@ const EntranceTest = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title=''>
+      <Layout title='Entrance Test'>
       <div className="header bg-white border-b border-default">
         <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
           <SearchForm
