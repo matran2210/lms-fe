@@ -84,11 +84,13 @@ const LoginPage = () => {
       if (accessDeviceToken) {
         return accessDeviceToken
       }
-      const token = await getMessagingToken()
-      if (token) {
-        await AsyncStorage.setItem('firebaseDeviceToken', token)
+      if (window?.Notification?.permission !== 'denied') {
+        const token = await getMessagingToken()
+        if (token) {
+          await AsyncStorage.setItem('firebaseDeviceToken', token)
+        }
+        return token
       }
-      return token
     } catch (error) {
       return ''
     }
@@ -103,7 +105,7 @@ const LoginPage = () => {
       } else {
         router.push(beforeLoginPath || PageLink.COURSES)
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const incorrectEmailAndPassword = ['400|010433', '400|010833']
@@ -153,7 +155,7 @@ const LoginPage = () => {
             setLoading(false)
           }, 1000)
         })
-    } catch (error: any) {}
+    } catch (error: any) { }
   }
 
   useEffect(() => {
