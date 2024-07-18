@@ -34,7 +34,10 @@ import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
 import { io } from 'socket.io-client'
 import { ICert } from 'src/type'
-import { PinnedNotifyProvider, usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
+import {
+  PinnedNotifyProvider,
+  usePinnedNotifyContext,
+} from '@contexts/PinnedNotifyContext'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import PopupCert from '@components/mycourses/PopupCert'
 import { Button, Popover, Tooltip } from 'antd'
@@ -73,9 +76,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     },
   })
 
-  const {
-    getPinnedData
-  } = usePinnedNotifyContext()
+  const { getPinnedData } = usePinnedNotifyContext()
 
   const excludedPaths = [
     PageLink.AUTH_LOGIN,
@@ -228,7 +229,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   let authToken = getActToken()
 
-  const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<any>(null)
 
   useEffect(() => {
     if (authToken) {
@@ -251,11 +252,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       socket.on('connect', () => { });
       socket.on('disconnect', () => { });
       socket.on('STUDENT_COMPLETE_COURSE', (data: ICert) => {
-        setOpenCert(true);
-        setDataStudent(data);
-      });
+        setOpenCert(true)
+        setDataStudent(data)
+      })
     }
-  }, [socket]);
+  }, [socket])
 
   const handleCancel = () => {
     setOpenCert(false)

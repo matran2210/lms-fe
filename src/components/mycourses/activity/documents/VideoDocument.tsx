@@ -419,13 +419,7 @@ const VideoDocument = ({
               <div className="!text-xl font-bold text-bw-1">Question</div>
             }
             parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
-            okButtonCaption={`${
-              finishQuestion
-                ? 'Finish'
-                : isConfirmQuestion || activeQuestion?.corrects
-                  ? 'Next'
-                  : 'Submit'
-            }`}
+            okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}
             buttonSize="small"
             size="max-w-full"
             position="center"
@@ -445,7 +439,7 @@ const VideoDocument = ({
             }}
             closeAfterSubmit={false}
             colorCancel="textUnderline"
-            cancelButtonCaption={`${finishQuestion ? '' : 'Skip'}`}
+            cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
           >
             <div className="py-5">
               <QuizComponent
