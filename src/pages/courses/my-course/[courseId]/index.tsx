@@ -9,7 +9,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ANIMATION } from 'src/constants'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import ModalCongrats from '@components/mycourses/course-detail/ModalCongrats'
+import { useCourseContext } from '@contexts/index'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -116,6 +116,12 @@ const CourseDetail = () => {
     (section) => section?.course_section_type === 'FINAL_TEST',
   )?.quiz
 
+  const { setCourseType } = useCourseContext()
+
+  useEffect(() => {
+    setCourseType(data?.pages?.[0]?.courseDetail?.data?.course_type)
+  })
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <div className="header bg-white border-b border-default h-[70px]">
@@ -148,11 +154,11 @@ const CourseDetail = () => {
           lastElementRef={lastElementRef}
         />
       </div>
-      <ModalCongrats
+      {/* <ModalCongrats
         name={courseNameDetail}
         course_type={data?.pages?.[0]?.courseDetail?.data?.course_type}
         quiz={sectionFinalTest}
-      />
+      /> */}
     </SappLoadingGlobal>
   )
 }

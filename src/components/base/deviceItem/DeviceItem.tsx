@@ -33,7 +33,7 @@ const DeviceItem = ({ data }: any) => {
           </div>
           {data.is_current && (
             <div className="bg-blue-50 h-fit px-2">
-              <div className="text-state-info text-xsm">This Devices</div>
+              <div className="text-state-info text-xsm">This Browser</div>
             </div>
           )}
         </div>

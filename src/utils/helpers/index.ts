@@ -183,6 +183,13 @@ export const convertLocalTimeToUTC = (currentTime: Date) => {
   return utcTime
 }
 
+export const convertUTCToLocalTime = (utc_time: Date) => {
+  const offsetMinutes = utc_time.getTimezoneOffset()
+  const local_time = new Date(utc_time.getTime() - offsetMinutes * 60 * 1000)
+
+  return local_time
+}
+
 export const convertHourToDayLeft = (hours: number) => {
   if (hours <= 0) {
     return 0
@@ -237,4 +244,18 @@ export const getResolution = (bitrate: number) => {
     default:
       return '4k+'
   }
+}
+
+export const isAppleDevice = () => {
+  return /Mac|iPod|iPhone|iPad/.test(navigator.platform)
+}
+
+export const isSafari = () => {
+  const userAgent = navigator.userAgent
+  const vendor = navigator.vendor
+  return (
+    /Safari/.test(userAgent) &&
+    /Apple Computer/.test(vendor) &&
+    !/Chrome/.test(userAgent)
+  )
 }

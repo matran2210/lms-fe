@@ -1,10 +1,12 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
+import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
+import { NOTIFICATION_STATUS } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
 
 interface IProps {
@@ -61,6 +63,14 @@ const ProfileSideBar = ({ page }: IProps) => {
   const handleLogout = async () => {
     try {
       await dispatch(getLogoutUser())
+      .then(() => {
+        const pinnedStatus = getLocalStorageItem('pinnedStatus')
+        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
+          removeLocalStorageItem('pinnedId')
+          removeLocalStorageItem('openPinned')
+          removeLocalStorageItem('pinnedStatus')
+        }
+      })
       // router.push(PageLink.AUTH_LOGIN)
     } catch (error) {}
   }
@@ -208,7 +218,10 @@ const ProfileSideBar = ({ page }: IProps) => {
                               className="p-3 block w-full text-left"
                               onClick={() => handleChildClick(childLabel)}
                             >
-                              {getLabelFromChild(child)}
+                              {getLabelFromChild(child).toLowerCase() ===
+                              'devices'
+                                ? 'Browsers'
+                                : getLabelFromChild(child)}
                             </a>
                           </div>
                         )
@@ -232,7 +245,7 @@ const ProfileSideBar = ({ page }: IProps) => {
           </li>
         </div>
         <div className="text-center text-sm font-normal text-gray-1">
-          LMS Pro Version 1.3.0
+          LMS Pro Version 1.4.0
         </div>
       </ul>
     </div>

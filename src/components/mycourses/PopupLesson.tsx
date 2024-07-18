@@ -35,7 +35,7 @@ const PopupLesson = ({ open, setOpen }: IProps) => {
         <AlertIcon />
       </div>
       <div className="text-2xl md:text-4xl text-bw-1 font-semibold flex justify-center">
-        Course
+        Foundation Required
       </div>
       <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 xl:mb-7 px-1">
         Please pass the Foundation Class to activate this course.

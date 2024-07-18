@@ -18,6 +18,7 @@ module.exports = {
       '2xl-max': { max: '1279px' },
       '3xl': '1536px',
       '3.5xl': '1660px',
+      '3.75xl': '1778px',
       '4xl': '1920px',
     },
     fontSize: {
@@ -101,6 +102,9 @@ module.exports = {
         blue: {
           1: '#0000EE',
         },
+        pinned: {
+          1: '#18355D',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -134,6 +138,8 @@ module.exports = {
           '0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 4px 0px rgba(0, 0, 0, 0.04)',
         'sidebar-tablet': '0px -2px 7px 0px #0000001A',
         pagination: '0px 2px 7px 0px #00000021',
+        pinned: '0 1px 3px rgba(0, 0, 0, .1)',
+        livechat: 'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px'
       },
       minWidth: {
         4: '16px',

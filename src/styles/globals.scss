@@ -434,9 +434,9 @@ body *::-webkit-scrollbar-thumb:hover {
   @apply cursor-pointer flex justify-evenly gap-2 w-max items-center px-2 py-0 border;
 }
 
-// .tox-tinymce {
-//   border: none !important;
-// }
+.tox-tinymce {
+  border-radius: 0 !important;
+}
 
 .resizable {
   @apply bg-white top-[100px] left-[100px] cursor-move;
@@ -826,6 +826,155 @@ p a {
   padding: 10px 12px !important;
 }
 
+#floating-button {
+  @apply w-[60px] h-[60px] bg-white fixed cursor-pointer rounded-full;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px;
+  animation: moveDown 0.3s ease-out forwards;
+}
+
+#floating-button.clicked {
+  animation: moveDown 0.3s ease-out forwards;
+}
+
+@keyframes moveDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.plus {
+  animation: plus-out 0.3s;
+  transition: all 0.3s;
+  @apply w-[60px] h-[60px] left-[-2px]
+}
+
+#container-floating {
+  @apply fixed w-[60px] h-[60px] bottom-[30px] right-[20px] z-[50px]
+}
+
+// @keyframes edit-in {
+//   from {
+//     opacity: 0;
+//     transform: rotateZ(-70deg);
+//   }
+//   to {
+//     opacity: 1;
+//     transform: rotateZ(0deg);
+//   }
+// }
+
+// @keyframes edit-out {
+//   from {
+//     opacity: 1;
+//     transform: rotateZ(0deg);
+//   }
+//   to {
+//     opacity: 0;
+//     transform: rotateZ(-70deg);
+//   }
+// }
+
+// @keyframes plus-in {
+//   from {
+//     opacity: 1;
+//     transform: rotateZ(0deg);
+//   }
+//   to {
+//     opacity: 0;
+//     transform: rotateZ(180deg);
+//   }
+// }
+
+// @keyframes plus-out {
+//   from {
+//     opacity: 0;
+//     transform: rotateZ(180deg);
+//   }
+//   to {
+//     opacity: 1;
+//     transform: rotateZ(0deg);
+//   }
+// }
+
+// @keyframes bounce-nds {
+//   from {
+//     opacity: 0;
+//   }
+//   to {
+//     opacity: 1;
+//     transform: scale(1);
+//   }
+// }
+
+// @keyframes bounce-out-nds {
+//   from {
+//     opacity: 1;
+//     transform: scale(1);
+//   }
+//   to {
+//     opacity: 0;
+//     transform: scale(0);
+//   }
+// }
+
+.ant-popover-content {
+  width: 360px !important;
+}
+
+.ant-popover-inner {
+  padding: 24px !important;
+  margin-bottom: 16px !important;
+}
+
+.ant-popover {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+#hubspot-messages-iframe-container.visible-icon iframe {
+  display: none !important;
+}
+
+#hubspot-messages-iframe-container.visible-icon {
+  position: inherit !important;
+}
+
+#floating-button .plus:hover svg path {
+  @apply fill-white
+}
+
+.svg-container:hover path {
+  @apply fill-primary
+}
+
 .ant-modal {
   font-family: 'Roboto', sans-serif !important;
+}
+
+.pinned-noti-marquee-content {
+  transform: translateX(100%);
+  animation: scroll-left 50s linear infinite;
+}
+
+.pinned-noti-marquee-content:hover {
+  animation: unset !important;
+  transform: unset !important;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.content-course div strong {
+  @apply font-medium text-bw-1;
 }

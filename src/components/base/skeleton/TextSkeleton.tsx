@@ -1,21 +1,17 @@
-import React, { ReactNode } from 'react'
+import { SkeletonProps } from './type'
 
-type Props = {
-  children?: ReactNode
-  loading?: boolean
-  length?: number
-  className?: string
-  classChild?: string
-  widths?: string[]
-}
-
-const TextSkeleton = ({ children, loading, length = 1, widths }: Props) => {
+const TextSkeleton = ({
+  children,
+  loading,
+  length = 1,
+  widths,
+}: SkeletonProps) => {
   const mockData = new Array(widths?.length ? widths.length : length).fill(0)
   return (
     <>
       {loading ? (
         <>
-          {mockData.map((data, index) => (
+          {mockData.map((_, index) => (
             <div
               key={index}
               role="status"

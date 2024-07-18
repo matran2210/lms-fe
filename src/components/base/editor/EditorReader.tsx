@@ -18,6 +18,7 @@ type Props = {
   highlighted?: string
   options?: any
   highlighArea?: string
+  pinned?: boolean
 }
 
 const EditorReader = ({
@@ -29,6 +30,7 @@ const EditorReader = ({
   highlighted,
   options,
   highlighArea = 'hightlight_area',
+  pinned
 }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
@@ -204,7 +206,7 @@ const EditorReader = ({
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
       >
-        <div ref={extenalRef || refDocument}>
+        <div ref={extenalRef || refDocument} className={`${pinned ? 'text-white pt-2' : 'text-bw-1'}`}>
           {parseHTML(
             replaceTextAlignCenterToWebKitCenter(content || ''),
             options,

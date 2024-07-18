@@ -192,10 +192,11 @@ const DragNDropPreivew = forwardRef(
                   ? 'corrects'
                   : 'wrongs'
               }">
-            <span id="${defaultAnswer?.[index]
-              ?.idAnswer}" class="flex justify-center w-full">${defaultAnswer?.[
-              index
-            ]?.value}</span>
+            <span id="${
+              defaultAnswer?.[index]?.idAnswer
+            }" class="flex justify-center w-full">${
+              defaultAnswer?.[index]?.value
+            }</span>
             </span>`
             } else {
               element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer ${
@@ -222,8 +223,9 @@ const DragNDropPreivew = forwardRef(
               element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
                 index + 1
               }">
-                <span class="answer-box" id="${defaultAnswer?.[index]
-                  ?.idAnswer}">${defaultAnswer?.[index]?.value}</span>
+                <span class="answer-box" id="${
+                  defaultAnswer?.[index]?.idAnswer
+                }">${defaultAnswer?.[index]?.value}</span>
                </span>
               `
             } else {
@@ -337,7 +339,9 @@ const DragNDropPreivew = forwardRef(
                 !isHideExhibit &&
                 data?.question_topic?.exhibits?.length > 0 && (
                   <>
-                    <div className="border border-b-gray-2 my-6"></div>
+                    {data?.question_topic?.description && (
+                      <div className="border border-b-gray-2 my-6"></div>
+                    )}
                     <div className="flex items-center mb-4">
                       <div className="font-semibold">
                         Exhibits ({data?.question_topic?.exhibits?.length || 0})
