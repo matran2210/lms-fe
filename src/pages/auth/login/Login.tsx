@@ -99,10 +99,11 @@ const LoginPage = () => {
   async function getListEntranceTest() {
     try {
       const res = await EntranceTestAPI.getListEntranceTestLogin()
+      const beforeLoginPath = localStorage.getItem('beforeLoginPath')
       if (res?.data?.length > 0) {
         router.push(PageLink.ENTRANCE_TEST)
       } else {
-        router.push(PageLink.COURSES)
+        router.push(beforeLoginPath || PageLink.COURSES)
       }
     } catch (error) { }
   }
