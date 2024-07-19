@@ -100,10 +100,8 @@ const LoginPage = () => {
       const beforeLoginPath = localStorage.getItem('beforeLoginPath')
       if (res?.data?.length > 0) {
         router.push(PageLink.ENTRANCE_TEST)
-      } else if (beforeLoginPath) {
-        router.push(beforeLoginPath)
       } else {
-        router.push(PageLink.COURSES)
+        router.push(beforeLoginPath || PageLink.COURSES)
       }
     } catch (error) {}
   }
