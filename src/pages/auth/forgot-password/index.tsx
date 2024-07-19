@@ -53,31 +53,24 @@ const ForgotPasswordPage = () => {
 
   return (
     <SingleDialogLayout title='Forgot Password'>
-    <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
-          Forgot Password
-        </div>
-        <span className="text-medium-sm text-gray-1 mb-10">
-          Enter the email you used to create your account so we can send you 6
-          digits code to reset your password.
-        </span>
-        <div className="md:mt-15 mt-8">
-          <HookFormTextField
-            name="email"
-            control={control}
-            textSize="sm"
-            placeholder="Email"
-          ></HookFormTextField>
-        </div>
-        {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
-        <SappButton
-          title="Send"
-          size="lager"
-          type="submit"
-          className="w-full mt-[27px] !font-semibold"
-        ></SappButton>
-        <div className="mt-8">
+      <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
+            Forgot Password
+          </div>
+          <span className="text-medium-sm text-gray-1 mb-10">
+            Enter the email you used to create your account so we can send you 6
+            digits code to reset your password.
+          </span>
+          <div className="md:mt-15 mt-8">
+            <HookFormTextField
+              name="email"
+              control={control}
+              textSize="sm"
+              placeholder="Email"
+            ></HookFormTextField>
+          </div>
+          {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
           <SappButton
             title="Send"
             size="lager"
