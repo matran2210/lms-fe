@@ -7,6 +7,8 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { useGetDataQuery } from '@utils/index'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { useState } from 'react'
+import PopupNotCus from '@components/entrance-test/PopupNotCus'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -20,26 +22,25 @@ const TestEntranceResult = () => {
     router.query.id !== undefined,
   )
 
+  const [openScoreDetail, setOpenScoreDetail] = useState(false)
+
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <FullScreenLayout title="">
+      <FullScreenLayout title="Entrance Test Detail">
         <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>
           <div
             className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
-            onClick={() => {
-              router.back()
-            }}
+            onClick={() => router.back()}
           >
             <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
           </div>
           <QuizResult
             dataChart={chartData?.chart_data}
-            onClick={() => {
-              router.push(`/entrance-test/table-result/${router.query.id}`)
-            }}
+            onClick={() => chartData?.is_publish_detail ? router.push(`/entrance-test/table-result/${router.query.id}`) : setOpenScoreDetail(true)}
             dataTable={chartData}
           />
         </div>
+        <PopupNotCus open={openScoreDetail} setOpen={setOpenScoreDetail} />
       </FullScreenLayout>
     </SappLoadingGlobal>
   )

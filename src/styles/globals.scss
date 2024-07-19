@@ -706,7 +706,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal-root .ant-modal-wrap {
-  @apply bg-bw-5;
+  @apply bg-bw-10
 }
 
 .lf-player-container {
@@ -979,4 +979,17 @@ p a {
 
 .content-course div strong {
   @apply font-medium text-bw-1;
+}
+
+.sapp-custom--modal .ant-modal-content {
+  @apply bg-transparent max-w-none h-[100vh] w-[100vw]
+}
+
+.ant-modal.sapp-custom--modal {
+  width: fit-content !important;
+  @apply max-w-none
+}
+
+.ant-modal-wrap.ant-modal-centered {
+  @apply w-fit
 }
