@@ -399,7 +399,6 @@ const TestDetail = () => {
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
     [],
   )
-  const [pageTitle, setPageTitle] = useState('')
 
   useEffect(() => {
     const updateMousePosition = (ev: any) => {
@@ -1675,30 +1674,27 @@ const TestDetail = () => {
   )
 
   const checkTypeAndRenderTitle = (type: string) => {
+    let pageTitle = ''
     switch (type) {
         case TEST_TYPE.MID_TERM_TEST:
-          return 'Midterm Test'
+          return pageTitle = 'Midterm Test'
         case TEST_TYPE.FINAL_TEST:
-          return 'Final Test'
+          return pageTitle = 'Final Test'
         case TEST_TYPE.TOPIC_TEST:
-          return 'Part/Topic Test'
+          return pageTitle = 'Topic Test'
         case TEST_TYPE.CHAPTER_TEST:
-          return 'Chapter/Module Test'
+          return pageTitle = 'Chapter Test'
         case TEST_TYPE.PART_TEST:
-          return 'Part/Topic Test'
+          return pageTitle = 'Part Test'
         case TEST_TYPE.ENTRANCE_TEST:
-          return 'Entrance Test'
+          return pageTitle = 'Entrance Test'
         default:
-        return ''
+        return pageTitle
     }
   }
 
-  useEffect(() => {
-    setPageTitle(checkTypeAndRenderTitle(quizDetail?.quiz_type));
-  }, [quizDetail?.quiz_type])
-
   return (
-    <FullScreenLayout title={pageTitle}>
+    <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
         {loading || !currentTabContent?.id ? (
           <SappLoading />

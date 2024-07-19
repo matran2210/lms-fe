@@ -151,33 +151,7 @@ const MyCourse = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title='My Course'>
-      <div className="header bg-white border-b border-default">
-        <div
-          className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
-          ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
-        >
-          <SearchForm
-            placeholder="Enter name of course..."
-            formStyle="w-full flex items-center"
-            // setPage={setPage}
-          />
-          {guideStatus && guideStep === 1 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_1}
-              className="top-full w-full max-w-[365px] left-0 mt-3"
-              index={1}
-              total={6}
-              handleNext={nextStep}
-              handleCancel={closeUserGuide}
-            />
-          )}
-        </div>
-      </div>
-      <div className="main max-w-xxl my-0 mx-auto">
-        <div className="flex justify-between xl-max:mx-6">
-          <h2 className="text-medium-sm font-medium text-bw-1 pt-6 pb-4">
-            My Course
-          </h2>
+        <div className="header bg-white border-b border-default">
           <div
             className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
           ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
