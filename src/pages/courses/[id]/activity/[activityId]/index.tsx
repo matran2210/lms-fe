@@ -495,7 +495,7 @@ const ActivityPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="">
+      <Layout title='Activity'>
         <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
           {/* Breadcrumbs */}
           <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">

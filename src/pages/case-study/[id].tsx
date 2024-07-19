@@ -772,7 +772,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   return (
     <SappLoadingGlobal loading={loading}>
-      <FullScreenLayout title="">
+      <FullScreenLayout title='Case Study'>
         <div
           className="h-screen flex flex-col bg-white overflow-hidden relative"
           onMouseUp={() => {

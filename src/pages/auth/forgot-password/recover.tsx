@@ -11,7 +11,7 @@ type IProps = {
 
 const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
   return (
-    <SingleDialogLayout title="">
+    <SingleDialogLayout title='Password Recover'>
       <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
         <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
           Forgot Password

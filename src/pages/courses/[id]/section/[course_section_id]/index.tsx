@@ -316,7 +316,7 @@ const CoursePartDetail = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="">
+      <Layout title='Course Part Detail'>
         <div className="main max-w-xxl my-0 mx-auto default-content-editor">
           <div className="w-full">
             <div className="flex pt-6 items-center">
