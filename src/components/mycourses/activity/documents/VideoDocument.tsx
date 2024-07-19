@@ -182,7 +182,7 @@ const VideoDocument = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -300,7 +300,7 @@ const VideoDocument = ({
           },
         })
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleGoTimeline = (time: number) => {
@@ -318,10 +318,18 @@ const VideoDocument = ({
   /**
    * @description check điều kiện xem có phải câu hỏi cuối cùng không
    */
-  const finishQuestion =
+  const atLastQuestion =
     timeQuiz?.[timeQuiz?.length - 1]?.find(
       (quiz) => quiz?.id === activeQuestion?.id,
     )?.id === activeQuestion?.id
+
+  const [finishAll, setFinishAll] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (atLastQuestion && isConfirmQuestion) {
+      setFinishAll(true)
+    }
+  }, [atLastQuestion, isConfirmQuestion])
 
   return (
     <div>
@@ -338,17 +346,16 @@ const VideoDocument = ({
                   onChange={() => debouncedHandleSetCurrentVideo.current(v)}
                   {...(v?.file?.id === currentVideo?.file?.id
                     ? {
-                        checked: true,
-                      }
+                      checked: true,
+                    }
                     : { checked: false })}
                   size={'small'}
                 ></SAPPRadio>
                 <span
-                  className={`radio-item-label  ${
-                    v?.file?.id === currentVideo?.file?.id
+                  className={`radio-item-label  ${v?.file?.id === currentVideo?.file?.id
                       ? 'text-bw-1'
                       : 'text-gray-1'
-                  }`}
+                    }`}
                 >
                   Video {i + 1}
                 </span>
