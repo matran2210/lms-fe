@@ -986,10 +986,10 @@ p a {
 }
 
 .ant-modal.sapp-custom--modal {
-  width: fit-content !important;
+  width: -webkit-fill-available !important;
   @apply max-w-none
 }
 
-.ant-modal-wrap.ant-modal-centered {
-  @apply w-fit
-}
+// .ant-modal-wrap.ant-modal-centered {
+//   @apply w-fit
+// }
