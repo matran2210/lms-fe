@@ -36,8 +36,15 @@ const TestEntranceResult = () => {
           </div>
           <QuizResult
             dataChart={chartData?.chart_data}
-            onClick={() => chartData?.is_publish_detail ? router.push(`/entrance-test/table-result/${router.query.id}`) : setOpenScoreDetail(true)}
+            onClick={() =>
+              chartData?.is_publish_detail
+                ? router.push(`/entrance-test/table-result/${router.query.id}`)
+                : setOpenScoreDetail(true)
+            }
             dataTable={chartData}
+            onPublish={() => {}}
+            id={undefined}
+            is_ops={false}
           />
         </div>
         <PopupNotCus open={openScoreDetail} setOpen={setOpenScoreDetail} />
