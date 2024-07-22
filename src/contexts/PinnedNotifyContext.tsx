@@ -1,5 +1,5 @@
 import { convertUTCToLocalTime } from '@utils/helpers'
-import { getActToken } from '@utils/index'
+import { getActToken, getLocalStorageItem, setLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
 import {
   PropsWithChildren,
@@ -74,8 +74,8 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
   const getPinnedData = async () => {
     if (authToken) {
       const res: PinnedNotifications = await UserApi.getPinnedNotifications()
-      const oldPinnedId = localStorage.getItem('pinnedId')
-      const oldPinnedFlag = localStorage.getItem('openPinned')
+      const oldPinnedId = getLocalStorageItem('pinnedId')
+      const oldPinnedFlag = getLocalStorageItem('openPinned')
 
       if (oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')) {
         // * Logic đúng
@@ -92,8 +92,9 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
         if (unix_pin_start <= unix_now && unix_now <= unix_pin_end) {
           setPinnedNotifications(res)
           setOpenPinned(true)
-          localStorage.setItem('pinnedId', res?.data?.id)
-          localStorage.setItem('openPinned', 'true')
+          setLocalStorageItem('pinnedId', res?.data?.id)
+          setLocalStorageItem('openPinned', 'true')
+          setLocalStorageItem('pinnedStatus', res?.data?.status)
         }
       } else {
         if (Boolean(oldPinnedFlag === 'false')) {
