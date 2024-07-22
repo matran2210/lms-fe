@@ -834,6 +834,11 @@ p a {
   animation: moveDown 0.3s ease-out forwards;
 }
 
+.sapp-pinned-noti-header {
+  padding: 12px 24px 12px 233px;
+  background: #18355d;
+}
+
 #floating-button.clicked {
   animation: moveDown 0.3s ease-out forwards;
 }
@@ -945,6 +950,11 @@ p a {
   position: inherit !important;
 }
 
+.pinned-noti-marquee-parent {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+}
+
 #floating-button .plus:hover svg path {
   @apply fill-white;
 }
@@ -980,16 +990,3 @@ p a {
 .content-course div strong {
   @apply font-medium text-bw-1;
 }
-
-.sapp-custom--modal .ant-modal-content {
-  @apply bg-transparent max-w-none h-[100vh] w-[100vw]
-}
-
-.ant-modal.sapp-custom--modal {
-  width: -webkit-fill-available !important;
-  @apply max-w-none
-}
-
-// .ant-modal-wrap.ant-modal-centered {
-//   @apply w-fit
-// }

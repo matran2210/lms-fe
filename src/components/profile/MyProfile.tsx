@@ -15,12 +15,11 @@ import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { ANIMATION, PageLink } from 'src/constants'
+import { ANIMATION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
-  getUserInformation,
   makeContactDefault,
   updateUser,
   updateUserAvatar,
@@ -60,11 +59,6 @@ const MyProfile = ({
   }>({
     resolver: zodResolver(schema),
   })
-
-  useEffect(() => {
-    dispatch(getMe())
-    dispatch(getUserInformation())
-  }, [])
 
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
     status: boolean

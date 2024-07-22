@@ -183,7 +183,7 @@ export const convertLocalTimeToUTC = (currentTime: Date) => {
   return utcTime
 }
 
-export const convertUTCToLocalTime = (utc_time: Date) => {
+export const convertUTCToLocalTime = (utc_time: Date | string) => {
   return new Date(utc_time)
 }
 

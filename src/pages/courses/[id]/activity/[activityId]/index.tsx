@@ -100,12 +100,6 @@ const ActivityPage = () => {
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
-        // ;(async () => {
-        //   await CourseActivityApi.startCourseSectionProgress(
-        //     courseId,
-        //     sectionId,
-        //   )
-        // })()
       } catch (error) {}
     }
 
@@ -113,7 +107,18 @@ const ActivityPage = () => {
       dispatch(courseActivityAction.resetActivity())
       dispatch(resetQuizActivity({}))
     }
-  }, [activity])
+  }, [activity, dispatch, router.query.id, sectionId])
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', () => {
+      isFinishRef.current = false
+    })
+    return () => {
+      router.events.off('routeChangeComplete', () => {
+        isFinishRef.current = true
+      })
+    }
+  }, [router.events])
 
   useEffect(() => {
     setTimeout(() => {
@@ -130,7 +135,7 @@ const ActivityPage = () => {
   useEffect(() => {
     dispatch(clearNote())
     dispatch(closeCalculator())
-  }, [router.asPath])
+  }, [dispatch, router.asPath])
 
   /**
    * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
@@ -830,44 +835,45 @@ const ActivityPage = () => {
             </ActivitySkeleton>
           </div>
 
-          {/* Next/Prev Activities */}
-          {(activity?.previous_activity ||
-            activity?.next_activity ||
-            (nextActivityIndex !== -1 &&
-              nextActivityIndex !== sessionData?.length - 1) ||
-            (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
-            <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-              <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
-                <div
-                  className={`flex flex-nowrap gap-5 justify-${
-                    activity?.previous_activity ||
-                    (previousActivityIndex !== -1 &&
-                      previousActivityIndex !== 0)
-                      ? 'between'
-                      : 'end'
-                  }`}
-                >
-                  {(activity?.previous_activity ||
-                    (previousActivityIndex !== -1 &&
-                      previousActivityIndex !== 0)) && (
-                    <div className="w-1/2">
-                      <div
-                        onClick={async () => {
-                          router.push({
-                            pathname: `/courses/${router.query.id}/activity/${idPreviousActivity}`,
-                          })
-                          await CoursesAPI.startCourseSectionProgress(
-                            router?.query?.id,
-                            activity?.previous_activity?.id ||
-                              activityIds[previousActivityIndex - 1],
-                          )
-                        }}
-                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
-                      >
-                        Previous Activity
-                      </div>
-                      <div className="text-medium-sm text-gray-1 flex">
-                        {getCourseIcon(
+        {/* Next/Prev Activities */}
+        {(activity?.previous_activity ||
+          activity?.next_activity ||
+          (nextActivityIndex !== -1 &&
+            nextActivityIndex !== sessionData?.length - 1) ||
+          (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
+          <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
+            <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
+              <div
+                className={`flex flex-nowrap gap-5 justify-${
+                  activity?.previous_activity ||
+                  (previousActivityIndex !== -1 && previousActivityIndex !== 0)
+                    ? 'between'
+                    : 'end'
+                }`}
+              >
+                {(activity?.previous_activity ||
+                  (previousActivityIndex !== -1 &&
+                    previousActivityIndex !== 0)) && (
+                  <div className="w-1/2">
+                    <div
+                      onClick={async () => {
+                        router.push({
+                          pathname: `/courses/${router.query.id}/activity/${idPreviousActivity}`,
+                        })
+                      }}
+                      className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                    >
+                      Previous Activity
+                    </div>
+                    <div className="text-medium-sm text-gray-1 flex">
+                      {getCourseIcon(
+                        activity?.previous_activity
+                          ? activity?.previous_activity?.display_icon
+                          : findActivityByIndex(previousActivityIndex - 1)
+                              ?.display_icon,
+                      )}
+                      <SappTooltip
+                        title={
                           activity?.previous_activity
                             ? activity?.previous_activity?.display_icon
                             : findActivityByIndex(previousActivityIndex - 1)
@@ -899,23 +905,31 @@ const ActivityPage = () => {
                         </SappTooltip>
                       </div>
                     </div>
-                  )}
-                  {!activity?.previous_activity && <></>}
-                  {(activity?.next_activity ||
-                    (nextActivityIndex !== -1 &&
-                      nextActivityIndex !== sessionData?.length - 1)) && (
-                    <div className="w-1/2">
-                      <div
-                        onClick={async () => {
-                          router.push({
-                            pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
-                          })
-                          await CoursesAPI.startCourseSectionProgress(
-                            router?.query?.id,
-                            idNextActivity,
-                          )
-                        }}
-                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                  </div>
+                )}
+                {!activity?.previous_activity && <></>}
+                {(activity?.next_activity ||
+                  (nextActivityIndex !== -1 &&
+                    nextActivityIndex !== sessionData?.length - 1)) && (
+                  <div className="w-1/2">
+                    <div
+                      onClick={async () => {
+                        router.push({
+                          pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
+                        })
+                      }}
+                      className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                    >
+                      Next Activity
+                    </div>
+                    <div className="text-medium-sm text-gray-1 flex justify-end">
+                      <SappTooltip
+                        title={
+                          activity?.next_activity
+                            ? activity?.next_activity?.name
+                            : findActivityByIndex(nextActivityIndex + 1)?.name
+                        }
+                        showTooltip={activity?.next_activity?.name?.length > 80}
                       >
                         Next Activity
                       </div>
