@@ -366,7 +366,7 @@ const Discussion = ({ class_id }: Props) => {
                       }
                       loading="eager"
                       priority={true}
-                      alt='avatar'
+                      alt="avatar"
                     ></Image>
                   </div>
                   <form
@@ -405,7 +405,7 @@ const Discussion = ({ class_id }: Props) => {
                                 src={URL.createObjectURL(file)}
                                 loading="eager"
                                 objectFit="contain"
-                                alt='Discussion file'
+                                alt="Discussion file"
                                 onClick={() => {
                                   setImageSrc(URL.createObjectURL(file))
                                 }}
@@ -459,7 +459,7 @@ const Discussion = ({ class_id }: Props) => {
             }
             loading="eager"
             priority={true}
-            alt='user avatar'
+            alt="user avatar"
           ></Image>
         </div>
         <form
@@ -502,7 +502,7 @@ const Discussion = ({ class_id }: Props) => {
                         setImageSrc(URL.createObjectURL(file))
                       }}
                       priority={true}
-                      alt=''
+                      alt=""
                     ></Image>
                   </li>
                 ))}

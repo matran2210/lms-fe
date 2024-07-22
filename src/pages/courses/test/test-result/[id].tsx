@@ -67,7 +67,7 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <Layout title='Test Result'>
+    <Layout title="Test Result">
       <div className="main px-6 xl:px-16">
         <Breadcrumb
           tabs={breadcrumbs}

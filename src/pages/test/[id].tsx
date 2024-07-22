@@ -1676,19 +1676,19 @@ const TestDetail = () => {
   const checkTypeAndRenderTitle = (type: string) => {
     let pageTitle = ''
     switch (type) {
-        case TEST_TYPE.MID_TERM_TEST:
-          return pageTitle = 'Midterm Test'
-        case TEST_TYPE.FINAL_TEST:
-          return pageTitle = 'Final Test'
-        case TEST_TYPE.TOPIC_TEST:
-          return pageTitle = 'Topic Test'
-        case TEST_TYPE.CHAPTER_TEST:
-          return pageTitle = 'Chapter Test'
-        case TEST_TYPE.PART_TEST:
-          return pageTitle = 'Part Test'
-        case TEST_TYPE.ENTRANCE_TEST:
-          return pageTitle = 'Entrance Test'
-        default:
+      case TEST_TYPE.MID_TERM_TEST:
+        return (pageTitle = 'Midterm Test')
+      case TEST_TYPE.FINAL_TEST:
+        return (pageTitle = 'Final Test')
+      case TEST_TYPE.TOPIC_TEST:
+        return (pageTitle = 'Topic Test')
+      case TEST_TYPE.CHAPTER_TEST:
+        return (pageTitle = 'Chapter Test')
+      case TEST_TYPE.PART_TEST:
+        return (pageTitle = 'Part Test')
+      case TEST_TYPE.ENTRANCE_TEST:
+        return (pageTitle = 'Entrance Test')
+      default:
         return pageTitle
     }
   }

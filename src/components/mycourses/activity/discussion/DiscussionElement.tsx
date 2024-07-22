@@ -1,18 +1,18 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import SappModalV2 from '@components/base/modal/SappModalV2'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'																		
+import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ActivityAPI } from 'src/pages/api/activity'
 import { useAppDispatch } from 'src/redux/hook'
-import { getDiscussion } from 'src/redux/slice/Course/MyCourse/Activity/Activity'																			 
+import { getDiscussion } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import {
   ICreateDiscussionResReact,
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
-import { IUser } from 'src/redux/types/User/urser'											  
+import { IUser } from 'src/redux/types/User/urser'
 
 type Props = {
   rank?: number
@@ -21,7 +21,7 @@ type Props = {
   handleChangeIdReply?: (idReply: string) => void
   onReact: (data: ICreateDiscussionResReact) => Promise<void>
   setImageSrc: (value: SetStateAction<string | undefined>) => void
-	classId?: string
+  classId?: string
   profile?: IUser
   setLoading: (isLoading: boolean) => void
 }
@@ -35,16 +35,18 @@ function DiscussionElement({
   idReply,
   handleChangeIdReply,
   setImageSrc,
-	classId,
+  classId,
   profile,
-  setLoading
+  setLoading,
 }: Props) {
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isDelete, setIsDelete] = useState<boolean>(false)
   const [editValue, setEditValue] = useState('')
-  const [discussionContent, setDiscussionContent] = useState(discussion?.content)
+  const [discussionContent, setDiscussionContent] = useState(
+    discussion?.content,
+  )
   const dispatch = useAppDispatch()
 
   const canEdit = profile?.username === discussion?.username
@@ -61,7 +63,7 @@ function DiscussionElement({
         params,
       )
 
-      if(res?.success){
+      if (res?.success) {
         setDiscussionContent(res?.data?.content)
         setIsEdit(false)
       }
@@ -72,7 +74,7 @@ function DiscussionElement({
     setLoading(true)
     try {
       const res = await ActivityAPI.deleteDiscussion(discussion?.id)
-      if(res){
+      if (res) {
         dispatch(
           getDiscussion({
             id: classId,
@@ -87,7 +89,7 @@ function DiscussionElement({
 
   const handleEdit = () => {
     setEditValue(discussionContent)
-    setIsEdit(true);
+    setIsEdit(true)
   }
 
   const handleCancelEdit = () => {
@@ -105,11 +107,11 @@ function DiscussionElement({
 
   return (
     <div className="flex gap-3 text-bw-1">
-      <form 
-        className='w-full'
+      <form
+        className="w-full"
         onSubmit={handleSubmit((e: IEventData) => onSubmit(e))}
       >
-        <div className='flex flex-row gap-3'>
+        <div className="flex flex-row gap-3">
           <div className="flex-none leading-0">
             <Image
               width={40}
@@ -123,10 +125,10 @@ function DiscussionElement({
               loading="eager"
               blurDataURL={blankAvatar.src}
               priority={true}
-              alt='avatar'
+              alt="avatar"
             ></Image>
           </div>
-          <div className='flex-1'>
+          <div className="flex-1">
             <div className="text-base font-semibold mb-1">
               {discussion?.full_name}
             </div>
@@ -143,7 +145,7 @@ function DiscussionElement({
                       objectFit="contain"
                       onClick={() => setImageSrc(e.url)}
                       priority={true}
-                      alt='file'
+                      alt="file"
                     ></Image>
                   </div>
                 )
@@ -172,7 +174,7 @@ function DiscussionElement({
                     className="absolute w-full cursor-pointer opacity-0"
                   />
                 </div>
-              </div>											
+              </div>
             )}
 
             <div className="flex gap-y-1 gap-x-6 font-semibold text-medium-sm">
@@ -191,18 +193,18 @@ function DiscussionElement({
               )}
 
               {canEdit && (
-                <div className='relative'>
-                  <div className='flex flex-row'>
+                <div className="relative">
+                  <div className="flex flex-row">
                     {!isEdit ? (
                       <>
-                        <div 
-                          className='pr-6 font-semibold text-medium-sm text-bw-1 cursor-pointer'
+                        <div
+                          className="pr-6 font-semibold text-medium-sm text-bw-1 cursor-pointer"
                           onClick={handleEdit}
                         >
-                          Edit 
+                          Edit
                         </div>
-                        <div 
-                          className='font-semibold text-medium-sm cursor-pointer' 
+                        <div
+                          className="font-semibold text-medium-sm cursor-pointer"
                           onClick={handleDeleteComment}
                         >
                           Delete
@@ -210,12 +212,14 @@ function DiscussionElement({
                       </>
                     ) : (
                       <>
-                        <div 
-                        className='font-semibold text-medium-sm cursor-pointer'
-                        onClick={handleCancelEdit}
+                        <div
+                          className="font-semibold text-medium-sm cursor-pointer"
+                          onClick={handleCancelEdit}
                         >
-                          Cancel 
-                          <span className='text-gray-1 font-normal pl-1'>edit this comment</span>
+                          Cancel
+                          <span className="text-gray-1 font-normal pl-1">
+                            edit this comment
+                          </span>
                         </div>
                       </>
                     )}
@@ -224,13 +228,12 @@ function DiscussionElement({
               )}
               <div className="font-normal text-gray-1">{timeAgo}</div>
             </div>
-			
           </div>
         </div>
       </form>
       {isDelete && (
         <SappModalV2
-          title={"Delete Comment?"}
+          title={'Delete Comment?'}
           open={isDelete}
           handleCancel={() => setIsDelete(false)}
           showOkButton={true}
@@ -239,7 +242,9 @@ function DiscussionElement({
           cancelButtonCaption={'Cancel'}
           buttonSize="lager"
         >
-          <div className='text-gray-1 font-medium-sm font-sans font-normal'>Are you sure you want to delete this comment?</div>
+          <div className="text-gray-1 font-medium-sm font-sans font-normal">
+            Are you sure you want to delete this comment?
+          </div>
         </SappModalV2>
       )}
     </div>

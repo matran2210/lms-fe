@@ -1,5 +1,9 @@
 import { convertUTCToLocalTime } from '@utils/helpers'
-import { getActToken, getLocalStorageItem, setLocalStorageItem } from '@utils/index'
+import {
+  getActToken,
+  getLocalStorageItem,
+  setLocalStorageItem,
+} from '@utils/index'
 import { useRouter } from 'next/router'
 import {
   PropsWithChildren,
