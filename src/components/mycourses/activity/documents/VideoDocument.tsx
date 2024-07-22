@@ -335,7 +335,7 @@ const VideoDocument = ({
     <div>
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-2.5">
         <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
-          {videos?.map((v, i) => {
+          {(videos as IVideo[])?.length > 1 && videos?.map((v, i) => {
             return (
               <label
                 className=" flex items-center gap-2 select-none cursor-pointer"
