@@ -970,11 +970,6 @@ p a {
   animation: scroll-left 50s linear infinite;
 }
 
-.pinned-noti-marquee-content:hover {
-  animation: unset !important;
-  transform: unset !important;
-}
-
 @keyframes scroll-left {
   0% {
     transform: translateX(100%);

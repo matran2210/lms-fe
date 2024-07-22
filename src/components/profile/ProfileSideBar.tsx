@@ -67,8 +67,6 @@ const ProfileSideBar = ({ page }: IProps) => {
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')
-          removeLocalStorageItem('openPinned')
-          removeLocalStorageItem('pinnedStatus')
         }
       })
       // router.push(PageLink.AUTH_LOGIN)
