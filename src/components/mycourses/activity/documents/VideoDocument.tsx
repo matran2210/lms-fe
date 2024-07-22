@@ -175,7 +175,7 @@ const VideoDocument = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -293,7 +293,7 @@ const VideoDocument = ({
           },
         })
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const handleGoTimeline = (time: number) => {
@@ -328,33 +328,35 @@ const VideoDocument = ({
     <div>
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-2.5">
         <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
-          {(videos as IVideo[])?.length > 1 && videos?.map((v, i) => {
-            return (
-              <label
-                className=" flex items-center gap-2 select-none cursor-pointer"
-                key={v?.file?.id ?? i}
-              >
-                {/* Radio button for video selection */}
-                <SAPPRadio
-                  onChange={() => debouncedHandleSetCurrentVideo.current(v)}
-                  {...(v?.file?.id === currentVideo?.file?.id
-                    ? {
-                      checked: true,
-                    }
-                    : { checked: false })}
-                  size={'small'}
-                ></SAPPRadio>
-                <span
-                  className={`radio-item-label  ${v?.file?.id === currentVideo?.file?.id
-                      ? 'text-bw-1'
-                      : 'text-gray-1'
-                    }`}
+          {(videos as IVideo[])?.length > 1 &&
+            videos?.map((v, i) => {
+              return (
+                <label
+                  className=" flex items-center gap-2 select-none cursor-pointer"
+                  key={v?.file?.id ?? i}
                 >
-                  Video {i + 1}
-                </span>
-              </label>
-            )
-          })}
+                  {/* Radio button for video selection */}
+                  <SAPPRadio
+                    onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                    {...(v?.file?.id === currentVideo?.file?.id
+                      ? {
+                          checked: true,
+                        }
+                      : { checked: false })}
+                    size={'small'}
+                  ></SAPPRadio>
+                  <span
+                    className={`radio-item-label  ${
+                      v?.file?.id === currentVideo?.file?.id
+                        ? 'text-bw-1'
+                        : 'text-gray-1'
+                    }`}
+                  >
+                    Video {i + 1}
+                  </span>
+                </label>
+              )
+            })}
         </div>
         <div className="flex items-center select-none cursor-pointer relative z-30 group">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (

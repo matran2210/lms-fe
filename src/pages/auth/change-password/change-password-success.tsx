@@ -16,7 +16,7 @@ const ChangePasswordSuccess = () => {
   }
 
   return (
-    <SingleDialogLayout title='Change Password Successfully'>
+    <SingleDialogLayout title="Change Password Successfully">
       <div className="d-flex flex-column flex-root sapp-height-layout--login justify-content-center">
         <div className="d-flex flex-column  flex-lg-row justify-content-center">
           <div className="d-flex flex-lg-row-auto justify-content-center justify-content-lg-end">

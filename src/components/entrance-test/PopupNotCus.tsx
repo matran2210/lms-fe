@@ -24,7 +24,7 @@ const PopupNotCus = ({ open, setOpen }: IProps) => {
         X
       </div>
       <div className="text-base font-normal h-[calc(100vh-50px)] flex items-center justify-center text-white">
-        <span className='text-center'>
+        <span className="text-center">
           <span className="text-white">
             Bạn tạm thời chưa thể xem kết quả chi tiết. Mọi thắc mắc vui lòng
             liên hệ tới Hotline
