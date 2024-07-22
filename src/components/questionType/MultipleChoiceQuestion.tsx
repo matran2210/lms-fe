@@ -129,11 +129,6 @@ const MultiChoiceQuestion = ({
               <div className="border border-b-gray-2 my-6"></div>
             </>
           )}
-        <EditorReader
-          text_editor_content={data?.question_content}
-          className="sapp-questions"
-          highlighted={highlighted}
-        />
       </div>
       <div
         className="sapp-answer-wrapper"
