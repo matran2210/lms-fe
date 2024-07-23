@@ -429,7 +429,7 @@ const DragNDropPreivew = forwardRef(
         )}
         {answerContent && (
           <>
-            <div className="text-bw-1 font-semibold text-base pt-[31px]">
+            <div className="font-semibold text-base pt-[31px]">
               Correct Answer
             </div>
             <EditorReader
@@ -444,10 +444,7 @@ const DragNDropPreivew = forwardRef(
         {solution && (
           <div className="bg-gray-4 mt-6 p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader
-              className="mt-4 text-bw-1"
-              text_editor_content={solution}
-            />
+            <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}
       </div>

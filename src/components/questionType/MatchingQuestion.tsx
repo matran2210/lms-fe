@@ -408,7 +408,7 @@ const MatchingQuestion = forwardRef(
                       <>
                         <QuestionCard
                           value={e?.content}
-                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6 text-bw-1"
+                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6"
                         />
                         <div
                           // id={e?.id}
@@ -417,7 +417,7 @@ const MatchingQuestion = forwardRef(
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container-corrects text-bw-1 min-w-132px !border-gray-6 before:!border-gray-6"
+                              className="sapp-notched-container-corrects min-w-132px !border-gray-6 before:!border-gray-6"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
@@ -452,9 +452,7 @@ const MatchingQuestion = forwardRef(
               })}
             </div>
             <div className="flex flex-col gap-y-5 pt-[42px]">
-              <div className="text-bw-1 font-semibold text-base">
-                Correct Answer
-              </div>
+              <div className=" font-semibold text-base">Correct Answer</div>
 
               {data?.question_matchings?.map((e: any, index: number) => {
                 return (
@@ -485,10 +483,7 @@ const MatchingQuestion = forwardRef(
         {solution && (
           <div className="bg-gray-4 mt-6 p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader
-              className="mt-4 text-bw-1"
-              text_editor_content={solution}
-            />
+            <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>
         )}
       </div>
