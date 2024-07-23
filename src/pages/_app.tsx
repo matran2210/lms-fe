@@ -76,7 +76,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     if (accessToken && excludedPaths.every((path) => router?.asPath !== path)) {
       try {
         await dispatch(getCountUnRead())
-      } catch (error) { }
+      } catch (error) {}
     }
   }
 
@@ -151,20 +151,20 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         extraHeaders: {
           authorization: authToken,
         },
-      });
+      })
 
-      setSocket(newSocket);
+      setSocket(newSocket)
 
       return () => {
-        newSocket.disconnect();
-      };
+        newSocket.disconnect()
+      }
     }
-  }, [authToken]); // reconnect khi authToken thay đổi
+  }, [authToken]) // reconnect khi authToken thay đổi
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => { });
-      socket.on('disconnect', () => { });
+      socket.on('connect', () => {})
+      socket.on('disconnect', () => {})
       socket.on('STUDENT_COMPLETE_COURSE', (data: ICert) => {
         setOpenCert(true)
         setDataStudent(data)
