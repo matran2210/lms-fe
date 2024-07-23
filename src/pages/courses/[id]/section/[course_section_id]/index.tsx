@@ -317,9 +317,9 @@ const CoursePartDetail = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Part Detail">
-        <div className="main max-w-xxl my-0 mx-auto default-content-editor">
+        <div className="container max-w-xxl pt-4">
           <div className="w-full">
-            <div className="flex pt-6 items-center">
+            <div className="flex mb-4 items-center">
               <span
                 onClick={() => router.push('/courses')}
                 className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
@@ -355,7 +355,8 @@ const CoursePartDetail = () => {
               </span>
             </div>
           </div>
-          <div data-aos={ANIMATION.DATA_AOS}>
+          {/* Custom css class to override PreviewPartDetail library style*/}
+          <div data-aos={ANIMATION.DATA_AOS} className="part-detail__container">
             <PreviewPartDetail
               chapterMenu={partDetail}
               fetchChapterDetail={fetchChapterDetail}
