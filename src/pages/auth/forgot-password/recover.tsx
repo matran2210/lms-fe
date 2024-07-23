@@ -29,7 +29,6 @@ const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
       <div className="md:mt-12 mt-8">
         <InputCodeForm email={email} token={token} />
       </div>
-    </div>
     </SingleDialogLayout>
   )
 }

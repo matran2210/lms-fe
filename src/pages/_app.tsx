@@ -26,9 +26,7 @@ import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
 import { io } from 'socket.io-client'
 import { ICert } from 'src/type'
-import {
-  PinnedNotifyProvider,
-} from '@contexts/PinnedNotifyContext'
+import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import PopupCert from '@components/mycourses/PopupCert'
 import Help from '@components/Help'

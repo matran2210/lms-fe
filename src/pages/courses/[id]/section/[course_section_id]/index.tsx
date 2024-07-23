@@ -430,11 +430,10 @@ const CoursePartDetail = () => {
             setOpen={setOpen}
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
-            activeCourse={() => { }}
+            activeCourse={() => {}}
           />
         </div>
       </Layout>
-
     </SappLoadingGlobal>
   )
 }
