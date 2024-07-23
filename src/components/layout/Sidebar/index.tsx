@@ -22,7 +22,7 @@ export default function Sidebar({
   className,
   toggleDrawer,
   setOpenResource,
-  openResource
+  openResource,
 }: SidebarProps) {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
@@ -46,20 +46,22 @@ export default function Sidebar({
   useEffect(() => {
     try {
       dispatch(getMe())
-    } catch (error) { }
+    } catch (error) {}
   }, [dispatch])
 
   return (
     <>
       <div
-        className={`${className} ${guideStatus && (guideStep === 2 || guideStep === 3) ? 'z-50' : 'z-30'
-          } ${isOpened ? 'w-[200px]' : ''}`}
+        className={`${className} ${
+          guideStatus && (guideStep === 2 || guideStep === 3) ? 'z-50' : 'z-30'
+        } ${isOpened ? 'w-[200px]' : ''}`}
       >
         <div
-          className={`pt-5.25 pb-6 relative max-h-[calc(100vh-145px) ${guideStatus && guideStep == 2
+          className={`pt-5.25 pb-6 relative max-h-[calc(100vh-145px) ${
+            guideStatus && guideStep == 2
               ? 'bg-white z-50'
               : 'overflow-y-auto overflow-x-hidden'
-            }`}
+          }`}
         >
           <div
             className="group-logos mx-auto pb-5.25 px-5 h-[71px]"
@@ -114,8 +116,9 @@ export default function Sidebar({
       </div>
       <div
         onClick={toggleDrawer}
-        className={`sidebar-overlay ${isOpened ? 'block md:hidden' : 'hidden'
-          } fixed top-0 left-0 bottom-0 right-0 bg-overlay-dark w-full h-ful z-20 cursor-pointer`}
+        className={`sidebar-overlay ${
+          isOpened ? 'block md:hidden' : 'hidden'
+        } fixed top-0 left-0 bottom-0 right-0 bg-overlay-dark w-full h-ful z-20 cursor-pointer`}
       ></div>
       <LearningResource open={openResource} setOpenResource={setOpenResource} />
     </>

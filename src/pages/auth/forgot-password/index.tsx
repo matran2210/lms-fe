@@ -81,9 +81,8 @@ const ForgotPasswordPage = () => {
             isPadding={false}
             onClick={redirectLogin}
           ></SappButton>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
     </SingleDialogLayout>
   )
 }
