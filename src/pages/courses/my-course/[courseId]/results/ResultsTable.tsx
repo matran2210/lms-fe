@@ -1,14 +1,19 @@
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { truncateString } from '@utils/index'
-import { Dropdown } from 'antd'
+import { getTimeFromInput, truncateString } from '@utils/index'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/pages/api/courses'
 
-const ResultsTable = () => {
+interface Iprops {
+  courseId: string
+}
+
+const ResultsTable = ({ courseId }: Iprops) => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const router = useRouter()
@@ -31,7 +36,7 @@ const ResultsTable = () => {
     params: Object
   }) => {
     const { data } = await CoursesAPI.getCourseResults(
-      '46448b5f-0f76-4031-83ff-fb3060dce02e',
+      courseId,
       pageIndex || 1,
       pageSize,
       params,
@@ -44,12 +49,10 @@ const ResultsTable = () => {
    */
   const {
     data: resultData,
-    isFetching,
     isLoading,
     isSuccess,
-    refetch,
   } = useQuery({
-    queryKey: ['courseResults'],
+    queryKey: ['courseResults', currentPage, pageSize],
     queryFn: () => {
       return fetchCourseResults({ pageIndex: currentPage, params })
     },
@@ -59,39 +62,33 @@ const ResultsTable = () => {
   const headers = [
     {
       label: 'Name',
-      className:
-        'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-1/4',
+      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
     },
     {
       label: 'Belong To',
-      className:
-        'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-1/4',
+      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
     },
     {
       label: 'Type',
-      className:
-        'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-1/8',
+      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
     },
     {
       label: 'Grade',
-      className:
-        'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-1/16',
+      className: 'text-center pb-3 text-medium-sm text-gray-1 font-semibold',
     },
     {
       label: 'Time Spent',
-      className:
-        'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-1/16',
+      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
     },
     {
       label: 'Last submission',
-      className:
-        'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-1/8',
+      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
     },
   ]
 
-  useEffect(() => {
-    refetch()
-  }, [pageSize, currentPage])
+  // useEffect(() => {
+  //   refetch()
+  // }, [pageSize, currentPage])
 
   isLoading && <></>
 
@@ -101,9 +98,11 @@ const ResultsTable = () => {
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' },
   ]
+
+  const commonDataCellStyle = 'px-0 pr-4 text-start py-5'
   return (
     <>
-      <div className="flex gap-6 mb-8">
+      {/* <div className="flex gap-6 mb-8">
         <HookFormSelect
           classParent="w-full md:max-w-full"
           placeholder="Section"
@@ -136,50 +135,54 @@ const ResultsTable = () => {
           onChange={(selectedOption) => setActivity(selectedOption)}
           options={options}
         />
-      </div>
-      <SappTable headers={headers} hasCheck={false} isCheckedAll={false}>
+      </div> */}
+      <SappTable
+        headers={headers}
+        hasCheck={false}
+        isCheckedAll={false}
+        classTable="table-auto w-full"
+      >
         {isSuccess &&
           resultData.data?.map((row: any, index: number) => {
-            let parts = []
-            let totalScore = 0
-            if (row.attempts.length > 0) {
-              parts = row?.attempts[0]?.ratio_score.split('/')
-              totalScore = (row?.attempts[0].score / parts[0]) * parts[1]
-            }
+            const lastSubmission = dayjs(row?.last_submit_time).format(
+              'DD/MM/YYYY hh:mm',
+            )
+
             return (
               <tr
-                className="border-dashed border-b border-gray-2 px-5 h-12 wf"
+                className={clsx({
+                  'border-dashed border-b border-gray-2 px-5 h-12': true,
+                  'text-gray-2': !row.is_studied,
+                })}
                 key={row?.id}
               >
                 {/* Name */}
-                <td className="px-0 pr-4 text-start py-5">
+                <td className={clsx(commonDataCellStyle)}>
                   {truncateString(row?.name, 35)}
                 </td>
 
                 {/* Belong to */}
-                <td className="px-0 pr-4 text-start py-5"></td>
+                <td className={clsx(commonDataCellStyle)}>{row.path}</td>
 
                 {/* Type */}
-                <td className="px-0 pr-4 text-start py-5">
-                  {row?.quiz_type.toLowerCase()}
+                <td className={clsx(commonDataCellStyle)}>
+                  {row?.course_section_type.toLowerCase()}
                 </td>
 
                 {/* Grade */}
-                <td className="px-0 pr-4 text-start py-5">
-                  {row?.attempts[0]?.score
-                    ? `${row?.attempts[0]?.score} / ${totalScore}`
-                    : ''}
+                <td className={clsx(commonDataCellStyle)}>
+                  {row.score_percentage}
                 </td>
 
                 {/* Time Spent */}
-                <td className="px-0 pr-4 text-start py-5">
-                  {/* {row.attempts} */}
+                <td className={clsx(commonDataCellStyle)}>
+                  {row.total_attempt_time
+                    ? getTimeFromInput(row.total_attempt_time)
+                    : '-'}
                 </td>
 
                 {/* Last Submission */}
-                <td className="px-0 pr-4 text-start py-5">
-                  {row?.attempts[0]?.finished_at}
-                </td>
+                <td className={clsx(commonDataCellStyle)}>{lastSubmission}</td>
               </tr>
             )
           })}

@@ -40,7 +40,11 @@ const Results = () => {
       router.query.user_section_learning_status || undefined,
   }
 
-  const { data: courseData, isSuccess } = useQuery({
+  const {
+    data: courseData,
+    isSuccess,
+    isLoading,
+  } = useQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
     enabled: router.isReady,
@@ -50,9 +54,10 @@ const Results = () => {
    * @description biến này lấy name của course
    */
   const courseNameDetail = courseData?.courseDetail?.data?.name
+  const courseId = courseData?.courseDetail?.data?.id
 
   return (
-    <SappLoadingGlobal loading={false}>
+    <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Result">
         <div className="header bg-white border-b border-default h-[70px]">
           <div className="max-w-xxl my-0 mx-auto flex py-6 xl-max:mx-5">
@@ -62,23 +67,25 @@ const Results = () => {
             />
           </div>
         </div>
-        <div className="main max-w-xxl my-0 mx-auto xl-max:container relative">
-          <div className="flex justify-between pt-6 pb-4 w-full items-center">
-            {isSuccess && (
-              <BreadcrumbFilter
-                name={courseNameDetail}
-                subpath="Results"
-                courseId={router.query.courseId}
-              />
-            )}
-            {/* <FilterCourseDetail totalResult={courses?.length || 0} /> */}
+        <div className="container">
+          <div className="main max-w-xxl my-0 mx-auto relative">
+            <div className="flex justify-between pt-6 pb-4 w-full items-center">
+              {isSuccess && (
+                <BreadcrumbFilter
+                  name={courseNameDetail}
+                  subpath="Results"
+                  courseId={router.query.courseId}
+                />
+              )}
+              {/* <FilterCourseDetail totalResult={courses?.length || 0} /> */}
+            </div>
           </div>
-        </div>
-        <div className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6">
-          <Heading greeting="" title={'Results'} />
-        </div>
-        <div className="max-w-xxl my-0 mx-auto xl-max:container bg-white px-8 pt-8 pb-3 mt-6 mb-6">
-          <ResultsTable />
+          <div className="bg-white max-w-xxl my-0 mx-auto flex">
+            <Heading greeting="" title={'Results'} />
+          </div>
+          <div className="max-w-xxl my-0 mx-auto xl-max:container bg-white px-8 pt-8 pb-3 mt-6 mb-6">
+            <ResultsTable courseId={courseId} />
+          </div>
         </div>
       </Layout>
     </SappLoadingGlobal>
