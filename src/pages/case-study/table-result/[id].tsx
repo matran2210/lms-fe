@@ -145,7 +145,7 @@ const TableCaseStudyResult = () => {
   }, [router.query.id])
 
   return (
-    <FullScreenLayout title='Case Study Result'>
+    <FullScreenLayout title="Case Study Result">
       <div className="relative" data-aos={ANIMATION.DATA_AOS}>
         <div
           className="fixed px-6 py-4 right-0 cursor-pointer z-20"

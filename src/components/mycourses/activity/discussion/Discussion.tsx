@@ -364,45 +364,87 @@ const Discussion = ({ class_id }: Props) => {
                   className="flex-1"
                   encType="multipart/form-data"
                 >
-                  {selectedFiles?.length > 0 && (
-                    <div>
-                      <ul className="flex gap-4 flex-wrap">
-                        {selectedFiles.map((file, index) => (
-                          <li key={index} className="leading-0 relative mb-2">
-                            <div
-                              className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
-                              role="button"
-                              onClick={() => handleRemoveSelectedFiles(index)}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-4 h-4 "
+                  <div className="flex-none leading-0">
+                    <Image
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                      src={
+                        user?.detail?.avatar['50x50'] ||
+                        user?.detail?.avatar['ORIGIN'] ||
+                        blankAvatar
+                      }
+                      loading="eager"
+                      priority={true}
+                      alt="avatar"
+                    ></Image>
+                  </div>
+                  <form
+                    onSubmit={handleSubmit((e) => onSubmit(e))}
+                    className="flex-1"
+                    encType="multipart/form-data"
+                  >
+                    {selectedFiles?.length > 0 && (
+                      <div>
+                        <ul className="flex gap-4 flex-wrap">
+                          {selectedFiles.map((file, index) => (
+                            <li key={index} className="leading-0 relative mb-2">
+                              <div
+                                className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
+                                role="button"
+                                onClick={() => handleRemoveSelectedFiles(index)}
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
-                            </div>
-                            <Image
-                              width={100}
-                              height={100}
-                              src={URL.createObjectURL(file)}
-                              loading="eager"
-                              objectFit="contain"
-                              onClick={() => {
-                                setImageSrc(URL.createObjectURL(file))
-                              }}
-                              priority={true}
-                            ></Image>
-                          </li>
-                        ))}
-                      </ul>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  className="w-4 h-4 "
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              </div>
+                              <Image
+                                width={100}
+                                height={100}
+                                src={URL.createObjectURL(file)}
+                                loading="eager"
+                                objectFit="contain"
+                                alt="Discussion file"
+                                onClick={() => {
+                                  setImageSrc(URL.createObjectURL(file))
+                                }}
+                                priority={true}
+                              ></Image>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <div className="relative">
+                      <HookFormTextField
+                        control={control}
+                        name={idReply === e?.id ? 'comment' : ''}
+                        textSize="sm"
+                        inputClassName={'max-h-10 !pr-9'}
+                        placeholder="Your comment..."
+                      ></HookFormTextField>
+                      <div className="absolute top-[13px] right-3 cursor-pointer">
+                        <SappIcon icon="camera"></SappIcon>
+                        <input
+                          type="file"
+                          className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
+                          accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
+                          multiple
+                          onChange={handleFileChange}
+                          ref={fileInputRef}
+                        />
+                      </div>
                     </div>
                   )}
                   <div className="relative">
@@ -449,6 +491,7 @@ const Discussion = ({ class_id }: Props) => {
             }
             loading="eager"
             priority={true}
+            alt="user avatar"
           ></Image>
         </div>
         <form
@@ -491,6 +534,7 @@ const Discussion = ({ class_id }: Props) => {
                         setImageSrc(URL.createObjectURL(file))
                       }}
                       priority={true}
+                      alt=""
                     ></Image>
                   </li>
                 ))}
