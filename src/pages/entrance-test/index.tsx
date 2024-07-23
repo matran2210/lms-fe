@@ -60,24 +60,6 @@ const EntranceTest = () => {
             des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
           />
         </div>
-        <div className="main max-w-xxl my-0 mx-8 lg:mx-auto">
-          <div className="flex justify-between pt-6 pb-4">
-            <h2 className="text-medium-sm font-medium text-bw-1 ">
-              Entrance Test
-            </h2>
-            <EntranceTestFilter count={entranceTestLists?.length || 0} />
-          </div>
-        </div>
-        <div
-          className="heading bg-white max-w-xxl my-0 flex mx-8 xl:mx-auto lg:mx-8 md:mx-8"
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <Heading
-            greeting="Welcome to"
-            title="Entrance Test"
-            des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
-          />
-        </div>
         <div
           className="pt-6 max-w-xxl my-0 mx-8 xl:mx-auto lg:mx-8"
           data-aos={ANIMATION.DATA_AOS}
