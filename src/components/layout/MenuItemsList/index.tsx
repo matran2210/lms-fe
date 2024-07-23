@@ -4,7 +4,7 @@ import MenuItem from '../MenuItem'
 
 type MenuItemsListProps = {
   options: MenuItemType[]
-  setOpenResource: Dispatch<SetStateAction<boolean>>
+  setOpenResource?: Dispatch<SetStateAction<boolean>>
   closeSideBar: () => void
 }
 
@@ -23,6 +23,7 @@ export default function MenuItemsList({
           closeSideBar={closeSideBar}
         />
       ))}
+
     </div>
   )
 }

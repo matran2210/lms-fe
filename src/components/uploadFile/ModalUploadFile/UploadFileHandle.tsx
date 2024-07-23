@@ -8,7 +8,6 @@ import { validateFile } from 'src/utils/upload'
 // import ButtonIconOnly from '../../button/ButtonIconOnly'
 // import ButtonPrimary from '../../button/ButtonPrimary'
 import { UPLOAD_TYPE } from './UploadFileInterface'
-import ButtonIcon from '@components/base/button/ButtonIcon'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 // import { ResourceAPI } from 'src/apis/resource-bank'
 
@@ -37,7 +36,7 @@ const UploadFileHandle = ({
   setUploadFile,
   progress,
   loading,
-  handleCancel,
+  // handleCancel,
   fileType,
   icon,
   isMultiple,

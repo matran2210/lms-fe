@@ -10,12 +10,12 @@ interface IProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   placeholder?: string
   className?: string
-  rows?: number | undefined
-  label?: string
-  guideline?: string[]
+  // rows?: number | undefined
+  // label?: string
+  // guideline?: string[]
   disabled?: boolean
   labelClass?: string
-  required?: boolean
+  // required?: boolean
   skeleton?: boolean
 }
 
@@ -26,12 +26,12 @@ const HookFormTextArea = ({
   onChange,
   placeholder,
   className = '',
-  rows,
-  label,
-  guideline,
+  // rows,
+  // label,
+  // guideline,
   disabled,
   // labelClass = 'fs-6 fw-bold mb-3',
-  required,
+  // required,
   skeleton,
 }: IProps) => {
   return (

@@ -26,6 +26,7 @@ interface Props {
 const DynamicBundledEditor = dynamic(() => import('../../form/editor'), {
   ssr: false,
 })
+
 const HookFormEditor = ({
   name,
   control,

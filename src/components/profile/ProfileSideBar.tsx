@@ -62,13 +62,10 @@ const ProfileSideBar = ({ page }: IProps) => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser())
-      .then(() => {
+      await dispatch(getLogoutUser()).then(() => {
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')
-          removeLocalStorageItem('openPinned')
-          removeLocalStorageItem('pinnedStatus')
         }
       })
       // router.push(PageLink.AUTH_LOGIN)

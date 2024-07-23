@@ -14,6 +14,7 @@ import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
+import Layout from '@components/layout'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -149,9 +150,10 @@ const MyCourse = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <div className="header bg-white border-b border-default">
-        <div
-          className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
+      <Layout title="My Course">
+        <div className="header bg-white border-b border-default">
+          <div
+            className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
           ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
         >
           <SearchForm
@@ -253,6 +255,7 @@ const MyCourse = () => {
           className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
         ></div>
       )}
+      </Layout>
     </SappLoadingGlobal>
   )
 }

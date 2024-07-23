@@ -31,9 +31,8 @@ import NewFiltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { LAYOUT } from '@utils/constants'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { isUndefined, uniqueId } from 'lodash'
+import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -61,6 +60,7 @@ import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 interface Answer {
   answer: string | string[] | Object[]
@@ -1517,6 +1517,8 @@ const TestDetail = () => {
         }
         // setCurrentTabContent(arr[0])
         setTabs(arr)
+      } else {
+        router.push(PageLink.PAGE_NOT_FOUND)
       }
       setCurrentPage(questions?.[0]?.id)
     }
@@ -1670,8 +1672,30 @@ const TestDetail = () => {
       </div>
     </div>
   )
+
+  const checkTypeAndRenderTitle = (type: string) => {
+    let pageTitle = ''
+    switch (type) {
+      case TEST_TYPE.MID_TERM_TEST:
+        return (pageTitle = 'Midterm Test')
+      case TEST_TYPE.FINAL_TEST:
+        return (pageTitle = 'Final Test')
+      case TEST_TYPE.TOPIC_TEST:
+        return (pageTitle = 'Topic Test')
+      case TEST_TYPE.CHAPTER_TEST:
+        return (pageTitle = 'Chapter Test')
+      case TEST_TYPE.PART_TEST:
+        return (pageTitle = 'Part Test')
+      case TEST_TYPE.ENTRANCE_TEST:
+        return (pageTitle = 'Entrance Test')
+      default:
+        return pageTitle
+    }
+  }
+
   return (
-    <CourseProvider>
+    <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
+      <CourseProvider>
       {loading || !currentTabContent?.id ? (
         <SappLoading />
       ) : (
@@ -2484,9 +2508,9 @@ const TestDetail = () => {
         </div>
       )}
     </CourseProvider>
+    </FullScreenLayout>
   )
 }
 
 // eslint-disable-next-line import/no-unused-modules
 export default TestDetail
-TestDetail.layout = LAYOUT.FULLSCREEN_LAYOUT

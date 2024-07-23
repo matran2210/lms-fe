@@ -4,12 +4,7 @@ import React, {
   SetStateAction,
   useEffect,
   useRef,
-  useState,
 } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { IButtonColors } from 'src/type'
-import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import Icon from '@components/icons'
 
 type Props = {

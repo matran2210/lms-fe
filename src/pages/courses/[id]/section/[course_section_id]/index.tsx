@@ -8,12 +8,12 @@ import { useRouter } from 'next/router'
 import { truncateString } from '@utils/index'
 import TestModal from 'src/pages/courses/test'
 import { ANIMATION } from 'src/constants'
-import { Tooltip } from 'antd'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { CoursesAPI } from '../../../../api/courses/index'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
+import Layout from '@components/layout'
 
 interface IProps {
   course_section_type: string
@@ -318,120 +318,123 @@ const CoursePartDetail = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <div className="main max-w-xxl my-0 mx-auto default-content-editor">
-        <div className="w-full">
-          <div className="flex pt-6 items-center">
-            <span
-              onClick={() => router.push('/courses')}
-              className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
-            >
-              My Course
-            </span>
-            <span
-              className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
-              onClick={() =>
-                router.push(`/courses/my-course/${router.query.id}`)
-              }
-            >
-              /
-              <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
-                <SappTooltip
-                  title={previewPart?.name}
-                  showTooltip={previewPart?.name?.length > 60}
-                >
-                  {truncateString(previewPart?.name, 50)}
-                </SappTooltip>
-              </p>
-            </span>
-            <span className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
-              <p className="text-medium-sm font-medium text-bw-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis">
-                /{' '}
-                <SappTooltip
-                  title={partDetail?.name}
-                  showTooltip={partDetail?.name?.length > 90}
-                >
-                  {truncateString(partDetail?.name, 90)}
-                </SappTooltip>
-              </p>
-            </span>
+      <Layout title="Course Part Detail">
+        <div className="main max-w-xxl my-0 mx-auto default-content-editor">
+          <div className="w-full">
+            <div className="flex pt-6 items-center">
+              <span
+                onClick={() => router.push('/courses')}
+                className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
+              >
+                My Course
+              </span>
+              <span
+                className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
+                onClick={() =>
+                  router.push(`/courses/my-course/${router.query.id}`)
+                }
+              >
+                /
+                <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
+                  <SappTooltip
+                    title={previewPart?.name}
+                    showTooltip={previewPart?.name?.length > 60}
+                  >
+                    {truncateString(previewPart?.name, 50)}
+                  </SappTooltip>
+                </p>
+              </span>
+              <span className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
+                <p className="text-medium-sm font-medium text-bw-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis">
+                  /{' '}
+                  <SappTooltip
+                    title={partDetail?.name}
+                    showTooltip={partDetail?.name?.length > 90}
+                  >
+                    {truncateString(partDetail?.name, 90)}
+                  </SappTooltip>
+                </p>
+              </span>
+            </div>
           </div>
-        </div>
-        <div data-aos={ANIMATION.DATA_AOS}>
-          <PreviewPartDetail
-            chapterMenu={partDetail}
-            fetchChapterDetail={fetchChapterDetail}
-            chapterDetail={chapterDetail}
-            loading={false}
-            loadingChapter={loadingChapter}
-            setLoadingChapter={setLoadingChapter}
-            setOpenLearningOutcome={setOpenLearningOutcome}
-            course_id={router.query.id as any}
-            course_section_id={router.query.course_section_id as any}
-            handleRouterActivity={handleRouterActivity}
-            handleRouterCaseStudy={handleRouterCaseStudy}
-            handleLearningOutCome={handleLearningOutCome}
-            handleRouterChapter={handleRouterChapter}
-            readMore={readMore}
-            setReadMore={setReadMore}
-            defaultActive={defaultActive ? defaultActive : ''}
+          <div data-aos={ANIMATION.DATA_AOS}>
+            <PreviewPartDetail
+              chapterMenu={partDetail}
+              fetchChapterDetail={fetchChapterDetail}
+              chapterDetail={chapterDetail}
+              loading={false}
+              loadingChapter={loadingChapter}
+              setLoadingChapter={setLoadingChapter}
+              setOpenLearningOutcome={setOpenLearningOutcome}
+              course_id={router.query.id as any}
+              course_section_id={router.query.course_section_id as any}
+              handleRouterActivity={handleRouterActivity}
+              handleRouterCaseStudy={handleRouterCaseStudy}
+              handleLearningOutCome={handleLearningOutCome}
+              handleRouterChapter={handleRouterChapter}
+              readMore={readMore}
+              setReadMore={setReadMore}
+              defaultActive={defaultActive ? defaultActive : ''}
+            />
+          </div>
+
+          <SappDrawer
+            isOpen={openLearningOutcome}
+            onClose={handleCancel}
+            title={learningOutcome?.name}
+            message="Bạn có chắc chắn muốn hủy không?"
+            widthDrawer="w-6/12"
+            handleSubmit={handleNextLesson}
+            confirmOnClose={false}
+            heightBody="h-[calc(100vh-186px)] pb-6"
+            sizeTextBtn="medium"
+          >
+            <TextSkeleton
+              loading={loadingLearningOutcome}
+              widths={['70', '100', '100', '50', '100']}
+              className="mb-4"
+              classChild="rounded"
+            >
+              <div
+                style={{ borderBottom: '1px solid #DCDDDD' }}
+                className="pb-6 text-bw-1 learningOutcome-description"
+                dangerouslySetInnerHTML={{
+                  __html: learningOutcome?.description ?? '',
+                }}
+              />
+            </TextSkeleton>
+            {loadingLearningOutcome && (
+              <div className="h-px w-full bg-gray-2 mt-4 mb-2"></div>
+            )}
+            <TextSkeleton
+              loading={loadingLearningOutcome}
+              className="mt-4 last:mb-4"
+              classChild="rounded"
+              widths={['70', '100', '100', '50', '100']}
+            >
+              {learningOutcome?.course_outcomes?.map((outcome, index) => (
+                <div className="flex mt-6 mr-3" key={outcome.id}>
+                  <div className="font-medium leading-5 text-base me-1 text-bw-1">
+                    LO{index + 1}:
+                  </div>
+                  <div
+                    className="text-bw-1 learningOutcome-description"
+                    dangerouslySetInnerHTML={{ __html: outcome?.description }}
+                  />
+                </div>
+              ))}
+            </TextSkeleton>
+          </SappDrawer>
+          <TestModal
+            open={open}
+            setOpen={setOpen}
+            data={chapterData}
+            class_user_id={previewPart?.class_user_id}
+            activeCourse={() => { }}
           />
         </div>
+      </Layout>
 
-        <SappDrawer
-          isOpen={openLearningOutcome}
-          onClose={handleCancel}
-          title={learningOutcome?.name}
-          message="Bạn có chắc chắn muốn hủy không?"
-          widthDrawer="w-6/12"
-          handleSubmit={handleNextLesson}
-          confirmOnClose={false}
-          heightBody="h-[calc(100vh-186px)] pb-6"
-          sizeTextBtn="medium"
-        >
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            widths={['70', '100', '100', '50', '100']}
-            className="mb-4"
-            classChild="rounded"
-          >
-            <div
-              style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="pb-6 text-bw-1 learningOutcome-description"
-              dangerouslySetInnerHTML={{
-                __html: learningOutcome?.description ?? '',
-              }}
-            />
-          </TextSkeleton>
-          {loadingLearningOutcome && (
-            <div className="h-px w-full bg-gray-2 mt-4 mb-2"></div>
-          )}
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            className="mt-4 last:mb-4"
-            classChild="rounded"
-            widths={['70', '100', '100', '50', '100']}
-          >
-            {learningOutcome?.course_outcomes?.map((outcome, index) => (
-              <div className="flex mt-6 mr-3" key={outcome.id}>
-                <div className="font-medium leading-5 text-base me-1 text-bw-1">
-                  LO{index + 1}:
-                </div>
-                <div
-                  className="text-bw-1 learningOutcome-description"
-                  dangerouslySetInnerHTML={{ __html: outcome?.description }}
-                />
-              </div>
-            ))}
-          </TextSkeleton>
-        </SappDrawer>
-        <TestModal
-          open={open}
-          setOpen={setOpen}
-          data={chapterData}
-          class_user_id={previewPart?.class_user_id}
-          activeCourse={() => {}}
-        />
-      </div>
     </SappLoadingGlobal>
   )
 }

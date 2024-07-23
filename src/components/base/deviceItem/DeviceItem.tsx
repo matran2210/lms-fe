@@ -1,7 +1,7 @@
 import { AppleLogo, PhoneLogo, WinDowLogo } from '@assets/icons'
 import { useMemo } from 'react'
-import { format, formatDistanceToNow } from 'date-fns'
 import { calculateTimeAgo } from '@utils/helpers'
+
 const DeviceItem = ({ data }: any) => {
   const chooseLogo = useMemo(() => {
     if (data?.user_agent?.osName) {

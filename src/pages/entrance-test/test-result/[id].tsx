@@ -1,12 +1,12 @@
 import QuizResult from 'entrance-test-result-package'
 import 'entrance-test-result-package/dist/index.css'
 import { useRouter } from 'next/router'
-import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { useGetDataQuery } from '@utils/index'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -22,26 +22,27 @@ const TestEntranceResult = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>
-        <div
-          className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
-          onClick={() => {
-            router.back()
-          }}
-        >
-          <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+      <FullScreenLayout title=''>
+        <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>
+          <div
+            className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
+            onClick={() => {
+              router.back()
+            }}
+          >
+            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+          </div>
+          <QuizResult
+            dataChart={chartData?.chart_data}
+            onClick={() => {
+              router.push(`/entrance-test/table-result/${router.query.id}`)
+            }}
+            dataTable={chartData}
+          />
         </div>
-        <QuizResult
-          dataChart={chartData?.chart_data}
-          onClick={() => {
-            router.push(`/entrance-test/table-result/${router.query.id}`)
-          }}
-          dataTable={chartData}
-        />
-      </div>
+      </FullScreenLayout>
     </SappLoadingGlobal>
   )
 }
 
 export default TestEntranceResult
-TestEntranceResult.layout = LAYOUT.FULLSCREEN_LAYOUT

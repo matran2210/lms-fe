@@ -5,8 +5,6 @@ import {
   IActivityStateQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
-  selectQuestions,
-  submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import SappModal from '@components/base/modal/SappModal'
@@ -14,12 +12,7 @@ import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { debounce } from '@utils/helpers'
-import {
-  IQuestionResult,
-  IQuestionResultResponse,
-} from 'quiz-result-package/dist/type'
 import SappIcon from 'src/common/SappIcon'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { video_url } from '@utils/constants'
@@ -60,7 +53,7 @@ const VideoDocument = ({
   const [currentListQuestion, setCurrentListQuestion] = useState<IQuestion[]>(
     [],
   )
-  const selector = useAppSelector(courseActivityQuizReducer)
+  // const selector = useAppSelector(courseActivityQuizReducer)
   const questionRef = useRef<QuizComponentRef>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
@@ -182,7 +175,7 @@ const VideoDocument = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -300,7 +293,7 @@ const VideoDocument = ({
           },
         })
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const handleGoTimeline = (time: number) => {
@@ -335,33 +328,35 @@ const VideoDocument = ({
     <div>
       <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-2.5">
         <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
-          {videos?.map((v, i) => {
-            return (
-              <label
-                className=" flex items-center gap-2 select-none cursor-pointer"
-                key={v?.file?.id ?? i}
-              >
-                {/* Radio button for video selection */}
-                <SAPPRadio
-                  onChange={() => debouncedHandleSetCurrentVideo.current(v)}
-                  {...(v?.file?.id === currentVideo?.file?.id
-                    ? {
-                      checked: true,
-                    }
-                    : { checked: false })}
-                  size={'small'}
-                ></SAPPRadio>
-                <span
-                  className={`radio-item-label  ${v?.file?.id === currentVideo?.file?.id
-                      ? 'text-bw-1'
-                      : 'text-gray-1'
-                    }`}
+          {(videos as IVideo[])?.length > 1 &&
+            videos?.map((v, i) => {
+              return (
+                <label
+                  className=" flex items-center gap-2 select-none cursor-pointer"
+                  key={v?.file?.id ?? i}
                 >
-                  Video {i + 1}
-                </span>
-              </label>
-            )
-          })}
+                  {/* Radio button for video selection */}
+                  <SAPPRadio
+                    onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                    {...(v?.file?.id === currentVideo?.file?.id
+                      ? {
+                          checked: true,
+                        }
+                      : { checked: false })}
+                    size={'small'}
+                  ></SAPPRadio>
+                  <span
+                    className={`radio-item-label  ${
+                      v?.file?.id === currentVideo?.file?.id
+                        ? 'text-bw-1'
+                        : 'text-gray-1'
+                    }`}
+                  >
+                    Video {i + 1}
+                  </span>
+                </label>
+              )
+            })}
         </div>
         <div className="flex items-center select-none cursor-pointer relative z-30 group">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (

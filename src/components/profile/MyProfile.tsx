@@ -12,7 +12,8 @@ import {
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import { StaticImageData } from 'next/image'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useRouter } from 'next/router'
+import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { ANIMATION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'

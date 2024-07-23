@@ -13,6 +13,7 @@ export const PageLink = {
   NOTIFICATION: '/notifications',
   ENTRANCE_TEST: '/entrance-test',
   MYPROFILE: '/myprofile',
+  PAGE_NOT_FOUND: '/404',
 }
 
 export const TitleSidebar = {

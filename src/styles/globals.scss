@@ -706,7 +706,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal-root .ant-modal-wrap {
-  @apply bg-bw-5;
+  @apply bg-bw-10;
 }
 
 .lf-player-container {
@@ -828,7 +828,9 @@ p a {
 
 #floating-button {
   @apply w-[60px] h-[60px] bg-white fixed cursor-pointer rounded-full;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 4px,
+    rgba(0, 0, 0, 0.2) 0px 2px 12px;
   animation: moveDown 0.3s ease-out forwards;
 }
 
@@ -855,11 +857,11 @@ p a {
 .plus {
   animation: plus-out 0.3s;
   transition: all 0.3s;
-  @apply w-[60px] h-[60px] left-[-2px]
+  @apply w-[60px] h-[60px] left-[-2px];
 }
 
 #container-floating {
-  @apply fixed w-[60px] h-[60px] bottom-[30px] right-[20px] z-[50px]
+  @apply fixed w-[60px] h-[60px] bottom-[30px] right-[20px] z-[50px];
 }
 
 // @keyframes edit-in {
@@ -954,11 +956,11 @@ p a {
 }
 
 #floating-button .plus:hover svg path {
-  @apply fill-white
+  @apply fill-white;
 }
 
 .svg-container:hover path {
-  @apply fill-primary
+  @apply fill-primary;
 }
 
 .ant-modal {
@@ -968,11 +970,6 @@ p a {
 .pinned-noti-marquee-content {
   transform: translateX(100%);
   animation: scroll-left 50s linear infinite;
-}
-
-.pinned-noti-marquee-content:hover {
-  animation: unset !important;
-  transform: unset !important;
 }
 
 @keyframes scroll-left {

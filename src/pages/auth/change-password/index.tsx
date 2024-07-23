@@ -17,6 +17,7 @@ import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
 import { removeJwtToken } from '@utils/index'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 
 interface IInputProps {
   password: string
@@ -84,53 +85,55 @@ const ChangePasswordPage = () => {
   }
 
   return (
-    <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
-      <div className="md:text-4xl text-3xl font-bold text-bw-1 mb-2">
-        New password
-      </div>
-      <div className="text-medium-sm text-gray-1 md:mb-10 mb-8">
-        Set the new password for your account.
-      </div>
-      <div>
-        <form>
-          <HookFormTextField
-            name="password"
-            control={control}
-            placeholder="New Password"
-            type="password"
-            textSize="sm"
-          />
-          <HookFormTextField
-            name="confirmPassword"
-            control={control}
-            placeholder="Confirm Password"
-            type="password"
-            className="mt-6"
-            textSize="sm"
-          />
-          <div className="mt-10">
-            <SappButton
-              title="Submit"
-              full={true}
-              className="mb-8"
-              size="lager"
-              onClick={handleSubmit(onSubmit)}
-              loading={loading}
+    <SingleDialogLayout title="Change Password">
+      <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
+        <div className="md:text-4xl text-3xl font-bold text-bw-1 mb-2">
+          New password
+        </div>
+        <div className="text-medium-sm text-gray-1 md:mb-10 mb-8">
+          Set the new password for your account.
+        </div>
+        <div>
+          <form>
+            <HookFormTextField
+              name="password"
+              control={control}
+              placeholder="New Password"
+              type="password"
+              textSize="sm"
             />
-            <div className="text-center">
+            <HookFormTextField
+              name="confirmPassword"
+              control={control}
+              placeholder="Confirm Password"
+              type="password"
+              className="mt-6"
+              textSize="sm"
+            />
+            <div className="mt-10">
               <SappButton
-                title="Cancel"
+                title="Submit"
+                full={true}
+                className="mb-8"
                 size="lager"
-                onClick={redirectLogin}
-                isUnderLine={false}
-                isPadding={false}
-                color="text"
-              ></SappButton>
+                onClick={handleSubmit(onSubmit)}
+                loading={loading}
+              />
+              <div className="text-center">
+                <SappButton
+                  title="Cancel"
+                  size="lager"
+                  onClick={redirectLogin}
+                  isUnderLine={false}
+                  isPadding={false}
+                  color="text"
+                ></SappButton>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </SingleDialogLayout>
   )
 }
 
