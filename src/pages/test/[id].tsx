@@ -2038,15 +2038,6 @@ const TestDetail = () => {
                           event: ChangeEvent<HTMLInputElement>,
                         ) => handleChangeScratchPad(event, currentPage)}
                       />
-                      {exhibitsDes &&
-                        exhibitsDes?.files?.length > 0 &&
-                        exhibitsDes?.files?.map((e: any, index: number) => {
-                          return (
-                            <div key={index} className="overflow-auto bg-white">
-                              <PDFViewer file={e?.resource?.url} />
-                            </div>
-                          )
-                        })}
                     </div>
                   </MovableWindow>
                 )
