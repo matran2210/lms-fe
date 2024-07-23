@@ -62,7 +62,7 @@ const Certificate = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <SinglePageLayout title=''>
+      <SinglePageLayout title='Certificate'>
         <div className="h-full">
           <div className="bg-white h-[70px] flex justify-between items-center px-6">
             <div className="flex items-center">

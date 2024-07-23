@@ -150,10 +150,10 @@ const MyCourse = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title=''>
-      <div className="header bg-white border-b border-default">
-        <div
-          className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
+      <Layout title='My Course'>
+        <div className="header bg-white border-b border-default">
+          <div
+            className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
           ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
         >
           <SearchForm
