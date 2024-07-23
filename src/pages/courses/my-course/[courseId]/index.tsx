@@ -126,7 +126,7 @@ const CourseDetail = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Detail">
-        <div className="header bg-white border-b border-default h-[70px]">
+        <div className="header bg-white border-b border-e-default">
           <div className="max-w-xxl my-0 mx-auto flex py-6 xl-max:mx-5">
             <SearchForm
               placeholder="Enter name of course..."
@@ -134,27 +134,26 @@ const CourseDetail = () => {
             />
           </div>
         </div>
-        <div className="main max-w-xxl my-0 mx-auto xl-max:container relative">
-          <div className="flex justify-between pt-6 pb-4 w-full items-center">
-            <BreadcrumbFilter name={courseNameDetail} />
-            <FilterCourseDetail totalResult={courses?.length || 0} />
+        <div className="container max-w-xxl">
+          <div className="mx-auto  my-4">
+            <div className="flex justify-between items-center">
+              <BreadcrumbFilter name={courseNameDetail} />
+              <FilterCourseDetail totalResult={courses?.length || 0} />
+            </div>
           </div>
-        </div>
-        <div
-          className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6"
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <Heading greeting="Welcome to" title={courseNameDetail} />
-        </div>
-        <div
-          className="pt-6 max-w-xxl my-0 mx-auto xl-max:container"
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <CourseParts
-            courses={courses}
-            class_user_id={class_user_id}
-            lastElementRef={lastElementRef}
-          />
+          <div
+            className="bg-white my-0 mx-auto flex"
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <Heading greeting="Welcome to" title={courseNameDetail} />
+          </div>
+          <div className="pt-6 my-0 " data-aos={ANIMATION.DATA_AOS}>
+            <CourseParts
+              courses={courses}
+              class_user_id={class_user_id}
+              lastElementRef={lastElementRef}
+            />
+          </div>
         </div>
       </Layout>
     </SappLoadingGlobal>
