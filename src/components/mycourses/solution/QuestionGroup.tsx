@@ -1,6 +1,6 @@
 // components/SearchForm.tsx
 
-import React, { useState } from 'react'
+import React from 'react'
 import Icon from '@components/icons'
 
 interface QuestionGroupProps {

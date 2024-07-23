@@ -170,11 +170,11 @@ const Course = ({
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
   // Action của button trong course list
-  const queryString = buildQueryString({
-    name: router.query.name || '',
-    status: router.query.status || '',
-    type: router.query.type || '',
-  })
+  // const queryString = buildQueryString({
+  //   name: router.query.name || '',
+  //   status: router.query.status || '',
+  //   type: router.query.type || '',
+  // })
 
   // async function fetchCourseList() {
   //   setLoading(true)

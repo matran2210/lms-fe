@@ -67,7 +67,6 @@ const ChangePassword = () => {
     reset,
     getValues,
     watch,
-    formState: { errors },
   } = useForm<IChangePassword>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',

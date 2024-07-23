@@ -9,7 +9,7 @@ import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
 
 const Part = ({ course }: { course: IMyCourseDetail }) => {
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const router = useRouter()
 
   const percentProgress = round(
