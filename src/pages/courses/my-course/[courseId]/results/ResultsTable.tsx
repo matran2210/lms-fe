@@ -1,21 +1,25 @@
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
+import HookFormSelect from '@components/base/select/HookFormSelect'
 import { getTimeFromInput, truncateString } from '@utils/index'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import useSelectedSectionCombo from 'src/hooks/useSelectSection'
 import { CoursesAPI } from 'src/pages/api/courses'
+import { CourseKey } from 'src/pages/api/queryKey'
 
 interface Iprops {
   courseId: string
 }
 
 const ResultsTable = ({ courseId }: Iprops) => {
+  const router = useRouter()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
-  const router = useRouter()
+  // const { sections } = useSelectedSectionCombo(router.query.courseId)
 
   /**
    * @description config params khi filter
@@ -25,112 +29,71 @@ const ResultsTable = ({ courseId }: Iprops) => {
   }
 
   /**
-   * @description fetch API course result
-   */
-  const fetchCourseResults = async ({
-    pageIndex,
-    params,
-  }: {
-    pageIndex: number
-    params: Object
-  }) => {
-    const { data } = await CoursesAPI.getCourseResults(
-      courseId,
-      pageIndex || 1,
-      pageSize,
-      params,
-    )
-    return data
-  }
-
-  /**
-   * @description sử dụng react-query để lấy data sau khi call API
+   * @description sử dụng react-query để lấy data
    */
   const {
     data: resultData,
     isLoading,
     isSuccess,
   } = useQuery({
-    queryKey: ['courseResults', currentPage, pageSize],
+    queryKey: [CourseKey.resultsList, currentPage, pageSize],
     queryFn: () => {
-      return fetchCourseResults({ pageIndex: currentPage, params })
+      return CoursesAPI.getCourseResults(
+        courseId,
+        currentPage || 1,
+        pageSize,
+        params,
+      )
     },
     enabled: router.query.courseId !== undefined,
+    select: (data) => {
+      return data.data
+    },
   })
 
+  const commonDataCellStyle = 'text-start py-5'
+  const commonHeaderCellStyle =
+    'text-left text-medium-sm text-gray-1 font-semibold pb-3'
   const headers = [
-    {
-      label: 'Name',
-      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
-    },
-    {
-      label: 'Belong To',
-      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
-    },
-    {
-      label: 'Type',
-      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
-    },
-    {
-      label: 'Grade',
-      className: 'text-center pb-3 text-medium-sm text-gray-1 font-semibold',
-    },
-    {
-      label: 'Time Spent',
-      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
-    },
-    {
-      label: 'Last submission',
-      className: 'text-left pb-3 text-medium-sm text-gray-1 font-semibold',
-    },
-  ]
+    'Name',
+    'Belong To',
+    'Type',
+    'Grade',
+    'Time Spent',
+    'Last submission',
+  ].map((label) => ({ label, className: commonHeaderCellStyle }))
 
   isLoading && <></>
 
-  // const [activity, setActivity] = useState<any>(null)
-  // const options = [
-  //   { value: 'chocolate', label: 'Chocolate' },
-  //   { value: 'strawberry', label: 'Strawberry' },
-  //   { value: 'vanilla', label: 'Vanilla' },
-  // ]
+  const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
 
-  const commonDataCellStyle = 'px-0 pr-4 text-start py-5'
   return (
     <>
-      {/* <div className="flex gap-6 mb-8">
+      <div className="flex gap-6 mb-8">
         <HookFormSelect
           classParent="w-full md:max-w-full"
           placeholder="Section"
           isClearable={true}
-          value={activity}
-          onChange={(selectedOption) => setActivity(selectedOption)}
-          options={options}
+          // value={selectedSection}
+          // onChange={(selectedOption) =>
+          //   handleDropdownChange(
+          //     selectedOption,
+          //     setSelectedSection,
+          //     setSelectedSubsection,
+          //   )
+          // }
+          // options={
+          //   sections &&
+          //   DEFAULT_SELECT_SECTION.concat(
+          //     sections?.map((section) => ({
+          //       label: section.name,
+          //       value: section.id,
+          //     })),
+          //   )
+          // }
+          // onMenuScrollToBottom={handleMenuScrollToSections}
         />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Subsection"
-          isClearable={true}
-          value={activity}
-          onChange={(selectedOption) => setActivity(selectedOption)}
-          options={options}
-        />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Unit"
-          isClearable={true}
-          value={activity}
-          onChange={(selectedOption) => setActivity(selectedOption)}
-          options={options}
-        />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Activity"
-          isClearable={true}
-          value={activity}
-          onChange={(selectedOption) => setActivity(selectedOption)}
-          options={options}
-        />
-      </div> */}
+      </div>
       <SappTable
         headers={headers}
         hasCheck={false}
@@ -146,7 +109,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
             return (
               <tr
                 className={clsx({
-                  'border-dashed border-b border-gray-2 px-5 h-12': true,
+                  'border-dashed border-b border-gray-2 h-auto': true,
                   'text-gray-2': !row.is_studied,
                 })}
                 key={row?.id}
