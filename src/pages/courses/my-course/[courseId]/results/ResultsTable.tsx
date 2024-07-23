@@ -1,6 +1,5 @@
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
-import HookFormSelect from '@components/base/select/HookFormSelect'
 import { getTimeFromInput, truncateString } from '@utils/index'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -86,18 +85,14 @@ const ResultsTable = ({ courseId }: Iprops) => {
     },
   ]
 
-  // useEffect(() => {
-  //   refetch()
-  // }, [pageSize, currentPage])
-
   isLoading && <></>
 
-  const [activity, setActivity] = useState<any>(null)
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ]
+  // const [activity, setActivity] = useState<any>(null)
+  // const options = [
+  //   { value: 'chocolate', label: 'Chocolate' },
+  //   { value: 'strawberry', label: 'Strawberry' },
+  //   { value: 'vanilla', label: 'Vanilla' },
+  // ]
 
   const commonDataCellStyle = 'px-0 pr-4 text-start py-5'
   return (

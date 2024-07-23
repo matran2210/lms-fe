@@ -81,7 +81,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
                 </p>
               </>
             ) : (
-              <span className="text-bw-1">--</span>
+              <span className="">--</span>
             )}
           </div>
         </div>

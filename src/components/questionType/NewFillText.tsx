@@ -237,10 +237,7 @@ const NewFiltext = forwardRef(
         {solution && (
           <div className="bg-gray-4 mt-6 p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader
-              className="mt-4 text-bw-1"
-              text_editor_content={solution}
-            />
+            <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}
       </div>

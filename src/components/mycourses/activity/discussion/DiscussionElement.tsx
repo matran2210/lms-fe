@@ -130,17 +130,19 @@ function DiscussionElement({
             ></Image>
           </div>
           <div>
-            <div className='flex flex-row'>
+            <div className="flex flex-row">
               <div className="text-base font-semibold mb-1">
                 {discussion?.full_name}
               </div>
               {discussion?.is_staff_support && (
-                <div className='text-primary font-semibold bg-secondary h-6 ml-2 min-w-132px px-2 content-center'>
-                  <div className='flex flex-row'>
-                    <div className='content-center'>
-                      <VerifiedIcon/>
+                <div className="text-primary font-semibold bg-secondary h-6 ml-2 min-w-132px px-2 content-center">
+                  <div className="flex flex-row">
+                    <div className="content-center">
+                      <VerifiedIcon />
                     </div>
-                    <div className='content-center text-ssm px-2'>SAPP Supporter</div>
+                    <div className="content-center text-ssm px-2">
+                      SAPP Supporter
+                    </div>
                   </div>
                 </div>
               )}
