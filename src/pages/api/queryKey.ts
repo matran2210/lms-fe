@@ -2,6 +2,9 @@
  * This file is for storing Tanstack Query
  */
 export const CourseKey = {
-  resultsList: 'courseResultList',
-  sectionList: 'courseSectionList',
+  ResultsList: 'courseResultList',
+  SectionList: 'courseSectionList',
+  SubsectionList: 'courseSubsectionList',
+  UnitList: 'courseUnitList',
+  ActivityList: 'courseActivityList',
 }

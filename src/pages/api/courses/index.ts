@@ -301,9 +301,10 @@ export class CoursesAPI {
   static getCourseSectionList(
     id: string | string[] | undefined,
     page_size: number,
+    page_index: number,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/short/list?page_index=1&page_size=${page_size}&classId=${id}&type=PART`,
+      `${apiURL}/course-sections/short/list?page_index=${page_index | 1}&page_size=${page_size}&classId=${id}&type=PART`,
     )
   }
 

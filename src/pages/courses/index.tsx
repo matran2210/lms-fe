@@ -66,11 +66,7 @@ const MyCourse = () => {
     pageParam: number
     params: Object
   }) => {
-    const { data } = await CoursesAPI.get(
-      pageParam || 1,
-      DEFAULT_PAGESIZE,
-      params,
-    )
+    const { data } = await CoursesAPI.get(pageParam || 1, 1, params)
     return { data: data?.courses || [], category: data }
   }
 

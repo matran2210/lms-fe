@@ -1,15 +1,15 @@
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
-import HookFormSelect from '@components/base/select/HookFormSelect'
 import { getTimeFromInput, truncateString } from '@utils/index'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import useSelectedSectionCombo from 'src/hooks/useSelectSection'
+import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
+import ResultsTableFilter from './ResultsTableFilter'
 
 interface Iprops {
   courseId: string
@@ -17,15 +17,22 @@ interface Iprops {
 
 const ResultsTable = ({ courseId }: Iprops) => {
   const router = useRouter()
+  const selectFilterProp = useSelectFilter(router.query.courseId)
+  const {
+    selected,
+    selectedSection,
+    selectedSubsection,
+    selectedUnit,
+    selectedActivity,
+  } = selectFilterProp
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
-  // const { sections } = useSelectedSectionCombo(router.query.courseId)
 
   /**
    * @description config params khi filter
    */
   const params = {
-    parentId: router.query.parentId || undefined,
+    parentId: selected?.value || undefined,
   }
 
   /**
@@ -36,7 +43,15 @@ const ResultsTable = ({ courseId }: Iprops) => {
     isLoading,
     isSuccess,
   } = useQuery({
-    queryKey: [CourseKey.resultsList, currentPage, pageSize],
+    queryKey: [
+      CourseKey.ResultsList,
+      currentPage,
+      pageSize,
+      selectedSection,
+      selectedSubsection,
+      selectedUnit,
+      selectedActivity,
+    ],
     queryFn: () => {
       return CoursesAPI.getCourseResults(
         courseId,
@@ -46,7 +61,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
       )
     },
     enabled: router.query.courseId !== undefined,
-    select: (data) => {
+    select: (data: { data: any }) => {
       return data.data
     },
   })
@@ -65,34 +80,10 @@ const ResultsTable = ({ courseId }: Iprops) => {
 
   isLoading && <></>
 
-  const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
-
   return (
     <>
       <div className="flex gap-6 mb-8">
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Section"
-          isClearable={true}
-          // value={selectedSection}
-          // onChange={(selectedOption) =>
-          //   handleDropdownChange(
-          //     selectedOption,
-          //     setSelectedSection,
-          //     setSelectedSubsection,
-          //   )
-          // }
-          // options={
-          //   sections &&
-          //   DEFAULT_SELECT_SECTION.concat(
-          //     sections?.map((section) => ({
-          //       label: section.name,
-          //       value: section.id,
-          //     })),
-          //   )
-          // }
-          // onMenuScrollToBottom={handleMenuScrollToSections}
-        />
+        <ResultsTableFilter {...selectFilterProp} />
       </div>
       <SappTable
         headers={headers}
