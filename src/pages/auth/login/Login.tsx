@@ -105,7 +105,7 @@ const LoginPage = () => {
       } else {
         router.push(beforeLoginPath || PageLink.COURSES)
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const incorrectEmailAndPassword = ['400|010433', '400|010833']
@@ -155,7 +155,7 @@ const LoginPage = () => {
             setLoading(false)
           }, 1000)
         })
-    } catch (error: any) { }
+    } catch (error: any) {}
   }
 
   useEffect(() => {

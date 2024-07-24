@@ -39,6 +39,7 @@ import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import SAPPBorder from 'src/common/SAPPBorder'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import Layout from '@components/layout'
 
@@ -978,11 +979,8 @@ const ActivityPage = () => {
                       </button>
                     </div>
                     <div
-                      onClick={async () => {
-                        router.push({
-                          pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
-                        })
-                      }}
+                      // className="overflow-auto p-4 bg-white"
+                      style={{ height: 'calc(100% - 40px' }}
                       className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                     >
                       {/* <div className='flex flex-'> */}
