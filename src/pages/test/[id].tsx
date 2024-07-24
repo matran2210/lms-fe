@@ -1712,7 +1712,7 @@ const TestDetail = () => {
       )} */}
             <div>
               <div className="flex justify-between py-2 px-6 items-center bg-gray-3 relative z-50">
-                <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
+                <div className="text-lg-xl font-medium w-1/3 truncate">
                   {quizDetail?.name}
                 </div>
                 {quizDetail?.quiz_timed && (
@@ -1797,7 +1797,7 @@ const TestDetail = () => {
             {/* <div className=''> */}
             {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
               <div
-                className={`flex bg-gray-3 flex-1 overflow-auto text-bw-1`}
+                className={`flex bg-gray-3 flex-1 overflow-auto`}
                 id={'preview-question'}
               >
                 <div
@@ -2067,7 +2067,7 @@ const TestDetail = () => {
                     <div className="absolute h-full w-full  top-0 left-0 border">
                       <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
                         <div className="truncate">
-                          <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                          <span className="font-semibold text-base">{`Exhibit ${
                             (i ?? 0) + 1
                           }: `}</span>
                           {exhibitsDes?.name}
@@ -2294,7 +2294,7 @@ const TestDetail = () => {
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                   !currentTabContent.done && (
                     <div className="flex gap-1">
-                      <div className="hidden 3.5xl:block text-bw-1">
+                      <div className="hidden 3.5xl:block ">
                         Choose response option:
                       </div>
                       <button
@@ -2350,7 +2350,7 @@ const TestDetail = () => {
                     </div>
                   )}
                 <button
-                  className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 3xl:w-[150px] text-bw-1"
+                  className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 3xl:w-[150px] "
                   onClick={() => handleFlagQuestion(currentPage)}
                 >
                   <FlagIcon />
@@ -2377,7 +2377,7 @@ const TestDetail = () => {
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
                     <button
-                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
+                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 "
                       onClick={async () => {
                         const data = await getResult(currentTabContent)
                         confirmAnswer(
@@ -2395,7 +2395,7 @@ const TestDetail = () => {
                   ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
                     filteredTabs.length - 1 ? (
                     <button
-                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 text-bw-1"
+                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 "
                       onClick={() => {
                         const index = filteredTabs?.findIndex(
                           (e: any) => e.id === currentPage,
@@ -2412,7 +2412,7 @@ const TestDetail = () => {
                     </button>
                   ) : (
                     <button
-                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
+                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] "
                       onClick={() => {
                         handleConfirmEssay()
                       }}
@@ -2424,7 +2424,7 @@ const TestDetail = () => {
                   filteredTabs.findIndex((e: any) => e.id === currentPage) <
                     filteredTabs.length - 1 && (
                     <button
-                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] text-bw-1"
+                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] "
                       onClick={() => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
