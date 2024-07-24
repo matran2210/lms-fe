@@ -84,11 +84,13 @@ const LoginPage = () => {
       if (accessDeviceToken) {
         return accessDeviceToken
       }
-      const token = await getMessagingToken()
-      if (token) {
-        await AsyncStorage.setItem('firebaseDeviceToken', token)
+      if (window?.Notification?.permission !== 'denied') {
+        const token = await getMessagingToken()
+        if (token) {
+          await AsyncStorage.setItem('firebaseDeviceToken', token)
+        }
+        return token
       }
-      return token
     } catch (error) {
       return ''
     }

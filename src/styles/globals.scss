@@ -140,7 +140,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .editor-wrap {
-  @apply font-sans text-sm text-[#5e6278];
+  @apply font-sans;
   hr {
     @apply hidden;
   }

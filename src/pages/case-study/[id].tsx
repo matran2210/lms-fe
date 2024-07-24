@@ -7,10 +7,13 @@ import {
   UnHighLightIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import EditorReader from '@components/base/editor/EditorReader'
+import PDFViewer from '@components/base/pdf/pdf-viewer'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -19,12 +22,15 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -33,18 +39,12 @@ import {
   loadMoreQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
+import { IExhibit } from 'src/type/exhibit'
+import { CoursesAPI } from '../api/courses/index'
+import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-import useMousePosition from '@utils/hookMouseMove'
-import { CoursesAPI } from '../api/courses/index'
-import { TestAPI } from '../api/test'
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
-import PDFViewer from '@components/base/pdf/pdf-viewer'
-import { IExhibit } from 'src/type/exhibit'
-import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -790,7 +790,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           {/* Header */}
           <div className="h-full" ref={containerRef}>
             <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
-              <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
+              <div className="text-lg-xl font-medium w-1/3 truncate">
                 {topics?.case_study_name} - {topics?.name}
               </div>
               <ButtonCancelSubmit
@@ -1076,7 +1076,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     <div className="absolute h-full w-full  top-0 left-0 border">
                       <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
                         <div className="truncate">
-                          <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                          <span className="font-semibold text-base ">{`Exhibit ${
                             (i ?? 0) + 1
                           }: `}</span>
                           {exhibitsDes?.name}

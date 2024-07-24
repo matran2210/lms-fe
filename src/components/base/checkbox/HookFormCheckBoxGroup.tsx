@@ -102,7 +102,7 @@ const HookFormCheckBoxGroup = ({
             >
               {options.map((option, index) => {
                 let state: 'error' | 'default' | 'success' | undefined
-                let stateLabel: string = 'text-bw-1'
+                let stateLabel: string = ''
 
                 let checked: boolean = multiple
                   ? field.value?.includes(option.value.toString())
