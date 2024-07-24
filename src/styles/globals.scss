@@ -985,3 +985,20 @@ p a {
 .content-course div strong {
   @apply font-medium text-bw-1;
 }
+
+.sapp-custom--modal .ant-modal-content {
+  @apply bg-transparent max-w-none h-[100vh] w-[100vw];
+}
+
+.ant-modal.sapp-custom--modal {
+  width: -webkit-fill-available !important;
+  @apply max-w-none;
+}
+
+// .ant-modal-wrap.ant-modal-centered {
+//   @apply w-fit
+// }
+
+.tooltip-box div span p {
+  @apply mb-0 ml-2;
+}
