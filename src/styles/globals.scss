@@ -1004,3 +1004,12 @@ p a {
 .tooltip-box div span p {
   @apply mb-0 ml-2;
 }
+
+.videoContainer {
+  @apply h-auto w-full relative;
+}
+
+.loadingOverlay {
+  transform: translate(-50%, -50%);
+  @apply absolute top-[50%] left-[50%] text-bw-1 p-2.5 rounded-[5px] z-10;
+}

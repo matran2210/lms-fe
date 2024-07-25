@@ -1445,3 +1445,55 @@ export const IconFAQ = () => {
     </svg>
   )
 }
+
+export const LoadingIcon = ({
+  loading,
+  loadingPercentage,
+  stroke,
+}: {
+  loading?: boolean
+  loadingPercentage?: number
+  stroke?: '#ffffff' | '#404041'
+}) => {
+  return (
+    <svg
+      className="loader-video block absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2"
+      xmlns="http://www.w3.org/2000/svg"
+      width="85px"
+      height="85px"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid"
+    >
+      <circle
+        cx="50"
+        cy="50"
+        fill="none"
+        stroke={stroke}
+        strokeWidth="5"
+        r="47"
+        strokeDasharray="164.93361431346415 56.97787143782138"
+      >
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          repeatCount="indefinite"
+          dur="0.5s"
+          values="0 50 50;360 50 50"
+          keyTimes="0;1"
+        ></animateTransform>
+      </circle>
+      {loading && (
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          fill="#ffffff"
+          fontSize="14"
+          dy=".3em"
+        >
+          {loadingPercentage}%
+        </text>
+      )}
+    </svg>
+  )
+}
