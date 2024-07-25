@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useInfiniteQuery, useQuery } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import {
@@ -11,22 +11,31 @@ import {
   ISelect,
 } from 'src/type'
 
-const DEFAULT_PAGESIZE = 2
+const DEFAULT_PAGESIZE = 10
+
+const getNextPageFilterParam = (lastPage: any, pages: any) => {
+  return lastPage?.meta.page_index < lastPage.meta.total_pages
+    ? lastPage?.meta.page_index + 1
+    : undefined
+}
+
 const useSelectFilter = (courseId: string | string[] | undefined) => {
   const [selected, setSelected] = useState<ISelect | null>(null)
 
   const [sections, setSections] = useState<ISection[]>([])
-  const [subSections, setSubSections] = useState<ISection[]>([])
-  const [units, setUnits] = useState<ISection[]>([])
-  const [activities, setActivities] = useState<ISection[]>([])
-
   const [selectedSection, setSelectedSection] = useState<ISelect | null>(null)
+
+  const [subSections, setSubSections] = useState<ISection[]>([])
   const [selectedSubsection, setSelectedSubsection] = useState<ISelect | null>(
     null,
   )
+  const [units, setUnits] = useState<ISection[]>([])
   const [selectedUnit, setSelectedUnit] = useState<ISelect | null>(null)
+
+  const [activities, setActivities] = useState<ISection[]>([])
   const [selectedActivity, setSelectedActivity] = useState<ISelect | null>(null)
 
+  // Get Section List
   const getCourseSectionList = async (page: any) => {
     const { data, success }: IGetCourseSectionList =
       await CoursesAPI.getCourseSectionList(
@@ -36,94 +45,112 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
       )
 
     if (success) {
-      setSections([...data?.sections].reverse())
+      setSections((prev) => [...prev, ...[...data?.sections].reverse()])
       setSelectedSubsection(null)
       setSelectedUnit(null)
       setSelectedActivity(null)
     }
     return data
   }
-  // Get Section List
-  const { hasNextPage, fetchNextPage } = useInfiniteQuery({
+  const {
+    hasNextPage: hasNextSectionPage,
+    fetchNextPage: fetchNextSectionPage,
+  } = useInfiniteQuery({
     queryKey: [CourseKey.SectionList, selectedSection],
     queryFn: getCourseSectionList,
     enabled: !!courseId,
-    getNextPageParam: (lastPage: any, pages: any) => {
-      return lastPage?.meta.page_index < lastPage.meta.total_pages
-        ? lastPage.meta.page_index + 1
-        : undefined
-    },
+    getNextPageParam: getNextPageFilterParam,
   })
 
-  // Get Subsection List
-  useQuery({
-    queryKey: [CourseKey.SubsectionList, selectedSection],
-    queryFn: async () => {
-      try {
-        const { data, success }: IGetCourseSubSectionList =
-          await CoursesAPI.getCourseSubsectionList(
-            DEFAULT_PAGESIZE,
-            'CHAPTER',
-            selectedSection?.value,
-          )
+  // Get SubSection List
+  const getCourseSubsectionList = async (page: any) => {
+    try {
+      const { data, success }: IGetCourseSubSectionList =
+        await CoursesAPI.getCourseSubsectionList(
+          DEFAULT_PAGESIZE,
+          'CHAPTER',
+          selectedSection?.value,
+          '',
+          page.pageParam,
+        )
 
-        if (success) {
-          setSubSections([...data?.sections])
-          setSelectedUnit(null)
-          setSelectedActivity(null)
-        }
-        return data
-      } catch (err) {}
-    },
-    enabled: !!selectedSection && selectedSection.value !== '',
-  })
-
-  // Get Course Unit
-  useQuery({
-    queryKey: [CourseKey.UnitList, selectedSubsection],
-    queryFn: async () => {
-      try {
-        const { data, success }: IGetCourseUnitList =
-          await CoursesAPI.getCourseSubsectionList(
-            DEFAULT_PAGESIZE,
-            'UNIT',
-            selectedSubsection?.value,
-          )
-
-        if (success) {
-          setUnits([...data?.sections])
-          setSelectedActivity(null)
-          return data
-        }
-      } catch {
+      if (success) {
+        setSubSections((prev) => [...prev, ...[...data?.sections].reverse()])
         setSelectedUnit(null)
         setSelectedActivity(null)
       }
-    },
-    enabled: !!selectedSubsection,
+      return data
+    } catch (err) {}
+  }
+  const {
+    hasNextPage: hasNextSubsectionPage,
+    fetchNextPage: fetchNextSubsectionPage,
+  } = useInfiniteQuery({
+    queryKey: [CourseKey.SubsectionList, selectedSection],
+    queryFn: getCourseSubsectionList,
+    enabled: !!selectedSection && selectedSection.value !== '',
+    getNextPageParam: getNextPageFilterParam,
   })
 
-  // Get Course Activity
-  useQuery({
-    queryKey: [CourseKey.ActivityList, selectedUnit],
-    queryFn: async () => {
-      try {
-        const { data, success }: IGetCourseActivityList =
-          await CoursesAPI.getCourseSubsectionList(
-            DEFAULT_PAGESIZE,
-            'ACTIVITY',
-            selectedUnit?.value,
-          )
+  // Get Unit List
+  const getCourseUnitList = async (page: any) => {
+    try {
+      const { data, success }: IGetCourseUnitList =
+        await CoursesAPI.getCourseSubsectionList(
+          DEFAULT_PAGESIZE,
+          'UNIT',
+          selectedSubsection?.value,
+          '',
+          page.pageParam,
+        )
 
-        if (success) {
-          setActivities([...data?.sections])
-          return data
-        }
-      } catch {
+      if (success) {
+        setUnits((prev) => [...prev, ...[...data?.sections].reverse()])
         setSelectedActivity(null)
+        return data
       }
-    },
+    } catch {
+      setSelectedUnit(null)
+      setSelectedActivity(null)
+    }
+  }
+  const { hasNextPage: hasNextUnitPage, fetchNextPage: fetchNextUnitPage } =
+    useInfiniteQuery({
+      queryKey: [CourseKey.UnitList, selectedSubsection],
+      queryFn: getCourseUnitList,
+      enabled: !!selectedSubsection,
+      getNextPageParam: getNextPageFilterParam,
+    })
+
+  // Get Activity List
+  const getCourseActivityList = async (page: any) => {
+    try {
+      const { data, success }: IGetCourseActivityList =
+        await CoursesAPI.getCourseSubsectionList(
+          DEFAULT_PAGESIZE,
+          'ACTIVITY',
+          selectedUnit?.value,
+          '',
+          page.pageParam,
+        )
+
+      if (success) {
+        setActivities((prev) => [...prev, ...[...data?.sections].reverse()])
+        return data
+      }
+    } catch {
+      setSelectedActivity(null)
+    }
+  }
+
+  const {
+    hasNextPage: hasNextActivityPage,
+    fetchNextPage: fetchNextActivityPage,
+  } = useInfiniteQuery({
+    queryKey: [CourseKey.ActivityList, selectedUnit],
+    queryFn: getCourseActivityList,
     enabled: !!selectedUnit,
+    getNextPageParam: getNextPageFilterParam,
   })
 
   useEffect(() => {
@@ -144,19 +171,38 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
   return {
     selected,
     setSelected,
+
+    // Sections
     sections,
+    setSections,
     selectedSection,
     setSelectedSection,
+    hasNextSectionPage,
+    fetchNextSectionPage,
+
+    // Sub-Section
     subSections,
+    setSubSections,
     selectedSubsection,
     setSelectedSubsection,
+    hasNextSubsectionPage,
+    fetchNextSubsectionPage,
+
+    // Units
     units,
+    setUnits,
     selectedUnit,
     setSelectedUnit,
+    hasNextUnitPage,
+    fetchNextUnitPage,
+
+    // Activities
     activities,
+    setActivities,
     selectedActivity,
     setSelectedActivity,
-    fetchNextPage,
+    hasNextActivityPage,
+    fetchNextActivityPage,
   }
 }
 

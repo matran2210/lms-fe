@@ -1,42 +1,60 @@
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { ISection, ISelect } from 'src/type'
 
 interface IProps {
   setSelected: React.Dispatch<ISelect | null>
+
   sections: ISection[]
   selectedSection: ISelect | null
   setSelectedSection: React.Dispatch<ISelect | null>
+  fetchNextSectionPage: any
+  hasNextSectionPage: any
+
   subSections: ISection[]
   selectedSubsection: ISelect | null
   setSelectedSubsection: React.Dispatch<ISelect | null>
+  hasNextSubsectionPage: any
+  fetchNextSubsectionPage: any
+
   units: ISection[]
   selectedUnit: ISelect | null
   setSelectedUnit: React.Dispatch<ISelect | null>
+  hasNextUnitPage: any
+  fetchNextUnitPage: any
+
   activities: ISection[]
   selectedActivity: ISelect | null
   setSelectedActivity: React.Dispatch<ISelect | null>
-  fetchNextPage: any
+  hasNextActivityPage: any
+  fetchNextActivityPage: any
 }
 const ResultsTableFilter = ({
   setSelected,
+
   sections,
   selectedSection,
   setSelectedSection,
+  hasNextSectionPage,
+  fetchNextSectionPage,
+
   subSections,
   selectedSubsection,
   setSelectedSubsection,
+  hasNextSubsectionPage,
+  fetchNextSubsectionPage,
+
   units,
   selectedUnit,
   setSelectedUnit,
+  hasNextUnitPage,
+  fetchNextUnitPage,
+
   activities,
   selectedActivity,
   setSelectedActivity,
-  fetchNextPage,
+  hasNextActivityPage,
+  fetchNextActivityPage,
 }: IProps) => {
-  const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
-
   return (
     <>
       {/* Section */}
@@ -57,6 +75,7 @@ const ResultsTableFilter = ({
               }))
             : []
         }
+        onMenuScrollToBottom={hasNextSectionPage && fetchNextSectionPage}
       />
 
       {/* SubSection */}
@@ -78,6 +97,7 @@ const ResultsTableFilter = ({
             : []
         }
         isDisabled={selectedSection === null || selectedSection?.value === ''}
+        onMenuScrollToBottom={hasNextSubsectionPage && fetchNextSubsectionPage}
       />
 
       {/* Unit */}
@@ -99,6 +119,7 @@ const ResultsTableFilter = ({
             : []
         }
         isDisabled={selectedSubsection === null}
+        onMenuScrollToBottom={hasNextUnitPage && fetchNextUnitPage}
       />
 
       {/* Activity */}
@@ -120,6 +141,7 @@ const ResultsTableFilter = ({
             : []
         }
         isDisabled={selectedUnit === null}
+        onMenuScrollToBottom={hasNextActivityPage && fetchNextActivityPage}
       />
     </>
   )

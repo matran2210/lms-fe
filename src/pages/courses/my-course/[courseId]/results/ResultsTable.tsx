@@ -15,8 +15,26 @@ interface Iprops {
   courseId: string
 }
 
+const commonDataCellStyle = 'text-start py-5'
+const commonHeaderCellStyle =
+  'text-left text-medium-sm text-gray-1 font-semibold pb-3'
+const headers = [
+  'Name',
+  'Belong To',
+  'Type',
+  'Grade',
+  'Time Spent',
+  'Last submission',
+].map((label) => ({ label, className: commonHeaderCellStyle }))
+
 const ResultsTable = ({ courseId }: Iprops) => {
   const router = useRouter()
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(10)
+
+  /**
+   * Filter
+   */
   const selectFilterProp = useSelectFilter(router.query.courseId)
   const {
     selected,
@@ -25,9 +43,6 @@ const ResultsTable = ({ courseId }: Iprops) => {
     selectedUnit,
     selectedActivity,
   } = selectFilterProp
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(10)
-
   /**
    * @description config params khi filter
    */
@@ -43,6 +58,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
     isLoading,
     isSuccess,
   } = useQuery({
+    // Fetch lại data khi filter thay đổi
     queryKey: [
       CourseKey.ResultsList,
       currentPage,
@@ -65,18 +81,6 @@ const ResultsTable = ({ courseId }: Iprops) => {
       return data.data
     },
   })
-
-  const commonDataCellStyle = 'text-start py-5'
-  const commonHeaderCellStyle =
-    'text-left text-medium-sm text-gray-1 font-semibold pb-3'
-  const headers = [
-    'Name',
-    'Belong To',
-    'Type',
-    'Grade',
-    'Time Spent',
-    'Last submission',
-  ].map((label) => ({ label, className: commonHeaderCellStyle }))
 
   isLoading && <></>
 
