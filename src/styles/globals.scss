@@ -942,11 +942,13 @@ p a {
   font-family: 'Roboto', sans-serif !important;
 }
 
-#hubspot-messages-iframe-container.visible-icon iframe {
+#hubspot-messages-iframe-container.visible-icon iframe,
+#hubspot-messages-iframe-container .visible-icon {
   display: none !important;
 }
 
-#hubspot-messages-iframe-container.visible-icon {
+#hubspot-messages-iframe-container.visible-icon,
+#hubspot-messages-iframe-container .visible-icon {
   position: inherit !important;
 }
 
