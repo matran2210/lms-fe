@@ -180,9 +180,21 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     '/case-study/[id]',
     '/certificates/[id]',
   ]
+
   const showHelp = !excludedPathsHelp.some((path) =>
     router.pathname.includes(path),
   )
+
+  useEffect(() => {
+    const container = document.getElementById('hubspot-conversations-iframe')
+    if (container) {
+      if (!showHelp) {
+        container.classList.add('visible-icon')
+      } else {
+        container.classList.remove('visible-icon')
+      }
+    }
+  }, [showHelp])
 
   return (
     <main>
