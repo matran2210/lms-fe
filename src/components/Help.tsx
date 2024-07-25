@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import PopupSupportCenter from './PopupSupportCenter'
 import { getLocalStorgeActToken } from '@utils/index'
 
-const Help = () => {
+const Help = ({ showHelp }: { showHelp: boolean }) => {
   const [visible, setVisible] = useState(false)
 
   const handleVisibleChange = (newVisible: boolean) => {
@@ -20,7 +20,7 @@ const Help = () => {
 
   useEffect(() => {
     // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
-    if (getLocalStorgeActToken()) {
+    if (getLocalStorgeActToken() && showHelp) {
       // Tạo một thẻ script mới
       const scriptElement = document.createElement('script')
       scriptElement.type = 'text/javascript'
