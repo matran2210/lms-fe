@@ -175,6 +175,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     setDataStudent(undefined)
   }
 
+  const excludedPathsHelp = [
+    '/test/[id]',
+    '/case-study/[id]',
+    '/certificates/[id]',
+  ]
+  const showHelp = !excludedPathsHelp.some((path) =>
+    router.pathname.includes(path),
+  )
+
   return (
     <main>
       <PinnedNotifyProvider>
@@ -186,10 +195,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               <>
                 <PinnedNotifications />
                 <Component {...pageProps} />
-                {getActToken() && (
+                {getActToken() && showHelp && (
                   <>
                     <BackToTop />
-                    <Help />
+                    <Help showHelp={showHelp} />
                   </>
                 )}
                 <LearningNotesList />
