@@ -175,13 +175,13 @@ const SAPPVideo = ({
     return () => {
       if (player) {
         player.reset()
+        player.off(dashjs.MediaPlayer.events.PLAYBACK_SEEKING, () =>
+          setSeeking(true),
+        )
+        player.off(dashjs.MediaPlayer.events.PLAYBACK_SEEKED, () =>
+          setSeeking(false),
+        )
       }
-      player.off(dashjs.MediaPlayer.events.PLAYBACK_SEEKING, () =>
-        setSeeking(true),
-      )
-      player.off(dashjs.MediaPlayer.events.PLAYBACK_SEEKED, () =>
-        setSeeking(false),
-      )
     }
   }, [options?.src])
 
