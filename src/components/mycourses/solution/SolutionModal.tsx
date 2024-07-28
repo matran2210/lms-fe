@@ -3,6 +3,7 @@ import { Dispatch, FC, SetStateAction } from 'react'
 import Icon from '@components/icons'
 import HeadingSolution from './HeadingSolution'
 import SolutionModalContent from './SolutionModalContent'
+import { trackGAEvent } from '@utils/google-analytics'
 
 // define the props for the confirm dialog component
 export type EntrancePopupProps = {

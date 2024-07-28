@@ -1,5 +1,6 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
+import { trackGAEvent } from '@utils/google-analytics'
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -172,12 +173,14 @@ const ProfileSideBar = ({ page }: IProps) => {
                       // If not 'security', use existing logic
                       handleChildClick(childLabel)
                       setChildActivationStates({ security: false })
+                      trackGAEvent(`Click Button ${childLabel} My Profile`)
                     } else if (childActivationStates[childLabel] === false) {
                       // If 'security' and not a child, set only 'security' to active
                       setChildActivationStates({ security: true })
                     } else if (urlPage === 'security') {
                       onClickExpand()
                       setChildActivationStates({ security: true })
+                      trackGAEvent(`Click Button Security My Profile`)
                     }
                   }}
                 >

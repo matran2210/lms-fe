@@ -1,26 +1,27 @@
-import { AlertIcon, AlertTriagle } from '@assets/icons'
+import { AlertTriagle } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
-import { TimeIcon } from '@components/icons'
-import { useEffect } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
+import { trackGAEvent } from '@utils/google-analytics'
+import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
-  setOpen: any
-  handleQuit: any
-  handleCancel: any
+  setOpen: Dispatch<SetStateAction<boolean>>
+  handleQuit: () => void
+  handleCancel: () => void
 }
 const QuitTestModal = ({ open, setOpen, handleQuit, handleCancel }: IProps) => {
   const onSubmit = () => {
     setOpen(false)
     handleQuit()
-    // handleSubmit()
-    //to do: start test
+    trackGAEvent('Click Button Quit Modal Test')
   }
+
   const onCancel = () => {
     handleCancel()
     setOpen(false)
+    trackGAEvent('Click Button Cancel Modal Test')
   }
+
   return (
     <SappModal
       open={open}
