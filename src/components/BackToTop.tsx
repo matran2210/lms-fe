@@ -1,5 +1,6 @@
 /* eslint-disable */
 
+import { trackGAEvent } from '@utils/google-analytics'
 import React, { useState, useEffect } from 'react'
 
 const BackToTop = () => {
@@ -43,6 +44,7 @@ const BackToTop = () => {
       top: 0,
       behavior: 'smooth',
     })
+    trackGAEvent('Click Button Back To Top')
   }
 
   useEffect(() => {

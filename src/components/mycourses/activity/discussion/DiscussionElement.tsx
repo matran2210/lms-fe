@@ -1,6 +1,8 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { VerifiedIcon } from '@components/icons'
+import { trackGAEvent } from '@utils/google-analytics'
 import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'
 import { SetStateAction, useEffect, useState } from 'react'
@@ -91,14 +93,17 @@ function DiscussionElement({
   const handleEdit = () => {
     setEditValue(discussionContent)
     setIsEdit(true)
+    trackGAEvent('Click Edit Comment Activity')
   }
 
   const handleCancelEdit = () => {
     setIsEdit(false)
+    trackGAEvent('Click Cancel Edit Comment Activity')
   }
 
   const handleDeleteComment = () => {
     setIsDelete(true)
+    trackGAEvent('Click Delete Comment Activity')
   }
 
   useEffect(() => {
@@ -182,9 +187,10 @@ function DiscussionElement({
                   className={`${
                     discussion?.id === idReply ? 'text-primary' : ''
                   } select-none`}
-                  onClick={() =>
+                  onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id)
-                  }
+                    trackGAEvent('Click Reply Comment Activity')
+                  }}
                 >
                   Reply
                 </div>

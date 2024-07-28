@@ -7,6 +7,7 @@ import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface IProps {
   notifyLists: any[]
@@ -63,6 +64,7 @@ const NotifyList = ({
                   notifyItem?.content,
                   (e?.target as HTMLElement)?.tagName,
                 )
+                trackGAEvent('Click Open Modal Notification')
               }}
               data-aos={ANIMATION.DATA_AOS}
             >

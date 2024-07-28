@@ -77,10 +77,11 @@ interface Answer {
 }
 
 import { QuestionAPI } from '../api/question'
+import { trackGAEvent } from '@utils/google-analytics'
 
-type Window = {
-  userAgreed: any
-}
+// type Window = {
+//   userAgreed: any
+// }
 interface ScratchPadValue {
   id: string
   value: string
@@ -2163,6 +2164,7 @@ const TestDetail = () => {
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)
+                    trackGAEvent('Click Button Highlight Test')
                   }}
                 >
                   <ButtonContent icon={<HighlightIcon />} content="Highlight" />
@@ -2172,6 +2174,7 @@ const TestDetail = () => {
                   onClick={() => {
                     setAllowUnHighLight(!allowUnHighLight),
                       setAllowHighLight(false)
+                    trackGAEvent('Click Button Unhighlight Test')
                   }}
                 >
                   <ButtonContent
@@ -2181,18 +2184,24 @@ const TestDetail = () => {
                 </button>
                 <button
                   className="h-full"
-                  onClick={() => handleOpenScratchPad('scratch_pad')}
+                  onClick={() => {
+                    handleOpenScratchPad('scratch_pad')
+                    trackGAEvent('Click Button ScratchPad Test')
+                  }}
                 >
                   <ButtonContent
                     icon={<ScratchPadIcon />}
-                    content="ScratchPadIcon"
+                    content="ScratchPad"
                   />
                 </button>
                 <button
                   className={`h-full ${
                     checkCalExist > -1 && 'sapp-disable-button'
                   }`}
-                  onClick={() => handleOpenScratchPad('calculator')}
+                  onClick={() => {
+                    handleOpenScratchPad('calculator')
+                    trackGAEvent('Click Button Calculator Test')
+                  }}
                   disabled={checkCalExist > -1}
                 >
                   <ButtonContent
@@ -2351,7 +2360,10 @@ const TestDetail = () => {
                   )}
                 <button
                   className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 3xl:w-[150px] "
-                  onClick={() => handleFlagQuestion(currentPage)}
+                  onClick={() => {
+                    handleFlagQuestion(currentPage)
+                    trackGAEvent('Click Button Flag To Review Test')
+                  }}
                 >
                   <FlagIcon />
                   <div className="font-medium text-medium-sm hidden lg:block">
@@ -2365,7 +2377,10 @@ const TestDetail = () => {
                       ? 'border-gray-1 text-bw-1'
                       : 'border-default text-gray-2'
                   } justify-center p-1 w-[150px] py-2`}
-                  onClick={() => handleClearSelection(currentTabContent)}
+                  onClick={() => {
+                    handleClearSelection(currentTabContent)
+                    trackGAEvent('Click Button Clear Selection Test')
+                  }}
                 >
                   <div className="font-medium text-medium-sm">
                     Clear Selection
@@ -2386,6 +2401,7 @@ const TestDetail = () => {
                           currentTabContent,
                           data?.isSelfReflection,
                         )
+                        trackGAEvent('Click Button Confirm Answer Test')
                       }}
                     >
                       <div className="font-medium text-medium-sm">
@@ -2404,6 +2420,7 @@ const TestDetail = () => {
                           currentPage,
                           filteredTabs[index + 1].id,
                         )
+                        trackGAEvent('Click Button Confirm & Next Test')
                       }}
                     >
                       <div className="font-medium text-medium-sm">
@@ -2415,6 +2432,7 @@ const TestDetail = () => {
                       className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] "
                       onClick={() => {
                         handleConfirmEssay()
+                        trackGAEvent('Click Button Confirm Test')
                       }}
                     >
                       <div className="font-medium text-medium-sm">Confirm</div>
@@ -2465,9 +2483,11 @@ const TestDetail = () => {
                         setSubmitTest(true)
                       }
                     }
+                    trackGAEvent('Click Button Submit Time Out Test')
                   })
               }}
               handleQuit={() => {
+                trackGAEvent('Click Button Quit Time Out Test')
                 router.back()
               }}
             />

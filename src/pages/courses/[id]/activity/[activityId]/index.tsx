@@ -42,6 +42,7 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import Layout from '@components/layout'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -500,6 +501,7 @@ const ActivityPage = () => {
                 href="/courses"
                 className="breadcrumbs__link"
                 scroll={false}
+                onClick={() => trackGAEvent('Click Breadcrumb My Course')}
               >
                 My Course /
               </Link>
@@ -514,7 +516,14 @@ const ActivityPage = () => {
               </a>
             </Dropdown>
             <li className="text-bw-1">
-              <Link href={'#'} className="breadcrumbs__link" scroll={false}>
+              <Link
+                href={'#'}
+                className="breadcrumbs__link"
+                scroll={false}
+                onClick={() =>
+                  trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
+                }
+              >
                 <span>{nameActivity?.name}</span>
               </Link>
             </li>
@@ -612,7 +621,10 @@ const ActivityPage = () => {
                       className="py-2.5 !px-3 text-medium-sm !font-normal"
                       color={tabButtonColor(e?.id)}
                       title={truncateString(e?.name, 60)}
-                      onClick={() => handleChangeTab(e?.id)}
+                      onClick={() => {
+                        handleChangeTab(e?.id)
+                        trackGAEvent('Click Button Tab Activity')
+                      }}
                     ></SappButton>
                   )
                 })}
@@ -738,18 +750,22 @@ const ActivityPage = () => {
                                           e?.resource?.url,
                                           e?.resource?.name,
                                         )
+                                        trackGAEvent('Click Open File Resource')
                                       }}
                                     >
                                       {e?.resource?.name}
                                     </div>
                                   </div>
                                   <a
-                                    onClick={() =>
+                                    onClick={() => {
                                       download(
                                         e?.resource?.name,
                                         e?.resource?.file_key,
                                       )
-                                    }
+                                      trackGAEvent(
+                                        'Click Button Download Resource Activity',
+                                      )
+                                    }}
                                   >
                                     <DownloadIcon />
                                   </a>
@@ -767,9 +783,12 @@ const ActivityPage = () => {
                         <div className="w-auto">
                           <div className="relative">
                             <div
-                              onClick={() =>
+                              onClick={() => {
                                 handleChangeTab(getPreviousTabId() || '')
-                              }
+                                trackGAEvent(
+                                  'Click Button Previous Tab Activity',
+                                )
+                              }}
                               className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
                             >
                               <svg
@@ -795,9 +814,10 @@ const ActivityPage = () => {
                         <div className="w-auto relative ml-auto">
                           <div className="relative">
                             <div
-                              onClick={() =>
+                              onClick={() => {
                                 handleChangeTab(getNextTabId() || '')
-                              }
+                                trackGAEvent('Click Button Next Tab Activity')
+                              }}
                               className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                             >
                               Next Tab
@@ -852,6 +872,7 @@ const ActivityPage = () => {
                           router.push({
                             pathname: `/courses/${router.query.id}/activity/${idPreviousActivity}`,
                           })
+                          trackGAEvent('Click Button Previous Activity')
                         }}
                         className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
                       >
@@ -901,6 +922,7 @@ const ActivityPage = () => {
                           router.push({
                             pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
                           })
+                          trackGAEvent('Click Button Next Activity')
                         }}
                         className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                       >

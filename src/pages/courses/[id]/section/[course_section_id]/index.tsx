@@ -14,6 +14,7 @@ import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import Layout from '@components/layout'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface IProps {
   course_section_type: string
@@ -323,16 +324,20 @@ const CoursePartDetail = () => {
           <div className="w-full">
             <div className="flex pt-6 items-center">
               <span
-                onClick={() => router.push('/courses')}
+                onClick={() => {
+                  router.push('/courses')
+                  trackGAEvent('Click Breadcrumb My Course')
+                }}
                 className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
               >
                 My Course
               </span>
               <span
                 className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
-                onClick={() =>
+                onClick={() => {
                   router.push(`/courses/my-course/${router.query.id}`)
-                }
+                  trackGAEvent('Click Breadcrumb My Course Detail')
+                }}
               >
                 /
                 <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
