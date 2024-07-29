@@ -106,6 +106,9 @@ module.exports = {
         pinned: {
           1: '#18355D',
         },
+		support: {
+          1: '#33475B'
+        }
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
