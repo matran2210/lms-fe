@@ -53,7 +53,7 @@ function PinnedNotifications() {
                                 pinnedNotifications?.data?.content
                               }
                               pinned
-                              className="overflow-hidden text-clip whitespace-nowrap"
+                              className="overflow-hidden text-clip whitespace-nowrap w-max"
                             />
                           </p>
                         </div>
