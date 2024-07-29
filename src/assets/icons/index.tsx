@@ -1400,7 +1400,7 @@ export const IconClose = () => {
       width="32"
       height="32"
       viewBox="0 0 32 32"
-      fill="none"					
+      fill="none"
     >
       <g clip-path="url(#clip0_14517_6157)">
         <path
