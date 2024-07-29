@@ -41,7 +41,7 @@ function PinnedNotifications() {
                       <div className="text-center content-center flex items-center">
                         <IconLoudSpeaker />
                       </div>
-                      <div className="flex flex-row items-center content-center 3xl:w-full sm:w-[800px] w-[225px]">
+                      <div className="flex flex-row items-center content-center 3xl:w-[1250px] sm:w-[800px] w-[225px]">
                         <div
                           className={`${showPinNoti ? 'shadow-pinned overflow-hidden' : ''} ml-2`}
                         >
