@@ -831,16 +831,11 @@ p a {
   box-shadow:
     rgba(0, 0, 0, 0.1) 0px 1px 4px,
     rgba(0, 0, 0, 0.2) 0px 2px 12px;
-  animation: moveDown 0.3s ease-out forwards;
 }
 
 .sapp-pinned-noti-header {
   padding: 12px 24px 12px 233px;
   background: #18355d;
-}
-
-#floating-button.clicked {
-  animation: moveDown 0.3s ease-out forwards;
 }
 
 @keyframes moveDown {
@@ -957,8 +952,10 @@ p a {
   max-width: 90%;
 }
 
-#floating-button .plus:hover svg path {
-  @apply fill-white;
+
+#floating-button:hover, #close_icon:hover, #back-to-top:hover {
+  transition: transform 100ms ease-in-out 0s;
+  transform: scale(1.1);
 }
 
 .svg-container:hover path {
