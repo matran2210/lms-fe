@@ -947,7 +947,9 @@ p a {
   position: inherit !important;
 }
 
-#floating-button:hover, #close_icon:hover, #back-to-top:hover {
+#floating-button:hover,
+#close_icon:hover,
+#back-to-top:hover {
   transition: transform 100ms ease-in-out 0s;
   transform: scale(1.1);
 }
