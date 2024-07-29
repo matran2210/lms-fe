@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import Sidebar from '../Sidebar'
 import { useAppSelector } from 'src/redux/hook'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
+import { PageLink } from 'src/constants'
+import { useRouter } from 'next/router'
 
 type DashboardLayoutProps = {
   children: React.ReactNode
@@ -13,6 +15,7 @@ export default function DashboardLayout({
   children,
   openDrawer,
 }: DashboardLayoutProps) {
+  const router = useRouter()
   const [isOpened, setOpened] = useState(false)
   const toggleDrawer = () => {
     setOpened((prev) => !prev)
@@ -23,6 +26,14 @@ export default function DashboardLayout({
 
   const [openResource, setOpenResource] = useState(false)
 
+	const isEnablePinnedPages = [
+    PageLink.COURSES,
+    PageLink.USERPAGE,
+    PageLink.COURSE_DETAIL,
+    PageLink.COURSE_PART_DETAIL,
+    PageLink.COURSE_ACTIVITY
+  ].includes(router.pathname)
+
   return (
     <div className="flex flex-nowrap">
       <Sidebar
@@ -30,7 +41,7 @@ export default function DashboardLayout({
         toggleDrawer={toggleDrawer}
         className={`menu-sidebar-left fixed top-0 md:left-0 h-screen bg-white shadow-sidebar w-20 max-w-screen ${
           openDrawer ? 'opacity-5' : ''
-        } ${guideStatus ? '' : 'overflow-hidden'} ${openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
+        } ${guideStatus ? '' : 'overflow-hidden'} ${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
         setOpenResource={setOpenResource}
         openResource={openResource}
       />
@@ -38,7 +49,7 @@ export default function DashboardLayout({
         {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}
         {/* <div> */}
         <div
-          className={`${openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''} bg-gray-4 min-h-full`}
+          className={`${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''} bg-gray-4 min-h-full`}
         >
           <div className="ml-0 md:ml-20 sapp-loading">{children}</div>
         </div>

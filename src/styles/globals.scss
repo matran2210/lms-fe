@@ -947,12 +947,6 @@ p a {
   position: inherit !important;
 }
 
-.pinned-noti-marquee-parent {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  max-width: 90%;
-}
-
-
 #floating-button:hover, #close_icon:hover, #back-to-top:hover {
   transition: transform 100ms ease-in-out 0s;
   transform: scale(1.1);
@@ -969,6 +963,12 @@ p a {
 .pinned-noti-marquee-content {
   transform: translateX(100%);
   animation: scroll-left 50s linear infinite;
+}
+
+.pinned-noti-marquee-content:hover {
+  -moz-animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
 }
 
 @keyframes scroll-left {
