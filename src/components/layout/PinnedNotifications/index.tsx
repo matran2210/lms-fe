@@ -38,7 +38,7 @@ function PinnedNotifications() {
                 <Col span={21}>
                   <div className="flex flex-row justify-items-center h-12">
                     <div className="mx-auto flex flex-row">
-                      <div className="text-center content-center">
+                      <div className="text-center content-center flex items-center">
                         <IconLoudSpeaker />
                       </div>
                       <div className="flex flex-row items-center content-center 3xl:w-full sm:w-[800px] w-[225px]">
@@ -64,7 +64,7 @@ function PinnedNotifications() {
                 <Col span={1}>
                   <div
                     onClick={handleClosePinned}
-                    className="float-right pr-6 cursor-pointer h-full content-center"
+                    className="float-right pr-6 cursor-pointer h-full content-center flex items-center"
                   >
                     <CloseIconNote />
                   </div>
