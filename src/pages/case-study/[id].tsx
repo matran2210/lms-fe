@@ -1094,7 +1094,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                           exhibitsDes?.files?.length > 0 &&
                           exhibitsDes?.files?.map((e: any, index: number) => {
                             return (
-                              <div key={index} className="overflow-auto bg-white">
+                              <div
+                                key={index}
+                                className="overflow-auto bg-white"
+                              >
                                 <PDFViewer file={e?.resource?.url} />
                               </div>
                             )
