@@ -838,6 +838,11 @@ p a {
   background: #18355d;
 }
 
+.sapp-pinned-noti-header {
+  padding: 12px 24px 12px 233px;
+  @apply bg-bw-1;
+}
+
 @keyframes moveDown {
   0% {
     transform: translateY(-100%);
@@ -952,6 +957,10 @@ p a {
 #back-to-top:hover {
   transition: transform 100ms ease-in-out 0s;
   transform: scale(1.1);
+}
+
+#floating-button .plus:hover svg path {
+  @apply fill-white;
 }
 
 .svg-container:hover path {
