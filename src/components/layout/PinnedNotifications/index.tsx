@@ -41,9 +41,9 @@ function PinnedNotifications() {
                       <div className="text-center content-center flex items-center">
                         <IconLoudSpeaker />
                       </div>
-                      <div className="flex flex-row items-center content-center 3xl:w-[1250px] sm:w-[800px] w-[225px]">
+                      <div className="flex flex-row items-center content-center 3xl:w-[1250px] sm:w-[610px] w-[225px]">
                         <div
-                          className={`${showPinNoti ? 'shadow-pinned overflow-hidden' : ''} ml-2`}
+                          className={`${showPinNoti ? 'shadow-pinned overflow-hidden text-clip whitespace-nowrap' : ''} ml-2`}
                         >
                           <p
                             className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}
