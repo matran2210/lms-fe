@@ -959,10 +959,6 @@ p a {
   transform: scale(1.1);
 }
 
-#floating-button .plus:hover svg path {
-  @apply fill-white;
-}
-
 .svg-container:hover path {
   @apply fill-primary;
 }
