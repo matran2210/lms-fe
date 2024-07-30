@@ -1012,3 +1012,11 @@ p a {
   transform: translate(-50%, -50%);
   @apply absolute top-[50%] left-[50%] text-bw-1 p-2.5 rounded-[5px] z-10;
 }
+
+.hotline ins {
+  @apply no-underline cursor-default;
+}
+
+.fanpage ins {
+  @apply no-underline hover:underline;
+}
