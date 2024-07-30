@@ -81,7 +81,6 @@ export interface ICert {
   }
 }
 
-
 export interface PinnedNotifications {
   data: IPinned
 }

@@ -222,7 +222,10 @@ const Course = ({
 
   const handleCourseDetail = () => {
     router.push(`/courses/my-course/${classInstance?.id}`)
-    localStorage.setItem('courseDetail', `/courses/my-course/${classInstance?.id}`)
+    localStorage.setItem(
+      'courseDetail',
+      `/courses/my-course/${classInstance?.id}`,
+    )
   }
 
   const courseAction = () => {
@@ -249,9 +252,7 @@ const Course = ({
     } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
       setOpenClass(true)
     } else {
-      course.status !== CLASS_USER_STATUS.CANCELED
-        ? handleCourseDetail()
-        : {}
+      course.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
     }
   }
 
