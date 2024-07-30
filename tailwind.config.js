@@ -105,6 +105,9 @@ module.exports = {
         pinned: {
           1: '#18355D',
         },
+        support: {
+          1: '#33475B',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -139,7 +142,8 @@ module.exports = {
         'sidebar-tablet': '0px -2px 7px 0px #0000001A',
         pagination: '0px 2px 7px 0px #00000021',
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
-        livechat: 'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px'
+        livechat:
+          'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
       },
       minWidth: {
         4: '16px',

@@ -26,7 +26,7 @@ const PopupCert = ({ dataStudent, onCancel, open }: IProps) => {
     onCancel()
     router.push(localStorage.getItem('courseDetail') || '')
   }
-  
+
   return (
     <SappModalV2
       title={undefined}

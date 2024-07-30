@@ -2,9 +2,12 @@ import { CloseIconNote, IconLoudSpeaker } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { Col, Row } from 'antd'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { PageLink } from 'src/constants'
 
 function PinnedNotifications() {
+  const router = useRouter()
   const { openPinned, setOpenPinned, pinnedNotifications } =
     usePinnedNotifyContext()
 
@@ -15,39 +18,61 @@ function PinnedNotifications() {
 
   const showPinNoti = pinnedNotifications?.data?.content?.length > 200
 
+  const isEnablePinnedPages = [
+    PageLink.COURSES,
+    PageLink.USERPAGE,
+    PageLink.COURSE_DETAIL,
+    PageLink.COURSE_PART_DETAIL,
+    PageLink.COURSE_ACTIVITY,
+  ].includes(router.pathname)
+
   return (
     <React.Fragment>
-      {openPinned && pinnedNotifications?.data?.content && (
-        <React.Fragment>
-          <div className={`w-full bg-pinned-1 z-50 fixed h-12 text-white`}>
-            <Row className="flex flex-row">
-              <Col span={2}></Col>
-              <Col span={21}>
-                <div className="flex flex-row justify-items-center">
-                  <div className="mx-auto flex flex-row">
-                    <div className='py-4'><IconLoudSpeaker /></div>
-                    <div className='flex flex-row items-center'>
-                      <div className={`${showPinNoti ? 'shadow-pinned overflow-hidden h-12' : ''} ml-2`}>
-                        <p className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}>
-                          <EditorReader text_editor_content={pinnedNotifications?.data?.content} pinned/>
-                        </p>
+      {isEnablePinnedPages &&
+        openPinned &&
+        pinnedNotifications?.data?.content && (
+          <React.Fragment>
+            <div className={`w-full bg-support-1 z-50 fixed h-12 text-white`}>
+              <Row className="flex flex-row h-12">
+                <Col span={2}></Col>
+                <Col span={21}>
+                  <div className="flex flex-row justify-items-center h-12">
+                    <div className="mx-auto flex flex-row">
+                      <div className="text-center content-center flex items-center">
+                        <IconLoudSpeaker />
+                      </div>
+                      <div className="flex flex-row items-center content-center 3xl:w-[1250px] sm:w-[610px] w-[225px]">
+                        <div
+                          className={`${showPinNoti ? 'shadow-pinned overflow-hidden text-clip whitespace-nowrap' : ''} ml-2`}
+                        >
+                          <p
+                            className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}
+                          >
+                            <EditorReader
+                              text_editor_content={
+                                pinnedNotifications?.data?.content
+                              }
+                              pinned
+                              className="overflow-hidden text-clip whitespace-nowrap w-max"
+                            />
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Col>
-              <Col span={1}>
-                <div
-                  onClick={handleClosePinned}
-                  className="float-right pr-6 cursor-pointer py-4"
-                >
-                  <CloseIconNote />
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </React.Fragment>
-      )}
+                </Col>
+                <Col span={1}>
+                  <div
+                    onClick={handleClosePinned}
+                    className="float-right pr-6 cursor-pointer h-full content-center flex items-center"
+                  >
+                    <CloseIconNote />
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </React.Fragment>
+        )}
     </React.Fragment>
   )
 }
