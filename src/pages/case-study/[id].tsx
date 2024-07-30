@@ -1094,18 +1094,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                           exhibitsDes?.files?.length > 0 &&
                           exhibitsDes?.files?.map((e: any, index: number) => {
                             return (
-                              <div
-                                key={index}
-                                className="cursor-pointer text-state-info hover:underline"
-                                onClick={() =>
-                                  handleOpenScratchPad(
-                                    'file',
-                                    e?.resource?.url,
-                                    e?.resource?.name,
-                                  )
-                                }
-                              >
-                                {e?.resource?.name}
+                              <div key={index} className="overflow-auto bg-white">
+                                <PDFViewer file={e?.resource?.url} />
                               </div>
                             )
                           })}
