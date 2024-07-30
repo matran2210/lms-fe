@@ -2,7 +2,7 @@ import QuizResult from 'entrance-test-result-package'
 import 'entrance-test-result-package/dist/index.css'
 import { useRouter } from 'next/router'
 import { CloseIcon } from '@assets/icons'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { useGetDataQuery } from '@utils/index'
@@ -30,9 +30,7 @@ const TestEntranceResult = () => {
         <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>
           <div
             className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
-            onClick={() => {
-              router.back()
-            }}
+            onClick={() => router.push(PageLink.ENTRANCE_TEST)}
           >
             <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
           </div>
