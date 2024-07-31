@@ -14,7 +14,7 @@ interface IProps {
 
 const ChartCFAScore = ({ data }: IProps) => {
   return (
-    <div className="block overflow-x-auto">
+    <div className="block dashboard-scroll-x dashboard-scroll-y">
       <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
         Your Performance by Topic Area
       </div>
@@ -27,7 +27,7 @@ const ChartCFAScore = ({ data }: IProps) => {
           <div
             className="flex items-center min-w-full mt-10"
             style={{
-              width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`,
+              width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`
             }}
           >
             <span className="text-medium-sm text-bw-1 font-normal pr-7">
@@ -38,7 +38,7 @@ const ChartCFAScore = ({ data }: IProps) => {
           <div
             className="flex items-center min-w-full mt-4"
             style={{
-              width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`,
+              width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`
             }}
           >
             <span className="text-medium-sm text-bw-1 font-normal pr-7">
@@ -67,7 +67,7 @@ const ChartCFAScore = ({ data }: IProps) => {
                       bottom: `${
                         (item?.total_correct_answers / item?.total_questions) *
                         100
-                      }%`,
+                      }%`
                     }}
                   ></div>
                 </div>
@@ -76,7 +76,7 @@ const ChartCFAScore = ({ data }: IProps) => {
                 </div>
                 <div className="text-medium-sm text-gray-1 font-normal">
                   {`${roundNumber(
-                    (item?.total_questions / item?.total_quiz_questions) * 100,
+                    (item?.total_questions / item?.total_quiz_questions) * 100
                   )}%`}
                 </div>
               </div>

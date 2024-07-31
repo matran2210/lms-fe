@@ -106,9 +106,12 @@ module.exports = {
         pinned: {
           1: '#18355D',
         },
-        support: {
-          1: '#33475B',
+        black: {
+          1: '#050505'
         },
+        support: {
+          1: '#33475B'
+        }
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -120,6 +123,7 @@ module.exports = {
         'gray-2': '#F1F1F1',
         'gray-3': '#F8F8F8',
         'gray-4': '#F3F3F3',
+		    'pinned-1': '#18355D',				  
         active: '#FFB800',
         dark: '#1C2039',
       },

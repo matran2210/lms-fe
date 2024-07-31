@@ -13,11 +13,11 @@ interface IProps {
 
 const ChartACCAScore = ({ data }: IProps) => {
   return (
-    <div className="block bg-white xl:mb-6 mb-4 pt-6 pb-5 pr-5 pl-6 xl:pl-[99px] shadow-sidebar max-w-[1144px] h-[161.8px] overflow-y-scroll">
-      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-5">
-        Your Score by Topic
+    <div className="block bg-white xl:mb-6 mb-4 pr-5 pl-6 xl:pl-[99px] shadow-sidebar max-w-[1144px] h-[152px] dashboard-scroll-x dashboard-scroll-y">
+      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 pt-6 pb-4">
+        Multiple Choice Score by Part
       </div>
-      <div className="w-full overflow-x-auto pb-3">
+      <div className="w-full dashboard-scroll-x dashboard-scroll-y pb-3">
         <div className="flex flex-row gap-14 flex-start">
           {data?.map((item: any) => (
             <div

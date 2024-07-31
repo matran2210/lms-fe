@@ -22,7 +22,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
           <li className="flex items-center gap-0.5 text-medium-sm" key={index}>
             {index !== tabs.length - 1 ? (
               <>
-                {tab.link ? (
+                {tab.link && !tab?.disable ? (
                   <Link href={tab.link}>
                     <a
                       className={`w-fit max-w-[210px] line-clamp-1 ${

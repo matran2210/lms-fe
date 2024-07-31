@@ -6,17 +6,21 @@ import React, { useRef, useState } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
+import { IconAnnotationGuide } from '@assets/icons'
+import { IAnswer } from 'src/type/quiz/quiz'
 
 interface MultipleQuestionProps {
   questions: any
   className?: string
   multipleQuestionRef?: React.RefObject<HTMLDivElement>
+  setOpenAnnotaion: (open: boolean) => void
 }
 
 const MultipleQuestion = ({
   questions,
   className,
   multipleQuestionRef,
+  setOpenAnnotaion,
 }: MultipleQuestionProps) => {
   const router = useRouter()
   const [showMore, setShowMore] = useState<boolean>(false)
@@ -46,8 +50,19 @@ const MultipleQuestion = ({
     }
   }
 
+  const renderBoxesAndLineClass = (type: string, data: IAnswer) => {
+    if (type === 'Constructed Questions') {
+      return data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
+        ? ' text-pinned-1 border-pinned-1'
+        : ' text-gray-1 border-gray-1'
+    }
+    return data?.is_correct
+      ? ' text-state-success border-success'
+      : ' text-state-error border-error'
+  }
+
   const renderBoxes = (type: string, data: any, totalBefore: number) => {
-    const renderBoxItems = data?.map((item: any, index: number) => {
+    const renderBoxItems = data?.map((item: IAnswer, index: number) => {
       return (
         <div
           key={item?.id}
@@ -55,11 +70,7 @@ const MultipleQuestion = ({
             router.push(`/explanation/${item?.id}?title=My Course`)
           }}
           className={`border border-solid flex items-center flex-row justify-center w-10 xl:w-12 h-10 xl:h-12 text-sm font-medium leading-8.5 cursor-pointer
-          ${
-            item?.is_correct || item?.active === 'SUBMITED'
-              ? ' text-state-success border-success'
-              : ' text-state-error border-error'
-          }
+            ${renderBoxesAndLineClass(type, item)}
           `}
         >
           {index + totalBefore + 1}
@@ -76,7 +87,7 @@ const MultipleQuestion = ({
             </div>
             <div
               className={`flex flex-row items-center flex-wrap gap-3 w-full ${
-                type === 'Multiple Questions' ? 'mb-10' : ''
+                type === 'Multiple Choice Questions' ? 'mb-10' : ''
               }`}
             >
               {renderBoxItems}
@@ -88,7 +99,7 @@ const MultipleQuestion = ({
   }
 
   const renderLines = (type: string, data: any, totalBefore: number) => {
-    const renderBoxItems = data?.map((item: any, index: number) => {
+    const renderBoxItems = data?.map((item: IAnswer, index: number) => {
       return (
         <div
           key={item?.id}
@@ -96,11 +107,7 @@ const MultipleQuestion = ({
             router.push(`/explanation/${item?.id}?title=My Course`)
           }}
           className={`border border-solid flex items-center flex-row justify-center w-10 xl:w-12 h-10 xl:h-12 text-sm font-medium leading-8.5 cursor-pointer
-          ${
-            item?.is_correct || item?.active === 'SUBMITED'
-              ? ' text-state-success border-success'
-              : ' text-state-error border-error'
-          }
+            ${renderBoxesAndLineClass(type, item)}
           `}
         >
           {index + totalBefore + 1}
@@ -143,7 +150,7 @@ const MultipleQuestion = ({
       >
         <div className="flex flex-col w-full items-start">
           {renderBoxes(
-            'Multiple Questions',
+            'Multiple Choice Questions',
             questions?.selectedResponseAnswers ?? [],
             0,
           )}
@@ -162,23 +169,16 @@ const MultipleQuestion = ({
               : '3.75xl:border-t pt-0 3.75xl:pt-6'
           }`}
         >
-          <div className="hidden 3.75xl:flex items-center mr-6 w-20">
-            <Icon
-              type={'circle'}
-              className="w-4 h-4 text-state-success mr-1.5"
-            />
-            <span className="text-base leading-6.2 text-state-success font-normal">
-              Correct
-            </span>
-          </div>
-          <div className="hidden 3.75xl:flex items-center mr-4 w-20">
-            <Icon
-              type={'circle'}
-              className="w-4 h-4 text-state-error mr-1.5 shrink-0"
-            />
-            <span className="text-base leading-6.2 text-state-error font-normal">
-              Incorrect
-            </span>
+          <div
+            className="flex flex-row text-center cursor-pointer pr-2"
+            onClick={() => setOpenAnnotaion(true)}
+          >
+            <div className="my-auto">
+              <IconAnnotationGuide />
+            </div>
+            <div className="text-xs text-gray-1 font-normal ml-1 my-auto">
+              Annotation Guide
+            </div>
           </div>
           <div
             ref={elementRef as React.LegacyRef<HTMLDivElement>}
@@ -191,7 +191,7 @@ const MultipleQuestion = ({
             } w-full flex gap-3 overflow-x-auto duration-300 block 3.75xl:hidden !max-h-[1040px]`}
           >
             {renderLines(
-              'Multiple Questions',
+              'Multiple Choice Questions',
               questions?.selectedResponseAnswers ?? [],
               0,
             )}

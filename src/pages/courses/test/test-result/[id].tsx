@@ -51,18 +51,22 @@ const TestResultDetail = () => {
     {
       link: '/courses',
       title: 'Courses',
+	    disable: false			
     },
     {
       link: `/courses/my-course/${questions?.class_id ?? ''}`,
       title: `${questions?.course?.name ?? 'Course Detail'}`,
+		  disable: false			
     },
     {
       link: linkTest,
       title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+		  disable: true		   
     },
     {
       link: '/',
       title: 'Results',
+	    disable: false
     },
   ]
 
