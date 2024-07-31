@@ -11,10 +11,10 @@ const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
   const PDFViewer = dynamic(() => import('../pdf/pdf-viewer'), {
     ssr: false,
   })
-  const onSubmit = () => {
-    setOpen({ status: false, url: undefined })
-    //to do: start test
-  }
+  // const onSubmit = () => {
+  //   setOpen({ status: false, url: undefined })
+  //   //to do: start test
+  // }
   const onCancel = () => {
     setOpen({ status: false, url: undefined })
   }

@@ -8,6 +8,7 @@ import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
 import 'src/utils/global.d.ts'
 import { isUndefined } from 'lodash'
+import clsx from 'clsx'
 
 type Props = {
   text_editor_content: string | undefined
@@ -30,7 +31,7 @@ const EditorReader = ({
   highlighted,
   options,
   highlighArea = 'hightlight_area',
-  pinned
+  pinned,
 }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
@@ -196,7 +197,7 @@ const EditorReader = ({
         }
       })
     }
-  }, [])
+  })
 
   return (
     <>
@@ -206,7 +207,10 @@ const EditorReader = ({
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
       >
-        <div ref={extenalRef || refDocument} className={`${pinned ? 'text-white pt-2' : 'text-bw-1'}`}>
+        <div
+          ref={extenalRef || refDocument}
+          className={clsx({ 'text-white pt-2': pinned })}
+        >
           {parseHTML(
             replaceTextAlignCenterToWebKitCenter(content || ''),
             options,

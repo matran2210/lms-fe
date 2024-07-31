@@ -7,13 +7,14 @@ import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import dashboard from 'src/assets/images/dashboard.png'
 import Image from 'next/image'
+import Layout from '@components/layout'
 
 const Dashboard = () => {
   const router = useRouter()
   const { user } = useAppSelector(userReducer)
 
   return (
-    <React.Fragment>
+    <Layout title="Dashboard">
       <div className="header bg-white border-b border-default px-4 lg:px-20">
         <div className="max-w-xxl my-0 mx-auto flex py-4.5">
           <SearchForm
@@ -61,7 +62,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </Layout>
   )
 }
 

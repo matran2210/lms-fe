@@ -22,7 +22,7 @@ const ProfileContent = ({
   setReViewImageSrc,
 }: IProps) => {
   return (
-    <div className="bg-white p-6 flex-1 shadow-box">
+    <div className="bg-white p-6 pt-4 flex-1 shadow-box">
       {page === 'myprofile' && (
         <MyProfile
           isEdit={isEdit}

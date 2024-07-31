@@ -66,8 +66,8 @@ const TinyEditor = ({
   //   }>({
   //     status: false,
   //   })
-  const [openPreviewImage, setOpenPreviewImage] = useState<boolean>(false)
-  const [previewImage, setPreviewImage] = useState<string>()
+  // const [openPreviewImage, setOpenPreviewImage] = useState<boolean>(false)
+  // const [previewImage, setPreviewImage] = useState<string>()
   //   const acceptVideo = VALID_UPLOAD_EDITOR_VIDEO
   //   const acceptImage = VALID_UPLOAD_EDITOR_IMAGE
   //   const handleSelectFile = async (e: any) => {

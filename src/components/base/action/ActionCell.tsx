@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { Dispatch, ReactNode, SetStateAction, useRef } from 'react'
 import Icon from '@components/icons'
 import useClickOutside from '../clickoutside/HookClick'
 

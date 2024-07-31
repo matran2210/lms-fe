@@ -1,5 +1,6 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
+import { trackGAEvent } from '@utils/google-analytics'
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -62,13 +63,10 @@ const ProfileSideBar = ({ page }: IProps) => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser())
-      .then(() => {
+      await dispatch(getLogoutUser()).then(() => {
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')
-          removeLocalStorageItem('openPinned')
-          removeLocalStorageItem('pinnedStatus')
         }
       })
       // router.push(PageLink.AUTH_LOGIN)
@@ -175,12 +173,14 @@ const ProfileSideBar = ({ page }: IProps) => {
                       // If not 'security', use existing logic
                       handleChildClick(childLabel)
                       setChildActivationStates({ security: false })
+                      trackGAEvent(`Click Button ${childLabel} My Profile`)
                     } else if (childActivationStates[childLabel] === false) {
                       // If 'security' and not a child, set only 'security' to active
                       setChildActivationStates({ security: true })
                     } else if (urlPage === 'security') {
                       onClickExpand()
                       setChildActivationStates({ security: true })
+                      trackGAEvent(`Click Button Security My Profile`)
                     }
                   }}
                 >
@@ -245,7 +245,7 @@ const ProfileSideBar = ({ page }: IProps) => {
           </li>
         </div>
         <div className="text-center text-sm font-normal text-gray-1">
-          LMS Pro Version 1.4.0
+          LMS Pro Version 1.5.0
         </div>
       </ul>
     </div>

@@ -10,6 +10,7 @@ import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
 import { removeJwtToken } from '@utils/index'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 
 const schema = z.object({
   email: z
@@ -51,31 +52,25 @@ const ForgotPasswordPage = () => {
   }
 
   return (
-    <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
-          Forgot Password
-        </div>
-        <span className="text-medium-sm text-gray-1 mb-10">
-          Enter the email you used to create your account so we can send you 6
-          digits code to reset your password.
-        </span>
-        <div className="md:mt-15 mt-8">
-          <HookFormTextField
-            name="email"
-            control={control}
-            textSize="sm"
-            placeholder="Email"
-          ></HookFormTextField>
-        </div>
-        {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
-        <SappButton
-          title="Send"
-          size="lager"
-          type="submit"
-          className="w-full mt-[27px] !font-semibold"
-        ></SappButton>
-        <div className="mt-8">
+    <SingleDialogLayout title="Forgot Password">
+      <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
+            Forgot Password
+          </div>
+          <span className="text-medium-sm text-gray-1 mb-10">
+            Enter the email you used to create your account so we can send you 6
+            digits code to reset your password.
+          </span>
+          <div className="md:mt-15 mt-8">
+            <HookFormTextField
+              name="email"
+              control={control}
+              textSize="sm"
+              placeholder="Email"
+            ></HookFormTextField>
+          </div>
+          {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
           <SappButton
             title="Back to Login"
             size="lager"
@@ -86,9 +81,9 @@ const ForgotPasswordPage = () => {
             isPadding={false}
             onClick={redirectLogin}
           ></SappButton>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </SingleDialogLayout>
   )
 }
 

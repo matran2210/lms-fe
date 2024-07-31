@@ -5,11 +5,7 @@ type Props = {
 }
 
 const TextDocument = ({ text_editor_content }: Props) => {
-  return (
-    <>
-      <EditorReader text_editor_content={text_editor_content}></EditorReader>
-    </>
-  )
+  return <EditorReader text_editor_content={text_editor_content}></EditorReader>
 }
 
 export default TextDocument

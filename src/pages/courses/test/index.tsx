@@ -1,6 +1,7 @@
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
 import { TEST_TYPE } from '@utils/constants'
+import { trackGAEvent } from '@utils/google-analytics'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -23,6 +24,13 @@ const TestModal = ({
 }: IProps) => {
   const router = useRouter()
 
+  const checkFinished = useMemo(() => {
+    if (data?.quiz?.attempt) {
+      return true
+    }
+    return false
+  }, [data?.quiz?.attempt])
+
   const onSubmit = async () => {
     //to do: start test
     try {
@@ -33,21 +41,20 @@ const TestModal = ({
           class_user_id: class_user_id,
         },
       })
+      checkFinished
+        ? () => trackGAEvent('Click Button Retake Modal Test')
+        : () => trackGAEvent('Click Button Start Modal Test')
     } catch (err) {}
   }
-
-  const checkFinished = useMemo(() => {
-    if (data?.quiz?.attempt) {
-      return true
-    }
-    return false
-  }, [data?.quiz?.attempt])
 
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}
       open={open}
-      handleCancel={() => setOpen(false)}
+      handleCancel={() => {
+        setOpen(false)
+        trackGAEvent('Click Button Cancel Modal Test')
+      }}
       showOkButton={
         !data?.quiz?.is_limited
           ? true
@@ -104,11 +111,12 @@ const TestModal = ({
             {checkFinished && (
               <div
                 className="underline ml-2 text-state-info cursor-pointer"
-                onClick={() =>
+                onClick={() => {
                   router.push(
                     `/courses/test/test-result/${data?.quiz?.attempt?.id}`,
                   )
-                }
+                  trackGAEvent('Click Button View Modal Result')
+                }}
               >
                 View
               </div>
@@ -119,9 +127,7 @@ const TestModal = ({
       <div className="flex justify-between py-6 gap-8 text-base">
         <div className="text-gray-1">Status:</div>
         <div
-          className={`${
-            checkFinished ? 'text-state-success' : 'text-state-error'
-          } pr-0.5 font-medium`}
+          className={`${checkFinished ? 'text-state-success' : 'text-state-error'} pr-0.5 font-medium`}
         >
           {checkFinished ? 'Finished' : 'Unfinished'}
         </div>

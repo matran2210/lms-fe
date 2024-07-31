@@ -19,11 +19,11 @@ import PopupActive from './PopupActive'
 import PopupLesson from './PopupLesson'
 import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
-import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
 import PopupOpenClass from './PopupOpenClass'
 import SappTooltip from 'src/common/SappTooltip'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const Course = ({
   course,
@@ -170,11 +170,11 @@ const Course = ({
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
   // Action của button trong course list
-  const queryString = buildQueryString({
-    name: router.query.name || '',
-    status: router.query.status || '',
-    type: router.query.type || '',
-  })
+  // const queryString = buildQueryString({
+  //   name: router.query.name || '',
+  //   status: router.query.status || '',
+  //   type: router.query.type || '',
+  // })
 
   // async function fetchCourseList() {
   //   setLoading(true)
@@ -222,7 +222,10 @@ const Course = ({
 
   const handleCourseDetail = () => {
     router.push(`/courses/my-course/${classInstance?.id}`)
-    localStorage.setItem('courseDetail', `/courses/my-course/${classInstance?.id}`)
+    localStorage.setItem(
+      'courseDetail',
+      `/courses/my-course/${classInstance?.id}`,
+    )
   }
 
   const courseAction = () => {
@@ -249,9 +252,7 @@ const Course = ({
     } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
       setOpenClass(true)
     } else {
-      course.status !== CLASS_USER_STATUS.CANCELED
-        ? handleCourseDetail()
-        : {}
+      course.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
     }
   }
 
@@ -304,11 +305,12 @@ const Course = ({
               }`}
             >
               <div
-                className="line-clamp-2 text-ellipsis cursor-pointer "
+                className="line-clamp-2 text-ellipsis cursor-pointer"
                 onClick={() => {
                   if (isActiveStudent && enableCourse) {
                     courseAction()
                   }
+                  trackGAEvent('Click Title Course Item')
                 }}
               >
                 <SappTooltip
@@ -447,6 +449,7 @@ const Course = ({
                       if (isActiveStudent) {
                         courseAction()
                       }
+                      trackGAEvent('CLick Button Course Item')
                     }}
                   />
                 ) : (

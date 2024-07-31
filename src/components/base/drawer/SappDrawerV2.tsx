@@ -1,6 +1,6 @@
 import Icon from '@components/icons'
 import { Drawer } from 'antd'
-import React, { Dispatch, ReactNode, SetStateAction } from 'react'
+import React, { ReactNode } from 'react'
 
 interface IProps {
   open: boolean

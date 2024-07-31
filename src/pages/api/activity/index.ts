@@ -1,5 +1,4 @@
 import { fetcher } from '@services/requestV2'
-import { isEmpty } from 'lodash'
 import { apiURL } from 'src/redux/services/httpService'
 import {
   ICreateDiscussionRequest,
@@ -95,6 +94,30 @@ export class ActivityAPI {
       },
       data: formData,
       method: 'POST',
+    })
+  }
+
+  /**
+   * @description Cập nhật một cuộc thảo luận.
+   * @async
+   */
+  static updateDiscussionComment(
+    id: string | undefined,
+    params?: Object,
+  ): Promise<any> {
+    return fetcher(`${apiURL}/course-discussions/${id}`, {
+      data: params,
+      method: 'PUT',
+    })
+  }
+
+  /**
+   * @description Xóa cuộc thảo luận.
+   * @async
+   */
+  static deleteDiscussion(id: string): Promise<any> {
+    return fetcher(`${apiURL}/course-discussions/${id}`, {
+      method: 'DELETE',
     })
   }
 }

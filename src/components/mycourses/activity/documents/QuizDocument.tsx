@@ -18,14 +18,13 @@ import {
 } from 'quiz-result-package/dist/type'
 import toast from 'react-hot-toast'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion } from 'src/type/course/Question'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import SappButton from '@components/base/button/SappButton'
 import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
+import { trackGAEvent } from '@utils/google-analytics'
 
 type Props = {
   questions: IQuestion[]
@@ -326,6 +325,7 @@ const QuizDocument = ({
                 return
               }
               handlePrevQuestion()
+              trackGAEvent('Click Prev Question Quiz Activity')
             }}
           >
             <SappIcon icon="arrow_left" />
@@ -343,6 +343,7 @@ const QuizDocument = ({
                 handleConfirmQuestion(false)
               }
               handleNextQuestion()
+              trackGAEvent('Click Next Question Quiz Activity')
             }}
           >
             <SappIcon icon="arrow_right" />
@@ -364,6 +365,7 @@ const QuizDocument = ({
                 grading_preference === 'AFTER_EACH_QUESTION'
               ) {
                 setRunHandleFinishQuiz((e) => e + 1)
+                trackGAEvent('Click Button Finish Quiz Activity')
                 return
               }
               if (
@@ -371,11 +373,13 @@ const QuizDocument = ({
                 grading_preference !== 'AFTER_EACH_QUESTION'
               ) {
                 handleConfirmQuestion(true)
+                trackGAEvent('Click Button Confirm Quiz Activity')
               } else {
                 if (grading_preference !== 'AFTER_EACH_QUESTION') {
                   handleConfirmQuestion(false)
                 }
                 handleNextQuestion()
+                trackGAEvent('Click Button Next Quiz Activity')
               }
             }}
             color="primary"
@@ -392,12 +396,14 @@ const QuizDocument = ({
                 if (!loading) {
                   handleConfirmQuestion(false)
                 }
+                trackGAEvent('Click Button Confirm Quiz Activity')
               }}
               color="primary"
               loading={loading}
             />
           )}
       </div>
+
       <SappModal
         open={modalResult?.status}
         okButtonCaption={'Yes'}

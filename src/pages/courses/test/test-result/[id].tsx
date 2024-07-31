@@ -6,7 +6,7 @@ import { useGetDataQuery } from '@utils/index'
 import { TEST_TYPE } from '@utils/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
+import Layout from '@components/layout'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -67,7 +67,7 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <>
+    <Layout title="Test Result">
       <div className="main px-6 xl:px-16">
         <Breadcrumb
           tabs={breadcrumbs}
@@ -83,7 +83,7 @@ const TestResultDetail = () => {
           subjectCode={questions?.course?.subject?.code ?? ''}
         />
       </div>
-    </>
+    </Layout>
   )
 }
 

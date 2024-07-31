@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import SolutionListAnswer from './SolutionListAnswer'
 import { MY_COURSES } from 'src/constants/lang'
 
