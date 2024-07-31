@@ -7,8 +7,6 @@ import TotalScore from '@components/mycourses/test/TotalScore'
 import { roundNumber } from '@utils/helpers'
 import { F_LOW_CODES } from '@utils/constants'
 import SappLoading from 'src/common/SappLoading'
-import SappModalV2 from '@components/base/modal/SappModalV2'
-import { CloseIcon } from '@assets/icons'
 import ChartCMAScore from './cma/chartCMAScore'
 import Annotation from './Annotation'
 

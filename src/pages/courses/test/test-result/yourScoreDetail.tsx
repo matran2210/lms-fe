@@ -8,7 +8,8 @@ import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
 import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
-import { IAnswearGroup, IAnswer, IScoreDetails } from 'src/type'
+import { IAnswearGroup, IAnswer, IScoreDetails } from 'src/type/quiz/quiz'
+import Image from 'next/image'
 
 const headers = [
   {
@@ -180,10 +181,11 @@ const YourScoreDetail = ({
           headers={headers}
           loading={loading}
           isCheckedAll={true}
-          onChange={() => {}}
+          onChange={() => { } }
           hasCheck={false}
           classTableRes="!overflow-x-hidden"
-        >
+          data={undefined}
+          >
           <>
             {scoreDetails?.answer_groups?.map((ansg: IAnswearGroup) => {
               return (
@@ -257,10 +259,11 @@ const YourScoreDetail = ({
                         <td className="p-0 pr-4 text-start m-6 text-gray-1">
                           {e?.question?.qType !== 'ESSAY' && (
                             <div className="flex items-center ml-1">
-                              <img
+                              <Image
                                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                                alt="Correct"
-                                className="w-4 text-state-success mr-1"
+                                width={16}
+                                height={16}
+                                alt="Globe"
                               />
                               {roundNumber(
                                 e?.question?.question_report?.ratio || 0,
