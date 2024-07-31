@@ -1,10 +1,10 @@
 // ConfirmDialog.tsx
 import SappTable from '@components/base/SappTable'
 import SappModal from '@components/base/modal/SappModal'
-import router from 'next/router'
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, FC, SetStateAction } from 'react'
 import ResultTableRows from './ResultTableRows'
 import Icon from '@components/icons'
+import { trackGAEvent } from '@utils/google-analytics'
 
 // define the props for the confirm dialog component
 export type ResultRowsModalProps = {
@@ -225,6 +225,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
           className="absolute right-4 top-2.5 p-2 cursor-pointer"
           onClick={() => {
             handleOnClick()
+            trackGAEvent('Click Icon Close Your Score Details')
           }}
         >
           <Icon type="cross" />

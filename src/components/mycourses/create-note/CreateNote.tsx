@@ -33,12 +33,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
       .min(1, VALIDATE_REQUIRED),
   })
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<any>({
+  const { control, handleSubmit } = useForm<any>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
   })

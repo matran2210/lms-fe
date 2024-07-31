@@ -1,5 +1,6 @@
 import { AlertTriagle } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { trackGAEvent } from '@utils/google-analytics'
 import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
@@ -20,10 +21,14 @@ const UnSubmitAnswerModal = ({
 }: IProps) => {
   const onSubmit = () => {
     handleSubmit()
+    trackGAEvent('Click Button Submit Anyway Test')
   }
+
   const onCancel = () => {
     setOpen(false)
+    trackGAEvent('Click Button Keep Doing Test')
   }
+
   return (
     <SappModalV2
       open={open}

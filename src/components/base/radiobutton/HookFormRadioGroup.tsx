@@ -70,7 +70,7 @@ const HookFormRadioGroup = ({
             >
               {options.map((option, index) => {
                 let state: 'error' | 'default' | 'success' | undefined
-                let stateLabel: string = 'text-bw-1'
+                let stateLabel: string = ''
                 let checked: boolean = option.value.toString() === field.value
                 let correctCheck: boolean =
                   corrects?.[option.value as string] || false

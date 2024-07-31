@@ -7,12 +7,15 @@ import { getMe } from 'src/redux/slice/User/User'
 import PopupStep from '@components/user-guide/PopupStep'
 import { increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { UserGuide } from 'src/constants'
+import LearningResource from '@components/mycourses/LearningResource'
+import { trackGAEvent } from '@utils/google-analytics'
 
 type SidebarProps = {
   isOpened: boolean
   className: string
   toggleDrawer: () => void
   setOpenResource: Dispatch<SetStateAction<boolean>>
+  openResource: boolean
 }
 
 export default function Sidebar({
@@ -20,6 +23,7 @@ export default function Sidebar({
   className,
   toggleDrawer,
   setOpenResource,
+  openResource,
 }: SidebarProps) {
   const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
@@ -64,7 +68,10 @@ export default function Sidebar({
             className="group-logos mx-auto pb-5.25 px-5 h-[71px]"
             onClick={() => closeSideBar()}
           >
-            <div className="h-[50px] flex justify-start text-center items-end">
+            <div
+              className="h-[50px] flex justify-start text-center items-end"
+              onClick={() => trackGAEvent('Click Logo SAPP Menu')}
+            >
               <ExpandIcon type={'logo-default'} />
               <ExpandIcon type={'logo-full'} />
             </div>
@@ -117,6 +124,7 @@ export default function Sidebar({
           isOpened ? 'block md:hidden' : 'hidden'
         } fixed top-0 left-0 bottom-0 right-0 bg-overlay-dark w-full h-ful z-20 cursor-pointer`}
       ></div>
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
     </>
   )
 }

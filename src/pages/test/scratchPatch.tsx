@@ -1,8 +1,4 @@
-import { CloseIcon, ConfirmIcon } from '@assets/icons'
-import SappButton from '@components/base/button/SappButton'
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import MovableWindow from '@components/base/window'
 import { Control } from 'react-hook-form'
 
 type ScratchPadValue = {

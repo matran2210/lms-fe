@@ -47,7 +47,7 @@ const Certificate = () => {
   return (
     <div>
       <div className="relative">
-        <div className="text-xl font-bold border-b pb-5 border-gray-3 mx-6">
+        <div className="text-xl font-medium border-b pb-5 border-gray-3 mx-6">
           Certificates ({totalCertificateData})
         </div>
         <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>

@@ -7,10 +7,11 @@ import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
 import { convertFractionToPercentage, truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, TEST_TYPE } from 'src/constants'
 import { isNull, round } from 'lodash'
 import { useCourseContext } from '@contexts/index'
 import SappTooltip from 'src/common/SappTooltip'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const PartFailed = ({
   coursePart,
@@ -85,12 +86,20 @@ const PartFailed = ({
     coursePart?.course_section_type === 'FINAL_TEST' &&
     courseType === 'FOUNDATION_COURSE'
 
+  const showTitleFinalTest =
+    coursePart?.course_section_type === TEST_TYPE.FINAL_TEST
+      ? 'Final Test'
+      : 'MidTerm Test'
+
   return (
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
           className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-pointer`}
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setOpen(true)
+            trackGAEvent(`Click Title ${showTitleFinalTest}`)
+          }}
         >
           <SappTooltip
             title={coursePart?.name}
@@ -115,7 +124,7 @@ const PartFailed = ({
                     coursePart?.quiz?.quiz_timed
                       ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
                       : 'Unlimited'
-                  }` ?? ''}
+                  }`}
                 </p>
               </div>
             </>
@@ -131,7 +140,7 @@ const PartFailed = ({
                 quizAttempt?.limit_count !== 0
                   ? quizAttempt?.limit_count
                   : 'Unlimited'
-              }` ?? ''}
+              }`}
             </p>
           </div>
         </div>
@@ -156,7 +165,10 @@ const PartFailed = ({
                   coursePart?.quiz?.attempt?.number_of_attempts !==
                     coursePart?.quiz?.limit_count && ''
                 } ml-auto`}
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                  setOpen(true)
+                  trackGAEvent(`Click Button Start ${showTitleFinalTest}`)
+                }}
               />
             ) : (
               <></>
@@ -172,11 +184,12 @@ const PartFailed = ({
                   isUnderLine
                   color="text"
                   className="font-medium underline !p-0"
-                  onClick={() =>
+                  onClick={() => {
                     router.push(
                       `/courses/test/test-result/${quizAttempt?.attempt?.id}`,
                     )
-                  }
+                    trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
+                  }}
                 />
               )}
 
@@ -192,7 +205,10 @@ const PartFailed = ({
                     coursePart?.quiz?.attempt?.number_of_attempts !==
                       coursePart?.quiz?.limit_count && ''
                   } ml-auto`}
-                  onClick={() => setOpen(true)}
+                  onClick={() => {
+                    setOpen(true)
+                    trackGAEvent(`Click Button Retake ${showTitleFinalTest}`)
+                  }}
                 />
               )}
             </div>

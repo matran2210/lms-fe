@@ -12,10 +12,11 @@ import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
 import { TitleSidebar } from 'src/constants'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { trackGAEvent } from '@utils/google-analytics'
 
 type MenuItemProps = {
   menuItem: MenuItemType
-  setOpenResource: Dispatch<SetStateAction<boolean>>
+  setOpenResource?: Dispatch<SetStateAction<boolean>>
   closeSideBar: () => void
 }
 
@@ -28,18 +29,18 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const isDetailCourse =
-    router.pathname.includes('/my-course') ||
-    router.pathname.includes('/section') ||
-    router.pathname.includes('/activity')
+  // const isDetailCourse =
+  //   router.pathname.includes('/my-course') ||
+  //   router.pathname.includes('/section') ||
+  //   router.pathname.includes('/activity')
 
-  const isProfile =
-    Icon === 'avatar' &&
-    (router.asPath === '/myprofile' ||
-      router.asPath === '/certificates' ||
-      router.asPath === '/settings' ||
-      router.asPath === '/login_history' ||
-      router.asPath === '/devices')
+  // const isProfile =
+  //   Icon === 'avatar' &&
+  //   (router.asPath === '/myprofile' ||
+  //     router.asPath === '/certificates' ||
+  //     router.asPath === '/settings' ||
+  //     router.asPath === '/login_history' ||
+  //     router.asPath === '/devices')
 
   const selected = router.pathname === url
 
@@ -50,7 +51,7 @@ export default function MenuItem({
   }
 
   const handleOpenResource = () => {
-    setOpenResource(true)
+    setOpenResource && setOpenResource(true)
     document.body.style.overflow = 'hidden'
   }
 
@@ -170,6 +171,7 @@ export default function MenuItem({
                 className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 line-clamp-1 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary`}
+                onClick={() => trackGAEvent(`Click Button ${name} Menu `)}
               >
                 {name}
               </span>

@@ -1,6 +1,7 @@
 import { ConfirmIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface IProps {
   open: boolean
@@ -16,11 +17,12 @@ const ConFirmSubmit = ({
 }: IProps) => {
   const onSubmit = () => {
     handleSubmit()
-    //to do: start test
+    trackGAEvent('Click Button Submit Modal Confirm Quiz Activity')
   }
   const onCancel = () => {
     handleCancel()
     setOpen(false)
+    trackGAEvent('Click Button Cancel Modal Confirm Quiz Activity')
   }
   const onClose = () => {
     setOpen(false)

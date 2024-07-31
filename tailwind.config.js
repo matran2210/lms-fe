@@ -79,6 +79,7 @@ module.exports = {
           6: '#F9FAFC',
           7: '#EDEFF5',
           9: '#C3C3C3',
+          10: 'rgba(0, 0, 0, 0.80)',
         },
         gray: {
           1: '#A1A1A1',

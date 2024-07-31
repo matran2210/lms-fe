@@ -167,7 +167,7 @@ export class CoursesAPI {
   }
 
   /**
-   * @deprecated
+   * @deprecated use QuestionAPI.getQuestionDetail (cached api)
    */
   static getQuestionsDetail(id: string): Promise<any> {
     const uri = url.getQuestionDetail

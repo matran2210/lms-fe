@@ -1,5 +1,6 @@
 import { AlertIcon } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { trackGAEvent } from '@utils/google-analytics'
 import { onLinkSocial } from '@utils/index'
 import { Dispatch, SetStateAction } from 'react'
 
@@ -13,7 +14,10 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
     <SappModalV2
       open={open}
       okButtonCaption="Back"
-      onOk={() => setOpen(false)}
+      onOk={() => {
+        setOpen(false)
+        trackGAEvent('Click Button Back Modal Expired Test')
+      }}
       handleCancel={() => setOpen(false)}
       showCancelButton={false}
       showHeader={false}
@@ -42,7 +46,10 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
         </span>{' '}
         <span
           className="text-primary underline cursor-pointer"
-          onClick={() => onLinkSocial('https://www.facebook.com/sapp.edu.vn')}
+          onClick={() => {
+            onLinkSocial('https://www.facebook.com/sapp.edu.vn')
+            trackGAEvent('Click Text Link Facebook')
+          }}
         >
           Facebook.
         </span>

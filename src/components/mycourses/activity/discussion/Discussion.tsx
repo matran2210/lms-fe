@@ -1,9 +1,8 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import SappModal from '@components/base/modal/SappModal'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { ChangeEvent, SetStateAction, useRef, useState } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -22,7 +21,7 @@ import {
 import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
-import { ANIMATION } from 'src/constants'
+import { Skeleton } from 'antd'
 
 type Props = {
   class_id: string
@@ -40,11 +39,12 @@ const Discussion = ({ class_id }: Props) => {
   const [idReply, setIdReply] = useState<string>()
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
   const { user } = useAppSelector(userReducer)
-  const [stream, setStream] = useState<MediaStream | null>(null)
+  // const [stream, setStream] = useState<MediaStream | null>(null)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [rootSelectedFiles, setRootSetSelectedFiles] = useState<File[]>([])
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const rootFileInputRef = useRef<HTMLInputElement | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const [imageSrc, setImageSrc] = useState<string>()
 
@@ -304,138 +304,146 @@ const Discussion = ({ class_id }: Props) => {
   return (
     <div className="p-6 bg-white">
       <div className="text-xl font-bold mb-4">Discussion</div>
-      {selector?.discussion?.map((e, i) => {
-        return (
-          <div className={` ${i !== 0 ? 'mt-6' : ''}`} key={e.id}>
-            <DiscussionElement
-              onReact={onReact}
-              discussion={e}
-              idReply={idReply}
-              handleChangeIdReply={handleChangeIdReply}
-              setImageSrc={setImageSrc}
-            />
-            <div
-              className={`${
-                e?.children?.[0] ? 'mt-6' : ''
-              } ' relative ml-13 pl-5 overflow-hidden`}
-            >
-              {e?.children?.[0] && (
-                <div>
-                  <div
-                    className="absolute left-0 top-0 bottom-0 w-0.5 -mt-1 bg-size-100-30"
-                    style={{
-                      background:
-                        'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
-                    }}
-                  ></div>
-                  {e?.children?.map((f, index) => {
-                    return (
-                      <div className={index === 0 ? '' : 'mt-5'} key={f?.id}>
-                        <DiscussionElement
-                          rank={2}
-                          discussion={f}
-                          onReact={onReact}
-                          setImageSrc={setImageSrc}
+      <Skeleton loading={loading}>
+        {selector?.discussion?.map((e, i) => {
+          return (
+            <div className={` ${i !== 0 ? 'mt-6' : ''}`} key={e.id}>
+              <DiscussionElement
+                onReact={onReact}
+                discussion={e}
+                idReply={idReply}
+                handleChangeIdReply={handleChangeIdReply}
+                setImageSrc={setImageSrc}
+                classId={class_id}
+                profile={user}
+                setLoading={setLoading}
+              />
+              <div
+                className={`${
+                  e?.children?.[0] ? 'mt-6' : ''
+                } ' relative ml-13 pl-5 overflow-hidden`}
+              >
+                {e?.children?.[0] && (
+                  <div>
+                    <div
+                      className="absolute left-0 top-0 bottom-0 w-0.5 -mt-1 bg-size-100-30"
+                      style={{
+                        background:
+                          'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
+                      }}
+                    ></div>
+                    {e?.children?.map((f, index) => {
+                      return (
+                        <div className={index === 0 ? '' : 'mt-5'} key={f?.id}>
+                          <DiscussionElement
+                            rank={2}
+                            discussion={f}
+                            onReact={onReact}
+                            setImageSrc={setImageSrc}
+                            classId={class_id}
+                            profile={user}
+                            setLoading={setLoading}
+                          />
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+                <div
+                  className={`flex items-start gap-3 overflow-visible transition-max-height duration-300 ${
+                    idReply === e.id ? `max-h-96 mt-6` : 'max-h-0'
+                  }`}
+                >
+                  <div className="flex-none leading-0">
+                    <Image
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                      src={
+                        user?.detail?.avatar['50x50'] ||
+                        user?.detail?.avatar['ORIGIN'] ||
+                        blankAvatar
+                      }
+                      loading="eager"
+                      priority={true}
+                      alt="avatar"
+                    ></Image>
+                  </div>
+                  <form
+                    onSubmit={handleSubmit((e) => onSubmit(e))}
+                    className="flex-1"
+                    encType="multipart/form-data"
+                  >
+                    {selectedFiles?.length > 0 && (
+                      <div>
+                        <ul className="flex gap-4 flex-wrap">
+                          {selectedFiles.map((file, index) => (
+                            <li key={index} className="leading-0 relative mb-2">
+                              <div
+                                className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
+                                role="button"
+                                onClick={() => handleRemoveSelectedFiles(index)}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  className="w-4 h-4 "
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              </div>
+                              <Image
+                                width={100}
+                                height={100}
+                                src={URL.createObjectURL(file)}
+                                loading="eager"
+                                objectFit="contain"
+                                alt="Discussion file"
+                                onClick={() => {
+                                  setImageSrc(URL.createObjectURL(file))
+                                }}
+                                priority={true}
+                              ></Image>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <div className="relative">
+                      <HookFormTextField
+                        control={control}
+                        name={idReply === e?.id ? 'comment' : ''}
+                        textSize="sm"
+                        inputClassName={'max-h-10 !pr-9'}
+                        placeholder="Your comment..."
+                      ></HookFormTextField>
+                      <div className="absolute top-[13px] right-3 cursor-pointer">
+                        <SappIcon icon="camera"></SappIcon>
+                        <input
+                          type="file"
+                          className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
+                          accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
+                          multiple
+                          onChange={handleFileChange}
+                          ref={fileInputRef}
                         />
                       </div>
-                    )
-                  })}
-                </div>
-              )}
-              <div
-                className={`flex items-start gap-3 overflow-visible transition-max-height duration-300 ${
-                  idReply === e.id ? `max-h-96 mt-6` : 'max-h-0'
-                }`}
-              >
-                <div className="flex-none leading-0">
-                  <Image
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                    src={
-                      user?.detail?.avatar['50x50'] ||
-                      user?.detail?.avatar['ORIGIN'] ||
-                      blankAvatar
-                    }
-                    loading="eager"
-                    priority={true}
-                  ></Image>
-                </div>
-                <form
-                  onSubmit={handleSubmit((e) => onSubmit(e))}
-                  className="flex-1"
-                  encType="multipart/form-data"
-                >
-                  {selectedFiles?.length > 0 && (
-                    <div>
-                      <ul className="flex gap-4 flex-wrap">
-                        {selectedFiles.map((file, index) => (
-                          <li key={index} className="leading-0 relative mb-2">
-                            <div
-                              className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
-                              role="button"
-                              onClick={() => handleRemoveSelectedFiles(index)}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-4 h-4 "
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
-                            </div>
-                            <Image
-                              width={100}
-                              height={100}
-                              src={URL.createObjectURL(file)}
-                              loading="eager"
-                              objectFit="contain"
-                              onClick={() => {
-                                setImageSrc(URL.createObjectURL(file))
-                              }}
-                              priority={true}
-                            ></Image>
-                          </li>
-                        ))}
-                      </ul>
                     </div>
-                  )}
-                  <div className="relative">
-                    <HookFormTextField
-                      control={control}
-                      name={idReply === e?.id ? 'comment' : ''}
-                      textSize="sm"
-                      inputClassName={'max-h-10 !pr-9'}
-                      placeholder="Your comment..."
-                    ></HookFormTextField>
-                    <div className="absolute top-[13px] right-3 cursor-pointer">
-                      <SappIcon icon="camera"></SappIcon>
-                      <input
-                        type="file"
-                        className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
-                        accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
-                        multiple
-                        onChange={handleFileChange}
-                        ref={fileInputRef}
-                      />
-                    </div>
-                  </div>
-                  <button type="submit" className="hidden"></button>
-                </form>
+                    <button type="submit" className="hidden"></button>
+                  </form>
+                </div>
               </div>
             </div>
-
-            {/* {idReply === e.id && ( */}
-          </div>
-        )
-      })}
+          )
+        })}
+      </Skeleton>
       <div
         className={`mt-6 flex items-start gap-3 overflow-visible transition-max-height duration-300`}
       >
@@ -451,6 +459,7 @@ const Discussion = ({ class_id }: Props) => {
             }
             loading="eager"
             priority={true}
+            alt="user avatar"
           ></Image>
         </div>
         <form
@@ -493,6 +502,7 @@ const Discussion = ({ class_id }: Props) => {
                         setImageSrc(URL.createObjectURL(file))
                       }}
                       priority={true}
+                      alt=""
                     ></Image>
                   </li>
                 ))}

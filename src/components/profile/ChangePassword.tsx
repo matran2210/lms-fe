@@ -61,17 +61,11 @@ const ChangePassword = () => {
   /**
    * @description sử dụng useForm
    */
-  const {
-    control,
-    handleSubmit,
-    reset,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm<IChangePassword>({
-    resolver: zodResolver(validationSchema),
-    mode: 'onSubmit',
-  })
+  const { control, handleSubmit, reset, getValues, watch } =
+    useForm<IChangePassword>({
+      resolver: zodResolver(validationSchema),
+      mode: 'onSubmit',
+    })
 
   /**
    * @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
@@ -94,13 +88,11 @@ const ChangePassword = () => {
 
   return (
     <React.Fragment>
-      <div className="bg-white p-6 flex-1 shadow-box">
+      <div className="bg-white p-6 pt-4 flex-1 shadow-box">
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="relative">
-            <div className="flex items-center justify-between pb-6 border-b border-b-gray-3">
-              <div className="text-xl font-medium text-bw-1">
-                Change Password
-              </div>
+            <div className="flex items-center justify-between border-b pb-5 border-gray-3">
+              <div className="text-xl font-medium ">Change Password</div>
               <div>
                 <ButtonCancelSubmit
                   className="gap-12 flex"

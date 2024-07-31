@@ -1,13 +1,20 @@
-import { ReactElement } from 'react'
-import Image from 'next/image'
-import SAPP_Logo from '@assets/images/sapp_logo.svg'
+import { ReactElement, ReactNode } from 'react'
+import Head from 'next/head'
 
 interface LayoutProps {
-  children: any
+  children: ReactNode
+  title: string
 }
 
 // eslint-disable-next-line import/no-unused-modules
 export default function FullScreenLayout(props: LayoutProps): ReactElement {
-  const { children } = props
-  return <div className="min-h-screen bg-white">{children}</div>
+  const { children, title } = props
+  return (
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <div className="min-h-screen bg-white">{children}</div>
+    </>
+  )
 }

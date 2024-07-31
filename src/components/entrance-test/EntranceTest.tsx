@@ -5,6 +5,7 @@ import EntrancePopup from './EntrancePopup'
 import { useRouter } from 'next/router'
 import SappButton from '@components/base/button/SappButton'
 import PopupExtend from './PopupExtend'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface EntranceTestProps {
   data: any
@@ -22,8 +23,10 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   const handleOnClick = () => {
     if (data?.attempt_times >= 1) {
       router.push(`entrance-test/test-result/${data?.quiz_attempt_id}`)
+      trackGAEvent('Click Button Result Entrance Test List')
     } else {
       setOpen(true)
+      trackGAEvent('Click Button Begin Entrance Test List')
     }
   }
 
@@ -81,7 +84,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
                 </p>
               </>
             ) : (
-              <span className="text-bw-1">--</span>
+              <span className="">--</span>
             )}
           </div>
         </div>

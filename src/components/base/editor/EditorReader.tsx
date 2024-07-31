@@ -8,6 +8,7 @@ import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
 import 'src/utils/global.d.ts'
 import { isUndefined } from 'lodash'
+import clsx from 'clsx'
 
 type Props = {
   text_editor_content: string | undefined
@@ -196,7 +197,7 @@ const EditorReader = ({
         }
       })
     }
-  }, [])
+  })
 
   return (
     <>
@@ -208,7 +209,7 @@ const EditorReader = ({
       >
         <div
           ref={extenalRef || refDocument}
-          className={`${pinned ? 'text-white pt-2' : 'text-bw-1'}`}
+          className={clsx({ 'text-white pt-2': pinned })}
         >
           {parseHTML(
             replaceTextAlignCenterToWebKitCenter(content || ''),
