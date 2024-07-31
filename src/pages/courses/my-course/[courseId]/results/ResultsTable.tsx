@@ -4,7 +4,7 @@ import { getTimeFromInput, truncateString } from '@utils/index'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -57,6 +57,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
     data: resultData,
     isLoading,
     isSuccess,
+    refetch,
   } = useQuery({
     // Fetch lại data khi filter thay đổi
     queryKey: [
@@ -70,7 +71,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
     ],
     queryFn: () => {
       return CoursesAPI.getCourseResults(
-        courseId,
+        '6266f986-e33c-461c-a9f4-a9c15cdc39fc',
         currentPage || 1,
         pageSize,
         params,
@@ -83,6 +84,14 @@ const ResultsTable = ({ courseId }: Iprops) => {
   })
 
   isLoading && <></>
+  // useEffect(() => {
+  //   refetch()
+  //   console.log(selected)
+  // }, [selectedSection, selectedSubsection, selectedActivity, selectedUnit])
+  // useEffect(() => {
+  //   console.log(router.query.courseId)
+  //   console.log(courseId)
+  // }, [courseId])
 
   return (
     <>

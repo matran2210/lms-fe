@@ -1,4 +1,5 @@
 import HookFormSelect from '@components/base/select/HookFormSelect'
+import { DEFAULT_SELECT_SECTION } from 'src/constants'
 import { ISection, ISelect } from 'src/type'
 
 interface IProps {
@@ -85,8 +86,9 @@ const ResultsTableFilter = ({
         isClearable={true}
         value={selectedSubsection}
         onChange={(selected: ISelect) => {
-          setSelected(selected)
-          setSelectedSubsection(selected)
+          selected === null
+            ? setSelected(selectedSection)
+            : setSelected(selected)
         }}
         options={
           selectedSection
@@ -107,8 +109,9 @@ const ResultsTableFilter = ({
         isClearable={true}
         value={selectedUnit}
         onChange={(selected: ISelect) => {
-          setSelected(selected)
-          setSelectedUnit(selected)
+          selected === null
+            ? setSelected(selectedSubsection)
+            : setSelected(selected)
         }}
         options={
           selectedSubsection
@@ -129,8 +132,7 @@ const ResultsTableFilter = ({
         isClearable={true}
         value={selectedActivity}
         onChange={(selected: ISelect) => {
-          setSelected(selected)
-          setSelectedActivity(selected)
+          selected === null ? setSelected(selectedUnit) : setSelected(selected)
         }}
         options={
           selectedUnit

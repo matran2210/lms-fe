@@ -45,7 +45,10 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
       )
 
     if (success) {
-      setSections((prev) => [...prev, ...[...data?.sections].reverse()])
+      data?.sections.length > 0
+        ? setSections((prev) => [...prev, ...[...data?.sections].reverse()])
+        : setSections(data?.sections)
+
       setSelectedSubsection(null)
       setSelectedUnit(null)
       setSelectedActivity(null)
@@ -56,7 +59,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     hasNextPage: hasNextSectionPage,
     fetchNextPage: fetchNextSectionPage,
   } = useInfiniteQuery({
-    queryKey: [CourseKey.SectionList, selectedSection],
+    queryKey: [CourseKey.SectionList],
     queryFn: getCourseSectionList,
     enabled: !!courseId,
     getNextPageParam: getNextPageFilterParam,
@@ -75,7 +78,12 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
         )
 
       if (success) {
-        setSubSections((prev) => [...prev, ...[...data?.sections].reverse()])
+        data?.sections.length > 0
+          ? setSubSections((prev) => [
+              ...prev,
+              ...[...data?.sections].reverse(),
+            ])
+          : setSubSections(data?.sections)
         setSelectedUnit(null)
         setSelectedActivity(null)
       }
@@ -105,6 +113,9 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
         )
 
       if (success) {
+        data?.sections.length > 0
+          ? setUnits((prev) => [...prev, ...[...data?.sections].reverse()])
+          : setUnits(data?.sections)
         setUnits((prev) => [...prev, ...[...data?.sections].reverse()])
         setSelectedActivity(null)
         return data
@@ -119,7 +130,11 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
       queryKey: [CourseKey.UnitList, selectedSubsection],
       queryFn: getCourseUnitList,
       enabled: !!selectedSubsection,
-      getNextPageParam: getNextPageFilterParam,
+      getNextPageParam: (lastPage: any, pages: any) => {
+        return lastPage?.meta.page_index < lastPage.meta.total_pages
+          ? lastPage?.meta.page_index + 1
+          : undefined
+      },
     })
 
   // Get Activity List
@@ -135,7 +150,10 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
         )
 
       if (success) {
-        setActivities((prev) => [...prev, ...[...data?.sections].reverse()])
+        data?.sections.length > 0
+          ? setActivities((prev) => [...prev, ...[...data?.sections].reverse()])
+          : setActivities(data?.sections)
+
         return data
       }
     } catch {
