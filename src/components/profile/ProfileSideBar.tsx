@@ -2,6 +2,7 @@ import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { trackGAEvent } from '@utils/google-analytics'
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { ANIMATION } from 'src/constants'
@@ -154,7 +155,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                 key={key}
               >
                 <a
-                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-medium hover-transition-font-weight ${
+                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover-transition-font-weight  ${
                     isActive ||
                     (urlPage === 'security' &&
                       Object.values(childActivationStates)?.some(
@@ -162,7 +163,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                       ) &&
                       !childActivationStates[childLabel])
                       ? 'bg-secondary text-primary font-medium'
-                      : 'hover:left-[-0.5px] font-normal'
+                      : 'font-normal'
                   }`}
                   style={{
                     position: 'relative', // Đặt position là relative
@@ -196,7 +197,12 @@ const ProfileSideBar = ({ page }: IProps) => {
                   )}
                 </a>
                 {urlChildren?.length > 0 && (
-                  <div className="border-l border-gray-2 ml-5 my-5">
+                  <div
+                    className={clsx(
+                      'border-l border-gray-2 ml-5',
+                      isExpanded && 'my-5',
+                    )}
+                  >
                     {isExpanded &&
                       urlChildren?.map((child) => {
                         const childLabel = getLabelFromChild(child).replace(
