@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import SappDrawer from '@components/base/SappDrawer'
+import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import Layout from '@components/layout'
+import { trackGAEvent } from '@utils/google-analytics'
+import { truncateString } from '@utils/index'
+import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
-import { TreeHelper } from 'src/helper/tree'
-import { ILearningOutcome } from 'src/type/courses'
-import SappDrawer from '@components/base/SappDrawer'
-import { useRouter } from 'next/router'
-import { truncateString } from '@utils/index'
-import TestModal from 'src/pages/courses/test'
-import { ANIMATION } from 'src/constants'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import { CoursesAPI } from '../../../../api/courses/index'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
-import Layout from '@components/layout'
-import { trackGAEvent } from '@utils/google-analytics'
+import { ANIMATION } from 'src/constants'
+import { TreeHelper } from 'src/helper/tree'
+import TestModal from 'src/pages/courses/test'
+import { ILearningOutcome } from 'src/type/courses'
+import { CoursesAPI } from '../../../../api/courses/index'
 
 interface IProps {
   course_section_type: string
@@ -58,6 +58,7 @@ const CoursePartDetail = () => {
   const [chapterData, setChapterData] = useState<any>({})
   const [chapterTestId, setChapterTestId] = useState<string>()
   const [defaultActive, setDefaultActive] = useState<string>()
+  const courseChapterId = localStorage.getItem('course_chapter_id')
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
 
@@ -89,6 +90,7 @@ const CoursePartDetail = () => {
     setLoadingChapter(true)
     try {
       const res = await CoursesAPI.getPartDetail(id, course_section_id)
+
       const nodeList = res?.data?.course_section_tree
       const newData = nodeList.map((item: IProps) => {
         if (item.id === course_section_id) {
@@ -101,6 +103,7 @@ const CoursePartDetail = () => {
 
       const detail = tree[0]
       setChapterDetail(detail)
+      localStorage.removeItem('course_chapter_id')
     } catch (error) {
     } finally {
       setLoadingChapter(false)
@@ -173,7 +176,7 @@ const CoursePartDetail = () => {
       if (sectionId && caseStudyId) {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
-      router.push({
+      router.replace({
         pathname: `/case-study/${topicId}`,
         query: {
           quiz_id: quizId,
@@ -279,9 +282,9 @@ const CoursePartDetail = () => {
         )
 
         if (matchingChild) {
-          setDefaultActive(matchingChild.id)
+          !courseChapterId && setDefaultActive(matchingChild.id)
         } else if (filteredChildren?.length > 0) {
-          setDefaultActive(filteredChildren[0].id) // Set default to the first child
+          !courseChapterId && setDefaultActive(filteredChildren[0].id) // Set default to the first child
         }
       } else {
         setDefaultActive('')
@@ -316,6 +319,9 @@ const CoursePartDetail = () => {
       JSON.stringify(transformedArray),
     )
   })
+  useEffect(() => {
+    courseChapterId && setDefaultActive(courseChapterId as string)
+  }, [courseChapterId])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -379,7 +385,7 @@ const CoursePartDetail = () => {
               handleRouterChapter={handleRouterChapter}
               readMore={readMore}
               setReadMore={setReadMore}
-              defaultActive={defaultActive ? defaultActive : ''}
+              defaultActive={defaultActive}
             />
           </div>
 
