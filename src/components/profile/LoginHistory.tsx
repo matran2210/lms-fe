@@ -32,8 +32,8 @@ const LoginHistory = () => {
   }
   return (
     <div
-      className="bg-white py-6 flex-1 shadow-box h-fit"
-      style={{ maxHeight: '568px', overflowY: 'auto' }}
+      className="bg-white py-6 flex-1 shadow-box h-fit "
+      style={{ maxHeight: '568px', overflowY: 'auto', minHeight: '400px' }}
     >
       <div className="text-xl font-medium border-b pb-5 border-gray-3 mx-6">{`Login History (${
         loginHistory?.meta?.total_records || 0
