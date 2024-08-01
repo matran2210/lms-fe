@@ -61,8 +61,8 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
           }
           title={undefined}
           trigger="click"
-          visible={visible}
-          onVisibleChange={handleVisibleChange}
+          open={visible}
+          onOpenChange={handleVisibleChange}
           placement="topLeft"
           arrow={false}
         >

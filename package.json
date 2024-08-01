@@ -109,8 +109,8 @@
   },
   "lint-staged": {
     "**/*.{js,ts,tsx,json,jsx,scss,css}": [
-      "prettier --write --ignore-unknown '**/*.{js,jsx,ts,tsx,scss,css,json}'",
-      "eslint --ext .js,.jsx,.ts,.tsx src --color"
+      "eslint --ext .js,.jsx,.ts,.tsx src --color",
+      "prettier --write --ignore-unknown '**/*.{js,jsx,ts,tsx,scss,css,json}'"
     ]
   },
   "browserslist": [
