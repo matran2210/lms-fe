@@ -26,7 +26,7 @@ const Explanation = () => {
         return corrects
       case QUESTION_TYPES.MULTIPLE_CHOICE:
         return Object.fromEntries(
-          (answers || []).map((originalAnswer: any) => [
+          (answers || [])?.map((originalAnswer: any) => [
             originalAnswer.id,
             originalAnswer.is_correct,
           ]),
@@ -61,11 +61,12 @@ const Explanation = () => {
           resultResponse?.data?.answer?.question?.qType !==
             QUESTION_TYPES.MATCHING
             ? resultResponse?.data?.answer?.question?.answers
-            : resultResponse?.data?.answer?.question?.answers,
+            : resultResponse?.data?.answer?.answer_matching_mapping,
           resultResponse?.data?.answer?.question?.qType,
         ),
-        question_matchings: resultResponse?.data?.answer?.question?.answers,
-        answers: resultResponse?.data?.answer?.question.answers || [],
+        question_matchings:
+          resultResponse?.data?.answer?.answer_matching_mapping,
+        answers: resultResponse?.data?.answer?.question?.answers || [],
         myAnswers: [
           {
             question_id: resultResponse?.data?.answer?.question?.id,
@@ -79,6 +80,8 @@ const Explanation = () => {
         previous: resultResponse?.data?.previous,
         total_question: resultResponse?.data?.total_question,
         index: resultResponse?.data?.index,
+        answer_position_mapping:
+          resultResponse?.data?.answer?.answer_position_mapping,
         question_topic: topicDescription?.data,
         short_answer: resultResponse?.data?.answer?.short_answer,
         response_option_answer: resultResponse?.data?.answer?.response_option,
