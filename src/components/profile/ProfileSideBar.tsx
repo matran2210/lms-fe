@@ -163,7 +163,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                       ) &&
                       !childActivationStates[childLabel])
                       ? 'bg-secondary text-primary font-medium'
-                      : 'font-normal'
+                      : 'hover:left-[-0.25px] font-normal'
                   }`}
                   style={{
                     position: 'relative', // Đặt position là relative
@@ -243,7 +243,7 @@ const ProfileSideBar = ({ page }: IProps) => {
             )
           })}
           <li
-            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:text-primary hover-transition-font-weight"
+            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
             onClick={handleLogout}
           >
             <div className="absolute inset-0 bottom-0"></div>
