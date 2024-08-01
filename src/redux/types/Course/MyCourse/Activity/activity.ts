@@ -51,6 +51,7 @@ export interface IDiscussion {
   avatar: { [key: string]: string }
   is_like: boolean
   children: IDiscussion[]
+  is_staff_support?: boolean
 }
 
 export interface ICreateDiscussionResReact {
