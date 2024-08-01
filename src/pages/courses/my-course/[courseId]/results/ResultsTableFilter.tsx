@@ -1,5 +1,6 @@
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { DEFAULT_SELECT_SECTION } from 'src/constants'
+import { useQueryClient } from 'react-query'
+import { CourseKey } from 'src/pages/api/queryKey'
 import { ISection, ISelect } from 'src/type'
 
 interface IProps {
@@ -56,6 +57,7 @@ const ResultsTableFilter = ({
   hasNextActivityPage,
   fetchNextActivityPage,
 }: IProps) => {
+  const queryClient = useQueryClient()
   return (
     <>
       {/* Section */}
@@ -67,6 +69,7 @@ const ResultsTableFilter = ({
         onChange={(selected: ISelect) => {
           setSelected(selected)
           setSelectedSection(selected)
+          // queryClient.invalidateQueries(CourseKey.SubsectionList)
         }}
         options={
           sections
@@ -86,6 +89,7 @@ const ResultsTableFilter = ({
         isClearable={true}
         value={selectedSubsection}
         onChange={(selected: ISelect) => {
+          setSelectedSubsection(selected)
           selected === null
             ? setSelected(selectedSection)
             : setSelected(selected)
@@ -109,6 +113,7 @@ const ResultsTableFilter = ({
         isClearable={true}
         value={selectedUnit}
         onChange={(selected: ISelect) => {
+          setSelectedUnit(selected)
           selected === null
             ? setSelected(selectedSubsection)
             : setSelected(selected)
@@ -132,6 +137,7 @@ const ResultsTableFilter = ({
         isClearable={true}
         value={selectedActivity}
         onChange={(selected: ISelect) => {
+          setSelectedActivity(selected)
           selected === null ? setSelected(selectedUnit) : setSelected(selected)
         }}
         options={

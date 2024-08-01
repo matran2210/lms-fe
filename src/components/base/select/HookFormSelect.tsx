@@ -41,6 +41,19 @@ const HookFormSelect = ({
     )
   }
 
+  const onMenuOpen = () => {
+    setTimeout(() => {
+      const selectedEl = document.querySelector('[aria-selected="true"]')
+      if (selectedEl) {
+        selectedEl.scrollIntoView({
+          behavior: 'instant',
+          block: 'center',
+          inline: 'center',
+        })
+      }
+    }, 15)
+  }
+
   return (
     <div className={`select-options ${classParent}`}>
       <Select
@@ -58,6 +71,7 @@ const HookFormSelect = ({
         onMenuScrollToBottom={onMenuScrollToBottom}
         isClearable={isClearable}
         components={{ DropdownIndicator }}
+        onMenuOpen={onMenuOpen}
       />
     </div>
   )

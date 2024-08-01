@@ -337,7 +337,7 @@ export class CoursesAPI {
   }
 
   static getCourseResults(
-    id: string | string[] | undefined,
+    id: string | string[],
     page_index: number,
     page_size: number,
     params: Object,

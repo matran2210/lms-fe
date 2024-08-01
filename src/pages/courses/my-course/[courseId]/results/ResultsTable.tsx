@@ -36,18 +36,12 @@ const ResultsTable = ({ courseId }: Iprops) => {
    * Filter
    */
   const selectFilterProp = useSelectFilter(router.query.courseId)
-  const {
-    selected,
-    selectedSection,
-    selectedSubsection,
-    selectedUnit,
-    selectedActivity,
-  } = selectFilterProp
+  const { selected } = selectFilterProp
   /**
    * @description config params khi filter
    */
   const params = {
-    parentId: selected?.value || undefined,
+    parent_id: selected?.value || undefined,
   }
 
   /**
@@ -58,40 +52,28 @@ const ResultsTable = ({ courseId }: Iprops) => {
     isLoading,
     isSuccess,
     refetch,
+    isFetching,
   } = useQuery({
     // Fetch lại data khi filter thay đổi
-    queryKey: [
-      CourseKey.ResultsList,
-      currentPage,
-      pageSize,
-      selectedSection,
-      selectedSubsection,
-      selectedUnit,
-      selectedActivity,
-    ],
+    queryKey: [CourseKey.ResultsList, currentPage, pageSize, selected],
     queryFn: () => {
       return CoursesAPI.getCourseResults(
-        '6266f986-e33c-461c-a9f4-a9c15cdc39fc',
+        courseId,
         currentPage || 1,
         pageSize,
         params,
       )
     },
-    enabled: router.query.courseId !== undefined,
+    enabled: courseId !== undefined,
     select: (data: { data: any }) => {
       return data.data
     },
   })
 
   isLoading && <></>
-  // useEffect(() => {
-  //   refetch()
-  //   console.log(selected)
-  // }, [selectedSection, selectedSubsection, selectedActivity, selectedUnit])
-  // useEffect(() => {
-  //   console.log(router.query.courseId)
-  //   console.log(courseId)
-  // }, [courseId])
+  useEffect(() => {
+    refetch()
+  }, [selected])
 
   return (
     <>
@@ -103,51 +85,51 @@ const ResultsTable = ({ courseId }: Iprops) => {
         hasCheck={false}
         isCheckedAll={false}
         classTable="table-auto w-full"
+        loading={isFetching}
       >
-        {isSuccess &&
-          resultData.data?.map((row: any, index: number) => {
-            const lastSubmission = dayjs(row?.last_submit_time).format(
-              'DD/MM/YYYY hh:mm',
-            )
+        {resultData?.data?.map((row: any) => {
+          const lastSubmission = dayjs(row?.last_submit_time).format(
+            'DD/MM/YYYY hh:mm',
+          )
 
-            return (
-              <tr
-                className={clsx({
-                  'border-dashed border-b border-gray-2 h-auto': true,
-                  'text-gray-2': !row.is_studied,
-                })}
-                key={row?.id}
-              >
-                {/* Name */}
-                <td className={clsx(commonDataCellStyle)}>
-                  {truncateString(row?.name, 35)}
-                </td>
+          return (
+            <tr
+              className={clsx({
+                'border-dashed border-b border-gray-2 h-auto': true,
+                'text-gray-2': !row.is_studied,
+              })}
+              key={row?.id}
+            >
+              {/* Name */}
+              <td className={clsx(commonDataCellStyle)}>
+                {truncateString(row?.name, 35)}
+              </td>
 
-                {/* Belong to */}
-                <td className={clsx(commonDataCellStyle)}>{row.path}</td>
+              {/* Belong to */}
+              <td className={clsx(commonDataCellStyle)}>{row.path}</td>
 
-                {/* Type */}
-                <td className={clsx(commonDataCellStyle)}>
-                  {row?.course_section_type.toLowerCase()}
-                </td>
+              {/* Type */}
+              <td className={clsx(commonDataCellStyle)}>
+                {row?.course_section_type.toLowerCase()}
+              </td>
 
-                {/* Grade */}
-                <td className={clsx(commonDataCellStyle)}>
-                  {row.score_percentage}
-                </td>
+              {/* Grade */}
+              <td className={clsx(commonDataCellStyle)}>
+                {row.score_percentage}
+              </td>
 
-                {/* Time Spent */}
-                <td className={clsx(commonDataCellStyle)}>
-                  {row.total_attempt_time
-                    ? getTimeFromInput(row.total_attempt_time)
-                    : '-'}
-                </td>
+              {/* Time Spent */}
+              <td className={clsx(commonDataCellStyle)}>
+                {row.total_attempt_time
+                  ? getTimeFromInput(row.total_attempt_time)
+                  : '-'}
+              </td>
 
-                {/* Last Submission */}
-                <td className={clsx(commonDataCellStyle)}>{lastSubmission}</td>
-              </tr>
-            )
-          })}
+              {/* Last Submission */}
+              <td className={clsx(commonDataCellStyle)}>{lastSubmission}</td>
+            </tr>
+          )
+        })}
       </SappTable>
       <PaginationSAPP
         currentPage={resultData?.metadata?.page_index}

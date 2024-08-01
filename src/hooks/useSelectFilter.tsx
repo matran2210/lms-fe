@@ -93,8 +93,9 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
   const {
     hasNextPage: hasNextSubsectionPage,
     fetchNextPage: fetchNextSubsectionPage,
+    refetch: refetchSubsections,
   } = useInfiniteQuery({
-    queryKey: [CourseKey.SubsectionList, selectedSection],
+    queryKey: [CourseKey.SubsectionList],
     queryFn: getCourseSubsectionList,
     enabled: !!selectedSection && selectedSection.value !== '',
     getNextPageParam: getNextPageFilterParam,
@@ -116,7 +117,6 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
         data?.sections.length > 0
           ? setUnits((prev) => [...prev, ...[...data?.sections].reverse()])
           : setUnits(data?.sections)
-        setUnits((prev) => [...prev, ...[...data?.sections].reverse()])
         setSelectedActivity(null)
         return data
       }
@@ -125,17 +125,20 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
       setSelectedActivity(null)
     }
   }
-  const { hasNextPage: hasNextUnitPage, fetchNextPage: fetchNextUnitPage } =
-    useInfiniteQuery({
-      queryKey: [CourseKey.UnitList, selectedSubsection],
-      queryFn: getCourseUnitList,
-      enabled: !!selectedSubsection,
-      getNextPageParam: (lastPage: any, pages: any) => {
-        return lastPage?.meta.page_index < lastPage.meta.total_pages
-          ? lastPage?.meta.page_index + 1
-          : undefined
-      },
-    })
+  const {
+    hasNextPage: hasNextUnitPage,
+    fetchNextPage: fetchNextUnitPage,
+    refetch: refetchUnits,
+  } = useInfiniteQuery({
+    queryKey: [CourseKey.UnitList],
+    queryFn: getCourseUnitList,
+    enabled: !!selectedSubsection,
+    getNextPageParam: (lastPage: any) => {
+      return lastPage?.meta.page_index < lastPage.meta.total_pages
+        ? lastPage?.meta.page_index + 1
+        : undefined
+    },
+  })
 
   // Get Activity List
   const getCourseActivityList = async (page: any) => {
@@ -160,10 +163,10 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
       setSelectedActivity(null)
     }
   }
-
   const {
     hasNextPage: hasNextActivityPage,
     fetchNextPage: fetchNextActivityPage,
+    refetch: refetchActivities,
   } = useInfiniteQuery({
     queryKey: [CourseKey.ActivityList, selectedUnit],
     queryFn: getCourseActivityList,
@@ -172,17 +175,21 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
   })
 
   useEffect(() => {
+    !!selectedSection && selectedSection.value !== '' && refetchSubsections()
+
     setSelectedSubsection(null)
     setSelectedUnit(null)
     setSelectedActivity(null)
   }, [selectedSection])
 
   useEffect(() => {
+    !!selectedSubsection && refetchUnits()
     setSelectedUnit(null)
     setSelectedActivity(null)
   }, [selectedSubsection])
 
   useEffect(() => {
+    !!selectedUnit && refetchActivities()
     setSelectedActivity(null)
   }, [selectedUnit])
 
