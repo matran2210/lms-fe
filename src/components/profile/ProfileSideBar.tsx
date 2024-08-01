@@ -146,7 +146,7 @@ const ProfileSideBar = ({ page }: IProps) => {
               className = 'bg-secondary font-medium text-primary'
             }
             if (childActivationStates[childLabel]) {
-              className = 'bg-secondary hover:font-medium text-primary'
+              className = 'bg-secondary text-primary'
             }
 
             return (
@@ -214,10 +214,10 @@ const ProfileSideBar = ({ page }: IProps) => {
                         return (
                           <div
                             key={childLabel}
-                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-medium hover-transition-font-weight ${
+                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover-transition-font-weight ${
                               childIsActive
                                 ? 'bg-white font-medium text-primary'
-                                : 'hover:left-[-0.5px] font-normal'
+                                : 'hover:left-[-0.25px] font-normal'
                             }`}
                           >
                             <a
@@ -243,7 +243,7 @@ const ProfileSideBar = ({ page }: IProps) => {
             )
           })}
           <li
-            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:font-medium hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
+            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:text-primary hover-transition-font-weight"
             onClick={handleLogout}
           >
             <div className="absolute inset-0 bottom-0"></div>
