@@ -22,6 +22,10 @@ import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
 import { Skeleton } from 'antd'
+import { IconSend } from '@assets/icons'
+import SappButtonIcon from '@components/base/button/SappButtonIcon'
+import SappButton from '@components/base/button/SappButton'
+import clsx from 'clsx'
 
 type Props = {
   class_id: string
@@ -424,19 +428,31 @@ const Discussion = ({ class_id }: Props) => {
                         inputClassName={'max-h-10 !pr-9'}
                         placeholder="Your comment..."
                       ></HookFormTextField>
-                      <div className="absolute top-[13px] right-3 cursor-pointer">
+                      <div
+                        className={`absolute top-[13px] right-[40px] cursor-pointer ${clsx({ hidden: rootSelectedFiles?.length > 0 || selectedFiles?.length > 0 })}`}
+                      >
                         <SappIcon icon="camera"></SappIcon>
                         <input
                           type="file"
                           className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
                           accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
-                          multiple
                           onChange={handleFileChange}
                           ref={fileInputRef}
                         />
                       </div>
+                      <SappButtonIcon
+                        type="submit"
+                        ishover={false}
+                        className="border-none absolute top-[13px] right-1 cursor-pointer select-none bg-transparent min-w-1 h-fit"
+                      >
+                        <IconSend className="hover:fill-yellow-500" />
+                      </SappButtonIcon>
                     </div>
-                    <button type="submit" className="hidden"></button>
+                    <SappButton
+                      title=""
+                      type="submit"
+                      className="hidden"
+                    ></SappButton>
                   </form>
                 </div>
               </div>
@@ -518,8 +534,10 @@ const Discussion = ({ class_id }: Props) => {
               placeholder="Your comment..."
               className="h-fit"
             ></HookFormTextField>
-            <button type="submit" className="hidden"></button>
-            <div className="absolute top-[13px] right-3 cursor-pointer select-none">
+            <SappButton title="" type="submit" className="hidden"></SappButton>
+            <div
+              className={`absolute top-[13px] right-[40px] cursor-pointer select-none ${clsx({ hidden: rootSelectedFiles?.length > 0 || selectedFiles?.length > 0 })}`}
+            >
               <SappIcon icon="camera"></SappIcon>
               <input
                 type="file"
@@ -530,6 +548,13 @@ const Discussion = ({ class_id }: Props) => {
                 ref={rootFileInputRef}
               />
             </div>
+            <SappButtonIcon
+              type="submit"
+              ishover={false}
+              className="border-none absolute top-[13px] right-1 cursor-pointer select-none bg-transparent min-w-1 h-fit"
+            >
+              <IconSend className="hover:fill-yellow-500" />
+            </SappButtonIcon>
           </div>
         </form>
       </div>
