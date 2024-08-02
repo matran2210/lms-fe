@@ -15,6 +15,7 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import Layout from '@components/layout'
 import { trackGAEvent } from '@utils/google-analytics'
+import PopupCanNotRetakeTest from '@components/mycourses/PogupCannotRetakeTest'
 
 interface IProps {
   course_section_type: string
@@ -40,6 +41,7 @@ interface IProps {
     attempt: {
       id: string
       number_of_attempts: number
+      score: number
       ratio_score: string
       total_attempt_time: number
     }
@@ -60,7 +62,6 @@ const CoursePartDetail = () => {
   const [defaultActive, setDefaultActive] = useState<string>()
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
-
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await CoursesAPI.getPartDetail(
@@ -81,7 +82,7 @@ const CoursePartDetail = () => {
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
-
+  let is_passed_course = false
   const fetchChapterDetail = async (
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
@@ -90,6 +91,7 @@ const CoursePartDetail = () => {
     try {
       const res = await CoursesAPI.getPartDetail(id, course_section_id)
       const nodeList = res?.data?.course_section_tree
+      is_passed_course = res?.data?.is_passed_course
       const newData = nodeList.map((item: IProps) => {
         if (item.id === course_section_id) {
           const { parent_id, ...rest } = item
@@ -200,7 +202,11 @@ const CoursePartDetail = () => {
       setChapterData(filteredData?.[0])
       setChapterTestId(filteredData?.[0]?.id)
     }
+
     setOpen(true)
+  }
+  const onCancel = () => {
+    setOpen(false)
   }
 
   const course_section = chapterDetail?.children?.[0]
@@ -436,6 +442,7 @@ const CoursePartDetail = () => {
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
             activeCourse={() => {}}
+            is_passed_course={is_passed_course}
           />
         </div>
       </Layout>
