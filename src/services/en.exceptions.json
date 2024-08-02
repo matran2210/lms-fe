@@ -96,6 +96,7 @@
   "400|050004": "Case Study Story Not Found",
   "400|050005": "Topic Added And Removed At The Same Time",
   "400|050022": "Case Study Story Already In Used",
+  "400|060002": "You already passed the Course",
   "400|060004": "Quiz Not Found",
   "400|060005": "Invalid Quiz",
   "400|060022": "Quiz Already In Used",
