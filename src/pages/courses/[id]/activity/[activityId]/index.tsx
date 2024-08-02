@@ -73,7 +73,7 @@ const ActivityPage = () => {
   )
 
   const courseId = router.query?.id
-  const sectionId = router.query?.activityId
+  const sectionId = router.query?.activityId as string
 
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
@@ -90,7 +90,7 @@ const ActivityPage = () => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-
+  const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
     left: 'calc(50% - 200px)',
@@ -219,8 +219,12 @@ const ActivityPage = () => {
    */
   const handleFinishedCourseSectionProgress = async () => {
     if (!isFinishRef?.current) {
+      if (fetch_progress.find((id) => id === sectionId)) {
+        return
+      }
       await CoursesAPI.startCourseSectionProgress(courseId, sectionId)
       isFinishRef.current = true
+      setFetch_progress([...fetch_progress, sectionId])
     }
   }
 

@@ -9,10 +9,12 @@ import NoData from 'src/common/NoData'
 const CourseParts = ({
   courses,
   class_user_id,
+  is_passed_course,
   lastElementRef,
 }: {
   courses: IMyCourseDetail[] | undefined
   class_user_id?: string
+  is_passed_course: boolean
   lastElementRef: (node: HTMLDivElement) => void
 }) => {
   return (
@@ -38,6 +40,7 @@ const CourseParts = ({
                 <PartMiddleTest
                   key={index}
                   coursePart={coursePart}
+                  is_passed_course={is_passed_course}
                   class_user_id={class_user_id}
                 />
               ) : (

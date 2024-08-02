@@ -1,11 +1,16 @@
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
+import PopupCanNotRetakeTest from '@components/mycourses/PogupCannotRetakeTest'
 import { TEST_TYPE } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
-
+import { useMemo, useState } from 'react'
+enum StatusQuizAttempt {
+  Passed = 'Passed',
+  Failed = 'Failed',
+  Unsubmitted = 'Unsubmitted',
+}
 interface IProps {
   open: boolean
   setOpen: any
@@ -13,6 +18,7 @@ interface IProps {
   data?: any
   class_user_id?: string
   activeCourse?: any
+  is_passed_course: boolean
 }
 const TestModal = ({
   open,
@@ -21,17 +27,40 @@ const TestModal = ({
   data,
   class_user_id,
   activeCourse,
+  is_passed_course,
 }: IProps) => {
   const router = useRouter()
+  const [openResource, setOpenPopup] = useState(false)
+  const onCancel = () => {
+    setTimeout(() => {
+      setOpen(false)
+    })
+  }
 
-  const checkFinished = useMemo(() => {
-    if (data?.quiz?.attempt) {
+  const can_retake = useMemo(() => {
+    if (!data?.quiz?.attempt) {
       return true
     }
-    return false
+    if (data.quiz.is_graded && is_passed_course) {
+      return false
+    }
+    return true
+  }, [data?.quiz?.attempt])
+  const status = useMemo(() => {
+    if (!data?.quiz?.attempt) {
+      return StatusQuizAttempt.Unsubmitted
+    }
+    if (data.quiz.attempt.score < data?.quiz?.required_percent_score) {
+      return StatusQuizAttempt.Failed
+    }
+    return StatusQuizAttempt.Passed
   }, [data?.quiz?.attempt])
 
   const onSubmit = async () => {
+    if (!can_retake) {
+      setOpenPopup(true)
+      return
+    }
     //to do: start test
     try {
       activeCourse && (await activeCourse())
@@ -41,7 +70,7 @@ const TestModal = ({
           class_user_id: class_user_id,
         },
       })
-      checkFinished
+      status
         ? () => trackGAEvent('Click Button Retake Modal Test')
         : () => trackGAEvent('Click Button Start Modal Test')
     } catch (err) {}
@@ -66,7 +95,9 @@ const TestModal = ({
             : false
       }
       onOk={onSubmit}
-      okButtonCaption={checkFinished ? 'Retake' : 'Start'}
+      okButtonCaption={
+        status === StatusQuizAttempt.Unsubmitted ? 'Start' : 'Retake'
+      }
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
     >
@@ -108,7 +139,7 @@ const TestModal = ({
             <div className={` pr-0.5 font-medium`}>
               {data?.quiz?.attempt?.ratio_score ?? '--'}
             </div>
-            {checkFinished && (
+            {status !== StatusQuizAttempt.Unsubmitted && (
               <div
                 className="underline ml-2 text-state-info cursor-pointer"
                 onClick={() => {
@@ -127,11 +158,16 @@ const TestModal = ({
       <div className="flex justify-between py-6 gap-8 text-base">
         <div className="text-gray-1">Status:</div>
         <div
-          className={`${checkFinished ? 'text-state-success' : 'text-state-error'} pr-0.5 font-medium`}
+          className={`${status === StatusQuizAttempt.Passed ? 'text-state-success' : status === StatusQuizAttempt.Failed ? 'text-state-error' : 'text-bw-1'} pr-0.5 font-medium`}
         >
-          {checkFinished ? 'Finished' : 'Unfinished'}
+          {status}
         </div>
       </div>
+      <PopupCanNotRetakeTest
+        open={openResource}
+        setOpen={setOpenPopup}
+        onCancel={() => onCancel()}
+      />
     </SappModalV2>
   )
 }
