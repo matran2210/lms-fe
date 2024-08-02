@@ -636,7 +636,7 @@ const ActivityPage = () => {
               className="w-4/5 mx-auto"
             >
               {!!course_tab_documents?.length && (
-                <div className="bg-white pb-6 mb-6">
+                <div className="activity__body bg-white pb-6 mb-6">
                   <div
                     className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}
                   >
