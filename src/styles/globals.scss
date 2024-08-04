@@ -208,6 +208,11 @@ body *::-webkit-scrollbar-thumb:hover {
     display: unset;
     max-width: max-content;
   }
+
+  .video-controls ul {
+    padding-inline-start: 0 !important;
+    list-style: none;
+  }
 }
 
 .sapp-questions .sapp-input-preview {

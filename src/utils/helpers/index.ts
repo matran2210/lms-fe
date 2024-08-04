@@ -256,3 +256,7 @@ export const isSafari = () => {
     !/Chrome/.test(userAgent)
   )
 }
+
+export const isMobileOrTablet = () => {
+  return /Mobi|Tablet|iPad|iPhone/.test(navigator.userAgent);
+}
