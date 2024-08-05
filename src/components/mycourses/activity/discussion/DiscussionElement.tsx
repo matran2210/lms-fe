@@ -308,7 +308,7 @@ function DiscussionElement({
                     <SappButtonIcon
                       type="submit"
                       ishover={false}
-                      className="border-none min-w-1 h-fit"
+                      className="border-none !min-w-1 h-fit"
                     >
                       <IconSend className="hover:fill-yellow-500" />
                     </SappButtonIcon>

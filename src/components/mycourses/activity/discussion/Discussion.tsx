@@ -429,7 +429,7 @@ const Discussion = ({ class_id }: Props) => {
                         placeholder="Your comment..."
                       ></HookFormTextField>
                       <div
-                        className={`absolute top-[13px] right-[40px] cursor-pointer ${clsx({ hidden: rootSelectedFiles?.length > 0 || selectedFiles?.length > 0 })}`}
+                        className={`absolute top-[13px] right-[40px] cursor-pointer ${clsx({ hidden: selectedFiles?.length > 0 })}`}
                       >
                         <SappIcon icon="camera"></SappIcon>
                         <input
@@ -443,7 +443,7 @@ const Discussion = ({ class_id }: Props) => {
                       <SappButtonIcon
                         type="submit"
                         ishover={false}
-                        className="border-none absolute top-[13px] right-1 cursor-pointer select-none bg-transparent min-w-1 h-fit"
+                        className="border-none absolute top-[13px] right-1 cursor-pointer select-none bg-transparent !min-w-1 h-fit"
                       >
                         <IconSend className="hover:fill-yellow-500" />
                       </SappButtonIcon>
@@ -536,7 +536,7 @@ const Discussion = ({ class_id }: Props) => {
             ></HookFormTextField>
             <SappButton title="" type="submit" className="hidden"></SappButton>
             <div
-              className={`absolute top-[13px] right-[40px] cursor-pointer select-none ${clsx({ hidden: rootSelectedFiles?.length > 0 || selectedFiles?.length > 0 })}`}
+              className={`absolute top-[13px] right-[40px] cursor-pointer select-none ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
             >
               <SappIcon icon="camera"></SappIcon>
               <input
@@ -551,7 +551,7 @@ const Discussion = ({ class_id }: Props) => {
             <SappButtonIcon
               type="submit"
               ishover={false}
-              className="border-none absolute top-[13px] right-1 cursor-pointer select-none bg-transparent min-w-1 h-fit"
+              className="border-none absolute top-[13px] right-1 cursor-pointer select-none bg-transparent !min-w-1 h-fit"
             >
               <IconSend className="hover:fill-yellow-500" />
             </SappButtonIcon>
