@@ -190,12 +190,10 @@ export default function ExpandIcon({
       )}
 
       {type === 'notification' && (
-        <span className="relative">
-          <NotificationIcon
-            className={className}
-            isNotifications={isNotifications}
-          />
-        </span>
+        <NotificationIcon
+          className={className}
+          isNotifications={isNotifications}
+        />
       )}
       {type === 'setting' && (
         <svg

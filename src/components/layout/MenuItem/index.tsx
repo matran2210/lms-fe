@@ -103,18 +103,6 @@ export default function MenuItem({
     router?.query?.activityId ||
     router?.query?.course_section_id
 
-  const socket = useContext(SocketContext)
-
-  useEffect(() => {
-    if (socket && socket.connected) {
-      socket.on('GET_NOTIFICATION_UNREAD', {})
-    }
-
-    return () => {
-      socket?.off('GET_NOTIFICATION_UNREAD', () => {})
-    }
-  }, [])
-
   const renderMenuContent = () => {
     return (
       <div className="flex items-center" onClick={handleActive}>

@@ -22,12 +22,10 @@ import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
 import { ANIMATION, PageLink } from 'src/constants'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
-  getCountUnRead,
-  hideNotification,
-  showNotification,
+  showNotification
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { URL } from 'url'
@@ -48,9 +46,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   // const gettingNotiUnread = useAppSelector(
   //   (state) => state.notificationReducer?.loading,
   // )
-  const getNotiUnread = useAppSelector(
-    (state) => state.notificationReducer?.total_records,
-  )
+  // const getNotiUnread = useAppSelector(
+  //   (state) => state.notificationReducer?.total_records,
+  // )
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -70,37 +68,19 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
   ]
 
-  const coutNotificationsUnRead = async () => {
-    const accessToken = getActToken()
-    if (accessToken && excludedPaths.every((path) => router?.asPath !== path)) {
-      try {
-        await dispatch(getCountUnRead())
-      } catch (error) {}
-    }
-  }
-
   useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
     })
   })
 
-  const handleOnChangePage = () => {
-    // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
-    coutNotificationsUnRead()
-  }
-
-  useEffect(() => {
-    handleOnChangePage()
-  }, [router.pathname])
-
-  useEffect(() => {
-    if (getNotiUnread > 0) {
-      dispatch(showNotification())
-    } else {
-      dispatch(hideNotification())
-    }
-  }, [getNotiUnread])
+  // useEffect(() => {
+  //   if (getNotiUnread > 0) {
+  //     dispatch(showNotification())
+  //   } else {
+  //     dispatch(hideNotification())
+  //   }
+  // }, [getNotiUnread])
 
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })

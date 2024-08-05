@@ -25,7 +25,7 @@ const NotificationIcon = ({
     }
   }, [])
   return (
-    <>
+    <div className="relative">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -46,7 +46,7 @@ const NotificationIcon = ({
       {countUnread === 0 && isNotifications && (
         <Icon type="ellip" className="text-danger absolute top-0.5 right-0.5" />
       )}
-    </>
+    </div>
   )
 }
 
