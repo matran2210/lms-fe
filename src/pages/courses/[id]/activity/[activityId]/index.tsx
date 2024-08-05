@@ -748,14 +748,19 @@ const ActivityPage = () => {
                                       className="cursor-pointer text-gray-1 hover:text-primary"
                                       onClick={() => {
                                         e.resource.suffix_type !==
-                                          SUFFIX_TYPE.GENERAL_FILE &&
-                                          handleOpenScratchPad(
-                                            {
-                                              type: 'file',
-                                            },
-                                            e?.resource?.url,
-                                            e?.resource?.name,
-                                          )
+                                        SUFFIX_TYPE.GENERAL_FILE
+                                          ? handleOpenScratchPad(
+                                              {
+                                                type: 'file',
+                                              },
+                                              e?.resource?.url,
+                                              e?.resource?.name,
+                                            )
+                                          : download(
+                                              e?.resource?.name,
+                                              e?.resource?.file_key,
+                                            )
+
                                         trackGAEvent('Click Open File Resource')
                                       }}
                                     >
