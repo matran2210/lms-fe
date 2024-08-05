@@ -1,9 +1,8 @@
+import { NotificationIcon } from '@assets/icons'
+import { useAppSelector } from 'src/redux/hook'
+import ArrowUp from './ArrowUp'
 import LogoDefault from './LogoDefault'
 import LogoFull from './LogoFull'
-import ArrowUp from './ArrowUp'
-import { useAppSelector } from 'src/redux/hook'
-import Icon from '@components/icons'
-import { NotificationIcon } from '@assets/icons'
 
 type ExpandIconPros = {
   isExpanded?: boolean
@@ -21,6 +20,7 @@ export default function ExpandIcon({
   const isNotifications = useAppSelector(
     (state) => state.notificationReducer.notification_status,
   )
+
   return (
     <>
       {isExpanded && type === 'ontoggle' ? (
@@ -191,13 +191,10 @@ export default function ExpandIcon({
 
       {type === 'notification' && (
         <span className="relative">
-          <NotificationIcon className={className} />
-          {isNotifications && (
-            <Icon
-              type="ellip"
-              className="absolute right-0.5 top-1 text-danger"
-            />
-          )}
+          <NotificationIcon
+            className={className}
+            isNotifications={isNotifications}
+          />
         </span>
       )}
       {type === 'setting' && (

@@ -1,18 +1,25 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
+import { SocketContext } from '@contexts/SocketContext'
+import { trackGAEvent } from '@utils/google-analytics'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { useAppSelector, useAppDispatch } from 'src/redux/hook'
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
+import { TitleSidebar } from 'src/constants'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { userReducer } from 'src/redux/slice/User/User'
+import { v4 as uuidv4 } from 'uuid'
 import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
-import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
-import { v4 as uuidv4 } from 'uuid'
-import { TitleSidebar } from 'src/constants'
-import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { trackGAEvent } from '@utils/google-analytics'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -95,6 +102,18 @@ export default function MenuItem({
     router?.query?.courseId ||
     router?.query?.activityId ||
     router?.query?.course_section_id
+
+  const socket = useContext(SocketContext)
+
+  useEffect(() => {
+    if (socket && socket.connected) {
+      socket.on('GET_NOTIFICATION_UNREAD', {})
+    }
+
+    return () => {
+      socket?.off('GET_NOTIFICATION_UNREAD', () => {})
+    }
+  }, [])
 
   const renderMenuContent = () => {
     return (

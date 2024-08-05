@@ -7,6 +7,7 @@ import LearningNotesList from '@components/mycourses/LearningNotesList'
 import PopupCert from '@components/mycourses/PopupCert'
 import { CourseProvider } from '@contexts/index'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
+import { SocketContext } from '@contexts/SocketContext'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
 import initializeGA from '@utils/google-analytics'
@@ -197,22 +198,24 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <PinnedNotifyProvider>
         <CourseProvider>
           <QueryClientProvider client={queryClient}>
-            <Toaster />
-            <SappConfirmDialogContainer />
-            <RouteGuard>
-              <>
-                <PinnedNotifications />
-                <Component {...pageProps} />
-                {getActToken() && showHelp && (
-                  <>
-                    <BackToTop />
-                    <Help showHelp={showHelp} />
-                  </>
-                )}
-                <LearningNotesList />
-                <PopupCert />
-              </>
-            </RouteGuard>
+            <SocketContext.Provider value={socket}>
+              <Toaster />
+              <SappConfirmDialogContainer />
+              <RouteGuard>
+                <>
+                  <PinnedNotifications />
+                  <Component {...pageProps} />
+                  {getActToken() && showHelp && (
+                    <>
+                      <BackToTop />
+                      <Help showHelp={showHelp} />
+                    </>
+                  )}
+                  <LearningNotesList />
+                  <PopupCert />
+                </>
+              </RouteGuard>
+            </SocketContext.Provider>
           </QueryClientProvider>
         </CourseProvider>
       </PinnedNotifyProvider>

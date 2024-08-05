@@ -1,25 +1,25 @@
-import SearchForm from '@components/mycourses/Search'
-import NotifyTab from '@components/notification/NotifyTab'
-import React, { useEffect, useState } from 'react'
 import ActionCell from '@components/base/action/ActionCell'
-import NotifyList from '@components/notification/NotifyList'
+import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
+import Layout from '@components/layout'
+import SearchForm from '@components/mycourses/Search'
 import NotifyDetail from '@components/notification//NotifyDetail'
 import NotifyActions from '@components/notification/NotifyActions'
+import NotifyList from '@components/notification/NotifyList'
+import NotifyTab from '@components/notification/NotifyTab'
+import { trackGAEvent } from '@utils/google-analytics'
+import Router, { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { ANIMATION } from 'src/constants'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
-  getNotification,
   getCountUnRead,
+  getNotification,
   getNotificationDetail,
-  markAllNotifications,
   loadMoreNotification,
+  markAllNotifications,
   updateStatus,
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import Router, { useRouter } from 'next/router'
-import { ANIMATION } from 'src/constants'
-import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
-import Layout from '@components/layout'
-import { trackGAEvent } from '@utils/google-analytics'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -181,6 +181,7 @@ const Notifications = () => {
             </ActionCell>
           </div>
         </div>
+
         <div className="mx-auto my-0 max-w-xxl" data-aos={ANIMATION.DATA_AOS}>
           <NotifyList
             notifyLists={notifyLists}
