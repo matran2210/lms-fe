@@ -26,12 +26,12 @@ export default function DashboardLayout({
 
   const [openResource, setOpenResource] = useState(false)
 
-	const isEnablePinnedPages = [
+  const isEnablePinnedPages = [
     PageLink.COURSES,
     PageLink.USERPAGE,
     PageLink.COURSE_DETAIL,
     PageLink.COURSE_PART_DETAIL,
-    PageLink.COURSE_ACTIVITY
+    PageLink.COURSE_ACTIVITY,
   ].includes(router.pathname)
 
   return (
