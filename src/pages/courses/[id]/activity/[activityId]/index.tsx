@@ -1178,16 +1178,9 @@ const ActivityPage = () => {
                           return (
                             <div
                               key={index}
-                              className="cursor-pointer text-state-info hover:underline"
-                              onClick={() =>
-                                handleOpenScratchPad(
-                                  { type: 'file' },
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                              }
+                              className="cursor-pointer h-full"
                             >
-                              {e?.resource?.name}
+                              <PdfViewer file={e?.resource?.url} />
                             </div>
                           )
                         })}
