@@ -208,7 +208,7 @@ export default function ExpandIcon({
           {isNotifications && (
             <Icon
               type="ellip"
-              className="text-danger absolute top-1 right-0.5"
+              className="absolute right-0.5 top-1 text-danger"
             />
           )}
         </span>
@@ -237,7 +237,7 @@ export default function ExpandIcon({
           viewBox="0 0 512 512"
           width="40"
           height="40"
-          className={`!w-10 !h-10 ${className}`}
+          className={`!h-10 !w-10 ${className}`}
         >
           <path
             fill="currentColor"
@@ -253,7 +253,7 @@ export default function ExpandIcon({
           version="1.1"
           viewBox="0 0 31.955 31.955"
           xmlSpace="preserve"
-          className={`!min-w-[4px] !min-h-[4px] ${className}`}
+          className={`!min-h-[4px] !min-w-[4px] ${className}`}
         >
           <g fill="#181C32">
             <path d="M27.25 4.655c-6.254-6.226-16.37-6.201-22.594.051-6.227 6.254-6.204 16.37.049 22.594 6.256 6.226 16.374 6.203 22.597-.051 6.224-6.254 6.203-16.371-.052-22.594z"></path>
@@ -269,7 +269,7 @@ export default function ExpandIcon({
           height="24"
           fill="none"
           viewBox="0 0 24 24"
-          className={`!min-w-[4px] !min-h-[4px] ${className}`}
+          className={`!min-h-[4px] !min-w-[4px] ${className}`}
         >
           <path
             fill="currentColor"
@@ -284,7 +284,7 @@ export default function ExpandIcon({
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={`!min-w-[4px] !min-h-[4px] ${className}`}
+          className={`!min-h-[4px] !min-w-[4px] ${className}`}
         >
           <path
             d="M7.5 11.25H14.408L11.408 8.25L12.4688 7.18922L17.2795 12L12.4688 16.8108L11.408 15.75L14.408 12.75H7.5V19.6875C7.5 19.8367 7.55926 19.9798 7.66475 20.0852C7.77024 20.1907 7.91332 20.25 8.0625 20.25H21.9375C22.0867 20.25 22.2298 20.1907 22.3352 20.0852C22.4407 19.9798 22.5 19.8367 22.5 19.6875V4.3125C22.5 4.16332 22.4407 4.02024 22.3352 3.91475C22.2298 3.80926 22.0867 3.75 21.9375 3.75H8.0625C7.91332 3.75 7.77024 3.80926 7.66475 3.91475C7.55926 4.02024 7.5 4.16332 7.5 4.3125V11.25Z"

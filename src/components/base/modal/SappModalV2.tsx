@@ -91,7 +91,7 @@ const SappModalV2 = ({
     >
       {children}
       {showFooter && (
-        <div className={`md:pt-9 pt-5 relative`}>
+        <div className={`relative pt-5 md:pt-9`}>
           <ButtonCancelSubmit
             revertFunction={revertFunction}
             className={footerButtonClassName}

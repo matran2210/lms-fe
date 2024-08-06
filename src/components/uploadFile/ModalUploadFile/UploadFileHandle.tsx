@@ -84,7 +84,7 @@ const UploadFileHandle = ({
     }
     return (
       <>
-        <div className="sapp-upload-file-progress items-center mt-2">
+        <div className="sapp-upload-file-progress mt-2 items-center">
           <div className="w-100 sapp-upload-file-content">
             <div className="sapp-upload-file-name">
               {_file?.name ?? _file?.originFileObj?.name}
@@ -139,7 +139,7 @@ const UploadFileHandle = ({
         accept={UPLOAD_TYPE[fileType]?.accept}
         {...(!isMultiple && { maxCount: 1 })}
       >
-        <div className="scroll-y px-10 px-lg-15 pt-10 pb-10">
+        <div className="scroll-y px-lg-15 px-10 pb-10 pt-10">
           <div>
             <div className="mb-3 flex justify-center">
               {typeof icon === 'object' ? (
@@ -167,7 +167,7 @@ const UploadFileHandle = ({
               title="Browse"
               className="mb-10"
             ></ButtonPrimary>
-            <div className="flex w-fit my-0 mx-auto">
+            <div className="mx-auto my-0 flex w-fit">
               <span className="text-left"> File support:</span>
               <div className="ms-2">
                 {UPLOAD_TYPE[fileType]?.note?.map((e, i) => {

@@ -40,7 +40,7 @@ const SappTable = ({
         {showHeader && (
           <thead className={`${theadClass}`}>
             <tr
-              className={`text-start text-muted fw-bolder fs-7 text-uppercase gs-0 ${classString}`}
+              className={`text-muted fw-bolder fs-7 text-uppercase gs-0 text-start ${classString}`}
             >
               {hasCheck && (
                 <th className="w-50px pr-5">

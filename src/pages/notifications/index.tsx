@@ -152,8 +152,8 @@ const Notifications = () => {
           Loading
         </div>
       )} */}
-      <div className="header bg-white border-b border-default px-4 lg:px-20">
-        <div className="max-w-xxl my-0 mx-auto flex py-4.5">
+      <div className="header border-b border-default bg-white px-4 lg:px-20">
+        <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
@@ -162,26 +162,26 @@ const Notifications = () => {
       </div>
       <div className="lg:px-20" data-aos={ANIMATION.DATA_AOS}>
         <div
-          className="main max-w-xxl my-0 mx-auto pt-6 px-4 lg:px-0"
+          className="main mx-auto my-0 max-w-xxl px-4 pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}
         >
-          <h2 className="text-medium-sm font-medium text-bw-1 pb-4">
+          <h2 className="pb-4 text-medium-sm font-medium text-bw-1">
             Notifications
           </h2>
         </div>
 
         <div
-          className="heading bg-white max-w-xxl my-0 px-6 mx-auto flex justify-between border-b border-gray-2"
+          className="heading mx-auto my-0 flex max-w-xxl justify-between border-b border-gray-2 bg-white px-6"
           data-aos={ANIMATION.DATA_AOS}
         >
           <NotifyTab tabs={tabs} />
-          <div className="settings flex items-center relative">
+          <div className="settings relative flex items-center">
             <ActionCell open={openToolTip} setOpen={setOpenToolTip}>
               <NotifyActions handleMarkAll={handleMarkAll} />
             </ActionCell>
           </div>
         </div>
-        <div className="max-w-xxl my-0 mx-auto" data-aos={ANIMATION.DATA_AOS}>
+        <div className="mx-auto my-0 max-w-xxl" data-aos={ANIMATION.DATA_AOS}>
           <NotifyList
             notifyLists={notifyLists}
             open={openModel}

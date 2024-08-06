@@ -36,7 +36,7 @@ function PinnedNotifications() {
               <Row className="flex flex-row h-12">
                 <Col span={2}></Col>
                 <Col span={21}>
-                  <div className="flex flex-row justify-items-center h-12">
+                  <div className="flex h-12 flex-row justify-items-center">
                     <div className="mx-auto flex flex-row">
                       <div className="text-center content-center">
                         <IconLoudSpeaker />

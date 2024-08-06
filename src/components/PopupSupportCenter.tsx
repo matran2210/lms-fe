@@ -40,11 +40,11 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
     <>
       <div className="flex">
         <IconSupportCenter onClick={() => setVisible(!visible)} />
-        <div className="font-semibold text-base text-bw-1 ms-2">
+        <div className="ms-2 text-base font-semibold text-bw-1">
           Support Center
         </div>
       </div>
-      <div className="text-bw-1 text-ssm mt-3 mb-4">
+      <div className="mb-4 mt-3 text-ssm text-bw-1">
         Trong quá trình học tập, nếu có các vấn đề cần hỗ trợ, bạn hãy kết nối
         với bộ phận Hỗ trợ học viên qua các kênh liên hệ sau:
       </div>
@@ -56,7 +56,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         <div
           // onMouseEnter={() => setIsHoveredFourLevel(true)}
           // onMouseLeave={() => setIsHoveredFourLevel(false)}
-          className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
+          className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary"
           ref={hoverRefFourLevel}
         >
           {isHoverFourLevel ? (
@@ -87,7 +87,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         className="mt-3"
       >
         <div
-          className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
+          className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary"
           ref={hoverRefRequestForm}
         >
           {isHoverRequestForm ? (
@@ -112,7 +112,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         className="mt-3"
       >
         <div
-          className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
+          className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary"
           ref={hoverRefChat}
         >
           {isHoverChat ? (
@@ -139,7 +139,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         className="mt-3"
       >
         <div
-          className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary cursor-pointer"
+          className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary"
           ref={hoverRefAccess}
         >
           {isHoverAccess ? (
@@ -162,7 +162,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
       <div className="mt-3">
         <div
           ref={hoverRefContact}
-          className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary"
+          className="mt-3 flex h-14 border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary"
         >
           {isHoverContact ? (
             <Infomation title="Gọi khẩn cấp" />
@@ -185,7 +185,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
       <div className="mt-3">
         <div
           ref={hoverRefEmergency}
-          className="flex h-14 border-[1px] border-solid border-gray-3 py-2.5 px-3.5 mt-3 hover:bg-primary"
+          className="mt-3 flex h-14 border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary"
         >
           {isHoverEmergency ? (
             <Infomation title="Gọi khẩn cấp" />
@@ -202,7 +202,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
           )}
         </div>
       </div>
-      <div className="text-ssm text-center text-bw-1 mt-4 italic">
+      <div className="mt-4 text-center text-ssm italic text-bw-1">
         Chúng tôi cam kết phản hồi trong 4 giờ làm việc (trừ Thứ 7, Chủ nhật và
         các ngày lễ)
       </div>
@@ -212,7 +212,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
 
 const Infomation = ({ title }: { title: string }) => {
   return (
-    <div className="w-full flex items-center justify-center text-white text-ssm">
+    <div className="flex w-full items-center justify-center text-ssm text-white">
       {title}
     </div>
   )

@@ -58,25 +58,25 @@ export default function Sidebar({
         } ${isOpened ? 'w-[200px]' : ''}`}
       >
         <div
-          className={`pt-5.25 pb-6 relative max-h-[calc(100vh-145px) ${
+          className={`max-h-[calc(100vh-145px) relative pb-6 pt-5.25 ${
             guideStatus && guideStep == 2
-              ? 'bg-white z-50'
+              ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'
           }`}
         >
           <div
-            className="group-logos mx-auto pb-5.25 px-5 h-[71px]"
+            className="group-logos mx-auto h-[71px] px-5 pb-5.25"
             onClick={() => closeSideBar()}
           >
             <div
-              className="h-[50px] flex justify-start text-center items-end"
+              className="flex h-[50px] items-end justify-start text-center"
               onClick={() => trackGAEvent('Click Logo SAPP Menu')}
             >
               <ExpandIcon type={'logo-default'} />
               <ExpandIcon type={'logo-full'} />
             </div>
           </div>
-          <div className="h-px w-[calc(100%-48px)] bg-gray-2 text-center mx-auto mb-6"></div>
+          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
           <MenuItemsList
             options={MENU_ITEMS}
             setOpenResource={setOpenResource}
@@ -85,7 +85,7 @@ export default function Sidebar({
           {guideStatus && guideStep == 2 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_2}
-              className="top-full left-full max-w-365px mt-3 ml-3 w-screen"
+              className="left-full top-full ml-3 mt-3 w-screen max-w-365px"
               index={2}
               total={6}
               handleNext={nextStep}
@@ -94,10 +94,10 @@ export default function Sidebar({
           )}
         </div>
         <div
-          className={`absolute bottom-0 w-full pb-6 bg-white 
+          className={`absolute bottom-0 w-full bg-white pb-6 
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
-          <div className="h-px w-[calc(100%-48px)] bg-gray-2 text-center mx-auto mb-6"></div>
+          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
           <MenuItemsList
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}
@@ -106,7 +106,7 @@ export default function Sidebar({
           {guideStatus && guideStep == 3 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_3}
-              className="max-w-365px bottom-full left-full mb-3 ml-3 w-screen"
+              className="bottom-full left-full mb-3 ml-3 w-screen max-w-365px"
               index={3}
               total={6}
               handleNext={nextStep}
@@ -115,14 +115,14 @@ export default function Sidebar({
           )}
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
-          <div className="absolute animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40"></div>
+          <div className="bg-black absolute inset-0 z-40 animate-fade-in-overlay opacity-55 transition-opacity"></div>
         )}
       </div>
       <div
         onClick={toggleDrawer}
         className={`sidebar-overlay ${
           isOpened ? 'block md:hidden' : 'hidden'
-        } fixed top-0 left-0 bottom-0 right-0 bg-overlay-dark w-full h-ful z-20 cursor-pointer`}
+        } h-ful fixed bottom-0 left-0 right-0 top-0 z-20 w-full cursor-pointer bg-overlay-dark`}
       ></div>
       <LearningResource open={openResource} setOpenResource={setOpenResource} />
     </>

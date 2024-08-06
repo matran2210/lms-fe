@@ -30,9 +30,9 @@ const EntranceTestFilter = ({ count }: { count: number }) => {
   )
 
   return (
-    <div className="filter flex">
+    <div className="flex filter">
       <TotalResullt total={count} />
-      <div className="filter pl-6 flex self-center">
+      <div className="flex self-center pl-6 filter">
         <SappHookFormSelect
           control={control}
           name="attempt_status"

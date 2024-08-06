@@ -34,7 +34,7 @@ export interface IButtonProps {
 export interface ITabs {
   link: string
   title: string
-	disable?: boolean
+  disable?: boolean
 }
 
 export type IButtonCancelSubmitProps = {

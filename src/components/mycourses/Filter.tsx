@@ -72,10 +72,10 @@ const Filter = ({ courses, setPage }: IProps) => {
   }, [router?.query?.type])
 
   return (
-    <div className="filter flex items-center">
+    <div className="flex items-center filter">
       <TotalResullt total={totalResults} className="mr-6" />
       <div
-        className={`pr-6 border-r border-gray-1 ${
+        className={`border-r border-gray-1 pr-6 ${
           !activeStatus ? 'inactive-filter' : ''
         }`}
       >
@@ -95,7 +95,7 @@ const Filter = ({ courses, setPage }: IProps) => {
           isSearchable={false}
         />
       </div>
-      <div className="filter pl-6 flex self-center">
+      <div className="flex self-center pl-6 filter">
         <SappHookFormSelect
           control={control}
           name="status"

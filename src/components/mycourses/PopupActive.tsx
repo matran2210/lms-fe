@@ -38,10 +38,10 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
       <div className="mb-6 flex justify-center">
         <ActiveIcon />
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold flex justify-center">
+      <div className="flex justify-center text-2xl font-semibold text-bw-1 md:text-4xl">
         Active Course?
       </div>
-      <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 2xl:mb-11">
+      <div className="mb-1 mt-4 text-center text-medium-sm text-gray-1 2xl:mb-11">
         You will have {time} {time > 1 ? 'days' : 'day'} from the activation
         date to study this course
       </div>

@@ -8,8 +8,7 @@ import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
 import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
-import { IAnswearGroup, IAnswer, IScoreDetails } from 'src/type/quiz/quiz'
-import Image from 'next/image'
+import { IAnswearGroup, IAnswer, IScoreDetails } from 'src/type'
 
 const headers = [
   {
@@ -169,30 +168,29 @@ const YourScoreDetail = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`overflow-y-auto bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar ${className}`}
+      className={`max-h-full overflow-y-auto bg-white px-6 py-6 shadow-sidebar xl:max-w-[1144px] xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
+      <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Score Details
       </div>
-      <div className="block pl-4 overflow-x-auto">
+      <div className="block overflow-x-auto pl-4">
         <SappTable
           headers={headers}
           loading={loading}
           isCheckedAll={true}
-          onChange={() => { } }
+          onChange={() => {}}
           hasCheck={false}
           classTableRes="!overflow-x-hidden"
-          data={undefined}
-          >
+        >
           <>
             {scoreDetails?.answer_groups?.map((ansg: IAnswearGroup) => {
               return (
                 <>
                   <tr>
                     <td
-                      className="text-bw-1 font-medium text-base w-full pt-8"
+                      className="w-full pt-8 text-base font-medium text-bw-1"
                       colSpan={6}
                     >
                       {ansg?.name}
@@ -202,13 +200,13 @@ const YourScoreDetail = ({
                     indexQuestion++
                     return (
                       <tr
-                        className="border-dashed border-b border-gray-2"
+                        className="border-b border-dashed border-gray-2"
                         key={e?.id}
                       >
                         <td className="p-0 pr-1 text-bw-1">{indexQuestion}</td>
                         <td className="p-0 pr-4 text-start">
                           <div
-                            className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
+                            className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
                             dangerouslySetInnerHTML={{
                               __html: String(
                                 e?.question?.question_content ?? '--',
@@ -229,7 +227,7 @@ const YourScoreDetail = ({
                           ></div>
                         </td>
                         <td
-                          className="p-0 my-5 text-starttext-bw-1 line-clamp-1"
+                          className="text-starttext-bw-1 my-5 line-clamp-1 p-0"
                           title={
                             e?.question?.question_filter_id?.part?.name ?? '--'
                           }
@@ -242,7 +240,7 @@ const YourScoreDetail = ({
                           </div>
                         </td>
                         <td
-                          className={`text-start pr-7
+                          className={`pr-7 text-start
                       ${renderBoxesAndLineClass(getTypeName(e?.question?.qType ?? '--'), e)}
                     `}
                         >
@@ -256,14 +254,13 @@ const YourScoreDetail = ({
                             </>
                           )}
                         </td>
-                        <td className="p-0 pr-4 text-start m-6 text-gray-1">
+                        <td className="m-6 p-0 pr-4 text-start text-gray-1">
                           {e?.question?.qType !== 'ESSAY' && (
-                            <div className="flex items-center ml-1">
-                              <Image
+                            <div className="ml-1 flex items-center">
+                              <img
                                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                                width={16}
-                                height={16}
-                                alt="Globe"
+                                alt="Correct"
+                                className="mr-1 w-4 text-state-success"
                               />
                               {roundNumber(
                                 e?.question?.question_report?.ratio || 0,
@@ -272,7 +269,7 @@ const YourScoreDetail = ({
                             </div>
                           )}
                         </td>
-                        <td className="p-0 text-start m-6">
+                        <td className="m-6 p-0 text-start">
                           <div className="text-center">
                             {(() => {
                               if (e?.time_spent !== null) {

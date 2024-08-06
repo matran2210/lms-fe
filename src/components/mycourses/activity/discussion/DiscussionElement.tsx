@@ -225,23 +225,23 @@ function DiscussionElement({
           </div>
           <div className="w-full">
             <div className="flex flex-row">
-              <div className="text-base font-semibold mb-1">
+              <div className="mb-1 text-base font-semibold">
                 {discussion?.full_name}
               </div>
               {discussion?.is_sapp_supporter && (
-                <div className="text-primary font-semibold bg-secondary h-6 ml-2 w-fit px-2 content-center">
+                <div className="ml-2 h-6 w-fit content-center bg-secondary px-2 font-semibold text-primary">
                   <div className="flex flex-row">
                     <div className="content-center">
                       <VerifiedIcon />
                     </div>
-                    <div className="content-center text-ssm px-2 w-fit">
+                    <div className="w-fit content-center px-2 text-ssm">
                       {discussion?.supporter_display_name ?? ''}
                     </div>
                   </div>
                 </div>
               )}
             </div>
-            <div className="flex gap-3 flex-wrap mb-3">
+            <div className="mb-3 flex flex-wrap gap-3">
               {discussionFile?.map((e) => (
                 <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
                   <Image
@@ -257,7 +257,7 @@ function DiscussionElement({
                   />
                   {isEdit && (
                     <div
-                      className="absolute top-[-10px] right-[-10px] p-[5px] rounded-[80px] bg-white shadow-md"
+                      className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
                       onClick={() => handleDeleteFile(e.id, false)}
                     >
                       <CloseIconPreview width={12} height={12} />
@@ -283,7 +283,7 @@ function DiscussionElement({
                   ></Image>
                   {isEdit && (
                     <div
-                      className="absolute top-[-10px] right-[-10px] p-[5px] rounded-[80px] bg-white shadow-md"
+                      className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
                       onClick={() => {
                         handleDeleteFile(index, true)
                       }}
@@ -337,7 +337,7 @@ function DiscussionElement({
                   className="hidden"
                   disabled={isLoading}
                 ></SappButton>
-                <div className="relative w-full top-2 right-3 cursor-pointer select-none pb-2">
+                <div className="relative right-3 top-2 w-full cursor-pointer select-none pb-2">
                   <input type="text" className="absolute w-full opacity-0" />
                 </div>
               </div>
@@ -365,13 +365,13 @@ function DiscussionElement({
                     {!isEdit ? (
                       <>
                         <div
-                          className="pr-6 font-medium text-medium-sm text-bw-1 cursor-pointer hover:underline"
+                          className="cursor-pointer pr-6 text-medium-sm font-medium text-bw-1 hover:underline"
                           onClick={handleEdit}
                         >
                           Edit
                         </div>
                         <div
-                          className="font-medium text-medium-sm cursor-pointer hover:underline"
+                          className="cursor-pointer text-medium-sm font-medium hover:underline"
                           onClick={handleDeleteComment}
                         >
                           Delete
@@ -386,7 +386,7 @@ function DiscussionElement({
                   </div>
                 </div>
               )}
-              <div className="font-normal text-gray-1 cursor-default">
+              <div className="cursor-default font-normal text-gray-1">
                 {timeAgo}
               </div>
             </div>

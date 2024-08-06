@@ -18,22 +18,22 @@ const TotalScore = ({
 }: IProps) => {
   return (
     <div
-      className={`${className} bg-white flex flex-wrap flex-row justify-between w-full xl:mb-6 pr-6`}
+      className={`${className} flex w-full flex-row flex-wrap justify-between bg-white xl:mb-6 2xl:mb-8`}
     >
-      <div className="flex flex-row justify-between w-full">
+      <div className="flex w-full flex-row justify-between">
         <div className="block">
-          <div className="text-6xl xl:text-xl font-semibold xl:font-medium text-bw-1">
+          <div className="mb-3 text-xl font-semibold text-bw-1 xl:font-medium">
             Multiple Choice Score
           </div>
           <div
-            className={`${classScore} text-5.5xl xl:text-6xl font-bold text-primary mt-2 font-inter`}
+            className={`${classScore} font-inter text-5.5xl font-bold text-primary xl:text-6xl`}
           >
             <>{Math.floor(score as number)}%</>
           </div>
         </div>
         <div className="flex flex-row">
           <div
-            className={`${classGlobal} flex flex-row gap-1 w-fit items-start`}
+            className={`${classGlobal} flex w-fit flex-row items-start gap-1`}
           >
             <Image
               src="https://file.rendit.io/n/XnLyBdd8onI3Zbp3i20X.svg"

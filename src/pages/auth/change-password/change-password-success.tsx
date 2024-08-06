@@ -21,9 +21,9 @@ const ChangePasswordSuccess = () => {
         <div className="d-flex flex-column  flex-lg-row justify-content-center">
           <div className="d-flex flex-lg-row-auto justify-content-center justify-content-lg-end">
             <div className="bg-body d-flex flex-column align-items-stretch flex-center">
-              <div className="w-3/4  px-lg-10">
+              <div className="px-lg-10  w-3/4">
                 {/* Start Form Login */}
-                <div className="block max-w-[38.375rem] py-17.5 px-19 mx-auto shadow-single-dialog">
+                <div className="mx-auto block max-w-[38.375rem] px-19 py-17.5 shadow-single-dialog">
                   <div className="swal2-icon swal2-success swal2-icon-show d-flex mb-6 text-center">
                     <Image
                       src={SAPP_PasswordSuccess}
@@ -33,11 +33,11 @@ const ChangePasswordSuccess = () => {
                       priority={true}
                     />
                   </div>
-                  <div className="text-center mb-16">
-                    <h1 className="text-bw-1 fw-bolder font-semibold mb-4 text-4xl">
+                  <div className="mb-16 text-center">
+                    <h1 className="fw-bolder mb-4 text-4xl font-semibold text-bw-1">
                       Successfully
                     </h1>
-                    <div className="text-gray-1 text-medium-sm font-normal not-italic">
+                    <div className="text-medium-sm font-normal not-italic text-gray-1">
                       Your password has been reset successfully
                     </div>
                   </div>

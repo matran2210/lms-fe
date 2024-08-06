@@ -107,25 +107,25 @@ const ProfileHeader = ({
   }, [])
 
   return (
-    <div className="shadow-box block pl-10 bg-white mb-6 relative">
-      <div className="lg:flex block justify-start items-center gap-6">
+    <div className="relative mb-6 block bg-white pl-10 shadow-box">
+      <div className="block items-center justify-start gap-6 lg:flex">
         <div className="relative">
-          <div className="w-30 pt-29.2 rounded-full border-2 w border-primary  shrink mb-6 lg:mb-0 relative">
+          <div className="w relative mb-6 w-30 shrink rounded-full  border-2 border-primary pt-29.2 lg:mb-0">
             <div
               className={`${
                 loading ? 'animate-pulse' : ''
-              } w-100 h-100 rounded-full absolute top-0 left-0 right-0 bottom-0 overflow-hidden`}
+              } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full`}
             >
-              <div className="w-fit h-fit rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden leading-[0]">
+              <div className="absolute left-1/2 top-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
                 {isEdit && (
-                  <div className="z-10 absolute top-0 left-0 right-0 bottom-0 cursor-pointer">
+                  <div className="absolute bottom-0 left-0 right-0 top-0 z-10 cursor-pointer">
                     <input
                       type="file"
-                      className="w-full h-full opacity-0 cursor-pointer absolute top-0 left-0 right-0 bottom-0 z-10"
+                      className="absolute bottom-0 left-0 right-0 top-0 z-10 h-full w-full cursor-pointer opacity-0"
                       onChange={handlerChangeUploadAvatar}
                       ref={inputFileRef}
                     />
-                    <div className="w-full h-full flex justify-center items-center bg-black opacity-40">
+                    <div className="bg-black flex h-full w-full items-center justify-center opacity-40">
                       {!loadingEditAvatar ? (
                         <svg
                           width="20"
@@ -151,7 +151,7 @@ const ProfileHeader = ({
                         <div role="status">
                           <svg
                             aria-hidden="true"
-                            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                            className="h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
                             viewBox="0 0 100 101"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -191,11 +191,11 @@ const ProfileHeader = ({
           </div>
           {isEdit && (
             <div
-              className="absolute right-0 bottom-2 w-fit opacity-1 z-10"
+              className="opacity-1 absolute bottom-2 right-0 z-10 w-fit"
               onClick={handlerCancelUploadAvatar}
             >
               <div
-                className="w-6 h-6 bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
+                className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white shadow-box hover:text-state-error"
                 role="button"
               >
                 <svg
@@ -204,7 +204,7 @@ const ProfileHeader = ({
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  className="w-4 h-4 "
+                  className="h-4 w-4 "
                 >
                   <path
                     strokeLinecap="round"
@@ -217,14 +217,14 @@ const ProfileHeader = ({
           )}
         </div>
 
-        <div className="flex-1 mb-6 lg:mb-0">
-          <div className="font-bold text-2xl mb-4 truncate max-w-[600px] text-bw-1">
+        <div className="mb-6 flex-1 lg:mb-0">
+          <div className="mb-4 max-w-[600px] truncate text-2xl font-bold text-bw-1">
             <TextSkeleton loading={loading || loadingEditName}>
               {user.detail.full_name}
             </TextSkeleton>
           </div>
-          <div className="md:flex block justify-start items-center gap-8 text-gray-1">
-            <div className="flex justify-start items-center gap-1.5 mb-3 md:mb-0">
+          <div className="block items-center justify-start gap-8 text-gray-1 md:flex">
+            <div className="mb-3 flex items-center justify-start gap-1.5 md:mb-0">
               <svg
                 width="24"
                 height="24"
@@ -250,7 +250,7 @@ const ProfileHeader = ({
               {user.courses} Enrolled Courses
             </div>
 
-            <div className="flex justify-start items-center gap-1">
+            <div className="flex items-center justify-start gap-1">
               <svg
                 width="24"
                 height="24"

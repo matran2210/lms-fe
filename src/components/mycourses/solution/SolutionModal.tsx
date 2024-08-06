@@ -54,7 +54,7 @@ const SolutionModal: FC<EntrancePopupProps> = ({ open, setOpen }) => {
       >
         <HeadingSolution question="Question and Solution: 3 of 4" />
         <div
-          className="close-action absolute right-4 top-2 p-4 cursor-pointer"
+          className="close-action absolute right-4 top-2 cursor-pointer p-4"
           onClick={() => {
             handleOnClick()
           }}

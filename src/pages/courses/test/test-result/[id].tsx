@@ -51,35 +51,35 @@ const TestResultDetail = () => {
     {
       link: '/courses',
       title: 'Courses',
-	    disable: false			
+      disable: false,
     },
     {
       link: `/courses/my-course/${questions?.class_id ?? ''}`,
       title: `${questions?.course?.name ?? 'Course Detail'}`,
-		  disable: false			
+      disable: false,
     },
     {
       link: linkTest,
       title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
-		  disable: true		   
+      disable: true,
     },
     {
       link: '/',
       title: 'Results',
-	    disable: false
+      disable: false,
     },
   ]
 
   return (
     <Layout title="Test Result">
-      <div className="main px-6 xl:px-16">
+      <div className="container">
         <Breadcrumb
           tabs={breadcrumbs}
           currentPage={'Results'}
           className="2xl-max:py-4"
         />
       </div>
-      <div className="px-6 xl:px-0 mx-auto xl:mx-16 mb-6">
+      <div className="container">
         <TestResultPage
           questions={questions}
           type={questions?.course?.course_categories?.[0]?.name}

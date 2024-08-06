@@ -338,12 +338,12 @@ const Discussion = ({ class_id }: Props) => {
               <div
                 className={`${
                   e?.children?.[0] ? 'mt-6' : ''
-                } ' relative ml-13 pl-5 overflow-hidden`}
+                } ' relative ml-13 overflow-hidden pl-5`}
               >
                 {e?.children?.[0] && (
                   <div>
                     <div
-                      className="absolute left-0 top-0 bottom-0 w-0.5 -mt-1 bg-size-100-30"
+                      className="bg-size-100-30 absolute bottom-0 left-0 top-0 -mt-1 w-0.5"
                       style={{
                         background:
                           'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
@@ -367,8 +367,8 @@ const Discussion = ({ class_id }: Props) => {
                   </div>
                 )}
                 <div
-                  className={`flex items-start gap-3 overflow-visible transition-max-height duration-300 ${
-                    idReply === e.id ? `max-h-96 mt-6` : 'max-h-0'
+                  className={`transition-max-height flex items-start gap-3 overflow-visible duration-300 ${
+                    idReply === e.id ? `mt-6 max-h-96` : 'max-h-0'
                   }`}
                 >
                   <div className="flex-none leading-0">
@@ -393,11 +393,11 @@ const Discussion = ({ class_id }: Props) => {
                   >
                     {selectedFiles?.length > 0 && (
                       <div>
-                        <ul className="flex gap-4 flex-wrap">
+                        <ul className="flex flex-wrap gap-4">
                           {selectedFiles.map((file, index) => (
-                            <li key={index} className="leading-0 relative mb-2">
+                            <li key={index} className="relative mb-2 leading-0">
                               <div
-                                className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
+                                className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-state-error"
                                 role="button"
                                 onClick={() => handleRemoveSelectedFiles(index)}
                               >
@@ -407,7 +407,7 @@ const Discussion = ({ class_id }: Props) => {
                                   viewBox="0 0 24 24"
                                   strokeWidth="1.5"
                                   stroke="currentColor"
-                                  className="w-4 h-4 "
+                                  className="h-4 w-4 "
                                 >
                                   <path
                                     strokeLinecap="round"
@@ -450,7 +450,7 @@ const Discussion = ({ class_id }: Props) => {
                         <SappIcon icon="camera" />
                         <input
                           type="file"
-                          className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
+                          className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
                           accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
                           onChange={handleFileChange}
                           ref={fileInputRef}
@@ -477,7 +477,7 @@ const Discussion = ({ class_id }: Props) => {
         })}
       </Skeleton>
       <div
-        className={`mt-6 flex items-start gap-3 overflow-visible transition-max-height duration-300`}
+        className={`transition-max-height mt-6 flex items-start gap-3 overflow-visible duration-300`}
       >
         <div className="flex-none leading-0">
           <Image
@@ -496,16 +496,16 @@ const Discussion = ({ class_id }: Props) => {
         </div>
         <form
           onSubmit={handleSubmit((e) => onSubmit(e, true))}
-          className="flex-1 relative"
+          className="relative flex-1"
           encType="multipart/form-data"
         >
           {rootSelectedFiles?.length > 0 && (
             <div>
-              <ul className="flex gap-4 flex-wrap">
+              <ul className="flex flex-wrap gap-4">
                 {rootSelectedFiles?.map((file, index) => (
-                  <li key={index} className="leading-0 relative mb-2">
+                  <li key={index} className="relative mb-2 leading-0">
                     <div
-                      className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 w-6 h-6 select-none bg-white rounded-full shadow-box flex justify-center items-center cursor-pointer hover:text-state-error"
+                      className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-state-error"
                       role="button"
                       onClick={() => handleRemoveSelectedFiles(index, true)}
                     >
@@ -515,7 +515,7 @@ const Discussion = ({ class_id }: Props) => {
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
-                        className="w-4 h-4 "
+                        className="h-4 w-4 "
                       >
                         <path
                           strokeLinecap="round"
@@ -555,7 +555,7 @@ const Discussion = ({ class_id }: Props) => {
               <SappIcon icon="camera" />
               <input
                 type="file"
-                className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
+                className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
                 accept="image/jpeg, image/png, image/gif"
                 multiple
                 onChange={(e) => handleFileChange(e, true)}

@@ -290,7 +290,7 @@ const QuizDocument = ({
       ></ConFirmSubmit>
 
       <div
-        className="border border-gray-2 p-6 select-none max-h-[500px] overflow-auto text-[#050505] "
+        className="border border-gray-2 p-6 select-none max-h-[500px] overflow-auto text-black-1 "
         data-aos={ANIMATION.DATA_AOS}
       >
         {activeQuestion && (
@@ -311,16 +311,16 @@ const QuizDocument = ({
         )}
       </div>
 
-      <div className="min-h-[50px] bg-gray-3 flex items-center py-2 px-6">
+      <div className="flex min-h-[50px] items-center bg-gray-3 px-6 py-2">
         <div
           className={`${
             is_graded || 'invisible'
-          } text-state-info bg-state-info bg-opacity-10 whitespace-nowrap px-1 py-0.5 font-semibold text-center text-medium-sm text-[11px]`}
+          } whitespace-nowrap bg-state-info bg-opacity-10 px-1 py-0.5 text-center text-[11px] text-medium-sm font-semibold text-state-info`}
         >
           Graded Activity
         </div>
 
-        <div className="w-fit mx-auto flex items-center gap-3">
+        <div className="mx-auto flex w-fit items-center gap-3">
           <div
             className={`cursor-pointer select-none ${
               activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
@@ -425,12 +425,12 @@ const QuizDocument = ({
       >
         <div className="relative">
           <div
-            className="ml-auto cursor-pointer absolute  right-6 top-5"
+            className="absolute right-6 top-5  ml-auto cursor-pointer"
             onClick={() => setModalResult(undefined)}
           >
-            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
-          <div className="max-w-[1114px] mx-auto overflow-auto">
+          <div className="mx-auto max-w-[1114px] overflow-auto">
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}
               getTable={getTable}

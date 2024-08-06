@@ -126,7 +126,7 @@ const HookFormCheckBoxGroup = ({
                   <label
                     className={`flex justify-center items-${positionCheckBox} w-fit ${
                       disabled
-                        ? 'opacity-60 cursor-not-allowed'
+                        ? 'cursor-not-allowed opacity-60'
                         : 'cursor-pointer'
                     } ${corrects && 'pointer-events-none'} ${
                       seprateLine && 'py-2'

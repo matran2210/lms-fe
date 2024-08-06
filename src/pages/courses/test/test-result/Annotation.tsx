@@ -1,5 +1,5 @@
-import { CloseIcon } from "@assets/icons";
-import SappModalV2 from "@components/base/modal/SappModalV2";
+import { CloseIcon } from '@assets/icons'
+import SappModalV2 from '@components/base/modal/SappModalV2'
 
 interface IAnnotation {
   openAnnotaion: boolean
@@ -18,40 +18,40 @@ const Annotation = ({ openAnnotaion, setOpenAnnotaion }: IAnnotation) => {
       width={'614px'}
     >
       <div
-        className="text-white flex cursor-pointer justify-end"
+        className="flex cursor-pointer justify-end text-white"
         onClick={() => setOpenAnnotaion(false)}
       >
-        <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-black" />
+        <CloseIcon className="group-hover:stroke-black transform stroke-bw-1 transition-all duration-300 ease-in-out" />
       </div>
-      <div className="flex flex-col w-[462px] mx-auto my-auto">
-        <div className="text-bw-1 text-4xl font-semibold mt-4">
+      <div className="mx-auto my-auto flex w-[462px] flex-col">
+        <div className="mt-4 text-4xl font-semibold text-bw-1">
           Annotation by Color
         </div>
-        <div className="text-gray-1 text-sm mb-4 mt-2">
+        <div className="mb-4 mt-2 text-sm text-gray-1">
           The annotation uses colors as labels for the status of the question in
           your test/ quiz.
         </div>
-        <div className="flex flex-row justify-between my-4 w-full">
+        <div className="my-4 flex w-full flex-row justify-between">
           <div className="content-center">
-            <div className="text-state-success w-[360px] h-2 bg-state-success"></div>
+            <div className="h-2 w-[360px] bg-state-success text-state-success"></div>
           </div>
           <div className="content-center text-state-success">Correct</div>
         </div>
-        <div className="flex flex-row justify-between my-4">
+        <div className="my-4 flex flex-row justify-between">
           <div className="content-center">
-            <div className="text-state-error w-[340px] h-2 bg-state-error"></div>
+            <div className="h-2 w-[340px] bg-state-error text-state-error"></div>
           </div>
           <div className="content-center text-state-error">Incorrect</div>
         </div>
-        <div className="flex flex-row justify-between my-4">
+        <div className="my-4 flex flex-row justify-between">
           <div className="content-center">
-            <div className="text-pinned-1 w-[320px] h-2 bg-pinned-1"></div>
+            <div className="h-2 w-[320px] bg-pinned-1 text-pinned-1"></div>
           </div>
           <div className="content-center text-pinned-1">Compeleted</div>
         </div>
-        <div className="flex flex-row justify-between my-4">
+        <div className="my-4 flex flex-row justify-between">
           <div className="content-center">
-            <div className="text-gray-1 w-[300px] h-2 bg-gray-1"></div>
+            <div className="h-2 w-[300px] bg-gray-1 text-gray-1"></div>
           </div>
           <div className="content-center text-gray-1">Not Completed</div>
         </div>
@@ -60,4 +60,4 @@ const Annotation = ({ openAnnotaion, setOpenAnnotaion }: IAnnotation) => {
   )
 }
 
-export default Annotation;
+export default Annotation

@@ -13,21 +13,21 @@ interface IProps {
 
 const ChartACCAScore = ({ data }: IProps) => {
   return (
-    <div className="block bg-white xl:mb-6 mb-4 pr-5 pl-6 xl:pl-[99px] shadow-sidebar max-w-[1144px] h-[152px] dashboard-scroll-x dashboard-scroll-y">
-      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 pt-6 pb-4">
+    <div className="dashboard-scroll-x dashboard-scroll-y mb-4 block h-[152px] max-w-[1144px] bg-white pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">
+      <div className="pb-4 pt-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Multiple Choice Score by Part
       </div>
-      <div className="w-full dashboard-scroll-x dashboard-scroll-y pb-3">
-        <div className="flex flex-row gap-14 flex-start">
+      <div className="dashboard-scroll-x dashboard-scroll-y w-full pb-3">
+        <div className="flex-start flex flex-row gap-14">
           {data?.map((item: any) => (
             <div
               key={item?.id}
-              className="flex flex-col w-1/3 max-w-78 justify-end shrink-0 items-start gap-1"
+              className="flex w-1/3 max-w-78 shrink-0 flex-col items-start justify-end gap-1"
             >
-              <div className="text-bw-1 font-normal line-clamp-2">
+              <div className="line-clamp-2 font-normal text-bw-1">
                 {item?.title}
               </div>
-              <div className="h-2 bg-gray-3 w-full relative">
+              <div className="relative h-2 w-full bg-gray-3">
                 <div
                   className="absolute left-0 top-0 h-2 bg-primary"
                   style={{
@@ -38,7 +38,7 @@ const ChartACCAScore = ({ data }: IProps) => {
                   }}
                 ></div>
               </div>
-              <div className="text-base text-bw-1 font-normal flex items-center justify-between w-full">
+              <div className="flex w-full items-center justify-between text-base font-normal text-bw-1">
                 {`${roundNumber(
                   (item?.total_correct_answers / item?.total_questions) * 100,
                 )}%`}
@@ -46,7 +46,7 @@ const ChartACCAScore = ({ data }: IProps) => {
                   <img
                     src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                     alt="Correct"
-                    className="w-4 text-state-success mr-1.5"
+                    className="mr-1.5 w-4 text-state-success"
                   />
                   <span>{roundNumber(item?.ratio ?? 0)}%</span>
                 </div>

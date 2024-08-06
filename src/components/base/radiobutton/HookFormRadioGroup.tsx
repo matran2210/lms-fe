@@ -91,13 +91,13 @@ const HookFormRadioGroup = ({
                   >
                     <div className="flex flex-row">
                       <label
-                        className={`flex gap-3 flex-row items-start ${
+                        className={`flex flex-row items-start gap-3 ${
                           (
                             option.disabled !== undefined
                               ? option.disabled
                               : disabled
                           )
-                            ? 'opacity-60 cursor-not-allowed'
+                            ? 'cursor-not-allowed opacity-60'
                             : 'cursor-pointer'
                         }`}
                       >
@@ -115,7 +115,7 @@ const HookFormRadioGroup = ({
                           key={index}
                           value={option.value.toString()}
                           checked={checked}
-                          className="flex-none mt-[3px]"
+                          className="mt-[3px] flex-none"
                           size="small"
                           state={state}
                         />
@@ -129,7 +129,7 @@ const HookFormRadioGroup = ({
                                 : ` ${stateLabel} ${
                                     labelClass ? labelClass : ''
                                   }`
-                            } flex-1 fw-bold text-base`}
+                            } fw-bold flex-1 text-base`}
                           >
                             {option.label}
                             <YourAnswer

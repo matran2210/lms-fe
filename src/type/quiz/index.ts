@@ -4,7 +4,7 @@ import { IMeta } from '../courses'
 export interface IScoreDetails {
   meta: IMeta
   answers: IAnswer[]
-	answer_groups?: IAnswearGroup[]						 
+  answer_groups?: IAnswearGroup[]
 }
 
 export interface IAnswearGroup {
