@@ -9,42 +9,39 @@ import { parseHTMLToString } from '@utils/index'
 import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
 import { IAnswearGroup, IAnswer, IScoreDetails } from 'src/type'
+import Image from 'next/image'
+import clsx from 'clsx'
 
+const commonHeaderClass =
+  'text-left p-0 text-medium-sm text-gray-1 font-semibold'
 const headers = [
   {
     label: '#',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[20px] xl:min-w-[50px]',
+    className: clsx(commonHeaderClass, 'min-w-[20px] xl:min-w-[50px]'),
   },
   {
     label: 'Question',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
+    className: clsx(commonHeaderClass, 'min-w-[210px]'),
   },
   {
-    label: 'Section (Part)',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[198px]',
+    label: 'Module',
+    className: clsx(commonHeaderClass, 'min-w-[198px]'),
   },
   {
     label: 'Type',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[110px]',
+    className: clsx(commonHeaderClass, 'min-w-[110px]'),
   },
   {
     label: 'Result',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[140px]',
+    className: clsx(commonHeaderClass, 'min-w-[90px]'),
   },
   {
     label: '',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[40px]',
+    className: clsx(commonHeaderClass, 'min-w-[40px]'),
   },
   {
     label: 'Time Spent',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[95px] !pr-0 text-center',
+    className: clsx(commonHeaderClass, ' min-w-[95px] !pr-0 text-center'),
   },
 ]
 const DEFAULT_PAGE_INDEX = 1
@@ -168,11 +165,11 @@ const YourScoreDetail = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`max-h-full overflow-y-auto bg-white px-6 py-6 shadow-sidebar xl:max-w-[1144px] xl:px-24 ${className}`}
+      className={`!mb-0 !h-fit bg-white p-6 shadow-sidebar xl:px-24  ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+      <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Score Details
       </div>
       <div className="block overflow-x-auto pl-4">
@@ -204,7 +201,7 @@ const YourScoreDetail = ({
                         key={e?.id}
                       >
                         <td className="p-0 pr-1 text-bw-1">{indexQuestion}</td>
-                        <td className="p-0 pr-4 text-start">
+                        <td className="p-0 pr-4">
                           <div
                             className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
                             dangerouslySetInnerHTML={{
@@ -234,13 +231,13 @@ const YourScoreDetail = ({
                         >
                           {e?.question?.question_filter_id?.part?.name ?? '--'}
                         </td>
-                        <td className="p-0 pr-4 text-start text-bw-1">
+                        <td className="p-0 pr-4 text-bw-1">
                           <div className="min-w-[111px]">
                             {getTypeName(e?.question?.qType ?? '--')}
                           </div>
                         </td>
                         <td
-                          className={`pr-7 text-start
+                          className={`pr-4 
                       ${renderBoxesAndLineClass(getTypeName(e?.question?.qType ?? '--'), e)}
                     `}
                         >
@@ -254,13 +251,15 @@ const YourScoreDetail = ({
                             </>
                           )}
                         </td>
-                        <td className="m-6 p-0 pr-4 text-start text-gray-1">
+                        <td className="m-6 p-0 pr-4 text-gray-1">
                           {e?.question?.qType !== 'ESSAY' && (
                             <div className="ml-1 flex items-center">
-                              <img
+                              <Image
                                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                                 alt="Correct"
                                 className="mr-1 w-4 text-state-success"
+                                width={16}
+                                height={16}
                               />
                               {roundNumber(
                                 e?.question?.question_report?.ratio || 0,
@@ -269,7 +268,7 @@ const YourScoreDetail = ({
                             </div>
                           )}
                         </td>
-                        <td className="m-6 p-0 text-start">
+                        <td className="m-6 p-0">
                           <div className="text-center">
                             {(() => {
                               if (e?.time_spent !== null) {

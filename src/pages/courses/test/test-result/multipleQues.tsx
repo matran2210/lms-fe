@@ -69,7 +69,7 @@ const MultipleQuestion = ({
           onClick={() => {
             router.push(`/explanation/${item?.id}?title=My Course`)
           }}
-          className={`border border-solid flex items-center flex-row justify-center w-10 xl:w-12 h-10 xl:h-12 text-sm font-medium leading-8.5 cursor-pointer
+          className={`flex h-8 w-8 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-8.5 md:h-10 md:w-10 xl:h-12 xl:w-12
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
@@ -82,11 +82,11 @@ const MultipleQuestion = ({
       <div className="w-full">
         {data?.length > 0 && (
           <>
-            <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium mb-6 text-bw-1">
+            <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
               {type}
             </div>
             <div
-              className={`flex flex-row items-center flex-wrap gap-3 w-full ${
+              className={`flex w-full flex-row flex-wrap items-center gap-3 ${
                 type === 'Multiple Choice Questions' ? 'mb-10' : ''
               }`}
             >
@@ -106,7 +106,8 @@ const MultipleQuestion = ({
           onClick={() => {
             router.push(`/explanation/${item?.id}?title=My Course`)
           }}
-          className={`border border-solid flex items-center flex-row justify-center w-10 xl:w-12 h-10 xl:h-12 text-sm font-medium leading-8.5 cursor-pointer
+          className={`flex h-8 w-8 flex-none cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium
+            leading-8.5 xl:h-12 xl:w-12
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
@@ -120,7 +121,7 @@ const MultipleQuestion = ({
         {data.length > 0 && (
           <>
             <div
-              className={`flex flex-row gap-3 w-auto items-start ${
+              className={`flex w-auto flex-row items-start gap-3 overflow-x-auto overflow-y-hidden ${
                 type === 'Constructed Questions' && totalBefore > 0
                   ? 'border-l border-default pl-3'
                   : ''
@@ -135,95 +136,99 @@ const MultipleQuestion = ({
   }
 
   return (
-    <div
-      className={`${className} 2xl-max:!min-h-[88px] fixed 3.75xl:static z-10 right-0 bottom-0 bg-white flex flex-col gap-y-5 w-full max-w-[calc(100vw-80px)] 3.75xl:max-w-smd items-start px-[27px] py-6 xl:overflow-y-auto shadow-sidebar-tablet 3.75xl:shadow-sidebar`}
-      data-aos={ANIMATION.DATA_AOS}
-      ref={multipleQuestionRef}
-    >
+    <div className="relative">
       <div
-        className={`${
-          showMore
-            ? 'opacity-100 visible mb-4 xl:mb-0 h-fit'
-            : 'opacity-0 3.75xl:opacity-100 invisible 3.75xl:visible h-0 3.75xl:h-auto 3.75xl:block hidden'
-        }
-        duration-300 xl:max-h-auto overflow-y-auto xl:overflow-visible flex flex-col gap-10 w-full items-start`}
+        // pl-[calc(27px+80px)]: closed sidebar width (80px)
+        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 bg-white py-6 pl-[calc(27px+80px)] pr-6 shadow-sidebar-tablet 
+        xl:sticky xl:top-[65px] xl:!h-[calc(100vh-65px-24px)] xl:pl-7 xl:shadow-sidebar`}
+        data-aos={ANIMATION.DATA_AOS}
+        ref={multipleQuestionRef}
       >
-        <div className="flex flex-col w-full items-start">
-          {renderBoxes(
-            'Multiple Choice Questions',
-            questions?.selectedResponseAnswers ?? [],
-            0,
-          )}
-          {renderBoxes(
-            'Constructed Questions',
-            questions?.constructedResponseAnswers ?? [],
-            questions?.selectedResponseAnswers?.length ?? 0,
-          )}
-        </div>
-      </div>
-      <div className="mt-auto w-full">
         <div
-          className={`border-default flex justify-between ${
+          className={`${
             showMore
-              ? 'border-t pt-4 xl:pt-6'
-              : '3.75xl:border-t pt-0 3.75xl:pt-6'
-          }`}
+              ? 'visible mb-4 h-fit opacity-100 xl:mb-0'
+              : 'invisible hidden h-0 opacity-0 xl:visible xl:block xl:h-auto xl:opacity-100'
+          }
+        xl:max-h-auto flex w-full flex-col items-start gap-10 overflow-y-auto duration-300 xl:overflow-visible`}
         >
-          <div
-            className="flex flex-row text-center cursor-pointer pr-2"
-            onClick={() => setOpenAnnotaion(true)}
-          >
-            <div className="my-auto">
-              <IconAnnotationGuide />
-            </div>
-            <div className="text-xs text-gray-1 font-normal ml-1 my-auto">
-              Annotation Guide
-            </div>
-          </div>
-          <div
-            ref={elementRef as React.LegacyRef<HTMLDivElement>}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={() => setIsDragging(false)}
-            onMouseLeave={() => setIsDragging(false)}
-            className={`${
-              !showMore ? 'opacity-100 visible' : 'opacity-0 invisible'
-            } w-full flex gap-3 overflow-x-auto duration-300 block 3.75xl:hidden !max-h-[1040px]`}
-          >
-            {renderLines(
+          <div className="flex w-full flex-col items-start">
+            {renderBoxes(
               'Multiple Choice Questions',
               questions?.selectedResponseAnswers ?? [],
               0,
             )}
-            {renderLines(
+            {renderBoxes(
               'Constructed Questions',
               questions?.constructedResponseAnswers ?? [],
               questions?.selectedResponseAnswers?.length ?? 0,
             )}
           </div>
-          <div className="flex items-center justify-end w-full shrink max-h-[40px] max-w-[192px]">
-            {Number(questions?.selectedResponseAnswers?.length || 0) +
-              Number(questions?.constructedResponseAnswers?.length || 0) >=
-              8 && (
+        </div>
+        <div className="mt-auto w-full">
+          <div
+            className={`flex max-w-full items-end justify-between gap-2 border-default xl:items-center ${
+              showMore ? 'border-t pt-4 xl:pt-6' : 'pt-0 xl:border-t xl:pt-6'
+            }`}
+          >
+            <div className="flex w-3/5 flex-col gap-2 xl:flex-row">
               <div
-                className="block 3.75xl:hidden text-medium-sm font-medium underline cursor-pointer mr-6"
-                onClick={() => {
-                  setShowMore(!showMore)
-                  if (multipleQuestionRef?.current) {
-                    multipleQuestionRef.current.style.height = 'fit-content'
-                  }
-                }}
+                className="flex cursor-pointer flex-row pr-2 text-center"
+                onClick={() => setOpenAnnotaion(true)}
               >
-                {showMore ? 'View Less' : 'View All'}
+                <div className="my-auto">
+                  <IconAnnotationGuide />
+                </div>
+                <div className="text-xs my-auto ml-1 font-normal text-gray-1">
+                  Annotation Guide
+                </div>
               </div>
-            )}
-            <Link href={`/courses/my-course/${questions?.class_id ?? ''}`}>
-              <ButtonPrimary
-                title={'Quit'}
-                size={'medium'}
-                className={'px-11 text-medium-sm !font-medium max-w-[120px]'}
-              />
-            </Link>
+              <div
+                ref={elementRef as React.LegacyRef<HTMLDivElement>}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={() => setIsDragging(false)}
+                onMouseLeave={() => setIsDragging(false)}
+                className={`${
+                  !showMore ? 'visible opacity-100' : 'invisible opacity-0'
+                } grid !max-h-[1040px] w-full grid-cols-2 gap-3 duration-300 xl:hidden`}
+              >
+                {renderLines(
+                  'Multiple Choice Questions',
+                  questions?.selectedResponseAnswers ?? [],
+                  0,
+                )}
+                {renderLines(
+                  'Constructed Questions',
+                  questions?.constructedResponseAnswers ?? [],
+                  questions?.selectedResponseAnswers?.length ?? 0,
+                )}
+              </div>
+            </div>
+            <div className="flex max-h-[40px] w-2/5 shrink items-center justify-end">
+              {Number(questions?.selectedResponseAnswers?.length || 0) +
+                Number(questions?.constructedResponseAnswers?.length || 0) >=
+                8 && (
+                <div
+                  className="mr-6 block cursor-pointer text-medium-sm font-medium underline xl:hidden"
+                  onClick={() => {
+                    setShowMore(!showMore)
+                    if (multipleQuestionRef?.current) {
+                      multipleQuestionRef.current.style.height = 'fit-content'
+                    }
+                  }}
+                >
+                  {showMore ? 'View Less' : 'View All'}
+                </div>
+              )}
+              <Link href={`/courses/my-course/${questions?.class_id ?? ''}`}>
+                <ButtonPrimary
+                  title={'Quit'}
+                  size={'medium'}
+                  className={'max-w-[120px] px-11 text-medium-sm !font-medium'}
+                />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

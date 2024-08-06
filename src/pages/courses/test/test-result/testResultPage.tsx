@@ -75,21 +75,23 @@ const TestResultPage = ({
   )
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
 
+  const commonMultipleScoreStyle =
+    'grid grid-cols-1 xl:grid-cols-test-result gap-x-6 w-full'
   return (
     <>
       {type === 'ACCA' && F_LOW_CODES.includes(subjectCode) ? (
-        <div className="flex xl:gap-6 flex-wrap">
-          <div className="max-h-full w-full xl:w-auto flex flex-col">
+        <div className={commonMultipleScoreStyle}>
+          <div className="flex max-h-full flex-col">
             <ChartACCAScore data={chartData?.chart_data} />
             <YourScoreDetail
-              className={'min-h-[635px] 2xl-max:pb-10 grow'}
+              className={'relative'}
               yourScoreDetailRef={yourScoreDetailRef}
             />
           </div>
-          <div className="max-h-full w-full xl:max-w-smd">
+          <div className="max-h-full w-full xl:w-full">
             <TotalScore
               score={highestValue}
-              className="mb-4 pt-6 pb-5 px-[27px] shadow-sidebar h-[152px]"
+              className="mb-4 h-[152px] px-[27px] pb-5 pt-6 shadow-sidebar"
               classScore="pt-2"
               classGlobal="mt-3 mb-3.5 !items-end"
               classCountAll="relative top-0.5"
@@ -97,7 +99,7 @@ const TestResultPage = ({
             />
             <MultipleQuestion
               questions={questions}
-              className={'3.75xl:min-h-[635px]'}
+              className={'xl:min-h-[635px]'}
               multipleQuestionRef={multipleQuestionRef}
               setOpenAnnotaion={setOpenAnnotaion}
             />
@@ -106,17 +108,17 @@ const TestResultPage = ({
       ) : (
         <>
           {type === 'CFA' ? (
-            <div className="flex gap-6 flex-wrap">
-              <div className="max-h-full w-full xl:w-auto flex flex-col">
+            <div className={commonMultipleScoreStyle}>
+              <div className="flex max-h-full flex-col">
                 <YourScore chartData={chartData} />
                 <YourScoreDetail
-                  className={'min-h-[180px] grow 2xl-max:pb-10'}
+                  className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
                 />
               </div>
               <MultipleQuestion
                 questions={questions}
-                className={'3.75xl:min-h-[820px]'}
+                className={'xl:w-full'}
                 multipleQuestionRef={multipleQuestionRef}
                 setOpenAnnotaion={setOpenAnnotaion}
               />
@@ -124,21 +126,21 @@ const TestResultPage = ({
           ) : (
             <>
               {type !== undefined ? (
-                <div className="flex xl:gap-6 flex-wrap">
-                  <div className="h-auto w-full xl:w-auto flex flex-col">
+                <div className={commonMultipleScoreStyle}>
+                  <div className="xl:3/4 flex h-auto w-full flex-col">
                     <ChartCMAScore
                       data={chartData?.chart_data}
                       GlobalAverage={GlobalAverage}
                       score={highestValue}
                     />
                     <YourScoreDetail
-                      className={'min-h-[250px] 2xl-max:pb-10'}
+                      className={''}
                       yourScoreDetailRef={yourScoreDetailRef}
                     />
                   </div>
                   <MultipleQuestion
                     questions={questions}
-                    className={'3.75xl:min-h-[820px]'}
+                    className={'h-full xl:w-full'}
                     multipleQuestionRef={multipleQuestionRef}
                     setOpenAnnotaion={setOpenAnnotaion}
                   />
