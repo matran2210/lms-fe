@@ -42,6 +42,7 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import Layout from '@components/layout'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -500,6 +501,7 @@ const ActivityPage = () => {
                 href="/courses"
                 className="breadcrumbs__link"
                 scroll={false}
+                onClick={() => trackGAEvent('Click Breadcrumb My Course')}
               >
                 My Course /
               </Link>
@@ -514,7 +516,14 @@ const ActivityPage = () => {
               </a>
             </Dropdown>
             <li className="text-bw-1">
-              <Link href={'#'} className="breadcrumbs__link" scroll={false}>
+              <Link
+                href={'#'}
+                className="breadcrumbs__link"
+                scroll={false}
+                onClick={() =>
+                  trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
+                }
+              >
                 <span>{nameActivity?.name}</span>
               </Link>
             </li>
@@ -612,7 +621,10 @@ const ActivityPage = () => {
                       className="py-2.5 !px-3 text-medium-sm !font-normal"
                       color={tabButtonColor(e?.id)}
                       title={truncateString(e?.name, 60)}
-                      onClick={() => handleChangeTab(e?.id)}
+                      onClick={() => {
+                        handleChangeTab(e?.id)
+                        trackGAEvent('Click Button Tab Activity')
+                      }}
                     ></SappButton>
                   )
                 })}
@@ -738,18 +750,22 @@ const ActivityPage = () => {
                                           e?.resource?.url,
                                           e?.resource?.name,
                                         )
+                                        trackGAEvent('Click Open File Resource')
                                       }}
                                     >
                                       {e?.resource?.name}
                                     </div>
                                   </div>
                                   <a
-                                    onClick={() =>
+                                    onClick={() => {
                                       download(
                                         e?.resource?.name,
                                         e?.resource?.file_key,
                                       )
-                                    }
+                                      trackGAEvent(
+                                        'Click Button Download Resource Activity',
+                                      )
+                                    }}
                                   >
                                     <DownloadIcon />
                                   </a>
@@ -767,9 +783,12 @@ const ActivityPage = () => {
                         <div className="w-auto">
                           <div className="relative">
                             <div
-                              onClick={() =>
+                              onClick={() => {
                                 handleChangeTab(getPreviousTabId() || '')
-                              }
+                                trackGAEvent(
+                                  'Click Button Previous Tab Activity',
+                                )
+                              }}
                               className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
                             >
                               <svg
@@ -795,9 +814,10 @@ const ActivityPage = () => {
                         <div className="w-auto relative ml-auto">
                           <div className="relative">
                             <div
-                              onClick={() =>
+                              onClick={() => {
                                 handleChangeTab(getNextTabId() || '')
-                              }
+                                trackGAEvent('Click Button Next Tab Activity')
+                              }}
                               className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                             >
                               Next Tab
@@ -852,6 +872,7 @@ const ActivityPage = () => {
                           router.push({
                             pathname: `/courses/${router.query.id}/activity/${idPreviousActivity}`,
                           })
+                          trackGAEvent('Click Button Previous Activity')
                         }}
                         className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
                       >
@@ -901,6 +922,7 @@ const ActivityPage = () => {
                           router.push({
                             pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
                           })
+                          trackGAEvent('Click Button Next Activity')
                         }}
                         className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                       >
@@ -979,8 +1001,9 @@ const ActivityPage = () => {
                       </button>
                     </div>
                     <div
-                      className="overflow-auto p-4 bg-white"
+                      // className="overflow-auto p-4 bg-white"
                       style={{ height: 'calc(100% - 40px' }}
+                      className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
                     >
                       {/* <div className='flex flex-'> */}
                       <PdfViewer file={e?.file} />
@@ -1054,118 +1077,3 @@ const ActivityPage = () => {
 }
 
 export default ActivityPage
-
-/**
- * Hàm props phía máy chủ cho thành phần ActivityPage.
- * @param {Object} context - Đối tượng context phía máy chủ.
- * @returns {Object} - Props phía máy chủ.
- */
-// export async function getServerSideProps(context: any) {
-//   const { req, res, query } = context
-
-//   // Lấy accessToken từ cookie
-//   const accessToken = req.cookies.accessToken
-
-//   // Kiểm tra accessToken
-//   if (!accessToken) {
-//     // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-//     return {
-//       redirect: {
-//         destination: '/auth/login',
-//         permanent: false,
-//       },
-//     }
-//   }
-
-//   try {
-//     const { req } = context
-
-//     // Parse cookies from the request headers
-//     const cookies = parse(req.headers.cookie || '')
-
-//     if (!context?.query?.activityId) {
-//       return {
-//         notFound: true,
-//       }
-//     }
-
-//     const activity = await CourseActivityApi.getActivityById(
-//       context?.query?.activityId,
-//       context?.query.id,
-//       cookies.accessToken,
-//     )
-
-//     return {
-//       props: {
-//         activity,
-//         courseId: context.query?.id,
-//         sectionId: context.query?.activityId,
-//       },
-//     }
-//   } catch (error: any) {
-//     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-//     if (error.response && error.response.status === 401) {
-//       // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-//       const refreshToken = req.cookies.refreshToken
-
-//       try {
-//         const refreshResponse = await axios.post(
-//           `${apiURL}/auth/rotate`,
-//           {},
-//           {
-//             headers: {
-//               Authorization: `Bearer ${refreshToken}`,
-//             },
-//           },
-//         )
-//         // Lưu accessToken mới vào cookie
-//         const userInfo = refreshResponse?.data?.data?.tokens
-//         const act = userInfo?.act
-//         const rft = userInfo?.rft
-//         // Save the new access token to the AsyncStorage
-//         if (typeof window !== 'undefined') {
-//           await AsyncStorage.setItem('accessToken', act)
-//           await AsyncStorage.setItem('refreshToken', rft)
-//         }
-//         setCookieActToken(act)
-//         setCookieRefreshToken(rft)
-//         res.setHeader('Set-Cookie', `accessToken=${act}; HttpOnly`)
-
-//         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-//         const activity = await CourseActivityApi.getActivityById(
-//           context?.query?.activityId,
-//           context?.query.id,
-//           act,
-//         )
-
-//         return {
-//           props: {
-//             activity,
-//             courseId: context.query?.id,
-//             sectionId: context.query?.activityId,
-//           },
-//         }
-//       } catch (refreshError) {
-//         removeJwtToken()
-//         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-//         // Chuyển hướng đến trang đăng nhập
-//         return {
-//           redirect: {
-//             destination: '/auth/login',
-//             permanent: false,
-//           },
-//         }
-//       }
-//     } else {
-//       // Xử lý lỗi khác khi sử dụng accessToken
-
-//       // Chuyển hướng đến trang đăng nhập
-//       return {
-//         redirect: {
-//           destination: '/404',
-//           permanent: false,
-//         },
-//       }
-//     }
-//   }
-// }

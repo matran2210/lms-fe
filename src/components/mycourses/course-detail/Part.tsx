@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
@@ -7,6 +7,7 @@ import { formatTime, truncateString } from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const Part = ({ course }: { course: IMyCourseDetail }) => {
   // const [open, setOpen] = useState(false)
@@ -58,13 +59,26 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
 
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
+  const trackGAEventBasedOnProgress = (
+    percentProgress: number,
+  ): (() => void) => {
+    if (percentProgress === 0) {
+      return () => trackGAEvent('Button Begin Course Detail')
+    } else if (percentProgress === 100) {
+      return () => trackGAEvent('Button Review Course Detail')
+    } else {
+      return () => trackGAEvent('Button Resume Course Detail')
+    }
+  }
+
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
       <div
         className={`name-course text-2xl font-medium xl:h-[60px] text-bw-1`}
-        onClick={() =>
-          course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
-        }
+        onClick={() => {
+          course?.course_section_type === 'PART' ? {} : {}
+          trackGAEvent('Title Course Detail')
+        }}
       >
         <div className="line-clamp-2 text-ellipsis cursor-pointer ">
           <SappTooltip
@@ -133,11 +147,12 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             full={false}
             size={'small'}
             className="ml-auto"
-            onClick={() =>
+            onClick={() => {
               course?.course_section_type === 'PART'
                 ? onClickPart(course?.id)
                 : {}
-            }
+              trackGAEventBasedOnProgress(percentProgress)
+            }}
           />
         </div>
       </div>

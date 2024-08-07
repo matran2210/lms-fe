@@ -5103,7 +5103,7 @@ entities@^4.2.0, entities@^4.4.0, entities@^4.5.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
-entrance-test-result-package@^1.0.53:
+entrance-test-result-package@^1.0.25:
   version "1.0.55"
   resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.0.55.tgz#b389817d381cd46a35b9121d1cb943eda50a5eb0"
   integrity sha512-HRU3/UXqRRVTfamZlKG2miDJg6hxdRjii0VCS0UA+sspkgIAtLTdmv6s8E2vSpR7UJ7TbfZg5cWUaSYylgdsaw==
@@ -10551,7 +10551,6 @@ word-wrap@^1.2.5:
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
-  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

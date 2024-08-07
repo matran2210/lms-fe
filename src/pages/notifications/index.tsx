@@ -19,6 +19,7 @@ import Router, { useRouter } from 'next/router'
 import { ANIMATION } from 'src/constants'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import Layout from '@components/layout'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -98,7 +99,9 @@ const Notifications = () => {
   const handleMarkAll = () => {
     setOpenToolTip(false)
     markAllRead()
+    trackGAEvent('Click Button Mark All As Read Notification')
   }
+
   const DEFAULT_PAGESIZE = 10
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
 

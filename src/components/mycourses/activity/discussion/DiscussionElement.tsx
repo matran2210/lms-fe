@@ -1,7 +1,7 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { VerifiedIcon } from '@components/icons'
+import { trackGAEvent } from '@utils/google-analytics'
 import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'
 import { SetStateAction, useEffect, useState } from 'react'
@@ -14,6 +14,7 @@ import {
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IUser } from 'src/redux/types/User/urser'
+import ModalDeleteComment from './ModalDeleteComment'
 
 type Props = {
   rank?: number
@@ -91,14 +92,17 @@ function DiscussionElement({
   const handleEdit = () => {
     setEditValue(discussionContent)
     setIsEdit(true)
+    trackGAEvent('Click Edit Comment Activity')
   }
 
   const handleCancelEdit = () => {
     setIsEdit(false)
+    trackGAEvent('Click Cancel Edit Comment Activity')
   }
 
   const handleDeleteComment = () => {
     setIsDelete(true)
+    trackGAEvent('Click Delete Comment Activity')
   }
 
   useEffect(() => {
@@ -184,10 +188,7 @@ function DiscussionElement({
                 ></HookFormTextField>
                 <button type="submit" className="hidden"></button>
                 <div className="relative w-full top-2 right-3 cursor-pointer select-none pb-2">
-                  <input
-                    type="text"
-                    className="absolute w-full cursor-pointer opacity-0"
-                  />
+                  <input type="text" className="absolute w-full opacity-0" />
                 </div>
               </div>
             )}
@@ -199,9 +200,10 @@ function DiscussionElement({
                   className={`${
                     discussion?.id === idReply ? 'text-primary' : ''
                   } select-none`}
-                  onClick={() =>
+                  onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id)
-                  }
+                    trackGAEvent('Click Reply Comment Activity')
+                  }}
                 >
                   Reply
                 </div>
@@ -228,39 +230,32 @@ function DiscussionElement({
                     ) : (
                       <>
                         <div
-                          className="font-semibold text-medium-sm cursor-pointer"
+                          className="font-semibold text-medium-sm cursor-pointer hover:underline"
                           onClick={handleCancelEdit}
                         >
                           Cancel
-                          <span className="text-gray-1 font-normal pl-1">
-                            edit this comment
-                          </span>
                         </div>
+                        <span className="text-gray-1 font-normal pl-1">
+                          edit this comment
+                        </span>
                       </>
                     )}
                   </div>
                 </div>
               )}
-              <div className="font-normal text-gray-1">{timeAgo}</div>
+              <div className="font-normal text-gray-1 cursor-default">
+                {timeAgo}
+              </div>
             </div>
           </div>
         </div>
       </form>
       {isDelete && (
-        <SappModalV2
-          title={'Delete Comment?'}
-          open={isDelete}
-          handleCancel={() => setIsDelete(false)}
-          showOkButton={true}
-          onOk={onDeleteComment}
-          okButtonCaption={'Delete'}
-          cancelButtonCaption={'Cancel'}
-          buttonSize="lager"
-        >
-          <div className="text-gray-1 font-medium-sm font-sans font-normal">
-            Are you sure you want to delete this comment?
-          </div>
-        </SappModalV2>
+        <ModalDeleteComment
+          isDelete={isDelete}
+          setIsDelete={setIsDelete}
+          onDeleteComment={onDeleteComment}
+        />
       )}
     </div>
   )

@@ -8,6 +8,7 @@ import PopupStep from '@components/user-guide/PopupStep'
 import { increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { UserGuide } from 'src/constants'
 import LearningResource from '@components/mycourses/LearningResource'
+import { trackGAEvent } from '@utils/google-analytics'
 
 type SidebarProps = {
   isOpened: boolean
@@ -67,7 +68,10 @@ export default function Sidebar({
             className="group-logos mx-auto pb-5.25 px-5 h-[71px]"
             onClick={() => closeSideBar()}
           >
-            <div className="h-[50px] flex justify-start text-center items-end">
+            <div
+              className="h-[50px] flex justify-start text-center items-end"
+              onClick={() => trackGAEvent('Click Logo SAPP Menu')}
+            >
               <ExpandIcon type={'logo-default'} />
               <ExpandIcon type={'logo-full'} />
             </div>

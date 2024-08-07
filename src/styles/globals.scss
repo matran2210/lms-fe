@@ -831,7 +831,6 @@ p a {
   box-shadow:
     rgba(0, 0, 0, 0.1) 0px 1px 4px,
     rgba(0, 0, 0, 0.2) 0px 2px 12px;
-  animation: moveDown 0.3s ease-out forwards;
 }
 
 .sapp-pinned-noti-header {
@@ -839,8 +838,9 @@ p a {
   background: #18355d;
 }
 
-#floating-button.clicked {
-  animation: moveDown 0.3s ease-out forwards;
+.sapp-pinned-noti-header {
+  padding: 12px 24px 12px 233px;
+  @apply bg-bw-1;
 }
 
 @keyframes moveDown {
@@ -942,21 +942,21 @@ p a {
   font-family: 'Roboto', sans-serif !important;
 }
 
-#hubspot-messages-iframe-container.visible-icon iframe {
+#hubspot-messages-iframe-container.visible-icon iframe,
+#hubspot-messages-iframe-container .visible-icon {
   display: none !important;
 }
 
-#hubspot-messages-iframe-container.visible-icon {
+#hubspot-messages-iframe-container.visible-icon,
+#hubspot-messages-iframe-container .visible-icon {
   position: inherit !important;
 }
 
-.pinned-noti-marquee-parent {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  max-width: 90%;
-}
-
-#floating-button .plus:hover svg path {
-  @apply fill-white;
+#floating-button:hover,
+#close_icon:hover,
+#back-to-top:hover {
+  transition: transform 100ms ease-in-out 0s;
+  transform: scale(1.1);
 }
 
 .svg-container:hover path {
@@ -972,6 +972,12 @@ p a {
   animation: scroll-left 50s linear infinite;
 }
 
+.pinned-noti-marquee-content:hover {
+  -moz-animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
 @keyframes scroll-left {
   0% {
     transform: translateX(100%);
@@ -984,4 +990,38 @@ p a {
 
 .content-course div strong {
   @apply font-medium text-bw-1;
+}
+
+.sapp-custom--modal .ant-modal-content {
+  @apply bg-transparent max-w-none h-[100vh] w-[100vw];
+}
+
+.ant-modal.sapp-custom--modal {
+  width: -webkit-fill-available !important;
+  @apply max-w-none;
+}
+
+// .ant-modal-wrap.ant-modal-centered {
+//   @apply w-fit
+// }
+
+.tooltip-box div span p {
+  @apply mb-0 ml-2;
+}
+
+.videoContainer {
+  @apply h-auto w-full relative;
+}
+
+.loadingOverlay {
+  transform: translate(-50%, -50%);
+  @apply absolute top-[50%] left-[50%] text-bw-1 p-2.5 rounded-[5px] z-10;
+}
+
+.hotline ins {
+  @apply no-underline cursor-default;
+}
+
+.fanpage ins {
+  @apply no-underline hover:underline;
 }

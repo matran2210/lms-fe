@@ -21,7 +21,7 @@ import { ANIMATION, PageLink } from 'src/constants'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { getActToken, getLocalStorgeActToken, pageview } from '@utils/index'
+import { getActToken, pageview } from '@utils/index'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
 import { io } from 'socket.io-client'
@@ -31,6 +31,8 @@ import PinnedNotifications from '@components/layout/PinnedNotifications'
 import PopupCert from '@components/mycourses/PopupCert'
 import Help from '@components/Help'
 import BackToTop from '@components/BackToTop'
+import TagManager, { TagManagerArgs } from 'react-gtm-module'
+import initializeGA from '@utils/google-analytics'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -175,6 +177,41 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     setDataStudent(undefined)
   }
 
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
+  const tagManagerArgs: TagManagerArgs = { gtmId }
+
+  useEffect(() => {
+    TagManager.initialize(tagManagerArgs)
+  }, [])
+
+  useEffect(() => {
+    if (!window.GA_INITIALIZED) {
+      initializeGA()
+      window.GA_INITIALIZED = true
+    }
+  }, [])
+
+  const excludedPathsHelp = [
+    '/test/[id]',
+    '/case-study/[id]',
+    '/certificates/[id]',
+  ]
+
+  const showHelp = !excludedPathsHelp.some((path) =>
+    router.pathname.includes(path),
+  )
+
+  useEffect(() => {
+    const container = document.getElementById('hubspot-conversations-iframe')
+    if (container) {
+      if (!showHelp) {
+        container.classList.add('visible-icon')
+      } else {
+        container.classList.remove('visible-icon')
+      }
+    }
+  }, [showHelp])
+
   return (
     <main>
       <PinnedNotifyProvider>
@@ -186,10 +223,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               <>
                 <PinnedNotifications />
                 <Component {...pageProps} />
-                {getActToken() && (
+                {getActToken() && showHelp && (
                   <>
                     <BackToTop />
-                    <Help />
+                    <Help showHelp={showHelp} />
                   </>
                 )}
                 <LearningNotesList />

@@ -1,3 +1,4 @@
+import { CloseIcon } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { onLinkSocial } from '@utils/index'
 import React, { Dispatch, SetStateAction } from 'react'
@@ -21,7 +22,7 @@ const PopupNotCus = ({ open, setOpen }: IProps) => {
         className="text-white flex justify-end cursor-pointer"
         onClick={() => setOpen(false)}
       >
-        X
+        <CloseIcon className="stroke-white" />
       </div>
       <div className="text-base font-normal h-[calc(100vh-50px)] flex items-center justify-center text-white">
         <span className="text-center">

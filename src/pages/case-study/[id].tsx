@@ -1096,16 +1096,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                             return (
                               <div
                                 key={index}
-                                className="cursor-pointer text-state-info hover:underline"
-                                onClick={() =>
-                                  handleOpenScratchPad(
-                                    'file',
-                                    e?.resource?.url,
-                                    e?.resource?.name,
-                                  )
-                                }
+                                className="overflow-auto bg-white"
                               >
-                                {e?.resource?.name}
+                                <PDFViewer file={e?.resource?.url} />
                               </div>
                             )
                           })}

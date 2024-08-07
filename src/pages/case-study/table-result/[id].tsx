@@ -234,6 +234,7 @@ const TableCaseStudyResult = () => {
               isCheckedAll={true}
               onChange={() => {}}
               hasCheck={false}
+              data={scoreDetail?.answers}
             >
               <>
                 {scoreDetail?.answers?.map((e: any, index: number) => {

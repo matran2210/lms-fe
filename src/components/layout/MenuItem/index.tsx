@@ -12,6 +12,7 @@ import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
 import { TitleSidebar } from 'src/constants'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { trackGAEvent } from '@utils/google-analytics'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -177,6 +178,7 @@ export default function MenuItem({
                 className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 line-clamp-1 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary`}
+                onClick={() => trackGAEvent(`Click Button ${name} Menu `)}
               >
                 {name}
               </span>

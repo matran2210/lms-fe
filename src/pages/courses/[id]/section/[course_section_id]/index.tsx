@@ -14,6 +14,7 @@ import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import Layout from '@components/layout'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface IProps {
   course_section_type: string
@@ -317,20 +318,24 @@ const CoursePartDetail = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Part Detail">
-        <div className="container max-w-xxl pt-4">
+        <div className="main max-w-xxl my-0 mx-auto default-content-editor">
           <div className="w-full">
-            <div className="flex mb-4 items-center">
+            <div className="flex pt-6 items-center">
               <span
-                onClick={() => router.push('/courses')}
+                onClick={() => {
+                  router.push('/courses')
+                  trackGAEvent('Click Breadcrumb My Course')
+                }}
                 className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
               >
                 My Course
               </span>
               <span
                 className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
-                onClick={() =>
+                onClick={() => {
                   router.push(`/courses/my-course/${router.query.id}`)
-                }
+                  trackGAEvent('Click Breadcrumb My Course Detail')
+                }}
               >
                 /
                 <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
@@ -355,8 +360,7 @@ const CoursePartDetail = () => {
               </span>
             </div>
           </div>
-          {/* Custom css class to override PreviewPartDetail library style*/}
-          <div data-aos={ANIMATION.DATA_AOS} className="part-detail__container">
+          <div data-aos={ANIMATION.DATA_AOS}>
             <PreviewPartDetail
               chapterMenu={partDetail}
               fetchChapterDetail={fetchChapterDetail}
@@ -373,11 +377,7 @@ const CoursePartDetail = () => {
               handleRouterChapter={handleRouterChapter}
               readMore={readMore}
               setReadMore={setReadMore}
-              defaultActive={
-                router.query.course_chapter_id
-                  ? router.query.course_chapter_id
-                  : ''
-              }
+              defaultActive={defaultActive ? defaultActive : ''}
             />
           </div>
 

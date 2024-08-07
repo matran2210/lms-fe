@@ -5,6 +5,7 @@ import exceptions from './en.exceptions.json'
 import {
   getLocalStorgeActToken,
   getLocalStorgeRefreshToken,
+  removeJwtToken,
   removeLocalStorageJwtToken,
   setActToken,
   setCookieActToken,
@@ -107,6 +108,7 @@ request.interceptors.response.use(
           })
           .catch(() => {
             removeLocalStorageJwtToken()
+            removeJwtToken()
             window.location.href = PageLink.AUTH_LOGIN
           })
       }

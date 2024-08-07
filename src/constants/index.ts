@@ -14,6 +14,10 @@ export const PageLink = {
   ENTRANCE_TEST: '/entrance-test',
   MYPROFILE: '/myprofile',
   PAGE_NOT_FOUND: '/404',
+  COURSE_DETAIL: '/courses/my-course/[courseId]',
+  COURSE_PART_DETAIL: '/courses/[id]/section/[course_section_id]',
+  COURSE_ACTIVITY: '/courses/[id]/activity/[activityId]',
+  USERPAGE: '/[page]',
 }
 
 export const TitleSidebar = {

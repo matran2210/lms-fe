@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Tooltip } from 'antd'
 import { truncateString } from '@utils/index'
 import clsx from 'clsx'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const BreadcrumbFilter = ({
   name,
@@ -21,7 +22,12 @@ const BreadcrumbFilter = ({
     >
       <ol className="breadcrumbs__list flex text-medium-sm font-medium">
         <li className="breadcrumbs__item text-gray-1 shrink-0 hover:underline">
-          <Link href="/courses" className="breadcrumbs__link" scroll={false}>
+          <Link
+            href="/courses"
+            className="breadcrumbs__link"
+            scroll={false}
+            onClick={() => trackGAEvent('Breadcrumb My Course')}
+          >
             My Course
           </Link>
         </li>
