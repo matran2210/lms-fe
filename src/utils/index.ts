@@ -91,6 +91,36 @@ export const formatTime = (minutes: number) => {
   return formattedHours + formattedMinutes || '0h0m'
 }
 
+/**
+ * Convert millisecond/seconds to readable hh:mm:ss
+ *
+ * @param   totalTime  time in milliseconds/seconds
+ * @param   unit       'milliseconds'(default) | 'seconds'
+ * @returns hh:mm:ss
+ */
+export const getTimeFromInput = (
+  totalTime: number,
+  unit: 'milliseconds' | 'seconds' = 'milliseconds',
+) => {
+  let totalSeconds
+
+  if (unit === 'milliseconds') {
+    totalSeconds = Math.floor(totalTime / 1000)
+  } else {
+    totalSeconds = totalTime
+  }
+
+  const totalMinutes = Math.floor(totalSeconds / 60)
+  const totalHours = Math.floor(totalMinutes / 60)
+
+  const formattedHours =
+    totalHours > 0 ? ('0' + totalHours).slice(-2) + ':' : ''
+  const formattedMinutes = ('0' + (totalMinutes % 60)).slice(-2)
+  const formattedSeconds = ('0' + (totalSeconds % 60)).slice(-2)
+
+  return `${formattedHours}${formattedMinutes}:${formattedSeconds}`
+}
+
 export const countWords = (text: string) => {
   const words = text.trim().split(/\s+/)
   return words.length

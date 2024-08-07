@@ -42,9 +42,25 @@ const BreadcrumbFilter = ({
               <span>/ {truncateString(name, 80)}</span>
             </Tooltip>
           ) : (
-            <span>/ {name}</span>
+            <>
+              /&nbsp;
+              <span className="hover:underline">
+                <Link
+                  href={`/courses/my-course/${courseId}`}
+                  className="breadcrumbs__link"
+                  scroll={false}
+                >
+                  {`${name}`}
+                </Link>
+              </span>
+            </>
           )}
         </li>
+        {subpath && (
+          <li className="breadcrumbs__item current-course text-bw-1 ml-1 line-clamp-1">
+            / {subpath}
+          </li>
+        )}
       </ol>
     </nav>
   )

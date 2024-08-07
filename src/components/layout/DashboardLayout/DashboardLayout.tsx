@@ -22,7 +22,10 @@ export default function DashboardLayout({
   }
   const { openPinned, pinnedNotifications } = usePinnedNotifyContext()
 
-  const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
+  const guideStatus = useAppSelector(
+    (state: { userGuideReducer: { status: any } }) =>
+      state.userGuideReducer?.status,
+  )
 
   const [openResource, setOpenResource] = useState(false)
 

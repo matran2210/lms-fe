@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import Select, { type DropdownIndicatorProps, components } from 'react-select'
 import Icon from '@components/icons'
+import { ISelect } from 'src/type'
 
 interface IProps {
   defaultValue?: any
@@ -11,7 +12,7 @@ interface IProps {
   children?: ReactNode
   placeholder?: string
   onChange?: (select: any) => void
-  value?: string | null | undefined
+  value?: string | null | undefined | ISelect
   isDisabled?: boolean
   onMenuScrollToBottom?: any
   classParent?: string
@@ -40,6 +41,19 @@ const HookFormSelect = ({
     )
   }
 
+  const onMenuOpen = () => {
+    setTimeout(() => {
+      const selectedEl = document.querySelector('[aria-selected="true"]')
+      if (selectedEl) {
+        selectedEl.scrollIntoView({
+          behavior: 'instant',
+          block: 'center',
+          inline: 'center',
+        })
+      }
+    }, 15)
+  }
+
   return (
     <div className={`select-options ${classParent}`}>
       <Select
@@ -57,6 +71,7 @@ const HookFormSelect = ({
         onMenuScrollToBottom={onMenuScrollToBottom}
         isClearable={isClearable}
         components={{ DropdownIndicator }}
+        onMenuOpen={onMenuOpen}
       />
     </div>
   )

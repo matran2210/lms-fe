@@ -1,5 +1,4 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { VerifiedIcon } from '@components/icons'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -134,9 +133,23 @@ function DiscussionElement({
               alt="avatar"
             ></Image>
           </div>
-          <div className="flex-1">
-            <div className="text-base font-semibold mb-1">
-              {discussion?.full_name}
+          <div>
+            <div className="flex flex-row">
+              <div className="text-base font-semibold mb-1">
+                {discussion?.full_name}
+              </div>
+              {discussion?.is_staff_support && (
+                <div className="text-primary font-semibold bg-secondary h-6 ml-2 min-w-132px px-2 content-center">
+                  <div className="flex flex-row">
+                    <div className="content-center">
+                      <VerifiedIcon />
+                    </div>
+                    <div className="content-center text-ssm px-2">
+                      SAPP Supporter
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex gap-3 flex-wrap">
               {discussion?.course_discussion_files?.map((e) => {
