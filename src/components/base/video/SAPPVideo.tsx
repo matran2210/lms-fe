@@ -2,7 +2,11 @@ import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
-import { formatTimeToHourMinuteSecond, getResolution, isMobileOrTablet } from '@utils/helpers'
+import {
+  formatTimeToHourMinuteSecond,
+  getResolution,
+  isMobileOrTablet,
+} from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
@@ -123,7 +127,9 @@ const SAPPVideo = ({
               `${video_url}${options?.src}/manifest/video.mpd`,
               false,
             )
-            await fetchCaptions(`${video_url}${options?.src}/manifest/video.mpd`)
+            await fetchCaptions(
+              `${video_url}${options?.src}/manifest/video.mpd`,
+            )
 
             player.updateSettings({
               streaming: {

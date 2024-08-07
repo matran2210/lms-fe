@@ -258,5 +258,5 @@ export const isSafari = () => {
 }
 
 export const isMobileOrTablet = () => {
-  return /Mobi|Tablet|iPad|iPhone/.test(navigator.userAgent);
+  return /Mobi|Tablet|iPad|iPhone/.test(navigator.userAgent)
 }
