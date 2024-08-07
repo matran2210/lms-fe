@@ -8,7 +8,7 @@ import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
 import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
-import { IAnswer, IScoreDetails } from 'src/type/quiz/quiz'
+import { IAnswer, IScoreDetails } from 'src/type'
 
 const headers = [
   {
@@ -167,7 +167,6 @@ const YourScoreDetail = ({
         <SappTable
           headers={headers}
           loading={loading}
-          data={scoreDetails?.answers}
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}

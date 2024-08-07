@@ -1,5 +1,4 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { VerifiedIcon } from '@components/icons'
 import { trackGAEvent } from '@utils/google-analytics'

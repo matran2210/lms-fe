@@ -287,8 +287,6 @@ const CoursePartDetail = () => {
         } else if (filteredChildren?.length > 0) {
           setDefaultActive(filteredChildren[0].id) // Set default to the first child
         }
-      } else {
-        setDefaultActive('')
       }
     }
   }, [router?.asPath, partDetail?.id])

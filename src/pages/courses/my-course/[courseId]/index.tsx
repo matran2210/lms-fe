@@ -26,7 +26,7 @@ const CourseDetail = () => {
   /**
    * @description config API course detail
    */
-  const fecthCourseDetail = async ({
+  const fetchCourseDetail = async ({
     pageParam,
     params,
   }: {
@@ -53,7 +53,7 @@ const CourseDetail = () => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ['courseDetail'],
-      queryFn: ({ pageParam }) => fecthCourseDetail({ pageParam, params }),
+      queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
       getNextPageParam: (lastPage, allPages) => {
         if (
           params.user_section_learning_status ||
@@ -108,7 +108,7 @@ const CourseDetail = () => {
   const courseNameDetail = data?.pages?.[0]?.courseDetail?.data?.name
 
   /**
-   * @description biến này lấy name của course
+   * @description biến này lấy class user id
    */
   const is_passed_course = data?.pages?.[0]?.is_passed
 
