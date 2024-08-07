@@ -3,7 +3,7 @@ import React from 'react'
 interface IProps {
   checked: boolean
   disabled?: boolean
-  onChange: React.ChangeEventHandler<HTMLInputElement>
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
   className?: string
   name?: string
   value?: string | boolean

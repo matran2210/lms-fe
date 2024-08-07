@@ -123,3 +123,7 @@
 .w-fill--available {
   width: -webkit-fill-available;
 }
+
+.part-detail__container > :first-child {
+  @apply p-0;
+}

@@ -301,9 +301,10 @@ export class CoursesAPI {
   static getCourseSectionList(
     id: string | string[] | undefined,
     page_size: number,
+    page_index?: number,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/short/list?page_index=1&page_size=${page_size}&classId=${id}&type=PART`,
+      `${apiURL}/course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${page_size}&classId=${id}&type=PART`,
     )
   }
 
@@ -312,9 +313,10 @@ export class CoursesAPI {
     type: 'CHAPTER' | 'UNIT' | 'ACTIVITY',
     parentId?: string,
     classId?: string,
+    page_index?: number,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/short/list?page_index=1&page_size=${
+      `${apiURL}/course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
         page_size || 10
       }&type=${type}&parentId=${parentId ?? ''}${
         classId ? `&classId=${classId}` : ''
@@ -328,6 +330,20 @@ export class CoursesAPI {
   ): Promise<any> {
     return fetcher(
       `${apiURL}/courses/${id}/resources?&attachment_type=attached`,
+      {
+        params: params,
+      },
+    )
+  }
+
+  static getCourseResults(
+    id: string | string[],
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/courses/${id}/quizzes?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },

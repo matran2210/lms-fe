@@ -271,10 +271,12 @@ const LearningNotesList = () => {
 
   async function getCourseSubsections(page_size: number) {
     try {
+      const class_id = courseId || queryId
       const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'CHAPTER',
         selectedSection.value,
+        class_id as any,
       )
       setSubsections([...res?.data?.sections].reverse())
       setSelectedUnit(null)
@@ -284,10 +286,12 @@ const LearningNotesList = () => {
 
   async function getCourseUnit() {
     try {
+      const class_id = courseId || queryId
       const res = await CoursesAPI.getCourseSubsectionList(
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
+        class_id as any,
       )
       setUnit([...res?.data?.sections].reverse())
       setSelectedActivity(null)
@@ -299,10 +303,12 @@ const LearningNotesList = () => {
 
   async function getCourseActivity(page_size: number) {
     try {
+      const class_id = courseId || queryId
       const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'ACTIVITY',
         selectedUnit.value,
+        class_id as any,
       )
       setActivity([...res?.data?.sections].reverse())
     } catch (error) {

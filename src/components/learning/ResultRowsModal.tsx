@@ -233,7 +233,6 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         <SappTable
           headers={headers}
           loading={false}
-          data={[{}]}
           isCheckedAll={false}
           hasCheck={false}
           hasCheckAll={false}

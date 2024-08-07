@@ -26,7 +26,7 @@ const CourseDetail = () => {
   /**
    * @description config API course detail
    */
-  const fecthCourseDetail = async ({
+  const fetchCourseDetail = async ({
     pageParam,
     params,
   }: {
@@ -40,6 +40,8 @@ const CourseDetail = () => {
       params,
     )
     return {
+      class_user_id: data?.class_user_id,
+      is_passed: data?.is_passed,
       data: data?.data?.course_sections_with_progress || [],
       courseDetail: data,
     }
@@ -51,7 +53,7 @@ const CourseDetail = () => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ['courseDetail'],
-      queryFn: ({ pageParam }) => fecthCourseDetail({ pageParam, params }),
+      queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
       getNextPageParam: (lastPage, allPages) => {
         if (
           params.user_section_learning_status ||
@@ -106,6 +108,11 @@ const CourseDetail = () => {
   const courseNameDetail = data?.pages?.[0]?.courseDetail?.data?.name
 
   /**
+   * @description biến này lấy class user id
+   */
+  const is_passed_course = data?.pages?.[0]?.is_passed
+
+  /**
    * @description biến này lấy name của course
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
@@ -152,6 +159,7 @@ const CourseDetail = () => {
         >
           <CourseParts
             courses={courses}
+            is_passed_course={is_passed_course}
             class_user_id={class_user_id}
             lastElementRef={lastElementRef}
           />
