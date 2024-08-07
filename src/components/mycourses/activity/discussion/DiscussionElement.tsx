@@ -60,12 +60,14 @@ function DiscussionElement({
   const dispatch = useAppDispatch()
   const [selectFile, setSelectFile] = useState<File[]>([])
   const [discussionFile, setDiscussionFile] = useState<IDiscussionFile[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const canEdit = profile?.username === discussion?.username
 
   const { control, handleSubmit } = useForm<IEventData>({})
 
   const onSubmit = async (e: IEventData) => {
+    setIsLoading(true)
     try {
       const params = {
         content: e?.editData,
@@ -96,7 +98,10 @@ function DiscussionElement({
         setIsEdit(false)
         setSelectFile([])
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleRefresh = () => {
@@ -303,11 +308,13 @@ function DiscussionElement({
                         className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
                         accept="image/jpeg, image/png, image/gif"
                         onChange={(e) => handleFileChange(e)}
+                        disabled={isLoading}
                       />
                     </div>
                     <SappButtonIcon
                       type="submit"
                       ishover={false}
+                      disabled={isLoading}
                       className="border-none !min-w-1 h-fit"
                     >
                       <IconSend className="hover:fill-yellow-500" />
@@ -318,6 +325,7 @@ function DiscussionElement({
                   title=""
                   type="submit"
                   className="hidden"
+                  disabled={isLoading}
                 ></SappButton>
                 <div className="relative w-full top-2 right-3 cursor-pointer select-none pb-2">
                   <input type="text" className="absolute w-full opacity-0" />
