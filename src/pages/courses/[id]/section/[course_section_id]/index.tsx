@@ -176,7 +176,7 @@ const CoursePartDetail = () => {
       if (sectionId && caseStudyId) {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
-      router.replace({
+      router.push({
         pathname: `/case-study/${topicId}`,
         query: {
           quiz_id: quizId,
