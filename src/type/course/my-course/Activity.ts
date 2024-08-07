@@ -1,4 +1,4 @@
-import { IFile, IVideo, IQuestion } from '../Question'
+import { IFile, IQuestion, IVideo } from '../Question'
 
 export interface IActivity {
   id: string[] | undefined | string
@@ -94,10 +94,11 @@ export interface ITab {
   }[]
 }
 
+type CourseSectionType = 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
 export interface IBreadcrumb {
   id: string
   name: string
-  course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
+  course_section_type: CourseSectionType
   parent_id?: string
   url?: string
 }

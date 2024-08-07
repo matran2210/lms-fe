@@ -535,7 +535,7 @@ export const VerifiedIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g id="verified 1" clip-path="url(#clip0_12314_6902)">
+      <g id="verified 1" clipPath="url(#clip0_12314_6902)">
         <g id="Group">
           <path
             id="Vector"

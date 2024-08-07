@@ -20,3 +20,4 @@ export const TEST_TYPE = {
 export const F_LOW_CODES = ['F1', 'F2', 'F3', 'F4']
 
 export const video_url = process.env.NEXT_PUBLIC_VIDEO_URL
+export * from './Course'

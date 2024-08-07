@@ -2,13 +2,20 @@ import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
+import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
+import Calculator from '@components/calculator'
+import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
+import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
+import { CourseSectionType } from '@utils/constants'
+import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
+import { Dropdown, Menu } from 'antd'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -19,31 +26,24 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { useQuery } from 'react-query'
+import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import SappTooltip from 'src/common/SappTooltip'
+import { ANIMATION } from 'src/constants'
+import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
+  closeCalculator,
   courseActivityAction,
   courseActivityReducer,
   getCourseActivityTapById,
   getDiscussion,
-  closeCalculator,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity } from 'src/type/course/my-course/Activity'
-import { Dropdown, Menu } from 'antd'
-import Calculator from '@components/calculator'
-import { ANIMATION } from 'src/constants'
-import SappTooltip from 'src/common/SappTooltip'
-import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
-import SAPPBorder from 'src/common/SAPPBorder'
-import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
-import Layout from '@components/layout'
-import { trackGAEvent } from '@utils/google-analytics'
-import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -372,6 +372,10 @@ const ActivityPage = () => {
     (e: IBreadCrumbs) => e?.course_section_type === 'PART',
   )?.id
 
+  const chapterId = breadcrumbsMenu?.data?.find(
+    (e: IBreadCrumbs) => e?.course_section_type === CourseSectionType.CHAPTER,
+  )?.id
+
   /**
    * @description config menu breadcrumbs trong activity
    */
@@ -401,22 +405,22 @@ const ActivityPage = () => {
           return (
             <React.Fragment key={e?.id}>
               {e?.course_section_type !== 'ACTIVITY' ? (
-                <Menu.Item onClick={() => router.push(url)}>
+                <Menu.Item
+                  onClick={() => {
+                    ;['CHAPTER', 'UNIT', 'PART'].includes(
+                      e.course_section_type,
+                    ) && localStorage.setItem('course_chapter_id', chapterId)
+
+                    router.push(url)
+                  }}
+                >
                   <li
                     className={
                       'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
                     }
                     title={e?.name}
                   >
-                    <Link href={url}>
-                      <span
-                        className={
-                          'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
-                        }
-                      >
-                        {truncateString(e?.name, 25)}
-                      </span>
-                    </Link>
+                    {truncateString(e?.name, 25)}
                   </li>
                 </Menu.Item>
               ) : null}
