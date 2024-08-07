@@ -2,7 +2,7 @@ import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
-import { formatTimeToHourMinuteSecond, getResolution } from '@utils/helpers'
+import { formatTimeToHourMinuteSecond, getResolution, isMobileOrTablet } from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
@@ -112,59 +112,64 @@ const SAPPVideo = ({
         dashjs = await import('dashjs')
 
         if (dashjs) {
-          player = dashjs.MediaPlayer().create()
+          if (dashjs?.supportsMediaSource() || !isMobileOrTablet()) {
+            player = dashjs.MediaPlayer().create()
 
-          const audioVideoSettings = player.getSettings()?.streaming?.abr
-          audioVideoSettings.autoSwitchBitrate.video = false
+            const audioVideoSettings = player.getSettings()?.streaming?.abr
+            audioVideoSettings.autoSwitchBitrate.video = false
 
-          player.initialize(
-            streamRef.current,
-            `${video_url}${options?.src}/manifest/video.mpd`,
-            false,
-          )
-          await fetchCaptions(`${video_url}${options?.src}/manifest/video.mpd`)
+            player.initialize(
+              streamRef.current,
+              `${video_url}${options?.src}/manifest/video.mpd`,
+              false,
+            )
+            await fetchCaptions(`${video_url}${options?.src}/manifest/video.mpd`)
 
-          player.updateSettings({
-            streaming: {
-              abr: audioVideoSettings,
-              buffer: {
-                stableBufferTime: 30,
-                bufferTimeAtTopQuality: 60,
-                bufferTimeAtTopQualityLongForm: 120,
+            player.updateSettings({
+              streaming: {
+                abr: audioVideoSettings,
+                buffer: {
+                  stableBufferTime: 30,
+                  bufferTimeAtTopQuality: 60,
+                  bufferTimeAtTopQualityLongForm: 120,
+                },
               },
-            },
-          })
+            })
 
-          player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
-            setTimeout(() => {
-              const currentVideoQualityIndex = player.getQualityFor('video')
-              const getListBit = player.getBitrateInfoListFor('video')
-              player.setQualityFor(
-                'video',
-                getListBit?.[currentVideoQualityIndex]?.qualityIndex,
-                true,
-              )
+            player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
+              setTimeout(() => {
+                const currentVideoQualityIndex = player.getQualityFor('video')
+                const getListBit = player.getBitrateInfoListFor('video')
+                player.setQualityFor(
+                  'video',
+                  getListBit?.[currentVideoQualityIndex]?.qualityIndex,
+                  true,
+                )
 
-              setListQualitys(getListBit)
-              setPlaybackQuality(
-                getListBit?.[currentVideoQualityIndex]?.bitrate,
-              )
-            }, 1000)
-            setPlayerFunction(player)
-          })
+                setListQualitys(getListBit)
+                setPlaybackQuality(
+                  getListBit?.[currentVideoQualityIndex]?.bitrate,
+                )
+              }, 1000)
+              setPlayerFunction(player)
+            })
 
-          player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, () => {
+            player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, () => {
+              setCanPlay(true)
+              setCloudflarePlayer(false)
+            })
+
+            player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKING, () => {
+              setSeeking(true)
+            })
+
+            player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKED, () => {
+              setSeeking(false)
+            })
+          } else {
             setCanPlay(true)
-            setCloudflarePlayer(false)
-          })
-
-          player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKING, () => {
-            setSeeking(true)
-          })
-
-          player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKED, () => {
-            setSeeking(false)
-          })
+            setCloudflarePlayer(true)
+          }
         } else {
           setCanPlay(true)
           setCloudflarePlayer(true)

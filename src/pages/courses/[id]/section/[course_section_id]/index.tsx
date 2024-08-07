@@ -15,6 +15,7 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import Layout from '@components/layout'
 import { trackGAEvent } from '@utils/google-analytics'
+import PopupCanNotRetakeTest from '@components/mycourses/PogupCannotRetakeTest'
 
 interface IProps {
   course_section_type: string
@@ -40,6 +41,7 @@ interface IProps {
     attempt: {
       id: string
       number_of_attempts: number
+      score: number
       ratio_score: string
       total_attempt_time: number
     }
@@ -58,9 +60,9 @@ const CoursePartDetail = () => {
   const [chapterData, setChapterData] = useState<any>({})
   const [chapterTestId, setChapterTestId] = useState<string>()
   const [defaultActive, setDefaultActive] = useState<string>()
+  const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
-
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await CoursesAPI.getPartDetail(
@@ -90,6 +92,7 @@ const CoursePartDetail = () => {
     try {
       const res = await CoursesAPI.getPartDetail(id, course_section_id)
       const nodeList = res?.data?.course_section_tree
+      setIsPassedCourse(res?.data?.is_passed_course)
       const newData = nodeList.map((item: IProps) => {
         if (item.id === course_section_id) {
           const { parent_id, ...rest } = item
@@ -200,6 +203,7 @@ const CoursePartDetail = () => {
       setChapterData(filteredData?.[0])
       setChapterTestId(filteredData?.[0]?.id)
     }
+
     setOpen(true)
   }
 
@@ -434,6 +438,7 @@ const CoursePartDetail = () => {
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
             activeCourse={() => {}}
+            is_passed_course={isPassedCourse}
           />
         </div>
       </Layout>

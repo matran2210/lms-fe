@@ -106,11 +106,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseSubsections(page_size: number) {
     try {
+      const class_id = router.query.courseId || router.query.id
       const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'CHAPTER',
         selectedSection.value,
-        router.query.courseId as string,
+        class_id as any,
       )
       setSubsections([...res?.data?.sections].reverse())
       setSelectedUnit(null)
@@ -128,11 +129,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseUnit() {
     try {
+      const class_id = router.query.courseId || router.query.id
       const res = await CoursesAPI.getCourseSubsectionList(
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
-        router.query.courseId as string,
+        class_id as any,
       )
       setUnit([...res?.data?.sections].reverse())
       setSelectedActivity(null)
@@ -149,11 +151,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseActivity(page_size: number) {
     try {
+      const class_id = router.query.courseId || router.query.id
       const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'ACTIVITY',
         selectedUnit.value,
-        router.query.courseId as string,
+        class_id as any,
       )
       setActivity([...res?.data?.sections].reverse())
     } catch (error) {}
