@@ -637,7 +637,10 @@ textarea.is-invalid:focus {
 }
 
 .hover-transition-font-weight {
-  transition: font-weight 0.1s ease;
+  transition: text-shadow 0.2s ease-in-out;
+  &:hover {
+    text-shadow: 0px 0px 0.05em #ffb800;
+  }
 }
 
 .ant-tooltip-inner {
