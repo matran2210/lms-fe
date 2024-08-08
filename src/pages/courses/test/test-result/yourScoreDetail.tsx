@@ -33,7 +33,7 @@ const headers = [
   },
   {
     label: 'Result',
-    className: clsx(commonHeaderClass, 'min-w-[90px]'),
+    className: clsx(commonHeaderClass, 'min-w-[80px]'),
   },
   {
     label: '',
@@ -165,21 +165,21 @@ const YourScoreDetail = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!mb-0 !h-fit bg-white p-6 shadow-sidebar xl:px-24  ${className}`}
+      className={`!mb-0 !h-fit bg-white p-6 shadow-sidebar 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
       <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Score Details
       </div>
-      <div className="block overflow-x-auto pl-4">
+      <div className="block pl-4">
         <SappTable
           headers={headers}
           loading={loading}
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}
-          classTableRes="!overflow-x-hidden"
+          // classTableRes="overflow-x-auto"
         >
           <>
             {scoreDetails?.answer_groups?.map((ansg: IAnswearGroup) => {
@@ -253,13 +253,14 @@ const YourScoreDetail = ({
                         </td>
                         <td className="m-6 p-0 pr-4 text-gray-1">
                           {e?.question?.qType !== 'ESSAY' && (
-                            <div className="ml-1 flex items-center justify-end gap-2">
+                            <div className="ml-1 flex items-center justify-start gap-2">
                               <Image
                                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                                 alt="Correct"
-                                className="mr-1 w-4 text-state-success"
+                                className="mr-1 text-state-success"
                                 width={16}
                                 height={16}
+                                layout="fixed"
                               />
                               {roundNumber(
                                 e?.question?.question_report?.ratio || 0,
