@@ -183,20 +183,26 @@ const EditorReader = ({
    * @description add class border theo editor khi border style khác none và hidden ở lần đầu component render
    */
   useEffect(() => {
-    const tableElement = document?.querySelector('table')
-    if (tableElement) {
-      const style = window?.getComputedStyle(tableElement)
-      const newBorderStyle = style?.borderStyle
+    // Lấy tất cả các bảng trong tài liệu
+    const tableElements = document?.querySelectorAll('table')
 
-      const thElements = document?.querySelectorAll('.editor-wrap td')
-      thElements?.forEach((td) => {
-        if (newBorderStyle !== 'none' && newBorderStyle !== 'hidden') {
-          td?.classList?.add(`border-[1px]`)
-        } else {
-          td?.classList?.remove(`border-[1px]`)
-        }
-      })
-    }
+    tableElements?.forEach((tableElement) => {
+      if (tableElement) {
+        // Lấy kiểu border của bảng hiện tại
+        const style = window?.getComputedStyle(tableElement)
+        const newBorderStyle = style?.borderStyle
+
+        // Lấy tất cả các ô (td) trong bảng hiện tại
+        const tdElements = tableElement?.querySelectorAll('td')
+        tdElements?.forEach((td) => {
+          if (newBorderStyle !== 'none' && newBorderStyle !== 'hidden') {
+            td?.classList?.add('border-[1px]')
+          } else {
+            td?.classList?.remove('border-[1px]')
+          }
+        })
+      }
+    })
   })
 
   return (
