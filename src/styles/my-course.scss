@@ -127,3 +127,17 @@
 .part-detail__container > :first-child {
   @apply p-0;
 }
+
+.test-result {
+  &__passing-score:hover {
+    &:before {
+      content: 'Passing Score';
+      position: absolute;
+      top: -20px;
+      right: 0;
+      transition: 0.25s;
+      font-size: small;
+      @apply text-state-info;
+    }
+  }
+}

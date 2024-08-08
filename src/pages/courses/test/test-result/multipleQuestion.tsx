@@ -164,13 +164,13 @@ const MultipleQuestion = ({
         </div>
         <div className="mt-auto w-full">
           <div
-            className={`flex max-w-full items-end justify-between gap-2 border-default xl:items-center ${
+            className={`flex max-w-full flex-col items-end justify-between gap-2 border-default md:flex-row xl:items-center ${
               showMore
                 ? 'items-center border-t pt-4 xl:pt-6'
                 : 'pt-0 xl:border-t xl:pt-6'
             }`}
           >
-            <div className="flex w-3/5 flex-col gap-3 xl:flex-row">
+            <div className="flex flex-col gap-3 md:w-4/5 xl:flex-row">
               <div
                 className="flex cursor-pointer flex-row pr-2 text-center"
                 onClick={() => setOpenAnnotaion(true)}
@@ -204,7 +204,7 @@ const MultipleQuestion = ({
                 )}
               </div>
             </div>
-            <div className="flex max-h-[40px] w-2/5 shrink items-center justify-end">
+            <div className="mb-2 flex max-h-[40px] shrink items-center justify-end md:w-1/5">
               {Number(questions?.selectedResponseAnswers?.length || 0) +
                 Number(questions?.constructedResponseAnswers?.length || 0) >=
                 8 && (

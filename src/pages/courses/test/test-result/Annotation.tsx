@@ -14,8 +14,7 @@ const Annotation = ({ openAnnotaion, setOpenAnnotaion }: IAnnotation) => {
       handleCancel={() => {}}
       onOk={() => {}}
       showFooter={false}
-      classNameModal=""
-      width={'614px'}
+      classNameModal="max-w-[634px]"
     >
       <div
         className="flex cursor-pointer justify-end text-white"
@@ -23,7 +22,7 @@ const Annotation = ({ openAnnotaion, setOpenAnnotaion }: IAnnotation) => {
       >
         <CloseIcon className="group-hover:stroke-black transform stroke-bw-1 transition-all duration-300 ease-in-out" />
       </div>
-      <div className="mx-auto my-auto flex w-[462px] flex-col">
+      <div className="mx-auto my-auto flex flex-col px-2 md:px-12">
         <div className="mt-4 text-4xl font-semibold text-bw-1">
           Annotation by Color
         </div>
@@ -31,29 +30,37 @@ const Annotation = ({ openAnnotaion, setOpenAnnotaion }: IAnnotation) => {
           The annotation uses colors as labels for the status of the question in
           your test/ quiz.
         </div>
-        <div className="my-4 flex w-full flex-row justify-between">
+        <div className="my-[18px] grid w-full grid-cols-[80%,20%]">
           <div className="content-center">
-            <div className="h-2 w-[360px] bg-state-success text-state-success"></div>
+            <div className="h-2 bg-state-success text-state-success"></div>
           </div>
-          <div className="content-center text-state-success">Correct</div>
+          <div className="content-center text-right text-state-success">
+            Correct
+          </div>
         </div>
-        <div className="my-4 flex flex-row justify-between">
+        <div className="my-[18px] grid w-full grid-cols-[75%,25%]">
           <div className="content-center">
-            <div className="h-2 w-[340px] bg-state-error text-state-error"></div>
+            <div className="h-2 bg-state-error text-state-error"></div>
           </div>
-          <div className="content-center text-state-error">Incorrect</div>
+          <div className="content-center text-right text-state-error">
+            Incorrect
+          </div>
         </div>
-        <div className="my-4 flex flex-row justify-between">
+        <div className="my-[18px] grid w-full grid-cols-[70%,30%]">
           <div className="content-center">
-            <div className="h-2 w-[320px] bg-pinned-1 text-pinned-1"></div>
+            <div className="h-2 bg-pinned-1 text-pinned-1"></div>
           </div>
-          <div className="content-center text-pinned-1">Compeleted</div>
+          <div className="content-center text-right text-pinned-1">
+            Compeleted
+          </div>
         </div>
-        <div className="my-4 flex flex-row justify-between">
+        <div className="my-[18px] grid w-full grid-cols-[65%,35%]">
           <div className="content-center">
-            <div className="h-2 w-[300px] bg-gray-1 text-gray-1"></div>
+            <div className="h-2 bg-gray-1 text-gray-1"></div>
           </div>
-          <div className="content-center text-gray-1">Not Completed</div>
+          <div className="content-center text-right text-gray-1">
+            Not Completed
+          </div>
         </div>
       </div>
     </SappModalV2>

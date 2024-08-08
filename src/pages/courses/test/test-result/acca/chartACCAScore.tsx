@@ -17,7 +17,7 @@ const ChartACCAScore = ({ data }: IProps) => {
       <div className="pb-4 pt-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Multiple Choice Score by Part
       </div>
-      <div className="flex-start dashboard-scroll-x flex w-full snap-x flex-row gap-14">
+      <div className="flex-start dashboard-scroll-x flex w-full snap-x flex-row gap-14 scroll-smooth">
         {data?.map((item: any) => (
           <div
             key={item?.id}
