@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
-import { IAnswer } from 'src/type/quiz/quiz'
+import { IAnswer } from 'src/type'
 
 interface MultipleQuestionProps {
   questions: any
