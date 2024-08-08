@@ -290,7 +290,7 @@ const QuizDocument = ({
       ></ConFirmSubmit>
 
       <div
-        className="border border-gray-2 p-6 select-none max-h-[500px] overflow-auto text-black-1 "
+        className="max-h-[500px] select-none overflow-auto border border-gray-2 p-6 text-black-1 "
         data-aos={ANIMATION.DATA_AOS}
       >
         {activeQuestion && (

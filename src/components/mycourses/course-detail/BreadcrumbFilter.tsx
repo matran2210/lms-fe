@@ -57,7 +57,7 @@ const BreadcrumbFilter = ({
           )}
         </li>
         {subpath && (
-          <li className="breadcrumbs__item current-course text-bw-1 ml-1 line-clamp-1">
+          <li className="breadcrumbs__item current-course ml-1 line-clamp-1 text-bw-1">
             / {subpath}
           </li>
         )}

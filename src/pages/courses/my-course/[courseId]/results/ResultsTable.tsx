@@ -77,7 +77,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
 
   return (
     <>
-      <div className="flex gap-6 mb-8">
+      <div className="mb-8 flex gap-6">
         <ResultsTableFilter {...selectFilterProp} />
       </div>
       <SappTable
@@ -95,7 +95,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
           return (
             <tr
               className={clsx({
-                'border-dashed border-b border-gray-2 h-auto': true,
+                'h-auto border-b border-dashed border-gray-2': true,
                 'text-gray-2': !row.is_studied,
               })}
               key={row?.id}
