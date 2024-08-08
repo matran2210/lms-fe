@@ -1,12 +1,10 @@
+import { IconAnnotationGuide } from '@assets/icons'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import Icon from '@components/icons'
+import 'aos/dist/aos.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import { ANIMATION } from 'src/constants'
-import { IconAnnotationGuide } from '@assets/icons'
 import { IAnswer } from 'src/type/quiz/quiz'
 
 interface MultipleQuestionProps {
@@ -138,9 +136,8 @@ const MultipleQuestion = ({
   return (
     <div className="relative">
       <div
-        // pl-[calc(27px+80px)]: closed sidebar width (80px)
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 bg-white py-6 pl-[calc(27px+80px)] pr-6 shadow-sidebar-tablet 
-        xl:sticky xl:top-[65px] xl:!h-[calc(100vh-65px-24px)] xl:pl-7 xl:shadow-sidebar`}
+        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 bg-white p-6 shadow-sidebar-tablet 
+        xl:sticky xl:top-6 xl:!h-fit xl:max-h-[calc(100vh-65px)] xl:pl-7 xl:shadow-sidebar`}
         data-aos={ANIMATION.DATA_AOS}
         ref={multipleQuestionRef}
       >
@@ -168,10 +165,12 @@ const MultipleQuestion = ({
         <div className="mt-auto w-full">
           <div
             className={`flex max-w-full items-end justify-between gap-2 border-default xl:items-center ${
-              showMore ? 'border-t pt-4 xl:pt-6' : 'pt-0 xl:border-t xl:pt-6'
+              showMore
+                ? 'items-center border-t pt-4 xl:pt-6'
+                : 'pt-0 xl:border-t xl:pt-6'
             }`}
           >
-            <div className="flex w-3/5 flex-col gap-2 xl:flex-row">
+            <div className="flex w-3/5 flex-col gap-3 xl:flex-row">
               <div
                 className="flex cursor-pointer flex-row pr-2 text-center"
                 onClick={() => setOpenAnnotaion(true)}
@@ -190,7 +189,7 @@ const MultipleQuestion = ({
                 onMouseUp={() => setIsDragging(false)}
                 onMouseLeave={() => setIsDragging(false)}
                 className={`${
-                  !showMore ? 'visible opacity-100' : 'invisible opacity-0'
+                  !showMore ? 'block' : 'hidden'
                 } grid !max-h-[1040px] w-full grid-cols-2 gap-3 duration-300 xl:hidden`}
               >
                 {renderLines(

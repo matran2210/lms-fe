@@ -148,7 +148,7 @@ export const debounce = <T extends (...args: any[]) => void>(
 /**
  * @description Return number percent with type: 80.99
  * @param {number} num: number
- * @return {*}
+ * @return {*} The percentage value of num relative to total. Returns 0 if total is 0.
  */
 export const percentConversion = (num: number) => {
   return Math.round(num * 10000) / 100
@@ -161,6 +161,19 @@ export const percentConversion = (num: number) => {
  */
 export const roundNumber = (num: number) => {
   return Math.round(num * 100) / 100
+}
+
+/**
+ * @description Return number percent with type: 80
+ * @param {number} num
+ * @param {number} total
+ * @return {number} The percentage value of num relative to total. Returns 0 if total is 0.
+ */
+export const calculatePercentage = (num: number, total: number): number => {
+  if (total === 0) {
+    return 0
+  }
+  return (num / total) * 100
 }
 
 /**

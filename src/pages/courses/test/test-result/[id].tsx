@@ -1,12 +1,12 @@
-import React from 'react'
+import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
+import SinglePageLayout from '@components/layout/SinglePage'
+import { TEST_TYPE } from '@utils/constants'
+import { useGetDataQuery } from '@utils/index'
+import { useRouter } from 'next/router'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TestResultPage from './testResultPage'
-import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
-import { useGetDataQuery } from '@utils/index'
-import { TEST_TYPE } from '@utils/constants'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { useRouter } from 'next/router'
-import Layout from '@components/layout'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -71,7 +71,7 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <Layout title="Test Result">
+    <FullScreenLayout title="Test Result" className="!bg-gray-3">
       <div className="container">
         <Breadcrumb
           tabs={breadcrumbs}
@@ -87,7 +87,7 @@ const TestResultDetail = () => {
           subjectCode={questions?.course?.subject?.code ?? ''}
         />
       </div>
-    </Layout>
+    </FullScreenLayout>
   )
 }
 

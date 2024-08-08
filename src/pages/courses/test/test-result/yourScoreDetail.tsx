@@ -253,7 +253,7 @@ const YourScoreDetail = ({
                         </td>
                         <td className="m-6 p-0 pr-4 text-gray-1">
                           {e?.question?.qType !== 'ESSAY' && (
-                            <div className="ml-1 flex items-center">
+                            <div className="ml-1 flex items-center justify-end gap-2">
                               <Image
                                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                                 alt="Correct"

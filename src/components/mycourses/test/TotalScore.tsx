@@ -26,7 +26,7 @@ const TotalScore = ({
             Multiple Choice Score
           </div>
           <div
-            className={`${classScore} font-inter text-5.5xl font-bold text-primary xl:text-6xl`}
+            className={`${classScore} font-inter text-6xl font-bold text-primary xl:text-6xl`}
           >
             <>{Math.floor(score as number)}%</>
           </div>
