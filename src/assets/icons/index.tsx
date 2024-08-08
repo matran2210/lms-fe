@@ -33,12 +33,12 @@ export const DownloadIcon = () => {
   )
 }
 
-export const EditIcon = () => {
+export const EditIcon = ({ width, height }: ISVG) => {
   return (
     <svg
       className="edit-icon"
-      width="24"
-      height="24"
+      width={width ?? 24}
+      height={height ?? 24}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -90,12 +90,12 @@ export const ViewIcon = () => {
   )
 }
 
-export const CloseIconPreview = () => {
+export const CloseIconPreview = ({ width, height }: ISVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="12"
-      height="12"
+      width={width ?? 12}
+      height={height ?? 12}
       viewBox="0 0 12 12"
       fill="none"
     >
@@ -307,6 +307,7 @@ export const ScratchPadIcon = () => {
     </svg>
   )
 }
+import { ISVG } from 'src/type'
 // Import Tailwind CSS classes
 import 'tailwindcss/tailwind.css'
 
@@ -1494,6 +1495,24 @@ export const LoadingIcon = ({
           {loadingPercentage}%
         </text>
       )}
+    </svg>
+  )
+}
+export const IconSend = ({ width, height, className }: ISVG) => {
+  return (
+    <svg
+      className={className}
+      width={width ?? 16}
+      height={height ?? 16}
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="#A1A1A1"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M1.5 2.62245V5.60051L9.03466 7.03059C9.03471 7.0306 9.03475 7.03061 9.0348 7.03061C10.1196 7.23634 10.1197 8.78985 9.0348 8.99557C9.03476 8.99558 9.03471 8.99559 9.03466 8.9956L1.5 10.4257V13.3752L14.499 8.01418L1.5 2.62245ZM1.54235 1.55741C0.993478 1.32506 0.5 1.79319 0.5 2.26841L0.5 5.80829C0.500177 5.98267 0.561114 6.15154 0.672329 6.28585C0.783544 6.42017 0.938087 6.51153 1.10938 6.54423L1.10989 6.54432L8.84833 8.01307L8.84843 8.01309L8.84832 8.01312L1.11031 9.48184C1.11027 9.48185 1.11024 9.48186 1.1102 9.48187C0.938628 9.51442 0.783789 9.60582 0.672391 9.74032C0.56097 9.87484 0.5 10.044 0.5 10.2187V13.7597C0.5 13.7615 0.50001 13.7633 0.50003 13.7652C0.501406 13.8899 0.534077 14.0122 0.595045 14.121C0.656014 14.2298 0.743327 14.3215 0.848973 14.3878C0.954616 14.4541 1.07521 14.4928 1.1997 14.5003C1.31908 14.5075 1.43837 14.4859 1.5475 14.4373L14.8875 8.93564C14.8899 8.93465 14.8923 8.93365 14.8947 8.93263C15.0741 8.85533 15.227 8.72716 15.3344 8.56393C15.4418 8.40071 15.4991 8.20959 15.4991 8.01419C15.4991 7.81879 15.4418 7.62767 15.3344 7.46445C15.227 7.30122 15.0741 7.17304 14.8947 7.09575C14.8926 7.09486 14.8905 7.09398 14.8884 7.09312L1.54235 1.55741Z"
+      />
     </svg>
   )
 }

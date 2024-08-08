@@ -99,3 +99,8 @@ export * from './courses'
 export * from './exhibit'
 export * from './notification'
 export * from './quiz'
+export interface ISVG {
+  width?: number
+  height?: number
+  className?: string
+}
