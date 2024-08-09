@@ -7,6 +7,7 @@ import NotifyActions from '@components/notification/NotifyActions'
 import NotifyList from '@components/notification/NotifyList'
 import NotifyTab from '@components/notification/NotifyTab'
 import { trackGAEvent } from '@utils/google-analytics'
+import { getActToken } from '@utils/index'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION } from 'src/constants'
@@ -144,6 +145,15 @@ const Notifications = () => {
   const handleCancel = () => {
     setOpenModel(false)
   }
+
+  useEffect(() => {
+    const accessToken = getActToken()
+    if (accessToken) {
+      try {
+        dispatch(getCountUnRead())
+      } catch (error) {}
+    }
+  }, [])
 
   return (
     <Layout title="Notifications">

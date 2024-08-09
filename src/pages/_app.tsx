@@ -21,12 +21,10 @@ import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
-import { ANIMATION, PageLink } from 'src/constants'
+import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
-import {
-  showNotification
-} from 'src/redux/slice/Notification/Notification'
+import { showNotification } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
@@ -43,12 +41,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const router = useRouter()
   // const [showPinned, setShowPinned] = useState(true)
   const dispatch = useAppDispatch()
-  // const gettingNotiUnread = useAppSelector(
-  //   (state) => state.notificationReducer?.loading,
-  // )
-  // const getNotiUnread = useAppSelector(
-  //   (state) => state.notificationReducer?.total_records,
-  // )
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -60,27 +52,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   // const { getPinnedData } = usePinnedNotifyContext()
 
-  const excludedPaths = [
-    PageLink.AUTH_LOGIN,
-    PageLink.AUTH_CHANGE_PASSWORD,
-    PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
-    PageLink.AUTH_FORGOT_PASSWORD,
-    PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
-  ]
-
   useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
     })
   })
-
-  // useEffect(() => {
-  //   if (getNotiUnread > 0) {
-  //     dispatch(showNotification())
-  //   } else {
-  //     dispatch(hideNotification())
-  //   }
-  // }, [getNotiUnread])
 
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
@@ -129,6 +105,17 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     if (socket) {
       socket.on('connect', () => {})
       socket.on('disconnect', () => {})
+
+      socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
+          data.payload.data.unread,
+        )
+      })
+
+      return () => {
+        socket?.off(SOCKET_EVENTS.NOTIFICATION_UNREAD)
+      }
     }
   }, [socket])
 

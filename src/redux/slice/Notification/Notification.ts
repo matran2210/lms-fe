@@ -1,4 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { LOCAL_STORAGE_KEYS } from 'src/constants'
 import { NotificationAPI } from 'src/pages/api/notification'
 import { RootState } from 'src/redux/store'
 
@@ -53,14 +54,21 @@ const initialState: NotificationState = {
 
 export const getCountUnRead = createAsyncThunk(
   'notificationReducer/getCountUnRead',
-  async ({}, thunkAPI) => {
+  async ({}) => {
     try {
       const res = await NotificationAPI.getCountUnRead()
       if (!res?.data) {
         return
       }
-      if (res.data.total_records > 0) {
-        thunkAPI.dispatch(showNotification())
+
+      if (
+        res.data.total_records !== undefined &&
+        res.data.total_records !== null
+      ) {
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
+          res.data.total_records.toString(),
+        )
       }
       return { ...res.data }
     } catch (error: any) {
