@@ -1,8 +1,6 @@
-import { SocketContext } from '@contexts/SocketContext'
 import clsx from 'clsx'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LOCAL_STORAGE_KEYS } from 'src/constants'
-import { SOCKET_EVENTS } from 'src/constants/socketEvents'
 import { IIcon } from 'src/type'
 
 const NotificationIcon = ({ className }: IIcon) => {
@@ -15,7 +13,8 @@ const NotificationIcon = ({ className }: IIcon) => {
   })
 
   useEffect(() => {
-    setNotificationUnread(parseInt(storedCount ?? '0', 10))
+    const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
+    setNotificationUnread(parseInt(count ?? '0', 10))
   }, [localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)])
 
   useEffect(() => {
