@@ -1,8 +1,7 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, FormEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -26,6 +25,9 @@ import { IconSend } from '@assets/icons'
 import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import SappButton from '@components/base/button/SappButton'
 import clsx from 'clsx'
+import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import ActionDiscussion from './ActionDiscussion'
+import SendComment from './SendComment'
 
 type Props = {
   class_id: string
@@ -305,9 +307,20 @@ const Discussion = ({ class_id }: Props) => {
     }
   }
 
+  const handleKeyDown = (
+    e: KeyboardEvent<HTMLTextAreaElement>,
+    isRoot?: boolean,
+  ) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      // Kiểm tra nếu nhấn Enter và không nhấn Shift
+      e.preventDefault() // Ngăn chặn hành động mặc định của Enter
+      handleSubmit((data) => onSubmit(data, isRoot ? true : false))()
+    }
+  }
+
   return (
-    <div className="p-6 bg-white">
-      <div className="text-xl font-bold mb-4">Discussion</div>
+    <div className="mb-15 bg-white p-6">
+      <div className="mb-4 text-xl font-bold">Discussion</div>
       <Skeleton loading={loading}>
         {selector?.discussion?.map((e, i) => {
           return (
@@ -421,17 +434,20 @@ const Discussion = ({ class_id }: Props) => {
                       </div>
                     )}
                     <div className="relative">
-                      <HookFormTextField
+                      <HookFormTextArea
                         control={control}
                         name={idReply === e?.id ? 'comment' : ''}
-                        textSize="sm"
-                        inputClassName={'max-h-10 !pr-9'}
                         placeholder="Your comment..."
-                      ></HookFormTextField>
+                        handleKeyDown={handleKeyDown}
+                      />
+                      <ActionDiscussion
+                        titlePrimary={'reply this comment'}
+                        onClick={() => handleChangeIdReply('')}
+                      />
                       <div
-                        className={`absolute top-[13px] right-[40px] cursor-pointer ${clsx({ hidden: selectedFiles?.length > 0 })}`}
+                        className={`absolute bottom-10 right-12 cursor-pointer ${clsx({ hidden: selectedFiles?.length > 0 })}`}
                       >
-                        <SappIcon icon="camera"></SappIcon>
+                        <SappIcon icon="camera" />
                         <input
                           type="file"
                           className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
@@ -443,9 +459,9 @@ const Discussion = ({ class_id }: Props) => {
                       <SappButtonIcon
                         type="submit"
                         ishover={false}
-                        className="border-none absolute top-[13px] right-1 cursor-pointer select-none bg-transparent !min-w-1 h-fit"
+                        className="sapp-custom-hover absolute bottom-10 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
                       >
-                        <IconSend className="hover:fill-yellow-500" />
+                        <SendComment />
                       </SappButtonIcon>
                     </div>
                     <SappButton
@@ -526,19 +542,17 @@ const Discussion = ({ class_id }: Props) => {
             </div>
           )}
           <div className="relative">
-            <HookFormTextField
+            <HookFormTextArea
               control={control}
               name={'commentRoot'}
-              textSize="sm"
-              inputClassName={'max-h-10 !pr-9'}
               placeholder="Your comment..."
-              className="h-fit"
-            ></HookFormTextField>
-            <SappButton title="" type="submit" className="hidden"></SappButton>
+              handleKeyDown={(e: any) => handleKeyDown(e, true)}
+            />
+            <SappButton title="" type="submit" className="hidden" />
             <div
-              className={`absolute top-[13px] right-[40px] cursor-pointer select-none ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
+              className={`absolute bottom-5 right-12 cursor-pointer select-none ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
             >
-              <SappIcon icon="camera"></SappIcon>
+              <SappIcon icon="camera" />
               <input
                 type="file"
                 className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
@@ -551,9 +565,9 @@ const Discussion = ({ class_id }: Props) => {
             <SappButtonIcon
               type="submit"
               ishover={false}
-              className="border-none absolute top-[13px] right-1 cursor-pointer select-none bg-transparent !min-w-1 h-fit"
+              className="sapp-custom-hover absolute bottom-5 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
             >
-              <IconSend className="hover:fill-yellow-500" />
+              <SendComment />
             </SappButtonIcon>
           </div>
         </form>
