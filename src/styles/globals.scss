@@ -809,7 +809,12 @@ $focus: (
 }
 
 textarea:focus {
-  --tw-ring-color: #ffb800;
+  --tw-ring-color: none;
+  @apply border-primary;
+}
+
+textarea {
+  @apply border-[1px] border-gray-2;
 }
 
 .button-icon {
@@ -1034,4 +1039,35 @@ p a {
 
 .fanpage ins {
   @apply no-underline hover:underline;
+}
+
+.result-scroll {
+  &::-webkit-scrollbar {
+    @apply h-4 w-1.5 border bg-bw-3;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply border;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply border bg-primary;
+  }
+}
+
+.dashboard-scroll-x,
+.dashboard-scroll-y {
+  overflow: hidden;
+}
+
+.dashboard-scroll-x:hover {
+  overflow-x: auto;
+}
+
+.dashboard-scroll-y:hover {
+  overflow-y: auto;
+}
+
+.sapp-custom-hover.button-icon:hover {
+  @apply bg-transparent;
 }

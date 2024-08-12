@@ -23,6 +23,10 @@ import ModalDeleteComment from './ModalDeleteComment'
 import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import SappButton from '@components/base/button/SappButton'
 import clsx from 'clsx'
+import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import ActionDiscussion from './ActionDiscussion'
+import SappDisplayText from 'src/common/SappDisplayText'
+import SendComment from './SendComment'
 
 type Props = {
   rank?: number
@@ -191,6 +195,14 @@ function DiscussionElement({
     setDiscussionFile(discussion.course_discussion_files)
   }, [discussion])
 
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      // Kiểm tra nếu nhấn Enter và không nhấn Shift
+      e.preventDefault() // Ngăn chặn hành động mặc định của Enter
+      handleSubmit(onSubmit)()
+    }
+  }
+
   return (
     <div className="flex gap-3 text-bw-1">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
@@ -209,9 +221,9 @@ function DiscussionElement({
               blurDataURL={blankAvatar.src}
               priority={true}
               alt="avatar"
-            ></Image>
+            />
           </div>
-          <div>
+          <div className="w-full">
             <div className="flex flex-row">
               <div className="text-base font-semibold mb-1">
                 {discussion?.full_name}
@@ -242,7 +254,7 @@ function DiscussionElement({
                     onClick={() => setImageSrc(e.url)}
                     priority={true}
                     alt="file"
-                  ></Image>
+                  />
                   {isEdit && (
                     <div
                       className="absolute top-[-10px] right-[-10px] p-[5px] rounded-[80px] bg-white shadow-md"
@@ -284,43 +296,41 @@ function DiscussionElement({
             </div>
 
             {!isEdit && discussionContent && (
-              <div className={`text-base mb-2 `}>{discussionContent}</div>
+              <SappDisplayText text={discussionContent} />
             )}
 
             {isEdit && (
               <div>
-                <div className="relative border flex">
-                  <HookFormTextField
+                <div className="relative">
+                  <HookFormTextArea
                     control={control}
-                    name={'editData'}
-                    textSize="sm"
-                    inputClassName={'max-h-10 !pr-9 border-none px-0'}
-                    className=""
+                    name="editData"
                     defaultValue={editValue}
-                  ></HookFormTextField>
-                  <div className="flex gap-x-2 items-center pr-1">
-                    <div
-                      className={`relative cursor-pointer select-none ${clsx({ hidden: discussionFile?.length > 0 || selectFile?.length > 0 })}`}
-                    >
-                      <SappIcon icon="camera"></SappIcon>
-                      <input
-                        type="file"
-                        className="block absolute top-0 left-0 right-0 bottom-0 w-full h-full cursor-pointer opacity-0"
-                        accept="image/jpeg, image/png, image/gif"
-                        onChange={(e) => handleFileChange(e)}
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <SappButtonIcon
-                      type="submit"
-                      ishover={false}
+                    handleKeyDown={handleKeyDown}
+                  />
+                  {/* <div className="flex items-center gap-x-2 pr-1"> */}
+                  <div
+                    className={`absolute bottom-5 right-12 cursor-pointer select-none ${clsx({ hidden: discussionFile?.length > 0 || selectFile?.length > 0 })}`}
+                  >
+                    <SappIcon icon="camera"></SappIcon>
+                    <input
+                      type="file"
+                      className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
+                      accept="image/jpeg, image/png, image/gif"
+                      onChange={(e) => handleFileChange(e)}
                       disabled={isLoading}
-                      className="border-none !min-w-1 h-fit"
-                    >
-                      <IconSend className="hover:fill-yellow-500" />
-                    </SappButtonIcon>
+                    />
                   </div>
+                  <SappButtonIcon
+                    type="submit"
+                    ishover={false}
+                    disabled={isLoading}
+                    className="sapp-custom-hover absolute bottom-5 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
+                  >
+                    <SendComment />
+                  </SappButtonIcon>
                 </div>
+                {/* </div> */}
                 <SappButton
                   title=""
                   type="submit"
@@ -333,13 +343,13 @@ function DiscussionElement({
               </div>
             )}
 
-            <div className="flex gap-y-1 gap-x-6 font-semibold text-medium-sm">
+            <div className="flex gap-x-6 gap-y-1 text-medium-sm">
               {!isEdit && rank < 1 && (
                 <div
                   role="button"
                   className={`${
                     discussion?.id === idReply ? 'text-primary' : ''
-                  } select-none`}
+                  } select-none font-semibold`}
                   onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id)
                     trackGAEvent('Click Reply Comment Activity')
@@ -368,17 +378,10 @@ function DiscussionElement({
                         </div>
                       </>
                     ) : (
-                      <>
-                        <div
-                          className="font-semibold text-medium-sm cursor-pointer hover:underline"
-                          onClick={handleCancelEdit}
-                        >
-                          Cancel
-                        </div>
-                        <span className="text-gray-1 font-normal pl-1">
-                          edit this comment
-                        </span>
-                      </>
+                      <ActionDiscussion
+                        onClick={handleCancelEdit}
+                        titlePrimary={'edit this comment'}
+                      />
                     )}
                   </div>
                 </div>
