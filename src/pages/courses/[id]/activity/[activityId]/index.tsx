@@ -43,7 +43,14 @@ import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import Layout from '@components/layout'
 import { trackGAEvent } from '@utils/google-analytics'
-
+import { showPopup } from 'src/redux/slice/Popup/Result-test'
+interface VideoStateClicked {
+  course_tab_document_id: string
+  videos: {
+    file_id: string
+    is_click: boolean
+  }[]
+}
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -86,7 +93,8 @@ const ActivityPage = () => {
   const videoRef = useRef<any>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
-  const activityType = activity?.display_icon
+  const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
+  const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -96,10 +104,48 @@ const ActivityPage = () => {
     left: 'calc(50% - 200px)',
   })
 
+  const settingDoneProcessActivity = (activity: IActivity) => {
+    if (
+      activity.tabs?.find((tab) =>
+        tab.course_tab_documents?.find(
+          (course_tab) => course_tab.quiz?.is_graded,
+        ),
+      )
+    ) {
+      setIsHasQuizGrading(true)
+    }
+    const videos: VideoStateClicked[] = []
+    activity.tabs?.forEach((tab) => {
+      tab?.course_tab_documents?.forEach((course_tab) => {
+        if (!course_tab.videos?.length) {
+          return
+        }
+        const course_tab_index = videos.findIndex(
+          (video) => video.course_tab_document_id === course_tab.id,
+        )
+        if (course_tab_index === -1) {
+          videos.push({
+            course_tab_document_id: course_tab.id,
+            videos:
+              course_tab.videos?.map((document) => {
+                return {
+                  file_id: document.file.id,
+                  is_click: false,
+                }
+              }) ?? [],
+          })
+        }
+      })
+    })
+
+    setVideoClicked(videos)
+  }
+
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
       try {
+        settingDoneProcessActivity(activity)
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
       } catch (error) {}
@@ -148,26 +194,18 @@ const ActivityPage = () => {
     }
 
     timeoutRef.current = setTimeout(async () => {
-      // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
-      if (activityType === 'VIDEO' && videoRef?.current) {
-        for (let e of videoRef?.current) {
-          e.addEventListener('playing', async () => {
-            await handleFinishedCourseSectionProgress()
-          })
-        }
-        return
-      }
-      // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
-      else if (
-        activityType === 'QUIZ' ||
-        activityType === 'PAST_EXAM_ANALYSIS'
-      ) {
-        await handleFinishedCourseSectionProgress()
+      // Nếu có quiz chấm điểm thì ko xử lý progress này
+      if (isHasQuizGrading) {
         return
       }
 
-      // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-      else if (endActivityRef?.current && activityType === 'TEXT') {
+      // Nếu có video thì ko xử lý progress trong này
+      if (videoClicked.length) {
+        return
+      }
+
+      // Xử lý khi scroll đến element next or preview activity
+      if (endActivityRef?.current) {
         // Hủy theo dõi nếu đã có observerRef.current
         if (observerRef?.current) {
           observerRef?.current?.unobserve(endActivityRef?.current)
@@ -211,7 +249,32 @@ const ActivityPage = () => {
           }
         }
       }
-    }, 300)
+    }, 1000)
+  }
+
+  const onVideoStart = (file_id: string, course_tab_document_id: string) => {
+    if (isHasQuizGrading) {
+      return
+    }
+    const courseTabIndex = videoClicked.findIndex(
+      (course_tab) =>
+        course_tab?.course_tab_document_id === course_tab_document_id,
+    )
+    const videoIndex = videoClicked[courseTabIndex].videos.findIndex(
+      (video) => video.file_id === file_id,
+    )
+    videoClicked[courseTabIndex].videos[videoIndex].is_click = true
+    // Kiểm tra xem đã đủ điều kiện gọi api processs chưa
+    let is_watch_all_video = true
+    videoClicked.forEach((course_tab) => {
+      if (course_tab.videos.every((video) => !video.is_click)) {
+        is_watch_all_video = false
+      }
+    })
+    if (is_watch_all_video) {
+      handleFinishedCourseSectionProgress()
+    }
+    setVideoClicked(videoClicked)
   }
 
   /**
@@ -222,7 +285,13 @@ const ActivityPage = () => {
       if (fetch_progress.find((id) => id === sectionId)) {
         return
       }
-      await CoursesAPI.startCourseSectionProgress(courseId, sectionId)
+      const response = await CoursesAPI.startCourseSectionProgress(
+        courseId,
+        sectionId,
+      )
+      if (response?.data?.class_user_score) {
+        dispatch(showPopup(response?.data?.class_user_score))
+      }
       isFinishRef.current = true
       setFetch_progress([...fetch_progress, sectionId])
     }
@@ -702,9 +771,7 @@ const ActivityPage = () => {
                                 streamRefProp={(el: any) =>
                                   (videoRef.current[i || 0] = el)
                                 }
-                                handleProcess={
-                                  handleFinishedCourseSectionProgress
-                                }
+                                handleProcess={onVideoStart}
                                 document_id={e?.id}
                                 quizId={e?.quiz?.id || ''}
                                 grading_preference={
@@ -859,6 +926,7 @@ const ActivityPage = () => {
             <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
               <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
                 <div
+                  ref={endActivityRef}
                   className={`flex flex-nowrap gap-5 justify-${
                     activity?.previous_activity ||
                     (previousActivityIndex !== -1 &&
@@ -967,7 +1035,7 @@ const ActivityPage = () => {
               </div>
             </div>
           )}
-          <div ref={endActivityRef}></div>
+          <div></div>
           <div className="shadow-activity mt-6" data-aos={ANIMATION.DATA_AOS}>
             <Discussion class_id={(router.query.id as string) || ''} />
           </div>
