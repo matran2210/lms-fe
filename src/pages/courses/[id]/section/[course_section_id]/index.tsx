@@ -167,7 +167,7 @@ const CoursePartDetail = () => {
       totalCourseSectionsCompleted !== undefined
     ) {
       router.push({
-        pathname: `/case-study/table-result/${getCaseStudy?.attempt?.id}`,
+        pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
         query: {
           class_user_id: previewPart.class_user_id,
           class_id: router?.query?.id,

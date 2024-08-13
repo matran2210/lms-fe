@@ -8,12 +8,14 @@ interface IProps {
   setOpen: any
   handleSubmit: any
   handleCancel: any
+  message?: String
 }
 const ConFirmSubmit = ({
   open,
   setOpen,
   handleSubmit,
   handleCancel,
+  message,
 }: IProps) => {
   const onSubmit = () => {
     handleSubmit()
@@ -45,8 +47,9 @@ const ConFirmSubmit = ({
       <div className="text-bw-1 text-4xl font-semibold mt-6 flex justify-center">
         Confirm Submission
       </div>
-      <div className="text-gray-1 text-sm font-normal mt-4 mb-11 text-center">
-        Are you sure you are done here and ready to view the report?
+      <div className="mb-11 mt-4 text-center text-sm font-normal text-gray-1">
+        {message ??
+          'Are you sure you are done here and ready to view the report?'}
       </div>
       <div className="md:pt-5 pt-5 relative">
         <div className="flex flex-col-reverse gap-6">

@@ -36,6 +36,7 @@ interface IProps {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => void
   isHideExhibit?: boolean
+  isAlwaysShowAnswer?: boolean
 }
 type IProp = {
   value: string
@@ -60,6 +61,7 @@ const MatchingQuestion = forwardRef(
       uuid,
       setOpenFile,
       isHideExhibit = true,
+      isAlwaysShowAnswer = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -245,7 +247,7 @@ const MatchingQuestion = forwardRef(
       shuffleArray(arr)
       if (corrects) {
         for (let correct of corrects) {
-          if (defaultAnswer) {
+          if (defaultAnswer || isAlwaysShowAnswer) {
             objCorrect[correct?.id] = correct?.answer
           }
         }

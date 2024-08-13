@@ -98,6 +98,13 @@ export enum NOTIFICATION_STATUS {
   ENDED = 'ENDED',
 }
 
+export interface IMetaData {
+  total_pages: number
+  total_records: number
+  page_index: number
+  page_size: number
+}
+
 export * from './course'
 export * from './courses'
 export * from './exhibit'
