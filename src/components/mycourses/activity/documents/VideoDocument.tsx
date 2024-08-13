@@ -22,7 +22,7 @@ type Props = {
   activityId: string
   tabId: string
   streamRefProp?: any
-  handleProcess?: () => void
+  handleProcess?: (file_id: string, course_tab_document_id: string) => void
   document_id: string
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
@@ -72,7 +72,7 @@ const VideoDocument = ({
 
   useEffect(() => {
     if (handleProcess && streamRef?.current?.paused === false) {
-      handleProcess()
+      handleProcess(currentVideo?.file?.id, document_id)
     }
   }, [streamRef?.current?.paused])
 

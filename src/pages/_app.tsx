@@ -25,7 +25,7 @@ import { getActToken, pageview } from '@utils/index'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
 import { io } from 'socket.io-client'
-import { ICert } from 'src/type'
+import { ICourseScore } from 'src/type'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import PopupCert from '@components/mycourses/PopupCert'
@@ -139,7 +139,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   // Lấy token từ cokkieStorage (giả sử 'accessToken' là key lưu token)
 
   const [openCert, setOpenCert] = useState(false)
-  const [dataStudent, setDataStudent] = useState<ICert>()
 
   let authToken = getActToken()
 
@@ -165,17 +164,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     if (socket) {
       socket.on('connect', () => {})
       socket.on('disconnect', () => {})
-      socket.on('STUDENT_COMPLETE_COURSE', (data: ICert) => {
-        setOpenCert(true)
-        setDataStudent(data)
-      })
     }
   }, [socket])
-
-  const handleCancel = () => {
-    setOpenCert(false)
-    setDataStudent(undefined)
-  }
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
   const tagManagerArgs: TagManagerArgs = { gtmId }
@@ -230,11 +220,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   </>
                 )}
                 <LearningNotesList />
-                <PopupCert
-                  open={openCert}
-                  onCancel={handleCancel}
-                  dataStudent={dataStudent}
-                />
+                <PopupCert />
               </>
             </RouteGuard>
           </QueryClientProvider>

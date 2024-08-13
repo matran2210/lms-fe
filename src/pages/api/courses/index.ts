@@ -441,16 +441,24 @@ export const getActivityById = async (
     `${apiURL}/course-sections/activity/${id}/tabs`,
   )
 
-  if (responseActivity?.data && responseTabs?.data?.[0]) {
-    responseActivity.data.tabs = responseTabs.data
-
-    const responseTab = await fetcher(
-      `${apiURL}/course-sections/tab/${responseTabs.data?.[0].id}`,
-    )
-
-    if (responseTab.data) {
-      responseActivity.data.tabs[0] = responseTab.data
-    }
+  if (responseActivity?.data && !responseTabs?.data?.length) {
+    return responseActivity.data
   }
+  responseActivity.data.tabs = []
+  const promises = []
+  for (const tab of responseTabs.data) {
+    promises.push(
+      new Promise(async (resolve, reject) => {
+        const responseTab = await fetcher(
+          `${apiURL}/course-sections/tab/${tab.id}`,
+        )
+        if (responseTab?.data) {
+          return resolve(responseTab.data)
+        }
+        return reject('Tab Not Found')
+      }),
+    )
+  }
+  responseActivity.data.tabs = await Promise.all(promises)
   return responseActivity.data
 }

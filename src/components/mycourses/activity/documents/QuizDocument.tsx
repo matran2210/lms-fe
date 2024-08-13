@@ -25,6 +25,7 @@ import SappButton from '@components/base/button/SappButton'
 import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import { trackGAEvent } from '@utils/google-analytics'
+import { showPopup } from 'src/redux/slice/Popup/Result-test'
 
 type Props = {
   questions: IQuestion[]
@@ -203,7 +204,6 @@ const QuizDocument = ({
         .unwrap()
         .then((e: any) => {
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
-
           dispatch(
             removeQuizFinished({
               activityId,
@@ -214,6 +214,11 @@ const QuizDocument = ({
           setLoading(false)
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
+          if (e?.data?.class_user_score) {
+            setTimeout(() => {
+              dispatch(showPopup(e.data.class_user_score))
+            }, 4000)
+          }
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {

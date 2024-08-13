@@ -54,6 +54,11 @@ export interface IActivity {
     name: string
   }
   breadcumb?: IBreadcrumb[]
+  user_course_section_progress: {
+    id: string
+    total_course_sections: number
+    total_course_sections_completed: number
+  }[]
 }
 
 export interface ITab {
