@@ -1,4 +1,3 @@
-import { LAYOUT } from '@utils/constants'
 import { GetServerSideProps } from 'next'
 import { PageLink } from 'src/constants'
 import InputCodeForm from '../../../components/auth/InputCodeForm'
@@ -22,12 +21,6 @@ const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
         <div className="md:mt-12 mt-8">
           <InputCodeForm email={email} token={token} />
         </div>
-      </div>
-      <span className="text-medium-sm text-gray-1 mb-10">
-        Enter your 6 digits code that you received on your email.
-      </span>
-      <div className="md:mt-12 mt-8">
-        <InputCodeForm email={email} token={token} />
       </div>
     </SingleDialogLayout>
   )
