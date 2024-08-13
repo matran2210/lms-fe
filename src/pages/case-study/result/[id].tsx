@@ -153,6 +153,7 @@ const CaseStudyResult = () => {
             done={done}
             corrects={corrects?.corrects}
             solution={solution}
+            isAlwaysShowAnswer
           />
         )
       case QUESTION_TYPES.FILL_WORD:
