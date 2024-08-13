@@ -349,7 +349,7 @@ function DiscussionElement({
                   role="button"
                   className={`${
                     discussion?.id === idReply ? 'text-primary' : ''
-                  } select-none font-semibold`}
+                  } select-none font-medium hover:underline`}
                   onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id)
                     trackGAEvent('Click Reply Comment Activity')
@@ -365,13 +365,13 @@ function DiscussionElement({
                     {!isEdit ? (
                       <>
                         <div
-                          className="pr-6 font-semibold text-medium-sm text-bw-1 cursor-pointer"
+                          className="pr-6 font-medium text-medium-sm text-bw-1 cursor-pointer hover:underline"
                           onClick={handleEdit}
                         >
                           Edit
                         </div>
                         <div
-                          className="font-semibold text-medium-sm cursor-pointer"
+                          className="font-medium text-medium-sm cursor-pointer hover:underline"
                           onClick={handleDeleteComment}
                         >
                           Delete
