@@ -1,4 +1,3 @@
-import { LAYOUT } from '@utils/constants'
 import { GetServerSideProps } from 'next'
 import { PageLink } from 'src/constants'
 import InputCodeForm from '../../../components/auth/InputCodeForm'
