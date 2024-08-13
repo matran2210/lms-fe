@@ -1071,3 +1071,8 @@ p a {
 .sapp-custom-hover.button-icon:hover {
   @apply bg-transparent;
 }
+
+br {
+  content: "";
+  @apply block m-2 text-sm;
+}
