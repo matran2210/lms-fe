@@ -70,14 +70,18 @@ interface IPinned {
   updated_at: string
 }
 
-export interface ICert {
-  user_id: string
-  payload: {
-    content: string
-    created_at: Date
+export interface ICourseScore {
+  is_passed: boolean
+  course: {
     id: string
+    name: string
+  }
+  user_certificate: {
+    id: string
+  }
+  content: {
     title: string
-    certificate_id: string
+    content: string
   }
 }
 

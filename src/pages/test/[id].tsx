@@ -78,6 +78,7 @@ interface Answer {
 
 import { QuestionAPI } from '../api/question'
 import { trackGAEvent } from '@utils/google-analytics'
+import { showPopup } from 'src/redux/slice/Popup/Result-test'
 
 // type Window = {
 //   userAgreed: any
@@ -1278,6 +1279,9 @@ const TestDetail = () => {
         scratch_pads: scratchPads || [],
       })
       if (res) {
+        if (res?.data?.class_user_score) {
+          dispatch(showPopup(res?.data?.class_user_score))
+        }
         if (type === 'entrance') {
           router.replace(`/entrance-test/test-result/${res?.data?.id}`)
         } else {
@@ -1310,6 +1314,9 @@ const TestDetail = () => {
           (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       })
       if (res) {
+        if (res?.data?.class_user_score) {
+          dispatch(showPopup(res?.data?.class_user_score))
+        }
         setScoreFinalTest(res?.data?.score)
         setQuizResultId(() => {
           setOpenTimeOut(true)

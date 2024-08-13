@@ -114,7 +114,7 @@ const PartFailed = ({
           {checkFinished && (
             <>
               <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
-                <p className="text-base text-gray-1">Latest Result:</p>
+                <p className="text-base text-gray-1">Latest Results:</p>
                 <p className="text-base text-bw-1 font-medium">
                   {`${countTimeSpent(coursePart?.quiz?.attempt?.ratio_score)}%`}
                 </p>
@@ -195,10 +195,9 @@ const PartFailed = ({
                 />
               )}
 
-              {(coursePart?.quiz?.is_limited &&
-                coursePart?.quiz?.attempt?.number_of_attempts ===
-                  coursePart?.quiz?.limit_count) ||
-              passFinalTest ? null : (
+              {coursePart?.quiz?.is_limited &&
+              coursePart?.quiz?.attempt?.number_of_attempts ===
+                coursePart?.quiz?.limit_count ? null : (
                 <ButtonSecondary
                   title="Retake"
                   full={false}
