@@ -45,6 +45,7 @@ import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
+import SappButton from '@components/base/button/SappButton'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -652,7 +653,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         })
         toast.success('Submitted successfully')
         router.replace(
-          `/case-study/table-result/${quizAttempId}?class_user_id=${router.query.class_user_id}`,
+          `/case-study/result/${quizAttempId}?class_user_id=${router.query.class_user_id}&class_id=${router.query.class_id}&course_section_id=${router.query.course_section_id}`,
         )
       } catch (err) {
         toast.error('submit failed')
@@ -793,35 +794,13 @@ const CaseStudyDetail = ({ questions }: any) => {
               <div className="text-lg-xl font-medium w-1/3 truncate">
                 {topics?.case_study_name} - {topics?.name}
               </div>
-              <ButtonCancelSubmit
-                className={'flex gap-4 flex-row-reverse w-1/3'}
-                // color={color}
-                submit={{
-                  title: 'Finish',
-                  size: 'small',
-                  loading: false,
-                  disabled: false,
-                  onClick: () => {
-                    setOpenScratchPad([])
-                    if (checkUnSubmitAnswer().length) {
-                      setUnSubmitAnswer(true)
-                    } else {
-                      setOpenSubmit(true)
-                    }
-                    setUnsavedChanges(false)
-                  },
+              <SappButton
+                title="Quit"
+                onClick={() => {
+                  setOpenQuit(true)
+                  setUnsavedChanges(false)
                 }}
-                cancel={{
-                  title: 'Quit',
-                  size: 'small',
-                  onClick: () => {
-                    setOpenQuit(true)
-                    setUnsavedChanges(false)
-                  },
-                  loading: false,
-                  //   full: fullWidthBtn,
-                }}
-              ></ButtonCancelSubmit>
+              />
             </div>
             {/* End Header */}
             <div
@@ -1242,11 +1221,27 @@ const CaseStudyDetail = ({ questions }: any) => {
                   </button>
                 )}
               </div>
+              <div>
+                <SappButton
+                  className={`mr-2 h-full bg-slate-200 py-3`}
+                  title="View Answer"
+                  onClick={() => {
+                    setOpenScratchPad([])
+                    if (checkUnSubmitAnswer().length) {
+                      setUnSubmitAnswer(true)
+                    } else {
+                      setOpenSubmit(true)
+                    }
+                    setUnsavedChanges(false)
+                  }}
+                />
+              </div>
             </div>
           </div>
           <ConFirmSubmit
             open={openSubmit}
             setOpen={setOpenSubmit}
+            message="Do you want to confirm all the answers and view the total report?"
             handleSubmit={() => {
               handleSubmitQuestion()
               setOpenSubmit(false)
