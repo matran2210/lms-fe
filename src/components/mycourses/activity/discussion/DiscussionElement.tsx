@@ -1,5 +1,5 @@
+import { CloseIconPreview, IconSend } from '@assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { VerifiedIcon } from '@components/icons'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -7,15 +7,26 @@ import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import SappIcon from 'src/common/SappIcon'
 import { ActivityAPI } from 'src/pages/api/activity'
 import { useAppDispatch } from 'src/redux/hook'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { getDiscussion } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import {
   ICreateDiscussionResReact,
   IDiscussion,
+  IDiscussionFile,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IUser } from 'src/redux/types/User/urser'
 import ModalDeleteComment from './ModalDeleteComment'
+import SappButtonIcon from '@components/base/button/SappButtonIcon'
+import SappButton from '@components/base/button/SappButton'
+import clsx from 'clsx'
+import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import ActionDiscussion from './ActionDiscussion'
+import SappDisplayText from 'src/common/SappDisplayText'
+import SendComment from './SendComment'
 
 type Props = {
   rank?: number
@@ -51,26 +62,59 @@ function DiscussionElement({
     discussion?.content,
   )
   const dispatch = useAppDispatch()
+  const [selectFile, setSelectFile] = useState<File[]>([])
+  const [discussionFile, setDiscussionFile] = useState<IDiscussionFile[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const canEdit = profile?.username === discussion?.username
 
   const { control, handleSubmit } = useForm<IEventData>({})
 
   const onSubmit = async (e: IEventData) => {
+    setIsLoading(true)
     try {
       const params = {
         content: e?.editData,
+      }
+      if (selectFile) {
+        await CourseActivityApi.uploadImagesDiscussion({
+          discussion_id: discussion?.id,
+          new_discussion_file: selectFile,
+          discussion_file_ids: discussion.course_discussion_files
+            .filter((el) => {
+              const isNotDelete = discussionFile.find(
+                (item) => item.id === el.id,
+              )
+              if (isNotDelete?.id) {
+                return el
+              }
+            })
+            .map((item) => item.id),
+        })
       }
       const res = await ActivityAPI.updateDiscussionComment(
         discussion?.id,
         params,
       )
-
+      handleRefresh()
       if (res?.success) {
         setDiscussionContent(res?.data?.content)
         setIsEdit(false)
+        setSelectFile([])
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleRefresh = () => {
+    dispatch(
+      getDiscussion({
+        id: classId,
+        sectionId: discussion?.course_section_id,
+      }),
+    )
   }
 
   const onDeleteComment = async () => {
@@ -78,16 +122,53 @@ function DiscussionElement({
     try {
       const res = await ActivityAPI.deleteDiscussion(discussion?.id)
       if (res) {
-        dispatch(
-          getDiscussion({
-            id: classId,
-            sectionId: discussion?.course_section_id,
-          }),
-        )
+        handleRefresh()
         setIsDelete(false)
         setLoading(false)
       }
     } catch (error) {}
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e?.target?.files
+    if (files) {
+      const imageFiles = Array.from(files).filter((file) =>
+        file?.type?.startsWith('image/'),
+      )
+      if (imageFiles.length > 1) {
+        toast.error('Vui lòng chỉ chọn 1 ảnh từ thiết bị.')
+        return
+      }
+
+      // Loại bỏ các file có định dạng .webp
+      const filteredFiles = imageFiles?.filter(
+        (file) => !file?.name?.toLowerCase()?.endsWith('.webp'),
+      )
+
+      // Kiểm tra kích thước file không vượt quá 20MB
+      const validFiles = filteredFiles?.filter(
+        (file) => file?.size < 20 * 1024 * 1024,
+      )
+
+      if (validFiles?.length > 0) {
+        setSelectFile(validFiles)
+      } else {
+        toast.error('Vui lòng chọn ảnh từ thiết bị, không quá 20MB')
+        return
+      }
+    }
+  }
+
+  const handleDeleteFile = (id: string | number, isFile: boolean) => {
+    if (isFile) {
+      setSelectFile((prev: File[]) => {
+        return prev.filter((_, i) => i !== id)
+      })
+    } else {
+      setDiscussionFile((prev) => {
+        return prev?.filter((e) => e.id !== id)
+      })
+    }
   }
 
   const handleEdit = () => {
@@ -98,6 +179,8 @@ function DiscussionElement({
 
   const handleCancelEdit = () => {
     setIsEdit(false)
+    handleRefresh()
+    setSelectFile([])
     trackGAEvent('Click Cancel Edit Comment Activity')
   }
 
@@ -109,14 +192,20 @@ function DiscussionElement({
   useEffect(() => {
     setIsLike(discussion.is_like)
     setTimeAgo(() => calculateTimeAgo(discussion.created_at))
+    setDiscussionFile(discussion.course_discussion_files)
   }, [discussion])
+
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      // Kiểm tra nếu nhấn Enter và không nhấn Shift
+      e.preventDefault() // Ngăn chặn hành động mặc định của Enter
+      handleSubmit(onSubmit)()
+    }
+  }
 
   return (
     <div className="flex gap-3 text-bw-1">
-      <form
-        className="w-full"
-        onSubmit={handleSubmit((e: IEventData) => onSubmit(e))}
-      >
+      <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-row gap-3">
           <div className="flex-none leading-0">
             <Image
@@ -132,9 +221,9 @@ function DiscussionElement({
               blurDataURL={blankAvatar.src}
               priority={true}
               alt="avatar"
-            ></Image>
+            />
           </div>
-          <div>
+          <div className="w-full">
             <div className="flex flex-row">
               <div className="text-base font-semibold mb-1">
                 {discussion?.full_name}
@@ -152,55 +241,115 @@ function DiscussionElement({
                 </div>
               )}
             </div>
-            <div className="flex gap-3 flex-wrap">
-              {discussion?.course_discussion_files?.map((e) => {
-                return (
-                  <div key={e.id}>
-                    <Image
-                      width={100}
-                      height={100}
-                      src={e.url}
-                      loading="eager"
-                      blurDataURL={blankAvatar.src}
-                      objectFit="contain"
-                      onClick={() => setImageSrc(e.url)}
-                      priority={true}
-                      alt="file"
-                    ></Image>
-                  </div>
-                )
-              })}
+            <div className="flex gap-3 flex-wrap mb-3">
+              {discussionFile?.map((e) => (
+                <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
+                  <Image
+                    width={100}
+                    height={100}
+                    src={e.url}
+                    loading="eager"
+                    blurDataURL={blankAvatar.src}
+                    objectFit="contain"
+                    onClick={() => setImageSrc(e.url)}
+                    priority={true}
+                    alt="file"
+                  />
+                  {isEdit && (
+                    <div
+                      className="absolute top-[-10px] right-[-10px] p-[5px] rounded-[80px] bg-white shadow-md"
+                      onClick={() => handleDeleteFile(e.id, false)}
+                    >
+                      <CloseIconPreview width={12} height={12} />
+                    </div>
+                  )}
+                </div>
+              ))}
+              {selectFile.map((file: File, index: number) => (
+                <div
+                  key={`comemnt-${index}`}
+                  className={`relative bg-cover bg-no-repeat `}
+                >
+                  <Image
+                    width={100}
+                    height={100}
+                    src={URL.createObjectURL(file)}
+                    loading="eager"
+                    blurDataURL={blankAvatar.src}
+                    objectFit="contain"
+                    onClick={() => setImageSrc(URL.createObjectURL(file))}
+                    priority={true}
+                    alt="file"
+                  ></Image>
+                  {isEdit && (
+                    <div
+                      className="absolute top-[-10px] right-[-10px] p-[5px] rounded-[80px] bg-white shadow-md"
+                      onClick={() => {
+                        handleDeleteFile(index, true)
+                      }}
+                    >
+                      <CloseIconPreview width={12} height={12} />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
 
             {!isEdit && discussionContent && (
-              <div className={`text-base mb-2 `}>{discussionContent}</div>
+              <SappDisplayText text={discussionContent} />
             )}
 
             {isEdit && (
               <div>
-                <HookFormTextField
-                  control={control}
-                  name={'editData'}
-                  textSize="sm"
-                  inputClassName={'max-h-10 !pr-9'}
-                  placeholder="Edit your comment..."
-                  className=""
-                  defaultValue={editValue}
-                ></HookFormTextField>
-                <button type="submit" className="hidden"></button>
+                <div className="relative">
+                  <HookFormTextArea
+                    control={control}
+                    name="editData"
+                    defaultValue={editValue}
+                    handleKeyDown={handleKeyDown}
+                  />
+                  {/* <div className="flex items-center gap-x-2 pr-1"> */}
+                  <div
+                    className={`absolute bottom-5 right-12 cursor-pointer select-none ${clsx({ hidden: discussionFile?.length > 0 || selectFile?.length > 0 })}`}
+                  >
+                    <SappIcon icon="camera"></SappIcon>
+                    <input
+                      type="file"
+                      className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
+                      accept="image/jpeg, image/png, image/gif"
+                      onChange={(e) => handleFileChange(e)}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <SappButtonIcon
+                    type="submit"
+                    ishover={false}
+                    disabled={isLoading}
+                    className="sapp-custom-hover absolute bottom-5 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
+                  >
+                    <SendComment />
+                  </SappButtonIcon>
+                </div>
+                {/* </div> */}
+                <SappButton
+                  title=""
+                  type="submit"
+                  className="hidden"
+                  disabled={isLoading}
+                ></SappButton>
                 <div className="relative w-full top-2 right-3 cursor-pointer select-none pb-2">
                   <input type="text" className="absolute w-full opacity-0" />
                 </div>
               </div>
             )}
 
-            <div className="flex gap-y-1 gap-x-6 font-semibold text-medium-sm">
+            <div className="flex gap-x-6 gap-y-1 text-medium-sm">
               {!isEdit && rank < 1 && (
                 <div
                   role="button"
                   className={`${
                     discussion?.id === idReply ? 'text-primary' : ''
-                  } select-none`}
+                  } select-none font-semibold`}
                   onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id)
                     trackGAEvent('Click Reply Comment Activity')
@@ -229,17 +378,10 @@ function DiscussionElement({
                         </div>
                       </>
                     ) : (
-                      <>
-                        <div
-                          className="font-semibold text-medium-sm cursor-pointer hover:underline"
-                          onClick={handleCancelEdit}
-                        >
-                          Cancel
-                        </div>
-                        <span className="text-gray-1 font-normal pl-1">
-                          edit this comment
-                        </span>
-                      </>
+                      <ActionDiscussion
+                        onClick={handleCancelEdit}
+                        titlePrimary={'edit this comment'}
+                      />
                     )}
                   </div>
                 </div>

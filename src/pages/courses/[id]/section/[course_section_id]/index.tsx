@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import SappDrawer from '@components/base/SappDrawer'
+import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import Layout from '@components/layout'
+import { trackGAEvent } from '@utils/google-analytics'
+import { truncateString } from '@utils/index'
+import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
-import { TreeHelper } from 'src/helper/tree'
-import { ILearningOutcome } from 'src/type/courses'
-import SappDrawer from '@components/base/SappDrawer'
-import { useRouter } from 'next/router'
-import { truncateString } from '@utils/index'
-import TestModal from 'src/pages/courses/test'
-import { ANIMATION } from 'src/constants'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import { CoursesAPI } from '../../../../api/courses/index'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
-import Layout from '@components/layout'
-import { trackGAEvent } from '@utils/google-analytics'
+import { ANIMATION } from 'src/constants'
+import { TreeHelper } from 'src/helper/tree'
+import TestModal from 'src/pages/courses/test'
+import { ILearningOutcome } from 'src/type/courses'
+import { CoursesAPI } from '../../../../api/courses/index'
 
 interface IProps {
   course_section_type: string
@@ -40,6 +40,7 @@ interface IProps {
     attempt: {
       id: string
       number_of_attempts: number
+      score: number
       ratio_score: string
       total_attempt_time: number
     }
@@ -58,9 +59,10 @@ const CoursePartDetail = () => {
   const [chapterData, setChapterData] = useState<any>({})
   const [chapterTestId, setChapterTestId] = useState<string>()
   const [defaultActive, setDefaultActive] = useState<string>()
+  const courseChapterId = localStorage.getItem('course_chapter_id')
+  const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
-
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await CoursesAPI.getPartDetail(
@@ -89,7 +91,9 @@ const CoursePartDetail = () => {
     setLoadingChapter(true)
     try {
       const res = await CoursesAPI.getPartDetail(id, course_section_id)
+
       const nodeList = res?.data?.course_section_tree
+      setIsPassedCourse(res?.data?.is_passed_course)
       const newData = nodeList.map((item: IProps) => {
         if (item.id === course_section_id) {
           const { parent_id, ...rest } = item
@@ -101,6 +105,7 @@ const CoursePartDetail = () => {
 
       const detail = tree[0]
       setChapterDetail(detail)
+      localStorage.removeItem('course_chapter_id')
     } catch (error) {
     } finally {
       setLoadingChapter(false)
@@ -200,6 +205,7 @@ const CoursePartDetail = () => {
       setChapterData(filteredData?.[0])
       setChapterTestId(filteredData?.[0]?.id)
     }
+
     setOpen(true)
   }
 
@@ -279,12 +285,10 @@ const CoursePartDetail = () => {
         )
 
         if (matchingChild) {
-          setDefaultActive(matchingChild.id)
+          !courseChapterId && setDefaultActive(matchingChild.id)
         } else if (filteredChildren?.length > 0) {
-          setDefaultActive(filteredChildren[0].id) // Set default to the first child
+          !courseChapterId && setDefaultActive(filteredChildren[0].id) // Set default to the first child
         }
-      } else {
-        setDefaultActive('')
       }
     }
   }, [router?.asPath, partDetail?.id])
@@ -316,6 +320,9 @@ const CoursePartDetail = () => {
       JSON.stringify(transformedArray),
     )
   })
+  useEffect(() => {
+    courseChapterId && setDefaultActive(courseChapterId as string)
+  }, [courseChapterId])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -379,7 +386,7 @@ const CoursePartDetail = () => {
               handleRouterChapter={handleRouterChapter}
               readMore={readMore}
               setReadMore={setReadMore}
-              defaultActive={defaultActive ? defaultActive : ''}
+              defaultActive={defaultActive}
             />
           </div>
 
@@ -436,6 +443,7 @@ const CoursePartDetail = () => {
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
             activeCourse={() => {}}
+            is_passed_course={isPassedCourse}
           />
         </div>
       </Layout>

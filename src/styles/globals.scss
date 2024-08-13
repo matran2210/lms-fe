@@ -6,6 +6,8 @@
 @import 'sidebar.scss';
 @import 'my-course.scss';
 @import 'video.scss';
+@import 'activity.scss';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -207,6 +209,11 @@ body *::-webkit-scrollbar-thumb:hover {
     width: auto !important;
     display: unset;
     max-width: max-content;
+  }
+
+  .video-controls ul {
+    padding-inline-start: 0 !important;
+    list-style: none;
   }
 }
 
@@ -630,7 +637,10 @@ textarea.is-invalid:focus {
 }
 
 .hover-transition-font-weight {
-  transition: font-weight 0.1s ease;
+  transition: text-shadow 0.2s ease-in-out;
+  &:hover {
+    text-shadow: 0px 0px 0.05em #ffb800;
+  }
 }
 
 .ant-tooltip-inner {
@@ -799,7 +809,12 @@ $focus: (
 }
 
 textarea:focus {
-  --tw-ring-color: #ffb800;
+  --tw-ring-color: none;
+  @apply border-primary;
+}
+
+textarea {
+  @apply border-[1px] border-gray-2;
 }
 
 .button-icon {
@@ -1024,4 +1039,35 @@ p a {
 
 .fanpage ins {
   @apply no-underline hover:underline;
+}
+
+.result-scroll {
+  &::-webkit-scrollbar {
+    @apply h-4 w-1.5 border bg-bw-3;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply border;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply border bg-primary;
+  }
+}
+
+.dashboard-scroll-x,
+.dashboard-scroll-y {
+  overflow: hidden;
+}
+
+.dashboard-scroll-x:hover {
+  overflow-x: auto;
+}
+
+.dashboard-scroll-y:hover {
+  overflow-y: auto;
+}
+
+.sapp-custom-hover.button-icon:hover {
+  @apply bg-transparent;
 }

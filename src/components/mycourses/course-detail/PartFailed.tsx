@@ -16,9 +16,11 @@ import { trackGAEvent } from '@utils/google-analytics'
 const PartFailed = ({
   coursePart,
   class_user_id,
+  is_passed_course,
 }: {
   coursePart: IMyCourseDetail
   class_user_id?: string
+  is_passed_course: boolean
 }) => {
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
@@ -221,6 +223,7 @@ const PartFailed = ({
         title={coursePart?.name}
         data={coursePart}
         class_user_id={class_user_id}
+        is_passed_course={is_passed_course}
         activeCourse={() => {}}
       />
     </>

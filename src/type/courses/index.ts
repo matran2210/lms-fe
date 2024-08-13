@@ -178,6 +178,7 @@ export interface ISection {
   course_section_type: string
   created_at: Date
   id: string
+  parent_id: string
   name: string
   updated_at: Date
 }

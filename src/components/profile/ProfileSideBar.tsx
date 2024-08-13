@@ -2,6 +2,7 @@ import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { trackGAEvent } from '@utils/google-analytics'
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { ANIMATION } from 'src/constants'
@@ -145,7 +146,7 @@ const ProfileSideBar = ({ page }: IProps) => {
               className = 'bg-secondary font-medium text-primary'
             }
             if (childActivationStates[childLabel]) {
-              className = 'bg-secondary hover:font-medium text-primary'
+              className = 'bg-secondary text-primary'
             }
 
             return (
@@ -154,7 +155,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                 key={key}
               >
                 <a
-                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover:font-medium hover-transition-font-weight ${
+                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover-transition-font-weight  ${
                     isActive ||
                     (urlPage === 'security' &&
                       Object.values(childActivationStates)?.some(
@@ -162,7 +163,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                       ) &&
                       !childActivationStates[childLabel])
                       ? 'bg-secondary text-primary font-medium'
-                      : 'hover:left-[-0.5px] font-normal'
+                      : 'hover:left-[-0.25px] font-normal'
                   }`}
                   style={{
                     position: 'relative', // Đặt position là relative
@@ -196,7 +197,12 @@ const ProfileSideBar = ({ page }: IProps) => {
                   )}
                 </a>
                 {urlChildren?.length > 0 && (
-                  <div className="border-l border-gray-2 ml-5 my-5">
+                  <div
+                    className={clsx(
+                      'border-l border-gray-2 ml-5',
+                      isExpanded && 'my-5',
+                    )}
+                  >
                     {isExpanded &&
                       urlChildren?.map((child) => {
                         const childLabel = getLabelFromChild(child).replace(
@@ -208,10 +214,10 @@ const ProfileSideBar = ({ page }: IProps) => {
                         return (
                           <div
                             key={childLabel}
-                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover:font-medium hover-transition-font-weight ${
+                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover-transition-font-weight ${
                               childIsActive
                                 ? 'bg-white font-medium text-primary'
-                                : 'hover:left-[-0.5px] font-normal'
+                                : 'hover:left-[-0.25px] font-normal'
                             }`}
                           >
                             <a
@@ -237,7 +243,7 @@ const ProfileSideBar = ({ page }: IProps) => {
             )
           })}
           <li
-            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:font-medium hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
+            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
             onClick={handleLogout}
           >
             <div className="absolute inset-0 bottom-0"></div>

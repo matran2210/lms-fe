@@ -1990,7 +1990,7 @@ const TestDetail = () => {
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                      <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
                         <div className="text-sm font-normal">Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -2022,7 +2022,7 @@ const TestDetail = () => {
                     }
                   >
                     <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                      <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
                         <div className="text-sm font-normal">Scratch Pad</div>
                         {/* <CloseIcon */}
                         <button onClick={() => handleCloseScratchPad(e)}>

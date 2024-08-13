@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["antd", "Sapp"]
+  "cSpell.words": ["antd", "Sapp"],
+  "scss.lint.unknownAtRules": "ignore"
 }

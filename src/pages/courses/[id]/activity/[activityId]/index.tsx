@@ -2,13 +2,20 @@ import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
+import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
+import Calculator from '@components/calculator'
+import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
+import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
+import { CourseSectionType } from '@utils/constants'
+import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
+import { Dropdown, Menu } from 'antd'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -19,30 +26,24 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { useQuery } from 'react-query'
+import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import SappTooltip from 'src/common/SappTooltip'
+import { ANIMATION } from 'src/constants'
+import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
+  closeCalculator,
   courseActivityAction,
   courseActivityReducer,
   getCourseActivityTapById,
   getDiscussion,
-  closeCalculator,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { IActivity } from 'src/type/course/my-course/Activity'
-import { Dropdown, Menu } from 'antd'
-import Calculator from '@components/calculator'
-import { ANIMATION } from 'src/constants'
-import SappTooltip from 'src/common/SappTooltip'
-import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
-import SAPPBorder from 'src/common/SAPPBorder'
-import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
-import Layout from '@components/layout'
-import { trackGAEvent } from '@utils/google-analytics'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -73,7 +74,7 @@ const ActivityPage = () => {
   )
 
   const courseId = router.query?.id
-  const sectionId = router.query?.activityId
+  const sectionId = router.query?.activityId as string
 
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
@@ -90,7 +91,7 @@ const ActivityPage = () => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-
+  const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
     left: 'calc(50% - 200px)',
@@ -219,8 +220,12 @@ const ActivityPage = () => {
    */
   const handleFinishedCourseSectionProgress = async () => {
     if (!isFinishRef?.current) {
+      if (fetch_progress.find((id) => id === sectionId)) {
+        return
+      }
       await CoursesAPI.startCourseSectionProgress(courseId, sectionId)
       isFinishRef.current = true
+      setFetch_progress([...fetch_progress, sectionId])
     }
   }
 
@@ -367,6 +372,10 @@ const ActivityPage = () => {
     (e: IBreadCrumbs) => e?.course_section_type === 'PART',
   )?.id
 
+  const chapterId = breadcrumbsMenu?.data?.find(
+    (e: IBreadCrumbs) => e?.course_section_type === CourseSectionType.CHAPTER,
+  )?.id
+
   /**
    * @description config menu breadcrumbs trong activity
    */
@@ -396,22 +405,22 @@ const ActivityPage = () => {
           return (
             <React.Fragment key={e?.id}>
               {e?.course_section_type !== 'ACTIVITY' ? (
-                <Menu.Item onClick={() => router.push(url)}>
+                <Menu.Item
+                  onClick={() => {
+                    ;['CHAPTER', 'UNIT', 'PART'].includes(
+                      e.course_section_type,
+                    ) && localStorage.setItem('course_chapter_id', chapterId)
+
+                    router.push(url)
+                  }}
+                >
                   <li
                     className={
                       'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
                     }
                     title={e?.name}
                   >
-                    <Link href={url}>
-                      <span
-                        className={
-                          'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
-                        }
-                      >
-                        {truncateString(e?.name, 25)}
-                      </span>
-                    </Link>
+                    {truncateString(e?.name, 25)}
                   </li>
                 </Menu.Item>
               ) : null}
@@ -554,7 +563,7 @@ const ActivityPage = () => {
                   fixed
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
-                    <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {
@@ -635,214 +644,223 @@ const ActivityPage = () => {
               loading={selector.loading}
               className="w-4/5 mx-auto"
             >
-              {!!course_tab_documents?.length && (
-                <div className="bg-white pb-6 mb-6">
-                  <div
-                    className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}
-                  >
-                    <div className="tab-content overflow-x-auto overflow-y-hidden">
-                      {course_tab_documents?.map((e, i) => {
-                        const marginBottom =
-                          i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                        if (e?.type === 'QUIZ') {
-                          return (
-                            <div
-                              className={marginBottom}
-                              key={
-                                e?.id + '_' + i + '_' + selector?.currentTabId
+              <div className="bg-white pb-6 mb-6">
+                <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
+                  <div className="tab-content overflow-x-auto overflow-y-hidden">
+                    {course_tab_documents?.map((e, i) => {
+                      const marginBottom =
+                        i < course_tab_documents?.length - 1 ? 'mb-6' : ''
+                      if (e?.type === 'QUIZ') {
+                        return (
+                          <div
+                            className={marginBottom}
+                            key={e?.id + '_' + i + '_' + selector?.currentTabId}
+                            ref={quizDocumentRef}
+                          >
+                            <QuizDocument
+                              questions={[
+                                ...(e?.quiz?.multiple_choice_questions || []),
+                                ...(e?.quiz?.constructed_questions || []),
+                              ]}
+                              activityId={activity?.id as string}
+                              tabId={selector?.currentTabId || ''}
+                              quizId={e?.quiz?.id || ''}
+                              grading_preference={
+                                e.quiz?.grading_preference ||
+                                'AFTER_EACH_QUESTION'
                               }
-                              ref={quizDocumentRef}
-                            >
-                              <QuizDocument
-                                questions={[
-                                  ...(e?.quiz?.multiple_choice_questions || []),
-                                  ...(e?.quiz?.constructed_questions || []),
-                                ]}
-                                activityId={activity?.id as string}
-                                tabId={selector?.currentTabId || ''}
-                                quizId={e?.quiz?.id || ''}
-                                grading_preference={
-                                  e.quiz?.grading_preference ||
-                                  'AFTER_EACH_QUESTION'
-                                }
-                                document_id={e?.id}
-                                is_graded={e?.quiz?.is_graded || false}
-                                setOpenFile={handleOpenScratchPad}
-                                class_user_id={activity?.class_user_id}
-                              ></QuizDocument>
-                            </div>
-                          )
-                        }
-                        if (e.type === 'TEXT') {
-                          return (
-                            <div
-                              className={`${marginBottom} select-none`}
-                              key={i + '_' + selector?.currentTabId}
-                            >
-                              <TextDocument
-                                text_editor_content={e?.text_editor_content}
-                              ></TextDocument>
-                            </div>
-                          )
-                        }
-                        if (e.type === 'VIDEO') {
-                          return (
-                            <div
-                              className={marginBottom}
-                              key={i + '_' + selector?.currentTabId}
-                            >
-                              <VideoDocument
-                                videos={e?.videos}
-                                activityId={activity?.id as string}
-                                tabId={selector?.currentTabId || ''}
-                                streamRefProp={(el: any) =>
-                                  (videoRef.current[i || 0] = el)
-                                }
-                                handleProcess={
-                                  handleFinishedCourseSectionProgress
-                                }
-                                document_id={e?.id}
-                                quizId={e?.quiz?.id || ''}
-                                grading_preference={
-                                  e.quiz?.grading_preference ||
-                                  'AFTER_EACH_QUESTION'
-                                }
-                                class_user_id={activity?.class_user_id}
-                              ></VideoDocument>
-                            </div>
-                          )
-                        }
-                        return null
-                      })}
-                    </div>
-
-                    {activity?.files?.length > 0 && (
-                      <>
-                        <SAPPBorder />
-                        <div
-                          className={`pt-8 ${
-                            getPreviousTabId() ? 'pb-4' : 'pb-0'
-                          } `}
-                        >
-                          <div className="font-semibold text-base">
-                            Resource:
+                              document_id={e?.id}
+                              is_graded={e?.quiz?.is_graded || false}
+                              setOpenFile={handleOpenScratchPad}
+                              class_user_id={activity?.class_user_id}
+                            ></QuizDocument>
                           </div>
-                          <ul className="list-disc text-base">
-                            {activity?.files.map((e: any, index: number) => {
-                              return (
-                                <div
-                                  className={`flex justify-between group cursor-pointer ${
-                                    index === 0 ? 'mt-4' : 'mt-5'
-                                  }`}
-                                  key={index}
-                                >
-                                  <div className="flex">
-                                    <div className="mr-2 group-hover:text-primary flex self-center">
-                                      <LinkIcon />
-                                    </div>
-                                    <div
-                                      className="cursor-pointer text-gray-1 group-hover:text-primary"
+                        )
+                      }
+                      if (e.type === 'TEXT') {
+                        return (
+                          <div
+                            className={`${marginBottom} select-none`}
+                            key={i + '_' + selector?.currentTabId}
+                          >
+                            <TextDocument
+                              text_editor_content={e?.text_editor_content}
+                            ></TextDocument>
+                          </div>
+                        )
+                      }
+                      if (e.type === 'VIDEO') {
+                        return (
+                          <div
+                            className={marginBottom}
+                            key={i + '_' + selector?.currentTabId}
+                          >
+                            <VideoDocument
+                              videos={e?.videos}
+                              activityId={activity?.id as string}
+                              tabId={selector?.currentTabId || ''}
+                              streamRefProp={(el: any) =>
+                                (videoRef.current[i || 0] = el)
+                              }
+                              handleProcess={
+                                handleFinishedCourseSectionProgress
+                              }
+                              document_id={e?.id}
+                              quizId={e?.quiz?.id || ''}
+                              grading_preference={
+                                e.quiz?.grading_preference ||
+                                'AFTER_EACH_QUESTION'
+                              }
+                              class_user_id={activity?.class_user_id}
+                            ></VideoDocument>
+                          </div>
+                        )
+                      }
+                      return null
+                    })}
+                  </div>
+
+                  {activity?.files?.length > 0 && (
+                    <>
+                      <SAPPBorder />
+                      <div
+                        className={`pt-8 ${
+                          getPreviousTabId() ? 'pb-4' : 'pb-0'
+                        } `}
+                      >
+                        <div className="font-semibold text-base">Resource:</div>
+                        <ul className="list-disc text-base">
+                          {activity?.files.map((e: any, index: number) => {
+                            return (
+                              <div
+                                className={`flex justify-between ${
+                                  index === 0 ? 'mt-4' : 'mt-5'
+                                }`}
+                                key={index}
+                              >
+                                <div className="flex">
+                                  <div className="mr-2 flex self-center">
+                                    <LinkIcon />
+                                  </div>
+                                  <SappTooltip
+                                    title={
+                                      e.resource.suffix_type !==
+                                      SUFFIX_TYPE.GENERAL_FILE
+                                        ? 'Preview File'
+                                        : 'Download file'
+                                    }
+                                    showTooltip={true}
+                                    placement="right"
+                                  >
+                                    <p
+                                      className="cursor-pointer text-gray-1 hover:text-primary"
                                       onClick={() => {
-                                        handleOpenScratchPad(
-                                          {
-                                            type: 'file',
-                                          },
-                                          e?.resource?.url,
-                                          e?.resource?.name,
-                                        )
+                                        e.resource.suffix_type !==
+                                        SUFFIX_TYPE.GENERAL_FILE
+                                          ? handleOpenScratchPad(
+                                              {
+                                                type: 'file',
+                                              },
+                                              e?.resource?.url,
+                                              e?.resource?.name,
+                                            )
+                                          : download(
+                                              e?.resource?.name,
+                                              e?.resource?.file_key,
+                                            )
+
                                         trackGAEvent('Click Open File Resource')
                                       }}
                                     >
                                       {e?.resource?.name}
-                                    </div>
-                                  </div>
-                                  <a
-                                    onClick={() => {
-                                      download(
-                                        e?.resource?.name,
-                                        e?.resource?.file_key,
-                                      )
-                                      trackGAEvent(
-                                        'Click Button Download Resource Activity',
-                                      )
-                                    }}
-                                  >
-                                    <DownloadIcon />
-                                  </a>
+                                    </p>
+                                  </SappTooltip>
                                 </div>
-                              )
-                            })}
-                          </ul>
-                        </div>
-                        {getPreviousTabId() && <SAPPBorder className="mt-4" />}
-                      </>
-                    )}
+                                <a
+                                  className="cursor-pointer"
+                                  onClick={() => {
+                                    download(
+                                      e?.resource?.name,
+                                      e?.resource?.file_key,
+                                    )
+                                    trackGAEvent(
+                                      'Click Button Download Resource Activity',
+                                    )
+                                  }}
+                                >
+                                  <DownloadIcon />
+                                </a>
+                              </div>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                      {getPreviousTabId() && <SAPPBorder className="mt-4" />}
+                    </>
+                  )}
 
-                    <div className="flex justify-between flex-wrap gap-5 mt-8">
-                      {getPreviousTabId() && (
-                        <div className="w-auto">
-                          <div className="relative">
-                            <div
-                              onClick={() => {
-                                handleChangeTab(getPreviousTabId() || '')
-                                trackGAEvent(
-                                  'Click Button Previous Tab Activity',
-                                )
-                              }}
-                              className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                  <div className="flex justify-between flex-wrap gap-5 mt-8">
+                    {getPreviousTabId() && (
+                      <div className="w-auto">
+                        <div className="relative">
+                          <div
+                            onClick={() => {
+                              handleChangeTab(getPreviousTabId() || '')
+                              trackGAEvent('Click Button Previous Tab Activity')
+                            }}
+                            className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={20}
+                              height={20}
+                              fill="none"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width={20}
-                                height={20}
-                                fill="none"
-                              >
-                                <path
-                                  className="fill-bw-1 group-hover:fill-primary"
-                                  fillRule="evenodd"
-                                  d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              Previous Tab
-                            </div>
-                            <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+                              <path
+                                className="fill-bw-1 group-hover:fill-primary"
+                                fillRule="evenodd"
+                                d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Previous Tab
                           </div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
                         </div>
-                      )}
-                      {getNextTabId() && (
-                        <div className="w-auto relative ml-auto">
-                          <div className="relative">
-                            <div
-                              onClick={() => {
-                                handleChangeTab(getNextTabId() || '')
-                                trackGAEvent('Click Button Next Tab Activity')
-                              }}
-                              className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                      </div>
+                    )}
+                    {getNextTabId() && (
+                      <div className="w-auto relative ml-auto">
+                        <div className="relative">
+                          <div
+                            onClick={() => {
+                              handleChangeTab(getNextTabId() || '')
+                              trackGAEvent('Click Button Next Tab Activity')
+                            }}
+                            className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                          >
+                            Next Tab
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={20}
+                              height={20}
+                              fill="none"
                             >
-                              Next Tab
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width={20}
-                                height={20}
-                                fill="none"
-                              >
-                                <path
-                                  className="fill-bw-1 group-hover:fill-primary"
-                                  fillRule="evenodd"
-                                  d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
+                              <path
+                                className="fill-bw-1 group-hover:fill-primary"
+                                fillRule="evenodd"
+                                d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
                           </div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-              )}
+              </div>
             </ActivitySkeleton>
           </div>
 
@@ -1030,7 +1048,7 @@ const ActivityPage = () => {
                   }
                 >
                   <div className="absolute h-full w-full  top-0 left-0 border">
-                    <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
+                    <div className="flex items-center bg-white w-full h-10 justify-between px-5">
                       <div className="truncate">
                         <span className="font-semibold text-base text-bw-1">{`Exhibit ${
                           e?.index + 1
