@@ -57,6 +57,7 @@ const initialState: ICourseActivityState = {
   files: [] as any[],
   discussion: undefined,
   breadcumb: [] as IBreadcrumb[],
+  user_course_section_progress: [],
 }
 
 export const getCourseActivityTapById = createAsyncThunk(
