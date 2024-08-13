@@ -642,7 +642,8 @@ const ActivityPage = () => {
             <ActivitySkeleton
               length={1}
               loading={selector.loading}
-              className="w-4/5 mx-auto"
+              className="bg-white mb-6"
+              classChild="w-11/12 mx-auto max-w-[950px]"
             >
               <div className="bg-white pb-6 mb-6">
                 <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>

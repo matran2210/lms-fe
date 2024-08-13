@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { SkeletonProps } from './type'
+import clsx from 'clsx'
 
 const ActivitySkeleton: React.FunctionComponent<SkeletonProps> = ({
   children,
@@ -7,27 +8,28 @@ const ActivitySkeleton: React.FunctionComponent<SkeletonProps> = ({
   length = 1,
   widths,
   className,
+  classChild,
 }) => {
   const mockData = new Array(widths?.length ? widths.length : length).fill(0)
   return (
     <>
       {loading ? (
-        <>
-          {mockData.map((data, index) => (
+        <div className={clsx(className)}>
+          {mockData.map((_, index) => (
             <div
               key={index}
               role="status"
-              className={'animate-pulse mt-6 p-6' + ' ' + className}
+              className={clsx('animate-pulse p-6', classChild)}
             >
-              <div className="h-60 bg-gray-200 rounded-md dark:bg-gray-700 mb-6"></div>
-              <div className="h-7 bg-gray-200 rounded-md dark:bg-gray-700 mb-3"></div>
-              <div className="h-4 bg-gray-200 rounded-md dark:bg-gray-700 mb-6"></div>
-              <div className="h-7 bg-gray-200 rounded-md dark:bg-gray-700 mb-3"></div>
-              <div className="h-4 bg-gray-200 rounded-md dark:bg-gray-700 mb-6"></div>
-              <div className="h-30 bg-gray-200 rounded-md dark:bg-gray-700 mb-3"></div>
+              <div className="h-60 bg-gray-3 mb-6"></div>
+              <div className="h-7 bg-gray-3 mb-3"></div>
+              <div className="h-4 bg-gray-3 mb-6"></div>
+              <div className="h-7 bg-gray-3 mb-3"></div>
+              <div className="h-4 bg-gray-3 mb-6"></div>
+              <div className="h-30 bg-gray-3 mb-3"></div>
             </div>
           ))}
-        </>
+        </div>
       ) : (
         children
       )}
