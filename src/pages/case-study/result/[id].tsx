@@ -519,7 +519,7 @@ const CaseStudyResult = () => {
           }}
         >
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-end bg-gray-3 px-6 py-2 ">
+            <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
               <div className="w-1/3 truncate text-lg-xl font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
