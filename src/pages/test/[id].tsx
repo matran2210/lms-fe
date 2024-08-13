@@ -61,6 +61,7 @@ import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { debounce } from 'lodash'
 
 interface Answer {
   answer: string | string[] | Object[]
@@ -233,6 +234,12 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        const handleEssayChange = (id: string) => {
+          const idx = parseInt(id, 10)
+          if (!isNaN(idx)) {
+            setAnswerListValue(idx)
+          }
+        }
         return (
           <EssayQuestionPreview
             data={essayData?.req}
@@ -261,6 +268,7 @@ const TestDetail = () => {
             setOpenPdf={handleOpenScratchPad}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             showRequiment={showListRequirement}
+            handleChange={handleEssayChange}
           />
           // <Luckysheet/>
         )
@@ -1123,25 +1131,22 @@ const TestDetail = () => {
       return arr
     })
   }
-  const [answerList, setAnswerList] = useState<{ answer: any }[]>([])
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
+  const answerListRef = useRef<string[]>([])
 
-  const setAnswerListValue = (id: string, index: number) => {
-    if (answerList[index]) {
-      setValue(`${currentPage}_answer`, answerList[index].answer)
+  const setRequirementValue = (id: string) => {
+    const existingAnswer = answerListRef.current[id as unknown as number]
+    if (existingAnswer) {
+      setValue(
+        getValues(`${currentPage}_${essayData?.index}_answer`),
+        existingAnswer,
+      )
     }
-    setAnswerList((prevAnswerList) => {
-      const updatedList = [...prevAnswerList]
-
-      updatedList[currentIndex] = {
-        answer: getValues(`${currentPage}_${essayData?.index}_answer`) || '',
-      }
-
-      setCurrentIndex(index)
-
-      return updatedList
-    })
   }
+
+  const setAnswerListValue = debounce((index: number) => {
+    answerListRef.current[index] =
+      getValues(`${currentPage}_${essayData?.index}_answer`) || ''
+  }, 200)
 
   const { setScoreQuestion, setSubmitTest, courseType } = useCourseContext()
 
@@ -1241,19 +1246,26 @@ const TestDetail = () => {
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
         if (checkAnswered(e)) {
-          e?.data?.requirements?.forEach((requirement: any, index: any) => {
+          const requirements = e?.data?.requirements?.length
+            ? e?.data?.requirements
+            : [null]
+          requirements?.forEach((requirement: any) => {
             answers.push({
               question_id: e.id,
-              short_answer: answerList[index]?.answer || e.answer || '',
-              requirement_id: requirement.id || '',
-              response_option: e.data.response_option
-                ? e.data.response_option
-                : e.response_type === 0
+              short_answer: answerListRef?.current?.[requirement?.id]
+                ? answerListRef?.current?.[requirement?.id]
+                : requirement?.id
+                  ? ''
+                  : e?.answer,
+              requirement_id: requirement?.id || null,
+              response_option: e?.data?.response_option
+                ? e?.data?.response_option
+                : e?.response_type === 0
                   ? 'WORD'
                   : 'SHEET',
-              time_spent: Math.ceil(e.timeSpent / 1000),
+              time_spent: Math.ceil(e?.timeSpent / 1000),
               active: 'SUBMITED',
-              answer_file: e.answer_file,
+              answer_file: e?.answer_file,
             })
           })
         }
@@ -2281,7 +2293,7 @@ const TestDetail = () => {
                                   essayData.index !== index && 'text-gray-1'
                                 }`}
                                 onClick={() => {
-                                  setAnswerListValue(e.id, index)
+                                  setRequirementValue(e.id)
                                   setEssayData({ req: e, index: index })
                                   rightSideRef?.current &&
                                     rightSideRef.current.scrollTo({

@@ -50,7 +50,7 @@ export type IPreviewProp = {
   setOpenPdf?: any
   handleSaveHighLightRequirement?: any
   setUnsavedChanges?: any
-  handleChange?: () => void
+  handleChange?: (id: string) => void
   isShowContent?: boolean
   showRequiment?: boolean
 }
@@ -403,7 +403,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={fullData?.done || fullData?.confirmed}
-              handleChange={handleChange}
+              handleChange={() => handleChange && handleChange(data?.id)}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
@@ -430,7 +430,7 @@ const EssayQuestionPreview = ({
                             )
                             // Check event change text of sheet
                             if (old?.[0]?.celldata?.length > 0) {
-                              handleChange && handleChange()
+                              handleChange && handleChange(data?.id)
                             }
                             if (index >= 0) {
                               old.splice(index, 1, currentSheet)
@@ -478,7 +478,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={fullData?.done || fullData?.confirmed}
-              handleChange={handleChange}
+              handleChange={() => handleChange && handleChange(data?.id)}
             />
           ) : (
             <div className="w-full h-[500px] border">
@@ -509,7 +509,7 @@ const EssayQuestionPreview = ({
                             )
                             // Check event change text of sheet
                             if (old?.[0]?.celldata?.length > 0) {
-                              handleChange && handleChange()
+                              handleChange && handleChange(data?.id)
                             }
                             if (index >= 0) {
                               old.splice(index, 1, currentSheet)
