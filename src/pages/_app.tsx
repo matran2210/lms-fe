@@ -122,20 +122,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
-  useEffect(() => {
-    const isExclusivePages = [
-      PageLink.AUTH_LOGIN,
-      PageLink.AUTH_CHANGE_PASSWORD,
-      PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
-      PageLink.AUTH_FORGOT_PASSWORD,
-      PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
-    ].includes(router.asPath)
-
-    if (!isExclusivePages) {
-      localStorage.setItem('beforeLoginPath', router.asPath.toString())
-    }
-  }, [router])
-
   // Lấy token từ cokkieStorage (giả sử 'accessToken' là key lưu token)
 
   const [openCert, setOpenCert] = useState(false)
