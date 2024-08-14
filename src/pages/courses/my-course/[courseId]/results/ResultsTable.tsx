@@ -50,7 +50,6 @@ const ResultsTable = ({ courseId }: Iprops) => {
   const {
     data: resultData,
     isLoading,
-    isSuccess,
     refetch,
     isFetching,
   } = useQuery({
@@ -88,9 +87,9 @@ const ResultsTable = ({ courseId }: Iprops) => {
         loading={isFetching}
       >
         {resultData?.data?.map((row: any) => {
-          const lastSubmission = dayjs(row?.last_submit_time).format(
-            'DD/MM/YYYY hh:mm',
-          )
+          const lastSubmission = row?.last_submit_time
+            ? dayjs(row?.last_submit_time).format('DD/MM/YYYY hh:mm')
+            : '-'
 
           return (
             <tr
