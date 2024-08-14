@@ -5,61 +5,67 @@ import React, { useEffect, useState } from 'react'
 import { roundNumber, convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { ANIMATION, QUESTION_TYPES } from 'src/constants'
 import 'aos/dist/aos.css'
-import { parseHTMLToString } from '@utils/index'
+import { parseHTMLToString, truncateString } from '@utils/index'
 import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
-import { IAnswearGroup, IAnswer, IScoreDetails } from 'src/type'
+import {
+  IAnswearGroup,
+  IAnswer,
+  IQuizAttemptChartType,
+  IScoreDetails,
+  QuizAttemptChartType,
+} from 'src/type'
 import Image from 'next/image'
 import clsx from 'clsx'
 
 const commonHeaderClass =
   'text-left p-0 text-medium-sm text-gray-1 font-semibold'
-const headers = [
-  {
-    label: '#',
-    className: clsx(commonHeaderClass, 'min-w-[20px] xl:min-w-[50px]'),
-  },
-  {
-    label: 'Question',
-    className: clsx(commonHeaderClass, 'min-w-[210px]'),
-  },
-  {
-    label: 'Module',
-    className: clsx(commonHeaderClass, 'min-w-[198px]'),
-  },
-  {
-    label: 'Type',
-    className: clsx(commonHeaderClass, 'min-w-[110px]'),
-  },
-  {
-    label: 'Result',
-    className: clsx(commonHeaderClass, 'min-w-[80px]'),
-  },
-  {
-    label: '',
-    className: clsx(commonHeaderClass, 'min-w-[40px]'),
-  },
-  {
-    label: 'Time Spent',
-    className: clsx(commonHeaderClass, ' min-w-[95px] !pr-0 text-center'),
-  },
-]
+
 const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
 interface YourScoreDetailProps {
   className?: string
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
+  type: IQuizAttemptChartType
 }
 
 const YourScoreDetail = ({
   className,
   yourScoreDetailRef,
+  type,
 }: YourScoreDetailProps) => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
   const [scoreDetails, setScoreDetails] = useState<IScoreDetails>()
+
+  const headers = [
+    {
+      label: '#',
+      className: clsx(commonHeaderClass, 'min-w-[20px] xl:min-w-[50px]'),
+    },
+    {
+      label: 'Question',
+      className: clsx(commonHeaderClass, 'min-w-[210px]'),
+    },
+    {
+      label: type === QuizAttemptChartType.CFA ? 'Module' : 'Chapter',
+      className: clsx(commonHeaderClass, 'min-w-[198px]'),
+    },
+    {
+      label: 'Type',
+      className: clsx(commonHeaderClass, 'min-w-[150px]'),
+    },
+    {
+      label: 'Result',
+      className: clsx(commonHeaderClass, 'max-w-[130px]'),
+    },
+    {
+      label: 'Time Spent',
+      className: clsx(commonHeaderClass, ' min-w-[80px] !pr-0 text-center'),
+    },
+  ]
 
   useQuery(
     ['scoreDetails', router.query.id],
@@ -198,13 +204,19 @@ const YourScoreDetail = ({
                         className="border-b border-dashed border-gray-2"
                         key={e?.id}
                       >
+                        {/* # */}
                         <td className="p-0 pr-1 text-bw-1">{e.index}</td>
+
+                        {/* Question */}
                         <td className="p-0 pr-4">
                           <div
                             className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
                             dangerouslySetInnerHTML={{
                               __html: String(
-                                e?.question?.question_content ?? '--',
+                                truncateString(
+                                  e?.question?.question_content ?? '--',
+                                  20,
+                                ),
                               ),
                             }}
                             title={
@@ -221,37 +233,44 @@ const YourScoreDetail = ({
                             }}
                           ></div>
                         </td>
+
+                        {/* Chapter/Module */}
                         <td
                           className="text-starttext-bw-1 my-5 line-clamp-1 p-0"
                           title={
-                            e?.question?.question_filter_id?.part?.name ?? '--'
+                            e?.question?.question_filter?.part?.name ?? '--'
                           }
                         >
-                          {e?.question?.question_filter_id?.part?.name ?? '--'}
+                          {truncateString(
+                            e?.question?.question_filter?.part?.name ?? '--',
+                            15,
+                          )}
                         </td>
+
+                        {/* Type */}
                         <td className="p-0 pr-4 text-bw-1">
                           <div className="min-w-[111px]">
                             {getTypeName(e?.question?.qType ?? '--')}
                           </div>
                         </td>
-                        <td
-                          className={`pr-4 
-                      ${renderBoxesAndLineClass(getTypeName(e?.question?.qType ?? '--'), e)}
-                    `}
-                        >
-                          {e?.question?.qType !== 'ESSAY' ? (
-                            <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
-                          ) : (
-                            <>
-                              {e?.active === 'SUBMITED'
-                                ? 'Completed'
-                                : 'Not Completed'}
-                            </>
-                          )}
-                        </td>
-                        <td className="m-6 p-0 pr-4 text-gray-1">
+
+                        {/* Result */}
+                        <td className={`flex justify-between gap-4 pr-4`}>
+                          <div
+                            className={`${renderBoxesAndLineClass(getTypeName(e?.question?.qType ?? '--'), e)}`}
+                          >
+                            {e?.question?.qType !== 'ESSAY' ? (
+                              <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
+                            ) : (
+                              <>
+                                {e?.active === 'SUBMITED'
+                                  ? 'Completed'
+                                  : 'Not Completed'}
+                              </>
+                            )}
+                          </div>
                           {e?.question?.qType !== 'ESSAY' && (
-                            <div className="ml-1 flex items-center justify-start gap-2">
+                            <div className="ml-1 flex items-center justify-start gap-2 text-gray-1">
                               <Image
                                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                                 alt="Correct"
@@ -267,6 +286,8 @@ const YourScoreDetail = ({
                             </div>
                           )}
                         </td>
+
+                        {/* Time Spent */}
                         <td className="m-6 p-0">
                           <div className="text-center">
                             {(() => {

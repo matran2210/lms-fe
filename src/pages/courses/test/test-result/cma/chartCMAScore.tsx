@@ -13,9 +13,17 @@ interface IProps {
   data: DataItem[]
   GlobalAverage?: number
   score?: number
+  isGraded?: boolean
+  passingScore?: number
 }
 
-const ChartCMAScore = ({ data, GlobalAverage, score }: IProps) => {
+const ChartCMAScore = ({
+  data,
+  GlobalAverage,
+  score,
+  passingScore,
+  isGraded,
+}: IProps) => {
   return (
     <div className="mb-4 w-full max-w-full items-start overflow-x-auto bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 xl:mb-6 xl:px-24">
       <div className="sticky left-0 flex flex-row justify-between">
@@ -49,21 +57,32 @@ const ChartCMAScore = ({ data, GlobalAverage, score }: IProps) => {
         </div>
       </div>
       <div>
-        <div className="relative flex h-[250px] px-6">
-          <div>
-            <div className="test-result__passing-score absolute bottom-3/4 z-10 flex h-0 w-[calc(100%-48px)] items-center border-t border-dotted border-gray-2 hover:border-state-info">
-              <div className="relative -left-6 bottom-[75%] text-medium-sm font-normal text-black-1">
-                <span className="relative">75</span>
-              </div>
+        <div className="group flex h-[250px]">
+          <div className=" relative ">
+            <div className=" relative h-full w-full border-b border-l border-gray-2 " />
+            <div>
+              {!isGraded && (
+                <div
+                  className={`absolute bottom-[${passingScore}%] z-10 flex h-0 w-full items-center border-t border-dotted border-gray-2 group-hover:border-state-info`}
+                >
+                  <div
+                    className={`relative -left-6 text-medium-sm font-normal text-black-1`}
+                  >
+                    <span className="relative">{passingScore}</span>
+                  </div>
+                  <p className="sticky right-0 mb-5 ml-auto hidden text-sm text-state-info group-hover:block">
+                    Passing Score
+                  </p>
+                </div>
+              )}
+              {passingScore !== 50 && (
+                <div className="absolute bottom-1/2 z-10 flex h-0 w-full items-center border-t border-dotted border-gray-2 hover:border-state-info">
+                  <div className="relative -left-6 bottom-[50%] text-medium-sm font-normal text-black-1">
+                    <span className="relative">50</span>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="absolute bottom-1/2 z-10 flex h-0 w-[calc(100%-48px)] items-center border-t border-dotted border-gray-2 hover:border-state-info">
-              <div className="relative -left-6 bottom-[50%] text-medium-sm font-normal text-black-1">
-                <span className="relative">50</span>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="relative bottom-0 h-full w-full border-b border-l border-gray-2" />
             <div className="flex w-full flex-row">
               <div className="mt-4 flex shrink-0 flex-col justify-between bg-white py-2">
                 <div className="text-medium-sm text-black-1">Part</div>

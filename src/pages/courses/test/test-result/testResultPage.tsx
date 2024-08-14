@@ -11,9 +11,19 @@ import ChartCMAScore from './cma/chartCMAScore'
 import Annotation from './Annotation'
 import { isNaN } from 'lodash'
 import Image from 'next/image'
+import { IQuizAttemptChartType } from 'src/type'
 
 interface QuizReport {
   ratio: number
+}
+
+export interface Quiz {
+  id: string
+  quiz_type: string
+  is_graded: boolean
+  required_percent_score: number
+  course_category_id: any
+  subject_id: any
 }
 
 interface DataItem {
@@ -22,11 +32,12 @@ interface DataItem {
   correct_answer: number
   total_question: number
   quiz_report: QuizReport
+  quiz: Quiz
 }
 
 interface IProps {
   questions: Object
-  type: string
+  type: IQuizAttemptChartType
   chartData: DataItem
   subjectCode: string
 }
@@ -82,6 +93,7 @@ const TestResultPage = ({
 
   const commonMultipleScoreStyle =
     'grid grid-cols-1 xl:grid-cols-test-result gap-x-6 w-full'
+
   return (
     <>
       {type === 'ACCA' && F_LOW_CODES.includes(subjectCode) ? (
@@ -91,6 +103,7 @@ const TestResultPage = ({
             <YourScoreDetail
               className={'relative'}
               yourScoreDetailRef={yourScoreDetailRef}
+              type={type}
             />
           </div>
           <div className="-order-1 mb-4 xl:order-1">
@@ -138,6 +151,7 @@ const TestResultPage = ({
                 <YourScoreDetail
                   className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
+                  type={type}
                 />
               </div>
               <MultipleQuestion
@@ -156,10 +170,13 @@ const TestResultPage = ({
                       data={chartData?.chart_data}
                       GlobalAverage={GlobalAverage}
                       score={highestValue}
+                      isGraded={chartData?.quiz?.is_graded}
+                      passingScore={chartData?.quiz?.required_percent_score}
                     />
                     <YourScoreDetail
                       className={''}
                       yourScoreDetailRef={yourScoreDetailRef}
+                      type={type}
                     />
                   </div>
                   <MultipleQuestion

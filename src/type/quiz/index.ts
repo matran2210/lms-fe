@@ -49,7 +49,7 @@ interface QuestionReport {
 
 interface Question {
   id: string
-  question_filter_id: QuestionFilter
+  question_filter: QuestionFilter
   question_content: string
   level: string
   qType: QUESTION_TYPES
