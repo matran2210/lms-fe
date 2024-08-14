@@ -47,10 +47,10 @@ const Certificate = () => {
   return (
     <div>
       <div className="relative">
-        <div className="text-xl font-medium border-b pb-5 border-gray-3 mx-6">
+        <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">
           Certificates ({totalCertificateData})
         </div>
-        <div className="absolute inset-0 border-b border-gray-3 bottom-0"></div>
+        <div className="absolute inset-0 bottom-0 border-b border-gray-3"></div>
       </div>
       <div
         style={{ maxHeight: '478px', overflowY: 'auto', minHeight: '400px' }}
@@ -59,7 +59,7 @@ const Certificate = () => {
           return (
             <div key={certificate?.id}>
               <div
-                className="hover:bg-secondary hover:text-primary group relative flex flex-row gap-2 w-full items-start self-center pt-5 px-6 cursor-pointer min-h-[88px]  border-b border-gray-2"
+                className="group relative flex min-h-[88px] w-full cursor-pointer flex-row items-start gap-2 self-center border-b border-gray-2 px-6 pt-5  hover:bg-secondary hover:text-primary"
                 onClick={() =>
                   window.open(
                     `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`,
@@ -67,17 +67,17 @@ const Certificate = () => {
                   )
                 }
               >
-                <div className=" flex flex-row justify-center mb-5  items-start bg-gray-4 border border-bottom ">
-                  <a className="hover:text-primary group-hover:bg-secondary group-hover:border-active border-solid border px-5 py-1 h-[48px] w-[80px] ">
+                <div className=" border-bottom mb-5 flex flex-row  items-start justify-center border bg-gray-4 ">
+                  <a className="h-[48px] w-[80px] border border-solid px-5 py-1 hover:text-primary group-hover:border-active group-hover:bg-secondary ">
                     <CertificateImg className="border-none text-gray-1 group-hover:text-primary" />
                   </a>
                 </div>
 
-                <div className="relative flex flex-col gap-1 w-full items-start cursor-pointer">
-                  <div className="text-base leading-[24px] text-active hover:text-primary font-medium">
+                <div className="relative flex w-full cursor-pointer flex-col items-start gap-1">
+                  <div className="text-active text-base font-medium leading-[24px] hover:text-primary">
                     {certificate?.course?.name}
                   </div>
-                  <div className="text-[13px] leading-[16px] cursor-pointer text-gray-1">
+                  <div className="cursor-pointer text-[13px] leading-[16px] text-gray-1">
                     <div> Grade Achieved: {certificate?.pass_point} %</div>
                   </div>
                 </div>

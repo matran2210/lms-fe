@@ -11,14 +11,14 @@ type IProps = {
 const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
   return (
     <SingleDialogLayout title="Password Recover">
-      <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
-        <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
+      <div className="mx-auto block max-w-[38.375rem] px-8 py-10 shadow-single-dialog md:px-19 md:py-17.5">
+        <div className="mb-2 text-3xl font-semibold text-bw-1 md:text-4xl">
           Forgot Password
         </div>
-        <span className="text-medium-sm text-gray-1 mb-10">
+        <span className="mb-10 text-medium-sm text-gray-1">
           Enter your 6 digits code that you received on your email.
         </span>
-        <div className="md:mt-12 mt-8">
+        <div className="mt-8 md:mt-12">
           <InputCodeForm email={email} token={token} />
         </div>
       </div>

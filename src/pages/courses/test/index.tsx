@@ -101,15 +101,15 @@ const TestModal = ({
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
     >
-      <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
+      <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
         <div className="text-gray-1">Name:</div>
-        <div className="text-bw-1 line-clamp-2 pr-0.5 font-medium">
+        <div className="line-clamp-2 pr-0.5 font-medium text-bw-1">
           {data?.name}
         </div>
       </div>
-      <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
+      <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
         <div className="text-gray-1">Pass Point:</div>
-        <div className="text-bw-1 pr-0.5 font-medium">
+        <div className="pr-0.5 font-medium text-bw-1">
           {data?.quiz?.is_graded ? (
             <>{data?.quiz?.required_percent_score ?? '- -'}</>
           ) : (
@@ -117,23 +117,23 @@ const TestModal = ({
           )}
         </div>
       </div>
-      <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
+      <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
         <div className="text-gray-1">Time Allowed:</div>
-        <div className="text-bw-1 pr-0.5 font-medium">
+        <div className="pr-0.5 font-medium text-bw-1">
           {data?.quiz?.quiz_timed
             ? formatTime(data?.quiz?.quiz_timed * 60)
             : 'Unlimited'}
         </div>
       </div>
-      <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
+      <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
         <div className="text-gray-1">No of Attempts:</div>
-        <div className="text-bw-1 pr-0.5 font-medium">
+        <div className="pr-0.5 font-medium text-bw-1">
           {data?.quiz?.attempt?.number_of_attempts || 0}/
           {data?.quiz?.is_limited ? data?.quiz?.limit_count : 'Unlimited'}
         </div>
       </div>
       {data?.quiz && (
-        <div className="flex justify-between py-6 border-b border-slate-100 gap-8 text-base">
+        <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
           <div className="text-gray-1">Latest Result:</div>
           <div className="flex flex-row">
             <div className={` pr-0.5 font-medium`}>
@@ -141,7 +141,7 @@ const TestModal = ({
             </div>
             {status !== StatusQuizAttempt.Unsubmitted && (
               <div
-                className="underline ml-2 text-state-info cursor-pointer"
+                className="ml-2 cursor-pointer text-state-info underline"
                 onClick={() => {
                   router.push(
                     `/courses/test/test-result/${data?.quiz?.attempt?.id}`,
@@ -155,7 +155,7 @@ const TestModal = ({
           </div>
         </div>
       )}
-      <div className="flex justify-between py-6 gap-8 text-base">
+      <div className="flex justify-between gap-8 py-6 text-base">
         <div className="text-gray-1">Status:</div>
         <div
           className={`${status === StatusQuizAttempt.Passed ? 'text-state-success' : status === StatusQuizAttempt.Failed ? 'text-state-error' : 'text-bw-1'} pr-0.5 font-medium`}

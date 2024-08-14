@@ -31,13 +31,13 @@ const UnSubmitAnswerModal = ({
       cancelButtonCaption="Close"
       title={''}
     >
-      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
+      <div className="mx-auto flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertTriagle />
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6 flex justify-center">
+      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
         UnSubmit Answer
       </div>
-      <div className="text-gray-1 text-2xl font-normal mt-4 mb-11 text-center">
+      <div className="mb-11 mt-4 text-center text-2xl font-normal text-gray-1">
         {caseStudy ? (
           <ul>
             {data.map((item, index) => (

@@ -70,14 +70,14 @@ const TableEntranceResult = () => {
 
   return (
     <FullScreenLayout title="">
-      <div className="max-w-screen-lg m-auto overflow-y-hidden overflow-x-auto px-6">
+      <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
         <div
-          className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
+          className="absolute right-6 top-[18px]  ml-auto cursor-pointer"
           onClick={() => {
             router.back()
           }}
         >
-          <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+          <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
         {modalResult?.questions?.data?.length > 0 && (
           <QuizResultComponent

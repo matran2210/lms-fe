@@ -40,7 +40,7 @@ const SappTable = ({
         {showHeader && (
           <thead className={`${theadClass}`}>
             <tr
-              className={`text-start text-muted fw-bolder fs-7 text-uppercase gs-0 ${classString}`}
+              className={`text-muted fw-bolder fs-7 text-uppercase gs-0 text-start ${classString}`}
             >
               {hasCheck && (
                 <th className="w-50px pr-5">
@@ -65,7 +65,7 @@ const SappTable = ({
             </tr>
           </thead>
         )}
-        <tbody className={`text-bw-1 fw-semibold ${tbodyClass}`}>
+        <tbody className={`fw-semibold text-bw-1 ${tbodyClass}`}>
           {children}
         </tbody>
       </table>

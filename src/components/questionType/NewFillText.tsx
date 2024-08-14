@@ -222,7 +222,7 @@ const NewFiltext = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base mt-[38px]">
+            <div className="mt-[38px] text-base font-semibold">
               Correct Answer
             </div>
             <EditorReader
@@ -235,7 +235,7 @@ const NewFiltext = forwardRef(
           </>
         )}
         {solution && (
-          <div className="bg-gray-4 mt-6 p-6">
+          <div className="mt-6 bg-gray-4 p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>

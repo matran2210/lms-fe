@@ -150,13 +150,13 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
       showFooter={false}
     >
       <div className="">
-        <div className="font-semibold text-bw-1 mb-2 text-4xl">
+        <div className="mb-2 text-4xl font-semibold text-bw-1">
           Change Password
         </div>
-        <span className="text-medium-sm text-gray-1 mb-10">
+        <span className="mb-10 text-medium-sm text-gray-1">
           Enter your 6-digit code that you received on your email.
         </span>
-        <div className="grid grid-cols-6 grid-rows-1 gap-3 mb-2 mt-12">
+        <div className="mb-2 mt-12 grid grid-cols-6 grid-rows-1 gap-3">
           {code?.map((otp, index) => (
             <SAPPTextFiled
               key={index}
@@ -173,7 +173,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
             />
           ))}
         </div>
-        <div className="flex justify-between mb-8">
+        <div className="mb-8 flex justify-between">
           <span className="text-medium-sm text-state-error">
             {errorMessage}
           </span>
@@ -188,7 +188,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
         <SappButton
           title="Verify Code"
           full={true}
-          className="mb-5 !font-semibold h-12.5"
+          className="mb-5 h-12.5 !font-semibold"
           size="lager"
           loading={loading}
           onClick={verifyCode}
@@ -199,7 +199,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
           full={true}
           disabled={!canResend}
           onClick={onResendCode}
-          className="no-underline pt-3 pb-3.25"
+          className="pb-3.25 pt-3 no-underline"
           size="medium"
           loading={loading}
         />

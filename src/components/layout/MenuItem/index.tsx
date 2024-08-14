@@ -100,14 +100,14 @@ export default function MenuItem({
     return (
       <div className="flex items-center" onClick={handleActive}>
         {Icon === 'avatar' ? (
-          <div className="w-10 h-10 shrink-0">
+          <div className="h-10 w-10 shrink-0">
             {user?.detail?.avatar['40x40'] || user.detail.avatar['ORIGIN'] ? (
               <Image
                 src={
                   user.detail.avatar['40x40'] || user.detail.avatar['ORIGIN']
                 }
                 alt="avatar"
-                className="rounded-full w-10 h-10 object-cover"
+                className="h-10 w-10 rounded-full object-cover"
                 width={40}
                 height={40}
               />
@@ -125,7 +125,7 @@ export default function MenuItem({
         ) : (
           <>
             {Icon === 'profile-detail' ? (
-              <div className="w-10 h-10 shrink-0">
+              <div className="h-10 w-10 shrink-0">
                 <Image
                   src={
                     user.detail.avatar['40x40'] ||
@@ -133,7 +133,7 @@ export default function MenuItem({
                     blankAvatar
                   }
                   alt="avatar"
-                  className="rounded-full w-10 h-10 object-cover"
+                  className="h-10 w-10 rounded-full object-cover"
                   width={40}
                   height={40}
                   priority={true}
@@ -142,7 +142,7 @@ export default function MenuItem({
             ) : (
               <ExpandIcon
                 type={Icon}
-                className={`before-icon shrink-0 min-w-6 min-h-6 ${
+                className={`before-icon min-h-6 min-w-6 shrink-0 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary 
                 `}
@@ -152,14 +152,14 @@ export default function MenuItem({
         )}
         {Icon === 'avatar' ? (
           <div
-            className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 avatar ${
+            className={`label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
               selected ? 'text-primary' : 'text-gray-2'
             } group-hover:text-primary`}
           >
-            <div className="text-base font-semibold text-bw-1 group-hover:text-primary line-clamp-1">
+            <div className="line-clamp-1 text-base font-semibold text-bw-1 group-hover:text-primary">
               {user?.detail?.full_name}
             </div>
-            <div className="text-medium-sm text-gray-1 font-normal line-clamp-1 capitalize group-hover:text-primary">
+            <div className="line-clamp-1 text-medium-sm font-normal capitalize text-gray-1 group-hover:text-primary">
               {user?.type?.toLowerCase()}
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function MenuItem({
           <>
             {Icon === 'profile-detail' ? (
               <span
-                className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 line-clamp-1 ${
+                className={`label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary`}
               >
@@ -175,7 +175,7 @@ export default function MenuItem({
               </span>
             ) : (
               <span
-                className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 line-clamp-1 ${
+                className={`label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary`}
                 onClick={() => trackGAEvent(`Click Button ${name} Menu `)}
@@ -192,17 +192,17 @@ export default function MenuItem({
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
-        <div className="h-px w-[calc(100%-48px)] bg-gray-2 text-center mx-auto"></div>
+        <div className="mx-auto h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
       )}
       <div
-        className={`cursor-pointer hover:bg-secondary group ${
+        className={`group cursor-pointer hover:bg-secondary ${
           selected &&
           type === 'level-1' &&
           Icon !== 'avatar' &&
           Icon !== 'profile-detail'
-            ? 'pl-6 border-l-4 pr-1 border-active'
+            ? 'border-l-4 border-active pl-6 pr-1'
             : 'pl-7'
-        } relative sidebar-list-items py-2 mb-4 last:mb-0 ${
+        } sidebar-list-items relative mb-4 py-2 last:mb-0 ${
           !isActivity &&
           (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
             ? 'hidden'

@@ -6,11 +6,7 @@ module.exports = {
       xs: '376px',
       sm: '640px',
       md: '768px',
-      'md-max': { max: '767px' },
-      'md-checkout': { min: '1000px' },
-      '2md': '992px',
       lg: '1024px',
-      'lg-max': { max: '1023px' },
       xl: '1280px',
       'xl-max': { max: '1199px' },
       '2xl': '1440px',
@@ -18,12 +14,10 @@ module.exports = {
       '2xl-max': { max: '1279px' },
       '3xl': '1536px',
       '3.5xl': '1660px',
-      '3.75xl': '1778px',
       '4xl': '1920px',
     },
     fontSize: {
-      '6xl': ['64px', { lineHeight: '76.8px ' }],
-      '5.5xl': ['56px', { lineHeight: '67px ' }],
+      '6xl': ['64px', { lineHeight: '77px ' }],
       '5xl': ['40px', { lineHeight: '50px' }],
       '4xl': ['36px', { lineHeight: '45px' }],
       '3xl': ['32px', { lineHeight: '40px' }],
@@ -49,6 +43,7 @@ module.exports = {
         DEFAULT: '16px',
         md: '24px',
         xl: '32px',
+        '4xl': '175px',
       },
     },
     extend: {
@@ -106,6 +101,9 @@ module.exports = {
         pinned: {
           1: '#18355D',
         },
+        black: {
+          1: '#050505',
+        },
         support: {
           1: '#33475B',
         },
@@ -120,6 +118,7 @@ module.exports = {
         'gray-2': '#F1F1F1',
         'gray-3': '#F8F8F8',
         'gray-4': '#F3F3F3',
+        'pinned-1': '#18355D',
         active: '#FFB800',
         dark: '#1C2039',
       },
@@ -306,6 +305,9 @@ module.exports = {
         'fade-out-sidebar': 'fade-out-sidebar 0.3s ease-in-out',
         'fade-in-overlay-sidebar': 'fade-in-overlay 0.3s ease-in-out',
         'fade-out-overlay-sidebar': 'fade-out-overlay 0.3s ease-out',
+      },
+      gridTemplateColumns: {
+        'test-result': 'minmax(0, 3fr) minmax(0, 1fr)',
       },
     },
   },

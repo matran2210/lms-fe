@@ -19,21 +19,21 @@ const PopupNotCus = ({ open, setOpen }: IProps) => {
       classNameModal="sapp-custom--modal"
     >
       <div
-        className="text-white flex justify-end cursor-pointer"
+        className="flex cursor-pointer justify-end text-white"
         onClick={() => setOpen(false)}
       >
         <CloseIcon className="stroke-white" />
       </div>
-      <div className="text-base font-normal h-[calc(100vh-50px)] flex items-center justify-center text-white">
+      <div className="flex h-[calc(100vh-50px)] items-center justify-center text-base font-normal text-white">
         <span className="text-center">
           <span className="text-white">
             Bạn tạm thời chưa thể xem kết quả chi tiết. Mọi thắc mắc vui lòng
             liên hệ tới Hotline
           </span>
-          <span className="text-primary mx-1">19002225</span>
+          <span className="mx-1 text-primary">19002225</span>
           hoặc
           <span
-            className="text-primary hover:underline mx-1 cursor-pointer"
+            className="mx-1 cursor-pointer text-primary hover:underline"
             onClick={() =>
               onLinkSocial('https://www.facebook.com/ServiceofSAPP')
             }

@@ -151,10 +151,10 @@ const MyCourse = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="My Course">
-        <div className="header bg-white border-b border-default">
+        <div className="header border-b border-default bg-white">
           <div
-            className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
-          ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
+            className={`relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6 
+          ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
           >
             <SearchForm
               placeholder="Enter name of course..."
@@ -164,7 +164,7 @@ const MyCourse = () => {
             {guideStatus && guideStep === 1 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_1}
-                className="top-full w-full max-w-[365px] left-0 mt-3"
+                className="left-0 top-full mt-3 w-full max-w-[365px]"
                 index={1}
                 total={6}
                 handleNext={nextStep}
@@ -173,21 +173,21 @@ const MyCourse = () => {
             )}
           </div>
         </div>
-        <div className="main max-w-xxl my-0 mx-auto">
+        <div className="main mx-auto my-0 max-w-xxl">
           <div className="flex justify-between xl-max:mx-6">
-            <h2 className="text-medium-sm font-medium text-bw-1 pt-6 pb-4">
+            <h2 className="pb-4 pt-6 text-medium-sm font-medium text-bw-1">
               My Course
             </h2>
             <div
-              className={`pt-6 pb-4 relative ${
-                guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
+              className={`relative pb-4 pt-6 ${
+                guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white px-4' : ''
               }`}
             >
               <Filter courses={data?.pages?.[0]?.category} />
               {guideStatus && guideStep === 6 && (
                 <PopupStep
                   content={UserGuide.CONTENT_STEP_6}
-                  className="w-screen max-w-365px top-full right-full mt-3"
+                  className="right-full top-full mt-3 w-screen max-w-365px"
                   index={6}
                   total={6}
                   handleNext={closeUserGuide}
@@ -199,7 +199,7 @@ const MyCourse = () => {
           </div>
         </div>
         <div
-          className={`heading bg-white max-w-xxl my-0 mx-auto flex relative xl-max:mx-6
+          className={`heading relative mx-auto my-0 flex max-w-xxl bg-white xl-max:mx-6
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
           data-aos={ANIMATION.DATA_AOS}
@@ -212,7 +212,7 @@ const MyCourse = () => {
           {guideStatus && guideStep === 4 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_4}
-              className="top-full w-full max-w-365px left-0 mt-3"
+              className="left-0 top-full mt-3 w-full max-w-365px"
               index={4}
               total={6}
               handleNext={
@@ -226,16 +226,16 @@ const MyCourse = () => {
         </div>
         <div
           // data-aos={ANIMATION.DATA_AOS}
-          className={`pt-6 max-w-xxl my-0 mx-auto relative ${
+          className={`relative mx-auto my-0 max-w-xxl pt-6 ${
             isEmpty(courses)
-              ? 'flex justify-center min-h-[calc(100vh-13rem)] items-center'
+              ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
               : ''
           } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
         >
           {guideStatus && guideStep === 5 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_5}
-              className="w-full max-w-xs 2xl:max-w-[362px] top-0 left-1/2 2xl:left-[33%] mt-6"
+              className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[362px]"
               index={5}
               total={6}
               handleNext={nextStep}
@@ -252,7 +252,7 @@ const MyCourse = () => {
         {guideStatus && (
           <div
             ref={confirmDialogOverLayRef}
-            className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
+            className={`bg-black fixed inset-0 z-40 animate-fade-in-overlay opacity-55 transition-opacity`}
           ></div>
         )}
       </Layout>

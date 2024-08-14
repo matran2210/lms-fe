@@ -27,7 +27,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
       <input
         type="text"
         placeholder={placeholder}
-        className="border-0 h-6 px-4 text-gray-1 focus:border-0 focus:outline-0 focus:ring-0 placeholder-text-gray-1"
+        className="placeholder-text-gray-1 h-6 border-0 px-4 text-gray-1 focus:border-0 focus:outline-0 focus:ring-0"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />

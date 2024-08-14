@@ -49,20 +49,20 @@ const UnSubmitAnswerModal = ({
       title={title ?? ''}
       cancelButtonCaption="Keep Doing"
     >
-      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
+      <div className="mx-auto flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertTriagle />
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold text-center">
+      <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
         Are You Sure
       </div>
-      <div className="text-center mt-4 mb-3">
-        <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center">
+      <div className="mb-3 mt-4 text-center">
+        <span className="mb-3 mt-4 text-center text-medium-sm font-normal text-gray-1">
           Oops look like you&apos;ve got a few unfinished questions:
         </span>
-        <span className="text-bw-1 text-medium-sm font-semibold mt-4 mb-3 text-center ms-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-semibold text-bw-1">
           {data?.length > 10 ? data?.slice(0, 10)?.join(', ') : data.join(', ')}
         </span>
-        <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center ms-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-normal text-gray-1">
           {data?.length > 10 ? '...' : ''}After you submit, you can&apos;t edit
           this assignment.
         </span>

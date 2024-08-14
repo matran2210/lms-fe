@@ -86,11 +86,11 @@ const ChangePasswordPage = () => {
 
   return (
     <SingleDialogLayout title="Change Password">
-      <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
-        <div className="md:text-4xl text-3xl font-bold text-bw-1 mb-2">
+      <div className="mx-auto block max-w-[38.375rem] px-8 py-10 shadow-single-dialog md:px-19 md:py-17.5">
+        <div className="mb-2 text-3xl font-bold text-bw-1 md:text-4xl">
           New password
         </div>
-        <div className="text-medium-sm text-gray-1 md:mb-10 mb-8">
+        <div className="mb-8 text-medium-sm text-gray-1 md:mb-10">
           Set the new password for your account.
         </div>
         <div>

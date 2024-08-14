@@ -34,16 +34,16 @@ const EntranceTest = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Entrance Test">
-        <div className="header bg-white border-b border-default">
-          <div className="max-w-xxl my-0 mx-auto flex py-[18px]">
+        <div className="header border-b border-default bg-white">
+          <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
             <SearchForm
               placeholder="Enter name of course..."
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="main max-w-xxl my-0 mx-8 lg:mx-auto">
-          <div className="flex justify-between pt-6 pb-4">
+        <div className="main mx-8 my-0 max-w-xxl lg:mx-auto">
+          <div className="flex justify-between pb-4 pt-6">
             <h2 className="text-medium-sm font-medium text-bw-1 ">
               Entrance Test
             </h2>
@@ -51,7 +51,7 @@ const EntranceTest = () => {
           </div>
         </div>
         <div
-          className="heading bg-white max-w-xxl my-0 flex mx-8 xl:mx-auto lg:mx-8 md:mx-8"
+          className="heading mx-8 my-0 flex max-w-xxl bg-white md:mx-8 lg:mx-8 xl:mx-auto"
           data-aos={ANIMATION.DATA_AOS}
         >
           <Heading
@@ -61,7 +61,7 @@ const EntranceTest = () => {
           />
         </div>
         <div
-          className="pt-6 max-w-xxl my-0 mx-8 xl:mx-auto lg:mx-8"
+          className="mx-8 my-0 max-w-xxl pt-6 lg:mx-8 xl:mx-auto"
           data-aos={ANIMATION.DATA_AOS}
         >
           <EntranceTestList entranceTestLists={entranceTestLists} />

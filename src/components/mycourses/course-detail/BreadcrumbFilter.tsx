@@ -21,7 +21,7 @@ const BreadcrumbFilter = ({
       aria-label="breadcrumbs"
     >
       <ol className="breadcrumbs__list flex text-medium-sm font-medium">
-        <li className="breadcrumbs__item text-gray-1 shrink-0 hover:underline">
+        <li className="breadcrumbs__item shrink-0 text-gray-1 hover:underline">
           <Link
             href="/courses"
             className="breadcrumbs__link"
@@ -57,7 +57,7 @@ const BreadcrumbFilter = ({
           )}
         </li>
         {subpath && (
-          <li className="breadcrumbs__item current-course text-bw-1 ml-1 line-clamp-1">
+          <li className="breadcrumbs__item current-course ml-1 line-clamp-1 text-bw-1">
             / {subpath}
           </li>
         )}

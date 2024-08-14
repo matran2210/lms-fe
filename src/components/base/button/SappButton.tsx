@@ -86,16 +86,16 @@ const SappButton = ({
       disabled={disabled || loading}
     >
       {loading ? (
-        <div className={`flex justify-center items-center ${classNameLoading}`}>
+        <div className={`flex items-center justify-center ${classNameLoading}`}>
           <span className="sr-only">Loading...</span>
           <div
-            className={`h-2 w-2 rounded-full animate-bounce [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
+            className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
           ></div>
           <div
-            className={`h-2 w-2 rounded-full animate-bounce [animation-delay:-0.15s] ${COLOR_LOADING[color]}`}
+            className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.15s] ${COLOR_LOADING[color]}`}
           ></div>
           <div
-            className={`h-2 w-2 rounded-full animate-bounce ${COLOR_LOADING[color]}`}
+            className={`h-2 w-2 animate-bounce rounded-full ${COLOR_LOADING[color]}`}
           ></div>
         </div>
       ) : (

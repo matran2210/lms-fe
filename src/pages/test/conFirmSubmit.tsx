@@ -41,17 +41,17 @@ const ConFirmSubmit = ({
       title={''}
       showFooter={false}
     >
-      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
+      <div className="mx-auto flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <ConfirmIcon />
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6 flex justify-center">
+      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
         Confirm Submission
       </div>
       <div className="mb-11 mt-4 text-center text-sm font-normal text-gray-1">
         {message ??
           'Are you sure you are done here and ready to view the report?'}
       </div>
-      <div className="md:pt-5 pt-5 relative">
+      <div className="relative pt-5 md:pt-5">
         <div className="flex flex-col-reverse gap-6">
           <SappButton
             title="Cancel"
@@ -63,7 +63,7 @@ const ConFirmSubmit = ({
           <SappButton
             title={'Submit'}
             size="medium"
-            className="w-full h-12.5"
+            className="h-12.5 w-full"
             onClick={onSubmit}
           />
         </div>

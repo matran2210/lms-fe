@@ -160,7 +160,7 @@ const TabSlide = ({
 
   return (
     <ul
-      className={`pagination flex items-center flex-wrap w-full gap-3 min-h-[40px]`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3`}
       aria-label="Pagination"
     >
       <div
@@ -169,13 +169,13 @@ const TabSlide = ({
             ? `relative ${
                 hasScrollBar ? 'w-[calc(100%-141px)]' : 'w-full'
               } mx-7`
-            : ' flex items-center gap-6 w-full'
+            : ' flex w-full items-center gap-6'
         }`}
       >
         {data.length > 0 && (
           <div
             className={`${
-              !activeShowAll && 'absolute top-0.5 -left-3 -translate-x-full'
+              !activeShowAll && 'absolute -left-3 top-0.5 -translate-x-full'
             }`}
           >
             <PageLink
@@ -194,7 +194,7 @@ const TabSlide = ({
           </div>
         )}
         <div
-          className={'flex gap-2 overflow-hidden w-full select-none'}
+          className={'flex w-full select-none gap-2 overflow-hidden'}
           ref={elementRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -207,7 +207,7 @@ const TabSlide = ({
                 firstEssayPosition !== undefined &&
                 pageNum.index === firstEssayPosition ? (
                   <div className="flex" key={pageNum.id}>
-                    {idx !== 0 && <div className="h-full border me-2"></div>}
+                    {idx !== 0 && <div className="me-2 h-full border"></div>}
                     <PageLink
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
@@ -265,8 +265,8 @@ const TabSlide = ({
                           {pageNum[0].index + 1}
                         </PageLink>
                       ) : (
-                        <div className="flex items-center h-full justify-center">
-                          <div className="h-full border w-[1px]"></div>
+                        <div className="flex h-full items-center justify-center">
+                          <div className="h-full w-[1px] border"></div>
                         </div>
                       )
                     ) : (
@@ -290,8 +290,8 @@ const TabSlide = ({
                           {pageNum[1].index + 1}
                         </PageLink>
                       ) : (
-                        <div className="flex items-center h-full justify-center">
-                          <div className="h-full border w-[1px]"></div>
+                        <div className="flex h-full items-center justify-center">
+                          <div className="h-full w-[1px] border"></div>
                         </div>
                       )
                     ) : (
@@ -303,7 +303,7 @@ const TabSlide = ({
               })
             )
           ) : (
-            <div className="flex justify-center w-full">
+            <div className="flex w-full justify-center">
               Your search did not match any questions
             </div>
           )}
@@ -311,7 +311,7 @@ const TabSlide = ({
         {data.length > 0 && (
           <div
             className={`${
-              !activeShowAll && 'absolute top-0.5 -right-3 translate-x-full'
+              !activeShowAll && 'absolute -right-3 top-0.5 translate-x-full'
             }`}
           >
             <PageLink
@@ -336,7 +336,7 @@ const TabSlide = ({
           <div className="flex items-center">
             {activeShowAll && optionShowAll}
             <div
-              className={`ml-6 text-sm leading-4.5 text-bw-1 underline font-semibold cursor-pointer w-max ${
+              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
                 !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2 '
               }`}
               onClick={() => {

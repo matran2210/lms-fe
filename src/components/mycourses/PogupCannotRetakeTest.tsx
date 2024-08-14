@@ -29,13 +29,13 @@ const PopupCanNotRetakeTest = ({ open, onCancel, setOpen }: IProps) => {
       title={undefined}
       showCancelButton={false}
     >
-      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
+      <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertIcon />
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold flex justify-center">
+      <div className="flex justify-center text-2xl font-semibold text-bw-1 md:text-4xl">
         No Retake
       </div>
-      <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 2xl:mb-11">
+      <div className="mb-1 mt-4 text-center text-medium-sm text-gray-1 2xl:mb-11">
         You cannot retake the test because you have already passed this course.
         Congratulations!
       </div>

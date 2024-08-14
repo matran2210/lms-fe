@@ -189,7 +189,7 @@ const EditorReader = ({
       >
         <div
           ref={extenalRef || refDocument}
-          className={clsx({ 'text-white pt-2': pinned })}
+          className={clsx({ 'pt-2 text-white': pinned })}
         >
           {parseHTML(replaceTextAlignCenterToWebKitCenter(content || ''), {
             replace: (domNode) => {

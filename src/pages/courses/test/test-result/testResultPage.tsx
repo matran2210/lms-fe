@@ -1,12 +1,16 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import YourScore from './cfa/yourScore'
 import YourScoreDetail from './yourScoreDetail'
-import MultipleQuestion from './multipleQues'
+import MultipleQuestion from './multipleQuestion'
 import ChartACCAScore from './acca/chartACCAScore'
 import TotalScore from '@components/mycourses/test/TotalScore'
 import { roundNumber } from '@utils/helpers'
 import { F_LOW_CODES } from '@utils/constants'
 import SappLoading from 'src/common/SappLoading'
+import ChartCMAScore from './cma/chartCMAScore'
+import Annotation from './Annotation'
+import { isNaN } from 'lodash'
+import Image from 'next/image'
 
 interface QuizReport {
   ratio: number
@@ -35,6 +39,8 @@ const TestResultPage = ({
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
+
+  const [openAnnotaion, setOpenAnnotaion] = useState(false)
 
   const handleResize = () => {
     const multipleQuestionElem = multipleQuestionRef?.current
@@ -66,70 +72,102 @@ const TestResultPage = ({
     }
   }, [])
 
-  const highestValue = roundNumber(
-    (chartData?.correct_answer / chartData?.total_question) * 100,
+  const calculateHighestValue = isNaN(
+    chartData?.correct_answer / chartData?.total_question,
   )
+    ? 0
+    : chartData?.correct_answer / chartData?.total_question
+  const highestValue = roundNumber(calculateHighestValue * 100)
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
 
+  const commonMultipleScoreStyle =
+    'grid grid-cols-1 xl:grid-cols-test-result gap-x-6 w-full'
   return (
     <>
       {type === 'ACCA' && F_LOW_CODES.includes(subjectCode) ? (
-        <div className="flex xl:gap-6 flex-wrap">
-          <div className="max-h-full w-full xl:max-w-smd">
-            <TotalScore
-              score={highestValue}
-              className="mb-4 pt-6 pb-5 px-[27px] shadow-sidebar"
-              classScore="pt-2"
-              classGlobal="mt-3 mb-3.5 !items-end"
-              classCountAll="relative top-0.5"
-              globalAverage={GlobalAverage}
-            />
-            <MultipleQuestion
-              questions={questions}
-              className={'3.75xl:min-h-[815px]'}
-              multipleQuestionRef={multipleQuestionRef}
-            />
-          </div>
-          <div className="max-h-full w-full xl:w-auto flex flex-col">
+        <div className={commonMultipleScoreStyle}>
+          <div className="flex max-h-full flex-col overflow-y-auto">
             <ChartACCAScore data={chartData?.chart_data} />
             <YourScoreDetail
-              className={'min-h-[815px] 2xl-max:pb-10 grow'}
+              className={'relative'}
               yourScoreDetailRef={yourScoreDetailRef}
             />
+          </div>
+          <div className="-order-1 mb-4 xl:order-1">
+            <div className="max-h-full w-full xl:sticky xl:top-6 ">
+              <div
+                className={`$ flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
+              >
+                <div className="mb-5 text-xl font-semibold text-bw-1 xl:font-medium">
+                  Multiple Choice Score
+                </div>
+                <div className="flex w-full items-end justify-between">
+                  <div
+                    className={`$ -mb-[13px] font-inter text-6xl font-bold text-primary xl:text-6xl`}
+                  >
+                    <>{Math.floor(highestValue as number)}%</>
+                  </div>
+                  <div className={`flex items-center gap-1`}>
+                    <Image
+                      src="https://file.rendit.io/n/XnLyBdd8onI3Zbp3i20X.svg"
+                      width={16}
+                      height={16}
+                      alt="Globe"
+                    />
+                    <div className={`text-sm leading-4.9 text-gray-1`}>
+                      Global Average {GlobalAverage}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <MultipleQuestion
+                questions={questions}
+                className={'xl:w-full'}
+                multipleQuestionRef={multipleQuestionRef}
+                setOpenAnnotaion={setOpenAnnotaion}
+              />
+            </div>
           </div>
         </div>
       ) : (
         <>
           {type === 'CFA' ? (
-            <div className="flex gap-6 flex-wrap">
-              <div className="max-h-full w-full xl:w-auto flex flex-col">
+            <div className={commonMultipleScoreStyle}>
+              <div className="flex max-h-full flex-col">
                 <YourScore chartData={chartData} />
                 <YourScoreDetail
-                  className={'min-h-[466px] grow 2xl-max:pb-10'}
+                  className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
                 />
               </div>
               <MultipleQuestion
                 questions={questions}
-                className={'3.75xl:min-h-[991px]'}
+                className={'xl:!h-[calc(100vh-241px)] xl:w-full'}
                 multipleQuestionRef={multipleQuestionRef}
+                setOpenAnnotaion={setOpenAnnotaion}
               />
             </div>
           ) : (
             <>
               {type !== undefined ? (
-                <div className="flex gap-6 flex-wrap">
-                  <MultipleQuestion
-                    questions={questions}
-                    className={'3.75xl:min-h-[991px]'}
-                    multipleQuestionRef={multipleQuestionRef}
-                  />
-                  <div className="max-h-full w-full xl:w-auto">
+                <div className={commonMultipleScoreStyle}>
+                  <div className="xl:3/4 flex h-auto w-full flex-col">
+                    <ChartCMAScore
+                      data={chartData?.chart_data}
+                      GlobalAverage={GlobalAverage}
+                      score={highestValue}
+                    />
                     <YourScoreDetail
-                      className={'min-h-[991px] 2xl-max:pb-10'}
+                      className={''}
                       yourScoreDetailRef={yourScoreDetailRef}
                     />
                   </div>
+                  <MultipleQuestion
+                    questions={questions}
+                    className={'h-full xl:w-full'}
+                    multipleQuestionRef={multipleQuestionRef}
+                    setOpenAnnotaion={setOpenAnnotaion}
+                  />
                 </div>
               ) : (
                 <SappLoading />
@@ -138,6 +176,10 @@ const TestResultPage = ({
           )}
         </>
       )}
+      <Annotation
+        openAnnotaion={openAnnotaion}
+        setOpenAnnotaion={setOpenAnnotaion}
+      />
     </>
   )
 }

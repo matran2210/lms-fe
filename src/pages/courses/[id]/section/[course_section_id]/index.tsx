@@ -327,27 +327,27 @@ const CoursePartDetail = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Part Detail">
-        <div className="main max-w-xxl my-0 mx-auto default-content-editor">
+        <div className="main default-content-editor mx-auto my-0 max-w-xxl">
           <div className="w-full">
-            <div className="flex pt-6 items-center">
+            <div className="flex items-center pt-6">
               <span
                 onClick={() => {
                   router.push('/courses')
                   trackGAEvent('Click Breadcrumb My Course')
                 }}
-                className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
+                className="cursor-pointer whitespace-nowrap text-medium-sm font-medium text-gray-1"
               >
                 My Course
               </span>
               <span
-                className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
+                className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1"
                 onClick={() => {
                   router.push(`/courses/my-course/${router.query.id}`)
                   trackGAEvent('Click Breadcrumb My Course Detail')
                 }}
               >
                 /
-                <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
+                <p className="mx-0.5 inline-block w-full max-w-78 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap">
                   <SappTooltip
                     title={previewPart?.name}
                     showTooltip={previewPart?.name?.length > 60}
@@ -356,8 +356,8 @@ const CoursePartDetail = () => {
                   </SappTooltip>
                 </p>
               </span>
-              <span className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
-                <p className="text-medium-sm font-medium text-bw-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis">
+              <span className="flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap">
+                <p className="inline-block w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-bw-1">
                   /{' '}
                   <SappTooltip
                     title={partDetail?.name}
@@ -409,14 +409,14 @@ const CoursePartDetail = () => {
             >
               <div
                 style={{ borderBottom: '1px solid #DCDDDD' }}
-                className="pb-6 text-bw-1 learningOutcome-description"
+                className="learningOutcome-description pb-6 text-bw-1"
                 dangerouslySetInnerHTML={{
                   __html: learningOutcome?.description ?? '',
                 }}
               />
             </TextSkeleton>
             {loadingLearningOutcome && (
-              <div className="h-px w-full bg-gray-2 mt-4 mb-2"></div>
+              <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
             )}
             <TextSkeleton
               loading={loadingLearningOutcome}
@@ -425,12 +425,12 @@ const CoursePartDetail = () => {
               widths={['70', '100', '100', '50', '100']}
             >
               {learningOutcome?.course_outcomes?.map((outcome, index) => (
-                <div className="flex mt-6 mr-3" key={outcome.id}>
-                  <div className="font-medium leading-5 text-base me-1 text-bw-1">
+                <div className="mr-3 mt-6 flex" key={outcome.id}>
+                  <div className="me-1 text-base font-medium leading-5 text-bw-1">
                     LO{index + 1}:
                   </div>
                   <div
-                    className="text-bw-1 learningOutcome-description"
+                    className="learningOutcome-description text-bw-1"
                     dangerouslySetInnerHTML={{ __html: outcome?.description }}
                   />
                 </div>

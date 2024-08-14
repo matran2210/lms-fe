@@ -64,14 +64,14 @@ const Certificate = () => {
     <SappLoadingGlobal loading={isLoading}>
       <SinglePageLayout title="Certificate">
         <div className="h-full">
-          <div className="bg-white h-[70px] flex justify-between items-center px-6">
+          <div className="flex h-[70px] items-center justify-between bg-white px-6">
             <div className="flex items-center">
-              <div className="text-bw-1 text-lg-xl font-medium me-3">
+              <div className="me-3 text-lg-xl font-medium text-bw-1">
                 {certificate?.course?.name}
               </div>
-              <div className="text-gray-1 text-sm me-1">Issued by</div>
+              <div className="me-1 text-sm text-gray-1">Issued by</div>
               <div
-                className="text-primary text-sm font-medium hover:underline cursor-pointer"
+                className="cursor-pointer text-sm font-medium text-primary hover:underline"
                 onClick={() => window.open('https://sapp.edu.vn', '_blank')}
               >
                 SAPP Academy
@@ -99,7 +99,7 @@ const Certificate = () => {
               </SappButtonIcon>
             </div>
           </div>
-          <div className="bg-gray-3 flex justify-center items-center md:min-h-[94vh] lg:min-h-[95vh] 3xl:min-h-[93vh] max-h-[100vh] min-h-[95vh]">
+          <div className="flex max-h-[100vh] min-h-[95vh] items-center justify-center bg-gray-3 md:min-h-[94vh] lg:min-h-[95vh] 3xl:min-h-[93vh]">
             <Image
               src={certificate?.certificate_url}
               alt={certificate?.course?.name}
