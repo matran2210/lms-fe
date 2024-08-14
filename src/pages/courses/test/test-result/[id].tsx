@@ -72,14 +72,14 @@ const TestResultDetail = () => {
 
   return (
     <FullScreenLayout title="Test Result" className="!bg-gray-3">
-      <div className="px-10 xl:container">
+      <div className="px-5 xl:container md:px-10">
         <Breadcrumb
           tabs={breadcrumbs}
           currentPage={'Results'}
           className="2xl-max:py-4"
         />
       </div>
-      <div className="px-10 xl:container">
+      <div className="px-5 xl:container md:px-10">
         <TestResultPage
           questions={questions}
           type={questions?.course?.course_categories?.[0]?.name}

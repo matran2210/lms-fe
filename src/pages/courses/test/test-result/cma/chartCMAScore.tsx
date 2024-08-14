@@ -17,7 +17,7 @@ interface IProps {
 
 const ChartCMAScore = ({ data, GlobalAverage, score }: IProps) => {
   return (
-    <div className="mb-4 w-full max-w-full items-start overflow-x-auto bg-white px-11 py-6 shadow-sidebar xl:mb-6 xl:px-24">
+    <div className="mb-4 w-full max-w-full items-start overflow-x-auto bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 xl:mb-6 xl:px-24">
       <div className="sticky left-0 flex flex-row justify-between">
         <div>
           <div className="flex flex-col">

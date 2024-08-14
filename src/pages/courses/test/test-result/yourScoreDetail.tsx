@@ -60,7 +60,6 @@ const YourScoreDetail = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
   const [scoreDetails, setScoreDetails] = useState<IScoreDetails>()
-  let indexQuestion = 0
 
   useQuery(
     ['scoreDetails', router.query.id],
@@ -165,7 +164,7 @@ const YourScoreDetail = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!mb-0 !h-fit bg-white px-11 py-6 shadow-sidebar 2xl:px-24 ${className}`}
+      className={`!h-fit bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:!mb-0 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
@@ -184,7 +183,7 @@ const YourScoreDetail = ({
           <>
             {scoreDetails?.answer_groups?.map((ansg: IAnswearGroup) => {
               return (
-                <>
+                <React.Fragment key={ansg.id}>
                   <tr>
                     <td
                       className="w-full pt-8 text-base font-medium text-bw-1"
@@ -193,14 +192,13 @@ const YourScoreDetail = ({
                       {ansg?.name}
                     </td>
                   </tr>
-                  {ansg?.answers?.map((e: IAnswer, index: number) => {
-                    indexQuestion++
+                  {ansg?.answers?.map((e: IAnswer) => {
                     return (
                       <tr
                         className="border-b border-dashed border-gray-2"
                         key={e?.id}
                       >
-                        <td className="p-0 pr-1 text-bw-1">{indexQuestion}</td>
+                        <td className="p-0 pr-1 text-bw-1">{e.index}</td>
                         <td className="p-0 pr-4">
                           <div
                             className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
@@ -285,7 +283,7 @@ const YourScoreDetail = ({
                       </tr>
                     )
                   })}
-                </>
+                </React.Fragment>
               )
             })}
           </>

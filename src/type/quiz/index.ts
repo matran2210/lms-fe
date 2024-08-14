@@ -21,6 +21,7 @@ export interface IAnswer {
   active: string
   topic_attempt_id: string | null
   question: Question
+  index: number
 }
 
 interface QuestionFilter {

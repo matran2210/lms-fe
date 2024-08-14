@@ -53,7 +53,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   }, [visible])
 
   return (
-    <div id="container-floating">
+    <div id="container-floating" className="hidden md:block">
       <div className="cursor-pointer">
         <Popover
           content={

@@ -170,7 +170,7 @@ const MultipleQuestion = ({
                 : 'pt-0 xl:border-t xl:pt-6'
             }`}
           >
-            <div className="flex flex-col gap-3 md:w-4/5 xl:flex-row">
+            <div className="flex w-full flex-col gap-3 md:w-9/12 xl:flex-row">
               <div
                 className="flex cursor-pointer flex-row pr-2 text-center"
                 onClick={() => setOpenAnnotaion(true)}
@@ -204,7 +204,7 @@ const MultipleQuestion = ({
                 )}
               </div>
             </div>
-            <div className="mb-2 flex max-h-[40px] shrink items-center justify-end md:w-1/5">
+            <div className="mb-2 flex max-h-[40px] grow items-center justify-end md:w-1/5">
               {Number(questions?.selectedResponseAnswers?.length || 0) +
                 Number(questions?.constructedResponseAnswers?.length || 0) >=
                 8 && (
