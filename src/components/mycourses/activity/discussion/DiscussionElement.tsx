@@ -226,16 +226,18 @@ function DiscussionElement({
           <div className="w-full">
             <div className="flex flex-row">
               <div className="mb-1 text-base font-semibold">
-                {discussion?.full_name}
+                {discussion?.is_sapp_supporter
+                  ? discussion?.supporter_display_name
+                  : discussion?.full_name}
               </div>
               {discussion?.is_sapp_supporter && (
-                <div className="ml-2 h-6 w-fit content-center bg-secondary px-2 font-semibold text-primary">
+                <div className="ml-2 h-6 w-fit content-center bg-secondary pl-2 font-semibold text-primary">
                   <div className="flex flex-row">
                     <div className="content-center">
                       <VerifiedIcon />
                     </div>
                     <div className="w-fit content-center px-2 text-ssm">
-                      {discussion?.supporter_display_name ?? ''}
+                      SAPP
                     </div>
                   </div>
                 </div>
