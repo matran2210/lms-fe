@@ -80,13 +80,13 @@ function SappModelSidebar({
           <>
             <div
               ref={confirmDialogRef}
-              className={`animate-fade-in-sidebar max-h-screen overflow-y-auto transition-all duration-300 fixed top-0 h-screen bg-white w-full md:w-1/2 z-50 right-0 ${refClass}`}
+              className={`fixed right-0 top-0 z-50 h-screen max-h-screen w-full animate-fade-in-sidebar overflow-y-auto bg-white transition-all duration-300 md:w-1/2 ${refClass}`}
               role="dialog"
               aria-modal="true"
             >
               {showHeader && (
-                <div className="bg-bw-1 px-8 py-6 relative">
-                  <div className="text-2xl font-medium text-white pr-10">
+                <div className="relative bg-bw-1 px-8 py-6">
+                  <div className="pr-10 text-2xl font-medium text-white">
                     {title}
                   </div>
                   <div
@@ -102,7 +102,7 @@ function SappModelSidebar({
             <div
               ref={confirmDialogOverLayRef}
               onClick={handleClose}
-              className={`sapp-overlay fixed inset-0 bg-overlay-dark-sidebar z-40 cursor-pointer animate-fade-in-overlay-sidebar ${overlayClass}`}
+              className={`sapp-overlay fixed inset-0 z-40 animate-fade-in-overlay-sidebar cursor-pointer bg-overlay-dark-sidebar ${overlayClass}`}
             ></div>
           </>
         )}

@@ -97,7 +97,7 @@ const PartFailed = ({
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
-          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-pointer`}
+          className={`name-part line-clamp-2 h-[60px] cursor-pointer text-2xl font-medium`}
           onClick={() => {
             setOpen(true)
             trackGAEvent(`Click Title ${showTitleFinalTest}`)
@@ -113,15 +113,15 @@ const PartFailed = ({
         <div className="info mt-6">
           {checkFinished && (
             <>
-              <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
+              <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
                 <p className="text-base text-gray-1">Latest Results:</p>
-                <p className="text-base text-bw-1 font-medium">
+                <p className="text-base font-medium text-bw-1">
                   {`${countTimeSpent(coursePart?.quiz?.attempt?.ratio_score)}%`}
                 </p>
               </div>
-              <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
+              <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
                 <p className="text-base text-gray-1">Time Spent:</p>
-                <p className="text-base text-bw-1 font-medium">
+                <p className="text-base font-medium text-bw-1">
                   {`${
                     coursePart?.quiz?.quiz_timed
                       ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
@@ -131,13 +131,13 @@ const PartFailed = ({
               </div>
             </>
           )}
-          <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
+          <div className="time-allow flex justify-between border-b border-gray-2 pb-4">
             <p className="text-base text-gray-1">Time Allowed:</p>
-            <p className="text-base text-bw-1 font-medium">{formattedTime}</p>
+            <p className="text-base font-medium text-bw-1">{formattedTime}</p>
           </div>
           <div className="time-allow flex justify-between pt-4">
             <p className="text-base text-gray-1">Attempt:</p>
-            <p className="text-base text-bw-1 font-medium">
+            <p className="text-base font-medium text-bw-1">
               {`${quizAttempt?.attempt?.number_of_attempts || 0} / ${
                 quizAttempt?.limit_count !== 0
                   ? quizAttempt?.limit_count
@@ -148,7 +148,7 @@ const PartFailed = ({
         </div>
       </div>
       <div className="mt-7">
-        <div className="action flex items-center jusity-end relative">
+        <div className="action jusity-end relative flex items-center">
           {!checkFinished ? (
             !coursePart?.quiz?.is_limited ||
             (coursePart?.quiz?.attempt?.number_of_attempts !==
@@ -176,7 +176,7 @@ const PartFailed = ({
               <></>
             )
           ) : (
-            <div className="flex justify-between flex-1">
+            <div className="flex flex-1 justify-between">
               {(passFinalTest ||
                 (coursePart?.course_section_type === 'FINAL_TEST' &&
                   courseType !== 'FOUNDATION_COURSE') ||
@@ -185,7 +185,7 @@ const PartFailed = ({
                   title="Result"
                   isUnderLine
                   color="text"
-                  className="font-medium underline !p-0"
+                  className="!p-0 font-medium underline"
                   onClick={() => {
                     router.push(
                       `/courses/test/test-result/${quizAttempt?.attempt?.id}`,

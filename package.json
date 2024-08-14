@@ -108,9 +108,6 @@
   "resolutions": {
     "string-width": "4.1.0"
   },
-  "resolutions": {
-    "string-width": "4.1.0"
-  },
   "lint-staged": {
     "**/*.{js,ts,tsx,jsx}": [
       "eslint --fix --color"

@@ -192,7 +192,7 @@ const MyProfile = ({
         data-aos={ANIMATION.DATA_AOS}
       >
         <div className="relative">
-          <div className="flex items-center justify-between pb-6 mb-6 border-b border-b-gray-3">
+          <div className="mb-6 flex items-center justify-between border-b border-b-gray-3 pb-6">
             <div className="text-xl font-medium text-bw-1">Overview</div>
             <div>
               {!isEdit ? (
@@ -205,7 +205,7 @@ const MyProfile = ({
                 ></SappButton>
               ) : (
                 <ButtonCancelSubmit
-                  className="gap-12 flex"
+                  className="flex gap-12"
                   cancel={{
                     title: 'Cancel',
                     onClick: handleChangeToPreview,
@@ -230,14 +230,14 @@ const MyProfile = ({
         <ul>
           {/* start:: Code*/}
           <li
-            className={`md:flex block gap-[1.4rem] transition-[margin] ${
+            className={`block gap-[1.4rem] transition-[margin] md:flex ${
               !isEdit ? 'mb-5' : 'mb-6'
             } `}
           >
-            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
+            <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
               Code
             </div>
-            <div className="flex-auto max-w-[300px] font-medium text-bw-1">
+            <div className="max-w-[300px] flex-auto font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit}>
                 {user?.code?.toString() ?? user?.key?.toString()}
               </TextSkeleton>
@@ -247,12 +247,12 @@ const MyProfile = ({
 
           {/* start:: Full Name*/}
           <li
-            className={`md:flex block transition-[margin] ${
-              !isEdit ? 'mb-5 gap-[1.4rem]' : 'mb-5 gap-y-6 gap-2 '
+            className={`block transition-[margin] md:flex ${
+              !isEdit ? 'mb-5 gap-[1.4rem]' : 'mb-5 gap-2 gap-y-6 '
             }`}
           >
             <div
-              className={`text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%] ${
+              className={`w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%] ${
                 isEdit ? 'py-2.5' : ''
               }`}
             >
@@ -267,7 +267,7 @@ const MyProfile = ({
                 className="w-full flex-1"
               ></HookFormTextField>
             ) : (
-              <div className="flex-auto max-w-[300px] font-medium text-bw-1">
+              <div className="max-w-[300px] flex-auto font-medium text-bw-1">
                 <TextSkeleton loading={loading && !isEdit}>
                   {user.detail.full_name}
                 </TextSkeleton>
@@ -277,14 +277,14 @@ const MyProfile = ({
 
           {/* start:: Username*/}
           <li
-            className={`md:flex block gap-[1.4rem] transition-[margin] ${
+            className={`block gap-[1.4rem] transition-[margin] md:flex ${
               !isEdit ? 'mb-5' : 'mb-8'
             }`}
           >
-            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
+            <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
               Username
             </div>
-            <div className="flex-auto max-w-[300px] font-medium text-bw-1">
+            <div className="max-w-[300px] flex-auto font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit}>
                 {user?.username}
               </TextSkeleton>
@@ -294,14 +294,14 @@ const MyProfile = ({
 
           {/* start:: Role*/}
           <li
-            className={`md:flex block gap-[1.4rem] ${
+            className={`block gap-[1.4rem] md:flex ${
               !isEdit ? 'mb-5' : 'mb-8 transition-[margin]'
             }`}
           >
-            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
+            <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
               Role
             </div>
-            <div className="flex-auto max-w-[300px] font-medium text-bw-1">
+            <div className="max-w-[300px] flex-auto font-medium text-bw-1">
               <TextSkeleton loading={loading && !isEdit}>
                 {USER_TYPE[user?.type]?.label}
               </TextSkeleton>
@@ -310,11 +310,11 @@ const MyProfile = ({
           {/* end:: Role*/}
 
           {/* start:: Status*/}
-          <li className={`md:flex block gap-[1.4rem] ${!isEdit ? 'mb-5' : ''}`}>
-            <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
+          <li className={`block gap-[1.4rem] md:flex ${!isEdit ? 'mb-5' : ''}`}>
+            <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
               Status
             </div>
-            <div className={`flex-auto max-w-[300px] font-medium`}>
+            <div className={`max-w-[300px] flex-auto font-medium`}>
               <TextSkeleton loading={loading && !isEdit}>
                 <span className={`${USER_STATUS[user?.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
@@ -326,11 +326,11 @@ const MyProfile = ({
 
           {/* start:: Updated At*/}
           {!isEdit && (
-            <li className={`md:flex block gap-[1.4rem]`}>
-              <div className="text-gray-1 flex-none w-[17.43rem] max-w-[200px] lg:max-w-[50%]">
+            <li className={`block gap-[1.4rem] md:flex`}>
+              <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
                 Updated At
               </div>
-              <div className="flex-auto max-w-[300px] font-medium text-bw-1">
+              <div className="max-w-[300px] flex-auto font-medium text-bw-1">
                 <TextSkeleton loading={loading && !isEdit}>
                   {formatDate(user?.updated_at)}
                 </TextSkeleton>
@@ -350,22 +350,22 @@ const MyProfile = ({
                 <div>
                   <span className="text-gray-1">Profile {i + 1}</span>
                   {e?.is_default && (
-                    <span className="ml-[10px] bg-blue-600 bg-opacity-5 text-state-info py-1 px-2 inline-block select-none text-medium-sm leading-4">
+                    <span className="ml-[10px] inline-block select-none bg-blue-600 bg-opacity-5 px-2 py-1 text-medium-sm leading-4 text-state-info">
                       Default
                     </span>
                   )}
                 </div>
-                <div className="text-bw-1 mt-3 font-medium flex">
+                <div className="mt-3 flex font-medium text-bw-1">
                   <div className="w-fit">
                     {e?.phone && e?.phone}
                     {e?.email && e?.phone && (
-                      <span className="text-gray-1 mx-3">|</span>
+                      <span className="mx-3 text-gray-1">|</span>
                     )}
                     {e?.email && e?.email}
                   </div>
                   {!isEdit && (
                     <div
-                      className="ml-auto w-fit cursor-pointer select-none group"
+                      className="group ml-auto w-fit cursor-pointer select-none"
                       onClick={() =>
                         setMakeDefaultDrawer({
                           status: true,
@@ -385,7 +385,7 @@ const MyProfile = ({
                         fill="none"
                       >
                         <path
-                          className="fill-current text-gray-500 group-hover:text-primary transition-colors duration-300"
+                          className="fill-current text-gray-500 transition-colors duration-300 group-hover:text-primary"
                           d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
                         />
                       </svg>
@@ -409,12 +409,12 @@ const MyProfile = ({
         showSubmitButton={makeDefaultDrawer?.is_default ? false : true}
       >
         <div className="text-bw-1">
-          <span className="text-gray-1 w-[302px] inline-block">Email:</span>
+          <span className="inline-block w-[302px] text-gray-1">Email:</span>
           <span className="font-medium">{makeDefaultDrawer?.email || ''}</span>
         </div>
         {makeDefaultDrawer?.phone && (
           <div className="mt-5 text-bw-1">
-            <span className="text-gray-1 w-[302px] inline-block">
+            <span className="inline-block w-[302px] text-gray-1">
               Phone Number:
             </span>
             <span className="font-medium">
@@ -424,7 +424,7 @@ const MyProfile = ({
         )}
         {makeDefaultDrawer?.address && (
           <div className="mt-5 text-bw-1">
-            <span className="text-gray-1 w-[302px] inline-block">
+            <span className="inline-block w-[302px] text-gray-1">
               {' '}
               Address:{' '}
             </span>

@@ -1741,9 +1741,9 @@ const TestDetail = () => {
     icon: JSX.Element
     content: string
   }) => (
-    <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
+    <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
       {icon}
-      <div className="hidden font-normal text-sm lg:inline-block">
+      <div className="hidden text-sm font-normal lg:inline-block">
         {content}
       </div>
     </div>
@@ -1776,7 +1776,7 @@ const TestDetail = () => {
           <SappLoading />
         ) : (
           <div
-            className="h-screen flex flex-col bg-white overflow-hidden relative"
+            className="relative flex h-screen flex-col overflow-hidden bg-white"
             onMouseUp={() => {
               setStartResize(false)
               setCurrentLeftWidth(leftWidth)
@@ -1787,8 +1787,8 @@ const TestDetail = () => {
         <div className="absolute w-screen h-screen z-[1350]"></div>
       )} */}
             <div>
-              <div className="flex justify-between py-2 px-6 items-center bg-gray-3 relative z-50">
-                <div className="text-lg-xl font-medium w-1/3 truncate">
+              <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
+                <div className="w-1/3 truncate text-lg-xl font-medium">
                   {quizDetail?.name}
                 </div>
                 {quizDetail?.quiz_timed && (
@@ -1818,7 +1818,7 @@ const TestDetail = () => {
                   />
                 )}
                 <ButtonCancelSubmit
-                  className={'flex gap-4 flex-row-reverse w-1/3'}
+                  className={'flex w-1/3 flex-row-reverse gap-4'}
                   // color={color}
                   submit={{
                     title: 'Finish',
@@ -1853,7 +1853,7 @@ const TestDetail = () => {
               </div>
               {/* End Header */}
               {tabs?.length > 0 && (
-                <div className="px-6 bg-gray-4 shadow-pagination relative py-2 w-full z-10">
+                <div className="relative z-10 w-full bg-gray-4 px-6 py-2 shadow-pagination">
                   <TabSlide
                     data={filteredTabs}
                     currentTab={currentPage}
@@ -1873,7 +1873,7 @@ const TestDetail = () => {
             {/* <div className=''> */}
             {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
               <div
-                className={`flex bg-gray-3 flex-1 overflow-auto`}
+                className={`flex flex-1 overflow-auto bg-gray-3`}
                 id={'preview-question'}
               >
                 <div
@@ -1938,7 +1938,7 @@ const TestDetail = () => {
                   </div>
                 </div>
                 <div
-                  className="w-[20px] h-full bg-gray-3 cursor-ew-resize"
+                  className="h-full w-[20px] cursor-ew-resize bg-gray-3"
                   onMouseDown={() => {
                     setStartResize(true)
                     // setCurrentMousePos(mousePosition.x || 0)
@@ -1950,7 +1950,7 @@ const TestDetail = () => {
                   style={{ width: `calc(50% + ${leftWidth}px)` }}
                   ref={rightSideRef}
                 >
-                  <div className="px-6 min-w-[700px]">
+                  <div className="min-w-[700px] px-6">
                     {checkType(
                       currentTabContent?.data,
                       currentTabContent?.data?.qType,
@@ -1966,7 +1966,7 @@ const TestDetail = () => {
               </div>
             ) : (
               <div
-                className={`overflow-auto py-6 px-6 flex-1`}
+                className={`flex-1 overflow-auto px-6 py-6`}
                 id={'preview-question'}
               >
                 <div
@@ -1994,7 +1994,7 @@ const TestDetail = () => {
                       }
                     }
                   }}
-                  className="editor-wrap mb-3 max-w-[950px] w-full m-auto"
+                  className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
                 >
                   {/* <div className="mb-4">
                   {currentTabContent?.topicDescription?.name}
@@ -2032,7 +2032,7 @@ const TestDetail = () => {
                 </div>
 
                 {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-                <div className="max-w-[950px] w-full m-auto">
+                <div className="m-auto w-full max-w-[950px]">
                   {checkType(
                     currentTabContent?.data,
                     currentTabContent?.data?.qType,
@@ -2064,8 +2064,8 @@ const TestDetail = () => {
                         : index + 500
                     }
                   >
-                    <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div className="absolute left-0 top-0  h-full w-full border">
+                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div className="text-sm font-normal">Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -2096,8 +2096,8 @@ const TestDetail = () => {
                         : index + 500
                     }
                   >
-                    <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div className="absolute left-0 top-0  h-full w-full border">
+                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div className="text-sm font-normal">Scratch Pad</div>
                         {/* <CloseIcon */}
                         <button onClick={() => handleCloseScratchPad(e)}>
@@ -2140,10 +2140,10 @@ const TestDetail = () => {
                         : index + 500
                     }
                   >
-                    <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
+                    <div className="absolute left-0 top-0  h-full w-full border">
+                      <div className="flex h-10 w-6-percent w-full items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="font-semibold text-base">{`Exhibit ${
+                          <span className="text-base font-semibold">{`Exhibit ${
                             (i ?? 0) + 1
                           }: `}</span>
                           {exhibitsDes?.name}
@@ -2152,7 +2152,7 @@ const TestDetail = () => {
                           <CloseIcon />
                         </button>
                       </div>
-                      <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                      <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                         <EditorReader
                           text_editor_content={exhibitsDes?.description}
                           className=" w-full"
@@ -2176,7 +2176,7 @@ const TestDetail = () => {
               } else if (e.type === 'file') {
                 return (
                   <MovableWindow
-                    className="transform -translate-x-1/2 -translate-y-1/2 2xl:!h-[842px]"
+                    className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
                     position={{
                       width: '595px',
                       height: '650px',
@@ -2193,9 +2193,9 @@ const TestDetail = () => {
                     // not_resizable
                     // className='pointer-events-none'
                   >
-                    <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
-                        <div className="text-sm font-normal truncate">
+                    <div className="absolute left-0 top-0  h-full w-full border">
+                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                        <div className="truncate text-sm font-normal">
                           {e.fileName}
                         </div>
                         {/* <CloseIcon */}
@@ -2204,7 +2204,7 @@ const TestDetail = () => {
                         </button>
                       </div>
                       <div
-                        className="overflow-auto p-4 bg-white"
+                        className="overflow-auto bg-white p-4"
                         style={{ height: 'calc(100% - 40px' }}
                       >
                         {/* <div className='flex flex-'> */}
@@ -2217,8 +2217,8 @@ const TestDetail = () => {
               }
             })}
             {/* </div> */}
-            <div className=" bg-gray-3 flex items-center  justify-between shadow-question-footer h-[48px] z-10">
-              <div className="flex items-center h-full">
+            <div className=" z-10 flex h-[48px]  items-center justify-between bg-gray-3 shadow-question-footer">
+              <div className="flex h-full items-center">
                 {/* <button className="h-full">
                 <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                   <HelpIcon />
@@ -2278,9 +2278,9 @@ const TestDetail = () => {
                   />
                 </button>
                 {exhibitData && exhibitData?.length > 0 && (
-                  <button className="h-full relative" ref={dropUpRef}>
+                  <button className="relative h-full" ref={dropUpRef}>
                     <div
-                      className="flex items-center gap-3 px-4 3xl:px-6 border-l"
+                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
                       onClick={() => {
                         setShowListExhibits(!showListExhibits)
                         // handleOpenScratchPad(
@@ -2291,7 +2291,7 @@ const TestDetail = () => {
                       }}
                     >
                       <ExhibitsIcon />
-                      <div className="font-normal flex text-sm items-center gap-3">
+                      <div className="flex items-center gap-3 text-sm font-normal">
                         <div>
                           <span className="hidden xl:inline-block 3xl:me-1">
                             {`Exhibits (${exhibitData?.length || 0})`}
@@ -2303,7 +2303,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
+                      <div className="absolute bottom-full z-[1400] flex h-fit max-w-max justify-center bg-gray-3 p-4 shadow-questions-exhibits 3xl:w-full 3xl:max-w-none">
                         <HookFormCheckBoxGroup
                           control={controlExhibits}
                           name="exhibits"
@@ -2320,15 +2320,15 @@ const TestDetail = () => {
                   </button>
                 )}
                 {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-                  <button className="h-full relative" ref={dropUpRequire}>
+                  <button className="relative h-full" ref={dropUpRequire}>
                     <div
-                      className="flex items-center gap-3 px-4 3xl:px-6 border-l"
+                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
                       onClick={() => {
                         setShowLisRequirement(!showListRequirement)
                       }}
                     >
                       <TextSquareIcon />
-                      <div className="font-normal flex text-sm items-center gap-3">
+                      <div className="flex items-center gap-3 text-sm font-normal">
                         <div>
                           <span className="hidden lg:inline-block 3xl:me-1">
                             Requirement
@@ -2339,7 +2339,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     {showListRequirement && (
-                      <div className="bg-gray-3 absolute h-fit bottom-full shadow-questions-exhibits justify-center sapp-separateLine 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
                         {currentTabContent?.data?.requirements?.map(
                           (e: any, index: number) => {
                             return (
@@ -2366,7 +2366,7 @@ const TestDetail = () => {
                   </button>
                 )}
               </div>
-              <div className="flex items-center h-full gap-3 pe-6">
+              <div className="flex h-full items-center gap-3 pe-6">
                 {currentTabContent?.data?.response_option === null &&
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                   !currentTabContent.done && (
@@ -2427,14 +2427,14 @@ const TestDetail = () => {
                     </div>
                   )}
                 <button
-                  className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 3xl:w-[150px] "
+                  className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px] "
                   onClick={() => {
                     handleFlagQuestion(currentPage)
                     trackGAEvent('Click Button Flag To Review Test')
                   }}
                 >
                   <FlagIcon />
-                  <div className="font-medium text-medium-sm hidden lg:block">
+                  <div className="hidden text-medium-sm font-medium lg:block">
                     Flag to Review
                   </div>
                 </button>
@@ -2444,13 +2444,13 @@ const TestDetail = () => {
                     !currentTabContent?.done
                       ? 'border-gray-1 text-bw-1'
                       : 'border-default text-gray-2'
-                  } justify-center p-1 w-[150px] py-2`}
+                  } w-[150px] justify-center p-1 py-2`}
                   onClick={() => {
                     handleClearSelection(currentTabContent)
                     trackGAEvent('Click Button Clear Selection Test')
                   }}
                 >
-                  <div className="font-medium text-medium-sm">
+                  <div className="text-medium-sm font-medium">
                     Clear Selection
                   </div>
                 </button>
@@ -2460,7 +2460,7 @@ const TestDetail = () => {
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
                     <button
-                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 "
+                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                       onClick={async () => {
                         const data = await getResult(currentTabContent)
                         confirmAnswer(
@@ -2472,14 +2472,14 @@ const TestDetail = () => {
                         trackGAEvent('Click Button Confirm Answer Test')
                       }}
                     >
-                      <div className="font-medium text-medium-sm">
+                      <div className="text-medium-sm font-medium">
                         Confirm Answer
                       </div>
                     </button>
                   ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
                     filteredTabs.length - 1 ? (
                     <button
-                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 w-[150px] py-2 "
+                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                       onClick={() => {
                         const index = filteredTabs?.findIndex(
                           (e: any) => e.id === currentPage,
@@ -2491,26 +2491,26 @@ const TestDetail = () => {
                         trackGAEvent('Click Button Confirm & Next Test')
                       }}
                     >
-                      <div className="font-medium text-medium-sm">
+                      <div className="text-medium-sm font-medium">
                         Confirm & Next
                       </div>
                     </button>
                   ) : (
                     <button
-                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] "
+                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                       onClick={() => {
                         handleConfirmEssay()
                         trackGAEvent('Click Button Confirm Test')
                       }}
                     >
-                      <div className="font-medium text-medium-sm">Confirm</div>
+                      <div className="text-medium-sm font-medium">Confirm</div>
                     </button>
                   )
                 ) : (
                   filteredTabs.findIndex((e: any) => e.id === currentPage) <
                     filteredTabs.length - 1 && (
                     <button
-                      className="flex items-center gap-3 border border-gray-1 justify-center px-3 py-2 w-[150px] "
+                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                       onClick={() => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
@@ -2518,7 +2518,7 @@ const TestDetail = () => {
                         handleChangeTab(filteredTabs[index + 1].id)
                       }}
                     >
-                      <div className="font-medium text-medium-sm">
+                      <div className="text-medium-sm font-medium">
                         Next Question
                       </div>
                     </button>

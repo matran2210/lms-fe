@@ -27,17 +27,17 @@ const ResultRow = ({
 
   return (
     <>
-      <td className="text-base text-bw-1 w-18 pl-11 py-5 border-b border-default border-dashed min-w-165px">
+      <td className="w-18 min-w-165px border-b border-dashed border-default py-5 pl-11 text-base text-bw-1">
         {type}
       </td>
-      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-3.6 min-w-400px">
+      <td className="w-3.6 min-w-400px border-b border-dashed border-default py-5 text-base text-bw-1">
         {partName}
       </td>
-      <td className="text-base text-bw-1 py-5 border-b border-default border-dashed w-17 min-w-190px">
+      <td className="w-17 min-w-190px border-b border-dashed border-default py-5 text-base text-bw-1">
         {chapter}
       </td>
-      <td className="text-base text-bw-1 flex justify-between pr-14 py-5 border-b border-default border-dashed min-w-132px">
-        <div className="flex justify-between gap-x-5 w-full">
+      <td className="flex min-w-132px justify-between border-b border-dashed border-default py-5 pr-14 text-base text-bw-1">
+        <div className="flex w-full justify-between gap-x-5">
           <span>
             {correctStatus ? (
               <span className="text-state-success">{status}</span>
@@ -46,14 +46,14 @@ const ResultRow = ({
             )}
           </span>
           {statusPercentage != 0 && (
-            <span className="flex gap-1 text-base text-gray-1 items-center">
+            <span className="flex items-center gap-1 text-base text-gray-1">
               <Icon type={statusIcon} />
               {statusPercentage}%
             </span>
           )}
         </div>
       </td>
-      <td className="text-base text-bw-1 text-center py-5 border-b border-default border-dashed w-7-percent min-w-78px">
+      <td className="w-7-percent min-w-78px border-b border-dashed border-default py-5 text-center text-base text-bw-1">
         {formattedTime}
       </td>
     </>

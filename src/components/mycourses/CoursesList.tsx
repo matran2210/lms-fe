@@ -21,7 +21,7 @@ const CoursesList: React.FC<CoursesProps> = ({
     <>
       {!isEmpty(courses) ? (
         <div
-          className="grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-6 xl-max:px-6"
+          className="mb-6 grid grid-cols-2 gap-6 xl-max:px-6 2xl-min:grid-cols-3"
           // data-aos={ANIMATION.DATA_AOS}
         >
           {courses?.map((course, index: number) => (

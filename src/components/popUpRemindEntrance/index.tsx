@@ -45,11 +45,11 @@ const PopUpRemindEntrance = () => {
       <div className="p-11">
         <LoginIcon />
       </div>
-      <div className="text-bw-1 text-4xl font-bold mt-6">Take Your Test</div>
-      <div className="text-gray-1 text-sm font-normal mt-4 mb-7 text-center">
+      <div className="mt-6 text-4xl font-bold text-bw-1">Take Your Test</div>
+      <div className="mb-7 mt-4 text-center text-sm font-normal text-gray-1">
         <span>
           You have
-          <span className="text-bw-1 font-semibold"> {count}</span>
+          <span className="font-semibold text-bw-1"> {count}</span>
         </span>
         <span> entrance tests that haven’t been taken, complete them now</span>
       </div>

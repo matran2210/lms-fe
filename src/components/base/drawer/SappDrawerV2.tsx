@@ -25,9 +25,9 @@ const SappDrawerV2 = ({
       width={width ?? '45%'}
       closeIcon={false}
     >
-      <div className={`bg-white w-full`}>
-        <div className="bg-bw-1 px-8 py-6 relative">
-          <div className="text-2xl font-medium text-white pr-10">{title}</div>
+      <div className={`w-full bg-white`}>
+        <div className="relative bg-bw-1 px-8 py-6">
+          <div className="pr-10 text-2xl font-medium text-white">{title}</div>
           <div
             className="absolute right-8 top-1/2 -translate-y-2/4 cursor-pointer"
             onClick={handleCancel}

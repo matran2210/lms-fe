@@ -45,34 +45,34 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
       title={undefined}
       cancelButtonCaption="Cancel"
     >
-      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
+      <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         {noExtensions ? <AlertIcon /> : <LockIcon />}
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold text-center">
+      <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
         Extend Trial Course
       </div>
       {noExtensions ? (
-        <div className="text-medium-sm text-center mt-4 mb-1 xl:mb-7 px-1">
+        <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
           <span className="text-gray-1">
             This is your final course extension. Would you like to extend it
             now?
           </span>
         </div>
       ) : (
-        <div className="text-medium-sm text-center mt-4 mb-1 xl:mb-7 px-1">
+        <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
           <span className="text-gray-1">
             You can only extend a trial course once. For further support, please
             contact SAPP Academy via
           </span>{' '}
           <span
-            className="text-primary underline cursor-pointer"
+            className="cursor-pointer text-primary underline"
             onClick={() => onLinkSocial('https://www.facebook.com/sapp.edu.vn')}
           >
             Facebook
           </span>
           <span className="text-gray-1">,</span>{' '}
           <span
-            className="text-primary underline cursor-pointer"
+            className="cursor-pointer text-primary underline"
             onClick={() => onLinkSocial('https://zalo.me/3938733079901781176')}
           >
             Zalo

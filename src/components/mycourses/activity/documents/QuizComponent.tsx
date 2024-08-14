@@ -519,11 +519,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 </div>
                 {!!activeQuestion?.requirements?.length && (
                   <>
-                    <div className="border border-b-gray-2 my-6"></div>
-                    <div className="flex items-center cursor-pointer select-none">
+                    <div className="my-6 border border-b-gray-2"></div>
+                    <div className="flex cursor-pointer select-none items-center">
                       <div className="relative">
                         <div
-                          className="flex items-center hover:text-primary group"
+                          className="group flex items-center hover:text-primary"
                           onClick={() => setShowListRequirement(true)}
                         >
                           <div className="font-semibold">
@@ -532,7 +532,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                           </div>
                           <div>
                             <SappIcon
-                              className="ml-2 -mt-1 group-hover:fill-primary fill-bw-1"
+                              className="-mt-1 ml-2 fill-bw-1 group-hover:fill-primary"
                               icon="arrow_down"
                             ></SappIcon>
                           </div>
@@ -540,7 +540,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         {showListRequirement && (
                           <div
                             ref={listRequirementRef}
-                            className="absolute z-50 text-over  left-0 bottom-0 bg-white w-max max-w-md translate-y-full shadow-md py-1"
+                            className="text-over absolute bottom-0  left-0 z-50 w-max max-w-md translate-y-full bg-white py-1 shadow-md"
                           >
                             {activeQuestion?.requirements?.map((e, i) => {
                               return (
@@ -553,7 +553,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                       files: e?.files,
                                     })
                                   }}
-                                  className="font-semibold hover:text-primary truncate py-1.5 px-3"
+                                  className="truncate px-3 py-1.5 font-semibold hover:text-primary"
                                   key={e.id}
                                 >{`Requirement ${i + 1}: ${e?.name}`}</div>
                               )
@@ -603,8 +603,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 )}
                 {exhibitData && exhibitData?.length > 0 && (
                   <>
-                    <div className="border border-b-gray-2 my-6"></div>
-                    <div className="flex items-center mb-4">
+                    <div className="my-6 border border-b-gray-2"></div>
+                    <div className="mb-4 flex items-center">
                       <div className="font-semibold">
                         Exhibits ({exhibitData?.length || 0})
                       </div>
@@ -645,9 +645,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
                 {activeQuestion?.question_topic?.files?.length > 0 && (
                   <div>
-                    <div className="border border-b-gray-2 my-6"></div>
+                    <div className="my-6 border border-b-gray-2"></div>
                     <div>
-                      <div className="font-semibold mb-2">Topic Resource:</div>
+                      <div className="mb-2 font-semibold">Topic Resource:</div>
                       {activeQuestion?.question_topic?.files.map(
                         (e: any, index: number) => {
                           return (
@@ -672,7 +672,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   </div>
                 )}
               </div>
-              <div className="border border-b-gray-2 my-6"></div>
+              <div className="my-6 border border-b-gray-2"></div>
               <EssayQuestionPreview
                 data={null}
                 question_content={activeQuestion?.question_content}
@@ -725,7 +725,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {activeQuestion?.confirmed &&
             activeQuestion.qType !== 'ESSAY' &&
             showCorrect && (
-              <div className="p-4 mt-8 bg-gray-4">
+              <div className="mt-8 bg-gray-4 p-4">
                 <div className="font-semibold">{MY_COURSES.explanations}</div>
                 {activeQuestion?.solution && (
                   <EditorReader

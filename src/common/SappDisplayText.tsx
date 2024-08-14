@@ -7,7 +7,16 @@ const SappDisplayText = ({
   text: string
   className?: string | undefined
 }) => {
-  return <pre className={`mb-2 font-sans text-base ${className}`}>{text}</pre>
+  return (
+    <React.Fragment>
+      {text.split('\n').map((item, index) => (
+        <React.Fragment key={index}>
+          <div className={`font-sans text-base ${className}`}>{item}</div>
+          <br />
+        </React.Fragment>
+      ))}
+    </React.Fragment>
+  )
 }
 
 export default SappDisplayText

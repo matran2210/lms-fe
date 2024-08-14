@@ -9,13 +9,13 @@ interface QuestionGroupProps {
 
 const QuestionGroup = ({ question }: QuestionGroupProps) => {
   return (
-    <div className="flex justify-center py-4.5 bg-gray-3 shadow-solution w-full relative">
+    <div className="relative flex w-full justify-center bg-gray-3 py-4.5 shadow-solution">
       <div className="heading flex items-center">
         <Icon type="ant-left" />
         <h3 className="mx-1">{question}</h3>
         <Icon type="ant-right" />
       </div>
-      <div className="close-action absolute right-4 top-2 p-4 cursor-pointer">
+      <div className="close-action absolute right-4 top-2 cursor-pointer p-4">
         <Icon type="arrows" />
       </div>
     </div>

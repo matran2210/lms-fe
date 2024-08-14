@@ -53,16 +53,16 @@ const ForgotPasswordPage = () => {
 
   return (
     <SingleDialogLayout title="Forgot Password">
-      <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
+      <div className="mx-auto block max-w-[38.375rem] px-8 py-10 shadow-single-dialog md:px-19 md:py-17.5">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
+          <div className="mb-2 text-3xl font-semibold text-bw-1 md:text-4xl">
             Forgot Password
           </div>
-          <span className="text-medium-sm text-gray-1 mb-10">
+          <span className="mb-10 text-medium-sm text-gray-1">
             Enter the email you used to create your account so we can send you 6
             digits code to reset your password.
           </span>
-          <div className="md:mt-15 mt-8">
+          <div className="mt-8 md:mt-15">
             <HookFormTextField
               name="email"
               control={control}
@@ -75,7 +75,7 @@ const ForgotPasswordPage = () => {
             title="Send"
             size="lager"
             type="submit"
-            className="w-full mt-[27px] !font-semibold"
+            className="mt-[27px] w-full !font-semibold"
           />
           <div className="mt-8">
             <SappButton

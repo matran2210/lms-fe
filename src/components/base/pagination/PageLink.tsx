@@ -30,9 +30,9 @@ const PageLink = ({
   if (arrow && disabled) {
     return (
       <li
-        className={`cursor-not-allowed flex items-center justify-center p-0.5 ${
+        className={`flex cursor-not-allowed items-center justify-center p-0.5 ${
           type === 'table'
-            ? 'min-w-8 min-h-8 text-gray-6'
+            ? 'min-h-8 min-w-8 text-gray-6'
             : 'min-h-default text-gray-1'
         }`}
       >
@@ -43,8 +43,8 @@ const PageLink = ({
     return (
       <li
         className={`${
-          type === 'table' ? 'min-w-8 min-h-8 text-gray-5' : 'min-h-default'
-        } p-0.5 cursor-pointer flex items-center justify-center`}
+          type === 'table' ? 'min-h-8 min-w-8 text-gray-5' : 'min-h-default'
+        } flex cursor-pointer items-center justify-center p-0.5`}
         {...otherProps}
       >
         {children}
@@ -57,8 +57,8 @@ const PageLink = ({
       <li
         className={`flex items-center justify-center ${
           type === 'table'
-            ? 'text-gray-5 min-w-8 min-h-8'
-            : 'min-h-default text-3xl leading-8.5 text-gray-1 font-thin '
+            ? 'min-h-8 min-w-8 text-gray-5'
+            : 'min-h-default text-3xl font-thin leading-8.5 text-gray-1 '
         }`}
       >
         {children}
@@ -70,21 +70,21 @@ const PageLink = ({
     <li
       className={`${
         type === 'table'
-          ? 'min-w-8 min-h-8 text-xsm leading-4.8 font-semibold rounded-md'
-          : 'min-w-default min-h-default text-sm leading-8.5 font-normal border'
-      } relative p-0.5 cursor-pointer flex items-center justify-center
-      ${isViewedProp && type !== 'row' ? 'bg-gray-3 !border-default' : ''} ${
+          ? 'min-h-8 min-w-8 rounded-md text-xsm font-semibold leading-4.8'
+          : 'min-h-default min-w-default border text-sm font-normal leading-8.5'
+      } relative flex cursor-pointer items-center justify-center p-0.5
+      ${isViewedProp && type !== 'row' ? '!border-default bg-gray-3' : ''} ${
         active
-          ? 'bg-primary text-white border-active'
+          ? 'border-active bg-primary text-white'
           : !isViewedProp
-            ? 'bg-white text-gray-1 border-default hover:bg-primary hover:text-white hover:border-active'
-            : 'text-gray-1 border-gray-2 hover:bg-primary hover:text-white hover:border-active'
+            ? 'border-default bg-white text-gray-1 hover:border-active hover:bg-primary hover:text-white'
+            : 'border-gray-2 text-gray-1 hover:border-active hover:bg-primary hover:text-white'
       }`}
       aria-current={active ? 'page' : undefined}
       {...otherProps}
     >
       <span
-        className="w-full h-full text-center"
+        className="h-full w-full text-center"
         // onClick={() => {
         //   setIsViewed(true)
         //   // setIsFlagged(!isFlagged)
@@ -93,7 +93,7 @@ const PageLink = ({
         {children}
       </span>
       {isFlagedProp && (
-        <i className="absolute top-1 right-1 w-2 h-2 bg-gray-1 rounded-full"></i>
+        <i className="absolute right-1 top-1 h-2 w-2 rounded-full bg-gray-1"></i>
       )}
     </li>
   )

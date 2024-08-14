@@ -122,10 +122,10 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-answer-wrapper {
-  @apply flex pt-2 gap-y-6 flex-wrap;
+  @apply flex flex-wrap gap-y-6 pt-2;
 
   .answer {
-    @apply flex gap-x-3 items-start break-words;
+    @apply flex items-start gap-x-3 break-words;
 
     .desciption {
       @apply flex-1;
@@ -137,7 +137,7 @@ body *::-webkit-scrollbar-thumb:hover {
   @apply mb-4;
 
   p {
-    @apply break-words mb-2;
+    @apply mb-2 break-words;
   }
 }
 
@@ -153,7 +153,7 @@ body *::-webkit-scrollbar-thumb:hover {
   }
 
   p {
-    @apply break-words mb-2;
+    @apply mb-2 break-words;
   }
 
   thead,
@@ -226,7 +226,7 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 35px;
   margin-bottom: 4px;
 
-  @apply bg-gray-4 font-bold text-base text-center;
+  @apply bg-gray-4 text-center text-base font-bold;
 }
 
 .sapp-select--selectword-preview,
@@ -283,7 +283,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-notched-container {
-  @apply break-words flex-1 relative bg-gray-3 h-full flex items-center justify-start p-5 border-solid border border-gray-6 ps-8 z-10;
+  @apply relative z-10 flex h-full flex-1 items-center justify-start break-words border border-solid border-gray-6 bg-gray-3 p-5 ps-8;
 
   &.dragging {
     @apply z-20;
@@ -298,11 +298,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-white absolute border border-t-0 border-r-0 border-gray-6;
+  @apply absolute z-0 border border-r-0 border-t-0 border-solid border-gray-6 bg-white;
 }
 
 .sapp-arrowed-container {
-  @apply break-words relative bg-gray-3 h-auto flex items-center justify-start p-5 border-solid border w-[40%] border-gray-6;
+  @apply relative flex h-auto w-[40%] items-center justify-start break-words border border-solid border-gray-6 bg-gray-3 p-5;
 }
 
 .sapp-arrowed-container:before {
@@ -314,11 +314,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-gray-3 absolute border border-t-0 border-r-0 border-gray-6;
+  @apply absolute z-0 border border-r-0 border-t-0 border-solid border-gray-6 bg-gray-3;
 }
 
 .sapp-arrowed-container-corrects {
-  @apply break-words relative bg-bw-6 h-auto flex items-center justify-start p-5 border-solid border w-[48%] border-success;
+  @apply relative flex h-auto w-[48%] items-center justify-start break-words border border-solid border-success bg-bw-6 p-5;
 }
 
 .sapp-arrowed-container-corrects:before {
@@ -330,11 +330,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-10 border-solid bg-bw-6 absolute border border-t-0 border-r-0 border-success;
+  @apply absolute z-10 border border-r-0 border-t-0 border-solid border-success bg-bw-6;
 }
 
 .sapp-notched-container-corrects {
-  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-start p-5 border-solid border border-success border-l-0 ps-8;
+  @apply relative flex h-full flex-1 items-center justify-start break-words border border-l-0 border-solid border-success bg-bw-6 p-5 ps-8;
 }
 
 .sapp-notched-container-corrects:before {
@@ -345,11 +345,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-bw-6 absolute border-success;
+  @apply absolute z-0 border-solid border-success bg-bw-6;
 }
 
 .sapp-arrowed-container-incorrects {
-  @apply break-words relative bg-bw-6 h-auto flex items-center justify-start p-5 border-solid border w-[48%] border-error;
+  @apply relative flex h-auto w-[48%] items-center justify-start break-words border border-solid border-error bg-bw-6 p-5;
 }
 
 .sapp-arrowed-container-incorrects:before {
@@ -361,11 +361,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-10 border-solid bg-bw-6 absolute border border-t-0 border-r-0 border-error;
+  @apply absolute z-10 border border-r-0 border-t-0 border-solid border-error bg-bw-6;
 }
 
 .sapp-notched-container-incorrects {
-  @apply break-words flex-1 relative bg-bw-6 h-full flex items-center justify-start p-5 border-solid border border-error border-l-0 ps-8;
+  @apply relative flex h-full flex-1 items-center justify-start break-words border border-l-0 border-solid border-error bg-bw-6 p-5 ps-8;
 }
 
 .sapp-notched-container-incorrects:before {
@@ -377,21 +377,21 @@ body *::-webkit-scrollbar-thumb:hover {
   border: 0;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply z-0 border-solid bg-bw-6 absolute border-error;
+  @apply absolute z-0 border-solid border-error bg-bw-6;
 }
 
 .answer-area {
-  @apply flex flex-wrap gap-5 mt-4;
+  @apply mt-4 flex flex-wrap gap-5;
 }
 
 .answer-box {
   border: 1px solid rgb(204, 204, 204);
   background: rgb(243, 243, 243);
-  @apply p-2 block z-10;
+  @apply z-10 block p-2;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
-  @apply inline-block min-w-[100px] border-b border-gray-500 border-0 min-h-[17px] relative;
+  @apply relative inline-block min-h-[17px] min-w-[100px] border-0 border-b border-gray-500;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box))::after {
@@ -409,7 +409,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop-answer {
-  @apply inline-block min-w-[100px] border border-gray-500 border p-1 m-1 bg-gray-4;
+  @apply m-1 inline-block min-w-[100px] border border border-gray-500 bg-gray-4 p-1;
 
   &.corrects {
     @apply border-success text-state-success;
@@ -426,19 +426,19 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-questions-essay {
   line-height: 33px;
-  @apply font-semibold text-base font-sans text-bw-1 mb-4;
+  @apply mb-4 font-sans text-base font-semibold text-bw-1;
 }
 
 .sapp-seprate-line-preview {
-  @apply w-[calc(100%+48px)] -ms-6 h-3 bg-gray-3 mb-4;
+  @apply -ms-6 mb-4 h-3 w-[calc(100%+48px)] bg-gray-3;
 }
 
 .sapp-upload-file-preview {
-  @apply flex gap-3 mb-4 px-0 items-center;
+  @apply mb-4 flex items-center gap-3 px-0;
 }
 
 .sapp-upload-button-preview {
-  @apply cursor-pointer flex justify-evenly gap-2 w-max items-center px-2 py-0 border;
+  @apply flex w-max cursor-pointer items-center justify-evenly gap-2 border px-2 py-0;
 }
 
 .tox-tinymce {
@@ -446,12 +446,12 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .resizable {
-  @apply bg-white top-[100px] left-[100px] cursor-move;
+  @apply left-[100px] top-[100px] cursor-move bg-white;
 }
 
 .resizable .resizers {
   display: none;
-  @apply w-full h-full box-border z-[500];
+  @apply z-[500] box-border h-full w-full;
 }
 
 .resizable.enable .resizers {
@@ -464,7 +464,7 @@ body *::-webkit-scrollbar-thumb:hover {
   box-shadow:
     0px 0px 0px 1px rgba(43, 59, 74, 0.3),
     0px 0px 4px 1px rgba(57, 76, 96, 0.15);
-  @apply w-[12px] h-[12px] rounded-full bg-white absolute z-[500];
+  @apply absolute z-[500] h-[12px] w-[12px] rounded-full bg-white;
 }
 
 .resizable .resizers .resizer.top-left {
@@ -476,19 +476,19 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .resizable .resizers .resizer.bottom-left {
-  @apply -left-[5px] -bottom-[5px] cursor-nesw-resize;
+  @apply -bottom-[5px] -left-[5px] cursor-nesw-resize;
 }
 
 .resizable .resizers .resizer.bottom-right {
-  @apply -right-[5px] -bottom-[5px] cursor-nwse-resize;
+  @apply -bottom-[5px] -right-[5px] cursor-nwse-resize;
 }
 
 .resizable .resizers .resizer.right {
-  @apply rounded-[3px] w-[6px] h-[18px] -right-[2.5px] top-1/2 cursor-col-resize -translate-y-1/2;
+  @apply -right-[2.5px] top-1/2 h-[18px] w-[6px] -translate-y-1/2 cursor-col-resize rounded-[3px];
 }
 
 .resizable .resizers .resizer.left {
-  @apply rounded-[3px] w-[6px] h-[18px] -left-[2.5px] top-1/2 cursor-col-resize -translate-y-1/2;
+  @apply -left-[2.5px] top-1/2 h-[18px] w-[6px] -translate-y-1/2 cursor-col-resize rounded-[3px];
 }
 
 .sapp-opacity-bg-border {
@@ -514,7 +514,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .calculator-body {
-  @apply w-full h-[calc(100%-40px)] flex flex-col;
+  @apply flex h-[calc(100%-40px)] w-full flex-col;
 }
 
 .button {
@@ -712,7 +712,7 @@ textarea.is-invalid:focus {
 }
 
 .sapp-modal .ant-modal-content .ant-modal-header .ant-modal-title {
-  @apply text-bw-1 font-semibold text-4xl;
+  @apply text-4xl font-semibold text-bw-1;
 }
 
 .ant-modal-root .ant-modal-wrap {
@@ -721,7 +721,7 @@ textarea.is-invalid:focus {
 
 .lf-player-container {
   height: inherit;
-  @apply flex justify-center items-center;
+  @apply flex items-center justify-center;
 }
 
 // Animate the size, inside
@@ -842,7 +842,7 @@ p a {
 }
 
 #floating-button {
-  @apply w-[60px] h-[60px] bg-white fixed cursor-pointer rounded-full;
+  @apply fixed h-[60px] w-[60px] cursor-pointer rounded-full bg-white;
   box-shadow:
     rgba(0, 0, 0, 0.1) 0px 1px 4px,
     rgba(0, 0, 0, 0.2) 0px 2px 12px;
@@ -872,11 +872,11 @@ p a {
 .plus {
   animation: plus-out 0.3s;
   transition: all 0.3s;
-  @apply w-[60px] h-[60px] left-[-2px];
+  @apply left-[-2px] h-[60px] w-[60px];
 }
 
 #container-floating {
-  @apply fixed w-[60px] h-[60px] bottom-[30px] right-[20px] z-[50px];
+  @apply fixed bottom-[30px] right-[20px] z-[50px] h-[60px] w-[60px];
 }
 
 // @keyframes edit-in {
@@ -1008,7 +1008,7 @@ p a {
 }
 
 .sapp-custom--modal .ant-modal-content {
-  @apply bg-transparent max-w-none h-[100vh] w-[100vw];
+  @apply h-[100vh] w-[100vw] max-w-none bg-transparent;
 }
 
 .ant-modal.sapp-custom--modal {
@@ -1025,16 +1025,16 @@ p a {
 }
 
 .videoContainer {
-  @apply h-auto w-full relative;
+  @apply relative h-auto w-full;
 }
 
 .loadingOverlay {
   transform: translate(-50%, -50%);
-  @apply absolute top-[50%] left-[50%] text-bw-1 p-2.5 rounded-[5px] z-10;
+  @apply absolute left-[50%] top-[50%] z-10 rounded-[5px] p-2.5 text-bw-1;
 }
 
 .hotline ins {
-  @apply no-underline cursor-default;
+  @apply cursor-default no-underline;
 }
 
 .fanpage ins {
@@ -1070,4 +1070,9 @@ p a {
 
 .sapp-custom-hover.button-icon:hover {
   @apply bg-transparent;
+}
+
+br {
+  content: '';
+  @apply m-2 block text-sm;
 }

@@ -34,6 +34,7 @@ export interface IButtonProps {
 export interface ITabs {
   link: string
   title: string
+  disable?: boolean
 }
 
 export type IButtonCancelSubmitProps = {
@@ -96,6 +97,13 @@ export enum NOTIFICATION_STATUS {
   TIMER = 'TIMER',
   SHOWING = 'SHOWING',
   ENDED = 'ENDED',
+}
+
+export interface IMetaData {
+  total_pages: number
+  total_records: number
+  page_index: number
+  page_size: number
 }
 
 export * from './course'

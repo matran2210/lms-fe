@@ -36,9 +36,9 @@ const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
   )
 
   return (
-    <div className="filter flex">
+    <div className="flex filter">
       <TotalResullt total={totalResult} />
-      <div className="filter pl-6 flex self-center">
+      <div className="flex self-center pl-6 filter">
         <SappHookFormSelect
           control={control}
           name="user_section_learning_status"

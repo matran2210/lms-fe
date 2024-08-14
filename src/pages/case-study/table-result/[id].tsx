@@ -148,19 +148,19 @@ const TableCaseStudyResult = () => {
     <FullScreenLayout title="Case Study Result">
       <div className="relative" data-aos={ANIMATION.DATA_AOS}>
         <div
-          className="fixed px-6 py-4 right-0 cursor-pointer z-20"
+          className="fixed right-0 z-20 cursor-pointer px-6 py-4"
           onClick={() => router.back()}
         >
           <CloseIcon />
         </div>
-        <div className="bg-white max-w-[1144px] max-h-full m-auto pt-8">
-          <div className="px-6 xl:px-0 flex justify-between mb-10 items-center flex-row">
+        <div className="m-auto max-h-full max-w-[1144px] bg-white pt-8">
+          <div className="mb-10 flex flex-row items-center justify-between px-6 xl:px-0">
             <div className="pr-4">
-              <div className="text-xl font-medium text-bw-1 line-clamp-1">
+              <div className="line-clamp-1 text-xl font-medium text-bw-1">
                 {topicAttemptDetail?.question_topic?.name}
               </div>
-              <div className="text-base pt-2.5">
-                <span className="font-normal text-gray-1 pt-1.5">
+              <div className="pt-2.5 text-base">
+                <span className="pt-1.5 font-normal text-gray-1">
                   Your Score:
                 </span>{' '}
                 <span className="font-bold text-state-error">
@@ -179,7 +179,7 @@ const TableCaseStudyResult = () => {
                         : '/Unlimited'
                     }`}
                     size="medium"
-                    className={'!font-medium shrink-0'}
+                    className={'shrink-0 !font-medium'}
                     onClick={() =>
                       handleRetake(
                         topicAttemptDetail?.question_topic?.id,
@@ -199,7 +199,7 @@ const TableCaseStudyResult = () => {
                         : '/Unlimited'
                     }`}
                     size="medium"
-                    className={'!font-medium shrink-0'}
+                    className={'shrink-0 !font-medium'}
                   />
                 )
               ) : (
@@ -222,12 +222,12 @@ const TableCaseStudyResult = () => {
                     router?.query?.course_section_id as string,
                   )
                 }
-                className={'!font-medium shrink-0'}
+                className={'shrink-0 !font-medium'}
               />
             )}
           </div>
 
-          <div className="block px-6 xl:pr-0 xl:pl-4">
+          <div className="block px-6 xl:pl-4 xl:pr-0">
             <SappTable
               headers={headers}
               loading={true}
@@ -240,13 +240,13 @@ const TableCaseStudyResult = () => {
                 {scoreDetail?.answers?.map((e: any, index: number) => {
                   return (
                     <tr
-                      className="border-dashed border-b border-gray-2"
+                      className="border-b border-dashed border-gray-2"
                       key={e?.id}
                     >
                       <td className="pr-1 text-bw-1">{index + 1}</td>
-                      <td className="text-start m-6 pr-4">
+                      <td className="m-6 pr-4 text-start">
                         <div
-                          className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
+                          className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
                           dangerouslySetInnerHTML={{
                             __html: String(
                               e?.question?.question_content ?? '--',
@@ -257,13 +257,13 @@ const TableCaseStudyResult = () => {
                           }}
                         ></div>
                       </td>
-                      <td className="text-start m-6 pr-4 text-bw-1">
-                        <div className="mt-6 mr-6 mb-6 min-w-132px">
+                      <td className="m-6 pr-4 text-start text-bw-1">
+                        <div className="mb-6 mr-6 mt-6 min-w-132px">
                           {getTypeName(e?.question?.qType ?? '--')}
                         </div>
                       </td>
                       <td
-                        className={`text-start m-6 pr-1
+                        className={`m-6 pr-1 text-start
                       ${
                         e?.is_correct || e?.active === 'SUBMITED'
                           ? ' text-state-success'
@@ -281,13 +281,13 @@ const TableCaseStudyResult = () => {
                           </>
                         )}
                       </td>
-                      <td className="text-start m-6 text-gray-1 pr-4">
+                      <td className="m-6 pr-4 text-start text-gray-1">
                         {e?.question?.qType !== 'ESSAY' && (
-                          <div className="flex items-center ml-1">
+                          <div className="ml-1 flex items-center">
                             <img
                               src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                               alt="Correct"
-                              className="w-4 text-state-success mr-1"
+                              className="mr-1 w-4 text-state-success"
                             />
                             {roundNumber(
                               e?.question?.question_report?.ratio || 0,

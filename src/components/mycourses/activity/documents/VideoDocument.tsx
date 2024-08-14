@@ -326,13 +326,13 @@ const VideoDocument = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-2.5">
-        <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
+      <div className="mb-2.5 flex items-center justify-between gap-x-10 gap-y-2 text-primary">
+        <div className="flex flex-wrap items-center gap-x-10 gap-y-2">
           {(videos as IVideo[])?.length > 1 &&
             videos?.map((v, i) => {
               return (
                 <label
-                  className=" flex items-center gap-2 select-none cursor-pointer"
+                  className=" flex cursor-pointer select-none items-center gap-2"
                   key={v?.file?.id ?? i}
                 >
                   {/* Radio button for video selection */}
@@ -358,7 +358,7 @@ const VideoDocument = ({
               )
             })}
         </div>
-        <div className="flex items-center select-none cursor-pointer relative z-30 group">
+        <div className="group relative z-30 flex cursor-pointer select-none items-center">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
               <span className="mr-2 text-bw-1 group-hover:text-primary">
@@ -374,21 +374,21 @@ const VideoDocument = ({
             <></>
           )}
 
-          <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100px]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
-            <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
+          <div className="max-w-[100px]: absolute -right-[3px] bottom-0 hidden w-[412px] translate-y-full animate-fade-in-overlay overflow-hidden bg-white py-3 shadow-single-dialog group-hover:block">
+            <div className="h-full max-h-[412px] flex-1 snap-y overflow-y-auto bg-white">
               {timeLine?.map((e, i) => {
                 return (
                   <div
                     key={i}
-                    className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid p-3 hover:text-primary-2 text-bw-1 grid-cols-[1.3fr,6fr]"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-medium-sm text-bw-1 hover:bg-gray-4 hover:text-primary-2"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}
                   >
-                    <div className="text-state-info mim-w-[62px]">
+                    <div className="mim-w-[62px] text-state-info">
                       {formatTime(e?.time)}
                     </div>
-                    <div className="text-bw-1 line-clamp-2 text-inherit">
+                    <div className="line-clamp-2 text-bw-1 text-inherit">
                       {htmlToRaw(e?.text)}
                     </div>
                   </div>
