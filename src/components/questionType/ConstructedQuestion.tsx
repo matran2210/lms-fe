@@ -307,7 +307,50 @@ const EssayQuestionPreview = ({
       )}
       <>
         {question_data.assignment_type !== 'TEXT' ? (
-          !fullData.answer_file?.file_key ? (
+          fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
+          fullData?.answer_file?.file_key ? (
+            <React.Fragment>
+              <div className="sapp-upload-file-preview">
+                <div className="font-semibold text-base">
+                  Upload file to submit:
+                </div>
+                <div
+                  className="cursor-pointer text-state-info hover:underline"
+                  onClick={() =>
+                    handleDownload({
+                      files: [
+                        {
+                          name:
+                            fullData?.data?.requirements?.[index ?? 0]
+                              ?.answer_file?.file_name ||
+                            fullData?.answer_file?.file_name,
+                          file_key:
+                            fullData?.data?.requirements?.[index ?? 0]
+                              ?.answer_file?.file_key ||
+                            fullData?.answer_file?.file_key,
+                        },
+                      ],
+                    })
+                  }
+                >
+                  {fullData?.data?.requirements?.[index ?? 0]?.answer_file
+                    ?.file_name || fullData?.answer_file?.file_name}
+                </div>
+                {!fullData?.done && !fullData?.confirmed && (
+                  <div
+                    onClick={() => handleClearFile(index)}
+                    className="cursor-pointer"
+                  >
+                    <CloseIcon />
+                  </div>
+                )}
+              </div>
+              {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
+                !forCaseStudy && (
+                  <div className="sapp-seprate-line-preview"></div>
+                )}
+            </React.Fragment>
+          ) : (
             <React.Fragment>
               <div
                 className={`sapp-upload-file-preview ${
@@ -324,17 +367,9 @@ const EssayQuestionPreview = ({
                   Upload file to submit:
                 </div>
                 <div className="sapp-upload-button-preview">
-                  {/* <input
-                      ref={inputRef}
-                      type="file"
-                      className="hidden"
-                      onChange={handleFileChange}
-                    /> */}
-                  {/* <UploadIcon /> */}
                   <UploadIcon />
                   <div
                     className="title-btn-preview"
-                    // onClick={() => inputRef.current.click()}
                     onClick={() => openChooseFile(true)}
                   >
                     Choose file to upload
@@ -344,41 +379,6 @@ const EssayQuestionPreview = ({
               {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy &&
                 data && <div className="sapp-seprate-line-preview"></div>}
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              <div className="sapp-upload-file-preview">
-                <div className="font-semibold text-base">
-                  Upload file to submit:
-                </div>
-                <div
-                  className="cursor-pointer text-state-info hover:underline"
-                  onClick={() =>
-                    handleDownload({
-                      files: [
-                        {
-                          name: fullData?.answer_file?.file_name,
-                          file_key: fullData?.answer_file?.file_key,
-                        },
-                      ],
-                    })
-                  }
-                >
-                  {fullData?.answer_file?.file_name}
-                </div>
-                {!fullData?.done && !fullData?.confirmed && (
-                  <div
-                    onClick={() => handleClearFile()}
-                    className="cursor-pointer"
-                  >
-                    <CloseIcon />
-                  </div>
-                )}
-              </div>
-              {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
-                !forCaseStudy && (
-                  <div className="sapp-seprate-line-preview"></div>
-                )}
             </React.Fragment>
           )
         ) : (
