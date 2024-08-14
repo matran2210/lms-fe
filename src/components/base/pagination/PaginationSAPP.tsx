@@ -1,5 +1,6 @@
 import Pagination from 'src/components/base/pagination/Pagination'
 import { Dispatch, SetStateAction, ReactNode } from 'react'
+import clsx from 'clsx'
 
 interface IProps {
   currentPage: number
@@ -10,6 +11,7 @@ interface IProps {
   type?: 'row' | 'table'
   children?: ReactNode
   optionShowAll?: ReactNode
+  classname?: string
 }
 
 const PaginationSAPP = ({
@@ -20,6 +22,7 @@ const PaginationSAPP = ({
   totalItems,
   type,
   optionShowAll,
+  classname,
 }: IProps) => {
   const options = [
     { value: 10, label: '10' },
@@ -35,15 +38,16 @@ const PaginationSAPP = ({
   return (
     <>
       <div
-        className={`flex items-center justify-center md:justify-between flex-wrap gap-4 overflow-hidden`}
+        className={clsx(
+          `flex flex-wrap items-center justify-center gap-4 overflow-hidden md:justify-between`,
+          classname,
+        )}
       >
         {type === 'table' && (
           <label className="flex items-center">
-            <span className="text-xsm font-semibold text-gray-5 mr-2.5">
-              Show
-            </span>
+            <span className="mr-2.5 text-xsm text-gray-1">Show</span>
             <select
-              className="rounded-md shadow-0 border-0 bg-gray-4 py-0 px-2.5 cursor-pointer w-[70px]"
+              className="w-[70px] cursor-pointer border-0 bg-gray-4 px-2.5 py-1 shadow-0"
               onChange={(e) => {
                 const pageNumber = parseInt(e.target.value)
                 handlePageChange(pageNumber)
@@ -55,7 +59,7 @@ const PaginationSAPP = ({
                 </option>
               ))}
             </select>
-            <span className="text-xsm font-semibold text-gray-5 ml-2.5">
+            <span className="ml-2.5 text-xsm text-gray-1">
               of {totalItems} entries
             </span>
           </label>

@@ -36,6 +36,7 @@ interface IProps {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => void
   isHideExhibit?: boolean
+  isAlwaysShowAnswer?: boolean
 }
 type IProp = {
   value: string
@@ -60,6 +61,7 @@ const MatchingQuestion = forwardRef(
       uuid,
       setOpenFile,
       isHideExhibit = true,
+      isAlwaysShowAnswer = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -245,7 +247,7 @@ const MatchingQuestion = forwardRef(
       shuffleArray(arr)
       if (corrects) {
         for (let correct of corrects) {
-          if (defaultAnswer) {
+          if (defaultAnswer || isAlwaysShowAnswer) {
             objCorrect[correct?.id] = correct?.answer
           }
         }
@@ -292,8 +294,10 @@ const MatchingQuestion = forwardRef(
             !isHideExhibit &&
             data?.question_topic?.exhibits?.length > 0 && (
               <>
-                <div className="border border-b-gray-2 my-6"></div>
-                <div className="flex items-center mb-4">
+                {!!data?.question_topic?.description && (
+                  <div className="my-6 border border-b-gray-2"></div>
+                )}
+                <div className="mb-4 flex items-center">
                   <div className="font-semibold">
                     Exhibits({data?.question_topic?.exhibits?.length || 0})
                   </div>
@@ -329,7 +333,7 @@ const MatchingQuestion = forwardRef(
                     )
                   })}
                 </div>
-                <div className="border border-b-gray-2 my-6"></div>
+                <div className="my-6 border border-b-gray-2"></div>
               </>
             )}
           <EditorReader
@@ -349,7 +353,7 @@ const MatchingQuestion = forwardRef(
                   <QuestionCard value={e?.content} />
                   <div
                     id={e?.id}
-                    className="flex-1 sapp-match-result dropable"
+                    className="sapp-match-result dropable flex-1"
                     onDrop={() => drop(event, data?.id)}
                     onDragOver={() => allowDrop(event)}
                   >
@@ -371,7 +375,7 @@ const MatchingQuestion = forwardRef(
               )
             })}
             <div
-              className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 dropable overflow-hidden ${storageId}`}
+              className={`sapp-store dropable flex min-h-large flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
               onDrop={(ev) => handleStorage(ev, data?.id)}
               onDragOver={allowDropStorage}
               id="storage"
@@ -406,16 +410,16 @@ const MatchingQuestion = forwardRef(
                       <>
                         <QuestionCard
                           value={e?.content}
-                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6 text-bw-1"
+                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6"
                         />
                         <div
                           // id={e?.id}
-                          className="flex-1 sapp-match-result"
+                          className="sapp-match-result flex-1"
                         >
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container-corrects text-bw-1 min-w-132px !border-gray-6 before:!border-gray-6"
+                              className="sapp-notched-container-corrects min-w-132px !border-gray-6 before:!border-gray-6"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
@@ -431,7 +435,7 @@ const MatchingQuestion = forwardRef(
                         />
                         <div
                           // id={e?.id}
-                          className="flex-1 sapp-match-result"
+                          className="sapp-match-result flex-1"
                         >
                           {defaultValue?.[e?.id]?.id && (
                             <div
@@ -450,9 +454,7 @@ const MatchingQuestion = forwardRef(
               })}
             </div>
             <div className="flex flex-col gap-y-5 pt-[42px]">
-              <div className="text-bw-1 font-semibold text-base">
-                Correct Answer
-              </div>
+              <div className=" text-base font-semibold">Correct Answer</div>
 
               {data?.question_matchings?.map((e: any, index: number) => {
                 return (
@@ -464,7 +466,7 @@ const MatchingQuestion = forwardRef(
                       value={e?.content}
                       className="sapp-arrowed-container-corrects text-state-success"
                     />
-                    <div className="flex-1 sapp-match-result">
+                    <div className="sapp-match-result flex-1">
                       {correctAnswer?.[e?.id]?.id && (
                         <div
                           // className="w-fit"
@@ -481,12 +483,9 @@ const MatchingQuestion = forwardRef(
           </>
         )}
         {solution && (
-          <div className="bg-gray-4 mt-6 p-6">
+          <div className="mt-6 bg-gray-4 p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader
-              className="mt-4 text-bw-1"
-              text_editor_content={solution}
-            />
+            <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>
         )}
       </div>

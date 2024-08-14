@@ -1,7 +1,7 @@
-import { LAYOUT } from '@utils/constants'
 import { GetServerSideProps } from 'next'
 import { PageLink } from 'src/constants'
 import InputCodeForm from '../../../components/auth/InputCodeForm'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 
 type IProps = {
   email: string
@@ -10,22 +10,23 @@ type IProps = {
 
 const ForgotPasswordRecoverPage = ({ email, token }: IProps) => {
   return (
-    <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
-      <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
-        Forgot Password
+    <SingleDialogLayout title="Password Recover">
+      <div className="mx-auto block max-w-[38.375rem] px-8 py-10 shadow-single-dialog md:px-19 md:py-17.5">
+        <div className="mb-2 text-3xl font-semibold text-bw-1 md:text-4xl">
+          Forgot Password
+        </div>
+        <span className="mb-10 text-medium-sm text-gray-1">
+          Enter your 6 digits code that you received on your email.
+        </span>
+        <div className="mt-8 md:mt-12">
+          <InputCodeForm email={email} token={token} />
+        </div>
       </div>
-      <span className="text-medium-sm text-gray-1 mb-10">
-        Enter your 6 digits code that you received on your email.
-      </span>
-      <div className="md:mt-12 mt-8">
-        <InputCodeForm email={email} token={token} />
-      </div>
-    </div>
+    </SingleDialogLayout>
   )
 }
 
 export default ForgotPasswordRecoverPage
-ForgotPasswordRecoverPage.layout = LAYOUT.SINGLE_DIALOG_LAYOUT
 
 export const getServerSideProps: GetServerSideProps<IProps> = async (
   context,

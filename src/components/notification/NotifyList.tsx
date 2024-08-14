@@ -7,6 +7,7 @@ import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface IProps {
   notifyLists: any[]
@@ -42,8 +43,8 @@ const NotifyList = ({
   }
 
   useEffect(() => {
-    Aos.init({ duration: ANIMATION.DURATION, once: true })
-  })
+    Aos.init({ duration: ANIMATION.DURATION, once: true, offset: 0 })
+  }, [open])
 
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
@@ -53,7 +54,7 @@ const NotifyList = ({
           return (
             <div
               key={notifyItem?.id + index}
-              className={`w-full p-6 pb-5 cursor-pointer relative flex items-center gap-4 ${
+              className={`relative flex w-full cursor-pointer items-center gap-4 p-6 pb-5 ${
                 readStatus ? 'bg-white' : 'bg-secondary'
               }`}
               onClick={(e: React.MouseEvent<HTMLElement>) => {
@@ -63,13 +64,14 @@ const NotifyList = ({
                   notifyItem?.content,
                   (e?.target as HTMLElement)?.tagName,
                 )
+                trackGAEvent('Click Open Modal Notification')
               }}
               data-aos={ANIMATION.DATA_AOS}
             >
               {!readStatus && (
                 <Icon
                   type="ellip"
-                  className="text-primary absolute left-2 top-1/2"
+                  className="absolute left-2 top-1/2 text-primary"
                 />
               )}
               <div className="shrink-0">
@@ -80,7 +82,7 @@ const NotifyList = ({
                       notifyItem?.avatar['50x50'] || notifyItem?.avatar?.ORIGIN
                     }
                     alt="avatar"
-                    className="rounded-full w-14 h-14 object-cover bg-gray-3"
+                    className="h-14 w-14 rounded-full bg-gray-3 object-cover"
                     width={56}
                     height={56}
                   />
@@ -99,14 +101,14 @@ const NotifyList = ({
               </div>
               <div className="block">
                 <h4
-                  className="text-base text-bw-1 mb-1 line-clamp-2"
+                  className="mb-1 line-clamp-2 text-base text-bw-1"
                   dangerouslySetInnerHTML={{
                     __html: notifyItem?.created_by
                       ? notifyItem?.title
                       : notifyItem?.content,
                   }}
                 ></h4>
-                <p className="text-gray-1 text-medium-sm text-left">
+                <p className="text-left text-medium-sm text-gray-1">
                   {calculateTimeAgo(notifyItem?.updated_at)}
                 </p>
               </div>
@@ -114,7 +116,7 @@ const NotifyList = ({
           )
         })
       ) : (
-        <div className="flex justify-center items-center min-h-[calc(100vh-12rem)]">
+        <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
           <NoData />
         </div>
       )}

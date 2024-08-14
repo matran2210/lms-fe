@@ -8,7 +8,7 @@ const YourAnswer = ({ show }: Props) => {
   return (
     <>
       {show && (
-        <div className="whitespace-nowrap max-h-5.5 ml-3 text-ssm text-bw-1 font-normal inline-block px-2 border-gray-2 border rounded-sm bg-gray-4">
+        <div className="ml-3 inline-block max-h-5.5 whitespace-nowrap rounded-sm border border-gray-2 bg-gray-4 px-2 text-ssm font-normal text-bw-1">
           Your Answer
         </div>
       )}

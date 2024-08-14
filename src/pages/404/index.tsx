@@ -5,7 +5,7 @@ import { PageLink } from 'src/constants'
 
 const ErrorPage = () => {
   return (
-    <div className="h-screen flex items-center justify-center flex-col flex-nowrap overflow-y-auto p-4 text-center">
+    <div className="flex h-screen flex-col flex-nowrap items-center justify-center overflow-y-auto p-4 text-center">
       <img
         className="h-max"
         src="/assets/images/image_404.jpg"
@@ -14,10 +14,10 @@ const ErrorPage = () => {
         width="320"
         height="260"
       />
-      <h1 className="text-2xl md:text-4xl text-bw-1 font-bold mt-10">
+      <h1 className="mt-10 text-2xl font-bold text-bw-1 md:text-4xl">
         PAGE NOT FOUND
       </h1>
-      <span className="text-base text-gray-1 max-w-dl px-4 mt-3">
+      <span className="mt-3 max-w-dl px-4 text-base text-gray-1">
         We are very sorry for inconvenience. It looks like you’re trying to
         access a page that was has been deleted or never even existed.
       </span>

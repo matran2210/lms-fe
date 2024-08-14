@@ -12,10 +12,11 @@ import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
 import { TitleSidebar } from 'src/constants'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { trackGAEvent } from '@utils/google-analytics'
 
 type MenuItemProps = {
   menuItem: MenuItemType
-  setOpenResource: Dispatch<SetStateAction<boolean>>
+  setOpenResource?: Dispatch<SetStateAction<boolean>>
   closeSideBar: () => void
 }
 
@@ -28,18 +29,18 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const isDetailCourse =
-    router.pathname.includes('/my-course') ||
-    router.pathname.includes('/section') ||
-    router.pathname.includes('/activity')
+  // const isDetailCourse =
+  //   router.pathname.includes('/my-course') ||
+  //   router.pathname.includes('/section') ||
+  //   router.pathname.includes('/activity')
 
-  const isProfile =
-    Icon === 'avatar' &&
-    (router.asPath === '/myprofile' ||
-      router.asPath === '/certificates' ||
-      router.asPath === '/settings' ||
-      router.asPath === '/login_history' ||
-      router.asPath === '/devices')
+  // const isProfile =
+  //   Icon === 'avatar' &&
+  //   (router.asPath === '/myprofile' ||
+  //     router.asPath === '/certificates' ||
+  //     router.asPath === '/settings' ||
+  //     router.asPath === '/login_history' ||
+  //     router.asPath === '/devices')
 
   const selected = router.pathname === url
 
@@ -50,7 +51,7 @@ export default function MenuItem({
   }
 
   const handleOpenResource = () => {
-    setOpenResource(true)
+    setOpenResource && setOpenResource(true)
     document.body.style.overflow = 'hidden'
   }
 
@@ -73,12 +74,19 @@ export default function MenuItem({
     dispatch(openCalculator())
   }
 
+  const handleOpenResultsPage = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.courseId}/results`,
+    })
+  }
+
   const handleActive = () => {
     if (router?.query?.courseId || router.query.id) {
       name === TitleSidebar.RESOURCES && handleOpenResource()
       name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
       name === TitleSidebar.NEW_NOTE && handleAddNote()
       name === TitleSidebar.CALCULATOR && handleOpenCalculator()
+      name === TitleSidebar.RESULTS && handleOpenResultsPage()
     }
   }
 
@@ -92,14 +100,14 @@ export default function MenuItem({
     return (
       <div className="flex items-center" onClick={handleActive}>
         {Icon === 'avatar' ? (
-          <div className="w-10 h-10 shrink-0">
+          <div className="h-10 w-10 shrink-0">
             {user?.detail?.avatar['40x40'] || user.detail.avatar['ORIGIN'] ? (
-              <img
+              <Image
                 src={
                   user.detail.avatar['40x40'] || user.detail.avatar['ORIGIN']
                 }
                 alt="avatar"
-                className="rounded-full w-10 h-10 object-cover"
+                className="h-10 w-10 rounded-full object-cover"
                 width={40}
                 height={40}
               />
@@ -117,7 +125,7 @@ export default function MenuItem({
         ) : (
           <>
             {Icon === 'profile-detail' ? (
-              <div className="w-10 h-10 shrink-0">
+              <div className="h-10 w-10 shrink-0">
                 <Image
                   src={
                     user.detail.avatar['40x40'] ||
@@ -125,7 +133,7 @@ export default function MenuItem({
                     blankAvatar
                   }
                   alt="avatar"
-                  className="rounded-full w-10 h-10 object-cover"
+                  className="h-10 w-10 rounded-full object-cover"
                   width={40}
                   height={40}
                   priority={true}
@@ -134,7 +142,7 @@ export default function MenuItem({
             ) : (
               <ExpandIcon
                 type={Icon}
-                className={`before-icon shrink-0 min-w-6 min-h-6 ${
+                className={`before-icon min-h-6 min-w-6 shrink-0 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary 
                 `}
@@ -144,14 +152,14 @@ export default function MenuItem({
         )}
         {Icon === 'avatar' ? (
           <div
-            className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 avatar ${
+            className={`label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
               selected ? 'text-primary' : 'text-gray-2'
             } group-hover:text-primary`}
           >
-            <div className="text-base font-semibold text-bw-1 group-hover:text-primary line-clamp-1">
+            <div className="line-clamp-1 text-base font-semibold text-bw-1 group-hover:text-primary">
               {user?.detail?.full_name}
             </div>
-            <div className="text-medium-sm text-gray-1 font-normal line-clamp-1 capitalize group-hover:text-primary">
+            <div className="line-clamp-1 text-medium-sm font-normal capitalize text-gray-1 group-hover:text-primary">
               {user?.type?.toLowerCase()}
             </div>
           </div>
@@ -159,7 +167,7 @@ export default function MenuItem({
           <>
             {Icon === 'profile-detail' ? (
               <span
-                className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 line-clamp-1 ${
+                className={`label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary`}
               >
@@ -167,9 +175,10 @@ export default function MenuItem({
               </span>
             ) : (
               <span
-                className={`label transition-all duration-150 invisible opacity-0 text-base font-normal pl-4 line-clamp-1 ${
+                className={`label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
                   selected ? 'text-primary' : 'text-gray-2'
                 } group-hover:text-primary`}
+                onClick={() => trackGAEvent(`Click Button ${name} Menu `)}
               >
                 {name}
               </span>
@@ -183,17 +192,17 @@ export default function MenuItem({
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
-        <div className="h-px w-[calc(100%-48px)] bg-gray-2 text-center mx-auto"></div>
+        <div className="mx-auto h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
       )}
       <div
-        className={`cursor-pointer hover:bg-secondary group ${
+        className={`group cursor-pointer hover:bg-secondary ${
           selected &&
           type === 'level-1' &&
           Icon !== 'avatar' &&
           Icon !== 'profile-detail'
-            ? 'pl-6 border-l-4 pr-1 border-active'
+            ? 'border-l-4 border-active pl-6 pr-1'
             : 'pl-7'
-        } relative sidebar-list-items py-2 mb-4 last:mb-0 ${
+        } sidebar-list-items relative mb-4 py-2 last:mb-0 ${
           !isActivity &&
           (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
             ? 'hidden'
@@ -205,7 +214,7 @@ export default function MenuItem({
           !isInCourse &&
           (name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
-            // name === TitleSidebar.RESULTS ||
+            name === TitleSidebar.RESULTS ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
             ? 'hidden'

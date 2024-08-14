@@ -57,6 +57,7 @@ const initialState: ICourseActivityState = {
   files: [] as any[],
   discussion: undefined,
   breadcumb: [] as IBreadcrumb[],
+  user_course_section_progress: [],
 }
 
 export const getCourseActivityTapById = createAsyncThunk(
@@ -88,6 +89,7 @@ export const getDiscussion = createAsyncThunk(
     }
   },
 )
+
 export const createDiscussion = createAsyncThunk(
   'courseActivityReducer/createDiscussion',
   async (data: ICreateDiscussionRequest, thunkAPI) => {
@@ -102,6 +104,7 @@ export const createDiscussion = createAsyncThunk(
     }
   },
 )
+
 export const uploadImagesDiscussion = createAsyncThunk(
   'courseActivityReducer/uploadImagesDiscussion',
   async (data: ICreateDiscussionUploadRequest, thunkAPI) => {
@@ -131,6 +134,7 @@ export const reactDiscussion = createAsyncThunk(
     }
   },
 )
+
 export const courseActivitySlice = createSlice({
   name: 'courseActivityReducer',
   initialState,

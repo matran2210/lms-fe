@@ -19,11 +19,11 @@ import PopupActive from './PopupActive'
 import PopupLesson from './PopupLesson'
 import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
-import { buildQueryString } from '@utils/index'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { Tooltip } from 'antd'
 import PopupOpenClass from './PopupOpenClass'
 import SappTooltip from 'src/common/SappTooltip'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const Course = ({
   course,
@@ -170,11 +170,11 @@ const Course = ({
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
   // Action của button trong course list
-  const queryString = buildQueryString({
-    name: router.query.name || '',
-    status: router.query.status || '',
-    type: router.query.type || '',
-  })
+  // const queryString = buildQueryString({
+  //   name: router.query.name || '',
+  //   status: router.query.status || '',
+  //   type: router.query.type || '',
+  // })
 
   // async function fetchCourseList() {
   //   setLoading(true)
@@ -220,6 +220,14 @@ const Course = ({
     } catch (error) {}
   }
 
+  const handleCourseDetail = () => {
+    router.push(`/courses/my-course/${classInstance?.id}`)
+    localStorage.setItem(
+      'courseDetail',
+      `/courses/my-course/${classInstance?.id}`,
+    )
+  }
+
   const courseAction = () => {
     if (classInstance?.type === 'LESSON' && student?.is_passed === false) {
       setOpenLesson(true)
@@ -244,9 +252,7 @@ const Course = ({
     } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
       setOpenClass(true)
     } else {
-      course.status !== CLASS_USER_STATUS.CANCELED
-        ? router.push(`/courses/my-course/${classInstance?.id}`)
-        : {}
+      course.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
     }
   }
 
@@ -288,22 +294,23 @@ const Course = ({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
+          className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div className={`${enableCourse ? '' : ''} min-h-352 flex flex-col`}>
+          <div className={`${enableCourse ? '' : ''} flex min-h-352 flex-col`}>
             <div
-              className={`name-course text-2xl font-medium mb-4 xl:h-[60px] ${
+              className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
               }`}
             >
               <div
-                className="line-clamp-2 text-ellipsis cursor-pointer "
+                className="line-clamp-2 cursor-pointer text-ellipsis"
                 onClick={() => {
                   if (isActiveStudent && enableCourse) {
                     courseAction()
                   }
+                  trackGAEvent('Click Title Course Item')
                 }}
               >
                 <SappTooltip
@@ -314,11 +321,11 @@ const Course = ({
                 </SappTooltip>
               </div>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               {enableCourse ? (
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
-                  <span className="ml-1 text-bw-1 font-medium">
+                  <span className="ml-1 font-medium text-bw-1">
                     <SappTooltip
                       title={course?.classes?.[0]?.code}
                       showTooltip={course?.classes?.[0]?.code?.length > 15}
@@ -329,7 +336,7 @@ const Course = ({
                 </div>
               ) : (
                 <div className="name-class text-medium-sm text-gray-1">
-                  <span className="ml-1 text-bw-1 font-medium" />
+                  <span className="ml-1 font-medium text-bw-1" />
                 </div>
               )}
               <div className="time-class text-medium-sm text-gray-2">
@@ -351,7 +358,7 @@ const Course = ({
                 )}
               </div>
             </div>
-            <div className="des mt-6 mb-8 line-clamp-5 text-ellipsis h-[116px]">
+            <div className="des mb-8 mt-6 line-clamp-5 h-[116px] text-ellipsis">
               {(course?.description as string)?.length > 250 ? (
                 <Tooltip
                   title={
@@ -386,7 +393,7 @@ const Course = ({
             </div>
             <div className="mt-auto">
               <div className="progress mb-6 h-8">
-                <div className="info flex items-center justify-between mb-2">
+                <div className="info mb-2 flex items-center justify-between">
                   <div className="text flex items-center">
                     <Icon
                       type={enableCourse ? iconType : 'expired'}
@@ -397,7 +404,7 @@ const Course = ({
                     <p
                       className={`text-medium-sm font-medium ${
                         enableCourse ? 'text-bw-1' : 'text-gray-2 '
-                      } pl-2 ml-px`}
+                      } ml-px pl-2`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
                     </p>
@@ -412,7 +419,7 @@ const Course = ({
                     </p>
                   </div>
                 </div>
-                <div className="progressbar bg-gray-3 h-1.5">
+                <div className="progressbar h-1.5 bg-gray-3">
                   <div
                     className={`progress-percentage ${
                       enableCourse ? 'bg-primary ' : 'bg-gray-2'
@@ -421,7 +428,7 @@ const Course = ({
                   ></div>
                 </div>
               </div>
-              <div className="action flex items-center justify-end relative">
+              <div className="action relative flex items-center justify-end">
                 {/* {'changeExam' && (
                   <a className="underline capitalize block text-bw-1 text-medium-sm font-semibold">
                     {'changeExam'}
@@ -442,10 +449,11 @@ const Course = ({
                       if (isActiveStudent) {
                         courseAction()
                       }
+                      trackGAEvent('CLick Button Course Item')
                     }}
                   />
                 ) : (
-                  <div className="action flex items-center justify-end relative h-8"></div>
+                  <div className="action relative flex h-8 items-center justify-end"></div>
                 )}
                 {/* )} */}
               </div>

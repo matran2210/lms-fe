@@ -15,12 +15,12 @@ const TestTimeOutModal = ({
   handleSubmit,
   handleQuit,
 }: IProps) => {
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
   // const {} = useAppSelector()
   //to do: call api to get datail
-  const getData = useEffect(() => {
-    //dispatch(getDetailTest)
-  }, [])
+  // const getData = useEffect(() => {
+  //   //dispatch(getDetailTest)
+  // }, [])
   const onSubmit = () => {
     handleSubmit()
     //to do: start test
@@ -51,8 +51,8 @@ const TestTimeOutModal = ({
       disableClickOutSide
     >
       <TimeIcon />
-      <div className="text-bw-1 text-4xl font-bold mt-6 gap">Time Out</div>
-      <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-13">
+      <div className="gap mt-6 text-4xl font-bold text-bw-1">Time Out</div>
+      <div className="mb-13 mt-4 text-medium-sm font-normal text-gray-1">
         You are running out of time to do your test
       </div>
     </SappModal>

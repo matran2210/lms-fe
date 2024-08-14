@@ -11,7 +11,7 @@ const LogoDefault = () => {
         height="50"
         fill="none"
         viewBox="0 0 42 50"
-        className="cursor-pointer logo-default shrink-0"
+        className="logo-default shrink-0 cursor-pointer"
       >
         <path fill="url(#pattern0)" d="M0 0H42V50H0z"></path>
         <defs>

@@ -11,10 +11,10 @@ interface IProps {
 
 const Heading = ({ greeting, title, des }: IProps) => {
   return (
-    <div className="2xl-min:flex justify-between 2xl-min:py-4.5 py-7.5 px-7.5 w-full shadow-sidebar">
-      <h1 className="text-2xl font-light text-bw-1 line-clamp-1">
+    <div className="w-full justify-between px-7.5 py-7.5 shadow-sidebar 2xl-min:flex 2xl-min:py-4.5">
+      <h1 className="line-clamp-1 text-2xl font-light text-bw-1">
         {greeting}
-        <span className="font-medium ml-1.5">
+        <span className="ml-1.5 font-medium">
           <SappTooltip
             title={title}
             showTooltip={(title as string)?.length > 50}
@@ -23,8 +23,8 @@ const Heading = ({ greeting, title, des }: IProps) => {
           </SappTooltip>
         </span>
       </h1>
-      <div className="filter flex 2xl-min:mt-0 mt-2">
-        <p className="text-bw-1 text-medium-sm 2xl-min:text-right max-w-[553px]">
+      <div className="mt-2 flex filter 2xl-min:mt-0">
+        <p className="max-w-[553px] text-medium-sm text-bw-1 2xl-min:text-right">
           {des}
         </p>
       </div>

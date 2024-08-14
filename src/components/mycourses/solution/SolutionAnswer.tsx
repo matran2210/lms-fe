@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Icon from '@components/icons'
 interface SolutionAnswerProps {
   message: string
@@ -20,21 +20,21 @@ const SolutionAnswer = ({
   return (
     <>
       <div
-        className={`flex gap-x-3 items-center text-base mb-4 ${classParent}`}
+        className={`mb-4 flex items-center gap-x-3 text-base ${classParent}`}
       >
         {isYourAnswer ? (
           <>
-            <Icon type="group-fill" className="w-[18px] h-[18px]" />
+            <Icon type="group-fill" className="h-[18px] w-[18px]" />
           </>
         ) : (
           <>
-            <Icon type="group-empty" className="w-[18px] h-[18px]" />
+            <Icon type="group-empty" className="h-[18px] w-[18px]" />
           </>
         )}
         <div className="w-fit">
           {message}
           {isYourAnswer && (
-            <span className="ml-3 inline-block bg-gray-4 border-default text-bw-1 text-ssm py-0.5 px-2">
+            <span className="ml-3 inline-block border-default bg-gray-4 px-2 py-0.5 text-ssm text-bw-1">
               Your Answer
             </span>
           )}

@@ -14,6 +14,7 @@ import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
+import Layout from '@components/layout'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -149,106 +150,112 @@ const MyCourse = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <div className="header bg-white border-b border-default">
+      <Layout title="My Course">
+        <div className="header border-b border-default bg-white">
+          <div
+            className={`relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6 
+          ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
+          >
+            <SearchForm
+              placeholder="Enter name of course..."
+              formStyle="w-full flex items-center"
+              // setPage={setPage}
+            />
+            {guideStatus && guideStep === 1 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_1}
+                className="left-0 top-full mt-3 w-full max-w-[365px]"
+                index={1}
+                total={6}
+                handleNext={nextStep}
+                handleCancel={closeUserGuide}
+              />
+            )}
+          </div>
+        </div>
+        <div className="main mx-auto my-0 max-w-xxl">
+          <div className="flex justify-between xl-max:mx-6">
+            <h2 className="pb-4 pt-6 text-medium-sm font-medium text-bw-1">
+              My Course
+            </h2>
+            <div
+              className={`relative pb-4 pt-6 ${
+                guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white px-4' : ''
+              }`}
+            >
+              <Filter courses={data?.pages?.[0]?.category} />
+              {guideStatus && guideStep === 6 && (
+                <PopupStep
+                  content={UserGuide.CONTENT_STEP_6}
+                  className="right-full top-full mt-3 w-screen max-w-365px"
+                  index={6}
+                  total={6}
+                  handleNext={closeUserGuide}
+                  showCancel={false}
+                  titleButtonNext="Done"
+                />
+              )}
+            </div>
+          </div>
+        </div>
         <div
-          className={`max-w-xxl my-0 mx-auto flex py-5.75 xl-max:mx-6 relative 
-          ${guideStatus && guideStep === 1 ? 'bg-white z-50 px-5' : ''}`}
+          className={`heading relative mx-auto my-0 flex max-w-xxl bg-white xl-max:mx-6
+        ${guideStatus && guideStep === 4 ? 'z-50' : ''}
+      `}
+          data-aos={ANIMATION.DATA_AOS}
         >
-          <SearchForm
-            placeholder="Enter name of course..."
-            formStyle="w-full flex items-center"
-            // setPage={setPage}
+          <Heading
+            greeting="Welcome to"
+            title="My Course"
+            des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
           />
-          {guideStatus && guideStep === 1 && (
+          {guideStatus && guideStep === 4 && (
             <PopupStep
-              content={UserGuide.CONTENT_STEP_1}
-              className="top-full w-full max-w-[365px] left-0 mt-3"
-              index={1}
+              content={UserGuide.CONTENT_STEP_4}
+              className="left-0 top-full mt-3 w-full max-w-365px"
+              index={4}
+              total={6}
+              handleNext={
+                Number(window.sessionStorage.getItem('totalCourse')) > 0
+                  ? nextStep
+                  : closeUserGuide
+              }
+              handleCancel={closeUserGuide}
+            />
+          )}
+        </div>
+        <div
+          // data-aos={ANIMATION.DATA_AOS}
+          className={`relative mx-auto my-0 max-w-xxl pt-6 ${
+            isEmpty(courses)
+              ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
+              : ''
+          } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
+        >
+          {guideStatus && guideStep === 5 && (
+            <PopupStep
+              content={UserGuide.CONTENT_STEP_5}
+              className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[362px]"
+              index={5}
               total={6}
               handleNext={nextStep}
               handleCancel={closeUserGuide}
             />
           )}
+          <CoursesList
+            courses={courses}
+            lastElementRef={lastElementRef}
+            refetch={refetch}
+          />
         </div>
-      </div>
-      <div className="main max-w-xxl my-0 mx-auto">
-        <div className="flex justify-between xl-max:mx-6">
-          <h2 className="text-medium-sm font-medium text-bw-1 pt-6 pb-4">
-            My Course
-          </h2>
+        {guideStatus && guideStep == 0 && <PopupWelcome />}
+        {guideStatus && (
           <div
-            className={`pt-6 pb-4 relative ${
-              guideStatus && guideStep === 6 ? 'bg-white z-50 px-4 -mr-4' : ''
-            }`}
-          >
-            <Filter courses={data?.pages?.[0]?.category} />
-            {guideStatus && guideStep === 6 && (
-              <PopupStep
-                content={UserGuide.CONTENT_STEP_6}
-                className="w-screen max-w-365px top-full right-full mt-3"
-                index={6}
-                total={6}
-                handleNext={closeUserGuide}
-                showCancel={false}
-                titleButtonNext="Done"
-              />
-            )}
-          </div>
-        </div>
-      </div>
-      <div
-        className={`heading bg-white max-w-xxl my-0 mx-auto flex relative xl-max:mx-6
-        ${guideStatus && guideStep === 4 ? 'z-50' : ''}
-      `}
-        data-aos={ANIMATION.DATA_AOS}
-      >
-        <Heading
-          greeting="Welcome to"
-          title="My Course"
-          des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
-        />
-        {guideStatus && guideStep === 4 && (
-          <PopupStep
-            content={UserGuide.CONTENT_STEP_4}
-            className="top-full w-full max-w-365px left-0 mt-3"
-            index={4}
-            total={6}
-            handleNext={nextStep}
-            handleCancel={closeUserGuide}
-          />
+            ref={confirmDialogOverLayRef}
+            className={`bg-black fixed inset-0 z-40 animate-fade-in-overlay opacity-55 transition-opacity`}
+          ></div>
         )}
-      </div>
-      <div
-        // data-aos={ANIMATION.DATA_AOS}
-        className={`pt-6 max-w-xxl my-0 mx-auto relative ${
-          isEmpty(courses)
-            ? 'flex justify-center min-h-[calc(100vh-13rem)] items-center'
-            : ''
-        } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
-      >
-        {guideStatus && guideStep === 5 && (
-          <PopupStep
-            content={UserGuide.CONTENT_STEP_5}
-            className="w-full max-w-xs 2xl:max-w-[362px] top-0 left-1/2 2xl:left-[33%] mt-6"
-            index={5}
-            total={6}
-            handleNext={nextStep}
-            handleCancel={closeUserGuide}
-          />
-        )}
-        <CoursesList
-          courses={courses}
-          lastElementRef={lastElementRef}
-          refetch={refetch}
-        />
-      </div>
-      {guideStatus && guideStep == 0 && <PopupWelcome />}
-      {guideStatus && (
-        <div
-          ref={confirmDialogOverLayRef}
-          className={`fixed animate-fade-in-overlay inset-0 bg-black opacity-55 transition-opacity z-40`}
-        ></div>
-      )}
+      </Layout>
     </SappLoadingGlobal>
   )
 }

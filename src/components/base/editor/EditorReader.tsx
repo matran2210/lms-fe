@@ -2,12 +2,15 @@ import {
   DeserializeHighlight,
   replaceTextAlignCenterToWebKitCenter,
 } from '@utils/index'
-import parseHTML from 'html-react-parser'
+import parseHTML, { Element } from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
 import 'src/utils/global.d.ts'
 import { isUndefined } from 'lodash'
+import clsx from 'clsx'
+import SAPPVideo from '@components/base/video/SAPPVideo'
+import React from 'react'
 
 type Props = {
   text_editor_content: string | undefined
@@ -18,6 +21,7 @@ type Props = {
   highlighted?: string
   options?: any
   highlighArea?: string
+  pinned?: boolean
 }
 
 const EditorReader = ({
@@ -29,12 +33,16 @@ const EditorReader = ({
   highlighted,
   options,
   highlighArea = 'hightlight_area',
+  pinned,
 }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   const [content, setContent] = useState<any>()
   const editorRef = useRef<HTMLDivElement>(null)
+  const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
+    {},
+  )
 
   useEffect(() => {
     if (extenalRef) {
@@ -53,38 +61,6 @@ const EditorReader = ({
   }, [refDocument?.current, extenalRef?.current])
 
   useEffect(() => {
-    if (text_editor_content) {
-      const parser = new DOMParser()
-      const doc = parser?.parseFromString(text_editor_content, 'text/html')
-      const videos = doc?.querySelectorAll('video')
-      for (let video of videos) {
-        const src = video?.querySelector('source')?.getAttribute('token')
-        if (src && src !== 'null' && video?.tagName === 'VIDEO') {
-          var wrapper = document?.createElement('div')
-          var overLay = document?.createElement('span')
-          overLay.className = 'sapp_overlay_video'
-          const _video = video?.cloneNode(true) as HTMLVideoElement
-          wrapper?.append(_video)
-          wrapper.className = 'relative w-fit overflow-clip'
-          wrapper.style.cssText = `height:${video.getAttribute(
-            'height',
-          )}px; width:${video.getAttribute('width')}px`
-          wrapper.append(overLay)
-          _video.style.cssText = `width:${video.getAttribute(
-            'width',
-          )}px; height:${video.getAttribute(
-            'height',
-          )}px; border: 1px solid gray`
-          video?.parentNode?.replaceChild(wrapper, video)
-        }
-      }
-      setContent(doc?.documentElement?.querySelector('body')?.innerHTML || '')
-    } else {
-      setContent(text_editor_content)
-    }
-  }, [text_editor_content])
-
-  useEffect(() => {
     if (highlighArea === 'hightlight_area_topic') {
       DeserializeHighlight(highlighted, highlighArea)
     } else if (highlighArea === 'hightlight_area_require') {
@@ -93,9 +69,10 @@ const EditorReader = ({
       DeserializeHighlight(highlighted)
     }
   }, [content, highlighted])
-  // useEffect(() => {
-  //   setContent(text_editor_content)
-  // }, [text_editor_content])
+
+  useEffect(() => {
+    setContent(text_editor_content)
+  }, [text_editor_content])
 
   const convertMathToImage = async (element: any) => {
     const viewer = com?.wiris?.js?.JsPluginViewer
@@ -180,21 +157,27 @@ const EditorReader = ({
    * @description add class border theo editor khi border style khác none và hidden ở lần đầu component render
    */
   useEffect(() => {
-    const tableElement = document?.querySelector('table')
-    if (tableElement) {
-      const style = window?.getComputedStyle(tableElement)
-      const newBorderStyle = style?.borderStyle
+    // Lấy tất cả các bảng trong tài liệu
+    const tableElements = document?.querySelectorAll('table')
 
-      const thElements = document?.querySelectorAll('.editor-wrap td')
-      thElements?.forEach((td) => {
-        if (newBorderStyle !== 'none' && newBorderStyle !== 'hidden') {
-          td?.classList?.add(`border-[1px]`)
-        } else {
-          td?.classList?.remove(`border-[1px]`)
-        }
-      })
-    }
-  }, [])
+    tableElements?.forEach((tableElement) => {
+      if (tableElement) {
+        // Lấy kiểu border của bảng hiện tại
+        const style = window?.getComputedStyle(tableElement)
+        const newBorderStyle = style?.borderStyle
+
+        // Lấy tất cả các ô (td) trong bảng hiện tại
+        const tdElements = tableElement?.querySelectorAll('td')
+        tdElements?.forEach((td) => {
+          if (newBorderStyle !== 'none' && newBorderStyle !== 'hidden') {
+            td?.classList?.add('border-[1px]')
+          } else {
+            td?.classList?.remove('border-[1px]')
+          }
+        })
+      }
+    })
+  })
 
   return (
     <>
@@ -204,11 +187,43 @@ const EditorReader = ({
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
       >
-        <div ref={extenalRef || refDocument}>
-          {parseHTML(
-            replaceTextAlignCenterToWebKitCenter(content || ''),
-            options,
-          )}
+        <div
+          ref={extenalRef || refDocument}
+          className={clsx({ 'pt-2 text-white': pinned })}
+        >
+          {parseHTML(replaceTextAlignCenterToWebKitCenter(content || ''), {
+            replace: (domNode) => {
+              if (domNode.type === 'tag' && domNode.name === 'video') {
+                const sourceChild = (domNode.children as Element[]).find(
+                  (child) => child.name === 'source',
+                )
+                const videoToken = sourceChild?.attribs?.token
+                if (videoToken) {
+                  if (!videoRefs.current[videoToken]) {
+                    videoRefs.current[videoToken] =
+                      React.createRef<HTMLVideoElement>()
+                  }
+                  return (
+                    <SAPPVideo
+                      key={videoToken}
+                      options={{
+                        onTimeUpdate: () => {},
+                        src: videoToken,
+                      }}
+                      streamRef={videoRefs.current[videoToken]}
+                      pauseOnSeek={true}
+                      thumbnail={{
+                        '640x360': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=360`,
+                        '770x435': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=435`,
+                        '950x535': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=535`,
+                      }}
+                    />
+                  )
+                }
+              }
+            },
+            ...options,
+          })}
         </div>
       </div>
       {type === 'IMG' && (

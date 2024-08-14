@@ -10,6 +10,7 @@ import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
 import { removeJwtToken } from '@utils/index'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 
 const schema = z.object({
   email: z
@@ -51,44 +52,46 @@ const ForgotPasswordPage = () => {
   }
 
   return (
-    <div className="block max-w-[38.375rem] md:py-17.5 py-10 px-8 md:px-19 mx-auto shadow-single-dialog">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="font-semibold text-bw-1 mb-2 md:text-4xl text-3xl">
-          Forgot Password
-        </div>
-        <span className="text-medium-sm text-gray-1 mb-10">
-          Enter the email you used to create your account so we can send you 6
-          digits code to reset your password.
-        </span>
-        <div className="md:mt-15 mt-8">
-          <HookFormTextField
-            name="email"
-            control={control}
-            textSize="sm"
-            placeholder="Email"
-          ></HookFormTextField>
-        </div>
-        {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
-        <SappButton
-          title="Send"
-          size="lager"
-          type="submit"
-          className="w-full mt-[27px] !font-semibold"
-        ></SappButton>
-        <div className="mt-8">
+    <SingleDialogLayout title="Forgot Password">
+      <div className="mx-auto block max-w-[38.375rem] px-8 py-10 shadow-single-dialog md:px-19 md:py-17.5">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-2 text-3xl font-semibold text-bw-1 md:text-4xl">
+            Forgot Password
+          </div>
+          <span className="mb-10 text-medium-sm text-gray-1">
+            Enter the email you used to create your account so we can send you 6
+            digits code to reset your password.
+          </span>
+          <div className="mt-8 md:mt-15">
+            <HookFormTextField
+              name="email"
+              control={control}
+              textSize="sm"
+              placeholder="Email"
+            ></HookFormTextField>
+          </div>
+          {!Object.values(errors)?.[0] && <div className="mt-[21px]"></div>}
           <SappButton
-            title="Back to Login"
+            title="Send"
             size="lager"
             type="submit"
-            className="w-full !font-semibold"
-            color="text"
-            isUnderLine={false}
-            isPadding={false}
-            onClick={redirectLogin}
-          ></SappButton>
-        </div>
-      </form>
-    </div>
+            className="w-full mt-[27px] !font-semibold"
+          />
+          <div className="mt-8">
+            <SappButton
+              title="Back to Login"
+              size="lager"
+              type="submit"
+              className="w-full !font-semibold"
+              color="text"
+              isUnderLine={false}
+              isPadding={false}
+              onClick={redirectLogin}
+            ></SappButton>
+          </div>
+        </form>
+      </div>
+    </SingleDialogLayout>
   )
 }
 

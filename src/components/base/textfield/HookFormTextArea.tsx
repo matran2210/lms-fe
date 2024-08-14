@@ -1,5 +1,5 @@
 import { Skeleton } from 'antd'
-import React from 'react'
+import React, { KeyboardEvent } from 'react'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 
@@ -10,13 +10,14 @@ interface IProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   placeholder?: string
   className?: string
-  rows?: number | undefined
-  label?: string
-  guideline?: string[]
+  // rows?: number | undefined
+  // label?: string
+  // guideline?: string[]
   disabled?: boolean
   labelClass?: string
-  required?: boolean
+  // required?: boolean
   skeleton?: boolean
+  handleKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void
 }
 
 const HookFormTextArea = ({
@@ -25,51 +26,51 @@ const HookFormTextArea = ({
   defaultValue,
   onChange,
   placeholder,
-  className = '',
-  rows,
-  label,
-  guideline,
+  className = 'w-fill--available h-30',
+  // rows,
+  // label,
+  // guideline,
   disabled,
   // labelClass = 'fs-6 fw-bold mb-3',
-  required,
+  // required,
   skeleton,
+  handleKeyDown,
 }: IProps) => {
   return (
-    <>
-      <Controller
-        name={name}
-        control={control}
-        defaultValue={defaultValue}
-        render={({ field, fieldState: { error } }) => (
-          <>
-            {!skeleton ? (
-              <textarea
-                {...field}
-                value={field.value ?? ''}
-                defaultValue={field.value ? undefined : defaultValue}
-                onChange={(value) => {
-                  field.onChange(value)
-                  onChange && onChange(value)
-                }}
-                className={`${className} form-control ${
-                  error?.message ? 'is-invalid' : ''
-                }`}
-                placeholder={placeholder}
-                // rows={rows ?? 3}
-                disabled={disabled}
-              />
-            ) : (
-              <Skeleton.Input
-                active
-                size="large"
-                className="w-100 h-150px"
-              ></Skeleton.Input>
-            )}
-            <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
-          </>
-        )}
-      />
-    </>
+    <Controller
+      name={name}
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field, fieldState: { error } }) => (
+        <>
+          {!skeleton ? (
+            <textarea
+              {...field}
+              value={field.value ?? ''}
+              defaultValue={field.value ? undefined : defaultValue}
+              onChange={(value) => {
+                field.onChange(value)
+                onChange && onChange(value)
+              }}
+              className={`${className} form-control ${
+                error?.message ? 'is-invalid' : ''
+              }`}
+              placeholder={placeholder}
+              // rows={rows ?? 3}
+              disabled={disabled}
+              onKeyDown={handleKeyDown}
+            />
+          ) : (
+            <Skeleton.Input
+              active
+              size="large"
+              className="w-100 h-150px"
+            ></Skeleton.Input>
+          )}
+          <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+        </>
+      )}
+    />
   )
 }
 

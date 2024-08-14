@@ -42,11 +42,11 @@ const ButtonPrimary = ({
     >
       <span className={loading ? 'invisible' : ''}> {title}</span>
       {loading && (
-        <div className="absolute w-100 h-100 top-0 left-0 right-0 bottom-0 flex space-x-2 justify-center items-center bg-none dark:invert">
+        <div className="w-100 h-100 absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2 bg-none dark:invert">
           <span className="sr-only">Loading...</span>
-          <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-          <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-          <div className="h-2 w-2 bg-white rounded-full animate-bounce"></div>
+          <div className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.3s]"></div>
+          <div className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.15s]"></div>
+          <div className="h-2 w-2 animate-bounce rounded-full bg-white"></div>
         </div>
       )}
     </button>

@@ -26,6 +26,7 @@ interface Props {
 const DynamicBundledEditor = dynamic(() => import('../../form/editor'), {
   ssr: false,
 })
+
 const HookFormEditor = ({
   name,
   control,
@@ -52,7 +53,7 @@ const HookFormEditor = ({
         return (
           <>
             {label && (
-              <label className={'text-base block font-medium mb-2'}>
+              <label className={'mb-2 block text-base font-medium'}>
                 {label} {`${required ? '*' : ''}`}
               </label>
             )}{' '}

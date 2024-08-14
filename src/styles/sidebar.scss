@@ -31,13 +31,13 @@ body:not(.no-hover) {
 .sidebar-list-items {
   &:hover {
     .sidebar-child.level-1 {
-      @apply opacity-100 visible;
+      @apply visible opacity-100;
     }
   }
 
   .sidebar-child {
     &.level-1 {
-      @apply w-max rounded-md transition-all duration-300 absolute top-0 left-full z-20 bg-white p-4 opacity-0 invisible border border-default;
+      @apply invisible absolute left-full top-0 z-20 w-max rounded-md border border-default bg-white p-4 opacity-0 transition-all duration-300;
       .sidebar-item {
         @apply justify-start;
 
@@ -47,15 +47,15 @@ body:not(.no-hover) {
       }
 
       .sidebar-list-items {
-        @apply mb-3 last:mb-0 pl-0;
+        @apply mb-3 pl-0 last:mb-0;
       }
     }
 
     &.level-2 {
-      @apply transition-all duration-100 h-0 opacity-0 invisible;
+      @apply invisible h-0 opacity-0 transition-all duration-100;
 
       &.active {
-        @apply opacity-100 visible h-full;
+        @apply visible h-full opacity-100;
 
         .sidebar-list-items {
           @apply pl-0;

@@ -12,7 +12,7 @@ const SolutionListAnswer: React.FC<SolutionListAnswerProps> = ({
 }) => {
   return (
     <>
-      <h3 className="text-base text-bw-1 font-semibold mb-4">{question}</h3>
+      <h3 className="mb-4 text-base font-semibold text-bw-1">{question}</h3>
       {solutionListAnswers.map((solutionListAnswer, index) => (
         <>
           <SolutionAnswer

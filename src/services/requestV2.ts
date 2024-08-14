@@ -5,8 +5,11 @@ import exceptions from './en.exceptions.json'
 import {
   getLocalStorgeActToken,
   getLocalStorgeRefreshToken,
+  removeJwtToken,
   removeLocalStorageJwtToken,
   setActToken,
+  setCookieActToken,
+  setCookieRefreshToken,
   setRefreshToken,
 } from '@utils/index'
 import { apiURL } from 'src/redux/services/httpService'
@@ -89,6 +92,8 @@ request.interceptors.response.use(
             const userInfo = res?.data?.data?.tokens
             setActToken(userInfo?.act)
             setRefreshToken(userInfo?.rft)
+            setCookieActToken(userInfo?.act)
+            setCookieRefreshToken(userInfo?.rft)
 
             // update new token to axios
             request.defaults.headers.common['Authorization'] =
@@ -102,7 +107,8 @@ request.interceptors.response.use(
             isRefreshing = false
           })
           .catch(() => {
-            removeLocalStorageJwtToken()
+            localStorage.clear()
+            removeJwtToken()
             window.location.href = PageLink.AUTH_LOGIN
           })
       }
@@ -122,6 +128,14 @@ request.interceptors.response.use(
   },
 )
 
+const toastException = [
+  '400|060915',
+  '400|060904',
+  '403|000010',
+  '400|010833',
+  '400|010433',
+  '400|010008',
+]
 request.interceptors.response.use(
   function (response: any) {
     return response
@@ -129,11 +143,7 @@ request.interceptors.response.use(
   function (error: any) {
     const errorCode: string = error?.response?.data?.error?.code
     const errorMessage = exceptions[errorCode as keyof typeof exceptions]
-    if (
-      errorCode !== '400|060915' &&
-      errorCode !== '400|060904' &&
-      errorCode !== '403|000010'
-    ) {
+    if (!toastException.includes(errorCode)) {
       toast.error(
         errorMessage ||
           error?.response?.statusText ||

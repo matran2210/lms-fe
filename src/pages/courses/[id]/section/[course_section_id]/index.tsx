@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import SappDrawer from '@components/base/SappDrawer'
+import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import Layout from '@components/layout'
+import { trackGAEvent } from '@utils/google-analytics'
+import { truncateString } from '@utils/index'
+import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
-import { TreeHelper } from 'src/helper/tree'
-import { ILearningOutcome } from 'src/type/courses'
-import SappDrawer from '@components/base/SappDrawer'
-import { useRouter } from 'next/router'
-import { truncateString } from '@utils/index'
-import TestModal from 'src/pages/courses/test'
-import { ANIMATION } from 'src/constants'
-import { Tooltip } from 'antd'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import { CoursesAPI } from '../../../../api/courses/index'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
+import { ANIMATION } from 'src/constants'
+import { TreeHelper } from 'src/helper/tree'
+import TestModal from 'src/pages/courses/test'
+import { ILearningOutcome } from 'src/type/courses'
+import { CoursesAPI } from '../../../../api/courses/index'
 
 interface IProps {
   course_section_type: string
@@ -39,6 +40,7 @@ interface IProps {
     attempt: {
       id: string
       number_of_attempts: number
+      score: number
       ratio_score: string
       total_attempt_time: number
     }
@@ -57,9 +59,10 @@ const CoursePartDetail = () => {
   const [chapterData, setChapterData] = useState<any>({})
   const [chapterTestId, setChapterTestId] = useState<string>()
   const [defaultActive, setDefaultActive] = useState<string>()
+  const courseChapterId = localStorage.getItem('course_chapter_id')
+  const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
-
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await CoursesAPI.getPartDetail(
@@ -88,7 +91,9 @@ const CoursePartDetail = () => {
     setLoadingChapter(true)
     try {
       const res = await CoursesAPI.getPartDetail(id, course_section_id)
+
       const nodeList = res?.data?.course_section_tree
+      setIsPassedCourse(res?.data?.is_passed_course)
       const newData = nodeList.map((item: IProps) => {
         if (item.id === course_section_id) {
           const { parent_id, ...rest } = item
@@ -100,6 +105,7 @@ const CoursePartDetail = () => {
 
       const detail = tree[0]
       setChapterDetail(detail)
+      localStorage.removeItem('course_chapter_id')
     } catch (error) {
     } finally {
       setLoadingChapter(false)
@@ -161,7 +167,7 @@ const CoursePartDetail = () => {
       totalCourseSectionsCompleted !== undefined
     ) {
       router.push({
-        pathname: `/case-study/table-result/${getCaseStudy?.attempt?.id}`,
+        pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
         query: {
           class_user_id: previewPart.class_user_id,
           class_id: router?.query?.id,
@@ -199,6 +205,7 @@ const CoursePartDetail = () => {
       setChapterData(filteredData?.[0])
       setChapterTestId(filteredData?.[0]?.id)
     }
+
     setOpen(true)
   }
 
@@ -278,12 +285,10 @@ const CoursePartDetail = () => {
         )
 
         if (matchingChild) {
-          setDefaultActive(matchingChild.id)
+          !courseChapterId && setDefaultActive(matchingChild.id)
         } else if (filteredChildren?.length > 0) {
-          setDefaultActive(filteredChildren[0].id) // Set default to the first child
+          !courseChapterId && setDefaultActive(filteredChildren[0].id) // Set default to the first child
         }
-      } else {
-        setDefaultActive('')
       }
     }
   }, [router?.asPath, partDetail?.id])
@@ -315,123 +320,133 @@ const CoursePartDetail = () => {
       JSON.stringify(transformedArray),
     )
   })
+  useEffect(() => {
+    courseChapterId && setDefaultActive(courseChapterId as string)
+  }, [courseChapterId])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <div className="main max-w-xxl my-0 mx-auto default-content-editor">
-        <div className="w-full">
-          <div className="flex pt-6 items-center">
-            <span
-              onClick={() => router.push('/courses')}
-              className="text-medium-sm font-medium text-gray-1 cursor-pointer whitespace-nowrap"
-            >
-              My Course
-            </span>
-            <span
-              className="text-medium-sm font-medium text-gray-1 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ml-1 cursor-pointer"
-              onClick={() =>
-                router.push(`/courses/my-course/${router.query.id}`)
-              }
-            >
-              /
-              <p className="w-full max-w-78 inline-block whitespace-nowrap overflow-hidden text-ellipsis mx-0.5 shrink-0">
-                <SappTooltip
-                  title={previewPart?.name}
-                  showTooltip={previewPart?.name?.length > 60}
-                >
-                  {truncateString(previewPart?.name, 50)}
-                </SappTooltip>
-              </p>
-            </span>
-            <span className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer">
-              <p className="text-medium-sm font-medium text-bw-1 w-full max-w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis">
-                /{' '}
-                <SappTooltip
-                  title={partDetail?.name}
-                  showTooltip={partDetail?.name?.length > 90}
-                >
-                  {truncateString(partDetail?.name, 90)}
-                </SappTooltip>
-              </p>
-            </span>
+      <Layout title="Course Part Detail">
+        <div className="main default-content-editor mx-auto my-0 max-w-xxl">
+          <div className="w-full">
+            <div className="flex items-center pt-6">
+              <span
+                onClick={() => {
+                  router.push('/courses')
+                  trackGAEvent('Click Breadcrumb My Course')
+                }}
+                className="cursor-pointer whitespace-nowrap text-medium-sm font-medium text-gray-1"
+              >
+                My Course
+              </span>
+              <span
+                className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1"
+                onClick={() => {
+                  router.push(`/courses/my-course/${router.query.id}`)
+                  trackGAEvent('Click Breadcrumb My Course Detail')
+                }}
+              >
+                /
+                <p className="mx-0.5 inline-block w-full max-w-78 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap">
+                  <SappTooltip
+                    title={previewPart?.name}
+                    showTooltip={previewPart?.name?.length > 60}
+                  >
+                    {truncateString(previewPart?.name, 50)}
+                  </SappTooltip>
+                </p>
+              </span>
+              <span className="flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap">
+                <p className="inline-block w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-bw-1">
+                  /{' '}
+                  <SappTooltip
+                    title={partDetail?.name}
+                    showTooltip={partDetail?.name?.length > 90}
+                  >
+                    {truncateString(partDetail?.name, 90)}
+                  </SappTooltip>
+                </p>
+              </span>
+            </div>
           </div>
-        </div>
-        <div data-aos={ANIMATION.DATA_AOS}>
-          <PreviewPartDetail
-            chapterMenu={partDetail}
-            fetchChapterDetail={fetchChapterDetail}
-            chapterDetail={chapterDetail}
-            loading={false}
-            loadingChapter={loadingChapter}
-            setLoadingChapter={setLoadingChapter}
-            setOpenLearningOutcome={setOpenLearningOutcome}
-            course_id={router.query.id as any}
-            course_section_id={router.query.course_section_id as any}
-            handleRouterActivity={handleRouterActivity}
-            handleRouterCaseStudy={handleRouterCaseStudy}
-            handleLearningOutCome={handleLearningOutCome}
-            handleRouterChapter={handleRouterChapter}
-            readMore={readMore}
-            setReadMore={setReadMore}
-            defaultActive={defaultActive ? defaultActive : ''}
+          <div data-aos={ANIMATION.DATA_AOS}>
+            <PreviewPartDetail
+              chapterMenu={partDetail}
+              fetchChapterDetail={fetchChapterDetail}
+              chapterDetail={chapterDetail}
+              loading={false}
+              loadingChapter={loadingChapter}
+              setLoadingChapter={setLoadingChapter}
+              setOpenLearningOutcome={setOpenLearningOutcome}
+              course_id={router.query.id as any}
+              course_section_id={router.query.course_section_id as any}
+              handleRouterActivity={handleRouterActivity}
+              handleRouterCaseStudy={handleRouterCaseStudy}
+              handleLearningOutCome={handleLearningOutCome}
+              handleRouterChapter={handleRouterChapter}
+              readMore={readMore}
+              setReadMore={setReadMore}
+              defaultActive={defaultActive}
+            />
+          </div>
+
+          <SappDrawer
+            isOpen={openLearningOutcome}
+            onClose={handleCancel}
+            title={learningOutcome?.name}
+            message="Bạn có chắc chắn muốn hủy không?"
+            widthDrawer="w-6/12"
+            handleSubmit={handleNextLesson}
+            confirmOnClose={false}
+            heightBody="h-[calc(100vh-186px)] pb-6"
+            sizeTextBtn="medium"
+          >
+            <TextSkeleton
+              loading={loadingLearningOutcome}
+              widths={['70', '100', '100', '50', '100']}
+              className="mb-4"
+              classChild="rounded"
+            >
+              <div
+                style={{ borderBottom: '1px solid #DCDDDD' }}
+                className="learningOutcome-description pb-6 text-bw-1"
+                dangerouslySetInnerHTML={{
+                  __html: learningOutcome?.description ?? '',
+                }}
+              />
+            </TextSkeleton>
+            {loadingLearningOutcome && (
+              <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
+            )}
+            <TextSkeleton
+              loading={loadingLearningOutcome}
+              className="mt-4 last:mb-4"
+              classChild="rounded"
+              widths={['70', '100', '100', '50', '100']}
+            >
+              {learningOutcome?.course_outcomes?.map((outcome, index) => (
+                <div className="mr-3 mt-6 flex" key={outcome.id}>
+                  <div className="me-1 text-base font-medium leading-5 text-bw-1">
+                    LO{index + 1}:
+                  </div>
+                  <div
+                    className="learningOutcome-description text-bw-1"
+                    dangerouslySetInnerHTML={{ __html: outcome?.description }}
+                  />
+                </div>
+              ))}
+            </TextSkeleton>
+          </SappDrawer>
+          <TestModal
+            open={open}
+            setOpen={setOpen}
+            data={chapterData}
+            class_user_id={previewPart?.class_user_id}
+            activeCourse={() => {}}
+            is_passed_course={isPassedCourse}
           />
         </div>
-
-        <SappDrawer
-          isOpen={openLearningOutcome}
-          onClose={handleCancel}
-          title={learningOutcome?.name}
-          message="Bạn có chắc chắn muốn hủy không?"
-          widthDrawer="w-6/12"
-          handleSubmit={handleNextLesson}
-          confirmOnClose={false}
-          heightBody="h-[calc(100vh-186px)] pb-6"
-          sizeTextBtn="medium"
-        >
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            widths={['70', '100', '100', '50', '100']}
-            className="mb-4"
-            classChild="rounded"
-          >
-            <div
-              style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="pb-6 text-bw-1 learningOutcome-description"
-              dangerouslySetInnerHTML={{
-                __html: learningOutcome?.description ?? '',
-              }}
-            />
-          </TextSkeleton>
-          {loadingLearningOutcome && (
-            <div className="h-px w-full bg-gray-2 mt-4 mb-2"></div>
-          )}
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            className="mt-4 last:mb-4"
-            classChild="rounded"
-            widths={['70', '100', '100', '50', '100']}
-          >
-            {learningOutcome?.course_outcomes?.map((outcome, index) => (
-              <div className="flex mt-6 mr-3" key={outcome.id}>
-                <div className="font-medium leading-5 text-base me-1 text-bw-1">
-                  LO{index + 1}:
-                </div>
-                <div
-                  className="text-bw-1 learningOutcome-description"
-                  dangerouslySetInnerHTML={{ __html: outcome?.description }}
-                />
-              </div>
-            ))}
-          </TextSkeleton>
-        </SappDrawer>
-        <TestModal
-          open={open}
-          setOpen={setOpen}
-          data={chapterData}
-          class_user_id={previewPart?.class_user_id}
-          activeCourse={() => {}}
-        />
-      </div>
+      </Layout>
     </SappLoadingGlobal>
   )
 }

@@ -5,8 +5,6 @@ import {
   IActivityStateQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
-  selectQuestions,
-  submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import SappModal from '@components/base/modal/SappModal'
@@ -14,12 +12,7 @@ import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { debounce } from '@utils/helpers'
-import {
-  IQuestionResult,
-  IQuestionResultResponse,
-} from 'quiz-result-package/dist/type'
 import SappIcon from 'src/common/SappIcon'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { video_url } from '@utils/constants'
@@ -29,7 +22,7 @@ type Props = {
   activityId: string
   tabId: string
   streamRefProp?: any
-  handleProcess?: () => void
+  handleProcess?: (file_id: string, course_tab_document_id: string) => void
   document_id: string
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
@@ -52,13 +45,15 @@ const VideoDocument = ({
   quizId,
   grading_preference,
 }: Props) => {
-  const [currentVideo, setCurrentVideo] = useState<IVideo>()
+  const [currentVideo, setCurrentVideo] = useState<IVideo>(
+    videos && videos.length > 0 ? videos[0] : ({} as IVideo),
+  )
   const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
   const currentTimeRef = useRef(-1)
   const [currentListQuestion, setCurrentListQuestion] = useState<IQuestion[]>(
     [],
   )
-  const selector = useAppSelector(courseActivityQuizReducer)
+  // const selector = useAppSelector(courseActivityQuizReducer)
   const questionRef = useRef<QuizComponentRef>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
@@ -77,7 +72,7 @@ const VideoDocument = ({
 
   useEffect(() => {
     if (handleProcess && streamRef?.current?.paused === false) {
-      handleProcess()
+      handleProcess(currentVideo?.file?.id, document_id)
     }
   }, [streamRef?.current?.paused])
 
@@ -316,45 +311,54 @@ const VideoDocument = ({
   /**
    * @description check điều kiện xem có phải câu hỏi cuối cùng không
    */
-  const finishQuestion =
+  const atLastQuestion =
     timeQuiz?.[timeQuiz?.length - 1]?.find(
       (quiz) => quiz?.id === activeQuestion?.id,
     )?.id === activeQuestion?.id
 
+  const [finishAll, setFinishAll] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (atLastQuestion && isConfirmQuestion) {
+      setFinishAll(true)
+    }
+  }, [atLastQuestion, isConfirmQuestion])
+
   return (
     <div>
-      <div className="flex items-center justify-between text-primary gap-x-10 gap-y-2 mb-2.5">
-        <div className="flex items-center gap-x-10 gap-y-2 flex-wrap">
-          {videos?.map((v, i) => {
-            return (
-              <label
-                className=" flex items-center gap-2 select-none cursor-pointer"
-                key={v?.file?.id ?? i}
-              >
-                {/* Radio button for video selection */}
-                <SAPPRadio
-                  onChange={() => debouncedHandleSetCurrentVideo.current(v)}
-                  {...(v?.file?.id === currentVideo?.file?.id
-                    ? {
-                        checked: true,
-                      }
-                    : { checked: false })}
-                  size={'small'}
-                ></SAPPRadio>
-                <span
-                  className={`radio-item-label  ${
-                    v?.file?.id === currentVideo?.file?.id
-                      ? 'text-bw-1'
-                      : 'text-gray-1'
-                  }`}
+      <div className="mb-2.5 flex items-center justify-between gap-x-10 gap-y-2 text-primary">
+        <div className="flex flex-wrap items-center gap-x-10 gap-y-2">
+          {(videos as IVideo[])?.length > 1 &&
+            videos?.map((v, i) => {
+              return (
+                <label
+                  className=" flex cursor-pointer select-none items-center gap-2"
+                  key={v?.file?.id ?? i}
                 >
-                  Video {i + 1}
-                </span>
-              </label>
-            )
-          })}
+                  {/* Radio button for video selection */}
+                  <SAPPRadio
+                    onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                    {...(v?.file?.id === currentVideo?.file?.id
+                      ? {
+                          checked: true,
+                        }
+                      : { checked: false })}
+                    size={'small'}
+                  ></SAPPRadio>
+                  <span
+                    className={`radio-item-label  ${
+                      v?.file?.id === currentVideo?.file?.id
+                        ? 'text-bw-1'
+                        : 'text-gray-1'
+                    }`}
+                  >
+                    Video {i + 1}
+                  </span>
+                </label>
+              )
+            })}
         </div>
-        <div className="flex items-center select-none cursor-pointer relative z-30 group">
+        <div className="group relative z-30 flex cursor-pointer select-none items-center">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
               <span className="mr-2 text-bw-1 group-hover:text-primary">
@@ -370,21 +374,21 @@ const VideoDocument = ({
             <></>
           )}
 
-          <div className="py-3 overflow-hidden animate-fade-in-overlay group-hover:block absolute bottom-0 w-[412px] max-w-[100px]: -right-[3px] bg-white translate-y-full shadow-single-dialog hidden">
-            <div className="snap-y flex-1 overflow-y-auto bg-white h-full max-h-[412px]">
+          <div className="max-w-[100px]: absolute -right-[3px] bottom-0 hidden w-[412px] translate-y-full animate-fade-in-overlay overflow-hidden bg-white py-3 shadow-single-dialog group-hover:block">
+            <div className="h-full max-h-[412px] flex-1 snap-y overflow-y-auto bg-white">
               {timeLine?.map((e, i) => {
                 return (
                   <div
                     key={i}
-                    className="hover:bg-gray-4 mx-3 gap-3 text-medium-sm grid p-3 hover:text-primary-2 text-bw-1 grid-cols-[1.3fr,6fr]"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-medium-sm text-bw-1 hover:bg-gray-4 hover:text-primary-2"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}
                   >
-                    <div className="text-state-info mim-w-[62px]">
+                    <div className="mim-w-[62px] text-state-info">
                       {formatTime(e?.time)}
                     </div>
-                    <div className="text-bw-1 line-clamp-2 text-inherit">
+                    <div className="line-clamp-2 text-bw-1 text-inherit">
                       {htmlToRaw(e?.text)}
                     </div>
                   </div>
@@ -408,6 +412,7 @@ const VideoDocument = ({
           hideVideo={hideVideo}
           openQuestion={modalOpen}
           timeQuiz={timeQuiz}
+          thumbnail={currentVideo?.file?.resource?.thumbnail}
         >
           {/* Modal for quiz questions */}
           <SappModal
@@ -416,13 +421,7 @@ const VideoDocument = ({
               <div className="!text-xl font-bold text-bw-1">Question</div>
             }
             parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
-            okButtonCaption={`${
-              finishQuestion
-                ? 'Finish'
-                : isConfirmQuestion || activeQuestion?.corrects
-                  ? 'Next'
-                  : 'Submit'
-            }`}
+            okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}
             buttonSize="small"
             size="max-w-full"
             position="center"
@@ -442,7 +441,7 @@ const VideoDocument = ({
             }}
             closeAfterSubmit={false}
             colorCancel="textUnderline"
-            cancelButtonCaption={`${finishQuestion ? '' : 'Skip'}`}
+            cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
           >
             <div className="py-5">
               <QuizComponent

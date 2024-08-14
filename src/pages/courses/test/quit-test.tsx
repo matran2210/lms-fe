@@ -1,26 +1,27 @@
-import { AlertIcon, AlertTriagle } from '@assets/icons'
+import { AlertTriagle } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
-import { TimeIcon } from '@components/icons'
-import { useEffect } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
+import { trackGAEvent } from '@utils/google-analytics'
+import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
-  setOpen: any
-  handleQuit: any
-  handleCancel: any
+  setOpen: Dispatch<SetStateAction<boolean>>
+  handleQuit: () => void
+  handleCancel: () => void
 }
 const QuitTestModal = ({ open, setOpen, handleQuit, handleCancel }: IProps) => {
   const onSubmit = () => {
     setOpen(false)
     handleQuit()
-    // handleSubmit()
-    //to do: start test
+    trackGAEvent('Click Button Quit Modal Test')
   }
+
   const onCancel = () => {
     handleCancel()
     setOpen(false)
+    trackGAEvent('Click Button Cancel Modal Test')
   }
+
   return (
     <SappModal
       open={open}
@@ -41,11 +42,11 @@ const QuitTestModal = ({ open, setOpen, handleQuit, handleCancel }: IProps) => {
       buttonSize="extra"
       revertFunction={true}
     >
-      <div className="p-8 rounded-full bg-secondary">
+      <div className="rounded-full bg-secondary p-8">
         <AlertTriagle />
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6">Are you sure?</div>
-      <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-7 text-center">
+      <div className="mt-6 text-4xl font-semibold text-bw-1">Are you sure?</div>
+      <div className="mb-7 mt-4 text-center text-medium-sm font-normal text-gray-1">
         If you quit at this time, the test results will not be saved
       </div>
     </SappModal>

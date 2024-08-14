@@ -7,10 +7,13 @@ import {
   UnHighLightIcon,
 } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import EditorReader from '@components/base/editor/EditorReader'
+import PDFViewer from '@components/base/pdf/pdf-viewer'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -19,13 +22,15 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { LAYOUT } from '@utils/constants'
+import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import { QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -34,16 +39,13 @@ import {
   loadMoreQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
+import { IExhibit } from 'src/type/exhibit'
+import { CoursesAPI } from '../api/courses/index'
+import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-import useMousePosition from '@utils/hookMouseMove'
-import SappLoading from 'src/common/SappLoading'
-import { CoursesAPI } from '../api/courses/index'
-import { TestAPI } from '../api/test'
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
-import PDFViewer from '@components/base/pdf/pdf-viewer'
-import { IExhibit } from 'src/type/exhibit'
+import SappButton from '@components/base/button/SappButton'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -242,6 +244,46 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
+  const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
+
+  /**
+   * handl confirm before submitting
+   */
+  const checkUnSubmitAnswer = () => {
+    const result: number[] = []
+    getAllValue().map((item, index) => {
+      if (typeof item.answer === 'string' && item?.answer === '') {
+        result.push(index + 1)
+        return
+      }
+      if (Array.isArray(item.answer)) {
+        const emptyAnswer = item?.answer?.filter((el) => {
+          if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
+            return el
+          }
+          if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
+            return el
+          }
+        })
+        const emptyEl = item.answer.filter(
+          (el: string) => typeof el === 'string' && !el,
+        )
+        if (emptyAnswer?.length || emptyEl.length) {
+          result.push(index + 1)
+        }
+        return
+      }
+    })
+    setUnSubmitAnswerData(result)
+    if (result.length === 0) {
+      setOpenSubmit(true)
+    } else {
+      setUnSubmitAnswer(true)
+    }
+    return result
+  }
+
   const { x } = useMousePosition()
   useEffect(() => {
     if (startResize) {
@@ -341,6 +383,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           return e.type !== 'exhibits'
         })
         for (let e of watch('exhibits')) {
+          setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -610,7 +653,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         })
         toast.success('Submitted successfully')
         router.replace(
-          `/case-study/table-result/${quizAttempId}?class_user_id=${router.query.class_user_id}`,
+          `/case-study/result/${quizAttempId}?class_user_id=${router.query.class_user_id}&class_id=${router.query.class_id}&course_section_id=${router.query.course_section_id}`,
         )
       } catch (err) {
         toast.error('submit failed')
@@ -729,12 +772,10 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
 
   return (
-    <>
-      {loading ? (
-        <SappLoading />
-      ) : (
+    <SappLoadingGlobal loading={loading}>
+      <FullScreenLayout title="Case Study">
         <div
-          className="h-screen flex flex-col bg-white overflow-hidden relative"
+          className="relative flex h-screen flex-col overflow-hidden bg-white"
           onMouseUp={() => {
             setStartResize(false)
             setCurrentLeftWidth(leftWidth)
@@ -749,35 +790,17 @@ const CaseStudyDetail = ({ questions }: any) => {
       ></div> */}
           {/* Header */}
           <div className="h-full" ref={containerRef}>
-            <div className="flex justify-between py-2 px-6 items-center bg-gray-3 ">
-              <div className="text-bw-1 text-lg-xl font-medium w-1/3 truncate">
+            <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
+              <div className="w-1/3 truncate text-lg-xl font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
-              <ButtonCancelSubmit
-                className={'flex gap-4 flex-row-reverse w-1/3'}
-                // color={color}
-                submit={{
-                  title: 'Finish',
-                  size: 'small',
-                  loading: false,
-                  disabled: false,
-                  onClick: () => {
-                    setOpenScratchPad([])
-                    setOpenSubmit(true)
-                    setUnsavedChanges(false)
-                  },
+              <SappButton
+                title="Quit"
+                onClick={() => {
+                  setOpenQuit(true)
+                  setUnsavedChanges(false)
                 }}
-                cancel={{
-                  title: 'Quit',
-                  size: 'small',
-                  onClick: () => {
-                    setOpenQuit(true)
-                    setUnsavedChanges(false)
-                  },
-                  loading: false,
-                  //   full: fullWidthBtn,
-                }}
-              ></ButtonCancelSubmit>
+              />
             </div>
             {/* End Header */}
             <div
@@ -851,7 +874,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 </div>
               </div>
               <div
-                className="w-[20px] h-full bg-gray-3 cursor-ew-resize"
+                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -908,7 +931,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                           key={question?.id + index}
                           topic-key={topicId}
                           className={`${
-                            index === 0 ? 'mb-8' : 'pt-8 mb-8 border-t'
+                            index === 0 ? 'mb-8' : 'mb-8 border-t pt-8'
                           }`}
                         >
                           {/*<div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>*/}
@@ -949,12 +972,12 @@ const CaseStudyDetail = ({ questions }: any) => {
                     onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
                       onFocusingPad === e?.id
-                        ? openScratchPad?.length + 1400
-                        : index + 1400
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
-                    <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div className="absolute left-0 top-0  h-full w-full border">
+                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div>Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -979,12 +1002,12 @@ const CaseStudyDetail = ({ questions }: any) => {
                     onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
                       onFocusingPad === e?.id
-                        ? openScratchPad?.length + 1400
-                        : index + 1400
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
-                    <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                    <div className="absolute left-0 top-0  h-full w-full border">
+                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div>Scratch Pad</div>
                         {/* <CloseIcon */}
                         <button onClick={() => handleCloseScratchPad(e)}>
@@ -1000,7 +1023,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         onChange={(event) =>
                           handleChangeScratchPad(event, e?.id)
                         }
-                        className="w-full h-[calc(100%-40px)] sapp-text-area p-5"
+                        className="sapp-text-area h-[calc(100%-40px)] w-full p-5"
                       />
                       {/* </div> */}
                     </div>
@@ -1025,14 +1048,14 @@ const CaseStudyDetail = ({ questions }: any) => {
                     onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
                       onFocusingPad === e?.id
-                        ? openScratchPad?.length + 1400
-                        : index + 1400
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
-                    <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
+                    <div className="absolute left-0 top-0  h-full w-full border">
+                      <div className="flex h-10 w-6-percent w-full items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                          <span className="text-base font-semibold ">{`Exhibit ${
                             (i ?? 0) + 1
                           }: `}</span>
                           {exhibitsDes?.name}
@@ -1041,7 +1064,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                           <CloseIcon />
                         </button>
                       </div>
-                      <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                      <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                         <EditorReader
                           text_editor_content={exhibitsDes?.description}
                           className=" w-full"
@@ -1052,16 +1075,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                             return (
                               <div
                                 key={index}
-                                className="cursor-pointer text-state-info hover:underline"
-                                onClick={() =>
-                                  handleOpenScratchPad(
-                                    'file',
-                                    e?.resource?.url,
-                                    e?.resource?.name,
-                                  )
-                                }
+                                className="overflow-auto bg-white"
                               >
-                                {e?.resource?.name}
+                                <PDFViewer file={e?.resource?.url} />
                               </div>
                             )
                           })}
@@ -1072,7 +1088,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               } else if (e.type === 'file') {
                 return (
                   <MovableWindow
-                    className="transform -translate-x-1/2 -translate-y-1/2 2xl:!h-[842px]"
+                    className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
                     position={{
                       width: '595px',
                       height: '650px',
@@ -1083,13 +1099,13 @@ const CaseStudyDetail = ({ questions }: any) => {
                     onClick={() => setOnFocusingPad(e?.id)}
                     zIndex={
                       onFocusingPad === e?.id
-                        ? openScratchPad.length + 1400
-                        : index + 1400
+                        ? openScratchPad?.length + 500
+                        : index + 500
                     }
                   >
-                    <div className="absolute h-full w-full  top-0 left-0 border">
-                      <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
-                        <div className="text-sm font-normal truncate">
+                    <div className="absolute left-0 top-0  h-full w-full border">
+                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                        <div className="truncate text-sm font-normal">
                           {e?.fileName}
                         </div>
                         {/* <CloseIcon */}
@@ -1098,7 +1114,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         </button>
                       </div>
                       <div
-                        className="overflow-auto p-4 bg-white"
+                        className="overflow-auto bg-white p-4"
                         style={{ height: 'calc(100% - 40px' }}
                       >
                         <PDFViewer file={e?.file} />
@@ -1108,8 +1124,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 )
               }
             })}
-            <div className=" bg-gray-3 flex items-center justify-between shadow-question-footer h-[48px] relative">
-              <div className="flex items-center h-full">
+            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+              <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                     <HelpIcon />
@@ -1125,9 +1141,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                     setAllowUnHighLight(false)
                   }}
                 >
-                  <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
                     <HighlightIcon />
-                    <div className="hidden font-normal text-sm 3xl:inline-block">
+                    <div className="hidden text-sm font-normal 3xl:inline-block">
                       Highlight
                     </div>
                   </div>
@@ -1139,9 +1155,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                       setAllowHighLight(false)
                   }}
                 >
-                  <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l ">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
                     <UnHighLightIcon />
-                    <div className="hidden font-normal text-sm 3xl:inline-block">
+                    <div className="hidden text-sm font-normal 3xl:inline-block">
                       Unhighlight
                     </div>
                   </div>
@@ -1150,9 +1166,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                   className="h-full"
                   onClick={() => handleOpenScratchPad('scratch_pad')}
                 >
-                  <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 border-l">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
                     <ScratchPadIcon />
-                    <div className="hidden font-normal text-sm 3xl:inline-block">
+                    <div className="hidden text-sm font-normal 3xl:inline-block">
                       Scratch Pad
                     </div>
                   </div>
@@ -1164,32 +1180,32 @@ const CaseStudyDetail = ({ questions }: any) => {
                   onClick={() => handleOpenScratchPad('calculator')}
                   disabled={checkCalExist > -1}
                 >
-                  <div className="flex items-center gap-3 px-4 3xl:px-6 border-l">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:px-6">
                     <CalculatorIcon />
-                    <div className="hidden font-normal text-sm 3xl:inline-block">
+                    <div className="hidden text-sm font-normal 3xl:inline-block">
                       Calculator
                     </div>
                   </div>
                 </button>
                 {exhibits.length > 0 && (
-                  <button className="h-full relative">
+                  <button className="relative h-full">
                     <div
-                      className="flex items-center gap-3 px-4 3xl:px-6 border-l"
+                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
                       onClick={() => {
                         setShowListExhibits(!showListExhibits)
                       }}
                     >
                       <ExhibitsIcon />
-                      <div className="font-normal flex text-sm items-center gap-3">
+                      <div className="flex items-center gap-3 text-sm font-normal">
                         <div>
-                          <span className="hidden 3xl:inline-block 3xl:me-1">
-                            Exhibits
+                          <span className="hidden  lg:inline-block 3xl:me-1">
+                            {`Exhibits (${exhibits?.length})`}
                           </span>
                         </div>
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="bg-gray-3 absolute h-fit max-w-max 3xl:w-full 3xl:max-w-none bottom-full shadow-questions-exhibits p-4 flex justify-center z-[1400]">
+                      <div className="absolute bottom-full z-[1400] flex h-fit max-w-max justify-center bg-gray-3 p-4 shadow-questions-exhibits 3xl:w-full 3xl:max-w-none">
                         <HookFormCheckBoxGroup
                           control={controlExhibits}
                           name="exhibits"
@@ -1205,13 +1221,42 @@ const CaseStudyDetail = ({ questions }: any) => {
                   </button>
                 )}
               </div>
+              <div>
+                <SappButton
+                  className={`mr-2 h-full bg-slate-200 py-3`}
+                  title="View Answer"
+                  onClick={() => {
+                    setOpenScratchPad([])
+                    if (checkUnSubmitAnswer().length) {
+                      setUnSubmitAnswer(true)
+                    } else {
+                      setOpenSubmit(true)
+                    }
+                    setUnsavedChanges(false)
+                  }}
+                />
+              </div>
             </div>
           </div>
           <ConFirmSubmit
             open={openSubmit}
             setOpen={setOpenSubmit}
-            handleSubmit={handleSubmitQuestion}
+            message="Do you want to confirm all the answers and view the total report?"
+            handleSubmit={() => {
+              handleSubmitQuestion()
+              setOpenSubmit(false)
+            }}
             handleCancel={() => setUnsavedChanges(true)}
+          />
+          <UnSubmitAnswerModal
+            open={openUnSubmitAnswer}
+            setOpen={setUnSubmitAnswer}
+            data={unSubmitAnswerData}
+            handleSubmit={() => {
+              handleSubmitQuestion()
+              setUnSubmitAnswer(false)
+            }}
+            handleCancel={() => setUnSubmitAnswer(false)}
           />
           <QuitTestModal
             open={openQuit}
@@ -1246,116 +1291,10 @@ const CaseStudyDetail = ({ questions }: any) => {
         url={openPdf?.url || ''}
       /> */}
         </div>
-      )}
-    </>
+      </FullScreenLayout>
+    </SappLoadingGlobal>
   )
 }
 
 // eslint-disable-next-line import/no-unused-modules
 export default CaseStudyDetail
-CaseStudyDetail.layout = LAYOUT.FULLSCREEN_LAYOUT
-
-// export async function getServerSideProps(context: any) {
-//   const { req, res, query } = context
-
-//   // Lấy accessToken từ cookie
-//   const accessToken = req.cookies.accessToken
-
-//   // Kiểm tra accessToken
-//   if (!accessToken) {
-//     // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-//     return {
-//       redirect: {
-//         destination: '/auth/login',
-//         permanent: false,
-//       },
-//     }
-//   }
-
-//   try {
-//     const { req } = context
-
-//     // Parse cookies from the request headers
-//     const cookies = parse(req.headers.cookie || '')
-//     console.log(context?.query?.id);
-
-//     if (!context?.query?.id) {
-//       return {
-//         notFound: true,
-//       }
-//     } else {
-//       const topic = (await CourseTestApi.getQuestionCaseStudiesByIdServerSide(
-//         context?.query?.id,
-//         cookies.accessToken,
-//         1,
-//         5,
-//       )) as any
-//       return {
-//         props: { questions: topic },
-//       }
-//     }
-//   } catch (error: any) {
-//     // console.log(error)
-
-//     // Nếu có lỗi khi sử dụng accessToken, kiểm tra xem có phải là lỗi hết hạn không
-//     if (error.response && error.response.status === 401) {
-//       // Nếu là lỗi hết hạn, thực hiện cập nhật accessToken
-//       const refreshToken = req.cookies.refreshToken
-
-//       try {
-//         const refreshResponse = await axios.post(
-//           `${apiURL}/auth/rotate`,
-//           {},
-//           {
-//             headers: {
-//               Authorization: `Bearer ${refreshToken}`,
-//             },
-//           },
-//         )
-
-//         // Lưu accessToken mới vào cookie
-//         res.setHeader(
-//           'Set-Cookie',
-//           `accessToken=${refreshResponse.data.accessToken}; HttpOnly`,
-//         )
-
-//         // Tiếp tục thực hiện yêu cầu API với accessToken mới
-//         const topic = (await CourseTestApi.getQuestionCaseStudiesByIdServerSide(
-//           context?.query?.id,
-//           refreshResponse.data.accessToken,
-//           1,
-//           5,
-//         )) as any
-//         return {
-//           props: { questions: topic },
-//         }
-//       } catch (refreshError) {
-//         // Xử lý lỗi khi cập nhật accessToken từ refreshToken
-//         // Chuyển hướng đến trang đăng nhập
-//         return {
-//           redirect: {
-//             destination: '/auth/login',
-//             permanent: false,
-//           },
-//         }
-//       }
-//     } else {
-//       // Xử lý lỗi khác khi sử dụng accessToken
-//       if (error.response && error.response.status === 403) {
-//         // Chuyển hướng đến trang đăng nhập
-//         return {
-//           redirect: {
-//             destination: '/auth/login',
-//             permanent: false,
-//           },
-//         }
-//       } else
-//         return {
-//           redirect: {
-//             destination: '/404',
-//             permanent: false,
-//           },
-//         }
-//     }
-//   }
-// }

@@ -45,8 +45,8 @@ const PopUpCertificate = ({
       scrollbale={false}
     >
       <div className="w-full">
-        <div className="border-b border-solid border-gray-3 w-full flex justify-between pb-6">
-          <div className=" flex text-xl font-sans font-medium leading-6.2 text-bw-1 w-full pr-4">
+        <div className="flex w-full justify-between border-b border-solid border-gray-3 pb-6">
+          <div className=" flex w-full pr-4 font-sans text-xl font-medium leading-6.2 text-bw-1">
             {data?.course?.name}
           </div>
           <div className="cursor-pointer" onClick={handleOnClose}>
@@ -55,7 +55,7 @@ const PopUpCertificate = ({
         </div>
         {/* <div>{data?.certificate_url}</div> */}
         <div className="flex justify-center pt-6">
-          <img src={data?.certificate_url} className="w-full h-auto"></img>
+          <img src={data?.certificate_url} className="h-auto w-full"></img>
         </div>
       </div>
     </SappModalCerti>

@@ -3,14 +3,14 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { httpService } from 'src/redux/services/httpService'
 import { QUESTION_TYPES } from 'src/type/course/Question'
-// import 'explanation-package/dist/index.css'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import { ANIMATION } from 'src/constants'
-import SappLoading from 'src/common/SappLoading'
 import { CoursesAPI } from '../api/courses'
-// import {} from 'explanation-package'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
+
 const Explanation = () => {
   const router = useRouter()
   const [activeQuestion, setActiveQuestion] = useState<any>()
@@ -26,7 +26,7 @@ const Explanation = () => {
         return corrects
       case QUESTION_TYPES.MULTIPLE_CHOICE:
         return Object.fromEntries(
-          (answers || []).map((originalAnswer: any) => [
+          (answers || [])?.map((originalAnswer: any) => [
             originalAnswer.id,
             originalAnswer.is_correct,
           ]),
@@ -61,11 +61,12 @@ const Explanation = () => {
           resultResponse?.data?.answer?.question?.qType !==
             QUESTION_TYPES.MATCHING
             ? resultResponse?.data?.answer?.question?.answers
-            : resultResponse?.data?.answer?.question?.answers,
+            : resultResponse?.data?.answer?.answer_matching_mapping,
           resultResponse?.data?.answer?.question?.qType,
         ),
-        question_matchings: resultResponse?.data?.answer?.question?.answers,
-        answers: resultResponse?.data?.answer?.question.answers || [],
+        question_matchings:
+          resultResponse?.data?.answer?.answer_matching_mapping,
+        answers: resultResponse?.data?.answer?.question?.answers || [],
         myAnswers: [
           {
             question_id: resultResponse?.data?.answer?.question?.id,
@@ -79,6 +80,8 @@ const Explanation = () => {
         previous: resultResponse?.data?.previous,
         total_question: resultResponse?.data?.total_question,
         index: resultResponse?.data?.index,
+        answer_position_mapping:
+          resultResponse?.data?.answer?.answer_position_mapping,
         question_topic: topicDescription?.data,
         short_answer: resultResponse?.data?.answer?.short_answer,
         response_option_answer: resultResponse?.data?.answer?.response_option,
@@ -107,13 +110,11 @@ const Explanation = () => {
   }
 
   return (
-    <>
-      {loading ? (
-        <SappLoading />
-      ) : (
+    <SappLoadingGlobal loading={loading}>
+      <FullScreenLayout title="Detailed Explanation">
         <div data-aos={ANIMATION.DATA_AOS}>
           <div
-            className="ml-auto cursor-pointer absolute right-6 top-[14px]"
+            className="absolute right-6 top-[14px] ml-auto cursor-pointer"
             onClick={() => {
               if (activeQuestion?.answer?.quiz_attempt?.id) {
                 router.push(
@@ -124,7 +125,7 @@ const Explanation = () => {
               }
             }}
           >
-            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
           <ExplanationPackage
             getActiveQuestion={getActiveQuestion}
@@ -133,8 +134,8 @@ const Explanation = () => {
             handleDownload={handleDownload}
           />
         </div>
-      )}
-    </>
+      </FullScreenLayout>
+    </SappLoadingGlobal>
   )
 }
 export default Explanation

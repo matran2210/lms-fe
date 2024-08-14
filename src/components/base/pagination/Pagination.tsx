@@ -58,7 +58,7 @@ const Pagination = ({
 
   return (
     <ul
-      className={`pagination flex items-center flex-wrap ${
+      className={`pagination flex flex-wrap items-center ${
         type === 'row' && 'w-full'
       } ${type === 'table' ? 'gap-5' : 'gap-3'}`}
       aria-label="Pagination"
@@ -66,7 +66,7 @@ const Pagination = ({
       <div
         className={`${
           type === 'row' && activeShowAll
-            ? 'relative w-[calc(100%-141px)] mx-7'
+            ? 'relative mx-7 w-[calc(100%-141px)]'
             : ' flex items-center gap-6'
         }`}
       >
@@ -74,7 +74,7 @@ const Pagination = ({
           className={`${
             type === 'row' &&
             activeShowAll &&
-            'absolute top-0.5 -left-3 -translate-x-full'
+            'absolute -left-3 top-0.5 -translate-x-full'
           }`}
         >
           <PageLink
@@ -97,8 +97,8 @@ const Pagination = ({
         <div
           className={`${
             type === 'row' && activeShowAll
-              ? 'flex gap-2 overflow-hidden w-full'
-              : 'flex items-center gap-2 flex-wrap'
+              ? 'flex w-full gap-2 overflow-hidden'
+              : 'flex flex-wrap items-center gap-2'
           }`}
           ref={elementRef}
         >
@@ -122,7 +122,7 @@ const Pagination = ({
           className={`${
             type === 'row' &&
             activeShowAll &&
-            'absolute top-0.5 -right-3 translate-x-full'
+            'absolute -right-3 top-0.5 translate-x-full'
           }`}
         >
           <PageLink
@@ -147,7 +147,7 @@ const Pagination = ({
           <div className="flex items-center">
             {!activeShowAll && optionShowAll}
             <div
-              className={`ml-6 text-sm leading-4.5 text-bw-1 underline font-semibold cursor-pointer w-max ${
+              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
                 activeShowAll && 'absolute -right-28 top-0 translate-y-1/2 '
               }`}
               onClick={() => {

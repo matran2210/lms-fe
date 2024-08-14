@@ -1,4 +1,4 @@
-import { roundNumber } from '@utils/helpers'
+import { calculatePercentage, roundNumber } from '@utils/helpers'
 
 interface DataItem {
   question_topic_id: string
@@ -13,47 +13,38 @@ interface IProps {
 
 const ChartACCAScore = ({ data }: IProps) => {
   return (
-    <div className="block bg-white xl:mb-6 mb-4 pt-6 pb-5 pr-5 pl-6 xl:pl-[99px] shadow-sidebar max-w-[1144px] h-[161.8px] overflow-y-scroll">
-      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-5">
-        Your Score by Topic
+    <div className=" mb-4 block h-[152px] bg-white pb-3 pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">
+      <div className="pb-4 pt-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+        Multiple Choice Score by Part
       </div>
-      <div className="w-full overflow-x-auto pb-3">
-        <div className="flex flex-row gap-14 flex-start">
-          {data?.map((item: any) => (
-            <div
-              key={item?.id}
-              className="flex flex-col w-1/3 max-w-78 justify-end shrink-0 items-start gap-1"
-            >
-              <div className="text-bw-1 font-normal line-clamp-2">
-                {item?.title}
-              </div>
-              <div className="h-2 bg-gray-3 w-full relative">
-                <div
-                  className="absolute left-0 top-0 h-2 bg-primary"
-                  style={{
-                    width: `${roundNumber(
-                      (item?.total_correct_answers / item?.total_questions) *
-                        100,
-                    )}%`,
-                  }}
-                ></div>
-              </div>
-              <div className="text-base text-bw-1 font-normal flex items-center justify-between w-full">
-                {`${roundNumber(
-                  (item?.total_correct_answers / item?.total_questions) * 100,
-                )}%`}
-                <div className="flex items-center pl-1 text-gray-1">
-                  <img
-                    src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                    alt="Correct"
-                    className="w-4 text-state-success mr-1.5"
-                  />
-                  <span>{roundNumber(item?.ratio ?? 0)}%</span>
-                </div>
-              </div>
+      <div className="flex-start dashboard-scroll-x flex w-full snap-x flex-row gap-14 scroll-smooth">
+        {data?.map((item: any) => (
+          <div
+            key={item?.id}
+            className="flex w-11/12 max-w-78 shrink-0 snap-start flex-col items-start justify-end gap-2 md:w-1/2 xl:w-1/3"
+          >
+            <div className="line-clamp-2 font-normal text-bw-1">
+              {item?.title}
             </div>
-          ))}
-        </div>
+            <div className="relative h-2 w-full bg-gray-3">
+              <div
+                className="absolute left-0 top-0 h-2 bg-primary"
+                style={{
+                  width: `${calculatePercentage(
+                    item?.total_correct_answers,
+                    item?.total_questions,
+                  )}%`,
+                }}
+              ></div>
+            </div>
+            <div className="flex w-full items-center justify-end text-base font-normal text-bw-1">
+              {`${calculatePercentage(
+                item?.total_correct_answers,
+                item?.total_questions,
+              )}%`}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )

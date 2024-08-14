@@ -1,3 +1,10 @@
+export interface Thumbnail {
+  '640x360': string
+  '770x435': string
+  '950x535': string
+  [key: string]: string
+}
+
 export interface IFile {
   id: string
   created_at: string
@@ -18,6 +25,7 @@ export interface IFile {
     url: string
     url_expired_in: string
     sub_url: string
+    thumbnail: Thumbnail
   }
 }
 export interface IVideo {

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 // eslint-disable-next-line import/no-unused-modules
 export function isMobile() {
   const toMatch = [
@@ -148,7 +150,7 @@ export const debounce = <T extends (...args: any[]) => void>(
 /**
  * @description Return number percent with type: 80.99
  * @param {number} num: number
- * @return {*}
+ * @return {*} The percentage value of num relative to total. Returns 0 if total is 0.
  */
 export const percentConversion = (num: number) => {
   return Math.round(num * 10000) / 100
@@ -161,6 +163,19 @@ export const percentConversion = (num: number) => {
  */
 export const roundNumber = (num: number) => {
   return Math.round(num * 100) / 100
+}
+
+/**
+ * @description Return number percent with type: 80
+ * @param {number} num
+ * @param {number} total
+ * @return {number} The percentage value of num relative to total. Returns 0 if total is 0.
+ */
+export const calculatePercentage = (num: number, total: number): number => {
+  if (total === 0) {
+    return 0
+  }
+  return _.round((num / total) * 100, 2)
 }
 
 /**
@@ -181,6 +196,10 @@ export const convertLocalTimeToUTC = (currentTime: Date) => {
   const utcTime = new Date(currentTime.getTime() + offsetMinutes * 60 * 1000)
 
   return utcTime
+}
+
+export const convertUTCToLocalTime = (utc_time: Date | string) => {
+  return new Date(utc_time)
 }
 
 export const convertHourToDayLeft = (hours: number) => {
@@ -237,4 +256,22 @@ export const getResolution = (bitrate: number) => {
     default:
       return '4k+'
   }
+}
+
+export const isAppleDevice = () => {
+  return /Mac|iPod|iPhone|iPad/.test(navigator.platform)
+}
+
+export const isSafari = () => {
+  const userAgent = navigator.userAgent
+  const vendor = navigator.vendor
+  return (
+    /Safari/.test(userAgent) &&
+    /Apple Computer/.test(vendor) &&
+    !/Chrome/.test(userAgent)
+  )
+}
+
+export const isMobileOrTablet = () => {
+  return /Mobi|Tablet|iPad|iPhone/.test(navigator.userAgent)
 }

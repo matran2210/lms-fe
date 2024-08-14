@@ -1,8 +1,6 @@
-import SappModal from '@components/base/modal/SappModal'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import EntranceApi from 'src/redux/services/EntranceTest'
 import { z } from 'zod'
 import { EntrancePopupProps } from './EntrancePopup'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
@@ -90,15 +88,7 @@ const EntranceTestFillForm = ({
     setListEngLevel(optionEngLevel)
     // return res?.data?.[0]
   }
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    setValue,
-    reset,
-    watch,
-    getFieldState,
-  } = useForm<any>({
+  const { control, handleSubmit, setValue, reset } = useForm<any>({
     resolver: zodResolver(schema),
     mode: 'onSubmit',
   })
@@ -185,7 +175,7 @@ const EntranceTestFillForm = ({
       closeAfterSubmit={false}
       title={undefined}
     >
-      <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
+      <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
         Fill This Form
       </h2>
       <div className="mt-10">
@@ -198,7 +188,7 @@ const EntranceTestFillForm = ({
           options={listUnivers}
         />
       </div>
-      <div className="flex gap-6 mt-10">
+      <div className="mt-10 flex gap-6">
         <div className="flex-1">
           <SappHookFormSelect
             control={control}
@@ -220,7 +210,7 @@ const EntranceTestFillForm = ({
           />
         </div>
       </div>
-      <div className="mt-10 mb-10">
+      <div className="mb-10 mt-10">
         <SappHookFormSelect
           control={control}
           name="englishLevel_id"

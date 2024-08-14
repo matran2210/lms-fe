@@ -37,10 +37,10 @@ const LimitQuizModal = ({ open, setOpen, handleQuit }: IProps) => {
       closeAfterSubmit={false}
       buttonSize="extra"
     >
-      <div className="p-8 rounded-full bg-secondary">
+      <div className="rounded-full bg-secondary p-8">
         <AlertTriagle />
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6">
+      <div className="mt-6 text-4xl font-semibold text-bw-1">
         Quiz limit exceded
       </div>
     </SappModal>
