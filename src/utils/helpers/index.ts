@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 // eslint-disable-next-line import/no-unused-modules
 export function isMobile() {
   const toMatch = [
