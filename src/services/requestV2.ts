@@ -99,6 +99,7 @@ request.interceptors.response.use(
                 keycloak
                   .logout({ redirectUri: window.location.origin })
                   .then(() => {
+                    removeJwtToken()
                     removeLocalStorageJwtToken()
                   })
               }
@@ -107,6 +108,7 @@ request.interceptors.response.use(
               keycloak
                 .logout({ redirectUri: window.location.origin })
                 .then(() => {
+                  removeJwtToken()
                   removeLocalStorageJwtToken()
                 })
             })
@@ -143,6 +145,16 @@ request.interceptors.response.use(
   function (error: any) {
     const errorCode: string = error?.response?.data?.error?.code
     const errorMessage = exceptions[errorCode as keyof typeof exceptions]
+
+    if (errorCode === '500|000000') {
+      const keycloak = getKeycloakInstance()
+      if (keycloak) {
+        keycloak.logout({ redirectUri: window.location.origin }).then(() => {
+          removeJwtToken()
+          removeLocalStorageJwtToken()
+        })
+      }
+    }
     if (!toastException.includes(errorCode)) {
       toast.error(
         errorMessage ||

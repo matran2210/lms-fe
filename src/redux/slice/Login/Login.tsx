@@ -151,6 +151,7 @@ export const loginSlice = createSlice({
       if (action.payload.code === 200) {
         state.changePass = true
         removeJwtToken()
+        removeLocalStorageJwtToken()
       }
     })
     builder.addCase(changePassword.rejected, (state, action) => {
