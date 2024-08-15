@@ -175,7 +175,7 @@ const EntranceTestFillForm = ({
       closeAfterSubmit={false}
       title={undefined}
     >
-      <h2 className="text-4xl font-bold text-bw-1 mb-4 max-w-screen-sm">
+      <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
         Fill This Form
       </h2>
       <div className="mt-10">
@@ -188,7 +188,7 @@ const EntranceTestFillForm = ({
           options={listUnivers}
         />
       </div>
-      <div className="flex gap-6 mt-10">
+      <div className="mt-10 flex gap-6">
         <div className="flex-1">
           <SappHookFormSelect
             control={control}
@@ -210,7 +210,7 @@ const EntranceTestFillForm = ({
           />
         </div>
       </div>
-      <div className="mt-10 mb-10">
+      <div className="mb-10 mt-10">
         <SappHookFormSelect
           control={control}
           name="englishLevel_id"

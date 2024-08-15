@@ -360,7 +360,7 @@ const LearningNotesList = () => {
       confirmOnClose={false}
       heightBody={'h-[calc(100vh-112px)]'}
     >
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mt-2">
+      <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
         <HookFormSelect
           classParent="w-full md:max-w-full"
           placeholder="Section"
@@ -458,18 +458,18 @@ const LearningNotesList = () => {
               const isExpanded = expandedNotes.includes(note?.id)
               return (
                 <div
-                  className="mt-6 p-6 border border-default last:mb-6"
+                  className="mt-6 border border-default p-6 last:mb-6"
                   key={note?.id}
                 >
                   <div
-                    className="flex items-center mb-1.5 pb-px"
+                    className="mb-1.5 flex items-center pb-px"
                     onClick={() => onClose()}
                   >
                     <SappBreadcrumbNotLink
                       paths={[...note?.course_section_path].reverse()}
                     />
                   </div>
-                  <div className="font-normal text-base text-bw-1">
+                  <div className="text-base font-normal text-bw-1">
                     <span
                       className={`whitespace-pre-wrap break-all ${
                         isExpanded ? '' : 'line-clamp-3'
@@ -479,7 +479,7 @@ const LearningNotesList = () => {
                     </span>
                     {!isExpanded && note?.description?.length > 230 ? (
                       <button
-                        className="block font-normal text-base text-gray-1"
+                        className="block text-base font-normal text-gray-1"
                         onClick={() => toggleExpand(note?.id)}
                       >
                         Show more
@@ -488,7 +488,7 @@ const LearningNotesList = () => {
                       <>
                         {note?.description?.length > 230 ? (
                           <button
-                            className="block font-normal text-base text-gray-1"
+                            className="block text-base font-normal text-gray-1"
                             onClick={() => toggleExpand(note?.id)}
                           >
                             Show less
@@ -500,11 +500,11 @@ const LearningNotesList = () => {
                     )}
                   </div>
                   <div className="mt-5 flex justify-between">
-                    <div className="font-normal text-sm text-gray-1">
+                    <div className="text-sm font-normal text-gray-1">
                       {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
                     </div>
                     <div className="flex">
-                      <div className="cursor-pointer relative">
+                      <div className="relative cursor-pointer">
                         {activityId === note?.course_section_id ? (
                           <span
                             className="notes-list-icon"
@@ -559,7 +559,7 @@ const LearningNotesList = () => {
             })}
           </TextSkeleton>
         ) : (
-          <div className="flex justify-center items-center min-h-[calc(100vh-12rem)]">
+          <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
             <NoData />
           </div>
         )}

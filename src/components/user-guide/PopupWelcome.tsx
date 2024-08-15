@@ -39,10 +39,10 @@ const PopupWelcome = ({}: Props) => {
           'md:px-6 py-6.5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all'
         }
       >
-        <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto">
+        <div className="mx-auto flex w-max items-center justify-center rounded-full bg-secondary p-8">
           <Icon type="play-circle-sharp" className="text-primary" />
         </div>
-        <h2 className="text-4xl font-bold pt-6 text-bw-1">
+        <h2 className="pt-6 text-4xl font-bold text-bw-1">
           {UserGuide.TITLE_WELCOME}
         </h2>
         <span className="pt-4 text-medium-sm text-gray-1">

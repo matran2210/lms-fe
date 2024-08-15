@@ -89,7 +89,7 @@ const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
             {...field}
             type="text"
             placeholder={placeholder}
-            className="w-full border-0 h-6 px-4 text-bw-1 focus:border-0 focus:outline-0 focus:ring-0 placeholder-text-gray-1"
+            className="placeholder-text-gray-1 h-6 w-full border-0 px-4 text-bw-1 focus:border-0 focus:outline-0 focus:ring-0"
           />
         )}
       />

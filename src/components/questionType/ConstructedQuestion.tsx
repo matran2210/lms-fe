@@ -318,13 +318,13 @@ const EssayQuestionPreview = ({
                 className={`sapp-upload-file-preview ${
                   data
                     ? ''
-                    : 'flex-col justify-start w-fit !items-start font-semibold !pt-0'
+                    : 'w-fit flex-col !items-start justify-start !pt-0 font-semibold'
                 }`}
               >
                 <div
                   className={`${
                     data ? '' : 'text-left'
-                  } font-semibold text-base`}
+                  } text-base font-semibold`}
                 >
                   Upload file to submit:
                 </div>
@@ -353,7 +353,7 @@ const EssayQuestionPreview = ({
           ) : (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
-                <div className="font-semibold text-base">
+                <div className="text-base font-semibold">
                   Upload file to submit:
                 </div>
                 <div
@@ -412,7 +412,7 @@ const EssayQuestionPreview = ({
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
-            <div className="w-full h-[500px] border">
+            <div className="h-[500px] w-full border">
               <Controller
                 name={name}
                 control={control}
@@ -486,7 +486,7 @@ const EssayQuestionPreview = ({
               handleChange={handleChange}
             />
           ) : (
-            <div className="w-full h-[500px] border">
+            <div className="h-[500px] w-full border">
               <Controller
                 name={name}
                 control={control}

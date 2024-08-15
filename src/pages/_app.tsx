@@ -171,6 +171,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     '/test/[id]',
     '/case-study/[id]',
     '/certificates/[id]',
+    '/case-study/result/[id]',
   ]
 
   const showHelp = !excludedPathsHelp.some((path) =>

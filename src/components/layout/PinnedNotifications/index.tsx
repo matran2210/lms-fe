@@ -32,18 +32,18 @@ function PinnedNotifications() {
         openPinned &&
         pinnedNotifications?.data?.content && (
           <React.Fragment>
-            <div className={`w-full bg-pinned-1 z-50 fixed h-12 text-white`}>
-              <Row className="flex flex-row h-12">
+            <div className={`fixed z-50 h-12 w-full bg-pinned-1 text-white`}>
+              <Row className="flex h-12 flex-row">
                 <Col span={2}></Col>
                 <Col span={21}>
-                  <div className="flex flex-row justify-items-center h-12">
+                  <div className="flex h-12 flex-row justify-items-center">
                     <div className="mx-auto flex flex-row">
-                      <div className="text-center content-center">
+                      <div className="content-center text-center">
                         <IconLoudSpeaker />
                       </div>
-                      <div className="flex flex-row items-center content-center">
+                      <div className="flex flex-row content-center items-center">
                         <div
-                          className={`${showPinNoti ? 'shadow-pinned overflow-hidden' : ''} ml-2`}
+                          className={`${showPinNoti ? 'overflow-hidden shadow-pinned' : ''} ml-2`}
                         >
                           <p
                             className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}
@@ -63,7 +63,7 @@ function PinnedNotifications() {
                 <Col span={1}>
                   <div
                     onClick={handleClosePinned}
-                    className="float-right pr-6 cursor-pointer h-full content-center"
+                    className="float-right h-full cursor-pointer content-center pr-6"
                   >
                     <CloseIconNote />
                   </div>

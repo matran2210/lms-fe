@@ -35,14 +35,14 @@ const ModalDeleteComment = ({
       scrollbale={false}
     >
       <div className="flex justify-center">
-        <div className="p-8 rounded-full bg-secondary w-fit">
+        <div className="w-fit rounded-full bg-secondary p-8">
           <AlertIcon />
         </div>
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6 flex justify-center">
+      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
         Delete Comment?
       </div>
-      <div className="text-medium-sm text-gray-1 text-center mt-4 mb-11">
+      <div className="mb-11 mt-4 text-center text-medium-sm text-gray-1">
         Are you sure you want to delete this comment?
       </div>
     </SappModalV2>

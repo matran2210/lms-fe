@@ -42,19 +42,19 @@ export default function DashboardLayout({
       <Sidebar
         isOpened={isOpened}
         toggleDrawer={toggleDrawer}
-        className={`menu-sidebar-left fixed top-0 md:left-0 h-screen bg-white shadow-sidebar w-20 max-w-screen ${
+        className={`menu-sidebar-left max-w-screen fixed top-0 h-screen w-20 bg-white shadow-sidebar md:left-0 ${
           openDrawer ? 'opacity-5' : ''
         } ${guideStatus ? '' : 'overflow-hidden'} ${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
         setOpenResource={setOpenResource}
         openResource={openResource}
       />
-      <div className="w-full min-h-screen">
+      <div className="min-h-screen w-full">
         {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}
         {/* <div> */}
         <div
-          className={`${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''} bg-gray-4 min-h-full`}
+          className={`${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''} min-h-full bg-gray-4`}
         >
-          <div className="ml-0 md:ml-20 sapp-loading">{children}</div>
+          <div className="sapp-loading ml-0 md:ml-20">{children}</div>
         </div>
         {/* </div> */}
         {/* <Footer /> */}

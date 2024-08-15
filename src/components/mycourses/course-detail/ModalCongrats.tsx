@@ -95,29 +95,29 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
     >
       <div className="flex justify-center">
         <div
-          className="p-8 rounded-full bg-secondary"
+          className="rounded-full bg-secondary p-8"
           style={{ width: 'fit-content' }}
         >
           <IconCongrats />
         </div>
       </div>
-      <div className="text-bw-1 text-4xl font-semibold mt-6 flex justify-center">
+      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
         Congratulations
       </div>
-      <div className="text-center mt-4 mb-3">
-        <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center">
+      <div className="mb-3 mt-4 text-center">
+        <span className="mb-3 mt-4 text-center text-medium-sm font-normal text-gray-1">
           Congratulations on completing the Final Test of
         </span>
-        <span className="text-bw-1 text-medium-sm font-semibold mt-4 mb-3 text-center ms-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-semibold text-bw-1">
           {name}
         </span>
-        <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center ms-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-normal text-gray-1">
           with a score of
         </span>
-        <span className="text-bw-1 text-medium-sm font-semibold mt-4 mb-3 text-center ms-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-semibold text-bw-1">
           {scoreQuestion}
         </span>
-        <span className="text-gray-1 text-medium-sm font-normal mt-4 mb-3 text-center">
+        <span className="mb-3 mt-4 text-center text-medium-sm font-normal text-gray-1">
           . The system will calculate your overall grade for this course and
           return it to you via Email shortly.
         </span>

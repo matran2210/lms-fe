@@ -501,7 +501,7 @@ const ActivityPage = () => {
                 >
                   <li
                     className={
-                      'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
+                      'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
                     }
                     title={e?.name}
                   >
@@ -587,10 +587,10 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
+        <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
-            <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
+          <ul className="line-clamp-1 flex flex-wrap gap-1 overflow-x-auto py-6 text-medium-sm font-medium">
+            <li className="cursor-pointer whitespace-nowrap text-gray-1 hover:text-primary">
               <Link
                 href="/courses"
                 className="breadcrumbs__link"
@@ -647,8 +647,8 @@ const ActivityPage = () => {
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute h-full w-full  top-0 left-0 border">
-                    <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {
@@ -669,26 +669,26 @@ const ActivityPage = () => {
             {/* Header */}
             <div className="bg-gray-3 px-6 ">
               <div
-                className={`flex justify-between w-full gap-4 py-6 select-none ${
+                className={`flex w-full select-none justify-between gap-4 py-6 ${
                   activity?.course_outcomes?.length > 0
-                    ? 'border-b borderColor-default'
+                    ? 'borderColor-default border-b'
                     : ''
                 }`}
               >
-                <div className="font-medium text-2xl ">{activity?.name}</div>
-                <div className="text-sm text-gray-1 whitespace-nowrap">
+                <div className="text-2xl font-medium ">{activity?.name}</div>
+                <div className="whitespace-nowrap text-sm text-gray-1">
                   {activity?.duration || 0}{' '}
                   {activity?.duration > 1 ? 'mins' : 'min'} estimated
                 </div>
               </div>
 
               {activity?.course_outcomes?.length > 0 && (
-                <div className={`pt-6 pb-4`}>
-                  <div className="font-semibold text-base mb-2 select-none">
+                <div className={`pb-4 pt-6`}>
+                  <div className="mb-2 select-none text-base font-semibold">
                     Learning Outcome:
                   </div>
 
-                  <ul className="list-disc text-base ml-3 select-none">
+                  <ul className="ml-3 select-none list-disc text-base">
                     {activity?.course_outcomes?.map((e: any) => {
                       return (
                         <li className="ml-4" key={e?.id}>
@@ -706,13 +706,13 @@ const ActivityPage = () => {
 
             {/* Tabs */}
             <div className="bg-gray-3">
-              <div className="flex gap-2 px-6 flex-wrap">
+              <div className="flex flex-wrap gap-2 px-6">
                 {selector?.tabs?.map((e) => {
                   return (
                     <SappButton
                       key={e?.id}
                       size="small"
-                      className="py-2.5 !px-3 text-medium-sm !font-normal"
+                      className="!px-3 py-2.5 text-medium-sm !font-normal"
                       color={tabButtonColor(e?.id)}
                       title={truncateString(e?.name, 60)}
                       onClick={() => {
@@ -727,11 +727,11 @@ const ActivityPage = () => {
             <ActivitySkeleton
               length={1}
               loading={selector.loading}
-              className="bg-white mb-6"
+              className="mb-6 bg-white"
               classChild="w-11/12 mx-auto max-w-[950px]"
             >
-              <div className="bg-white pb-6 mb-6">
-                <div className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}>
+              <div className="mb-6 bg-white pb-6">
+                <div className={`mx-auto my-0 w-full max-w-[1000px] px-6 pt-6`}>
                   <div className="tab-content overflow-x-auto overflow-y-hidden">
                     {course_tab_documents?.map((e, i) => {
                       const marginBottom =
@@ -788,9 +788,7 @@ const ActivityPage = () => {
                               streamRefProp={(el: any) =>
                                 (videoRef.current[i || 0] = el)
                               }
-                              handleProcess={
-                                handleFinishedCourseSectionProgress
-                              }
+                              handleProcess={onVideoStart}
                               document_id={e?.id}
                               quizId={e?.quiz?.id || ''}
                               grading_preference={
@@ -814,7 +812,7 @@ const ActivityPage = () => {
                           getPreviousTabId() ? 'pb-4' : 'pb-0'
                         } `}
                       >
-                        <div className="font-semibold text-base">Resource:</div>
+                        <div className="text-base font-semibold">Resource:</div>
                         <ul className="list-disc text-base">
                           {activity?.files.map((e: any, index: number) => {
                             return (
@@ -885,7 +883,7 @@ const ActivityPage = () => {
                     </>
                   )}
 
-                  <div className="flex justify-between flex-wrap gap-5 mt-8">
+                  <div className="mt-8 flex flex-wrap justify-between gap-5">
                     {getPreviousTabId() && (
                       <div className="w-auto">
                         <div className="relative">
@@ -894,7 +892,7 @@ const ActivityPage = () => {
                               handleChangeTab(getPreviousTabId() || '')
                               trackGAEvent('Click Button Previous Tab Activity')
                             }}
-                            className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold text-bw-1 hover:text-primary"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -916,14 +914,14 @@ const ActivityPage = () => {
                       </div>
                     )}
                     {getNextTabId() && (
-                      <div className="w-auto relative ml-auto">
+                      <div className="relative ml-auto w-auto">
                         <div className="relative">
                           <div
                             onClick={() => {
                               handleChangeTab(getNextTabId() || '')
                               trackGAEvent('Click Button Next Tab Activity')
                             }}
-                            className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold text-bw-1 hover:text-primary"
                           >
                             Next Tab
                             <svg
@@ -940,7 +938,7 @@ const ActivityPage = () => {
                               />
                             </svg>
                           </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-3"></div>
                         </div>
                       </div>
                     )}
@@ -957,7 +955,7 @@ const ActivityPage = () => {
               nextActivityIndex !== sessionData?.length - 1) ||
             (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
             <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-              <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
+              <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
                 <div
                   ref={endActivityRef}
                   className={`flex flex-nowrap gap-5 justify-${
@@ -979,11 +977,11 @@ const ActivityPage = () => {
                           })
                           trackGAEvent('Click Button Previous Activity')
                         }}
-                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                        className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
                       >
                         Previous Activity
                       </div>
-                      <div className="text-medium-sm text-gray-1 flex">
+                      <div className="flex text-medium-sm text-gray-1">
                         {getCourseIcon(
                           activity?.previous_activity
                             ? activity?.previous_activity?.display_icon
@@ -1029,11 +1027,11 @@ const ActivityPage = () => {
                           })
                           trackGAEvent('Click Button Next Activity')
                         }}
-                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                        className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                       >
                         Next Activity
                       </div>
-                      <div className="text-medium-sm text-gray-1 flex justify-end">
+                      <div className="flex justify-end text-medium-sm text-gray-1">
                         <SappTooltip
                           title={
                             activity?.next_activity
@@ -1044,7 +1042,7 @@ const ActivityPage = () => {
                             activity?.next_activity?.name?.length > 80
                           }
                         >
-                          <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
+                          <span className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
                             {activity?.next_activity
                               ? truncateString(activity?.next_activity.name, 80)
                               : truncateString(
@@ -1069,7 +1067,7 @@ const ActivityPage = () => {
             </div>
           )}
           <div></div>
-          <div className="shadow-activity mt-6" data-aos={ANIMATION.DATA_AOS}>
+          <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
             <Discussion class_id={(router.query.id as string) || ''} />
           </div>
 
@@ -1095,9 +1093,9 @@ const ActivityPage = () => {
                   // not_resizable
                   // className='pointer-events-none'
                 >
-                  <div className="absolute h-full w-full  top-0 left-0 border">
-                    <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
-                      <div className="text-sm font-normal truncate">
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="truncate text-sm font-normal">
                         {e?.fileName}
                       </div>
                       {/* <CloseIcon */}
@@ -1108,7 +1106,7 @@ const ActivityPage = () => {
                     <div
                       // className="overflow-auto p-4 bg-white"
                       style={{ height: 'calc(100% - 40px' }}
-                      className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                     >
                       {/* <div className='flex flex-'> */}
                       <PdfViewer file={e?.file} />
@@ -1134,10 +1132,10 @@ const ActivityPage = () => {
                       : index + 500
                   }
                 >
-                  <div className="absolute h-full w-full  top-0 left-0 border">
-                    <div className="flex items-center bg-white w-full h-10 justify-between px-5">
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-white px-5">
                       <div className="truncate">
-                        <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                        <span className="text-base font-semibold text-bw-1">{`Exhibit ${
                           e?.index + 1
                         }: `}</span>
                         {e?.name}
@@ -1146,7 +1144,7 @@ const ActivityPage = () => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
                         text_editor_content={e?.description}
                         className=" w-full "

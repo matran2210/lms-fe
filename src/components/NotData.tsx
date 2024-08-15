@@ -5,7 +5,7 @@ const NotData = ({ className }: { className?: string | undefined }) => {
     <div
       className={`${
         className ?? ''
-      } d-flex text-center w-100 align-content-center justify-content-center`}
+      } d-flex w-100 align-content-center justify-content-center text-center`}
     >
       No matching records found
     </div>

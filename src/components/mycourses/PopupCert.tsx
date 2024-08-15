@@ -49,7 +49,7 @@ const PopupCert = ({}: IProps) => {
       handleClose={onClickBackCourse}
       showOkButton
     >
-      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
+      <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <IRibbon />
       </div>
       <div className="text-2xl md:text-4xl text-bw-1 font-semibold text-center">

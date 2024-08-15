@@ -16,16 +16,16 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   return (
     <nav className="breadcrumb" aria-label="breadcrumbs">
       <ul
-        className={`breadcrumb flex flex-row py-6 font-medium text-sm ${className}`}
+        className={`breadcrumb flex flex-row py-6 text-sm font-medium ${className}`}
       >
         {tabs.map((tab, index) => (
           <li className="flex items-center gap-0.5 text-medium-sm" key={index}>
             {index !== tabs.length - 1 ? (
               <>
-                {tab.link ? (
+                {tab.link && !tab?.disable ? (
                   <Link href={tab.link}>
                     <a
-                      className={`w-fit max-w-[210px] line-clamp-1 ${
+                      className={`line-clamp-1 w-fit max-w-[210px] ${
                         currentPage === tab.title ? 'text-bw-1' : 'text-gray-1'
                       }
                       `}

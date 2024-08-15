@@ -264,9 +264,9 @@ const SappModal: React.FC<IProps> = ({
           <div
             className={`sapp-custom-modal ${
               isInner
-                ? 'max-h-full absolute sapp-custom-modal-inner'
-                : `max-h-screen fixed`
-            } w-full flex justify-center inset-0 items-center ${zIndex} ${modelClassname}`}
+                ? 'sapp-custom-modal-inner absolute max-h-full'
+                : `fixed max-h-screen`
+            } inset-0 flex w-full items-center justify-center ${zIndex} ${modelClassname}`}
             role="dialog"
             aria-modal="true"
           >
@@ -285,24 +285,24 @@ const SappModal: React.FC<IProps> = ({
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
-              } animate-fade-in-overlay  inset-0 bg-black opacity-80 transition-opacity ${overlayClass}`}
+              } bg-black  inset-0 animate-fade-in-overlay opacity-80 transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${
                 isFullScreen || `${size} p-4 xl:py-8`
-              }  w-full text-center h-full flex justify-center inset-0 items-${position}`}
+              }  inset-0 flex h-full w-full justify-center text-center items-${position}`}
             >
               <div
                 ref={confirmDialogRef}
-                className={`w-fit max-h-full max-w-full 
+                className={`max-h-full w-fit max-w-full 
                 ${isContentFull ? 'w-full' : 'w-fit'}
                 ${refClass}`}
               >
                 {showHeader &&
                   (customHeader || (
-                    <div className="bg-white md:pb-5 pb-5 relative">
+                    <div className="relative bg-white pb-5 md:pb-5">
                       {isBordered && (
-                        <div className="absolute left-0 right-0 border-b border-gray-2 bottom-0 -mx-6"></div>
+                        <div className="absolute bottom-0 left-0 right-0 -mx-6 border-b border-gray-2"></div>
                       )}
                       <div className="flex">
                         {customTitle || (
@@ -315,7 +315,7 @@ const SappModal: React.FC<IProps> = ({
                             className="ml-auto cursor-pointer"
                             onClick={onCancel}
                           >
-                            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+                            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
                           </div>
                         )}
                       </div>
@@ -325,16 +325,16 @@ const SappModal: React.FC<IProps> = ({
                 <div
                   className={`${parentChildClass} ${
                     scrollbale &&
-                    'snap-y flex-1 overflow-y-scroll bg-white -mr-4.5'
+                    '-mr-4.5 flex-1 snap-y overflow-y-scroll bg-white'
                   }`}
                 >
                   <div className={`${childClass}`}>{children}</div>
                 </div>
 
                 {showFooter && (
-                  <div className={`md:pt-5 pt-5 relative ${footerClassName}`}>
+                  <div className={`relative pt-5 md:pt-5 ${footerClassName}`}>
                     {isBordered && (
-                      <div className="absolute left-0 right-0 border-b border-gray-2 top-0 -mx-6"></div>
+                      <div className="absolute left-0 right-0 top-0 -mx-6 border-b border-gray-2"></div>
                     )}
                     {customFooter || (
                       <ButtonCancelSubmit

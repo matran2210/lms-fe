@@ -26,25 +26,25 @@ const EntrancePopupContent = ({
     <>
       <div className="content">
         <div className="info">
-          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+          <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
             <p>Name:</p>
-            <p className="text-bw-1 font-medium line-clamp-2">{name}</p>
+            <p className="line-clamp-2 font-medium text-bw-1">{name}</p>
           </div>
-          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+          <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
             <p>Score:</p>
-            <p className="text-bw-1 font-medium">
+            <p className="font-medium text-bw-1">
               {score && score !== null ? score : '--'}
             </p>
           </div>
-          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+          <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
             <p>Time Allowed:</p>
-            <p className="text-bw-1 font-medium">{timeAllowFormatted}</p>
+            <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
           </div>
-          <div className="flex justify-between text-base text-gray-1 capitalize py-6 border-b border-gray-2">
+          <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
             <p>No of Attempts:</p>
-            <p className="text-bw-1 font-medium">{attemps}</p>
+            <p className="font-medium text-bw-1">{attemps}</p>
           </div>
-          <div className="flex justify-between text-base text-gray-1 capitalize py-6">
+          <div className="flex justify-between py-6 text-base capitalize text-gray-1">
             <p>Status:</p>
             <div
               className={`${

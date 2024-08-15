@@ -15,8 +15,8 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
     <div
       className={`${
         !isEmpty(entranceTestLists)
-          ? 'grid grid-cols-1 md:grid-cols-3 gap-6'
-          : 'flex justify-center min-h-[calc(100vh-15rem)] items-center'
+          ? 'grid grid-cols-1 gap-6 md:grid-cols-3'
+          : 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
       }`}
       // data-aos={ANIMATION.DATA_AOS}
     >
@@ -24,7 +24,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
         entranceTestLists?.map((e, index) => (
           <div
             key={index}
-            className={`item bg-white p-7.5 shadow-sidebar flex flex-col`}
+            className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
           >
             <EntranceTest data={e} />
           </div>

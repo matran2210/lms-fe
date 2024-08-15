@@ -68,7 +68,7 @@ const SAPPTextFiled = ({
             onChange={onChange}
             className={`${inputClassName} ${TEXT_SIZES[textSize]} ${
               isError ? '!border-error' : ''
-            } h-[50px] border-solid form-control w-full border-default border py-3 px-4 shadow-0 focus:shadow-0 focus:border-primary focus:outline-none font-medium text-bw-1 placeholder:font-medium placeholder:text-gray-1 ${
+            } form-control h-[50px] w-full border border-solid border-default px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none ${
               disabled ? 'bg-gray-4' : 'bg-transparent'
             }`}
             placeholder={placeholder}
@@ -81,7 +81,7 @@ const SAPPTextFiled = ({
           <div
             className={`${
               showPassword ? 'bg-show-password' : 'bg-hide-password'
-            } absolute top-2/4 -translate-y-2/4 right-4 h-4 w-4 max-w-4 min-w-4 min-h-4 max-h-4 cursor-pointer`}
+            } absolute right-4 top-2/4 h-4 max-h-4 min-h-4 w-4 min-w-4 max-w-4 -translate-y-2/4 cursor-pointer`}
             onClick={() => setShowPassword(!showPassword)}
           ></div>
         )}

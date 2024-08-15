@@ -127,10 +127,10 @@ const ProfileSideBar = ({ page }: IProps) => {
 
   return (
     <div
-      className="md:w-[22.8rem] w-100 shadow-box"
+      className="w-100 shadow-box md:w-[22.8rem]"
       data-aos={ANIMATION.DATA_AOS}
     >
-      <ul className="px-3 py-4 bg-white h-full flex flex-col justify-between">
+      <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
         <div>
           {Object.entries(PROFILE_PAGES).map(([key, value]) => {
             const urlPage = key?.toLowerCase()
@@ -151,19 +151,19 @@ const ProfileSideBar = ({ page }: IProps) => {
 
             return (
               <li
-                className={`${className} cursor-pointer relative group border-b-[1px] border-gray-2`}
+                className={`${className} group relative cursor-pointer border-b-[1px] border-gray-2`}
                 key={key}
               >
                 <a
-                  className={`p-5 w-full text-left flex justify-between hover:bg-secondary hover-transition-font-weight  ${
+                  className={`hover-transition-font-weight flex w-full justify-between p-5 text-left hover:bg-secondary  ${
                     isActive ||
                     (urlPage === 'security' &&
                       Object.values(childActivationStates)?.some(
                         (active) => active,
                       ) &&
                       !childActivationStates[childLabel])
-                      ? 'bg-secondary text-primary font-medium'
-                      : 'hover:left-[-0.25px] font-normal'
+                      ? 'bg-secondary font-medium text-primary'
+                      : 'font-normal hover:left-[-0.25px]'
                   }`}
                   style={{
                     position: 'relative', // Đặt position là relative
@@ -199,7 +199,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                 {urlChildren?.length > 0 && (
                   <div
                     className={clsx(
-                      'border-l border-gray-2 ml-5',
+                      'ml-5 border-l border-gray-2',
                       isExpanded && 'my-5',
                     )}
                   >
@@ -214,14 +214,14 @@ const ProfileSideBar = ({ page }: IProps) => {
                         return (
                           <div
                             key={childLabel}
-                            className={`${className} cursor-pointer relative ms-4 hover:bg-secondary hover-transition-font-weight ${
+                            className={`${className} hover-transition-font-weight relative ms-4 cursor-pointer hover:bg-secondary ${
                               childIsActive
                                 ? 'bg-white font-medium text-primary'
-                                : 'hover:left-[-0.25px] font-normal'
+                                : 'font-normal hover:left-[-0.25px]'
                             }`}
                           >
                             <a
-                              className="p-3 block w-full text-left"
+                              className="block w-full p-3 text-left"
                               onClick={() => handleChildClick(childLabel)}
                             >
                               {getLabelFromChild(child).toLowerCase() ===
@@ -235,7 +235,7 @@ const ProfileSideBar = ({ page }: IProps) => {
                   </div>
                 )}
                 <div
-                  className={`border-b border-gray-3 relative top-px group-hover:border-secondary ${
+                  className={`relative top-px border-b border-gray-3 group-hover:border-secondary ${
                     isActive ? 'border-secondary' : ''
                   }`}
                 ></div>
@@ -243,7 +243,7 @@ const ProfileSideBar = ({ page }: IProps) => {
             )
           })}
           <li
-            className="cursor-pointer p-5 text-gray-1 relative hover:bg-secondary font-normal hover:text-primary hover-transition-font-weight hover:left-[-0.25px]"
+            className="hover-transition-font-weight relative cursor-pointer p-5 font-normal text-gray-1 hover:left-[-0.25px] hover:bg-secondary hover:text-primary"
             onClick={handleLogout}
           >
             <div className="absolute inset-0 bottom-0"></div>

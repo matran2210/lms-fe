@@ -39,15 +39,15 @@ const PaginationSAPP = ({
     <>
       <div
         className={clsx(
-          `flex items-center justify-center md:justify-between flex-wrap gap-4 overflow-hidden`,
+          `flex flex-wrap items-center justify-center gap-4 overflow-hidden md:justify-between`,
           classname,
         )}
       >
         {type === 'table' && (
           <label className="flex items-center">
-            <span className="text-xsm text-gray-1 mr-2.5">Show</span>
+            <span className="mr-2.5 text-xsm text-gray-1">Show</span>
             <select
-              className="shadow-0 border-0 bg-gray-4 py-1 px-2.5 cursor-pointer w-[70px]"
+              className="w-[70px] cursor-pointer border-0 bg-gray-4 px-2.5 py-1 shadow-0"
               onChange={(e) => {
                 const pageNumber = parseInt(e.target.value)
                 handlePageChange(pageNumber)
@@ -59,7 +59,7 @@ const PaginationSAPP = ({
                 </option>
               ))}
             </select>
-            <span className="text-xsm text-gray-1 ml-2.5">
+            <span className="ml-2.5 text-xsm text-gray-1">
               of {totalItems} entries
             </span>
           </label>

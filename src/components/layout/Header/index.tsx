@@ -13,7 +13,7 @@ export default function Header({ isOpened, toggleDrawer }: HeaderProps) {
       <div className="block md:hidden" onClick={toggleDrawer}>
         {isOpened ? 'Show Sidebar' : 'Hidden SideBar'}
       </div>
-      <h1 className="text-5xl text-black">Location: {trans.location}</h1>
+      <h1 className="text-black text-5xl">Location: {trans.location}</h1>
       <div>Header</div>
     </div>
   )

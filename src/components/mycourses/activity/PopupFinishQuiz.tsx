@@ -41,10 +41,10 @@ const PopupFinishQuiz = ({ open, setOpen, submitQuiz }: IProps) => {
       <div className="mb-6">
         <ActiveIcon />
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold">
+      <div className="text-2xl font-semibold text-bw-1 md:text-4xl">
         Finish quiz?
       </div>
-      <div className="text-medium-sm text-gray-1 text-center mt-4 mb-11">
+      <div className="mb-11 mt-4 text-center text-medium-sm text-gray-1">
         Are you sure you want to Finish this quiz?
       </div>
     </SappModal>
