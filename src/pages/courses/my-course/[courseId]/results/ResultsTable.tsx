@@ -17,6 +17,8 @@ interface Iprops {
   courseId: string
 }
 
+// Là essay nên không có điểm
+const ESSAY_QUESTION = '0/0'
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
 const commonDataCellStyle = 'col text-start py-5 pr-4 whitespace-nowrap'
@@ -24,6 +26,7 @@ const headers = [
   'Name',
   'Belong To',
   'Type',
+  'Graded Activity',
   'Multiple Choice Score',
   'Time Spent',
   'Last submission',
@@ -89,15 +92,11 @@ const ResultsTable = ({ courseId }: Iprops) => {
         loading={isFetching}
       >
         {resultData?.data?.map((row: any) => {
-          const lastSubmission = row?.last_submit_time
-            ? dayjs(row?.last_submit_time).format('DD/MM/YYYY hh:mm')
-            : '-'
-
           return (
             <tr
               className={clsx({
                 'row h-auto border-b border-dashed border-gray-2': true,
-                'text-gray-2': !row.is_studied,
+                'text-gray-2': row.quiz.attempts.length === 0,
               })}
               key={row?.id}
             >
@@ -114,10 +113,10 @@ const ResultsTable = ({ courseId }: Iprops) => {
               {/* Belong to */}
               <td className={clsx(commonDataCellStyle)}>
                 <Tooltip
-                  title={row?.path?.length > 30 && row?.path}
+                  title={row?.path?.length > 30 && row?.path ? row.path : '-'}
                   color="white"
                 >
-                  {truncateString(row.path, 30)}
+                  {truncateString(row?.path || '-', 30)}
                 </Tooltip>
               </td>
 
@@ -126,21 +125,28 @@ const ResultsTable = ({ courseId }: Iprops) => {
                 {TEST_TYPE[row?.course_section_type]}
               </td>
 
-              {/* Grade */}
+              {/* Graded Activity */}
               <td className={clsx(commonDataCellStyle)}>
-                {row.score_percentage}
+                {row?.quiz?.is_graded ? 'Yes' : 'No'}
+              </td>
+
+              {/* Multiple Choice Score */}
+              <td className={clsx(commonDataCellStyle)}>
+                {row?.quiz?.attempts[0]?.ratio_score !== ESSAY_QUESTION
+                  ? row?.quiz?.attempts[0]?.ratio_score
+                  : '-'}
               </td>
 
               {/* Time Spent */}
               <td className={clsx(commonDataCellStyle)}>
-                {row.total_attempt_time
-                  ? getTimeFromInput(row.total_attempt_time)
-                  : '-'}
+                {getTimeFromInput(row?.quiz?.attempts[0]?.total_attempt_time)}
               </td>
 
               {/* Last Submission */}
               <td className={clsx('!pr-0', commonDataCellStyle)}>
-                {lastSubmission}
+                {dayjs(row?.quiz?.attempts[0]?.updated_at).format(
+                  'DD/MM/YYYY hh:mm',
+                ) || '-'}
               </td>
             </tr>
           )

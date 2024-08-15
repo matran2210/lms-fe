@@ -174,7 +174,7 @@ const YourScoreDetail = ({
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+      <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Score Details
       </div>
       <div className="block pl-4">
@@ -184,7 +184,7 @@ const YourScoreDetail = ({
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}
-          // classTableRes="overflow-x-auto"
+          classTable="w-full"
         >
           <>
             {scoreDetails?.answer_groups?.map((ansg: IAnswearGroup) => {

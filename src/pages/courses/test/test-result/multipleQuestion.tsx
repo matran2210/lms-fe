@@ -67,7 +67,7 @@ const MultipleQuestion = ({
           onClick={() => {
             router.push(`/explanation/${item?.id}?title=My Course`)
           }}
-          className={`flex h-8 w-8 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-8.5 md:h-10 md:w-10 xl:h-12 xl:w-12
+          className={`flex h-8 w-8 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-8.5 md:h-10 md:w-10 2xl:h-12 2xl:w-12
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
@@ -137,7 +137,7 @@ const MultipleQuestion = ({
     <div className="relative">
       <div
         className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 bg-white p-6 shadow-sidebar-tablet 
-        xl:sticky xl:top-6 xl:!h-fit xl:max-h-[calc(100vh-65px)] xl:pl-7 xl:shadow-sidebar`}
+        xl:sticky xl:top-6 xl:!h-fit xl:max-h-[calc(100vh-65px)] xl:overflow-auto xl:pl-7 xl:shadow-sidebar`}
         data-aos={ANIMATION.DATA_AOS}
         ref={multipleQuestionRef}
       >
@@ -147,7 +147,7 @@ const MultipleQuestion = ({
               ? 'visible mb-4 h-fit opacity-100 xl:mb-0'
               : 'invisible hidden h-0 opacity-0 xl:visible xl:block xl:h-auto xl:opacity-100'
           }
-        xl:max-h-auto flex w-full flex-col items-start gap-10 overflow-y-auto duration-300 xl:overflow-visible`}
+        xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300 xl:overflow-visible`}
         >
           <div className="flex w-full flex-col items-start">
             {renderBoxes(
@@ -162,7 +162,7 @@ const MultipleQuestion = ({
             )}
           </div>
         </div>
-        <div className="mt-auto w-full">
+        <div className="bottom-0 mt-auto w-full">
           <div
             className={`flex max-w-full flex-col items-end justify-between gap-2 border-default md:flex-row xl:items-center ${
               showMore
@@ -170,7 +170,7 @@ const MultipleQuestion = ({
                 : 'pt-0 xl:border-t xl:pt-6'
             }`}
           >
-            <div className="flex w-full flex-col gap-3 md:w-9/12 xl:flex-row">
+            <div className="flex w-full flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
                 className="flex cursor-pointer flex-row pr-2 text-center"
                 onClick={() => setOpenAnnotaion(true)}
