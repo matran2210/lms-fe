@@ -10,19 +10,21 @@ import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import ResultsTableFilter from './ResultsTableFilter'
+import { TEST_TYPE } from '@utils/constants'
+import { Tooltip } from 'antd'
 
 interface Iprops {
   courseId: string
 }
 
-const commonDataCellStyle = 'text-start py-5'
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
+const commonDataCellStyle = 'col text-start py-5 pr-4'
 const headers = [
   'Name',
   'Belong To',
   'Type',
-  'Grade',
+  'Multiple Choice Score',
   'Time Spent',
   'Last submission',
 ].map((label) => ({ label, className: commonHeaderCellStyle }))
@@ -76,14 +78,14 @@ const ResultsTable = ({ courseId }: Iprops) => {
 
   return (
     <>
-      <div className="mb-8 flex gap-6">
+      <div className="mb-8 flex flex-wrap gap-6 md:flex-nowrap">
         <ResultsTableFilter {...selectFilterProp} />
       </div>
       <SappTable
         headers={headers}
         hasCheck={false}
         isCheckedAll={false}
-        classTable="table-auto w-full"
+        classTable="w-full"
         loading={isFetching}
       >
         {resultData?.data?.map((row: any) => {
@@ -94,22 +96,28 @@ const ResultsTable = ({ courseId }: Iprops) => {
           return (
             <tr
               className={clsx({
-                'h-auto border-b border-dashed border-gray-2': true,
+                'row h-auto border-b border-dashed border-gray-2': true,
                 'text-gray-2': !row.is_studied,
               })}
               key={row?.id}
             >
               {/* Name */}
               <td className={clsx(commonDataCellStyle)}>
-                {truncateString(row?.name, 35)}
+                <Tooltip title={row?.name} color="white">
+                  {truncateString(row?.name, 30)}
+                </Tooltip>
               </td>
 
               {/* Belong to */}
-              <td className={clsx(commonDataCellStyle)}>{row.path}</td>
+              <td className={clsx(commonDataCellStyle)}>
+                <Tooltip title={row?.path} color="white">
+                  {truncateString(row.path, 30)}
+                </Tooltip>
+              </td>
 
               {/* Type */}
               <td className={clsx(commonDataCellStyle)}>
-                {row?.course_section_type.toLowerCase()}
+                {TEST_TYPE[row?.course_section_type]}
               </td>
 
               {/* Grade */}
@@ -125,7 +133,9 @@ const ResultsTable = ({ courseId }: Iprops) => {
               </td>
 
               {/* Last Submission */}
-              <td className={clsx(commonDataCellStyle)}>{lastSubmission}</td>
+              <td className={clsx('!pr-0', commonDataCellStyle)}>
+                {lastSubmission}
+              </td>
             </tr>
           )
         })}

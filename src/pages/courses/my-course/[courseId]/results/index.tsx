@@ -84,7 +84,7 @@ const Results = () => {
             <Heading greeting="" title={'Results'} />
           </div>
           <div className="mx-auto my-0 mb-6 mt-6 max-w-xxl bg-white px-8 pb-3 pt-8 xl-max:container">
-            <ResultsTable courseId={courseId} />
+            {isSuccess && <ResultsTable courseId={courseId} />}
           </div>
         </div>
       </Layout>
