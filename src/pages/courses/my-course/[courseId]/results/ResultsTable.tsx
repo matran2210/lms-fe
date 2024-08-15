@@ -19,7 +19,7 @@ interface Iprops {
 
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
-const commonDataCellStyle = 'col text-start py-5 pr-4'
+const commonDataCellStyle = 'col text-start py-5 pr-4 whitespace-nowrap'
 const headers = [
   'Name',
   'Belong To',
@@ -103,14 +103,20 @@ const ResultsTable = ({ courseId }: Iprops) => {
             >
               {/* Name */}
               <td className={clsx(commonDataCellStyle)}>
-                <Tooltip title={row?.name} color="white">
+                <Tooltip
+                  title={row?.name?.length > 30 && row?.name}
+                  color="white"
+                >
                   {truncateString(row?.name, 30)}
                 </Tooltip>
               </td>
 
               {/* Belong to */}
               <td className={clsx(commonDataCellStyle)}>
-                <Tooltip title={row?.path} color="white">
+                <Tooltip
+                  title={row?.path?.length > 30 && row?.path}
+                  color="white"
+                >
                   {truncateString(row.path, 30)}
                 </Tooltip>
               </td>
