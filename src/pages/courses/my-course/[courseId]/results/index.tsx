@@ -48,6 +48,7 @@ const Results = () => {
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
     enabled: router.isReady,
+    refetchOnWindowFocus: true,
   })
 
   /**
