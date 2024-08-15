@@ -947,7 +947,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                             undefined,
                             undefined,
                             undefined,
-                            question?.requirements?.[0],
+                            e?.requirement,
                             question?.question_content,
                             valueRef,
                           )}
