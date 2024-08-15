@@ -1,5 +1,5 @@
-import { AlertIcon, LoginIcon } from '@assets/icons'
-import SappModal from '@components/base/modal/SappModal'
+import { LoginIcon } from '@assets/icons'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { useRouter } from 'next/router'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -23,29 +23,19 @@ const PopUpRemindEntrance = () => {
   }
 
   return (
-    <SappModal
+    <SappModalV3
       open={shouldShowRemind && getEnstranceTest === 'true'}
-      setOpen={() => dispatch(closeShowRemind())}
+      // setOpen={() => dispatch(closeShowRemind())}
       cancelButtonCaption="Close"
       okButtonCaption="Take Your Test"
       handleCancel={onCancel}
-      handleSubmit={onOk}
+      onOk={onOk}
       //   showCancelButton={true}
-      showHeader={false}
-      refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
-      size="max-w-[614px]"
-      footerButtonClassName="flex flex-col-reverse gap-6"
-      childClass="flex flex-col justify-center items-center"
-      parentChildClass=""
-      position="center"
       fullWidthBtn={true}
-      closeAfterSubmit={false}
       buttonSize="extra"
+      icon={<LoginIcon />}
+      header="Take Your Test"
     >
-      <div className="p-11">
-        <LoginIcon />
-      </div>
-      <div className="mt-6 text-4xl font-bold text-bw-1">Take Your Test</div>
       <div className="mb-7 mt-4 text-center text-sm font-normal text-gray-1">
         <span>
           You have
@@ -53,7 +43,7 @@ const PopUpRemindEntrance = () => {
         </span>
         <span> entrance tests that haven’t been taken, complete them now</span>
       </div>
-    </SappModal>
+    </SappModalV3>
   )
 }
 export default PopUpRemindEntrance
