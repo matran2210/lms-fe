@@ -788,9 +788,7 @@ const ActivityPage = () => {
                               streamRefProp={(el: any) =>
                                 (videoRef.current[i || 0] = el)
                               }
-                              handleProcess={
-                                handleFinishedCourseSectionProgress
-                              }
+                              handleProcess={onVideoStart}
                               document_id={e?.id}
                               quizId={e?.quiz?.id || ''}
                               grading_preference={
