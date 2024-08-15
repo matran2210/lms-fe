@@ -6,6 +6,7 @@ import {
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
   IDiscussion,
+  IUserInDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
 import { CoursesAPI } from '../../../../../pages/api/courses/index'
@@ -17,6 +18,7 @@ export interface ICourseActivityState extends IActivity {
   loadingDiscussion: boolean
   currentTabId?: string
   discussion?: IDiscussion[]
+  userInDiscussion?: IUserInDiscussion
   calculator_status?: boolean
 }
 
@@ -193,6 +195,7 @@ export const courseActivitySlice = createSlice({
     builder.addCase(getDiscussion.fulfilled, (state, action) => {
       state.loadingDiscussion = false
       state.discussion = action.payload?.discussions
+      state.userInDiscussion = action.payload?.user
     })
     builder.addCase(getDiscussion.rejected, (state) => {
       state.loadingDiscussion = false
