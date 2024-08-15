@@ -909,7 +909,7 @@ const CaseStudyResult = () => {
                     className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                     onClick={handlePeriousTopic}
                   >
-                    <div className="text-medium-sm font-medium">Prerious</div>
+                    <div className="text-medium-sm font-medium">Previous</div>
                   </button>
                 )}
                 <button
