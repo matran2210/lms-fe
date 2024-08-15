@@ -76,7 +76,7 @@ export default function MenuItem({
 
   const handleOpenResultsPage = () => {
     router.push({
-      pathname: `/courses/my-course/${router.query.courseId}/results`,
+      pathname: `/courses/my-course/${router.query.courseId || router.query.id}/results`,
     })
   }
 

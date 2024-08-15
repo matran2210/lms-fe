@@ -181,7 +181,7 @@ const TestResultPage = ({
                   </div>
                   <MultipleQuestion
                     questions={questions}
-                    className={'h-full xl:w-full'}
+                    className={'h-full'}
                     multipleQuestionRef={multipleQuestionRef}
                     setOpenAnnotaion={setOpenAnnotaion}
                   />

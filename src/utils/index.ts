@@ -102,23 +102,26 @@ export const getTimeFromInput = (
   totalTime: number,
   unit: 'milliseconds' | 'seconds' = 'milliseconds',
 ) => {
-  let totalSeconds
+  if (totalTime !== null) {
+    let totalSeconds
 
-  if (unit === 'milliseconds') {
-    totalSeconds = Math.floor(totalTime / 1000)
-  } else {
-    totalSeconds = totalTime
+    if (unit === 'milliseconds') {
+      totalSeconds = Math.floor(totalTime / 1000)
+    } else {
+      totalSeconds = totalTime
+    }
+
+    const totalMinutes = Math.floor(totalSeconds / 60)
+    const totalHours = Math.floor(totalMinutes / 60)
+
+    const formattedHours =
+      totalHours > 0 ? ('0' + totalHours).slice(-2) + ':' : ''
+    const formattedMinutes = ('0' + (totalMinutes % 60)).slice(-2)
+    const formattedSeconds = ('0' + (totalSeconds % 60)).slice(-2)
+
+    return `${formattedHours}${formattedMinutes}:${formattedSeconds}`
   }
-
-  const totalMinutes = Math.floor(totalSeconds / 60)
-  const totalHours = Math.floor(totalMinutes / 60)
-
-  const formattedHours =
-    totalHours > 0 ? ('0' + totalHours).slice(-2) + ':' : ''
-  const formattedMinutes = ('0' + (totalMinutes % 60)).slice(-2)
-  const formattedSeconds = ('0' + (totalSeconds % 60)).slice(-2)
-
-  return `${formattedHours}${formattedMinutes}:${formattedSeconds}`
+  return '-'
 }
 
 export const countWords = (text: string) => {

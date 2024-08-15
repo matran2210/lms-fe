@@ -57,7 +57,6 @@ const ResultsTableFilter = ({
   hasNextActivityPage,
   fetchNextActivityPage,
 }: IProps) => {
-  const queryClient = useQueryClient()
   return (
     <>
       {/* Section */}
