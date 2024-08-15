@@ -7,13 +7,13 @@ export const LAYOUT = {
 }
 export const TEST_TYPE = {
   QUIZ: 'Quiz',
-  MID_TERM_TEST: 'Mid Term Test',
+  MID_TERM_TEST: 'Midterm Test',
   FINAL_TEST: 'Final Test',
   MOCK_TEST: 'Mock Test',
   ENTRANCE_TEST: 'Entrance Test',
   // STORY = 'STORY',
-  TOPIC_TEST: 'Topic Test',
-  CHAPTER_TEST: 'Chapter Test',
+  TOPIC_TEST: 'Part/Topic Test',
+  CHAPTER_TEST: 'Chapter/Module Test',
 } as any
 
 // Danh sách F thấp (< F4)

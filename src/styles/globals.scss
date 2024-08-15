@@ -1067,6 +1067,10 @@ p a {
 }
 
 br {
-  content: "";
+  content: '';
   @apply block m-2 text-sm;
+}
+
+td.py-5.px-3.sapp-table-quiz {
+  border-width: 0px;
 }

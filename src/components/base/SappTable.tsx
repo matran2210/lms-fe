@@ -35,7 +35,9 @@ const SappTable = ({
   classString = '',
 }: IProps) => {
   return (
-    <div className={`table-responsive overflow-x-auto ${classTableRes}`}>
+    <div
+      className={`table-responsive relative overflow-x-auto ${classTableRes}`}
+    >
       <table className={classTable}>
         {showHeader && (
           <thead className={`${theadClass}`}>
@@ -43,7 +45,7 @@ const SappTable = ({
               className={`text-muted fw-bolder fs-7 text-uppercase gs-0 text-start ${classString}`}
             >
               {hasCheck && (
-                <th className="w-50px pr-5">
+                <th className="w-50px pr-5" scope="col">
                   {hasCheckAll && (
                     <SAPPCheckbox checked={isCheckedAll} onChange={onChange} />
                   )}

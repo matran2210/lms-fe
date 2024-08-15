@@ -70,3 +70,9 @@ export interface ICreateDiscussionRepReact {
   created_at: string
   updated_at: string
 }
+
+export interface IUserInDiscussion {
+  id: string
+  is_sapp_supporter: boolean
+  supporter_display_name: string
+}

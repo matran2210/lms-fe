@@ -308,6 +308,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         'test-result': 'minmax(0, 3fr) minmax(0, 1fr)',
+        15: 'repeat(15, minmax(0, 1fr))',
       },
     },
   },
