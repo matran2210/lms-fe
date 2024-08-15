@@ -39,6 +39,29 @@ type Props = {
   class_user_id?: string
 }
 
+interface IAnswer {
+  active: string
+  id: string
+  is_correct: false
+  quiz_attempt_id: string
+  time_spent: number
+  topic_attempt_id: string
+  question: {
+    id: string
+    qType: string
+    question_content: string
+    question_filter_id: {
+      part: {
+        name: string
+      }
+    }
+  }
+}
+
+interface IAnswers {
+  answers: IAnswer[]
+}
+
 const QuizDocument = ({
   questions,
   activityId,
@@ -251,17 +274,20 @@ const QuizDocument = ({
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response?.data?.meta,
         data: (modalResult?.questions?.data || []).concat(
-          response?.data?.answers?.map((e: any) => {
-            return {
-              id: e?.id,
-              content: e?.question?.question_content,
-              section: e?.question?.question_filter_id?.part?.name,
-              type: e?.question?.qType,
-              is_correct: e?.is_correct,
-              time_spent: e?.time_spent,
-              question: e?.question as any,
-              active: e?.active,
-            }
+          response?.data?.answer_groups?.flatMap((group: IAnswers) => {
+            const answers = group?.answers?.map((answer: IAnswer) => {
+              return {
+                id: answer?.id,
+                content: answer?.question?.question_content,
+                section: answer?.question?.question_filter_id?.part?.name,
+                type: answer?.question?.qType,
+                is_correct: answer?.is_correct,
+                time_spent: answer?.time_spent,
+                question: answer?.question as any,
+                active: answer?.active,
+              }
+            })
+            return answers || []
           }) || [],
         ),
       }
