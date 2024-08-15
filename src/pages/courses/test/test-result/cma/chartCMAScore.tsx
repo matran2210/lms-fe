@@ -21,11 +21,9 @@ const ChartCMAScore = ({
   data,
   GlobalAverage,
   score,
-  // passingScore,
+  passingScore,
   isGraded,
 }: IProps) => {
-  let passingScore = 90
-
   return (
     <div className="mb-4 w-full max-w-full items-start bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 xl:mb-6 xl:px-24">
       <div className="sticky left-0 flex flex-row justify-between">
@@ -62,9 +60,9 @@ const ChartCMAScore = ({
         <div className="group relative h-[250px]">
           <div className="h-full w-full border-b border-l border-gray-2 " />
           <div>
-            {!isGraded && (
+            {isGraded && (
               <div
-                className={`absolute z-10 flex h-0 w-full items-center border-t border-dotted border-gray-2 group-hover:border-state-info`}
+                className={`absolute flex h-0 w-full items-center border-t border-dotted border-gray-2 group-hover:border-state-info`}
                 style={{
                   bottom: passingScore + '%',
                 }}
@@ -79,13 +77,13 @@ const ChartCMAScore = ({
                 </p>
               </div>
             )}
-            {/* {passingScore !== 50 && (
-              <div className="absolute bottom-1/2 z-10 flex h-0 w-full items-center border-t border-dotted border-gray-2 hover:border-state-info">
+            {passingScore === 50 && (
+              <div className="absolute bottom-1/2 flex h-0 w-full items-center border-t border-dotted border-gray-2">
                 <div className="relative -left-6 bottom-[50%] text-medium-sm font-normal text-black-1">
                   <span className="relative">50</span>
                 </div>
               </div>
-            )} */}
+            )}
           </div>
           <div className="flex w-full flex-row">
             <div className="mr-5 mt-4 flex shrink-0 flex-col justify-between bg-white py-2">
