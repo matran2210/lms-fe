@@ -12,6 +12,8 @@ import { CourseKey } from 'src/pages/api/queryKey'
 import ResultsTableFilter from './ResultsTableFilter'
 import { TEST_TYPE } from '@utils/constants'
 import { Tooltip } from 'antd'
+import Link from 'next/link'
+import { PageLink } from 'src/constants'
 
 interface Iprops {
   courseId: string
@@ -106,14 +108,22 @@ const ResultsTable = ({ courseId }: Iprops) => {
                   title={row?.name?.length > 30 && row?.name}
                   color="white"
                 >
-                  {truncateString(row?.name, 30)}
+                  {row?.quiz?.attempts[0]?.id ? (
+                    <Link
+                      href={`/courses/test/test-result/${row?.quiz?.attempts[0]?.id}`}
+                    >
+                      {truncateString(row?.name, 30)}
+                    </Link>
+                  ) : (
+                    truncateString(row?.name, 30)
+                  )}
                 </Tooltip>
               </td>
 
               {/* Belong to */}
               <td className={clsx(commonDataCellStyle)}>
                 <Tooltip
-                  title={row?.path?.length > 30 && row?.path ? row.path : '-'}
+                  title={row?.path?.length > 30 && row?.path && row.path}
                   color="white"
                 >
                   {truncateString(row?.path || '-', 30)}
