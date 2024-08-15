@@ -227,8 +227,12 @@ const SelectWord = forwardRef(
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
             <>
-              <div className="border border-b-gray-2 my-6"></div>
-              <div className="flex items-center mb-4">
+              {data?.question_topic?.description && (
+                <div className="my-6 border border-b-gray-2">
+                  {data?.question_topic?.id}
+                </div>
+              )}
+              <div className="mb-4 flex items-center">
                 <div className="font-semibold">
                   Exhibits ({data?.question_topic?.exhibits?.length || 0})
                 </div>
@@ -264,7 +268,7 @@ const SelectWord = forwardRef(
                   )
                 })}
               </div>
-              <div className="border border-b-gray-2 my-6"></div>
+              <div className="my-6 border border-b-gray-2"></div>
             </>
           )}
         <EditorReader
@@ -304,7 +308,7 @@ const SelectWord = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="font-semibold text-base pt-[18px]">
+            <div className="pt-[18px] text-base font-semibold">
               Correct Answer
             </div>
             <EditorReader
@@ -317,12 +321,9 @@ const SelectWord = forwardRef(
           </>
         )}
         {solution && (
-          <div className="bg-gray-4 mt-6 p-6 ">
+          <div className="mt-6 bg-gray-4 p-6 ">
             <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader
-              className="mt-4 text-bw-1"
-              text_editor_content={solution}
-            />
+            <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}
       </div>

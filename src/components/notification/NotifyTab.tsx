@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface Tab {
   label: string
@@ -32,6 +33,7 @@ const NotifyTab: React.FC<TabsProps> = ({
 
   const handleTabClick = (index: number) => {
     setActiveTab(index)
+    trackGAEvent('Click Button Tab Notification')
   }
 
   return (

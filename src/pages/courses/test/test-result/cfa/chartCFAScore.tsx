@@ -11,58 +11,55 @@ interface DataItem {
 interface IProps {
   data: DataItem[]
 }
-
 const ChartCFAScore = ({ data }: IProps) => {
   return (
     <div className="block overflow-x-auto">
-      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
-        Your Performance by Topic Area
+      <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+        Multiple Choice Score by Topic
       </div>
-      <div className="flex w-full relative mb-4">
-        <div className="absolute top-[43%] -translate-y-1/2 left-[-42px] text-medium-sm text-bw-1 font-normal -rotate-90 shrink-0">
+      <div className="relative mb-4 flex w-full">
+        <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-medium-sm font-normal text-bw-1">
           Available Points
         </div>
-        <div className="absolute top-1/2 -translate-y-1/2 left-27 w-0.5 h-full border-r border-gray-1"></div>
-        <div className="h-40 w-full ml-9">
+        <div className="absolute left-27 top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-gray-1"></div>
+        <div className="ml-9 h-40 w-full">
           <div
-            className="flex items-center min-w-full mt-10"
+            className="mt-10 flex min-w-full items-center"
             style={{
               width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`,
             }}
           >
-            <span className="text-medium-sm text-bw-1 font-normal pr-7">
+            <span className="pr-7 text-medium-sm font-normal text-bw-1">
               70%
             </span>
             <div className="w-full border-b border-gray-1"></div>
           </div>
           <div
-            className="flex items-center min-w-full mt-4"
+            className="mt-4 flex min-w-full items-center"
             style={{
               width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`,
             }}
           >
-            <span className="text-medium-sm text-bw-1 font-normal pr-7">
-              50%
-            </span>
+            <span className="pr-7 text-medium-sm font-normal">50%</span>
             <div className="w-full border-b border-gray-1"></div>
           </div>
         </div>
       </div>
       <div className="block">
-        <div className="bg-gray-4 w-full flex flex-row">
-          <div className="flex flex-col shrink-0 justify-between py-3 bg-white pr-7">
-            <div className="text-medium-sm text-bw-1">Topic Area</div>
-            <div className="text-medium-sm text-bw-1">Topic Weight</div>
+        <div className="flex w-full flex-row bg-gray-4">
+          <div className="flex shrink-0 flex-col justify-between bg-white py-2 pr-7">
+            <div className="text-medium-sm">Topic</div>
+            <div className="text-medium-sm">Weight</div>
           </div>
-          <div className="flex flex-row flex-start pr-12">
+          <div className="flex-start flex flex-row pr-12">
             {data?.map((item: any, index: number) => (
               <div
                 key={item?.id + index}
-                className="bg-gray-4 flex relative flex-col w-full min-w-[134px] max-w-[134px] justify-between shrink-0 items-start gap-1 first:ml-6 pr-6 py-3"
+                className="relative flex w-full min-w-[134px] max-w-[134px] shrink-0 flex-col items-start justify-between gap-1 bg-gray-4 py-3 pr-6 first:ml-6"
               >
-                <div className="absolute left-0 bottom-[calc(100%+16px)] h-40 w-auto">
+                <div className="absolute bottom-[calc(100%+16px)] left-0 h-40 w-auto">
                   <div
-                    className="w-16 h-1 bg-primary absolute left-0"
+                    className="absolute left-0 h-1 w-16 bg-primary"
                     style={{
                       bottom: `${
                         (item?.total_correct_answers / item?.total_questions) *
@@ -71,10 +68,10 @@ const ChartCFAScore = ({ data }: IProps) => {
                     }}
                   ></div>
                 </div>
-                <div className="text-medium-sm text-bw-1 font-medium w-full line-clamp-2">
+                <div className="line-clamp-2 w-full text-medium-sm font-medium text-bw-1">
                   {item?.title}
                 </div>
-                <div className="text-medium-sm text-gray-1 font-normal">
+                <div className="text-medium-sm font-normal text-gray-1">
                   {`${roundNumber(
                     (item?.total_questions / item?.total_quiz_questions) * 100,
                   )}%`}

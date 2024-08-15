@@ -33,12 +33,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
       .min(1, VALIDATE_REQUIRED),
   })
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<any>({
+  const { control, handleSubmit } = useForm<any>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
   })
@@ -106,8 +101,8 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         zIndex={40}
         fixed
       >
-        <div className="absolute h-full w-full  top-0 left-0 border bg-white">
-          <div className="flex w-6-percent items-center bg-gray-3 w-full h-10 justify-between px-2.5">
+        <div className="absolute left-0 top-0  h-full w-full border bg-white">
+          <div className="flex h-10 w-6-percent w-full items-center justify-between bg-gray-3 px-2.5">
             <button
               className="text-gray-1"
               onClick={() => {
@@ -127,7 +122,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
               >
                 <SaveIcon />
               </button>
-              <span className="h-4 w-px bg-gray-1 mx-4"></span>
+              <span className="mx-4 h-4 w-px bg-gray-1"></span>
               <button
                 className="text-gray-1"
                 onClick={() => {
@@ -142,7 +137,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
             placeholder="Take a note..."
             control={control}
             name={`description_${id ? id : uuid}`}
-            className="not-resizer w-full h-[calc(100%-40px)] sapp-text-area px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1 whitespace-pre-wrap"
+            className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
             defaultValue={content}
           />
         </div>

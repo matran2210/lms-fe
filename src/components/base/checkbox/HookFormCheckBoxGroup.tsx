@@ -41,11 +41,11 @@ const HookFormCheckBoxGroup = ({
   name,
   control,
   defaultValue,
-  title,
+  // title,
   className = '',
   onChange,
-  checked,
-  isWrong,
+  // checked,
+  // isWrong,
   // label,
   // required,
   disabled,
@@ -56,7 +56,7 @@ const HookFormCheckBoxGroup = ({
   justify,
   multiple = false,
   size = 'small',
-  state,
+  // state,
   corrects,
   toggle = false,
   positionCheckBox = 'center',
@@ -102,13 +102,13 @@ const HookFormCheckBoxGroup = ({
             >
               {options.map((option, index) => {
                 let state: 'error' | 'default' | 'success' | undefined
-                let stateLabel: string = 'text-bw-1'
+                let stateLabel: string = ''
 
                 let checked: boolean = multiple
                   ? field.value?.includes(option.value.toString())
                   : option.value.toString() === field.value
-                let correctCheck: boolean =
-                  corrects?.[option.value as string] || false
+                // let correctCheck: boolean =
+                //   corrects?.[option.value as string] || false
                 if (!!corrects) {
                   if (corrects?.[option.value as string]) {
                     state = 'success'
@@ -126,7 +126,7 @@ const HookFormCheckBoxGroup = ({
                   <label
                     className={`flex justify-center items-${positionCheckBox} w-fit ${
                       disabled
-                        ? 'opacity-60 cursor-not-allowed'
+                        ? 'cursor-not-allowed opacity-60'
                         : 'cursor-pointer'
                     } ${corrects && 'pointer-events-none'} ${
                       seprateLine && 'py-2'

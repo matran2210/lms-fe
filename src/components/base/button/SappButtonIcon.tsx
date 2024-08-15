@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React, { ReactNode } from 'react'
 
 interface IProps {
@@ -13,6 +14,8 @@ interface IProps {
   isTextPrimary?: boolean
   download?: boolean
   target?: '_blank' | '_parent' | '_self'
+  type?: 'button' | 'submit' | 'reset'
+  ishover?: boolean
 }
 
 const SappButtonIcon = ({
@@ -26,8 +29,10 @@ const SappButtonIcon = ({
   classTitle,
   isBgPrimary = false,
   isTextPrimary = false,
+  ishover = true,
   download,
   target,
+  type,
 }: IProps) => {
   if (link) {
     return (
@@ -39,12 +44,12 @@ const SappButtonIcon = ({
         className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${
           isBgPrimary
             ? 'primary'
-            : 'border border-solid border-[#404041] button-icon'
-        } flex items-center h-8 min-w-[120px] justify-center`}
+            : 'button-icon border border-solid border-[#404041]'
+        } flex h-8 min-w-[120px] items-center justify-center`}
       >
         {children}
         <div
-          className={`${classTitle} font-medium text-sm ms-2 ${
+          className={`${classTitle} ms-2 text-sm font-medium ${
             isTextPrimary ? 'text-white' : 'text-bw-1'
           }`}
         >
@@ -57,16 +62,15 @@ const SappButtonIcon = ({
   return (
     <button
       className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${
-        isBgPrimary
-          ? 'primary'
-          : 'border border-solid border-[#404041] button-icon'
-      } flex items-center h-8 min-w-[120px] justify-center`}
+        isBgPrimary ? 'primary' : 'border border-solid border-[#404041]'
+      } ${clsx({ 'button-icon': ishover })} flex h-8 min-w-[120px] items-center justify-center`}
       onClick={onClick}
       disabled={loading || disabled}
+      type={type ?? 'button'}
     >
       {children}
       <div
-        className={`${classTitle} font-medium text-sm ms-2 ${
+        className={`${classTitle} ms-2 text-sm font-medium ${
           isTextPrimary ? 'text-white' : 'text-bw-1'
         }`}
       >

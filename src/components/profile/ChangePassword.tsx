@@ -61,17 +61,11 @@ const ChangePassword = () => {
   /**
    * @description sử dụng useForm
    */
-  const {
-    control,
-    handleSubmit,
-    reset,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm<IChangePassword>({
-    resolver: zodResolver(validationSchema),
-    mode: 'onSubmit',
-  })
+  const { control, handleSubmit, reset, getValues, watch } =
+    useForm<IChangePassword>({
+      resolver: zodResolver(validationSchema),
+      mode: 'onSubmit',
+    })
 
   /**
    * @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
@@ -94,16 +88,14 @@ const ChangePassword = () => {
 
   return (
     <React.Fragment>
-      <div className="bg-white p-6 flex-1 shadow-box">
+      <div className="flex-1 bg-white p-6 pt-4 shadow-box">
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="relative">
-            <div className="flex items-center justify-between pb-6 border-b border-b-gray-3">
-              <div className="text-xl font-medium text-bw-1">
-                Change Password
-              </div>
+            <div className="flex items-center justify-between border-b border-gray-3 pb-5">
+              <div className="text-xl font-medium ">Change Password</div>
               <div>
                 <ButtonCancelSubmit
-                  className="gap-12 flex"
+                  className="flex gap-12"
                   cancel={{
                     title: '',
                     onClick: () => {},
@@ -125,8 +117,8 @@ const ChangePassword = () => {
             </div>
           </div>
         </form>
-        <div className="grid grid-cols-2 mt-6">
-          <div className="flex items-center text-gray-1 text-base">
+        <div className="mt-6 grid grid-cols-2">
+          <div className="flex items-center text-base text-gray-1">
             Current Password
           </div>
           <div>
@@ -138,8 +130,8 @@ const ChangePassword = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 mt-6">
-          <div className="flex items-center text-gray-1 text-base">
+        <div className="mt-6 grid grid-cols-2">
+          <div className="flex items-center text-base text-gray-1">
             New Password
           </div>
           <div>
@@ -151,8 +143,8 @@ const ChangePassword = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 mt-6">
-          <div className="flex items-center text-gray-1 text-base">
+        <div className="mt-6 grid grid-cols-2">
+          <div className="flex items-center text-base text-gray-1">
             Confirm New Password
           </div>
           <div>

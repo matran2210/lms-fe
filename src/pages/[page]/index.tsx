@@ -8,11 +8,12 @@ import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
 import { GetServerSideProps } from 'next'
 import { StaticImageData } from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { ITabs } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
 import { ANIMATION } from 'src/constants'
 import ChangePassword from '@components/profile/ChangePassword'
+import Layout from '@components/layout'
 
 interface IProps {
   page: IProfilePages
@@ -74,17 +75,17 @@ const ProfilePage = ({ page }: any) => {
   }
 
   return (
-    <>
-      <div className="header bg-white border-b border-default px-4 lg:px-20">
-        <div className="max-w-xxl my-0 mx-auto flex py-4.5">
+    <Layout title="My Profile">
+      <div className="header border-b border-default bg-white px-4 lg:px-20">
+        <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm
             placeholder="Enter name of course..."
             formStyle="w-full flex items-center"
           />
         </div>
       </div>
-      <div className="max-w-xxl my-0 mx-auto w-full">
-        <div className="main lg:mx-0 sm:mx-4 ">
+      <div className="mx-auto my-0 w-full max-w-xxl">
+        <div className="main sm:mx-4 lg:mx-0 ">
           <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
         </div>
         <div className="relative" data-aos={ANIMATION.DATA_AOS}>
@@ -96,12 +97,12 @@ const ProfilePage = ({ page }: any) => {
             inputFileRef={inputFileRef}
           ></ProfileHeader>
         </div>
-        <div className="flex sm:flex-row flex-col justify-between gap-6">
+        <div className="flex flex-col justify-between gap-6 sm:flex-row">
           <ProfileSideBar page={page}></ProfileSideBar>
           {selectedContent}
         </div>
       </div>
-    </>
+    </Layout>
   )
 }
 

@@ -1,5 +1,6 @@
 import { AlertIcon } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { trackGAEvent } from '@utils/google-analytics'
 import { onLinkSocial } from '@utils/index'
 import { Dispatch, SetStateAction } from 'react'
 
@@ -13,7 +14,10 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
     <SappModalV2
       open={open}
       okButtonCaption="Back"
-      onOk={() => setOpen(false)}
+      onOk={() => {
+        setOpen(false)
+        trackGAEvent('Click Button Back Modal Expired Test')
+      }}
       handleCancel={() => setOpen(false)}
       showCancelButton={false}
       showHeader={false}
@@ -29,20 +33,23 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       title={undefined}
       cancelButtonCaption="Cancel"
     >
-      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
+      <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertIcon />
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold text-center">
+      <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
         Expired Test
       </div>
-      <div className="text-medium-sm text-center mt-4 mb-1 xl:mb-7 px-1">
+      <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
         <span className="text-gray-1">
           You can only take the entrance test once. For further support, please
           contact SAPP Academy via
         </span>{' '}
         <span
-          className="text-primary underline cursor-pointer"
-          onClick={() => onLinkSocial('https://www.facebook.com/sapp.edu.vn')}
+          className="cursor-pointer text-primary underline"
+          onClick={() => {
+            onLinkSocial('https://www.facebook.com/sapp.edu.vn')
+            trackGAEvent('Click Text Link Facebook')
+          }}
         >
           Facebook.
         </span>

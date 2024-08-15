@@ -8,43 +8,40 @@ import 'aos/dist/aos.css'
 import { parseHTMLToString } from '@utils/index'
 import { CoursesAPI } from '../../../api/courses/index'
 import { useQuery } from 'react-query'
-import { IAnswer, IScoreDetails } from 'src/type/quiz/quiz'
+import { IAnswearGroup, IAnswer, IScoreDetails } from 'src/type'
+import Image from 'next/image'
+import clsx from 'clsx'
 
+const commonHeaderClass =
+  'text-left p-0 text-medium-sm text-gray-1 font-semibold'
 const headers = [
   {
     label: '#',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[44px] xl:min-w-62px',
+    className: clsx(commonHeaderClass, 'min-w-[20px] xl:min-w-[50px]'),
   },
   {
     label: 'Question',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
+    className: clsx(commonHeaderClass, 'min-w-[210px]'),
   },
   {
-    label: 'Section (Part)',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[210px]',
+    label: 'Module',
+    className: clsx(commonHeaderClass, 'min-w-[198px]'),
   },
   {
     label: 'Type',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[117px]',
+    className: clsx(commonHeaderClass, 'min-w-[110px]'),
   },
   {
     label: 'Result',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[70px]',
+    className: clsx(commonHeaderClass, 'min-w-[80px]'),
   },
   {
     label: '',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[117px]',
+    className: clsx(commonHeaderClass, 'min-w-[40px]'),
   },
   {
     label: 'Time Spent',
-    className:
-      'text-left p-0 pb-2 text-medium-sm text-gray-1 font-semibold min-w-[95px] !pr-0 text-center',
+    className: clsx(commonHeaderClass, ' min-w-[95px] !pr-0 text-center'),
   },
 ]
 const DEFAULT_PAGE_INDEX = 1
@@ -153,104 +150,140 @@ const YourScoreDetail = ({
     }
   }, [fetchData, pageIndex])
 
+  const renderBoxesAndLineClass = (type: string, data: IAnswer) => {
+    if (type === 'Constructed') {
+      return data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
+        ? ' text-pinned-1 border-pinned-1'
+        : ' text-gray-1 border-gray-1'
+    }
+    return data?.is_correct
+      ? ' text-state-success border-success'
+      : ' text-state-error border-error'
+  }
+
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`overflow-y-auto bg-white px-6 xl:px-24 py-6 xl:max-w-[1144px] max-h-full shadow-sidebar ${className}`}
+      className={`!h-fit bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:!mb-0 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="text-lg-xl xl:text-xl font-semibold xl:font-medium text-bw-1 mb-6">
-        Your Score Details
+      <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+        Score Details
       </div>
-      <div className="block pl-4 overflow-x-auto">
+      <div className="block pl-4">
         <SappTable
           headers={headers}
           loading={loading}
-          data={scoreDetails?.answers}
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}
-          classTableRes="!overflow-x-hidden"
+          // classTableRes="overflow-x-auto"
         >
           <>
-            {scoreDetails?.answers?.map((e: IAnswer, index: number) => {
+            {scoreDetails?.answer_groups?.map((ansg: IAnswearGroup) => {
               return (
-                <tr
-                  className="border-dashed border-b border-gray-2"
-                  key={e?.id}
-                >
-                  <td className="p-0 pr-1 text-bw-1">{index + 1}</td>
-                  <td className="p-0 pr-4 text-start max-w-[210px]">
-                    <div
-                      className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
-                      dangerouslySetInnerHTML={{
-                        __html: String(e?.question?.question_content ?? '--'),
-                      }}
-                      title={
-                        parseHTMLToString(e?.question?.question_content) ?? '--'
-                      }
-                      onClick={() => {
-                        if (e.id) {
-                          router.push(`/explanation/${e.id}?title=My Course`)
-                        }
-                      }}
-                    ></div>
-                  </td>
-                  <td
-                    className="p-0 my-5 text-starttext-bw-1 line-clamp-1"
-                    title={e?.question?.question_filter_id?.part?.name ?? '--'}
-                  >
-                    {e?.question?.question_filter_id?.part?.name ?? '--'}
-                  </td>
-                  <td className="p-0 pr-4 text-start text-bw-1">
-                    <div className="min-w-[111px]">
-                      {getTypeName(e?.question?.qType ?? '--')}
-                    </div>
-                  </td>
-                  <td
-                    className={`text-start pr-7
-                      ${
-                        e?.is_correct || e?.active === 'SUBMITED'
-                          ? ' text-state-success'
-                          : ' text-state-error'
-                      }
+                <React.Fragment key={ansg.id}>
+                  <tr>
+                    <td
+                      className="w-full pt-8 text-base font-medium text-bw-1"
+                      colSpan={6}
+                    >
+                      {ansg?.name}
+                    </td>
+                  </tr>
+                  {ansg?.answers?.map((e: IAnswer) => {
+                    return (
+                      <tr
+                        className="border-b border-dashed border-gray-2"
+                        key={e?.id}
+                      >
+                        <td className="p-0 pr-1 text-bw-1">{e.index}</td>
+                        <td className="p-0 pr-4">
+                          <div
+                            className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
+                            dangerouslySetInnerHTML={{
+                              __html: String(
+                                e?.question?.question_content ?? '--',
+                              ),
+                            }}
+                            title={
+                              parseHTMLToString(
+                                e?.question?.question_content,
+                              ) ?? '--'
+                            }
+                            onClick={() => {
+                              if (e.id) {
+                                router.push(
+                                  `/explanation/${e.id}?title=My Course`,
+                                )
+                              }
+                            }}
+                          ></div>
+                        </td>
+                        <td
+                          className="text-starttext-bw-1 my-5 line-clamp-1 p-0"
+                          title={
+                            e?.question?.question_filter_id?.part?.name ?? '--'
+                          }
+                        >
+                          {e?.question?.question_filter_id?.part?.name ?? '--'}
+                        </td>
+                        <td className="p-0 pr-4 text-bw-1">
+                          <div className="min-w-[111px]">
+                            {getTypeName(e?.question?.qType ?? '--')}
+                          </div>
+                        </td>
+                        <td
+                          className={`pr-4 
+                      ${renderBoxesAndLineClass(getTypeName(e?.question?.qType ?? '--'), e)}
                     `}
-                  >
-                    {e?.question?.qType !== 'ESSAY' ? (
-                      <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
-                    ) : (
-                      <>
-                        {e?.active === 'SUBMITED' ? 'Submitted' : 'Unfinished'}
-                      </>
-                    )}
-                  </td>
-                  <td className="p-0 pr-4 text-start m-6 text-gray-1">
-                    {e?.question?.qType !== 'ESSAY' && (
-                      <div className="flex items-center ml-1">
-                        <img
-                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                          alt="Correct"
-                          className="w-4 text-state-success mr-1"
-                        />
-                        {roundNumber(e?.question?.question_report?.ratio || 0)}%
-                      </div>
-                    )}
-                  </td>
-                  <td className="p-0 text-start m-6">
-                    <div className="text-center">
-                      {(() => {
-                        if (e?.time_spent !== null) {
-                          return convertSecondsToMinutesSeconds(
-                            e?.time_spent || 0,
-                          )
-                        } else {
-                          return '---'
-                        }
-                      })()}
-                    </div>
-                  </td>
-                </tr>
+                        >
+                          {e?.question?.qType !== 'ESSAY' ? (
+                            <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
+                          ) : (
+                            <>
+                              {e?.active === 'SUBMITED'
+                                ? 'Completed'
+                                : 'Not Completed'}
+                            </>
+                          )}
+                        </td>
+                        <td className="m-6 p-0 pr-4 text-gray-1">
+                          {e?.question?.qType !== 'ESSAY' && (
+                            <div className="ml-1 flex items-center justify-start gap-2">
+                              <Image
+                                src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                                alt="Correct"
+                                className="mr-1 text-state-success"
+                                width={16}
+                                height={16}
+                                layout="fixed"
+                              />
+                              {roundNumber(
+                                e?.question?.question_report?.ratio || 0,
+                              )}
+                              %
+                            </div>
+                          )}
+                        </td>
+                        <td className="m-6 p-0">
+                          <div className="text-center">
+                            {(() => {
+                              if (e?.time_spent !== null) {
+                                return convertSecondsToMinutesSeconds(
+                                  e?.time_spent || 0,
+                                )
+                              } else {
+                                return '---'
+                              }
+                            })()}
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </React.Fragment>
               )
             })}
           </>

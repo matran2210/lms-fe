@@ -18,14 +18,14 @@ import {
 } from 'quiz-result-package/dist/type'
 import toast from 'react-hot-toast'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { IQuestion } from 'src/type/course/Question'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import SappButton from '@components/base/button/SappButton'
 import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
+import { trackGAEvent } from '@utils/google-analytics'
+import { showPopup } from 'src/redux/slice/Popup/Result-test'
 
 type Props = {
   questions: IQuestion[]
@@ -204,7 +204,6 @@ const QuizDocument = ({
         .unwrap()
         .then((e: any) => {
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
-
           dispatch(
             removeQuizFinished({
               activityId,
@@ -215,6 +214,11 @@ const QuizDocument = ({
           setLoading(false)
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
+          if (e?.data?.class_user_score) {
+            setTimeout(() => {
+              dispatch(showPopup(e.data.class_user_score))
+            }, 4000)
+          }
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
@@ -286,7 +290,7 @@ const QuizDocument = ({
       ></ConFirmSubmit>
 
       <div
-        className="border border-gray-3 p-6 select-none"
+        className="max-h-[500px] select-none overflow-auto border border-gray-2 p-6 text-black-1 "
         data-aos={ANIMATION.DATA_AOS}
       >
         {activeQuestion && (
@@ -307,16 +311,16 @@ const QuizDocument = ({
         )}
       </div>
 
-      <div className="min-h-[50px] bg-gray-3 flex items-center py-2 px-6">
+      <div className="flex min-h-[50px] items-center bg-gray-3 px-6 py-2">
         <div
           className={`${
             is_graded || 'invisible'
-          } text-state-info bg-state-info bg-opacity-10 whitespace-nowrap px-1 py-0.5 font-semibold text-center text-medium-sm text-[11px]`}
+          } whitespace-nowrap bg-state-info bg-opacity-10 px-1 py-0.5 text-center text-[11px] text-medium-sm font-semibold text-state-info`}
         >
           Graded Activity
         </div>
 
-        <div className="w-fit mx-auto flex items-center gap-3">
+        <div className="mx-auto flex w-fit items-center gap-3">
           <div
             className={`cursor-pointer select-none ${
               activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
@@ -326,6 +330,7 @@ const QuizDocument = ({
                 return
               }
               handlePrevQuestion()
+              trackGAEvent('Click Prev Question Quiz Activity')
             }}
           >
             <SappIcon icon="arrow_left" />
@@ -343,6 +348,7 @@ const QuizDocument = ({
                 handleConfirmQuestion(false)
               }
               handleNextQuestion()
+              trackGAEvent('Click Next Question Quiz Activity')
             }}
           >
             <SappIcon icon="arrow_right" />
@@ -364,6 +370,7 @@ const QuizDocument = ({
                 grading_preference === 'AFTER_EACH_QUESTION'
               ) {
                 setRunHandleFinishQuiz((e) => e + 1)
+                trackGAEvent('Click Button Finish Quiz Activity')
                 return
               }
               if (
@@ -371,11 +378,13 @@ const QuizDocument = ({
                 grading_preference !== 'AFTER_EACH_QUESTION'
               ) {
                 handleConfirmQuestion(true)
+                trackGAEvent('Click Button Confirm Quiz Activity')
               } else {
                 if (grading_preference !== 'AFTER_EACH_QUESTION') {
                   handleConfirmQuestion(false)
                 }
                 handleNextQuestion()
+                trackGAEvent('Click Button Next Quiz Activity')
               }
             }}
             color="primary"
@@ -392,12 +401,14 @@ const QuizDocument = ({
                 if (!loading) {
                   handleConfirmQuestion(false)
                 }
+                trackGAEvent('Click Button Confirm Quiz Activity')
               }}
               color="primary"
               loading={loading}
             />
           )}
       </div>
+
       <SappModal
         open={modalResult?.status}
         okButtonCaption={'Yes'}
@@ -414,12 +425,12 @@ const QuizDocument = ({
       >
         <div className="relative">
           <div
-            className="ml-auto cursor-pointer absolute  right-6 top-5"
+            className="absolute right-6 top-5  ml-auto cursor-pointer"
             onClick={() => setModalResult(undefined)}
           >
-            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
-          <div className="max-w-[1114px] mx-auto overflow-auto">
+          <div className="mx-auto max-w-[1114px] overflow-auto">
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}
               getTable={getTable}

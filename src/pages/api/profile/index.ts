@@ -147,4 +147,8 @@ export class AuthAPI {
       method: 'POST',
     })
   }
+
+  static getPinnedNotifications() {
+    return fetcher(`${apiURL}/notifications/pinned`)
+  }
 }

@@ -43,8 +43,8 @@ const HookFormCheckBox = ({
       render={({ field, fieldState: { error } }) => (
         <>
           <label
-            className={`flex justify-center items-center w-fit ${
-              disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
+            className={`flex w-fit items-center justify-center ${
+              disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
             }`}
           >
             <SAPPCheckbox

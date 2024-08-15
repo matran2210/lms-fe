@@ -9,7 +9,8 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ANIMATION } from 'src/constants'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import ModalCongrats from '@components/mycourses/course-detail/ModalCongrats'
+import { useCourseContext } from '@contexts/index'
+import Layout from '@components/layout'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -25,7 +26,7 @@ const CourseDetail = () => {
   /**
    * @description config API course detail
    */
-  const fecthCourseDetail = async ({
+  const fetchCourseDetail = async ({
     pageParam,
     params,
   }: {
@@ -39,6 +40,8 @@ const CourseDetail = () => {
       params,
     )
     return {
+      class_user_id: data?.class_user_id,
+      is_passed: data?.is_passed,
       data: data?.data?.course_sections_with_progress || [],
       courseDetail: data,
     }
@@ -50,7 +53,7 @@ const CourseDetail = () => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ['courseDetail'],
-      queryFn: ({ pageParam }) => fecthCourseDetail({ pageParam, params }),
+      queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
       getNextPageParam: (lastPage, allPages) => {
         if (
           params.user_section_learning_status ||
@@ -105,6 +108,11 @@ const CourseDetail = () => {
   const courseNameDetail = data?.pages?.[0]?.courseDetail?.data?.name
 
   /**
+   * @description biến này lấy class user id
+   */
+  const is_passed_course = data?.pages?.[0]?.is_passed
+
+  /**
    * @description biến này lấy name của course
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
@@ -112,47 +120,51 @@ const CourseDetail = () => {
   /**
    * @description biến này tìm kiếm bài Final Test
    */
-  const sectionFinalTest = courses?.find(
-    (section) => section?.course_section_type === 'FINAL_TEST',
-  )?.quiz
+  // const sectionFinalTest = courses?.find(
+  //   (section) => section?.course_section_type === 'FINAL_TEST',
+  // )?.quiz
+
+  const { setCourseType } = useCourseContext()
+
+  useEffect(() => {
+    setCourseType(data?.pages?.[0]?.courseDetail?.data?.course_type)
+  })
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <div className="header bg-white border-b border-default h-[70px]">
-        <div className="max-w-xxl my-0 mx-auto flex py-6 xl-max:mx-5">
-          <SearchForm
-            placeholder="Enter name of course..."
-            formStyle="w-full flex items-center"
+      <Layout title="Course Detail">
+        <div className="header h-[70px] border-b border-default bg-white">
+          <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
+            <SearchForm
+              placeholder="Enter name of course..."
+              formStyle="w-full flex items-center"
+            />
+          </div>
+        </div>
+        <div className="main relative mx-auto my-0 max-w-xxl xl-max:container">
+          <div className="flex w-full items-center justify-between pb-4 pt-6">
+            <BreadcrumbFilter name={courseNameDetail} />
+            <FilterCourseDetail totalResult={courses?.length || 0} />
+          </div>
+        </div>
+        <div
+          className="heading mx-auto my-0 flex max-w-xxl bg-white xl-max:mx-6"
+          data-aos={ANIMATION.DATA_AOS}
+        >
+          <Heading greeting="Welcome to" title={courseNameDetail} />
+        </div>
+        <div
+          className="mx-auto my-0 max-w-xxl pt-6 xl-max:container"
+          data-aos={ANIMATION.DATA_AOS}
+        >
+          <CourseParts
+            courses={courses}
+            is_passed_course={is_passed_course}
+            class_user_id={class_user_id}
+            lastElementRef={lastElementRef}
           />
         </div>
-      </div>
-      <div className="main max-w-xxl my-0 mx-auto xl-max:container relative">
-        <div className="flex justify-between pt-6 pb-4 w-full items-center">
-          <BreadcrumbFilter name={courseNameDetail} />
-          <FilterCourseDetail totalResult={courses?.length || 0} />
-        </div>
-      </div>
-      <div
-        className="heading bg-white max-w-xxl my-0 mx-auto flex xl-max:mx-6"
-        data-aos={ANIMATION.DATA_AOS}
-      >
-        <Heading greeting="Welcome to" title={courseNameDetail} />
-      </div>
-      <div
-        className="pt-6 max-w-xxl my-0 mx-auto xl-max:container"
-        data-aos={ANIMATION.DATA_AOS}
-      >
-        <CourseParts
-          courses={courses}
-          class_user_id={class_user_id}
-          lastElementRef={lastElementRef}
-        />
-      </div>
-      <ModalCongrats
-        name={courseNameDetail}
-        course_type={data?.pages?.[0]?.courseDetail?.data?.course_type}
-        quiz={sectionFinalTest}
-      />
+      </Layout>
     </SappLoadingGlobal>
   )
 }

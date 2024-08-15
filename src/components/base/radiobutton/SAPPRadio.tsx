@@ -46,8 +46,8 @@ const SAPPRadio = ({
         name={name}
         className={`${
           STATE[state]
-        } block w-full h-full bg-center bg-no-repeat bg-radio-normal rounded-full border-0 border-transparent  outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
-          disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
+        } block h-full w-full rounded-full border-0 border-transparent bg-radio-normal bg-center bg-no-repeat  outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
+          disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
         }`}
         type="radio"
         data-kt-check={ktCheck}

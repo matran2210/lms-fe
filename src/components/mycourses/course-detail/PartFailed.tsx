@@ -7,17 +7,20 @@ import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
 import { convertFractionToPercentage, truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, TEST_TYPE } from 'src/constants'
 import { isNull, round } from 'lodash'
 import { useCourseContext } from '@contexts/index'
 import SappTooltip from 'src/common/SappTooltip'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const PartFailed = ({
   coursePart,
   class_user_id,
+  is_passed_course,
 }: {
   coursePart: IMyCourseDetail
   class_user_id?: string
+  is_passed_course: boolean
 }) => {
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
@@ -85,12 +88,20 @@ const PartFailed = ({
     coursePart?.course_section_type === 'FINAL_TEST' &&
     courseType === 'FOUNDATION_COURSE'
 
+  const showTitleFinalTest =
+    coursePart?.course_section_type === TEST_TYPE.FINAL_TEST
+      ? 'Final Test'
+      : 'MidTerm Test'
+
   return (
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
-          className={`name-part text-2xl font-medium h-[60px] line-clamp-2 cursor-pointer`}
-          onClick={() => setOpen(true)}
+          className={`name-part line-clamp-2 h-[60px] cursor-pointer text-2xl font-medium`}
+          onClick={() => {
+            setOpen(true)
+            trackGAEvent(`Click Title ${showTitleFinalTest}`)
+          }}
         >
           <SappTooltip
             title={coursePart?.name}
@@ -102,42 +113,42 @@ const PartFailed = ({
         <div className="info mt-6">
           {checkFinished && (
             <>
-              <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
-                <p className="text-base text-gray-1">Latest Result:</p>
-                <p className="text-base text-bw-1 font-medium">
+              <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
+                <p className="text-base text-gray-1">Latest Results:</p>
+                <p className="text-base font-medium text-bw-1">
                   {`${countTimeSpent(coursePart?.quiz?.attempt?.ratio_score)}%`}
                 </p>
               </div>
-              <div className="time-allow flex justify-between pb-4 border-b border-gray-2 mb-4">
+              <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
                 <p className="text-base text-gray-1">Time Spent:</p>
-                <p className="text-base text-bw-1 font-medium">
+                <p className="text-base font-medium text-bw-1">
                   {`${
                     coursePart?.quiz?.quiz_timed
                       ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
                       : 'Unlimited'
-                  }` ?? ''}
+                  }`}
                 </p>
               </div>
             </>
           )}
-          <div className="time-allow flex justify-between pb-4 border-b border-gray-2">
+          <div className="time-allow flex justify-between border-b border-gray-2 pb-4">
             <p className="text-base text-gray-1">Time Allowed:</p>
-            <p className="text-base text-bw-1 font-medium">{formattedTime}</p>
+            <p className="text-base font-medium text-bw-1">{formattedTime}</p>
           </div>
           <div className="time-allow flex justify-between pt-4">
             <p className="text-base text-gray-1">Attempt:</p>
-            <p className="text-base text-bw-1 font-medium">
+            <p className="text-base font-medium text-bw-1">
               {`${quizAttempt?.attempt?.number_of_attempts || 0} / ${
                 quizAttempt?.limit_count !== 0
                   ? quizAttempt?.limit_count
                   : 'Unlimited'
-              }` ?? ''}
+              }`}
             </p>
           </div>
         </div>
       </div>
       <div className="mt-7">
-        <div className="action flex items-center jusity-end relative">
+        <div className="action jusity-end relative flex items-center">
           {!checkFinished ? (
             !coursePart?.quiz?.is_limited ||
             (coursePart?.quiz?.attempt?.number_of_attempts !==
@@ -156,13 +167,16 @@ const PartFailed = ({
                   coursePart?.quiz?.attempt?.number_of_attempts !==
                     coursePart?.quiz?.limit_count && ''
                 } ml-auto`}
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                  setOpen(true)
+                  trackGAEvent(`Click Button Start ${showTitleFinalTest}`)
+                }}
               />
             ) : (
               <></>
             )
           ) : (
-            <div className="flex justify-between flex-1">
+            <div className="flex flex-1 justify-between">
               {(passFinalTest ||
                 (coursePart?.course_section_type === 'FINAL_TEST' &&
                   courseType !== 'FOUNDATION_COURSE') ||
@@ -171,19 +185,19 @@ const PartFailed = ({
                   title="Result"
                   isUnderLine
                   color="text"
-                  className="font-medium underline !p-0"
-                  onClick={() =>
+                  className="!p-0 font-medium underline"
+                  onClick={() => {
                     router.push(
                       `/courses/test/test-result/${quizAttempt?.attempt?.id}`,
                     )
-                  }
+                    trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
+                  }}
                 />
               )}
 
-              {(coursePart?.quiz?.is_limited &&
-                coursePart?.quiz?.attempt?.number_of_attempts ===
-                  coursePart?.quiz?.limit_count) ||
-              passFinalTest ? null : (
+              {coursePart?.quiz?.is_limited &&
+              coursePart?.quiz?.attempt?.number_of_attempts ===
+                coursePart?.quiz?.limit_count ? null : (
                 <ButtonSecondary
                   title="Retake"
                   full={false}
@@ -192,7 +206,10 @@ const PartFailed = ({
                     coursePart?.quiz?.attempt?.number_of_attempts !==
                       coursePart?.quiz?.limit_count && ''
                   } ml-auto`}
-                  onClick={() => setOpen(true)}
+                  onClick={() => {
+                    setOpen(true)
+                    trackGAEvent(`Click Button Retake ${showTitleFinalTest}`)
+                  }}
                 />
               )}
             </div>
@@ -205,6 +222,7 @@ const PartFailed = ({
         title={coursePart?.name}
         data={coursePart}
         class_user_id={class_user_id}
+        is_passed_course={is_passed_course}
         activeCourse={() => {}}
       />
     </>

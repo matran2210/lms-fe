@@ -151,10 +151,10 @@ const ModalExplanationPackage = ({
       >
         <div>
           <div
-            className="ml-auto cursor-pointer absolute  right-6 top-[14px]"
+            className="absolute right-6 top-[14px]  ml-auto cursor-pointer"
             onClick={() => setOpen(undefined)}
           >
-            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
           <div className="mx-auto">
             <div className="mx-auto">

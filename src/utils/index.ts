@@ -91,6 +91,36 @@ export const formatTime = (minutes: number) => {
   return formattedHours + formattedMinutes || '0h0m'
 }
 
+/**
+ * Convert millisecond/seconds to readable hh:mm:ss
+ *
+ * @param   totalTime  time in milliseconds/seconds
+ * @param   unit       'milliseconds'(default) | 'seconds'
+ * @returns hh:mm:ss
+ */
+export const getTimeFromInput = (
+  totalTime: number,
+  unit: 'milliseconds' | 'seconds' = 'milliseconds',
+) => {
+  let totalSeconds
+
+  if (unit === 'milliseconds') {
+    totalSeconds = Math.floor(totalTime / 1000)
+  } else {
+    totalSeconds = totalTime
+  }
+
+  const totalMinutes = Math.floor(totalSeconds / 60)
+  const totalHours = Math.floor(totalMinutes / 60)
+
+  const formattedHours =
+    totalHours > 0 ? ('0' + totalHours).slice(-2) + ':' : ''
+  const formattedMinutes = ('0' + (totalMinutes % 60)).slice(-2)
+  const formattedSeconds = ('0' + (totalSeconds % 60)).slice(-2)
+
+  return `${formattedHours}${formattedMinutes}:${formattedSeconds}`
+}
+
 export const countWords = (text: string) => {
   const words = text.trim().split(/\s+/)
   return words.length
@@ -207,4 +237,31 @@ export const pageview = (url: URL) => {
  */
 export const onLinkSocial = (link: string) => {
   window.open(link, '_blank')
+}
+
+export const getUppercaseByNumber = (num: number): string => {
+  let result = ''
+  while (num > 0) {
+    let remainder = num % 26
+    if (remainder === 0) {
+      remainder = 26
+      num--
+    }
+    let char = String.fromCharCode(remainder + 64)
+    result = char + result
+    num = Math.floor(num / 26)
+  }
+  return result
+}
+
+export const removeLocalStorageItem = (item: string) => {
+  localStorage.removeItem(item)
+}
+
+export const getLocalStorageItem = (name: string) => {
+  return localStorage.getItem(name) || ''
+}
+
+export const setLocalStorageItem = (name: string, value: string) => {
+  localStorage.setItem(name, value)
 }

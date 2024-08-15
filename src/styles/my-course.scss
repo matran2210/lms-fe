@@ -1,5 +1,5 @@
 .filter .select-single .select__control {
-  @apply h-[17px] items-baseline border-0 shadow-none bg-transparent min-h-[17px];
+  @apply h-[17px] min-h-[17px] items-baseline border-0 bg-transparent shadow-none;
 }
 
 .name-course a {
@@ -10,7 +10,7 @@
   @apply p-0 pr-2;
 
   & > input {
-    @apply text-gray-1 text-medium-sm font-normal;
+    @apply text-medium-sm font-normal text-gray-1;
   }
 }
 
@@ -19,11 +19,11 @@
 }
 
 .filter .select-single .select__indicator svg {
-  @apply w-4 h-4;
+  @apply h-4 w-4;
 }
 
 .filter .select__input-container {
-  @apply p-0 m-0;
+  @apply m-0 p-0;
 }
 
 .name-course + .des {
@@ -58,7 +58,7 @@
 }
 
 .sapp-active-item-guide .item:first-child {
-  @apply bg-white z-50;
+  @apply z-50 bg-white;
 }
 
 .select__menu {
@@ -85,7 +85,7 @@
 
 .select-single.status-course {
   .select__input-container {
-    @apply text-gray-1 text-medium-sm font-normal;
+    @apply text-medium-sm font-normal text-gray-1;
   }
 }
 
@@ -122,4 +122,22 @@
 
 .w-fill--available {
   width: -webkit-fill-available;
+}
+
+.part-detail__container > :first-child {
+  @apply p-0;
+}
+
+.test-result {
+  &__passing-score:hover {
+    &:before {
+      content: 'Passing Score';
+      position: absolute;
+      top: -20px;
+      right: 0;
+      transition: 0.25s;
+      font-size: small;
+      @apply text-state-info;
+    }
+  }
 }

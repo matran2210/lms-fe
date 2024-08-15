@@ -5,6 +5,7 @@ import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from '../../api/courses/index'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -68,29 +69,28 @@ const TableEntranceResult = () => {
   // return <></>
 
   return (
-    <div className="max-w-screen-lg m-auto overflow-y-hidden overflow-x-auto px-6">
-      <div
-        className="ml-auto cursor-pointer absolute  right-6 top-[18px]"
-        onClick={() => {
-          router.back()
-        }}
-      >
-        <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
-      </div>
-      {modalResult?.questions?.data?.length > 0 ? (
-        <QuizResultComponent
-          questionResponse={modalResult?.questions || []}
-          getTable={getTable}
-          onShowDetail={(e) => {
-            router.push(`/explanation/${e.id}?title=Entrance Test`)
+    <FullScreenLayout title="">
+      <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
+        <div
+          className="absolute right-6 top-[18px]  ml-auto cursor-pointer"
+          onClick={() => {
+            router.back()
           }}
-          loading={loading}
-        />
-      ) : (
-        <></>
-      )}
-    </div>
-    // <></>
+        >
+          <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+        </div>
+        {modalResult?.questions?.data?.length > 0 && (
+          <QuizResultComponent
+            questionResponse={modalResult?.questions || []}
+            getTable={getTable}
+            onShowDetail={(e) => {
+              router.push(`/explanation/${e.id}?title=Entrance Test`)
+            }}
+            loading={loading}
+          />
+        )}
+      </div>
+    </FullScreenLayout>
   )
 }
 export default TableEntranceResult

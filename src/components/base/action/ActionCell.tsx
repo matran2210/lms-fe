@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { Dispatch, ReactNode, SetStateAction, useRef } from 'react'
 import Icon from '@components/icons'
 import useClickOutside from '../clickoutside/HookClick'
 
@@ -41,7 +34,7 @@ const ActionCell = ({
         <div
           className={`${
             customWidth ?? 'w-200px'
-          } menu menu-sub menu-sub-dropdown w-36 px-4 right-full absolute top-4 z-50 bg-white shadow-notify`}
+          } menu menu-sub menu-sub-dropdown absolute right-full top-4 z-50 w-36 bg-white px-4 shadow-notify`}
           data-kt-menu="true"
         >
           {children}

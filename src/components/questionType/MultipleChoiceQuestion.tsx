@@ -1,6 +1,6 @@
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { getUppercaseByNumber, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
 import { IPreviewProp } from './OneChoiceQuestion'
 import { MY_COURSES } from 'src/constants/lang'
@@ -16,7 +16,6 @@ const MultiChoiceQuestion = ({
   setValue,
   handleSaveHighLight,
   highlighted,
-  removeHighlight,
   allowHighLight,
   solution,
   allowUnHighLight,
@@ -25,13 +24,18 @@ const MultiChoiceQuestion = ({
 }: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
+    let number = 0
     if (data?.answers) {
       const oldData = [...data?.answers]
       const sorted = oldData?.sort(
         (a: any, b: any) => a?.answer_position - b?.answer_position,
       )
       for (let e of sorted) {
-        answers.push({ label: e?.answer, value: e?.id })
+        number++
+        answers.push({
+          label: `${getUppercaseByNumber(number)}. ${e?.answer}`,
+          value: e?.id,
+        })
       }
     }
     return answers
@@ -76,12 +80,17 @@ const MultiChoiceQuestion = ({
           }
         }}
       >
+        <EditorReader
+          text_editor_content={data?.question_content}
+          className="sapp-questions"
+          highlighted={highlighted}
+        />
         {data?.question_topic?.exhibits &&
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
             <>
-              <div className="border border-b-gray-2 my-6"></div>
-              <div className="flex items-center mb-4">
+              <div className="my-6 border border-b-gray-2"></div>
+              <div className="mb-4 flex items-center">
                 <div className="font-semibold">
                   Exhibits ({data?.question_topic?.exhibits?.length || 0})
                 </div>
@@ -117,14 +126,9 @@ const MultiChoiceQuestion = ({
                   )
                 })}
               </div>
-              <div className="border border-b-gray-2 my-6"></div>
+              <div className="my-6 border border-b-gray-2"></div>
             </>
           )}
-        <EditorReader
-          text_editor_content={data?.question_content}
-          className="sapp-questions"
-          highlighted={highlighted}
-        />
       </div>
       <div
         className="sapp-answer-wrapper"
@@ -144,12 +148,9 @@ const MultiChoiceQuestion = ({
         />
       </div>
       {solution && (
-        <div className="bg-gray-4 mt-6 p-6">
+        <div className="mt-6 bg-gray-4 p-6">
           <SappTitleSolution title={MY_COURSES.explanations} />
-          <EditorReader
-            className="mt-4 text-bw-1"
-            text_editor_content={solution}
-          />
+          <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
       )}
     </div>

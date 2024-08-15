@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
@@ -7,9 +7,10 @@ import { formatTime, truncateString } from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
+import { trackGAEvent } from '@utils/google-analytics'
 
 const Part = ({ course }: { course: IMyCourseDetail }) => {
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const router = useRouter()
 
   const percentProgress = round(
@@ -58,15 +59,28 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
 
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
+  const trackGAEventBasedOnProgress = (
+    percentProgress: number,
+  ): (() => void) => {
+    if (percentProgress === 0) {
+      return () => trackGAEvent('Button Begin Course Detail')
+    } else if (percentProgress === 100) {
+      return () => trackGAEvent('Button Review Course Detail')
+    } else {
+      return () => trackGAEvent('Button Resume Course Detail')
+    }
+  }
+
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
       <div
-        className={`name-course text-2xl font-medium xl:h-[60px] text-bw-1`}
-        onClick={() =>
-          course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
-        }
+        className={`name-course text-2xl font-medium text-bw-1 xl:h-[60px]`}
+        onClick={() => {
+          course?.course_section_type === 'PART' ? {} : {}
+          trackGAEvent('Title Course Detail')
+        }}
       >
-        <div className="line-clamp-2 text-ellipsis cursor-pointer ">
+        <div className="line-clamp-2 cursor-pointer text-ellipsis ">
           <SappTooltip
             title={course?.name}
             showTooltip={(course?.name as string)?.length > 40}
@@ -75,8 +89,8 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
           </SappTooltip>
         </div>
       </div>
-      <div className="des mt-6 mb-15">
-        <div className="line-clamp-5 text-ellipsis h-[120px]">
+      <div className="des mb-15 mt-6">
+        <div className="line-clamp-5 h-[120px] text-ellipsis">
           <SappTooltip
             title={
               <p
@@ -91,20 +105,20 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
               dangerouslySetInnerHTML={{
                 __html: course?.description,
               }}
-              className="text-base h-[120px] text-bw-1"
+              className="h-[120px] text-base text-bw-1"
             />
           </SappTooltip>
         </div>
       </div>
       <div className="mt-auto">
         <div className="progress mb-6">
-          <div className="info flex justify-between mb-2">
+          <div className="info mb-2 flex justify-between">
             <div className="text flex items-end">
               <Icon type={`${iconType}`} />
-              <p className="text-medium-sm font-medium text-bw-1 pl-1 ml-px leading-[14px]">
+              <p className="ml-px pl-1 text-medium-sm font-medium leading-[14px] text-bw-1">
                 {showStatus}
               </p>
-              <span className="text-medium-sm font-medium text-gray-1 pl-1 ml-px">
+              <span className="ml-px pl-1 text-medium-sm font-medium text-gray-1">
                 {formattedTime > 0 ? `${formattedTime} left` : ''}
               </span>
             </div>
@@ -114,14 +128,14 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
               </p>
             </div>
           </div>
-          <div className="progressbar bg-gray-3 h-1.5">
+          <div className="progressbar h-1.5 bg-gray-3">
             <div
-              className="progress-percentage bg-primary h-1.5"
+              className="progress-percentage h-1.5 bg-primary"
               style={{ width: `${progressPart}%` }}
             ></div>
           </div>
         </div>
-        <div className="action flex items-center jusity-end relative">
+        <div className="action jusity-end relative flex items-center">
           <ButtonSecondary
             title={
               percentProgress === 0
@@ -133,11 +147,12 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             full={false}
             size={'small'}
             className="ml-auto"
-            onClick={() =>
+            onClick={() => {
               course?.course_section_type === 'PART'
                 ? onClickPart(course?.id)
                 : {}
-            }
+              trackGAEventBasedOnProgress(percentProgress)
+            }}
           />
         </div>
       </div>

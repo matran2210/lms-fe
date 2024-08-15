@@ -14,6 +14,8 @@ import {
   removeJwtToken,
   removeLocalStorageJwtToken,
   setActToken,
+  setCookieActToken,
+  setCookieRefreshToken,
   setRefreshToken,
 } from '@utils/index'
 import { PageLink } from 'src/constants'
@@ -54,6 +56,7 @@ export const getLogoutUser = createAsyncThunk(
       const keycloak = getKeycloakInstance()
       keycloak.logout({ redirectUri: window.location.origin }).then(() => {
         removeLocalStorageJwtToken()
+        removeJwtToken()
       })
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)

@@ -5,6 +5,7 @@ import EntrancePopup from './EntrancePopup'
 import { useRouter } from 'next/router'
 import SappButton from '@components/base/button/SappButton'
 import PopupExtend from './PopupExtend'
+import { trackGAEvent } from '@utils/google-analytics'
 
 interface EntranceTestProps {
   data: any
@@ -22,8 +23,10 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   const handleOnClick = () => {
     if (data?.attempt_times >= 1) {
       router.push(`entrance-test/test-result/${data?.quiz_attempt_id}`)
+      trackGAEvent('Click Button Result Entrance Test List')
     } else {
       setOpen(true)
+      trackGAEvent('Click Button Begin Entrance Test List')
     }
   }
 
@@ -53,26 +56,26 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
   return (
     <>
       <div className="name">
-        <h2 className="text-2xl font-medium mb-5 text-bw-1 line-clamp-2">
+        <h2 className="mb-5 line-clamp-2 text-2xl font-medium text-bw-1">
           {data?.name}
         </h2>
       </div>
       <div className="mt-auto">
         <div className="info">
-          <div className="flex justify-between text-base text-gray-1 capitalize pb-4 border-b border-gray-2">
+          <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
             {data?.is_attempt ? (
               <>
                 <p>Time taken:</p>
-                <p className="text-bw-1 font-medium">{timeTakenFormatted}</p>
+                <p className="font-medium text-bw-1">{timeTakenFormatted}</p>
               </>
             ) : (
               <>
                 <p>Time allowed: </p>
-                <p className="text-bw-1 font-medium">{timeAllowFormatted}</p>
+                <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
               </>
             )}
           </div>
-          <div className="flex justify-between text-base text-gray-1 capitalize pt-4">
+          <div className="flex justify-between pt-4 text-base capitalize text-gray-1">
             <p>Results:</p>
             {data?.is_attempt ? (
               <>
@@ -81,11 +84,11 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
                 </p>
               </>
             ) : (
-              <span className="text-bw-1">--</span>
+              <span className="">--</span>
             )}
           </div>
         </div>
-        <div className="action flex items-center justify-between relative mt-10">
+        <div className="action relative mt-10 flex items-center justify-between">
           {isAttemptValid && (
             <ButtonSecondary
               title="Retake"
@@ -101,7 +104,7 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
                 onClick={handleOnClick}
                 isUnderLine
                 color="text"
-                className="font-medium underline !p-0"
+                className="!p-0 font-medium underline"
                 size="small"
               />
             ) : (
