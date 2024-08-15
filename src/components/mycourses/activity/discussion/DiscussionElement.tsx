@@ -1,6 +1,6 @@
 import { CloseIconPreview, IconSend } from '@assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import sappAvatar from '@assets/images/blank_avatar_notification.png'
 import { VerifiedIcon } from '@components/icons'
 import { trackGAEvent } from '@utils/google-analytics'
 import { calculateTimeAgo } from '@utils/helpers'
@@ -209,13 +209,15 @@ function DiscussionElement({
         <div className="flex flex-row gap-3">
           <div className="flex-none leading-0">
             <Image
-              width={40}
-              height={40}
+              width={50}
+              height={50}
               className="rounded-full"
               src={
-                discussion?.avatar?.['50x50'] ||
-                discussion?.avatar?.['ORIGIN'] ||
-                blankAvatar
+                discussion.is_sapp_supporter
+                  ? sappAvatar
+                  : discussion?.avatar?.['50x50'] ||
+                    discussion?.avatar?.['ORIGIN'] ||
+                    blankAvatar
               }
               loading="eager"
               blurDataURL={blankAvatar.src}

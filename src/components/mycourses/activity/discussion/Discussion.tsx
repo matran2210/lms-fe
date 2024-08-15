@@ -1,7 +1,8 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
+import sappAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { ChangeEvent, FormEvent, KeyboardEvent, useRef, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -373,13 +374,15 @@ const Discussion = ({ class_id }: Props) => {
                 >
                   <div className="flex-none leading-0">
                     <Image
-                      width={40}
-                      height={40}
+                      width={50}
+                      height={50}
                       className="rounded-full"
                       src={
-                        user?.detail?.avatar['50x50'] ||
-                        user?.detail?.avatar['ORIGIN'] ||
-                        blankAvatar
+                        e.is_sapp_supporter
+                          ? sappAvatar
+                          : user?.detail?.avatar['50x50'] ||
+                            user?.detail?.avatar['ORIGIN'] ||
+                            blankAvatar
                       }
                       loading="eager"
                       priority={true}
@@ -481,13 +484,15 @@ const Discussion = ({ class_id }: Props) => {
       >
         <div className="flex-none leading-0">
           <Image
-            width={40}
-            height={40}
+            width={50}
+            height={50}
             className="rounded-full"
             src={
-              user?.detail?.avatar['150x150'] ||
-              user?.detail?.avatar['ORIGIN'] ||
-              blankAvatar
+              selector.userInDiscussion?.is_sapp_supporter
+                ? sappAvatar
+                : user?.detail?.avatar['50x50'] ||
+                  user?.detail?.avatar['ORIGIN'] ||
+                  blankAvatar
             }
             loading="eager"
             priority={true}
