@@ -9,18 +9,20 @@ import NoData from 'src/common/NoData'
 const CourseParts = ({
   courses,
   class_user_id,
+  is_passed_course,
   lastElementRef,
 }: {
   courses: IMyCourseDetail[] | undefined
   class_user_id?: string
+  is_passed_course: boolean
   lastElementRef: (node: HTMLDivElement) => void
 }) => {
   return (
     <div
       className={`${
         isEmpty(courses)
-          ? 'flex justify-center min-h-[calc(100vh-15rem)] items-center'
-          : 'grid 2xl-min:grid-cols-3 grid-cols-2 gap-6 mb-10'
+          ? 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
+          : 'mb-10 grid grid-cols-2 gap-6 2xl-min:grid-cols-3'
       }`}
     >
       {!isEmpty(courses) ? (
@@ -28,7 +30,7 @@ const CourseParts = ({
           return (
             <div
               key={coursePart?.id}
-              className={`item bg-white p-[30px] shadow-sidebar flex flex-col aspect-h-16 h-[412px] justify-between`}
+              className={`item aspect-h-16 flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
               ref={lastElementRef}
               data-aos={ANIMATION.DATA_AOS}
             >
@@ -38,6 +40,7 @@ const CourseParts = ({
                 <PartMiddleTest
                   key={index}
                   coursePart={coursePart}
+                  is_passed_course={is_passed_course}
                   class_user_id={class_user_id}
                 />
               ) : (

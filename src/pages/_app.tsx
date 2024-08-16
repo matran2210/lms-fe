@@ -25,7 +25,7 @@ import { getActToken, pageview } from '@utils/index'
 import { CourseProvider } from '@contexts/index'
 import { URL } from 'url'
 import { io } from 'socket.io-client'
-import { ICert } from 'src/type'
+import { ICourseScore } from 'src/type'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import PopupCert from '@components/mycourses/PopupCert'
@@ -122,24 +122,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
-  useEffect(() => {
-    const isExclusivePages = [
-      PageLink.AUTH_LOGIN,
-      PageLink.AUTH_CHANGE_PASSWORD,
-      PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
-      PageLink.AUTH_FORGOT_PASSWORD,
-      PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
-    ].includes(router.asPath)
-
-    if (!isExclusivePages) {
-      localStorage.setItem('beforeLoginPath', router.asPath.toString())
-    }
-  }, [router])
-
   // Lấy token từ cokkieStorage (giả sử 'accessToken' là key lưu token)
 
   const [openCert, setOpenCert] = useState(false)
-  const [dataStudent, setDataStudent] = useState<ICert>()
 
   let authToken = getActToken()
 
@@ -165,17 +150,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     if (socket) {
       socket.on('connect', () => {})
       socket.on('disconnect', () => {})
-      socket.on('STUDENT_COMPLETE_COURSE', (data: ICert) => {
-        setOpenCert(true)
-        setDataStudent(data)
-      })
     }
   }, [socket])
-
-  const handleCancel = () => {
-    setOpenCert(false)
-    setDataStudent(undefined)
-  }
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
   const tagManagerArgs: TagManagerArgs = { gtmId }
@@ -195,6 +171,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     '/test/[id]',
     '/case-study/[id]',
     '/certificates/[id]',
+    '/case-study/result/[id]',
   ]
 
   const showHelp = !excludedPathsHelp.some((path) =>
@@ -203,11 +180,16 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     const container = document.getElementById('hubspot-conversations-iframe')
+    const message = document.getElementById(
+      'hubspot-messages-iframe-container',
+    ) as HTMLElement
     if (container) {
       if (!showHelp) {
         container.classList.add('visible-icon')
+        message.classList.add('visible-icon')
       } else {
         container.classList.remove('visible-icon')
+        message.classList.remove('visible-icon')
       }
     }
   }, [showHelp])
@@ -230,11 +212,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   </>
                 )}
                 <LearningNotesList />
-                <PopupCert
-                  open={openCert}
-                  onCancel={handleCancel}
-                  dataStudent={dataStudent}
-                />
+                <PopupCert />
               </>
             </RouteGuard>
           </QueryClientProvider>

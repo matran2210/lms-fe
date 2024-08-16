@@ -135,7 +135,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-6 grid-rows-1 gap-3 mb-2">
+      <div className="mb-2 grid grid-cols-6 grid-rows-1 gap-3">
         {code?.map((otp, index) => (
           <SAPPTextFiled
             key={index}
@@ -152,7 +152,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
           />
         ))}
       </div>
-      <div className="flex justify-between mb-8">
+      <div className="mb-8 flex justify-between">
         <span className="text-medium-sm text-state-error">{errorMessage}</span>
         <span
           className={`min-w-fit text-right text-medium-sm ${
@@ -176,7 +176,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         full={true}
         disabled={!canResend}
         onClick={onResendCode}
-        className="no-underline pt-3 pb-3.25"
+        className="pb-3.25 pt-3 no-underline"
         size="medium"
         loading={loading}
       />

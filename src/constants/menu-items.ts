@@ -68,8 +68,8 @@ const MENU_OPTIONS: MenuOption[] = [
   // {
   //   name: `${TitleSidebar.RESULTS}`,
   //   icon: 'result',
-  //   url: '/',
-  //   type: 'level-1',
+  //   url: '#',
+  //   type: 'level-2',
   // },
   {
     name: `${TitleSidebar.NEW_NOTE}`,

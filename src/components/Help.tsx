@@ -53,7 +53,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   }, [visible])
 
   return (
-    <div id="container-floating">
+    <div id="container-floating" className="hidden md:block">
       <div className="cursor-pointer">
         <Popover
           content={
@@ -61,8 +61,8 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
           }
           title={undefined}
           trigger="click"
-          visible={visible}
-          onVisibleChange={handleVisibleChange}
+          open={visible}
+          onOpenChange={handleVisibleChange}
           placement="topLeft"
           arrow={false}
         >
@@ -70,9 +70,9 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             <div
               id="floating-button"
               onClick={handleButtonClick}
-              className={`${visible ? 'bottom-5 clicked' : 'bottom-[90px]'} right-[18px]`}
+              className={`${visible ? 'clicked bottom-5' : 'bottom-[90px]'} right-[18px]`}
             >
-              <div className="plus flex justify-center items-center bg-white hover:opacity-100 rounded-full transition delay-300">
+              <div className="plus flex items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
                 <svg
                   width="60"
                   height="60"
@@ -101,9 +101,9 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
               <div
                 id="floating-button"
                 onClick={handleButtonClick}
-                className={`${visible ? 'bottom-5 clicked' : 'bottom-[90px]'} right-[20px]`}
+                className={`${visible ? 'clicked bottom-5' : 'bottom-[90px]'} right-[20px]`}
               >
-                <div className="plus flex justify-center items-center hover:opacity-100 hover:rounded-full delay-300">
+                <div className="plus flex items-center justify-center delay-300 hover:rounded-full hover:opacity-100">
                   <IconClose />
                 </div>
               </div>

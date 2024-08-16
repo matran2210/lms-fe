@@ -4,10 +4,9 @@ import SAPPCheckbox from './checkbox/SAPPCheckbox'
 interface IProps {
   headers?: Array<{ label: string; className?: string }>
   children: ReactNode
-  loading: boolean
-  data: Array<any> | undefined
+  loading?: boolean
   isCheckedAll: any
-  onChange: (e: any) => void
+  onChange?: (e: any) => void
   hasCheckAll?: boolean
   hasCheck?: boolean
   showHeader?: boolean
@@ -23,7 +22,6 @@ const SappTable = ({
   children,
   headers,
   loading,
-  data,
   isCheckedAll,
   onChange,
   hasCheckAll = true,
@@ -37,15 +35,17 @@ const SappTable = ({
   classString = '',
 }: IProps) => {
   return (
-    <div className={`table-responsive overflow-x-auto ${classTableRes}`}>
+    <div
+      className={`table-responsive relative overflow-x-auto ${classTableRes}`}
+    >
       <table className={classTable}>
         {showHeader && (
           <thead className={`${theadClass}`}>
             <tr
-              className={`text-start text-muted fw-bolder fs-7 text-uppercase gs-0 ${classString}`}
+              className={`text-muted fw-bolder fs-7 text-uppercase gs-0 text-start ${classString}`}
             >
               {hasCheck && (
-                <th className="w-50px pr-5">
+                <th className="w-50px pr-5" scope="col">
                   {hasCheckAll && (
                     <SAPPCheckbox checked={isCheckedAll} onChange={onChange} />
                   )}
@@ -67,7 +67,7 @@ const SappTable = ({
             </tr>
           </thead>
         )}
-        <tbody className={`text-gray-600 fw-semibold ${tbodyClass}`}>
+        <tbody className={`fw-semibold text-bw-1 ${tbodyClass}`}>
           {children}
         </tbody>
       </table>

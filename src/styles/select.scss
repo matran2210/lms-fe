@@ -1,6 +1,6 @@
 .select-single {
   .select__control {
-    @apply h-12.5 border-default focus:border-primary hover:border-primary shadow-0 focus:shadow-0 focus:outline-none;
+    @apply h-12.5 border-default shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
@@ -9,7 +9,7 @@
 
   .select__single-value,
   .select__placeholder {
-    @apply text-sm leading-4.5 font-normal p-0 m-0;
+    @apply m-0 p-0 text-sm font-normal leading-4.5;
   }
 
   .select__placeholder {
@@ -17,11 +17,11 @@
   }
 
   .select__menu {
-    @apply border-0 shadow-select px-2 py-1 rounded-none text-sm;
+    @apply rounded-none border-0 px-2 py-1 text-sm shadow-select;
   }
 
   .select__option {
-    @apply text-sm leading-4.5 font-normal text-bw-1 cursor-pointer bg-transparent line-clamp-2 max-h-11;
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-4.5 text-bw-1;
 
     &.select__option--is-focused {
       @apply bg-transparent;
@@ -44,18 +44,18 @@
     @apply hidden;
 
     svg {
-      @apply w-7-percent h-7;
+      @apply h-7 w-7-percent;
     }
   }
 
   &:hover {
     .select__clear-indicator {
-      @apply transition-all opacity-100 duration-200;
+      @apply opacity-100 transition-all duration-200;
     }
   }
 
   .select__clear-indicator {
-    @apply cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 bg-white opacity-0;
+    @apply absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer bg-white opacity-0;
   }
 
   .select__input {

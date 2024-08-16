@@ -14,8 +14,8 @@ const Devices = ({}: any) => {
     getListDevices()
   }, [])
   return (
-    <div className="bg-white py-6 flex-1 shadow-box">
-      <div className="text-xl font-medium border-b pb-5 border-gray-3 mx-6">{`Browsers (${
+    <div className="flex-1 bg-white py-6 shadow-box">
+      <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">{`Browsers (${
         listDevices?.length || 0
       })`}</div>
       {listDevices?.map((e: any) => {
@@ -25,7 +25,7 @@ const Devices = ({}: any) => {
           </div>
         )
       })}
-      <div className="bg-gray-4 flex p-4 items-center gap-3 mx-6 mt-3">
+      <div className="mx-6 mt-3 flex items-center gap-3 bg-gray-4 p-4">
         <div>
           <SecurityIcon />
         </div>

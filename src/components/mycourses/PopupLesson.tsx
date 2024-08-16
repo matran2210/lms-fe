@@ -31,13 +31,13 @@ const PopupLesson = ({ open, setOpen }: IProps) => {
       confirmOnclose={false}
       title={undefined}
     >
-      <div className="p-8 rounded-full bg-secondary flex items-center justify-center w-max mx-auto mb-6">
+      <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertIcon />
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold flex justify-center">
+      <div className="flex justify-center text-2xl font-semibold text-bw-1 md:text-4xl">
         Foundation Required
       </div>
-      <div className="text-medium-sm text-gray-1 text-center mt-4 mb-1 xl:mb-7 px-1">
+      <div className="mb-1 mt-4 px-1 text-center text-medium-sm text-gray-1 xl:mb-7">
         Please pass the Foundation Class to activate this course.
       </div>
     </SappModalV2>

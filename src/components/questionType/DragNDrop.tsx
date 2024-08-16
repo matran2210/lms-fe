@@ -340,9 +340,9 @@ const DragNDropPreivew = forwardRef(
                 data?.question_topic?.exhibits?.length > 0 && (
                   <>
                     {data?.question_topic?.description && (
-                      <div className="border border-b-gray-2 my-6"></div>
+                      <div className="my-6 border border-b-gray-2"></div>
                     )}
-                    <div className="flex items-center mb-4">
+                    <div className="mb-4 flex items-center">
                       <div className="font-semibold">
                         Exhibits ({data?.question_topic?.exhibits?.length || 0})
                       </div>
@@ -380,7 +380,7 @@ const DragNDropPreivew = forwardRef(
                         },
                       )}
                     </div>
-                    <div className="border border-b-gray-2 my-6"></div>
+                    <div className="my-6 border border-b-gray-2"></div>
                   </>
                 )}
               <EditorReader
@@ -396,7 +396,7 @@ const DragNDropPreivew = forwardRef(
             {!corrects && (
               <div className="answer-area">
                 <div
-                  className={`border min-h-large sapp-store flex flex-wrap gap-5 p-5 w-full ${storageId}`}
+                  className={`sapp-store flex min-h-large w-full flex-wrap gap-5 border p-5 ${storageId}`}
                   onDrop={(ev) => handleStorage(ev, data?.id)}
                   onDragOver={allowDrop}
                   id="storage"
@@ -429,7 +429,7 @@ const DragNDropPreivew = forwardRef(
         )}
         {answerContent && (
           <>
-            <div className="font-semibold text-base pt-[31px]">
+            <div className="pt-[31px] text-base font-semibold">
               Correct Answer
             </div>
             <EditorReader
@@ -442,7 +442,7 @@ const DragNDropPreivew = forwardRef(
           </>
         )}
         {solution && (
-          <div className="bg-gray-4 mt-6 p-6">
+          <div className="mt-6 bg-gray-4 p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>

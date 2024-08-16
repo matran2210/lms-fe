@@ -32,10 +32,10 @@ const LoginHistory = () => {
   }
   return (
     <div
-      className="bg-white py-6 flex-1 shadow-box h-fit"
-      style={{ maxHeight: '578px', overflowY: 'auto', minHeight: '400px' }}
+      className="h-fit flex-1 bg-white py-6 shadow-box "
+      style={{ maxHeight: '568px', overflowY: 'auto', minHeight: '400px' }}
     >
-      <div className="text-xl font-medium border-b pb-5 border-gray-3 mx-6">{`Login History (${
+      <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">{`Login History (${
         loginHistory?.meta?.total_records || 0
       })`}</div>
       <div

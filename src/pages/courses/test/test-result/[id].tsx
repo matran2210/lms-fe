@@ -1,12 +1,12 @@
-import React from 'react'
+import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
+import SinglePageLayout from '@components/layout/SinglePage'
+import { TEST_TYPE } from '@utils/constants'
+import { useGetDataQuery } from '@utils/index'
+import { useRouter } from 'next/router'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TestResultPage from './testResultPage'
-import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
-import { useGetDataQuery } from '@utils/index'
-import { TEST_TYPE } from '@utils/constants'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { useRouter } from 'next/router'
-import Layout from '@components/layout'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -51,39 +51,45 @@ const TestResultDetail = () => {
     {
       link: '/courses',
       title: 'Courses',
+      disable: false,
     },
     {
       link: `/courses/my-course/${questions?.class_id ?? ''}`,
       title: `${questions?.course?.name ?? 'Course Detail'}`,
+      disable: false,
     },
     {
       link: linkTest,
       title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+      disable: true,
     },
     {
       link: '/',
       title: 'Results',
+      disable: false,
     },
   ]
 
   return (
-    <Layout title="Test Result">
-      <div className="main px-6 xl:px-16">
-        <Breadcrumb
-          tabs={breadcrumbs}
-          currentPage={'Results'}
-          className="2xl-max:py-4"
-        />
+    <FullScreenLayout title="Test Result" className="!bg-gray-3">
+      <div className="mx-auto max-w-[1570px]">
+        <div className="px-5 xl:container md:px-10">
+          <Breadcrumb
+            tabs={breadcrumbs}
+            currentPage={'Results'}
+            className="2xl-max:py-4"
+          />
+        </div>
+        <div className="px-5 xl:container md:px-10">
+          <TestResultPage
+            questions={questions}
+            type={questions?.course?.course_categories?.[0]?.name}
+            chartData={chartData}
+            subjectCode={questions?.course?.subject?.code ?? ''}
+          />
+        </div>
       </div>
-      <div className="px-6 xl:px-0 mx-auto xl:mx-16 mb-6">
-        <TestResultPage
-          questions={questions}
-          type={questions?.course?.course_categories?.[0]?.name}
-          chartData={chartData}
-          subjectCode={questions?.course?.subject?.code ?? ''}
-        />
-      </div>
-    </Layout>
+    </FullScreenLayout>
   )
 }
 

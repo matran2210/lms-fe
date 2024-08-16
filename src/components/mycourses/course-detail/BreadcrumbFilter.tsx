@@ -21,7 +21,7 @@ const BreadcrumbFilter = ({
       aria-label="breadcrumbs"
     >
       <ol className="breadcrumbs__list flex text-medium-sm font-medium">
-        <li className="breadcrumbs__item text-gray-1 shrink-0 hover:underline">
+        <li className="breadcrumbs__item shrink-0 text-gray-1 hover:underline">
           <Link
             href="/courses"
             className="breadcrumbs__link"
@@ -42,9 +42,25 @@ const BreadcrumbFilter = ({
               <span>/ {truncateString(name, 80)}</span>
             </Tooltip>
           ) : (
-            <span>/ {name}</span>
+            <>
+              /&nbsp;
+              <span className="hover:underline">
+                <Link
+                  href={`/courses/my-course/${courseId}`}
+                  className="breadcrumbs__link"
+                  scroll={false}
+                >
+                  {`${name}`}
+                </Link>
+              </span>
+            </>
           )}
         </li>
+        {subpath && (
+          <li className="breadcrumbs__item current-course ml-1 line-clamp-1 text-bw-1">
+            / {subpath}
+          </li>
+        )}
       </ol>
     </nav>
   )

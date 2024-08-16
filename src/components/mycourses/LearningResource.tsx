@@ -106,11 +106,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseSubsections(page_size: number) {
     try {
+      const class_id = router.query.courseId || router.query.id
       const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'CHAPTER',
         selectedSection.value,
-        router.query.courseId as string,
+        class_id as any,
       )
       setSubsections([...res?.data?.sections].reverse())
       setSelectedUnit(null)
@@ -128,11 +129,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseUnit() {
     try {
+      const class_id = router.query.courseId || router.query.id
       const res = await CoursesAPI.getCourseSubsectionList(
         DEFAULT_PAGESIZE,
         'UNIT',
         selectedSubsection.value,
-        router.query.courseId as string,
+        class_id as any,
       )
       setUnit([...res?.data?.sections].reverse())
       setSelectedActivity(null)
@@ -149,11 +151,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseActivity(page_size: number) {
     try {
+      const class_id = router.query.courseId || router.query.id
       const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'ACTIVITY',
         selectedUnit.value,
-        router.query.courseId as string,
+        class_id as any,
       )
       setActivity([...res?.data?.sections].reverse())
     } catch (error) {}
@@ -297,7 +300,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       confirmOnClose={false}
       heightBody={'h-[calc(100vh-112px)]'}
     >
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mt-2">
+      <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
         <HookFormSelect
           classParent="w-full md:max-w-full"
           placeholder="Section"
@@ -408,14 +411,14 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           {resources?.resources?.map((resource) => (
             <div key={resource.id}>
               <div
-                className="mt-6 p-6 h-[92px] last:mb-6 flex justify-between items-center"
+                className="mt-6 flex h-[92px] items-center justify-between p-6 last:mb-6"
                 style={{ border: '1px solid #DCDDDD' }}
               >
                 <div>
-                  <div className="font-normal text-base text-bw-1">
+                  <div className="text-base font-normal text-bw-1">
                     {resource?.name}
                   </div>
-                  <div className="text-gray-1 font-normal text-base">
+                  <div className="text-base font-normal text-gray-1">
                     {bytesToKilobyte(resource?.size)}
                   </div>
                 </div>
@@ -430,7 +433,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           ))}
         </TextSkeleton>
       ) : (
-        <div className="flex justify-center items-center min-h-[calc(100vh-12rem)]">
+        <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
           <NoData />
         </div>
       )}

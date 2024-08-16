@@ -220,9 +220,9 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         showHeader={false}
         showFooter={false}
       >
-        <h2 className="text-xl font-bold text-bw-1 py-6">Your Score Details</h2>
+        <h2 className="py-6 text-xl font-bold text-bw-1">Your Score Details</h2>
         <div
-          className="absolute right-4 top-2.5 p-2 cursor-pointer"
+          className="absolute right-4 top-2.5 cursor-pointer p-2"
           onClick={() => {
             handleOnClick()
             trackGAEvent('Click Icon Close Your Score Details')
@@ -233,7 +233,6 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         <SappTable
           headers={headers}
           loading={false}
-          data={[{}]}
           isCheckedAll={false}
           hasCheck={false}
           hasCheckAll={false}

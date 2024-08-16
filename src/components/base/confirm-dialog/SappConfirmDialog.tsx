@@ -61,7 +61,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         position="center"
       >
         <div className="">
-          <div className="mx-auto mb-7 flex w-fit h-fit flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+          <div className="mx-auto mb-7 flex h-fit w-fit flex-shrink-0 items-center justify-center rounded-full bg-red-100">
             <svg
               className="h-[100px] w-[100px] text-state-error"
               fill="none"

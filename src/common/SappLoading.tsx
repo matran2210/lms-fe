@@ -4,12 +4,12 @@ import animation from 'src/assets/images/animation.json'
 
 const SappLoading = () => {
   return (
-    <div className="backdrop-blur-[2000px] bg-white w-full h-full fixed block z-[9999]">
+    <div className="fixed z-[9999] block h-full w-full bg-white backdrop-blur-[2000px]">
       <Player
         src={animation}
         autoplay
         loop
-        className="top-0 left-0 z-[9999] backdrop-blur-[2000px] bg-white"
+        className="left-0 top-0 z-[9999] bg-white backdrop-blur-[2000px]"
         speed={3}
       />
     </div>

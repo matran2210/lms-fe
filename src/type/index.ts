@@ -34,6 +34,7 @@ export interface IButtonProps {
 export interface ITabs {
   link: string
   title: string
+  disable?: boolean
 }
 
 export type IButtonCancelSubmitProps = {
@@ -70,14 +71,18 @@ interface IPinned {
   updated_at: string
 }
 
-export interface ICert {
-  user_id: string
-  payload: {
-    content: string
-    created_at: Date
+export interface ICourseScore {
+  is_passed: boolean
+  course: {
     id: string
+    name: string
+  }
+  user_certificate: {
+    id: string
+  }
+  content: {
     title: string
-    certificate_id: string
+    content: string
   }
 }
 
@@ -92,4 +97,22 @@ export enum NOTIFICATION_STATUS {
   TIMER = 'TIMER',
   SHOWING = 'SHOWING',
   ENDED = 'ENDED',
+}
+
+export interface IMetaData {
+  total_pages: number
+  total_records: number
+  page_index: number
+  page_size: number
+}
+
+export * from './course'
+export * from './courses'
+export * from './exhibit'
+export * from './notification'
+export * from './quiz'
+export interface ISVG {
+  width?: number
+  height?: number
+  className?: string
 }

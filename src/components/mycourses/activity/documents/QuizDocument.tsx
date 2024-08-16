@@ -25,6 +25,7 @@ import SappButton from '@components/base/button/SappButton'
 import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import { trackGAEvent } from '@utils/google-analytics'
+import { showPopup } from 'src/redux/slice/Popup/Result-test'
 
 type Props = {
   questions: IQuestion[]
@@ -36,6 +37,29 @@ type Props = {
   is_graded?: boolean
   setOpenFile?: any
   class_user_id?: string
+}
+
+interface IAnswer {
+  active: string
+  id: string
+  is_correct: false
+  quiz_attempt_id: string
+  time_spent: number
+  topic_attempt_id: string
+  question: {
+    id: string
+    qType: string
+    question_content: string
+    question_filter_id: {
+      part: {
+        name: string
+      }
+    }
+  }
+}
+
+interface IAnswers {
+  answers: IAnswer[]
 }
 
 const QuizDocument = ({
@@ -203,7 +227,6 @@ const QuizDocument = ({
         .unwrap()
         .then((e: any) => {
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
-
           dispatch(
             removeQuizFinished({
               activityId,
@@ -214,6 +237,11 @@ const QuizDocument = ({
           setLoading(false)
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
+          if (e?.data?.class_user_score) {
+            setTimeout(() => {
+              dispatch(showPopup(e.data.class_user_score))
+            }, 4000)
+          }
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
@@ -246,17 +274,20 @@ const QuizDocument = ({
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response?.data?.meta,
         data: (modalResult?.questions?.data || []).concat(
-          response?.data?.answers?.map((e: any) => {
-            return {
-              id: e?.id,
-              content: e?.question?.question_content,
-              section: e?.question?.question_filter_id?.part?.name,
-              type: e?.question?.qType,
-              is_correct: e?.is_correct,
-              time_spent: e?.time_spent,
-              question: e?.question as any,
-              active: e?.active,
-            }
+          response?.data?.answer_groups?.flatMap((group: IAnswers) => {
+            const answers = group?.answers?.map((answer: IAnswer) => {
+              return {
+                id: answer?.id,
+                content: answer?.question?.question_content,
+                section: answer?.question?.question_filter_id?.part?.name,
+                type: answer?.question?.qType,
+                is_correct: answer?.is_correct,
+                time_spent: answer?.time_spent,
+                question: answer?.question as any,
+                active: answer?.active,
+              }
+            })
+            return answers || []
           }) || [],
         ),
       }
@@ -285,7 +316,7 @@ const QuizDocument = ({
       ></ConFirmSubmit>
 
       <div
-        className="border border-gray-3 p-6 select-none max-h-[500px] overflow-auto"
+        className="max-h-[500px] select-none overflow-auto border border-gray-2 p-6 text-black-1 "
         data-aos={ANIMATION.DATA_AOS}
       >
         {activeQuestion && (
@@ -306,16 +337,16 @@ const QuizDocument = ({
         )}
       </div>
 
-      <div className="min-h-[50px] bg-gray-3 flex items-center py-2 px-6">
+      <div className="flex min-h-[50px] items-center bg-gray-3 px-6 py-2">
         <div
           className={`${
             is_graded || 'invisible'
-          } text-state-info bg-state-info bg-opacity-10 whitespace-nowrap px-1 py-0.5 font-semibold text-center text-medium-sm text-[11px]`}
+          } whitespace-nowrap bg-state-info bg-opacity-10 px-1 py-0.5 text-center text-[11px] text-medium-sm font-semibold text-state-info`}
         >
           Graded Activity
         </div>
 
-        <div className="w-fit mx-auto flex items-center gap-3">
+        <div className="mx-auto flex w-fit items-center gap-3">
           <div
             className={`cursor-pointer select-none ${
               activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
@@ -420,12 +451,12 @@ const QuizDocument = ({
       >
         <div className="relative">
           <div
-            className="ml-auto cursor-pointer absolute  right-6 top-5"
+            className="absolute right-6 top-5  ml-auto cursor-pointer"
             onClick={() => setModalResult(undefined)}
           >
-            <CloseIcon className="transition-all stroke-bw-1 ease-in-out duration-300 transform group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
-          <div className="max-w-[1114px] mx-auto overflow-auto">
+          <div className="mx-auto max-w-[1114px] overflow-auto">
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}
               getTable={getTable}

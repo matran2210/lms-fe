@@ -4,8 +4,14 @@ import { IMeta } from '../courses'
 export interface IScoreDetails {
   meta: IMeta
   answers: IAnswer[]
+  answer_groups?: IAnswearGroup[]
 }
 
+export interface IAnswearGroup {
+  answers?: IAnswer[]
+  id?: string
+  name?: string
+}
 export interface IAnswer {
   id: string
   quiz_attempt_id: string
@@ -15,6 +21,7 @@ export interface IAnswer {
   active: string
   topic_attempt_id: string | null
   question: Question
+  index: number
 }
 
 interface QuestionFilter {
@@ -42,7 +49,7 @@ interface QuestionReport {
 
 interface Question {
   id: string
-  question_filter_id: QuestionFilter
+  question_filter: QuestionFilter
   question_content: string
   level: string
   qType: QUESTION_TYPES

@@ -2,7 +2,11 @@ import styles from '@styles/components/SAPPVideo.module.scss'
 import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
-import { formatTimeToHourMinuteSecond, getResolution } from '@utils/helpers'
+import {
+  formatTimeToHourMinuteSecond,
+  getResolution,
+  isMobileOrTablet,
+} from '@utils/helpers'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
@@ -112,59 +116,66 @@ const SAPPVideo = ({
         dashjs = await import('dashjs')
 
         if (dashjs) {
-          player = dashjs.MediaPlayer().create()
+          if (dashjs?.supportsMediaSource() || !isMobileOrTablet()) {
+            player = dashjs.MediaPlayer().create()
 
-          const audioVideoSettings = player.getSettings()?.streaming?.abr
-          audioVideoSettings.autoSwitchBitrate.video = false
+            const audioVideoSettings = player.getSettings()?.streaming?.abr
+            audioVideoSettings.autoSwitchBitrate.video = false
 
-          player.initialize(
-            streamRef.current,
-            `${video_url}${options?.src}/manifest/video.mpd`,
-            false,
-          )
-          await fetchCaptions(`${video_url}${options?.src}/manifest/video.mpd`)
+            player.initialize(
+              streamRef.current,
+              `${video_url}${options?.src}/manifest/video.mpd`,
+              false,
+            )
+            await fetchCaptions(
+              `${video_url}${options?.src}/manifest/video.mpd`,
+            )
 
-          player.updateSettings({
-            streaming: {
-              abr: audioVideoSettings,
-              buffer: {
-                stableBufferTime: 30,
-                bufferTimeAtTopQuality: 60,
-                bufferTimeAtTopQualityLongForm: 120,
+            player.updateSettings({
+              streaming: {
+                abr: audioVideoSettings,
+                buffer: {
+                  stableBufferTime: 30,
+                  bufferTimeAtTopQuality: 60,
+                  bufferTimeAtTopQualityLongForm: 120,
+                },
               },
-            },
-          })
+            })
 
-          player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
-            setTimeout(() => {
-              const currentVideoQualityIndex = player.getQualityFor('video')
-              const getListBit = player.getBitrateInfoListFor('video')
-              player.setQualityFor(
-                'video',
-                getListBit?.[currentVideoQualityIndex]?.qualityIndex,
-                true,
-              )
+            player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
+              setTimeout(() => {
+                const currentVideoQualityIndex = player.getQualityFor('video')
+                const getListBit = player.getBitrateInfoListFor('video')
+                player.setQualityFor(
+                  'video',
+                  getListBit?.[currentVideoQualityIndex]?.qualityIndex,
+                  true,
+                )
 
-              setListQualitys(getListBit)
-              setPlaybackQuality(
-                getListBit?.[currentVideoQualityIndex]?.bitrate,
-              )
-            }, 1000)
-            setPlayerFunction(player)
-          })
+                setListQualitys(getListBit)
+                setPlaybackQuality(
+                  getListBit?.[currentVideoQualityIndex]?.bitrate,
+                )
+              }, 1000)
+              setPlayerFunction(player)
+            })
 
-          player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, () => {
+            player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, () => {
+              setCanPlay(true)
+              setCloudflarePlayer(false)
+            })
+
+            player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKING, () => {
+              setSeeking(true)
+            })
+
+            player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKED, () => {
+              setSeeking(false)
+            })
+          } else {
             setCanPlay(true)
-            setCloudflarePlayer(false)
-          })
-
-          player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKING, () => {
-            setSeeking(true)
-          })
-
-          player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKED, () => {
-            setSeeking(false)
-          })
+            setCloudflarePlayer(true)
+          }
         } else {
           setCanPlay(true)
           setCloudflarePlayer(true)
@@ -702,21 +713,21 @@ const SAPPVideo = ({
   return (
     <>
       <div
-        className={`${loading ? 'visible' : 'hidden'} flex-center w-full h-full relative pt-[56.26%]`}
+        className={`${loading ? 'visible' : 'hidden'} flex-center relative h-full w-full pt-[56.26%]`}
       >
-        <div className="absolute top-0 left-0 bottom-0 right-0 w-full h-full">
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full">
           {thumbnail && (
             <Image
               src={thumbnail?.['950x535'] ?? ''}
               alt={'Thumbnail image'}
-              className="object-contain w-full h-full"
+              className="h-full w-full object-contain"
               width={952}
               height={535.5}
               priority
             />
           )}
         </div>
-        <div className="absolute top-0 left-0 bottom-0 right-0 w-full h-full bg-overlay-loading opacity-80 transition-opacity">
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-overlay-loading opacity-80 transition-opacity">
           <LoadingIcon
             loading={loading}
             loadingPercentage={loadingPercentage}
@@ -750,7 +761,7 @@ const SAPPVideo = ({
             </div>
           ) : (
             <div
-              className={`group sapp-video-custom video-container ${
+              className={`sapp-video-custom video-container group ${
                 !hideVideo ? styles.wrapper : styles.hideWrapper
               } ${loading ? 'hidden' : ''}`}
               ref={videoContainerRef}
@@ -760,9 +771,9 @@ const SAPPVideo = ({
                 className="playback-animation flex-center"
                 ref={playbackAnimationRef}
               >
-                <svg className="icon-svg playback-icons w-6 h-6">
+                <svg className="icon-svg playback-icons h-6 w-6">
                   <path
-                    className="hidden play"
+                    className="play hidden"
                     d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"
                   ></path>
                   <path
@@ -794,13 +805,13 @@ const SAPPVideo = ({
                 controlsList="nodownload"
               />
               <div
-                className="video-controls absolute right-0 left-0 bottom-0 py-3 px-4 h-14 w-full flex-center hidden"
+                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-14 w-full px-4 py-3"
                 ref={videoControlsRef}
               >
                 <div className="flex-center w-full">
                   <div className="left-controls flex items-center text-white">
                     <button
-                      className="btn-video bg-overlay-play w-8 h-8 mr-4 flex items-center justify-center before:-right-4"
+                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-overlay-play before:-right-4"
                       data-title="Play"
                       ref={playButtonRef}
                       onClick={() => {
@@ -808,19 +819,19 @@ const SAPPVideo = ({
                         animatePlayback()
                       }}
                     >
-                      <svg className="icon-svg playback-icons w-6 h-6">
+                      <svg className="icon-svg playback-icons h-6 w-6">
                         <path
                           className="play"
                           d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"
                         ></path>
                         <path
-                          className="hidden pause"
+                          className="pause hidden"
                           d="M14.016 5.016h3.984v13.969h-3.984v-13.969zM6 18.984v-13.969h3.984v13.969h-3.984z"
                         ></path>
                       </svg>
                     </button>
 
-                    <div className="time text-xsm text-gray-7 leading-normal font-normal flex-center gap-1 mr-4">
+                    <div className="time flex-center mr-4 gap-1 text-xsm font-normal leading-normal text-gray-7">
                       <time ref={timeElapsedRef}>00:00</time>
                       <span> / </span>
                       <time ref={durationRef}>00:00</time>
@@ -828,11 +839,11 @@ const SAPPVideo = ({
                   </div>
                   <div className="video-progress relative h-1.5 w-full">
                     <progress
-                      className="w-full h-1.5 pointer-events-none absolute top-0"
+                      className="pointer-events-none absolute top-0 h-1.5 w-full"
                       ref={progressBarRef}
                     ></progress>
                     <input
-                      className="seek z-10 absolute top-0 w-full cursor-pointer m-0"
+                      className="seek absolute top-0 z-10 m-0 w-full cursor-pointer"
                       min="0"
                       type="range"
                       step="1"
@@ -840,7 +851,7 @@ const SAPPVideo = ({
                       defaultValue="0"
                     />
                     <div
-                      className="seek-tooltip hidden absolute top-[-50px] -ml-5 text-xsm p-1 font-semibold text-white bg-overlay-dark"
+                      className="seek-tooltip absolute top-[-50px] -ml-5 hidden bg-overlay-dark p-1 text-xsm font-semibold text-white"
                       ref={seekTooltipRef}
                     >
                       00:00
@@ -851,7 +862,7 @@ const SAPPVideo = ({
                           return (
                             <div
                               key={i}
-                              className="marker absolute top-0 w-1.5 h-1.5 bg-primary z-[5]"
+                              className="marker absolute top-0 z-[5] h-1.5 w-1.5 bg-primary"
                               title={e[0]?.question_topic?.name}
                             ></div>
                           )
@@ -859,17 +870,17 @@ const SAPPVideo = ({
                     </>
                   </div>
                   <div className="right-controls flex-center">
-                    <div className="volume-controls w-8 h-8 relative flex items-center">
+                    <div className="volume-controls relative flex h-8 w-8 items-center">
                       <button
                         data-title="Mute"
                         className="btn-video volume-button"
                         ref={volumeButtonRef}
                         onClick={toggleMute}
                       >
-                        <svg className="icon-svg volume-mute w-5.5 h-5.5 ml-3 scale-[0.8] hidden">
+                        <svg className="icon-svg volume-mute ml-3 hidden h-5.5 w-5.5 scale-[0.8]">
                           <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
                         </svg>
-                        <svg className="icon-svg volume-low w-5.5 h-6 ml-3 hidden">
+                        <svg className="icon-svg volume-low ml-3 hidden h-6 w-5.5">
                           <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
                         </svg>
                         <Icon
@@ -891,7 +902,7 @@ const SAPPVideo = ({
                       </div>
                     </div>
                     <div
-                      className={`settings-control ml-4 text-white icon-svg relative ${
+                      className={`settings-control icon-svg relative ml-4 text-white ${
                         activeSettings ? 'active' : ''
                       }`}
                       ref={listSettingsRef}
@@ -912,14 +923,14 @@ const SAPPVideo = ({
                         ></path>
                       </svg>
                       <>
-                        <div className="settings-control-popup hidden absolute bottom-5 -right-8 text-center rounded text-white py-1 text-white bg-overlay-control w-44">
+                        <div className="settings-control-popup absolute -right-8 bottom-5 hidden w-44 rounded bg-overlay-control py-1 text-center text-white text-white">
                           {!activeQuality && !activeSpeed && !activeCC && (
                             <div className="px-4 py-1">
                               <div
                                 className="flex items-center justify-between"
                                 onClick={() => setActiveQuality(true)}
                               >
-                                <span className="block w-16 text-sm font-semibold text-left">
+                                <span className="block w-16 text-left text-sm font-semibold">
                                   Quality:
                                 </span>
                                 <span className="flex items-center justify-between gap-1 text-xsm font-medium">
@@ -927,7 +938,7 @@ const SAPPVideo = ({
                                     ? 'Auto'
                                     : getResolution(Number(playbackQuality))}
                                   <ArrowIcon
-                                    className={'w-3 h-4'}
+                                    className={'h-4 w-3'}
                                     right={true}
                                     iconType={'chervon'}
                                   ></ArrowIcon>
@@ -937,13 +948,13 @@ const SAPPVideo = ({
                                 className="flex items-center justify-between"
                                 onClick={() => setActiveSpeed(true)}
                               >
-                                <span className="block w-16 text-sm font-semibold text-left">
+                                <span className="block w-16 text-left text-sm font-semibold">
                                   Speed:
                                 </span>
                                 <span className="flex items-center justify-between gap-1 text-xsm font-medium">
                                   {playbackRate === 1 ? 'Normal' : playbackRate}
                                   <ArrowIcon
-                                    className={'w-3 h-4'}
+                                    className={'h-4 w-3'}
                                     right={true}
                                     iconType={'chervon'}
                                   ></ArrowIcon>
@@ -954,7 +965,7 @@ const SAPPVideo = ({
                                   className="flex items-center justify-between"
                                   onClick={() => setActiveCC(true)}
                                 >
-                                  <span className="block w-16 text-sm font-semibold text-left">
+                                  <span className="block w-16 text-left text-sm font-semibold">
                                     CC:
                                   </span>
                                   <span className="flex items-center justify-between gap-1 text-xsm font-medium">
@@ -962,7 +973,7 @@ const SAPPVideo = ({
                                       ? 'Off'
                                       : listCaptions[playbackCC].lang}
                                     <ArrowIcon
-                                      className={'w-3 h-4'}
+                                      className={'h-4 w-3'}
                                       right={true}
                                       iconType={'chervon'}
                                     ></ArrowIcon>
@@ -974,11 +985,11 @@ const SAPPVideo = ({
                           {activeQuality && (
                             <>
                               <h4
-                                className="text-base font-semibold px-1.5 relative"
+                                className="relative px-1.5 text-base font-semibold"
                                 onClick={() => setActiveQuality(false)}
                               >
                                 <ArrowIcon
-                                  className={'absolute left-1 top-1 w-4 h-4'}
+                                  className={'absolute left-1 top-1 h-4 w-4'}
                                   iconType={'chervon'}
                                 ></ArrowIcon>
                                 Quality
@@ -990,9 +1001,9 @@ const SAPPVideo = ({
                                 <li
                                   key={'auto-switch'}
                                   onClick={() => changeQuality('auto', 'Auto')}
-                                  className={`hover:bg-white hover:text-black text-xsm ${
+                                  className={`hover:text-black text-xsm hover:bg-white ${
                                     'Auto' === playbackQuality
-                                      ? 'bg-white text-black'
+                                      ? 'text-black bg-white'
                                       : ''
                                   }`}
                                 >
@@ -1008,9 +1019,9 @@ const SAPPVideo = ({
                                           quality?.bitrate,
                                         )
                                       }
-                                      className={`hover:bg-white hover:text-black text-xsm ${
+                                      className={`hover:text-black text-xsm hover:bg-white ${
                                         quality?.bitrate === playbackQuality
-                                          ? 'bg-white text-black'
+                                          ? 'text-black bg-white'
                                           : ''
                                       }`}
                                     >
@@ -1024,11 +1035,11 @@ const SAPPVideo = ({
                           {activeSpeed && (
                             <>
                               <h4
-                                className="text-base font-semibold px-1.5 relative"
+                                className="relative px-1.5 text-base font-semibold"
                                 onClick={() => setActiveSpeed(false)}
                               >
                                 <ArrowIcon
-                                  className={'absolute left-1 top-1 w-4 h-4'}
+                                  className={'absolute left-1 top-1 h-4 w-4'}
                                   iconType={'chervon'}
                                 ></ArrowIcon>
                                 Speed
@@ -1042,9 +1053,9 @@ const SAPPVideo = ({
                                     key={speed.value}
                                     onClick={handlePlaybackRateChange}
                                     data-speed={speed.value}
-                                    className={`hover:bg-white hover:text-black text-xsm ${
+                                    className={`hover:text-black text-xsm hover:bg-white ${
                                       parseFloat(speed.value) === playbackRate
-                                        ? 'bg-white text-black'
+                                        ? 'text-black bg-white'
                                         : ''
                                     }`}
                                   >
@@ -1057,11 +1068,11 @@ const SAPPVideo = ({
                           {activeCC && listCaptions.length > 0 && (
                             <>
                               <h4
-                                className="text-base font-semibold px-1.5 relative"
+                                className="relative px-1.5 text-base font-semibold"
                                 onClick={() => setActiveCC(false)}
                               >
                                 <ArrowIcon
-                                  className={'absolute left-1 top-1 w-4 h-4'}
+                                  className={'absolute left-1 top-1 h-4 w-4'}
                                   iconType={'chervon'}
                                 ></ArrowIcon>
                                 CC
@@ -1074,9 +1085,9 @@ const SAPPVideo = ({
                                   key={-1}
                                   onClick={handleLanguageChange}
                                   data-cc={-1}
-                                  className={`hover:bg-white hover:text-black text-xsm ${
+                                  className={`hover:text-black text-xsm hover:bg-white ${
                                     -1 === playbackCC
-                                      ? 'bg-white text-black'
+                                      ? 'text-black bg-white'
                                       : ''
                                   }`}
                                 >
@@ -1087,9 +1098,9 @@ const SAPPVideo = ({
                                     key={cc.index}
                                     onClick={handleLanguageChange}
                                     data-cc={cc.index}
-                                    className={`hover:bg-white hover:text-black text-xsm ${
+                                    className={`hover:text-black text-xsm hover:bg-white ${
                                       cc.index === playbackCC
-                                        ? 'bg-white text-black'
+                                        ? 'text-black bg-white'
                                         : ''
                                     }`}
                                   >
@@ -1112,7 +1123,7 @@ const SAPPVideo = ({
                         type={'fullscreen'}
                         className={'icon-svg fullscreen ml-4 text-white'}
                       />
-                      <svg className="icon-svg fullscreen-exit ml-3 w-5.5 h-6 hidden">
+                      <svg className="icon-svg fullscreen-exit ml-3 hidden h-6 w-5.5">
                         <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
                       </svg>
                     </button>

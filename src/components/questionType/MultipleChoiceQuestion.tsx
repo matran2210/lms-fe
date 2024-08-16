@@ -89,8 +89,8 @@ const MultiChoiceQuestion = ({
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
             <>
-              <div className="border border-b-gray-2 my-6"></div>
-              <div className="flex items-center mb-4">
+              <div className="my-6 border border-b-gray-2"></div>
+              <div className="mb-4 flex items-center">
                 <div className="font-semibold">
                   Exhibits ({data?.question_topic?.exhibits?.length || 0})
                 </div>
@@ -126,7 +126,7 @@ const MultiChoiceQuestion = ({
                   )
                 })}
               </div>
-              <div className="border border-b-gray-2 my-6"></div>
+              <div className="my-6 border border-b-gray-2"></div>
             </>
           )}
       </div>
@@ -148,7 +148,7 @@ const MultiChoiceQuestion = ({
         />
       </div>
       {solution && (
-        <div className="bg-gray-4 mt-6 p-6">
+        <div className="mt-6 bg-gray-4 p-6">
           <SappTitleSolution title={MY_COURSES.explanations} />
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>

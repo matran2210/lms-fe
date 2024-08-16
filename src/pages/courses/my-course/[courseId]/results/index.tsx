@@ -1,0 +1,96 @@
+import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
+import Heading from '@components/mycourses/Heading'
+import { useRouter } from 'next/router'
+import { useQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { CoursesAPI } from 'src/pages/api/courses'
+import ResultsTable from './ResultsTable'
+import SearchForm from '@components/mycourses/Search'
+import Layout from '@components/layout'
+
+const DEFAULT_PAGESIZE = 10
+
+const Results = () => {
+  const router = useRouter()
+
+  /**
+   * @description config API course detail
+   */
+  const fetchCourseDetail = async ({
+    pageParam,
+    params,
+  }: {
+    pageParam: number
+    params: Object
+  }) => {
+    const { data } = await CoursesAPI.getCourseDetail(
+      router.query.courseId,
+      pageParam || 1,
+      DEFAULT_PAGESIZE,
+      params,
+    )
+    return {
+      data: data?.data?.course_sections_with_progress || [],
+      courseDetail: data,
+    }
+  }
+
+  const params = {
+    user_section_learning_status:
+      router.query.user_section_learning_status || undefined,
+  }
+
+  const {
+    data: courseData,
+    isSuccess,
+    isLoading,
+  } = useQuery({
+    queryKey: ['courseDetail'],
+    queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
+    enabled: router.isReady,
+    refetchOnWindowFocus: true,
+  })
+
+  /**
+   * @description biến này lấy name của course
+   */
+  const courseNameDetail = courseData?.courseDetail?.data?.name
+  const courseId = courseData?.courseDetail?.data?.id
+
+  return (
+    <SappLoadingGlobal loading={isLoading}>
+      <Layout title="Course Result">
+        <div className="header h-[70px] border-b border-default bg-white">
+          <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
+            <SearchForm
+              placeholder="Enter name of course..."
+              formStyle="w-full flex items-center"
+            />
+          </div>
+        </div>
+        <div className="container">
+          <div className="main relative mx-auto my-0 max-w-xxl">
+            <div className="flex w-full items-center justify-between pb-4 pt-6">
+              {isSuccess && (
+                <BreadcrumbFilter
+                  name={courseNameDetail}
+                  subpath="Results"
+                  courseId={router.query.courseId}
+                />
+              )}
+              {/* <FilterCourseDetail totalResult={courses?.length || 0} /> */}
+            </div>
+          </div>
+          <div className="mx-auto my-0 flex max-w-xxl bg-white">
+            <Heading greeting="" title={'Results'} />
+          </div>
+          <div className="mx-auto my-0 mb-6 mt-6 max-w-xxl bg-white px-8 pb-3 pt-8 xl-max:container">
+            {isSuccess && <ResultsTable courseId={courseId} />}
+          </div>
+        </div>
+      </Layout>
+    </SappLoadingGlobal>
+  )
+}
+
+export default Results

@@ -301,9 +301,10 @@ export class CoursesAPI {
   static getCourseSectionList(
     id: string | string[] | undefined,
     page_size: number,
+    page_index?: number,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/short/list?page_index=1&page_size=${page_size}&classId=${id}&type=PART`,
+      `${apiURL}/course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${page_size}&classId=${id}&type=PART`,
     )
   }
 
@@ -312,9 +313,10 @@ export class CoursesAPI {
     type: 'CHAPTER' | 'UNIT' | 'ACTIVITY',
     parentId?: string,
     classId?: string,
+    page_index?: number,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/short/list?page_index=1&page_size=${
+      `${apiURL}/course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
         page_size || 10
       }&type=${type}&parentId=${parentId ?? ''}${
         classId ? `&classId=${classId}` : ''
@@ -328,6 +330,20 @@ export class CoursesAPI {
   ): Promise<any> {
     return fetcher(
       `${apiURL}/courses/${id}/resources?&attachment_type=attached`,
+      {
+        params: params,
+      },
+    )
+  }
+
+  static getCourseResults(
+    id: string | string[],
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/courses/${id}/quizzes?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
@@ -441,16 +457,24 @@ export const getActivityById = async (
     `${apiURL}/course-sections/activity/${id}/tabs`,
   )
 
-  if (responseActivity?.data && responseTabs?.data?.[0]) {
-    responseActivity.data.tabs = responseTabs.data
-
-    const responseTab = await fetcher(
-      `${apiURL}/course-sections/tab/${responseTabs.data?.[0].id}`,
-    )
-
-    if (responseTab.data) {
-      responseActivity.data.tabs[0] = responseTab.data
-    }
+  if (responseActivity?.data && !responseTabs?.data?.length) {
+    return responseActivity.data
   }
+  responseActivity.data.tabs = []
+  const promises = []
+  for (const tab of responseTabs.data) {
+    promises.push(
+      new Promise(async (resolve, reject) => {
+        const responseTab = await fetcher(
+          `${apiURL}/course-sections/tab/${tab.id}`,
+        )
+        if (responseTab?.data) {
+          return resolve(responseTab.data)
+        }
+        return reject('Tab Not Found')
+      }),
+    )
+  }
+  responseActivity.data.tabs = await Promise.all(promises)
   return responseActivity.data
 }

@@ -1,7 +1,5 @@
-import SappModal from '@components/base/modal/SappModal'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { TimeIcon } from '@components/icons'
-import { useEffect } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
 
 interface IProps {
   open: boolean
@@ -30,32 +28,18 @@ const TestTimeOutModal = ({
     handleQuit()
   }
   return (
-    <SappModal
+    <SappModalV3
       open={open}
-      setOpen={setOpen}
       cancelButtonCaption="Quit"
       okButtonCaption="Submit"
       handleCancel={onCancel}
-      handleCloseOnly={() => setOpen(false)}
-      handleSubmit={onSubmit}
-      showHeader={false}
-      refClass="md:px-19 py-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
-      size="max-w-[646px]"
-      footerButtonClassName="flex flex-col-reverse gap-8 mt-0"
-      childClass="flex flex-col justify-center items-center"
-      parentChildClass=""
-      position="center"
+      onOk={onSubmit}
       fullWidthBtn={true}
-      closeAfterSubmit={true}
       buttonSize="extra"
-      disableClickOutSide
-    >
-      <TimeIcon />
-      <div className="text-bw-1 text-4xl font-bold mt-6 gap">Time Out</div>
-      <div className="text-gray-1 text-medium-sm font-normal mt-4 mb-13">
-        You are running out of time to do your test
-      </div>
-    </SappModal>
+      icon={<TimeIcon />}
+      header="Time Out"
+      content="You are running out of time to do your test"
+    />
   )
 }
 

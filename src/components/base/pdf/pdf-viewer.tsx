@@ -47,7 +47,7 @@ const PDFViewer = ({ file }: { file: string }) => {
         />
       ) : (
         <>
-          <div className="flex justify-center mt-24 mb-2">
+          <div className="mb-2 mt-24 flex justify-center">
             <img src="https://view.officeapps.live.com/op/en-US/error.png" />
           </div>
           <div className="text-center">

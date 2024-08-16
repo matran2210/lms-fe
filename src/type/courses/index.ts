@@ -178,6 +178,7 @@ export interface ISection {
   course_section_type: string
   created_at: Date
   id: string
+  parent_id: string
   name: string
   updated_at: Date
 }
@@ -216,3 +217,17 @@ export interface IMyCourseDetail {
   }
   user_section_learning_status: string
 }
+
+export enum QuizAttemptChartType {
+  ENTRANCE_TEST = 'ENTRANCE_TEST',
+  CFA = 'CFA',
+  ACCA = 'ACCA',
+  CMA = 'CMA',
+  OTHER = 'OTHER',
+}
+export type IQuizAttemptChartType =
+  | 'ENTRANCE_TEST'
+  | 'CFA'
+  | 'ACCA'
+  | 'CMA'
+  | 'OTHER'

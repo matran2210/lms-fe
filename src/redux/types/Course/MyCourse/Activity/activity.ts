@@ -30,12 +30,14 @@ interface ICourseSection {
   quiz_id: string | null
 }
 
+export interface IDiscussionFile {
+  course_discussion_id: string
+  url: string
+  id: string
+}
+
 export interface IDiscussion {
-  course_discussion_files: {
-    course_discussion_id: string
-    url: string
-    id: string
-  }[]
+  course_discussion_files: IDiscussionFile[]
   id: string
   created_at: string
   updated_at: string
@@ -51,7 +53,8 @@ export interface IDiscussion {
   avatar: { [key: string]: string }
   is_like: boolean
   children: IDiscussion[]
-  is_staff_support?: boolean
+  is_sapp_supporter?: boolean
+  supporter_display_name?: string
 }
 
 export interface ICreateDiscussionResReact {
@@ -66,4 +69,10 @@ export interface ICreateDiscussionRepReact {
   id: string
   created_at: string
   updated_at: string
+}
+
+export interface IUserInDiscussion {
+  id: string
+  is_sapp_supporter: boolean
+  supporter_display_name: string
 }

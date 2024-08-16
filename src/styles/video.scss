@@ -13,7 +13,7 @@
   }
 
   .video-controls.hide {
-    @apply opacity-0 pointer-events-none;
+    @apply pointer-events-none opacity-0;
   }
 
   progress {
@@ -31,7 +31,7 @@
   }
 
   progress::-moz-progress-bar {
-    @apply bg-overlay-white border border-gray-4;
+    @apply border border-gray-4 bg-overlay-white;
   }
 
   .seek:hover + .seek-tooltip {
@@ -60,7 +60,7 @@
   }
 
   .btn-video {
-    @apply cursor-pointer relative text-ssm p-0 border-0 outline-0;
+    @apply relative cursor-pointer border-0 p-0 text-ssm outline-0;
   }
 
   .btn-video * {
@@ -78,7 +78,7 @@
   }
 
   .btn-video::before {
-    @apply absolute hidden right-0 top-[-50px] bg-overlay-control text-white font-semibold py-1 px-1.5 z-10;
+    @apply absolute right-0 top-[-50px] z-10 hidden bg-overlay-control px-1.5 py-1 font-semibold text-white;
     content: attr(data-title);
     word-break: keep-all;
     white-space: pre;
@@ -93,14 +93,14 @@
   }
 
   .playback-animation {
-    @apply bg-overlay-control pointer-events-none absolute top-1/2 left-1/2 -ml-10 -mt-10 w-20 h-20 rounded-full opacity-0 z-20;
+    @apply pointer-events-none absolute left-1/2 top-1/2 z-20 -ml-10 -mt-10 h-20 w-20 rounded-full bg-overlay-control opacity-0;
     border-radius: 80px;
   }
 
   input[type='range'] {
     -webkit-appearance: none;
     -moz-appearance: none;
-    @apply bg-overlay-white h-1.5 cursor-pointer;
+    @apply h-1.5 cursor-pointer bg-overlay-white;
   }
 
   input[type='range']:focus {
@@ -115,7 +115,7 @@
   }
 
   input[type='range']::-webkit-slider-thumb {
-    @apply w-4 h-4 bg-gray-3 cursor-pointer -ml-px;
+    @apply -ml-px h-4 w-4 cursor-pointer bg-gray-3;
     -webkit-appearance: none;
     border-radius: 16px;
   }
@@ -137,14 +137,14 @@
   }
 
   input[type='range']::-moz-range-track {
-    @apply w-full h-1.5 h-1.5 cursor-pointer;
+    @apply h-1.5 h-1.5 w-full cursor-pointer;
     border: 1px solid transparent;
     background: transparent;
     border-radius: 1.3px;
   }
 
   input[type='range']::-moz-range-thumb {
-    @apply h-3.5 w-3.5 border border-gray-4 bg-gray-8 cursor-pointer;
+    @apply h-3.5 w-3.5 cursor-pointer border border-gray-4 bg-gray-8;
     border-radius: 50px;
   }
 
@@ -161,7 +161,7 @@
   }
 
   .volume-process {
-    @apply bg-overlay-play px-2 pt-1 pb-2 rounded-sm absolute bottom-[200%] right-[-150%] w-[115px] hidden z-20;
+    @apply absolute bottom-[200%] right-[-150%] z-20 hidden w-[115px] rounded-sm bg-overlay-play px-2 pb-2 pt-1;
     transform: rotate(270deg);
   }
 

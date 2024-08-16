@@ -3,7 +3,7 @@ import React from 'react'
 interface IProps {
   checked: boolean
   disabled?: boolean
-  onChange: React.ChangeEventHandler<HTMLInputElement>
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
   className?: string
   name?: string
   value?: string | boolean
@@ -47,7 +47,7 @@ const SAPPCheckbox = ({
           SIZES[size]
         } border-1.5 outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${inputStyle} ${
           STATE[state]
-        } ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'} ${
+        } ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'} ${
           lowerOptions && 'border-none'
         }`}
         type="checkbox"

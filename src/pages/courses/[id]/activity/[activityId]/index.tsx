@@ -2,13 +2,20 @@ import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
+import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
+import Calculator from '@components/calculator'
+import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
+import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
+import { CourseSectionType } from '@utils/constants'
+import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
+import { Dropdown, Menu } from 'antd'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -19,38 +26,38 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { useQuery } from 'react-query'
+import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import SappTooltip from 'src/common/SappTooltip'
+import { ANIMATION } from 'src/constants'
+import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
+  closeCalculator,
   courseActivityAction,
   courseActivityReducer,
   getCourseActivityTapById,
   getDiscussion,
-  closeCalculator,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
+import { showPopup } from 'src/redux/slice/Popup/Result-test'
 import { IActivity } from 'src/type/course/my-course/Activity'
-import { Dropdown, Menu } from 'antd'
-import Calculator from '@components/calculator'
-import { ANIMATION } from 'src/constants'
-import SappTooltip from 'src/common/SappTooltip'
-import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
-import SAPPBorder from 'src/common/SAPPBorder'
-import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
-import Layout from '@components/layout'
-import { trackGAEvent } from '@utils/google-analytics'
-
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
   name: string
   parent_id: string
 }
-
+interface VideoStateClicked {
+  course_tab_document_id: string
+  videos: {
+    file_id: string
+    is_click: boolean
+  }[]
+}
 const ActivityPage = () => {
   const router = useRouter()
 
@@ -73,7 +80,7 @@ const ActivityPage = () => {
   )
 
   const courseId = router.query?.id
-  const sectionId = router.query?.activityId
+  const sectionId = router.query?.activityId as string
 
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
@@ -86,20 +93,76 @@ const ActivityPage = () => {
   const videoRef = useRef<any>(null)
   const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
-  const activityType = activity?.display_icon
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
+  const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
+  const [isDoneActivity, setIsDoneActivity] = useState(false)
+  // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-
+  const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
     top: 'calc(50% - 250px)',
     left: 'calc(50% - 200px)',
   })
 
+  const settingDoneProcessActivity = (activity: IActivity) => {
+    if (activity?.user_course_section_progress?.length) {
+      const progress = activity.user_course_section_progress[0]
+      if (
+        progress?.total_course_sections ===
+        progress?.total_course_sections_completed
+      ) {
+        setIsDoneActivity(true)
+        return
+      }
+    }
+
+    if (
+      activity.tabs?.find((tab) =>
+        tab.course_tab_documents?.find(
+          (course_tab) => course_tab.quiz?.is_graded,
+        ),
+      )
+    ) {
+      setIsHasQuizGrading(true)
+      return
+    }
+
+    const videos: VideoStateClicked[] = []
+    activity.tabs?.forEach((tab) => {
+      tab?.course_tab_documents?.forEach((course_tab) => {
+        if (!course_tab.videos?.length) {
+          return
+        }
+        const course_tab_index = videos.findIndex(
+          (video) => video.course_tab_document_id === course_tab.id,
+        )
+        if (course_tab_index === -1) {
+          videos.push({
+            course_tab_document_id: course_tab.id,
+            videos:
+              course_tab.videos?.map((document) => {
+                return {
+                  file_id: document.file.id,
+                  is_click: false,
+                }
+              }) ?? [],
+          })
+        }
+      })
+    })
+    if (videos.length) {
+      setVideoClicked(videos)
+      return
+    }
+    handleFinishedCourseSectionProgress()
+  }
+
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
       try {
+        settingDoneProcessActivity(activity)
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
       } catch (error) {}
@@ -122,11 +185,7 @@ const ActivityPage = () => {
     }
   }, [router.events])
 
-  useEffect(() => {
-    setTimeout(() => {
-      finishedCourseSectionProgress()
-    }, 500)
-  }, [
+  useEffect(() => {}, [
     endActivityRef.current,
     quizDocumentRef.current,
     observerRef.current,
@@ -139,88 +198,122 @@ const ActivityPage = () => {
     dispatch(closeCalculator())
   }, [dispatch, router.asPath])
 
-  /**
-   * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
-   */
-  const finishedCourseSectionProgress = async () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
+  // /**
+  //  * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
+  //  */
+  // const finishedCourseSectionProgress = async () => {
+  //   if (timeoutRef.current) {
+  //     clearTimeout(timeoutRef.current)
+  //   }
+
+  //   timeoutRef.current = setTimeout(async () => {
+  //     if (isDoneActivity) {
+  //       return
+  //     }
+  //     // Nếu có quiz chấm điểm thì ko xử lý progress này
+  //     if (isHasQuizGrading) {
+  //       return
+  //     }
+
+  //     // Nếu có video thì ko xử lý progress trong này
+  //     if (videoClicked.length) {
+  //       return
+  //     }
+
+  //     // Xử lý khi scroll đến element next or preview activity
+  //     if (endActivityRef?.current) {
+  //       // Hủy theo dõi nếu đã có observerRef.current
+  //       if (observerRef?.current) {
+  //         observerRef?.current?.unobserve(endActivityRef?.current)
+  //       }
+
+  //       // Thiết lập các tùy chọn cho IntersectionObserver
+  //       const options = {
+  //         root: null,
+  //         rootMargin: '0px',
+  //         threshold: 0.5,
+  //       }
+
+  //       // Hàm xử lý khi có sự giao thoa
+  //       const handleIntersection = async (
+  //         entries: IntersectionObserverEntry[],
+  //       ) => {
+  //         const isVisible = entries?.[0]?.isIntersecting
+
+  //         // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
+  //         if (isVisible && endActivityRef?.current) {
+  //           observerRef?.current?.unobserve(endActivityRef?.current)
+  //           await handleFinishedCourseSectionProgress()
+  //         }
+  //       }
+
+  //       // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
+  //       observerRef.current = new IntersectionObserver(
+  //         handleIntersection,
+  //         options,
+  //       )
+
+  //       // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
+  //       if (endActivityRef?.current) {
+  //         observerRef?.current?.observe(endActivityRef?.current)
+  //       }
+
+  //       // Trả về hàm cleanup
+  //       return () => {
+  //         if (endActivityRef?.current) {
+  //           observerRef?.current?.unobserve(endActivityRef?.current)
+  //         }
+  //       }
+  //     }
+  //   }, 1000)
+  // }
+
+  const onVideoStart = (file_id: string, course_tab_document_id: string) => {
+    if (isHasQuizGrading) {
+      return
     }
-
-    timeoutRef.current = setTimeout(async () => {
-      // Xử lý khi chỉ có video và tham chiếu đến streamRef hiện tại
-      if (activityType === 'VIDEO' && videoRef?.current) {
-        for (let e of videoRef?.current) {
-          e.addEventListener('playing', async () => {
-            await handleFinishedCourseSectionProgress()
-          })
-        }
-        return
+    if (isDoneActivity) {
+      return
+    }
+    if (!videoClicked.length) {
+      return
+    }
+    const courseTabIndex = videoClicked.findIndex(
+      (course_tab) =>
+        course_tab?.course_tab_document_id === course_tab_document_id,
+    )
+    const videoIndex = videoClicked[courseTabIndex].videos.findIndex(
+      (video) => video.file_id === file_id,
+    )
+    videoClicked[courseTabIndex].videos[videoIndex].is_click = true
+    // Kiểm tra xem đã đủ điều kiện gọi api processs chưa
+    let is_watch_all_video = true
+    videoClicked.forEach((course_tab) => {
+      if (course_tab.videos.every((video) => !video.is_click)) {
+        is_watch_all_video = false
       }
-      // Xử lý khi chỉ có bài kiểm tra và tham chiếu đến quizDocumentRef hiện tại
-      else if (
-        activityType === 'QUIZ' ||
-        activityType === 'PAST_EXAM_ANALYSIS'
-      ) {
-        await handleFinishedCourseSectionProgress()
-        return
-      }
-
-      // Xử lý khi có tham chiếu đến endActivityRef hiện tại
-      else if (endActivityRef?.current && activityType === 'TEXT') {
-        // Hủy theo dõi nếu đã có observerRef.current
-        if (observerRef?.current) {
-          observerRef?.current?.unobserve(endActivityRef?.current)
-        }
-
-        // Thiết lập các tùy chọn cho IntersectionObserver
-        const options = {
-          root: null,
-          rootMargin: '0px',
-          threshold: 0.5,
-        }
-
-        // Hàm xử lý khi có sự giao thoa
-        const handleIntersection = async (
-          entries: IntersectionObserverEntry[],
-        ) => {
-          const isVisible = entries?.[0]?.isIntersecting
-
-          // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-          if (isVisible && endActivityRef?.current) {
-            observerRef?.current?.unobserve(endActivityRef?.current)
-            await handleFinishedCourseSectionProgress()
-          }
-        }
-
-        // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
-        observerRef.current = new IntersectionObserver(
-          handleIntersection,
-          options,
-        )
-
-        // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-        if (endActivityRef?.current) {
-          observerRef?.current?.observe(endActivityRef?.current)
-        }
-
-        // Trả về hàm cleanup
-        return () => {
-          if (endActivityRef?.current) {
-            observerRef?.current?.unobserve(endActivityRef?.current)
-          }
-        }
-      }
-    }, 300)
+    })
+    if (is_watch_all_video) {
+      handleFinishedCourseSectionProgress()
+    }
+    setVideoClicked(videoClicked)
   }
 
   /**
    * Hàm xử lý khi kết thúc tiến trình phần của khóa học.
    */
   const handleFinishedCourseSectionProgress = async () => {
-    if (!isFinishRef?.current) {
-      await CoursesAPI.startCourseSectionProgress(courseId, sectionId)
-      isFinishRef.current = true
+    if (fetch_progress.find((id) => id === sectionId)) {
+      return
+    }
+    const response = await CoursesAPI.startCourseSectionProgress(
+      courseId,
+      sectionId,
+    )
+    isFinishRef.current = true
+    setFetch_progress([...fetch_progress, sectionId])
+    if (response?.data?.class_user_score) {
+      dispatch(showPopup(response?.data?.class_user_score))
     }
   }
 
@@ -367,6 +460,10 @@ const ActivityPage = () => {
     (e: IBreadCrumbs) => e?.course_section_type === 'PART',
   )?.id
 
+  const chapterId = breadcrumbsMenu?.data?.find(
+    (e: IBreadCrumbs) => e?.course_section_type === CourseSectionType.CHAPTER,
+  )?.id
+
   /**
    * @description config menu breadcrumbs trong activity
    */
@@ -396,22 +493,22 @@ const ActivityPage = () => {
           return (
             <React.Fragment key={e?.id}>
               {e?.course_section_type !== 'ACTIVITY' ? (
-                <Menu.Item onClick={() => router.push(url)}>
+                <Menu.Item
+                  onClick={() => {
+                    ;['CHAPTER', 'UNIT', 'PART'].includes(
+                      e.course_section_type,
+                    ) && localStorage.setItem('course_chapter_id', chapterId)
+
+                    router.push(url)
+                  }}
+                >
                   <li
                     className={
-                      'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
+                      'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
                     }
                     title={e?.name}
                   >
-                    <Link href={url}>
-                      <span
-                        className={
-                          'hover:text-primary cursor-pointer line-clamp-1 text-gray-1'
-                        }
-                      >
-                        {truncateString(e?.name, 25)}
-                      </span>
-                    </Link>
+                    {truncateString(e?.name, 25)}
                   </li>
                 </Menu.Item>
               ) : null}
@@ -493,10 +590,10 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`text-bw-1 max-w-xxl my-0 mx-auto`}>
+        <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="py-6 flex flex-wrap gap-1 line-clamp-1 overflow-x-auto text-medium-sm font-medium">
-            <li className="hover:text-primary cursor-pointer text-gray-1 whitespace-nowrap">
+          <ul className="line-clamp-1 flex flex-wrap gap-1 overflow-x-auto py-6 text-medium-sm font-medium">
+            <li className="cursor-pointer whitespace-nowrap text-gray-1 hover:text-primary">
               <Link
                 href="/courses"
                 className="breadcrumbs__link"
@@ -553,8 +650,8 @@ const ActivityPage = () => {
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute h-full w-full  top-0 left-0 border">
-                    <div className="flex w-6-percent items-center bg-gray-2 w-full h-10 justify-between px-5">
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {
@@ -575,26 +672,26 @@ const ActivityPage = () => {
             {/* Header */}
             <div className="bg-gray-3 px-6 ">
               <div
-                className={`flex justify-between w-full gap-4 py-6 select-none ${
+                className={`flex w-full select-none justify-between gap-4 py-6 ${
                   activity?.course_outcomes?.length > 0
-                    ? 'border-b borderColor-default'
+                    ? 'borderColor-default border-b'
                     : ''
                 }`}
               >
-                <div className="font-medium text-2xl ">{activity?.name}</div>
-                <div className="text-sm text-gray-1 whitespace-nowrap">
+                <div className="text-2xl font-medium ">{activity?.name}</div>
+                <div className="whitespace-nowrap text-sm text-gray-1">
                   {activity?.duration || 0}{' '}
                   {activity?.duration > 1 ? 'mins' : 'min'} estimated
                 </div>
               </div>
 
               {activity?.course_outcomes?.length > 0 && (
-                <div className={`pt-6 pb-4`}>
-                  <div className="font-semibold text-base mb-2 select-none">
+                <div className={`pb-4 pt-6`}>
+                  <div className="mb-2 select-none text-base font-semibold">
                     Learning Outcome:
                   </div>
 
-                  <ul className="list-disc text-base ml-3 select-none">
+                  <ul className="ml-3 select-none list-disc text-base">
                     {activity?.course_outcomes?.map((e: any) => {
                       return (
                         <li className="ml-4" key={e?.id}>
@@ -612,13 +709,13 @@ const ActivityPage = () => {
 
             {/* Tabs */}
             <div className="bg-gray-3">
-              <div className="flex gap-2 px-6 flex-wrap">
+              <div className="flex flex-wrap gap-2 px-6">
                 {selector?.tabs?.map((e) => {
                   return (
                     <SappButton
                       key={e?.id}
                       size="small"
-                      className="py-2.5 !px-3 text-medium-sm !font-normal"
+                      className="!px-3 py-2.5 text-medium-sm !font-normal"
                       color={tabButtonColor(e?.id)}
                       title={truncateString(e?.name, 60)}
                       onClick={() => {
@@ -633,216 +730,224 @@ const ActivityPage = () => {
             <ActivitySkeleton
               length={1}
               loading={selector.loading}
-              className="w-4/5 mx-auto"
+              className="mb-6 bg-white"
+              classChild="w-11/12 mx-auto max-w-[950px]"
             >
-              {!!course_tab_documents?.length && (
-                <div className="bg-white pb-6 mb-6">
-                  <div
-                    className={`pt-6 max-w-[1000px] w-full my-0 mx-auto px-6`}
-                  >
-                    <div className="tab-content overflow-x-auto overflow-y-hidden">
-                      {course_tab_documents?.map((e, i) => {
-                        const marginBottom =
-                          i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                        if (e?.type === 'QUIZ') {
-                          return (
-                            <div
-                              className={marginBottom}
-                              key={
-                                e?.id + '_' + i + '_' + selector?.currentTabId
+              <div className="mb-6 bg-white pb-6">
+                <div className={`mx-auto my-0 w-full max-w-[1000px] px-6 pt-6`}>
+                  <div className="tab-content overflow-x-auto overflow-y-hidden">
+                    {course_tab_documents?.map((e, i) => {
+                      const marginBottom =
+                        i < course_tab_documents?.length - 1 ? 'mb-6' : ''
+                      if (e?.type === 'QUIZ') {
+                        return (
+                          <div
+                            className={marginBottom}
+                            key={e?.id + '_' + i + '_' + selector?.currentTabId}
+                            ref={quizDocumentRef}
+                          >
+                            <QuizDocument
+                              questions={[
+                                ...(e?.quiz?.multiple_choice_questions || []),
+                                ...(e?.quiz?.constructed_questions || []),
+                              ]}
+                              activityId={activity?.id as string}
+                              tabId={selector?.currentTabId || ''}
+                              quizId={e?.quiz?.id || ''}
+                              grading_preference={
+                                e.quiz?.grading_preference ||
+                                'AFTER_EACH_QUESTION'
                               }
-                              ref={quizDocumentRef}
-                            >
-                              <QuizDocument
-                                questions={[
-                                  ...(e?.quiz?.multiple_choice_questions || []),
-                                  ...(e?.quiz?.constructed_questions || []),
-                                ]}
-                                activityId={activity?.id as string}
-                                tabId={selector?.currentTabId || ''}
-                                quizId={e?.quiz?.id || ''}
-                                grading_preference={
-                                  e.quiz?.grading_preference ||
-                                  'AFTER_EACH_QUESTION'
-                                }
-                                document_id={e?.id}
-                                is_graded={e?.quiz?.is_graded || false}
-                                setOpenFile={handleOpenScratchPad}
-                                class_user_id={activity?.class_user_id}
-                              ></QuizDocument>
-                            </div>
-                          )
-                        }
-                        if (e.type === 'TEXT') {
-                          return (
-                            <div
-                              className={`${marginBottom} select-none`}
-                              key={i + '_' + selector?.currentTabId}
-                            >
-                              <TextDocument
-                                text_editor_content={e?.text_editor_content}
-                              ></TextDocument>
-                            </div>
-                          )
-                        }
-                        if (e.type === 'VIDEO') {
-                          return (
-                            <div
-                              className={marginBottom}
-                              key={i + '_' + selector?.currentTabId}
-                            >
-                              <VideoDocument
-                                videos={e?.videos}
-                                activityId={activity?.id as string}
-                                tabId={selector?.currentTabId || ''}
-                                streamRefProp={(el: any) =>
-                                  (videoRef.current[i || 0] = el)
-                                }
-                                handleProcess={
-                                  handleFinishedCourseSectionProgress
-                                }
-                                document_id={e?.id}
-                                quizId={e?.quiz?.id || ''}
-                                grading_preference={
-                                  e.quiz?.grading_preference ||
-                                  'AFTER_EACH_QUESTION'
-                                }
-                                class_user_id={activity?.class_user_id}
-                              ></VideoDocument>
-                            </div>
-                          )
-                        }
-                        return null
-                      })}
-                    </div>
-
-                    {activity?.files?.length > 0 && (
-                      <>
-                        <SAPPBorder />
-                        <div
-                          className={`pt-8 ${
-                            getPreviousTabId() ? 'pb-4' : 'pb-0'
-                          } `}
-                        >
-                          <div className="font-semibold text-base">
-                            Resource:
+                              document_id={e?.id}
+                              is_graded={e?.quiz?.is_graded || false}
+                              setOpenFile={handleOpenScratchPad}
+                              class_user_id={activity?.class_user_id}
+                            ></QuizDocument>
                           </div>
-                          <ul className="list-disc text-base">
-                            {activity?.files.map((e: any, index: number) => {
-                              return (
-                                <div
-                                  className={`flex justify-between group cursor-pointer ${
-                                    index === 0 ? 'mt-4' : 'mt-5'
-                                  }`}
-                                  key={index}
-                                >
-                                  <div className="flex">
-                                    <div className="mr-2 group-hover:text-primary flex self-center">
-                                      <LinkIcon />
-                                    </div>
-                                    <div
-                                      className="cursor-pointer text-gray-1 group-hover:text-primary"
+                        )
+                      }
+                      if (e.type === 'TEXT') {
+                        return (
+                          <div
+                            className={`${marginBottom} select-none`}
+                            key={i + '_' + selector?.currentTabId}
+                          >
+                            <TextDocument
+                              text_editor_content={e?.text_editor_content}
+                            ></TextDocument>
+                          </div>
+                        )
+                      }
+                      if (e.type === 'VIDEO') {
+                        return (
+                          <div
+                            className={marginBottom}
+                            key={i + '_' + selector?.currentTabId}
+                          >
+                            <VideoDocument
+                              videos={e?.videos}
+                              activityId={activity?.id as string}
+                              tabId={selector?.currentTabId || ''}
+                              streamRefProp={(el: any) =>
+                                (videoRef.current[i || 0] = el)
+                              }
+                              handleProcess={onVideoStart}
+                              document_id={e?.id}
+                              quizId={e?.quiz?.id || ''}
+                              grading_preference={
+                                e.quiz?.grading_preference ||
+                                'AFTER_EACH_QUESTION'
+                              }
+                              class_user_id={activity?.class_user_id}
+                            ></VideoDocument>
+                          </div>
+                        )
+                      }
+                      return null
+                    })}
+                  </div>
+
+                  {activity?.files?.length > 0 && (
+                    <>
+                      <SAPPBorder />
+                      <div
+                        className={`pt-8 ${
+                          getPreviousTabId() ? 'pb-4' : 'pb-0'
+                        } `}
+                      >
+                        <div className="text-base font-semibold">Resource:</div>
+                        <ul className="list-disc text-base">
+                          {activity?.files.map((e: any, index: number) => {
+                            return (
+                              <div
+                                className={`flex justify-between ${
+                                  index === 0 ? 'mt-4' : 'mt-5'
+                                }`}
+                                key={index}
+                              >
+                                <div className="flex">
+                                  <div className="mr-2 flex self-center">
+                                    <LinkIcon />
+                                  </div>
+                                  <SappTooltip
+                                    title={
+                                      e.resource.suffix_type !==
+                                      SUFFIX_TYPE.GENERAL_FILE
+                                        ? 'Preview File'
+                                        : 'Download file'
+                                    }
+                                    showTooltip={true}
+                                    placement="right"
+                                  >
+                                    <p
+                                      className="cursor-pointer text-gray-1 hover:text-primary"
                                       onClick={() => {
-                                        handleOpenScratchPad(
-                                          {
-                                            type: 'file',
-                                          },
-                                          e?.resource?.url,
-                                          e?.resource?.name,
-                                        )
+                                        e.resource.suffix_type !==
+                                        SUFFIX_TYPE.GENERAL_FILE
+                                          ? handleOpenScratchPad(
+                                              {
+                                                type: 'file',
+                                              },
+                                              e?.resource?.url,
+                                              e?.resource?.name,
+                                            )
+                                          : download(
+                                              e?.resource?.name,
+                                              e?.resource?.file_key,
+                                            )
+
                                         trackGAEvent('Click Open File Resource')
                                       }}
                                     >
                                       {e?.resource?.name}
-                                    </div>
-                                  </div>
-                                  <a
-                                    onClick={() => {
-                                      download(
-                                        e?.resource?.name,
-                                        e?.resource?.file_key,
-                                      )
-                                      trackGAEvent(
-                                        'Click Button Download Resource Activity',
-                                      )
-                                    }}
-                                  >
-                                    <DownloadIcon />
-                                  </a>
+                                    </p>
+                                  </SappTooltip>
                                 </div>
-                              )
-                            })}
-                          </ul>
-                        </div>
-                        {getPreviousTabId() && <SAPPBorder className="mt-4" />}
-                      </>
-                    )}
+                                <a
+                                  className="cursor-pointer"
+                                  onClick={() => {
+                                    download(
+                                      e?.resource?.name,
+                                      e?.resource?.file_key,
+                                    )
+                                    trackGAEvent(
+                                      'Click Button Download Resource Activity',
+                                    )
+                                  }}
+                                >
+                                  <DownloadIcon />
+                                </a>
+                              </div>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                      {getPreviousTabId() && <SAPPBorder className="mt-4" />}
+                    </>
+                  )}
 
-                    <div className="flex justify-between flex-wrap gap-5 mt-8">
-                      {getPreviousTabId() && (
-                        <div className="w-auto">
-                          <div className="relative">
-                            <div
-                              onClick={() => {
-                                handleChangeTab(getPreviousTabId() || '')
-                                trackGAEvent(
-                                  'Click Button Previous Tab Activity',
-                                )
-                              }}
-                              className="flex relative z-10 items-center gap-2 mb-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary"
+                  <div className="mt-8 flex flex-wrap justify-between gap-5">
+                    {getPreviousTabId() && (
+                      <div className="w-auto">
+                        <div className="relative">
+                          <div
+                            onClick={() => {
+                              handleChangeTab(getPreviousTabId() || '')
+                              trackGAEvent('Click Button Previous Tab Activity')
+                            }}
+                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold text-bw-1 hover:text-primary"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={20}
+                              height={20}
+                              fill="none"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width={20}
-                                height={20}
-                                fill="none"
-                              >
-                                <path
-                                  className="fill-bw-1 group-hover:fill-primary"
-                                  fillRule="evenodd"
-                                  d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              Previous Tab
-                            </div>
-                            <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+                              <path
+                                className="fill-bw-1 group-hover:fill-primary"
+                                fillRule="evenodd"
+                                d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Previous Tab
                           </div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
                         </div>
-                      )}
-                      {getNextTabId() && (
-                        <div className="w-auto relative ml-auto">
-                          <div className="relative">
-                            <div
-                              onClick={() => {
-                                handleChangeTab(getNextTabId() || '')
-                                trackGAEvent('Click Button Next Tab Activity')
-                              }}
-                              className="mb-2 relative z-10 items-center flex gap-2 group text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                      </div>
+                    )}
+                    {getNextTabId() && (
+                      <div className="relative ml-auto w-auto">
+                        <div className="relative">
+                          <div
+                            onClick={() => {
+                              handleChangeTab(getNextTabId() || '')
+                              trackGAEvent('Click Button Next Tab Activity')
+                            }}
+                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold text-bw-1 hover:text-primary"
+                          >
+                            Next Tab
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={20}
+                              height={20}
+                              fill="none"
                             >
-                              Next Tab
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width={20}
-                                height={20}
-                                fill="none"
-                              >
-                                <path
-                                  className="fill-bw-1 group-hover:fill-primary"
-                                  fillRule="evenodd"
-                                  d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <div className="absolute bottom-0 left-0 h-2.5 w-[98px] bg-gray-3 -translate-x-1"></div>
+                              <path
+                                className="fill-bw-1 group-hover:fill-primary"
+                                fillRule="evenodd"
+                                d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
                           </div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-3"></div>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-              )}
+              </div>
             </ActivitySkeleton>
           </div>
 
@@ -853,8 +958,9 @@ const ActivityPage = () => {
               nextActivityIndex !== sessionData?.length - 1) ||
             (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
             <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-              <div className="bg-white shadow-activity px-6 py-3 mb-6 relative border-b-primary-2 border-b-2">
+              <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
                 <div
+                  ref={endActivityRef}
                   className={`flex flex-nowrap gap-5 justify-${
                     activity?.previous_activity ||
                     (previousActivityIndex !== -1 &&
@@ -874,11 +980,11 @@ const ActivityPage = () => {
                           })
                           trackGAEvent('Click Button Previous Activity')
                         }}
-                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary whitespace-nowrap"
+                        className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
                       >
                         Previous Activity
                       </div>
-                      <div className="text-medium-sm text-gray-1 flex">
+                      <div className="flex text-medium-sm text-gray-1">
                         {getCourseIcon(
                           activity?.previous_activity
                             ? activity?.previous_activity?.display_icon
@@ -924,11 +1030,11 @@ const ActivityPage = () => {
                           })
                           trackGAEvent('Click Button Next Activity')
                         }}
-                        className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                        className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                       >
                         Next Activity
                       </div>
-                      <div className="text-medium-sm text-gray-1 flex justify-end">
+                      <div className="flex justify-end text-medium-sm text-gray-1">
                         <SappTooltip
                           title={
                             activity?.next_activity
@@ -939,7 +1045,7 @@ const ActivityPage = () => {
                             activity?.next_activity?.name?.length > 80
                           }
                         >
-                          <span className="mr-2 w-full overflow-hidden text-ellipsis line-clamp-1 text-end">
+                          <span className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
                             {activity?.next_activity
                               ? truncateString(activity?.next_activity.name, 80)
                               : truncateString(
@@ -963,8 +1069,8 @@ const ActivityPage = () => {
               </div>
             </div>
           )}
-          <div ref={endActivityRef}></div>
-          <div className="shadow-activity mt-6" data-aos={ANIMATION.DATA_AOS}>
+          <div></div>
+          <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
             <Discussion class_id={(router.query.id as string) || ''} />
           </div>
 
@@ -990,9 +1096,9 @@ const ActivityPage = () => {
                   // not_resizable
                   // className='pointer-events-none'
                 >
-                  <div className="absolute h-full w-full  top-0 left-0 border">
-                    <div className="flex items-center bg-gray-2 w-full h-10 justify-between px-5">
-                      <div className="text-sm font-normal truncate">
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="truncate text-sm font-normal">
                         {e?.fileName}
                       </div>
                       {/* <CloseIcon */}
@@ -1003,7 +1109,7 @@ const ActivityPage = () => {
                     <div
                       // className="overflow-auto p-4 bg-white"
                       style={{ height: 'calc(100% - 40px' }}
-                      className="mb-2 text-base font-semibold text-bw-1 select-none cursor-pointer hover:text-primary text-right"
+                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                     >
                       {/* <div className='flex flex-'> */}
                       <PdfViewer file={e?.file} />
@@ -1029,10 +1135,10 @@ const ActivityPage = () => {
                       : index + 500
                   }
                 >
-                  <div className="absolute h-full w-full  top-0 left-0 border">
-                    <div className="flex w-6-percent items-center bg-white w-full h-10 justify-between px-5">
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-white px-5">
                       <div className="truncate">
-                        <span className="font-semibold text-base text-bw-1">{`Exhibit ${
+                        <span className="text-base font-semibold text-bw-1">{`Exhibit ${
                           e?.index + 1
                         }: `}</span>
                         {e?.name}
@@ -1041,7 +1147,7 @@ const ActivityPage = () => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="bg-white h-[calc(100%-40px)] overflow-auto p-5">
+                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
                         text_editor_content={e?.description}
                         className=" w-full "

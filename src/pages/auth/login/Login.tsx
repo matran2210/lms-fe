@@ -172,11 +172,11 @@ const LoginPage = () => {
 
   return (
     <SingleDialogLayout title="Login">
-      <div className="block max-w-[38.375rem] md:py-17.5 xs:py-10 py-8 px-8 md:px-19 mx-auto md:shadow-single-dialog max-h-[515px] lg:overflow-hidden md:overflow-hidden">
-        <div className="md:text-4xl text-3xl font-semibold text-bw-1 mb-2">
+      <div className="mx-auto block max-h-[515px] max-w-[38.375rem] px-8 py-8 xs:py-10 md:overflow-hidden md:px-19 md:py-17.5 md:shadow-single-dialog lg:overflow-hidden">
+        <div className="mb-2 text-3xl font-semibold text-bw-1 md:text-4xl">
           Log In
         </div>
-        <div className="text-medium-sm text-gray-1 md:mb-10 mb-5">
+        <div className="mb-5 text-medium-sm text-gray-1 md:mb-10">
           Login to Continue Learning
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="on">
@@ -199,7 +199,7 @@ const LoginPage = () => {
             <SappButton
               title="Log In"
               full={true}
-              className="mb-6 !font-semibold h-12.5"
+              className="mb-6 h-12.5 !font-semibold"
               size="lager"
               loading={loading ? loading : userLogin.loading}
               type="submit"
@@ -210,7 +210,7 @@ const LoginPage = () => {
             <HookFormCheckBox
               control={control}
               name="remember_me"
-              className="min-w-4 min-h-4 h-4"
+              className="h-4 min-h-4 min-w-4"
               title="Keep me logged in"
               classNameTitle="text-medium-sm text-gray-1"
               state="primary"

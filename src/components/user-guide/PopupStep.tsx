@@ -42,11 +42,11 @@ const PopupStep = ({
     <>
       <div
         ref={confirmDialogRef}
-        className={`animate-jump-in bg-primary p-7.5 absolute z-50 ${className}`}
+        className={`absolute z-50 animate-jump-in bg-primary p-7.5 ${className}`}
       >
         <span className="text-base font-normal text-white">{content}</span>
-        <div className="flex items-center justify-between mt-5">
-          <div className="text-white text-medium-sm font-normal">
+        <div className="mt-5 flex items-center justify-between">
+          <div className="text-medium-sm font-normal text-white">
             {index}/{total}
           </div>
           <div className="flex">
@@ -62,7 +62,7 @@ const PopupStep = ({
             )}
             <SappButton
               title={titleButtonNext ? titleButtonNext : 'Next'}
-              className="bg-primary-3 px-5 py-2 ml-3"
+              className="ml-3 bg-primary-3 px-5 py-2"
               size="small"
               isPadding={false}
               childClass="text-medium-sm"

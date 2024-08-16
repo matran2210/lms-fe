@@ -56,6 +56,7 @@ export const getLogoutUser = createAsyncThunk(
   async ({}, thunkAPI) => {
     try {
       const res = await AuthAPI.logout()
+      localStorage.clear()
       removeJwtToken()
       if (!res.success) {
         toast.error(res.error.message)
