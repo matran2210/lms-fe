@@ -375,7 +375,11 @@ const TestDetail = () => {
   const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
-  const [quizAttempId, setQuizAttempId] = useState('')
+  const [quizAttempId, setQuizAttempId] = useState({
+    id: '',
+    number_of_attempts: 0,
+    is_limited: false,
+  })
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
   const timeRef = useRef(null) as any
@@ -1270,7 +1274,7 @@ const TestDetail = () => {
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitQuestion(quizAttempId as string, {
+      const res = await CoursesAPI.submitQuestion(quizAttempId?.id as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:
@@ -1306,7 +1310,7 @@ const TestDetail = () => {
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitQuestion(quizAttempId as string, {
+      const res = await CoursesAPI.submitQuestion(quizAttempId?.id as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:
@@ -1583,7 +1587,7 @@ const TestDetail = () => {
           router.query.id as string,
           router.query.class_user_id as string,
         )
-        setQuizAttempId(res.data.id)
+        setQuizAttempId(res.data)
         setIsQuizAttemptCreated(true) // Mark the attempt as created
       } catch (err: any) {
         if (err.response?.data?.error.code === '400|060710') {
@@ -1749,39 +1753,48 @@ const TestDetail = () => {
                     }}
                   />
                 )}
-                <ButtonCancelSubmit
-                  className={'flex w-1/3 flex-row-reverse gap-4'}
-                  // color={color}
-                  submit={{
-                    title: 'Finish',
-                    size: 'small',
-                    loading: false,
-                    disabled: submited,
-                    className: 'border border-bw-1',
-                    color: 'secondary',
-                    onClick: () => {
-                      if (checkUnSubmitAnswer()?.length > 0) {
-                        setUnSubmitAnswer(true)
-                      } else {
-                        setOpenSubmit(true)
-                      }
-                      dispatch(disableUnsavedChange())
-                    },
-                    //   full: fullWidthBtn,
-                  }}
-                  cancel={{
-                    title: 'Quit',
-                    size: 'small',
-                    className: 'border border-bw-1 !w-[109px]',
-                    color: 'secondary',
-                    onClick: () => {
-                      setOpenQuit(true)
-                      dispatch(disableUnsavedChange())
-                    },
-                    loading: false,
-                    //   full: fullWidthBtn,
-                  }}
-                ></ButtonCancelSubmit>
+
+                <div className="flex items-center">
+                  <div className="mr-6 text-medium-sm text-bw-1">
+                    Attempt: {quizAttempId?.number_of_attempts}
+                    {quizDetail?.is_limited
+                      ? `/${quizDetail?.limit_count}`
+                      : ''}
+                  </div>
+                  <ButtonCancelSubmit
+                    className={'flex flex-row-reverse gap-4'}
+                    // color={color}
+                    submit={{
+                      title: 'Finish',
+                      size: 'small',
+                      loading: false,
+                      disabled: submited,
+                      className: 'border border-bw-1',
+                      color: 'secondary',
+                      onClick: () => {
+                        if (checkUnSubmitAnswer()?.length > 0) {
+                          setUnSubmitAnswer(true)
+                        } else {
+                          setOpenSubmit(true)
+                        }
+                        dispatch(disableUnsavedChange())
+                      },
+                      //   full: fullWidthBtn,
+                    }}
+                    cancel={{
+                      title: 'Quit',
+                      size: 'small',
+                      className: 'border border-bw-1 !w-[109px]',
+                      color: 'secondary',
+                      onClick: () => {
+                        setOpenQuit(true)
+                        dispatch(disableUnsavedChange())
+                      },
+                      loading: false,
+                      //   full: fullWidthBtn,
+                    }}
+                  ></ButtonCancelSubmit>
+                </div>
               </div>
               {/* End Header */}
               {tabs?.length > 0 && (
