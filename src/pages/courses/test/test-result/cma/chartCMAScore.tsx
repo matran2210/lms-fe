@@ -131,7 +131,7 @@ const ChartCMAScore = ({
           return (
             <div key={index} className="w-auto">
               <div className="w-full break-all py-2 text-medium-sm font-medium leading-4 text-bw-1">
-                {`${item?.short_name ? item?.short_name + "'" : ''} ${item?.title}`}
+                {`${item?.short_name ? item?.short_name + ' -' : ''} ${item?.title}`}
               </div>
             </div>
           )
