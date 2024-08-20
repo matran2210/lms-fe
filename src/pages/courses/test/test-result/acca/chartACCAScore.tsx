@@ -1,4 +1,4 @@
-import { calculatePercentage, roundNumber } from '@utils/helpers'
+import { calculatePercentage } from '@utils/helpers'
 
 interface DataItem {
   question_topic_id: string
