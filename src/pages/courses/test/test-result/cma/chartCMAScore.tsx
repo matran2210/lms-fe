@@ -25,7 +25,7 @@ const ChartCMAScore = ({
   isGraded,
 }: IProps) => {
   return (
-    <div className="mb-4 w-full max-w-full items-start bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 xl:mb-6 xl:px-24">
+    <div className="mb-4 w-full max-w-full items-start overflow-x-auto bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 xl:mb-6 xl:px-24">
       <div className="sticky left-0 flex flex-row justify-between">
         <div>
           <div className="flex flex-col">
@@ -77,7 +77,9 @@ const ChartCMAScore = ({
                 </p>
               </div>
             )}
-            {passingScore === 50 && (
+            {passingScore === 50 && isGraded ? (
+              ''
+            ) : (
               <div className="absolute bottom-1/2 flex h-0 w-full items-center border-t border-dotted border-gray-2">
                 <div className="relative -left-6 bottom-[50%] text-medium-sm font-normal text-black-1">
                   <span className="relative">50</span>
@@ -90,7 +92,7 @@ const ChartCMAScore = ({
               <div className="text-medium-sm text-black-1">Part</div>
               <div className="text-medium-sm text-black-1">Weight </div>
             </div>
-            <div className="flex-start flex w-full flex-row overflow-x-auto">
+            <div className="flex-start flex w-full flex-row">
               {data?.map((item: any, index: number) => (
                 <div
                   key={item?.id + index}
