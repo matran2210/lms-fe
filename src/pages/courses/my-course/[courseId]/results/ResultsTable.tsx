@@ -10,19 +10,26 @@ import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import ResultsTableFilter from './ResultsTableFilter'
+import { TEST_TYPE } from '@utils/constants'
+import { Tooltip } from 'antd'
+import Link from 'next/link'
+import { PageLink } from 'src/constants'
 
 interface Iprops {
   courseId: string
 }
 
-const commonDataCellStyle = 'text-start py-5'
+// Là essay nên không có điểm
+const ESSAY_QUESTION = '0/0'
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
+const commonDataCellStyle = 'col text-start py-5 pr-4 whitespace-nowrap'
 const headers = [
   'Name',
   'Belong To',
   'Type',
-  'Grade',
+  'Graded Activity',
+  'Multiple Choice Score',
   'Time Spent',
   'Last submission',
 ].map((label) => ({ label, className: commonHeaderCellStyle }))
@@ -76,56 +83,81 @@ const ResultsTable = ({ courseId }: Iprops) => {
 
   return (
     <>
-      <div className="mb-8 flex gap-6">
+      <div className="mb-8 flex flex-wrap gap-6 md:flex-nowrap">
         <ResultsTableFilter {...selectFilterProp} />
       </div>
       <SappTable
         headers={headers}
         hasCheck={false}
         isCheckedAll={false}
-        classTable="table-auto w-full"
+        classTable="w-full"
         loading={isFetching}
       >
         {resultData?.data?.map((row: any) => {
-          const lastSubmission = row?.last_submit_time
-            ? dayjs(row?.last_submit_time).format('DD/MM/YYYY hh:mm')
-            : '-'
-
           return (
             <tr
               className={clsx({
-                'h-auto border-b border-dashed border-gray-2': true,
-                'text-gray-2': !row.is_studied,
+                'row h-auto border-b border-dashed border-gray-2': true,
+                'text-gray-2': row.quiz.attempts.length === 0,
               })}
               key={row?.id}
             >
               {/* Name */}
               <td className={clsx(commonDataCellStyle)}>
-                {truncateString(row?.name, 35)}
+                <Tooltip
+                  title={row?.name?.length > 30 && row?.name}
+                  color="white"
+                >
+                  {row?.quiz?.attempts[0]?.id ? (
+                    <Link
+                      href={`/courses/test/test-result/${row?.quiz?.attempts[0]?.id}`}
+                    >
+                      {truncateString(row?.name, 30)}
+                    </Link>
+                  ) : (
+                    truncateString(row?.name, 30)
+                  )}
+                </Tooltip>
               </td>
 
               {/* Belong to */}
-              <td className={clsx(commonDataCellStyle)}>{row.path}</td>
+              <td className={clsx(commonDataCellStyle)}>
+                <Tooltip
+                  title={row?.path?.length > 30 && row?.path && row.path}
+                  color="white"
+                >
+                  {truncateString(row?.path || '-', 30)}
+                </Tooltip>
+              </td>
 
               {/* Type */}
               <td className={clsx(commonDataCellStyle)}>
-                {row?.course_section_type.toLowerCase()}
+                {TEST_TYPE[row?.course_section_type]}
               </td>
 
-              {/* Grade */}
+              {/* Graded Activity */}
               <td className={clsx(commonDataCellStyle)}>
-                {row.score_percentage}
+                {row?.quiz?.is_graded ? 'Yes' : 'No'}
+              </td>
+
+              {/* Multiple Choice Score */}
+              <td className={clsx(commonDataCellStyle)}>
+                {row?.quiz?.attempts[0]?.ratio_score !== ESSAY_QUESTION
+                  ? row?.quiz?.attempts[0]?.ratio_score
+                  : '-'}
               </td>
 
               {/* Time Spent */}
               <td className={clsx(commonDataCellStyle)}>
-                {row.total_attempt_time
-                  ? getTimeFromInput(row.total_attempt_time)
-                  : '-'}
+                {getTimeFromInput(row?.quiz?.attempts[0]?.total_attempt_time)}
               </td>
 
               {/* Last Submission */}
-              <td className={clsx(commonDataCellStyle)}>{lastSubmission}</td>
+              <td className={clsx('!pr-0', commonDataCellStyle)}>
+                {dayjs(row?.quiz?.attempts[0]?.updated_at).format(
+                  'DD/MM/YYYY hh:mm',
+                ) || '-'}
+              </td>
             </tr>
           )
         })}

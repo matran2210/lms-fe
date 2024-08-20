@@ -241,15 +241,13 @@ const CaseStudyResult = () => {
    */
   const handlePeriousTopic = () => {
     if (result?.previous_topic?.attempt) {
-      if (result?.previous_topic?.attempt) {
-        router.replace(
-          `/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
-        )
-      } else {
-        router.push(
-          `/case-study/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.next_topic?.id}`,
-        )
-      }
+      router.replace(
+        `/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
+      )
+    } else {
+      router.push(
+        `/case-study/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.previous_topic?.id}`,
+      )
     }
   }
 
@@ -498,9 +496,9 @@ const CaseStudyResult = () => {
             formatAnswer(item),
             corrects,
             undefined,
-            question.solution,
+            item?.requirement?.explanation,
             true,
-            question?.requirements?.[0],
+            item?.requirement,
             question?.question_content,
           )}
         </div>
@@ -909,7 +907,7 @@ const CaseStudyResult = () => {
                     className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                     onClick={handlePeriousTopic}
                   >
-                    <div className="text-medium-sm font-medium">Prerious</div>
+                    <div className="text-medium-sm font-medium">Previous</div>
                   </button>
                 )}
                 <button

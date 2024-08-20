@@ -205,6 +205,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     '/test/[id]',
     '/case-study/[id]',
     '/certificates/[id]',
+    '/case-study/result/[id]',
   ]
 
   const showHelp = !excludedPathsHelp.some((path) =>
@@ -213,11 +214,16 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     const container = document.getElementById('hubspot-conversations-iframe')
+    const message = document.getElementById(
+      'hubspot-messages-iframe-container',
+    ) as HTMLElement
     if (container) {
       if (!showHelp) {
         container.classList.add('visible-icon')
+        message.classList.add('visible-icon')
       } else {
         container.classList.remove('visible-icon')
+        message.classList.remove('visible-icon')
       }
     }
   }, [showHelp])

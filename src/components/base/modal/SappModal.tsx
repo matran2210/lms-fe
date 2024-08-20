@@ -285,7 +285,7 @@ const SappModal: React.FC<IProps> = ({
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
-              } bg-black  inset-0 animate-fade-in-overlay opacity-80 transition-opacity ${overlayClass}`}
+              } inset-0 animate-fade-in-overlay bg-bw-10 transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${

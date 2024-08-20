@@ -10,6 +10,7 @@ enum StatusQuizAttempt {
   Passed = 'Passed',
   Failed = 'Failed',
   Unsubmitted = 'Unsubmitted',
+  Submitted = 'Submitted',
 }
 interface IProps {
   open: boolean
@@ -47,13 +48,21 @@ const TestModal = ({
     return true
   }, [data?.quiz?.attempt])
   const status = useMemo(() => {
-    if (!data?.quiz?.attempt) {
+    // Nếu không có score
+    if (
+      data?.quiz?.attempt?.status === 'UN_SUBMITTED' ||
+      !data?.quiz?.attempt
+    ) {
       return StatusQuizAttempt.Unsubmitted
     }
-    if (data.quiz.attempt.score < data?.quiz?.required_percent_score) {
-      return StatusQuizAttempt.Failed
+    if (data?.quiz?.is_graded) {
+      const status =
+        data?.quiz?.attempt?.score < data?.quiz?.required_percent_score
+          ? StatusQuizAttempt.Failed
+          : StatusQuizAttempt.Passed
+      return status
     }
-    return StatusQuizAttempt.Passed
+    return StatusQuizAttempt.Submitted
   }, [data?.quiz?.attempt])
 
   const onSubmit = async () => {
