@@ -1,5 +1,6 @@
 import { QUESTION_TYPES } from 'src/constants'
 import { IMeta } from '../courses'
+import { IMetaData } from '..'
 
 export interface IScoreDetails {
   meta: IMeta
@@ -54,4 +55,25 @@ interface Question {
   level: string
   qType: QUESTION_TYPES
   question_report: QuestionReport
+}
+
+export interface IQuizResult {
+  finished_at: Date
+  id: string
+  is_graded: boolean
+  ratio_score: string
+  score: number
+  total_attempt_time: number
+  name: string
+  status: string
+  quiz: {
+    id: string
+    is_graded: boolean
+    required_percent_score: number
+  }
+}
+
+export interface IQuizResultList {
+  metadata: IMetaData
+  data: IQuizResult[]
 }
