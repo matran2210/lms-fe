@@ -106,6 +106,9 @@ const ActivityPage = () => {
   })
 
   const settingDoneProcessActivity = (activity: IActivity) => {
+    setIsHasQuizGrading(false)
+    setIsDoneActivity(false)
+    setVideoClicked([])
     if (activity?.user_course_section_progress?.length) {
       const progress = activity.user_course_section_progress[0]
       if (
@@ -162,7 +165,7 @@ const ActivityPage = () => {
     if (activity) {
       dispatch(resetQuizActivity({}))
       try {
-        settingDoneProcessActivity(activity)
+
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
       } catch (error) {}
@@ -174,6 +177,11 @@ const ActivityPage = () => {
     }
   }, [activity, dispatch, router.query.id, sectionId])
 
+  useEffect(() => {
+    if (activity) {
+      settingDoneProcessActivity(activity)
+    }
+  },[activity])
   useEffect(() => {
     router.events.on('routeChangeComplete', () => {
       isFinishRef.current = false
@@ -269,6 +277,12 @@ const ActivityPage = () => {
   // }
 
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
+    console.log('onVideoStart', {
+      isHasQuizGrading,
+      isDoneActivity,
+      videoClicked
+    });
+    
     if (isHasQuizGrading) {
       return
     }
