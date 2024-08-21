@@ -101,9 +101,6 @@ module.exports = {
         pinned: {
           1: '#18355D',
         },
-        black: {
-          1: '#050505',
-        },
         support: {
           1: '#33475B',
         },

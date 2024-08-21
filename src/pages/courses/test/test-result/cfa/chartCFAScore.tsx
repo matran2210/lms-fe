@@ -46,7 +46,7 @@ const ChartCFAScore = ({ data }: IProps) => {
         </div>
       </div>
       <div className="block">
-        <div className="flex w-full flex-row bg-gray-4">
+        <div className="flex w-full flex-row gap-10">
           <div className="flex shrink-0 flex-col justify-between bg-white py-2 pr-7">
             <div className="text-medium-sm">Topic</div>
             <div className="text-medium-sm">Weight</div>
@@ -55,11 +55,11 @@ const ChartCFAScore = ({ data }: IProps) => {
             {data?.map((item: any, index: number) => (
               <div
                 key={item?.id + index}
-                className="relative flex w-full min-w-[134px] max-w-[134px] shrink-0 flex-col items-start justify-between gap-1 bg-gray-4 py-3 pr-6 first:ml-6"
+                className="relative flex w-full min-w-[134px] max-w-[134px] shrink-0 flex-col items-start justify-between gap-1 bg-gray-4 py-3 pl-6 pr-6"
               >
                 <div className="absolute bottom-[calc(100%+16px)] left-0 h-40 w-auto">
                   <div
-                    className="absolute left-0 h-1 w-16 bg-primary"
+                    className="absolute left-6 h-1 w-16 bg-primary"
                     style={{
                       bottom: `${
                         (item?.total_correct_answers / item?.total_questions) *
