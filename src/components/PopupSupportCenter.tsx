@@ -35,12 +35,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         className="relative mt-3 hover:cursor-pointer"
       >
         <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
-          <div className="z-[999] flex h-full w-full">
+          <div className="z-[999] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconFAQ />
             </div>
             <div className="ms-3 text-[11px] text-bw-1">
-              <span className="">
+              <span>
                 Tra cứu các vấn đề thường gặp và tài liệu học tập qua trong
                 thông tin
               </span>{' '}
@@ -62,7 +62,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         className="relative mt-3 hover:cursor-pointer"
       >
         <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
-          <div className="z-[999] flex h-full w-full">
+          <div className="z-[999] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconRequestForm />
             </div>
@@ -83,7 +83,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         className="relative mt-3 hover:cursor-pointer"
       >
         <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
-          <div className="z-[999] flex h-full w-full">
+          <div className="z-[999] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconChat />
             </div>
@@ -106,7 +106,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         className="relative mt-3"
       >
         <div className="mt-3 flex h-14 border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary hover:text-primary">
-          <div className="z-[2] flex h-full w-full">
+          <div className="z-[2] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconAccess />
             </div>
@@ -124,7 +124,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
 
       <div className="relative mt-3 hover:cursor-pointer">
         <div className="mt-3 flex h-14 border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
-          <div className="z-[999] flex h-full w-full">
+          <div className="z-[999] flex h-full w-full hover:hidden hover:bg-primary">
             <div className="flex items-center">
               <IconContact />
             </div>
@@ -143,7 +143,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
 
       <div className="relative mt-3 hover:cursor-pointer">
         <div className="mt-3 flex h-14 border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
-          <div className="z-[999] flex h-full w-full">
+          <div className="z-[999] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconEmergency />
             </div>
