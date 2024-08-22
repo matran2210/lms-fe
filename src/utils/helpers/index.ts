@@ -91,9 +91,22 @@ export function isMobileExtensive() {
     /your|zeto|zte\-/i,
   ]
 
-  return toMatch.some((regex) => {
+  // First, check using the extensive regex list
+  let isMobile = toMatch.some((regex) => {
     return navigator.userAgent.match(regex)
   })
+
+  // Additional checks for iPads that might be missed
+  if (!isMobile) {
+    const isMac = RegExp(/Macintosh/i).test(navigator.userAgent)
+
+    // If the device is a Mac and supports touch, it could be an iPad
+    if (isMac && navigator.maxTouchPoints && navigator.maxTouchPoints > 2) {
+      isMobile = true
+    }
+  }
+
+  return isMobile
 }
 
 /**
