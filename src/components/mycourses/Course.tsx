@@ -28,8 +28,6 @@ import { trackGAEvent } from '@utils/google-analytics'
 const Course = ({
   course,
   index,
-  // setData,
-  // setLoading,
   lastElementRef,
   refetch,
 }: {
@@ -84,7 +82,6 @@ const Course = ({
   const checkStatusCourse = () => {
     const courseStatus = course?.status
     const classStatus = classInstance?.status
-    const classType = classInstance?.course_type
     const studentStatus = student?.status
     const startedAt = student?.started_at
     const finishedAt = student?.finished_at
@@ -107,7 +104,6 @@ const Course = ({
             classInstance?.finished_at
           ) {
             const classFinish = new Date(classInstance?.finished_at as any)
-            // const classFinish = startOfDay(getISOFinish.setUTCHours(0, 0, 0, 0))
             if (classFinish <= formattedDate) return BUTTON_STATUS.Extend
             if (classFinish > formattedDate) return BUTTON_STATUS.Active
           }
@@ -118,8 +114,6 @@ const Course = ({
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
         if (startedAt && finishedAt) {
-          // const parsedSpecificDate = parseISO(student?.finished_at as any)
-          // parsedSpecificDate.setUTCHours(0, 0, 0, 0)
           const finishedAtDate = new Date(student?.finished_at as any)
           if (
             course?.course_type === 'TRIAL_COURSE' &&
@@ -156,44 +150,18 @@ const Course = ({
     switch (status) {
       case `${TITLE_USER_STATUS.RESERVED}`:
         return false
-        break
       case `${TITLE_USER_STATUS.TRANSFER_TO}`:
         return false
-        break
       case `${TITLE_USER_STATUS.CANCELED}`:
         return false
-        break
       default:
         return true
     }
   }
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
-  // Action của button trong course list
-  // const queryString = buildQueryString({
-  //   name: router.query.name || '',
-  //   status: router.query.status || '',
-  //   type: router.query.type || '',
-  // })
-
-  // async function fetchCourseList() {
-  //   setLoading(true)
-  //   try {
-  //     const newData = await CourseAPI.getCourse(18, queryString)
-  //     setData(newData?.data)
-  //   } catch (error) {
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
-
   async function activeCourse() {
     try {
-      const params = {
-        classId: `${classInstance?.id}`,
-      }
-      const res = await CoursesAPI.activeCourse(params)
-      // await fetchCourseList()
       refetch()
       toast.success('Active thành công!')
     } catch (error) {}
@@ -213,8 +181,6 @@ const Course = ({
           is_student_in_class: false,
         })
       }
-      const res = await CoursesAPI.extendCourse(params)
-      // await fetchCourseList()
       refetch()
       toast.success('Gia hạn hành công!')
     } catch (error) {}
@@ -246,9 +212,7 @@ const Course = ({
       }
       setOpenActive(true)
     } else if (determineButtonToShow === 'Extend') {
-      // if (!student) {
       setOpenExtend(true)
-      // }
     } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
       setOpenClass(true)
     } else {
@@ -274,13 +238,10 @@ const Course = ({
     switch (status) {
       case `${CLASS_USER_STATUS.READY_TO_LEARN}`:
         return 'like'
-        break
       case `${CLASS_USER_STATUS.IN_PROGRESS}`:
         return 'hour'
-        break
       case `${CLASS_USER_STATUS.COMPLETED}`:
         return 'completed'
-        break
       default:
         return ''
     }
@@ -298,7 +259,7 @@ const Course = ({
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div className={`${enableCourse ? '' : ''} flex min-h-352 flex-col`}>
+          <div className={`flex min-h-352 flex-col`}>
             <div
               className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
@@ -429,12 +390,6 @@ const Course = ({
                 </div>
               </div>
               <div className="action relative flex items-center justify-end">
-                {/* {'changeExam' && (
-                  <a className="underline capitalize block text-bw-1 text-medium-sm font-semibold">
-                    {'changeExam'}
-                  </a>
-                )} */}
-                {/* {'buttonText' && ( */}
                 {determineButtonToShow !== 'Disabled' ? (
                   <ButtonSecondary
                     title={
