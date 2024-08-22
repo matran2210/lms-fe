@@ -165,15 +165,6 @@ export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
 export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
 
-export const TITLE_USER_STATUS = {
-  NORMAL: 'NORMAL',
-  RESERVED: 'RESERVED',
-  MOVED_OUT: 'MOVED_OUT',
-  MOVED_IN: 'MOVED_IN',
-  TRANSFER_TO: 'TRANSFER_TO',
-  TRANSFERRED: 'TRANSFERRED',
-  CANCELED: 'CANCELED',
-}
 export const COURSE_STATUS = {
   PUBLISH: 'PUBLISH',
   LOCK: 'LOCK',
@@ -186,6 +177,19 @@ export const CLASS_STATUS = {
   DRAFT: 'DRAFT',
   BLOCK: 'BLOCK',
   ENDED: 'ENDED',
+}
+
+export const CLASS_USER_TYPES = {
+  NORMAL: 'NORMAL', // Bình thường
+  RESERVED: 'RESERVED', // Bảo lưu
+  REASSIGNED: 'REASSIGNED', // Học lại vì bảo lưu
+  RETOOK: 'RETOOK', // Trượt
+  RETAKING: 'RETAKING', // Học lại vì trượt
+  MOVED_OUT: 'MOVED_OUT', // Chuyển ra khỏi lớp
+  MOVED_IN: 'MOVED_IN', // Chuyển vào lớp
+  TRANSFERED_TO: 'TRANSFERED_TO', // Đã chuyển nhượng
+  TRANSFERRED: 'BE_TRANSFERRED', // Được chuyển nhượng
+  CANCELED: 'CANCELED', // Hủy học
 }
 
 export const BUTTON_STATUS = {

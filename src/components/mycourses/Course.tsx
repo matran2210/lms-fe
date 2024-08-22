@@ -8,11 +8,11 @@ import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 import {
-  TITLE_USER_STATUS,
   BUTTON_STATUS,
   COURSE_STATUS,
   CLASS_STATUS,
   ANIMATION,
+  CLASS_USER_TYPES,
 } from 'src/constants'
 import PopupExtend from './PopupExtend'
 import PopupActive from './PopupActive'
@@ -78,10 +78,19 @@ const Course = ({
       2,
     ) || 0
 
+  const disabledCourseByClassType = [
+    CLASS_USER_TYPES.RESERVED,
+    CLASS_USER_TYPES.RETOOK,
+    CLASS_USER_TYPES.TRANSFERED_TO,
+    CLASS_USER_TYPES.MOVED_OUT,
+    CLASS_USER_TYPES.CANCELED,
+  ]
+
   // Function để hiển thị status của course
   const checkStatusCourse = () => {
     const courseStatus = course?.status
     const classStatus = classInstance?.status
+    const classUserType = classInstance?.class_user_instances[0].type
     const studentStatus = student?.status
     const startedAt = student?.started_at
     const finishedAt = student?.finished_at
@@ -136,23 +145,27 @@ const Course = ({
         return BUTTON_STATUS.Hidden
       return BUTTON_STATUS.Hidden
     }
+
     if (
       courseStatus === COURSE_STATUS.DRAFT ||
-      courseStatus === COURSE_STATUS.BLOCK
+      courseStatus === COURSE_STATUS.BLOCK ||
+      disabledCourseByClassType.includes(classUserType)
     )
       return BUTTON_STATUS.Hidden
+
     return BUTTON_STATUS.Hidden
   }
+
   const determineButtonToShow = checkStatusCourse() as any
 
   // Set active course dựa theo trạng thái của học viên
   const renderStatusUser = (status: string) => {
     switch (status) {
-      case `${TITLE_USER_STATUS.RESERVED}`:
+      case `${CLASS_USER_TYPES.RESERVED}`:
         return false
-      case `${TITLE_USER_STATUS.TRANSFER_TO}`:
+      case `${CLASS_USER_TYPES.TRANSFERED_TO}`:
         return false
-      case `${TITLE_USER_STATUS.CANCELED}`:
+      case `${CLASS_USER_TYPES.CANCELED}`:
         return false
       default:
         return true
