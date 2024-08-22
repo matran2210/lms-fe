@@ -207,5 +207,9 @@ export const ANIMATION = {
   DATA_AOS: 'fade-up',
 }
 
+export const SOCIAL_LINK = {
+  FACEBOOK: 'https://www.facebook.com/sapp.edu.vn',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'

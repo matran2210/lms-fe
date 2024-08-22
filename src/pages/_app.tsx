@@ -43,9 +43,7 @@ type MyAppProps = AppProps & {
 
 function MyApp({ Component, pageProps }: MyAppProps) {
   injectStore(store)
-  // const [show, setShow] = useState(false)
   const router = useRouter()
-  // const [showPinned, setShowPinned] = useState(true)
   const dispatch = useAppDispatch()
 
   const queryClient = new QueryClient({

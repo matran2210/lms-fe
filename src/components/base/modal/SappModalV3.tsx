@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
-import React, { ReactNode } from 'react'
-import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+import { ReactNode } from 'react'
 import { IButtonColors } from 'src/type'
+import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 
 interface IProps {
   title?: string | undefined
@@ -115,7 +115,7 @@ const SappModalV3 = ({
               full: fullWidthBtn,
               className: cancelButtonClass,
             }}
-          ></ButtonCancelSubmit>
+          />
         </div>
       )}
     </Modal>
