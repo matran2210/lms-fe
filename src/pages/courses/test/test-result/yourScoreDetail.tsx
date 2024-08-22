@@ -1,13 +1,14 @@
 import SappTable from '@components/base/SappTable'
-import { useRef } from 'react'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { roundNumber, convertSecondsToMinutesSeconds } from '@utils/helpers'
-import { ANIMATION, QUESTION_TYPES } from 'src/constants'
-import 'aos/dist/aos.css'
+import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 import { parseHTMLToString, truncateString } from '@utils/index'
-import { CoursesAPI } from '../../../api/courses/index'
+import 'aos/dist/aos.css'
+import clsx from 'clsx'
+import DOMPurify from 'dompurify'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import React, { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
+import { ANIMATION, QUESTION_TYPES } from 'src/constants'
 import {
   IAnswearGroup,
   IAnswer,
@@ -15,8 +16,8 @@ import {
   IScoreDetails,
   QuizAttemptChartType,
 } from 'src/type'
-import Image from 'next/image'
-import clsx from 'clsx'
+import { CoursesAPI } from '../../../api/courses/index'
+import { Tooltip } from 'antd'
 
 const commonHeaderClass =
   'text-left p-0 text-medium-sm text-gray-1 font-semibold'
@@ -174,7 +175,7 @@ const YourScoreDetail = ({
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+      <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Score Details
       </div>
       <div className="block pl-4">
@@ -184,7 +185,7 @@ const YourScoreDetail = ({
           isCheckedAll={true}
           onChange={() => {}}
           hasCheck={false}
-          // classTableRes="overflow-x-auto"
+          classTable="w-full"
         >
           <>
             {scoreDetails?.answer_groups?.map((ansg: IAnswearGroup) => {
@@ -202,36 +203,42 @@ const YourScoreDetail = ({
                     return (
                       <tr
                         className="border-b border-dashed border-gray-2"
-                        key={e?.id}
+                        key={e?.question_id}
                       >
                         {/* # */}
                         <td className="p-0 pr-1 text-bw-1">{e.index}</td>
 
                         {/* Question */}
                         <td className="p-0 pr-4">
-                          <div
-                            className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
-                            dangerouslySetInnerHTML={{
-                              __html: String(
-                                truncateString(
-                                  e?.question?.question_content ?? '--',
-                                  20,
-                                ),
-                              ),
-                            }}
+                          <Tooltip
+                            color="white"
                             title={
-                              parseHTMLToString(
-                                e?.question?.question_content,
-                              ) ?? '--'
+                              <div
+                                // className="h-24 overflow-y-scroll"
+                                dangerouslySetInnerHTML={{
+                                  __html: DOMPurify.sanitize(
+                                    e?.question?.question_content ?? '--',
+                                  ),
+                                }}
+                              />
                             }
-                            onClick={() => {
-                              if (e.id) {
-                                router.push(
-                                  `/explanation/${e.id}?title=My Course`,
-                                )
-                              }
-                            }}
-                          ></div>
+                          >
+                            <div
+                              className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
+                              dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(
+                                  e?.question?.question_content ?? '--',
+                                ),
+                              }}
+                              onClick={() => {
+                                if (e.id) {
+                                  router.push(
+                                    `/explanation/${e.id}?title=My Course`,
+                                  )
+                                }
+                              }}
+                            />
+                          </Tooltip>
                         </td>
 
                         {/* Chapter/Module */}

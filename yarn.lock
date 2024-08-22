@@ -3312,6 +3312,13 @@
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.6.0.tgz#eac397f28bf1d6ae0ae081363eca2f425bedf0d5"
   integrity sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==
 
+"@types/dompurify@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/dompurify/-/dompurify-3.0.5.tgz#02069a2fcb89a163bacf1a788f73cb415dd75cb7"
+  integrity sha512-1Wg0g3BtQF7sSb27fJQAKck1HECM6zV1EB66j8JH9i3LCjYabJa0FSdiSgsD5K/RbrsR0SiraKacLB+T8ZVYAg==
+  dependencies:
+    "@types/trusted-types" "*"
+
 "@types/estree@*", "@types/estree@^1.0.0":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.5.tgz#a6ce3e556e00fd9895dd872dd172ad0d4bd687f4"
@@ -3464,6 +3471,11 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/shimmer/-/shimmer-1.2.0.tgz#9b706af96fa06416828842397a70dfbbf1c14ded"
   integrity sha512-UE7oxhQLLd9gub6JKIAhDq06T0F6FnztwMNRvYgjeQSBeMc1ZG/tA47EwfduvkuQS8apbkM/lpLpWsaCeYsXVg==
+
+"@types/trusted-types@*":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.7.tgz#baccb07a970b91707df3a3e8ba6896c57ead2d11"
+  integrity sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==
 
 "@types/use-sync-external-store@^0.0.3":
   version "0.0.3"
@@ -5021,7 +5033,7 @@ domhandler@5.0.3, domhandler@^5.0.2, domhandler@^5.0.3:
   dependencies:
     domelementtype "^2.3.0"
 
-dompurify@^3.0.10:
+dompurify@^3.0.10, dompurify@^3.1.6:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.1.6.tgz#43c714a94c6a7b8801850f82e756685300a027e2"
   integrity sha512-cTOAhc36AalkjtBpfG6O8JimdTMWNXjiePT2xQH/ppBGi/4uIpmj8eKyIkMJErXWARyINV/sB38yf8JCLF5pbQ==
@@ -8378,10 +8390,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.2.81:
-  version "1.2.81"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.81.tgz#e5fae6ab5b09694d6c811454eba72e64cf833dfb"
-  integrity sha512-bJk0oCwUnAV/tuKuTKi9RqlxfwKjqhgCFoDCxElH+ZGMG4JqWur/p/b8ESASy2MrKH/uQ1t5d7HbB5eyjpvOGw==
+preview-part@^1.2.82:
+  version "1.2.82"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.2.82.tgz#ebcf3babccb2b4d911878430ace026a704452ea9"
+  integrity sha512-4kgjuOjkiqbur1hyvLaS6ExSFjoDHUWLbRtx1uUAYfsKwez67tJzW8H06YEPg0Xk+9av8g8GQuf3LJKrfm/pew==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/aos" "^3.0.7"
@@ -8486,10 +8498,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.1.26:
-  version "1.1.26"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.1.26.tgz#fa60b0eddfc27be66f1b3918e4b5fa11e8820673"
-  integrity sha512-akSBrRZb0IV5Yme8IS0PqYDW0HRiBVfsEL71UTFn/awUhY/rf515h0aPSS5Li3y9+6y4lsKN6sTbmq37fkB4Kw==
+quiz-result-package@^1.2.28:
+  version "1.2.28"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.28.tgz#34dfbe34c6d4b6fd2955b6ec562caebd0087cdf2"
+  integrity sha512-aYM9mjiJ+UAxqcHYovjSmkLC8YWDI1OLWZFXU91nIzlsuzALCVDGPx1mwXHaL42Z/EW0HtoIIQBinqaHe0O7Nw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 

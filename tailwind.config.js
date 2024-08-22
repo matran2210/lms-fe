@@ -101,9 +101,6 @@ module.exports = {
         pinned: {
           1: '#18355D',
         },
-        black: {
-          1: '#050505',
-        },
         support: {
           1: '#33475B',
         },
@@ -308,6 +305,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         'test-result': 'minmax(0, 3fr) minmax(0, 1fr)',
+        15: 'repeat(15, minmax(0, 1fr))',
       },
     },
   },

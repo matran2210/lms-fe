@@ -96,7 +96,7 @@ const ActivityPage = () => {
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
   const [isDoneActivity, setIsDoneActivity] = useState(false)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
@@ -155,7 +155,7 @@ const ActivityPage = () => {
       setVideoClicked(videos)
       return
     }
-    finishedCourseSectionProgress()
+    handleFinishedCourseSectionProgress()
   }
 
   useLayoutEffect(() => {
@@ -198,78 +198,81 @@ const ActivityPage = () => {
     dispatch(closeCalculator())
   }, [dispatch, router.asPath])
 
-  /**
-   * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
-   */
-  const finishedCourseSectionProgress = async () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
+  // /**
+  //  * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
+  //  */
+  // const finishedCourseSectionProgress = async () => {
+  //   if (timeoutRef.current) {
+  //     clearTimeout(timeoutRef.current)
+  //   }
 
-    timeoutRef.current = setTimeout(async () => {
-      if (isDoneActivity) {
-        return
-      }
-      // Nếu có quiz chấm điểm thì ko xử lý progress này
-      if (isHasQuizGrading) {
-        return
-      }
+  //   timeoutRef.current = setTimeout(async () => {
+  //     if (isDoneActivity) {
+  //       return
+  //     }
+  //     // Nếu có quiz chấm điểm thì ko xử lý progress này
+  //     if (isHasQuizGrading) {
+  //       return
+  //     }
 
-      // Nếu có video thì ko xử lý progress trong này
-      if (videoClicked.length) {
-        return
-      }
+  //     // Nếu có video thì ko xử lý progress trong này
+  //     if (videoClicked.length) {
+  //       return
+  //     }
 
-      // Xử lý khi scroll đến element next or preview activity
-      if (endActivityRef?.current) {
-        // Hủy theo dõi nếu đã có observerRef.current
-        if (observerRef?.current) {
-          observerRef?.current?.unobserve(endActivityRef?.current)
-        }
+  //     // Xử lý khi scroll đến element next or preview activity
+  //     if (endActivityRef?.current) {
+  //       // Hủy theo dõi nếu đã có observerRef.current
+  //       if (observerRef?.current) {
+  //         observerRef?.current?.unobserve(endActivityRef?.current)
+  //       }
 
-        // Thiết lập các tùy chọn cho IntersectionObserver
-        const options = {
-          root: null,
-          rootMargin: '0px',
-          threshold: 0.5,
-        }
+  //       // Thiết lập các tùy chọn cho IntersectionObserver
+  //       const options = {
+  //         root: null,
+  //         rootMargin: '0px',
+  //         threshold: 0.5,
+  //       }
 
-        // Hàm xử lý khi có sự giao thoa
-        const handleIntersection = async (
-          entries: IntersectionObserverEntry[],
-        ) => {
-          const isVisible = entries?.[0]?.isIntersecting
+  //       // Hàm xử lý khi có sự giao thoa
+  //       const handleIntersection = async (
+  //         entries: IntersectionObserverEntry[],
+  //       ) => {
+  //         const isVisible = entries?.[0]?.isIntersecting
 
-          // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-          if (isVisible && endActivityRef?.current) {
-            observerRef?.current?.unobserve(endActivityRef?.current)
-            await handleFinishedCourseSectionProgress()
-          }
-        }
+  //         // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
+  //         if (isVisible && endActivityRef?.current) {
+  //           observerRef?.current?.unobserve(endActivityRef?.current)
+  //           await handleFinishedCourseSectionProgress()
+  //         }
+  //       }
 
-        // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
-        observerRef.current = new IntersectionObserver(
-          handleIntersection,
-          options,
-        )
+  //       // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
+  //       observerRef.current = new IntersectionObserver(
+  //         handleIntersection,
+  //         options,
+  //       )
 
-        // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-        if (endActivityRef?.current) {
-          observerRef?.current?.observe(endActivityRef?.current)
-        }
+  //       // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
+  //       if (endActivityRef?.current) {
+  //         observerRef?.current?.observe(endActivityRef?.current)
+  //       }
 
-        // Trả về hàm cleanup
-        return () => {
-          if (endActivityRef?.current) {
-            observerRef?.current?.unobserve(endActivityRef?.current)
-          }
-        }
-      }
-    }, 1000)
-  }
+  //       // Trả về hàm cleanup
+  //       return () => {
+  //         if (endActivityRef?.current) {
+  //           observerRef?.current?.unobserve(endActivityRef?.current)
+  //         }
+  //       }
+  //     }
+  //   }, 1000)
+  // }
 
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
     if (isHasQuizGrading) {
+      return
+    }
+    if (isDoneActivity) {
       return
     }
     if (!videoClicked.length) {
