@@ -5,7 +5,11 @@ interface IProp {
 }
 
 const CertificateContent = ({ onOpenTab }: IProp) => {
-  return <Certificate onOpenTab={onOpenTab} />
+  return (
+    <div className="flex-1 bg-white pt-6 shadow-box">
+      <Certificate onOpenTab={onOpenTab} />
+    </div>
+  )
 }
 
 export default CertificateContent
