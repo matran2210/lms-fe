@@ -9,14 +9,12 @@ const SappDisplayText = ({
 }) => {
   return (
     <React.Fragment>
-      {
-        text.split('\n').map((item, index) => (
-          <React.Fragment key={index}>
-            <div className={`font-sans text-base ${className}`}>{item}</div>
-            <br />
-          </React.Fragment>
-        ))
-      }
+      {text.split('\n').map((item, index) => (
+        <React.Fragment key={index}>
+          <div className={`font-sans text-base ${className}`}>{item}</div>
+          <br />
+        </React.Fragment>
+      ))}
     </React.Fragment>
   )
 }

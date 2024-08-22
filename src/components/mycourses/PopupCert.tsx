@@ -52,13 +52,13 @@ const PopupCert = ({}: IProps) => {
       <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <IRibbon />
       </div>
-      <div className="text-2xl md:text-4xl text-bw-1 font-semibold text-center">
+      <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
         {selector?.content?.content?.title}
       </div>
 
       <EditorReader
         text_editor_content={selector?.content?.content?.content}
-        className="text-medium-sm text-gray-1 text-center mt-4 px-1 content-course"
+        className="content-course mt-4 px-1 text-center text-medium-sm text-gray-1"
       />
     </SappModalV2>
   )

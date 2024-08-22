@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
-@import "variables.scss";
-@import "fonts.scss";
-@import "select.scss";
-@import "sidebar.scss";
-@import "my-course.scss";
-@import "video.scss";
-@import "activity.scss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+@import 'variables.scss';
+@import 'fonts.scss';
+@import 'select.scss';
+@import 'sidebar.scss';
+@import 'my-course.scss';
+@import 'video.scss';
+@import 'activity.scss';
 
 @tailwind base;
 @tailwind components;
@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: techNology;
-  src: url("../assets/fonts/Technology/Technology.ttf");
+  src: url('../assets/fonts/Technology/Technology.ttf');
 }
 
 #globalLoader {
@@ -40,7 +40,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -54,7 +54,7 @@
 
 * .fa,
 * .fa::before {
-  font-family: "Font Awesome 5 Free";
+  font-family: 'Font Awesome 5 Free';
 }
 
 html {
@@ -196,7 +196,7 @@ body *::-webkit-scrollbar-thumb:hover {
 
     &::before {
       color: white;
-      content: "\25B6";
+      content: '\25B6';
       opacity: 0.5;
       cursor: pointer;
       text-shadow: 0 3px black;
@@ -262,7 +262,7 @@ body *::-webkit-scrollbar-thumb:hover {
     text-overflow: ellipsis;
   }
 
-  option[value=""][disabled] {
+  option[value=''][disabled] {
     display: none;
   }
 
@@ -291,7 +291,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-notched-container:before {
-  content: "";
+  content: '';
   left: 0;
   /* top: 50%; */
   width: 30px;
@@ -307,7 +307,7 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-arrowed-container:before {
   border: 1px dashed rgb(224, 221, 227);
-  content: "";
+  content: '';
   right: -1px;
   /* top: 50%; */
   width: 30px;
@@ -323,7 +323,7 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-arrowed-container-corrects:before {
   border: 1px dashed rgb(224, 221, 227);
-  content: "";
+  content: '';
   right: -1px;
   /* top: 50%; */
   width: 30px;
@@ -338,7 +338,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-notched-container-corrects:before {
-  content: "";
+  content: '';
   left: -1.2px;
   /* top: 50%; */
   width: 30px;
@@ -354,7 +354,7 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-arrowed-container-incorrects:before {
   border: 1px dashed rgb(224, 221, 227);
-  content: "";
+  content: '';
   right: -1px;
   /* top: 50%; */
   width: 30px;
@@ -369,7 +369,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-notched-container-incorrects:before {
-  content: "";
+  content: '';
   left: -1.2px;
   /* top: 50%; */
   width: 30px;
@@ -395,7 +395,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box))::after {
-  content: " (" attr(indexBox) ")";
+  content: ' (' attr(indexBox) ')';
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -532,7 +532,7 @@ body *::-webkit-scrollbar-thumb:hover {
   /* Set the position to absolute */
   position: absolute;
   /* Set the content to a circle icon */
-  content: "\25cf";
+  content: '\25cf';
   /* Set the font size to 12px */
   font-size: 12px;
   /* Set the color to white */
@@ -550,7 +550,7 @@ body *::-webkit-scrollbar-thumb:hover {
   /* Set the position to absolute */
   position: absolute;
   /* Set the content to a star icon */
-  content: "\2605";
+  content: '\2605';
   /* Set the font size to 12px */
   font-size: 12px;
   /* Set the color to yellow */
@@ -565,7 +565,7 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .required {
   &:after {
-    content: "*";
+    content: '*';
     position: relative;
     font-size: inherit;
     color: #d35563;
@@ -588,7 +588,7 @@ body *::-webkit-scrollbar-thumb:hover {
   position: relative;
 
   ::after {
-    content: "";
+    content: '';
     @apply bg-gray-3;
     // background: white;
     opacity: 0.6;
@@ -733,16 +733,16 @@ textarea.is-invalid:focus {
 
 $colors: (
   secondary: white,
-  primary: #ffd81b
+  primary: #ffd81b,
 );
 
 $hover: (
   secondary: #ffb800,
-  primary: #ffc83a
+  primary: #ffc83a,
 );
 
 $focus: (
-  primary: #ffb800
+  primary: #ffb800,
 );
 
 // Sass variables compile to a static string; CSS variables are dynamic and inherited
@@ -750,12 +750,18 @@ $focus: (
 @each $button, $color in $colors {
   .#{$button} {
     --color: #{$color};
-    --hover: #{map-get($hover, $button)}; // Sử dụng màu hover tương ứng với mỗi button
+    --hover: #{map-get(
+        $hover,
+        $button
+      )}; // Sử dụng màu hover tương ứng với mỗi button
     transition: background-color 0.3s ease; // Hiệu ứng transition cho màu nền
   }
 
   .#{$button}:hover {
-    --color: map-get($hover, $button); // Sử dụng màu hover tương ứng với mỗi button khi hover hoặc focus
+    --color: map-get(
+      $hover,
+      $button
+    ); // Sử dụng màu hover tương ứng với mỗi button khi hover hoặc focus
   }
 }
 
@@ -820,7 +826,7 @@ textarea {
 }
 
 :where(.css-dev-only-do-not-override-1xg9z9n).ant-modal {
-  font-family: "Roboto" !important;
+  font-family: 'Roboto' !important;
 }
 
 p a {
@@ -948,7 +954,7 @@ p a {
 }
 
 .ant-popover {
-  font-family: "Roboto", sans-serif !important;
+  font-family: 'Roboto', sans-serif !important;
 }
 
 #hubspot-messages-iframe-container.visible-icon iframe,
@@ -973,7 +979,7 @@ p a {
 }
 
 .ant-modal {
-  font-family: "Roboto", sans-serif !important;
+  font-family: 'Roboto', sans-serif !important;
 }
 
 .pinned-noti-marquee-content {
@@ -1068,7 +1074,7 @@ p a {
 
 br {
   content: '';
-  @apply block m-2 text-sm;
+  @apply m-2 block text-sm;
 }
 
 td.py-5.px-3.sapp-table-quiz {
