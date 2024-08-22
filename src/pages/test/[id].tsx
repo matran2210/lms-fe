@@ -61,6 +61,7 @@ import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { debounce } from 'lodash'
 
 interface Answer {
   answer: string | string[] | Object[]
@@ -98,6 +99,35 @@ declare global {
     userAgreed: any
   }
 }
+
+interface FileType {
+  file_key: string
+  file_name: string
+}
+
+interface Requirement {
+  id: string | number
+  created_at: string
+  name: string
+  description: string
+  files: FileType[]
+  answer_file?: FileType | null
+}
+
+interface DataType {
+  requirements: Requirement[]
+}
+
+type TabItem = {
+  id: string
+  data: DataType
+  answer_file?: FileType
+}
+
+type AnswerList = {
+  [key: string]: string | undefined
+}
+
 const TestDetail = () => {
   const checkType = (
     data: any,
@@ -233,6 +263,9 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        const handleEssayChange = (id: string) => {
+          setAnswerListValue(id as unknown as number)
+        }
         return (
           <EssayQuestionPreview
             data={essayData?.req}
@@ -255,12 +288,17 @@ const TestDetail = () => {
             externalRef={refEditor}
             fullData={currentTabContent}
             openChooseFile={(e: any) =>
-              setOpenUpload({ status: true, question_id: currentPage })
+              setOpenUpload({
+                status: true,
+                question_id: currentPage,
+                requirementIndex: essayData?.index,
+              })
             }
             handleClearFile={handleClearFile}
             setOpenPdf={handleOpenScratchPad}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             showRequiment={showListRequirement}
+            handleChange={handleEssayChange}
           />
           // <Luckysheet/>
         )
@@ -598,6 +636,13 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
+      if (Array.isArray(currentContent.data?.requirements)) {
+        for (let req of currentContent.data?.requirements) {
+          if (req?.answer_file?.file_key) {
+            return true
+          }
+        }
+      }
       if (currentContent?.answer_file?.file_key) {
         return true
       }
@@ -1098,18 +1143,46 @@ const TestDetail = () => {
     }
     return newData
   }
-  const handleSaveFileEssay = (file: any) => {
+  const handleSaveFileEssay = (file: any, requirementIndex: number | null) => {
     setTabs((prev: any) => {
       let _tabs = [...prev]
       let newData = [] as any
       for (let item of _tabs) {
         if (currentPage === item.id) {
-          var newItem = {
-            ...item,
-            answer_file: {
-              file_key: file.file_key,
-              file_name: file.name,
-            },
+          let newItem = { ...item }
+          if (
+            requirementIndex !== null &&
+            item.data.requirements &&
+            essayData?.req !== undefined
+          ) {
+            newItem = {
+              ...item,
+              data: {
+                ...item.data,
+                requirements: (item?.data?.requirements || [])?.map(
+                  (req: any, idx: number) => {
+                    if (idx === requirementIndex) {
+                      return {
+                        ...req,
+                        answer_file: {
+                          file_key: file.file_key,
+                          file_name: file.name,
+                        },
+                      }
+                    }
+                    return req
+                  },
+                ),
+              },
+            }
+          } else {
+            newItem = {
+              ...item,
+              answer_file: {
+                file_key: file.file_key,
+                file_name: file.name,
+              },
+            }
           }
           newData.push(newItem)
         } else {
@@ -1119,6 +1192,7 @@ const TestDetail = () => {
       return newData
     })
   }
+
   const handleChangeTypeEssay = (value: number) => {
     setTabs((prev: any) => {
       const arr = [...prev]
@@ -1127,25 +1201,20 @@ const TestDetail = () => {
       return arr
     })
   }
-  const [answerList, setAnswerList] = useState<{ answer: any }[]>([])
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
+  const answerListRef = useRef<AnswerList>({})
 
-  const setAnswerListValue = (id: string, index: number) => {
-    if (answerList[index]) {
-      setValue(`${currentPage}_answer`, answerList[index].answer)
+  const setRequirementValue = (requirementId: string | number) => {
+    const existingAnswer =
+      answerListRef?.current?.[requirementId as unknown as number]
+    if (existingAnswer) {
+      setValue(`${currentPage}_${essayData?.index}_answer`, existingAnswer)
     }
-    setAnswerList((prevAnswerList) => {
-      const updatedList = [...prevAnswerList]
-
-      updatedList[currentIndex] = {
-        answer: getValues(`${currentPage}_${essayData?.index}_answer`) || '',
-      }
-
-      setCurrentIndex(index)
-
-      return updatedList
-    })
   }
+
+  const setAnswerListValue = debounce((requirementId: number) => {
+    answerListRef.current[requirementId] =
+      getValues(`${currentPage}_${essayData?.index}_answer`) || ''
+  }, 200)
 
   const { setScoreQuestion, setSubmitTest, courseType } = useCourseContext()
 
@@ -1245,19 +1314,22 @@ const TestDetail = () => {
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
         if (checkAnswered(e)) {
-          e?.data?.requirements?.forEach((requirement: any, index: any) => {
+          const requirements = e?.data?.requirements?.length
+            ? e?.data?.requirements
+            : [null]
+          requirements?.forEach((requirement: Requirement | null) => {
             answers.push({
               question_id: e.id,
-              short_answer: answerList[index]?.answer || e.answer || '',
-              requirement_id: requirement.id || '',
-              response_option: e.data.response_option
-                ? e.data.response_option
-                : e.response_type === 0
-                  ? 'WORD'
-                  : 'SHEET',
-              time_spent: Math.ceil(e.timeSpent / 1000),
+              short_answer:
+                answerListRef?.current?.[requirement?.id || ''] ??
+                (requirement?.id ? '' : e?.answer || ''),
+              requirement_id: requirement?.id || null,
+              response_option:
+                e?.data?.response_option ??
+                (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+              time_spent: Math.ceil(e?.timeSpent / 1000),
               active: 'SUBMITED',
-              answer_file: e.answer_file,
+              answer_file: requirement?.answer_file || e?.answer_file || null,
             })
           })
         }
@@ -1267,6 +1339,7 @@ const TestDetail = () => {
         answers: e.data?.answers,
       })
     }
+
     if (type_submit === 'submit') {
       setTabs(() => {
         // ref.setKey
@@ -1408,9 +1481,20 @@ const TestDetail = () => {
         setTabs((prev: any) => {
           const newData = prev.map((item: any) => {
             if (currentTabContent?.id === item.id) {
+              const updatedRequirements = item?.data?.requirements?.map(
+                (req: Requirement) => ({
+                  ...req,
+                  answer_file: undefined,
+                }),
+              )
+
               return {
                 ...item,
                 answer_file: undefined,
+                data: {
+                  ...item.data,
+                  requirements: updatedRequirements,
+                },
               }
             }
             return item
@@ -1420,21 +1504,30 @@ const TestDetail = () => {
       }
     }
   }
-  const handleClearFile = () => {
-    if (!currentTabContent.done) {
-      setTabs((prev: any) => {
-        const newData = prev.map((item: any) => {
-          if (currentTabContent?.id === item.id) {
-            return {
-              ...item,
-              answer_file: undefined,
-            }
+  const handleClearFile = (requirementIndex: number) => {
+    setTabs((prev: TabItem[]) => {
+      const newData = prev.map((item: TabItem) => {
+        if (currentPage === item.id) {
+          return {
+            ...item,
+            answer_file: undefined,
+            data: {
+              ...item.data,
+              requirements: item.data.requirements.map(
+                (req: Requirement, idx: number) => {
+                  if (idx === requirementIndex) {
+                    return { ...req, answer_file: undefined }
+                  }
+                  return req
+                },
+              ),
+            },
           }
-          return item
-        })
-        return newData
+        }
+        return item
       })
-    }
+      return newData
+    })
   }
   const handleSaveHighLight = (e: any) => {
     setTabs((prev: any) => {
@@ -2294,7 +2387,7 @@ const TestDetail = () => {
                                   essayData.index !== index && 'text-gray-1'
                                 }`}
                                 onClick={() => {
-                                  setAnswerListValue(e.id, index)
+                                  setRequirementValue(e.id)
                                   setEssayData({ req: e, index: index })
                                   rightSideRef?.current &&
                                     rightSideRef.current.scrollTo({
@@ -2542,11 +2635,17 @@ const TestDetail = () => {
               open={openUpload?.status}
               isMultiple={false}
               handleClose={() => {
-                setOpenUpload({ status: false, question_id: undefined })
+                setOpenUpload({
+                  status: false,
+                  question_id: undefined,
+                  requirementIndex: undefined,
+                })
               }}
               fileType={'ESSAY'}
               location={`question-answer/${openUpload?.question_id}`}
-              setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
+              setSelectedFile={(e: any) =>
+                handleSaveFileEssay(e[0], openUpload?.requirementIndex)
+              }
             />
             {/* <PopupViewPdf
         open={openPdf?.status || false}

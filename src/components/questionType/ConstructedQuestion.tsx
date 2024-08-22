@@ -11,6 +11,7 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import clsx from 'clsx'
 
 type SheetData = {
   name: string
@@ -50,7 +51,7 @@ export type IPreviewProp = {
   setOpenPdf?: (type: string, file?: string, fileName?: string) => void
   handleSaveHighLightRequirement?: any
   setUnsavedChanges?: any
-  handleChange?: () => void
+  handleChange?: (id: string) => void
   isShowContent?: boolean
   showRequiment?: boolean
 }
@@ -312,45 +313,8 @@ const EssayQuestionPreview = ({
       )}
       <>
         {question_data.assignment_type !== 'TEXT' ? (
-          !fullData.answer_file?.file_key ? (
-            <React.Fragment>
-              <div
-                className={`sapp-upload-file-preview ${
-                  data
-                    ? ''
-                    : 'w-fit flex-col !items-start justify-start !pt-0 font-semibold'
-                }`}
-              >
-                <div
-                  className={`${
-                    data ? '' : 'text-left'
-                  } text-base font-semibold`}
-                >
-                  Upload file to submit:
-                </div>
-                <div className="sapp-upload-button-preview">
-                  {/* <input
-                      ref={inputRef}
-                      type="file"
-                      className="hidden"
-                      onChange={handleFileChange}
-                    /> */}
-                  {/* <UploadIcon /> */}
-                  <UploadIcon />
-                  <div
-                    className="title-btn-preview"
-                    // onClick={() => inputRef.current.click()}
-                    onClick={() => openChooseFile && openChooseFile(true)}
-                  >
-                    Choose file to upload
-                  </div>
-                </div>
-              </div>
-              {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
-                !forCaseStudy &&
-                data && <div className="sapp-seprate-line-preview"></div>}
-            </React.Fragment>
-          ) : (
+          fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
+          fullData?.answer_file?.file_key ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
                 <div className="text-base font-semibold">
@@ -362,18 +326,25 @@ const EssayQuestionPreview = ({
                     handleDownload({
                       files: [
                         {
-                          name: fullData?.answer_file?.file_name,
-                          file_key: fullData?.answer_file?.file_key,
+                          name:
+                            fullData?.data?.requirements?.[index ?? 0]
+                              ?.answer_file?.file_name ||
+                            fullData?.answer_file?.file_name,
+                          file_key:
+                            fullData?.data?.requirements?.[index ?? 0]
+                              ?.answer_file?.file_key ||
+                            fullData?.answer_file?.file_key,
                         },
                       ],
                     })
                   }
                 >
-                  {fullData?.answer_file?.file_name}
+                  {fullData?.data?.requirements?.[index ?? 0]?.answer_file
+                    ?.file_name || fullData?.answer_file?.file_name}
                 </div>
                 {!fullData?.done && !fullData?.confirmed && (
                   <div
-                    onClick={() => handleClearFile()}
+                    onClick={() => handleClearFile(index)}
                     className="cursor-pointer"
                   >
                     <CloseIcon />
@@ -385,10 +356,43 @@ const EssayQuestionPreview = ({
                   <div className="sapp-seprate-line-preview"></div>
                 )}
             </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <div
+                className={clsx(
+                  'sapp-upload-file-preview',
+                  data
+                    ? ''
+                    : 'w-fit flex-col !items-start justify-start !pt-0 font-semibold',
+                )}
+              >
+                <div
+                  className={clsx(
+                    data ? '' : 'text-left',
+                    'text-base font-semibold',
+                  )}
+                >
+                  Upload file to submit:
+                </div>
+                <div className="sapp-upload-button-preview">
+                  <UploadIcon />
+                  <div
+                    className="title-btn-preview"
+                    onClick={() => openChooseFile(true)}
+                  >
+                    Choose file to upload
+                  </div>
+                </div>
+              </div>
+              {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
+                !forCaseStudy &&
+                data && <div className="sapp-seprate-line-preview"></div>}
+            </React.Fragment>
           )
         ) : (
           <></>
         )}
+
         <div
           style={
             question_data?.display_type === DISPLAY_TYPE.VERTICAL ||
@@ -408,7 +412,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={fullData?.done || fullData?.confirmed}
-              handleChange={handleChange}
+              handleChange={() => handleChange && handleChange(data?.id)}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
@@ -435,7 +439,7 @@ const EssayQuestionPreview = ({
                             )
                             // Check event change text of sheet
                             if (old?.[0]?.celldata?.length > 0) {
-                              handleChange && handleChange()
+                              handleChange && handleChange(data?.id)
                             }
                             if (index >= 0) {
                               old.splice(index, 1, currentSheet)
@@ -483,7 +487,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={fullData?.done || fullData?.confirmed}
-              handleChange={handleChange}
+              handleChange={() => handleChange && handleChange(data?.id)}
             />
           ) : (
             <div className="h-[500px] w-full border">
@@ -514,7 +518,7 @@ const EssayQuestionPreview = ({
                             )
                             // Check event change text of sheet
                             if (old?.[0]?.celldata?.length > 0) {
-                              handleChange && handleChange()
+                              handleChange && handleChange(data?.id)
                             }
                             if (index >= 0) {
                               old.splice(index, 1, currentSheet)
