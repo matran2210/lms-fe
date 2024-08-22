@@ -99,6 +99,35 @@ declare global {
     userAgreed: any
   }
 }
+
+interface FileType {
+  file_key: string
+  file_name: string
+}
+
+interface Requirement {
+  id: string | number
+  created_at: string
+  name: string
+  description: string
+  files: FileType[]
+  answer_file?: FileType | null
+}
+
+interface DataType {
+  requirements: Requirement[]
+}
+
+type TabItem = {
+  id: string
+  data: DataType
+  answer_file?: FileType
+}
+
+type AnswerList = {
+  [key: string]: string | undefined
+}
+
 const TestDetail = () => {
   const checkType = (
     data: any,
@@ -1130,7 +1159,7 @@ const TestDetail = () => {
               ...item,
               data: {
                 ...item.data,
-                requirements: item.data.requirements.map(
+                requirements: (item?.data?.requirements || [])?.map(
                   (req: any, idx: number) => {
                     if (idx === requirementIndex) {
                       return {
@@ -1172,11 +1201,11 @@ const TestDetail = () => {
       return arr
     })
   }
-  const answerListRef = useRef<string[]>([])
+  const answerListRef = useRef<AnswerList>({})
 
   const setRequirementValue = (requirementId: string | number) => {
     const existingAnswer =
-      answerListRef.current[requirementId as unknown as number]
+      answerListRef?.current?.[requirementId as unknown as number]
     if (existingAnswer) {
       setValue(`${currentPage}_${essayData?.index}_answer`, existingAnswer)
     }
@@ -1288,20 +1317,16 @@ const TestDetail = () => {
           const requirements = e?.data?.requirements?.length
             ? e?.data?.requirements
             : [null]
-          requirements?.forEach((requirement: any) => {
+          requirements?.forEach((requirement: Requirement | null) => {
             answers.push({
               question_id: e.id,
-              short_answer: answerListRef?.current?.[requirement?.id]
-                ? answerListRef?.current?.[requirement?.id]
-                : requirement?.id
-                  ? ''
-                  : e?.answer,
+              short_answer:
+                answerListRef?.current?.[requirement?.id || ''] ??
+                (requirement?.id ? '' : e?.answer || ''),
               requirement_id: requirement?.id || null,
-              response_option: e?.data?.response_option
-                ? e?.data?.response_option
-                : e?.response_type === 0
-                  ? 'WORD'
-                  : 'SHEET',
+              response_option:
+                e?.data?.response_option ??
+                (e?.response_type === 0 ? 'WORD' : 'SHEET'),
               time_spent: Math.ceil(e?.timeSpent / 1000),
               active: 'SUBMITED',
               answer_file: requirement?.answer_file || e?.answer_file || null,
@@ -1457,7 +1482,7 @@ const TestDetail = () => {
           const newData = prev.map((item: any) => {
             if (currentTabContent?.id === item.id) {
               const updatedRequirements = item?.data?.requirements?.map(
-                (req: any) => ({
+                (req: Requirement) => ({
                   ...req,
                   answer_file: undefined,
                 }),
@@ -1480,8 +1505,8 @@ const TestDetail = () => {
     }
   }
   const handleClearFile = (requirementIndex: number) => {
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
+    setTabs((prev: TabItem[]) => {
+      const newData = prev.map((item: TabItem) => {
         if (currentPage === item.id) {
           return {
             ...item,
@@ -1489,7 +1514,7 @@ const TestDetail = () => {
             data: {
               ...item.data,
               requirements: item.data.requirements.map(
-                (req: any, idx: number) => {
+                (req: Requirement, idx: number) => {
                   if (idx === requirementIndex) {
                     return { ...req, answer_file: undefined }
                   }

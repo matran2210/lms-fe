@@ -11,6 +11,7 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import clsx from 'clsx'
 
 type SheetData = {
   name: string
@@ -358,16 +359,18 @@ const EssayQuestionPreview = ({
           ) : (
             <React.Fragment>
               <div
-                className={`sapp-upload-file-preview ${
+                className={clsx(
+                  'sapp-upload-file-preview',
                   data
                     ? ''
-                    : 'w-fit flex-col !items-start justify-start !pt-0 font-semibold'
-                }`}
+                    : 'w-fit flex-col !items-start justify-start !pt-0 font-semibold',
+                )}
               >
                 <div
-                  className={`${
-                    data ? '' : 'text-left'
-                  } text-base font-semibold`}
+                  className={clsx(
+                    data ? '' : 'text-left',
+                    'text-base font-semibold',
+                  )}
                 >
                   Upload file to submit:
                 </div>
