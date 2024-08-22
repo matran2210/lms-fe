@@ -165,7 +165,6 @@ const ActivityPage = () => {
     if (activity) {
       dispatch(resetQuizActivity({}))
       try {
-
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
       } catch (error) {}
@@ -181,7 +180,7 @@ const ActivityPage = () => {
     if (activity) {
       settingDoneProcessActivity(activity)
     }
-  },[activity])
+  }, [activity])
   useEffect(() => {
     router.events.on('routeChangeComplete', () => {
       isFinishRef.current = false
@@ -277,12 +276,6 @@ const ActivityPage = () => {
   // }
 
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
-    console.log('onVideoStart', {
-      isHasQuizGrading,
-      isDoneActivity,
-      videoClicked
-    });
-    
     if (isHasQuizGrading) {
       return
     }
