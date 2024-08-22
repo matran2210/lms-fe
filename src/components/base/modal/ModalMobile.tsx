@@ -3,7 +3,7 @@ import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import ButtonPrimary from '../button/ButtonPrimary'
 import { createPortal } from 'react-dom'
-import { isMobileExtensive } from '@utils/helpers'
+import { isMobile } from 'react-device-detect'
 
 const ModalMobile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -22,7 +22,7 @@ const ModalMobile = () => {
   }
 
   useEffect(() => {
-    if (isMobileExtensive()) {
+    if (isMobile) {
       const hasSeenModal = localStorage.getItem('hasSeenMobileWarning')
 
       if (hasSeenModal !== 'true') {
