@@ -1,9 +1,9 @@
 import { SadIcon } from '@assets/icons'
+import { isMobileExtensive } from '@utils/helpers'
 import { Modal } from 'antd'
-import React, { useEffect, useState } from 'react'
-import ButtonPrimary from '../button/ButtonPrimary'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { isMobile } from 'react-device-detect'
+import ButtonPrimary from '../button/ButtonPrimary'
 
 const ModalMobile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -20,9 +20,8 @@ const ModalMobile = () => {
   const handleCancel = () => {
     setIsModalOpen(false)
   }
-
   useEffect(() => {
-    if (isMobile) {
+    if (isMobileExtensive()) {
       const hasSeenModal = localStorage.getItem('hasSeenMobileWarning')
 
       if (hasSeenModal !== 'true') {
