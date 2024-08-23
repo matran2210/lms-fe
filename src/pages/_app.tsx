@@ -10,6 +10,7 @@ import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import { SocketContext } from '@contexts/SocketContext'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
+import { localStorageKeys } from '@utils/constants'
 import initializeGA from '@utils/google-analytics'
 import { getActToken, pageview } from '@utils/index'
 import Aos from 'aos'
@@ -21,7 +22,7 @@ import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
-import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
+import { ANIMATION, LOCAL_STORAGE_KEYS, PageLink, SOCKET_EVENTS } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import { showNotification } from 'src/redux/slice/Notification/Notification'
@@ -77,9 +78,19 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
-  // Lấy token từ cokkieStorage (giả sử 'accessToken' là key lưu token)
+  useEffect(() => {
+    const isExclusivePages = [
+      PageLink.AUTH_LOGIN,
+      PageLink.AUTH_CHANGE_PASSWORD,
+      PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
+      PageLink.AUTH_FORGOT_PASSWORD,
+      PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
+    ].includes(router.asPath)
 
-  const [openCert, setOpenCert] = useState(false)
+    if (!isExclusivePages) {
+      localStorage.setItem(localStorageKeys.REDIRECT_AFTER_LOGIN, router.asPath)
+    }
+  }, [router])
 
   let authToken = getActToken()
 
