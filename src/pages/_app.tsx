@@ -1,27 +1,15 @@
 import { RouteGuard } from '@components/auth/RouteGuard'
+import BackToTop from '@components/BackToTop'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
+import Help from '@components/Help'
+import PinnedNotifications from '@components/layout/PinnedNotifications'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
-import LearningResource from '@components/mycourses/LearningResource'
+import PopupCert from '@components/mycourses/PopupCert'
+import { CourseProvider } from '@contexts/index'
+import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
-import type { AppProps } from 'next/app'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { Toaster } from 'react-hot-toast'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { injectStore } from 'src/redux/services/httpService'
-import {
-  getCountUnRead,
-  showNotification,
-  hideNotification,
-} from 'src/redux/slice/Notification/Notification'
-import { onMessageListener } from 'src/utils/firebase'
-import { store, wrapper } from '../redux/store'
-import { ANIMATION, PageLink } from 'src/constants'
-import Aos from 'aos'
-import 'aos/dist/aos.css'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { getKeycloakInstance } from '../utils/helpers/keycloak'
+import initializeGA from '@utils/google-analytics'
 import {
   getLocalStorgeRefreshToken,
   getLocalStorgeActToken,
@@ -30,18 +18,28 @@ import {
   setActToken,
   setRefreshToken,
 } from '@utils/index'
-import { CourseProvider } from '@contexts/index'
-import { URL } from 'url'
-import { io } from 'socket.io-client'
-import { ICourseScore } from 'src/type'
-import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
-import PinnedNotifications from '@components/layout/PinnedNotifications'
-import PopupCert from '@components/mycourses/PopupCert'
-import Help from '@components/Help'
-import BackToTop from '@components/BackToTop'
+import Aos from 'aos'
+import 'aos/dist/aos.css'
+import type { AppProps } from 'next/app'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
-import initializeGA from '@utils/google-analytics'
+import { Toaster } from 'react-hot-toast'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { io } from 'socket.io-client'
+import { ANIMATION, PageLink } from 'src/constants'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { injectStore } from 'src/redux/services/httpService'
+import {
+  getCountUnRead,
+  hideNotification,
+  showNotification,
+} from 'src/redux/slice/Notification/Notification'
+import { onMessageListener } from 'src/utils/firebase'
+import { getKeycloakInstance } from '../utils/helpers/keycloak'
 import SappLoading from 'src/common/SappLoading'
+import { URL } from 'url'
+import { store, wrapper } from '../redux/store'
 
 type MyAppProps = AppProps & {
   Component: {
