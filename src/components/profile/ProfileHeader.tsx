@@ -114,7 +114,7 @@ const ProfileHeader = ({
             <div
               className={`${
                 loading ? 'animate-pulse' : ''
-              } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full`}
+              } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 hidden overflow-hidden rounded-full lg:block`}
             >
               <div className="absolute left-1/2 top-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
                 {isEdit && (
@@ -125,7 +125,7 @@ const ProfileHeader = ({
                       onChange={handlerChangeUploadAvatar}
                       ref={inputFileRef}
                     />
-                    <div className="bg-black flex h-full w-full items-center justify-center opacity-40">
+                    <div className="flex h-full w-full items-center justify-center bg-black opacity-40">
                       {!loadingEditAvatar ? (
                         <svg
                           width="20"
@@ -280,7 +280,11 @@ const ProfileHeader = ({
         {/* <div>
           <SappButton size="lager" title={'Enroll New Course'}></SappButton>
         </div> */}
-        <Image src={profile} className="absolute right-0" />
+        <Image
+          src={profile}
+          className="absolute right-0"
+          alt="logo-watermark"
+        />
       </div>
     </div>
   )

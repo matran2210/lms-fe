@@ -7,12 +7,12 @@ import {
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
+import { isEmpty } from 'lodash'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { AuthAPI } from 'src/pages/api/profile'
 import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
-import { AuthAPI } from 'src/pages/api/profile'
-import { isEmpty } from 'lodash'
 
 export interface IChangePassword {
   password: string
@@ -88,11 +88,11 @@ const ChangePassword = () => {
 
   return (
     <React.Fragment>
-      <div className="flex-1 bg-white p-6 pt-4 shadow-box">
+      <div className="flex-1 p-6 pt-4">
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="relative">
             <div className="flex items-center justify-between border-b border-gray-3 pb-5">
-              <div className="text-xl font-medium ">Change Password</div>
+              <div className="text-xl font-medium">Change Password</div>
               <div>
                 <ButtonCancelSubmit
                   className="flex gap-12"

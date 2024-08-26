@@ -14,7 +14,7 @@ const Devices = ({}: any) => {
     getListDevices()
   }, [])
   return (
-    <div className="flex-1 bg-white py-6 shadow-box">
+    <div className="pt-6">
       <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">{`Browsers (${
         listDevices?.length || 0
       })`}</div>

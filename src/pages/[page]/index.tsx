@@ -1,23 +1,49 @@
+import Layout from '@components/layout'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
-import CertificateContent from '@components/profile/CertificateContent'
+import Certificate from '@components/profile/Certificate'
+import ChangePassword from '@components/profile/ChangePassword'
 import Devices from '@components/profile/Devices'
 import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
 import { GetServerSideProps } from 'next'
-import { StaticImageData } from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import { useRef, useState } from 'react'
+import { ANIMATION } from 'src/constants'
 import { ITabs } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
-import { ANIMATION } from 'src/constants'
-import ChangePassword from '@components/profile/ChangePassword'
-import Layout from '@components/layout'
 
 interface IProps {
   page: IProfilePages
 }
+
+const NotFound = () => (
+  <div className="grid place-items-center p-6">
+    <Image
+      src={'/assets/images/image_404.jpg'}
+      alt="Image_404"
+      width="320"
+      height="260"
+    />
+    {/* <Image
+          className="h-max"
+          src="/assets/images/image_404.jpg"
+          loading="lazy"
+          alt="Image_404"
+          width="320"
+          height="260"
+        /> */}
+    <h1 className="mt-10 text-2xl font-bold text-bw-1 md:text-4xl">
+      PAGE NOT FOUND
+    </h1>
+    <p className="mt-3 max-w-dl px-4 text-center text-base text-gray-1">
+      We are very sorry for inconvenience. It looks like you’re trying to access
+      a page that was has been deleted or never even existed.
+    </p>
+  </div>
+)
 
 const ProfilePage = ({ page }: any) => {
   // const router = useRouter()
@@ -63,7 +89,7 @@ const ProfilePage = ({ page }: any) => {
       />
     )
   } else if (page === 'certificates') {
-    selectedContent = <CertificateContent />
+    selectedContent = <Certificate />
   } else if (page === 'devices') {
     selectedContent = <Devices />
   } else if (page === 'login_history') {
@@ -71,7 +97,7 @@ const ProfilePage = ({ page }: any) => {
   } else if (page === 'change_password') {
     selectedContent = <ChangePassword />
   } else {
-    selectedContent = <div>Page not found</div>
+    selectedContent = <NotFound />
   }
 
   return (
@@ -95,11 +121,19 @@ const ProfilePage = ({ page }: any) => {
             setAvatar={handleSetAvatar}
             isEdit={isEdit}
             inputFileRef={inputFileRef}
-          ></ProfileHeader>
+          />
         </div>
-        <div className="flex flex-col justify-between gap-6 sm:flex-row">
-          <ProfileSideBar page={page}></ProfileSideBar>
-          {selectedContent}
+        <div className="mb-6 flex flex-col items-stretch justify-between gap-6 sm:flex-row">
+          <ProfileSideBar page={page} />
+          <div
+            className="flex-1 flex-grow bg-white pb-6 shadow-box"
+            style={{
+              height: '600px',
+              overflowY: 'auto',
+            }}
+          >
+            {selectedContent}
+          </div>
         </div>
       </div>
     </Layout>

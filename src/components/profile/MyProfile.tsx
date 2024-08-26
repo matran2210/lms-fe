@@ -185,49 +185,43 @@ const MyProfile = ({
   }
 
   return (
-    <div>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="block min-h-[40.3rem]"
-        data-aos={ANIMATION.DATA_AOS}
-      >
-        <div className="relative">
-          <div className="mb-6 flex items-center justify-between border-b border-b-gray-3 pb-6">
-            <div className="text-xl font-medium text-bw-1">Overview</div>
-            <div>
-              {!isEdit ? (
-                <SappButton
-                  onClick={handleChangeToEditForm}
-                  size="medium"
-                  title={'Edit'}
-                  className="min-w-[120px] text-base"
-                  loading={loading && !isEdit}
-                ></SappButton>
-              ) : (
-                <ButtonCancelSubmit
-                  className="flex gap-12"
-                  cancel={{
-                    title: 'Cancel',
-                    onClick: handleChangeToPreview,
-                    size: 'medium',
-                    isPaddingHorizontal: false,
-                    disabled: loading || loadingEditName,
-                    className: 'min-w-fit !px-0 text-base w-30',
-                  }}
-                  submit={{
-                    title: 'Save',
-                    size: 'medium',
-                    className: 'min-w-fit px-0 text-sm w-30',
-                    type: 'submit',
-                    loading: loading || loadingEditName,
-                  }}
-                ></ButtonCancelSubmit>
-              )}
-            </div>
+    <div className="pt-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="block px-6">
+        <div className="mb-6 flex items-center justify-between border-b border-b-gray-3 pb-6">
+          <div className="text-xl font-medium text-bw-1">Overview</div>
+          <div>
+            {!isEdit ? (
+              <SappButton
+                onClick={handleChangeToEditForm}
+                size="medium"
+                title={'Edit'}
+                className="min-w-[120px] text-base"
+                loading={loading && !isEdit}
+              ></SappButton>
+            ) : (
+              <ButtonCancelSubmit
+                className="flex gap-12"
+                cancel={{
+                  title: 'Cancel',
+                  onClick: handleChangeToPreview,
+                  size: 'medium',
+                  isPaddingHorizontal: false,
+                  disabled: loading || loadingEditName,
+                  className: 'min-w-fit !px-0 text-base w-30',
+                }}
+                submit={{
+                  title: 'Save',
+                  size: 'medium',
+                  className: 'min-w-fit px-0 text-sm w-30',
+                  type: 'submit',
+                  loading: loading || loadingEditName,
+                }}
+              ></ButtonCancelSubmit>
+            )}
           </div>
         </div>
 
-        <ul>
+        <ul className="">
           {/* start:: Code*/}
           <li
             className={`block gap-[1.4rem] transition-[margin] md:flex ${

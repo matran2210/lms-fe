@@ -22,17 +22,15 @@ const ProfileContent = ({
   setReViewImageSrc,
 }: IProps) => {
   return (
-    <div className="flex-1 bg-white p-6 pt-4 shadow-box">
-      {page === 'myprofile' && (
-        <MyProfile
-          isEdit={isEdit}
-          setIsEdit={setIsEdit}
-          avatar={avatar}
-          handleSetAvatar={handleSetAvatar}
-          setReViewImageSrc={setReViewImageSrc}
-        ></MyProfile>
-      )}
-    </div>
+    page === 'myprofile' && (
+      <MyProfile
+        isEdit={isEdit}
+        setIsEdit={setIsEdit}
+        avatar={avatar}
+        handleSetAvatar={handleSetAvatar}
+        setReViewImageSrc={setReViewImageSrc}
+      />
+    )
   )
 }
 

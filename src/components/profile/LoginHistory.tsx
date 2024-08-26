@@ -31,15 +31,11 @@ const LoginHistory = () => {
     }
   }
   return (
-    <div
-      className="h-fit flex-1 bg-white py-6 shadow-box "
-      style={{ maxHeight: '568px', overflowY: 'auto', minHeight: '400px' }}
-    >
+    <div className="pt-6">
       <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">{`Login History (${
         loginHistory?.meta?.total_records || 0
       })`}</div>
       <div
-        className="max-h-[631px] "
         onScroll={(e) => {
           const { target } = e
           if (

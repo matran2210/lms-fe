@@ -45,16 +45,13 @@ const Certificate = () => {
   const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
 
   return (
-    <div>
+    <div className="pt-6">
       <div className="relative">
         <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">
           Certificates ({totalCertificateData})
         </div>
-        <div className="absolute inset-0 bottom-0 border-b border-gray-3"></div>
       </div>
-      <div
-        style={{ maxHeight: '478px', overflowY: 'auto', minHeight: '400px' }}
-      >
+      <div>
         {certificateData.map((certificate: ICertificate) => {
           return (
             <div key={certificate?.id}>
