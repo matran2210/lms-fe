@@ -202,3 +202,6 @@ export const ANIMATION = {
   DURATION: 500,
   DATA_AOS: 'fade-up',
 }
+
+export * from './socketEvents'
+export * from './localStorageKeys'
