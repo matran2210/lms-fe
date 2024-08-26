@@ -20,28 +20,22 @@ interface IProps {
 }
 
 const NotFound = () => (
-  <div className="grid place-items-center p-6">
-    <Image
-      src={'/assets/images/image_404.jpg'}
-      alt="Image_404"
-      width="320"
-      height="260"
-    />
-    {/* <Image
-          className="h-max"
-          src="/assets/images/image_404.jpg"
-          loading="lazy"
-          alt="Image_404"
-          width="320"
-          height="260"
-        /> */}
-    <h1 className="mt-10 text-2xl font-bold text-bw-1 md:text-4xl">
-      PAGE NOT FOUND
-    </h1>
-    <p className="mt-3 max-w-dl px-4 text-center text-base text-gray-1">
-      We are very sorry for inconvenience. It looks like you’re trying to access
-      a page that was has been deleted or never even existed.
-    </p>
+  <div className="grid h-full place-items-center p-6">
+    <div className="justifycenter flex flex-col items-center">
+      <Image
+        src={'/assets/images/image_404.jpg'}
+        alt="Image_404"
+        width="320"
+        height="260"
+      />
+      <h1 className="mt-3 text-2xl font-bold text-bw-1 md:text-4xl">
+        PAGE NOT FOUND
+      </h1>
+      <p className="mt-3 max-w-dl px-4 text-center text-base text-gray-1">
+        We are very sorry for the inconvenience. It looks like you’re trying to
+        access a page that has been deleted or never even existed.
+      </p>
+    </div>
   </div>
 )
 

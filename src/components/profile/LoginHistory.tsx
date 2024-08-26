@@ -31,10 +31,12 @@ const LoginHistory = () => {
     }
   }
   return (
-    <div className="pt-6">
-      <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">{`Login History (${
-        loginHistory?.meta?.total_records || 0
-      })`}</div>
+    <div className="relative">
+      <div className="sticky top-0 bg-white">
+        <div className="mx-6 border-b border-gray-3 pb-5 pt-6 text-xl font-medium">{`Login History (${
+          loginHistory?.meta?.total_records || 0
+        })`}</div>
+      </div>
       <div
         onScroll={(e) => {
           const { target } = e
