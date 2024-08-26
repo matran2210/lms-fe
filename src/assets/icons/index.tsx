@@ -310,6 +310,7 @@ export const ScratchPadIcon = () => {
 import { ISVG } from 'src/type'
 // Import Tailwind CSS classes
 import 'tailwindcss/tailwind.css'
+import SadIcon from './SadIcon'
 
 export const CloseIcon = ({
   className = 'stroke-bw-1 ',
@@ -1552,3 +1553,5 @@ export const IconSendHover = ({ width, height, className }: ISVG) => {
     </svg>
   )
 }
+
+export { SadIcon } from './SadIcon'
