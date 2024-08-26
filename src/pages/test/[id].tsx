@@ -380,13 +380,7 @@ const TestDetail = () => {
   // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control: controlScratch } = useForm()
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    setValue,
-    watch: watchEssay,
-  } = useForm()
+  const { control, getValues, setValue } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -1848,12 +1842,14 @@ const TestDetail = () => {
                 )}
 
                 <div className="flex items-center">
-                  <div className="mr-6 text-medium-sm text-bw-1">
-                    Attempt: {quizAttempId?.number_of_attempts}
-                    {quizDetail?.is_limited
-                      ? `/${quizDetail?.limit_count}`
-                      : ''}
-                  </div>
+                  {quizDetail?.quiz_type !== 'ENTRANCE_TEST' && (
+                    <div className="mr-6 text-medium-sm text-bw-1">
+                      Attempt: {quizAttempId?.number_of_attempts}
+                      {quizDetail?.is_limited
+                        ? `/${quizDetail?.limit_count}`
+                        : ''}
+                    </div>
+                  )}
                   <ButtonCancelSubmit
                     className={'flex flex-row-reverse gap-4'}
                     // color={color}
