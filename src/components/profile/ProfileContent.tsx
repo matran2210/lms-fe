@@ -12,6 +12,7 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >
+  onOpenTab?: () => void
 }
 const ProfileContent = ({
   page,
@@ -20,6 +21,7 @@ const ProfileContent = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
+  onOpenTab,
 }: IProps) => {
   return (
     page === 'myprofile' && (
@@ -29,6 +31,7 @@ const ProfileContent = ({
         avatar={avatar}
         handleSetAvatar={handleSetAvatar}
         setReViewImageSrc={setReViewImageSrc}
+        onOpenTab={onOpenTab}
       />
     )
   )

@@ -13,6 +13,8 @@ import { IProfilePages } from 'src/type/Profile'
 
 interface IProps {
   page: IProfilePages
+  className?: string
+  children?: React.ReactNode
 }
 
 interface ChildWithLabel {
@@ -43,7 +45,7 @@ type Child =
   | ChildWithLoginHistory
   | ChildWithChangePassword
 
-const ProfileSideBar = ({ page }: IProps) => {
+const ProfileSideBar = ({ page, children }: IProps) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
 
@@ -126,130 +128,138 @@ const ProfileSideBar = ({ page }: IProps) => {
   }
 
   return (
-    <div className="shadow-box xl:w-[22.8rem]" data-aos={ANIMATION.DATA_AOS}>
-      <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
-        <div>
-          {Object.entries(PROFILE_PAGES).map(([key, value]) => {
-            const urlPage = key?.toLowerCase()
-            const urlChildren = (value?.children || []) as Child[]
+    <>
+      <div
+        className="w-full shadow-box lg:w-[22.8rem]"
+        data-aos={ANIMATION.DATA_AOS}
+      >
+        <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
+          <div>
+            {Object.entries(PROFILE_PAGES).map(([key, value]) => {
+              const urlPage = key?.toLowerCase()
+              const urlChildren = (value?.children || []) as Child[]
 
-            const childLabel = getLabelFromChild(value)?.replace(/\s+/g, '_')
-            const isActive = urlPage === page
+              const childLabel = getLabelFromChild(value)?.replace(/\s+/g, '_')
+              const isActive = urlPage === page
 
-            let className =
-              'text-gray-1 relative hover:text-primary font-normal'
+              let className =
+                'text-gray-1 relative hover:text-primary font-normal'
 
-            if (isActive) {
-              className = 'bg-secondary font-medium text-primary'
-            }
-            if (childActivationStates[childLabel]) {
-              className = 'bg-secondary text-primary'
-            }
+              if (isActive) {
+                className = 'bg-secondary font-medium text-primary'
+              }
+              if (childActivationStates[childLabel]) {
+                className = 'bg-secondary text-primary'
+              }
 
-            return (
-              <li
-                className={`${className} group relative cursor-pointer border-b-[1px] border-gray-2`}
-                key={key}
-              >
-                <a
-                  className={`hover-transition-font-weight flex w-full justify-between p-5 text-left hover:bg-secondary  ${
-                    isActive ||
-                    (urlPage === 'security' &&
-                      Object.values(childActivationStates)?.some(
-                        (active) => active,
-                      ) &&
-                      !childActivationStates[childLabel])
-                      ? 'bg-secondary font-medium text-primary'
-                      : 'font-normal'
-                  }`}
-                  style={{
-                    position: 'relative', // Đặt position là relative
-                    zIndex: 2, // Thiết lập z-index của thẻ a
-                  }}
-                  onClick={() => {
-                    if (urlPage !== 'security') {
-                      // If not 'security', use existing logic
-                      handleChildClick(childLabel)
-                      setChildActivationStates({ security: false })
-                      trackGAEvent(`Click Button ${childLabel} My Profile`)
-                    } else if (childActivationStates[childLabel] === false) {
-                      // If 'security' and not a child, set only 'security' to active
-                      setChildActivationStates({ security: true })
-                    } else if (urlPage === 'security') {
-                      onClickExpand()
-                      setChildActivationStates({ security: true })
-                      trackGAEvent(`Click Button Security My Profile`)
-                    }
-                  }}
+              return (
+                <li
+                  className={`${className} group relative cursor-pointer border-b-[1px] border-gray-2`}
+                  key={key}
                 >
-                  {value?.label}
-                  {urlPage === 'security' && (
-                    <div className="mt-2">
-                      <ExpandIcon
-                        isExpanded={isExpanded}
-                        type={'ontoggle'}
-                        className={''}
-                      />
+                  <a
+                    className={`hover-transition-font-weight flex w-full justify-between p-5 text-left hover:bg-secondary  ${
+                      isActive ||
+                      (urlPage === 'security' &&
+                        Object.values(childActivationStates)?.some(
+                          (active) => active,
+                        ) &&
+                        !childActivationStates[childLabel])
+                        ? 'bg-secondary font-medium text-primary'
+                        : 'font-normal '
+                    }`}
+                    style={{
+                      position: 'relative', // Đặt position là relative
+                      zIndex: 2, // Thiết lập z-index của thẻ a
+                    }}
+                    onClick={() => {
+                      if (urlPage !== 'security') {
+                        // If not 'security', use existing logic
+                        handleChildClick(childLabel)
+                        setChildActivationStates({ security: false })
+                        trackGAEvent(`Click Button ${childLabel} My Profile`)
+                      } else if (childActivationStates[childLabel] === false) {
+                        // If 'security' and not a child, set only 'security' to active
+                        setChildActivationStates({ security: true })
+                      } else if (urlPage === 'security') {
+                        onClickExpand()
+                        setChildActivationStates({ security: true })
+                        trackGAEvent(`Click Button Security My Profile`)
+                      }
+                    }}
+                  >
+                    {value?.label}
+                    {urlPage === 'security' && (
+                      <div className="mt-2">
+                        <ExpandIcon
+                          isExpanded={isExpanded}
+                          type={'ontoggle'}
+                          className={''}
+                        />
+                      </div>
+                    )}
+                  </a>
+                  {urlChildren?.length > 0 && (
+                    <div
+                      className={clsx(
+                        'ml-5 border-l border-gray-2',
+                        isExpanded && 'my-5',
+                      )}
+                    >
+                      {isExpanded &&
+                        urlChildren?.map((child) => {
+                          const childLabel = getLabelFromChild(child).replace(
+                            /\s+/g,
+                            '_',
+                          )
+                          const childIsActive =
+                            childActivationStates[childLabel] || false
+                          return (
+                            <div
+                              key={childLabel}
+                              className={`${className} hover-transition-font-weight relative ms-4 cursor-pointer hover:bg-secondary ${
+                                childIsActive
+                                  ? 'bg-white font-medium text-primary'
+                                  : 'font-normal '
+                              }`}
+                            >
+                              <a
+                                className="block w-full p-3 text-left"
+                                onClick={() => handleChildClick(childLabel)}
+                              >
+                                {getLabelFromChild(child).toLowerCase() ===
+                                'devices'
+                                  ? 'Browsers'
+                                  : getLabelFromChild(child)}
+                              </a>
+                            </div>
+                          )
+                        })}
                     </div>
                   )}
-                </a>
-                {urlChildren?.length > 0 && (
                   <div
-                    className={clsx(
-                      'ml-5 border-l border-gray-2',
-                      isExpanded && 'my-5',
-                    )}
-                  >
-                    {isExpanded &&
-                      urlChildren?.map((child) => {
-                        const childLabel = getLabelFromChild(child).replace(
-                          /\s+/g,
-                          '_',
-                        )
-                        const childIsActive =
-                          childActivationStates[childLabel] || false
-                        return (
-                          <div
-                            key={childLabel}
-                            className={`${className} hover-transition-font-weight relative ms-4 cursor-pointer hover:bg-secondary ${
-                              childIsActive
-                                ? 'bg-white font-medium text-primary'
-                                : 'font-normal'
-                            }`}
-                          >
-                            <a
-                              className="block w-full p-3 text-left"
-                              onClick={() => handleChildClick(childLabel)}
-                            >
-                              {getLabelFromChild(child).toLowerCase() ===
-                              'devices'
-                                ? 'Browsers'
-                                : getLabelFromChild(child)}
-                            </a>
-                          </div>
-                        )
-                      })}
-                  </div>
-                )}
-                <div
-                  className={`hover-transition-font-weight relative top-px border-b border-gray-3 `}
-                />
-              </li>
-            )
-          })}
-          <li
-            className="hover-transition-font-weight relative cursor-pointer p-5 font-normal text-gray-1 hover:bg-secondary hover:text-primary"
-            onClick={handleLogout}
-          >
-            <div className="absolute inset-0 bottom-0"></div>
-            <div>Logout</div>
-          </li>
-        </div>
-        <div className="text-center text-sm font-normal text-gray-1">
-          LMS Pro Version 1.6.0
-        </div>
-      </ul>
-    </div>
+                    className={`hover-transition-font-weight relative top-px border-b border-gray-3 `}
+                  />
+                </li>
+              )
+            })}
+            <li
+              className="hover-transition-font-weight relative cursor-pointer p-5 font-normal text-gray-1  hover:bg-secondary hover:text-primary"
+              onClick={handleLogout}
+            >
+              <div className="absolute inset-0 bottom-0"></div>
+              <div>Logout</div>
+            </li>
+          </div>
+          <div className="text-center text-sm font-normal text-gray-1">
+            LMS Pro Version 1.5.0
+          </div>
+        </ul>
+      </div>
+      <div className="mb-6 hidden h-[604px] w-full bg-white shadow-box lg:mb-0 lg:block">
+        {children}
+      </div>
+    </>
   )
 }
 

@@ -108,9 +108,9 @@ const ProfileHeader = ({
 
   return (
     <div className="relative mb-6 block bg-white pl-10 shadow-box">
-      <div className="block items-center justify-start gap-6 lg:flex">
+      <div className="flex items-center justify-start gap-6">
         <div className="relative">
-          <div className="w relative mb-6 w-30 shrink rounded-full  border-2 border-primary pt-29.2 lg:mb-0">
+          <div className="w relative my-6 w-30 shrink rounded-full  border-2 border-primary pt-29.2 lg:my-0">
             <div
               className={`${
                 loading ? 'animate-pulse' : ''
@@ -217,7 +217,7 @@ const ProfileHeader = ({
           )}
         </div>
 
-        <div className="mb-6 flex-1 lg:mb-0">
+        <div className="my-6 flex-1 lg:my-0">
           <div className="mb-4 max-w-[600px] truncate text-2xl font-bold text-bw-1">
             <TextSkeleton loading={loading || loadingEditName}>
               {user.detail.full_name}
@@ -280,11 +280,13 @@ const ProfileHeader = ({
         {/* <div>
           <SappButton size="lager" title={'Enroll New Course'}></SappButton>
         </div> */}
-        <Image
-          src={profile}
-          className="absolute right-0"
-          alt="logo-watermark"
-        />
+        <div className="hidden lg:block">
+          <Image
+            src={profile}
+            className="absolute right-0"
+            alt="logo-watermark"
+          />
+        </div>
       </div>
     </div>
   )

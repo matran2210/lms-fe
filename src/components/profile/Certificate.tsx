@@ -2,6 +2,7 @@ import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { useEffect, useState } from 'react'
 import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
+import SappButton from '@components/base/button/SappButton'
 
 interface ICertificate {
   certificate: {
@@ -20,8 +21,11 @@ interface ICertificate {
   user_id: string
   pass_point: number
 }
+interface IProp {
+  onOpenTab?: () => void
+}
 
-const Certificate = () => {
+const Certificate = ({ onOpenTab }: IProp) => {
   const [certificateData, setCertificateData] = useState<ICertificate[]>([])
   const [totalCertificateData, setTotalCertificateData] = useState<any>()
   const [modalOpen, setOpenModal] = useState(false)
@@ -47,8 +51,17 @@ const Certificate = () => {
   return (
     <div className="pt-6">
       <div className="relative">
-        <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">
-          Certificates ({totalCertificateData})
+        <div className="item-center bottom-0 mx-6 flex justify-between border-b border-gray-3 pb-6 lg:block">
+          <div className="flex items-center text-xl font-medium">
+            <div>Certificates ({totalCertificateData})</div>
+          </div>
+          <SappButton
+            onClick={onOpenTab}
+            size="medium"
+            title={'Back'}
+            color="textUnderline"
+            className="-mr-8 block min-w-[120px] text-base lg:hidden"
+          ></SappButton>
         </div>
       </div>
       <div>
@@ -56,7 +69,7 @@ const Certificate = () => {
           return (
             <div key={certificate?.id}>
               <div
-                className="group relative flex min-h-[88px] w-full cursor-pointer flex-row items-start gap-2 self-center border-b border-gray-2 px-6 pt-5  hover:bg-secondary hover:text-primary"
+                className="group relative flex min-h-[88px] w-full cursor-pointer flex-row items-start gap-2 self-center border-b border-gray-3 px-6 pt-5  hover:bg-secondary hover:text-primary"
                 onClick={() =>
                   window.open(
                     `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`,
