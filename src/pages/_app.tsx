@@ -7,6 +7,7 @@ import LearningNotesList from '@components/mycourses/LearningNotesList'
 import PopupCert from '@components/mycourses/PopupCert'
 import { CourseProvider } from '@contexts/index'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
+import { SocketContext } from '@contexts/SocketContext'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
 import initializeGA from '@utils/google-analytics'
@@ -27,14 +28,10 @@ import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
-import { ANIMATION, PageLink } from 'src/constants'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
+import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
-import {
-  getCountUnRead,
-  hideNotification,
-  showNotification,
-} from 'src/redux/slice/Notification/Notification'
+import { showNotification } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { getKeycloakInstance } from '../utils/helpers/keycloak'
 import SappLoading from 'src/common/SappLoading'
@@ -53,12 +50,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const dispatch = useAppDispatch()
-  // const gettingNotiUnread = useAppSelector(
-  //   (state) => state.notificationReducer?.loading,
-  // )
-  const getNotiUnread = useAppSelector(
-    (state) => state.notificationReducer?.total_records,
-  )
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -69,23 +60,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   })
 
   // const { getPinnedData } = usePinnedNotifyContext()
-
-  const excludedPaths = [
-    PageLink.AUTH_LOGIN,
-    PageLink.AUTH_CHANGE_PASSWORD,
-    PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
-    PageLink.AUTH_FORGOT_PASSWORD,
-    PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
-  ]
-
-  const coutNotificationsUnRead = async () => {
-    const accessToken = getActToken()
-    if (accessToken && excludedPaths.every((path) => router?.asPath !== path)) {
-      try {
-        await dispatch(getCountUnRead())
-      } catch (error) {}
-    }
-  }
 
   useEffect(() => {
     const keycloak = getKeycloakInstance()
@@ -117,23 +91,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       dispatch(showNotification())
     })
   })
-
-  const handleOnChangePage = () => {
-    // Đếm số lượng noti chưa đọc, nếu lớn hơn 0 thì hiển thị thông báo
-    coutNotificationsUnRead()
-  }
-
-  useEffect(() => {
-    handleOnChangePage()
-  }, [router.pathname])
-
-  useEffect(() => {
-    if (getNotiUnread > 0) {
-      dispatch(showNotification())
-    } else {
-      dispatch(hideNotification())
-    }
-  }, [getNotiUnread])
 
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
@@ -182,6 +139,17 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     if (socket) {
       socket.on('connect', () => {})
       socket.on('disconnect', () => {})
+
+      socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
+          data.payload.data.unread,
+        )
+      })
+
+      return () => {
+        socket?.off(SOCKET_EVENTS.NOTIFICATION_UNREAD)
+      }
     }
   }, [socket])
 
@@ -235,22 +203,24 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <PinnedNotifyProvider>
         <CourseProvider>
           <QueryClientProvider client={queryClient}>
-            <Toaster />
-            <SappConfirmDialogContainer />
-            <RouteGuard>
-              <>
-                <PinnedNotifications />
-                <Component {...pageProps} />
-                {getActToken() && showHelp && (
-                  <>
-                    <BackToTop />
-                    <Help showHelp={showHelp} />
-                  </>
-                )}
-                <LearningNotesList />
-                <PopupCert />
-              </>
-            </RouteGuard>
+            <SocketContext.Provider value={socket}>
+              <Toaster />
+              <SappConfirmDialogContainer />
+              <RouteGuard>
+                <>
+                  <PinnedNotifications />
+                  <Component {...pageProps} />
+                  {getActToken() && showHelp && (
+                    <>
+                      <BackToTop />
+                      <Help showHelp={showHelp} />
+                    </>
+                  )}
+                  <LearningNotesList />
+                  <PopupCert />
+                </>
+              </RouteGuard>
+            </SocketContext.Provider>
           </QueryClientProvider>
         </CourseProvider>
       </PinnedNotifyProvider>
