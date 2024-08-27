@@ -13,6 +13,7 @@ import {
   setRefreshToken,
 } from '@utils/index'
 import { apiURL } from 'src/redux/services/httpService'
+import { redirect } from 'react-router-dom'
 
 type ApiConfig<T = any> = {
   uri: string
@@ -109,7 +110,7 @@ request.interceptors.response.use(
           .catch(() => {
             removeJwtToken()
             removeLocalStorageJwtToken()
-            window.location.replace(PageLink.AUTH_LOGIN)
+            redirect(PageLink.AUTH_LOGIN)
           })
       }
 
