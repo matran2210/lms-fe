@@ -87,7 +87,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
     ].includes(router.asPath)
 
-    if (!isExclusivePages) {
+    if (!authToken && !isExclusivePages) {
       localStorage.setItem(localStorageKeys.REDIRECT_AFTER_LOGIN, router.asPath)
     }
   }, [router])
