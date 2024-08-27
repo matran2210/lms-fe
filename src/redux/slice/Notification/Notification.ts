@@ -137,21 +137,6 @@ export const markAllNotifications = createAsyncThunk(
   },
 )
 
-// export const getDeviceToken = createAsyncThunk(
-//   'notificationReducer/getDeviceToken',
-//   async (thunkAPI) => {
-//     try {
-//       const res = await NotificationApi.createDevice()
-//       if (!res?.data) {
-//         return
-//       }
-//       return { ...res.data }
-//     } catch (error: any) {
-//       return false
-//     }
-//   },
-// )
-
 export const notificationSlice = createSlice({
   name: 'notificationReducer',
   initialState,
