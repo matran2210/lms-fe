@@ -1,3 +1,4 @@
+import SappButton from '@components/base/button/SappButton'
 import HistoryItem from '@components/base/historyItem/HistoryItem'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -7,7 +8,11 @@ import {
   userReducer,
 } from 'src/redux/slice/User/User'
 
-const LoginHistory = () => {
+interface IProp {
+  onOpenTab: () => void
+}
+
+const LoginHistory = ({ onOpenTab }: IProp) => {
   const dispatch = useAppDispatch()
   const { loginHistory, loadHistory } = useAppSelector(userReducer)
   const [pageIndex, setPageIndex] = useState(1)
@@ -31,15 +36,20 @@ const LoginHistory = () => {
     }
   }
   return (
-    <div
-      className="h-fit flex-1 bg-white py-6 shadow-box "
-      style={{ maxHeight: '568px', overflowY: 'auto', minHeight: '400px' }}
-    >
-      <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">{`Login History (${
-        loginHistory?.meta?.total_records || 0
-      })`}</div>
+    <div className="relative">
+      <div className="sticky top-0 flex items-center justify-between border-b border-gray-3 bg-white">
+        <div className="mx-6 pb-5 pt-6 text-xl font-medium">
+          {`Login History (${loginHistory?.meta?.total_records || 0})`}
+        </div>
+        <SappButton
+          onClick={onOpenTab}
+          size="medium"
+          title={'Back'}
+          color="textUnderline"
+          className="-mr-8 block min-w-[120px] text-base lg:hidden"
+        />
+      </div>
       <div
-        className="max-h-[631px] "
         onScroll={(e) => {
           const { target } = e
           if (
@@ -49,6 +59,7 @@ const LoginHistory = () => {
             handleLoadMoreHistory()
           }
         }}
+        className="h-[calc(604px-70px)] overflow-y-auto"
       >
         {loginHistory?.userActivities?.map((e: any) => {
           return (

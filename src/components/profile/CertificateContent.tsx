@@ -1,11 +1,11 @@
 import Certificate from './Certificate'
 
-const CertificateContent = () => {
-  return (
-    <div className="flex-1 bg-white pt-6 shadow-box">
-      <Certificate />
-    </div>
-  )
+interface IProp {
+  onOpenTab: () => void
+}
+
+const CertificateContent = ({ onOpenTab }: IProp) => {
+  return <Certificate onOpenTab={onOpenTab} />
 }
 
 export default CertificateContent

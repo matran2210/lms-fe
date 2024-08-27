@@ -13,6 +13,7 @@ import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
 import { AuthAPI } from 'src/pages/api/profile'
 import { isEmpty } from 'lodash'
+import SappButton from '@components/base/button/SappButton'
 
 export interface IChangePassword {
   password: string
@@ -20,7 +21,11 @@ export interface IChangePassword {
   confirmPassword: string
 }
 
-const ChangePassword = () => {
+interface IProp {
+  onOpenTab?: () => void
+}
+
+const ChangePassword = ({ onOpenTab }: IProp) => {
   const [loading, setLoading] = useState(false)
 
   /**
@@ -88,14 +93,21 @@ const ChangePassword = () => {
 
   return (
     <React.Fragment>
-      <div className="flex-1 bg-white p-6 pt-4 shadow-box">
+      <div className="flex-1 p-6 pt-4">
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="relative">
             <div className="flex items-center justify-between border-b border-gray-3 pb-5">
               <div className="text-xl font-medium ">Change Password</div>
-              <div>
+              <div className="flex items-center">
+                <SappButton
+                  onClick={onOpenTab}
+                  size="medium"
+                  title={'Back'}
+                  color="textUnderline"
+                  className="block min-w-[120px] pr-0 text-base lg:hidden"
+                />
                 <ButtonCancelSubmit
-                  className="flex gap-12"
+                  className="flex"
                   cancel={{
                     title: '',
                     onClick: () => {},

@@ -1,10 +1,15 @@
 import { SecurityIcon } from '@assets/icons'
+import SappButton from '@components/base/button/SappButton'
 import DeviceItem from '@components/base/deviceItem/DeviceItem'
 import { useEffect, useState } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 import UserApi from 'src/redux/services/User/user'
 
-const Devices = ({}: any) => {
+interface IProp {
+  onOpenTab?: () => void
+}
+
+const Devices = ({ onOpenTab }: IProp) => {
   const [listDevices, setListDevices] = useState<any>()
   const getListDevices = async () => {
     const res = await UserApi.getListDevices()
@@ -14,10 +19,20 @@ const Devices = ({}: any) => {
     getListDevices()
   }, [])
   return (
-    <div className="flex-1 bg-white py-6 shadow-box">
-      <div className="mx-6 border-b border-gray-3 pb-5 text-xl font-medium">{`Browsers (${
-        listDevices?.length || 0
-      })`}</div>
+    <div className="h-[calc(604px-70px)] h-full flex-1 overflow-y-auto bg-white py-6 lg:min-h-[400px]">
+      <div className="mx-6 flex items-center justify-between border-b border-gray-3 pb-3">
+        <div className="text-xl font-medium">{`Browsers (${
+          listDevices?.length || 0
+        })`}</div>
+        <SappButton
+          onClick={onOpenTab}
+          size="medium"
+          title={'Back'}
+          color="textUnderline"
+          className="block pr-0 text-base lg:hidden"
+        />
+      </div>
+
       {listDevices?.map((e: any) => {
         return (
           <div key={e.id}>
