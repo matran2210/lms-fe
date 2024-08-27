@@ -14,7 +14,6 @@ import {
 import { StaticImageData } from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ANIMATION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
@@ -34,6 +33,7 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >
+  onOpenTab?: () => void
 }
 
 const schema = z.object({
@@ -49,6 +49,7 @@ const MyProfile = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
+  onOpenTab,
 }: IProps) => {
   const dispatch = useAppDispatch()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)
@@ -442,34 +443,3 @@ const MyProfile = ({
 }
 
 export default MyProfile
-
-// export async function getServerSideProps(context: any) {
-//   try {
-//     const { req, res, query } = context
-
-//     // Lấy accessToken từ cookie
-//     const accessToken = req.cookies.accessToken
-
-//     // Kiểm tra accessToken
-//     if (!accessToken) {
-//       // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-//       return {
-//         redirect: {
-//           destination: '/auth/login',
-//           permanent: false,
-//         },
-//       }
-//     }
-
-//     return {
-//       props: {},
-//     }
-//   } catch (err) {
-//     return {
-//       redirect: {
-//         destination: '/auth/login',
-//         permanent: false,
-//       },
-//     }
-//   }
-// }
