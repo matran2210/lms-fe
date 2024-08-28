@@ -6,7 +6,7 @@ import SappTooltip from 'src/common/SappTooltip'
 interface IProps {
   greeting: string
   title: string
-  des?: string
+  des?: string | React.ReactNode
 }
 
 const Heading = ({ greeting, title, des }: IProps) => {

@@ -18,8 +18,8 @@ const ErrorPage = () => {
         PAGE NOT FOUND
       </h1>
       <span className="mt-3 max-w-dl px-4 text-base text-gray-1">
-        We are very sorry for inconvenience. It looks like you’re trying to
-        access a page that was has been deleted or never even existed.
+        We are very sorry for the inconvenience. It looks like you’re trying to
+        access a page that has been deleted or never even existed.
       </span>
       <Link href={PageLink.DASHBOARD}>
         <div className="mt-8">
