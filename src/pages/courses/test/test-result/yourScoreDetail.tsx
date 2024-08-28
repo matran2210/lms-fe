@@ -175,8 +175,13 @@ const YourScoreDetail = ({
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
-        Score Details
+      <div className="flex items-center gap-x-3">
+        <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+          Score Details
+        </div>
+        {router?.query?.attempt && (
+          <div className="mb-6 text-base text-gray-1">{`attempt: ${router?.query?.attempt}`}</div>
+        )}
       </div>
       <div className="block pl-4">
         <SappTable

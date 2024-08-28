@@ -659,10 +659,10 @@ const TestDetail = () => {
           }
           return false
         } else {
-          if (value !== undefined) {
-            return true
+          if (!value) {
+            return false
           }
-          return false
+          return true
         }
       } else {
         if (currentContent.response_type === 1) {
@@ -677,10 +677,10 @@ const TestDetail = () => {
           }
           return false
         } else {
-          if (value !== undefined) {
-            return true
+          if (!value) {
+            return false
           }
-          return false
+          return true
         }
       }
     }
@@ -1034,13 +1034,20 @@ const TestDetail = () => {
     }
   }
 
-  const handleChangeTab = async (currentTab: any) => {
+  const handleChangeTabAndQuestion = async (id: string) => {
+    const { question, topicDescription } = await getDetail(id)
+    handleChangeTab(id, question, topicDescription.data)
+  }
+
+  const handleChangeTab = async (
+    currentTab: any,
+    question?: any,
+    topicDescription?: any,
+  ) => {
     setLoading(true)
-    setScratchPadValues(null)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
-      const { topicDescription, question } = await getDetail(currentTab)
       const newData = tabs?.map((item: any) => {
         if (currentTab === item.id) {
           if (item.viewed) {
@@ -1051,7 +1058,7 @@ const TestDetail = () => {
               ...item,
               viewed: true,
               data: question,
-              topicDescription: topicDescription.data,
+              topicDescription: topicDescription,
             }
           }
         }
@@ -1086,6 +1093,7 @@ const TestDetail = () => {
       setTabs(savedAnswer)
     }
     setLoading(false)
+    setScratchPadValues(null)
 
     // if (currentPage) {
     //   getDetail()
@@ -1335,9 +1343,9 @@ const TestDetail = () => {
     }
 
     if (type_submit === 'submit') {
-      setTabs(() => {
+      setTabs(async () => {
+        await handleChangeTabAndQuestion(tabs[0].id)
         // ref.setKey
-        handleChangeTab(tabs[0].id)
         return reformTabs
       })
       dispatch(disableUnsavedChange())
@@ -1371,9 +1379,9 @@ const TestDetail = () => {
         }
       }
     } else {
-      setTabs(() => {
+      setTabs(async () => {
         // ref.setKey
-        handleChangeTab(tabs[0].id)
+        handleChangeTabAndQuestion(tabs[0].id)
         return reformTabs
       })
       dispatch(disableUnsavedChange())
@@ -1893,8 +1901,8 @@ const TestDetail = () => {
                     currentTab={currentPage}
                     setCurrentTab={setCurrentPage}
                     optionShowAll={<OptionShowAll />}
-                    handleChangeTab={(e: any) => {
-                      handleChangeTab(e)
+                    handleChangeTab={async (id?: string) => {
+                      id && handleChangeTabAndQuestion(id)
                     }}
                     activeShowAll={activeShowAll}
                     setActiveShowAll={setActiveShowAll}
@@ -2545,11 +2553,11 @@ const TestDetail = () => {
                     filteredTabs.length - 1 && (
                     <button
                       className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                      onClick={() => {
+                      onClick={async () => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
                         )
-                        handleChangeTab(filteredTabs[index + 1].id)
+                        handleChangeTabAndQuestion(filteredTabs[index + 1].id)
                       }}
                     >
                       <div className="text-medium-sm font-medium">

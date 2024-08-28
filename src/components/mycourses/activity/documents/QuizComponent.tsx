@@ -47,6 +47,7 @@ export type QuizComponentRef = {
     onFinally?: () => void
   }) => void
   reset: UseFormReset<FieldValues>
+  onSaveAnswer: (activeQuestion: IActivityStateQuestion) => void
 }
 
 type Props = {
@@ -244,7 +245,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const handleResponseResults = () => {
       if (activeQuestion) {
-        if (!activeQuestion?.confirmed) {
+        if (!activeQuestion?.confirmed && !activeQuestion.isDrafAnswer) {
           return
         }
         setTimeout(() => {
@@ -276,7 +277,80 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     useImperativeHandle(ref, () => ({
       onSubmit: onSubmit,
       reset: reset,
+      onSaveAnswer: handleGetAnswer,
     }))
+
+    const handleGetAnswer = (activeQuestion: IActivityStateQuestion) => {
+      switch (activeQuestion?.qType as QUESTION_TYPES) {
+        case QUESTION_TYPES.ONE_CHOICE:
+        case QUESTION_TYPES.TRUE_FALSE:
+          return getValues(`${activeQuestion?.id}_${document_id}_answer`)
+        case QUESTION_TYPES.MULTIPLE_CHOICE:
+          return getValues(`${activeQuestion?.id}_${document_id}_answer`)
+        case QUESTION_TYPES.FILL_WORD:
+          return getValueFillText()
+        case QUESTION_TYPES.SELECT_WORD:
+          return getValueSelectText()
+        case QUESTION_TYPES.MATCHING:
+          return getAnswerMatching()
+        case QUESTION_TYPES.DRAG_DROP:
+          return getAnswerDragNDrop()
+        case QUESTION_TYPES.ESSAY:
+          const value = getValues(`${activeQuestion?.id}_${document_id}_essay`)
+          const isSubmitted = (() => {
+            if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+              if (
+                isChange ||
+                (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
+              ) {
+                return true
+              } else if (value) {
+                const data = JSON.parse(value)
+                for (let e of data) {
+                  if (e?.celldata && e?.celldata?.length > 0) {
+                    return true
+                  }
+                }
+              }
+              return false
+            } else {
+              if (
+                (value !== undefined && value !== '') ||
+                isChange ||
+                (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
+              ) {
+                return true
+              }
+              return false
+            }
+          })()
+
+          let active = 'UNFINISHED'
+
+          if (isSubmitted || activeQuestion?.answer_file) {
+            active = 'SUBMITED'
+          }
+
+          return {
+            question_id: activeQuestion?.id,
+            short_answer:
+              (value !== undefined || value !== '') &&
+              (isChange ||
+                (isUploadFile &&
+                  grading_preference === 'AFTER_ALL_QUESTIONS')) &&
+              activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
+                ? ' '
+                : value,
+            response_option: activeQuestion?.response_option
+              ? activeQuestion?.response_option
+              : 'WORD',
+            answer_file: activeQuestion?.answer_file,
+            active,
+          }
+        default:
+          break
+      }
+    }
 
     const onSubmit = ({
       activityId,
@@ -294,86 +368,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       onFinally?: () => void
     }) => {
       if (activeQuestion) {
-        let myAnswers
-        switch (activeQuestion?.qType as QUESTION_TYPES) {
-          case QUESTION_TYPES.ONE_CHOICE:
-          case QUESTION_TYPES.TRUE_FALSE:
-            myAnswers = getValues(`${activeQuestion?.id}_${document_id}_answer`)
-            break
-          case QUESTION_TYPES.MULTIPLE_CHOICE:
-            myAnswers = getValues(`${activeQuestion?.id}_${document_id}_answer`)
-            break
-          case QUESTION_TYPES.FILL_WORD:
-            myAnswers = getValueFillText()
-            break
-          case QUESTION_TYPES.SELECT_WORD:
-            myAnswers = getValueSelectText()
-            break
-          case QUESTION_TYPES.MATCHING:
-            myAnswers = getAnswerMatching()
-            break
-          case QUESTION_TYPES.DRAG_DROP:
-            myAnswers = getAnswerDragNDrop()
-            break
-          case QUESTION_TYPES.ESSAY:
-            const value = getValues(
-              `${activeQuestion?.id}_${document_id}_essay`,
-            )
+        let myAnswers = handleGetAnswer(activeQuestion)
 
-            const isSubmitted = (() => {
-              if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-                if (
-                  isChange ||
-                  (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
-                ) {
-                  return true
-                } else if (value) {
-                  const data = JSON.parse(value)
-                  for (let e of data) {
-                    if (e?.celldata && e?.celldata?.length > 0) {
-                      return true
-                    }
-                  }
-                }
-                return false
-              } else {
-                if (
-                  (value !== undefined && value !== '') ||
-                  isChange ||
-                  (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
-                ) {
-                  return true
-                }
-                return false
-              }
-            })()
-
-            let active = 'UNFINISHED'
-
-            if (isSubmitted || activeQuestion?.answer_file) {
-              active = 'SUBMITED'
-            }
-
-            myAnswers = {
-              question_id: activeQuestion?.id,
-              short_answer:
-                (value !== undefined || value !== '') &&
-                (isChange ||
-                  (isUploadFile &&
-                    grading_preference === 'AFTER_ALL_QUESTIONS')) &&
-                activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
-                  ? ' '
-                  : value,
-              response_option: activeQuestion?.response_option
-                ? activeQuestion?.response_option
-                : 'WORD',
-              answer_file: activeQuestion?.answer_file,
-              active,
-            }
-            break
-          default:
-            break
-        }
         DragDropRef?.current?.handleReset()
         try {
           dispatch(
