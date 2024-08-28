@@ -1,29 +1,28 @@
-import React, { useEffect, useState, useMemo } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
+import { trackGAEvent } from '@utils/google-analytics'
+import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { truncateString } from '@utils/index'
-import { parseISO, differenceInDays, startOfDay } from 'date-fns'
+import { Tooltip } from 'antd'
+import { differenceInDays, parseISO, startOfDay } from 'date-fns'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
-import {
-  BUTTON_STATUS,
-  COURSE_STATUS,
-  CLASS_STATUS,
-  ANIMATION,
-  CLASS_USER_TYPES,
-} from 'src/constants'
-import PopupExtend from './PopupExtend'
-import PopupActive from './PopupActive'
-import PopupLesson from './PopupLesson'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
-import { Tooltip } from 'antd'
-import PopupOpenClass from './PopupOpenClass'
 import SappTooltip from 'src/common/SappTooltip'
-import { trackGAEvent } from '@utils/google-analytics'
+import {
+  ANIMATION,
+  BUTTON_STATUS,
+  CLASS_STATUS,
+  CLASS_USER_TYPES,
+  COURSE_STATUS,
+} from 'src/constants'
+import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
+import PopupActive from './PopupActive'
+import PopupExtend from './PopupExtend'
+import PopupLesson from './PopupLesson'
+import PopupOpenClass from './PopupOpenClass'
 
 const Course = ({
   course,
@@ -102,6 +101,12 @@ const Course = ({
       courseStatus === COURSE_STATUS.LOCK
     ) {
       if (
+        classUserType === CLASS_USER_TYPES.TRANSFERED_TO &&
+        classInstance?.type === 'LESSON'
+      ) {
+        return BUTTON_STATUS.Disabled
+      }
+      if (
         classStatus === CLASS_STATUS.PUBLIC ||
         classStatus === CLASS_STATUS.ENDED
       ) {
@@ -161,11 +166,11 @@ const Course = ({
   // Set active course dựa theo trạng thái của học viên
   const renderStatusUser = (status: string) => {
     switch (status) {
-      case `${CLASS_USER_TYPES.RESERVED}`:
+      case CLASS_USER_TYPES.RESERVED:
         return false
-      case `${CLASS_USER_TYPES.TRANSFERED_TO}`:
+      case CLASS_USER_TYPES.TRANSFERED_TO:
         return false
-      case `${CLASS_USER_TYPES.CANCELED}`:
+      case CLASS_USER_TYPES.CANCELED:
         return false
       default:
         return true
