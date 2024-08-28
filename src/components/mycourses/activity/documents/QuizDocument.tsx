@@ -5,7 +5,6 @@ import {
   courseActivityQuizReducer,
   fetchQuestionById,
   removeQuizFinished,
-  saveAnswer,
   selectQuestions,
   submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
