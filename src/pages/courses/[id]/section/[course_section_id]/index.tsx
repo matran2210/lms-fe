@@ -243,10 +243,6 @@ const CoursePartDetail = () => {
     // }
   }
 
-  const handleChapterTest = async () => {
-    await CoursesAPI.learningOutcomeProgress(router.query.id, chapterTestId)
-  }
-
   const handleCaseStudyProcess = async (
     courseId: string,
     caseStudyId: string,

@@ -717,7 +717,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           />
           <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
-        <div>
+        {/* <div>
           {activeQuestion?.confirmed &&
             activeQuestion.qType !== 'ESSAY' &&
             showCorrect && (
@@ -731,7 +731,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 )}
               </div>
             )}
-        </div>
+        </div> */}
         <ModalUploadFile
           open={openUpload.status}
           isMultiple={false}
@@ -744,11 +744,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             handleSaveFileEssay(e[0], openUpload.question_id, '')
           }
         />
-        {/* <PopupViewPdf
-          open={openPdf?.status || false}
-          setOpen={setOpenPdf}
-          url={openPdf?.url || ''}
-        /> */}
       </div>
     )
   },
