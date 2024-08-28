@@ -128,23 +128,9 @@ const QuizDocument = ({
     }
   }, [runHandleFinishQuiz])
 
-  const handleSaveAnswer = () => {
-    const myAnswers = questionRef?.current?.onSaveAnswer(activeQuestion)
-    dispatch(
-      saveAnswer({
-        activityId,
-        tabId,
-        quizId,
-        myAnswers,
-        question: activeQuestion,
-      }),
-    )
-  }
-
   const handleNextQuestion = async () => {
     if (activeQuestionIndex < questions?.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
-      handleSaveAnswer()
       // Load the next question if it hasn't been loaded yet
       const nextQuestionId = questions[activeQuestionIndex + 1]?.id
       if (nextQuestionId) {
@@ -167,7 +153,6 @@ const QuizDocument = ({
   const handlePrevQuestion = async () => {
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex(activeQuestionIndex - 1)
-      handleSaveAnswer()
       // Load the previous question if it hasn't been loaded yet
       const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
