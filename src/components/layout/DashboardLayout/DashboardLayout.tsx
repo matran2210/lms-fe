@@ -52,9 +52,9 @@ export default function DashboardLayout({
         {/* <Header isOpened={isOpened} toggleDrawer={toggleDrawer} /> */}
         {/* <div> */}
         <div
-          className={`${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''} min-h-full bg-gray-4`}
+          className={`${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''} h-full bg-gray-4`}
         >
-          <div className="sapp-loading ml-0 md:ml-20">{children}</div>
+          <div className="sapp-loading ml-0 h-full md:ml-20">{children}</div>
         </div>
         {/* </div> */}
         {/* <Footer /> */}
