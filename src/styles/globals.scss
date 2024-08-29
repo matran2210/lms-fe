@@ -147,6 +147,10 @@ body *::-webkit-scrollbar-thumb:hover {
     @apply hidden;
   }
 
+  a {
+    @apply font-semibold text-primary;
+  }
+
   table {
     border-color: gray;
     border-style: inset;
@@ -980,27 +984,6 @@ p a {
 
 .ant-modal {
   font-family: 'Roboto', sans-serif !important;
-}
-
-.pinned-noti-marquee-content {
-  transform: translateX(100%);
-  animation: scroll-left 50s linear infinite;
-}
-
-.pinned-noti-marquee-content:hover {
-  -moz-animation-play-state: paused;
-  -webkit-animation-play-state: paused;
-  animation-play-state: paused;
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(100%);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
 }
 
 .content-course div strong {
