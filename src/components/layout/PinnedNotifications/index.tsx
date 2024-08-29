@@ -32,18 +32,18 @@ function PinnedNotifications() {
         openPinned &&
         pinnedNotifications?.data?.content && (
           <React.Fragment>
-            <div className={`fixed z-50 h-12 w-full bg-pinned-1 text-white`}>
+            <div className={`fixed z-50 h-12 w-full bg-support-1 text-white`}>
               <Row className="flex h-12 flex-row">
                 <Col span={2}></Col>
                 <Col span={21}>
                   <div className="flex h-12 flex-row justify-items-center">
                     <div className="mx-auto flex flex-row">
-                      <div className="content-center text-center">
+                      <div className="flex content-center items-center text-center">
                         <IconLoudSpeaker />
                       </div>
-                      <div className="flex flex-row content-center items-center">
+                      <div className="flex w-[225px] flex-row content-center items-center sm:w-[610px] 3xl:w-[1250px]">
                         <div
-                          className={`${showPinNoti ? 'overflow-hidden shadow-pinned' : ''} ml-2`}
+                          className={`${showPinNoti ? 'overflow-hidden text-clip whitespace-nowrap shadow-pinned' : ''} ml-2`}
                         >
                           <p
                             className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}
@@ -53,6 +53,7 @@ function PinnedNotifications() {
                                 pinnedNotifications?.data?.content
                               }
                               pinned
+                              className="w-max overflow-hidden text-clip whitespace-nowrap"
                             />
                           </p>
                         </div>
@@ -63,7 +64,7 @@ function PinnedNotifications() {
                 <Col span={1}>
                   <div
                     onClick={handleClosePinned}
-                    className="float-right h-full cursor-pointer content-center pr-6"
+                    className="float-right flex h-full cursor-pointer content-center items-center pr-6"
                   >
                     <CloseIconNote />
                   </div>
