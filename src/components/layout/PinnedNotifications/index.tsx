@@ -18,7 +18,7 @@ function PinnedNotifications() {
     setOpenPinned(false)
   }
 
-  const showPinNoti = pinnedNotifications?.data?.content?.length > 200
+  const showPinNoti = pinnedNotifications?.data?.content?.length < 200
 
   const isEnablePinnedPages = [
     PageLink.COURSES,
@@ -45,9 +45,9 @@ function PinnedNotifications() {
                       </div>
                       <div className="flex w-[225px] flex-row content-center items-center lg:w-full">
                         <Marquee
-                          gradient={false} // Disable gradient for a plain background
-                          speed={50} // Adjust speed as needed
-                          pauseOnHover={true} // Optionally pause on hover
+                          gradient={false}
+                          speed={showPinNoti ? 0 : 50}
+                          pauseOnHover={true}
                           className={clsx({ 'leading-5': showPinNoti })}
                           delay={2}
                         >
