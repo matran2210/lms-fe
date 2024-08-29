@@ -207,7 +207,13 @@ const MyCourse = () => {
           <Heading
             greeting="Welcome to"
             title="My Course"
-            des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
+            des={
+              <div>
+                Welcome to the start of your learning journey.
+                <br /> It&apos;s time to advance your expertise with our
+                well-designed courses.
+              </div>
+            }
           />
           {guideStatus && guideStep === 4 && (
             <PopupStep
@@ -252,7 +258,7 @@ const MyCourse = () => {
         {guideStatus && (
           <div
             ref={confirmDialogOverLayRef}
-            className={`bg-black fixed inset-0 z-40 animate-fade-in-overlay opacity-55 transition-opacity`}
+            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
           ></div>
         )}
       </Layout>

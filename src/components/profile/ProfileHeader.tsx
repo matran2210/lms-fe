@@ -108,13 +108,13 @@ const ProfileHeader = ({
 
   return (
     <div className="relative mb-6 block bg-white pl-10 shadow-box">
-      <div className="block items-center justify-start gap-6 lg:flex">
+      <div className="flex items-center justify-start gap-6">
         <div className="relative">
-          <div className="w relative mb-6 w-30 shrink rounded-full  border-2 border-primary pt-29.2 lg:mb-0">
+          <div className="w relative my-6 w-30 shrink rounded-full  border-2 border-primary pt-29.2 lg:my-0">
             <div
               className={`${
                 loading ? 'animate-pulse' : ''
-              } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full`}
+              } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 hidden overflow-hidden rounded-full lg:block`}
             >
               <div className="absolute left-1/2 top-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
                 {isEdit && (
@@ -125,7 +125,7 @@ const ProfileHeader = ({
                       onChange={handlerChangeUploadAvatar}
                       ref={inputFileRef}
                     />
-                    <div className="bg-black flex h-full w-full items-center justify-center opacity-40">
+                    <div className="flex h-full w-full items-center justify-center bg-black opacity-40">
                       {!loadingEditAvatar ? (
                         <svg
                           width="20"
@@ -217,7 +217,7 @@ const ProfileHeader = ({
           )}
         </div>
 
-        <div className="mb-6 flex-1 lg:mb-0">
+        <div className="my-6 flex-1 lg:my-0">
           <div className="mb-4 max-w-[600px] truncate text-2xl font-bold text-bw-1">
             <TextSkeleton loading={loading || loadingEditName}>
               {user.detail.full_name}
@@ -280,7 +280,13 @@ const ProfileHeader = ({
         {/* <div>
           <SappButton size="lager" title={'Enroll New Course'}></SappButton>
         </div> */}
-        <Image src={profile} className="absolute right-0" />
+        <div className="hidden lg:block">
+          <Image
+            src={profile}
+            className="absolute right-0"
+            alt="logo-watermark"
+          />
+        </div>
       </div>
     </div>
   )

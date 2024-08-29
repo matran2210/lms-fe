@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie'
 import {
   deserializeHighlights,
   doHighlight,
@@ -6,6 +5,8 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import DOMPurify from 'dompurify'
+import Cookies from 'js-cookie'
 import { useQuery } from 'react-query'
 
 export const getActToken = (): string => {
@@ -176,7 +177,7 @@ export const buildOneChoiceQueryString = (params: Object) => {
 
 export const parseHTMLToString = (htmlContent: string) => {
   const tempElement = document.createElement('div')
-  tempElement.innerHTML = htmlContent
+  tempElement.innerHTML = DOMPurify.sanitize(htmlContent)
   return tempElement.textContent || tempElement.innerText
 }
 

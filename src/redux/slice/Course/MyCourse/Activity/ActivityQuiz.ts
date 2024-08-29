@@ -18,6 +18,7 @@ export interface IActivityStateQuestion extends IQuestion {
   corrects?: any
   quiz_position_mapping?: any
   defaultValue?: any
+  isDrafAnswer?: boolean
 }
 
 /**

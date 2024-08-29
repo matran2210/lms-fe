@@ -11,6 +11,7 @@ import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { useCourseContext } from '@contexts/index'
 import Layout from '@components/layout'
+import ModalMobile from '@components/base/modal/ModalMobile'
 
 const DEFAULT_PAGESIZE = 18
 

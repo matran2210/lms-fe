@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 import DashboardLayout from './DashboardLayout/DashboardLayout'
 import Head from 'next/head'
+import ModalMobile from '@components/base/modal/ModalMobile'
 
 interface LayoutProps {
   children: ReactNode
@@ -16,6 +17,7 @@ export default function Layout(props: LayoutProps): ReactElement {
       <Head>
         <title>{title}</title>
       </Head>
+      <ModalMobile />
       <DashboardLayout>{children}</DashboardLayout>
     </>
   )

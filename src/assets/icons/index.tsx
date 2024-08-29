@@ -1552,3 +1552,7 @@ export const IconSendHover = ({ width, height, className }: ISVG) => {
     </svg>
   )
 }
+
+export { default as NotificationIcon } from './NotificationIcon'
+export { SadIcon } from './SadIcon'
+

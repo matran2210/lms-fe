@@ -12,10 +12,8 @@ import {
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import { StaticImageData } from 'next/image'
-import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useState, useEffect } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ANIMATION } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
@@ -35,6 +33,7 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >
+  onOpenTab?: () => void
 }
 
 const schema = z.object({
@@ -50,6 +49,7 @@ const MyProfile = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
+  onOpenTab,
 }: IProps) => {
   const dispatch = useAppDispatch()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)
@@ -185,16 +185,20 @@ const MyProfile = ({
   }
 
   return (
-    <div>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="block min-h-[40.3rem]"
-        data-aos={ANIMATION.DATA_AOS}
-      >
+    <div className="p-6 pt-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="block">
         <div className="relative">
-          <div className="mb-6 flex items-center justify-between border-b border-b-gray-3 pb-6">
+          <div className="flex items-center justify-between border-b border-b-gray-3 pb-6">
             <div className="text-xl font-medium text-bw-1">Overview</div>
-            <div>
+            <div className=" flex gap-x-2">
+              <SappButton
+                onClick={onOpenTab}
+                size="medium"
+                title={'Back'}
+                color="textUnderline"
+                className="block min-w-[120px] pr-0 text-base lg:hidden"
+                loading={loading && !isEdit}
+              ></SappButton>
               {!isEdit ? (
                 <SappButton
                   onClick={handleChangeToEditForm}
@@ -227,7 +231,7 @@ const MyProfile = ({
           </div>
         </div>
 
-        <ul>
+        <ul className="mt-6">
           {/* start:: Code*/}
           <li
             className={`block gap-[1.4rem] transition-[margin] md:flex ${
@@ -439,34 +443,3 @@ const MyProfile = ({
 }
 
 export default MyProfile
-
-// export async function getServerSideProps(context: any) {
-//   try {
-//     const { req, res, query } = context
-
-//     // Lấy accessToken từ cookie
-//     const accessToken = req.cookies.accessToken
-
-//     // Kiểm tra accessToken
-//     if (!accessToken) {
-//       // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-//       return {
-//         redirect: {
-//           destination: '/auth/login',
-//           permanent: false,
-//         },
-//       }
-//     }
-
-//     return {
-//       props: {},
-//     }
-//   } catch (err) {
-//     return {
-//       redirect: {
-//         destination: '/auth/login',
-//         permanent: false,
-//       },
-//     }
-//   }
-// }

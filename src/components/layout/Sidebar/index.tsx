@@ -1,14 +1,16 @@
-import { MENU_ITEMS, MENU_BOTTOM } from '../../../constants/menu-items'
-import MenuItemsList from '../MenuItemsList'
-import ExpandIcon from '../ExpandIcon'
-import { Dispatch, SetStateAction, useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { getMe } from 'src/redux/slice/User/User'
-import PopupStep from '@components/user-guide/PopupStep'
-import { increment, reset } from 'src/redux/slice/Course/UserGuide'
-import { UserGuide } from 'src/constants'
 import LearningResource from '@components/mycourses/LearningResource'
+import PopupStep from '@components/user-guide/PopupStep'
 import { trackGAEvent } from '@utils/google-analytics'
+import { getActToken } from '@utils/index'
+import { Dispatch, SetStateAction, useEffect } from 'react'
+import { UserGuide } from 'src/constants'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { increment, reset } from 'src/redux/slice/Course/UserGuide'
+import { getCountUnRead } from 'src/redux/slice/Notification/Notification'
+import { getMe } from 'src/redux/slice/User/User'
+import { MENU_BOTTOM, MENU_ITEMS } from '../../../constants/menu-items'
+import ExpandIcon from '../ExpandIcon'
+import MenuItemsList from '../MenuItemsList'
 
 type SidebarProps = {
   isOpened: boolean
@@ -29,6 +31,7 @@ export default function Sidebar({
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
 
+  let authToken = getActToken()
   const nextStep = () => {
     dispatch(increment())
   }
@@ -47,6 +50,7 @@ export default function Sidebar({
   useEffect(() => {
     try {
       dispatch(getMe())
+      dispatch(getCountUnRead())
     } catch (error) {}
   }, [dispatch])
 
@@ -115,7 +119,7 @@ export default function Sidebar({
           )}
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
-          <div className="bg-black absolute inset-0 z-40 animate-fade-in-overlay opacity-55 transition-opacity"></div>
+          <div className="absolute inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity"></div>
         )}
       </div>
       <div

@@ -105,14 +105,15 @@ export interface IMetaData {
   page_index: number
   page_size: number
 }
+export interface ISVG {
+  width?: number
+  height?: number
+  className?: string
+}
 
 export * from './course'
 export * from './courses'
 export * from './exhibit'
 export * from './notification'
 export * from './quiz'
-export interface ISVG {
-  width?: number
-  height?: number
-  className?: string
-}
+export * from './Icon'

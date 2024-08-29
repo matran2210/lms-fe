@@ -61,6 +61,7 @@ import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { debounce } from 'lodash'
 
 interface Answer {
   answer: string | string[] | Object[]
@@ -98,6 +99,35 @@ declare global {
     userAgreed: any
   }
 }
+
+interface FileType {
+  file_key: string
+  file_name: string
+}
+
+interface Requirement {
+  id: string | number
+  created_at: string
+  name: string
+  description: string
+  files: FileType[]
+  answer_file?: FileType | null
+}
+
+interface DataType {
+  requirements: Requirement[]
+}
+
+type TabItem = {
+  id: string
+  data: DataType
+  answer_file?: FileType
+}
+
+type AnswerList = {
+  [key: string]: string | undefined
+}
+
 const TestDetail = () => {
   const checkType = (
     data: any,
@@ -233,6 +263,9 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        const handleEssayChange = (id: string) => {
+          setAnswerListValue(id as unknown as number)
+        }
         return (
           <EssayQuestionPreview
             data={essayData?.req}
@@ -255,12 +288,17 @@ const TestDetail = () => {
             externalRef={refEditor}
             fullData={currentTabContent}
             openChooseFile={(e: any) =>
-              setOpenUpload({ status: true, question_id: currentPage })
+              setOpenUpload({
+                status: true,
+                question_id: currentPage,
+                requirementIndex: essayData?.index,
+              })
             }
             handleClearFile={handleClearFile}
             setOpenPdf={handleOpenScratchPad}
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             showRequiment={showListRequirement}
+            handleChange={handleEssayChange}
           />
           // <Luckysheet/>
         )
@@ -342,13 +380,7 @@ const TestDetail = () => {
   // const [filteredTabs, setFilterdTabs] = useState<any>([])
   // const [currentTabContent, setCurrentTabContent] = useState<any>()
   const { control: controlScratch } = useForm()
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    setValue,
-    watch: watchEssay,
-  } = useForm()
+  const { control, getValues, setValue } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -375,7 +407,11 @@ const TestDetail = () => {
   const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
-  const [quizAttempId, setQuizAttempId] = useState('')
+  const [quizAttempId, setQuizAttempId] = useState({
+    id: '',
+    number_of_attempts: 0,
+    is_limited: false,
+  })
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
   const timeRef = useRef(null) as any
@@ -594,6 +630,13 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
+      if (Array.isArray(currentContent.data?.requirements)) {
+        for (let req of currentContent.data?.requirements) {
+          if (req?.answer_file?.file_key) {
+            return true
+          }
+        }
+      }
       if (currentContent?.answer_file?.file_key) {
         return true
       }
@@ -616,10 +659,10 @@ const TestDetail = () => {
           }
           return false
         } else {
-          if (value !== undefined) {
-            return true
+          if (!value) {
+            return false
           }
-          return false
+          return true
         }
       } else {
         if (currentContent.response_type === 1) {
@@ -634,10 +677,10 @@ const TestDetail = () => {
           }
           return false
         } else {
-          if (value !== undefined) {
-            return true
+          if (!value) {
+            return false
           }
-          return false
+          return true
         }
       }
     }
@@ -991,13 +1034,20 @@ const TestDetail = () => {
     }
   }
 
-  const handleChangeTab = async (currentTab: any) => {
+  const handleChangeTabAndQuestion = async (id: string) => {
+    const { question, topicDescription } = await getDetail(id)
+    handleChangeTab(id, question, topicDescription.data)
+  }
+
+  const handleChangeTab = async (
+    currentTab: any,
+    question?: any,
+    topicDescription?: any,
+  ) => {
     setLoading(true)
-    setScratchPadValues(null)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
-      const { topicDescription, question } = await getDetail(currentTab)
       const newData = tabs?.map((item: any) => {
         if (currentTab === item.id) {
           if (item.viewed) {
@@ -1008,7 +1058,7 @@ const TestDetail = () => {
               ...item,
               viewed: true,
               data: question,
-              topicDescription: topicDescription.data,
+              topicDescription: topicDescription,
             }
           }
         }
@@ -1043,6 +1093,7 @@ const TestDetail = () => {
       setTabs(savedAnswer)
     }
     setLoading(false)
+    setScratchPadValues(null)
 
     // if (currentPage) {
     //   getDetail()
@@ -1094,18 +1145,46 @@ const TestDetail = () => {
     }
     return newData
   }
-  const handleSaveFileEssay = (file: any) => {
+  const handleSaveFileEssay = (file: any, requirementIndex: number | null) => {
     setTabs((prev: any) => {
       let _tabs = [...prev]
       let newData = [] as any
       for (let item of _tabs) {
         if (currentPage === item.id) {
-          var newItem = {
-            ...item,
-            answer_file: {
-              file_key: file.file_key,
-              file_name: file.name,
-            },
+          let newItem = { ...item }
+          if (
+            requirementIndex !== null &&
+            item.data.requirements &&
+            essayData?.req !== undefined
+          ) {
+            newItem = {
+              ...item,
+              data: {
+                ...item.data,
+                requirements: (item?.data?.requirements || [])?.map(
+                  (req: any, idx: number) => {
+                    if (idx === requirementIndex) {
+                      return {
+                        ...req,
+                        answer_file: {
+                          file_key: file.file_key,
+                          file_name: file.name,
+                        },
+                      }
+                    }
+                    return req
+                  },
+                ),
+              },
+            }
+          } else {
+            newItem = {
+              ...item,
+              answer_file: {
+                file_key: file.file_key,
+                file_name: file.name,
+              },
+            }
           }
           newData.push(newItem)
         } else {
@@ -1115,6 +1194,7 @@ const TestDetail = () => {
       return newData
     })
   }
+
   const handleChangeTypeEssay = (value: number) => {
     setTabs((prev: any) => {
       const arr = [...prev]
@@ -1123,25 +1203,20 @@ const TestDetail = () => {
       return arr
     })
   }
-  const [answerList, setAnswerList] = useState<{ answer: any }[]>([])
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
+  const answerListRef = useRef<AnswerList>({})
 
-  const setAnswerListValue = (id: string, index: number) => {
-    if (answerList[index]) {
-      setValue(`${currentPage}_answer`, answerList[index].answer)
+  const setRequirementValue = (requirementId: string | number) => {
+    const existingAnswer =
+      answerListRef?.current?.[requirementId as unknown as number]
+    if (existingAnswer) {
+      setValue(`${currentPage}_${essayData?.index}_answer`, existingAnswer)
     }
-    setAnswerList((prevAnswerList) => {
-      const updatedList = [...prevAnswerList]
-
-      updatedList[currentIndex] = {
-        answer: getValues(`${currentPage}_${essayData?.index}_answer`) || '',
-      }
-
-      setCurrentIndex(index)
-
-      return updatedList
-    })
   }
+
+  const setAnswerListValue = debounce((requirementId: number) => {
+    answerListRef.current[requirementId] =
+      getValues(`${currentPage}_${essayData?.index}_answer`) || ''
+  }, 200)
 
   const { setScoreQuestion, setSubmitTest, courseType } = useCourseContext()
 
@@ -1241,19 +1316,22 @@ const TestDetail = () => {
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
         if (checkAnswered(e)) {
-          e?.data?.requirements?.forEach((requirement: any, index: any) => {
+          const requirements = e?.data?.requirements?.length
+            ? e?.data?.requirements
+            : [null]
+          requirements?.forEach((requirement: Requirement | null) => {
             answers.push({
               question_id: e.id,
-              short_answer: answerList[index]?.answer || e.answer || '',
-              requirement_id: requirement.id || '',
-              response_option: e.data.response_option
-                ? e.data.response_option
-                : e.response_type === 0
-                  ? 'WORD'
-                  : 'SHEET',
-              time_spent: Math.ceil(e.timeSpent / 1000),
+              short_answer:
+                answerListRef?.current?.[requirement?.id || ''] ??
+                (requirement?.id ? '' : e?.answer || ''),
+              requirement_id: requirement?.id || null,
+              response_option:
+                e?.data?.response_option ??
+                (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+              time_spent: Math.ceil(e?.timeSpent / 1000),
               active: 'SUBMITED',
-              answer_file: e.answer_file,
+              answer_file: requirement?.answer_file || e?.answer_file || null,
             })
           })
         }
@@ -1263,14 +1341,15 @@ const TestDetail = () => {
         answers: e.data?.answers,
       })
     }
+
     if (type_submit === 'submit') {
-      setTabs(() => {
+      setTabs(async () => {
+        await handleChangeTabAndQuestion(tabs[0].id)
         // ref.setKey
-        handleChangeTab(tabs[0].id)
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitQuestion(quizAttempId as string, {
+      const res = await CoursesAPI.submitQuestion(quizAttempId?.id as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:
@@ -1300,13 +1379,13 @@ const TestDetail = () => {
         }
       }
     } else {
-      setTabs(() => {
+      setTabs(async () => {
         // ref.setKey
-        handleChangeTab(tabs[0].id)
+        handleChangeTabAndQuestion(tabs[0].id)
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitQuestion(quizAttempId as string, {
+      const res = await CoursesAPI.submitQuestion(quizAttempId?.id as string, {
         answers: answers,
         quiz_position_mapping: quiz_position_mapping,
         total_attempt_time:
@@ -1404,9 +1483,20 @@ const TestDetail = () => {
         setTabs((prev: any) => {
           const newData = prev.map((item: any) => {
             if (currentTabContent?.id === item.id) {
+              const updatedRequirements = item?.data?.requirements?.map(
+                (req: Requirement) => ({
+                  ...req,
+                  answer_file: undefined,
+                }),
+              )
+
               return {
                 ...item,
                 answer_file: undefined,
+                data: {
+                  ...item.data,
+                  requirements: updatedRequirements,
+                },
               }
             }
             return item
@@ -1416,21 +1506,30 @@ const TestDetail = () => {
       }
     }
   }
-  const handleClearFile = () => {
-    if (!currentTabContent.done) {
-      setTabs((prev: any) => {
-        const newData = prev.map((item: any) => {
-          if (currentTabContent?.id === item.id) {
-            return {
-              ...item,
-              answer_file: undefined,
-            }
+  const handleClearFile = (requirementIndex: number) => {
+    setTabs((prev: TabItem[]) => {
+      const newData = prev.map((item: TabItem) => {
+        if (currentPage === item.id) {
+          return {
+            ...item,
+            answer_file: undefined,
+            data: {
+              ...item.data,
+              requirements: item.data.requirements.map(
+                (req: Requirement, idx: number) => {
+                  if (idx === requirementIndex) {
+                    return { ...req, answer_file: undefined }
+                  }
+                  return req
+                },
+              ),
+            },
           }
-          return item
-        })
-        return newData
+        }
+        return item
       })
-    }
+      return newData
+    })
   }
   const handleSaveHighLight = (e: any) => {
     setTabs((prev: any) => {
@@ -1583,7 +1682,7 @@ const TestDetail = () => {
           router.query.id as string,
           router.query.class_user_id as string,
         )
-        setQuizAttempId(res.data.id)
+        setQuizAttempId(res.data)
         setIsQuizAttemptCreated(true) // Mark the attempt as created
       } catch (err: any) {
         if (err.response?.data?.error.code === '400|060710') {
@@ -1749,39 +1848,50 @@ const TestDetail = () => {
                     }}
                   />
                 )}
-                <ButtonCancelSubmit
-                  className={'flex w-1/3 flex-row-reverse gap-4'}
-                  // color={color}
-                  submit={{
-                    title: 'Finish',
-                    size: 'small',
-                    loading: false,
-                    disabled: submited,
-                    className: 'border border-bw-1',
-                    color: 'secondary',
-                    onClick: () => {
-                      if (checkUnSubmitAnswer()?.length > 0) {
-                        setUnSubmitAnswer(true)
-                      } else {
-                        setOpenSubmit(true)
-                      }
-                      dispatch(disableUnsavedChange())
-                    },
-                    //   full: fullWidthBtn,
-                  }}
-                  cancel={{
-                    title: 'Quit',
-                    size: 'small',
-                    className: 'border border-bw-1 !w-[109px]',
-                    color: 'secondary',
-                    onClick: () => {
-                      setOpenQuit(true)
-                      dispatch(disableUnsavedChange())
-                    },
-                    loading: false,
-                    //   full: fullWidthBtn,
-                  }}
-                ></ButtonCancelSubmit>
+
+                <div className="flex items-center">
+                  {quizDetail?.quiz_type !== 'ENTRANCE_TEST' && (
+                    <div className="mr-6 text-medium-sm text-bw-1">
+                      Attempt: {quizAttempId?.number_of_attempts}
+                      {quizDetail?.is_limited
+                        ? `/${quizDetail?.limit_count}`
+                        : ''}
+                    </div>
+                  )}
+                  <ButtonCancelSubmit
+                    className={'flex flex-row-reverse gap-4'}
+                    // color={color}
+                    submit={{
+                      title: 'Finish',
+                      size: 'small',
+                      loading: false,
+                      disabled: submited,
+                      className: 'border border-bw-1',
+                      color: 'secondary',
+                      onClick: () => {
+                        if (checkUnSubmitAnswer()?.length > 0) {
+                          setUnSubmitAnswer(true)
+                        } else {
+                          setOpenSubmit(true)
+                        }
+                        dispatch(disableUnsavedChange())
+                      },
+                      //   full: fullWidthBtn,
+                    }}
+                    cancel={{
+                      title: 'Quit',
+                      size: 'small',
+                      className: 'border border-bw-1 !w-[109px]',
+                      color: 'secondary',
+                      onClick: () => {
+                        setOpenQuit(true)
+                        dispatch(disableUnsavedChange())
+                      },
+                      loading: false,
+                      //   full: fullWidthBtn,
+                    }}
+                  ></ButtonCancelSubmit>
+                </div>
               </div>
               {/* End Header */}
               {tabs?.length > 0 && (
@@ -1791,8 +1901,8 @@ const TestDetail = () => {
                     currentTab={currentPage}
                     setCurrentTab={setCurrentPage}
                     optionShowAll={<OptionShowAll />}
-                    handleChangeTab={(e: any) => {
-                      handleChangeTab(e)
+                    handleChangeTab={async (id?: string) => {
+                      id && handleChangeTabAndQuestion(id)
                     }}
                     activeShowAll={activeShowAll}
                     setActiveShowAll={setActiveShowAll}
@@ -2281,7 +2391,7 @@ const TestDetail = () => {
                                   essayData.index !== index && 'text-gray-1'
                                 }`}
                                 onClick={() => {
-                                  setAnswerListValue(e.id, index)
+                                  setRequirementValue(e.id)
                                   setEssayData({ req: e, index: index })
                                   rightSideRef?.current &&
                                     rightSideRef.current.scrollTo({
@@ -2443,11 +2553,11 @@ const TestDetail = () => {
                     filteredTabs.length - 1 && (
                     <button
                       className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                      onClick={() => {
+                      onClick={async () => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
                         )
-                        handleChangeTab(filteredTabs[index + 1].id)
+                        handleChangeTabAndQuestion(filteredTabs[index + 1].id)
                       }}
                     >
                       <div className="text-medium-sm font-medium">
@@ -2529,11 +2639,17 @@ const TestDetail = () => {
               open={openUpload?.status}
               isMultiple={false}
               handleClose={() => {
-                setOpenUpload({ status: false, question_id: undefined })
+                setOpenUpload({
+                  status: false,
+                  question_id: undefined,
+                  requirementIndex: undefined,
+                })
               }}
               fileType={'ESSAY'}
               location={`question-answer/${openUpload?.question_id}`}
-              setSelectedFile={(e: any) => handleSaveFileEssay(e[0])}
+              setSelectedFile={(e: any) =>
+                handleSaveFileEssay(e[0], openUpload?.requirementIndex)
+              }
             />
             {/* <PopupViewPdf
         open={openPdf?.status || false}

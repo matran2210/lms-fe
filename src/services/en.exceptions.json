@@ -208,6 +208,7 @@
   "400|190001": "Question Topic Name Already Exist",
   "400|210005": "Invalid Otp Code",
   "400|010833": "Password not correct.",
+  "400|010009": "You are not have permission to access this resource.",
   "400|010433": "Couldn’t find your account.",
   "400|010008": "Your account has been locked. Please contact the administrator for more information."
 }
