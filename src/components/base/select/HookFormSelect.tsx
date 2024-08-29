@@ -17,9 +17,6 @@ interface IProps {
   onMenuScrollToBottom?: any
   classParent?: string
   isClearable?: boolean
-  isResultSelect?: boolean
-  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
 const HookFormSelect = ({
@@ -35,9 +32,6 @@ const HookFormSelect = ({
   onMenuScrollToBottom,
   classParent = '',
   isClearable = false,
-  isResultSelect = false,
-  onFocus,
-  onBlur,
 }: IProps) => {
   const DropdownIndicator: React.FC<DropdownIndicatorProps> = (props) => {
     return (
@@ -67,7 +61,7 @@ const HookFormSelect = ({
         isMulti={isMulti}
         options={options}
         defaultValue={defaultValue}
-        className={`${isResultSelect ? 'select-result' : 'select-single'} ${className}`}
+        className={`select-single ${className}`}
         classNamePrefix="select"
         instanceId="selectInstanceId"
         placeholder={placeholder}
@@ -78,12 +72,6 @@ const HookFormSelect = ({
         isClearable={isClearable}
         components={{ DropdownIndicator }}
         onMenuOpen={onMenuOpen}
-        onFocus={(e) => {
-          onFocus && onFocus(e)
-        }}
-        onBlur={(e) => {
-          onBlur && onBlur(e)
-        }}
       />
     </div>
   )
