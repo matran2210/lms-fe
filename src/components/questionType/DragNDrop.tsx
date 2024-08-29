@@ -61,9 +61,12 @@ const DragNDropPreivew = forwardRef(
     const isSelfReflection = data?.is_self_reflection
 
     useEffect(() => {
-      if (resetDefaultAnswer) {
-        setAnswered(defaultAnswer)
-      }
+      const answerOfStudent = action()
+      const filledAnswered =
+        answerOfStudent && answerOfStudent?.length
+          ? answerOfStudent
+          : defaultAnswer
+      setAnswered(filledAnswered)
     }, [defaultAnswer])
 
     function allowDrop(ev: any) {
