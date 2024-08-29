@@ -22,7 +22,12 @@ import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
-import { ANIMATION, LOCAL_STORAGE_KEYS, PageLink, SOCKET_EVENTS } from 'src/constants'
+import {
+  ANIMATION,
+  LOCAL_STORAGE_KEYS,
+  PageLink,
+  SOCKET_EVENTS,
+} from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import { showNotification } from 'src/redux/slice/Notification/Notification'
@@ -122,6 +127,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
           data.payload.data.unread,
         )
+        window.dispatchEvent(new Event('storage'))
       })
 
       return () => {

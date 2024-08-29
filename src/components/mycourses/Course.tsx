@@ -23,6 +23,7 @@ import PopupActive from './PopupActive'
 import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
+import { CoursesAPI } from 'src/pages/api/courses'
 
 const Course = ({
   course,
@@ -93,6 +94,7 @@ const Course = ({
     const studentStatus = student?.status
     const startedAt = student?.started_at
     const finishedAt = student?.finished_at
+
     // Chuyển đổi sang chuỗi theo định dạng ISO
     const formattedDate = new Date()
 
@@ -180,6 +182,11 @@ const Course = ({
 
   async function activeCourse() {
     try {
+      const params = {
+        classId: `${classInstance?.id}`,
+      }
+      await CoursesAPI.activeCourse(params)
+      // await fetchCourseList()
       refetch()
       toast.success('Active thành công!')
     } catch (error) {}
