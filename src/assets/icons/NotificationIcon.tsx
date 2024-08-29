@@ -13,8 +13,6 @@ const NotificationIcon = ({ className }: IIcon) => {
   })
   useEffect(() => {
     window.addEventListener('storage', (e) => {
-      console.log(e)
-
       const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
       setNotificationUnread(parseInt(count ?? '0', 10))
     })
