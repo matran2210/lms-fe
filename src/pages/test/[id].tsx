@@ -1819,7 +1819,7 @@ const TestDetail = () => {
       )} */}
             <div>
               <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
-                <div className="w-1/3 truncate text-lg-xl font-medium">
+                <div className="w-2/6 truncate text-lg-xl font-medium">
                   {quizDetail?.name}
                 </div>
                 {quizDetail?.quiz_timed && (
@@ -1849,7 +1849,7 @@ const TestDetail = () => {
                   />
                 )}
 
-                <div className="flex items-center">
+                <div className="flex w-2/6 items-center justify-end">
                   {quizDetail?.quiz_type !== 'ENTRANCE_TEST' && (
                     <div className="mr-6 text-medium-sm text-bw-1">
                       Attempt: {quizAttempId?.number_of_attempts}
