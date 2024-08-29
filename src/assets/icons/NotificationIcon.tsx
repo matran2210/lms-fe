@@ -11,11 +11,14 @@ const NotificationIcon = ({ className }: IIcon) => {
   const [notificationUnread, setNotificationUnread] = useState(() => {
     return parseInt(storedCount ?? '0', 10)
   })
-
   useEffect(() => {
-    const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
-    setNotificationUnread(parseInt(count ?? '0', 10))
-  }, [localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)])
+    window.addEventListener('storage', (e) => {
+      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
+      setNotificationUnread(parseInt(count ?? '0', 10))
+    })
+
+    return () => window.removeEventListener('storage', () => {})
+  }, [])
 
   useEffect(() => {
     if (notificationUnread > 9) {
@@ -42,7 +45,7 @@ const NotificationIcon = ({ className }: IIcon) => {
       {notificationUnread > 0 && (
         <span
           className={clsx(
-            'absolute  flex items-center justify-center  rounded-full bg-danger text-white text-ssm aspect-1',
+            'absolute  flex aspect-1 items-center  justify-center rounded-full bg-danger text-ssm text-white',
             badgeClass,
           )}
         >
