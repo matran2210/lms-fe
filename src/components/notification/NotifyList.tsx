@@ -77,7 +77,7 @@ const NotifyList = ({
               <div className="shrink-0">
                 <>{/*Fix image load slow*/}</>
                 {notifyItem?.avatar?.ORIGIN ? (
-                  <img
+                  <Image
                     src={
                       notifyItem?.avatar['50x50'] || notifyItem?.avatar?.ORIGIN
                     }
