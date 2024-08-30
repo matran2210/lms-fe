@@ -1,21 +1,20 @@
 import Layout from '@components/layout'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
-import Certificate from '@components/profile/Certificate'
+import CertificateContent from '@components/profile/CertificateContent'
 import ChangePassword from '@components/profile/ChangePassword'
 import Devices from '@components/profile/Devices'
 import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
+import Settings from '@components/profile/Settings'
 import { GetServerSideProps } from 'next'
-import { useEffect, useRef, useState } from 'react'
 import Image, { StaticImageData } from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import { ITabs } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
-import CertificateContent from '@components/profile/CertificateContent'
-import SappButton from '@components/base/button/SappButton'
 
 interface IProps {
   page: IProfilePages
@@ -42,17 +41,8 @@ const ProfilePage = ({ page }: any) => {
           height="260"
         />
         <h1 className="mt-3 text-2xl font-bold text-bw-1 md:text-4xl">
-          PAGE NOT FOUND
+          Tab Not Found
         </h1>
-        <p className="mt-3 max-w-dl px-4 text-center text-base text-gray-1">
-          We are very sorry for the inconvenience. It looks like you’re trying
-          to access a page that has been deleted or never even existed.
-        </p>
-        <SappButton
-          title={'Back'}
-          onClick={() => setSelectPage(true)}
-          className="mt-3"
-        />
       </div>
     </div>
   )
@@ -101,6 +91,8 @@ const ProfilePage = ({ page }: any) => {
     selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
   } else if (page === 'change_password') {
     selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
+  } else if (page === 'settings') {
+    selectedContent = <Settings />
   } else {
     selectedContent = <NotFound />
   }

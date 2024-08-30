@@ -20,9 +20,9 @@ const Devices = ({ onOpenTab }: IProp) => {
     getListDevices()
   }, [])
   return (
-    <div className="h-[calc(604px-70px)] h-full flex-1 overflow-y-auto bg-white py-6 lg:min-h-[400px]">
-      <div className="mx-6 flex items-center justify-between border-b border-gray-3 pb-3">
-        <div className="text-xl font-medium">{`Browsers (${
+    <div className="relative">
+      <div className="sticky top-0 flex items-center justify-between border-b border-gray-3 bg-white">
+        <div className="mx-6 pb-5 pt-6 text-xl font-medium">{`Browsers (${
           listDevices?.length || 0
         })`}</div>
         <SappButton
@@ -34,25 +34,46 @@ const Devices = ({ onOpenTab }: IProp) => {
         />
       </div>
 
-      {listDevices?.map((e: any) => {
-        return (
-          <div key={e.id}>
-            <DeviceItem data={e} />
+      <div className="h-[calc(604px-70px)] overflow-y-auto">
+        {listDevices?.map((e: any) => {
+          return (
+            <div key={e.id}>
+              <DeviceItem data={e} />
+            </div>
+          )
+        })}
+        {listDevices?.map((e: any) => {
+          return (
+            <div key={e.id}>
+              <DeviceItem data={e} />
+            </div>
+          )
+        })}
+        {listDevices?.map((e: any) => {
+          return (
+            <div key={e.id}>
+              <DeviceItem data={e} />
+            </div>
+          )
+        })}
+        <div className="mx-6 mb-6 mt-3 flex items-center gap-3 bg-gray-4 p-4">
+          <div>
+            <SecurityIcon />
           </div>
-        )
-      })}
-      <div className="mx-6 mt-3 flex items-center gap-3 bg-gray-4 p-4">
-        <div>
-          <SecurityIcon />
-        </div>
-        <div className="text-sm text-bw-1">
-          <span>Maximum limit of 3 browsers: Please contact support team </span>
-          <span>
-            <a href="#" className="text-state-info underline">
-              {MY_COURSES.hotline}
-            </a>
-          </span>
-          <span> to remove one before accessing your account on another.</span>
+          <div className="text-sm text-bw-1">
+            <span>
+              Maximum limit of 3 browsers: Please contact support team{' '}
+            </span>
+            <span>
+              <a href="#" className="text-state-info underline">
+                {MY_COURSES.hotline}
+              </a>
+            </span>
+            <span>
+              {' '}
+              to remove one before accessing your account on another.
+            </span>
+          </div>
         </div>
       </div>
     </div>

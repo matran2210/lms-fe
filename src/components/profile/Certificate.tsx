@@ -49,7 +49,7 @@ const Certificate = ({ onOpenTab }: IProp) => {
   const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
 
   return (
-    <div className="">
+    <>
       <div className="relative">
         <div className="item-center bottom-0 mx-6 flex justify-between border-b border-gray-3 pb-6 lg:block">
           <div className="flex items-center text-xl font-medium">
@@ -107,7 +107,7 @@ const Certificate = ({ onOpenTab }: IProp) => {
         }}
         userDetail={userDetail}
       />
-    </div>
+    </>
   )
 }
 
