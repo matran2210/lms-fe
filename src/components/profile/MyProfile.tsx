@@ -24,6 +24,7 @@ import {
   userReducer,
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
+import TabLayout from './TabLayout'
 
 interface IProps {
   isEdit: boolean
@@ -187,221 +188,225 @@ const MyProfile = ({
   return (
     <div className="relative">
       <form onSubmit={handleSubmit(onSubmit)} className="block">
-        <div className="sticky top-0 flex items-center justify-between border-b border-gray-3 bg-white">
-          <div className="mx-6 pb-5 pt-6 text-xl font-medium">Overview</div>
-          <div className=" flex gap-x-2">
-            <SappButton
-              onClick={onOpenTab}
-              size="medium"
-              title={'Back'}
-              color="textUnderline"
-              className="block min-w-[120px] pr-0 text-base lg:hidden"
-              loading={loading && !isEdit}
-            ></SappButton>
-            {!isEdit ? (
+        <TabLayout
+          title="Overview"
+          headerButtons={
+            <div className=" flex gap-x-2">
               <SappButton
-                onClick={handleChangeToEditForm}
+                onClick={onOpenTab}
                 size="medium"
-                title={'Edit'}
-                className="min-w-[120px] text-base"
+                title={'Back'}
+                color="textUnderline"
+                className="block min-w-[120px] pr-0 text-base lg:hidden"
                 loading={loading && !isEdit}
               ></SappButton>
-            ) : (
-              <ButtonCancelSubmit
-                className="flex gap-12"
-                cancel={{
-                  title: 'Cancel',
-                  onClick: handleChangeToPreview,
-                  size: 'medium',
-                  isPaddingHorizontal: false,
-                  disabled: loading || loadingEditName,
-                  className: 'min-w-fit !px-0 text-base w-30',
-                }}
-                submit={{
-                  title: 'Save',
-                  size: 'medium',
-                  className: 'min-w-fit px-0 text-sm w-30',
-                  type: 'submit',
-                  loading: loading || loadingEditName,
-                }}
-              ></ButtonCancelSubmit>
-            )}
-          </div>
-        </div>
-
-        <div className="h-[calc(604px-70px)] overflow-y-auto">
-          <ul className="m-6">
-            {/* start:: Code*/}
-            <li
-              className={`block gap-[1.4rem] transition-[margin] md:flex ${
-                !isEdit ? 'mb-5' : 'mb-6'
-              } `}
-            >
-              <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                Code
-              </div>
-              <div className="max-w-[300px] flex-auto font-medium text-bw-1">
-                <TextSkeleton loading={loading && !isEdit}>
-                  {user?.code?.toString() ?? user?.key?.toString()}
-                </TextSkeleton>
-              </div>
-            </li>
-            {/* end:: Code*/}
-
-            {/* start:: Full Name*/}
-            <li
-              className={`block transition-[margin] md:flex ${
-                !isEdit ? 'mb-5 gap-[1.4rem]' : 'mb-5 gap-2 gap-y-6 '
-              }`}
-            >
-              <div
-                className={`w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%] ${
-                  isEdit ? 'py-2.5' : ''
-                }`}
-              >
-                Full Name
-              </div>
-
-              {isEdit ? (
-                <HookFormTextField
-                  control={control}
-                  name="full_name"
-                  skeleton={loadingEditName}
-                  className="w-full flex-1"
-                ></HookFormTextField>
+              {!isEdit ? (
+                <SappButton
+                  onClick={handleChangeToEditForm}
+                  size="medium"
+                  title={'Edit'}
+                  className="min-w-[120px] text-base"
+                  loading={loading && !isEdit}
+                ></SappButton>
               ) : (
-                <div className="max-w-[300px] flex-auto font-medium text-bw-1">
-                  <TextSkeleton loading={loading && !isEdit}>
-                    {user.detail.full_name}
-                  </TextSkeleton>
-                </div>
+                <ButtonCancelSubmit
+                  className="flex gap-12"
+                  cancel={{
+                    title: 'Cancel',
+                    onClick: handleChangeToPreview,
+                    size: 'medium',
+                    isPaddingHorizontal: false,
+                    disabled: loading || loadingEditName,
+                    className: 'min-w-fit !px-0 text-base w-30',
+                  }}
+                  submit={{
+                    title: 'Save',
+                    size: 'medium',
+                    className: 'min-w-fit px-0 text-sm w-30',
+                    type: 'submit',
+                    loading: loading || loadingEditName,
+                  }}
+                ></ButtonCancelSubmit>
               )}
-            </li>
-
-            {/* start:: Username*/}
-            <li
-              className={`block gap-[1.4rem] transition-[margin] md:flex ${
-                !isEdit ? 'mb-5' : 'mb-8'
-              }`}
-            >
-              <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                Username
-              </div>
-              <div className="max-w-[300px] flex-auto font-medium text-bw-1">
-                <TextSkeleton loading={loading && !isEdit}>
-                  {user?.username}
-                </TextSkeleton>
-              </div>
-            </li>
-            {/* end:: Username*/}
-
-            {/* start:: Role*/}
-            <li
-              className={`block gap-[1.4rem] md:flex ${
-                !isEdit ? 'mb-5' : 'mb-8 transition-[margin]'
-              }`}
-            >
-              <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                Role
-              </div>
-              <div className="max-w-[300px] flex-auto font-medium text-bw-1">
-                <TextSkeleton loading={loading && !isEdit}>
-                  {USER_TYPE[user?.type]?.label}
-                </TextSkeleton>
-              </div>
-            </li>
-            {/* end:: Role*/}
-
-            {/* start:: Status*/}
-            <li
-              className={`block gap-[1.4rem] md:flex ${!isEdit ? 'mb-5' : ''}`}
-            >
-              <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                Status
-              </div>
-              <div className={`max-w-[300px] flex-auto font-medium`}>
-                <TextSkeleton loading={loading && !isEdit}>
-                  <span className={`${USER_STATUS[user?.status]?.color}`}>
-                    {USER_STATUS[user.status]?.label}
-                  </span>
-                </TextSkeleton>
-              </div>
-            </li>
-            {/* end:: Status*/}
-
-            {/* start:: Updated At*/}
-            {!isEdit && (
-              <li className={`block gap-[1.4rem] md:flex`}>
+            </div>
+          }
+        >
+          <>
+            <ul className="m-6">
+              {/* start:: Code*/}
+              <li
+                className={`block gap-[1.4rem] transition-[margin] md:flex ${
+                  !isEdit ? 'mb-5' : 'mb-6'
+                } `}
+              >
                 <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                  Updated At
+                  Code
                 </div>
                 <div className="max-w-[300px] flex-auto font-medium text-bw-1">
                   <TextSkeleton loading={loading && !isEdit}>
-                    {formatDate(user?.updated_at)}
+                    {user?.code?.toString() ?? user?.key?.toString()}
                   </TextSkeleton>
                 </div>
               </li>
-            )}
-            {/* end:: Updated At*/}
-          </ul>
-          {sortByCreatedAtAndDefault(user?.user_contacts || [])?.map((e, i) => {
-            return (
-              <div className={`m-6`} key={e.id}>
+              {/* end:: Code*/}
+
+              {/* start:: Full Name*/}
+              <li
+                className={`block transition-[margin] md:flex ${
+                  !isEdit ? 'mb-5 gap-[1.4rem]' : 'mb-5 gap-2 gap-y-6 '
+                }`}
+              >
                 <div
-                  className={`border border-gray-3 p-4 ${
-                    isEdit ? 'bg-gray-3' : ''
-                  } `}
+                  className={`w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%] ${
+                    isEdit ? 'py-2.5' : ''
+                  }`}
                 >
-                  <div>
-                    <span className="text-gray-1">Profile {i + 1}</span>
-                    {e?.is_default && (
-                      <span className="ml-[10px] inline-block select-none bg-blue-600 bg-opacity-5 px-2 py-1 text-medium-sm leading-4 text-state-info">
-                        Default
-                      </span>
-                    )}
-                  </div>
-                  <div className="mt-3 flex font-medium text-bw-1">
-                    <div className="w-fit">
-                      {e?.phone && e?.phone}
-                      {e?.email && e?.phone && (
-                        <span className="mx-3 text-gray-1">|</span>
-                      )}
-                      {e?.email && e?.email}
-                    </div>
-                    {!isEdit && (
-                      <div
-                        className="group ml-auto w-fit cursor-pointer select-none"
-                        onClick={() =>
-                          setMakeDefaultDrawer({
-                            status: true,
-                            email: e?.email,
-                            phone: e?.phone,
-                            address: e?.address,
-                            index: i + 1,
-                            id: e?.id,
-                            is_default: e?.is_default,
-                          })
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width={24}
-                          height={24}
-                          fill="none"
-                        >
-                          <path
-                            className="fill-current text-gray-500 transition-colors duration-300 group-hover:text-primary"
-                            d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
-                          />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
+                  Full Name
                 </div>
-              </div>
-            )
-          })}
-        </div>
+
+                {isEdit ? (
+                  <HookFormTextField
+                    control={control}
+                    name="full_name"
+                    skeleton={loadingEditName}
+                    className="w-full flex-1"
+                  ></HookFormTextField>
+                ) : (
+                  <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+                    <TextSkeleton loading={loading && !isEdit}>
+                      {user.detail.full_name}
+                    </TextSkeleton>
+                  </div>
+                )}
+              </li>
+
+              {/* start:: Username*/}
+              <li
+                className={`block gap-[1.4rem] transition-[margin] md:flex ${
+                  !isEdit ? 'mb-5' : 'mb-8'
+                }`}
+              >
+                <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
+                  Username
+                </div>
+                <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+                  <TextSkeleton loading={loading && !isEdit}>
+                    {user?.username}
+                  </TextSkeleton>
+                </div>
+              </li>
+              {/* end:: Username*/}
+
+              {/* start:: Role*/}
+              <li
+                className={`block gap-[1.4rem] md:flex ${
+                  !isEdit ? 'mb-5' : 'mb-8 transition-[margin]'
+                }`}
+              >
+                <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
+                  Role
+                </div>
+                <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+                  <TextSkeleton loading={loading && !isEdit}>
+                    {USER_TYPE[user?.type]?.label}
+                  </TextSkeleton>
+                </div>
+              </li>
+              {/* end:: Role*/}
+
+              {/* start:: Status*/}
+              <li
+                className={`block gap-[1.4rem] md:flex ${!isEdit ? 'mb-5' : ''}`}
+              >
+                <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
+                  Status
+                </div>
+                <div className={`max-w-[300px] flex-auto font-medium`}>
+                  <TextSkeleton loading={loading && !isEdit}>
+                    <span className={`${USER_STATUS[user?.status]?.color}`}>
+                      {USER_STATUS[user.status]?.label}
+                    </span>
+                  </TextSkeleton>
+                </div>
+              </li>
+              {/* end:: Status*/}
+
+              {/* start:: Updated At*/}
+              {!isEdit && (
+                <li className={`block gap-[1.4rem] md:flex`}>
+                  <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
+                    Updated At
+                  </div>
+                  <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+                    <TextSkeleton loading={loading && !isEdit}>
+                      {formatDate(user?.updated_at)}
+                    </TextSkeleton>
+                  </div>
+                </li>
+              )}
+              {/* end:: Updated At*/}
+            </ul>
+            {sortByCreatedAtAndDefault(user?.user_contacts || [])?.map(
+              (e, i) => {
+                return (
+                  <div className={`m-6`} key={e.id}>
+                    <div
+                      className={`border border-gray-3 p-4 ${
+                        isEdit ? 'bg-gray-3' : ''
+                      } `}
+                    >
+                      <div>
+                        <span className="text-gray-1">Profile {i + 1}</span>
+                        {e?.is_default && (
+                          <span className="ml-[10px] inline-block select-none bg-blue-600 bg-opacity-5 px-2 py-1 text-medium-sm leading-4 text-state-info">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-3 flex font-medium text-bw-1">
+                        <div className="w-fit">
+                          {e?.phone && e?.phone}
+                          {e?.email && e?.phone && (
+                            <span className="mx-3 text-gray-1">|</span>
+                          )}
+                          {e?.email && e?.email}
+                        </div>
+                        {!isEdit && (
+                          <div
+                            className="group ml-auto w-fit cursor-pointer select-none"
+                            onClick={() =>
+                              setMakeDefaultDrawer({
+                                status: true,
+                                email: e?.email,
+                                phone: e?.phone,
+                                address: e?.address,
+                                index: i + 1,
+                                id: e?.id,
+                                is_default: e?.is_default,
+                              })
+                            }
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={24}
+                              height={24}
+                              fill="none"
+                            >
+                              <path
+                                className="fill-current text-gray-500 transition-colors duration-300 group-hover:text-primary"
+                                d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
+                              />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )
+              },
+            )}
+          </>
+        </TabLayout>
       </form>
       <SappDrawer
         isOpen={makeDefaultDrawer?.status || false}

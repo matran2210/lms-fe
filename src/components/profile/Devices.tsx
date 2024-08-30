@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 import UserApi from 'src/redux/services/User/user'
+import TabLayout from './TabLayout'
 
 interface IProp {
   onOpenTab?: () => void
@@ -20,11 +21,9 @@ const Devices = ({ onOpenTab }: IProp) => {
     getListDevices()
   }, [])
   return (
-    <div className="relative">
-      <div className="sticky top-0 flex items-center justify-between border-b border-gray-3 bg-white">
-        <div className="mx-6 pb-5 pt-6 text-xl font-medium">{`Browsers (${
-          listDevices?.length || 0
-        })`}</div>
+    <TabLayout
+      title={`Browsers (${listDevices?.length || 0})`}
+      headerButtons={
         <SappButton
           onClick={onOpenTab}
           size="medium"
@@ -32,23 +31,9 @@ const Devices = ({ onOpenTab }: IProp) => {
           color="textUnderline"
           className="block pr-0 text-base lg:hidden"
         />
-      </div>
-
-      <div className="h-[calc(604px-70px)] overflow-y-auto">
-        {listDevices?.map((e: any) => {
-          return (
-            <div key={e.id}>
-              <DeviceItem data={e} />
-            </div>
-          )
-        })}
-        {listDevices?.map((e: any) => {
-          return (
-            <div key={e.id}>
-              <DeviceItem data={e} />
-            </div>
-          )
-        })}
+      }
+    >
+      <>
         {listDevices?.map((e: any) => {
           return (
             <div key={e.id}>
@@ -75,8 +60,8 @@ const Devices = ({ onOpenTab }: IProp) => {
             </span>
           </div>
         </div>
-      </div>
-    </div>
+      </>
+    </TabLayout>
   )
 }
 export default Devices

@@ -7,6 +7,7 @@ import {
   loadMoreLoginHistory,
   userReducer,
 } from 'src/redux/slice/User/User'
+import TabLayout from './TabLayout'
 
 interface IProp {
   onOpenTab: () => void
@@ -20,6 +21,7 @@ const LoginHistory = ({ onOpenTab }: IProp) => {
   useEffect(() => {
     dispatch(getLoginHistory({ page_index: pageIndex, page_size: pageSize }))
   }, [])
+
   const handleLoadMoreHistory = () => {
     if (!loadHistory) {
       if (pageIndex < loginHistory.meta.total_pages) {
@@ -36,11 +38,9 @@ const LoginHistory = ({ onOpenTab }: IProp) => {
     }
   }
   return (
-    <div className="relative">
-      <div className="sticky top-0 flex items-center justify-between border-b border-gray-3 bg-white">
-        <div className="mx-6 pb-5 pt-6 text-xl font-medium">
-          {`Login History (${loginHistory?.meta?.total_records || 0})`}
-        </div>
+    <TabLayout
+      title={`Login History (${loginHistory?.meta?.total_records || 0})`}
+      headerButtons={
         <SappButton
           onClick={onOpenTab}
           size="medium"
@@ -48,28 +48,25 @@ const LoginHistory = ({ onOpenTab }: IProp) => {
           color="textUnderline"
           className="-mr-8 block min-w-[120px] text-base lg:hidden"
         />
-      </div>
-      <div
-        onScroll={(e) => {
-          const { target } = e
-          if (
-            (target as any).scrollTop + (target as any).offsetHeight >=
-            (target as any).scrollHeight
-          ) {
-            handleLoadMoreHistory()
-          }
-        }}
-        className="h-[calc(604px-70px)] overflow-y-auto"
-      >
-        {loginHistory?.userActivities?.map((e: any) => {
-          return (
-            <div key={e.id}>
-              <HistoryItem data={e} />
-            </div>
-          )
-        })}
-      </div>
-    </div>
+      }
+      onScroll={(e) => {
+        const { target } = e
+        if (
+          (target as any).scrollTop + (target as any).offsetHeight >=
+          (target as any).scrollHeight
+        ) {
+          handleLoadMoreHistory()
+        }
+      }}
+    >
+      {loginHistory?.userActivities?.map((e: any) => {
+        return (
+          <div key={e.id}>
+            <HistoryItem data={e} />
+          </div>
+        )
+      })}
+    </TabLayout>
   )
 }
 export default LoginHistory

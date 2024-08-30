@@ -1,6 +1,7 @@
 import Layout from '@components/layout'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
+import Certificate from '@components/profile/Certificate'
 import CertificateContent from '@components/profile/CertificateContent'
 import ChangePassword from '@components/profile/ChangePassword'
 import Devices from '@components/profile/Devices'
@@ -82,9 +83,7 @@ const ProfilePage = ({ page }: any) => {
       />
     )
   } else if (page === 'certificates') {
-    selectedContent = (
-      <CertificateContent onOpenTab={() => setSelectPage(true)} />
-    )
+    selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
   } else if (page === 'devices') {
     selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
   } else if (page === 'login_history') {

@@ -1,8 +1,9 @@
+import SappButton from '@components/base/button/SappButton'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
-import SappButton from '@components/base/button/SappButton'
+import TabLayout from './TabLayout'
 
 interface ICertificate {
   certificate: {
@@ -27,7 +28,7 @@ interface IProp {
 
 const Certificate = ({ onOpenTab }: IProp) => {
   const [certificateData, setCertificateData] = useState<ICertificate[]>([])
-  const [totalCertificateData, setTotalCertificateData] = useState<any>()
+  const [totalCertificateData, setTotalCertificateData] = useState<string>('0')
   const [modalOpen, setOpenModal] = useState(false)
   const [userDetail, setUserDetail] = useState('')
 
@@ -43,28 +44,25 @@ const Certificate = ({ onOpenTab }: IProp) => {
     } catch (error) {}
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchChapterDetail()
   }, [])
   const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
 
   return (
     <>
-      <div className="relative">
-        <div className="item-center bottom-0 mx-6 flex justify-between border-b border-gray-3 pb-6 lg:block">
-          <div className="flex items-center text-xl font-medium">
-            <div>Certificates ({totalCertificateData})</div>
-          </div>
+      <TabLayout
+        title={`Certificates (${totalCertificateData})`}
+        headerButtons={
           <SappButton
             onClick={onOpenTab}
             size="medium"
             title={'Back'}
             color="textUnderline"
             className="-mr-8 block min-w-[120px] text-base lg:hidden"
-          ></SappButton>
-        </div>
-      </div>
-      <div>
+          />
+        }
+      >
         {certificateData.map((certificate: ICertificate) => {
           return (
             <div key={certificate?.id}>
@@ -95,7 +93,8 @@ const Certificate = ({ onOpenTab }: IProp) => {
             </div>
           )
         })}
-      </div>
+      </TabLayout>
+
       <PopUpCertificate
         openPreview={modalOpen}
         setOpenModal={setOpenModal}
