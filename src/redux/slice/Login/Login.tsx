@@ -1,24 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-hot-toast'
 import { RootState } from '../../store'
 import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
 
 import {
   ChangePasswordReq,
   ChangePasswordRes,
-  LoginReq,
   PostLoginReq,
   LoginState,
 } from '../../types/Login/login'
-import {
-  removeJwtToken,
-  removeLocalStorageJwtToken,
-  setActToken,
-  setCookieActToken,
-  setCookieRefreshToken,
-  setRefreshToken,
-} from '@utils/index'
-import { PageLink } from 'src/constants'
+import { removeJwtToken, removeLocalStorageJwtToken } from '@utils/index'
 import { AuthAPI } from 'src/pages/api/profile'
 
 const initialState: LoginState = {

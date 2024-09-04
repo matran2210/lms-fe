@@ -84,7 +84,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           }
           setLoading(false)
         })
-        .catch((error: Error) => {
+        .catch(() => {
           setLoading(false)
         })
     } else {

@@ -87,7 +87,7 @@ request.interceptors.response.use(
         if (keycloak) {
           keycloak
             .updateToken(30)
-            .then((refreshed: any) => {
+            .then((refreshed) => {
               if (refreshed) {
                 const newToken = keycloak.token as string
                 setActToken(newToken)

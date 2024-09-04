@@ -97,7 +97,6 @@ const LoginPage = () => {
   const incorrectEmailAndPassword = ['400|010433', '400|010833']
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
-    const { login, password, remember_me } = data
     setLoading(true)
     try {
       const getFireBaseToken = await handleDeviceToken()
@@ -169,7 +168,7 @@ const LoginPage = () => {
             }),
           )
             .unwrap()
-            .then((payload) => {
+            .then(() => {
               dispatch(clearGuideState())
               dispatch(getEntranceCount())
               localStorage.setItem('enstranceTest', 'true')
