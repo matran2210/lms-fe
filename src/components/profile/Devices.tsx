@@ -1,6 +1,7 @@
 import { SecurityIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import DeviceItem from '@components/base/deviceItem/DeviceItem'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 import UserApi from 'src/redux/services/User/user'

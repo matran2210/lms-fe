@@ -1,11 +1,9 @@
-import Google_Logo from '@assets/images/google_logo.svg'
-import Microsoft_Logo from '@assets/images/microsoft_logo.svg'
 import SappButton from '@components/base/button/SappButton'
 import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { LAYOUT } from '@utils/constants'
+import { LAYOUT, localStorageKeys } from '@utils/constants'
 import {
   SHOW_ERROR_ACCOUNT_LOCK,
   SHOW_ERROR_USERNAME_PASSWORD,
@@ -19,7 +17,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
-import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { getMessagingToken } from 'src/utils/firebase'
@@ -97,18 +94,6 @@ const LoginPage = () => {
     }
   }
 
-  async function getListEntranceTest() {
-    try {
-      const res = await EntranceTestAPI.getListEntranceTestLogin()
-      const beforeLoginPath = localStorage.getItem('beforeLoginPath')
-      if (res?.data?.length > 0) {
-        router.push(PageLink.ENTRANCE_TEST)
-      } else {
-        router.push(beforeLoginPath || PageLink.COURSES)
-      }
-    } catch (error) {}
-  }
-
   const incorrectEmailAndPassword = ['400|010433', '400|010833']
   // Call API when submit
   const onSubmit = async (data: IInputProps) => {
@@ -121,18 +106,21 @@ const LoginPage = () => {
           device_id: getFireBaseToken,
         }),
       )
-        // dispatch(getEntranceCount())
         .unwrap()
-        .then((payload) => {
-          getListEntranceTest()
+        .then(async () => {
           dispatch(clearGuideState())
-          dispatch(getEntranceCount())
-          localStorage.setItem('enstranceTest', 'true')
+          const res = await dispatch(getEntranceCount())
+          return res.payload.data.count
         })
-        .then(() => {
-          const beforeLoginPath = localStorage.getItem('beforeLoginPath')
-          if (beforeLoginPath) {
-            router.push(beforeLoginPath)
+        .then((count) => {
+          const redirectAfterLogin = localStorage.getItem(
+            localStorageKeys.REDIRECT_AFTER_LOGIN,
+          )
+          if (count && count > 0) {
+            router.push(PageLink.ENTRANCE_TEST)
+          } else {
+            router.push(redirectAfterLogin || PageLink.COURSES)
+            localStorage.removeItem(localStorageKeys.REDIRECT_AFTER_LOGIN)
           }
         })
         .catch((error) => {
@@ -182,7 +170,6 @@ const LoginPage = () => {
           )
             .unwrap()
             .then((payload) => {
-              getListEntranceTest()
               dispatch(clearGuideState())
               dispatch(getEntranceCount())
               localStorage.setItem('enstranceTest', 'true')

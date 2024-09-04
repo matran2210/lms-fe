@@ -5,6 +5,8 @@ import { Col, Row } from 'antd'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { PageLink } from 'src/constants'
+import Marquee from 'react-fast-marquee'
+import clsx from 'clsx'
 
 function PinnedNotifications() {
   const router = useRouter()
@@ -16,7 +18,7 @@ function PinnedNotifications() {
     setOpenPinned(false)
   }
 
-  const showPinNoti = pinnedNotifications?.data?.content?.length > 200
+  const showPinNoti = pinnedNotifications?.data?.content?.length < 200
 
   const isEnablePinnedPages = [
     PageLink.COURSES,
@@ -32,30 +34,31 @@ function PinnedNotifications() {
         openPinned &&
         pinnedNotifications?.data?.content && (
           <React.Fragment>
-            <div className={`fixed z-50 h-12 w-full bg-pinned-1 text-white`}>
+            <div className={`fixed z-50 h-12 w-full bg-support-1 text-white`}>
               <Row className="flex h-12 flex-row">
-                <Col span={2}></Col>
-                <Col span={21}>
+                <Col span={1}></Col>
+                <Col span={22}>
                   <div className="flex h-12 flex-row justify-items-center">
                     <div className="mx-auto flex flex-row">
-                      <div className="content-center text-center">
+                      <div className="flex content-center items-center text-center">
                         <IconLoudSpeaker />
                       </div>
-                      <div className="flex flex-row content-center items-center">
-                        <div
-                          className={`${showPinNoti ? 'overflow-hidden shadow-pinned' : ''} ml-2`}
+                      <div className="flex w-[225px] flex-row content-center items-center lg:w-full">
+                        <Marquee
+                          gradient={false}
+                          speed={showPinNoti ? 0 : 50}
+                          pauseOnHover={true}
+                          className={clsx({ 'leading-5': showPinNoti })}
+                          delay={2}
                         >
-                          <p
-                            className={`${showPinNoti ? 'pinned-noti-marquee-content leading-5' : ''}`}
-                          >
-                            <EditorReader
-                              text_editor_content={
-                                pinnedNotifications?.data?.content
-                              }
-                              pinned
-                            />
-                          </p>
-                        </div>
+                          <EditorReader
+                            text_editor_content={
+                              pinnedNotifications?.data?.content
+                            }
+                            pinned
+                            className="me-60 ml-3"
+                          />
+                        </Marquee>
                       </div>
                     </div>
                   </div>
@@ -63,7 +66,7 @@ function PinnedNotifications() {
                 <Col span={1}>
                   <div
                     onClick={handleClosePinned}
-                    className="float-right h-full cursor-pointer content-center pr-6"
+                    className="float-right flex h-full cursor-pointer content-center items-center pr-6"
                   >
                     <CloseIconNote />
                   </div>

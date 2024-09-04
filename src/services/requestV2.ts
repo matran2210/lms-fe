@@ -14,6 +14,7 @@ import {
 } from '@utils/index'
 import { apiURL } from 'src/redux/services/httpService'
 import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
+import { redirect } from 'react-router-dom'
 
 type ApiConfig<T = any> = {
   uri: string
@@ -86,7 +87,7 @@ request.interceptors.response.use(
         if (keycloak) {
           keycloak
             .updateToken(30)
-            .then((refreshed) => {
+            .then((refreshed: any) => {
               if (refreshed) {
                 const newToken = keycloak.token as string
                 setActToken(newToken)
@@ -104,12 +105,13 @@ request.interceptors.response.use(
                   })
               }
             })
-            .catch((error) => {
+            .catch(() => {
               keycloak
                 .logout({ redirectUri: window.location.origin })
                 .then(() => {
                   removeJwtToken()
                   removeLocalStorageJwtToken()
+                  redirect(PageLink.AUTH_LOGIN)
                 })
             })
         }

@@ -14,6 +14,7 @@ import PasswordProfile from './PasswordProfile'
 import { AuthAPI } from 'src/pages/api/profile'
 import { isEmpty } from 'lodash'
 import SappButton from '@components/base/button/SappButton'
+import { useRouter } from 'next/router'
 
 export interface IChangePassword {
   password: string
