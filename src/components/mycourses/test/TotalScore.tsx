@@ -29,7 +29,7 @@ const TotalScore = ({
           <div
             className={`${classScore} font-inter text-6xl font-bold text-primary xl:text-6xl`}
           >
-            {score !== undefined ? formatNumber(score) : '--'}% %
+            {score !== undefined ? formatNumber(score) : '--'}%
           </div>
         </div>
         <div className="flex flex-row">
