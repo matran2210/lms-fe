@@ -19,6 +19,7 @@ export const PageLink = {
   COURSE_ACTIVITY: '/courses/[id]/activity/[activityId]',
   TEST_RESULT: '/courses/test/test-result/[id]',
   USERPAGE: '/[page]',
+  EVENT_TEST: '/event-test',
 }
 
 export const TitleSidebar = {

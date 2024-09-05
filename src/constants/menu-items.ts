@@ -65,6 +65,12 @@ const MENU_OPTIONS: MenuOption[] = [
     url: `${PageLink.ENTRANCE_TEST}`,
     type: 'level-1',
   },
+  {
+    name: `Event Test`,
+    icon: 'entrance-test',
+    url: PageLink.EVENT_TEST,
+    type: 'level-1',
+  },
   // {
   //   name: `${TitleSidebar.RESULTS}`,
   //   icon: 'result',
