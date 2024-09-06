@@ -27,6 +27,7 @@ import {
   confirmQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import { IEssayAnswer } from 'src/type/answer'
 import { IExhibit, IExhibitData } from 'src/type/exhibit'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -66,6 +67,7 @@ type Props = {
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   showQuestionContent?: boolean
   isHideExhibit?: boolean
+  saveAnswer?: () => void
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -81,11 +83,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       grading_preference,
       showQuestionContent = true,
       isHideExhibit = true,
+      saveAnswer,
     }: Props,
     ref,
   ) => {
     const questionRef = useRef<HTMLDivElement>(null)
-    const [essayData, setEssayData] = useState<any>()
 
     const dispatch = useAppDispatch()
     const { control: controlAnswer, setValue, reset, getValues } = useForm({})
@@ -99,6 +101,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const [isChange, setIsChange] = useState<boolean>(false)
     const [isUploadFile, setIsUploadFile] = useState<boolean>(false)
+    const [essayData, setEssayData] = useState<any>()
 
     useClickOutside({
       ref: listRequirementRef,
@@ -106,86 +109,39 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     })
 
     const [showRequirement, setShowRequirement] = useState<{
+      id: string
       description: string
       index: number
       name: string
       files: any
     }>()
 
-    // const [showExhibit, setShowExhibit] = useState<{
-    //   id: string
-    //   description: string
-    //   index: number
-    //   name: string
-    //   top: string
-    //   left: string
-    //   files: any
-    // }>()
-    const [openUpload, setOpenUpload] = useState<any>({})
+    const [openUpload, setOpenUpload] = useState<{
+      requirement_id?: string
+      question_id?: string
+      status: boolean
+    }>({ requirement_id: undefined, question_id: undefined, status: false })
     const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
-
-    useEffect(() => {
-      const defaultRequirement = activeQuestion?.requirements?.[0]
-      if (defaultRequirement) {
-        setShowRequirement({
-          name: defaultRequirement?.name,
-          description: defaultRequirement?.description,
-          files: defaultRequirement?.files,
-          index: 1,
-        })
-      }
-    }, [activeQuestion])
-
-    useEffect(() => {
-      if (activeQuestion?.requirements) {
-        setEssayData({
-          req: activeQuestion?.requirements?.[0],
-          index: 0,
-        })
-      }
-      let exhibitOption = []
-
-      if (
-        activeQuestion?.exhibits?.length &&
-        0 < activeQuestion?.exhibits?.length
-      ) {
-        exhibitOption.push(...activeQuestion?.exhibits)
-      }
-
-      if (activeQuestion?.question_topic?.exhibits?.length) {
-        exhibitOption?.push(...activeQuestion?.question_topic?.exhibits)
-      }
-
-      setExhibitData(exhibitOption)
-    }, [activeQuestion])
 
     const handleShowRequirement = (data: {
       description: string
       index: number
       name: string
       files: any
+      id: string
     }) => {
+      saveAnswer && saveAnswer()
       setShowListRequirement(false)
       setShowRequirement(data)
+      setValue(
+        `${activeQuestion?.id}_${data?.id}_essay`,
+        activeQuestion?.myAnswers?.[data.index]?.short_answer,
+      )
+      setEssayData({
+        req: data,
+        index: data.index - 1,
+      })
     }
-
-    // const handleShowExhibit = (
-    //   params: {
-    //     id: string
-    //     description: string
-    //     index: number
-    //     name: string
-    //     files: any
-    //   },
-    //   event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    // ) => {
-    //   var mouseY = event.pageY - 300
-    //   setShowExhibit({ ...params, top: mouseY + 'px', left: '33%' })
-    // }
-
-    // const handleCloseExhibit = () => {
-    //   setShowExhibit(undefined)
-    // }
 
     const getValueFillText = () => {
       let value = []
@@ -221,6 +177,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       }
       return value
     }
+
     const getAnswerDragNDrop = () => {
       let value = [] as any
       const inputs = questionRef?.current?.querySelectorAll(
@@ -232,16 +189,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       }
       return value
     }
-
-    useEffect(() => {
-      if (
-        activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
-        activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
-        activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-      ) {
-        handleResponseResults()
-      }
-    }, [activeQuestion])
 
     const handleResponseResults = () => {
       if (activeQuestion) {
@@ -269,10 +216,21 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 )
               break
             }
+
+            case QUESTION_TYPES.ESSAY: {
+              activeQuestion?.myAnswers?.map((ans: IEssayAnswer) => {
+                ans?.short_answer &&
+                  setValue(
+                    `${activeQuestion?.id}_${ans.requirement_id}_essay`,
+                    ans?.short_answer,
+                  )
+              })
+            }
           }
         })
       }
     }
+
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
       onSubmit: onSubmit,
@@ -330,23 +288,40 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           if (isSubmitted || activeQuestion?.answer_file) {
             active = 'SUBMITED'
           }
+          if (activeQuestion?.requirements?.length) {
+            const answers = activeQuestion?.requirements?.map((req) => {
+              const answer = getValues(`${activeQuestion?.id}_${req.id}_essay`)
+              return {
+                question_id: activeQuestion?.id,
+                answer_file: req.answer_file,
+                short_answer:
+                  answer !== undefined && answer !== '' ? answer : ' ',
+                response_option: activeQuestion?.response_option
+                  ? activeQuestion?.response_option
+                  : 'WORD',
 
-          return {
-            question_id: activeQuestion?.id,
-            short_answer:
-              (value !== undefined || value !== '') &&
-              (isChange ||
-                (isUploadFile &&
-                  grading_preference === 'AFTER_ALL_QUESTIONS')) &&
-              activeQuestion?.response_option !== RESPONSE_OPTION.SHEET
-                ? ' '
-                : value,
-            response_option: activeQuestion?.response_option
-              ? activeQuestion?.response_option
-              : 'WORD',
-            answer_file: activeQuestion?.answer_file,
-            active,
+                requirement_id: req.id,
+                active,
+              }
+            })
+            return answers
+          } else {
+            const answer = getValues(
+              `${activeQuestion?.id}_${document_id}_essay`,
+            )
+            return {
+              question_id: activeQuestion?.id,
+              answer_file: activeQuestion.answer_file,
+              short_answer:
+                answer !== undefined && answer !== '' ? answer : ' ',
+              response_option: activeQuestion?.response_option
+                ? activeQuestion?.response_option
+                : 'WORD',
+              requirement_id: null,
+              active,
+            }
           }
+
         default:
           break
       }
@@ -402,6 +377,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       file: any,
       question_id: string,
       topic_id: string,
+      requirement_id: string,
     ) => {
       try {
         dispatch(
@@ -412,6 +388,19 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             question_id: question_id,
             file: file,
             topic_id: topic_id,
+            requirement_id,
+            requirements: activeQuestion?.requirements?.map((item: any) => {
+              if (item.id === showRequirement?.id) {
+                return {
+                  ...item,
+                  answer_file: {
+                    file_key: file.file_key,
+                    file_name: file.name,
+                  },
+                }
+              }
+              return item
+            }),
           }),
         )
         setIsUploadFile(true)
@@ -543,6 +532,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                 <div
                                   onClick={() => {
                                     handleShowRequirement({
+                                      id: e.id,
                                       description: e?.description,
                                       index: i + 1,
                                       name: e?.name,
@@ -566,34 +556,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                           auto save)
                         </span>
                       </div>
-                    </div>
-                    <div className="mt-4">
-                      <div className="font-semibold">{`${showRequirement?.name}`}</div>
-                      {showRequirement?.description && (
-                        <EditorReader
-                          className="editor-wrap mt-1.5"
-                          text_editor_content={showRequirement?.description}
-                        />
-                      )}
-                      {showRequirement?.files?.length > 0 &&
-                        showRequirement?.files.map((e: any, index: number) => {
-                          return (
-                            <div
-                              className="cursor-pointer text-state-info hover:underline"
-                              onClick={() =>
-                                setOpenFile &&
-                                setOpenFile(
-                                  { type: 'file' },
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                              }
-                              key={index}
-                            >
-                              {e?.resource?.name}
-                            </div>
-                          )
-                        })}
                     </div>
                   </>
                 )}
@@ -668,21 +630,29 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   </div>
                 )}
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6"></div>
               <EssayQuestionPreview
-                data={null}
+                defaultValue={
+                  activeQuestion?.myAnswers?.find(
+                    (ans: IEssayAnswer) =>
+                      ans.requirement_id === showRequirement?.id,
+                  )?.short_answer ?? null
+                }
+                data={essayData?.req}
                 question_content={activeQuestion?.question_content}
                 index={essayData?.index}
                 question_data={activeQuestion}
                 control={controlAnswer}
+                setValue={setValue}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
-                name={`${activeQuestion?.id}_${document_id}_essay`}
-                fullData={activeQuestion}
+                name={`${activeQuestion?.id}_${showRequirement?.id ?? document_id}_essay`}
+                fullData={{ data: { ...activeQuestion } }}
                 openChooseFile={(e: any) =>
                   setOpenUpload({
                     status: true,
                     question_id: activeQuestion?.id,
+                    requirement_id: showRequirement?.id,
                   })
                 }
                 handleClearFile={() => {
@@ -692,11 +662,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       tabId,
                       quizId,
                       question_id: activeQuestion?.id,
+                      requirement_id: showRequirement?.id,
+                      requirements: activeQuestion?.requirements?.map(
+                        (item: any) => {
+                          if (item.id === showRequirement?.id) {
+                            return { ...item, answer_file: null }
+                          }
+                          return item
+                        },
+                      ),
                     }),
                   )
                 }}
                 handleChange={() => {
-                  setIsChange(true)
+                  !isChange && setIsChange(true)
                 }}
                 isShowContent={showQuestionContent}
               />
@@ -707,6 +686,55 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           return <div></div>
       }
     }
+
+    const handleDefaultRequirement = () => {
+      const defaultRequirement = activeQuestion?.requirements?.[0]
+      if (defaultRequirement) {
+        setShowRequirement({
+          name: defaultRequirement?.name,
+          id: defaultRequirement?.id,
+          description: defaultRequirement?.description,
+          files: defaultRequirement?.files,
+          index: 1,
+        })
+      }
+    }
+
+    const handleGetExhibit = () => {
+      if (activeQuestion?.requirements) {
+        setEssayData({
+          req: activeQuestion?.requirements?.[0],
+          index: 0,
+        })
+      }
+      let exhibitOption = []
+
+      if (
+        activeQuestion?.exhibits?.length &&
+        0 < activeQuestion?.exhibits?.length
+      ) {
+        exhibitOption.push(...activeQuestion?.exhibits)
+      }
+
+      if (activeQuestion?.question_topic?.exhibits?.length) {
+        exhibitOption?.push(...activeQuestion?.question_topic?.exhibits)
+      }
+
+      setExhibitData(exhibitOption)
+    }
+
+    useEffect(() => {
+      handleDefaultRequirement()
+      handleGetExhibit()
+      if (
+        activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
+        activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+        activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE ||
+        activeQuestion?.qType === QUESTION_TYPES.ESSAY
+      ) {
+        handleResponseResults()
+      }
+    }, [activeQuestion?.id])
 
     return (
       <div>
@@ -736,12 +764,23 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           open={openUpload.status}
           isMultiple={false}
           handleClose={() => {
-            setOpenUpload({ status: false, question_id: undefined })
+            setOpenUpload({
+              status: false,
+              question_id: undefined,
+              requirement_id: undefined,
+            })
           }}
+          overlayClass="!h-screen"
+          className="!overflow-auto"
           fileType={'ESSAY'}
           location={`question-answer/${openUpload.question_id}`}
           setSelectedFile={(e: any) =>
-            handleSaveFileEssay(e[0], openUpload.question_id, '')
+            handleSaveFileEssay(
+              e[0],
+              openUpload?.question_id ?? '',
+              '',
+              showRequirement?.id ?? '',
+            )
           }
         />
         {/* <PopupViewPdf

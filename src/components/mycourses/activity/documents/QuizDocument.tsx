@@ -232,7 +232,7 @@ const QuizDocument = ({
       availableQuestions?.reduce(
         (acc: any, obj: any) => {
           if (obj?.myAnswers) {
-            acc.answers = acc?.answers?.concat({ ...obj.myAnswers })
+            acc.answers = acc?.answers?.concat(...obj.myAnswers)
           }
           if (obj?.quiz_position_mapping) {
             acc.quiz_position_mapping = acc?.quiz_position_mapping?.concat(
@@ -362,6 +362,7 @@ const QuizDocument = ({
             grading_preference={grading_preference}
             showQuestionContent={false}
             isHideExhibit={false}
+            saveAnswer={handleSaveAnswer}
           />
         )}
       </div>

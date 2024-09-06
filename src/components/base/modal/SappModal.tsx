@@ -64,6 +64,7 @@ interface IProps {
   revertFunction?: boolean
   showCloseIcon?: boolean
   disableClickOutSide?: boolean
+  className?: string
 }
 /**
  * Hàm này tạo một modal component bằng React
@@ -132,6 +133,7 @@ const SappModal: React.FC<IProps> = ({
   revertFunction = false,
   showCloseIcon,
   disableClickOutSide = false,
+  className = '',
 }) => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -296,7 +298,7 @@ const SappModal: React.FC<IProps> = ({
                 ref={confirmDialogRef}
                 className={`max-h-full w-fit max-w-full 
                 ${isContentFull ? 'w-full' : 'w-fit'}
-                ${refClass}`}
+                ${refClass} ${className}`}
               >
                 {showHeader &&
                   (customHeader || (

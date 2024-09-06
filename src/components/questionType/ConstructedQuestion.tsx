@@ -125,9 +125,10 @@ const EssayQuestionPreview = ({
           refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
         })
       } else {
-        const sheetData = defaultValue
-          ? JSON.parse(defaultValue)
-          : [{ name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] }]
+        const sheetData =
+          defaultValue && String(defaultValue).trim() !== ''
+            ? JSON.parse(defaultValue)
+            : [{ name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] }]
 
         // Convert sheetData to constructor with id of refSheet.current
         const currentSheets = refSheet.current.getAllSheets()
@@ -313,8 +314,7 @@ const EssayQuestionPreview = ({
       )}
       <>
         {question_data.assignment_type !== 'TEXT' ? (
-          fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
-          fullData?.answer_file?.file_key ? (
+          fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
                 <div className="text-base font-semibold">
@@ -378,7 +378,13 @@ const EssayQuestionPreview = ({
                   <UploadIcon />
                   <div
                     className="title-btn-preview"
-                    onClick={() => openChooseFile(true)}
+                    onClick={() =>
+                      !(
+                        fullData?.done ||
+                        fullData?.confirmed ||
+                        fullData?.data?.confirmed
+                      ) && openChooseFile(true)
+                    }
                   >
                     Choose file to upload
                   </div>
@@ -411,13 +417,17 @@ const EssayQuestionPreview = ({
               height={500}
               placeholder="Your answer here"
               defaultValue={defaultValue}
-              disabled={fullData?.done || fullData?.confirmed}
+              disabled={
+                fullData?.done ||
+                fullData?.confirmed ||
+                fullData?.data?.confirmed
+              }
               handleChange={() => handleChange && handleChange(data?.id)}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`h-[500px] w-full border  ${fullData?.done || fullData?.confirmed ? 'pointer-events-none opacity-50' : ''}`}
+              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
                 name={name}
@@ -434,7 +444,7 @@ const EssayQuestionPreview = ({
                       onChange={(e) => {
                         if (!fullData?.done && !fullData?.confirmed) {
                           const currentSheet = refSheet.current?.getSheet()
-                          if (value) {
+                          if (value && String(value).trim() !== '') {
                             let old = [...JSON.parse(value)]
                             const index = old.findIndex(
                               (e: any) => e.id === currentSheet.id,
@@ -458,7 +468,7 @@ const EssayQuestionPreview = ({
                         }
                       }}
                       data={
-                        value
+                        value && String(value).trim() !== ''
                           ? JSON.parse(value)
                           : [
                               {
@@ -488,12 +498,16 @@ const EssayQuestionPreview = ({
               height={500}
               placeholder="Your answer here"
               defaultValue={defaultValue}
-              disabled={fullData?.done || fullData?.confirmed}
+              disabled={
+                fullData?.done ||
+                fullData?.confirmed ||
+                fullData?.data?.confirmed
+              }
               handleChange={() => handleChange && handleChange(data?.id)}
             />
           ) : (
             <div
-              className={`h-[500px] w-full border ${fullData?.done || fullData?.confirmed ? 'pointer-events-none opacity-50' : ''}`}
+              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
                 name={name}
@@ -539,7 +553,7 @@ const EssayQuestionPreview = ({
                         }
                       }}
                       data={
-                        value
+                        value && String(value).trim() !== ''
                           ? JSON.parse(value)
                           : [
                               {

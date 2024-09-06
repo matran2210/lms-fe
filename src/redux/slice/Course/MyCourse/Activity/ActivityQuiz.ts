@@ -259,39 +259,64 @@ const quizSlice: Slice = createSlice({
       return {}
     },
     saveFileEssay: (state, action) => {
-      const { activityId, tabId, quizId, question_id, file } =
-        action.payload as unknown as {
-          activityId: string
-          tabId: string
-          quizId: string
-          question_id: string
-          file: any
-        }
+      const {
+        activityId,
+        tabId,
+        quizId,
+        question_id,
+        file,
+        requirement_id,
+        requirements,
+      } = action.payload as unknown as {
+        activityId: string
+        tabId: string
+        quizId: string
+        question_id: string
+        file: any
+        requirement_id?: string
+        requirements: any
+      }
       const existingQuestion = state?.[activityId]?.[tabId]?.[
         quizId
       ]?.questions.find((q: { id: string }) => q.id === question_id)
 
       if (existingQuestion) {
-        existingQuestion.answer_file = {
+        const fileData = {
           file_key: file.file_key,
           file_name: file.name,
+        }
+        if (requirement_id) {
+          existingQuestion.requirements = requirements
+        } else {
+          existingQuestion.answer_file = fileData
         }
       }
     },
     clearFileEssay: (state, action) => {
-      const { activityId, tabId, quizId, question_id, file } =
-        action.payload as unknown as {
-          activityId: string
-          tabId: string
-          quizId: string
-          question_id: string
-          file: any
-        }
+      const {
+        activityId,
+        tabId,
+        quizId,
+        question_id,
+        file,
+        requirements,
+        requirement_id,
+      } = action.payload as unknown as {
+        activityId: string
+        tabId: string
+        quizId: string
+        question_id: string
+        file: any
+        requirement_id: string
+        requirements: any
+      }
       const existingQuestion = state?.[activityId]?.[tabId]?.[
         quizId
       ]?.questions.find((q: { id: string }) => q.id === question_id)
 
-      if (existingQuestion) {
+      if (requirement_id) {
+        existingQuestion.requirements = requirements
+      } else {
         existingQuestion.answer_file = null
       }
     },
@@ -435,15 +460,14 @@ const quizSlice: Slice = createSlice({
 
               break
             case QUESTION_TYPES.ESSAY:
-              questionToUpdate.myAnswers = [
+              const answers = [
                 ...(questionToUpdate.myAnswers?.filter(
                   (q: { question_id: string | undefined }) =>
                     q.question_id !== payload.question.id,
                 ) || []),
-                {
-                  ...(payload.myAnswers || {}),
-                },
+                ...(payload.myAnswers || {}),
               ]
+              questionToUpdate.myAnswers = answers
               break
             default:
               break
@@ -666,9 +690,7 @@ const quizSlice: Slice = createSlice({
                       (q: { question_id: string | undefined }) =>
                         q.question_id !== payload.question.id,
                     ) || []),
-                    {
-                      ...(payload.myAnswers || {}),
-                    },
+                    ...(payload.myAnswers || {}),
                   ]
                   break
                 default:

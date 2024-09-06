@@ -30,6 +30,8 @@ interface IModalUploadProps {
   parentId?: string
   maxCount?: number
   location: string
+  className?: string
+  overlayClass?: string
 }
 
 export const initCompleteModal = {
@@ -54,6 +56,8 @@ const ModalUploadFile = ({
   parentId,
   maxCount,
   location,
+  className,
+  overlayClass,
 }: IModalUploadProps) => {
   const sourceRef = useRef<CancelTokenSource>()
   const isCancel = useRef<boolean>()
@@ -193,6 +197,8 @@ const ModalUploadFile = ({
         size="max-w-xl"
         position="center"
         scrollbale={false}
+        className={className ?? ''}
+        overlayClass={overlayClass ?? ''}
       >
         <UploadFileHandle
           uploadFile={uploadFile}
