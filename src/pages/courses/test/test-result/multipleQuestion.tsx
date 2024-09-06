@@ -63,17 +63,20 @@ const MultipleQuestion = ({
   const renderBoxes = (type: string, data: any, totalBefore: number) => {
     const renderBoxItems = data?.map((item: IAnswer, index: number) => {
       return (
-        <div
+        <button
           key={item?.id}
           onClick={() => {
             router.push(`/explanation/${item?.id}?title=My Course`)
           }}
+          disabled={
+            questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
+          }
           className={`flex aspect-1 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-8.5 xl:h-auto xl:w-auto
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
           {index + totalBefore + 1}
-        </div>
+        </button>
       )
     })
 
@@ -101,18 +104,26 @@ const MultipleQuestion = ({
   const renderLines = (type: string, data: any, totalBefore: number) => {
     const renderBoxItems = data?.map((item: IAnswer, index: number) => {
       return (
-        <div
+        <button
           key={item?.id}
+          disabled={questions?.quizAttempt?.status === 'UN_SUBMITTED'}
           onClick={() => {
-            router.push(`/explanation/${item?.id}?title=My Course`)
+            if (
+              questions?.quizAttempt?.status === 'UN_SUBMITTED' ||
+              !item?.id
+            ) {
+              return
+            } else {
+              router.push(`/explanation/${item?.id}?title=My Course`)
+            }
           }}
-          className={`flex h-8 w-8 flex-none cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium
+          className={`flex h-8 w-8 flex-none flex-row items-center justify-center border border-solid text-sm font-medium
             leading-8.5 xl:h-12 xl:w-12
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
           {index + totalBefore + 1}
-        </div>
+        </button>
       )
     })
 
