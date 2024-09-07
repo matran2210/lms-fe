@@ -32,7 +32,7 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { uniqueId } from 'lodash'
+import { isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -1021,12 +1021,15 @@ const TestDetail = () => {
   }
 
   async function getDetail(currentPage: string) {
+    let topicDescription
     try {
-      const topicDescription = await CoursesAPI.getTopicDescription(
-        questions[questions.findIndex((e: any) => e.id === currentPage)]
-          ?.question_topic_id,
-        quizDetail?.id,
-      )
+      if (!isUndefined(quizDetail?.id)) {
+        topicDescription = await CoursesAPI.getTopicDescription(
+          questions[questions.findIndex((e: any) => e.id === currentPage)]
+            ?.question_topic_id,
+          quizDetail?.id,
+        )
+      }
       const res = await QuestionAPI.getQuestionDetail(currentPage)
       return { topicDescription, question: res.data }
     } catch (err) {
