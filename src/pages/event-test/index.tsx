@@ -4,22 +4,17 @@ import React from 'react'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { ANIMATION } from 'src/constants'
 import { useQuery } from 'react-query'
-import { EntranceTestAPI } from '../api/entrance-test'
 import { useRouter } from 'next/router'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Layout from '@components/layout'
 import EventTestFilter from '@components/event-test/EventTestFilter'
 import EventTestList from '@components/event-test/EventTestList'
+import { EventTestAPI } from '../api/event-test'
 
 const EventTest = () => {
-  // const dispatch = useAppDispatch()
-  // useEffect(() => {
-  //   dispatch(getEntranceCount())
-  // }, [])
-
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
-      const { data } = await EntranceTestAPI.get(params)
+      const { data } = await EventTestAPI.get(params)
       return data
     }
 
@@ -27,13 +22,13 @@ const EventTest = () => {
   }
 
   const router = useRouter()
-  const { data: entranceTestLists, isLoading } = useGetData('entrance-test1', {
+  const { data: eventTestLists, isLoading } = useGetData('event-test', {
     attempt_status: router?.query?.attempt_status,
   })
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Entrance Test">
+      <Layout title="Event Test">
         <div className="header border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
             <SearchForm
@@ -47,7 +42,7 @@ const EventTest = () => {
             <h2 className="text-medium-sm font-medium text-bw-1 ">
               Event Test
             </h2>
-            <EventTestFilter count={entranceTestLists?.length || 0} />
+            <EventTestFilter count={eventTestLists?.length || 0} />
           </div>
         </div>
         <div
@@ -64,7 +59,7 @@ const EventTest = () => {
           className="mx-8 my-0 max-w-xxl pt-6 lg:mx-8 xl:mx-auto"
           data-aos={ANIMATION.DATA_AOS}
         >
-          <EventTestList entranceTestLists={entranceTestLists} />
+          <EventTestList entranceTestLists={eventTestLists} />
         </div>
         <PopUpRemindEntrance />
       </Layout>

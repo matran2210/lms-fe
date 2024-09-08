@@ -2,12 +2,9 @@ import React, { useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { useRouter } from 'next/router'
-import SappButton from '@components/base/button/SappButton'
-import { trackGAEvent } from '@utils/google-analytics'
-
-interface EntranceTestProps {
-  data: any
-}
+import { IEventTest } from 'src/type/event-test'
+import SappModalV3 from '@components/base/modal/SappModalV3'
+import { AlertTriagle } from '@assets/icons'
 
 enum EAttemptStatus {
   UN_SUBMITTED = 'UN_SUBMITTED',
@@ -15,18 +12,9 @@ enum EAttemptStatus {
   UN_FINISHED = 'UN_FINISHED',
 }
 
-const EventTest = ({ data }: EntranceTestProps) => {
+const EventTest = ({ data }: { data: IEventTest }) => {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
-  const handleOnClick = () => {
-    if (data?.attempt_times >= 1) {
-      router.push(`entrance-test/test-result/${data?.quiz_attempt_id}`)
-      trackGAEvent('Click Button Result Entrance Test List')
-    } else {
-      setOpen(true)
-      trackGAEvent('Click Button Begin Entrance Test List')
-    }
-  }
 
   const timeTakenFormatted = data?.total_attempt_time
     ? formatTime(data?.total_attempt_time)
@@ -36,20 +24,15 @@ const EventTest = ({ data }: EntranceTestProps) => {
     : 'Unlimited'
 
   /**
-   * @description state này để đóng mở popup nếu học viên làm 2 lần
-   */
-  const [openExpired, setOpenExpired] = useState(false)
-
-  /**
    * @description Kiểm tra điều kiện có hiệu lực
    */
-  const isAttemptValid =
-    data.is_attempt &&
-    [
-      EAttemptStatus.SUBMITTED,
-      EAttemptStatus.UN_FINISHED,
-      EAttemptStatus.UN_SUBMITTED,
-    ].includes(data?.attempt_status)
+  // const isAttemptValid =
+  //   data.is_attempt &&
+  //   [
+  //     EAttemptStatus.SUBMITTED,
+  //     EAttemptStatus.UN_FINISHED,
+  //     EAttemptStatus.UN_SUBMITTED,
+  //   ].includes(data?.attempt_status)
 
   return (
     <>
@@ -87,9 +70,36 @@ const EventTest = ({ data }: EntranceTestProps) => {
           </div>
         </div>
         <div className="action relative mt-10 flex items-center justify-end">
-          <ButtonSecondary title="Begin" size="small" full={false} />
+          {!data?.is_attempt && (
+            <ButtonSecondary
+              title="Begin"
+              size="small"
+              full={false}
+              onClick={() =>
+                data.is_opened
+                  ? router.push({
+                      pathname: `/test/${data?.id}`,
+                      query: {
+                        type: 'event-test',
+                      },
+                    })
+                  : setOpen(true)
+              }
+            />
+          )}
         </div>
       </div>
+      <SappModalV3
+        open={open}
+        okButtonCaption="Quit"
+        handleCancel={() => {}}
+        onOk={() => {}}
+        fullWidthBtn={true}
+        buttonSize="extra"
+        icon={<AlertTriagle />}
+        header="Are you sure?"
+        content="chuwa dden han"
+      />
     </>
   )
 }

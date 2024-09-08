@@ -1363,6 +1363,8 @@ const TestDetail = () => {
         }
         if (type === 'entrance') {
           router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+        } else if (type === 'event-test') {
+          router.replace(`/event-test`)
         } else {
           if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
             router.replace(`/courses/test/test-result/${res?.data?.id}`)
@@ -1850,7 +1852,9 @@ const TestDetail = () => {
                 )}
 
                 <div className="flex w-2/6 items-center justify-end">
-                  {quizDetail?.quiz_type !== 'ENTRANCE_TEST' && (
+                  {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(
+                    quizDetail?.quiz_type,
+                  ) && (
                     <div className="mr-6 text-medium-sm text-bw-1">
                       Attempt: {quizAttempId?.number_of_attempts}
                       {quizDetail?.is_limited
@@ -2579,6 +2583,8 @@ const TestDetail = () => {
                       router.replace(
                         `/entrance-test/test-result/${QuizResultId}`,
                       )
+                    } else if (type === 'event-test') {
+                      router.replace(`/event-test`)
                     } else {
                       if (
                         type !== 'entrance' &&
