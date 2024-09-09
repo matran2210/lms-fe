@@ -4,17 +4,21 @@ import { formatTime } from '@components/common/timer'
 import { useRouter } from 'next/router'
 import { IEventTest } from 'src/type/event-test'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import { AlertTriagle } from '@assets/icons'
-
-enum EAttemptStatus {
-  UN_SUBMITTED = 'UN_SUBMITTED',
-  SUBMITTED = 'SUBMITTED',
-  UN_FINISHED = 'UN_FINISHED',
-}
+import { AlertIcon, IconCongrats } from '@assets/icons'
+import { formatDate } from '@utils/helpers'
+import { MY_COURSES } from 'src/constants/lang'
+import { compareAsc, format } from 'date-fns'
 
 const EventTest = ({ data }: { data: IEventTest }) => {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
+  const [openSubmitTest, setOpenSubmitTest] = useState(
+    localStorage.getItem('openEventTest') === 'true' ? true : false,
+  )
+  const handleCancelModalSubmitTest = () => {
+    setOpenSubmitTest(false)
+    localStorage.removeItem('openEventTest')
+  }
 
   const timeTakenFormatted = data?.total_attempt_time
     ? formatTime(data?.total_attempt_time)
@@ -23,16 +27,25 @@ const EventTest = ({ data }: { data: IEventTest }) => {
     ? formatTime(data?.quiz_timed * 60)
     : 'Unlimited'
 
-  /**
-   * @description Kiểm tra điều kiện có hiệu lực
-   */
-  // const isAttemptValid =
-  //   data.is_attempt &&
-  //   [
-  //     EAttemptStatus.SUBMITTED,
-  //     EAttemptStatus.UN_FINISHED,
-  //     EAttemptStatus.UN_SUBMITTED,
-  //   ].includes(data?.attempt_status)
+  const currentTime = Date.now()
+  const started_at = new Date(data?.started_at)
+  const finished_at = new Date(data?.finished_at)
+
+  const resultStartAt = compareAsc(currentTime, started_at)
+  const resultFinishAt = compareAsc(currentTime, finished_at)
+
+  function checkEventStatus(
+    resultStartAt: number,
+    resultFinishAt: number,
+    textStart: string,
+    textEnd: string,
+  ) {
+    return resultStartAt === -1
+      ? textStart
+      : resultFinishAt === 1
+        ? textEnd
+        : ''
+  }
 
   return (
     <>
@@ -76,30 +89,59 @@ const EventTest = ({ data }: { data: IEventTest }) => {
               size="small"
               full={false}
               onClick={() =>
-                data.is_opened
-                  ? router.push({
+                resultStartAt === -1 || resultFinishAt === 1
+                  ? setOpen(true)
+                  : router.push({
                       pathname: `/test/${data?.id}`,
                       query: {
                         type: 'event-test',
                       },
                     })
-                  : setOpen(true)
               }
             />
           )}
         </div>
       </div>
+
       <SappModalV3
         open={open}
-        okButtonCaption="Quit"
-        handleCancel={() => {}}
-        onOk={() => {}}
+        okButtonCaption="Back To Event Test"
+        handleCancel={() => setOpen(false)}
+        onOk={() => setOpen(false)}
         fullWidthBtn={true}
         buttonSize="extra"
-        icon={<AlertTriagle />}
-        header="Are you sure?"
-        content="chuwa dden han"
+        icon={<AlertIcon />}
+        header={checkEventStatus(
+          resultStartAt,
+          resultFinishAt,
+          'Unstarted Event Test',
+          'Ended Event Test',
+        )}
+        content={`This Event Test ${checkEventStatus(resultStartAt, resultFinishAt, 'will start', 'has ended')} on ${formatDate(new Date(resultStartAt === -1 ? data?.started_at : resultFinishAt === 1 ? data?.finished_at : '').toString())}. Please come back later or contact our Support at ${MY_COURSES.hotline}.`}
       />
+
+      <SappModalV3
+        open={openSubmitTest}
+        okButtonCaption="Back To Event Test"
+        handleCancel={handleCancelModalSubmitTest}
+        onOk={handleCancelModalSubmitTest}
+        fullWidthBtn={true}
+        buttonSize="extra"
+        icon={<IconCongrats />}
+        header="Congratulations"
+      >
+        <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
+          <span className="text-gray-1">Your test results will</span>{' '}
+          <span className="text-bw-1">
+            be emailed to you on{' '}
+            {format(new Date(data.finished_at), 'MMMM dd, yyyy')}
+          </span>
+          .
+          <div className="text-gray-1">
+            Please check your email regularly to receive the earliest update.
+          </div>
+        </div>
+      </SappModalV3>
     </>
   )
 }

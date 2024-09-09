@@ -7,4 +7,8 @@ export class EventTestAPI {
       params: params,
     })
   }
+
+  static getCount(): Promise<any> {
+    return fetcher(`${apiURL}/event-tests/count`)
+  }
 }
