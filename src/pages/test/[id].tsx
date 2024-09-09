@@ -1208,14 +1208,6 @@ const TestDetail = () => {
   }
   const answerListRef = useRef<AnswerList>({})
 
-  const setRequirementValue = (requirementId: string | number) => {
-    const existingAnswer =
-      answerListRef?.current?.[requirementId as unknown as number]
-    if (existingAnswer) {
-      setValue(`${currentPage}_${essayData?.index}_answer`, existingAnswer)
-    }
-  }
-
   const setAnswerListValue = debounce((requirementId: number) => {
     answerListRef.current[requirementId] =
       getValues(`${currentPage}_${essayData?.index}_answer`) || ''
@@ -2407,7 +2399,6 @@ const TestDetail = () => {
                                   essayData.index !== index && 'text-gray-1'
                                 }`}
                                 onClick={() => {
-                                  setRequirementValue(e.id)
                                   setEssayData({ req: e, index: index })
                                   rightSideRef?.current &&
                                     rightSideRef.current.scrollTo({
