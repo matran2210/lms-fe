@@ -16,8 +16,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
     localStorage.getItem('openEventTest') === 'true' ? true : false,
   )
   const handleCancelModalSubmitTest = () => {
-    setOpenSubmitTest(false)
-    localStorage.removeItem('openEventTest')
+    setOpenSubmitTest(localStorage.set('openEventTest', 'false'))
   }
 
   const timeTakenFormatted = data?.total_attempt_time
