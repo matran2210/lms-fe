@@ -379,7 +379,9 @@ const Discussion = ({ class_id }: Props) => {
                       className="rounded-full"
                       src={
                         e.is_sapp_supporter
-                          ? sappAvatar
+                          ? e.avatar['50x50'] ||
+                            e.avatar['ORIGIN'] ||
+                            sappAvatar
                           : user?.detail?.avatar['50x50'] ||
                             user?.detail?.avatar['ORIGIN'] ||
                             blankAvatar
@@ -488,8 +490,11 @@ const Discussion = ({ class_id }: Props) => {
             height={50}
             className="rounded-full"
             src={
-              selector.userInDiscussion?.is_sapp_supporter
-                ? sappAvatar
+              selector.userInDiscussion?.is_sapp_supporter &&
+              selector.userInDiscussion?.avatar
+                ? selector.userInDiscussion?.avatar['50x50'] ||
+                  selector.userInDiscussion?.avatar['ORIGIN'] ||
+                  sappAvatar
                 : user?.detail?.avatar['50x50'] ||
                   user?.detail?.avatar['ORIGIN'] ||
                   blankAvatar
