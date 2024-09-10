@@ -1896,7 +1896,7 @@ const TestDetail = () => {
                       onClick: () => {
                         setOpenQuit(true)
                         dispatch(disableUnsavedChange())
-                        localStorage.setItem('openEventTest', 'true')
+                        setSubmitEventTest(true)
                       },
                       loading: false,
                       //   full: fullWidthBtn,
@@ -2592,7 +2592,7 @@ const TestDetail = () => {
                       )
                     } else if (type === 'event-test') {
                       router.replace(`/event-test`)
-                      localStorage.setItem('openEventTest', 'true')
+                      setSubmitEventTest(true)
                     } else {
                       if (
                         type !== 'entrance' &&
