@@ -84,6 +84,9 @@ const EditorReader = ({
     }
   }
 
+  let mathElement =
+    editorRef?.current && editorRef?.current?.querySelectorAll('math')
+
   useEffect(() => {
     setTimeout(() => {
       const editor = editorRef?.current
@@ -108,8 +111,7 @@ const EditorReader = ({
         })
 
         // Replace quote in font family
-        const mathElement = editor?.querySelectorAll('math')
-        if (mathElement) {
+        if (mathElement && mathElement?.length) {
           mathElement?.forEach((el: any) => {
             if (el?.hasAttribute('style')) {
               let styleValue = el?.getAttribute('style')
@@ -121,7 +123,7 @@ const EditorReader = ({
         }
       }
     }, 100)
-  }, [editorRef?.current, text_editor_content])
+  }, [editorRef?.current, text_editor_content, mathElement])
 
   const handleOnclick = async (e: MouseEvent) => {
     const target = e?.target as HTMLElement
