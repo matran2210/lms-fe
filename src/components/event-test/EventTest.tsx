@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { useRouter } from 'next/router'
@@ -7,16 +7,18 @@ import SappModalV3 from '@components/base/modal/SappModalV3'
 import { AlertIcon, IconCongrats } from '@assets/icons'
 import { formatDate } from '@utils/helpers'
 import { MY_COURSES } from 'src/constants/lang'
-import { compareAsc, format } from 'date-fns'
+import { compareAsc } from 'date-fns'
+import Icon from '@components/icons'
+import ContentTestCongratution from './ContentTestCongratution'
+import { useCourseContext } from '@contexts/index'
 
 const EventTest = ({ data }: { data: IEventTest }) => {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
-  const [openSubmitTest, setOpenSubmitTest] = useState(
-    localStorage.getItem('openEventTest') === 'true' ? true : false,
-  )
+  const { setSubmitEventTest, submitEventTest } = useCourseContext()
+
   const handleCancelModalSubmitTest = () => {
-    setOpenSubmitTest(localStorage.set('openEventTest', 'false'))
+    setSubmitEventTest(false)
   }
 
   const timeTakenFormatted = data?.total_attempt_time
@@ -46,6 +48,58 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         : ''
   }
 
+  const renderContentPopup = (type: string) => {
+    switch (type) {
+      case 'ACCA':
+        return (
+          <ContentTestCongratution
+            text1="Your test results will"
+            text2="be emailed to you on October 04, 2024"
+            text3="Please check your email regularly to receive the earliest update."
+          />
+        )
+      case 'CMA':
+        return (
+          <ContentTestCongratution
+            text1="Your results for Round 1 will"
+            text2="be emailed to you on September 28, 2024"
+            text3="Please remember to check your inbox to ensure you don’t miss the update."
+          />
+        )
+      case 'CFA':
+        return (
+          <ContentTestCongratution
+            text1="Your results for Round 1 will"
+            text2="be emailed to you on September 27 - 30, 2024"
+            text3="Please remember to check your inbox to ensure you don’t miss the update."
+          />
+        )
+      default:
+        return (
+          <ContentTestCongratution
+            text1="Your test results will"
+            text2="be emailed to you on October 04, 2024"
+            text3="Please check your email regularly to receive the earliest update."
+          />
+        )
+    }
+  }
+
+  const resultDate = (category: string) => {
+    switch (category) {
+      case 'ACCA':
+        return '04/10/2024'
+
+      case 'CFA':
+        return '27-30/09/2024'
+
+      case 'CMA':
+        return '28/09/2024'
+      default:
+        break
+    }
+  }
+
   return (
     <>
       <div className="name">
@@ -53,7 +107,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
           {data?.name}
         </h2>
       </div>
-      <div className="mt-auto">
+      <div>
         <div className="info">
           <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
             {data?.is_attempt ? (
@@ -69,19 +123,26 @@ const EventTest = ({ data }: { data: IEventTest }) => {
             )}
           </div>
           <div className="flex justify-between pt-4 text-base capitalize text-gray-1">
-            <p>Results:</p>
-            {data?.is_attempt ? (
-              <>
-                <p className="text-state-success">
-                  {data?.total_correct_answer + '/' + data?.total_question}
-                </p>
-              </>
-            ) : (
-              <span className="">--</span>
-            )}
+            <p>
+              {data?.is_attempt ? 'Results Release Date:' : 'No of Questions:'}
+            </p>
+            <p className="text-medium-sm font-medium text-bw-1">
+              {data?.is_attempt
+                ? resultDate(data?.course_category?.name)
+                : data?.quiz_question_instances?.length}
+            </p>
           </div>
         </div>
-        <div className="action relative mt-10 flex items-center justify-end">
+        <div className="action relative mt-10 flex min-h-[32px] items-center justify-between">
+          <div className="text flex items-center">
+            <Icon
+              type={`${data?.is_attempt ? 'completed' : 'like'}`}
+              className={`relative text-bw-1`}
+            />
+            <p className={`ml-px pl-2 text-medium-sm font-medium text-bw-1`}>
+              {data?.is_attempt ? 'Completed' : 'Take Your Test'}
+            </p>
+          </div>
           {!data?.is_attempt && (
             <ButtonSecondary
               title="Begin"
@@ -120,7 +181,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
       />
 
       <SappModalV3
-        open={openSubmitTest}
+        open={submitEventTest}
         okButtonCaption="Back To Event Test"
         handleCancel={handleCancelModalSubmitTest}
         onOk={handleCancelModalSubmitTest}
@@ -129,17 +190,9 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         icon={<IconCongrats />}
         header="Congratulations"
       >
-        <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
-          <span className="text-gray-1">Your test results will</span>{' '}
-          <span className="text-bw-1">
-            be emailed to you on{' '}
-            {format(new Date(data.finished_at), 'MMMM dd, yyyy')}
-          </span>
-          .
-          <div className="text-gray-1">
-            Please check your email regularly to receive the earliest update.
-          </div>
-        </div>
+        {renderContentPopup(
+          JSON.parse(localStorage.getItem('userData1') as any),
+        )}
       </SappModalV3>
     </>
   )

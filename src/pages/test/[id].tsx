@@ -1218,7 +1218,8 @@ const TestDetail = () => {
       getValues(`${currentPage}_${essayData?.index}_answer`) || ''
   }, 200)
 
-  const { setScoreQuestion, setSubmitTest, courseType } = useCourseContext()
+  const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
+    useCourseContext()
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
 
@@ -1365,7 +1366,11 @@ const TestDetail = () => {
           router.replace(`/entrance-test/test-result/${res?.data?.id}`)
         } else if (type === 'event-test') {
           router.replace(`/event-test`)
-          localStorage.setItem('openEventTest', 'true')
+          setSubmitEventTest(true)
+          localStorage.setItem(
+            'userData1',
+            JSON.stringify(res?.data?.course_category?.name),
+          )
         } else {
           if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
             router.replace(`/courses/test/test-result/${res?.data?.id}`)

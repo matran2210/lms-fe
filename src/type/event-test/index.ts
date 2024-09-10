@@ -19,4 +19,7 @@ export interface IEventTest {
   total_correct_answer: number
   total_attempt_time: number
   total_question: number
+  course_category: {
+    name: string
+  }
 }

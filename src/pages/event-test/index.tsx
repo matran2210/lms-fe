@@ -52,7 +52,7 @@ const EventTest = () => {
           <Heading
             greeting="Welcome to"
             title="Event Test"
-            des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
+            des="Welcome to Futurewards 2024"
           />
         </div>
         <div
