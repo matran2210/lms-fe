@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import { formatTime } from '@components/common/timer'
-import { IMyCourseDetail } from 'src/type/courses'
-import TestModal from 'src/pages/courses/test'
 import SappButton from '@components/base/button/SappButton'
-import { useRouter } from 'next/router'
-import { convertFractionToPercentage, truncateString } from '@utils/index'
-import { roundNumber } from '@utils/helpers'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
-import { isNull, round } from 'lodash'
+import { formatTime } from '@components/common/timer'
 import { useCourseContext } from '@contexts/index'
-import SappTooltip from 'src/common/SappTooltip'
 import { trackGAEvent } from '@utils/google-analytics'
+import { roundNumber } from '@utils/helpers'
+import { convertFractionToPercentage, truncateString } from '@utils/index'
+import { isNull, round } from 'lodash'
+import { useRouter } from 'next/router'
+import { useEffect, useMemo, useState } from 'react'
+import SappTooltip from 'src/common/SappTooltip'
+import { ANIMATION, COURSE_TYPE, TEST_TYPE } from 'src/constants'
+import TestModal from 'src/pages/courses/test'
+import { IMyCourseDetail } from 'src/type/courses'
 
 const PartFailed = ({
   coursePart,
@@ -92,6 +92,20 @@ const PartFailed = ({
     coursePart?.course_section_type === TEST_TYPE.FINAL_TEST
       ? 'Final Test'
       : 'MidTerm Test'
+
+  const shouldShowResultButton = () => {
+    const testTypes = new Set([
+      TEST_TYPE.FINAL_TEST,
+      TEST_TYPE.MID_TERM_TEST,
+      TEST_TYPE.MOCK_TEST,
+    ])
+    return (
+      passFinalTest ||
+      (coursePart?.course_section_type === TEST_TYPE.FINAL_TEST &&
+        courseType !== COURSE_TYPE.FOUNDATION_COURSE) ||
+      testTypes.has(coursePart?.course_section_type as TEST_TYPE)
+    )
+  }
 
   return (
     <>
@@ -177,10 +191,7 @@ const PartFailed = ({
             )
           ) : (
             <div className="flex flex-1 justify-between">
-              {(passFinalTest ||
-                (coursePart?.course_section_type === 'FINAL_TEST' &&
-                  courseType !== 'FOUNDATION_COURSE') ||
-                coursePart?.course_section_type === 'MID_TERM_TEST') && (
+              {shouldShowResultButton() && (
                 <SappButton
                   title="Result"
                   isUnderLine
