@@ -1,6 +1,6 @@
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React from 'react'
+import React, { useEffect } from 'react'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { ANIMATION } from 'src/constants'
 import { useQuery } from 'react-query'
@@ -11,6 +11,7 @@ import EventTestFilter from '@components/event-test/EventTestFilter'
 import EventTestList from '@components/event-test/EventTestList'
 import { EventTestAPI } from '../api/event-test'
 import { LANG_SIGNIN } from 'src/constants/lang'
+import { isEmpty } from 'lodash'
 
 const EventTest = () => {
   const useGetData = (queryKey: string, params: Object) => {
@@ -26,6 +27,12 @@ const EventTest = () => {
   const { data: eventTestLists, isLoading } = useGetData('event-test', {
     attempt_status: router?.query?.attempt_status,
   })
+
+  useEffect(() => {
+    if (!isEmpty(eventTestLists)) {
+      localStorage.setItem('countEvent', eventTestLists?.length)
+    }
+  }, [eventTestLists?.length])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
