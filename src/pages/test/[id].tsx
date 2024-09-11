@@ -1367,6 +1367,10 @@ const TestDetail = () => {
         } else if (type === 'event-test') {
           router.replace(`/event-test`)
           setSubmitEventTest(true)
+          localStorage.setItem(
+            'category',
+            JSON.stringify(res?.data?.course_category?.name),
+          )
         } else {
           if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
             router.replace(`/courses/test/test-result/${res?.data?.id}`)
@@ -1892,7 +1896,7 @@ const TestDetail = () => {
                       onClick: () => {
                         setOpenQuit(true)
                         dispatch(disableUnsavedChange())
-                        localStorage.setItem('openEventTest', 'true')
+                        setSubmitEventTest(true)
                       },
                       loading: false,
                       //   full: fullWidthBtn,

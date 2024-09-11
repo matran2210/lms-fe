@@ -56,6 +56,9 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    */
   const [submitTest, setSubmitTest] = useState(false)
 
+  /**
+   * @description state này bằng true khi submit bài test
+   */
   const [submitEventTest, setSubmitEventTest] = useState(false)
 
   return (
