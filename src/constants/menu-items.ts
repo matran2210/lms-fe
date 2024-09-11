@@ -1,4 +1,5 @@
 import { PageLink, TitleSidebar } from './index'
+import { LANG_SIGNIN } from './lang'
 
 const MENU_OPTIONS: MenuOption[] = [
   // {
@@ -65,12 +66,6 @@ const MENU_OPTIONS: MenuOption[] = [
     url: `${PageLink.ENTRANCE_TEST}`,
     type: 'level-1',
   },
-  {
-    name: `Event Test`,
-    icon: 'entrance-test',
-    url: PageLink.EVENT_TEST,
-    type: 'level-1',
-  },
   // {
   //   name: `${TitleSidebar.RESULTS}`,
   //   icon: 'result',
@@ -92,52 +87,12 @@ const MENU_OPTIONS: MenuOption[] = [
 ]
 
 const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
-  // {
-  //   name: `${TitleSidebar.DASHBOARD}`,
-  //   icon: 'grid',
-  //   url: PageLink.DASHBOARD,
-  //   type: 'level-1',
-  // },
   {
     name: `${TitleSidebar.COURSES}`,
     icon: 'course',
     url: `${PageLink.COURSES}`,
     type: 'level-1',
-    // subItems: [
-    //   {
-    //     name: `${TitleSidebar.COURSE_NEW}`,
-    //     icon: 'document',
-    //     url: `${PageLink.COURSE_NEW}`,
-    //     type: 'level-2',
-    //   },
-    //   {
-    //     name: `${TitleSidebar.COURSE_LIST}`,
-    //     icon: 'document',
-    //     url: `${PageLink.COURSES}`,
-    //     type: 'level-2',
-    //     subItems: [
-    //       {
-    //         name: `${TitleSidebar.TEACHER}`,
-    //         icon: 'dot',
-    //         url: `${PageLink.TEACHER}`,
-    //         type: 'level-3',
-    //       },
-    //       {
-    //         name: `${TitleSidebar.COURSE_LIST}`,
-    //         icon: 'dot',
-    //         url: `${PageLink.COURSES}`,
-    //         type: 'level-3',
-    //       },
-    //     ],
-    //   },
-    // ],
   },
-  // {
-  //   name: `${TitleSidebar.DASHBOARD}`,
-  //   icon: 'stats-chart-sharp',
-  //   url: PageLink.DASHBOARD,
-  //   type: 'level-1',
-  // },
   {
     name: `${TitleSidebar.NOTES_LIST}`,
     icon: 'notes-list',
@@ -157,8 +112,8 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
     type: 'level-1',
   },
   {
-    name: `Event Test`,
-    icon: 'entrance-test',
+    name: LANG_SIGNIN.eventTest,
+    icon: 'event-test',
     url: PageLink.EVENT_TEST,
     type: 'level-1',
   },

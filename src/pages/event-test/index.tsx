@@ -10,6 +10,7 @@ import Layout from '@components/layout'
 import EventTestFilter from '@components/event-test/EventTestFilter'
 import EventTestList from '@components/event-test/EventTestList'
 import { EventTestAPI } from '../api/event-test'
+import { LANG_SIGNIN } from 'src/constants/lang'
 
 const EventTest = () => {
   const useGetData = (queryKey: string, params: Object) => {
@@ -28,7 +29,7 @@ const EventTest = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Event Test">
+      <Layout title={LANG_SIGNIN.eventTest}>
         <div className="header border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
             <SearchForm
@@ -40,7 +41,7 @@ const EventTest = () => {
         <div className="main mx-8 my-0 max-w-xxl lg:mx-auto">
           <div className="flex justify-between pb-4 pt-6">
             <h2 className="text-medium-sm font-medium text-bw-1 ">
-              Event Test
+              {LANG_SIGNIN.eventTest}
             </h2>
             <EventTestFilter count={eventTestLists?.length || 0} />
           </div>
@@ -49,11 +50,7 @@ const EventTest = () => {
           className="heading mx-8 my-0 flex max-w-xxl bg-white md:mx-8 lg:mx-8 xl:mx-auto"
           data-aos={ANIMATION.DATA_AOS}
         >
-          <Heading
-            greeting="Welcome to"
-            title="Event Test"
-            des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
-          />
+          <Heading greeting="Welcome to" title={LANG_SIGNIN.eventTest} des="" />
         </div>
         <div
           className="mx-8 my-0 max-w-xxl pt-6 lg:mx-8 xl:mx-auto"

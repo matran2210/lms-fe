@@ -15,6 +15,8 @@ type Context = {
   setScoreQuestion: React.Dispatch<React.SetStateAction<number>>
   submitTest: boolean
   setSubmitTest: React.Dispatch<React.SetStateAction<boolean>>
+  submitEventTest: boolean
+  setSubmitEventTest: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 // initContext
@@ -27,6 +29,8 @@ const initContext: Context = {
   setScoreQuestion: () => {},
   submitTest: false,
   setSubmitTest: () => {},
+  submitEventTest: false,
+  setSubmitEventTest: () => {},
 }
 
 const CourseContext = createContext<Context>(initContext)
@@ -52,6 +56,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    */
   const [submitTest, setSubmitTest] = useState(false)
 
+  const [submitEventTest, setSubmitEventTest] = useState(false)
+
   return (
     <CourseContext.Provider
       value={{
@@ -63,6 +69,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
         setScoreQuestion,
         setSubmitTest,
         submitTest,
+        submitEventTest,
+        setSubmitEventTest,
       }}
       {...props}
     />

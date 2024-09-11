@@ -8,15 +8,15 @@ import { AlertIcon, IconCongrats } from '@assets/icons'
 import { formatDate } from '@utils/helpers'
 import { MY_COURSES } from 'src/constants/lang'
 import { compareAsc, format } from 'date-fns'
+import { useCourseContext } from '@contexts/index'
 
 const EventTest = ({ data }: { data: IEventTest }) => {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
-  const [openSubmitTest, setOpenSubmitTest] = useState(
-    localStorage.getItem('openEventTest') === 'true' ? true : false,
-  )
+  const { setSubmitEventTest, submitEventTest } = useCourseContext()
+
   const handleCancelModalSubmitTest = () => {
-    setOpenSubmitTest(localStorage.set('openEventTest', 'false'))
+    setSubmitEventTest(false)
   }
 
   const timeTakenFormatted = data?.total_attempt_time
@@ -120,7 +120,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
       />
 
       <SappModalV3
-        open={openSubmitTest}
+        open={submitEventTest}
         okButtonCaption="Back To Event Test"
         handleCancel={handleCancelModalSubmitTest}
         onOk={handleCancelModalSubmitTest}
