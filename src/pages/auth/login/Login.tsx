@@ -26,6 +26,7 @@ import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 import PopUpLimit from './PopupLimit'
 import { getKeycloakInstance } from '../../../utils/helpers/keycloak'
 import SingleDialogLayout from '@components/layout/SingleDialog'
+import { EventTestAPI } from 'src/pages/api/event-test'
 
 interface IInputProps {
   login: string
@@ -100,22 +101,36 @@ const LoginPage = () => {
     setLoading(true)
     try {
       const getFireBaseToken = await handleDeviceToken()
+      const keycloak = getKeycloakInstance()
       dispatch(
         getLoginUser({
           device_id: getFireBaseToken,
+          username: keycloak?.tokenParsed?.preferred_username || '',
         }),
       )
         .unwrap()
         .then(async () => {
           dispatch(clearGuideState())
-          const res = await dispatch(getEntranceCount())
-          return res.payload.data.count
-        })
-        .then((count) => {
+          let countEventTest = await EventTestAPI.getCount()
+          let countEntranceTest: any
+
+          localStorage.setItem('countEvent', countEventTest?.data?.count)
+
+          if (countEventTest?.data?.count && countEventTest?.data?.count < 0) {
+            countEntranceTest = await dispatch(getEntranceCount())
+            return countEntranceTest
+          }
+
           const redirectAfterLogin = localStorage.getItem(
             localStorageKeys.REDIRECT_AFTER_LOGIN,
           )
-          if (count && count > 0) {
+
+          if (countEventTest?.data?.count && countEventTest?.data?.count > 0) {
+            router.push('/event-test')
+          } else if (
+            countEntranceTest?.data?.count &&
+            countEntranceTest?.data?.count > 0
+          ) {
             router.push(PageLink.ENTRANCE_TEST)
           } else {
             router.push(redirectAfterLogin || PageLink.COURSES)
@@ -154,43 +169,6 @@ const LoginPage = () => {
     }
     registerFirebase()
   }, [])
-
-  useEffect(() => {
-    const keycloak = getKeycloakInstance()
-    setLoading(true)
-    const checkKeycloakAuthentication = async () => {
-      if (keycloak.authenticated) {
-        try {
-          const getFireBaseToken = await handleDeviceToken()
-          dispatch(
-            getLoginUser({
-              device_id: getFireBaseToken,
-            }),
-          )
-            .unwrap()
-            .then(() => {
-              dispatch(clearGuideState())
-              dispatch(getEntranceCount())
-              localStorage.setItem('enstranceTest', 'true')
-            })
-            .catch((error) => {
-              if (error?.response?.data?.error?.code === '403|000010') {
-                setOpenLimit(true)
-              } else if (error?.response?.data?.error?.code === '401|0000') {
-                setError('login', { message: SHOW_ERROR_USERNAME_PASSWORD })
-                setError('password', { message: SHOW_ERROR_USERNAME_PASSWORD })
-              }
-              setTimeout(() => {
-                setLoading(false)
-              }, 1000)
-            })
-        } catch (error) {}
-      } else {
-        setLoading(false)
-      }
-    }
-    checkKeycloakAuthentication()
-  }, [router])
 
   return (
     <SingleDialogLayout title="Login">

@@ -11,6 +11,7 @@ export interface LoginReq {
 
 export interface PostLoginReq {
   device_id: string | undefined
+  username: string | undefined
 }
 
 export interface ChangePasswordReq {

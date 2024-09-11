@@ -19,6 +19,8 @@ import {
   pageview,
   setActToken,
   setRefreshToken,
+  removeLocalStorageJwtToken,
+  removeJwtToken,
 } from '@utils/index'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
@@ -43,6 +45,13 @@ import { getKeycloakInstance } from '../utils/helpers/keycloak'
 import SappLoading from 'src/common/SappLoading'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getMessagingToken } from 'src/utils/firebase'
+import { getLoginUser } from 'src/redux/slice/Login/Login'
+import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
+import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
+import PopUpLimit from './auth/login/PopupLimit'
+import { EventTestAPI } from 'src/pages/api/event-test'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -56,6 +65,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const dispatch = useAppDispatch()
+  const [openLimit, setOpenLimit] = useState<boolean>(false)
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -67,6 +77,26 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   // const { getPinnedData } = usePinnedNotifyContext()
 
+  const handleDeviceToken = async (): Promise<string | undefined> => {
+    try {
+      const accessDeviceToken = await AsyncStorage.getItem(
+        'firebaseDeviceToken',
+      )
+      if (accessDeviceToken) {
+        return accessDeviceToken
+      }
+      if (window?.Notification?.permission !== 'denied') {
+        const token = await getMessagingToken()
+        if (token) {
+          await AsyncStorage.setItem('firebaseDeviceToken', token)
+        }
+        return token ?? ''
+      }
+    } catch (error) {
+      return ''
+    }
+  }
+
   useEffect(() => {
     const keycloak = getKeycloakInstance()
     const accessToken = getLocalStorgeActToken()
@@ -77,12 +107,36 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         .init({ onLoad: 'login-required' })
         .then((authenticated: boolean) => {
           if (authenticated) {
-            if (!accessToken && !refreshToken) {
-              setActToken(keycloak.token ?? '')
-              setRefreshToken(keycloak.refreshToken ?? '')
+            const checkKeycloakAuthentication = async () => {
+              try {
+                const getFireBaseToken = await handleDeviceToken()
+
+                await dispatch(
+                  getLoginUser({
+                    device_id: getFireBaseToken,
+                    username: keycloak?.tokenParsed?.preferred_username,
+                  }),
+                ).unwrap()
+
+                if (!accessToken && !refreshToken) {
+                  setActToken(keycloak.token ?? '')
+                  setRefreshToken(keycloak.refreshToken ?? '')
+                }
+                dispatch(clearGuideState())
+                dispatch(getEntranceCount())
+                localStorage.setItem('enstranceTest', 'true')
+                setLoading(false)
+              } catch (error: unknown) {
+                const err = error as {
+                  response: { data: { error: { code: string } } }
+                }
+                if (err?.response?.data?.error?.code === '403|000010') {
+                  setOpenLimit(true)
+                }
+              }
             }
+            checkKeycloakAuthentication()
           }
-          setLoading(false)
         })
         .catch(() => {
           setLoading(false)
@@ -212,7 +266,24 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [showHelp])
 
   if (loading) {
-    return <>{loading ? <SappLoading /> : <></>}</>
+    return (
+      <div>
+        {loading ? <SappLoading openLimit={openLimit} /> : <></>}
+        <PopUpLimit
+          open={openLimit}
+          setOpen={setOpenLimit}
+          handleAction={() => {
+            const keycloak = getKeycloakInstance()
+            keycloak
+              .logout({ redirectUri: window.location.origin })
+              .then(() => {
+                removeJwtToken()
+                removeLocalStorageJwtToken()
+              })
+          }}
+        />
+      </div>
+    )
   }
 
   return (

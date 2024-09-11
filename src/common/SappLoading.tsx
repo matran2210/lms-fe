@@ -2,9 +2,15 @@ import { Player } from '@lottiefiles/react-lottie-player'
 import React from 'react'
 import animation from 'src/assets/images/animation.json'
 
-const SappLoading = () => {
+interface IProps {
+  openLimit?: boolean
+}
+
+const SappLoading = ({ openLimit = false }: IProps) => {
   return (
-    <div className="fixed z-[9999] block h-full w-full bg-white backdrop-blur-[2000px]">
+    <div
+      className={`fixed ${openLimit ? '' : 'z-[9999]'} block h-full w-full bg-white backdrop-blur-[2000px]`}
+    >
       <Player
         src={animation}
         autoplay

@@ -41,6 +41,7 @@ export class AuthAPI {
     return fetcher(`${apiURL}/auth/post-login`, {
       data: {
         device_id: request?.device_id,
+        username: request?.username,
       },
       method: 'POST',
     })

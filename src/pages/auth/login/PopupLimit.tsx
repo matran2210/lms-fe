@@ -7,9 +7,10 @@ import { useAppDispatch } from 'src/redux/hook'
 interface IProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
+  handleAction?: () => void
 }
 
-const PopUpLimit = ({ open, setOpen }: IProps) => {
+const PopUpLimit = ({ open, setOpen, handleAction }: IProps) => {
   const dispatch = useAppDispatch()
   // const {} = useAppSelector()
   //to do: call api to get datail
@@ -19,6 +20,7 @@ const PopUpLimit = ({ open, setOpen }: IProps) => {
 
   const onOk = () => {
     setOpen(false)
+    handleAction && handleAction()
   }
   return (
     <SappModalV2
@@ -36,7 +38,10 @@ const PopUpLimit = ({ open, setOpen }: IProps) => {
       closeAfterSubmit={true}
       buttonSize="extra"
       title={undefined}
-      handleCancel={() => setOpen(false)}
+      handleCancel={() => {
+        setOpen(false)
+        handleAction && handleAction()
+      }}
     >
       <div className="flex justify-center">
         <div
