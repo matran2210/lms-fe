@@ -7,7 +7,7 @@ import SappModalV3 from '@components/base/modal/SappModalV3'
 import { AlertIcon, IconCongrats } from '@assets/icons'
 import { formatDate } from '@utils/helpers'
 import { MY_COURSES } from 'src/constants/lang'
-import { compareAsc } from 'date-fns'
+import { compareAsc, format } from 'date-fns'
 import Icon from '@components/icons'
 import ContentTestCongratution from './ContentTestCongratution'
 import { useCourseContext } from '@contexts/index'
@@ -100,50 +100,95 @@ const EventTest = ({ data }: { data: IEventTest }) => {
     }
   }
 
+  const getEventTestStatus = (
+    textDoneAttempt: string | number | any,
+    textNotAttempt: string | number,
+    textExpired: string | number,
+  ) => {
+    if (data?.is_attempt) {
+      return textDoneAttempt
+    } else if (resultFinishAt === 1 && !data?.is_attempt) {
+      return textExpired
+    } else if (!data?.is_attempt) {
+      return textNotAttempt
+    } else {
+      return ''
+    }
+  }
+
+  function getTextColor(colorDefault: string) {
+    return resultFinishAt === 1 && !data?.is_attempt
+      ? 'text-gray-2'
+      : colorDefault
+  }
+
   return (
     <>
       <div className="name">
-        <h2 className="mb-5 line-clamp-2 text-2xl font-medium text-bw-1">
+        <h2
+          className={`mb-5 line-clamp-2 text-2xl font-medium ${getTextColor('text-bw-1')}`}
+        >
           {data?.name}
         </h2>
       </div>
       <div>
         <div className="info">
-          <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
-            {data?.is_attempt ? (
-              <>
-                <p>Time taken:</p>
-                <p className="font-medium text-bw-1">{timeTakenFormatted}</p>
-              </>
-            ) : (
-              <>
-                <p>Time allowed: </p>
-                <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
-              </>
-            )}
-          </div>
-          <div className="flex justify-between pt-4 text-base capitalize text-gray-1">
+          <div
+            className={`flex justify-between border-b border-gray-2 pb-4 text-base capitalize ${getTextColor('text-gray-1')}`}
+          >
             <p>
-              {data?.is_attempt ? 'Results Release Date:' : 'No of Questions:'}
+              {getEventTestStatus(
+                'Time taken:',
+                'Time allowed:',
+                'Start Date:',
+              )}
             </p>
-            <p className="text-medium-sm font-medium text-bw-1">
-              {data?.is_attempt
-                ? resultDate(data?.course_category?.name)
-                : data?.quiz_question_instances?.length}
+            <p className={`font-medium ${getTextColor('text-bw-1')}`}>
+              {getEventTestStatus(
+                timeTakenFormatted,
+                timeAllowFormatted,
+                format(new Date(data?.started_at), 'dd/MM/yyyy'),
+              )}
+            </p>
+          </div>
+          <div
+            className={`flex justify-between pt-4 text-base capitalize ${getTextColor('text-gray-1')}`}
+          >
+            <p>
+              {getEventTestStatus(
+                'Results Release Date:',
+                'No of Questions:',
+                'End Date:',
+              )}
+            </p>
+            <p className={`font-medium ${getTextColor('text-bw-1')}`}>
+              {getEventTestStatus(
+                resultDate(data?.course_category?.name),
+                data?.quiz_question_instances?.length,
+                format(new Date(data?.finished_at), 'dd/MM/yyyy'),
+              )}
             </p>
           </div>
         </div>
         <div className="action relative mt-10 flex min-h-[32px] items-center justify-between">
           <div className="text flex items-center">
             <Icon
-              type={`${data?.is_attempt ? 'completed' : 'like'}`}
-              className={`relative text-bw-1`}
+              type={`${data?.is_attempt ? 'completed' : resultFinishAt === 1 && !data?.is_attempt ? 'expired' : !data?.is_attempt ? 'like' : ''}`}
+              className={`relative ${getTextColor('text-bw-1')}`}
             />
-            <p className={`ml-px pl-2 text-medium-sm font-medium text-bw-1`}>
-              {data?.is_attempt ? 'Completed' : 'Take Your Test'}
+            <p
+              className={`ml-px pl-2 text-medium-sm font-medium ${getTextColor('text-bw-1')}`}
+            >
+              {data?.is_attempt
+                ? 'Completed'
+                : resultFinishAt === 1 && !data?.is_attempt
+                  ? 'Expired'
+                  : !data?.is_attempt
+                    ? 'Take Your Test '
+                    : ''}
             </p>
           </div>
-          {!data?.is_attempt && (
+          {!data?.is_attempt && resultFinishAt !== 1 && (
             <ButtonSecondary
               title="Begin"
               size="small"
@@ -165,7 +210,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
 
       <SappModalV3
         open={open}
-        okButtonCaption="Back To Event Test"
+        okButtonCaption="Back"
         handleCancel={() => setOpen(false)}
         onOk={() => setOpen(false)}
         fullWidthBtn={true}
@@ -177,8 +222,31 @@ const EventTest = ({ data }: { data: IEventTest }) => {
           'Unstarted Event Test',
           'Ended Event Test',
         )}
-        content={`This Event Test ${checkEventStatus(resultStartAt, resultFinishAt, 'will start', 'has ended')} on ${formatDate(new Date(resultStartAt === -1 ? data?.started_at : resultFinishAt === 1 ? data?.finished_at : '').toString())}. Please come back later or contact our Support at ${MY_COURSES.hotline}.`}
-      />
+      >
+        <div className="mb-1 mt-4 text-center text-medium-sm text-gray-1 2xl:mb-11">
+          This Event Test{' '}
+          {checkEventStatus(
+            resultStartAt,
+            resultFinishAt,
+            'will start',
+            'has ended',
+          )}{' '}
+          on{' '}
+          <span className="font-semibold text-bw-1">
+            {formatDate(
+              new Date(
+                resultStartAt === -1
+                  ? data?.started_at
+                  : resultFinishAt === 1
+                    ? data?.finished_at
+                    : '',
+              ).toString(),
+            )}
+          </span>
+          . Please come back later or contact our Support at{' '}
+          {MY_COURSES.hotline}.
+        </div>
+      </SappModalV3>
 
       <SappModalV3
         open={submitEventTest}

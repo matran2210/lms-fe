@@ -1904,7 +1904,9 @@ const TestDetail = () => {
                       onClick: () => {
                         setOpenQuit(true)
                         dispatch(disableUnsavedChange())
-                        setSubmitEventTest(true)
+                        if (type === 'event-test') {
+                          setSubmitEventTest(true)
+                        }
                       },
                       loading: false,
                       //   full: fullWidthBtn,
@@ -2626,7 +2628,14 @@ const TestDetail = () => {
             <QuitTestModal
               open={openQuit}
               setOpen={setOpenQuit}
-              handleQuit={() => router.back()}
+              handleQuit={() => {
+                if (type === 'event-test') {
+                  router.replace(`/event-test`)
+                  setSubmitEventTest(true)
+                } else {
+                  router.back()
+                }
+              }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
               }
@@ -2640,8 +2649,13 @@ const TestDetail = () => {
               open={openSubmit}
               setOpen={setOpenSubmit}
               handleSubmit={() => {
-                handleSubmitQuestion('submit')
-                setOpenSubmit(false)
+                if (type === 'event-test') {
+                  router.replace(`/event-test`)
+                  setSubmitEventTest(true)
+                } else {
+                  handleSubmitQuestion('submit')
+                  setOpenSubmit(false)
+                }
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
