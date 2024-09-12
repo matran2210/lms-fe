@@ -107,7 +107,7 @@ request.interceptors.response.use(
           .catch(() => {
             removeJwtToken()
             removeLocalStorageJwtToken()
-            redirect(PageLink.AUTH_LOGIN)
+            window.location.href = PageLink.AUTH_LOGIN
           })
       }
 

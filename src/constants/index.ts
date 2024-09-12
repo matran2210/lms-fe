@@ -162,6 +162,21 @@ export const defaultStatusEnstraceTest = [
   },
 ]
 
+export const defaultStatusEventTest = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Completed',
+    value: 'SUBMITTED',
+  },
+  {
+    label: 'Uncompleted',
+    value: 'UN_SUBMITTED',
+  },
+]
+
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
 export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
