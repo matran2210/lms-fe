@@ -44,10 +44,17 @@ export const getLogoutUser = createAsyncThunk(
   async ({}, thunkAPI) => {
     try {
       const keycloak = getKeycloakInstance()
-      keycloak.logout({ redirectUri: window.location.origin }).then(() => {
-        removeLocalStorageJwtToken()
-        removeJwtToken()
-      })
+      keycloak
+        .logout({ redirectUri: window.location.origin })
+        .then(async () => {
+          try {
+            await AuthAPI.logout()
+          } catch (error) {
+          } finally {
+            removeJwtToken()
+            removeLocalStorageJwtToken()
+          }
+        })
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
     }
@@ -114,9 +121,17 @@ export const loginSlice = createSlice({
       }
 
       const keycloak = getKeycloakInstance()
-      keycloak.logout({ redirectUri: window.location.origin }).then(() => {
-        removeLocalStorageJwtToken()
-      })
+      keycloak
+        .logout({ redirectUri: window.location.origin })
+        .then(async () => {
+          try {
+            await AuthAPI.logout()
+          } catch (error) {
+          } finally {
+            removeJwtToken()
+            removeLocalStorageJwtToken()
+          }
+        })
     })
     builder.addCase(getLogoutUser.rejected, (state, action) => {
       state.accessToken = ''
@@ -128,9 +143,17 @@ export const loginSlice = createSlice({
         username: '',
       }
       const keycloak = getKeycloakInstance()
-      keycloak.logout({ redirectUri: window.location.origin }).then(() => {
-        removeLocalStorageJwtToken()
-      })
+      keycloak
+        .logout({ redirectUri: window.location.origin })
+        .then(async () => {
+          try {
+            await AuthAPI.logout()
+          } catch (error) {
+          } finally {
+            removeJwtToken()
+            removeLocalStorageJwtToken()
+          }
+        })
     })
 
     builder.addCase(changePassword.pending, (state) => {

@@ -15,6 +15,7 @@ import {
 import { apiURL } from 'src/redux/services/httpService'
 import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
 import { redirect } from 'react-router-dom'
+import { AuthAPI } from 'src/pages/api/profile'
 
 type ApiConfig<T = any> = {
   uri: string
@@ -84,37 +85,44 @@ request.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true
         const keycloak = getKeycloakInstance()
-        if (keycloak) {
-          keycloak
-            .updateToken(30)
-            .then((refreshed) => {
-              if (refreshed) {
-                const newToken = keycloak.token as string
-                setActToken(newToken)
-                request.defaults.headers.common['Authorization'] =
-                  `Bearer ${newToken}`
-                refreshSubscribers.forEach((callback) => callback(newToken))
-                refreshSubscribers = []
-                isRefreshing = false
-              } else {
-                keycloak
-                  .logout({ redirectUri: window.location.origin })
-                  .then(() => {
-                    removeJwtToken()
-                    removeLocalStorageJwtToken()
-                  })
-              }
-            })
-            .catch(() => {
-              keycloak
-                .logout({ redirectUri: window.location.origin })
-                .then(() => {
+
+        axios(`${apiURL}/auth/rotate`, {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + getLocalStorgeRefreshToken(),
+          },
+        })
+          .then((res: any) => {
+            const userInfo = res?.data?.data?.tokens
+            setActToken(userInfo?.act)
+            setRefreshToken(userInfo?.rft)
+            setCookieActToken(userInfo?.act)
+            setCookieRefreshToken(userInfo?.rft)
+
+            // update new token to axios
+            request.defaults.headers.common['Authorization'] =
+              `Bearer ${getLocalStorgeActToken()}`
+
+            // Callback to unauth API calls
+            refreshSubscribers.forEach((callback) =>
+              callback(getLocalStorgeActToken()),
+            )
+            refreshSubscribers = []
+            isRefreshing = false
+          })
+          .catch(() => {
+            keycloak
+              .logout({ redirectUri: window.location.origin })
+              .then(async () => {
+                try {
+                  await AuthAPI.logout()
+                } catch (error) {
+                } finally {
                   removeJwtToken()
                   removeLocalStorageJwtToken()
-                  redirect(PageLink.AUTH_LOGIN)
-                })
-            })
-        }
+                }
+              })
+          })
       }
 
       // Return a Promise to wait for the initial API callback
@@ -151,10 +159,17 @@ request.interceptors.response.use(
     if (errorCode === '500|000000') {
       const keycloak = getKeycloakInstance()
       if (keycloak) {
-        keycloak.logout({ redirectUri: window.location.origin }).then(() => {
-          removeJwtToken()
-          removeLocalStorageJwtToken()
-        })
+        keycloak
+          .logout({ redirectUri: window.location.origin })
+          .then(async () => {
+            try {
+              await AuthAPI.logout()
+            } catch (error) {
+            } finally {
+              removeJwtToken()
+              removeLocalStorageJwtToken()
+            }
+          })
       }
     }
     if (!toastException.includes(errorCode)) {

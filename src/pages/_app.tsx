@@ -52,6 +52,7 @@ import { clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import PopUpLimit from './auth/login/PopupLimit'
 import { EventTestAPI } from 'src/pages/api/event-test'
+import { AuthAPI } from './api/profile'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -109,22 +110,30 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           if (authenticated) {
             const checkKeycloakAuthentication = async () => {
               try {
-                const getFireBaseToken = await handleDeviceToken()
-
-                await dispatch(
-                  getLoginUser({
-                    device_id: getFireBaseToken,
-                    username: keycloak?.tokenParsed?.preferred_username,
-                  }),
-                ).unwrap()
-
                 if (!accessToken && !refreshToken) {
-                  setActToken(keycloak.token ?? '')
-                  setRefreshToken(keycloak.refreshToken ?? '')
+                  const getFireBaseToken = await handleDeviceToken()
+                  await dispatch(
+                    getLoginUser({
+                      device_id: getFireBaseToken,
+                      username: keycloak?.tokenParsed?.preferred_username,
+                      token: keycloak?.token,
+                    }),
+                  )
+                    .unwrap()
+                    .then((res) => {
+                      setActToken(
+                        res?.data?.tokens?.act?.text || keycloak?.token || '',
+                      )
+                      setRefreshToken(
+                        res?.data?.tokens?.rft?.text ||
+                          keycloak?.refreshToken ||
+                          '',
+                      )
+                      dispatch(clearGuideState())
+                      dispatch(getEntranceCount())
+                      localStorage.setItem('enstranceTest', 'true')
+                    })
                 }
-                dispatch(clearGuideState())
-                dispatch(getEntranceCount())
-                localStorage.setItem('enstranceTest', 'true')
                 setLoading(false)
               } catch (error: unknown) {
                 const err = error as {
@@ -266,6 +275,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [showHelp])
 
   if (loading) {
+    removeLocalStorageJwtToken
     return (
       <div>
         {loading ? <SappLoading openLimit={openLimit} /> : <></>}
@@ -276,9 +286,14 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             const keycloak = getKeycloakInstance()
             keycloak
               .logout({ redirectUri: window.location.origin })
-              .then(() => {
-                removeJwtToken()
-                removeLocalStorageJwtToken()
+              .then(async () => {
+                try {
+                  await AuthAPI.logout()
+                } catch (error) {
+                } finally {
+                  removeJwtToken()
+                  removeLocalStorageJwtToken()
+                }
               })
           }}
         />

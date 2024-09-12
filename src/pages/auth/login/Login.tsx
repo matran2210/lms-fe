@@ -106,6 +106,7 @@ const LoginPage = () => {
         getLoginUser({
           device_id: getFireBaseToken,
           username: keycloak?.tokenParsed?.preferred_username || '',
+          token: keycloak.token || '',
         }),
       )
         .unwrap()

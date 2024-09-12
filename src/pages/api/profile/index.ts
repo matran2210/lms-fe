@@ -42,6 +42,7 @@ export class AuthAPI {
       data: {
         device_id: request?.device_id,
         username: request?.username,
+        token: request?.token,
       },
       method: 'POST',
     })
