@@ -77,7 +77,7 @@ const EditorReader = ({
   const convertMathToImage = async (element: any) => {
     const viewer = com?.wiris?.js?.JsPluginViewer
 
-    if (element && (!isUndefined(viewer?.e) || viewer)) {
+    if (element && viewer) {
       try {
         await viewer.parseElement(element, true, function () {})
       } catch (error) {}
