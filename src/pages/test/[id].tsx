@@ -1038,13 +1038,8 @@ const TestDetail = () => {
   }
 
   const handleChangeTabAndQuestion = async (id: string) => {
-    setLoading(true)
-    try {
-      const { question, topicDescription } = await getDetail(id)
-      handleChangeTab(id, question, topicDescription.data)
-    } finally {
-      setLoading(false)
-    }
+    const { question, topicDescription } = await getDetail(id)
+    handleChangeTab(id, question, topicDescription.data)
   }
 
   const handleChangeTab = async (
