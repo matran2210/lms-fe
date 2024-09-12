@@ -250,7 +250,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
 
       <SappModalV3
         open={submitEventTest}
-        okButtonCaption="Back To Event Test"
+        okButtonCaption="Back"
         handleCancel={handleCancelModalSubmitTest}
         onOk={handleCancelModalSubmitTest}
         fullWidthBtn={true}
