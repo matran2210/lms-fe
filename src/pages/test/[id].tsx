@@ -2645,9 +2645,9 @@ const TestDetail = () => {
                   router.replace(`/event-test`)
                   setSubmitEventTest(true)
                 } else {
-                  handleSubmitQuestion('submit')
                   setOpenSubmit(false)
                 }
+                handleSubmitQuestion('submit')
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2658,8 +2658,13 @@ const TestDetail = () => {
               setOpen={setUnSubmitAnswer}
               data={unSubmitAnswerData}
               handleSubmit={() => {
+                if (type === 'event-test') {
+                  router.replace(`/event-test`)
+                  setSubmitEventTest(true)
+                } else {
+                  setUnSubmitAnswer(false)
+                }
                 handleSubmitQuestion('submit')
-                setUnSubmitAnswer(false)
               }}
               handleCancel={() => setUnSubmitAnswer(false)}
             />
