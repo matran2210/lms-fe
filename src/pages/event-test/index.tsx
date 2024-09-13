@@ -20,7 +20,9 @@ const EventTest = () => {
       return data
     }
 
-    return useQuery([queryKey, params], fetchData)
+    return useQuery([queryKey, params], fetchData, {
+      enabled: !!params, // chỉ thực hiện khi có params
+    })
   }
 
   const router = useRouter()

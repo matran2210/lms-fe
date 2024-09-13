@@ -22,4 +22,5 @@ export interface IEventTest {
   course_category: {
     name: string
   }
+  spend_time: number
 }
