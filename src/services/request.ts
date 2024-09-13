@@ -7,7 +7,6 @@ import {
   removeLocalStorageJwtToken,
 } from '@utils/index'
 import axios, { AxiosRequestConfig } from 'axios'
-import { redirect } from 'react-router-dom'
 import { PageLink } from 'src/constants'
 import { apiURL } from 'src/redux/services/httpService'
 
@@ -107,7 +106,7 @@ request.interceptors.response.use(
           .catch(() => {
             removeJwtToken()
             removeLocalStorageJwtToken()
-            redirect(PageLink.AUTH_LOGIN)
+            window.location.href = PageLink.AUTH_LOGIN
           })
       }
 
