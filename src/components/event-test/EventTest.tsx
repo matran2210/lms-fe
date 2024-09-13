@@ -21,9 +21,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
     setSubmitEventTest(false)
   }
 
-  const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data?.total_attempt_time)
-    : 0
+  const timeTakenFormatted = data?.spend_time ? formatTime(data?.spend_time) : 0
   const timeAllowFormatted = data?.quiz_timed
     ? formatTime(data?.quiz_timed * 60)
     : 'Unlimited'
