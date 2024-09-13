@@ -121,14 +121,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   )
                     .unwrap()
                     .then((res) => {
-                      setActToken(
-                        res?.data?.tokens?.act?.text || keycloak?.token || '',
-                      )
-                      setRefreshToken(
-                        res?.data?.tokens?.rft?.text ||
-                          keycloak?.refreshToken ||
-                          '',
-                      )
                       dispatch(clearGuideState())
                       dispatch(getEntranceCount())
                       localStorage.setItem('enstranceTest', 'true')

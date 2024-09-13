@@ -1,15 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../store'
 import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
-
+import { toast } from 'react-hot-toast'
 import {
   ChangePasswordReq,
   ChangePasswordRes,
   PostLoginReq,
   LoginState,
 } from '../../types/Login/login'
-import { removeJwtToken, removeLocalStorageJwtToken } from '@utils/index'
+import {
+  removeJwtToken,
+  removeLocalStorageJwtToken,
+  setActToken,
+  setCookieActToken,
+  setCookieRefreshToken,
+  setRefreshToken,
+} from '@utils/index'
 import { AuthAPI } from 'src/pages/api/profile'
+import { PageLink } from 'src/constants'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -33,6 +41,11 @@ export const getLoginUser = createAsyncThunk(
         return
       }
 
+      setActToken(res?.data?.tokens?.act?.text)
+      setRefreshToken(res?.data?.tokens?.rft?.text)
+      setCookieActToken(res?.data?.tokens?.act?.text)
+      setCookieRefreshToken(res?.data?.tokens?.rft?.text)
+
       return { ...res }
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
@@ -43,18 +56,20 @@ export const getLogoutUser = createAsyncThunk(
   'loginReducer/handleLogout',
   async ({}, thunkAPI) => {
     try {
-      const keycloak = getKeycloakInstance()
-      keycloak
-        .logout({ redirectUri: window.location.origin })
-        .then(async () => {
-          try {
-            await AuthAPI.logout()
-          } catch (error) {
-          } finally {
-            removeJwtToken()
-            removeLocalStorageJwtToken()
-          }
-        })
+      const res = await AuthAPI.logout()
+      localStorage.clear()
+      removeJwtToken()
+      if (res.success) {
+        const keycloak = getKeycloakInstance()
+        keycloak
+          .logout({ redirectUri: window.location.origin })
+          .then(async () => {})
+      }
+      if (!res.success) {
+        toast.error(res.error.message)
+        return
+      }
+      return { ...res }
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
     }
@@ -101,6 +116,15 @@ export const loginSlice = createSlice({
     builder.addCase(getLoginUser.fulfilled, (state, action) => {
       state.loading = false
       state.changePass = false
+      if (action?.payload?.data?.tokens?.act) {
+        const accessToken = action.payload?.data.tokens.act.text
+        const refreshToken = action.payload?.data.tokens.rft.text
+        state.accessToken = accessToken
+        state.user = action.payload.data.user
+
+        setActToken(accessToken)
+        setRefreshToken(refreshToken)
+      }
     })
     builder.addCase(getLoginUser.rejected, (state, action) => {
       state.loading = false
@@ -119,19 +143,8 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
-
-      const keycloak = getKeycloakInstance()
-      keycloak
-        .logout({ redirectUri: window.location.origin })
-        .then(async () => {
-          try {
-            await AuthAPI.logout()
-          } catch (error) {
-          } finally {
-            removeJwtToken()
-            removeLocalStorageJwtToken()
-          }
-        })
+      removeJwtToken()
+      removeLocalStorageJwtToken()
     })
     builder.addCase(getLogoutUser.rejected, (state, action) => {
       state.accessToken = ''
@@ -142,18 +155,7 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
-      const keycloak = getKeycloakInstance()
-      keycloak
-        .logout({ redirectUri: window.location.origin })
-        .then(async () => {
-          try {
-            await AuthAPI.logout()
-          } catch (error) {
-          } finally {
-            removeJwtToken()
-            removeLocalStorageJwtToken()
-          }
-        })
+      removeLocalStorageJwtToken()
     })
 
     builder.addCase(changePassword.pending, (state) => {

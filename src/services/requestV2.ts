@@ -110,17 +110,11 @@ request.interceptors.response.use(
             isRefreshing = false
           })
           .catch(() => {
+            removeJwtToken()
+            removeLocalStorageJwtToken()
             keycloak
               .logout({ redirectUri: window.location.origin })
-              .then(async () => {
-                try {
-                  await AuthAPI.logout()
-                } catch (error) {
-                } finally {
-                  removeJwtToken()
-                  removeLocalStorageJwtToken()
-                }
-              })
+              .then(async () => {})
           })
       }
 
@@ -151,24 +145,20 @@ request.interceptors.response.use(
   function (response: any) {
     return response
   },
-  function (error: any) {
+  async function (error: any) {
     const errorCode: string = error?.response?.data?.error?.code
     const errorMessage = exceptions[errorCode as keyof typeof exceptions]
 
     if (errorCode === '500|000000') {
-      const keycloak = getKeycloakInstance()
-      if (keycloak) {
+      const res = await AuthAPI.logout()
+      localStorage.clear()
+      removeJwtToken()
+      removeLocalStorageJwtToken()
+      if (res.success) {
+        const keycloak = getKeycloakInstance()
         keycloak
           .logout({ redirectUri: window.location.origin })
-          .then(async () => {
-            try {
-              await AuthAPI.logout()
-            } catch (error) {
-            } finally {
-              removeJwtToken()
-              removeLocalStorageJwtToken()
-            }
-          })
+          .then(async () => {})
       }
     }
     if (!toastException.includes(errorCode)) {
