@@ -1221,7 +1221,8 @@ const TestDetail = () => {
       getValues(`${currentPage}_${essayData?.index}_answer`) || ''
   }, 200)
 
-  const { setScoreQuestion, setSubmitTest, courseType } = useCourseContext()
+  const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
+    useCourseContext()
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
 
@@ -1366,6 +1367,13 @@ const TestDetail = () => {
         }
         if (type === 'entrance') {
           router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+        } else if (type === 'event-test') {
+          router.replace(`/event-test`)
+          setSubmitEventTest(true)
+          localStorage.setItem(
+            'category',
+            JSON.stringify(res?.data?.course_category?.name),
+          )
         } else {
           if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
             router.replace(`/courses/test/test-result/${res?.data?.id}`)
@@ -1853,7 +1861,9 @@ const TestDetail = () => {
                 )}
 
                 <div className="flex w-2/6 items-center justify-end">
-                  {quizDetail?.quiz_type !== 'ENTRANCE_TEST' && (
+                  {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(
+                    quizDetail?.quiz_type,
+                  ) && (
                     <div className="mr-6 text-medium-sm text-bw-1">
                       Attempt: {quizAttempId?.number_of_attempts}
                       {quizDetail?.is_limited
@@ -1889,6 +1899,9 @@ const TestDetail = () => {
                       onClick: () => {
                         setOpenQuit(true)
                         dispatch(disableUnsavedChange())
+                        if (type === 'event-test') {
+                          setSubmitEventTest(true)
+                        }
                       },
                       loading: false,
                       //   full: fullWidthBtn,
@@ -2582,6 +2595,9 @@ const TestDetail = () => {
                       router.replace(
                         `/entrance-test/test-result/${QuizResultId}`,
                       )
+                    } else if (type === 'event-test') {
+                      router.replace(`/event-test`)
+                      setSubmitEventTest(true)
                     } else {
                       if (
                         type !== 'entrance' &&
@@ -2607,7 +2623,14 @@ const TestDetail = () => {
             <QuitTestModal
               open={openQuit}
               setOpen={setOpenQuit}
-              handleQuit={() => router.back()}
+              handleQuit={() => {
+                if (type === 'event-test') {
+                  router.replace(`/event-test`)
+                  setSubmitEventTest(true)
+                } else {
+                  router.back()
+                }
+              }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
               }
@@ -2621,8 +2644,13 @@ const TestDetail = () => {
               open={openSubmit}
               setOpen={setOpenSubmit}
               handleSubmit={() => {
+                if (type === 'event-test') {
+                  router.replace(`/event-test`)
+                  setSubmitEventTest(true)
+                } else {
+                  setOpenSubmit(false)
+                }
                 handleSubmitQuestion('submit')
-                setOpenSubmit(false)
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2633,8 +2661,13 @@ const TestDetail = () => {
               setOpen={setUnSubmitAnswer}
               data={unSubmitAnswerData}
               handleSubmit={() => {
+                if (type === 'event-test') {
+                  router.replace(`/event-test`)
+                  setSubmitEventTest(true)
+                } else {
+                  setUnSubmitAnswer(false)
+                }
                 handleSubmitQuestion('submit')
-                setUnSubmitAnswer(false)
               }}
               handleCancel={() => setUnSubmitAnswer(false)}
             />

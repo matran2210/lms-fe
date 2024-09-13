@@ -17,6 +17,7 @@ export const LANG_SIGNIN = {
   terms: 'Terms',
   plans: 'Plans',
   contactUs: 'Contact Us',
+  eventTest: 'Futurewards',
 }
 
 export const MY_COURSES = {

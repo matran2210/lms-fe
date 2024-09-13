@@ -1,14 +1,17 @@
 import LearningResource from '@components/mycourses/LearningResource'
 import PopupStep from '@components/user-guide/PopupStep'
 import { trackGAEvent } from '@utils/google-analytics'
-import { getActToken } from '@utils/index'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { UserGuide } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { getCountUnRead } from 'src/redux/slice/Notification/Notification'
 import { getMe } from 'src/redux/slice/User/User'
-import { MENU_BOTTOM, MENU_ITEMS } from '../../../constants/menu-items'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 
@@ -31,7 +34,6 @@ export default function Sidebar({
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
 
-  let authToken = getActToken()
   const nextStep = () => {
     dispatch(increment())
   }
@@ -82,7 +84,11 @@ export default function Sidebar({
           </div>
           <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
           <MenuItemsList
-            options={MENU_ITEMS}
+            options={
+              Number(localStorage.getItem('countEvent')) < 0
+                ? MENU_ITEMS
+                : MENU_ITEMS_EVENT
+            }
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
           />

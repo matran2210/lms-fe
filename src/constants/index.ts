@@ -19,6 +19,7 @@ export const PageLink = {
   COURSE_ACTIVITY: '/courses/[id]/activity/[activityId]',
   TEST_RESULT: '/courses/test/test-result/[id]',
   USERPAGE: '/[page]',
+  EVENT_TEST: '/event-test',
 }
 
 export const TitleSidebar = {
@@ -157,6 +158,21 @@ export const defaultStatusEnstraceTest = [
   },
   {
     label: 'Unsubmitted',
+    value: 'UN_SUBMITTED',
+  },
+]
+
+export const defaultStatusEventTest = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Completed',
+    value: 'SUBMITTED',
+  },
+  {
+    label: 'Uncompleted',
     value: 'UN_SUBMITTED',
   },
 ]
