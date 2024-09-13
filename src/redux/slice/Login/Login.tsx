@@ -59,6 +59,7 @@ export const getLogoutUser = createAsyncThunk(
       const res = await AuthAPI.logout()
       localStorage.clear()
       removeJwtToken()
+      removeLocalStorageJwtToken()
       if (res.success) {
         const keycloak = getKeycloakInstance()
         keycloak

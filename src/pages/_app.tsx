@@ -267,26 +267,23 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [showHelp])
 
   if (loading) {
-    removeLocalStorageJwtToken
     return (
       <div>
         {loading ? <SappLoading openLimit={openLimit} /> : <></>}
         <PopUpLimit
           open={openLimit}
           setOpen={setOpenLimit}
-          handleAction={() => {
-            const keycloak = getKeycloakInstance()
-            keycloak
-              .logout({ redirectUri: window.location.origin })
-              .then(async () => {
-                try {
-                  await AuthAPI.logout()
-                } catch (error) {
-                } finally {
-                  removeJwtToken()
-                  removeLocalStorageJwtToken()
-                }
-              })
+          handleAction={async () => {
+            const res = await AuthAPI.logout()
+            localStorage.clear()
+            removeJwtToken()
+            removeLocalStorageJwtToken()
+            if (res.success) {
+              const keycloak = getKeycloakInstance()
+              keycloak
+                .logout({ redirectUri: window.location.origin })
+                .then(async () => {})
+            }
           }}
         />
       </div>
