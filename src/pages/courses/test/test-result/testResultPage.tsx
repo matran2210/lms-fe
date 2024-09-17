@@ -1,44 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react'
-import YourScore from './cfa/yourScore'
-import YourScoreDetail from './yourScoreDetail'
-import MultipleQuestion from './multipleQuestion'
-import ChartACCAScore from './acca/chartACCAScore'
-import TotalScore from '@components/mycourses/test/TotalScore'
-import { roundNumber } from '@utils/helpers'
 import { F_LOW_CODES } from '@utils/constants'
-import SappLoading from 'src/common/SappLoading'
-import ChartCMAScore from './cma/chartCMAScore'
-import Annotation from './Annotation'
-import { isNaN } from 'lodash'
+import { roundNumber } from '@utils/helpers'
 import Image from 'next/image'
-import { IQuizAttemptChartType } from 'src/type'
-
-interface QuizReport {
-  ratio: number
-}
-
-export interface Quiz {
-  id: string
-  quiz_type: string
-  is_graded: boolean
-  required_percent_score: number
-  course_category_id: any
-  subject_id: any
-}
-
-interface DataItem {
-  chart_data: any
-  chart_type: string
-  correct_answer: number
-  total_question: number
-  quiz_report: QuizReport
-  quiz: Quiz
-}
+import { useEffect, useRef, useState } from 'react'
+import SappLoading from 'src/common/SappLoading'
+import { IQuizAttemptChartType, QuizAttemptChart } from 'src/type'
+import ChartACCAScore from './acca/chartACCAScore'
+import Annotation from './Annotation'
+import MultipleChoiceScore from './cfa/MultipleChoiceScore'
+import ChartCMAScore from './cma/chartCMAScore'
+import MultipleQuestion from './multipleQuestion'
+import ScoreDetail from './ScoreDetail'
 
 interface IProps {
   questions: Object
   type: IQuizAttemptChartType
-  chartData: DataItem
+  chartData: QuizAttemptChart
   subjectCode: string
 }
 
@@ -83,12 +59,6 @@ const TestResultPage = ({
     }
   }, [])
 
-  const calculateHighestValue = isNaN(
-    chartData?.correct_answer / chartData?.total_question,
-  )
-    ? 0
-    : chartData?.correct_answer / chartData?.total_question
-  const highestValue = roundNumber(calculateHighestValue * 100)
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
 
   const commonMultipleScoreStyle =
@@ -100,7 +70,7 @@ const TestResultPage = ({
         <div className={commonMultipleScoreStyle}>
           <div className="flex max-h-full flex-col overflow-y-auto">
             <ChartACCAScore data={chartData?.chart_data} />
-            <YourScoreDetail
+            <ScoreDetail
               className={'relative'}
               yourScoreDetailRef={yourScoreDetailRef}
               type={type}
@@ -118,7 +88,7 @@ const TestResultPage = ({
                   <div
                     className={`$ -mb-[13px] font-inter text-6xl font-bold text-primary xl:text-6xl`}
                   >
-                    <>{Math.floor(highestValue as number)}%</>
+                    <>{Math.round(chartData?.multiple_choice_score)}%</>
                   </div>
                   <div className={`flex items-center gap-1`}>
                     <Image
@@ -147,8 +117,8 @@ const TestResultPage = ({
           {type === 'CFA' ? (
             <div className={commonMultipleScoreStyle}>
               <div className="flex max-h-full flex-col">
-                <YourScore chartData={chartData} />
-                <YourScoreDetail
+                <MultipleChoiceScore chartData={chartData} />
+                <ScoreDetail
                   className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
@@ -169,11 +139,11 @@ const TestResultPage = ({
                     <ChartCMAScore
                       data={chartData?.chart_data}
                       GlobalAverage={GlobalAverage}
-                      score={highestValue}
+                      score={chartData?.multiple_choice_score}
                       isGraded={chartData?.quiz?.is_graded}
                       passingScore={chartData?.quiz?.required_percent_score}
                     />
-                    <YourScoreDetail
+                    <ScoreDetail
                       className={''}
                       yourScoreDetailRef={yourScoreDetailRef}
                       type={type}

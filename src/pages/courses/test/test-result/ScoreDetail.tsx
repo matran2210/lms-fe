@@ -1,6 +1,7 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { parseHTMLToString, truncateString } from '@utils/index'
+import { truncateString } from '@utils/index'
+import { Tooltip } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
@@ -17,7 +18,6 @@ import {
   QuizAttemptChartType,
 } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
-import { Tooltip } from 'antd'
 
 const commonHeaderClass =
   'text-left p-0 text-medium-sm text-gray-1 font-semibold'
@@ -25,17 +25,17 @@ const commonHeaderClass =
 const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
-interface YourScoreDetailProps {
+interface ScoreDetailProps {
   className?: string
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
 }
 
-const YourScoreDetail = ({
+const ScoreDetail = ({
   className,
   yourScoreDetailRef,
   type,
-}: YourScoreDetailProps) => {
+}: ScoreDetailProps) => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
@@ -321,4 +321,4 @@ const YourScoreDetail = ({
   )
 }
 
-export default YourScoreDetail
+export default ScoreDetail

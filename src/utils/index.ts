@@ -269,3 +269,5 @@ export const getLocalStorageItem = (name: string) => {
 export const setLocalStorageItem = (name: string, value: string) => {
   localStorage.setItem(name, value)
 }
+
+export * from './formatNumber'

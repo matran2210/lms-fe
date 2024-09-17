@@ -1,16 +1,23 @@
 import { roundNumber } from '@utils/helpers'
-
-interface DataItem {
-  question_topic_id: string
-  title: string
-  total_correct_answers: number
-  total_questions: number
-  total_quiz_questions: number
-}
+import { ChartDatum } from 'src/type'
 
 interface IProps {
-  data: DataItem[]
+  data: ChartDatum[]
 }
+
+/**
+ * ChartCFAScore Component
+ *
+ * Renders a chart displaying CFA (Chartered Financial Analyst) scores by topic.
+ * The component shows a title "Multiple Choice Score by Topic", followed by a
+ * visual representation of scores for each topic.
+ *
+ * Features:
+ * - Y-axis labeled "Available Points" with 70% and 50% markers
+ * - Horizontal bars for each topic showing the score percentage
+ * - Topic titles and weights displayed below each bar
+ *
+ */
 const ChartCFAScore = ({ data }: IProps) => {
   return (
     <div className="block overflow-x-auto">
