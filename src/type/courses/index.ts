@@ -225,9 +225,12 @@ export enum QuizAttemptChartType {
   CMA = 'CMA',
   OTHER = 'OTHER',
 }
+
 export type IQuizAttemptChartType =
   | 'ENTRANCE_TEST'
   | 'CFA'
   | 'ACCA'
   | 'CMA'
   | 'OTHER'
+
+export * from './test'

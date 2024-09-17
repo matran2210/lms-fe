@@ -1,6 +1,7 @@
+import { formatNumber } from '@utils/formatNumber'
 import Image from 'next/image'
 interface IProps {
-  score: Number
+  score: number
   className?: string
   classScore?: string
   classGlobal?: string
@@ -28,7 +29,7 @@ const TotalScore = ({
           <div
             className={`${classScore} font-inter text-6xl font-bold text-primary xl:text-6xl`}
           >
-            <>{Math.floor(score as number)}%</>
+            {score !== undefined ? formatNumber(score) : '--'}%
           </div>
         </div>
         <div className="flex flex-row">
