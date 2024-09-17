@@ -52,22 +52,22 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         return (
           <ContentTestCongratution
             text1="Your test results will"
-            text2="be emailed to you on October 04, 2024"
+            text2="be emailed to you on Septemper 27, 2024"
             text3="Please check your email regularly to receive the earliest update."
           />
         )
       case 'CMA':
         return (
           <ContentTestCongratution
-            text1="Your results for Round 1 will"
-            text2="be emailed to you on September 28, 2024"
+            text1="Your results for Round 2 will"
+            text2="be emailed to you on September 30, 2024"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         )
       case 'CFA':
         return (
           <ContentTestCongratution
-            text1="Your results for Round 1 will"
+            text1="Your results for Round 2 will"
             text2="be emailed to you on September 27 - 30, 2024"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
