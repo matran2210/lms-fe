@@ -256,7 +256,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
           </div>
         </ul>
       </div>
-      <div className="mb-6 hidden w-full overflow-y-auto bg-white shadow-box lg:mb-0 lg:block">
+      <div className="mb-6 hidden w-full bg-white shadow-box lg:mb-0 lg:block">
         {children}
       </div>
     </>
