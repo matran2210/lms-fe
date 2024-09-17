@@ -250,6 +250,14 @@ const quizSlice: Slice = createSlice({
             delete state[activityId]?.[tabId]?.[quizId]?.questions[i]
               ?.defaultValue
             delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.solution
+            const requirements =
+              state[activityId]?.[tabId]?.[quizId]?.questions[i]?.requirements
+            if (requirements.length) {
+              requirements.map((req: any) => (req.answer_file = null))
+            } else {
+              delete state[activityId]?.[tabId]?.[quizId]?.questions[i]
+                ?.answer_file
+            }
           },
         )
       }
