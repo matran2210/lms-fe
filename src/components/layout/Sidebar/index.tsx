@@ -50,7 +50,6 @@ export default function Sidebar({
   useEffect(() => {
     try {
       dispatch(getMe())
-      dispatch(getCountUnRead())
     } catch (error) {}
   }, [dispatch])
 
