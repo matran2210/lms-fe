@@ -8,6 +8,7 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
   useEffect,
@@ -27,9 +28,23 @@ import {
   confirmQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import { IFile } from 'src/type'
 import { IEssayAnswer } from 'src/type/answer'
 import { IExhibit, IExhibitData } from 'src/type/exhibit'
 import { v4 as uuidv4 } from 'uuid'
+
+interface IRequirement {
+  id: string
+  name: string
+  type?: 'TEXT' | 'FILE'
+  description: string
+  files?: IFile[]
+  answer_file?: {
+    file_key: string
+    file_name: string
+  }
+  short_answer?: string
+}
 
 export type QuizComponentRef = {
   onSubmit: ({
@@ -101,7 +116,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const [isChange, setIsChange] = useState<boolean>(false)
     const [isUploadFile, setIsUploadFile] = useState<boolean>(false)
-    const [essayData, setEssayData] = useState<any>()
+    const [essayData, setEssayData] = useState<{
+      req?: IRequirement
+      index?: number
+    }>()
 
     useClickOutside({
       ref: listRequirementRef,
@@ -295,31 +313,33 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 question_id: activeQuestion?.id,
                 answer_file: req.answer_file,
                 short_answer:
-                  answer !== undefined && answer !== '' ? answer : ' ',
+                  isUndefined(answer) && !isEmpty(answer) ? answer : ' ',
                 response_option: activeQuestion?.response_option
                   ? activeQuestion?.response_option
                   : 'WORD',
 
-                requirement_id: req.id,
+                requirement_id: req?.id,
                 active,
               }
             })
             return answers
           } else {
             const answer = getValues(
-              `${activeQuestion?.id}_${document_id}_essay`,
+              `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? showRequirement?.id : document_id}_essay`,
             )
-            return {
-              question_id: activeQuestion?.id,
-              answer_file: activeQuestion.answer_file,
-              short_answer:
-                answer !== undefined && answer !== '' ? answer : ' ',
-              response_option: activeQuestion?.response_option
-                ? activeQuestion?.response_option
-                : 'WORD',
-              requirement_id: null,
-              active,
-            }
+            return [
+              {
+                question_id: activeQuestion?.id,
+                answer_file: activeQuestion.answer_file,
+                short_answer:
+                  isUndefined(answer) && !isEmpty(answer) ? answer : ' ',
+                response_option: activeQuestion?.response_option
+                  ? activeQuestion?.response_option
+                  : 'WORD',
+                requirement_id: null,
+                active,
+              },
+            ]
           }
 
         default:
@@ -390,7 +410,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             topic_id: topic_id,
             requirement_id,
             requirements: activeQuestion?.requirements?.map((item: any) => {
-              if (item.id === showRequirement?.id) {
+              if (item?.id === showRequirement?.id) {
                 return {
                   ...item,
                   answer_file: {
@@ -633,10 +653,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               <div className="my-6"></div>
               <EssayQuestionPreview
                 defaultValue={
-                  activeQuestion?.myAnswers?.find(
-                    (ans: IEssayAnswer) =>
-                      ans.requirement_id === showRequirement?.id,
-                  )?.short_answer ?? null
+                  activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                    if (
+                      ans.requirement_id ===
+                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
+                    ) {
+                      return ans
+                    }
+                  })?.short_answer ??
+                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  null
                 }
                 data={essayData?.req}
                 question_content={activeQuestion?.question_content}
@@ -646,7 +672,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 setValue={setValue}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
-                name={`${activeQuestion?.id}_${showRequirement?.id ?? document_id}_essay`}
+                name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
                 fullData={{ data: { ...activeQuestion } }}
                 openChooseFile={(e: any) =>
                   setOpenUpload({
@@ -664,8 +690,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       question_id: activeQuestion?.id,
                       requirement_id: showRequirement?.id,
                       requirements: activeQuestion?.requirements?.map(
-                        (item: any) => {
-                          if (item.id === showRequirement?.id) {
+                        (item: IRequirement) => {
+                          if (item?.id === showRequirement?.id) {
                             return { ...item, answer_file: null }
                           }
                           return item
@@ -776,7 +802,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           location={`question-answer/${openUpload.question_id}`}
           setSelectedFile={(e: any) =>
             handleSaveFileEssay(
-              e[0],
+              e?.[0],
               openUpload?.question_id ?? '',
               '',
               showRequirement?.id ?? '',

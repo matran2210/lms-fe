@@ -471,9 +471,9 @@ const quizSlice: Slice = createSlice({
               const answers = [
                 ...(questionToUpdate.myAnswers?.filter(
                   (q: { question_id: string | undefined }) =>
-                    q.question_id !== payload.question.id,
+                    q.question_id !== payload?.question?.id,
                 ) || []),
-                ...(payload.myAnswers || {}),
+                ...(payload?.myAnswers || {}),
               ]
               questionToUpdate.myAnswers = answers
               break

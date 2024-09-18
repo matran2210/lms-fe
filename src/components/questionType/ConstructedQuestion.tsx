@@ -111,7 +111,11 @@ const EssayQuestionPreview = ({
       refSheet.current &&
       Number(index) <= question_data?.requirements?.length
     ) {
-      if (defaultValue === undefined) {
+      if (
+        defaultValue === undefined ||
+        defaultValue === null ||
+        String(defaultValue).trim() === ''
+      ) {
         const emptySheets = refSheet.current
           ?.getAllSheets()
           .map((sheet: SheetData) => ({
@@ -157,7 +161,7 @@ const EssayQuestionPreview = ({
         })
       }
     }
-  }, [defaultValue])
+  }, [defaultValue, index])
 
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]

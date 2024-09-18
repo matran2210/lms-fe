@@ -7,9 +7,9 @@ import toast from 'react-hot-toast'
 import { IResource } from './UploadFileInterface'
 import UploadFileHandle from './UploadFileHandle'
 import { UPLOAD_TYPE } from './UploadFileInterface'
-import SappModal from '@components/base/modal/SappModal'
 import { UploadAPI } from 'src/pages/api/upload'
 import { capitalize } from 'lodash'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 
 interface IModalUploadProps {
   open: boolean
@@ -181,7 +181,7 @@ const ModalUploadFile = ({
   }
   return (
     <div>
-      <SappModal
+      <SappModalV3
         open={open}
         title={
           title ||
@@ -189,16 +189,15 @@ const ModalUploadFile = ({
         }
         cancelButtonCaption="Cancel"
         okButtonCaption={'Save'}
-        confirmOnclose={false}
         handleCancel={handleCancel}
-        handleSubmit={handleUploadFile}
-        closeAfterSubmit={false}
         externalLoading={disabled}
         size="max-w-xl"
-        position="center"
         scrollbale={false}
-        className={className ?? ''}
-        overlayClass={overlayClass ?? ''}
+        onOk={handleUploadFile}
+        icon={undefined}
+        header={''}
+        fullWidthBtn={true}
+        buttonSize="extra"
       >
         <UploadFileHandle
           uploadFile={uploadFile}
@@ -212,7 +211,7 @@ const ModalUploadFile = ({
           customValidate={customValidate}
           maxCount={maxCount}
         ></UploadFileHandle>
-      </SappModal>
+      </SappModalV3>
     </div>
   )
 }

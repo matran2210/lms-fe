@@ -476,7 +476,7 @@ const QuizDocument = ({
         position="center"
         showFooter={false}
         isFullScreen={true}
-        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all z-[100000]"
         showHeader={false}
       >
         <div className="relative">
