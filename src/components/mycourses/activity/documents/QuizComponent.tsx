@@ -313,7 +313,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 question_id: activeQuestion?.id,
                 answer_file: req.answer_file,
                 short_answer:
-                  isUndefined(answer) && !isEmpty(answer) ? answer : ' ',
+                  !isUndefined(answer) && !isEmpty(answer) ? answer : ' ',
                 response_option: activeQuestion?.response_option
                   ? activeQuestion?.response_option
                   : 'WORD',
@@ -332,7 +332,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 question_id: activeQuestion?.id,
                 answer_file: activeQuestion.answer_file,
                 short_answer:
-                  isUndefined(answer) && !isEmpty(answer) ? answer : ' ',
+                  !isUndefined(answer) && !isEmpty(answer) ? answer : ' ',
                 response_option: activeQuestion?.response_option
                   ? activeQuestion?.response_option
                   : 'WORD',
