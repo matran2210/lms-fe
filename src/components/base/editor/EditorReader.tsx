@@ -7,10 +7,10 @@ import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
 import 'src/utils/global.d.ts'
-import { isUndefined } from 'lodash'
 import clsx from 'clsx'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import React from 'react'
+import { random } from 'lodash'
 
 type Props = {
   text_editor_content: string | undefined
@@ -68,11 +68,35 @@ const EditorReader = ({
     } else if (highlighArea === 'hightlight_area') {
       DeserializeHighlight(highlighted)
     }
-  }, [content, highlighted])
+  }, [content, highlighted, text_editor_content])
+
+  let mathElement =
+    editorRef?.current && editorRef?.current?.querySelectorAll('math')
+  let updatedContent = text_editor_content || ''
+
+  const generateRandomContent = (n: number, customText: string) => {
+    let content = ''
+
+    // Loop to generate n paragraphs with customText
+    for (let i = 0; i < n; i++) {
+      content += `<p style="display:none">${customText}</p>`
+    }
+
+    return content
+  }
 
   useEffect(() => {
-    setContent(text_editor_content)
-  }, [text_editor_content])
+    const randomEditor = random(1, 3)
+    // Add random number of MathML blocks
+    if (!updatedContent.includes('<math')) {
+      for (let i = 0; i < randomEditor; i++) {
+        updatedContent += generateRandomContent(randomEditor, 'Champion')
+      }
+    }
+
+    // Update the state with the modified content
+    setContent(updatedContent)
+  }, [text_editor_content, editorRef?.current])
 
   const convertMathToImage = async (element: any) => {
     const viewer = com?.wiris?.js?.JsPluginViewer
@@ -83,9 +107,6 @@ const EditorReader = ({
       } catch (error) {}
     }
   }
-
-  let mathElement =
-    editorRef?.current && editorRef?.current?.querySelectorAll('math')
 
   useEffect(() => {
     setTimeout(() => {
