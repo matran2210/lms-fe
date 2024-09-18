@@ -76,9 +76,11 @@ const SappModalV3 = ({
       onCancel={handleClose || handleCancel}
       width={width}
     >
-      <div className="flex justify-center">
-        <div className="w-fit rounded-full bg-secondary p-8">{icon}</div>
-      </div>
+      {icon && (
+        <div className="flex justify-center">
+          <div className="w-fit rounded-full bg-secondary p-8">{icon}</div>
+        </div>
+      )}
       <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
         {header}
       </div>
