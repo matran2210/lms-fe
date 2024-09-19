@@ -133,7 +133,7 @@ const CourseDetail = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Detail">
-        <div className="header h-[70px] border-b border-default bg-white">
+        <div className="header border-b border-e-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
             <SearchForm
               placeholder="Enter name of course..."

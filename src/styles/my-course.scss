@@ -26,6 +26,12 @@
   @apply m-0 p-0;
 }
 
+.filter {
+  .select__placeholder {
+    @apply text-gray-1;
+  }
+}
+
 .name-course + .des {
   @apply pt-[17px];
 }
