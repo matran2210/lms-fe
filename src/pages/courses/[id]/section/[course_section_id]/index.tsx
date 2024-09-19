@@ -327,9 +327,9 @@ const CoursePartDetail = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Part Detail">
-        <div className="container max-w-xxl pt-4">
+        <div className="main default-content-editor mx-auto my-0 max-w-xxl">
           <div className="w-full">
-            <div className="mb-4 flex items-center">
+            <div className="flex items-center px-5 pt-6 xl:px-0">
               <span
                 onClick={() => {
                   router.push('/courses')
@@ -369,7 +369,7 @@ const CoursePartDetail = () => {
               </span>
             </div>
           </div>
-          <div data-aos={ANIMATION.DATA_AOS} className="part-detail__container">
+          <div data-aos={ANIMATION.DATA_AOS}>
             <PreviewPartDetail
               chapterMenu={partDetail}
               fetchChapterDetail={fetchChapterDetail}
