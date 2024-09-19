@@ -5,10 +5,44 @@ import { useEffect, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type'
 
+interface IQuizAttempt {
+  attempt?: {
+    grading_status?: string
+    id?: string
+    number_of_attempts?: number
+    quiz_id?: string
+    ratio_score?: string
+    score?: string | number
+    total_attempt_time?: string | number | Date
+  }
+  id: string
+  is_graded: boolean
+  grading_method?: string
+  required_percent_score?: number
+  is_limited: boolean
+}
+
+interface CoursePart {
+  course_section_type?: string
+  description?: string
+  duration?: string | number
+  id?: string
+  learning_progress?: {
+    total_course_sections: number
+    total_course_sections_completed: number
+    time_spent: number
+    duration: number
+  }
+  name?: string
+  position?: number
+  quiz?: IQuizAttempt
+  user_section_learning_status?: string
+}
+
 interface IProps {
   class_user_id?: string
-  coursePart: any
-  quizAttempt: any
+  coursePart: CoursePart
+  quizAttempt: IQuizAttempt
   trackGA: () => void
 }
 
@@ -75,15 +109,6 @@ const ResultCourse = ({
     fetchResult(1, 10)
   }, [])
 
-  useEffect(() => {
-    const element = document.querySelector(
-      '.select__single-value',
-    ) as HTMLElement
-    if (element) {
-      element.style.color = isFocus ? '#FFB800' : '#a1a1a1'
-    }
-  }, [isFocus])
-
   return resultList.data.length <= 1 ? (
     <SappButton
       title="Result"
@@ -91,7 +116,10 @@ const ResultCourse = ({
       color="text"
       className="!p-0 font-medium underline"
       onClick={() => {
-        router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
+        if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
+          router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
+        }
+
         trackGA()
       }}
     />

@@ -106,7 +106,9 @@ const MultipleQuestion = ({
       return (
         <button
           key={item?.id}
-          disabled={questions?.quizAttempt?.status === 'UN_SUBMITTED'}
+          disabled={
+            questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item.id
+          }
           onClick={() => {
             if (
               questions?.quizAttempt?.status === 'UN_SUBMITTED' ||

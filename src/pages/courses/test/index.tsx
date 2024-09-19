@@ -158,15 +158,6 @@ const TestModal = ({
     } catch (err) {}
   }
 
-  useEffect(() => {
-    const element = document.querySelector(
-      '.select__single-value',
-    ) as HTMLElement
-    if (element) {
-      element.style.color = isFocus ? '#FFB800' : '#a1a1a1'
-    }
-  }, [isFocus])
-
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}

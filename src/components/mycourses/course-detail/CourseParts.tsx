@@ -30,9 +30,10 @@ const CourseParts = ({
           return (
             <div
               key={coursePart?.id}
-              className={`item aspect-h-16 flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
+              className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
               ref={lastElementRef}
               data-aos={ANIMATION.DATA_AOS}
+              style={{ zIndex: courses?.length - index }}
             >
               {['MID_TERM_TEST', 'FINAL_TEST'].includes(
                 coursePart?.course_section_type,

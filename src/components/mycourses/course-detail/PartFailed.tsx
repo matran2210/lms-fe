@@ -154,7 +154,7 @@ const PartFailed = ({
             )
           ) : (
             <div className="flex flex-1 justify-between">
-              {quizAttempt.id && !open && (
+              {quizAttempt.id && (
                 <ResultCourse
                   class_user_id={class_user_id}
                   coursePart={coursePart}
