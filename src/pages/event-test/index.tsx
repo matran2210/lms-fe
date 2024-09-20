@@ -10,7 +10,7 @@ import Layout from '@components/layout'
 import EventTestFilter from '@components/event-test/EventTestFilter'
 import EventTestList from '@components/event-test/EventTestList'
 import { EventTestAPI } from '../api/event-test'
-import { LANG_SIGNIN } from 'src/constants/lang'
+import { LANG_SIGNIN, MY_COURSES } from 'src/constants/lang'
 import { isEmpty } from 'lodash'
 
 const EventTest = () => {
@@ -42,7 +42,7 @@ const EventTest = () => {
         <div className="header border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
             <SearchForm
-              placeholder="Enter name of course..."
+              placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>

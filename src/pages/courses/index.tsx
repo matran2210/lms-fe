@@ -15,6 +15,7 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import Layout from '@components/layout'
+import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -157,7 +158,7 @@ const MyCourse = () => {
           ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
           >
             <SearchForm
-              placeholder="Enter name of course..."
+              placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
               // setPage={setPage}
             />

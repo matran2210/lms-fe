@@ -10,6 +10,7 @@ import { EntranceTestAPI } from '../api/entrance-test'
 import { useRouter } from 'next/router'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Layout from '@components/layout'
+import { MY_COURSES } from 'src/constants/lang'
 
 const EntranceTest = () => {
   // const dispatch = useAppDispatch()
@@ -37,7 +38,7 @@ const EntranceTest = () => {
         <div className="header border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
             <SearchForm
-              placeholder="Enter name of course..."
+              placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>

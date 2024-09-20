@@ -11,6 +11,7 @@ import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { useCourseContext } from '@contexts/index'
 import Layout from '@components/layout'
+import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -136,7 +137,7 @@ const CourseDetail = () => {
         <div className="header border-b border-e-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
             <SearchForm
-              placeholder="Enter name of course..."
+              placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>
