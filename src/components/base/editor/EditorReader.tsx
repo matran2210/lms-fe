@@ -71,6 +71,21 @@ const EditorReader = ({
     }
   }, [content, highlighted, text_editor_content])
 
+  let mathElement =
+    editorRef?.current && editorRef?.current?.querySelectorAll('math')
+  let updatedContent = text_editor_content || ''
+
+  const generateRandomContent = (n: number, customText: string) => {
+    let content = ''
+
+    // Loop to generate n paragraphs with customText
+    for (let i = 0; i < n; i++) {
+      content += `<p style="display:none">${customText}</p>`
+    }
+
+    return content
+  }
+
   useEffect(() => {
     // Update the state with the modified content
     if (text_editor_content) {

@@ -66,3 +66,79 @@
 .select-single .select__single-value {
   @apply text-bw-1;
 }
+
+// style css for result popup
+.select-result {
+  .select__control {
+    @apply h-12.5 border-none hover:border-transparent focus:text-primary  focus:shadow-0 focus:outline-none;
+  }
+
+  .select__value-container {
+    @apply px-4 pl-0;
+  }
+
+  .select__single-value,
+  .select__placeholder {
+    @apply m-0 p-0 text-sm font-normal leading-4.5;
+  }
+
+  .select__control {
+    box-shadow: none;
+  }
+
+  .select__placeholder {
+    @apply p-0 text-base text-gray-400 focus:text-primary;
+  }
+
+  .select__menu {
+    @apply rounded-none border-0 px-2 py-1 text-sm shadow-select;
+  }
+
+  .select__option {
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-4.5 text-bw-1;
+
+    &.select__option--is-focused {
+      @apply bg-transparent;
+    }
+  }
+
+  .select__option.select__option--is-selected {
+    @apply bg-secondary text-primary;
+  }
+
+  .select__option:hover {
+    @apply bg-secondary text-primary;
+  }
+
+  .select__indicator {
+    @apply w-[30px] text-gray-1;
+  }
+
+  .select__indicator-separator {
+    @apply hidden;
+
+    svg {
+      @apply h-7 w-7-percent;
+    }
+  }
+
+  &:hover {
+    .select__clear-indicator {
+      @apply opacity-100 transition-all duration-200;
+    }
+  }
+
+  .select__clear-indicator {
+    @apply absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer bg-white opacity-0;
+  }
+
+  .select__input {
+    @apply shadow-0;
+  }
+}
+
+.right-top {
+  .select__menu {
+    @apply left-[50px] top-[-100%];
+  }
+}

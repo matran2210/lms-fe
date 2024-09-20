@@ -99,6 +99,10 @@ export interface IQuestion {
     type?: 'TEXT' | 'FILE'
     description: string
     files?: IFile[]
+    answer_file?: {
+      file_key: string
+      file_name: string
+    }
   }[]
   exhibits?: {
     id: string
