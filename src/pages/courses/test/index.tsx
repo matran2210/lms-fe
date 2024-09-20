@@ -88,8 +88,10 @@ const TestModal = ({
   }
 
   useEffect(() => {
-    fetchResult(1, 10)
-  }, [])
+    if (open) {
+      fetchResult(1, 10)
+    }
+  }, [open])
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
@@ -222,7 +224,7 @@ const TestModal = ({
             >
               Result:
             </div>
-            {selectedResult?.value && (
+            {resultList.data.length > 1 && (
               <div className="flex gap-2">
                 <HookFormSelect
                   classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
