@@ -2,15 +2,15 @@ import {
   DeserializeHighlight,
   replaceTextAlignCenterToWebKitCenter,
 } from '@utils/index'
-import parseHTML, { Element } from 'html-react-parser'
+import parseHTML from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
 import 'src/utils/global.d.ts'
 import clsx from 'clsx'
-import SAPPVideo from '@components/base/video/SAPPVideo'
 import React from 'react'
-import { random } from 'lodash'
+import SappModalV3 from '../modal/SappModalV3'
+import SAPPVideo from '../video/SAPPVideo'
 
 type Props = {
   text_editor_content: string | undefined
@@ -37,12 +37,13 @@ const EditorReader = ({
 }: Props) => {
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
-  const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
+  const [type, setType] = useState<'VIDEO' | 'IMG' | 'MATH'>('VIDEO')
   const [content, setContent] = useState<any>()
   const editorRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
     {},
   )
+  const [openMathType, setOpenMathType] = useState(false)
 
   useEffect(() => {
     if (extenalRef) {
@@ -86,27 +87,21 @@ const EditorReader = ({
   }
 
   useEffect(() => {
-    const randomEditor = random(1, 3)
-    // Add random number of MathML blocks
-    if (!updatedContent.includes('<math')) {
-      for (let i = 0; i < randomEditor; i++) {
-        updatedContent += generateRandomContent(randomEditor, 'Champion')
-      }
-    }
-
     // Update the state with the modified content
-    setContent(updatedContent)
-  }, [text_editor_content, editorRef?.current])
-
-  const convertMathToImage = async (element: any) => {
-    const viewer = com?.wiris?.js?.JsPluginViewer
-
-    if (element && viewer) {
-      try {
-        await viewer.parseElement(element, true, function () {})
-      } catch (error) {}
+    if (text_editor_content) {
+      setContent(text_editor_content)
     }
-  }
+  }, [text_editor_content])
+
+  // const convertMathToImage = async (element: any) => {
+  //   const viewer = com?.wiris?.js?.JsPluginViewer
+
+  //   if (element && viewer) {
+  //     try {
+  //       await viewer.parseElement(element, true, function () {})
+  //     } catch (error) {}
+  //   }
+  // }
 
   useEffect(() => {
     setTimeout(() => {
@@ -131,6 +126,7 @@ const EditorReader = ({
           }
         })
 
+        let mathElement = editor?.querySelectorAll('math')
         // Replace quote in font family
         if (mathElement && mathElement?.length) {
           mathElement?.forEach((el: any) => {
@@ -140,14 +136,26 @@ const EditorReader = ({
               el?.setAttribute('style', styleValue)
             }
           })
-          editor && convertMathToImage(editor)
+          // editor && convertMathToImage(editor)
         }
       }
     }, 100)
-  }, [editorRef?.current, text_editor_content, mathElement])
+  }, [editorRef?.current, text_editor_content])
 
   const handleOnclick = async (e: MouseEvent) => {
     const target = e?.target as HTMLElement
+    if (['mroot', 'mn', 'math', 'mi', 'mo', 'msub'].includes(target?.tagName)) {
+      const mathElement = target.closest('math')
+      if (mathElement) {
+        setType('MATH')
+        const mathElementString = mathElement.outerHTML
+        setSrc(
+          `<p style="text-align: -webkit-center;"><span style="font-size: 30px;">${mathElementString}</span></p>`,
+        )
+        setOpenMathType(true)
+      }
+    }
+
     if (target.className === 'sapp_overlay_video') {
       // const overlay = target.nextSibling as any
       const video = target?.previousSibling as any
@@ -215,11 +223,11 @@ const EditorReader = ({
           className={clsx({ 'pt-2 text-white': pinned })}
         >
           {parseHTML(replaceTextAlignCenterToWebKitCenter(content || ''), {
-            replace: (domNode) => {
+            replace: (domNode: any) => {
               if (domNode.type === 'tag' && domNode.name === 'video') {
                 const sourceChild = (domNode.children as Element[]).find(
-                  (child) => child.name === 'source',
-                )
+                  (child: any) => child.name === 'source',
+                ) as any
                 const videoToken = sourceChild?.attribs?.token
                 if (videoToken) {
                   if (!videoRefs.current[videoToken]) {
@@ -251,6 +259,22 @@ const EditorReader = ({
       </div>
       {type === 'IMG' && (
         <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
+      )}
+      {type === 'MATH' && (
+        <SappModalV3
+          showFooter={false}
+          showOkButton={false}
+          open={openMathType}
+          handleCancel={() => setOpenMathType(false)}
+          onOk={() => setOpenMathType(false)}
+          icon={undefined}
+          header={''}
+          classNameModal="sapp-modal--math"
+        >
+          <div className="mx-auto w-fit min-w-[100%] max-w-full">
+            <div dangerouslySetInnerHTML={{ __html: src || '' }} />
+          </div>
+        </SappModalV3>
       )}
     </>
   )
