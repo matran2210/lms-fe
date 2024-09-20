@@ -37,7 +37,6 @@ import {
 import { onMessageListener } from 'src/utils/firebase'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import { EventTestAPI } from './api/event-test'
 
 type MyAppProps = AppProps & {
   Component: {
