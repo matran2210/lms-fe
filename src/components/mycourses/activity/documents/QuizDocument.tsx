@@ -89,6 +89,7 @@ const QuizDocument = ({
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
   const [loading, setLoading] = useState<boolean>(false)
+  const [resultId, setResultId] = useState<string>('')
 
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -292,6 +293,9 @@ const QuizDocument = ({
   }) => {
     setLoading(true)
     try {
+      const checkId = id || modalResult?.id
+      if (checkId === resultId) return
+      setResultId(id ?? modalResult?.id ?? '')
       const response = await CoursesAPI.getQuizAttemptsTable(
         id || modalResult?.id || '',
         {
@@ -302,7 +306,7 @@ const QuizDocument = ({
 
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response?.data?.meta,
-        data: (modalResult?.questions?.data || []).concat(
+        data: (modalResult?.questions?.data ?? []).concat(
           response?.data?.answer_groups?.flatMap((group: IAnswers) => {
             const answers = group?.answers?.map((answer: IAnswer) => {
               return {
@@ -312,7 +316,7 @@ const QuizDocument = ({
                 type: answer?.question?.qType,
                 is_correct: answer?.is_correct,
                 time_spent: answer?.time_spent,
-                question: answer?.question as any,
+                question: answer?.question,
                 active: answer?.active,
               }
             })
