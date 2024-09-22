@@ -430,9 +430,7 @@ const EssayQuestionPreview = ({
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
-            <div
-              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
-            >
+            <div className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}>
               <Controller
                 name={name}
                 control={control}
@@ -510,9 +508,7 @@ const EssayQuestionPreview = ({
               handleChange={() => handleChange && handleChange(data?.id)}
             />
           ) : (
-            <div
-              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
-            >
+            <div className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}>
               <Controller
                 name={name}
                 control={control}
