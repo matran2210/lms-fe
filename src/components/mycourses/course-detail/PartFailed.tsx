@@ -3,15 +3,12 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { IMyCourseDetail } from 'src/type/courses'
 import TestModal from 'src/pages/courses/test'
-import SappButton from '@components/base/button/SappButton'
-import { useRouter } from 'next/router'
-import { convertFractionToPercentage, truncateString } from '@utils/index'
+import { truncateString } from '@utils/index'
 import { roundNumber } from '@utils/helpers'
 import { ANIMATION, TEST_TYPE } from 'src/constants'
-import { isNull, round } from 'lodash'
-import { useCourseContext } from '@contexts/index'
 import SappTooltip from 'src/common/SappTooltip'
 import { trackGAEvent } from '@utils/google-analytics'
+import ResultCourse from './CourseResult'
 
 const PartFailed = ({
   coursePart,
@@ -22,20 +19,18 @@ const PartFailed = ({
   class_user_id?: string
   is_passed_course: boolean
 }) => {
+  const quizAttempt = coursePart?.quiz
+  const [open, setOpen] = useState(false)
+  const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
+
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
     : 'Unlimited'
-  const [open, setOpen] = useState(false)
-  const router = useRouter()
 
   const checkFinished = useMemo(() => {
-    if (isNull(coursePart?.quiz?.attempt)) {
-      return false
-    }
     if (coursePart?.quiz?.attempt) {
       return true
     }
-
     return false
   }, [coursePart?.quiz?.attempt])
 
@@ -50,7 +45,6 @@ const PartFailed = ({
   //     throw err
   //   }
   // }
-  const quizAttempt = coursePart?.quiz
 
   const countTimeSpent = (ratio_score: string) => {
     const parts = ratio_score?.split('/')
@@ -65,33 +59,16 @@ const PartFailed = ({
         coursePart?.quiz?.limit_count,
     ) || 0
 
-  const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
+  const showTitleFinalTest =
+    coursePart?.course_section_type === TEST_TYPE.FINAL_TEST
+      ? 'Final Test'
+      : 'MidTerm Test'
 
   useEffect(() => {
     if (runOutAttemp >= 1 && coursePart?.quiz?.is_limited === true) {
       setIsRunoutAttemp(false)
     }
   }, [runOutAttemp])
-
-  const { courseType } = useCourseContext()
-
-  /**
-   * @description check điều kiện pass Final Test
-   */
-  const passFinalTest =
-    round(
-      convertFractionToPercentage(
-        coursePart?.quiz?.attempt?.ratio_score || '0/0',
-      ),
-      2,
-    ) > coursePart?.quiz?.required_percent_score &&
-    coursePart?.course_section_type === 'FINAL_TEST' &&
-    courseType === 'FOUNDATION_COURSE'
-
-  const showTitleFinalTest =
-    coursePart?.course_section_type === TEST_TYPE.FINAL_TEST
-      ? 'Final Test'
-      : 'MidTerm Test'
 
   return (
     <>
@@ -177,24 +154,16 @@ const PartFailed = ({
             )
           ) : (
             <div className="flex flex-1 justify-between">
-              {(passFinalTest ||
-                (coursePart?.course_section_type === 'FINAL_TEST' &&
-                  courseType !== 'FOUNDATION_COURSE') ||
-                coursePart?.course_section_type === 'MID_TERM_TEST') && (
-                <SappButton
-                  title="Result"
-                  isUnderLine
-                  color="text"
-                  className="!p-0 font-medium underline"
-                  onClick={() => {
-                    router.push(
-                      `/courses/test/test-result/${quizAttempt?.attempt?.id}`,
-                    )
+              {quizAttempt.id && (
+                <ResultCourse
+                  class_user_id={class_user_id}
+                  coursePart={coursePart}
+                  quizAttempt={quizAttempt}
+                  trackGA={() => {
                     trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
                   }}
                 />
               )}
-
               {coursePart?.quiz?.is_limited &&
               coursePart?.quiz?.attempt?.number_of_attempts ===
                 coursePart?.quiz?.limit_count ? null : (
@@ -205,7 +174,7 @@ const PartFailed = ({
                   className={`${
                     coursePart?.quiz?.attempt?.number_of_attempts !==
                       coursePart?.quiz?.limit_count && ''
-                  } ml-auto`}
+                  } ml-auto max-h-[40px]`}
                   onClick={() => {
                     setOpen(true)
                     trackGAEvent(`Click Button Retake ${showTitleFinalTest}`)

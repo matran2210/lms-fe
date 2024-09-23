@@ -7,6 +7,7 @@ import {
   removeQuizFinished,
   selectQuestions,
   submitQuiz,
+  saveAnswer,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import { CloseIcon } from '@assets/icons'
@@ -26,6 +27,7 @@ import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { isValidatedAnswer } from '@utils/answer'
 
 type Props = {
   questions: IQuestion[]
@@ -87,6 +89,7 @@ const QuizDocument = ({
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
   const [loading, setLoading] = useState<boolean>(false)
+  const [resultId, setResultId] = useState<string>('')
 
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -130,6 +133,7 @@ const QuizDocument = ({
   const handleNextQuestion = async () => {
     if (activeQuestionIndex < questions?.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
+      handleSaveAnswer()
       // Load the next question if it hasn't been loaded yet
       const nextQuestionId = questions[activeQuestionIndex + 1]?.id
       if (nextQuestionId) {
@@ -152,6 +156,7 @@ const QuizDocument = ({
   const handlePrevQuestion = async () => {
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex(activeQuestionIndex - 1)
+      handleSaveAnswer()
       // Load the previous question if it hasn't been loaded yet
       const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
@@ -190,29 +195,56 @@ const QuizDocument = ({
       })
     }
   }
+  /**
+   * Function: Xử lý việc lưu đáp án lên store trước khi chuyển sang câu khác
+   */
+  const handleSaveAnswer = () => {
+    const myAnswers = questionRef?.current?.onSaveAnswer(
+      activeQuestion,
+    ) as unknown
+    if (!activeQuestion?.confirmed) {
+      dispatch(
+        saveAnswer({
+          activityId,
+          tabId,
+          quizId,
+          myAnswers,
+          question: activeQuestion,
+        }),
+      )
+    }
+  }
 
   const handleFinishQuiz = async () => {
     setOpenFinishQuiz(false)
     setLoading(true)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
+    // Handle: handle việc check xem đáp án đó đãn làm và có đáp án chưa chưa có thì sẽ return null
+    const availableQuestions = questions?.map((item: any) => {
+      if (isValidatedAnswer(item.myAnswers, item.qType)) {
+        return item
+      }
+      return { ...item, myAnswers: null }
+    })
     const {
       answers,
       quiz_position_mapping,
-    }: { answers: any[]; quiz_position_mapping: any[] } = questions?.reduce(
-      (acc: any, obj: any) => {
-        if (obj?.myAnswers) {
-          acc.answers = acc?.answers?.concat({ ...obj.myAnswers })
-        }
-        if (obj?.quiz_position_mapping) {
-          acc.quiz_position_mapping = acc?.quiz_position_mapping?.concat(
-            obj?.quiz_position_mapping,
-          )
-        }
+    }: { answers: any[]; quiz_position_mapping: any[] } =
+      availableQuestions?.reduce(
+        (acc: any, obj: any) => {
+          if (obj?.myAnswers) {
+            acc.answers = acc?.answers?.concat(...obj.myAnswers)
+          }
+          if (obj?.quiz_position_mapping) {
+            acc.quiz_position_mapping = acc?.quiz_position_mapping?.concat(
+              obj?.quiz_position_mapping,
+            )
+          }
 
-        return acc
-      },
-      { answers: [] as any[], quiz_position_mapping: [] as any[] },
-    )
+          return acc
+        },
+        { answers: [] as any[], quiz_position_mapping: [] as any[] },
+      )
 
     try {
       await dispatch(
@@ -261,6 +293,9 @@ const QuizDocument = ({
   }) => {
     setLoading(true)
     try {
+      const checkId = id || modalResult?.id
+      if (checkId === resultId) return
+      setResultId(id ?? modalResult?.id ?? '')
       const response = await CoursesAPI.getQuizAttemptsTable(
         id || modalResult?.id || '',
         {
@@ -271,7 +306,7 @@ const QuizDocument = ({
 
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response?.data?.meta,
-        data: (modalResult?.questions?.data || []).concat(
+        data: (modalResult?.questions?.data ?? []).concat(
           response?.data?.answer_groups?.flatMap((group: IAnswers) => {
             const answers = group?.answers?.map((answer: IAnswer) => {
               return {
@@ -281,7 +316,7 @@ const QuizDocument = ({
                 type: answer?.question?.qType,
                 is_correct: answer?.is_correct,
                 time_spent: answer?.time_spent,
-                question: answer?.question as any,
+                question: answer?.question,
                 active: answer?.active,
               }
             })
@@ -331,6 +366,7 @@ const QuizDocument = ({
             grading_preference={grading_preference}
             showQuestionContent={false}
             isHideExhibit={false}
+            saveAnswer={handleSaveAnswer}
           />
         )}
       </div>
@@ -444,7 +480,7 @@ const QuizDocument = ({
         position="center"
         showFooter={false}
         isFullScreen={true}
-        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
+        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all z-[100000]"
         showHeader={false}
       >
         <div className="relative">

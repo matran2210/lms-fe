@@ -1,9 +1,12 @@
+import { getActToken } from '@utils/index'
 import React, {
   PropsWithChildren,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from 'react'
+import { EventTestAPI } from 'src/pages/api/event-test'
 
 // type for context
 type Context = {
@@ -60,6 +63,21 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    * @description state này bằng true khi submit bài test
    */
   const [submitEventTest, setSubmitEventTest] = useState(false)
+
+  const accessToken = getActToken()
+
+  async function fetchEventTest() {
+    const res = await EventTestAPI.get({})
+    if (res.success) {
+      localStorage.setItem('countEvent', res?.data?.length)
+    }
+  }
+
+  useEffect(() => {
+    if (accessToken) {
+      fetchEventTest()
+    }
+  }, [])
 
   return (
     <CourseContext.Provider

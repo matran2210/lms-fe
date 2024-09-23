@@ -329,7 +329,7 @@ const CoursePartDetail = () => {
       <Layout title="Course Part Detail">
         <div className="main default-content-editor mx-auto my-0 max-w-xxl">
           <div className="w-full">
-            <div className="flex items-center pt-6">
+            <div className="flex items-center px-5 pt-6 xl:px-0">
               <span
                 onClick={() => {
                   router.push('/courses')

@@ -10,7 +10,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { getActToken } from '@utils/index'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, LOCAL_STORAGE_KEYS } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   getCountUnRead,
@@ -18,6 +18,7 @@ import {
   getNotificationDetail,
   loadMoreNotification,
   markAllNotifications,
+  notificationSlice,
   updateStatus,
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
@@ -51,24 +52,6 @@ const Notifications = () => {
     try {
       await dispatch(getCountUnRead())
     } catch (error) {}
-  }
-
-  const getNotifications = async (params: Object) => {
-    try {
-      await dispatch(getNotification(params))
-      // await coutNotificationsUnRead()
-    } catch (error) {}
-  }
-
-  const loadMore = async (params: Object) => {
-    setLoading(true)
-    try {
-      await dispatch(loadMoreNotification(params))
-      await coutNotificationsUnRead()
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
   }
 
   const getApiNotificationDetail = async (
@@ -109,6 +92,17 @@ const Notifications = () => {
   useEffect(() => {
     let isFetching = false
     const isEndPage = page <= pagination?.total_records
+    const loadMore = async (params: Object) => {
+      setLoading(true)
+      try {
+        await dispatch(loadMoreNotification(params))
+        await coutNotificationsUnRead()
+      } catch (error) {
+      } finally {
+        setLoading(false)
+      }
+    }
+
     const handleScroll = () => {
       if (
         !isFetching &&
@@ -133,6 +127,12 @@ const Notifications = () => {
   }, [pagination])
 
   useEffect(() => {
+    const getNotifications = async (params: Object) => {
+      try {
+        await dispatch(getNotification(params))
+      } catch (error) {}
+    }
+
     getNotifications({
       page_index: 1,
       page_size: 10,
@@ -140,7 +140,7 @@ const Notifications = () => {
         is_read: false,
       }),
     })
-  }, [router])
+  }, [router, getTotal, dispatch])
 
   const handleCancel = () => {
     setOpenModel(false)
@@ -153,6 +153,16 @@ const Notifications = () => {
         dispatch(getCountUnRead())
       } catch (error) {}
     }
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('storage', (e) => {
+      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
+
+      dispatch(notificationSlice.actions.updateTotalUnread(count))
+    })
+
+    // ... rest of the effect ...
   }, [])
 
   return (

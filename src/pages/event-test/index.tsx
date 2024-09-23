@@ -30,12 +30,6 @@ const EventTest = () => {
     attempt_status: router?.query?.attempt_status,
   })
 
-  useEffect(() => {
-    if (!isEmpty(eventTestLists)) {
-      localStorage.setItem('countEvent', eventTestLists?.length)
-    }
-  }, [eventTestLists?.length])
-
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title={LANG_SIGNIN.eventTest}>
