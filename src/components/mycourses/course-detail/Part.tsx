@@ -72,7 +72,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   }
 
   return (
-    <div data-aos={ANIMATION.DATA_AOS}>
+    <div data-aos={ANIMATION.DATA_AOS} className="flex h-full flex-col">
       <div
         className={`name-course text-2xl font-medium text-bw-1 xl:h-[60px]`}
         onClick={() => {
@@ -89,7 +89,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
           </SappTooltip>
         </div>
       </div>
-      <div className="des mb-15 mt-6">
+      <div className="des mt-6">
         <div className="line-clamp-5 h-[120px] text-ellipsis">
           <SappTooltip
             title={
