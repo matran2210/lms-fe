@@ -331,22 +331,12 @@ const CoursePartDetail = () => {
           <div className="w-full">
             <div className="flex items-center px-5 pt-6 xl:px-0">
               <span
-                onClick={() => {
-                  router.push('/courses')
-                  trackGAEvent('Click Breadcrumb My Course')
-                }}
-                className="cursor-pointer whitespace-nowrap text-medium-sm font-medium text-gray-1"
-              >
-                My Course
-              </span>
-              <span
-                className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1"
+                className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
                 onClick={() => {
                   router.push(`/courses/my-course/${router.query.id}`)
                   trackGAEvent('Click Breadcrumb My Course Detail')
                 }}
               >
-                /
                 <p className="mx-0.5 inline-block w-full max-w-78 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap">
                   <SappTooltip
                     title={previewPart?.name}

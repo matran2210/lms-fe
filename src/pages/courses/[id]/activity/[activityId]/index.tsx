@@ -15,7 +15,6 @@ import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileIn
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
-import { Dropdown, Menu } from 'antd'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -474,8 +473,8 @@ const ActivityPage = () => {
   /**
    * @description config menu breadcrumbs trong activity
    */
-  const menu = (
-    <Menu>
+  const BreadCrumbs = () => (
+    <>
       {breadcrumbsMenu?.data &&
         breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
           let url = ''
@@ -497,32 +496,33 @@ const ActivityPage = () => {
               url = `/courses/my-course/${router.query.id}`
               break
           }
+
           return (
             <React.Fragment key={e?.id}>
               {e?.course_section_type !== 'ACTIVITY' ? (
-                <Menu.Item
+                <li
+                  title={e?.name}
                   onClick={() => {
                     ;['CHAPTER', 'UNIT', 'PART'].includes(
                       e.course_section_type,
                     ) && localStorage.setItem('course_chapter_id', chapterId)
-
                     router.push(url)
+
+                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }}
                 >
-                  <li
-                    className={
-                      'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
-                    }
-                    title={e?.name}
-                  >
-                    {truncateString(e?.name, 25)}
-                  </li>
-                </Menu.Item>
+                  <div className="line-clamp-1 flex text-gray-1">
+                    <span className=" cursor-pointer hover:text-primary">
+                      {truncateString(e?.name, 25)}
+                    </span>
+                    <span>/</span>
+                  </div>
+                </li>
               ) : null}
             </React.Fragment>
           )
         })}
-    </Menu>
+    </>
   )
 
   /**
@@ -600,25 +600,7 @@ const ActivityPage = () => {
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
           <ul className="line-clamp-1 flex flex-wrap gap-1 overflow-x-auto py-6 text-medium-sm font-medium">
-            <li className="cursor-pointer whitespace-nowrap text-gray-1 hover:text-primary">
-              <Link
-                href="/courses"
-                className="breadcrumbs__link"
-                scroll={false}
-                onClick={() => trackGAEvent('Click Breadcrumb My Course')}
-              >
-                My Course /
-              </Link>
-            </li>
-
-            <Dropdown overlay={menu} trigger={['click']}>
-              <a
-                className="ant-dropdown-link cursor-pointer"
-                onClick={(e) => e.preventDefault()}
-              >
-                ..... /
-              </a>
-            </Dropdown>
+            <BreadCrumbs />
             <li className="text-bw-1">
               <Link
                 href={'#'}

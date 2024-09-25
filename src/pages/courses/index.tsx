@@ -174,10 +174,7 @@ const MyCourse = () => {
           </div>
         </div>
         <div className="main mx-auto my-0 max-w-xxl">
-          <div className="flex justify-between xl-max:mx-6">
-            <h2 className="pb-4 pt-6 text-medium-sm font-medium text-bw-1">
-              My Course
-            </h2>
+          <div className="flex justify-end xl-max:mx-6">
             <div
               className={`relative pb-4 pt-6 ${
                 guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white px-4' : ''
