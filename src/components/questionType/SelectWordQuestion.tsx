@@ -216,7 +216,6 @@ const SelectWord = forwardRef(
 
     // useEffect(() => {
     //   if (questionContent) {
-    //     console.log("abc");
 
     //     DeserializeHighlight(highlighted)
     //   }

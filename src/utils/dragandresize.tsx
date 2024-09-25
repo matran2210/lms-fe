@@ -154,7 +154,6 @@ export const moveAndResizeElement = (
   // movablezone?.addEventListener(
   //   'mousedown',
   //   function (e: MouseEvent) {
-  //     console.log("abc");
 
   //     document.addEventListener('mousemove', handleMoveMouse, true)
   //     isDown = true

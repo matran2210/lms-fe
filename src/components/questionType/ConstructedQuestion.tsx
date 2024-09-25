@@ -84,14 +84,12 @@ const EssayQuestionPreview = ({
   showRequiment = false,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
-  // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
   const inputRef = useRef(null) as any
   // useEffect(() => {
   //   // if (question_data) {
   //   DeserializeHighlight(highlighted)
-  //   console.log(highlighted)
 
   //   // }
   // }, [question_data, question_content, data])
@@ -430,7 +428,9 @@ const EssayQuestionPreview = ({
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
-            <div className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}>
+            <div
+              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+            >
               <Controller
                 name={name}
                 control={control}
@@ -485,7 +485,6 @@ const EssayQuestionPreview = ({
                               },
                             ]
                       }
-                      // onChange={(e) => console.log(e)}
                     />
                   )
                 }}
@@ -508,7 +507,9 @@ const EssayQuestionPreview = ({
               handleChange={() => handleChange && handleChange(data?.id)}
             />
           ) : (
-            <div className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}>
+            <div
+              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+            >
               <Controller
                 name={name}
                 control={control}
@@ -525,10 +526,8 @@ const EssayQuestionPreview = ({
                         // const celldata = e.data
                         if (!fullData?.done && !fullData?.confirmed) {
                           const currentSheet = refSheet?.current?.getSheet()
-                          // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
                           // // listSheet.splice(0,1)
                           // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
-                          // console.log(listSheet,"test");
                           if (value) {
                             let old = [...JSON.parse(value)]
                             const index = old?.findIndex(
@@ -561,7 +560,6 @@ const EssayQuestionPreview = ({
                               },
                             ]
                       }
-                      // onChange={(e) => console.log(e)}
                     />
                   )
                 }}

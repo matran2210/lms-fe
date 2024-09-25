@@ -1,4 +1,5 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import SappButton from '@components/base/button/SappButton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
@@ -7,14 +8,13 @@ import {
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
+import { isEmpty } from 'lodash'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import PasswordProfile from './PasswordProfile'
 import { AuthAPI } from 'src/pages/api/profile'
-import { isEmpty } from 'lodash'
-import SappButton from '@components/base/button/SappButton'
-import { useRouter } from 'next/router'
+import { z } from 'zod'
+import exceptions from '../../services/en.exceptions.json'
+import PasswordProfile from './PasswordProfile'
 import TabLayout from './TabLayout'
 
 export interface IChangePassword {
@@ -68,7 +68,7 @@ const ChangePassword = ({ onOpenTab }: IProp) => {
   /**
    * @description sử dụng useForm
    */
-  const { control, handleSubmit, reset, getValues, watch } =
+  const { control, handleSubmit, reset, getValues, watch, setError } =
     useForm<IChangePassword>({
       resolver: zodResolver(validationSchema),
       mode: 'onSubmit',
@@ -87,7 +87,10 @@ const ChangePassword = ({ onOpenTab }: IProp) => {
     try {
       await AuthAPI.changeUserPassword(data.password)
       setOpenPopup(true)
-    } catch (error) {
+    } catch (error: any) {
+      const errorCode = error?.response?.data?.error?.code
+      const errorMessage = exceptions[errorCode as keyof typeof exceptions]
+      setError('password', { message: errorMessage })
     } finally {
       setLoading(false)
     }
