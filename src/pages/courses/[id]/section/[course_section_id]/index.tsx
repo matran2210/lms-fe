@@ -14,6 +14,8 @@ import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
+import SkeletonButton from 'antd/es/skeleton/Button'
+import { Skeleton } from 'antd'
 
 interface IProps {
   course_section_type: string
@@ -326,46 +328,50 @@ const CoursePartDetail = () => {
   return (
     <Layout title="Course Part Detail">
       <div className="main default-content-editor mx-auto my-0 max-w-xxl">
-        <div className="w-full">
-          <div className="flex items-center px-5 pt-6 xl:px-0">
-            <span
-              onClick={() => {
-                router.push('/courses')
-                trackGAEvent('Click Breadcrumb My Course')
-              }}
-              className="cursor-pointer whitespace-nowrap text-medium-sm font-medium text-gray-1"
-            >
-              My Course
-            </span>
-            <span
-              className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1"
-              onClick={() => {
-                router.push(`/courses/my-course/${router.query.id}`)
-                trackGAEvent('Click Breadcrumb My Course Detail')
-              }}
-            >
-              /
-              <p className="mx-0.5 inline-block w-full max-w-78 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap">
-                <SappTooltip
-                  title={previewPart?.name}
-                  showTooltip={previewPart?.name?.length > 60}
-                >
-                  {truncateString(previewPart?.name, 50)}
-                </SappTooltip>
-              </p>
-            </span>
-            <span className="flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap">
-              <p className="inline-block w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-bw-1">
-                /{' '}
-                <SappTooltip
-                  title={partDetail?.name}
-                  showTooltip={partDetail?.name?.length > 90}
-                >
-                  {truncateString(partDetail?.name, 90)}
-                </SappTooltip>
-              </p>
-            </span>
-          </div>
+        <div className="w-full ">
+          {isLoading ? (
+            <Skeleton.Input size={'small'} active={true} className="pt-6" />
+          ) : (
+            <div className="flex items-center px-5 pt-6 xl:px-0">
+              <span
+                onClick={() => {
+                  router.push('/courses')
+                  trackGAEvent('Click Breadcrumb My Course')
+                }}
+                className="cursor-pointer whitespace-nowrap text-medium-sm font-medium text-gray-1"
+              >
+                My Course
+              </span>
+              <span
+                className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1"
+                onClick={() => {
+                  router.push(`/courses/my-course/${router.query.id}`)
+                  trackGAEvent('Click Breadcrumb My Course Detail')
+                }}
+              >
+                /
+                <p className="mx-0.5 inline-block w-full max-w-78 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap">
+                  <SappTooltip
+                    title={previewPart?.name}
+                    showTooltip={previewPart?.name?.length > 60}
+                  >
+                    {truncateString(previewPart?.name, 50)}
+                  </SappTooltip>
+                </p>
+              </span>
+              <span className="flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap">
+                <p className="inline-block w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-bw-1">
+                  /{' '}
+                  <SappTooltip
+                    title={partDetail?.name}
+                    showTooltip={partDetail?.name?.length > 90}
+                  >
+                    {truncateString(partDetail?.name, 90)}
+                  </SappTooltip>
+                </p>
+              </span>
+            </div>
+          )}
         </div>
         <div data-aos={ANIMATION.DATA_AOS}>
           <PreviewPartDetail
