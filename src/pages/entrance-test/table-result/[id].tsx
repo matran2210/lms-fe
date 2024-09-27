@@ -72,7 +72,7 @@ const TableEntranceResult = () => {
     <FullScreenLayout title="">
       <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
         <div
-          className="absolute right-6 top-[18px]  ml-auto cursor-pointer"
+          className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
           onClick={() => {
             router.back()
           }}
