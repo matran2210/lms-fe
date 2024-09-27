@@ -14,7 +14,8 @@ import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { truncateString } from '@utils/index'
+import { truncateBySpace, truncateString } from '@utils/index'
+import { Dropdown, Menu } from 'antd'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -512,12 +513,14 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }}
                 >
-                  <div className="line-clamp-1 flex text-gray-1">
-                    <span className=" cursor-pointer hover:text-primary">
-                      {truncateString(e?.name, 25)}
-                    </span>
-                    <span>/</span>
-                  </div>
+                  <li
+                    className={
+                      'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
+                    }
+                    title={e?.name}
+                  >
+                    {truncateBySpace(e?.name, 5) ?? ''}
+                  </li>
                 </li>
               ) : null}
             </React.Fragment>
@@ -750,16 +753,14 @@ const ActivityPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               document_id={e?.id}
-                              is_graded={
-                                e?.quiz?.is_graded &&
-                                e?.quiz?.grading_method === 'MANUAL'
-                              }
+                              is_graded={e?.quiz?.is_graded}
                               setOpenFile={handleOpenScratchPad}
                               class_user_id={activity?.class_user_id}
                               quizSetting={e?.quiz?.quiz_setting}
                               reload={refetch}
                               gradeStatus={gradeStatus}
                               quizName={e?.quiz?.name}
+                              grading_method={e?.quiz?.grading_method}
                             />
                           </div>
                         )
