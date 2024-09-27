@@ -159,12 +159,12 @@ const CourseDetail = () => {
               className="pt-6 xl-max:container"
               data-aos={ANIMATION.DATA_AOS}
             >
-              {/* <CourseParts
+              <CourseParts
                 courses={courses}
                 is_passed_course={is_passed_course}
                 class_user_id={class_user_id}
                 lastElementRef={lastElementRef}
-              /> */}
+              />
             </div>
           </>
         )}

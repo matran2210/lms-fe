@@ -1,7 +1,6 @@
-import Heading from '@components/mycourses/Heading'
 import { Skeleton } from 'antd'
 import clsx from 'clsx'
-import React, { forwardRef, HTMLAttributes } from 'react'
+import { forwardRef, HTMLAttributes } from 'react'
 
 const CourseSkeleton = forwardRef<
   HTMLDivElement,

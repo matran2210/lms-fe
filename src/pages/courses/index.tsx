@@ -3,10 +3,10 @@ import CoursesList from '@components/mycourses/CoursesList'
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
+import CardsSkeleton from '@components/skeleton/CardsSkeleton'
 import PopupStep from '@components/user-guide/PopupStep'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
 import Aos from 'aos'
-import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
@@ -14,7 +14,6 @@ import { ANIMATION, UserGuide } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { CoursesAPI } from '../api/courses'
-import CardsSkeleton from '@components/skeleton/CardsSkeleton'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -86,24 +85,17 @@ const MyCourse = () => {
   /**
    * @description sử dụng react-query để lấy data sau khi call API
    */
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isLoading,
-    refetch,
-    isSuccess,
-  } = useInfiniteQuery({
-    queryKey: ['myCourse'],
-    queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
-    getNextPageParam: (lastPage, allPages) => {
-      if (params.status || params.type) {
-        return undefined // Prevent fetching more pages if params change
-      }
-      return lastPage?.data.length ? allPages.length + 1 : undefined
-    },
-  })
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
+    useInfiniteQuery({
+      queryKey: ['myCourse'],
+      queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
+      getNextPageParam: (lastPage, allPages) => {
+        if (params.status || params.type) {
+          return undefined // Prevent fetching more pages if params change
+        }
+        return lastPage?.data.length ? allPages.length + 1 : undefined
+      },
+    })
 
   /**
    * @description check ref khi scroll đến cuối page thì call API
@@ -250,15 +242,14 @@ const MyCourse = () => {
             handleCancel={closeUserGuide}
           />
         )}
-        {isSuccess ? (
-          <div></div>
-        ) : (
-          // <CoursesList
-          //   courses={courses}
-          //   lastElementRef={lastElementRef}
-          //   refetch={refetch}
-          // />
+        {isLoading ? (
           <CardsSkeleton />
+        ) : (
+          <CoursesList
+            courses={courses}
+            lastElementRef={lastElementRef}
+            refetch={refetch}
+          />
         )}
       </div>
       {guideStatus && guideStep == 0 && <PopupWelcome />}
