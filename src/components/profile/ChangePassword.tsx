@@ -89,8 +89,13 @@ const ChangePassword = ({ onOpenTab }: IProp) => {
       setOpenPopup(true)
     } catch (error: any) {
       const errorCode = error?.response?.data?.error?.code
-      const errorMessage = exceptions[errorCode as keyof typeof exceptions]
-      setError('password', { message: errorMessage })
+      const errorMessage = exceptions.find(
+        (exception) => exception.code === errorCode,
+      )
+
+      setError('password', {
+        message: errorMessage?.message || '',
+      })
     } finally {
       setLoading(false)
     }

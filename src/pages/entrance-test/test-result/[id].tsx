@@ -45,6 +45,7 @@ const TestEntranceResult = () => {
             onPublish={() => {}}
             id={undefined}
             is_ops={false}
+            handleClose={() => router.push(PageLink.ENTRANCE_TEST)}
           />
         </div>
         <PopupNotCus open={openScoreDetail} setOpen={setOpenScoreDetail} />
