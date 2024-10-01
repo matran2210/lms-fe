@@ -151,7 +151,7 @@ const MyCourse = () => {
     <Layout title="My Course">
       <div className="border-b border-default bg-white">
         <div
-          className={`mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5 
+          className={`relative mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5 
           ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
         >
           <SearchForm
@@ -170,14 +170,14 @@ const MyCourse = () => {
           )}
         </div>
       </div>
-      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
-        <div className="flex justify-between xl-max:mx-6">
-          <h2 className="pb-4  text-medium-sm font-medium text-bw-1">
+      <div className="mx-auto my-0 max-w-xxl pt-4 xl-max:mx-6">
+        <div className="flex items-center justify-between xl-max:mx-6">
+          <h2 className="py-4 text-medium-sm font-medium text-bw-1">
             My Course
           </h2>
           <div
-            className={`relative pb-4  ${
-              guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white px-4' : ''
+            className={`relative ${
+              guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white p-4' : ''
             }`}
           >
             <Filter courses={data?.pages?.[0]?.category} />
@@ -257,7 +257,7 @@ const MyCourse = () => {
         <div
           ref={confirmDialogOverLayRef}
           className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
-        ></div>
+        />
       )}
     </Layout>
   )
