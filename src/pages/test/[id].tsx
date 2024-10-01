@@ -55,8 +55,7 @@ import toast from 'react-hot-toast'
 import ScratchPatch from './scratchPatch'
 import { CoursesAPI } from '../api/courses'
 import { TestAPI } from '../api/test'
-import Countdown from 'react-countdown'
-import { renderer, useCountdown } from 'src/hooks/useCountdown'
+// import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
@@ -80,6 +79,7 @@ interface Answer {
 import { QuestionAPI } from '../api/question'
 import { trackGAEvent } from '@utils/google-analytics'
 import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import Countdown from './countdown'
 
 // type Window = {
 //   userAgreed: any
@@ -1758,7 +1758,7 @@ const TestDetail = () => {
   /**
    * @description sử dụng hook countdown
    */
-  const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
+  // const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
 
   const ButtonContent = ({
     icon,
@@ -1790,6 +1790,8 @@ const TestDetail = () => {
         return (pageTitle = 'Part Test')
       case TEST_TYPE.ENTRANCE_TEST:
         return (pageTitle = 'Entrance Test')
+      case TEST_TYPE.ENTRANCE_TEST:
+        return (pageTitle = 'Event Test')
       default:
         return pageTitle
     }
@@ -1818,30 +1820,30 @@ const TestDetail = () => {
                 {quizDetail?.name}
               </div>
               {quizDetail?.quiz_timed && (
-                // <CountDown
-                //   remainTime={quizDetail?.quiz_timed}
-                //   onTimeOut={() => {
-                //     if (!openLimit) {
-                //       dispatch(disableUnsavedChange())
-                //       handleSubmitQuestion('timeout')
-                //       // setOpenTimeOut(true)
-                //     }
-                //   }}
-                //   ref={timeRef}
-                // />
                 <Countdown
-                  date={data?.date + data?.delay}
-                  renderer={renderer}
-                  onStart={onStart}
-                  onComplete={() => {
+                  remainTime={quizDetail?.quiz_timed}
+                  onTimeOut={() => {
                     if (!openLimit) {
                       dispatch(disableUnsavedChange())
                       handleSubmitQuestion('timeout')
                       // setOpenTimeOut(true)
                     }
-                    onComplete()
                   }}
+                  ref={timeRef}
                 />
+                // <Countdown
+                //   date={data?.date + data?.delay}
+                //   renderer={renderer}
+                //   onStart={onStart}
+                //   onComplete={() => {
+                //     if (!openLimit) {
+                // dispatch(disableUnsavedChange())
+                // handleSubmitQuestion('timeout')
+                // setOpenTimeOut(true)
+                //     }
+                //     onComplete()
+                //   }}
+                // />
               )}
 
               <div className="flex w-2/6 items-center justify-end">
