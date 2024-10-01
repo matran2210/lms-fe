@@ -72,6 +72,7 @@ export interface IQuizResult {
     required_percent_score: number
     is_limited: boolean
     limit_count?: number
+    grading_method?: string
   }
 }
 

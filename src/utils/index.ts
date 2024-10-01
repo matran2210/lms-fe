@@ -281,4 +281,13 @@ export const removeStyleAttributes = (htmlString?: string) => {
   return doc.body.innerHTML
 }
 
+export const capitalizeFirstLetter = (str?: string) => {
+  if (!str) return
+  str = str?.toLocaleLowerCase()
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 export * from './formatNumber'

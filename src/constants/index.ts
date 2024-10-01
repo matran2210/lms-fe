@@ -238,5 +238,10 @@ export const GRADE_STATUS = {
   FINISHED_GRADING: 'FINISHED_GRADING',
 }
 
+export const GRADING_METHOD = {
+  MANUAL: 'MANUAL',
+  AUTO: 'AUTO',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'
