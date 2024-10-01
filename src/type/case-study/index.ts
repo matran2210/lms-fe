@@ -91,6 +91,7 @@ export interface IQuestionResult {
   }
   exhibits: IExhibit[]
   requirements: IRequirement[]
+  response_option: string
   question_report: {
     ratio: string
     average_time: string

@@ -3,7 +3,10 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import EditorReader from '@components/base/editor/EditorReader'
-import { runHighlight } from '@utils/index'
+import {
+  replaceTextAlignCenterToWebKitCenter,
+  runHighlight,
+} from '@utils/index'
 import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
 import { isNull, isUndefined, uniqueId } from 'lodash'
@@ -315,7 +318,9 @@ const EssayQuestionPreview = ({
             <React.Fragment>
               <div className="sapp-upload-file-preview">
                 <div className="text-base font-semibold">
-                  Upload file to submit:
+                  {fullData.done
+                    ? 'Your Answer File:'
+                    : 'Upload file to submit'}
                 </div>
                 <div
                   className="cursor-pointer text-state-info hover:underline"
