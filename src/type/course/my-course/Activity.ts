@@ -91,12 +91,19 @@ export interface ITab {
     files?: IFile[]
     videos?: IVideo[]
     quiz?: {
+      attempt: {
+        status: string
+        id: string
+        grading_status: string
+      }
       id?: string
+      name?: string
       constructed_questions: IQuestion[]
       multiple_choice_questions: IQuestion[]
       grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
       is_graded?: boolean
       quiz_setting?: IQuizSetting
+      grading_method?: string
     }
   }[]
 }

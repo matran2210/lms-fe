@@ -233,5 +233,10 @@ export const ESSAY_TYPE = {
   SHEET: 'SHEET',
 }
 
+export const GRADE_STATUS = {
+  AWAITING_GRADING: 'AWAITING_GRADING',
+  FINISHED_GRADING: 'FINISHED_GRADING',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'
