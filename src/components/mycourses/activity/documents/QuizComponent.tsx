@@ -86,6 +86,10 @@ type Props = {
   saveAnswer?: () => void
 }
 
+type RefEditor = {
+  reset: () => void
+}
+
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
   (
     {
@@ -141,6 +145,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       status: boolean
     }>({ requirement_id: undefined, question_id: undefined, status: false })
     const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+    const refEditor = useRef<RefEditor>(null)
 
     const handleShowRequirement = (data: {
       description: string
@@ -149,6 +154,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       files: any
       id: string
     }) => {
+      refEditor?.current?.reset()
       saveAnswer && saveAnswer()
       setShowListRequirement(false)
       refEditor?.current?.reset()
@@ -714,6 +720,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   !isChange && setIsChange(true)
                 }}
                 isShowContent={showQuestionContent}
+                externalRef={refEditor}
               />
             </>
           )
