@@ -32,12 +32,13 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { isUndefined, uniqueId } from 'lodash'
+import { isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   DISPLAY_TYPE,
+  ESSAY_TYPE,
   PageLink,
   QUESTION_TYPES,
   RESPONSE_OPTION,
@@ -577,18 +578,21 @@ const TestDetail = () => {
       </div>
     )
   }
-  const checkAnswered = (currentContent: any) => {
+  const checkAnswered = (currentContent: any, isSubmit = false) => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE
     ) {
-      if (getValues(`${currentContent?.id}_answer`)) {
+      if (
+        !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
+        getValues(`${currentContent?.id}_answer`)?.length > 0
+      ) {
         return true
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       if (
-        getValues(`${currentContent?.id}_answer`) &&
+        !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
         getValues(`${currentContent?.id}_answer`)?.length > 0
       ) {
         return true
@@ -632,7 +636,10 @@ const TestDetail = () => {
     } else if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
       if (Array.isArray(currentContent.data?.requirements)) {
         for (let req of currentContent.data?.requirements) {
-          if (req?.answer_file?.file_key) {
+          if (
+            req?.answer_file?.file_key ||
+            answerListRef?.current?.[req?.id || '']
+          ) {
             return true
           }
         }
@@ -640,9 +647,9 @@ const TestDetail = () => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value = getValues(
-        `${currentContent?.id}_${essayData?.index}_answer`,
-      )
+      const value = isSubmit
+        ? getValues(`${currentContent?.id}_0_answer`)
+        : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
@@ -967,7 +974,7 @@ const TestDetail = () => {
     }
   }
   const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
-    if (!currentContent.done) {
+    if (!currentContent?.done) {
       if (
         currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
         currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
@@ -1303,25 +1310,39 @@ const TestDetail = () => {
         }
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
-        if (checkAnswered(e)) {
+        if (checkAnswered(e, true)) {
           const requirements = e?.data?.requirements?.length
             ? e?.data?.requirements
             : [null]
-          requirements?.forEach((requirement: Requirement | null) => {
+          if (requirements?.length) {
+            requirements?.forEach((requirement: Requirement | null) => {
+              answers.push({
+                question_id: e.id,
+                short_answer:
+                  answerListRef?.current?.[requirement?.id || ''] ??
+                  (requirement?.id ? '' : e?.answer || ''),
+                requirement_id: requirement?.id || null,
+                response_option:
+                  e?.data?.response_option ??
+                  (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+                time_spent: Math.ceil(e?.timeSpent / 1000),
+                active: 'SUBMITED',
+                answer_file: requirement?.answer_file || e?.answer_file || null,
+              })
+            })
+          } else {
             answers.push({
               question_id: e.id,
-              short_answer:
-                answerListRef?.current?.[requirement?.id || ''] ??
-                (requirement?.id ? '' : e?.answer || ''),
-              requirement_id: requirement?.id || null,
+              short_answer: e?.answer || '',
+              requirement_id: null,
               response_option:
                 e?.data?.response_option ??
-                (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+                (e?.response_type === 0 ? ESSAY_TYPE.WORD : ESSAY_TYPE.SHEET),
               time_spent: Math.ceil(e?.timeSpent / 1000),
               active: 'SUBMITED',
-              answer_file: requirement?.answer_file || e?.answer_file || null,
+              answer_file: e?.answer_file || null,
             })
-          })
+          }
         }
       }
       quiz_position_mapping.push({

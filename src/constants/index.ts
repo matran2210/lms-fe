@@ -224,5 +224,10 @@ export const ANIMATION = {
   DATA_AOS: 'fade-up',
 }
 
+export const ESSAY_TYPE = {
+  WORD: 'WORD',
+  SHEET: 'SHEET',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'
