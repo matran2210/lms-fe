@@ -44,6 +44,7 @@ interface IRequirement {
     file_name: string
   }
   short_answer?: string
+  explanation?: string
 }
 
 export type QuizComponentRef = {
@@ -668,7 +669,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   activeQuestion?.myAnswers?.[0]?.short_answer ??
                   null
                 }
-                data={essayData?.req}
+                data={activeQuestion?.requirements?.[essayData?.index ?? 0]}
                 question_content={activeQuestion?.question_content}
                 index={essayData?.index}
                 question_data={activeQuestion}
