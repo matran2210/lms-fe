@@ -318,7 +318,9 @@ const EssayQuestionPreview = ({
       )}
       <>
         {question_data.assignment_type !== 'TEXT' ? (
-          fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ? (
+          fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
+          fullData?.answer_file?.file_key ||
+          fullData?.data.answer_file?.file_key ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
                 <div className="text-base font-semibold">
@@ -333,18 +335,22 @@ const EssayQuestionPreview = ({
                           name:
                             fullData?.data?.requirements?.[index ?? 0]
                               ?.answer_file?.file_name ||
-                            fullData?.answer_file?.file_name,
+                            fullData?.answer_file?.file_name ||
+                            fullData?.data.answer_file?.file_name,
                           file_key:
                             fullData?.data?.requirements?.[index ?? 0]
                               ?.answer_file?.file_key ||
-                            fullData?.answer_file?.file_key,
+                            fullData?.answer_file?.file_key ||
+                            fullData?.data.answer_file?.file_key,
                         },
                       ],
                     })
                   }
                 >
                   {fullData?.data?.requirements?.[index ?? 0]?.answer_file
-                    ?.file_name || fullData?.answer_file?.file_name}
+                    ?.file_name ||
+                    fullData?.answer_file?.file_name ||
+                    fullData?.data.answer_file?.file_name}
                 </div>
                 {!fullData?.done && !fullData?.confirmed && (
                   <div
@@ -578,7 +584,10 @@ const EssayQuestionPreview = ({
                 <div className="font-semibold">Solution</div>
                 <EditorReader
                   text_editor_content={
-                    data?.explanation ?? fullData?.solution ?? ''
+                    data?.explanation ??
+                    fullData?.solution ??
+                    fullData?.data.solution ??
+                    ''
                   }
                   className="mt-4"
                 />

@@ -151,10 +151,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }) => {
       saveAnswer && saveAnswer()
       setShowListRequirement(false)
+      refEditor?.current?.reset()
       setShowRequirement(data)
       setValue(
         `${activeQuestion?.id}_${data?.id}_essay`,
-        activeQuestion?.myAnswers?.[data.index]?.short_answer,
+        activeQuestion?.myAnswers?.[data.index - 1]?.short_answer ??
+          getValues(`${activeQuestion?.id}_${data?.id}_essay` ?? null),
       )
       setEssayData({
         req: data,
@@ -678,7 +680,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
                 name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
-                fullData={{ data: { ...activeQuestion } }}
+                fullData={{
+                  data: { ...activeQuestion },
+                  solution: activeQuestion?.solution ?? '',
+                }}
                 openChooseFile={(e: any) =>
                   setOpenUpload({
                     status: true,
@@ -757,6 +762,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
+      refEditor?.current?.reset()
       if (
         activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
         activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||

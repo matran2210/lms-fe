@@ -273,6 +273,7 @@ const QuizDocument = ({
             }, 4000)
           }
         })
+      reload()
     } catch (error: any) {
       if (error?.response?.status === 422) {
         toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
