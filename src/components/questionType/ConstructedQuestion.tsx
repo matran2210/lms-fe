@@ -92,7 +92,7 @@ const EssayQuestionPreview = ({
     name:
       fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_name ||
       fullData?.answer_file?.file_name ||
-      fullData?.data.answer_file?.file_name,
+      fullData?.data?.answer_file?.file_name,
     key:
       fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
       fullData?.answer_file?.file_key ||
