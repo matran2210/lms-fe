@@ -96,7 +96,7 @@ const EssayQuestionPreview = ({
     key:
       fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
       fullData?.answer_file?.file_key ||
-      fullData?.data.answer_file?.file_key,
+      fullData?.data?.answer_file?.file_key,
   }
   if (externalRef) {
     externalRef.current = {
@@ -323,8 +323,8 @@ const EssayQuestionPreview = ({
                     handleDownload({
                       files: [
                         {
-                          name: fileData.name,
-                          file_key: fileData.key,
+                          name: fileData?.name,
+                          file_key: fileData?.key,
                         },
                       ],
                     })
@@ -380,7 +380,7 @@ const EssayQuestionPreview = ({
                   </div>
                 </div>
               </div>
-              {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
+              {question_data?.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy &&
                 data && <div className="sapp-seprate-line-preview"></div>}
             </React.Fragment>
@@ -566,7 +566,7 @@ const EssayQuestionPreview = ({
                   text_editor_content={
                     data?.explanation ??
                     fullData?.solution ??
-                    fullData?.data.solution ??
+                    fullData?.data?.solution ??
                     ''
                   }
                   className="mt-4"
