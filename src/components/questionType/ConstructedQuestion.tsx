@@ -337,14 +337,16 @@ const EssayQuestionPreview = ({
                 >
                   {fileData.name}
                 </div>
-                {!fullData?.done && !fullData?.confirmed && (
-                  <div
-                    onClick={() => handleClearFile(index)}
-                    className="cursor-pointer"
-                  >
-                    <CloseIcon />
-                  </div>
-                )}
+                {!fullData?.done &&
+                  !fullData?.confirmed &&
+                  !fullData.data.confirmed && (
+                    <button
+                      onClick={() => handleClearFile(index)}
+                      className="cursor-pointer"
+                    >
+                      <CloseIcon />
+                    </button>
+                  )}
               </div>
               {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy && (

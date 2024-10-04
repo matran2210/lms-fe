@@ -39,6 +39,7 @@ type Props = {
   is_graded?: boolean
   setOpenFile?: any
   class_user_id?: string
+  reload?: any
 }
 
 interface IAnswer {
@@ -74,6 +75,7 @@ const QuizDocument = ({
   is_graded,
   setOpenFile,
   class_user_id,
+  reload,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)

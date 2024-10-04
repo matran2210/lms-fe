@@ -154,7 +154,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       files: any
       id: string
     }) => {
-      refEditor?.current?.reset()
       saveAnswer && saveAnswer()
       setShowListRequirement(false)
       refEditor?.current?.reset()

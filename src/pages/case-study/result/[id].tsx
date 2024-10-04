@@ -194,9 +194,12 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.ESSAY:
         const requirementIndex = getIndexOfRequirement(requirement, data.id)
+        const requirementQuestion = data?.requirements?.find(
+          (req) => req.id === requirement?.id,
+        )
         return (
           <EssayQuestionPreview
-            data={requirement}
+            data={{ ...requirementQuestion, ...requirement }}
             question_content={question_content ?? ''}
             index={requirementIndex === -1 ? 0 : requirementIndex}
             question_data={data}
