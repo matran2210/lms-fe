@@ -87,7 +87,6 @@ const EssayQuestionPreview = ({
   showRequiment = false,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
-  // console.log(response_option_custom)
   const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
 
@@ -565,7 +564,9 @@ const EssayQuestionPreview = ({
               ></Controller>
             </div>
           )}
-          {(fullData?.confirmed || fullData?.data?.confirmed) &&
+          {(fullData?.confirmed ||
+            fullData?.done ||
+            fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
               <div className="mb-11 mt-8 bg-gray-4 p-4">
                 <div className="font-semibold">Solution</div>

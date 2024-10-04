@@ -156,12 +156,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }) => {
       saveAnswer && saveAnswer()
       setShowListRequirement(false)
-      refEditor?.current?.reset()
+      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+        refEditor?.current?.reset()
+      }
       setShowRequirement(data)
       setValue(
         `${activeQuestion?.id}_${data?.id}_essay`,
         activeQuestion?.myAnswers?.[data.index - 1]?.short_answer ??
-          getValues(`${activeQuestion?.id}_${data?.id}_essay` ?? null),
+          getValues(`${activeQuestion?.id}_${data?.id}_essay`) ??
+          null,
       )
       setEssayData({
         req: data,
@@ -247,7 +250,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               activeQuestion?.myAnswers?.map((ans: IEssayAnswer) => {
                 ans?.short_answer &&
                   setValue(
-                    `${activeQuestion?.id}_${ans.requirement_id}_essay`,
+                    `${activeQuestion?.id}_${ans.requirement_id ?? document_id}_essay`,
                     ans?.short_answer,
                   )
               })
@@ -764,11 +767,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
       setExhibitData(exhibitOption)
     }
-
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
-      refEditor?.current?.reset()
+      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+        refEditor?.current?.reset()
+      }
       if (
         activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
         activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
