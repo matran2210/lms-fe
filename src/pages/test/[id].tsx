@@ -478,11 +478,12 @@ const TestDetail = () => {
     callback: () => setShowLisRequirement(false),
   })
   const [onMount, setOnMount] = useState(true)
-  const currentTabContent = useMemo(() => {
-    if (tabs && tabs.length > 0) {
-      return tabs.find((e: any) => e.id === currentPage)
-    } else return undefined
-  }, [currentPage, tabs])
+
+  const currentTabContent =
+    tabs && tabs.length > 0
+      ? tabs.find((e: any) => e.id === currentPage)
+      : undefined
+
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
       if (openScratchPad[i].type === 'calculator') {
