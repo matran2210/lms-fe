@@ -81,6 +81,7 @@ import { QuestionAPI } from '../api/question'
 import { trackGAEvent } from '@utils/google-analytics'
 import { showPopup } from 'src/redux/slice/Popup/Result-test'
 import Countdown from './countdown'
+import { IRequirement } from 'src/type/case-study'
 
 // type Window = {
 //   userAgreed: any
@@ -269,7 +270,10 @@ const TestDetail = () => {
         }
         return (
           <EssayQuestionPreview
-            data={essayData?.req}
+            data={{
+              ...currentTabContent?.data?.requirements?.[essayData?.index],
+              ...essayData?.req,
+            }}
             question_content={currentTabContent?.data?.question_content}
             index={essayData?.index}
             question_data={currentTabContent?.data}
@@ -493,6 +497,7 @@ const TestDetail = () => {
     return -1
     // if (!arr.includes('calculator')) {
   }, [openScratchPad])
+
   const handleOpenScratchPad = (
     type: string,
     file?: string,
@@ -800,6 +805,7 @@ const TestDetail = () => {
       corrects: corrects,
       solution: res?.data?.[0]?.solution,
       isSelfReflection: res?.data?.[0]?.is_self_reflection,
+      requirements: res?.data?.[0]?.requirements,
     }
   }
   const confirmAnswer = async (
@@ -807,6 +813,7 @@ const TestDetail = () => {
     solution: any,
     currentTabContent: any,
     isSelfReflection: boolean,
+    requirements?: IRequirement[],
   ) => {
     setLoading(true)
     // setStartTime(Date.now())
@@ -824,6 +831,14 @@ const TestDetail = () => {
           currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
         ) {
           ref.current?.handleReset()
+        }
+        if (item?.data?.requirements?.length) {
+          item.data.requirements = item.data.requirements.map(
+            (req: IRequirement, index: number) => ({
+              ...requirements?.[index],
+              ...req,
+            }),
+          )
         }
         return {
           ...item,
@@ -2513,54 +2528,22 @@ const TestDetail = () => {
               {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
               !currentTabContent?.done &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
-                currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
-                  <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                    onClick={async () => {
-                      const data = await getResult(currentTabContent)
-                      confirmAnswer(
-                        data?.corrects,
-                        data?.solution,
-                        currentTabContent,
-                        data?.isSelfReflection,
-                      )
-                      trackGAEvent('Click Button Confirm Answer Test')
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">
-                      Confirm Answer
-                    </div>
-                  </button>
-                ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1 ? (
-                  <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                    onClick={() => {
-                      const index = filteredTabs?.findIndex(
-                        (e: any) => e.id === currentPage,
-                      )
-                      handleConfirmAndNext(
-                        currentPage,
-                        filteredTabs[index + 1].id,
-                      )
-                      trackGAEvent('Click Button Confirm & Next Test')
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">
-                      Confirm & Next
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                    onClick={() => {
-                      handleConfirmEssay()
-                      trackGAEvent('Click Button Confirm Test')
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">Confirm</div>
-                  </button>
-                )
+                <button
+                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  onClick={async () => {
+                    const data = await getResult(currentTabContent)
+                    confirmAnswer(
+                      data?.corrects,
+                      data?.solution,
+                      currentTabContent,
+                      data?.isSelfReflection,
+                      data?.requirements,
+                    )
+                    trackGAEvent('Click Button View Answer Test')
+                  }}
+                >
+                  <div className="text-medium-sm font-medium">View Answer</div>
+                </button>
               ) : (
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <
                   filteredTabs.length - 1 && (
