@@ -95,6 +95,7 @@ const CaseStudyResult = () => {
     done?: boolean,
     requirement?: IRequirement,
     question_content?: string,
+    answerFile?: { file_key: string; file_name: string; url: string },
   ) => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -192,11 +193,15 @@ const CaseStudyResult = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        const requirementIndex = getIndexOfRequirement(requirement, data.id)
+        const requirementQuestion = data?.requirements?.find(
+          (req) => req.id === requirement?.id,
+        )
         return (
           <EssayQuestionPreview
-            data={requirement}
+            data={{ ...requirementQuestion, ...requirement }}
             question_content={question_content ?? ''}
-            index={undefined}
+            index={requirementIndex === -1 ? 0 : requirementIndex}
             question_data={data}
             control={control}
             handleSaveHighLight={() => {}}
@@ -206,15 +211,37 @@ const CaseStudyResult = () => {
             name={`${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
-            fullData={data}
+            fullData={{
+              confirmed: true,
+              done: true,
+              ...data,
+              answer_file: answerFile,
+            }}
             response_option_custom={0}
             solution={solution}
             setOpenPdf={handleOpenScratchPad}
+            isShowContent={
+              requirementIndex === 0 || data.requirements.length === 0
+            }
           />
         )
       default:
         return <div></div>
     }
+  }
+
+  /**
+   *
+   * */
+  const getIndexOfRequirement = (
+    requirement?: IRequirement,
+    questionId?: string,
+  ) => {
+    const order = result?.answers
+      ?.filter((item) => item?.question_id === questionId)
+      .findIndex((value) => value?.requirement_id === requirement?.id)
+    if (order === undefined || order === null) return 0
+    return order
   }
 
   /**
@@ -333,6 +360,9 @@ const CaseStudyResult = () => {
 
     if (data.question.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       return data.answer?.map((item: { answer_id: string }) => item.answer_id)
+    }
+    if (data.question.qType === QUESTION_TYPES.ESSAY) {
+      return data.short_answer
     }
     return data.answer
   }
@@ -480,7 +510,14 @@ const CaseStudyResult = () => {
 
   const questionRender = useMemo(() => {
     return result?.answers?.map((item: any, index: number) => {
-      const question = item.question
+      const question =
+        item.question.qType === QUESTION_TYPES.ESSAY
+          ? { ...item.question, response_option: item.response_option }
+          : item.question
+      const solution =
+        item.question.qType === QUESTION_TYPES.ESSAY
+          ? item?.requirement?.explanation
+          : item.question.solution
       const corrects = getResult(question)
       return (
         <div
@@ -496,10 +533,11 @@ const CaseStudyResult = () => {
             formatAnswer(item),
             corrects,
             undefined,
-            item?.requirement?.explanation,
+            solution,
             true,
             item?.requirement,
             question?.question_content,
+            item?.answer_file,
           )}
         </div>
       )

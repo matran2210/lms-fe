@@ -103,6 +103,7 @@ export interface IQuestion {
       file_key: string
       file_name: string
     }
+    explanation?: string
   }[]
   exhibits?: {
     id: string

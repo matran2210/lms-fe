@@ -44,6 +44,7 @@ interface IRequirement {
     file_name: string
   }
   short_answer?: string
+  explanation?: string
 }
 
 export type QuizComponentRef = {
@@ -83,6 +84,10 @@ type Props = {
   showQuestionContent?: boolean
   isHideExhibit?: boolean
   saveAnswer?: () => void
+}
+
+type RefEditor = {
+  reset: () => void
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -140,6 +145,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       status: boolean
     }>({ requirement_id: undefined, question_id: undefined, status: false })
     const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+    const refEditor = useRef<RefEditor>(null)
 
     const handleShowRequirement = (data: {
       description: string
@@ -150,10 +156,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }) => {
       saveAnswer && saveAnswer()
       setShowListRequirement(false)
+      refEditor?.current?.reset()
       setShowRequirement(data)
       setValue(
         `${activeQuestion?.id}_${data?.id}_essay`,
-        activeQuestion?.myAnswers?.[data.index]?.short_answer,
+        activeQuestion?.myAnswers?.[data.index - 1]?.short_answer ??
+          getValues(`${activeQuestion?.id}_${data?.id}_essay` ?? null),
       )
       setEssayData({
         req: data,
@@ -668,7 +676,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   activeQuestion?.myAnswers?.[0]?.short_answer ??
                   null
                 }
-                data={essayData?.req}
+                data={activeQuestion?.requirements?.[essayData?.index ?? 0]}
                 question_content={activeQuestion?.question_content}
                 index={essayData?.index}
                 question_data={activeQuestion}
@@ -677,7 +685,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
                 name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
-                fullData={{ data: { ...activeQuestion } }}
+                fullData={{
+                  data: { ...activeQuestion },
+                  solution: activeQuestion?.solution ?? '',
+                }}
                 openChooseFile={(e: any) =>
                   setOpenUpload({
                     status: true,
@@ -708,6 +719,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   !isChange && setIsChange(true)
                 }}
                 isShowContent={showQuestionContent}
+                externalRef={refEditor}
               />
             </>
           )
@@ -756,6 +768,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
+      refEditor?.current?.reset()
       if (
         activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
         activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||

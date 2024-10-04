@@ -74,10 +74,11 @@ const ActivityPage = () => {
     )
   }
 
-  const { data: activity, isLoading } = useGetActivityById(
-    router.query.activityId,
-    router.query.id,
-  )
+  const {
+    data: activity,
+    isLoading,
+    refetch,
+  } = useGetActivityById(router.query.activityId, router.query.id)
 
   const courseId = router.query?.id
   const sectionId = router.query?.activityId as string
@@ -769,6 +770,7 @@ const ActivityPage = () => {
                               is_graded={e?.quiz?.is_graded || false}
                               setOpenFile={handleOpenScratchPad}
                               class_user_id={activity?.class_user_id}
+                              reload={refetch}
                             ></QuizDocument>
                           </div>
                         )
