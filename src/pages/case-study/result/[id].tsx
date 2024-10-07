@@ -42,6 +42,7 @@ import {
   ITopic,
 } from 'src/type/case-study'
 import { IFile } from 'preview-activity/dist/shared/interfaces'
+import clsx from 'clsx'
 
 const CaseStudyResult = () => {
   const router = useRouter()
@@ -96,6 +97,8 @@ const CaseStudyResult = () => {
     requirement?: IRequirement,
     question_content?: string,
     answerFile?: { file_key: string; file_name: string; url: string },
+    requirementIndex?: number,
+    requirementQuestion?: IRequirement,
   ) => {
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -193,10 +196,6 @@ const CaseStudyResult = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
-        const requirementIndex = getIndexOfRequirement(requirement, data.id)
-        const requirementQuestion = data?.requirements?.find(
-          (req) => req.id === requirement?.id,
-        )
         return (
           <EssayQuestionPreview
             data={{ ...requirementQuestion, ...requirement }}
@@ -519,11 +518,21 @@ const CaseStudyResult = () => {
           ? item?.requirement?.explanation
           : item.question.solution
       const corrects = getResult(question)
+      const requirementIndex = getIndexOfRequirement(
+        item?.requirement,
+        question.id,
+      )
+      const requirementQuestion = question?.requirements?.find(
+        (req: IRequirement) => req.id === item?.requirement?.id,
+      )
+      const isAddedBorder =
+        (requirementIndex === 0 && index !== 0) ||
+        (index !== 0 && question.qType !== QUESTION_TYPES.ESSAY)
       return (
         <div
           key={question?.id + index}
           topic-key={question?.question_topic?.id}
-          className={`${index === 0 ? 'mb-8' : 'mb-8 border-t pt-8'}`}
+          className={`mb-8 ${clsx({ 'border-t pt-8': isAddedBorder })}`}
         >
           {checkType(
             index,
@@ -538,6 +547,8 @@ const CaseStudyResult = () => {
             item?.requirement,
             question?.question_content,
             item?.answer_file,
+            requirementIndex,
+            requirementQuestion,
           )}
         </div>
       )
