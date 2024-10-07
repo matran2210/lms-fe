@@ -43,10 +43,7 @@ const EntranceTest = () => {
           </div>
         </div>
         <div className="main mx-8 my-0 max-w-xxl lg:mx-auto">
-          <div className="flex justify-between pb-4 pt-6">
-            <h2 className="text-medium-sm font-medium text-bw-1 ">
-              Entrance Test
-            </h2>
+          <div className="flex justify-end pb-4 pt-6">
             <EntranceTestFilter count={entranceTestLists?.length || 0} />
           </div>
         </div>

@@ -36,9 +36,14 @@ export interface IExhibit {
 export interface IRequirement {
   id: string
   name: string
+  type?: 'TEXT' | 'FILE'
   description: string
-  explanation: string
-  files: IFile[]
+  files?: IFile[]
+  answer_file?: {
+    file_key: string
+    file_name: string
+  }
+  explanation?: string
 }
 
 export interface IAnswerResult {
@@ -86,6 +91,7 @@ export interface IQuestionResult {
   }
   exhibits: IExhibit[]
   requirements: IRequirement[]
+  response_option: string
   question_report: {
     ratio: string
     average_time: string

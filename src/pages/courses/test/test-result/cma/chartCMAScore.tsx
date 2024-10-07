@@ -1,16 +1,10 @@
+import { formatNumber } from '@utils/formatNumber'
 import { roundNumber } from '@utils/helpers'
 import Image from 'next/image'
-
-interface DataItem {
-  question_topic_id: string
-  title: string
-  total_correct_answers: number
-  total_questions: number
-  total_quiz_questions: number
-}
+import { ChartDatum } from 'src/type'
 
 interface IProps {
-  data: DataItem[]
+  data: ChartDatum[]
   GlobalAverage?: number
   score?: number
   isGraded?: boolean
@@ -29,14 +23,14 @@ const ChartCMAScore = ({
       <div className="sticky left-0 flex flex-row justify-between">
         <div>
           <div className="flex flex-col">
-            <div className="text-xl font-medium text-black-1">
+            <div className="text-black-1 text-xl font-medium">
               Multiple Choice Score
             </div>
             <div className="my-2 text-6xl font-bold text-primary">
-              {Math.floor(score as number)}%
+              {score !== undefined ? formatNumber(score) : '--'}%
             </div>
           </div>
-          <div className="mb-6 text-lg-xl font-semibold text-black-1 xl:text-xl xl:font-medium">
+          <div className="text-black-1 mb-6 text-lg-xl font-semibold xl:text-xl xl:font-medium">
             Multiple Choice Score by Part
           </div>
         </div>
@@ -68,7 +62,7 @@ const ChartCMAScore = ({
                 }}
               >
                 <div
-                  className={`relative -left-6 text-medium-sm font-normal text-black-1`}
+                  className={`text-black-1 relative -left-6 text-medium-sm font-normal`}
                 >
                   <span className="relative">{passingScore}</span>
                 </div>
@@ -81,7 +75,7 @@ const ChartCMAScore = ({
               ''
             ) : (
               <div className="absolute bottom-1/2 flex h-0 w-full items-center border-t border-dotted border-gray-2">
-                <div className="relative -left-6 bottom-[50%] text-medium-sm font-normal text-black-1">
+                <div className="text-black-1 relative -left-6 bottom-[50%] text-medium-sm font-normal">
                   <span className="relative">50</span>
                 </div>
               </div>
@@ -89,8 +83,8 @@ const ChartCMAScore = ({
           </div>
           <div className="flex w-full flex-row">
             <div className="mr-5 mt-4 flex shrink-0 flex-col justify-between bg-white py-2">
-              <div className="text-medium-sm text-black-1">Part</div>
-              <div className="text-medium-sm text-black-1">Weight </div>
+              <div className="text-black-1 text-medium-sm">Part</div>
+              <div className="text-black-1 text-medium-sm">Weight </div>
             </div>
             <div className="flex-start flex w-full flex-row">
               {data?.map((item: any, index: number) => (
@@ -109,12 +103,12 @@ const ChartCMAScore = ({
                         }%`,
                       }}
                     />
-                    <div className="absolute -bottom-2.5 left-1/2 h-2.5 w-[1px] bg-black-1" />
+                    <div className="bg-black-1 absolute -bottom-2.5 left-1/2 h-2.5 w-[1px]" />
                   </div>
                   <div className="mt-4 line-clamp-2 w-full text-center text-medium-sm font-medium text-bw-1">
                     {item?.short_name}
                   </div>
-                  <div className="w-full text-center text-medium-sm font-normal text-black-1">
+                  <div className="text-black-1 w-full text-center text-medium-sm font-normal">
                     {`${roundNumber(
                       (item?.total_questions / item?.total_quiz_questions) *
                         100,
