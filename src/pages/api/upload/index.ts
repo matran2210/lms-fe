@@ -1,10 +1,7 @@
 import axios, { AxiosResponse, CancelTokenSource } from 'axios'
-// import {VALID_UPLOAD_EDITOR, VALID_UPLOAD_FILES} from 'src/constants/upload'
-import { fetcher, request } from 'src/services/request'
 import { IResponse } from 'src/redux/types'
 import { apiURL, httpService } from 'src/redux/services/httpService'
-// import {ResourcesAPI} from '../resources'
-// import {ResourceAPI} from '../resource-bank'
+import { fetcher, request } from '@services/requestV2'
 
 type PartUploadDto = { part_number: number; upload_url: string }
 
