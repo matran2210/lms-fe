@@ -8,6 +8,7 @@ import { userReducer } from 'src/redux/slice/User/User'
 import dashboard from 'src/assets/images/dashboard.png'
 import Image from 'next/image'
 import Layout from '@components/layout'
+import { MY_COURSES } from 'src/constants/lang'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -18,7 +19,7 @@ const Dashboard = () => {
       <div className="border-b border-default bg-white px-4 lg:px-20">
         <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm
-            placeholder="Enter name of course..."
+            placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
           />
         </div>

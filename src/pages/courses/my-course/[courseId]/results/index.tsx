@@ -8,6 +8,9 @@ import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { CoursesAPI } from 'src/pages/api/courses'
 import ResultsTable from './ResultsTable'
+import SearchForm from '@components/mycourses/Search'
+import Layout from '@components/layout'
+import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 10
 
@@ -64,7 +67,7 @@ const Results = () => {
         <div className="h-[70px] border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
             <SearchForm
-              placeholder="Enter name of course..."
+              placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>

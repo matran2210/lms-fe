@@ -23,4 +23,5 @@ export const LANG_SIGNIN = {
 export const MY_COURSES = {
   explanations: 'Explanations',
   hotline: '19002225',
+  placeholderSearch: 'Search for your course here',
 }

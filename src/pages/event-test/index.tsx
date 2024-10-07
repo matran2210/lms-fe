@@ -7,9 +7,13 @@ import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION } from 'src/constants'
-import { LANG_SIGNIN } from 'src/constants/lang'
+import Layout from '@components/layout'
+import EventTestFilter from '@components/event-test/EventTestFilter'
+import EventTestList from '@components/event-test/EventTestList'
 import { EventTestAPI } from '../api/event-test'
+import { LANG_SIGNIN, MY_COURSES } from 'src/constants/lang'
+import { isEmpty } from 'lodash'
+import { ANIMATION } from 'src/constants'
 
 const EventTest = () => {
   const useGetData = (queryKey: string, params: Object) => {
@@ -34,7 +38,7 @@ const EventTest = () => {
         <div className="border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
             <SearchForm
-              placeholder="Enter name of course..."
+              placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>

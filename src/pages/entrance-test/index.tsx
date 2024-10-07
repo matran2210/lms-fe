@@ -9,6 +9,10 @@ import { useQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
 import { EntranceTestAPI } from '../api/entrance-test'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+import { useRouter } from 'next/router'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import Layout from '@components/layout'
+import { MY_COURSES } from 'src/constants/lang'
 
 const EntranceTest = () => {
   const useGetData = (queryKey: string, params: Object) => {
@@ -30,7 +34,7 @@ const EntranceTest = () => {
       <div className="border-b border-default bg-white">
         <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6">
           <SearchForm
-            placeholder="Enter name of course..."
+            placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
           />
         </div>

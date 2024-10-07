@@ -11,6 +11,7 @@ import { getActToken } from '@utils/index'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS } from 'src/constants'
+import { MY_COURSES } from 'src/constants/lang'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   getCountUnRead,
@@ -175,7 +176,7 @@ const Notifications = () => {
       <div className="border-b border-default bg-white px-4 lg:px-20">
         <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm
-            placeholder="Enter name of course..."
+            placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
           />
         </div>
