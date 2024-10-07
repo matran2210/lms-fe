@@ -59,7 +59,7 @@ const SappHookFormSelect = ({
                 {...field}
                 options={options}
                 styles={customStyles}
-                className={`select-single ${className} `}
+                className={`select-single ${className}`}
                 classNamePrefix="select"
                 instanceId="selectInstanceId"
                 placeholder={placeholder}

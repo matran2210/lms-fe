@@ -60,7 +60,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         return (
           <ContentTestCongratution
             text1="Your results for Round 2 will"
-            text2="be emailed to you on September 30, 2024"
+            text2="be emailed to you on October 17, 2024"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         )

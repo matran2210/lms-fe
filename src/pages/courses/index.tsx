@@ -49,7 +49,7 @@ const MyCourse = () => {
     }, 50)
   }
   useEffect(() => {
-    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
+    if (true) {
       dispatch(active())
     }
   }, [userGuideLine])
@@ -85,17 +85,21 @@ const MyCourse = () => {
   /**
    * @description sử dụng react-query để lấy data sau khi call API
    */
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
-    useInfiniteQuery({
-      queryKey: ['myCourse'],
-      queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
-      getNextPageParam: (lastPage, allPages) => {
-        if (params.status || params.type) {
-          return undefined // Prevent fetching more pages if params change
-        }
-        return lastPage?.data.length ? allPages.length + 1 : undefined
-      },
-    })
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    refetch,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['myCourse'],
+    queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage?.data.length ? allPages.length + 1 : undefined
+    },
+  })
 
   /**
    * @description check ref khi scroll đến cuối page thì call API
@@ -249,6 +253,8 @@ const MyCourse = () => {
             courses={courses}
             lastElementRef={lastElementRef}
             refetch={refetch}
+            isFetching={isFetching}
+            isFetchingNextPage={isFetchingNextPage}
           />
         )}
       </div>

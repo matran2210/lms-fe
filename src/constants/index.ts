@@ -71,6 +71,7 @@ export enum TEST_TYPE {
   TOPIC_TEST = 'TOPIC_TEST',
   CHAPTER_TEST = 'CHAPTER_TEST',
   PART_TEST = 'PART_TEST',
+  EVENT_TEST = 'EVENT_TEST',
 }
 export enum DISPLAY_TYPE {
   VERTICAL = 'VERTICAL',
@@ -221,6 +222,11 @@ export const BUTTON_STATUS = {
 export const ANIMATION = {
   DURATION: 500,
   DATA_AOS: 'fade-up',
+}
+
+export const ESSAY_TYPE = {
+  WORD: 'WORD',
+  SHEET: 'SHEET',
 }
 
 export * from './socketEvents'

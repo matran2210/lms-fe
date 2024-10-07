@@ -5,6 +5,7 @@ import { RootState } from 'src/redux/store'
 import { IQuestion } from 'src/type/course/Question'
 import { submitQuizTest } from '../../../../../pages/api/courses/index'
 import { QuestionAPI } from 'src/pages/api/question'
+import { IRequirement } from 'src/type/case-study'
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -552,6 +553,14 @@ const quizSlice: Slice = createSlice({
               questionToUpdate.confirmed = true
               questionToUpdate.solution = payload.question.solution
               questionToUpdate.defaultValue = payload.myAnswers
+              questionToUpdate.requirements =
+                questionToUpdate?.requirements?.map(
+                  (req: IRequirement, index: number) => ({
+                    ...req,
+                    explanation:
+                      payload.question?.requirements?.[index]?.explanation,
+                  }),
+                )
 
               questionToUpdate.quiz_position_mapping = [
                 ...(questionToUpdate?.quiz_position_mapping?.filter(
