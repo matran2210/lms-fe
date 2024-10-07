@@ -3,20 +3,42 @@ import { ICourse } from 'src/type/courses'
 import React from 'react'
 import NoData from 'src/common/NoData'
 import { isEmpty } from 'lodash'
+import { Skeleton } from 'antd'
 
 interface CoursesProps {
   courses: ICourse[]
-  // setData: Dispatch<SetStateAction<ICourseAll>>
-  // setLoading: Dispatch<SetStateAction<boolean>>
   lastElementRef: (node: HTMLDivElement) => void
   refetch: () => void
+  isFetching: boolean
+  isFetchingNextPage: boolean
 }
 
 const CoursesList: React.FC<CoursesProps> = ({
   courses,
   lastElementRef,
   refetch,
+  isFetching,
+  isFetchingNextPage,
 }) => {
+  if (isFetching && !isFetchingNextPage) {
+    return (
+      <div className="mb-6 grid grid-cols-2 gap-6 xl-max:px-6 2xl-min:grid-cols-3">
+        {Array(9)
+          .fill([])
+          .map((_, index) => (
+            <div
+              className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+              key={index}
+            >
+              <div className={`flex min-h-352 flex-col`}>
+                <Skeleton />
+                <Skeleton.Button className="mt-auto self-end" />
+              </div>
+            </div>
+          ))}
+      </div>
+    )
+  }
   return (
     <>
       {!isEmpty(courses) ? (

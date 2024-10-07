@@ -19,6 +19,7 @@ export const PageLink = {
   COURSE_ACTIVITY: '/courses/[id]/activity/[activityId]',
   TEST_RESULT: '/courses/test/test-result/[id]',
   USERPAGE: '/[page]',
+  EVENT_TEST: '/event-test',
 }
 
 export const TitleSidebar = {
@@ -70,6 +71,7 @@ export enum TEST_TYPE {
   TOPIC_TEST = 'TOPIC_TEST',
   CHAPTER_TEST = 'CHAPTER_TEST',
   PART_TEST = 'PART_TEST',
+  EVENT_TEST = 'EVENT_TEST',
 }
 
 export enum COURSE_TYPE {
@@ -166,6 +168,21 @@ export const defaultStatusEnstraceTest = [
   },
 ]
 
+export const defaultStatusEventTest = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Completed',
+    value: 'SUBMITTED',
+  },
+  {
+    label: 'Uncompleted',
+    value: 'UN_SUBMITTED',
+  },
+]
+
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
 export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
@@ -214,6 +231,11 @@ export const ANIMATION = {
 
 export const SOCIAL_LINK = {
   FACEBOOK: 'https://www.facebook.com/sapp.edu.vn',
+}
+
+export const ESSAY_TYPE = {
+  WORD: 'WORD',
+  SHEET: 'SHEET',
 }
 
 export * from './socketEvents'

@@ -712,7 +712,17 @@ textarea.is-invalid:focus {
 
 .sapp-modal .ant-modal-content {
   padding: 70px 76px !important;
-  width: 614px;
+  width: 630px;
+}
+
+.sapp-modal--math .ant-modal-content {
+  width: fit-content;
+  padding: 20px !important;
+  margin: auto;
+}
+
+.sapp-modal--math.ant-modal {
+  width: fit-content !important;
 }
 
 .sapp-modal .ant-modal-content .ant-modal-header .ant-modal-title {
@@ -1062,4 +1072,8 @@ br {
 
 td.py-5.px-3.sapp-table-quiz {
   border-width: 0px;
+}
+
+.sapp-border-none {
+  border: 0;
 }

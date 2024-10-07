@@ -1,12 +1,11 @@
 import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
-import SinglePageLayout from '@components/layout/SinglePage'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TestResultPage from './testResultPage'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 
 const TestResultDetail = () => {
   const router = useRouter()

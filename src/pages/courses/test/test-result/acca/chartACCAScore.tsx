@@ -1,16 +1,16 @@
 import { calculatePercentage } from '@utils/helpers'
-
-interface DataItem {
-  question_topic_id: string
-  title: string
-  total_correct_answers: number
-  total_questions: number
-}
+import { ChartDatum } from 'src/type'
 
 interface IProps {
-  data: DataItem[]
+  data: ChartDatum[]
 }
 
+/**
+ * ChartACCAScore Component
+ *
+ * Renders a horizontal bar chart displaying ACCA - Low F scores by part.
+ *
+ */
 const ChartACCAScore = ({ data }: IProps) => {
   return (
     <div className=" mb-4 block h-[152px] bg-white pb-3 pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">

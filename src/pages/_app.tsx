@@ -30,7 +30,10 @@ import {
 } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
-import { showNotification } from 'src/redux/slice/Notification/Notification'
+import {
+  getCountUnRead,
+  showNotification,
+} from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
@@ -174,6 +177,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       }
     }
   }, [showHelp])
+
+  const accessToken = getActToken()
+  useEffect(() => {
+    if (accessToken) {
+      try {
+        dispatch(getCountUnRead())
+      } catch (error) {}
+    }
+  }, [accessToken])
 
   return (
     <main>

@@ -69,6 +69,8 @@ export const getCountUnRead = createAsyncThunk(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
           res.data.total_records.toString(),
         )
+
+        window.dispatchEvent(new Event('storage'))
       }
       return { ...res.data }
     } catch (error: any) {
@@ -171,6 +173,9 @@ export const notificationSlice = createSlice({
     },
     hideNotification: (state) => {
       state.notification_status = false
+    },
+    updateTotalUnread: (state, action: PayloadAction<any>) => {
+      state.total_records = action.payload
     },
   },
 

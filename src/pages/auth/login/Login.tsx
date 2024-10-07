@@ -25,6 +25,7 @@ import { z } from 'zod'
 import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 import PopUpLimit from './PopupLimit'
+import { EventTestAPI } from 'src/pages/api/event-test'
 
 interface IInputProps {
   login: string
@@ -111,14 +112,26 @@ const LoginPage = () => {
         .unwrap()
         .then(async () => {
           dispatch(clearGuideState())
-          const res = await dispatch(getEntranceCount())
-          return res.payload.data.count
-        })
-        .then((count) => {
+          let countEventTest = await EventTestAPI.getCount()
+          let countEntranceTest: any
+
+          localStorage.setItem('countEvent', countEventTest?.data?.count)
+
+          if (countEventTest?.data?.count && countEventTest?.data?.count < 0) {
+            countEntranceTest = await dispatch(getEntranceCount())
+            return countEntranceTest
+          }
+
           const redirectAfterLogin = localStorage.getItem(
             localStorageKeys.REDIRECT_AFTER_LOGIN,
           )
-          if (count && count > 0) {
+
+          if (countEventTest?.data?.count && countEventTest?.data?.count > 0) {
+            router.push('/event-test')
+          } else if (
+            countEntranceTest?.data?.count &&
+            countEntranceTest?.data?.count > 0
+          ) {
             router.push(PageLink.ENTRANCE_TEST)
           } else {
             router.push(redirectAfterLogin || PageLink.COURSES)

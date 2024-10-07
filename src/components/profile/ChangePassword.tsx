@@ -15,6 +15,7 @@ import { AuthAPI } from 'src/pages/api/profile'
 import { isEmpty } from 'lodash'
 import SappButton from '@components/base/button/SappButton'
 import { useRouter } from 'next/router'
+import TabLayout from './TabLayout'
 
 export interface IChangePassword {
   password: string
@@ -94,11 +95,11 @@ const ChangePassword = ({ onOpenTab }: IProp) => {
 
   return (
     <React.Fragment>
-      <div className="flex-1 p-6 pt-4">
+      <div className="">
         <form onSubmit={handleSubmit(onSubmit)} className="block">
-          <div className="relative">
-            <div className="flex items-center justify-between border-b border-gray-3 pb-5">
-              <div className="text-xl font-medium ">Change Password</div>
+          <TabLayout
+            title="Change Password"
+            headerButtons={
               <div className="flex items-center">
                 <SappButton
                   onClick={onOpenTab}
@@ -127,47 +128,50 @@ const ChangePassword = ({ onOpenTab }: IProp) => {
                   }}
                 />
               </div>
+            }
+          >
+            <div className="px-6">
+              <div className="mt-6 grid grid-cols-2">
+                <div className="flex items-center text-base text-gray-1">
+                  Current Password
+                </div>
+                <div>
+                  <HookFormTextField
+                    control={control}
+                    name="password"
+                    type="password"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 grid grid-cols-2">
+                <div className="flex items-center text-base text-gray-1">
+                  New Password
+                </div>
+                <div>
+                  <HookFormTextField
+                    control={control}
+                    name="newPassword"
+                    type="password"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 grid grid-cols-2">
+                <div className="flex items-center text-base text-gray-1">
+                  Confirm New Password
+                </div>
+                <div>
+                  <HookFormTextField
+                    control={control}
+                    name="confirmPassword"
+                    type="password"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
+          </TabLayout>
         </form>
-        <div className="mt-6 grid grid-cols-2">
-          <div className="flex items-center text-base text-gray-1">
-            Current Password
-          </div>
-          <div>
-            <HookFormTextField
-              control={control}
-              name="password"
-              type="password"
-            />
-          </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2">
-          <div className="flex items-center text-base text-gray-1">
-            New Password
-          </div>
-          <div>
-            <HookFormTextField
-              control={control}
-              name="newPassword"
-              type="password"
-            />
-          </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2">
-          <div className="flex items-center text-base text-gray-1">
-            Confirm New Password
-          </div>
-          <div>
-            <HookFormTextField
-              control={control}
-              name="confirmPassword"
-              type="password"
-            />
-          </div>
-        </div>
       </div>
       <PasswordProfile
         open={openPopup}
