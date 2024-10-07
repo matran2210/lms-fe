@@ -115,7 +115,7 @@ const ProfilePage = ({ page }: any) => {
   return (
     <Layout title="My Profile">
       <div className="flex h-full w-full flex-col">
-        <div className="header border-b border-default bg-white px-4 lg:px-20">
+        <div className="border-b border-default bg-white px-4 lg:px-20">
           <div className="mx-auto my-0 flex h-full max-w-xxl py-4.5">
             <SearchForm
               placeholder="Enter name of course..."

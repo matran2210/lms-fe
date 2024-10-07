@@ -1,17 +1,15 @@
-import Heading from '@components/mycourses/Heading'
-import SearchForm from '@components/mycourses/Search'
-import React, { useEffect } from 'react'
-import PopUpRemindEntrance from '@components/popUpRemindEntrance'
-import { ANIMATION } from 'src/constants'
-import { useQuery } from 'react-query'
-import { useRouter } from 'next/router'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import Layout from '@components/layout'
 import EventTestFilter from '@components/event-test/EventTestFilter'
 import EventTestList from '@components/event-test/EventTestList'
-import { EventTestAPI } from '../api/event-test'
+import Layout from '@components/layout'
+import Heading from '@components/mycourses/Heading'
+import SearchForm from '@components/mycourses/Search'
+import PopUpRemindEntrance from '@components/popUpRemindEntrance'
+import { useRouter } from 'next/router'
+import { useQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { ANIMATION } from 'src/constants'
 import { LANG_SIGNIN } from 'src/constants/lang'
-import { isEmpty } from 'lodash'
+import { EventTestAPI } from '../api/event-test'
 
 const EventTest = () => {
   const useGetData = (queryKey: string, params: Object) => {
@@ -33,7 +31,7 @@ const EventTest = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title={LANG_SIGNIN.eventTest}>
-        <div className="header border-b border-default bg-white">
+        <div className="border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
             <SearchForm
               placeholder="Enter name of course..."
