@@ -9,9 +9,6 @@ import { useQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
 import { EntranceTestAPI } from '../api/entrance-test'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
-import { useRouter } from 'next/router'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import Layout from '@components/layout'
 import { MY_COURSES } from 'src/constants/lang'
 
 const EntranceTest = () => {

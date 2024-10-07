@@ -15,11 +15,6 @@ import { ANIMATION, UserGuide } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { CoursesAPI } from '../api/courses'
-import { useInfiniteQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import Aos from 'aos'
-import { isEmpty } from 'lodash'
-import Layout from '@components/layout'
 import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 9
