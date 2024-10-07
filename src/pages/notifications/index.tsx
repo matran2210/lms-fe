@@ -173,7 +173,7 @@ const Notifications = () => {
           Loading
         </div>
       )} */}
-      <div className="header border-b border-default bg-white px-4 lg:px-20">
+      <div className="border-b border-default bg-white px-4 lg:px-20">
         <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}

@@ -1,3 +1,4 @@
+import { IQuizSetting } from 'src/type/courses'
 import { IFile, IQuestion, IVideo } from '../Question'
 
 export interface IActivity {
@@ -95,6 +96,7 @@ export interface ITab {
       multiple_choice_questions: IQuestion[]
       grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
       is_graded?: boolean
+      quiz_setting?: IQuizSetting
     }
   }[]
 }

@@ -1,10 +1,11 @@
+import EventTestFilter from '@components/event-test/EventTestFilter'
+import EventTestList from '@components/event-test/EventTestList'
+import Layout from '@components/layout'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React, { useEffect } from 'react'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
-import { ANIMATION } from 'src/constants'
-import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
+import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Layout from '@components/layout'
 import EventTestFilter from '@components/event-test/EventTestFilter'
@@ -12,6 +13,7 @@ import EventTestList from '@components/event-test/EventTestList'
 import { EventTestAPI } from '../api/event-test'
 import { LANG_SIGNIN, MY_COURSES } from 'src/constants/lang'
 import { isEmpty } from 'lodash'
+import { ANIMATION } from 'src/constants'
 
 const EventTest = () => {
   const useGetData = (queryKey: string, params: Object) => {
@@ -30,16 +32,10 @@ const EventTest = () => {
     attempt_status: router?.query?.attempt_status,
   })
 
-  useEffect(() => {
-    if (!isEmpty(eventTestLists)) {
-      localStorage.setItem('countEvent', eventTestLists?.length)
-    }
-  }, [eventTestLists?.length])
-
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title={LANG_SIGNIN.eventTest}>
-        <div className="header border-b border-default bg-white">
+        <div className="border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}

@@ -1,10 +1,15 @@
+import Layout from '@components/layout'
 import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
+import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+import { useCourseContext } from '@contexts/index'
 import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useInfiniteQuery } from 'react-query'
+import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ANIMATION } from 'src/constants'
 import { useInfiniteQuery } from 'react-query'
@@ -132,41 +137,45 @@ const CourseDetail = () => {
   })
 
   return (
-    <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Course Detail">
-        <div className="header border-b border-e-default bg-white">
-          <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
-            <SearchForm
-              placeholder={MY_COURSES.placeholderSearch}
-              formStyle="w-full flex items-center"
-            />
-          </div>
-        </div>
-        <div className="main relative mx-auto my-0 max-w-xxl xl-max:container">
-          <div className="flex w-full items-center justify-between pb-4 pt-6">
-            <BreadcrumbFilter name={courseNameDetail} />
-            <FilterCourseDetail totalResult={courses?.length || 0} />
-          </div>
-        </div>
-        <div
-          className="heading mx-auto my-0 flex max-w-xxl bg-white xl-max:mx-6"
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <Heading greeting="Welcome to" title={courseNameDetail} />
-        </div>
-        <div
-          className="mx-auto my-0 max-w-xxl pt-6 xl-max:container"
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <CourseParts
-            courses={courses}
-            is_passed_course={is_passed_course}
-            class_user_id={class_user_id}
-            lastElementRef={lastElementRef}
+    <Layout title="Course Detail">
+      <div className="border-b border-e-default bg-white">
+        <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
+          <SearchForm
+            placeholder={MY_COURSES.placeholderSearch}
+            formStyle="w-full flex items-center"
           />
         </div>
-      </Layout>
-    </SappLoadingGlobal>
+      </div>
+
+      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
+        {isLoading ? (
+          <CourseSkeleton />
+        ) : (
+          <>
+            <div className="main relative">
+              <div className="flex w-full items-center justify-between pb-4">
+                <BreadcrumbFilter name={courseNameDetail} />
+                <FilterCourseDetail totalResult={courses?.length || 0} />
+              </div>
+            </div>
+            <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
+              <Heading greeting="Welcome to" title={courseNameDetail} />
+            </div>
+            <div
+              className="pt-6 xl-max:container"
+              data-aos={ANIMATION.DATA_AOS}
+            >
+              <CourseParts
+                courses={courses}
+                is_passed_course={is_passed_course}
+                class_user_id={class_user_id}
+                lastElementRef={lastElementRef}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </Layout>
   )
 }
 

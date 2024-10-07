@@ -61,7 +61,7 @@ const DragNDropPreivew = forwardRef(
     const isSelfReflection = data?.is_self_reflection
 
     useEffect(() => {
-      const answerOfStudent = action()
+      const answerOfStudent = action ? action() : defaultAnswer
       const filledAnswered =
         answerOfStudent && answerOfStudent?.length
           ? answerOfStudent
@@ -197,12 +197,12 @@ const DragNDropPreivew = forwardRef(
               }">
             <span id="${
               defaultAnswer?.[index]?.idAnswer
-            }" class="flex justify-center w-full">${
+            }" class="flex justify-center w-full min-w-[100px]">${
               defaultAnswer?.[index]?.value
             }</span>
             </span>`
             } else {
-              element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer ${
+              element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer min-w-[100px] ${
                 isSelfReflection === true ? 'corrects' : 'wrongs'
               }">
               <span class="sapp-input-dragNDrop-empty"></span>

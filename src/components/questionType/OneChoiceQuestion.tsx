@@ -52,7 +52,7 @@ const OneChoiceQuestion = ({
     } else {
       setValue(name, '')
     }
-  }, [defaultValues])
+  }, [defaultValues, name])
   const convertAnswer = useMemo(() => {
     let answers = []
     let number = 0

@@ -1,8 +1,10 @@
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
+import TestAnnouncementModal from '@components/mycourses/course-detail/TestAnnoucementModal'
 import PopupCanNotRetakeTest from '@components/mycourses/PogupCannotRetakeTest'
 import { TEST_TYPE } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import dayjs, { Dayjs } from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
@@ -28,7 +30,6 @@ interface IProps {
 const TestModal = ({
   open,
   setOpen,
-  title,
   data,
   class_user_id,
   activeCourse,
@@ -88,8 +89,10 @@ const TestModal = ({
   }
 
   useEffect(() => {
-    fetchResult(1, 10)
-  }, [])
+    if (open) {
+      fetchResult(1, 10)
+    }
+  }, [open])
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
@@ -158,6 +161,34 @@ const TestModal = ({
     } catch (err) {}
   }
 
+  // const startTime = dayjs().add(1, 'day')
+  const startTime = data?.quiz?.quiz_setting?.start_time
+  const endTime = data?.quiz?.quiz_setting?.end_time
+  // const endTime = dayjs().subtract(1, 'year')
+
+  // Test Unopend or Expired
+  const getType = (startTime: Dayjs, endTime: string) => {
+    if (dayjs().isBefore(startTime)) return 'unopened'
+    if (dayjs().isAfter(dayjs(endTime))) return 'expired'
+    return null
+  }
+
+  const type = getType(startTime, endTime)
+
+  if (type) {
+    return (
+      <TestAnnouncementModal
+        open={open}
+        handleCancel={() => {
+          setOpen(false)
+          trackGAEvent('Click Button Cancel Modal Test')
+        }}
+        type={type}
+      />
+    )
+  }
+
+  // Default case
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}
@@ -222,7 +253,7 @@ const TestModal = ({
             >
               Result:
             </div>
-            {selectedResult?.value && (
+            {resultList.data.length > 1 && (
               <div className="flex gap-2">
                 <HookFormSelect
                   classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"

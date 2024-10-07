@@ -46,11 +46,13 @@ import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
 import SappButton from '@components/base/button/SappButton'
+import { IRequirement } from 'src/type/case-study'
+import clsx from 'clsx'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
-    index: number,
+    index: number | string,
     data: any,
     type: string,
     currentTabID: string,
@@ -193,21 +195,30 @@ const CaseStudyDetail = ({ questions }: any) => {
             name={`${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
-            fullData={data}
+            fullData={{ data }}
             response_option_custom={0}
             openChooseFile={(e: any) =>
-              setOpenUpload({ status: true, question_id: data.id })
+              setOpenUpload({
+                status: true,
+                question_id: data.id,
+                requirementId: data?.requirements?.[0]?.id,
+              })
             }
             handleClearFile={() =>
               dispatch(
                 clearFileEssay({
                   question_id: data.id,
                   topic_id: router.query.id as string,
+                  requirement_id: data?.requirements?.[0]?.id,
                 }),
               )
             }
             setOpenPdf={handleOpenScratchPad}
             setUnsavedChanges={setUnsavedChanges}
+            isShowContent={
+              requirement?.requirementIndex === 0 ||
+              data.requirements.length === 0
+            }
           />
         )
       default:
@@ -466,8 +477,8 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const getAllValue = () => {
     let arrAnswer = []
-    for (let i = 0; i < listQuestions.length; i++) {
-      const question = Object.values(listQuestions[i])[0] as any
+    for (let i = 0; i < questionData.length; i++) {
+      const question = questionData?.[i]
       if (
         question?.qType === QUESTION_TYPES.ONE_CHOICE ||
         question?.qType === QUESTION_TYPES.TRUE_FALSE ||
@@ -512,9 +523,11 @@ const CaseStudyDetail = ({ questions }: any) => {
           qType: question?.qType,
           answer: getValues(`${i}_answer`),
           id: question?.id,
+          requirement_id: question?.requirements?.[0]?.id,
           answers: question?.answers,
           response_option: question?.response_option,
-          answer_file: question?.answer_file,
+          answer_file:
+            question?.requirements?.[0]?.answer_file ?? question?.answer_file,
         })
       }
     }
@@ -606,6 +619,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   if (el.celldata && el.celldata.length > 0) {
                     answers.push({
                       question_id: e?.id,
+                      requirement_id: e?.requirement_id,
                       short_answer: e?.answer || '',
                       response_option: e?.response_option
                         ? e?.response_option
@@ -623,6 +637,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               answers.push({
                 question_id: e?.id,
                 short_answer: e?.answer || '',
+                requirement_id: e?.requirement_id,
                 response_option: e?.response_option
                   ? e?.response_option
                   : 'WORD',
@@ -707,12 +722,14 @@ const CaseStudyDetail = ({ questions }: any) => {
     file: any,
     question_id: string,
     topic_id: string,
+    requirement_id: string,
   ) => {
     dispatch(
       saveFileEssay({
         question_id: question_id,
         file: file,
         topic_id: topic_id,
+        requirement_id: requirement_id,
       }),
     )
   }
@@ -770,6 +787,29 @@ const CaseStudyDetail = ({ questions }: any) => {
       value,
     }))
   }
+
+  const questionData = useMemo(() => {
+    const data: any[] = []
+    listQuestions.map((item: any) => {
+      const question = Object.values(item)[0] as any
+      const topicId = Object.keys(item)[0] as string
+      if (
+        question.qType === QUESTION_TYPES.ESSAY &&
+        question?.requirements?.length
+      ) {
+        question.requirements.map((req: IRequirement, index: number) => {
+          data.push({
+            ...question,
+            requirements: [{ ...req, requirementIndex: index }],
+            topic_id: topicId,
+          })
+        })
+      } else {
+        data.push({ ...question, topic_id: topicId })
+      }
+    })
+    return data
+  }, [listQuestions])
 
   return (
     <SappLoadingGlobal loading={loading}>
@@ -922,20 +962,27 @@ const CaseStudyDetail = ({ questions }: any) => {
                       }
                     }}
                   >
-                    {/* {topics.map((el: any) => { */}
-                    {listQuestions?.map((e: any, index: number) => {
-                      const question = Object.values(e)[0] as any
-                      const topicId = Object.keys(e)[0] as any
+                    {questionData?.map((question: any, index: number) => {
+                      const isFirstIndex = index === 0
+                      const isEssayType =
+                        question.qType === QUESTION_TYPES.ESSAY
+                      const hasFirstRequirementIndexZero =
+                        question?.requirements?.[0]?.requirementIndex === 0
+                      const hasNonZeroRequirementIndex =
+                        question?.requirements?.[0]?.requirementIndex !== 0
+                      const isAddedBorder =
+                        (isFirstIndex && !isEssayType) ||
+                        (isFirstIndex && hasFirstRequirementIndexZero) ||
+                        (isEssayType && hasNonZeroRequirementIndex)
+
                       return (
                         <div
                           key={question?.id + index}
-                          topic-key={topicId}
-                          className={`${
-                            index === 0 ? 'mb-8' : 'mb-8 border-t pt-8'
-                          }`}
+                          topic-key={question.topic_id}
+                          className={`mb-8 ${clsx({
+                            'border-t pt-8': !isAddedBorder,
+                          })}`}
                         >
-                          {/*<div className="h-[1px] w-full bg-gray-4 mt-8 mb-8"></div>*/}
-
                           {checkType(
                             question,
                             index,
@@ -947,7 +994,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                             undefined,
                             undefined,
                             undefined,
-                            e?.requirement,
+                            question?.requirements?.[0],
                             question?.question_content,
                             valueRef,
                           )}
@@ -1273,7 +1320,11 @@ const CaseStudyDetail = ({ questions }: any) => {
             open={openUpload.status}
             isMultiple={false}
             handleClose={() => {
-              setOpenUpload({ status: false, question_id: undefined })
+              setOpenUpload({
+                status: false,
+                question_id: undefined,
+                requirementId: undefined,
+              })
             }}
             fileType={'ESSAY'}
             location={`question-answer/${openUpload?.question_id}`}
@@ -1282,6 +1333,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 e?.[0],
                 openUpload?.question_id,
                 router.query.id as string,
+                openUpload.requirementId,
               )
             }
           />
