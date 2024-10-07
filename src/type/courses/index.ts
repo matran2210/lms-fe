@@ -188,6 +188,13 @@ export interface ISectionDetail {
   sections: ISection[]
 }
 
+export interface IQuizSetting {
+  id: string
+  start_time: any
+  end_time: any
+  quiz_id: string
+}
+
 export interface IMyCourseDetail {
   course_section_type: string
   description: string
@@ -202,6 +209,7 @@ export interface IMyCourseDetail {
     total_course_sections_completed: number
   }
   quiz: {
+    quiz_setting: IQuizSetting
     attempt: {
       id: string
       number_of_attempts: number

@@ -752,8 +752,9 @@ const ActivityPage = () => {
                               is_graded={e?.quiz?.is_graded || false}
                               setOpenFile={handleOpenScratchPad}
                               class_user_id={activity?.class_user_id}
+                              quizSetting={e?.quiz?.quiz_setting}
                               reload={refetch}
-                            ></QuizDocument>
+                            />
                           </div>
                         )
                       }
