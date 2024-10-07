@@ -1,20 +1,20 @@
+import Layout from '@components/layout'
+import CoursesList from '@components/mycourses/CoursesList'
 import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import React, { useEffect, useRef, useMemo, useCallback } from 'react'
-import CoursesList from '@components/mycourses/CoursesList'
-import PopupWelcome from '@components/user-guide/PopupWelcome'
 import PopupStep from '@components/user-guide/PopupStep'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
-import { ANIMATION, UserGuide } from 'src/constants'
-import { useRouter } from 'next/router'
-import { CoursesAPI } from '../api/courses'
-import { useInfiniteQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import PopupWelcome from '@components/user-guide/PopupWelcome'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
-import Layout from '@components/layout'
+import { useRouter } from 'next/router'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useInfiniteQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { ANIMATION, UserGuide } from 'src/constants'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
+import { CoursesAPI } from '../api/courses'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -86,17 +86,21 @@ const MyCourse = () => {
   /**
    * @description sử dụng react-query để lấy data sau khi call API
    */
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
-    useInfiniteQuery({
-      queryKey: ['myCourse'],
-      queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
-      getNextPageParam: (lastPage, allPages) => {
-        if (params.status || params.type) {
-          return undefined // Prevent fetching more pages if params change
-        }
-        return lastPage?.data.length ? allPages.length + 1 : undefined
-      },
-    })
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    refetch,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['myCourse'],
+    queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage?.data.length ? allPages.length + 1 : undefined
+    },
+  })
 
   /**
    * @description check ref khi scroll đến cuối page thì call API
@@ -252,6 +256,8 @@ const MyCourse = () => {
             courses={courses}
             lastElementRef={lastElementRef}
             refetch={refetch}
+            isFetching={isFetching}
+            isFetchingNextPage={isFetchingNextPage}
           />
         </div>
         {guideStatus && guideStep == 0 && <PopupWelcome />}
