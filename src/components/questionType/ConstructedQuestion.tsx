@@ -3,13 +3,10 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import EditorReader from '@components/base/editor/EditorReader'
-import {
-  replaceTextAlignCenterToWebKitCenter,
-  runHighlight,
-} from '@utils/index'
+import { runHighlight } from '@utils/index'
 import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
-import { isNull, isUndefined, uniqueId } from 'lodash'
+import { isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
@@ -434,6 +431,21 @@ const EssayQuestionPreview = ({
                 control={control}
                 defaultValue={defaultValue}
                 render={({ field: { onChange, value } }) => {
+                  const isValid = (value?: string) => {
+                    try {
+                      if (
+                        !value ||
+                        isEmpty(value) ||
+                        isUndefined(value) ||
+                        isNull(value)
+                      )
+                        return false
+                      JSON.parse(value)
+                      return true
+                    } catch {
+                      return false
+                    }
+                  }
                   return (
                     <Workbook
                       // generateSheetId={() => name}
@@ -468,7 +480,7 @@ const EssayQuestionPreview = ({
                         }
                       }}
                       data={
-                        value && String(value).trim() !== ''
+                        isValid(value)
                           ? JSON.parse(value)
                           : [
                               {
