@@ -40,7 +40,6 @@ export class UploadAPI {
         location: location || '',
         size,
       })
-      // console.log({responsePreUpload},"test");
 
       await uploadFile(
         {

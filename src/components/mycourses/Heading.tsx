@@ -24,9 +24,9 @@ const Heading = ({ greeting, title, des }: IProps) => {
         </span>
       </h1>
       <div className="mt-2 flex filter 2xl-min:mt-0">
-        <p className="flex max-w-[553px] items-center text-medium-sm text-bw-1 2xl-min:text-right">
+        <div className="flex max-w-[553px] items-center text-medium-sm text-bw-1 2xl-min:text-right">
           {des}
-        </p>
+        </div>
       </div>
     </div>
   )

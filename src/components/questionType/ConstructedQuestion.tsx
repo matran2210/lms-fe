@@ -495,7 +495,6 @@ const EssayQuestionPreview = ({
                               },
                             ]
                       }
-                      // onChange={(e) => console.log(e)}
                     />
                   )
                 }}
@@ -537,10 +536,8 @@ const EssayQuestionPreview = ({
                         // const celldata = e.data
                         if (!fullData?.done && !fullData?.confirmed) {
                           const currentSheet = refSheet?.current?.getSheet()
-                          // // console.log(listSheet.findIndex((e:any)=>e.id === currentSheet.id),"test");
                           // // listSheet.splice(0,1)
                           // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
-                          // console.log(listSheet,"test");
                           if (value) {
                             let old = [...JSON.parse(value)]
                             const index = old?.findIndex(
@@ -573,7 +570,6 @@ const EssayQuestionPreview = ({
                               },
                             ]
                       }
-                      // onChange={(e) => console.log(e)}
                     />
                   )
                 }}

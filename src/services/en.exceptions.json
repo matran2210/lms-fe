@@ -1,214 +1,790 @@
-{
-  "500|1001": "Invalid Status Code",
-  "404|2008": "Model Not Found",
-  "404|2003": "Route Not Defined",
-  "404|2004": "Event Not Found",
-  "422|2005": "Unprocessable Entity",
-  "400|3015": "Email Already Exists",
-  "400|3017": "Phone Number Already Exists",
-  "403|1001": "Account Forbidden Due to Inactivity",
-  "403|1002": "Account Forbidden",
-  "400|3004": "Staff Not Found",
-  "400|3104": "User Not Found",
-  "400|2001": "OTP Type Does Not Exist",
-  "400|2002": "Invalid OTP",
-  "400|4001": "Role Already Exists",
-  "400|4002": "Role Not Found",
-  "400|4101": "Permission Already Exists",
-  "400|4102": "Permission Not Found",
-  "403|0000": "Not Modified",
-  "401|0000": "Unauthorized",
-  "403|0001": "Forbidden",
-  "500|0000": "Internal Server Error",
-  "400|0000": "Bad Request",
-  "400|3010": "Email Already In Used",
-  "400|3110": "Email Already In Used",
-  "404|5202": "Course Level Not Found",
-  "404|5102": "Course Category Not Found",
-  "404|5103": "Course Category Name Already In Used",
-  "422|5102": "Course Category Connected To Course",
-  "400|5002": "Course Not Found",
-  "400|5003": "Invalid Course Foundation",
-  "400|5004": "Invalid Course",
-  "400|5005": "Invalid Course Section",
-  "400|5006": "Total Point Not Equal 100",
-  "400|5007": "Course Code Already In Used",
-  "400|5009": "Course Tag Not Found",
-  "400|5010": "Maximum 3 Course Tags",
-  "400|5011": "Locked Course Status",
-  "400|5012": "Course Foundation Invalid Level",
-  "400|5013": "Invalid Connection Between Courses",
-  "400|5014": "Invalid Course Type",
-  "400|5020": "Course Section Part's Code Already In Used",
-  "400|5022": "Course Section Type Part Not Found",
-  "400|5030": "Course Section Chapter's Code Already In Used",
-  "400|5032": "Course Section Type Chapter Not Found",
-  "400|5040": "Course Section Unit's Code Already In Used",
-  "400|5042": "Course Section Type Unit Not Found",
-  "400|5050": "Course Section Activity's Code Already In Used",
-  "400|5052": "Course Section Type Activity Not Found",
-  "400|5053": "Invalid Course Activity",
-  "400|5102": "Course Learning Outcome Not Found",
-  "400|5103": "At Least One Course Outcome",
-  "422|5103": "Course Learning Outcome Connected To Course Section",
-  "400|5202": "Course Outcome Not Found",
-  "400|4201": "Resource Already Exists",
-  "400|4202": "Resource Not Found",
-  "400|6002": "Quiz's Question Not Found",
-  "400|6003": "Invalid Quiz's Course",
-  "400|6004": "Invalid Quiz Type",
-  "400|6005": "Quiz Not Found",
-  "400|6006": "Invalid Quiz's Part",
-  "400|6007": "Invalid Quiz",
-  "400|6008": "Locked Quiz Status",
-  "403|5902": "This Question Already In Used",
-  "400|100010": "Maximum Class Capacity Reached",
-  "400|100002": "To Add Students, Course Is Required!",
-  "400|100306": "Cannot Edit Class Because Class Has Student",
-  "400|100003": "Examination Not Found",
-  "400|100307": "Student's Level Not Equal Foundation Class's Level",
-  "400|100001": "Class Code Already Exists",
-  "400|6202": "Mark Of Question Must Be Greater Than 0",
-  "400|100004": "Class Not Found",
-  "400|100401": "Trial Class With The Same Course Already Existed",
-  "400|100322": "Students Have Learned The Course In This Class!",
-  "404|000000": "Not Found",
-  "304|000000": "Not Modified",
-  "401|000000": "Unauthorized",
-  "403|000000": "Forbidden",
-  "400|000000": "Bad Request",
-  "403|000005": "Forbidden Inactive",
-  "403|000008": "Forbidden Blocked",
-  "403|000010": "The Number Of Logins Has Been Exceeded",
-  "404|000304": "Event Not Found",
-  "422|000405": "Unprocess Entity",
-  "400|010004": "Student Not Found",
-  "400|010401": "Username Already Exists",
-  "400|010501": "Email Already Exists",
-  "400|010601": "Phone Already Exists",
-  "400|010704": "Level Of Student Not Found",
-  "400|020004": "Staff Not Found",
-  "400|020501": "Email Already Exists",
-  "400|030004": "Question Not Found",
-  "400|030022": "Test/Quiz/Case Study included the question(s).",
-  "400|030108": "Question Can Not Be Updated",
-  "400|030208": "Question Can Not Be Deleted",
-  "400|050004": "Case Study Story Not Found",
-  "400|050005": "Topic Added And Removed At The Same Time",
-  "400|050022": "Case Study Story Already In Used",
-  "400|060002": "You already have completed the course",
-  "400|060004": "Quiz Not Found",
-  "400|060005": "Invalid Quiz",
-  "400|060022": "Quiz Already In Used",
-  "400|060104": "Quiz Questions Not Found",
-  "400|060205": "Invalid Course For Quiz",
-  "400|060305": "Invalid Part For Quiz",
-  "400|060405": "Invalid Quiz Status",
-  "400|060409": "Locked Quiz Status",
-  "400|060505": "Invalid Quiz Type",
-  "400|060604": "Quiz Section Category Not Found",
-  "400|060711": "Invalid Quiz Setting Minimum Grading",
-  "403|060908": "You are not authorized to take this test.",
-  "400|060910": "Maximum Quiz Attempt Reached",
-  "400|061004": "Quiz Attempt Answer Not Found",
-  "400|061101": "Question Already Existed In Quiz Section",
-  "400|070004": "Course Not Found",
-  "400|070005": "Invalid Course",
-  "400|070022": "Course Already In Used",
-  "400|070205": "Invalid Foundation Course",
-  "400|070208": "Non Foundation Course With Level",
-  "400|070218": "Foundation Class Can Not Be Modified",
-  "400|070305": "Invalid Course Type",
-  "400|070403": "Course Code Already Existed",
-  "400|070505": "Invalid Total Points",
-  "400|070703": "Course Part Code Already Existed",
-  "400|070704": "Course Part Not Found",
-  "400|070803": "Course Chapter Code Already Existed",
-  "400|070804": "Course Chapter Not Found",
-  "400|070903": "Course Unit Code Already Existed",
-  "400|070904": "Course Chapter Not Found",
-  "400|071003": "Course Activity Code Already Existed",
-  "400|071004": "Course Activity Not Found",
-  "400|071005": "Invalid Course Activity",
-  "400|071204": "Course Tab Document Not Found",
-  "400|071207": "Course Tab Document Type Can Not Be Changed",
-  "400|071304": "Course Learning Outcome Not Found",
-  "422|071324": "Course Learning Outcome Connected To Course Section",
-  "400|071404": "Course Outcome Not Found",
-  "400|071412": "Course Outcome Not Empty",
-  "400|071424": "Course Outcome Connected With Activity",
-  "400|071504": "Course Tag Not Found",
-  "400|071509": "Locked Course Status",
-  "400|071510": "Maximum 3 Course Tags",
-  "400|071604": "Course Level Not Found",
-  "400|071605": "Invalid Course Level",
-  "404|071704": "Course Section Note Not Found",
-  "404|071804": "Course Discussion Or Parent Discussion Not Found",
-  "400|071905": "Invalid Course Section",
-  "400|071901": "Linked Course Content Existed In Course",
-  "400|072001": "Foundation Course Connected With Normal Course",
-  "400|072005": "Invalid Connection Between Courses",
-  "400|080004": "Course Category Not Found",
-  "400|080104": "Invalid Course Category For Examination",
-  "400|080201": "Course Category Name Already Existed",
-  "422|080324": "Course Category Connected To Course",
-  "400|090001": "Role Already Exist",
-  "400|090004": "Role Not Found",
-  "400|090101": "Permission Already Exits",
-  "400|090104": "Permission Not Found",
-  "400|100016": "Class Is Not Activated",
-  "400|100021": "Class Has Ended",
-  "400|100104": "Create Class Examination Id Not Found",
-  "400|100204": "Class Area Not Found",
-  "400|100304": "Class Teacher Not Found",
-  "400|100314": "Students Have Learned This Course Content",
-  "400|100319": "Student Not Allowed To Active Course",
-  "400|100320": "Student Not Allowed To Extend Course",
-  "400|100327": "Student Not In Class",
-  "400|100329": "Class Has Student",
-  "400|100330": "Student Is Studying This Course In Another Class",
-  "400|100417": "Trial Class With Fixed Duration",
-  "400|100505": "Invalid Flexible Day For Flexible Class",
-  "400|100704": "Revision Class Not Found",
-  "400|100710": "Maximum Revision Class Capacity Reached",
-  "400|100807": "Course And Class Type Not Match",
-  "400|100910": "Maximum Class Capacity Reached",
-  "400|101005": "Invalid Class Schedule",
-  "400|101105": "Invalid Class Status",
-  "400|101207": "Student And Foundation Level Not Match",
-  "400|101304": "Class Mentor Not Found",
-  "400|101428": "Finished At Large Than Started At",
-  "400|101701": "Class Code Already Existed",
-  "400|101815": "Student Not Pass Foundation",
-  "400|101904": "Create Class Course Id Not Found",
-  "404|110004": "Certificate Not Found",
-  "403|110008": "Certificate Can Not Be Used When Blocked",
-  "403|110114": "Certificate Status Can Not Be Changed",
-  "400|120004": "Notification Already Exist",
-  "400|120018": "Notification Can Not Be Modified",
-  "400|120105": "Invalid Notification Timer",
-  "400|120205": "Invalid Notification Status",
-  "400|140104": "Cloudflare Token Already Exist",
-  "400|150001": "Resource Already Exist",
-  "400|150004": "Resource Not Found",
-  "400|150025": "Resource Can Not Be Deleted",
-  "400|150031": "Selecting Duplicate Videos Is Not Allowed",
-  "400|150202": "Token Download Not Exist",
-  "400|150302": "File Key Not Exist",
-  "400|160004": "Group Already Exist",
-  "400|170104": "Classification Already Exist",
-  "400|170226": "Deal Not Associated To Contact",
-  "400|180004": "Question Tag Not Found",
-  "400|190004": "Question Topic Not Found",
-  "400|190127": "Question Topic With No Question",
-  "400|200004": "Examination Not Found",
-  "404|200104": "Examination Type Not Found",
-  "400|200201": "Revision Class For This Exam Has Already Existed",
-  "400|210002": "Otp Code Not Found",
-  "400|190001": "Question Topic Name Already Exist",
-  "400|210005": "Invalid Otp Code",
-  "400|010833": "Password not correct.",
-  "400|010009": "You are not have permission to access this resource.",
-  "400|010433": "Couldn’t find your account.",
-  "400|010008": "Your account has been locked. Please contact the administrator for more information."
-}
+[
+  {
+    "code": "404|000000",
+    "message": "Not Found"
+  },
+  {
+    "code": "304|000000",
+    "message": "Not Modified"
+  },
+  {
+    "code": "401|000000",
+    "message": "Unauthorized"
+  },
+  {
+    "code": "403|000000",
+    "message": "Forbidden"
+  },
+  {
+    "code": "400|000000",
+    "message": "Bad Request"
+  },
+  {
+    "code": "403|000005",
+    "message": "Forbidden Inactive"
+  },
+  {
+    "code": "403|000008",
+    "message": "Forbidden Blocked"
+  },
+  {
+    "code": "403|000010",
+    "message": "The Number Of Logins Has Been Exceeded"
+  },
+  {
+    "code": "422|000405",
+    "message": "Unprocess Entity"
+  },
+  {
+    "code": "400|010004",
+    "message": "Student Not Found"
+  },
+  {
+    "code": "400|010008",
+    "message": "Your Account Has Been Blocked"
+  },
+  {
+    "code": "400|010009",
+    "message": "User Has Not Permission For Resource"
+  },
+  {
+    "code": "400|010401",
+    "message": "Username Already Exists"
+  },
+  {
+    "code": "400|010433",
+    "message": "User Account Incorrect"
+  },
+  {
+    "code": "400|010501",
+    "message": "Email Already Exists"
+  },
+  {
+    "code": "400|010601",
+    "message": "Phone Already Exists"
+  },
+  {
+    "code": "400|010704",
+    "message": "Level Of Student Not Found"
+  },
+  {
+    "code": "400|010833",
+    "message": "User Password Incorrect"
+  },
+  {
+    "code": "400|020004",
+    "message": "Staff Not Found"
+  },
+  {
+    "code": "400|020501",
+    "message": "Email Already Exists"
+  },
+  {
+    "code": "400|030004",
+    "message": "Question Not Found"
+  },
+  {
+    "code": "400|030008",
+    "message": "Question Without Belong To"
+  },
+  {
+    "code": "400|030022",
+    "message": "Test/Quiz/Case Study Included The Question(S)"
+  },
+  {
+    "code": "400|030108",
+    "message": "Question Can Not Be Updated"
+  },
+  {
+    "code": "400|030208",
+    "message": "Question Can Not Be Deleted"
+  },
+  {
+    "code": "400|030312",
+    "message": "Question Category Not Found"
+  },
+  {
+    "code": "400|030412",
+    "message": "Question Answer Not Found"
+  },
+  {
+    "code": "400|030512",
+    "message": "Question Requirement Not Found"
+  },
+  {
+    "code": "400|030612",
+    "message": "Duplicate Answers For A Requirement"
+  },
+  {
+    "code": "400|040004",
+    "message": "User Session Not Found"
+  },
+  {
+    "code": "400|050004",
+    "message": "Case Study Story Not Found"
+  },
+  {
+    "code": "400|050005",
+    "message": "Topic Added And Removed At The Same Time"
+  },
+  {
+    "code": "400|050022",
+    "message": "Case Study Story Already In Used"
+  },
+  {
+    "code": "400|060001",
+    "message": "Entrance Test Existed"
+  },
+  {
+    "code": "400|060002",
+    "message": "Course Include Quiz Already Passed"
+  },
+  {
+    "code": "400|060004",
+    "message": "Quiz Not Found"
+  },
+  {
+    "code": "400|060005",
+    "message": "Invalid Quiz"
+  },
+  {
+    "code": "400|060022",
+    "message": "Quiz Already In Used"
+  },
+  {
+    "code": "400|060034",
+    "message": "Quiz Used In Belong To"
+  },
+  {
+    "code": "400|060104",
+    "message": "Quiz Questions Not Found"
+  },
+  {
+    "code": "400|060205",
+    "message": "Invalid Course For Quiz"
+  },
+  {
+    "code": "400|060305",
+    "message": "Invalid Part For Quiz"
+  },
+  {
+    "code": "400|060405",
+    "message": "Invalid Quiz Status"
+  },
+  {
+    "code": "403|060406",
+    "message": "Authorization For User"
+  },
+  {
+    "code": "400|060409",
+    "message": "Locked Quiz Status"
+  },
+  {
+    "code": "400|060505",
+    "message": "Invalid Quiz Type"
+  },
+  {
+    "code": "400|060604",
+    "message": "Quiz Section Category Not Found"
+  },
+  {
+    "code": "400|060711",
+    "message": "Invalid Quiz Setting Minimum Grading"
+  },
+  {
+    "code": "400|060904",
+    "message": "Quiz Attempt Not Found"
+  },
+  {
+    "code": "403|060908",
+    "message": "Quiz Attempt Block Access"
+  },
+  {
+    "code": "400|060910",
+    "message": "Maximum Quiz Attempt Reached"
+  },
+  {
+    "code": "400|060915",
+    "message": "Quiz Attempt Not Pass"
+  },
+  {
+    "code": "400|061004",
+    "message": "Quiz Attempt Answer Not Found"
+  },
+  {
+    "code": "400|061101",
+    "message": "Question Already Existed In Quiz Section"
+  },
+  {
+    "code": "400|070004",
+    "message": "Course Not Found"
+  },
+  {
+    "code": "400|070005",
+    "message": "Invalid Course"
+  },
+  {
+    "code": "400|070022",
+    "message": "Course Already In Used"
+  },
+  {
+    "code": "400|070023",
+    "message": "Course Has Student Completed"
+  },
+  {
+    "code": "400|070205",
+    "message": "Invalid Foundation Course"
+  },
+  {
+    "code": "400|070208",
+    "message": "Non Foundation Course With Level"
+  },
+  {
+    "code": "400|070218",
+    "message": "Foundation Class Can Not Be Modified"
+  },
+  {
+    "code": "400|070305",
+    "message": "Invalid Course Type"
+  },
+  {
+    "code": "400|070403",
+    "message": "Course Code Already Existed"
+  },
+  {
+    "code": "400|070505",
+    "message": "Invalid Total Points"
+  },
+  {
+    "code": "400|070703",
+    "message": "Course Part Code Already Existed"
+  },
+  {
+    "code": "400|070704",
+    "message": "Course Part Not Found"
+  },
+  {
+    "code": "400|070803",
+    "message": "Course Chapter Code Already Existed"
+  },
+  {
+    "code": "400|070804",
+    "message": "Course Chapter Not Found"
+  },
+  {
+    "code": "400|070903",
+    "message": "Course Unit Code Already Existed"
+  },
+  {
+    "code": "400|070904",
+    "message": "Course Chapter Not Found"
+  },
+  {
+    "code": "400|071003",
+    "message": "Course Activity Code Already Existed"
+  },
+  {
+    "code": "400|071004",
+    "message": "Course Activity Not Found"
+  },
+  {
+    "code": "400|071005",
+    "message": "Invalid Course Activity"
+  },
+  {
+    "code": "400|071204",
+    "message": "Course Tab Document Not Found"
+  },
+  {
+    "code": "400|071205",
+    "message": "Course Section Link Not Found"
+  },
+  {
+    "code": "400|071206",
+    "message": "Course Section Link Nested Between Two Course Sections"
+  },
+  {
+    "code": "400|071207",
+    "message": "Course Tab Document Type Can Not Be Changed"
+  },
+  {
+    "code": "400|071304",
+    "message": "Course Learning Outcome Not Found"
+  },
+  {
+    "code": "422|071324",
+    "message": "Course Learning Outcome Connected To Course Section"
+  },
+  {
+    "code": "400|071404",
+    "message": "Course Outcome Not Found"
+  },
+  {
+    "code": "400|071412",
+    "message": "Course Outcome Not Empty"
+  },
+  {
+    "code": "400|071424",
+    "message": "Course Outcome Connected With Activity"
+  },
+  {
+    "code": "400|071504",
+    "message": "Course Tag Not Found"
+  },
+  {
+    "code": "400|071509",
+    "message": "Locked Course Status"
+  },
+  {
+    "code": "400|071510",
+    "message": "Maximum 3 Course Tags"
+  },
+  {
+    "code": "400|071604",
+    "message": "Course Level Not Found"
+  },
+  {
+    "code": "400|071605",
+    "message": "Invalid Course Level"
+  },
+  {
+    "code": "404|071704",
+    "message": "Course Section Note Not Found"
+  },
+  {
+    "code": "404|071804",
+    "message": "Course Discussion Or Parent Discussion Not Found"
+  },
+  {
+    "code": "400|071901",
+    "message": "Linked Course Content Existed In Course"
+  },
+  {
+    "code": "400|071905",
+    "message": "Invalid Course Section"
+  },
+  {
+    "code": "400|071907",
+    "message": "Course Sections Type Not Match"
+  },
+  {
+    "code": "400|072001",
+    "message": "Foundation Course Connected With Normal Course"
+  },
+  {
+    "code": "400|072005",
+    "message": "Invalid Connection Between Courses"
+  },
+  {
+    "code": "400|080004",
+    "message": "Course Category Not Found"
+  },
+  {
+    "code": "400|080104",
+    "message": "Invalid Course Category For Examination"
+  },
+  {
+    "code": "400|080201",
+    "message": "Course Category Name Already Existed"
+  },
+  {
+    "code": "422|080324",
+    "message": "Course Category Connected To Course"
+  },
+  {
+    "code": "400|090001",
+    "message": "Role Already Exist"
+  },
+  {
+    "code": "400|090004",
+    "message": "Role Not Found"
+  },
+  {
+    "code": "400|090101",
+    "message": "Permission Already Exits"
+  },
+  {
+    "code": "400|090104",
+    "message": "Permission Not Found"
+  },
+  {
+    "code": "400|100004",
+    "message": "Class Not Found"
+  },
+  {
+    "code": "400|100016",
+    "message": "Class Is Not Activated"
+  },
+  {
+    "code": "400|100021",
+    "message": "Class Has Ended"
+  },
+  {
+    "code": "400|100104",
+    "message": "Create Class Examination Id Not Found"
+  },
+  {
+    "code": "400|100107",
+    "message": "Course Category And Examination Not Match"
+  },
+  {
+    "code": "400|100204",
+    "message": "Area Not Found"
+  },
+  {
+    "code": "400|100204",
+    "message": "Class Area Not Found"
+  },
+  {
+    "code": "400|100304",
+    "message": "Class Teacher Not Found"
+  },
+  {
+    "code": "400|100314",
+    "message": "Students Have Learned This Course Content"
+  },
+  {
+    "code": "400|100318",
+    "message": "Student Not Allowed To Transfer"
+  },
+  {
+    "code": "400|100319",
+    "message": "Student Not Allowed To Active Course"
+  },
+  {
+    "code": "400|100320",
+    "message": "Student Not Allowed To Extend Course"
+  },
+  {
+    "code": "400|100322",
+    "message": "Students Have Learned The Course In This Class!"
+  },
+  {
+    "code": "400|100322",
+    "message": "Student Is Studying In This Class"
+  },
+  {
+    "code": "400|100327",
+    "message": "Student Not In Class"
+  },
+  {
+    "code": "400|100329",
+    "message": "Class Has Student"
+  },
+  {
+    "code": "400|100330",
+    "message": "Student Is Studying This Course In Another Class"
+  },
+  {
+    "code": "400|100401",
+    "message": "Trial Class With The Same Course Already Existed"
+  },
+  {
+    "code": "400|100417",
+    "message": "Trial Class With Fixed Duration"
+  },
+  {
+    "code": "400|100505",
+    "message": "Invalid Flexible Day For Flexible Class"
+  },
+  {
+    "code": "400|100704",
+    "message": "Revision Class Not Found"
+  },
+  {
+    "code": "400|100710",
+    "message": "Maximum Revision Class Capacity Reached"
+  },
+  {
+    "code": "400|100807",
+    "message": "Course And Class Type Not Match"
+  },
+  {
+    "code": "400|100910",
+    "message": "Maximum Class Capacity Reached"
+  },
+  {
+    "code": "400|101005",
+    "message": "Invalid Class Schedule"
+  },
+  {
+    "code": "400|101105",
+    "message": "Invalid Class Status"
+  },
+  {
+    "code": "400|101207",
+    "message": "Student And Foundation Level Not Match"
+  },
+  {
+    "code": "400|101304",
+    "message": "Class Mentor Not Found"
+  },
+  {
+    "code": "400|101305",
+    "message": "Class With Multiple Main Mentor"
+  },
+  {
+    "code": "400|101312",
+    "message": "Class With No Main Mentor"
+  },
+  {
+    "code": "400|101315",
+    "message": "Student Can Not Add This Class Because Of Hubspot Enrollment Not Allow It"
+  },
+  {
+    "code": "400|101428",
+    "message": "Finished At Large Than Started At"
+  },
+  {
+    "code": "400|101701",
+    "message": "Class Code Already Existed"
+  },
+  {
+    "code": "400|101815",
+    "message": "Student Not Pass Foundation"
+  },
+  {
+    "code": "400|101904",
+    "message": "Create Class Course Id Not Found"
+  },
+  {
+    "code": "404|110004",
+    "message": "Certificate Not Found"
+  },
+  {
+    "code": "403|110008",
+    "message": "Certificate Can Not Be Used When Blocked"
+  },
+  {
+    "code": "403|110114",
+    "message": "Certificate Status Can Not Be Changed"
+  },
+  {
+    "code": "400|120004",
+    "message": "Notification Already Exist"
+  },
+  {
+    "code": "400|120018",
+    "message": "Notification Can Not Be Modified"
+  },
+  {
+    "code": "400|120105",
+    "message": "Invalid Notification Timer"
+  },
+  {
+    "code": "400|120205",
+    "message": "Invalid Notification Status"
+  },
+  {
+    "code": "400|120304",
+    "message": "Notification Pinned No Finish Time"
+  },
+  {
+    "code": "400|120305",
+    "message": "Notification Overwrite Current Pinned"
+  },
+  {
+    "code": "400|120306",
+    "message": "Notification Overlap Pinned Duration"
+  },
+  {
+    "code": "400|130001",
+    "message": "Student Was Added In The Test"
+  },
+  {
+    "code": "400|130030",
+    "message": "Student Was Added In The Test With The Same Subject"
+  },
+  {
+    "code": "400|140104",
+    "message": "Cloudflare Token Already Exist"
+  },
+  {
+    "code": "400|150001",
+    "message": "Resource Already Exist"
+  },
+  {
+    "code": "400|150004",
+    "message": "Resource Not Found"
+  },
+  {
+    "code": "400|150022",
+    "message": "Resource In Used"
+  },
+  {
+    "code": "400|150025",
+    "message": "Resource Can Not Be Deleted"
+  },
+  {
+    "code": "400|150031",
+    "message": "Selecting Duplicate Videos Is Not Allowed"
+  },
+  {
+    "code": "400|150202",
+    "message": "Token Download Not Exist"
+  },
+  {
+    "code": "400|150302",
+    "message": "File Key Not Exist"
+  },
+  {
+    "code": "400|160004",
+    "message": "Group Not Found"
+  },
+  {
+    "code": "400|170104",
+    "message": "Classification Already Exist"
+  },
+  {
+    "code": "400|170226",
+    "message": "Deal Not Associated To Contact"
+  },
+  {
+    "code": "400|170304",
+    "message": "Lifecycle Contact Not Found"
+  },
+  {
+    "code": "400|180004",
+    "message": "Question Tag Not Found"
+  },
+  {
+    "code": "400|190004",
+    "message": "Question Topic Not Found"
+  },
+  {
+    "code": "400|190127",
+    "message": "Question Topic With No Question"
+  },
+  {
+    "code": "400|200001",
+    "message": "Duplicate Examination Season"
+  },
+  {
+    "code": "400|200004",
+    "message": "Examination Not Found"
+  },
+  {
+    "code": "400|200005",
+    "message": "Invalid Examination Season"
+  },
+  {
+    "code": "400|200012",
+    "message": "Examination Season Not Found"
+  },
+  {
+    "code": "400|200022",
+    "message": "Examination Used In Class"
+  },
+  {
+    "code": "400|200104",
+    "message": "Examination Type Not Found"
+  },
+  {
+    "code": "400|200201",
+    "message": "Revision Class For This Exam Has Already Existed"
+  },
+  {
+    "code": "400|210002",
+    "message": "Otp Code Not Found"
+  },
+  {
+    "code": "400|210005",
+    "message": "Invalid Otp Code"
+  },
+  {
+    "code": "400|360004",
+    "message": "Subject Not Found"
+  },
+  {
+    "code": "400|370004",
+    "message": "Mail Log Not Found"
+  },
+  {
+    "code": "400|380001",
+    "message": "Support Group Already Existed"
+  },
+  {
+    "code": "400|380004",
+    "message": "Support Group Not Found"
+  },
+  {
+    "code": "400|380014",
+    "message": "Support Group Can Not Be Updated"
+  },
+  {
+    "code": "404|400004",
+    "message": "Caching Setting Not Found"
+  },
+  {
+    "code": "404|410004",
+    "message": "Setting Quiz In Class Not Found"
+  },
+  {
+    "code": "404|410104",
+    "message": "Setting Quiz For User Not Found"
+  },
+  {
+    "code": "404|410205",
+    "message": "Invalid Setting Quiz Time"
+  },
+  {
+    "code": "404|410305",
+    "message": "Invalid Setting User Quiz Time"
+  },
+  {
+    "code": "400|420001",
+    "message": "Examination Already Existed"
+  },
+  {
+    "code": "400|420204",
+    "message": "Cfa Examination Early Registration Date Not Found"
+  },
+  {
+    "code": "400|420212",
+    "message": "Cfa Examination Registration Start Date Not Found"
+  },
+  {
+    "code": "400|420213",
+    "message": "Cfa Examination Standard Registration Date Not Found"
+  },
+  {
+    "code": "400|420305",
+    "message": "Examination For Subject Invalid Start Date"
+  },
+  {
+    "code": "400|420312",
+    "message": "Cma Examination Registration End Date Not Found"
+  },
+  {
+    "code": "400|420404",
+    "message": "Examination For Subject Not Found"
+  },
+  {
+    "code": "400|420413",
+    "message": "Examination For Subject Start Date Not Found"
+  },
+  {
+    "code": "400|420431",
+    "message": "Duplicate Subject In Examination"
+  },
+  {
+    "code": "400|430001",
+    "message": "Event Test Existed"
+  },
+  {
+    "code": "400|430036",
+    "message": "Event Test Not Opened"
+  },
+  {
+    "code": "400|440104",
+    "message": "S3 Key Not Found"
+  },
+  {
+    "code": "404|450004",
+    "message": "Event Not Found"
+  },
+  {
+    "code": "400|450035",
+    "message": "Event Expired"
+  }
+]

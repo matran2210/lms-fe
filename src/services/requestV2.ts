@@ -136,13 +136,23 @@ const toastException = [
   '400|010433',
   '400|010008',
 ]
+
+const formatedExceptions = exceptions.reduce(
+  (acc: { [key: string]: string }, { code, message }) => {
+    acc[code] = message
+    return acc
+  },
+  {},
+)
+
 request.interceptors.response.use(
   function (response: any) {
     return response
   },
   function (error: any) {
     const errorCode: string = error?.response?.data?.error?.code
-    const errorMessage = exceptions[errorCode as keyof typeof exceptions]
+    const errorMessage =
+      formatedExceptions[errorCode as keyof typeof formatedExceptions]
     if (!toastException.includes(errorCode)) {
       toast.error(
         errorMessage ||

@@ -138,7 +138,6 @@ const ModalUploadFile = ({
           })
           if (response) {
             responseUploadedFiles.push(response.data)
-            // console.log(responseUploadedFiles);
 
             setUploadFile((e: any) => {
               e[index] = {
