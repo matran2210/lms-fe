@@ -1964,7 +1964,8 @@ const TestDetail = () => {
             )}
           </div>
           {/* <div className=''> */}
-          {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
+          {currentTabContent &&
+          currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
             <div
               className={`flex flex-1 overflow-auto bg-gray-3`}
               id={'preview-question'}

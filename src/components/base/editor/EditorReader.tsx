@@ -11,7 +11,7 @@ import clsx from 'clsx'
 import React from 'react'
 import SappModalV3 from '../modal/SappModalV3'
 import SAPPVideo from '../video/SAPPVideo'
-import { isEmpty, isNull } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 
 type Props = {
   text_editor_content: string | undefined
@@ -39,7 +39,7 @@ const EditorReader = ({
   const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG' | 'MATH'>('VIDEO')
-  const [content, setContent] = useState<any>()
+  const [content, setContent] = useState<any>(text_editor_content)
   const editorRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
     {},
@@ -74,7 +74,11 @@ const EditorReader = ({
 
   useEffect(() => {
     // Update the state with the modified content
-    if (!isEmpty(text_editor_content) || !isNull(text_editor_content)) {
+    if (
+      !isEmpty(text_editor_content) ||
+      !isNull(text_editor_content) ||
+      !isUndefined(text_editor_content)
+    ) {
       setContent(text_editor_content)
     }
   }, [text_editor_content])
