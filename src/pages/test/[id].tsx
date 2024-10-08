@@ -488,10 +488,7 @@ const TestDetail = () => {
   })
   const [onMount, setOnMount] = useState(true)
 
-  const currentTabContent =
-    tabs && tabs.length > 0
-      ? tabs.find((e: any) => e.id === currentPage)
-      : undefined
+  const currentTabContent = tabs && tabs?.find((e: any) => e.id === currentPage)
 
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
