@@ -1,0 +1,70 @@
+import { AlertTriagle } from '@assets/icons'
+import SappModalV3 from '@components/base/modal/SappModalV3'
+import dayjs from 'dayjs'
+import { SOCIAL_LINK } from 'src/constants'
+
+interface IProps {
+  open: boolean
+  handleCancel: any
+  type?: 'expired' | 'unopened'
+}
+
+const TestAnnouncementModal = ({ open, handleCancel, type }: IProps) => {
+  // TEST EXPIRED
+  if (type === 'expired') {
+    return (
+      <SappModalV3
+        open={open}
+        showCancelButton={false}
+        cancelButtonCaption="Quit"
+        header={'Test Expired'}
+        buttonSize="extra"
+        okButtonCaption={'Quit'}
+        fullWidthBtn
+        icon={<AlertTriagle />}
+        handleCancel={handleCancel}
+        onOk={handleCancel}
+      >
+        <p className="mt-6">
+          The time for this test has ended, you can no longer submit answers.
+          For further support, please contact SAPP Academy via{' '}
+          <a
+            href={SOCIAL_LINK.FACEBOOK}
+            className="text-primary"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Facebook
+          </a>
+          , or hotline <span className="text-primary">19002225</span>.
+        </p>
+      </SappModalV3>
+    )
+  }
+
+  // TEST UNOPENED
+  if (type === 'unopened') {
+    return (
+      <SappModalV3
+        open={open}
+        showCancelButton={false}
+        handleCancel={handleCancel}
+        onOk={handleCancel}
+        buttonSize="extra"
+        okButtonCaption={'Quit'}
+        fullWidthBtn
+        icon={<AlertTriagle />}
+        header={'Unopened Test'}
+      >
+        <p className="mt-5 text-center text-gray-1">
+          This test will be opened at{' '}
+          <span className="font-bold text-primary">
+            {dayjs().format('DD/MM/YYYY HH:mm:ss')}
+          </span>
+        </p>
+      </SappModalV3>
+    )
+  }
+}
+
+export default TestAnnouncementModal

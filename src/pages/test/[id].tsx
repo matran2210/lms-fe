@@ -32,12 +32,13 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { isUndefined, uniqueId } from 'lodash'
+import { isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   DISPLAY_TYPE,
+  ESSAY_TYPE,
   PageLink,
   QUESTION_TYPES,
   RESPONSE_OPTION,
@@ -55,8 +56,7 @@ import toast from 'react-hot-toast'
 import ScratchPatch from './scratchPatch'
 import { CoursesAPI } from '../api/courses'
 import { TestAPI } from '../api/test'
-import Countdown from 'react-countdown'
-import { renderer, useCountdown } from 'src/hooks/useCountdown'
+// import { renderer, useCountdown } from 'src/hooks/useCountdown'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { IExhibit } from 'src/type/exhibit'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
@@ -80,6 +80,8 @@ interface Answer {
 import { QuestionAPI } from '../api/question'
 import { trackGAEvent } from '@utils/google-analytics'
 import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import Countdown from './countdown'
+import { IRequirement } from 'src/type/case-study'
 
 // type Window = {
 //   userAgreed: any
@@ -268,7 +270,10 @@ const TestDetail = () => {
         }
         return (
           <EssayQuestionPreview
-            data={essayData?.req}
+            data={{
+              ...currentTabContent?.data?.requirements?.[essayData?.index],
+              ...essayData?.req,
+            }}
             question_content={currentTabContent?.data?.question_content}
             index={essayData?.index}
             question_data={currentTabContent?.data}
@@ -478,11 +483,12 @@ const TestDetail = () => {
     callback: () => setShowLisRequirement(false),
   })
   const [onMount, setOnMount] = useState(true)
-  const currentTabContent = useMemo(() => {
-    if (tabs && tabs.length > 0) {
-      return tabs.find((e: any) => e.id === currentPage)
-    } else return undefined
-  }, [currentPage, tabs])
+
+  const currentTabContent =
+    tabs && tabs.length > 0
+      ? tabs.find((e: any) => e.id === currentPage)
+      : undefined
+
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
       if (openScratchPad[i].type === 'calculator') {
@@ -492,6 +498,7 @@ const TestDetail = () => {
     return -1
     // if (!arr.includes('calculator')) {
   }, [openScratchPad])
+
   const handleOpenScratchPad = (
     type: string,
     file?: string,
@@ -577,18 +584,21 @@ const TestDetail = () => {
       </div>
     )
   }
-  const checkAnswered = (currentContent: any) => {
+  const checkAnswered = (currentContent: any, isSubmit = false) => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE
     ) {
-      if (getValues(`${currentContent?.id}_answer`)) {
+      if (
+        !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
+        getValues(`${currentContent?.id}_answer`)?.length > 0
+      ) {
         return true
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       if (
-        getValues(`${currentContent?.id}_answer`) &&
+        !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
         getValues(`${currentContent?.id}_answer`)?.length > 0
       ) {
         return true
@@ -632,7 +642,10 @@ const TestDetail = () => {
     } else if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
       if (Array.isArray(currentContent.data?.requirements)) {
         for (let req of currentContent.data?.requirements) {
-          if (req?.answer_file?.file_key) {
+          if (
+            req?.answer_file?.file_key ||
+            answerListRef?.current?.[req?.id || '']
+          ) {
             return true
           }
         }
@@ -640,9 +653,9 @@ const TestDetail = () => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value = getValues(
-        `${currentContent?.id}_${essayData?.index}_answer`,
-      )
+      const value = isSubmit
+        ? getValues(`${currentContent?.id}_0_answer`)
+        : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
@@ -793,6 +806,7 @@ const TestDetail = () => {
       corrects: corrects,
       solution: res?.data?.[0]?.solution,
       isSelfReflection: res?.data?.[0]?.is_self_reflection,
+      requirements: res?.data?.[0]?.requirements,
     }
   }
   const confirmAnswer = async (
@@ -800,6 +814,7 @@ const TestDetail = () => {
     solution: any,
     currentTabContent: any,
     isSelfReflection: boolean,
+    requirements?: IRequirement[],
   ) => {
     setLoading(true)
     // setStartTime(Date.now())
@@ -817,6 +832,14 @@ const TestDetail = () => {
           currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
         ) {
           ref.current?.handleReset()
+        }
+        if (item?.data?.requirements?.length) {
+          item.data.requirements = item.data.requirements.map(
+            (req: IRequirement, index: number) => ({
+              ...requirements?.[index],
+              ...req,
+            }),
+          )
         }
         return {
           ...item,
@@ -967,7 +990,7 @@ const TestDetail = () => {
     }
   }
   const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
-    if (!currentContent.done) {
+    if (!currentContent?.done) {
       if (
         currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
         currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
@@ -1037,20 +1060,12 @@ const TestDetail = () => {
     }
   }
 
-  const handleChangeTabAndQuestion = async (id: string) => {
-    const { question, topicDescription } = await getDetail(id)
-    handleChangeTab(id, question, topicDescription.data)
-  }
-
-  const handleChangeTab = async (
-    currentTab: any,
-    question?: any,
-    topicDescription?: any,
-  ) => {
+  const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
+      const { question, topicDescription } = await getDetail(currentTab)
       const newData = tabs?.map((item: any) => {
         if (currentTab === item.id) {
           if (item.viewed) {
@@ -1061,7 +1076,7 @@ const TestDetail = () => {
               ...item,
               viewed: true,
               data: question,
-              topicDescription: topicDescription,
+              topicDescription: topicDescription.data,
             }
           }
         }
@@ -1311,25 +1326,39 @@ const TestDetail = () => {
         }
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
-        if (checkAnswered(e)) {
+        if (checkAnswered(e, true)) {
           const requirements = e?.data?.requirements?.length
             ? e?.data?.requirements
             : [null]
-          requirements?.forEach((requirement: Requirement | null) => {
+          if (requirements?.length) {
+            requirements?.forEach((requirement: Requirement | null) => {
+              answers.push({
+                question_id: e.id,
+                short_answer:
+                  answerListRef?.current?.[requirement?.id || ''] ??
+                  (requirement?.id ? '' : e?.answer || ''),
+                requirement_id: requirement?.id || null,
+                response_option:
+                  e?.data?.response_option ??
+                  (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+                time_spent: Math.ceil(e?.timeSpent / 1000),
+                active: 'SUBMITED',
+                answer_file: requirement?.answer_file || e?.answer_file || null,
+              })
+            })
+          } else {
             answers.push({
               question_id: e.id,
-              short_answer:
-                answerListRef?.current?.[requirement?.id || ''] ??
-                (requirement?.id ? '' : e?.answer || ''),
-              requirement_id: requirement?.id || null,
+              short_answer: e?.answer || '',
+              requirement_id: null,
               response_option:
                 e?.data?.response_option ??
-                (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+                (e?.response_type === 0 ? ESSAY_TYPE.WORD : ESSAY_TYPE.SHEET),
               time_spent: Math.ceil(e?.timeSpent / 1000),
               active: 'SUBMITED',
-              answer_file: requirement?.answer_file || e?.answer_file || null,
+              answer_file: e?.answer_file || null,
             })
-          })
+          }
         }
       }
       quiz_position_mapping.push({
@@ -1340,7 +1369,7 @@ const TestDetail = () => {
 
     if (type_submit === 'submit') {
       setTabs(async () => {
-        await handleChangeTabAndQuestion(tabs[0].id)
+        await handleChangeTab(tabs[0].id)
         // ref.setKey
         return reformTabs
       })
@@ -1384,7 +1413,7 @@ const TestDetail = () => {
     } else {
       setTabs(async () => {
         // ref.setKey
-        handleChangeTabAndQuestion(tabs[0].id)
+        handleChangeTab(tabs[0].id)
         return reformTabs
       })
       dispatch(disableUnsavedChange())
@@ -1766,7 +1795,7 @@ const TestDetail = () => {
   /**
    * @description sử dụng hook countdown
    */
-  const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
+  // const { data, onStart, onComplete } = useCountdown(quizDetail?.quiz_timed)
 
   const ButtonContent = ({
     icon,
@@ -1798,6 +1827,8 @@ const TestDetail = () => {
         return (pageTitle = 'Part Test')
       case TEST_TYPE.ENTRANCE_TEST:
         return (pageTitle = 'Entrance Test')
+      case TEST_TYPE.ENTRANCE_TEST:
+        return (pageTitle = 'Event Test')
       default:
         return pageTitle
     }
@@ -1806,220 +1837,132 @@ const TestDetail = () => {
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
-        {loading || !currentTabContent?.id ? (
-          <SappLoading />
-        ) : (
-          <div
-            className="relative flex h-screen flex-col overflow-hidden bg-white"
-            onMouseUp={() => {
-              setStartResize(false)
-              setCurrentLeftWidth(leftWidth)
-            }}
-          >
-            {/* Header */}
-            {/* {startResize && (
+        <SappLoading
+          className={loading || !currentTabContent?.id ? 'block' : 'hidden'}
+        />
+        <div
+          className="relative flex h-screen flex-col overflow-hidden bg-white"
+          onMouseUp={() => {
+            setStartResize(false)
+            setCurrentLeftWidth(leftWidth)
+          }}
+        >
+          {/* Header */}
+          {/* {startResize && (
         <div className="absolute w-screen h-screen z-[1350]"></div>
       )} */}
-            <div>
-              <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
-                <div className="w-2/6 truncate text-lg-xl font-medium">
-                  {quizDetail?.name}
-                </div>
-                {quizDetail?.quiz_timed && (
-                  // <CountDown
-                  //   remainTime={quizDetail?.quiz_timed}
-                  //   onTimeOut={() => {
-                  //     if (!openLimit) {
-                  //       dispatch(disableUnsavedChange())
-                  //       handleSubmitQuestion('timeout')
-                  //       // setOpenTimeOut(true)
-                  //     }
-                  //   }}
-                  //   ref={timeRef}
-                  // />
-                  <Countdown
-                    date={data?.date + data?.delay}
-                    renderer={renderer}
-                    onStart={onStart}
-                    onComplete={() => {
-                      if (!openLimit) {
-                        dispatch(disableUnsavedChange())
-                        handleSubmitQuestion('timeout')
-                        // setOpenTimeOut(true)
-                      }
-                      onComplete()
-                    }}
-                  />
-                )}
-
-                <div className="flex w-2/6 items-center justify-end">
-                  {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(
-                    quizDetail?.quiz_type,
-                  ) && (
-                    <div className="mr-6 text-medium-sm text-bw-1">
-                      Attempt: {quizAttempId?.number_of_attempts}
-                      {quizDetail?.is_limited
-                        ? `/${quizDetail?.limit_count}`
-                        : ''}
-                    </div>
-                  )}
-                  <ButtonCancelSubmit
-                    className={'flex flex-row-reverse gap-4'}
-                    // color={color}
-                    submit={{
-                      title: 'Finish',
-                      size: 'small',
-                      loading: false,
-                      disabled: submited,
-                      className: 'border border-bw-1',
-                      color: 'secondary',
-                      onClick: () => {
-                        if (checkUnSubmitAnswer()?.length > 0) {
-                          setUnSubmitAnswer(true)
-                        } else {
-                          setOpenSubmit(true)
-                        }
-                        dispatch(disableUnsavedChange())
-                      },
-                      //   full: fullWidthBtn,
-                    }}
-                    cancel={{
-                      title: 'Quit',
-                      size: 'small',
-                      className: 'border border-bw-1 !w-[109px]',
-                      color: 'secondary',
-                      onClick: () => {
-                        setOpenQuit(true)
-                        dispatch(disableUnsavedChange())
-                        if (type === 'event-test') {
-                          setSubmitEventTest(true)
-                        }
-                      },
-                      loading: false,
-                      //   full: fullWidthBtn,
-                    }}
-                  ></ButtonCancelSubmit>
-                </div>
+          <div>
+            <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
+              <div className="w-2/6 truncate text-lg-xl font-medium">
+                {quizDetail?.name}
               </div>
-              {/* End Header */}
-              {tabs?.length > 0 && (
-                <div className="relative z-10 w-full bg-gray-4 px-6 py-2 shadow-pagination">
-                  <TabSlide
-                    data={filteredTabs}
-                    currentTab={currentPage}
-                    setCurrentTab={setCurrentPage}
-                    optionShowAll={<OptionShowAll />}
-                    handleChangeTab={async (id?: string) => {
-                      id && handleChangeTabAndQuestion(id)
-                    }}
-                    activeShowAll={activeShowAll}
-                    setActiveShowAll={setActiveShowAll}
-                    setValueFilter={setValueFilter}
-                  />
-                  {/* </div> */}
-                </div>
-              )}
-            </div>
-            {/* <div className=''> */}
-            {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
-              <div
-                className={`flex flex-1 overflow-auto bg-gray-3`}
-                id={'preview-question'}
-              >
-                <div
-                  className="h-full overflow-auto bg-white p-6"
-                  style={{ width: `calc(50% - ${leftWidth}px)` }}
-                >
-                  <div
-                    className="min-w-[700px]"
-                    id="hightlight_area_topic"
-                    onMouseUp={(e: any) => {
-                      if (
-                        e.target.tagName.charAt(0) !== 'm' &&
-                        e.target.firstChild?.tagName !== 'math'
-                      ) {
-                        if (e) {
-                          if (allowHighLight) {
-                            runHighlight(
-                              handleSaveHighLightTopic,
-                              allowHighLight || false,
-                              'hightlight_area_topic',
-                            )
-                          } else if (allowUnHighLight) {
-                            runHighlight(
-                              handleSaveHighLightTopic,
-                              allowUnHighLight || false,
-                              'hightlight_area_topic',
-                              { color: 'white' },
-                            )
-                          }
-                        }
-                      }
-                    }}
-                  >
-                    <EditorReader
-                      className="mb-4"
-                      text_editor_content={
-                        currentTabContent?.topicDescription?.description
-                      }
-                      highlighted={currentTabContent?.hightlightTopic}
-                      highlighArea="hightlight_area_topic"
-                    />
-                    {currentTabContent?.topicDescription?.files?.length > 0 &&
-                      currentTabContent?.topicDescription?.files?.map(
-                        (e: any, index: number) => {
-                          return (
-                            <div
-                              className="cursor-pointer text-state-info hover:underline"
-                              onClick={() =>
-                                handleOpenScratchPad(
-                                  'file',
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                              }
-                              key={index}
-                            >
-                              {e?.resource?.name}
-                            </div>
-                          )
-                        },
-                      )}
-                  </div>
-                </div>
-                <div
-                  className="h-full w-[20px] cursor-ew-resize bg-gray-3"
-                  onMouseDown={() => {
-                    setStartResize(true)
-                    // setCurrentMousePos(mousePosition.x || 0)
+              {quizDetail?.quiz_timed && (
+                <Countdown
+                  remainTime={quizDetail?.quiz_timed}
+                  onTimeOut={() => {
+                    if (!openLimit) {
+                      dispatch(disableUnsavedChange())
+                      handleSubmitQuestion('timeout')
+                      // setOpenTimeOut(true)
+                    }
                   }}
-                  onMouseUp={() => setStartResize(false)}
-                ></div>
-                <div
-                  className="h-full overflow-auto bg-white py-6 "
-                  style={{ width: `calc(50% + ${leftWidth}px)` }}
-                  ref={rightSideRef}
-                >
-                  <div className="min-w-[700px] px-6">
-                    {checkType(
-                      currentTabContent?.data,
-                      currentTabContent?.data?.qType,
-                      currentTabContent?.id,
-                      currentTabContent?.answer,
-                      currentTabContent?.corrects,
-                      currentTabContent?.hightlight,
-                      currentTabContent?.solution,
-                      currentTabContent?.done,
-                    )}
+                  ref={timeRef}
+                />
+                // <Countdown
+                //   date={data?.date + data?.delay}
+                //   renderer={renderer}
+                //   onStart={onStart}
+                //   onComplete={() => {
+                //     if (!openLimit) {
+                // dispatch(disableUnsavedChange())
+                // handleSubmitQuestion('timeout')
+                // setOpenTimeOut(true)
+                //     }
+                //     onComplete()
+                //   }}
+                // />
+              )}
+
+              <div className="flex w-2/6 items-center justify-end">
+                {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(
+                  quizDetail?.quiz_type,
+                ) && (
+                  <div className="mr-6 text-medium-sm text-bw-1">
+                    Attempt: {quizAttempId?.number_of_attempts}
+                    {quizDetail?.is_limited
+                      ? `/${quizDetail?.limit_count}`
+                      : ''}
                   </div>
-                </div>
+                )}
+                <ButtonCancelSubmit
+                  className={'flex flex-row-reverse gap-4'}
+                  // color={color}
+                  submit={{
+                    title: 'Finish',
+                    size: 'small',
+                    loading: false,
+                    disabled: submited,
+                    className: 'border border-bw-1',
+                    color: 'secondary',
+                    onClick: () => {
+                      if (checkUnSubmitAnswer()?.length > 0) {
+                        setUnSubmitAnswer(true)
+                      } else {
+                        setOpenSubmit(true)
+                      }
+                      dispatch(disableUnsavedChange())
+                    },
+                    //   full: fullWidthBtn,
+                  }}
+                  cancel={{
+                    title: 'Quit',
+                    size: 'small',
+                    className: 'border border-bw-1 !w-[109px]',
+                    color: 'secondary',
+                    onClick: () => {
+                      setOpenQuit(true)
+                      dispatch(disableUnsavedChange())
+                      if (type === 'event-test') {
+                        setSubmitEventTest(true)
+                      }
+                    },
+                    loading: false,
+                    //   full: fullWidthBtn,
+                  }}
+                ></ButtonCancelSubmit>
               </div>
-            ) : (
+            </div>
+            {/* End Header */}
+            {tabs?.length > 0 && (
+              <div className="relative z-10 w-full bg-gray-4 px-6 py-2 shadow-pagination">
+                <TabSlide
+                  data={filteredTabs}
+                  currentTab={currentPage}
+                  setCurrentTab={setCurrentPage}
+                  optionShowAll={<OptionShowAll />}
+                  handleChangeTab={async (id?: string) => {
+                    id && handleChangeTab(id)
+                  }}
+                  activeShowAll={activeShowAll}
+                  setActiveShowAll={setActiveShowAll}
+                  setValueFilter={setValueFilter}
+                />
+                {/* </div> */}
+              </div>
+            )}
+          </div>
+          {/* <div className=''> */}
+          {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
+            <div
+              className={`flex flex-1 overflow-auto bg-gray-3`}
+              id={'preview-question'}
+            >
               <div
-                className={`flex-1 overflow-auto px-6 py-6`}
-                id={'preview-question'}
+                className="h-full overflow-auto bg-white p-6"
+                style={{ width: `calc(50% - ${leftWidth}px)` }}
               >
                 <div
+                  className="min-w-[700px]"
                   id="hightlight_area_topic"
                   onMouseUp={(e: any) => {
                     if (
@@ -2044,11 +1987,7 @@ const TestDetail = () => {
                       }
                     }
                   }}
-                  className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
                 >
-                  {/* <div className="mb-4">
-                  {currentTabContent?.topicDescription?.name}
-                </div> */}
                   <EditorReader
                     className="mb-4"
                     text_editor_content={
@@ -2063,14 +2002,12 @@ const TestDetail = () => {
                         return (
                           <div
                             className="cursor-pointer text-state-info hover:underline"
-                            onClick={
-                              () =>
-                                handleOpenScratchPad(
-                                  'file',
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                              // setOpenPdf({ status: true, url: e.resource.url })
+                            onClick={() =>
+                              handleOpenScratchPad(
+                                'file',
+                                e?.resource?.url,
+                                e?.resource?.name,
+                              )
                             }
                             key={index}
                           >
@@ -2080,9 +2017,21 @@ const TestDetail = () => {
                       },
                     )}
                 </div>
-
-                {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-                <div className="m-auto w-full max-w-[950px]">
+              </div>
+              <div
+                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                onMouseDown={() => {
+                  setStartResize(true)
+                  // setCurrentMousePos(mousePosition.x || 0)
+                }}
+                onMouseUp={() => setStartResize(false)}
+              ></div>
+              <div
+                className="h-full overflow-auto bg-white py-6 "
+                style={{ width: `calc(50% + ${leftWidth}px)` }}
+                ref={rightSideRef}
+              >
+                <div className="min-w-[700px] px-6">
                   {checkType(
                     currentTabContent?.data,
                     currentTabContent?.data?.qType,
@@ -2095,181 +2044,260 @@ const TestDetail = () => {
                   )}
                 </div>
               </div>
-            )}
-            {openScratchPad.map((e, index: number) => {
-              if (e.type === 'calculator') {
-                return (
-                  <MovableWindow
-                    position={{
-                      width: '400px',
-                      height: '300px',
-                      top: 'calc(25% - 150px)',
-                      left: 'calc(25% - 200px)',
-                    }}
-                    key={e.id}
-                    onClick={() => setOnFocusingPad(e.id)}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
+            </div>
+          ) : (
+            <div
+              className={`flex-1 overflow-auto px-6 py-6`}
+              id={'preview-question'}
+            >
+              <div
+                id="hightlight_area_topic"
+                onMouseUp={(e: any) => {
+                  if (
+                    e.target.tagName.charAt(0) !== 'm' &&
+                    e.target.firstChild?.tagName !== 'math'
+                  ) {
+                    if (e) {
+                      if (allowHighLight) {
+                        runHighlight(
+                          handleSaveHighLightTopic,
+                          allowHighLight || false,
+                          'hightlight_area_topic',
+                        )
+                      } else if (allowUnHighLight) {
+                        runHighlight(
+                          handleSaveHighLightTopic,
+                          allowUnHighLight || false,
+                          'hightlight_area_topic',
+                          { color: 'white' },
+                        )
+                      }
                     }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                        <div className="text-sm font-normal">Calculator</div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                      {/* <div className='flex flex-'> */}
-                      <Calculator />
-                      {/* </div> */}
+                  }
+                }}
+                className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
+              >
+                {/* <div className="mb-4">
+                  {currentTabContent?.topicDescription?.name}
+                </div> */}
+                <EditorReader
+                  className="mb-4"
+                  text_editor_content={
+                    currentTabContent?.topicDescription?.description
+                  }
+                  highlighted={currentTabContent?.hightlightTopic}
+                  highlighArea="hightlight_area_topic"
+                />
+                {currentTabContent?.topicDescription?.files?.length > 0 &&
+                  currentTabContent?.topicDescription?.files?.map(
+                    (e: any, index: number) => {
+                      return (
+                        <div
+                          className="cursor-pointer text-state-info hover:underline"
+                          onClick={
+                            () =>
+                              handleOpenScratchPad(
+                                'file',
+                                e?.resource?.url,
+                                e?.resource?.name,
+                              )
+                            // setOpenPdf({ status: true, url: e.resource.url })
+                          }
+                          key={index}
+                        >
+                          {e?.resource?.name}
+                        </div>
+                      )
+                    },
+                  )}
+              </div>
+
+              {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
+              <div className="m-auto w-full max-w-[950px]">
+                {checkType(
+                  currentTabContent?.data,
+                  currentTabContent?.data?.qType,
+                  currentTabContent?.id,
+                  currentTabContent?.answer,
+                  currentTabContent?.corrects,
+                  currentTabContent?.hightlight,
+                  currentTabContent?.solution,
+                  currentTabContent?.done,
+                )}
+              </div>
+            </div>
+          )}
+          {openScratchPad.map((e, index: number) => {
+            if (e.type === 'calculator') {
+              return (
+                <MovableWindow
+                  position={{
+                    width: '400px',
+                    height: '300px',
+                    top: 'calc(25% - 150px)',
+                    left: 'calc(25% - 200px)',
+                  }}
+                  key={e.id}
+                  onClick={() => setOnFocusingPad(e.id)}
+                  zIndex={
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
+                  }
+                >
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="text-sm font-normal">Calculator</div>
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseIcon />
+                      </button>
                     </div>
-                  </MovableWindow>
-                )
-              } else if (e.type === 'scratch_pad') {
-                return (
-                  <MovableWindow
-                    position={{
-                      width: '400px',
-                      height: '300px',
-                      top: 'calc(50% - 150px)',
-                      left: 'calc(50% - 200px)',
-                    }}
-                    key={currentPage}
-                    onClick={() => {
-                      setOnFocusingPad(e?.id)
-                    }}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                        <div className="text-sm font-normal">Scratch Pad</div>
-                        {/* <CloseIcon */}
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
+                    {/* <div className='flex flex-'> */}
+                    <Calculator />
+                    {/* </div> */}
+                  </div>
+                </MovableWindow>
+              )
+            } else if (e.type === 'scratch_pad') {
+              return (
+                <MovableWindow
+                  position={{
+                    width: '400px',
+                    height: '300px',
+                    top: 'calc(50% - 150px)',
+                    left: 'calc(50% - 200px)',
+                  }}
+                  key={currentPage}
+                  onClick={() => {
+                    setOnFocusingPad(e?.id)
+                  }}
+                  zIndex={
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
+                  }
+                >
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="text-sm font-normal">Scratch Pad</div>
+                      {/* <CloseIcon */}
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseIcon />
+                      </button>
+                    </div>
+                    <ScratchPatch
+                      scratchPadValues={scratchPadValues}
+                      control={controlScratch}
+                      scratchPads={scratchPads.find(
+                        (item: ScratchPad) => item?.id === currentPage,
+                      )}
+                      handleChangeScratchPad={(
+                        event: ChangeEvent<HTMLInputElement>,
+                      ) => handleChangeScratchPad(event, currentPage)}
+                    />
+                  </div>
+                </MovableWindow>
+              )
+            } else if (e.type === 'exhibits') {
+              const i = exhibitData?.findIndex((el: any) => el?.id === e?.id)
+              const exhibitsDes = exhibitData?.find(
+                (exhibit) => exhibit?.id === e?.id,
+              )
+              return (
+                <MovableWindow
+                  position={{
+                    width: '600px',
+                    height: '400px',
+                    top: 'calc(75% - 250px)',
+                    left: 'calc(0%)',
+                  }}
+                  key={e.id}
+                  onClick={() => {
+                    setOnFocusingPad(e?.id)
+                  }}
+                  zIndex={
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500 + 2
+                      : index + 500
+                  }
+                >
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-6-percent w-full items-center justify-between bg-white px-5">
+                      <div className="truncate">
+                        <span className="text-base font-semibold">{`Exhibit ${
+                          (i ?? 0) + 1
+                        }: `}</span>
+                        {exhibitsDes?.name}
                       </div>
-                      <ScratchPatch
-                        scratchPadValues={scratchPadValues}
-                        control={controlScratch}
-                        scratchPads={scratchPads.find(
-                          (item: ScratchPad) => item?.id === currentPage,
-                        )}
-                        handleChangeScratchPad={(
-                          event: ChangeEvent<HTMLInputElement>,
-                        ) => handleChangeScratchPad(event, currentPage)}
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseIcon />
+                      </button>
+                    </div>
+                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                      <EditorReader
+                        text_editor_content={exhibitsDes?.description}
+                        className=" w-full"
                       />
+                      {exhibitsDes &&
+                        exhibitsDes?.files?.length > 0 &&
+                        exhibitsDes?.files?.map((e: any, index: number) => {
+                          return (
+                            <div key={index} className="overflow-auto bg-white">
+                              <PDFViewer file={e?.resource?.url} />
+                            </div>
+                          )
+                        })}
                     </div>
-                  </MovableWindow>
-                )
-              } else if (e.type === 'exhibits') {
-                const i = exhibitData?.findIndex((el: any) => el?.id === e?.id)
-                const exhibitsDes = exhibitData?.find(
-                  (exhibit) => exhibit?.id === e?.id,
-                )
-                return (
-                  <MovableWindow
-                    position={{
-                      width: '600px',
-                      height: '400px',
-                      top: 'calc(75% - 250px)',
-                      left: 'calc(0%)',
-                    }}
-                    key={e.id}
-                    onClick={() => {
-                      setOnFocusingPad(e?.id)
-                    }}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500 + 2
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-6-percent w-full items-center justify-between bg-white px-5">
-                        <div className="truncate">
-                          <span className="text-base font-semibold">{`Exhibit ${
-                            (i ?? 0) + 1
-                          }: `}</span>
-                          {exhibitsDes?.name}
-                        </div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
+                  </div>
+                </MovableWindow>
+              )
+            } else if (e.type === 'file') {
+              return (
+                <MovableWindow
+                  className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
+                  position={{
+                    width: '595px',
+                    height: '650px',
+                    top: 'calc(50%)',
+                    left: 'calc(50%)',
+                  }}
+                  key={e.id}
+                  onClick={() => setOnFocusingPad(e.id)}
+                  zIndex={
+                    onFocusingPad === e.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
+                  }
+                  // not_resizable
+                  // className='pointer-events-none'
+                >
+                  <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="truncate text-sm font-normal">
+                        {e.fileName}
                       </div>
-                      <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
-                        <EditorReader
-                          text_editor_content={exhibitsDes?.description}
-                          className=" w-full"
-                        />
-                        {exhibitsDes &&
-                          exhibitsDes?.files?.length > 0 &&
-                          exhibitsDes?.files?.map((e: any, index: number) => {
-                            return (
-                              <div
-                                key={index}
-                                className="overflow-auto bg-white"
-                              >
-                                <PDFViewer file={e?.resource?.url} />
-                              </div>
-                            )
-                          })}
-                      </div>
+                      {/* <CloseIcon */}
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseIcon />
+                      </button>
                     </div>
-                  </MovableWindow>
-                )
-              } else if (e.type === 'file') {
-                return (
-                  <MovableWindow
-                    className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
-                    position={{
-                      width: '595px',
-                      height: '650px',
-                      top: 'calc(50%)',
-                      left: 'calc(50%)',
-                    }}
-                    key={e.id}
-                    onClick={() => setOnFocusingPad(e.id)}
-                    zIndex={
-                      onFocusingPad === e.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                    // not_resizable
-                    // className='pointer-events-none'
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                        <div className="truncate text-sm font-normal">
-                          {e.fileName}
-                        </div>
-                        {/* <CloseIcon */}
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                      <div
-                        className="overflow-auto bg-white p-4"
-                        style={{ height: 'calc(100% - 40px' }}
-                      >
-                        {/* <div className='flex flex-'> */}
-                        <PDFViewer file={e?.file} />
-                      </div>
-                      {/* </div> */}
+                    <div
+                      className="overflow-auto bg-white p-4"
+                      style={{ height: 'calc(100% - 40px' }}
+                    >
+                      {/* <div className='flex flex-'> */}
+                      <PDFViewer file={e?.file} />
                     </div>
-                  </MovableWindow>
-                )
-              }
-            })}
-            {/* </div> */}
-            <div className=" z-10 flex h-[48px]  items-center justify-between bg-gray-3 shadow-question-footer">
-              <div className="flex h-full items-center">
-                {/* <button className="h-full">
+                    {/* </div> */}
+                  </div>
+                </MovableWindow>
+              )
+            }
+          })}
+          {/* </div> */}
+          <div className=" z-10 flex h-[48px]  items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className="flex h-full items-center">
+              {/* <button className="h-full">
                 <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
                   <HelpIcon />
                   <div className="hidden font-normal text-sm 3xl:inline-block">
@@ -2277,414 +2305,373 @@ const TestDetail = () => {
                   </div>
                 </div>
               </button> */}
-                <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
-                  onClick={() => {
-                    setAllowHighLight(!allowHighLight)
-                    setAllowUnHighLight(false)
-                    trackGAEvent('Click Button Highlight Test')
-                  }}
-                >
-                  <ButtonContent icon={<HighlightIcon />} content="Highlight" />
-                </button>
-                <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
-                  onClick={() => {
-                    setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false)
-                    trackGAEvent('Click Button Unhighlight Test')
-                  }}
-                >
-                  <ButtonContent
-                    icon={<UnHighLightIcon />}
-                    content="Unhighlight"
-                  />
-                </button>
-                <button
-                  className="h-full"
-                  onClick={() => {
-                    handleOpenScratchPad('scratch_pad')
-                    trackGAEvent('Click Button ScratchPad Test')
-                  }}
-                >
-                  <ButtonContent
-                    icon={<ScratchPadIcon />}
-                    content="ScratchPad"
-                  />
-                </button>
-                <button
-                  className={`h-full ${
-                    checkCalExist > -1 && 'sapp-disable-button'
-                  }`}
-                  onClick={() => {
-                    handleOpenScratchPad('calculator')
-                    trackGAEvent('Click Button Calculator Test')
-                  }}
-                  disabled={checkCalExist > -1}
-                >
-                  <ButtonContent
-                    icon={<CalculatorIcon />}
-                    content="Calculator"
-                  />
-                </button>
-                {exhibitData && exhibitData?.length > 0 && (
-                  <button className="relative h-full" ref={dropUpRef}>
-                    <div
-                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
-                      onClick={() => {
-                        setShowListExhibits(!showListExhibits)
-                        // handleOpenScratchPad(
-                        //   'file',
-                        //   firstExhibitFiles?.resource?.url,
-                        //   firstExhibitFiles?.resource?.name,
-                        // )
-                      }}
-                    >
-                      <ExhibitsIcon />
-                      <div className="flex items-center gap-3 text-sm font-normal">
-                        <div>
-                          <span className="hidden xl:inline-block 3xl:me-1">
-                            {`Exhibits (${exhibitData?.length || 0})`}
-                          </span>
-                          {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
-                        </div>
-                        {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
-                        {/* <ArrowUpIcon /> */}
+              <button
+                className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                onClick={() => {
+                  setAllowHighLight(!allowHighLight)
+                  setAllowUnHighLight(false)
+                  trackGAEvent('Click Button Highlight Test')
+                }}
+              >
+                <ButtonContent icon={<HighlightIcon />} content="Highlight" />
+              </button>
+              <button
+                className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                onClick={() => {
+                  setAllowUnHighLight(!allowUnHighLight),
+                    setAllowHighLight(false)
+                  trackGAEvent('Click Button Unhighlight Test')
+                }}
+              >
+                <ButtonContent
+                  icon={<UnHighLightIcon />}
+                  content="Unhighlight"
+                />
+              </button>
+              <button
+                className="h-full"
+                onClick={() => {
+                  handleOpenScratchPad('scratch_pad')
+                  trackGAEvent('Click Button ScratchPad Test')
+                }}
+              >
+                <ButtonContent icon={<ScratchPadIcon />} content="ScratchPad" />
+              </button>
+              <button
+                className={`h-full ${
+                  checkCalExist > -1 && 'sapp-disable-button'
+                }`}
+                onClick={() => {
+                  handleOpenScratchPad('calculator')
+                  trackGAEvent('Click Button Calculator Test')
+                }}
+                disabled={checkCalExist > -1}
+              >
+                <ButtonContent icon={<CalculatorIcon />} content="Calculator" />
+              </button>
+              {exhibitData && exhibitData?.length > 0 && (
+                <button className="relative h-full" ref={dropUpRef}>
+                  <div
+                    className="flex items-center gap-3 border-l px-4 3xl:px-6"
+                    onClick={() => {
+                      setShowListExhibits(!showListExhibits)
+                      // handleOpenScratchPad(
+                      //   'file',
+                      //   firstExhibitFiles?.resource?.url,
+                      //   firstExhibitFiles?.resource?.name,
+                      // )
+                    }}
+                  >
+                    <ExhibitsIcon />
+                    <div className="flex items-center gap-3 text-sm font-normal">
+                      <div>
+                        <span className="hidden xl:inline-block 3xl:me-1">
+                          {`Exhibits (${exhibitData?.length || 0})`}
+                        </span>
+                        {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
                       </div>
+                      {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
+                      {/* <ArrowUpIcon /> */}
                     </div>
-                    {showListExhibits && (
-                      <div className="absolute bottom-full z-[1400] flex h-fit max-w-max justify-center bg-gray-3 p-4 shadow-questions-exhibits 3xl:w-full 3xl:max-w-none">
-                        <HookFormCheckBoxGroup
-                          control={controlExhibits}
-                          name="exhibits"
-                          options={exhibits}
-                          multiple
-                          lowerOptions={true}
-                          // gap="0"
-                          widthOptions="w-full"
-                          seprateLine={true} // classNameTitle='text-gray-2'
-                          maxWidthContent
-                        />
-                      </div>
-                    )}
-                  </button>
-                )}
-                {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-                  <button className="relative h-full" ref={dropUpRequire}>
-                    <div
-                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
-                      onClick={() => {
-                        setShowLisRequirement(!showListRequirement)
-                      }}
-                    >
-                      <TextSquareIcon />
-                      <div className="flex items-center gap-3 text-sm font-normal">
-                        <div>
-                          <span className="hidden lg:inline-block 3xl:me-1">
-                            Requirement
-                          </span>
-                          <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
-                        </div>
-                        <ArrowUpIcon />
-                      </div>
-                    </div>
-                    {showListRequirement && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
-                        {currentTabContent?.data?.requirements?.map(
-                          (e: any, index: number) => {
-                            return (
-                              <button
-                                key={e.id}
-                                className={`p-3 ${
-                                  essayData.index !== index && 'text-gray-1'
-                                }`}
-                                onClick={() => {
-                                  setEssayData({ req: e, index: index })
-                                  rightSideRef?.current &&
-                                    rightSideRef.current.scrollTo({
-                                      top: 0,
-                                      behavior: 'smooth',
-                                    })
-                                }}
-                              >{`Requirement (${index + 1})`}</button>
-                            )
-                          },
-                        )}
-                      </div>
-                    )}
-                  </button>
-                )}
-              </div>
-              <div className="flex h-full items-center gap-3 pe-6">
-                {currentTabContent?.data?.response_option === null &&
-                  currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
-                  !currentTabContent.done && (
-                    <div className="flex gap-1">
-                      <div className="hidden 3.5xl:block ">
-                        Choose response option:
-                      </div>
-                      <button
-                        onClick={() => {
-                          // handleChangeTypeEssay(0)
-                          // handleClearSelection(currentTabContent)
-                          // if (confirmOnclose) {
-                          dispatch(
-                            confirmDialog.open({
-                              // Nội dung của hộp thoại xác nhận
-                              message:
-                                'Change Type will delete your input, do you want to continue?',
-                              // Hàm thực thi khi người dùng xác nhận hành động
-                              onConfirm: () => {
-                                handleChangeTypeEssay(0)
-                                handleClearSelection(currentTabContent)
-                              },
-                            }),
-                          )
-                          // } else {
-                          //   // Nếu confirmOnclose là false, thì không cần xác nhận
-                          //   // Gọi hàm callHandleCancel
-                          //   callHandleCancel()
-                          // }
-                        }}
-                        className={`${
-                          currentTabContent?.response_type === 0 && 'active'
-                        }`}
-                      >
-                        <WordIcon />
-                      </button>
-                      <button
-                        onClick={() => {
-                          dispatch(
-                            confirmDialog.open({
-                              // Nội dung của hộp thoại xác nhận
-                              message:
-                                'Change Type will delete your input, do you want to continue?',
-                              // Hàm thực thi khi người dùng xác nhận hành động
-                              onConfirm: () => {
-                                handleChangeTypeEssay(1)
-                                handleClearSelection(currentTabContent)
-                              },
-                            }),
-                          )
-                        }}
-                        className={`${
-                          currentTabContent.response_type === 1 && 'active'
-                        }`}
-                      >
-                        <ExcelIcon />
-                      </button>
+                  </div>
+                  {showListExhibits && (
+                    <div className="absolute bottom-full z-[1400] flex h-fit max-w-max justify-center bg-gray-3 p-4 shadow-questions-exhibits 3xl:w-full 3xl:max-w-none">
+                      <HookFormCheckBoxGroup
+                        control={controlExhibits}
+                        name="exhibits"
+                        options={exhibits}
+                        multiple
+                        lowerOptions={true}
+                        // gap="0"
+                        widthOptions="w-full"
+                        seprateLine={true} // classNameTitle='text-gray-2'
+                        maxWidthContent
+                      />
                     </div>
                   )}
-                <button
-                  className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px] "
-                  onClick={() => {
-                    handleFlagQuestion(currentPage)
-                    trackGAEvent('Click Button Flag To Review Test')
-                  }}
-                >
-                  <FlagIcon />
-                  <div className="hidden text-medium-sm font-medium lg:block">
-                    Flag to Review
-                  </div>
                 </button>
-                <button
-                  disabled={currentTabContent?.done}
-                  className={`flex items-center gap-3 border border-solid ${
-                    !currentTabContent?.done
-                      ? 'border-gray-1 text-bw-1'
-                      : 'border-default text-gray-2'
-                  } w-[150px] justify-center p-1 py-2`}
-                  onClick={() => {
-                    handleClearSelection(currentTabContent)
-                    trackGAEvent('Click Button Clear Selection Test')
-                  }}
-                >
-                  <div className="text-medium-sm font-medium">
-                    Clear Selection
+              )}
+              {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+                <button className="relative h-full" ref={dropUpRequire}>
+                  <div
+                    className="flex items-center gap-3 border-l px-4 3xl:px-6"
+                    onClick={() => {
+                      setShowLisRequirement(!showListRequirement)
+                    }}
+                  >
+                    <TextSquareIcon />
+                    <div className="flex items-center gap-3 text-sm font-normal">
+                      <div>
+                        <span className="hidden lg:inline-block 3xl:me-1">
+                          Requirement
+                        </span>
+                        <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
+                      </div>
+                      <ArrowUpIcon />
+                    </div>
                   </div>
+                  {showListRequirement && (
+                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      {currentTabContent?.data?.requirements?.map(
+                        (e: any, index: number) => {
+                          return (
+                            <button
+                              key={e.id}
+                              className={`p-3 ${
+                                essayData.index !== index && 'text-gray-1'
+                              }`}
+                              onClick={() => {
+                                setEssayData({ req: e, index: index })
+                                rightSideRef?.current &&
+                                  rightSideRef.current.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth',
+                                  })
+                              }}
+                            >{`Requirement (${index + 1})`}</button>
+                          )
+                        },
+                      )}
+                    </div>
+                  )}
                 </button>
-                {/* )} */}
-                {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-                !currentTabContent?.done &&
-                quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
-                  currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
-                    <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                      onClick={async () => {
-                        const data = await getResult(currentTabContent)
-                        confirmAnswer(
-                          data?.corrects,
-                          data?.solution,
-                          currentTabContent,
-                          data?.isSelfReflection,
-                        )
-                        trackGAEvent('Click Button Confirm Answer Test')
-                      }}
-                    >
-                      <div className="text-medium-sm font-medium">
-                        Confirm Answer
-                      </div>
-                    </button>
-                  ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                    filteredTabs.length - 1 ? (
-                    <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                      onClick={() => {
-                        const index = filteredTabs?.findIndex(
-                          (e: any) => e.id === currentPage,
-                        )
-                        handleConfirmAndNext(
-                          currentPage,
-                          filteredTabs[index + 1].id,
-                        )
-                        trackGAEvent('Click Button Confirm & Next Test')
-                      }}
-                    >
-                      <div className="text-medium-sm font-medium">
-                        Confirm & Next
-                      </div>
-                    </button>
-                  ) : (
-                    <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                      onClick={() => {
-                        handleConfirmEssay()
-                        trackGAEvent('Click Button Confirm Test')
-                      }}
-                    >
-                      <div className="text-medium-sm font-medium">Confirm</div>
-                    </button>
-                  )
-                ) : (
-                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                    filteredTabs.length - 1 && (
-                    <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                      onClick={async () => {
-                        const index = filteredTabs.findIndex(
-                          (e: any) => e.id === currentPage,
-                        )
-                        handleChangeTabAndQuestion(filteredTabs[index + 1].id)
-                      }}
-                    >
-                      <div className="text-medium-sm font-medium">
-                        Next Question
-                      </div>
-                    </button>
-                  )
-                )}
-              </div>
+              )}
             </div>
-            <TestTimeOutModal
-              open={openTimeOut}
-              setOpen={setOpenTimeOut}
-              handleSubmit={() => {
-                dispatch(disableUnsavedChange())
-                  .unwrap()
-                  .then(() => {
-                    if (type === 'entrance') {
-                      router.replace(
-                        `/entrance-test/test-result/${QuizResultId}`,
-                      )
-                    } else if (type === 'event-test') {
-                      router.replace(`/event-test`)
-                      setSubmitEventTest(true)
-                    } else {
-                      if (
-                        type !== 'entrance' &&
-                        quizDetail?.quiz_type !== 'FINAL_TEST'
-                      ) {
-                        router.replace(
-                          `/courses/test/test-result/${QuizResultId}`,
+            <div className="flex h-full items-center gap-3 pe-6">
+              {currentTabContent?.data?.response_option === null &&
+                currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
+                !currentTabContent.done && (
+                  <div className="flex gap-1">
+                    <div className="hidden 3.5xl:block ">
+                      Choose response option:
+                    </div>
+                    <button
+                      onClick={() => {
+                        // handleChangeTypeEssay(0)
+                        // handleClearSelection(currentTabContent)
+                        // if (confirmOnclose) {
+                        dispatch(
+                          confirmDialog.open({
+                            // Nội dung của hộp thoại xác nhận
+                            message:
+                              'Change Type will delete your input, do you want to continue?',
+                            // Hàm thực thi khi người dùng xác nhận hành động
+                            onConfirm: () => {
+                              handleChangeTypeEssay(0)
+                              handleClearSelection(currentTabContent)
+                            },
+                          }),
                         )
-                      } else {
-                        router.back()
-                        setScoreQuestion(scoreFinalTest)
-                        setSubmitTest(true)
-                      }
+                        // } else {
+                        //   // Nếu confirmOnclose là false, thì không cần xác nhận
+                        //   // Gọi hàm callHandleCancel
+                        //   callHandleCancel()
+                        // }
+                      }}
+                      className={`${
+                        currentTabContent?.response_type === 0 && 'active'
+                      }`}
+                    >
+                      <WordIcon />
+                    </button>
+                    <button
+                      onClick={() => {
+                        dispatch(
+                          confirmDialog.open({
+                            // Nội dung của hộp thoại xác nhận
+                            message:
+                              'Change Type will delete your input, do you want to continue?',
+                            // Hàm thực thi khi người dùng xác nhận hành động
+                            onConfirm: () => {
+                              handleChangeTypeEssay(1)
+                              handleClearSelection(currentTabContent)
+                            },
+                          }),
+                        )
+                      }}
+                      className={`${
+                        currentTabContent.response_type === 1 && 'active'
+                      }`}
+                    >
+                      <ExcelIcon />
+                    </button>
+                  </div>
+                )}
+              <button
+                className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px] "
+                onClick={() => {
+                  handleFlagQuestion(currentPage)
+                  trackGAEvent('Click Button Flag To Review Test')
+                }}
+              >
+                <FlagIcon />
+                <div className="hidden text-medium-sm font-medium lg:block">
+                  Flag to Review
+                </div>
+              </button>
+              <button
+                disabled={currentTabContent?.done}
+                className={`flex items-center gap-3 border border-solid ${
+                  !currentTabContent?.done
+                    ? 'border-gray-1 text-bw-1'
+                    : 'border-default text-gray-2'
+                } w-[150px] justify-center p-1 py-2`}
+                onClick={() => {
+                  handleClearSelection(currentTabContent)
+                  trackGAEvent('Click Button Clear Selection Test')
+                }}
+              >
+                <div className="text-medium-sm font-medium">
+                  Clear Selection
+                </div>
+              </button>
+              {/* )} */}
+              {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
+              !currentTabContent?.done &&
+              quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
+                <button
+                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  onClick={async () => {
+                    const data = await getResult(currentTabContent)
+                    confirmAnswer(
+                      data?.corrects,
+                      data?.solution,
+                      currentTabContent,
+                      data?.isSelfReflection,
+                      data?.requirements,
+                    )
+                    trackGAEvent('Click Button View Answer Test')
+                  }}
+                >
+                  <div className="text-medium-sm font-medium">View Answer</div>
+                </button>
+              ) : (
+                filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1 && (
+                  <button
+                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                    onClick={async () => {
+                      const index = filteredTabs.findIndex(
+                        (e: any) => e.id === currentPage,
+                      )
+                      handleChangeTab(filteredTabs[index + 1].id)
+                    }}
+                  >
+                    <div className="text-medium-sm font-medium">
+                      Next Question
+                    </div>
+                  </button>
+                )
+              )}
+            </div>
+          </div>
+          <TestTimeOutModal
+            open={openTimeOut}
+            setOpen={setOpenTimeOut}
+            handleSubmit={() => {
+              dispatch(disableUnsavedChange())
+                .unwrap()
+                .then(() => {
+                  if (type === 'entrance') {
+                    router.replace(`/entrance-test/test-result/${QuizResultId}`)
+                  } else if (type === 'event-test') {
+                    router.replace(`/event-test`)
+                    setSubmitEventTest(true)
+                  } else {
+                    if (
+                      type !== 'entrance' &&
+                      quizDetail?.quiz_type !== 'FINAL_TEST'
+                    ) {
+                      router.replace(
+                        `/courses/test/test-result/${QuizResultId}`,
+                      )
+                    } else {
+                      router.back()
+                      setScoreQuestion(scoreFinalTest)
+                      setSubmitTest(true)
                     }
-                    trackGAEvent('Click Button Submit Time Out Test')
-                  })
-              }}
-              handleQuit={() => {
-                trackGAEvent('Click Button Quit Time Out Test')
-                router.back()
-              }}
-            />
-            <QuitTestModal
-              open={openQuit}
-              setOpen={setOpenQuit}
-              handleQuit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
-                  router.back()
-                }
-              }}
-              handleCancel={() =>
-                dispatch(loginSlice.actions.enableUnsavedChange())
-              }
-            />
-            <LimitQuizModal
-              open={openLimit}
-              setOpen={setOpenLimit}
-              handleQuit={() => router.back()}
-            />
-            <ConFirmSubmit
-              open={openSubmit}
-              setOpen={setOpenSubmit}
-              handleSubmit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
-                  setOpenSubmit(false)
-                }
-                handleSubmitQuestion('submit')
-              }}
-              handleCancel={() =>
-                dispatch(loginSlice.actions.enableUnsavedChange())
-              }
-            />
-            <UnSubmitAnswerModal
-              open={openUnSubmitAnswer}
-              setOpen={setUnSubmitAnswer}
-              data={unSubmitAnswerData}
-              handleSubmit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
-                  setUnSubmitAnswer(false)
-                }
-                handleSubmitQuestion('submit')
-              }}
-              handleCancel={() => setUnSubmitAnswer(false)}
-            />
-            <ModalUploadFile
-              open={openUpload?.status}
-              isMultiple={false}
-              handleClose={() => {
-                setOpenUpload({
-                  status: false,
-                  question_id: undefined,
-                  requirementIndex: undefined,
+                  }
+                  trackGAEvent('Click Button Submit Time Out Test')
                 })
-              }}
-              fileType={'ESSAY'}
-              location={`question-answer/${openUpload?.question_id}`}
-              setSelectedFile={(e: any) =>
-                handleSaveFileEssay(e[0], openUpload?.requirementIndex)
+            }}
+            handleQuit={() => {
+              trackGAEvent('Click Button Quit Time Out Test')
+              router.back()
+            }}
+          />
+          <QuitTestModal
+            open={openQuit}
+            setOpen={setOpenQuit}
+            handleQuit={() => {
+              if (type === 'event-test') {
+                router.replace(`/event-test`)
+                setSubmitEventTest(true)
+              } else {
+                router.back()
               }
-            />
-            {/* <PopupViewPdf
+            }}
+            handleCancel={() =>
+              dispatch(loginSlice.actions.enableUnsavedChange())
+            }
+          />
+          <LimitQuizModal
+            open={openLimit}
+            setOpen={setOpenLimit}
+            handleQuit={() => router.back()}
+          />
+          <ConFirmSubmit
+            open={openSubmit}
+            setOpen={setOpenSubmit}
+            handleSubmit={() => {
+              if (type === 'event-test') {
+                router.replace(`/event-test`)
+                setSubmitEventTest(true)
+              } else {
+                setOpenSubmit(false)
+              }
+              handleSubmitQuestion('submit')
+            }}
+            handleCancel={() =>
+              dispatch(loginSlice.actions.enableUnsavedChange())
+            }
+          />
+          <UnSubmitAnswerModal
+            open={openUnSubmitAnswer}
+            setOpen={setUnSubmitAnswer}
+            data={unSubmitAnswerData}
+            handleSubmit={() => {
+              if (type === 'event-test') {
+                router.replace(`/event-test`)
+                setSubmitEventTest(true)
+              } else {
+                setUnSubmitAnswer(false)
+              }
+              handleSubmitQuestion('submit')
+            }}
+            handleCancel={() => setUnSubmitAnswer(false)}
+          />
+          <ModalUploadFile
+            open={openUpload?.status}
+            isMultiple={false}
+            handleClose={() => {
+              setOpenUpload({
+                status: false,
+                question_id: undefined,
+                requirementIndex: undefined,
+              })
+            }}
+            fileType={'ESSAY'}
+            location={`question-answer/${openUpload?.question_id}`}
+            setSelectedFile={(e: any) =>
+              handleSaveFileEssay(e[0], openUpload?.requirementIndex)
+            }
+          />
+          {/* <PopupViewPdf
         open={openPdf?.status || false}
         setOpen={setOpenPdf}
         url={openPdf?.url || ''}
       /> */}
-          </div>
-        )}
+        </div>
       </CourseProvider>
     </FullScreenLayout>
   )

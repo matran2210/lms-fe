@@ -62,21 +62,44 @@ export const caseStudyTestSlice = createSlice({
       }
     },
     saveFileEssay: (state, action) => {
-      const { question_id, file, topic_id } = action.payload
+      const { question_id, file, topic_id, requirement_id } = action.payload
       const arr = [...state.listQuestions]
       let newData = [] as any
       for (let item of arr) {
         if (question_id === item[topic_id].id) {
-          var newItem = {
-            [topic_id]: {
-              ...item[topic_id],
-              answer_file: {
-                file_key: file.file_key,
-                file_name: file.name,
+          if (requirement_id) {
+            var newItem = {
+              [topic_id]: {
+                ...item[topic_id],
+                requirements: (item[topic_id].requirements || []).map(
+                  (req: any, idx: number) => {
+                    if (req.id === requirement_id) {
+                      return {
+                        ...req,
+                        answer_file: {
+                          file_key: file?.file_key,
+                          file_name: file?.name,
+                        },
+                      }
+                    }
+                    return req
+                  },
+                ),
               },
-            },
+            }
+            newData.push(newItem)
+          } else {
+            var newItem = {
+              [topic_id]: {
+                ...item[topic_id],
+                answer_file: {
+                  file_key: file?.file_key,
+                  file_name: file?.name,
+                },
+              },
+            }
+            newData.push(newItem)
           }
-          newData.push(newItem)
         } else {
           newData.push(item)
         }
@@ -87,18 +110,38 @@ export const caseStudyTestSlice = createSlice({
       }
     },
     clearFileEssay: (state, action) => {
-      const { question_id, topic_id } = action.payload
+      const { question_id, topic_id, requirement_id } = action.payload
       const arr = [...state.listQuestions]
       let newData = [] as any
       for (let item of arr) {
         if (question_id === item[topic_id]?.id) {
-          var newItem = {
-            [topic_id]: {
-              ...item[topic_id],
-              answer_file: undefined,
-            },
+          if (requirement_id) {
+            var newItem = {
+              [topic_id]: {
+                ...item[topic_id],
+                requirements: (item[topic_id].requirements || []).map(
+                  (req: any, idx: number) => {
+                    if (req.id === requirement_id) {
+                      return {
+                        ...req,
+                        answer_file: undefined,
+                      }
+                    }
+                    return req
+                  },
+                ),
+              },
+            }
+            newData.push(newItem)
+          } else {
+            var newItem = {
+              [topic_id]: {
+                ...item[topic_id],
+                answer_file: undefined,
+              },
+            }
+            newData.push(newItem)
           }
-          newData.push(newItem)
         } else {
           newData.push(item)
         }

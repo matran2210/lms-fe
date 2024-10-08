@@ -6,7 +6,7 @@ import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
 import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
-import { uniqueId } from 'lodash'
+import { isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
@@ -86,14 +86,17 @@ const EssayQuestionPreview = ({
   const dispatch = useAppDispatch()
   const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
-  const inputRef = useRef(null) as any
-  // useEffect(() => {
-  //   // if (question_data) {
-  //   DeserializeHighlight(highlighted)
 
-  //   // }
-  // }, [question_data, question_content, data])
-  // useEffect(()=>{
+  const fileData = {
+    name:
+      fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_name ||
+      fullData?.answer_file?.file_name ||
+      fullData?.data?.answer_file?.file_name,
+    key:
+      fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
+      fullData?.answer_file?.file_key ||
+      fullData?.data?.answer_file?.file_key,
+  }
   if (externalRef) {
     externalRef.current = {
       reset: () =>
@@ -174,13 +177,6 @@ const EssayQuestionPreview = ({
       dispatch(loginSlice.actions.enableUnsavedChange())
     }
   }
-  // useEffect(() => {
-  //   // setKey((prev) => {
-  //   //   const newKey = uniqueId('key')
-  //   //   return newKey
-  //   // })
-  // }, [data])
-  // },[response_option_custom])
   return (
     <div
       style={{ background: 'white' }}
@@ -271,21 +267,23 @@ const EssayQuestionPreview = ({
               }
             }}
           >
-            <div className="sapp-questions-essay">
-              {index !== undefined
-                ? `Requirement ${index + 1}: ${data?.name}`
-                : `Requirement: ${data?.name}`}
-            </div>
-            <EditorReader
-              className="editor-wrap mb-4"
-              // className="questions"
-              // style={{ borderBottom: "4px solid #F2F2F2" }}
-              text_editor_content={data?.description}
-              highlighted={
-                question_data?.requirements?.[index || 0]?.highlighted
-              }
-              highlighArea="hightlight_area_require"
-            />
+            {data?.name && (
+              <>
+                <div className="sapp-questions-essay">
+                  {index !== undefined
+                    ? `Requirement ${index + 1}: ${data?.name}`
+                    : `Requirement: ${data?.name}`}
+                </div>
+                <EditorReader
+                  className="editor-wrap mb-4"
+                  text_editor_content={data?.description}
+                  highlighted={
+                    question_data?.requirements?.[index || 0]?.highlighted
+                  }
+                  highlighArea="hightlight_area_require"
+                />
+              </>
+            )}
 
             {data?.files?.length > 0 && (
               <div className="mb-4">
@@ -316,11 +314,13 @@ const EssayQuestionPreview = ({
       )}
       <>
         {question_data.assignment_type !== 'TEXT' ? (
-          fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ? (
+          !isNull(fileData.key) && !isUndefined(fileData.key) ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
                 <div className="text-base font-semibold">
-                  Upload file to submit:
+                  {fullData.done
+                    ? 'Your Answer File:'
+                    : 'Upload file to submit'}
                 </div>
                 <div
                   className="cursor-pointer text-state-info hover:underline"
@@ -328,30 +328,25 @@ const EssayQuestionPreview = ({
                     handleDownload({
                       files: [
                         {
-                          name:
-                            fullData?.data?.requirements?.[index ?? 0]
-                              ?.answer_file?.file_name ||
-                            fullData?.answer_file?.file_name,
-                          file_key:
-                            fullData?.data?.requirements?.[index ?? 0]
-                              ?.answer_file?.file_key ||
-                            fullData?.answer_file?.file_key,
+                          name: fileData?.name,
+                          file_key: fileData?.key,
                         },
                       ],
                     })
                   }
                 >
-                  {fullData?.data?.requirements?.[index ?? 0]?.answer_file
-                    ?.file_name || fullData?.answer_file?.file_name}
+                  {fileData.name}
                 </div>
-                {!fullData?.done && !fullData?.confirmed && (
-                  <div
-                    onClick={() => handleClearFile(index)}
-                    className="cursor-pointer"
-                  >
-                    <CloseIcon />
-                  </div>
-                )}
+                {!fullData?.done &&
+                  !fullData?.confirmed &&
+                  !fullData.data.confirmed && (
+                    <button
+                      onClick={() => handleClearFile(index)}
+                      className="cursor-pointer"
+                    >
+                      <CloseIcon />
+                    </button>
+                  )}
               </div>
               {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy && (
@@ -392,7 +387,7 @@ const EssayQuestionPreview = ({
                   </div>
                 </div>
               </div>
-              {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
+              {question_data?.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy &&
                 data && <div className="sapp-seprate-line-preview"></div>}
             </React.Fragment>
@@ -436,6 +431,21 @@ const EssayQuestionPreview = ({
                 control={control}
                 defaultValue={defaultValue}
                 render={({ field: { onChange, value } }) => {
+                  const isValid = (value?: string) => {
+                    try {
+                      if (
+                        !value ||
+                        isEmpty(value) ||
+                        isUndefined(value) ||
+                        isNull(value)
+                      )
+                        return false
+                      JSON.parse(value)
+                      return true
+                    } catch {
+                      return false
+                    }
+                  }
                   return (
                     <Workbook
                       // generateSheetId={() => name}
@@ -470,7 +480,7 @@ const EssayQuestionPreview = ({
                         }
                       }}
                       data={
-                        value && String(value).trim() !== ''
+                        isValid(value)
                           ? JSON.parse(value)
                           : [
                               {
@@ -566,6 +576,23 @@ const EssayQuestionPreview = ({
               ></Controller>
             </div>
           )}
+          {(fullData?.confirmed ||
+            fullData?.done ||
+            fullData?.data?.confirmed) &&
+            (fullData?.solution || data?.explanation?.trim()) && (
+              <div className="mb-11 mt-8 bg-gray-4 p-4">
+                <div className="font-semibold">Solution</div>
+                <EditorReader
+                  text_editor_content={
+                    data?.explanation ??
+                    fullData?.solution ??
+                    fullData?.data?.solution ??
+                    ''
+                  }
+                  className="mt-4"
+                />
+              </div>
+            )}
         </div>
       </>
     </div>

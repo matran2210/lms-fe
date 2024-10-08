@@ -11,6 +11,7 @@ import clsx from 'clsx'
 import React from 'react'
 import SappModalV3 from '../modal/SappModalV3'
 import SAPPVideo from '../video/SAPPVideo'
+import { isEmpty, isNull } from 'lodash'
 
 type Props = {
   text_editor_content: string | undefined
@@ -73,7 +74,7 @@ const EditorReader = ({
 
   useEffect(() => {
     // Update the state with the modified content
-    if (text_editor_content) {
+    if (!isEmpty(text_editor_content) || !isNull(text_editor_content)) {
       setContent(text_editor_content)
     }
   }, [text_editor_content])
