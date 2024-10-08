@@ -137,7 +137,7 @@
   },
   {
     "code": "400|060002",
-    "message": "Course Include Quiz Already Passed"
+    "message": "You already have completed the course"
   },
   {
     "code": "400|060004",
