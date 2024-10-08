@@ -7,12 +7,8 @@ import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import Layout from '@components/layout'
-import EventTestFilter from '@components/event-test/EventTestFilter'
-import EventTestList from '@components/event-test/EventTestList'
 import { EventTestAPI } from '../api/event-test'
 import { LANG_SIGNIN, MY_COURSES } from 'src/constants/lang'
-import { isEmpty } from 'lodash'
 import { ANIMATION } from 'src/constants'
 
 const EventTest = () => {
