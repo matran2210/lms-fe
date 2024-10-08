@@ -450,7 +450,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     } else {
       value.push({
         question_id: listFullQuestions?.[index]?.id,
-        answer_id: '' || undefined,
+        answer_id: '' ?? undefined,
       })
     }
 
@@ -963,24 +963,22 @@ const CaseStudyDetail = ({ questions }: any) => {
                     }}
                   >
                     {questionData?.map((question: any, index: number) => {
-                      const isFirstIndex = index === 0
-                      const isEssayType =
-                        question.qType === QUESTION_TYPES.ESSAY
-                      const hasFirstRequirementIndexZero =
-                        question?.requirements?.[0]?.requirementIndex === 0
-                      const hasNonZeroRequirementIndex =
-                        question?.requirements?.[0]?.requirementIndex !== 0
                       const isAddedBorder =
-                        (isFirstIndex && !isEssayType) ||
-                        (isFirstIndex && hasFirstRequirementIndexZero) ||
-                        (isEssayType && hasNonZeroRequirementIndex)
+                        (index !== 0 &&
+                          question.qType !== QUESTION_TYPES.ESSAY) ||
+                        (question.qType === QUESTION_TYPES.ESSAY &&
+                          question?.requirements?.[0]?.requirementIndex ===
+                            0) ||
+                        (question.qType === QUESTION_TYPES.ESSAY &&
+                          question?.requirements?.length === 0 &&
+                          index !== 0)
 
                       return (
                         <div
                           key={question?.id + index}
                           topic-key={question.topic_id}
                           className={`mb-8 ${clsx({
-                            'border-t pt-8': !isAddedBorder,
+                            'border-t pt-8': isAddedBorder,
                           })}`}
                         >
                           {checkType(

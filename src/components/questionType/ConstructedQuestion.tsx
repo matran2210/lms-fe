@@ -268,21 +268,21 @@ const EssayQuestionPreview = ({
             }}
           >
             {data?.name && (
-              <>
-                <div className="sapp-questions-essay">
-                  {index !== undefined
-                    ? `Requirement ${index + 1}: ${data?.name}`
-                    : `Requirement: ${data?.name}`}
-                </div>
-                <EditorReader
-                  className="editor-wrap mb-4"
-                  text_editor_content={data?.description}
-                  highlighted={
-                    question_data?.requirements?.[index || 0]?.highlighted
-                  }
-                  highlighArea="hightlight_area_require"
-                />
-              </>
+              <div className="sapp-questions-essay">
+                {index !== undefined
+                  ? `Requirement ${index + 1}: ${data?.name}`
+                  : `Requirement: ${data?.name}`}
+              </div>
+            )}
+            {data?.description && (
+              <EditorReader
+                className="editor-wrap mb-4"
+                text_editor_content={data?.description}
+                highlighted={
+                  question_data?.requirements?.[index || 0]?.highlighted
+                }
+                highlighArea="hightlight_area_require"
+              />
             )}
 
             {data?.files?.length > 0 && (
