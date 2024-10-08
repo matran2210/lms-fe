@@ -10,9 +10,10 @@ import {
   submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
-import SappButton from '@components/base/button/SappButton'
 import { CloseIcon, ConfirmIcon } from '@assets/icons'
+import SappButton from '@components/base/button/SappButton'
 import SappModal from '@components/base/modal/SappModal'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
 import dayjs, { Dayjs } from 'dayjs'
@@ -30,7 +31,6 @@ import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import SappModalV3 from '@components/base/modal/SappModalV3'
 
 type Props = {
   questions: IQuestion[]

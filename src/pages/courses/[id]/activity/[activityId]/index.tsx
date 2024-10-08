@@ -756,10 +756,11 @@ const ActivityPage = () => {
                               }
                               setOpenFile={handleOpenScratchPad}
                               class_user_id={activity?.class_user_id}
+                              quizSetting={e?.quiz?.quiz_setting}
+                              reload={refetch}
                               gradeStatus={gradeStatus}
                               quizName={e?.quiz?.name}
-                              reload={refetch}
-                            ></QuizDocument>
+                            />
                           </div>
                         )
                       }
