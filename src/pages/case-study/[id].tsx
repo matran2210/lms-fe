@@ -47,6 +47,7 @@ import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
 import SappButton from '@components/base/button/SappButton'
 import { IRequirement } from 'src/type/case-study'
+import clsx from 'clsx'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -962,16 +963,25 @@ const CaseStudyDetail = ({ questions }: any) => {
                     }}
                   >
                     {questionData?.map((question: any, index: number) => {
+                      const isFirstIndex = index === 0
+                      const isEssayType =
+                        question.qType === QUESTION_TYPES.ESSAY
+                      const hasFirstRequirementIndexZero =
+                        question?.requirements?.[0]?.requirementIndex === 0
+                      const hasNonZeroRequirementIndex =
+                        question?.requirements?.[0]?.requirementIndex !== 0
+                      const isAddedBorder =
+                        (isFirstIndex && !isEssayType) ||
+                        (isFirstIndex && hasFirstRequirementIndexZero) ||
+                        (isEssayType && hasNonZeroRequirementIndex)
+
                       return (
                         <div
                           key={question?.id + index}
                           topic-key={question.topic_id}
-                          className={`${
-                            index === 0 ||
-                            question?.requirements?.requirementIndex !== 0
-                              ? 'mb-8'
-                              : 'mb-8 border-t pt-8'
-                          }`}
+                          className={`mb-8 ${clsx({
+                            'border-t pt-8': !isAddedBorder,
+                          })}`}
                         >
                           {checkType(
                             question,

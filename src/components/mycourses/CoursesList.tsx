@@ -41,7 +41,7 @@ const CoursesList: React.FC<CoursesProps> = ({
   }
   return (
     <>
-      {!isEmpty(courses) ? (
+      {!isEmpty(courses) && (
         <div
           className="mb-6 grid grid-cols-2 gap-6 xl-max:px-6 2xl-min:grid-cols-3"
           // data-aos={ANIMATION.DATA_AOS}
@@ -56,8 +56,6 @@ const CoursesList: React.FC<CoursesProps> = ({
             />
           ))}
         </div>
-      ) : (
-        <NoData />
       )}
     </>
   )

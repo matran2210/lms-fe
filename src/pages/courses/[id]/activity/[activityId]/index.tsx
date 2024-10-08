@@ -727,6 +727,7 @@ const ActivityPage = () => {
                 <div className={`mx-auto my-0 w-full max-w-[1000px] px-6 pt-6`}>
                   <div className="tab-content overflow-x-auto overflow-y-hidden">
                     {course_tab_documents?.map((e, i) => {
+                      const gradeStatus = e?.quiz?.attempt?.grading_status
                       const marginBottom =
                         i < course_tab_documents?.length - 1 ? 'mb-6' : ''
                       if (e?.type === 'QUIZ') {
@@ -749,11 +750,16 @@ const ActivityPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               document_id={e?.id}
-                              is_graded={e?.quiz?.is_graded || false}
+                              is_graded={
+                                e?.quiz?.is_graded &&
+                                e?.quiz?.grading_method === 'MANUAL'
+                              }
                               setOpenFile={handleOpenScratchPad}
                               class_user_id={activity?.class_user_id}
                               quizSetting={e?.quiz?.quiz_setting}
                               reload={refetch}
+                              gradeStatus={gradeStatus}
+                              quizName={e?.quiz?.name}
                             />
                           </div>
                         )

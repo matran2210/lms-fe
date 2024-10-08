@@ -1,12 +1,14 @@
+import Layout from '@components/layout'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import Heading from '@components/mycourses/Heading'
+import SearchForm from '@components/mycourses/Search'
+import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { CoursesAPI } from 'src/pages/api/courses'
 import ResultsTable from './ResultsTable'
-import SearchForm from '@components/mycourses/Search'
-import Layout from '@components/layout'
+import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 10
 
@@ -60,33 +62,39 @@ const Results = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Result">
-        <div className="header h-[70px] border-b border-default bg-white">
+        <div className="h-[70px] border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
             <SearchForm
-              placeholder="Enter name of course..."
+              placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="container">
-          <div className="main relative mx-auto my-0 max-w-xxl">
-            <div className="flex w-full items-center justify-between pb-4 pt-6">
-              {isSuccess && (
-                <BreadcrumbFilter
-                  name={courseNameDetail}
-                  subpath="Results"
-                  courseId={router.query.courseId}
-                />
-              )}
-              {/* <FilterCourseDetail totalResult={courses?.length || 0} /> */}
-            </div>
-          </div>
-          <div className="mx-auto my-0 flex max-w-xxl bg-white">
-            <Heading greeting="" title={'Results'} />
-          </div>
-          <div className="mx-auto my-0 mb-6 mt-6 max-w-xxl bg-white px-8 pb-3 pt-8 xl-max:container">
-            {isSuccess && <ResultsTable courseId={courseId} />}
-          </div>
+        <div className="mx-auto my-0 max-w-xxl xl-max:mx-6">
+          {isLoading ? (
+            <CourseSkeleton className="pt-6" />
+          ) : (
+            <>
+              <div className="main relative mx-auto my-0 max-w-xxl">
+                <div className="flex w-full items-center justify-between pb-4 pt-6">
+                  {isSuccess && (
+                    <BreadcrumbFilter
+                      name={courseNameDetail}
+                      subpath="Results"
+                      courseId={router.query.courseId}
+                    />
+                  )}
+                  {/* <FilterCourseDetail totalResult={courses?.length || 0} /> */}
+                </div>
+              </div>
+              <div className="mx-auto my-0 flex max-w-xxl bg-white">
+                <Heading greeting="" title={'Results'} />
+              </div>
+              <div className="mx-auto my-0 mb-6 mt-6 max-w-xxl bg-white px-8 pb-3 pt-8 xl-max:container">
+                {isSuccess && <ResultsTable courseId={courseId} />}
+              </div>
+            </>
+          )}
         </div>
       </Layout>
     </SappLoadingGlobal>

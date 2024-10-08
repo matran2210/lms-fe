@@ -6,6 +6,7 @@ import {
   ArrowUpIcon,
   CalculatorIcon,
   CloseIcon,
+  ConfirmIcon,
   ExcelIcon,
   ExhibitsIcon,
   FlagIcon,
@@ -39,6 +40,7 @@ import { useForm } from 'react-hook-form'
 import {
   DISPLAY_TYPE,
   ESSAY_TYPE,
+  GRADING_METHOD,
   PageLink,
   QUESTION_TYPES,
   RESPONSE_OPTION,
@@ -82,6 +84,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { showPopup } from 'src/redux/slice/Popup/Result-test'
 import Countdown from './countdown'
 import { IRequirement } from 'src/type/case-study'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 
 // type Window = {
 //   userAgreed: any
@@ -442,6 +445,7 @@ const TestDetail = () => {
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
     [],
   )
+  const [openReportModal, setOpenReportModal] = useState(false)
 
   useEffect(() => {
     const updateMousePosition = (ev: any) => {
@@ -483,11 +487,12 @@ const TestDetail = () => {
     callback: () => setShowLisRequirement(false),
   })
   const [onMount, setOnMount] = useState(true)
-  const currentTabContent = useMemo(() => {
-    if (tabs && tabs.length > 0) {
-      return tabs.find((e: any) => e.id === currentPage)
-    } else return undefined
-  }, [currentPage, tabs])
+
+  const currentTabContent =
+    tabs && tabs.length > 0
+      ? tabs.find((e: any) => e.id === currentPage)
+      : undefined
+
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
       if (openScratchPad[i].type === 'calculator') {
@@ -1384,6 +1389,14 @@ const TestDetail = () => {
       if (res) {
         if (res?.data?.class_user_score) {
           dispatch(showPopup(res?.data?.class_user_score))
+        }
+
+        if (
+          quizDetail?.is_graded &&
+          quizDetail?.grading_method === GRADING_METHOD.MANUAL
+        ) {
+          setOpenReportModal(true)
+          return
         }
         if (type === 'entrance') {
           router.replace(`/entrance-test/test-result/${res?.data?.id}`)
@@ -2665,11 +2678,25 @@ const TestDetail = () => {
               handleSaveFileEssay(e[0], openUpload?.requirementIndex)
             }
           />
+          <SappModalV3
+            open={openReportModal}
+            okButtonCaption="Back"
+            handleCancel={() => {}}
+            onOk={() => {
+              setOpenReportModal(false)
+              router.back()
+            }}
+            fullWidthBtn={true}
+            buttonSize="extra"
+            icon={<ConfirmIcon />}
+            header="Quiz Submitted"
+            content={`Congratulations on completing ${quizDetail?.name}. The result will be sent to you via email after the grading is finished.`}
+          />
           {/* <PopupViewPdf
-        open={openPdf?.status || false}
-        setOpen={setOpenPdf}
-        url={openPdf?.url || ''}
-      /> */}
+            open={openPdf?.status || false}
+            setOpen={setOpenPdf}
+            url={openPdf?.url || ''}
+          /> */}
         </div>
       </CourseProvider>
     </FullScreenLayout>

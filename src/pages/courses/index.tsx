@@ -15,6 +15,7 @@ import { ANIMATION, UserGuide } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { CoursesAPI } from '../api/courses'
+import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -161,7 +162,7 @@ const MyCourse = () => {
           ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
           >
             <SearchForm
-              placeholder="Enter name of course..."
+              placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
               // setPage={setPage}
             />

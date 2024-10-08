@@ -1,6 +1,6 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { truncateString } from '@utils/index'
+import { removeStyleAttributes, truncateString } from '@utils/index'
 import { Tooltip } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
@@ -232,7 +232,9 @@ const ScoreDetail = ({
                               className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
                               dangerouslySetInnerHTML={{
                                 __html: DOMPurify.sanitize(
-                                  e?.question?.question_content ?? '--',
+                                  removeStyleAttributes(
+                                    e?.question?.question_content,
+                                  ) ?? '--',
                                 ),
                               }}
                               onClick={() => {
