@@ -704,7 +704,7 @@ const CaseStudyResult = () => {
                   <MovableWindow
                     position={{
                       width: '400px',
-                      height: '300px',
+                      height: 'fit-content',
                       top: 'calc(25% - 150px)',
                       left: 'calc(25% - 200px)',
                     }}
