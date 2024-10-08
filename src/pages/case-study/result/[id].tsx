@@ -527,7 +527,8 @@ const CaseStudyResult = () => {
       )
       const isAddedBorder =
         (requirementIndex === 0 && index !== 0) ||
-        (index !== 0 && question.qType !== QUESTION_TYPES.ESSAY)
+        (index !== 0 && question.qType !== QUESTION_TYPES.ESSAY) ||
+        (question?.requirements?.length === 0 && index !== 0)
       return (
         <div
           key={question?.id + index}
