@@ -23,7 +23,12 @@ import {
   IQuestionResultResponse,
 } from 'quiz-result-package/dist/type'
 import toast from 'react-hot-toast'
-import { ANIMATION, GRADE_STATUS, SOCIAL_LINK } from 'src/constants'
+import {
+  ANIMATION,
+  GRADE_STATUS,
+  GRADING_METHOD,
+  SOCIAL_LINK,
+} from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import { showPopup } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'
@@ -46,6 +51,7 @@ type Props = {
   gradeStatus?: string
   quizName?: string
   reload: () => void
+  grading_method?: string
 }
 
 interface IAnswer {
@@ -85,6 +91,7 @@ const QuizDocument = ({
   gradeStatus,
   quizName,
   reload,
+  grading_method,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -280,7 +287,7 @@ const QuizDocument = ({
           setLoading(false)
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
-          if (is_graded) {
+          if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
             setOpenGradedReport(true)
             return
           }
@@ -342,7 +349,7 @@ const QuizDocument = ({
           }) || [],
         ),
       }
-      if (is_graded) {
+      if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
         setOpenGradedReport(true)
         reload()
       } else {
@@ -488,19 +495,19 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="rounded bg-blur-green px-4 py-1 font-medium text-green-800">
+          <div className="rounded bg-blur-green px-2 font-medium text-green-800">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="rounded  bg-blur-yellow px-4 py-1 font-medium text-amber-400">
+          <div className="rounded  bg-blur-yellow px-2 font-medium text-amber-400">
             Awaiting Grading
           </div>
         )
       default:
         return (
-          <div className="rounded bg-gray-200 px-4 py-1 font-medium text-gray-400">
+          <div className="rounded bg-gray-200 px-2 font-medium text-gray-400">
             Manual Grading
           </div>
         )
@@ -540,8 +547,17 @@ const QuizDocument = ({
           />
         )}
       </div>
-      <div className="flex min-h-[50px] items-center bg-gray-3 px-6 py-2">
-        {is_graded && getGradedLabel(gradeStatus)}
+      <div className="flex min-h-[50px] items-center gap-3 bg-gray-3 px-6 py-2">
+        <div
+          className={`${
+            is_graded || 'invisible'
+          } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
+        >
+          Graded Activity
+        </div>
+        {is_graded &&
+          grading_method === GRADING_METHOD.MANUAL &&
+          getGradedLabel(gradeStatus)}
 
         {type === null && (
           <>

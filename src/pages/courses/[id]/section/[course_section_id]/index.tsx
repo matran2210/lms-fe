@@ -2,7 +2,7 @@ import SappDrawer from '@components/base/SappDrawer'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Layout from '@components/layout'
 import { trackGAEvent } from '@utils/google-analytics'
-import { truncateString } from '@utils/index'
+import { truncateBySpace, truncateString } from '@utils/index'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
@@ -352,7 +352,7 @@ const CoursePartDetail = () => {
                     title={partDetail?.name}
                     showTooltip={partDetail?.name?.length > 90}
                   >
-                    {truncateString(partDetail?.name, 90)}
+                    {truncateBySpace(partDetail?.name, 10) ?? ''}
                   </SappTooltip>
                 </p>
               </span>
