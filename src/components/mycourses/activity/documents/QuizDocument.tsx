@@ -10,8 +10,8 @@ import {
   submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
-import { CloseIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
+import { CloseIcon, ConfirmIcon } from '@assets/icons'
 import SappModal from '@components/base/modal/SappModal'
 import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -22,7 +22,7 @@ import {
   IQuestionResultResponse,
 } from 'quiz-result-package/dist/type'
 import toast from 'react-hot-toast'
-import { ANIMATION, SOCIAL_LINK } from 'src/constants'
+import { ANIMATION, GRADE_STATUS, SOCIAL_LINK } from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import { showPopup } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'
@@ -30,6 +30,7 @@ import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 
 type Props = {
   questions: IQuestion[]
@@ -42,7 +43,9 @@ type Props = {
   setOpenFile?: any
   class_user_id?: string
   quizSetting?: IQuizSetting
-  reload?: any
+  gradeStatus?: string
+  quizName?: string
+  reload: () => void
 }
 
 interface IAnswer {
@@ -79,11 +82,14 @@ const QuizDocument = ({
   setOpenFile,
   class_user_id,
   quizSetting,
+  gradeStatus,
+  quizName,
   reload,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
+  const [openReportModal, setOpenReportModal] = useState<boolean>(false)
   const questionRef = useRef<QuizComponentRef>(null)
 
   const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
@@ -96,6 +102,7 @@ const QuizDocument = ({
 
   const [loading, setLoading] = useState<boolean>(false)
   const [resultId, setResultId] = useState<string>('')
+  const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
 
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -273,6 +280,10 @@ const QuizDocument = ({
           setLoading(false)
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
+          if (is_graded) {
+            setOpenGradedReport(true)
+            return
+          }
           if (e?.data?.class_user_score) {
             setTimeout(() => {
               dispatch(showPopup(e.data.class_user_score))
@@ -331,11 +342,16 @@ const QuizDocument = ({
           }) || [],
         ),
       }
-      setModalResult((e) => ({
-        id: id || e?.id,
-        status: true,
-        questions: newQuestionResponse,
-      }))
+      if (is_graded) {
+        setOpenGradedReport(true)
+        reload()
+      } else {
+        setModalResult((e) => ({
+          id: id || e?.id,
+          status: true,
+          questions: newQuestionResponse,
+        }))
+      }
     } catch (error) {
     } finally {
       setLoading(false)
@@ -463,6 +479,34 @@ const QuizDocument = ({
     </>
   )
 
+  /**
+   *
+   * @param status Trạng thái chấm điểm
+   * @returns label
+   */
+  const getGradedLabel = (status?: string) => {
+    switch (status) {
+      case GRADE_STATUS.FINISHED_GRADING:
+        return (
+          <div className="rounded bg-blur-green px-4 py-1 font-medium text-green-800">
+            Finished Grading
+          </div>
+        )
+      case GRADE_STATUS.AWAITING_GRADING:
+        return (
+          <div className="rounded  bg-blur-yellow px-4 py-1 font-medium text-amber-400">
+            Awaiting Grading
+          </div>
+        )
+      default:
+        return (
+          <div className="rounded bg-gray-200 px-4 py-1 font-medium text-gray-400">
+            Manual Grading
+          </div>
+        )
+    }
+  }
+
   return (
     <div className="">
       <ConFirmSubmit
@@ -474,7 +518,7 @@ const QuizDocument = ({
 
       {/* )} */}
       <div
-        className="text-black-1 relative max-h-[500px] min-h-[400px] select-none overflow-auto border border-gray-2 p-6 "
+        className={`text-black-1 max-h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {type !== null && <BluredNotification />}
@@ -497,18 +541,13 @@ const QuizDocument = ({
         )}
       </div>
       <div className="flex min-h-[50px] items-center bg-gray-3 px-6 py-2">
-        <div
-          className={`${
-            is_graded || 'invisible'
-          } whitespace-nowrap bg-state-info bg-opacity-10 px-1 py-0.5 text-center text-[11px] text-medium-sm font-semibold text-state-info`}
-        >
-          Graded Activity
-        </div>
+        {is_graded && getGradedLabel(gradeStatus)}
 
         {type === null && (
           <>
             <div className="mx-auto flex w-fit items-center gap-3">
-              <div
+              <button
+                disabled={!!gradeStatus || isLastQuestion || loading}
                 className={`cursor-pointer select-none ${
                   activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
                 }`}
@@ -521,9 +560,10 @@ const QuizDocument = ({
                 }}
               >
                 <SappIcon icon="arrow_left" />
-              </div>
+              </button>
               Question: {activeQuestionIndex + 1} of {questions?.length || 0}
-              <div
+              <button
+                disabled={!!gradeStatus || isLastQuestion || loading}
                 className={`cursor-pointer select-none ${
                   isLastQuestion || loading ? 'opacity-50' : ''
                 }`}
@@ -539,7 +579,7 @@ const QuizDocument = ({
                 }}
               >
                 <SappIcon icon="arrow_right" />
-              </div>
+              </button>
             </div>
             {(isQuestionConfirmed ||
               grading_preference !== 'AFTER_EACH_QUESTION' ||
@@ -581,9 +621,10 @@ const QuizDocument = ({
             {!isQuestionConfirmed &&
               grading_preference === 'AFTER_EACH_QUESTION' && (
                 <SappButton
-                  title={'Confirm'}
+                  title={'View Answer'}
                   full={false}
                   size={'small'}
+                  disabled={!!gradeStatus || loading}
                   onClick={() => {
                     if (!loading) {
                       handleConfirmQuestion(false)
@@ -633,6 +674,19 @@ const QuizDocument = ({
         open={showQuestionResultDetail?.isOpen || false}
         setOpen={() => setShowQuestionResultDetail(undefined)}
       ></ModalExplanationPackage>
+      <SappModalV3
+        open={openGradedReport}
+        okButtonCaption="Back"
+        handleCancel={() => {}}
+        onOk={() => {
+          setOpenGradedReport(false)
+        }}
+        fullWidthBtn={true}
+        buttonSize="extra"
+        icon={<ConfirmIcon />}
+        header="Quiz Submitted"
+        content={`Congratulations on completing ${quizName}. The result will be sent to you via email after the grading is finished.`}
+      />
     </div>
   )
 }

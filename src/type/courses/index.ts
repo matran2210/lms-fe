@@ -211,10 +211,12 @@ export interface IMyCourseDetail {
   quiz: {
     quiz_setting: IQuizSetting
     attempt: {
+      grading_method?: string
       id: string
       number_of_attempts: number
       ratio_score: string
       total_attempt_time: number
+      grading_status?: string
     }
     id: string
     is_graded: boolean
@@ -222,6 +224,7 @@ export interface IMyCourseDetail {
     limit_count: number
     quiz_timed: number
     required_percent_score: number
+    grading_method?: string
   }
   user_section_learning_status: string
 }

@@ -270,4 +270,24 @@ export const setLocalStorageItem = (name: string, value: string) => {
   localStorage.setItem(name, value)
 }
 
+export const removeStyleAttributes = (htmlString?: string) => {
+  if (!htmlString) return
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(htmlString, 'text/html')
+  const elementsWithStyle = doc.querySelectorAll('[style]')
+  elementsWithStyle.forEach((element) => {
+    element.removeAttribute('style')
+  })
+  return doc.body.innerHTML
+}
+
+export const capitalizeFirstLetter = (str?: string) => {
+  if (!str) return
+  str = str?.toLocaleLowerCase()
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 export * from './formatNumber'

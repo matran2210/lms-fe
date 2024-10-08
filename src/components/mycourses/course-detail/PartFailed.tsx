@@ -9,6 +9,8 @@ import { ANIMATION, TEST_TYPE } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 import ResultCourse from './CourseResult'
+import SappModalV3 from '@components/base/modal/SappModalV3'
+import { ConfirmIcon } from '@assets/icons'
 
 const PartFailed = ({
   coursePart,
@@ -22,6 +24,7 @@ const PartFailed = ({
   const quizAttempt = coursePart?.quiz
   const [open, setOpen] = useState(false)
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
+  const [openReport, setOpenReport] = useState<boolean>(false)
 
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
@@ -159,6 +162,7 @@ const PartFailed = ({
                   class_user_id={class_user_id}
                   coursePart={coursePart}
                   quizAttempt={quizAttempt}
+                  setOpenReport={setOpenReport}
                   trackGA={() => {
                     trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
                   }}
@@ -193,6 +197,19 @@ const PartFailed = ({
         class_user_id={class_user_id}
         is_passed_course={is_passed_course}
         activeCourse={() => {}}
+      />
+      <SappModalV3
+        open={openReport}
+        okButtonCaption="Back"
+        handleCancel={() => {}}
+        onOk={() => {
+          setOpenReport(false)
+        }}
+        fullWidthBtn={true}
+        buttonSize="extra"
+        icon={<ConfirmIcon />}
+        header="Awating Grading"
+        content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
       />
     </>
   )
