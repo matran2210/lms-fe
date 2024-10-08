@@ -1843,6 +1843,25 @@ const TestDetail = () => {
     }
   }
 
+  const handleOpenExhibit = (exhibitId?: string) => {
+    if (!exhibitId) return
+    const exhibitIds = getValuesExhibits('exhibits') ?? []
+    if (exhibitIds.includes(exhibitId)) {
+      setValueExhibits(
+        'exhibits',
+        exhibitIds.filter((id: string) => id !== exhibitId),
+      )
+    } else {
+      exhibitIds.push(exhibitId)
+      setValueExhibits('exhibits', exhibitIds)
+    }
+    rightSideRef?.current &&
+      rightSideRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+  }
+
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
@@ -2381,22 +2400,28 @@ const TestDetail = () => {
                         {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
                       </div>
                       {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
-                      {/* <ArrowUpIcon /> */}
+                      <ArrowUpIcon />
                     </div>
                   </div>
                   {showListExhibits && (
-                    <div className="absolute bottom-full z-[1400] flex h-fit max-w-max justify-center bg-gray-3 p-4 shadow-questions-exhibits 3xl:w-full 3xl:max-w-none">
-                      <HookFormCheckBoxGroup
-                        control={controlExhibits}
-                        name="exhibits"
-                        options={exhibits}
-                        multiple
-                        lowerOptions={true}
-                        // gap="0"
-                        widthOptions="w-full"
-                        seprateLine={true} // classNameTitle='text-gray-2'
-                        maxWidthContent
-                      />
+                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      {exhibits?.map(
+                        (
+                          e: { label: string; value: string },
+                          index: number,
+                        ) => {
+                          return (
+                            <button
+                              key={e?.value}
+                              className={`p-3 ${
+                                !watch('exhibits')?.includes(e?.value) &&
+                                'text-gray-1'
+                              }`}
+                              onClick={() => handleOpenExhibit(e?.value)}
+                            >{`Exhibit (${index + 1})`}</button>
+                          )
+                        },
+                      )}
                     </div>
                   )}
                 </button>
