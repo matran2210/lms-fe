@@ -248,5 +248,7 @@ export const GRADING_METHOD = {
   AUTO: 'AUTO',
 }
 
+export const FINISHED_TEST_TITLE = 'Submitted Successfully'
+
 export * from './socketEvents'
 export * from './localStorageKeys'

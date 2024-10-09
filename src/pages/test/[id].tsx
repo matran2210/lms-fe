@@ -2713,7 +2713,7 @@ const TestDetail = () => {
             fullWidthBtn={true}
             buttonSize="extra"
             icon={<ConfirmIcon />}
-            header="Quiz Submitted"
+            header={FINISHED_TEST_TITLE}
             content={`Congratulations on completing ${quizDetail?.name}. The result will be sent to you via email after the grading is finished.`}
           />
           {/* <PopupViewPdf
