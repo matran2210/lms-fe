@@ -25,6 +25,7 @@ import {
 import toast from 'react-hot-toast'
 import {
   ANIMATION,
+  FINISHED_TEST_TITLE,
   GRADE_STATUS,
   GRADING_METHOD,
   SOCIAL_LINK,
@@ -700,7 +701,7 @@ const QuizDocument = ({
         fullWidthBtn={true}
         buttonSize="extra"
         icon={<ConfirmIcon />}
-        header="Quiz Submitted"
+        header={FINISHED_TEST_TITLE}
         content={`Congratulations on completing ${quizName}. The result will be sent to you via email after the grading is finished.`}
       />
     </div>
