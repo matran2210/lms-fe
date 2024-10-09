@@ -967,8 +967,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                         (index !== 0 &&
                           question.qType !== QUESTION_TYPES.ESSAY) ||
                         (question.qType === QUESTION_TYPES.ESSAY &&
-                          question?.requirements?.[0]?.requirementIndex ===
-                            0) ||
+                          question?.requirements?.[0]?.requirementIndex === 0 &&
+                          index !== 0) ||
                         (question.qType === QUESTION_TYPES.ESSAY &&
                           question?.requirements?.length === 0 &&
                           index !== 0)
