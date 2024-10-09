@@ -298,7 +298,6 @@ const QuizDocument = ({
             }, 4000)
           }
         })
-      reload()
     } catch (error: any) {
       if (error?.response?.status === 422) {
         toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
@@ -352,7 +351,7 @@ const QuizDocument = ({
       }
       if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
         setOpenGradedReport(true)
-        reload()
+        return
       } else {
         setModalResult((e) => ({
           id: id || e?.id,
@@ -548,21 +547,23 @@ const QuizDocument = ({
           />
         )}
       </div>
-      <div className="flex min-h-[50px] items-center gap-3 bg-gray-3 px-6 py-2">
-        <div
-          className={`${
-            is_graded || 'invisible'
-          } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
-        >
-          Graded Activity
+      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
+        <div className="col-span-1 flex flex-wrap items-center gap-2">
+          <div
+            className={`${
+              is_graded || 'invisible'
+            } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
+          >
+            Graded Activity
+          </div>
+          {is_graded &&
+            grading_method === GRADING_METHOD.MANUAL &&
+            getGradedLabel(gradeStatus)}
         </div>
-        {is_graded &&
-          grading_method === GRADING_METHOD.MANUAL &&
-          getGradedLabel(gradeStatus)}
 
         {type === null && (
           <>
-            <div className="mx-auto flex w-fit items-center gap-3">
+            <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
               <button
                 disabled={!!gradeStatus || isLastQuestion || loading}
                 className={`cursor-pointer select-none ${
@@ -598,60 +599,62 @@ const QuizDocument = ({
                 <SappIcon icon="arrow_right" />
               </button>
             </div>
-            {(isQuestionConfirmed ||
-              grading_preference !== 'AFTER_EACH_QUESTION' ||
-              (isQuestionConfirmed && isLastQuestion)) && (
-              <SappButton
-                title={isLastQuestion ? 'Finish' : 'Next'}
-                full={false}
-                size={'small'}
-                onClick={() => {
-                  if (loading) {
-                    return
-                  }
-                  if (
-                    isLastQuestion &&
-                    grading_preference === 'AFTER_EACH_QUESTION'
-                  ) {
-                    setRunHandleFinishQuiz((e) => e + 1)
-                    trackGAEvent('Click Button Finish Quiz Activity')
-                    return
-                  }
-                  if (
-                    isLastQuestion &&
-                    grading_preference !== 'AFTER_EACH_QUESTION'
-                  ) {
-                    handleConfirmQuestion(true)
-                    trackGAEvent('Click Button Confirm Quiz Activity')
-                  } else {
-                    if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                      handleConfirmQuestion(false)
-                    }
-                    handleNextQuestion()
-                    trackGAEvent('Click Button Next Quiz Activity')
-                  }
-                }}
-                color="primary"
-                loading={loading}
-              />
-            )}
-            {!isQuestionConfirmed &&
-              grading_preference === 'AFTER_EACH_QUESTION' && (
+            <div className="col-span-1 flex flex-wrap items-center justify-end gap-2">
+              {(isQuestionConfirmed ||
+                grading_preference !== 'AFTER_EACH_QUESTION' ||
+                (isQuestionConfirmed && isLastQuestion)) && (
                 <SappButton
-                  title={'View Answer'}
+                  title={isLastQuestion ? 'Finish' : 'Next'}
                   full={false}
                   size={'small'}
-                  disabled={!!gradeStatus || loading}
                   onClick={() => {
-                    if (!loading) {
-                      handleConfirmQuestion(false)
+                    if (loading) {
+                      return
                     }
-                    trackGAEvent('Click Button Confirm Quiz Activity')
+                    if (
+                      isLastQuestion &&
+                      grading_preference === 'AFTER_EACH_QUESTION'
+                    ) {
+                      setRunHandleFinishQuiz((e) => e + 1)
+                      trackGAEvent('Click Button Finish Quiz Activity')
+                      return
+                    }
+                    if (
+                      isLastQuestion &&
+                      grading_preference !== 'AFTER_EACH_QUESTION'
+                    ) {
+                      handleConfirmQuestion(true)
+                      trackGAEvent('Click Button Confirm Quiz Activity')
+                    } else {
+                      if (grading_preference !== 'AFTER_EACH_QUESTION') {
+                        handleConfirmQuestion(false)
+                      }
+                      handleNextQuestion()
+                      trackGAEvent('Click Button Next Quiz Activity')
+                    }
                   }}
                   color="primary"
                   loading={loading}
                 />
               )}
+              {!isQuestionConfirmed &&
+                grading_preference === 'AFTER_EACH_QUESTION' && (
+                  <SappButton
+                    title={'View Answer'}
+                    full={false}
+                    size={'small'}
+                    disabled={!!gradeStatus || loading}
+                    onClick={() => {
+                      if (!loading) {
+                        handleConfirmQuestion(false)
+                      }
+                      trackGAEvent('Click Button Confirm Quiz Activity')
+                    }}
+                    color="primary"
+                    loading={loading}
+                  />
+                )}
+            </div>
           </>
         )}
       </div>
@@ -696,8 +699,10 @@ const QuizDocument = ({
         okButtonCaption="Back"
         handleCancel={() => {}}
         onOk={() => {
+          reload()
           setOpenGradedReport(false)
         }}
+        isMaskClosable={false}
         fullWidthBtn={true}
         buttonSize="extra"
         icon={<ConfirmIcon />}
