@@ -604,6 +604,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           e?.answer_file?.file_key
         ) {
           if (!e?.response_option) {
+            //** Kiểm tra đáp án cho câu không có response_option*/
             answers.push({
               question_id: e?.id,
               short_answer: e?.answer || '',
@@ -613,27 +614,44 @@ const CaseStudyDetail = ({ questions }: any) => {
             })
           } else {
             if (e?.response_option === 'SHEET') {
+              //** Kiểm tra đáp án cho câu excel  */
               if (e?.answer) {
-                const data = JSON.parse(e?.answer)
-                for (let el of data) {
-                  if (el.celldata && el.celldata.length > 0) {
-                    answers.push({
-                      question_id: e?.id,
-                      requirement_id: e?.requirement_id,
-                      short_answer: e?.answer || '',
-                      response_option: e?.response_option
-                        ? e?.response_option
-                        : 'WORD',
-                      answer_file: e?.answer_file,
-                      active: 'SUBMITED',
-                    })
-                    break
+                if (e?.answer_file?.file_key) {
+                  //** Nếu excel có file thì ghi nhận luôn  */
+                  answers.push({
+                    question_id: e?.id,
+                    requirement_id: e?.requirement_id,
+                    short_answer: e?.answer || '',
+                    response_option: e?.response_option
+                      ? e?.response_option
+                      : 'WORD',
+                    answer_file: e?.answer_file,
+                    active: 'SUBMITED',
+                  })
+                } else {
+                  const data = JSON.parse(e?.answer)
+                  //** check qua từng cell của excel để xem có đáp án không  */
+                  for (let el of data) {
+                    if (el.celldata && el.celldata.length > 0) {
+                      answers.push({
+                        question_id: e?.id,
+                        requirement_id: e?.requirement_id,
+                        short_answer: e?.answer || '',
+                        response_option: e?.response_option
+                          ? e?.response_option
+                          : 'WORD',
+                        answer_file: e?.answer_file,
+                        active: 'SUBMITED',
+                      })
+                      break
+                    }
                   }
                 }
                 continue
               }
               continue
             } else {
+              //** Lấy câu trả lời word nếu đã trả lời và có response_option*/
               answers.push({
                 question_id: e?.id,
                 short_answer: e?.answer || '',
