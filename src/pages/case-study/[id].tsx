@@ -31,7 +31,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
-import { QUESTION_TYPES } from 'src/constants'
+import { ESSAY_TYPE, QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   clearFileEssay,
@@ -259,15 +259,52 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
 
   /**
-   * handl confirm before submitting
+   * LIST DANH SÁCH CÁC CÂU CHƯA LÀM
    */
   const checkUnSubmitAnswer = () => {
     const result: number[] = []
+    const questionList = listQuestions.map(
+      (item: any) => Object.values(item)[0],
+    )
     getAllValue().map((item, index) => {
+      //** bỏ qua nếu là câu tự luận nếu có file */
+      if (item?.answer_file?.file_key) return
+      //** Ghi nhận chưa trả lời nếu trường answer rỗng */
       if (typeof item.answer === 'string' && item?.answer === '') {
-        result.push(index + 1)
+        const questionIndex = questionList.findIndex(
+          (q: { id: string }) => q.id === item.id,
+        )
+        questionIndex !== -1 &&
+          !result.includes(questionIndex + 1) &&
+          result.push(questionIndex + 1)
         return
       }
+      //** check file sheet nếu có cellData thì nó đã trả lời  */
+      //** Lúc nào cấu excel cũng trả về 1 array sheet nên kiểm tra từng cell data 1  */
+      if (
+        item?.response_option === ESSAY_TYPE.SHEET &&
+        item.qType === QUESTION_TYPES.ESSAY
+      ) {
+        let hasAnswer = false
+        const data = JSON.parse(item?.answer)
+        for (let el of data) {
+          if (el.celldata && el.celldata.length > 0) {
+            hasAnswer = true
+            break
+          }
+        }
+        //** bỏ qua nếu là câu tự luận nếu có file */
+        if (!hasAnswer) {
+          const questionIndex = questionList.findIndex(
+            (q: { id: string }) => q.id === item.id,
+          )
+          questionIndex !== -1 &&
+            !result.includes(questionIndex + 1) &&
+            result.push(questionIndex + 1)
+          return
+        }
+      }
+      //** Ghi nhận chưa trả lời nếu trường answer rỗng khi nó có nhiều đáp án */
       if (Array.isArray(item.answer)) {
         const emptyAnswer = item?.answer?.filter((el) => {
           if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
@@ -281,7 +318,12 @@ const CaseStudyDetail = ({ questions }: any) => {
           (el: string) => typeof el === 'string' && !el,
         )
         if (emptyAnswer?.length || emptyEl.length) {
-          result.push(index + 1)
+          const questionIndex = questionList.findIndex(
+            (q: { id: string }) => q.id === item.id,
+          )
+          questionIndex !== -1 &&
+            !result.includes(questionIndex + 1) &&
+            result.push(questionIndex + 1)
         }
         return
       }
