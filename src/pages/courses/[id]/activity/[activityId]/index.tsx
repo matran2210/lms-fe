@@ -15,8 +15,8 @@ import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileIn
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateBySpace, truncateString } from '@utils/index'
-import { Dropdown, Menu } from 'antd'
-import { uniqueId } from 'lodash'
+import { Tooltip } from 'antd'
+import { truncate, uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, {
@@ -520,6 +520,7 @@ const ActivityPage = () => {
                     title={e?.name}
                   >
                     {truncateBySpace(e?.name, 5) ?? ''}
+                    <span>/</span>
                   </li>
                 </li>
               ) : null}
@@ -605,18 +606,20 @@ const ActivityPage = () => {
           {/* Breadcrumbs */}
           <ul className="line-clamp-1 flex flex-wrap gap-1 overflow-x-auto py-6 text-medium-sm font-medium">
             <BreadCrumbs />
-            <li className="text-bw-1">
-              <Link
-                href={'#'}
-                className="breadcrumbs__link"
-                scroll={false}
-                onClick={() =>
-                  trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
-                }
-              >
-                <span>{nameActivity?.name}</span>
-              </Link>
-            </li>
+            <Tooltip title={nameActivity?.name} color="white">
+              <li className="text-bw-1">
+                <Link
+                  href={'#'}
+                  className="breadcrumbs__link"
+                  scroll={false}
+                  onClick={() =>
+                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
+                  }
+                >
+                  <span>{truncateString(nameActivity?.name, 20)}</span>
+                </Link>
+              </li>
+            </Tooltip>
           </ul>
           {/* Notes */}
           <>
@@ -671,7 +674,14 @@ const ActivityPage = () => {
                     : ''
                 }`}
               >
-                <div className="text-2xl font-medium ">{activity?.name}</div>
+                <div className="text-2xl font-medium ">
+                  <Tooltip
+                    title={activity?.name?.length > 95 && activity?.name}
+                    color="white"
+                  >
+                    {truncate(activity?.name, { length: 95 })}
+                  </Tooltip>
+                </div>
                 <div className="whitespace-nowrap text-sm text-gray-1">
                   {activity?.duration || 0}{' '}
                   {activity?.duration > 1 ? 'mins' : 'min'} estimated
