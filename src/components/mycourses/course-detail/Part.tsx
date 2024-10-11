@@ -3,7 +3,7 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import { formatTime, truncateBySpace, truncateTextOnly } from '@utils/index'
+import { formatTime, truncateBySpace, truncateHTML } from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
@@ -103,7 +103,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
           >
             <p
               dangerouslySetInnerHTML={{
-                __html: truncateTextOnly(course?.description, 200) ?? '',
+                __html: truncateHTML(25, course?.description) ?? '',
               }}
               className="h-[120px] text-base text-bw-1"
             />

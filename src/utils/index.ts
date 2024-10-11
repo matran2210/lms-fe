@@ -333,10 +333,55 @@ export const truncateTextOnly = (htmlString: string, limit: number) => {
   }
   walkNodes(div)
   if (lastSpacePosition !== -1) {
-    truncatedText = truncatedText.substring(0, lastSpacePosition) + '....'
+    truncatedText = truncatedText.substring(0, lastSpacePosition) + '...'
   }
-
   return truncatedText
 }
 
+export const truncateHTML = (limit: number, html?: string) => {
+  if (!html) return ''
+  const div = document.createElement('div')
+  div.innerHTML = html
+  let wordCount = 0
+  function traverse(node: any) {
+    const nodeType = node.nodeType
+
+    if (wordCount >= limit) {
+      return ''
+    }
+
+    if (nodeType === Node.TEXT_NODE) {
+      const text = node.textContent
+      const words = text.split(/\s+/)
+      let truncatedText = ''
+      for (let i = 0; i < words.length && wordCount < limit; i++) {
+        if (words[i]) {
+          truncatedText += (i > 0 ? ' ' : '') + words[i]
+          wordCount++
+        }
+      }
+
+      return truncatedText + (wordCount >= limit ? '...' : '')
+    } else if (nodeType === Node.ELEMENT_NODE) {
+      const tagName = node.tagName.toLowerCase()
+      const attributes = Array.from(node.attributes)
+        .map((attr: any) => `${attr.name}="${attr.value}"`)
+        .join(' ')
+
+      const openTag = `<${tagName}${attributes ? ' ' + attributes : ''}>`
+      const closeTag = `</${tagName}>`
+
+      const childNodes = Array.from(node.childNodes)
+      let innerHTML = ''
+      childNodes.forEach((child) => {
+        if (wordCount < limit) {
+          innerHTML += traverse(child)
+        }
+      })
+      return `${openTag}${innerHTML}${closeTag}`
+    }
+    return ''
+  }
+  return traverse(div)
+}
 export * from './formatNumber'
