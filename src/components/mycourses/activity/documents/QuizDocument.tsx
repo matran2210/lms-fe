@@ -400,7 +400,7 @@ const QuizDocument = ({
           )}
           {type === 'expired' && (
             <p className="text-center">
-              The time for this test has ended, you can no longer submit
+              The time for this Quiz has ended, you can no longer submit
               answers. For further support, please contact SAPP Academy via{' '}
               <a
                 href={SOCIAL_LINK.FACEBOOK}
