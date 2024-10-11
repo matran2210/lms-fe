@@ -7,9 +7,15 @@ interface IProps {
   open: boolean
   handleCancel: any
   type?: 'expired' | 'unopened'
+  start_time?: string
 }
 
-const TestAnnouncementModal = ({ open, handleCancel, type }: IProps) => {
+const TestAnnouncementModal = ({
+  open,
+  handleCancel,
+  type,
+  start_time,
+}: IProps) => {
   // TEST EXPIRED
   if (type === 'expired') {
     return (
@@ -59,7 +65,7 @@ const TestAnnouncementModal = ({ open, handleCancel, type }: IProps) => {
         <p className="mt-5 text-center text-gray-1">
           This test will be opened at{' '}
           <span className="font-bold text-primary">
-            {dayjs().format('DD/MM/YYYY HH:mm:ss')}
+            {dayjs(start_time).format('DD/MM/YYYY HH:mm:ss')}
           </span>
         </p>
       </SappModalV3>

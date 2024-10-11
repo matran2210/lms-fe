@@ -375,7 +375,7 @@ const QuizDocument = ({
   // const endTime = dayjs().subtract(1, 'year')
 
   // Test Unopend or Expired
-  const getType = (startTime: Dayjs, endTime: string) => {
+  const getType = (startTime: Dayjs, endTime: Dayjs) => {
     if (dayjs().isBefore(startTime)) return 'unopened'
     if (dayjs().isAfter(dayjs(endTime))) return 'expired'
     return null
@@ -384,37 +384,38 @@ const QuizDocument = ({
   const type = getType(startTime, endTime)
   const BluredNotification = () => (
     <>
-      {/* {type && ( */}
-      <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
-        {type === 'unopened' && (
-          <p className="text-center">
-            This Quiz will be opened at{' '}
-            <span className="font-semi-bold text-primary">
-              {dayjs(startTime).format('DD/MM/YYYY')}{' '}
-            </span>
-            and closed at{' '}
-            <span className="font-semi-bold text-primary">
-              {dayjs(endTime).format('DD/MM/YYYY')}{' '}
-            </span>
-          </p>
-        )}
-        {type === 'expired' && (
-          <p className="text-center">
-            The time for this test has ended, you can no longer submit answers.
-            For further support, please contact SAPP Academy via{' '}
-            <a
-              href={SOCIAL_LINK.FACEBOOK}
-              className="font-semi-bold text-primary"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Facebook,
-            </a>{' '}
-            or hotline{' '}
-            <span className="font-semi-bold text-primary">19002225</span>.
-          </p>
-        )}
-      </div>
+      {type !== null && (
+        <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
+          {type === 'unopened' && (
+            <p className="text-center">
+              This Quiz will be opened at{' '}
+              <span className="font-semi-bold text-primary">
+                {dayjs(startTime).format('DD/MM/YYYY')}{' '}
+              </span>
+              and closed at{' '}
+              <span className="font-semi-bold text-primary">
+                {dayjs(endTime).format('DD/MM/YYYY')}{' '}
+              </span>
+            </p>
+          )}
+          {type === 'expired' && (
+            <p className="text-center">
+              The time for this test has ended, you can no longer submit
+              answers. For further support, please contact SAPP Academy via{' '}
+              <a
+                href={SOCIAL_LINK.FACEBOOK}
+                className="font-semi-bold text-primary"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Facebook,
+              </a>{' '}
+              or hotline{' '}
+              <span className="font-semi-bold text-primary">19002225</span>.
+            </p>
+          )}
+        </div>
+      )}
       <div className="absolute left-0 top-0 z-20 h-full w-full bg-white/30 backdrop-blur" />
       {/* Fake Question */}
       <div>
