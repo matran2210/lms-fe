@@ -710,7 +710,7 @@ const ActivityPage = () => {
                       size="small"
                       className="!px-3 py-2.5 text-medium-sm !font-normal"
                       color={tabButtonColor(e?.id)}
-                      title={truncateString(e?.name, 60)}
+                      title={truncateBySpace(e?.name, 5)}
                       onClick={() => {
                         handleChangeTab(e?.id)
                         trackGAEvent('Click Button Tab Activity')
