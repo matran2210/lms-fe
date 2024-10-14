@@ -358,29 +358,60 @@ const TestDetail = () => {
 
   const router = useRouter()
 
-  const useGetQuizDetail = (queryKey: string, params: Object) => {
-    return useGetDataQuery(
-      queryKey,
-      params,
-      () => CoursesAPI.getDetailQuizById(router.query.id),
-      router.query.id !== undefined,
-    )
+  const useGetQuizDetail = () => {
+    const [quizDetail, setQuizDetail] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
+    const router = useRouter()
+
+    useEffect(() => {
+      const fetchQuizDetail = async () => {
+        if (router.query.id) {
+          try {
+            setLoading(true)
+            const response = await CoursesAPI.getDetailQuizById(router.query.id)
+            setQuizDetail(response.data)
+          } catch (err) {
+          } finally {
+            setLoading(false)
+          }
+        }
+      }
+
+      fetchQuizDetail()
+    }, [router.query.id]) // Dependency on router.query.id
+
+    return { quizDetail, loading }
   }
 
-  const useGetQuestionTabs = (queryKey: string, params: Object) => {
-    return useGetDataQuery(
-      queryKey,
-      params,
-      () => CoursesAPI.getQuestionTabsById(router.query.id),
-      router.query.id !== undefined,
-    )
+  const useGetQuestionTabs = () => {
+    const [questions, setQuestionTabs] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
+    const router = useRouter()
+
+    useEffect(() => {
+      const fetchQuestionTabs = async () => {
+        if (router.query.id) {
+          try {
+            setLoading(true)
+            const response = await CoursesAPI.getQuestionTabsById(
+              router.query.id,
+            )
+            setQuestionTabs(response.data)
+          } catch (err) {
+          } finally {
+            setLoading(false)
+          }
+        }
+      }
+
+      fetchQuestionTabs()
+    }, [router.query.id]) // Dependency on router.query.id
+
+    return { questions, loading }
   }
 
-  // Sử dụng hook useGetQuizDetail trong component
-  const { data: quizDetail } = useGetQuizDetail('quiz-detail', {})
-
-  // Sử dụng hook useGetQuestionTabs trong component
-  const { data: questions } = useGetQuestionTabs('question-detail', {})
+  const { quizDetail } = useGetQuizDetail()
+  const { questions } = useGetQuestionTabs()
 
   const type = router.query.type
 
@@ -1045,11 +1076,10 @@ const TestDetail = () => {
       return tabs
     }
   }
-
   async function getDetail(currentPage: string) {
     let topicDescription
     try {
-      if (!isUndefined(quizDetail?.id)) {
+      if (!isUndefined(quizDetail) && !isUndefined(questions)) {
         topicDescription = await CoursesAPI.getTopicDescription(
           questions[questions.findIndex((e: any) => e.id === currentPage)]
             ?.question_topic_id,
