@@ -490,7 +490,7 @@ const TestDetail = () => {
   const [onMount, setOnMount] = useState(true)
 
   const currentTabContent =
-    !isEmpty(tabs) && tabs?.find((e: any) => e?.id === currentPage)
+    tabs && tabs?.find((e: any) => e?.id === currentPage)
 
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
@@ -1982,181 +1982,185 @@ const TestDetail = () => {
             )}
           </div>
           {/* <div className=''> */}
-          {currentTabContent &&
-          currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
-            <div
-              className={`flex flex-1 overflow-auto bg-gray-3`}
-              id={'preview-question'}
-            >
-              <div
-                className="h-full overflow-auto bg-white p-6"
-                style={{ width: `calc(50% - ${leftWidth}px)` }}
-              >
+          {!isUndefined(currentTabContent) && (
+            <>
+              {currentTabContent?.data?.display_type ===
+              DISPLAY_TYPE.VERTICAL ? (
                 <div
-                  className="min-w-[700px]"
-                  id="hightlight_area_topic"
-                  onMouseUp={(e: any) => {
-                    if (
-                      e.target.tagName.charAt(0) !== 'm' &&
-                      e.target.firstChild?.tagName !== 'math'
-                    ) {
-                      if (e) {
-                        if (allowHighLight) {
-                          runHighlight(
-                            handleSaveHighLightTopic,
-                            allowHighLight || false,
-                            'hightlight_area_topic',
-                          )
-                        } else if (allowUnHighLight) {
-                          runHighlight(
-                            handleSaveHighLightTopic,
-                            allowUnHighLight || false,
-                            'hightlight_area_topic',
-                            { color: 'white' },
-                          )
-                        }
-                      }
-                    }
-                  }}
+                  className={`flex flex-1 overflow-auto bg-gray-3`}
+                  id={'preview-question'}
                 >
-                  <EditorReader
-                    className="mb-4"
-                    text_editor_content={
-                      currentTabContent?.topicDescription?.description
-                    }
-                    highlighted={currentTabContent?.hightlightTopic}
-                    highlighArea="hightlight_area_topic"
-                  />
-                  {currentTabContent?.topicDescription?.files?.length > 0 &&
-                    currentTabContent?.topicDescription?.files?.map(
-                      (e: any, index: number) => {
-                        return (
-                          <div
-                            className="cursor-pointer text-state-info hover:underline"
-                            onClick={() =>
-                              handleOpenScratchPad(
-                                'file',
-                                e?.resource?.url,
-                                e?.resource?.name,
+                  <div
+                    className="h-full overflow-auto bg-white p-6"
+                    style={{ width: `calc(50% - ${leftWidth}px)` }}
+                  >
+                    <div
+                      className="min-w-[700px]"
+                      id="hightlight_area_topic"
+                      onMouseUp={(e: any) => {
+                        if (
+                          e.target.tagName.charAt(0) !== 'm' &&
+                          e.target.firstChild?.tagName !== 'math'
+                        ) {
+                          if (e) {
+                            if (allowHighLight) {
+                              runHighlight(
+                                handleSaveHighLightTopic,
+                                allowHighLight || false,
+                                'hightlight_area_topic',
+                              )
+                            } else if (allowUnHighLight) {
+                              runHighlight(
+                                handleSaveHighLightTopic,
+                                allowUnHighLight || false,
+                                'hightlight_area_topic',
+                                { color: 'white' },
                               )
                             }
-                            key={index}
-                          >
-                            {e?.resource?.name}
-                          </div>
-                        )
-                      },
-                    )}
-                </div>
-              </div>
-              <div
-                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
-                onMouseDown={() => {
-                  setStartResize(true)
-                  // setCurrentMousePos(mousePosition.x || 0)
-                }}
-                onMouseUp={() => setStartResize(false)}
-              ></div>
-              <div
-                className="h-full overflow-auto bg-white py-6 "
-                style={{ width: `calc(50% + ${leftWidth}px)` }}
-                ref={rightSideRef}
-              >
-                <div className="min-w-[700px] px-6">
-                  {checkType(
-                    currentTabContent?.data,
-                    currentTabContent?.data?.qType,
-                    currentTabContent?.id,
-                    currentTabContent?.answer,
-                    currentTabContent?.corrects,
-                    currentTabContent?.hightlight,
-                    currentTabContent?.solution,
-                    currentTabContent?.done,
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div
-              className={`flex-1 overflow-auto px-6 py-6`}
-              id={'preview-question'}
-            >
-              <div
-                id="hightlight_area_topic"
-                onMouseUp={(e: any) => {
-                  if (
-                    e.target.tagName.charAt(0) !== 'm' &&
-                    e.target.firstChild?.tagName !== 'math'
-                  ) {
-                    if (e) {
-                      if (allowHighLight) {
-                        runHighlight(
-                          handleSaveHighLightTopic,
-                          allowHighLight || false,
-                          'hightlight_area_topic',
-                        )
-                      } else if (allowUnHighLight) {
-                        runHighlight(
-                          handleSaveHighLightTopic,
-                          allowUnHighLight || false,
-                          'hightlight_area_topic',
-                          { color: 'white' },
-                        )
-                      }
-                    }
-                  }
-                }}
-                className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
-              >
-                {/* <div className="mb-4">
-                  {currentTabContent?.topicDescription?.name}
-                </div> */}
-                <EditorReader
-                  className="mb-4"
-                  text_editor_content={
-                    currentTabContent?.topicDescription?.description
-                  }
-                  highlighted={currentTabContent?.hightlightTopic}
-                  highlighArea="hightlight_area_topic"
-                />
-                {currentTabContent?.topicDescription?.files?.length > 0 &&
-                  currentTabContent?.topicDescription?.files?.map(
-                    (e: any, index: number) => {
-                      return (
-                        <div
-                          className="cursor-pointer text-state-info hover:underline"
-                          onClick={
-                            () =>
-                              handleOpenScratchPad(
-                                'file',
-                                e?.resource?.url,
-                                e?.resource?.name,
-                              )
-                            // setOpenPdf({ status: true, url: e.resource.url })
                           }
-                          key={index}
-                        >
-                          {e?.resource?.name}
-                        </div>
-                      )
-                    },
-                  )}
-              </div>
+                        }
+                      }}
+                    >
+                      <EditorReader
+                        className="mb-4"
+                        text_editor_content={
+                          currentTabContent?.topicDescription?.description
+                        }
+                        highlighted={currentTabContent?.hightlightTopic}
+                        highlighArea="hightlight_area_topic"
+                      />
+                      {currentTabContent?.topicDescription?.files?.length > 0 &&
+                        currentTabContent?.topicDescription?.files?.map(
+                          (e: any, index: number) => {
+                            return (
+                              <div
+                                className="cursor-pointer text-state-info hover:underline"
+                                onClick={() =>
+                                  handleOpenScratchPad(
+                                    'file',
+                                    e?.resource?.url,
+                                    e?.resource?.name,
+                                  )
+                                }
+                                key={index}
+                              >
+                                {e?.resource?.name}
+                              </div>
+                            )
+                          },
+                        )}
+                    </div>
+                  </div>
+                  <div
+                    className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                    onMouseDown={() => {
+                      setStartResize(true)
+                      // setCurrentMousePos(mousePosition.x || 0)
+                    }}
+                    onMouseUp={() => setStartResize(false)}
+                  ></div>
+                  <div
+                    className="h-full overflow-auto bg-white py-6 "
+                    style={{ width: `calc(50% + ${leftWidth}px)` }}
+                    ref={rightSideRef}
+                  >
+                    <div className="min-w-[700px] px-6">
+                      {checkType(
+                        currentTabContent?.data,
+                        currentTabContent?.data?.qType,
+                        currentTabContent?.id,
+                        currentTabContent?.answer,
+                        currentTabContent?.corrects,
+                        currentTabContent?.hightlight,
+                        currentTabContent?.solution,
+                        currentTabContent?.done,
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className={`flex-1 overflow-auto px-6 py-6`}
+                  id={'preview-question'}
+                >
+                  <div
+                    id="hightlight_area_topic"
+                    onMouseUp={(e: any) => {
+                      if (
+                        e.target.tagName.charAt(0) !== 'm' &&
+                        e.target.firstChild?.tagName !== 'math'
+                      ) {
+                        if (e) {
+                          if (allowHighLight) {
+                            runHighlight(
+                              handleSaveHighLightTopic,
+                              allowHighLight || false,
+                              'hightlight_area_topic',
+                            )
+                          } else if (allowUnHighLight) {
+                            runHighlight(
+                              handleSaveHighLightTopic,
+                              allowUnHighLight || false,
+                              'hightlight_area_topic',
+                              { color: 'white' },
+                            )
+                          }
+                        }
+                      }
+                    }}
+                    className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
+                  >
+                    {/* <div className="mb-4">
+                      {currentTabContent?.topicDescription?.name}
+                    </div> */}
+                    <EditorReader
+                      className="mb-4"
+                      text_editor_content={
+                        currentTabContent?.topicDescription?.description
+                      }
+                      highlighted={currentTabContent?.hightlightTopic}
+                      highlighArea="hightlight_area_topic"
+                    />
+                    {currentTabContent?.topicDescription?.files?.length > 0 &&
+                      currentTabContent?.topicDescription?.files?.map(
+                        (e: any, index: number) => {
+                          return (
+                            <div
+                              className="cursor-pointer text-state-info hover:underline"
+                              onClick={
+                                () =>
+                                  handleOpenScratchPad(
+                                    'file',
+                                    e?.resource?.url,
+                                    e?.resource?.name,
+                                  )
+                                // setOpenPdf({ status: true, url: e.resource.url })
+                              }
+                              key={index}
+                            >
+                              {e?.resource?.name}
+                            </div>
+                          )
+                        },
+                      )}
+                  </div>
 
-              {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-              <div className="m-auto w-full max-w-[950px]">
-                {checkType(
-                  currentTabContent?.data,
-                  currentTabContent?.data?.qType,
-                  currentTabContent?.id,
-                  currentTabContent?.answer,
-                  currentTabContent?.corrects,
-                  currentTabContent?.hightlight,
-                  currentTabContent?.solution,
-                  currentTabContent?.done,
-                )}
-              </div>
-            </div>
+                  {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
+                  <div className="m-auto w-full max-w-[950px]">
+                    {checkType(
+                      currentTabContent?.data,
+                      currentTabContent?.data?.qType,
+                      currentTabContent?.id,
+                      currentTabContent?.answer,
+                      currentTabContent?.corrects,
+                      currentTabContent?.hightlight,
+                      currentTabContent?.solution,
+                      currentTabContent?.done,
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
           )}
           {openScratchPad.map((e, index: number) => {
             if (e.type === 'calculator') {

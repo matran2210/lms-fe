@@ -668,7 +668,7 @@ const ActivityPage = () => {
             {/* Header */}
             <div className="bg-gray-3 px-6 ">
               <div
-                className={`flex w-full select-none justify-between gap-4 py-6 ${
+                className={`flex w-full select-none items-center justify-between gap-4 py-6 ${
                   activity?.course_outcomes?.length > 0
                     ? 'borderColor-default border-b'
                     : ''
@@ -679,7 +679,7 @@ const ActivityPage = () => {
                     title={activity?.name?.length > 95 && activity?.name}
                     color="white"
                   >
-                    {truncate(activity?.name, { length: 95 })}
+                    {activity?.name}
                   </Tooltip>
                 </div>
                 <div className="whitespace-nowrap text-sm text-gray-1">
