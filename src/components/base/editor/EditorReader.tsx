@@ -81,7 +81,7 @@ const EditorReader = ({
     ) {
       setContent(text_editor_content)
     }
-  }, [text_editor_content])
+  })
 
   // const convertMathToImage = async (element: any) => {
   //   const viewer = com?.wiris?.js?.JsPluginViewer
