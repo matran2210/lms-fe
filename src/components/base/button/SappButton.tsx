@@ -1,4 +1,5 @@
 import React from 'react'
+import SappTooltip from 'src/common/SappTooltip'
 import { IButtonProps } from 'src/type'
 
 const SIZES = {
@@ -66,6 +67,8 @@ const SappButton = ({
   isPadding = true,
   childClass = '',
   classNameLoading = '',
+  showTooltip = false,
+  toolTipTitle = '',
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
@@ -99,9 +102,11 @@ const SappButton = ({
           ></div>
         </div>
       ) : (
-        <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
-          {title}
-        </span>
+        <SappTooltip title={toolTipTitle} showTooltip={showTooltip}>
+          <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
+            {title}
+          </span>
+        </SappTooltip>
       )}
     </button>
   )
