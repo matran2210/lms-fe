@@ -196,7 +196,7 @@ export const useGetData = (
   params: Object,
   fetchData: any,
 ) => {
-  return useQuery([queryKey, params], () => fetchData(params))
+  return useQuery([queryKey, params], () => fetchData(params), { retry: 1 })
 }
 
 export const useGetDataQuery = (

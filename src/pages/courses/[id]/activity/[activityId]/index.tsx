@@ -70,6 +70,7 @@ const ActivityPage = () => {
       () => getActivityById(id, course_id),
       {
         enabled: id !== undefined && course_id !== undefined,
+        retry: 1,
       },
     )
   }
@@ -449,6 +450,7 @@ const ActivityPage = () => {
       () => CoursesAPI.getBreadcumb(id, section_id),
       {
         enabled: id !== undefined && section_id !== undefined,
+        retry: 1,
       },
     )
   }

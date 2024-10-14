@@ -82,6 +82,7 @@ const ScoreDetail = ({
     },
     {
       enabled: router.query.id !== undefined,
+      retry: 1,
     },
   )
 

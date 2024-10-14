@@ -1,6 +1,4 @@
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { useQueryClient } from 'react-query'
-import { CourseKey } from 'src/pages/api/queryKey'
 import { ISection, ISelect } from 'src/type'
 
 interface IProps {

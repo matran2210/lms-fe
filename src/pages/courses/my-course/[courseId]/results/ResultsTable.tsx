@@ -74,6 +74,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
     select: (data: { data: any }) => {
       return data.data
     },
+    retry: 1,
   })
 
   isLoading && <></>
