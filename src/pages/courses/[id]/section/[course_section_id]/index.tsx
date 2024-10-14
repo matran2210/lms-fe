@@ -339,7 +339,7 @@ const CoursePartDetail = () => {
                 <p className="mx-0.5 inline-block w-full max-w-78 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap">
                   <SappTooltip
                     title={previewPart?.name}
-                    showTooltip={previewPart?.name?.length > 60}
+                    showTooltip={previewPart?.name?.length > 45}
                   >
                     {truncateString(previewPart?.name, 50)}
                   </SappTooltip>

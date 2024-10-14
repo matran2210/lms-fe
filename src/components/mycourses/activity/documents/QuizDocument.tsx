@@ -566,7 +566,7 @@ const QuizDocument = ({
           <>
             <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
               <button
-                disabled={!!gradeStatus || isLastQuestion || loading}
+                disabled={activeQuestionIndex === 0 || loading}
                 className={`cursor-pointer select-none ${
                   activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
                 }`}
@@ -582,7 +582,7 @@ const QuizDocument = ({
               </button>
               Question: {activeQuestionIndex + 1} of {questions?.length || 0}
               <button
-                disabled={!!gradeStatus || isLastQuestion || loading}
+                disabled={isLastQuestion || loading}
                 className={`cursor-pointer select-none ${
                   isLastQuestion || loading ? 'opacity-50' : ''
                 }`}

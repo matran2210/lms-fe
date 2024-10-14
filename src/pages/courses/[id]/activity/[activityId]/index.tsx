@@ -513,15 +513,20 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }}
                 >
-                  <li
-                    className={
-                      'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
-                    }
+                  <SappTooltip
                     title={e?.name}
+                    showTooltip={e?.name?.length > 45}
                   >
-                    {truncateBySpace(e?.name, 5) ?? ''}
-                    <span>/</span>
-                  </li>
+                    <li
+                      className={
+                        'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
+                      }
+                      title={e?.name}
+                    >
+                      {truncateBySpace(e?.name, 5) ?? ''}
+                      <span>/</span>
+                    </li>
+                  </SappTooltip>
                 </li>
               ) : null}
             </React.Fragment>
@@ -713,7 +718,7 @@ const ActivityPage = () => {
             {/* Tabs */}
             <div className="bg-gray-3">
               <div className="flex flex-wrap gap-2 px-6">
-                {selector?.tabs?.map((e) => {
+                {selector?.tabs?.map((e, index) => {
                   return (
                     <SappButton
                       key={e?.id}
@@ -721,11 +726,13 @@ const ActivityPage = () => {
                       className="!px-3 py-2.5 text-medium-sm !font-normal"
                       color={tabButtonColor(e?.id)}
                       title={truncateBySpace(e?.name, 5)}
+                      showTooltip={e?.name?.length > 20}
+                      toolTipTitle={e?.name}
                       onClick={() => {
                         handleChangeTab(e?.id)
                         trackGAEvent('Click Button Tab Activity')
                       }}
-                    ></SappButton>
+                    />
                   )
                 })}
               </div>
