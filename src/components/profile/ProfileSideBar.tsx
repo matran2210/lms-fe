@@ -252,7 +252,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
             </li>
           </div>
           <div className="text-center text-sm font-normal text-gray-1">
-            LMS Pro Version 1.8.0
+            LMS Pro Version 1.9.0
           </div>
         </ul>
       </div>
