@@ -14,6 +14,7 @@ interface IProps {
   activeShowAll: boolean
   setActiveShowAll: any
   setValueFilter: UseFormSetValue<FieldValues>
+  isScrollCenter?: boolean
 }
 
 const TabSlide = ({
@@ -25,12 +26,13 @@ const TabSlide = ({
   activeShowAll,
   setActiveShowAll,
   setValueFilter,
+  isScrollCenter = true,
 }: IProps) => {
   const elementRef = useRef(null) as any
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
 
   useEffect(() => {
-    if (elementRef?.current && !activeShowAll) {
+    if (elementRef?.current && !activeShowAll && isScrollCenter) {
       elementRef.current.scrollTo(
         elementRef?.current.offsetWidth *
           Math.floor(

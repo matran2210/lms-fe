@@ -2009,6 +2009,7 @@ const TestDetail = () => {
                   activeShowAll={activeShowAll}
                   setActiveShowAll={setActiveShowAll}
                   setValueFilter={setValueFilter}
+                  isScrollCenter={false}
                 />
                 {/* </div> */}
               </div>
