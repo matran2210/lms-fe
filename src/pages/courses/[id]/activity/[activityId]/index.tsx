@@ -621,7 +621,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }
                 >
-                  <span>{truncateString(nameActivity?.name, 20)}</span>
+                  <span>{truncateBySpace(nameActivity?.name, 13)}</span>
                 </Link>
               </li>
             </Tooltip>
