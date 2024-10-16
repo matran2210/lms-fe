@@ -14,26 +14,31 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import ResultsTableFilter from './ResultsTableFilter'
 
-interface Iprops {
-  courseId: string
-}
-
 // Là essay nên không có điểm
 const ESSAY_QUESTION = '0/0'
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
-const commonDataCellStyle = 'col text-start py-5 pr-4 whitespace-nowrap'
+const commonHeaderCellCenter =
+  'text-left text-medium-sm text-gray-1 font-semibold pb-3'
+const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 const headers = [
-  'Name',
-  'Belong To',
-  'Type',
-  'Graded Activity',
-  'Multiple Choice Score',
-  'Time Spent',
-  'Last submission',
-].map((label) => ({ label, className: commonHeaderCellStyle }))
+  ...['Name', 'Belong To', 'Type', 'Last submission'].map((label) => ({
+    label,
+    className: commonHeaderCellStyle,
+  })),
+  ...['Graded Activity', 'Multiple Choice Score', 'Time Spent'].map(
+    (label) => ({
+      label,
+      className: commonHeaderCellCenter,
+    }),
+  ),
+  ,
+] as {
+  label: string
+  className: string
+}[]
 
-const ResultsTable = ({ courseId }: Iprops) => {
+const ResultsTable = () => {
   const router = useRouter()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
@@ -136,19 +141,19 @@ const ResultsTable = ({ courseId }: Iprops) => {
               </td>
 
               {/* Graded Activity */}
-              <td className={clsx(commonDataCellStyle)}>
+              <td className={clsx(commonDataCellStyle, 'text-center')}>
                 {row?.quiz?.is_graded ? 'Yes' : 'No'}
               </td>
 
               {/* Multiple Choice Score */}
-              <td className={clsx(commonDataCellStyle)}>
+              <td className={clsx(commonDataCellStyle, 'text-center')}>
                 {row?.quiz?.attempts[0]?.ratio_score !== ESSAY_QUESTION
                   ? row?.quiz?.attempts[0]?.ratio_score
                   : '-'}
               </td>
 
               {/* Time Spent */}
-              <td className={clsx(commonDataCellStyle)}>
+              <td className={clsx(commonDataCellStyle, 'text-center')}>
                 {getTimeFromInput(row?.quiz?.attempts[0]?.total_attempt_time)}
               </td>
 
