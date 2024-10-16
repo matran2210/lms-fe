@@ -18,21 +18,33 @@ import ResultsTableFilter from './ResultsTableFilter'
 const ESSAY_QUESTION = '0/0'
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
-const commonHeaderCellCenter =
-  'text-left text-medium-sm text-gray-1 font-semibold pb-3'
+
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 const headers = [
-  ...['Name', 'Belong To', 'Type', 'Last submission'].map((label) => ({
+  ...['Name', 'Belong To', 'Type'].map((label) => ({
     label,
     className: commonHeaderCellStyle,
   })),
-  ...['Graded Activity', 'Multiple Choice Score', 'Time Spent'].map(
-    (label) => ({
-      label,
-      className: commonHeaderCellCenter,
-    }),
-  ),
-  ,
+  {
+    label: 'Graded Activity',
+    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
+  },
+  {
+    label: 'Status',
+    className: clsx(commonHeaderCellStyle, 'text-center'),
+  },
+  {
+    label: 'Score',
+    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
+  },
+  {
+    label: 'Time Spent',
+    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
+  },
+  {
+    label: 'Last submission',
+    className: commonHeaderCellStyle,
+  },
 ] as {
   label: string
   className: string
@@ -103,7 +115,8 @@ const ResultsTable = () => {
             <tr
               className={clsx({
                 'row h-auto border-b border-dashed border-gray-2': true,
-                'text-gray-2': row?.quiz?.attempts?.length === 0,
+                'text-gray-2':
+                  !row?.quiz?.attempts || row?.quiz?.attempts.length === 0,
               })}
               key={row?.id}
             >
@@ -145,7 +158,14 @@ const ResultsTable = () => {
                 {row?.quiz?.is_graded ? 'Yes' : 'No'}
               </td>
 
-              {/* Multiple Choice Score */}
+              {/* Status */}
+              <td className={clsx(commonDataCellStyle)}>
+                {row?.quiz?.attempts.length > 0
+                  ? row?.quiz?.attempts?.[0]?.status
+                  : '-'}
+              </td>
+
+              {/* Score */}
               <td className={clsx(commonDataCellStyle, 'text-center')}>
                 {row?.quiz?.attempts[0]?.ratio_score !== ESSAY_QUESTION
                   ? row?.quiz?.attempts[0]?.ratio_score

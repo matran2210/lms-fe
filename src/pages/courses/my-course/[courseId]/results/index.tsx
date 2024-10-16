@@ -58,7 +58,6 @@ const Results = () => {
    * @description biến này lấy name của course
    */
   const courseNameDetail = courseData?.courseDetail?.data?.name
-  const courseId = courseData?.courseDetail?.data?.id
 
   return (
     <SappLoadingGlobal loading={isLoading}>
