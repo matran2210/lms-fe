@@ -104,7 +104,7 @@ export const getTimeFromInput = (
   totalTime: number,
   unit: 'milliseconds' | 'seconds' = 'milliseconds',
 ) => {
-  if (totalTime !== null) {
+  if (totalTime || totalTime === 0) {
     let totalSeconds
 
     if (unit === 'milliseconds') {

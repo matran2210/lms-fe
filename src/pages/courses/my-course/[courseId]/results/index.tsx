@@ -6,9 +6,9 @@ import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { MY_COURSES } from 'src/constants/lang'
 import { CoursesAPI } from 'src/pages/api/courses'
 import ResultsTable from './ResultsTable'
-import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 10
 

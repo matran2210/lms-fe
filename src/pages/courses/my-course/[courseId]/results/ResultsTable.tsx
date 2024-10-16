@@ -1,8 +1,11 @@
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
+import { TEST_TYPE } from '@utils/constants'
 import { getTimeFromInput, truncateString } from '@utils/index'
+import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -10,10 +13,6 @@ import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import ResultsTableFilter from './ResultsTableFilter'
-import { TEST_TYPE } from '@utils/constants'
-import { Tooltip } from 'antd'
-import Link from 'next/link'
-import { PageLink } from 'src/constants'
 
 interface Iprops {
   courseId: string
@@ -64,13 +63,13 @@ const ResultsTable = ({ courseId }: Iprops) => {
     queryKey: [CourseKey.ResultsList, currentPage, pageSize, selected],
     queryFn: () => {
       return CoursesAPI.getCourseResults(
-        courseId,
+        router.query.courseId as string,
         currentPage || 1,
         pageSize,
         params,
       )
     },
-    enabled: courseId !== undefined,
+    enabled: router.query.courseId !== undefined,
     select: (data: { data: any }) => {
       return data.data
     },
@@ -99,7 +98,7 @@ const ResultsTable = ({ courseId }: Iprops) => {
             <tr
               className={clsx({
                 'row h-auto border-b border-dashed border-gray-2': true,
-                'text-gray-2': row.quiz.attempts.length === 0,
+                'text-gray-2': row?.quiz?.attempts?.length === 0,
               })}
               key={row?.id}
             >
@@ -109,9 +108,9 @@ const ResultsTable = ({ courseId }: Iprops) => {
                   title={row?.name?.length > 30 && row?.name}
                   color="white"
                 >
-                  {row?.quiz?.attempts[0]?.id ? (
+                  {row?.quiz?.attempts?.[0]?.id ? (
                     <Link
-                      href={`/courses/test/test-result/${row?.quiz?.attempts[0]?.id}`}
+                      href={`/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`}
                     >
                       {truncateString(row?.name, 30)}
                     </Link>
@@ -155,9 +154,11 @@ const ResultsTable = ({ courseId }: Iprops) => {
 
               {/* Last Submission */}
               <td className={clsx('!pr-0', commonDataCellStyle)}>
-                {dayjs(row?.quiz?.attempts[0]?.updated_at).format(
-                  'DD/MM/YYYY hh:mm',
-                ) || '-'}
+                {row.quiz?.attempts.length > 0
+                  ? dayjs(row?.quiz?.attempts[0]?.updated_at).format(
+                      'DD/MM/YYYY hh:mm',
+                    )
+                  : '-'}
               </td>
             </tr>
           )
