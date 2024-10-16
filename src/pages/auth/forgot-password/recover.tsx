@@ -11,7 +11,7 @@ import { PageLink } from 'src/constants'
 //   token: string
 // }
 
-const ForgotPasswordRecoverPage = ({ email, token }: any) => {
+const ForgotPasswordRecoverPage = () => {
   const router = useRouter()
   router.push(PageLink.PAGE_NOT_FOUND)
   //   return (
@@ -31,7 +31,7 @@ const ForgotPasswordRecoverPage = ({ email, token }: any) => {
   //   )
 }
 
-// export default ForgotPasswordRecoverPage
+export default ForgotPasswordRecoverPage
 
 // export const getServerSideProps: GetServerSideProps<IProps> = async (
 //   context,

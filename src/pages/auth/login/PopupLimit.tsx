@@ -13,7 +13,7 @@ import { PageLink } from 'src/constants'
 //   handleAction?: () => void
 // }
 
-const PopUpLimit = ({ open, setOpen, handleAction }: any) => {
+const PopUpLimit = () => {
   const router = useRouter()
   router.push(PageLink.PAGE_NOT_FOUND)
 }
@@ -68,4 +68,4 @@ const PopUpLimit = ({ open, setOpen, handleAction }: any) => {
 //   )
 // }
 
-// export default PopUpLimit
+export default PopUpLimit
