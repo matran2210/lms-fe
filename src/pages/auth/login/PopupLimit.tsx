@@ -4,13 +4,19 @@
 // import { MY_COURSES } from 'src/constants/lang'
 // import { useAppDispatch } from 'src/redux/hook'
 
+import { useRouter } from 'next/router'
+import { PageLink } from 'src/constants'
+
 // interface IProps {
 //   open: boolean
 //   setOpen: Dispatch<SetStateAction<boolean>>
 //   handleAction?: () => void
 // }
 
-// const PopUpLimit = ({ open, setOpen, handleAction }: IProps) => {
+const PopUpLimit = ({ open, setOpen, handleAction }: any) => {
+  const router = useRouter()
+  router.push(PageLink.PAGE_NOT_FOUND)
+}
 //   const dispatch = useAppDispatch()
 //   // const {} = useAppSelector()
 //   //to do: call api to get datail
