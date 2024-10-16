@@ -1,10 +1,8 @@
-import {
-  getLocalStorgeActToken,
-  getLocalStorgeRefreshToken,
-} from '@utils/index'
+import { getKeycloakInstance } from '@utils/helpers/keycloak'
+import { getLocalStorgeActToken } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { PUBLIC_PATHS, PageLink } from 'src/constants'
+import { PageLink } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { getMe } from 'src/redux/slice/User/User'
 
@@ -14,72 +12,40 @@ interface IProps {
 
 export const RouteGuard = ({ children }: IProps) => {
   const router = useRouter()
-
   const [authorized, setAuthorized] = useState(false)
-  const dispatch = useAppDispatch()
 
+  const dispatch = useAppDispatch()
   useEffect(() => {
     // on initial load - run auth check
-    authCheck(router.pathname)
-
+    authCheck()
     // on route change start - hide page content by setting
     // authorized to false
-    const hideContent = () => setAuthorized(true)
-    router.events.on('routeChangeStart', hideContent)
+    // const hideContent = () => setAuthorized(true)
+    // router.events.on('routeChangeStart', hideContent)
 
-    // on route change complete - run auth check
-    router.events.on('routeChangeComplete', authCheck)
+    // // on route change complete - run auth check
+    // router.events.on('routeChangeComplete', authCheck)
 
     // unsubscribe from events in useEffect return function
-    return () => {
-      router.events.off('routeChangeStart', hideContent)
-      router.events.off('routeChangeComplete', authCheck)
-    }
+    // return () => {
+    //   // router.events.off('routeChangeStart', hideContent)
+    //   // router.events.off('routeChangeComplete', authCheck)
+    // }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [router.pathname])
 
-  const authCheck = async (url: string) => {
-    // redirect to login page if accessing a private page and
-    // not logged in
-
-    const path = url?.split('?')?.[0]
-    const accessToken = getLocalStorgeActToken()
-    const refreshToken = getLocalStorgeRefreshToken()
-    if (
-      !accessToken &&
-      !refreshToken &&
-      !PUBLIC_PATHS[path] &&
-      router?.pathname !== '/certificates/[id]'
-    ) {
-      setAuthorized(false)
-      router.push(PageLink.AUTH_LOGIN)
-    } else {
-      setAuthorized(true)
-    }
-
-    // Chặn vào login page khi đã đăng nhập
-    const isLoginPage = [
-      PageLink.AUTH_LOGIN,
-      PageLink.AUTH_FORGOT_PASSWORD,
-      PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
-    ].includes(window.location.pathname)
-
-    if (
-      accessToken &&
-      isLoginPage &&
-      ![
-        PageLink.AUTH_CHANGE_PASSWORD,
-        PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
-      ].includes(window.location.pathname)
-    ) {
-      try {
-        await dispatch(getMe()).unwrap()
-        router.push(PageLink.COURSES)
-      } catch (error) {}
-    }
+  const callGetMe = async () => {
+    try {
+      await dispatch(getMe()).unwrap()
+    } catch (error) {}
   }
 
+  const authCheck = async () => {
+    await getKeycloakInstance()
+    callGetMe().then(() => setAuthorized(true))
+    // setAuthorized(true)
+  }
   /**
    * @description Check if the current pathname is '/' redirect to '/dashboard'
    */

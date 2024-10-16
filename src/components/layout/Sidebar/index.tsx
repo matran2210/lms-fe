@@ -48,13 +48,6 @@ export default function Sidebar({
       document.body.classList.remove('no-hover')
     }, 1000)
   }
-
-  useEffect(() => {
-    try {
-      dispatch(getMe())
-    } catch (error) {}
-  }, [dispatch])
-
   return (
     <>
       <div

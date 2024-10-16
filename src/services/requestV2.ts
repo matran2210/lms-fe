@@ -1,18 +1,13 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { PageLink } from 'src/constants'
-import { toast } from 'react-hot-toast'
-import exceptions from './en.exceptions.json'
 import {
   getLocalStorgeActToken,
-  getLocalStorgeRefreshToken,
-  removeJwtToken,
-  removeLocalStorageJwtToken,
   setActToken,
-  setCookieActToken,
-  setCookieRefreshToken,
   setRefreshToken,
 } from '@utils/index'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { toast } from 'react-hot-toast'
 import { apiURL } from 'src/redux/services/httpService'
+import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
+import exceptions from './en.exceptions.json'
 
 type ApiConfig<T = any> = {
   uri: string
@@ -21,10 +16,6 @@ type ApiConfig<T = any> = {
   request?: any
   token?: String
 }
-
-// Variable to track whether the refresh token API has been called
-let isRefreshing = false
-let refreshSubscribers: ((token: string) => void)[] = []
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
@@ -74,55 +65,16 @@ request.interceptors.response.use(
       return Promise.reject(error)
     }
 
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      error.config.url !== `${apiURL}${PageLink.AUTH_LOGIN}`
-    ) {
-      if (!isRefreshing) {
-        isRefreshing = true
-
-        axios(`${apiURL}/auth/rotate`, {
-          method: 'POST',
-          headers: {
-            Authorization: 'Bearer ' + getLocalStorgeRefreshToken(),
-          },
-        })
-          .then((res: any) => {
-            const userInfo = res?.data?.data?.tokens
-            setActToken(userInfo?.act)
-            setRefreshToken(userInfo?.rft)
-            setCookieActToken(userInfo?.act)
-            setCookieRefreshToken(userInfo?.rft)
-
-            // update new token to axios
-            request.defaults.headers.common['Authorization'] =
-              `Bearer ${getLocalStorgeActToken()}`
-
-            // Callback to unauth API calls
-            refreshSubscribers.forEach((callback) =>
-              callback(getLocalStorgeActToken()),
-            )
-            refreshSubscribers = []
-            isRefreshing = false
-          })
-          .catch(() => {
-            removeJwtToken()
-            removeLocalStorageJwtToken()
-            window.location.href = PageLink.AUTH_LOGIN
-          })
-      }
-
-      // Return a Promise to wait for the initial API callback
-      const retryOriginalRequest = new Promise((resolve) => {
-        const subscribeTokenRefresh = (token: string) => {
-          originalRequest.headers['Authorization'] = `Bearer ${token}`
-          resolve(axios(originalRequest))
-        }
-        refreshSubscribers.push(subscribeTokenRefresh)
-      })
-
-      return retryOriginalRequest
+    if (error.response && error.response.status === 401) {
+      const keycloak = await getKeycloakInstance()
+      await keycloak.updateToken(30)
+      const newAccessToken = keycloak.token ?? ''
+      const newRefreshToken = keycloak.refreshToken ?? ''
+      setActToken(newAccessToken)
+      setRefreshToken(newRefreshToken)
+      originalRequest.headers['Authorization'] =
+        'Bearer ' + getLocalStorgeActToken()
+      return axios(originalRequest)
     }
     return Promise.reject(error)
   },
@@ -149,7 +101,7 @@ request.interceptors.response.use(
   function (response: any) {
     return response
   },
-  function (error: any) {
+  async function (error: any) {
     const errorCode: string = error?.response?.data?.error?.code
     const errorMessage =
       formatedExceptions[errorCode as keyof typeof formatedExceptions]
