@@ -44,13 +44,6 @@ export const GUIDELINE_PASSWORD = [
   'Tối thiểu 8 ký tự, ít nhất 1 ký tự hoa, 1 ký tự số',
 ]
 
-export const PUBLIC_PATHS: { [key: string]: boolean } = {
-  [PageLink.AUTH_LOGIN]: true,
-  [PageLink.AUTH_FORGOT_PASSWORD]: true,
-  [PageLink.AUTH_FORGOT_PASSWORD_RECOVER]: true,
-  [PageLink.AUTH_CHANGE_PASSWORD]: true,
-  [PageLink.AUTH_CHANGE_PASSWORD_SUCCESS]: true,
-}
 export enum QUESTION_TYPES {
   TRUE_FALSE = 'TRUE_FALSE',
   ONE_CHOICE = 'ONE_CHOICE',

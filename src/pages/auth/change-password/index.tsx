@@ -18,6 +18,7 @@ import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
 import { removeJwtToken } from '@utils/index'
 import SingleDialogLayout from '@components/layout/SingleDialog'
+import { getKeycloakInstance } from '@utils/helpers/keycloak'
 
 interface IInputProps {
   password: string
@@ -79,9 +80,10 @@ const ChangePasswordPage = () => {
       setLoading(false)
     }
   }
-  const redirectLogin = () => {
+  const redirectLogin = async () => {
     removeJwtToken()
-    router.push(PageLink.AUTH_LOGIN)
+    const keycloak = await getKeycloakInstance()
+    await keycloak.logout({ redirectUri: window.location.origin })
   }
 
   return (

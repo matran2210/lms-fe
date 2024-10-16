@@ -21,12 +21,12 @@ const ActivitySkeleton: React.FunctionComponent<SkeletonProps> = ({
               role="status"
               className={clsx('animate-pulse p-6', classChild)}
             >
-              <div className="h-60 bg-gray-3 mb-6"></div>
-              <div className="h-7 bg-gray-3 mb-3"></div>
-              <div className="h-4 bg-gray-3 mb-6"></div>
-              <div className="h-7 bg-gray-3 mb-3"></div>
-              <div className="h-4 bg-gray-3 mb-6"></div>
-              <div className="h-30 bg-gray-3 mb-3"></div>
+              <div className="mb-6 h-60 bg-gray-3"></div>
+              <div className="mb-3 h-7 bg-gray-3"></div>
+              <div className="mb-6 h-4 bg-gray-3"></div>
+              <div className="mb-3 h-7 bg-gray-3"></div>
+              <div className="mb-6 h-4 bg-gray-3"></div>
+              <div className="mb-3 h-30 bg-gray-3"></div>
             </div>
           ))}
         </div>

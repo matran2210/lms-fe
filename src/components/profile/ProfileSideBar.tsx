@@ -1,7 +1,12 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { trackGAEvent } from '@utils/google-analytics'
-import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
+import { getKeycloakInstance } from '@utils/helpers/keycloak'
+import {
+  getLocalStorageItem,
+  removeLocalStorageItem,
+  removeLocalStorageJwtToken,
+} from '@utils/index'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -72,7 +77,9 @@ const ProfileSideBar = ({ page, children }: IProps) => {
           removeLocalStorageItem('pinnedId')
         }
       })
-      // router.push(PageLink.AUTH_LOGIN)
+      getKeycloakInstance().then((keycloak_instance) => {
+        keycloak_instance.logout({ redirectUri: window.location.origin })
+      })
     } catch (error) {}
   }
 

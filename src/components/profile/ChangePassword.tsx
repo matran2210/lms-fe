@@ -1,4 +1,5 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import SappButton from '@components/base/button/SappButton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
@@ -7,14 +8,12 @@ import {
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
+import { isEmpty } from 'lodash'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { AuthAPI } from 'src/pages/api/profile'
 import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
-import { AuthAPI } from 'src/pages/api/profile'
-import { isEmpty } from 'lodash'
-import SappButton from '@components/base/button/SappButton'
-import { useRouter } from 'next/router'
 import TabLayout from './TabLayout'
 
 export interface IChangePassword {
