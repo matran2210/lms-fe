@@ -48,11 +48,6 @@ const TestResultDetail = () => {
   // Config Courses
   const breadcrumbs: ITabs[] = [
     {
-      link: '/courses',
-      title: 'Courses',
-      disable: false,
-    },
-    {
       link: `/courses/my-course/${questions?.class_id ?? ''}`,
       title: `${questions?.course?.name ?? 'Course Detail'}`,
       disable: false,

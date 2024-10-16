@@ -18,9 +18,9 @@ const ChartACCAScore = ({ data }: IProps) => {
         Multiple Choice Score by Part
       </div>
       <div className="flex-start dashboard-scroll-x flex w-full snap-x flex-row gap-14 scroll-smooth">
-        {data?.map((item: any) => (
+        {data?.map((item: ChartDatum) => (
           <div
-            key={item?.id}
+            key={item?.part_id}
             className="flex w-11/12 max-w-78 shrink-0 snap-start flex-col items-start justify-end gap-2 md:w-1/2 xl:w-1/3"
           >
             <div className="line-clamp-2 font-normal text-bw-1">

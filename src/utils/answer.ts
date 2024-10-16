@@ -1,4 +1,4 @@
-import { QUESTION_TYPES } from 'src/constants'
+import { ESSAY_TYPE, QUESTION_TYPES } from 'src/constants'
 
 interface IOneChoiceAnswer {
   question_id?: string
@@ -36,7 +36,10 @@ interface IDragAndDropAnswer {
 
 interface IEssayAnswer {
   active: string
-  answer_file: string
+  answer_file?: {
+    file_key: string
+    file_name: string
+  }
   question_id: string
   response_option: string
   short_answer: string
@@ -77,9 +80,25 @@ export const isValidatedAnswer = (
       )
       return !!value?.length
     case QUESTION_TYPES.ESSAY:
-      value = (answer as IEssayAnswer[])?.filter(
-        (item) => !!item.answer_file || !!item.short_answer,
-      )
+      value = (answer as IEssayAnswer[])?.filter((item) => {
+        if (
+          item?.short_answer &&
+          item.response_option === ESSAY_TYPE.SHEET &&
+          !item.answer_file
+        ) {
+          let hasAnswer = false
+          const data = JSON.parse(item?.short_answer)
+          //** check qua từng cell của excel để xem có đáp án không  */
+          for (let el of data) {
+            if (el.celldata && el.celldata.length > 0) {
+              hasAnswer = true
+              break
+            }
+            if (hasAnswer) return item
+          }
+        }
+        if (!!item?.answer_file?.file_key || !!item.short_answer) return item
+      })
       return !!value?.length
     default:
       return false

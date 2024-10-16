@@ -2,19 +2,20 @@ import SappDrawer from '@components/base/SappDrawer'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Layout from '@components/layout'
 import { trackGAEvent } from '@utils/google-analytics'
-import { truncateString } from '@utils/index'
+import { truncateBySpace, truncateString } from '@utils/index'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import { ANIMATION } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
+import SkeletonButton from 'antd/es/skeleton/Button'
+import { Skeleton } from 'antd'
 
 interface IProps {
   course_section_type: string
@@ -243,10 +244,6 @@ const CoursePartDetail = () => {
     // }
   }
 
-  const handleChapterTest = async () => {
-    await CoursesAPI.learningOutcomeProgress(router.query.id, chapterTestId)
-  }
-
   const handleCaseStudyProcess = async (
     courseId: string,
     caseStudyId: string,
@@ -325,32 +322,24 @@ const CoursePartDetail = () => {
   }, [courseChapterId])
 
   return (
-    <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Course Part Detail">
+    <Layout title="Course Part Detail">
+      {isLoading ? (
+        <Skeleton.Input size={'small'} active={true} className="pt-6" />
+      ) : (
         <div className="main default-content-editor mx-auto my-0 max-w-xxl">
-          <div className="w-full">
+          <div className="w-full ">
             <div className="flex items-center px-5 pt-6 xl:px-0">
               <span
-                onClick={() => {
-                  router.push('/courses')
-                  trackGAEvent('Click Breadcrumb My Course')
-                }}
-                className="cursor-pointer whitespace-nowrap text-medium-sm font-medium text-gray-1"
-              >
-                My Course
-              </span>
-              <span
-                className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1"
+                className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
                 onClick={() => {
                   router.push(`/courses/my-course/${router.query.id}`)
                   trackGAEvent('Click Breadcrumb My Course Detail')
                 }}
               >
-                /
                 <p className="mx-0.5 inline-block w-full max-w-78 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap">
                   <SappTooltip
                     title={previewPart?.name}
-                    showTooltip={previewPart?.name?.length > 60}
+                    showTooltip={previewPart?.name?.length > 45}
                   >
                     {truncateString(previewPart?.name, 50)}
                   </SappTooltip>
@@ -363,7 +352,7 @@ const CoursePartDetail = () => {
                     title={partDetail?.name}
                     showTooltip={partDetail?.name?.length > 90}
                   >
-                    {truncateString(partDetail?.name, 90)}
+                    {truncateBySpace(partDetail?.name, 10) ?? ''}
                   </SappTooltip>
                 </p>
               </span>
@@ -446,8 +435,8 @@ const CoursePartDetail = () => {
             is_passed_course={isPassedCourse}
           />
         </div>
-      </Layout>
-    </SappLoadingGlobal>
+      )}
+    </Layout>
   )
 }
 

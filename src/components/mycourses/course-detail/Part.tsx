@@ -3,7 +3,7 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import { formatTime, truncateString } from '@utils/index'
+import { formatTime, truncateBySpace, truncateHTML } from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import { ANIMATION } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
@@ -72,7 +72,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   }
 
   return (
-    <div data-aos={ANIMATION.DATA_AOS}>
+    <div data-aos={ANIMATION.DATA_AOS} className="flex h-full flex-col">
       <div
         className={`name-course text-2xl font-medium text-bw-1 xl:h-[60px]`}
         onClick={() => {
@@ -85,12 +85,12 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             title={course?.name}
             showTooltip={(course?.name as string)?.length > 40}
           >
-            {truncateString(course?.name, 40)}
+            {truncateBySpace(course?.name, 40) ?? ''}
           </SappTooltip>
         </div>
       </div>
       <div className="des mb-15 mt-6">
-        <div className="line-clamp-5 h-[120px] text-ellipsis">
+        <div className="h-[120px]">
           <SappTooltip
             title={
               <p
@@ -99,11 +99,11 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
                 }}
               />
             }
-            showTooltip={(course?.description as string)?.length > 250}
+            showTooltip={(course?.description as string)?.length > 200}
           >
             <p
               dangerouslySetInnerHTML={{
-                __html: course?.description,
+                __html: truncateHTML(25, course?.description) ?? '',
               }}
               className="h-[120px] text-base text-bw-1"
             />

@@ -7,6 +7,7 @@ import {
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import DOMPurify from 'dompurify'
 import Cookies from 'js-cookie'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
 
 export const getActToken = (): string => {
@@ -270,4 +271,117 @@ export const setLocalStorageItem = (name: string, value: string) => {
   localStorage.setItem(name, value)
 }
 
+export const removeStyleAttributes = (htmlString?: string) => {
+  if (!htmlString) return
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(htmlString, 'text/html')
+  const elementsWithStyle = doc.querySelectorAll('[style]')
+  elementsWithStyle.forEach((element) => {
+    element.removeAttribute('style')
+  })
+  return doc.body.innerHTML
+}
+
+export const capitalizeFirstLetter = (str?: string) => {
+  if (!str) return
+  str = str?.toLocaleLowerCase()
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
+export const truncateBySpace = (text: string, maxWords: number): string => {
+  if (isEmpty(text) || isUndefined(text) || isNull(text)) return ''
+  const words = text?.split(' ')
+  if (words?.length <= maxWords) {
+    return text
+  }
+  return words?.slice(0, maxWords).join(' ') + '...'
+}
+
+export const truncateTextOnly = (htmlString: string, limit: number) => {
+  if (isEmpty(htmlString) || isUndefined(htmlString) || isNull(htmlString))
+    return
+  const div = document.createElement('div')
+  div.innerHTML = htmlString
+
+  let totalTextLength = 0
+  let truncatedText = ''
+  let lastSpacePosition = -1
+  function walkNodes(node: any) {
+    if (totalTextLength >= limit) return
+
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.nodeValue
+      for (let i = 0; i < text.length; i++) {
+        if (totalTextLength >= limit) break
+        truncatedText += text[i]
+        totalTextLength++
+        if (text[i] === ' ') {
+          lastSpacePosition = truncatedText.length
+        }
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      truncatedText += `<${node.nodeName.toLowerCase()}>`
+      for (let i = 0; i < node.childNodes.length; i++) {
+        walkNodes(node.childNodes[i])
+        if (totalTextLength >= limit) break
+      }
+      truncatedText += `</${node.nodeName.toLowerCase()}>`
+    }
+  }
+  walkNodes(div)
+  if (lastSpacePosition !== -1) {
+    truncatedText = truncatedText.substring(0, lastSpacePosition) + '...'
+  }
+  return truncatedText
+}
+
+export const truncateHTML = (limit: number, html?: string) => {
+  if (!html) return ''
+  const div = document.createElement('div')
+  div.innerHTML = html
+  let wordCount = 0
+  function traverse(node: any) {
+    const nodeType = node.nodeType
+
+    if (wordCount >= limit) {
+      return ''
+    }
+
+    if (nodeType === Node.TEXT_NODE) {
+      const text = node.textContent
+      const words = text.split(/\s+/)
+      let truncatedText = ''
+      for (let i = 0; i < words.length && wordCount < limit; i++) {
+        if (words[i]) {
+          truncatedText += (i > 0 ? ' ' : '') + words[i]
+          wordCount++
+        }
+      }
+
+      return truncatedText + (wordCount >= limit ? '...' : '')
+    } else if (nodeType === Node.ELEMENT_NODE) {
+      const tagName = node.tagName.toLowerCase()
+      const attributes = Array.from(node.attributes)
+        .map((attr: any) => `${attr.name}="${attr.value}"`)
+        .join(' ')
+
+      const openTag = `<${tagName}${attributes ? ' ' + attributes : ''}>`
+      const closeTag = `</${tagName}>`
+
+      const childNodes = Array.from(node.childNodes)
+      let innerHTML = ''
+      childNodes.forEach((child) => {
+        if (wordCount < limit) {
+          innerHTML += traverse(child)
+        }
+      })
+      return `${openTag}${innerHTML}${closeTag}`
+    }
+    return ''
+  }
+  return traverse(div)
+}
 export * from './formatNumber'

@@ -1,67 +1,67 @@
-import React, { Component } from 'react'
-import KeyPadComponent from './KeyPadComponent'
-import ResultComponent from './ResultComponent'
+import React, { useEffect, useState } from 'react'
+import { isNumber, calculate } from './logic/calculate'
 
-class Calculator extends Component {
-  state = {
-    result: '',
-  }
+import Display from './display'
+import Warning from './warning'
+import ButtonsContainer from './ButtonsContainer'
 
-  onClick = (button: any) => {
-    if (button === '=') {
-      this.calculate()
-    } else if (button === 'C') {
-      this.reset()
-    } else if (button === 'CE') {
-      this.backspace()
+const Calculator = () => {
+  const [calc, setCalc] = useState({
+    total: null,
+    next: null,
+    operation: null,
+  })
+
+  const [badDivision, setBadDivision] = useState(false)
+  useEffect(() => {
+    if (badDivision) {
+      setTimeout(() => {
+        setBadDivision(false)
+      }, 3000)
+    }
+  }, [badDivision])
+
+  const maxLength = 20
+
+  const updateState = (obj: any, key: any) => {
+    if (obj.next !== null && obj.next.length >= maxLength && isNumber(key)) {
+      return
+    }
+
+    const newObj = calculate(obj, key)
+
+    if (newObj.total === 'Undefined') {
+      setBadDivision(true)
+      setCalc({ total: null, next: null, operation: null })
     } else {
-      this.setState({
-        result: this.state.result + button,
-      })
+      setCalc((preObj: any) => ({ ...preObj, ...newObj }))
     }
   }
 
-  calculate = () => {
-    var checkResult = ''
-    if (this.state.result.includes('--')) {
-      checkResult = this.state.result.replace('--', '+')
-    } else {
-      checkResult = this.state.result
-    }
-
-    try {
-      this.setState({
-        result: (eval(checkResult) || '') + '',
-      })
-    } catch (e) {
-      this.setState({
-        result: 'error',
-      })
-    }
+  const handleClick = (obj: any, e: any) => {
+    updateState(obj, e.target.dataset.name)
   }
 
-  reset = () => {
-    this.setState({
-      result: '',
-    })
+  const handleKeyDown = (e: any) => {
+    e.preventDefault()
   }
 
-  backspace = () => {
-    this.setState({
-      result: this.state.result.slice(0, -1),
-    })
-  }
+  const { total, next, operation } = calc
 
-  render() {
-    return (
-      //   <div>
-      <div className="calculator-body">
-        <ResultComponent result={this.state.result} />
-        <KeyPadComponent onClick={this.onClick} />
-      </div>
-      //   </div>
-    )
-  }
+  return (
+    <div className="calc">
+      <Display
+        total={total ?? ''}
+        next={next ?? ''}
+        operation={operation ?? ''}
+      />
+      <ButtonsContainer
+        click={(e) => handleClick(calc, e)}
+        keyDown={handleKeyDown}
+      />
+      <Warning warning={badDivision} />
+    </div>
+  )
 }
 
 export default Calculator

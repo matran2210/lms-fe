@@ -1,7 +1,8 @@
 import SappButton from '@components/base/button/SappButton'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import router from 'next/router'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { GRADE_STATUS } from 'src/constants'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type'
 
@@ -44,6 +45,7 @@ interface IProps {
   coursePart: CoursePart
   quizAttempt: IQuizAttempt
   trackGA: () => void
+  setOpenReport: Dispatch<SetStateAction<boolean>>
 }
 
 const ResultCourse = ({
@@ -51,6 +53,7 @@ const ResultCourse = ({
   coursePart,
   quizAttempt,
   trackGA,
+  setOpenReport,
 }: IProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false)
   const [resultList, setResultList] = useState<IQuizResultList>({
@@ -116,7 +119,12 @@ const ResultCourse = ({
       color="text"
       className="!p-0 font-medium underline"
       onClick={() => {
-        if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
+        if (
+          coursePart?.quiz?.attempt?.grading_status ===
+          GRADE_STATUS.AWAITING_GRADING
+        ) {
+          setOpenReport(true)
+        } else if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
           router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
         }
 
@@ -124,7 +132,7 @@ const ResultCourse = ({
       }}
     />
   ) : (
-    <div className="flex items-center gap-2">
+    <div className="flex h-10 items-center gap-2">
       <div
         className={`forcus-group:text-primary text-gray-1 ${isFocus ? 'text-primary' : ''}`}
       >

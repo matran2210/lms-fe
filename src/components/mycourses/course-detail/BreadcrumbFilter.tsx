@@ -33,32 +33,24 @@ const BreadcrumbFilter = ({
         </li>
         <li
           className={clsx(
-            'breadcrumbs__item current-course ml-1 line-clamp-1',
+            'breadcrumbs__item current-course line-clamp-1',
             subpath ? 'text-gray-1' : 'text-bw-1',
           )}
         >
+          /&nbsp;
           {(name as string)?.length > 80 ? (
             <Tooltip title={name} color="#ffffff" placement="bottom">
-              <span>/ {truncateString(name, 80)}</span>
+              <span>{truncateString(name, 80)}</span>
             </Tooltip>
           ) : (
             <>
-              /&nbsp;
-              <span className="hover:underline">
-                <Link
-                  href={`/courses/my-course/${courseId}`}
-                  className="breadcrumbs__link"
-                  scroll={false}
-                >
-                  {`${name}`}
-                </Link>
-              </span>
+              <span>{`${name}`}</span>
             </>
           )}
         </li>
         {subpath && (
           <li className="breadcrumbs__item current-course ml-1 line-clamp-1 text-bw-1">
-            / {subpath}
+            {subpath}
           </li>
         )}
       </ol>

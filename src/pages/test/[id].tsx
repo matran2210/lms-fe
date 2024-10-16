@@ -6,6 +6,7 @@ import {
   ArrowUpIcon,
   CalculatorIcon,
   CloseIcon,
+  ConfirmIcon,
   ExcelIcon,
   ExhibitsIcon,
   FlagIcon,
@@ -32,12 +33,15 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight, useGetDataQuery } from '@utils/index'
-import { isUndefined, uniqueId } from 'lodash'
+import { isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   DISPLAY_TYPE,
+  ESSAY_TYPE,
+  FINISHED_TEST_TITLE,
+  GRADING_METHOD,
   PageLink,
   QUESTION_TYPES,
   RESPONSE_OPTION,
@@ -80,6 +84,8 @@ import { QuestionAPI } from '../api/question'
 import { trackGAEvent } from '@utils/google-analytics'
 import { showPopup } from 'src/redux/slice/Popup/Result-test'
 import Countdown from './countdown'
+import { IRequirement } from 'src/type/case-study'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 
 // type Window = {
 //   userAgreed: any
@@ -268,7 +274,10 @@ const TestDetail = () => {
         }
         return (
           <EssayQuestionPreview
-            data={essayData?.req}
+            data={{
+              ...currentTabContent?.data?.requirements?.[essayData?.index],
+              ...essayData?.req,
+            }}
             question_content={currentTabContent?.data?.question_content}
             index={essayData?.index}
             question_data={currentTabContent?.data}
@@ -349,29 +358,60 @@ const TestDetail = () => {
 
   const router = useRouter()
 
-  const useGetQuizDetail = (queryKey: string, params: Object) => {
-    return useGetDataQuery(
-      queryKey,
-      params,
-      () => CoursesAPI.getDetailQuizById(router.query.id),
-      router.query.id !== undefined,
-    )
+  const useGetQuizDetail = () => {
+    const [quizDetail, setQuizDetail] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
+    const router = useRouter()
+
+    useEffect(() => {
+      const fetchQuizDetail = async () => {
+        if (router.query.id) {
+          try {
+            setLoading(true)
+            const response = await CoursesAPI.getDetailQuizById(router.query.id)
+            setQuizDetail(response.data)
+          } catch (err) {
+          } finally {
+            setLoading(false)
+          }
+        }
+      }
+
+      fetchQuizDetail()
+    }, [router.query.id]) // Dependency on router.query.id
+
+    return { quizDetail, loading }
   }
 
-  const useGetQuestionTabs = (queryKey: string, params: Object) => {
-    return useGetDataQuery(
-      queryKey,
-      params,
-      () => CoursesAPI.getQuestionTabsById(router.query.id),
-      router.query.id !== undefined,
-    )
+  const useGetQuestionTabs = () => {
+    const [questions, setQuestionTabs] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
+    const router = useRouter()
+
+    useEffect(() => {
+      const fetchQuestionTabs = async () => {
+        if (router.query.id) {
+          try {
+            setLoading(true)
+            const response = await CoursesAPI.getQuestionTabsById(
+              router.query.id,
+            )
+            setQuestionTabs(response.data)
+          } catch (err) {
+          } finally {
+            setLoading(false)
+          }
+        }
+      }
+
+      fetchQuestionTabs()
+    }, [router.query.id]) // Dependency on router.query.id
+
+    return { questions, loading }
   }
 
-  // Sử dụng hook useGetQuizDetail trong component
-  const { data: quizDetail } = useGetQuizDetail('quiz-detail', {})
-
-  // Sử dụng hook useGetQuestionTabs trong component
-  const { data: questions } = useGetQuestionTabs('question-detail', {})
+  const { quizDetail } = useGetQuizDetail()
+  const { questions } = useGetQuestionTabs()
 
   const type = router.query.type
 
@@ -437,6 +477,7 @@ const TestDetail = () => {
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
     [],
   )
+  const [openReportModal, setOpenReportModal] = useState(false)
 
   useEffect(() => {
     const updateMousePosition = (ev: any) => {
@@ -478,11 +519,13 @@ const TestDetail = () => {
     callback: () => setShowLisRequirement(false),
   })
   const [onMount, setOnMount] = useState(true)
+
   const currentTabContent = useMemo(() => {
     if (tabs && tabs.length > 0) {
       return tabs.find((e: any) => e.id === currentPage)
     } else return undefined
   }, [currentPage, tabs])
+
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
       if (openScratchPad[i].type === 'calculator') {
@@ -492,6 +535,7 @@ const TestDetail = () => {
     return -1
     // if (!arr.includes('calculator')) {
   }, [openScratchPad])
+
   const handleOpenScratchPad = (
     type: string,
     file?: string,
@@ -577,18 +621,21 @@ const TestDetail = () => {
       </div>
     )
   }
-  const checkAnswered = (currentContent: any) => {
+  const checkAnswered = (currentContent: any, isSubmit = false) => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE
     ) {
-      if (getValues(`${currentContent?.id}_answer`)) {
+      if (
+        !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
+        getValues(`${currentContent?.id}_answer`)?.length > 0
+      ) {
         return true
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       if (
-        getValues(`${currentContent?.id}_answer`) &&
+        !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
         getValues(`${currentContent?.id}_answer`)?.length > 0
       ) {
         return true
@@ -632,7 +679,10 @@ const TestDetail = () => {
     } else if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
       if (Array.isArray(currentContent.data?.requirements)) {
         for (let req of currentContent.data?.requirements) {
-          if (req?.answer_file?.file_key) {
+          if (
+            req?.answer_file?.file_key ||
+            answerListRef?.current?.[req?.id || '']
+          ) {
             return true
           }
         }
@@ -640,9 +690,9 @@ const TestDetail = () => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value = getValues(
-        `${currentContent?.id}_${essayData?.index}_answer`,
-      )
+      const value = isSubmit
+        ? getValues(`${currentContent?.id}_0_answer`)
+        : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
@@ -793,6 +843,7 @@ const TestDetail = () => {
       corrects: corrects,
       solution: res?.data?.[0]?.solution,
       isSelfReflection: res?.data?.[0]?.is_self_reflection,
+      requirements: res?.data?.[0]?.requirements,
     }
   }
   const confirmAnswer = async (
@@ -800,6 +851,7 @@ const TestDetail = () => {
     solution: any,
     currentTabContent: any,
     isSelfReflection: boolean,
+    requirements?: IRequirement[],
   ) => {
     setLoading(true)
     // setStartTime(Date.now())
@@ -817,6 +869,14 @@ const TestDetail = () => {
           currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
         ) {
           ref.current?.handleReset()
+        }
+        if (item?.data?.requirements?.length) {
+          item.data.requirements = item.data.requirements.map(
+            (req: IRequirement, index: number) => ({
+              ...requirements?.[index],
+              ...req,
+            }),
+          )
         }
         return {
           ...item,
@@ -967,7 +1027,7 @@ const TestDetail = () => {
     }
   }
   const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
-    if (!currentContent.done) {
+    if (!currentContent?.done) {
       if (
         currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
         currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
@@ -1019,11 +1079,10 @@ const TestDetail = () => {
       return tabs
     }
   }
-
   async function getDetail(currentPage: string) {
     let topicDescription
     try {
-      if (!isUndefined(quizDetail?.id)) {
+      if (!isUndefined(quizDetail) && !isUndefined(questions)) {
         topicDescription = await CoursesAPI.getTopicDescription(
           questions[questions.findIndex((e: any) => e.id === currentPage)]
             ?.question_topic_id,
@@ -1303,25 +1362,39 @@ const TestDetail = () => {
         }
       }
       if (e.qType === QUESTION_TYPES.ESSAY) {
-        if (checkAnswered(e)) {
+        if (checkAnswered(e, true)) {
           const requirements = e?.data?.requirements?.length
             ? e?.data?.requirements
             : [null]
-          requirements?.forEach((requirement: Requirement | null) => {
+          if (requirements?.length) {
+            requirements?.forEach((requirement: Requirement | null) => {
+              answers.push({
+                question_id: e.id,
+                short_answer:
+                  answerListRef?.current?.[requirement?.id || ''] ??
+                  (requirement?.id ? '' : e?.answer || ''),
+                requirement_id: requirement?.id || null,
+                response_option:
+                  e?.data?.response_option ??
+                  (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+                time_spent: Math.ceil(e?.timeSpent / 1000),
+                active: 'SUBMITED',
+                answer_file: requirement?.answer_file || e?.answer_file || null,
+              })
+            })
+          } else {
             answers.push({
               question_id: e.id,
-              short_answer:
-                answerListRef?.current?.[requirement?.id || ''] ??
-                (requirement?.id ? '' : e?.answer || ''),
-              requirement_id: requirement?.id || null,
+              short_answer: e?.answer || '',
+              requirement_id: null,
               response_option:
                 e?.data?.response_option ??
-                (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+                (e?.response_type === 0 ? ESSAY_TYPE.WORD : ESSAY_TYPE.SHEET),
               time_spent: Math.ceil(e?.timeSpent / 1000),
               active: 'SUBMITED',
-              answer_file: requirement?.answer_file || e?.answer_file || null,
+              answer_file: e?.answer_file || null,
             })
-          })
+          }
         }
       }
       quiz_position_mapping.push({
@@ -1348,6 +1421,14 @@ const TestDetail = () => {
       if (res) {
         if (res?.data?.class_user_score) {
           dispatch(showPopup(res?.data?.class_user_score))
+        }
+
+        if (
+          quizDetail?.is_graded &&
+          quizDetail?.grading_method === GRADING_METHOD.MANUAL
+        ) {
+          setOpenReportModal(true)
+          return
         }
         if (type === 'entrance') {
           router.replace(`/entrance-test/test-result/${res?.data?.id}`)
@@ -1797,6 +1878,25 @@ const TestDetail = () => {
     }
   }
 
+  const handleOpenExhibit = (exhibitId?: string) => {
+    if (!exhibitId) return
+    const exhibitIds = getValuesExhibits('exhibits') ?? []
+    if (exhibitIds.includes(exhibitId)) {
+      setValueExhibits(
+        'exhibits',
+        exhibitIds.filter((id: string) => id !== exhibitId),
+      )
+    } else {
+      exhibitIds.push(exhibitId)
+      setValueExhibits('exhibits', exhibitIds)
+    }
+    rightSideRef?.current &&
+      rightSideRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+  }
+
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
@@ -1915,180 +2015,185 @@ const TestDetail = () => {
             )}
           </div>
           {/* <div className=''> */}
-          {currentTabContent?.data?.display_type === DISPLAY_TYPE.VERTICAL ? (
-            <div
-              className={`flex flex-1 overflow-auto bg-gray-3`}
-              id={'preview-question'}
-            >
-              <div
-                className="h-full overflow-auto bg-white p-6"
-                style={{ width: `calc(50% - ${leftWidth}px)` }}
-              >
+          {!isUndefined(currentTabContent) && (
+            <>
+              {currentTabContent?.data?.display_type ===
+              DISPLAY_TYPE.VERTICAL ? (
                 <div
-                  className="min-w-[700px]"
-                  id="hightlight_area_topic"
-                  onMouseUp={(e: any) => {
-                    if (
-                      e.target.tagName.charAt(0) !== 'm' &&
-                      e.target.firstChild?.tagName !== 'math'
-                    ) {
-                      if (e) {
-                        if (allowHighLight) {
-                          runHighlight(
-                            handleSaveHighLightTopic,
-                            allowHighLight || false,
-                            'hightlight_area_topic',
-                          )
-                        } else if (allowUnHighLight) {
-                          runHighlight(
-                            handleSaveHighLightTopic,
-                            allowUnHighLight || false,
-                            'hightlight_area_topic',
-                            { color: 'white' },
-                          )
-                        }
-                      }
-                    }
-                  }}
+                  className={`flex flex-1 overflow-auto bg-gray-3`}
+                  id={'preview-question'}
                 >
-                  <EditorReader
-                    className="mb-4"
-                    text_editor_content={
-                      currentTabContent?.topicDescription?.description
-                    }
-                    highlighted={currentTabContent?.hightlightTopic}
-                    highlighArea="hightlight_area_topic"
-                  />
-                  {currentTabContent?.topicDescription?.files?.length > 0 &&
-                    currentTabContent?.topicDescription?.files?.map(
-                      (e: any, index: number) => {
-                        return (
-                          <div
-                            className="cursor-pointer text-state-info hover:underline"
-                            onClick={() =>
-                              handleOpenScratchPad(
-                                'file',
-                                e?.resource?.url,
-                                e?.resource?.name,
+                  <div
+                    className="h-full overflow-auto bg-white p-6"
+                    style={{ width: `calc(50% - ${leftWidth}px)` }}
+                  >
+                    <div
+                      className="min-w-[700px]"
+                      id="hightlight_area_topic"
+                      onMouseUp={(e: any) => {
+                        if (
+                          e.target.tagName.charAt(0) !== 'm' &&
+                          e.target.firstChild?.tagName !== 'math'
+                        ) {
+                          if (e) {
+                            if (allowHighLight) {
+                              runHighlight(
+                                handleSaveHighLightTopic,
+                                allowHighLight || false,
+                                'hightlight_area_topic',
+                              )
+                            } else if (allowUnHighLight) {
+                              runHighlight(
+                                handleSaveHighLightTopic,
+                                allowUnHighLight || false,
+                                'hightlight_area_topic',
+                                { color: 'white' },
                               )
                             }
-                            key={index}
-                          >
-                            {e?.resource?.name}
-                          </div>
-                        )
-                      },
-                    )}
-                </div>
-              </div>
-              <div
-                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
-                onMouseDown={() => {
-                  setStartResize(true)
-                  // setCurrentMousePos(mousePosition.x || 0)
-                }}
-                onMouseUp={() => setStartResize(false)}
-              ></div>
-              <div
-                className="h-full overflow-auto bg-white py-6 "
-                style={{ width: `calc(50% + ${leftWidth}px)` }}
-                ref={rightSideRef}
-              >
-                <div className="min-w-[700px] px-6">
-                  {checkType(
-                    currentTabContent?.data,
-                    currentTabContent?.data?.qType,
-                    currentTabContent?.id,
-                    currentTabContent?.answer,
-                    currentTabContent?.corrects,
-                    currentTabContent?.hightlight,
-                    currentTabContent?.solution,
-                    currentTabContent?.done,
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div
-              className={`flex-1 overflow-auto px-6 py-6`}
-              id={'preview-question'}
-            >
-              <div
-                id="hightlight_area_topic"
-                onMouseUp={(e: any) => {
-                  if (
-                    e.target.tagName.charAt(0) !== 'm' &&
-                    e.target.firstChild?.tagName !== 'math'
-                  ) {
-                    if (e) {
-                      if (allowHighLight) {
-                        runHighlight(
-                          handleSaveHighLightTopic,
-                          allowHighLight || false,
-                          'hightlight_area_topic',
-                        )
-                      } else if (allowUnHighLight) {
-                        runHighlight(
-                          handleSaveHighLightTopic,
-                          allowUnHighLight || false,
-                          'hightlight_area_topic',
-                          { color: 'white' },
-                        )
-                      }
-                    }
-                  }
-                }}
-                className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
-              >
-                {/* <div className="mb-4">
-                  {currentTabContent?.topicDescription?.name}
-                </div> */}
-                <EditorReader
-                  className="mb-4"
-                  text_editor_content={
-                    currentTabContent?.topicDescription?.description
-                  }
-                  highlighted={currentTabContent?.hightlightTopic}
-                  highlighArea="hightlight_area_topic"
-                />
-                {currentTabContent?.topicDescription?.files?.length > 0 &&
-                  currentTabContent?.topicDescription?.files?.map(
-                    (e: any, index: number) => {
-                      return (
-                        <div
-                          className="cursor-pointer text-state-info hover:underline"
-                          onClick={
-                            () =>
-                              handleOpenScratchPad(
-                                'file',
-                                e?.resource?.url,
-                                e?.resource?.name,
-                              )
-                            // setOpenPdf({ status: true, url: e.resource.url })
                           }
-                          key={index}
-                        >
-                          {e?.resource?.name}
-                        </div>
-                      )
-                    },
-                  )}
-              </div>
+                        }
+                      }}
+                    >
+                      <EditorReader
+                        className="mb-4"
+                        text_editor_content={
+                          currentTabContent?.topicDescription?.description
+                        }
+                        highlighted={currentTabContent?.hightlightTopic}
+                        highlighArea="hightlight_area_topic"
+                      />
+                      {currentTabContent?.topicDescription?.files?.length > 0 &&
+                        currentTabContent?.topicDescription?.files?.map(
+                          (e: any, index: number) => {
+                            return (
+                              <div
+                                className="cursor-pointer text-state-info hover:underline"
+                                onClick={() =>
+                                  handleOpenScratchPad(
+                                    'file',
+                                    e?.resource?.url,
+                                    e?.resource?.name,
+                                  )
+                                }
+                                key={index}
+                              >
+                                {e?.resource?.name}
+                              </div>
+                            )
+                          },
+                        )}
+                    </div>
+                  </div>
+                  <div
+                    className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                    onMouseDown={() => {
+                      setStartResize(true)
+                      // setCurrentMousePos(mousePosition.x || 0)
+                    }}
+                    onMouseUp={() => setStartResize(false)}
+                  ></div>
+                  <div
+                    className="h-full overflow-auto bg-white py-6 "
+                    style={{ width: `calc(50% + ${leftWidth}px)` }}
+                    ref={rightSideRef}
+                  >
+                    <div className="min-w-[700px] px-6">
+                      {checkType(
+                        currentTabContent?.data,
+                        currentTabContent?.data?.qType,
+                        currentTabContent?.id,
+                        currentTabContent?.answer,
+                        currentTabContent?.corrects,
+                        currentTabContent?.hightlight,
+                        currentTabContent?.solution,
+                        currentTabContent?.done,
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className={`flex-1 overflow-auto px-6 py-6`}
+                  id={'preview-question'}
+                >
+                  <div
+                    id="hightlight_area_topic"
+                    onMouseUp={(e: any) => {
+                      if (
+                        e.target.tagName.charAt(0) !== 'm' &&
+                        e.target.firstChild?.tagName !== 'math'
+                      ) {
+                        if (e) {
+                          if (allowHighLight) {
+                            runHighlight(
+                              handleSaveHighLightTopic,
+                              allowHighLight || false,
+                              'hightlight_area_topic',
+                            )
+                          } else if (allowUnHighLight) {
+                            runHighlight(
+                              handleSaveHighLightTopic,
+                              allowUnHighLight || false,
+                              'hightlight_area_topic',
+                              { color: 'white' },
+                            )
+                          }
+                        }
+                      }
+                    }}
+                    className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
+                  >
+                    {/* <div className="mb-4">
+                      {currentTabContent?.topicDescription?.name}
+                    </div> */}
+                    <EditorReader
+                      className="mb-4"
+                      text_editor_content={
+                        currentTabContent?.topicDescription?.description
+                      }
+                      highlighted={currentTabContent?.hightlightTopic}
+                      highlighArea="hightlight_area_topic"
+                    />
+                    {currentTabContent?.topicDescription?.files?.length > 0 &&
+                      currentTabContent?.topicDescription?.files?.map(
+                        (e: any, index: number) => {
+                          return (
+                            <div
+                              className="cursor-pointer text-state-info hover:underline"
+                              onClick={
+                                () =>
+                                  handleOpenScratchPad(
+                                    'file',
+                                    e?.resource?.url,
+                                    e?.resource?.name,
+                                  )
+                                // setOpenPdf({ status: true, url: e.resource.url })
+                              }
+                              key={index}
+                            >
+                              {e?.resource?.name}
+                            </div>
+                          )
+                        },
+                      )}
+                  </div>
 
-              {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
-              <div className="m-auto w-full max-w-[950px]">
-                {checkType(
-                  currentTabContent?.data,
-                  currentTabContent?.data?.qType,
-                  currentTabContent?.id,
-                  currentTabContent?.answer,
-                  currentTabContent?.corrects,
-                  currentTabContent?.hightlight,
-                  currentTabContent?.solution,
-                  currentTabContent?.done,
-                )}
-              </div>
-            </div>
+                  {/* {type !== QUESTION_TYPES.ESSAY ? ( */}
+                  <div className="m-auto w-full max-w-[950px]">
+                    {checkType(
+                      currentTabContent?.data,
+                      currentTabContent?.data?.qType,
+                      currentTabContent?.id,
+                      currentTabContent?.answer,
+                      currentTabContent?.corrects,
+                      currentTabContent?.hightlight,
+                      currentTabContent?.solution,
+                      currentTabContent?.done,
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
           )}
           {openScratchPad.map((e, index: number) => {
             if (e.type === 'calculator') {
@@ -2096,7 +2201,7 @@ const TestDetail = () => {
                 <MovableWindow
                   position={{
                     width: '400px',
-                    height: '300px',
+                    height: 'fit-content',
                     top: 'calc(25% - 150px)',
                     left: 'calc(25% - 200px)',
                   }}
@@ -2334,22 +2439,28 @@ const TestDetail = () => {
                         {/* <span>{`(${currentTabContent?.data?.exhibits?.length})`}</span> */}
                       </div>
                       {/* {`Exhibits (${currentTabContent?.data?.exhibits?.length})`} */}
-                      {/* <ArrowUpIcon /> */}
+                      <ArrowUpIcon />
                     </div>
                   </div>
                   {showListExhibits && (
-                    <div className="absolute bottom-full z-[1400] flex h-fit max-w-max justify-center bg-gray-3 p-4 shadow-questions-exhibits 3xl:w-full 3xl:max-w-none">
-                      <HookFormCheckBoxGroup
-                        control={controlExhibits}
-                        name="exhibits"
-                        options={exhibits}
-                        multiple
-                        lowerOptions={true}
-                        // gap="0"
-                        widthOptions="w-full"
-                        seprateLine={true} // classNameTitle='text-gray-2'
-                        maxWidthContent
-                      />
+                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      {exhibits?.map(
+                        (
+                          e: { label: string; value: string },
+                          index: number,
+                        ) => {
+                          return (
+                            <button
+                              key={e?.value}
+                              className={`p-3 ${
+                                !watch('exhibits')?.includes(e?.value) &&
+                                'text-gray-1'
+                              }`}
+                              onClick={() => handleOpenExhibit(e?.value)}
+                            >{`Exhibit (${index + 1})`}</button>
+                          )
+                        },
+                      )}
                     </div>
                   )}
                 </button>
@@ -2492,54 +2603,22 @@ const TestDetail = () => {
               {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
               !currentTabContent?.done &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
-                currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY ? (
-                  <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                    onClick={async () => {
-                      const data = await getResult(currentTabContent)
-                      confirmAnswer(
-                        data?.corrects,
-                        data?.solution,
-                        currentTabContent,
-                        data?.isSelfReflection,
-                      )
-                      trackGAEvent('Click Button Confirm Answer Test')
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">
-                      Confirm Answer
-                    </div>
-                  </button>
-                ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1 ? (
-                  <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                    onClick={() => {
-                      const index = filteredTabs?.findIndex(
-                        (e: any) => e.id === currentPage,
-                      )
-                      handleConfirmAndNext(
-                        currentPage,
-                        filteredTabs[index + 1].id,
-                      )
-                      trackGAEvent('Click Button Confirm & Next Test')
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">
-                      Confirm & Next
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                    onClick={() => {
-                      handleConfirmEssay()
-                      trackGAEvent('Click Button Confirm Test')
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">Confirm</div>
-                  </button>
-                )
+                <button
+                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  onClick={async () => {
+                    const data = await getResult(currentTabContent)
+                    confirmAnswer(
+                      data?.corrects,
+                      data?.solution,
+                      currentTabContent,
+                      data?.isSelfReflection,
+                      data?.requirements,
+                    )
+                    trackGAEvent('Click Button View Answer Test')
+                  }}
+                >
+                  <div className="text-medium-sm font-medium">View Answer</div>
+                </button>
               ) : (
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <
                   filteredTabs.length - 1 && (
@@ -2661,11 +2740,25 @@ const TestDetail = () => {
               handleSaveFileEssay(e[0], openUpload?.requirementIndex)
             }
           />
+          <SappModalV3
+            open={openReportModal}
+            okButtonCaption="Back"
+            handleCancel={() => {}}
+            onOk={() => {
+              setOpenReportModal(false)
+              router.back()
+            }}
+            fullWidthBtn={true}
+            buttonSize="extra"
+            icon={<ConfirmIcon />}
+            header={FINISHED_TEST_TITLE}
+            content={`Congratulations on completing ${quizDetail?.name}. The result will be sent to you via email after the grading is finished.`}
+          />
           {/* <PopupViewPdf
-        open={openPdf?.status || false}
-        setOpen={setOpenPdf}
-        url={openPdf?.url || ''}
-      /> */}
+            open={openPdf?.status || false}
+            setOpen={setOpenPdf}
+            url={openPdf?.url || ''}
+          /> */}
         </div>
       </CourseProvider>
     </FullScreenLayout>

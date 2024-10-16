@@ -8,6 +8,7 @@ const NotificationIcon = ({ className }: IIcon) => {
   const storedCount = localStorage.getItem(
     LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
   )
+
   const [notificationUnread, setNotificationUnread] = useState(() => {
     return parseInt(storedCount ?? '0', 10)
   })
@@ -22,7 +23,7 @@ const NotificationIcon = ({ className }: IIcon) => {
 
   useEffect(() => {
     if (notificationUnread > 9) {
-      setBadgeClass('w-5 h-5 -top-2 -right-2')
+      setBadgeClass('w-6 h-6 -top-3.5 -right-3.5')
     } else {
       setBadgeClass('w-4 h-4 -top-1.5 -right-1.5') // Default width for single digits
     }
@@ -49,7 +50,7 @@ const NotificationIcon = ({ className }: IIcon) => {
             badgeClass,
           )}
         >
-          {notificationUnread}
+          {notificationUnread > 99 ? '99+' : notificationUnread}
         </span>
       )}
     </div>

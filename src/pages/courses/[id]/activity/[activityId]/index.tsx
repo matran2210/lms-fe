@@ -14,9 +14,9 @@ import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { truncateString } from '@utils/index'
-import { Dropdown, Menu } from 'antd'
-import { uniqueId } from 'lodash'
+import { truncateBySpace, truncateString } from '@utils/index'
+import { Tooltip } from 'antd'
+import { truncate, uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, {
@@ -74,10 +74,11 @@ const ActivityPage = () => {
     )
   }
 
-  const { data: activity, isLoading } = useGetActivityById(
-    router.query.activityId,
-    router.query.id,
-  )
+  const {
+    data: activity,
+    isLoading,
+    refetch,
+  } = useGetActivityById(router.query.activityId, router.query.id)
 
   const courseId = router.query?.id
   const sectionId = router.query?.activityId as string
@@ -474,8 +475,8 @@ const ActivityPage = () => {
   /**
    * @description config menu breadcrumbs trong activity
    */
-  const menu = (
-    <Menu>
+  const BreadCrumbs = () => (
+    <>
       {breadcrumbsMenu?.data &&
         breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
           let url = ''
@@ -497,32 +498,41 @@ const ActivityPage = () => {
               url = `/courses/my-course/${router.query.id}`
               break
           }
+
           return (
             <React.Fragment key={e?.id}>
               {e?.course_section_type !== 'ACTIVITY' ? (
-                <Menu.Item
+                <li
+                  title={e?.name}
                   onClick={() => {
                     ;['CHAPTER', 'UNIT', 'PART'].includes(
                       e.course_section_type,
                     ) && localStorage.setItem('course_chapter_id', chapterId)
-
                     router.push(url)
+
+                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }}
                 >
-                  <li
-                    className={
-                      'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
-                    }
+                  <SappTooltip
                     title={e?.name}
+                    showTooltip={e?.name?.length > 45}
                   >
-                    {truncateString(e?.name, 25)}
-                  </li>
-                </Menu.Item>
+                    <li
+                      className={
+                        'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
+                      }
+                      title={e?.name}
+                    >
+                      {truncateBySpace(e?.name, 5) ?? ''}
+                      <span>/</span>
+                    </li>
+                  </SappTooltip>
+                </li>
               ) : null}
             </React.Fragment>
           )
         })}
-    </Menu>
+    </>
   )
 
   /**
@@ -600,37 +610,21 @@ const ActivityPage = () => {
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
           <ul className="line-clamp-1 flex flex-wrap gap-1 overflow-x-auto py-6 text-medium-sm font-medium">
-            <li className="cursor-pointer whitespace-nowrap text-gray-1 hover:text-primary">
-              <Link
-                href="/courses"
-                className="breadcrumbs__link"
-                scroll={false}
-                onClick={() => trackGAEvent('Click Breadcrumb My Course')}
-              >
-                My Course /
-              </Link>
-            </li>
-
-            <Dropdown overlay={menu} trigger={['click']}>
-              <a
-                className="ant-dropdown-link cursor-pointer"
-                onClick={(e) => e.preventDefault()}
-              >
-                ..... /
-              </a>
-            </Dropdown>
-            <li className="text-bw-1">
-              <Link
-                href={'#'}
-                className="breadcrumbs__link"
-                scroll={false}
-                onClick={() =>
-                  trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
-                }
-              >
-                <span>{nameActivity?.name}</span>
-              </Link>
-            </li>
+            <BreadCrumbs />
+            <Tooltip title={nameActivity?.name} color="white">
+              <li className="text-bw-1">
+                <Link
+                  href={'#'}
+                  className="breadcrumbs__link"
+                  scroll={false}
+                  onClick={() =>
+                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
+                  }
+                >
+                  <span>{truncateBySpace(nameActivity?.name, 13)}</span>
+                </Link>
+              </li>
+            </Tooltip>
           </ul>
           {/* Notes */}
           <>
@@ -679,13 +673,20 @@ const ActivityPage = () => {
             {/* Header */}
             <div className="bg-gray-3 px-6 ">
               <div
-                className={`flex w-full select-none justify-between gap-4 py-6 ${
+                className={`flex w-full select-none items-center justify-between gap-4 py-6 ${
                   activity?.course_outcomes?.length > 0
                     ? 'borderColor-default border-b'
                     : ''
                 }`}
               >
-                <div className="text-2xl font-medium ">{activity?.name}</div>
+                <div className="text-2xl font-medium ">
+                  <Tooltip
+                    title={activity?.name?.length > 95 && activity?.name}
+                    color="white"
+                  >
+                    {activity?.name}
+                  </Tooltip>
+                </div>
                 <div className="whitespace-nowrap text-sm text-gray-1">
                   {activity?.duration || 0}{' '}
                   {activity?.duration > 1 ? 'mins' : 'min'} estimated
@@ -717,19 +718,21 @@ const ActivityPage = () => {
             {/* Tabs */}
             <div className="bg-gray-3">
               <div className="flex flex-wrap gap-2 px-6">
-                {selector?.tabs?.map((e) => {
+                {selector?.tabs?.map((e, index) => {
                   return (
                     <SappButton
                       key={e?.id}
                       size="small"
                       className="!px-3 py-2.5 text-medium-sm !font-normal"
                       color={tabButtonColor(e?.id)}
-                      title={truncateString(e?.name, 60)}
+                      title={truncateBySpace(e?.name, 5)}
+                      showTooltip={e?.name?.length > 20}
+                      toolTipTitle={e?.name}
                       onClick={() => {
                         handleChangeTab(e?.id)
                         trackGAEvent('Click Button Tab Activity')
                       }}
-                    ></SappButton>
+                    />
                   )
                 })}
               </div>
@@ -744,6 +747,7 @@ const ActivityPage = () => {
                 <div className={`mx-auto my-0 w-full max-w-[1000px] px-6 pt-6`}>
                   <div className="tab-content overflow-x-auto overflow-y-hidden">
                     {course_tab_documents?.map((e, i) => {
+                      const gradeStatus = e?.quiz?.attempt?.grading_status
                       const marginBottom =
                         i < course_tab_documents?.length - 1 ? 'mb-6' : ''
                       if (e?.type === 'QUIZ') {
@@ -766,10 +770,15 @@ const ActivityPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               document_id={e?.id}
-                              is_graded={e?.quiz?.is_graded || false}
+                              is_graded={e?.quiz?.is_graded}
                               setOpenFile={handleOpenScratchPad}
                               class_user_id={activity?.class_user_id}
-                            ></QuizDocument>
+                              quizSetting={e?.quiz?.quiz_setting}
+                              reload={refetch}
+                              gradeStatus={gradeStatus}
+                              quizName={e?.quiz?.name}
+                              grading_method={e?.quiz?.grading_method}
+                            />
                           </div>
                         )
                       }

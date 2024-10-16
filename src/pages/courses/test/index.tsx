@@ -1,14 +1,18 @@
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
+import TestAnnouncementModal from '@components/mycourses/course-detail/TestAnnoucementModal'
 import PopupCanNotRetakeTest from '@components/mycourses/PogupCannotRetakeTest'
 import { TEST_TYPE } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import dayjs, { Dayjs } from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type/quiz'
 import HookFormSelect from '@components/base/select/HookFormSelect'
+import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
+import { capitalizeFirstLetter } from '@utils/index'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -28,7 +32,6 @@ interface IProps {
 const TestModal = ({
   open,
   setOpen,
-  title,
   data,
   class_user_id,
   activeCourse,
@@ -50,6 +53,7 @@ const TestModal = ({
     value: string
     ratio_score?: string
     status: string
+    grading_method?: string
   }>()
   const [isFocus, setIsFocus] = useState<boolean>(false)
   const [openResource, setOpenPopup] = useState(false)
@@ -82,6 +86,7 @@ const TestModal = ({
           value: results?.[0]?.id,
           ratio_score: results?.[0]?.ratio_score,
           status: results?.[0]?.status,
+          grading_method: results?.[0]?.quiz?.grading_method,
         })
       }
     }
@@ -160,6 +165,88 @@ const TestModal = ({
     } catch (err) {}
   }
 
+  // const startTime = dayjs().add(1, 'day')
+  const startTime = data?.quiz?.quiz_setting?.start_time
+  const endTime = data?.quiz?.quiz_setting?.end_time
+  // const endTime = dayjs().subtract(1, 'year')
+
+  // Test Unopend or Expired
+  const getType = (startTime: string, endTime: string) => {
+    if (dayjs().isBefore(startTime)) return 'unopened'
+    if (dayjs().isAfter(dayjs(endTime))) return 'expired'
+    return null
+  }
+
+  const type = getType(startTime, endTime)
+
+  if (type !== null) {
+    return (
+      <TestAnnouncementModal
+        open={open}
+        handleCancel={() => {
+          setOpen(false)
+          trackGAEvent('Click Button Cancel Modal Test')
+        }}
+        type={type}
+        start_time={startTime}
+      />
+    )
+  }
+
+  // Default case
+  const getGradedStatus = (status?: string) => {
+    switch (status) {
+      case GRADE_STATUS.FINISHED_GRADING:
+        return (
+          <div className="pr-0.5 font-medium text-state-success">
+            Finished Grading
+          </div>
+        )
+      case GRADE_STATUS.AWAITING_GRADING:
+        return (
+          <div className="pr-0.5 font-medium text-yellow-400">
+            Awaiting Grading
+          </div>
+        )
+      default:
+        return (
+          <div className="pr-0.5 font-medium text-gray-500">Unsubmitted</div>
+        )
+    }
+  }
+
+  const getResultOfTest = () => {
+    if (
+      data?.quiz?.is_graded &&
+      data?.quiz?.grading_method === GRADING_METHOD.MANUAL
+    ) {
+      if (
+        data?.quiz?.attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
+      ) {
+        return data?.quiz?.required_percent_score > data?.quiz?.attempt?.score
+          ? StatusQuizAttempt.Failed
+          : StatusQuizAttempt.Passed
+      }
+      return '--'
+    }
+    return (
+      selectedResult?.ratio_score ?? data?.quiz?.attempt?.ratio_score ?? '--'
+    )
+  }
+
+  const isShowDetail = () => {
+    if (
+      data?.quiz?.is_graded &&
+      data?.quiz?.grading_method === GRADING_METHOD.MANUAL
+    ) {
+      return (
+        data?.quiz?.attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
+      )
+    } else {
+      return status !== StatusQuizAttempt.Unsubmitted
+    }
+  }
+
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}
@@ -207,6 +294,13 @@ const TestModal = ({
           {data?.quiz?.quiz_timed
             ? formatTime(data?.quiz?.quiz_timed * 60)
             : 'Unlimited'}
+        </div>
+      </div>
+      <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+        <div className="text-gray-1">Grading Method:</div>
+        <div className="pr-0.5 font-medium text-bw-1">
+          {capitalizeFirstLetter(selectedResult?.grading_method) ??
+            capitalizeFirstLetter(data?.quiz?.grading_method)}
         </div>
       </div>
       <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
@@ -262,12 +356,8 @@ const TestModal = ({
             )}
           </div>
           <div className="flex flex-row items-center">
-            <div className={` pr-0.5 font-medium`}>
-              {selectedResult?.ratio_score ??
-                data?.quiz?.attempt?.ratio_score ??
-                '--'}
-            </div>
-            {status !== StatusQuizAttempt.Unsubmitted && (
+            <div className={` pr-0.5 font-medium`}>{getResultOfTest()}</div>
+            {isShowDetail() && (
               <div
                 className="ml-2 cursor-pointer text-state-info underline"
                 onClick={() => {
@@ -286,11 +376,16 @@ const TestModal = ({
       )}
       <div className="flex justify-between gap-8 py-6 text-base">
         <div className="text-gray-1">Status:</div>
-        <div
-          className={`${status === StatusQuizAttempt.Passed ? 'text-state-success' : status === StatusQuizAttempt.Failed ? 'text-state-error' : 'text-bw-1'} pr-0.5 font-medium`}
-        >
-          {status}
-        </div>
+        {data?.quiz?.is_graded &&
+        data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
+          getGradedStatus(data?.quiz?.attempt?.grading_status)
+        ) : (
+          <div
+            className={`${status === StatusQuizAttempt.Passed ? 'text-state-success' : status === StatusQuizAttempt.Failed ? 'text-state-error' : 'text-bw-1'} pr-0.5 font-medium`}
+          >
+            {status}
+          </div>
+        )}
       </div>
       <PopupCanNotRetakeTest
         open={openResource}

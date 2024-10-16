@@ -1,14 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
-import { IMyCourseDetail } from 'src/type/courses'
-import TestModal from 'src/pages/courses/test'
-import { truncateString } from '@utils/index'
-import { roundNumber } from '@utils/helpers'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
-import SappTooltip from 'src/common/SappTooltip'
 import { trackGAEvent } from '@utils/google-analytics'
+import { roundNumber } from '@utils/helpers'
+import { truncateString } from '@utils/index'
+import { useEffect, useMemo, useState } from 'react'
+import SappTooltip from 'src/common/SappTooltip'
+import { ANIMATION, TEST_TYPE } from 'src/constants'
+import TestModal from 'src/pages/courses/test'
+import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
+import SappModalV3 from '@components/base/modal/SappModalV3'
+import { ConfirmIcon } from '@assets/icons'
 
 const PartFailed = ({
   coursePart,
@@ -22,6 +24,7 @@ const PartFailed = ({
   const quizAttempt = coursePart?.quiz
   const [open, setOpen] = useState(false)
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
+  const [openReport, setOpenReport] = useState<boolean>(false)
 
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
@@ -33,18 +36,6 @@ const PartFailed = ({
     }
     return false
   }, [coursePart?.quiz?.attempt])
-
-  // const handleChapterTest = async () => {
-  //   try {
-  //     await CoursesAPI.learningOutcomeProgress(
-  //       router.query.courseId,
-  //       coursePart.id,
-  //     )
-  //   } catch (err) {
-  //     toast.error('Cannot progress Test')
-  //     throw err
-  //   }
-  // }
 
   const countTimeSpent = (ratio_score: string) => {
     const parts = ratio_score?.split('/')
@@ -159,6 +150,7 @@ const PartFailed = ({
                   class_user_id={class_user_id}
                   coursePart={coursePart}
                   quizAttempt={quizAttempt}
+                  setOpenReport={setOpenReport}
                   trackGA={() => {
                     trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
                   }}
@@ -193,6 +185,19 @@ const PartFailed = ({
         class_user_id={class_user_id}
         is_passed_course={is_passed_course}
         activeCourse={() => {}}
+      />
+      <SappModalV3
+        open={openReport}
+        okButtonCaption="Back"
+        handleCancel={() => {}}
+        onOk={() => {
+          setOpenReport(false)
+        }}
+        fullWidthBtn={true}
+        buttonSize="extra"
+        icon={<ConfirmIcon />}
+        header="Awating Grading"
+        content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
       />
     </>
   )

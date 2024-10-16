@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
-import React, { ReactNode } from 'react'
-import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+import { ReactNode } from 'react'
 import { IButtonColors } from 'src/type'
+import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 
 interface IProps {
   title?: string | undefined
@@ -34,6 +34,7 @@ interface IProps {
   header: string
   content?: string | undefined
   children?: ReactNode
+  isMaskClosable?: boolean
 }
 
 const SappModalV3 = ({
@@ -64,6 +65,7 @@ const SappModalV3 = ({
   icon,
   content,
   children,
+  isMaskClosable = true,
 }: IProps) => {
   return (
     <Modal
@@ -75,6 +77,7 @@ const SappModalV3 = ({
       className={classNameModal ?? 'sapp-modal'}
       onCancel={handleClose || handleCancel}
       width={width}
+      maskClosable={isMaskClosable}
     >
       {icon && (
         <div className="flex justify-center">
@@ -117,7 +120,7 @@ const SappModalV3 = ({
               full: fullWidthBtn,
               className: cancelButtonClass,
             }}
-          ></ButtonCancelSubmit>
+          />
         </div>
       )}
     </Modal>

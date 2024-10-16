@@ -29,6 +29,8 @@ export interface IButtonProps {
   isUnderLine?: boolean
   childClass?: string
   classNameLoading?: string
+  showTooltip?: boolean
+  toolTipTitle?: string
 }
 
 export interface ITabs {

@@ -104,6 +104,10 @@ module.exports = {
         support: {
           1: '#33475B',
         },
+        blur: {
+          yellow: '#FFB8001A',
+          green: '#3978391A',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',

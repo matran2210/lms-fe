@@ -1,10 +1,9 @@
-import React from 'react'
-import Part from './Part'
-import PartMiddleTest from './PartFailed'
-import { ANIMATION } from 'src/constants'
-import { IMyCourseDetail } from 'src/type/courses'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
+import { ANIMATION, TEST_TYPE } from 'src/constants'
+import { IMyCourseDetail } from 'src/type/courses'
+import Part from './Part'
+import PartMiddleTest from './PartFailed'
 
 const CourseParts = ({
   courses,
@@ -35,9 +34,11 @@ const CourseParts = ({
               data-aos={ANIMATION.DATA_AOS}
               style={{ zIndex: courses?.length - index }}
             >
-              {['MID_TERM_TEST', 'FINAL_TEST'].includes(
-                coursePart?.course_section_type,
-              ) ? (
+              {[
+                TEST_TYPE.MID_TERM_TEST,
+                TEST_TYPE.FINAL_TEST,
+                TEST_TYPE.MOCK_TEST,
+              ].includes(coursePart?.course_section_type as TEST_TYPE) ? (
                 <PartMiddleTest
                   key={index}
                   coursePart={coursePart}
