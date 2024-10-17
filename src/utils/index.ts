@@ -384,4 +384,10 @@ export const truncateHTML = (limit: number, html?: string) => {
   }
   return traverse(div)
 }
+
+export const removeHtmlTags = (htmlString?: string) => {
+  if (!htmlString) return ''
+  return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
+}
+
 export * from './formatNumber'
