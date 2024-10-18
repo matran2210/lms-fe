@@ -3,6 +3,7 @@ import { setActToken, setRefreshToken } from '..'
 import { fetcher } from '@services/requestV2'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getMessagingToken } from '@utils/firebase'
+import Cookies from 'js-cookie'
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
   if (!accessDeviceToken) {
@@ -34,6 +35,8 @@ export const getKeycloakInstance = async (): Promise<Keycloak> => {
     }
     setActToken(keycloakInstance?.token ?? '')
     setRefreshToken(keycloakInstance?.refreshToken ?? '')
+    Cookies.set('accessToken', keycloakInstance?.token ?? '')
+    Cookies.set('refreshToken', keycloakInstance?.refreshToken ?? '')
   }
   return keycloakInstance
 }
