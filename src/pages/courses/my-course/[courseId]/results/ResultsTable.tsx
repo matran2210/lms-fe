@@ -31,7 +31,7 @@ const headers = [
   },
   {
     label: 'Status',
-    className: clsx(commonHeaderCellStyle, 'text-center'),
+    className: clsx(commonHeaderCellStyle),
   },
   {
     label: 'Score',
