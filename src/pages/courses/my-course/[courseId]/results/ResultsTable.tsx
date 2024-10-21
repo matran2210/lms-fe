@@ -17,7 +17,7 @@ import ResultsTableFilter from './ResultsTableFilter'
 // Là essay nên không có điểm
 const ESSAY_QUESTION = '0/0'
 const commonHeaderCellStyle =
-  'text-left text-medium-sm text-gray-1 font-semibold pb-3'
+  'text-left text-medium-sm text-gray-1 font-semibold pb-3 min-w-28'
 
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 const headers = [
