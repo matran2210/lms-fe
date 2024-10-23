@@ -90,22 +90,22 @@ const ResultsTable = () => {
     select: (data: { data: any }) => {
       return data.data
     },
-    retry: false,
+    retry: 1,
   })
 
   const getScore = (rowData: Daum, grading_method: GradingMethod): string => {
-    const attempt = rowData.quiz.attempts[0]
+    const attempt = rowData?.quiz?.attempts[0]
 
     if (!attempt) return '-'
 
     if (grading_method === GradingMethod.AUTO)
-      return `${attempt.multiple_choice_score}%`
+      return `${attempt?.multiple_choice_score}%`
 
     if (
       grading_method === GradingMethod.MANUAL &&
-      attempt.grading_status === GradingStatus.FINISHED
+      attempt?.grading_status === GradingStatus.FINISHED
     ) {
-      return `${attempt.score}%`
+      return `${attempt?.score}%`
     }
 
     return '-'

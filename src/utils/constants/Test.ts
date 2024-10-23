@@ -1,9 +1,9 @@
 export enum GradingMethod {
-  AUTO,
-  MANUAL,
+  AUTO = 'AUTO',
+  MANUAL = 'MANUAL',
 }
 
 export enum GradingStatus {
-  AWAITING,
-  FINISHED,
+  AWAITING = 'AWAITING',
+  FINISHED = 'FINISHED',
 }
