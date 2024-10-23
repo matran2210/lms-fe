@@ -1,6 +1,6 @@
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
-import { TEST_TYPE } from '@utils/constants'
+import { GradingMethod, GradingStatus, TEST_TYPE } from '@utils/constants'
 import { getTimeFromInput, truncateString } from '@utils/index'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
@@ -12,10 +12,10 @@ import { useQuery } from 'react-query'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
+import { Daum, IResultsList } from 'src/type/results'
 import ResultsTableFilter from './ResultsTableFilter'
 
 // Là essay nên không có điểm
-const ESSAY_QUESTION = '0/0'
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3 min-w-28'
 
@@ -75,7 +75,7 @@ const ResultsTable = () => {
     isLoading,
     refetch,
     isFetching,
-  } = useQuery({
+  } = useQuery<IResultsList>({
     // Fetch lại data khi filter thay đổi
     queryKey: [CourseKey.ResultsList, currentPage, pageSize, selected],
     queryFn: () => {
@@ -92,6 +92,24 @@ const ResultsTable = () => {
     },
     retry: false,
   })
+
+  const getScore = (rowData: Daum, grading_method: GradingMethod): string => {
+    const attempt = rowData.quiz.attempts[0]
+
+    if (!attempt) return '-'
+
+    if (grading_method === GradingMethod.AUTO)
+      return `${attempt.multiple_choice_score}%`
+
+    if (
+      grading_method === GradingMethod.MANUAL &&
+      attempt.grading_status === GradingStatus.FINISHED
+    ) {
+      return `${attempt.score}%`
+    }
+
+    return '-'
+  }
 
   isLoading && <></>
   useEffect(() => {
@@ -110,7 +128,7 @@ const ResultsTable = () => {
         classTable="w-full"
         loading={isFetching}
       >
-        {resultData?.data?.map((row: any) => {
+        {resultData?.data?.map((row) => {
           return (
             <tr
               className={clsx({
@@ -167,9 +185,7 @@ const ResultsTable = () => {
 
               {/* Score */}
               <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {row?.quiz?.attempts[0]?.ratio_score !== ESSAY_QUESTION
-                  ? row?.quiz?.attempts[0]?.ratio_score
-                  : '-'}
+                {getScore(row, row?.quiz?.grading_method)}
               </td>
 
               {/* Time Spent */}
@@ -189,15 +205,17 @@ const ResultsTable = () => {
           )
         })}
       </SappTable>
-      <PaginationSAPP
-        currentPage={resultData?.metadata?.page_index}
-        pageSize={resultData?.metadata?.page_size}
-        totalItems={resultData?.metadata?.total_records}
-        setCurrentPage={setCurrentPage}
-        setPageSize={setPageSize}
-        type={'table'}
-        classname="mt-3"
-      />
+      {resultData && (
+        <PaginationSAPP
+          currentPage={resultData.metadata?.page_index}
+          pageSize={resultData.metadata?.page_size}
+          totalItems={resultData.metadata?.total_records}
+          setCurrentPage={setCurrentPage}
+          setPageSize={setPageSize}
+          type={'table'}
+          classname="mt-3"
+        />
+      )}
     </>
   )
 }
