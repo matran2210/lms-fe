@@ -176,7 +176,7 @@ const ScoreDetail = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:!mb-0 2xl:px-24 ${className}`}
+      className={`!h-fit bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
