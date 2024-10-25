@@ -22,15 +22,21 @@ import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
 import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,
   showNotification,
 } from 'src/redux/slice/Notification/Notification'
 import { onMessageListener } from 'src/utils/firebase'
+import 'src/utils/helpers/keycloak'
+import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
+import {
+  createAuthenticationManager,
+  loginReducer,
+} from 'src/redux/slice/Login/Login'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -40,10 +46,9 @@ type MyAppProps = AppProps & {
 
 function MyApp({ Component, pageProps }: MyAppProps) {
   injectStore(store)
+
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const [openLimit, setOpenLimit] = useState<boolean>(false)
-
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -51,8 +56,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       },
     },
   })
-
-  // const { getPinnedData } = usePinnedNotifyContext()
 
   useEffect(() => {
     onMessageListener().then((data: any) => {
@@ -79,31 +82,27 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router.events])
 
-  let authToken = getActToken()
-
   const [socket, setSocket] = useState<any>(null)
-
+  const authenticationManager = new AuthenticationManager()
   useEffect(() => {
-    if (authToken) {
+    const token = authenticationManager.getToken()
+    if (token !== '') {
       const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
         extraHeaders: {
-          authorization: authToken,
+          authorization: token,
         },
       })
-
       setSocket(newSocket)
-
       return () => {
         newSocket.disconnect()
       }
     }
-  }, [authToken]) // reconnect khi authToken thay đổi
+  }, [authenticationManager]) // reconnect khi authToken thay đổi
 
   useEffect(() => {
     if (socket) {
       socket.on('connect', () => {})
       socket.on('disconnect', () => {})
-
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -111,7 +110,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         )
         window.dispatchEvent(new Event('storage'))
       })
-
       return () => {
         socket?.off(SOCKET_EVENTS.NOTIFICATION_UNREAD)
       }

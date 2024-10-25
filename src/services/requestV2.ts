@@ -1,13 +1,8 @@
-import {
-  getLocalStorgeActToken,
-  setActToken,
-  setRefreshToken,
-} from '@utils/index'
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { toast } from 'react-hot-toast'
 import { apiURL } from 'src/redux/services/httpService'
-import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
 import exceptions from './en.exceptions.json'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 type ApiConfig<T = any> = {
   uri: string
@@ -45,11 +40,28 @@ request.interceptors.request.use(
   },
 )
 
-request.interceptors.request.use((config: any) => {
-  config.headers = {
-    Authorization: 'Bearer ' + getLocalStorgeActToken(),
-    ...config.headers,
+request.interceptors.request.use(async (config: any) => {
+  const authenticationManager = new AuthenticationManager()
+  if (authenticationManager.getToken() !== '') {
+    config.headers = {
+      Authorization: 'Bearer ' + authenticationManager.getToken(),
+      ...config.headers,
+    }
+    return config
   }
+  await new Promise((resolve) => {
+    let interval = null as any
+    interval = setInterval(() => {
+      if (authenticationManager.getToken()) {
+        config.headers = {
+          Authorization: 'Bearer ' + authenticationManager.getToken(),
+          ...config.headers,
+        }
+        clearInterval(interval)
+        resolve(config)
+      }
+    }, 100)
+  })
 
   return config
 })
@@ -66,14 +78,11 @@ request.interceptors.response.use(
     }
 
     if (error.response && error.response.status === 401) {
-      const keycloak = await getKeycloakInstance()
-      await keycloak.updateToken(30)
-      const newAccessToken = keycloak.token ?? ''
-      const newRefreshToken = keycloak.refreshToken ?? ''
-      setActToken(newAccessToken)
-      setRefreshToken(newRefreshToken)
+      const authenticationManager = new AuthenticationManager()
+
+      await authenticationManager.refreshToken()
       originalRequest.headers['Authorization'] =
-        'Bearer ' + getLocalStorgeActToken()
+        'Bearer ' + authenticationManager.getToken()
       return axios(originalRequest)
     }
     return Promise.reject(error)

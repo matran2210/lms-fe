@@ -102,7 +102,6 @@ const ProfileHeader = ({
   }
 
   useEffect(() => {
-    dispatch(getMe())
     dispatch(getUserInformation())
   }, [])
 

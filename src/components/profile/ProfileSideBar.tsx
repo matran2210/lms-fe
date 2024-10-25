@@ -1,7 +1,7 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { trackGAEvent } from '@utils/google-analytics'
-import { getKeycloakInstance } from '@utils/helpers/keycloak'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import {
   getLocalStorageItem,
   removeLocalStorageItem,
@@ -77,9 +77,8 @@ const ProfileSideBar = ({ page, children }: IProps) => {
           removeLocalStorageItem('pinnedId')
         }
       })
-      getKeycloakInstance().then((keycloak_instance) => {
-        keycloak_instance.logout({ redirectUri: window.location.origin })
-      })
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout(window.location.origin)
     } catch (error) {}
   }
 

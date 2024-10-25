@@ -24,7 +24,7 @@ import { PageLink } from 'src/constants'
 // })
 const ForgotPasswordPage = () => {
   const router = useRouter()
-  router.push(PageLink.PAGE_NOT_FOUND)
+  router.push(PageLink.COURSES)
 }
 //   const router = useRouter()
 //   const {

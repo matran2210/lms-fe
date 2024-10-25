@@ -1,12 +1,10 @@
 import LearningResource from '@components/mycourses/LearningResource'
 import PopupStep from '@components/user-guide/PopupStep'
 import { trackGAEvent } from '@utils/google-analytics'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { UserGuide } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { increment, reset } from 'src/redux/slice/Course/UserGuide'
-import { getCountUnRead } from 'src/redux/slice/Notification/Notification'
-import { getMe } from 'src/redux/slice/User/User'
 import {
   MENU_BOTTOM,
   MENU_ITEMS,

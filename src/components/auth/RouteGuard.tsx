@@ -1,10 +1,10 @@
-import { getKeycloakInstance } from '@utils/helpers/keycloak'
-import { getLocalStorgeActToken } from '@utils/index'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
-import { useAppDispatch } from 'src/redux/hook'
-import { getMe } from 'src/redux/slice/User/User'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { createAuthenticationManager } from 'src/redux/slice/Login/Login'
+import { getMe, userReducer } from 'src/redux/slice/User/User'
 
 interface IProps {
   children: JSX.Element
@@ -13,11 +13,11 @@ interface IProps {
 export const RouteGuard = ({ children }: IProps) => {
   const router = useRouter()
   const [authorized, setAuthorized] = useState(false)
-
   const dispatch = useAppDispatch()
+  const userSlice = useAppSelector(userReducer)
   useEffect(() => {
     // on initial load - run auth check
-    authCheck()
+    callGetMe()
     // on route change start - hide page content by setting
     // authorized to false
     // const hideContent = () => setAuthorized(true)
@@ -31,27 +31,25 @@ export const RouteGuard = ({ children }: IProps) => {
     //   // router.events.off('routeChangeStart', hideContent)
     //   // router.events.off('routeChangeComplete', authCheck)
     // }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname])
 
   const callGetMe = async () => {
+    if (userSlice.user.id) {
+      return
+    }
     try {
       await dispatch(getMe()).unwrap()
+      setAuthorized(true)
     } catch (error) {}
   }
 
-  const authCheck = async () => {
-    await getKeycloakInstance()
-    callGetMe().then(() => setAuthorized(true))
-    // setAuthorized(true)
-  }
   /**
    * @description Check if the current pathname is '/' redirect to '/dashboard'
    */
   useEffect(() => {
     // Check if the current pathname is '/'
-    if (router.pathname === '/' && getLocalStorgeActToken()) {
+    if (router.pathname === '/') {
       // Redirect to '/courses'
       router.replace(PageLink.COURSES)
     }

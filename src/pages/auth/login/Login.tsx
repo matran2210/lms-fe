@@ -24,7 +24,7 @@
 // import { useAppDispatch, useAppSelector } from '../../../redux/hook'
 // import { getLoginUser, loginReducer } from '../../../redux/slice/Login/Login'
 // import PopUpLimit from './PopupLimit'
-// import { getKeycloakInstance } from '../../../utils/helpers/keycloak'
+// import { getkeyCloakInstance } from '../../../utils/helpers/keycloak'
 // import SingleDialogLayout from '@components/layout/SingleDialog'
 // import { EventTestAPI } from 'src/pages/api/event-test'
 
@@ -48,7 +48,7 @@ import { PageLink } from 'src/constants'
 
 const LoginPage = () => {
   const router = useRouter()
-  router.push(PageLink.PAGE_NOT_FOUND)
+  router.push(PageLink.COURSES)
 }
 //   const router = useRouter()
 //   const dispatch = useAppDispatch()
@@ -110,7 +110,7 @@ const LoginPage = () => {
 //     setLoading(true)
 //     try {
 //       const getFireBaseToken = await handleDeviceToken()
-//       const keycloak = getKeycloakInstance()
+//       const keycloak = getkeyCloakInstance()
 //       dispatch(
 //         getLoginUser({
 //           device_id: getFireBaseToken,

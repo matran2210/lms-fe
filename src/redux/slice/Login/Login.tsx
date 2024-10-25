@@ -1,23 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { removeJwtToken, removeLocalStorageJwtToken } from '@utils/index'
+import { AuthAPI } from 'src/pages/api/profile'
 import { RootState } from '../../store'
-import { getKeycloakInstance } from 'src/utils/helpers/keycloak'
-import { toast } from 'react-hot-toast'
 import {
   ChangePasswordReq,
   ChangePasswordRes,
-  PostLoginReq,
   LoginState,
 } from '../../types/Login/login'
-import {
-  removeJwtToken,
-  removeLocalStorageJwtToken,
-  setActToken,
-  setCookieActToken,
-  setCookieRefreshToken,
-  setRefreshToken,
-} from '@utils/index'
-import { AuthAPI } from 'src/pages/api/profile'
-import { PageLink } from 'src/constants'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -31,15 +21,26 @@ const initialState: LoginState = {
   unsavedChange: false,
 }
 
+export const createAuthenticationManager = createAsyncThunk(
+  'loginReducer/handleInitKeyCloak',
+  async (authenticationManager: AuthenticationManager, thunkAPI) => {
+    try {
+      return authenticationManager
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 export const getLogoutUser = createAsyncThunk(
   'loginReducer/handleLogout',
   async ({}, thunkAPI) => {
     try {
+      const authenticationManager = new AuthenticationManager()
       localStorage.clear()
       removeJwtToken()
       removeLocalStorageJwtToken()
-      const keycloak = await getKeycloakInstance()
-      await keycloak.logout({ redirectUri: window.location.origin })
+      await authenticationManager.logout(window.location.origin)
       return {}
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)

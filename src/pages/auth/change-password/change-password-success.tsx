@@ -5,21 +5,21 @@
 // import { PageLink } from 'src/constants'
 // import { removeJwtToken, removeLocalStorageJwtToken } from '@utils/index'
 // import SingleDialogLayout from '@components/layout/SingleDialog'
-// import { getKeycloakInstance } from '@utils/helpers/keycloak'
+// import { getkeyCloakInstance } from '@utils/helpers/keycloak'
 
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants'
 
 const ChangePasswordSuccess = () => {
   const router = useRouter()
-  router.push(PageLink.PAGE_NOT_FOUND)
+  router.push(PageLink.COURSES)
 }
 //   const router = useRouter()
 
 //   const redirectLogin = () => {
 //     removeJwtToken()
 //     removeLocalStorageJwtToken()
-//     const keycloak = getKeycloakInstance()
+//     const keycloak = getkeyCloakInstance()
 //     keycloak.logout({ redirectUri: window.location.origin })
 //   }
 

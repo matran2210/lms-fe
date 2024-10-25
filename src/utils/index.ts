@@ -45,7 +45,7 @@ export const setRefreshToken = (refreshToken: string) => {
 }
 
 export const getLocalStorgeActToken = (): string => {
-  return localStorage.getItem('accessToken') || ''
+  return ''
 }
 
 export const getLocalStorgeRefreshToken = (): string => {

@@ -3,22 +3,22 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 // import { useState } from 'react'
 import SappButton from '@components/base/button/SappButton'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
+  VALIDATE_MIN_LENGTH_PASSWORD,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
-  VALIDATE_MIN_LENGTH_PASSWORD,
 } from '@utils/helpers/ValidateMessage'
 import { display422Errors } from '@utils/helpers/form'
+import { keyCloakInstance } from '@utils/helpers/keycloak'
+import { removeJwtToken } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
-import { removeJwtToken } from '@utils/index'
-import SingleDialogLayout from '@components/layout/SingleDialog'
-import { getKeycloakInstance } from '@utils/helpers/keycloak'
 
 interface IInputProps {
   password: string
@@ -82,8 +82,7 @@ const ChangePasswordPage = () => {
   }
   const redirectLogin = async () => {
     removeJwtToken()
-    const keycloak = await getKeycloakInstance()
-    await keycloak.logout({ redirectUri: window.location.origin })
+    await keyCloakInstance.logout({ redirectUri: window.location.origin })
   }
 
   return (

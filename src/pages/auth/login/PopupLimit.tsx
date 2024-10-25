@@ -15,7 +15,7 @@ import { PageLink } from 'src/constants'
 
 const PopUpLimit = () => {
   const router = useRouter()
-  router.push(PageLink.PAGE_NOT_FOUND)
+  router.push(PageLink.COURSES)
 }
 //   const dispatch = useAppDispatch()
 //   // const {} = useAppSelector()

@@ -1,9 +1,7 @@
-import Keycloak, { KeycloakConfig } from 'keycloak-js'
-import { setActToken, setRefreshToken } from '..'
-import { fetcher } from '@services/requestV2'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { fetcher } from '@services/requestV2'
 import { getMessagingToken } from '@utils/firebase'
-import Cookies from 'js-cookie'
+import Keycloak, { KeycloakConfig } from 'keycloak-js'
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
   if (!accessDeviceToken) {
@@ -18,27 +16,46 @@ const handleFirebaseToken = async () => {
   }
   await setDeviceFirebaseToSession(accessDeviceToken ?? '')
 }
-let keycloakInstance: Keycloak | null = null
-export const getKeycloakInstance = async (): Promise<Keycloak> => {
-  if (!keycloakInstance) {
+export class AuthenticationManager {
+  keyCloak: Keycloak = null as any
+
+  constructor() {
+    if (AuthenticationManager.instance) {
+      return AuthenticationManager.instance
+    }
+
+    this.initKeyCloakConnect()
+    AuthenticationManager.instance = this
+  }
+
+  async initKeyCloakConnect() {
     const keycloakConfig: KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
       clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
     }
-    keycloakInstance = new Keycloak(keycloakConfig)
-    await keycloakInstance.init({ onLoad: 'login-required' }).then((value) => {
-      handleFirebaseToken()
-    })
-    if (!keycloakInstance.authenticated) {
-      await keycloakInstance.login()
+    this.keyCloak = new Keycloak(keycloakConfig)
+    await this.keyCloak.init({ onLoad: 'login-required' })
+    if (!this.keyCloak.authenticated) {
+      await this.keyCloak.login()
     }
-    setActToken(keycloakInstance?.token ?? '')
-    setRefreshToken(keycloakInstance?.refreshToken ?? '')
-    Cookies.set('accessToken', keycloakInstance?.token ?? '')
-    Cookies.set('refreshToken', keycloakInstance?.refreshToken ?? '')
+    await handleFirebaseToken()
   }
-  return keycloakInstance
+
+  getToken(): string {
+    return this.keyCloak?.token ?? ''
+  }
+
+  async refreshToken() {
+    await this.keyCloak.login()
+    await this.keyCloak?.updateToken(30)
+    return this.keyCloak?.token
+  }
+
+  async logout(redirectUri: string) {
+    await this.keyCloak?.logout({ redirectUri: redirectUri })
+  }
+  static instance: AuthenticationManager
 }
 
 export async function setDeviceFirebaseToSession(token: string): Promise<void> {
