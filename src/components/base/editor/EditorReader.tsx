@@ -70,8 +70,10 @@ const EditorReader = ({
   }, [content, highlighted])
 
   useEffect(() => {
-    setContent(text_editor_content)
-  })
+    if (text_editor_content !== content) {
+      setContent(text_editor_content)
+    }
+  }, [text_editor_content])
 
   const convertMathToImage = async (element: any) => {
     const viewer = com?.wiris?.js?.JsPluginViewer
@@ -190,6 +192,7 @@ const EditorReader = ({
           ref={extenalRef || refDocument}
           className={clsx({ 'pt-2 text-white': pinned })}
           key={content}
+          translate="no"
         >
           {parseHTML(replaceTextAlignCenterToWebKitCenter(content || ''), {
             replace: (domNode) => {
