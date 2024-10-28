@@ -834,6 +834,11 @@ const ActivityPage = () => {
                         <div className="text-base font-semibold">Resource:</div>
                         <ul className="list-disc text-base">
                           {activity?.files.map((e: any, index: number) => {
+                            const isPreviewFile =
+                              e.resource.suffix_type !==
+                                SUFFIX_TYPE.GENERAL_FILE &&
+                              e.resource.name.slice(-4) !== '.csv'
+
                             return (
                               <div
                                 className={`flex justify-between ${
@@ -847,8 +852,7 @@ const ActivityPage = () => {
                                   </div>
                                   <SappTooltip
                                     title={
-                                      e.resource.suffix_type !==
-                                      SUFFIX_TYPE.GENERAL_FILE
+                                      isPreviewFile
                                         ? 'Preview File'
                                         : 'Download file'
                                     }
@@ -858,8 +862,7 @@ const ActivityPage = () => {
                                     <p
                                       className="cursor-pointer text-gray-1 hover:text-primary"
                                       onClick={() => {
-                                        e.resource.suffix_type !==
-                                        SUFFIX_TYPE.GENERAL_FILE
+                                        isPreviewFile
                                           ? handleOpenScratchPad(
                                               {
                                                 type: 'file',
