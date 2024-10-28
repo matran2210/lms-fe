@@ -14,6 +14,7 @@ interface IProps {
   activeShowAll: boolean
   setActiveShowAll: any
   setValueFilter: UseFormSetValue<FieldValues>
+  isScrollCenter?: boolean
 }
 
 const TabSlide = ({
@@ -25,12 +26,13 @@ const TabSlide = ({
   activeShowAll,
   setActiveShowAll,
   setValueFilter,
+  isScrollCenter = true,
 }: IProps) => {
   const elementRef = useRef(null) as any
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
 
   useEffect(() => {
-    if (elementRef?.current && !activeShowAll) {
+    if (elementRef?.current && !activeShowAll && isScrollCenter) {
       elementRef.current.scrollTo(
         elementRef?.current.offsetWidth *
           Math.floor(
@@ -48,7 +50,11 @@ const TabSlide = ({
         setValueFilter('filter', undefined)
         setActiveShowAll(false)
         const el = elementRef.current
-        el && setHasScrollBar(el.scrollWidth > el.getBoundingClientRect().width)
+        el &&
+          setHasScrollBar(
+            el.scrollWidth > el.getBoundingClientRect().width &&
+              data?.length > 0,
+          )
       }
     }
     updateState(hasScrollBar)
@@ -58,7 +64,10 @@ const TabSlide = ({
   useEffect(() => {
     if (elementRef?.current && data.length > 0) {
       const el = elementRef.current
-      el && setHasScrollBar(el.scrollWidth > el.getBoundingClientRect().width)
+      el &&
+        setHasScrollBar(
+          el.scrollWidth > el.getBoundingClientRect().width && data?.length > 0,
+        )
     }
   }, [elementRef?.current])
   const renderTab = useMemo(() => {
@@ -172,7 +181,7 @@ const TabSlide = ({
             : ' flex w-full items-center gap-6'
         }`}
       >
-        {data.length > 0 && (
+        {hasScrollBar && (
           <div
             className={`${
               !activeShowAll && 'absolute -left-3 top-0.5 -translate-x-full'
@@ -308,7 +317,7 @@ const TabSlide = ({
             </div>
           )}
         </div>
-        {data.length > 0 && (
+        {hasScrollBar && (
           <div
             className={`${
               !activeShowAll && 'absolute -right-3 top-0.5 translate-x-full'

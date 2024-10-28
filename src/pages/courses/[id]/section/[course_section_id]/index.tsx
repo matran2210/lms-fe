@@ -77,6 +77,7 @@ const CoursePartDetail = () => {
       enabled:
         router.query.id !== undefined &&
         router.query.course_section_id !== undefined,
+      retry: 1,
     })
   }
 

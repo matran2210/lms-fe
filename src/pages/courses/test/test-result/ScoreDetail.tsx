@@ -1,6 +1,10 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { removeStyleAttributes, truncateString } from '@utils/index'
+import {
+  removeHtmlTags,
+  removeStyleAttributes,
+  truncateString,
+} from '@utils/index'
 import { Tooltip } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
@@ -82,6 +86,7 @@ const ScoreDetail = ({
     },
     {
       enabled: router.query.id !== undefined,
+      retry: 1,
     },
   )
 
@@ -171,7 +176,7 @@ const ScoreDetail = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:!mb-0 2xl:px-24 ${className}`}
+      className={`!h-fit bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
@@ -232,7 +237,7 @@ const ScoreDetail = ({
                               className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
                               dangerouslySetInnerHTML={{
                                 __html: DOMPurify.sanitize(
-                                  removeStyleAttributes(
+                                  removeHtmlTags(
                                     e?.question?.question_content,
                                   ) ?? '--',
                                 ),

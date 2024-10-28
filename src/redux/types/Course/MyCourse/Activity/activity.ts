@@ -75,4 +75,11 @@ export interface IUserInDiscussion {
   id: string
   is_sapp_supporter: boolean
   supporter_display_name: string
+  avatar?: {
+    '40x40': string
+    '50x50': string
+    '150x150': string
+    '160x160': string
+    ORIGIN: string
+  }
 }

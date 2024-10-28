@@ -196,7 +196,7 @@ export const useGetData = (
   params: Object,
   fetchData: any,
 ) => {
-  return useQuery([queryKey, params], () => fetchData(params))
+  return useQuery([queryKey, params], () => fetchData(params), { retry: 1 })
 }
 
 export const useGetDataQuery = (
@@ -343,7 +343,7 @@ export const truncateHTML = (limit: number, html?: string) => {
   const div = document.createElement('div')
   div.innerHTML = html
   let wordCount = 0
-  function traverse(node: any) {
+  function traverse(node: any): string {
     const nodeType = node.nodeType
 
     if (wordCount >= limit) {
@@ -351,13 +351,15 @@ export const truncateHTML = (limit: number, html?: string) => {
     }
 
     if (nodeType === Node.TEXT_NODE) {
-      const text = node.textContent
-      const words = text.split(/\s+/)
+      const text = node.textContent || ''
+      const words = text.split(/(\s+)/)
       let truncatedText = ''
       for (let i = 0; i < words.length && wordCount < limit; i++) {
-        if (words[i]) {
-          truncatedText += (i > 0 ? ' ' : '') + words[i]
+        if (/\S/.test(words[i])) {
+          truncatedText += words[i]
           wordCount++
+        } else {
+          truncatedText += words[i]
         }
       }
 
@@ -373,9 +375,18 @@ export const truncateHTML = (limit: number, html?: string) => {
 
       const childNodes = Array.from(node.childNodes)
       let innerHTML = ''
-      childNodes.forEach((child) => {
+      childNodes.forEach((child: any) => {
         if (wordCount < limit) {
-          innerHTML += traverse(child)
+          const childContent = traverse(child)
+          if (
+            child?.nodeType === Node.ELEMENT_NODE &&
+            innerHTML &&
+            !/\s$/.test(innerHTML)
+          ) {
+            innerHTML += ' ' + childContent
+          } else {
+            innerHTML += childContent
+          }
         }
       })
       return `${openTag}${innerHTML}${closeTag}`
@@ -384,4 +395,10 @@ export const truncateHTML = (limit: number, html?: string) => {
   }
   return traverse(div)
 }
+
+export const removeHtmlTags = (htmlString?: string) => {
+  if (!htmlString) return ''
+  return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
+}
+
 export * from './formatNumber'
