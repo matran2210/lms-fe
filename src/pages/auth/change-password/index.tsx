@@ -11,7 +11,6 @@ import {
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import { display422Errors } from '@utils/helpers/form'
-import { keyCloakInstance } from '@utils/helpers/keycloak'
 import { removeJwtToken } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -19,6 +18,7 @@ import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 interface IInputProps {
   password: string
@@ -82,7 +82,8 @@ const ChangePasswordPage = () => {
   }
   const redirectLogin = async () => {
     removeJwtToken()
-    await keyCloakInstance.logout({ redirectUri: window.location.origin })
+    const authenticationManager = new AuthenticationManager()
+    await authenticationManager.logout(window.location.origin)
   }
 
   return (
