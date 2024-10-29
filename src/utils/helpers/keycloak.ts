@@ -36,9 +36,6 @@ export class AuthenticationManager {
     }
     this.keyCloak = new Keycloak(keycloakConfig)
     await this.keyCloak.init({ onLoad: 'login-required' })
-    if (!this.keyCloak.authenticated) {
-      await this.keyCloak.login()
-    }
     await handleFirebaseToken()
   }
 
@@ -47,8 +44,10 @@ export class AuthenticationManager {
   }
 
   async refreshToken() {
-    await this.keyCloak.login()
-    await this.keyCloak?.updateToken(30)
+    const response = await this.keyCloak?.updateToken(30)
+    if (!response) {
+      await this.keyCloak.login()
+    }
     return this.keyCloak?.token
   }
 
