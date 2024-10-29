@@ -1,7 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
+import { CERTIFICATE_DETAIL } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
+import { NextRouter, useRouter } from 'next/router'
+
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
   if (!accessDeviceToken) {
@@ -18,6 +22,7 @@ const handleFirebaseToken = async () => {
 }
 export class AuthenticationManager {
   keyCloak: Keycloak = null as any
+  router: NextRouter | null = null
 
   constructor() {
     if (AuthenticationManager.instance) {
@@ -29,14 +34,19 @@ export class AuthenticationManager {
   }
 
   async initKeyCloakConnect() {
+    this.router = useRouter()
+
     const keycloakConfig: KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
       clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
     }
-    this.keyCloak = new Keycloak(keycloakConfig)
-    await this.keyCloak.init({ onLoad: 'login-required' })
-    await handleFirebaseToken()
+
+    if (this.router.pathname !== CERTIFICATE_DETAIL) {
+      this.keyCloak = new Keycloak(keycloakConfig)
+      await this.keyCloak.init({ onLoad: 'login-required' })
+      await handleFirebaseToken()
+    }
   }
 
   getToken(): string {

@@ -1,9 +1,8 @@
-import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { CERTIFICATE_DETAIL } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { createAuthenticationManager } from 'src/redux/slice/Login/Login'
 import { getMe, userReducer } from 'src/redux/slice/User/User'
 
 interface IProps {
@@ -35,9 +34,11 @@ export const RouteGuard = ({ children }: IProps) => {
   }, [router.pathname])
 
   const callGetMe = async () => {
-    if (userSlice.user.id) {
+    if (userSlice.user.id || router.pathname === CERTIFICATE_DETAIL) {
+      setAuthorized(true)
       return
     }
+
     try {
       await dispatch(getMe()).unwrap()
       setAuthorized(true)
