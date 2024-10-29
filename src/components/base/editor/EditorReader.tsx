@@ -34,7 +34,6 @@ const EditorReader = ({
   highlighArea = 'hightlight_area',
   pinned,
 }: Props) => {
-  const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   const [content, setContent] = useState<any>()
@@ -42,22 +41,6 @@ const EditorReader = ({
   const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
     {},
   )
-
-  useEffect(() => {
-    if (extenalRef) {
-      extenalRef?.current?.addEventListener('click', handleOnclick)
-
-      return () => {
-        extenalRef?.current?.removeEventListener('click', handleOnclick)
-      }
-    } else {
-      refDocument?.current?.addEventListener('click', handleOnclick)
-
-      return () => {
-        refDocument?.current?.removeEventListener('click', handleOnclick)
-      }
-    }
-  }, [refDocument?.current, extenalRef?.current])
 
   useEffect(() => {
     if (highlighArea === 'hightlight_area_topic') {
@@ -124,7 +107,7 @@ const EditorReader = ({
     }, 100)
   })
 
-  const handleOnclick = async (e: MouseEvent) => {
+  const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement
     if (target.className === 'sapp_overlay_video') {
       // const overlay = target.nextSibling as any
@@ -189,9 +172,10 @@ const EditorReader = ({
         ref={editorRef}
       >
         <div
-          ref={extenalRef || refDocument}
+          ref={extenalRef}
           className={clsx({ 'pt-2 text-white': pinned })}
           key={content}
+          onClick={handleOnclick}
           translate="no"
         >
           {parseHTML(replaceTextAlignCenterToWebKitCenter(content || ''), {
