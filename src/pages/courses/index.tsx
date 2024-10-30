@@ -101,6 +101,7 @@ const MyCourse = () => {
     getNextPageParam: (lastPage, allPages) => {
       return lastPage?.data.length ? allPages.length + 1 : undefined
     },
+    retry: 1,
   })
 
   /**
