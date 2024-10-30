@@ -4,6 +4,7 @@ import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'
 import Devices from '@components/profile/Devices'
+import ExamInformation from '@components/profile/ExamInformation'
 import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
@@ -14,7 +15,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import { ITabs } from 'src/type'
-import { IProfilePages } from 'src/type/Profile'
+import { IProfilePages, ProfilePages } from 'src/type/Profile'
 
 const ProfilePage = () => {
   const router = useRouter()
@@ -77,16 +78,18 @@ const ProfilePage = () => {
         onOpenTab={() => setSelectPage(true)}
       />
     )
-  } else if (page === 'certificates') {
+  } else if (page === ProfilePages.Certificates) {
     selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
-  } else if (page === 'devices') {
+  } else if (page === ProfilePages.Devices) {
     selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
-  } else if (page === 'login_history') {
+  } else if (page === ProfilePages.LoginHistory) {
     selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
-  } else if (page === 'change_password') {
+  } else if (page === ProfilePages.ChangePassword) {
     selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
-  } else if (page === 'settings') {
+  } else if (page === ProfilePages.Settings) {
     selectedContent = <Settings />
+  } else if (page === ProfilePages.ExamInfo) {
+    selectedContent = <ExamInformation />
   } else {
     selectedContent = <NotFound />
   }
