@@ -644,7 +644,11 @@ const QuizDocument = ({
                     title={'View Answer'}
                     full={false}
                     size={'small'}
-                    disabled={!!gradeStatus || loading}
+                    disabled={
+                      (grading_method === GRADING_METHOD.MANUAL &&
+                        !!gradeStatus) ||
+                      loading
+                    }
                     onClick={() => {
                       if (!loading) {
                         handleConfirmQuestion(false)
