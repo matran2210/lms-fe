@@ -20,7 +20,7 @@ const EventTest = () => {
 
     return useQuery([queryKey, params], fetchData, {
       enabled: !!params, // chỉ thực hiện khi có params,
-      retry: 1,
+      retry: false,
     })
   }
 

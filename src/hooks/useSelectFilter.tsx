@@ -63,7 +63,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     queryFn: getCourseSectionList,
     enabled: !!courseId,
     getNextPageParam: getNextPageFilterParam,
-    retry: 1,
+    retry: false,
   })
 
   // Get SubSection List
@@ -100,7 +100,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     queryFn: getCourseSubsectionList,
     enabled: !!selectedSection && selectedSection.value !== '',
     getNextPageParam: getNextPageFilterParam,
-    retry: 1,
+    retry: false,
   })
 
   // Get Unit List
@@ -140,7 +140,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
         ? lastPage?.meta.page_index + 1
         : undefined
     },
-    retry: 1,
+    retry: false,
   })
 
   // Get Activity List
@@ -175,7 +175,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     queryFn: getCourseActivityList,
     enabled: !!selectedUnit,
     getNextPageParam: getNextPageFilterParam,
-    retry: 1,
+    retry: false,
   })
 
   useEffect(() => {

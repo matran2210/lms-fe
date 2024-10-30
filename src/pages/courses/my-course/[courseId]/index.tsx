@@ -65,7 +65,7 @@ const CourseDetail = () => {
         return lastPage?.data?.length ? allPages.length + 1 : undefined
       },
       enabled: router.query.courseId !== undefined,
-      retry: 1,
+      retry: false,
     })
 
   /**
