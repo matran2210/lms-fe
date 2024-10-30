@@ -1708,7 +1708,7 @@ const TestDetail = () => {
     if (questions) {
       fetchTabs()
     }
-  }, [questions])
+  }, [questions, router])
 
   // useEffect(() => {
 
@@ -1716,6 +1716,7 @@ const TestDetail = () => {
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
     const topics = currentTabContent?.topicDescription
+
     const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
 
     if (exhibitTopic?.length) {
@@ -1736,6 +1737,7 @@ const TestDetail = () => {
       value: exhibit.id,
     }))
   }, [currentTabContent])
+
   useEffect(() => {
     if (watch('exhibits')) {
       setOpenScratchPad((prev) => {

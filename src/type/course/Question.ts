@@ -68,6 +68,42 @@ export interface IQuestionAnswer {
   answer_position: number
 }
 
+export interface IExhibit {
+  id: string
+  name: string
+  description: string
+  files?: IFile[]
+  type?: 'TEXT' | 'FILE'
+}
+
+export interface IRequirment {
+  id: string
+  name: string
+  type?: 'TEXT' | 'FILE'
+  description: string
+  files?: IFile[]
+}
+
+export interface IQuestionFilter {
+  course_id: string
+  chapter_id: string
+  unit_id: string
+  activity_id: string
+  part_id: string
+}
+
+export interface IQuestionTopic {
+  id: string
+  name: string
+  description: string
+  display_type: 'VERTICAL' | 'HORIZONTAL'
+  number_of_multiple_choice_questions: number
+  number_of_essay_questions: number
+  files: IFile[]
+  exhibits: IExhibit[]
+  case_study_name: string
+}
+
 export interface IQuestion {
   id?: string
   qType?: QUESTION_TYPES
@@ -84,38 +120,15 @@ export interface IQuestion {
     content: string
     answer: IQuestionAnswer
   }[]
-  question_filter?: {
-    course_id: string
-    chapter_id: string
-    unit_id: string
-    activity_id: string
-    part_id: string
-  }
+  question_filter?: IQuestionFilter
   question_category_id?: string
   question_topic_id?: string
-  requirements?: {
-    id: string
-    name: string
-    type?: 'TEXT' | 'FILE'
-    description: string
-    files?: IFile[]
-    answer_file?: {
-      file_key: string
-      file_name: string
-    }
-    explanation?: string
-  }[]
-  exhibits?: {
-    id: string
-    name: string
-    type?: 'TEXT' | 'FILE'
-    description: string
-    files?: IFile[]
-  }[]
+  requirements?: IRequirment[]
+  exhibits?: IExhibit[]
   files?: IFile[]
-
   setting_grade?: string
   time?: string
+  question_topic?: IQuestionTopic
 }
 
 export enum ANSWER_CORRECT_TYPE {
