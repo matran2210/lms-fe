@@ -70,7 +70,7 @@ const ActivityPage = () => {
       () => getActivityById(id, course_id),
       {
         enabled: id !== undefined && course_id !== undefined,
-        retry: 1,
+        retry: false,
       },
     )
   }
@@ -450,7 +450,7 @@ const ActivityPage = () => {
       () => CoursesAPI.getBreadcumb(id, section_id),
       {
         enabled: id !== undefined && section_id !== undefined,
-        retry: 1,
+        retry: false,
       },
     )
   }
@@ -1176,10 +1176,7 @@ const ActivityPage = () => {
                       {e?.files?.length > 0 &&
                         e?.files.map((e: any, index: number) => {
                           return (
-                            <div
-                              key={index}
-                              className="cursor-pointer h-full"
-                            >
+                            <div key={index} className="h-full cursor-pointer">
                               <PdfViewer file={e?.resource?.url} />
                             </div>
                           )

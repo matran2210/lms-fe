@@ -51,7 +51,7 @@ const Results = () => {
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
     enabled: router.isReady,
     refetchOnWindowFocus: true,
-    retry: 1,
+    retry: false,
   })
 
   /**
