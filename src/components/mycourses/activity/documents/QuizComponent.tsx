@@ -322,7 +322,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               const answer = getValues(`${activeQuestion?.id}_${req.id}_essay`)
               return {
                 question_id: activeQuestion?.id,
-                answer_file: req.answer_file,
+                answer_file: req?.answer_file,
                 short_answer:
                   !isUndefined(answer) && !isEmpty(answer)
                     ? String(answer).trim()

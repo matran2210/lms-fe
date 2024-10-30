@@ -82,6 +82,11 @@ export interface IRequirment {
   type?: 'TEXT' | 'FILE'
   description: string
   files?: IFile[]
+  answer_file?: {
+    file_key: string
+    file_name: string
+  }
+  explanation?: string
 }
 
 export interface IQuestionFilter {

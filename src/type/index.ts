@@ -115,7 +115,7 @@ export interface ISVG {
 
 export * from './course'
 export * from './courses'
-export * from './exhibit'
+// export * from './exhibit'
 export * from './notification'
 export * from './quiz'
 export * from './Icon'
