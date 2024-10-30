@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
-import { CERTIFICATE_DETAIL } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
 import { NextRouter, useRouter } from 'next/router'
@@ -34,8 +33,6 @@ export class AuthenticationManager {
   }
 
   async initKeyCloakConnect() {
-    this.router = useRouter()
-
     const keycloakConfig: KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
