@@ -65,8 +65,6 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    */
   const [submitEventTest, setSubmitEventTest] = useState(false)
 
-  const accessToken = getActToken()
-
   async function fetchEventTest() {
     const res = await EventTestAPI.get({})
     if (res.success) {
@@ -74,13 +72,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
     }
   }
 
-  const authenticationManager = new AuthenticationManager()
-  const token = authenticationManager.getToken()
-
   useEffect(() => {
-    if (token) {
-      fetchEventTest()
-    }
+    fetchEventTest()
   }, [])
 
   return (
