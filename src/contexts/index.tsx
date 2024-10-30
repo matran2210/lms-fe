@@ -1,3 +1,4 @@
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { getActToken } from '@utils/index'
 import React, {
   PropsWithChildren,
@@ -73,8 +74,11 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
     }
   }
 
+  const authenticationManager = new AuthenticationManager()
+  const token = authenticationManager.getToken()
+
   useEffect(() => {
-    if (accessToken) {
+    if (token) {
       fetchEventTest()
     }
   }, [])
