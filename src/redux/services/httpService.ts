@@ -1,19 +1,14 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios'
 import getConfig from 'next/config'
-import { PageLink } from 'src/constants'
-import { disableUnsavedChange } from '../slice/Login/Login'
 
 import toast from 'react-hot-toast'
-import { exceptions } from './en.exceptions'
-import {
-  removeJwtToken,
-  getRefreshToken,
-  setCookieActToken,
-  setCookieRefreshToken,
-  getLocalStorgeActToken,
-  getLocalStorgeRefreshToken,
-} from '@utils/index'
-import { capitalize } from 'lodash'
+import exceptions from 'src/services/en.exceptions.json'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -29,189 +24,116 @@ let store: any
 export const injectStore = (_store: any) => {
   store = _store
 }
+export const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return apiURL
+  }
+}
+
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: apiURL,
 })
 
-let isRefreshing = false
-let refreshSubscribers: any[] = []
+export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
+  axiosInstance(url, config)
+    .then((res) => res?.data)
+    .catch((err) => {
+      throw err
+    })
 
-const refreshAccessToken = async (): Promise<string | null> => {
-  try {
-    const refreshToken = getRefreshToken()
-
-    const response = await axios.post(
-      `${apiURL}/auth/rotate`,
-      {},
-      {
-        headers: {
-          Authorization: 'Bearer ' + refreshToken,
-        },
-      },
-    )
-
-    const userInfo = response?.data?.data?.tokens
-    const act = userInfo?.act
-    const rft = userInfo?.rft
-    setCookieActToken(act)
-    setCookieRefreshToken(rft)
-    // Resolve all the subscribers with the new access token
-    refreshSubscribers.forEach((callback) => callback(act))
-
-    // Reset the refresh flag and subscribers array
-    isRefreshing = false
-    refreshSubscribers = []
-
-    // Return the new access token
-    return act
-  } catch (error) {
-    store
-      .dispatch(disableUnsavedChange())
-      .unwrap()
-      .then(() => {
-        removeJwtToken()
-        window.location.href = PageLink.AUTH_LOGIN
-      })
-    // window.location.href = PageLink.AUTH_LOGIN
-
-    // If there is an error, return null
-    return null
-  }
-}
-// Set the authorization header for the Axios instance
-const setAuthorizationHeader = async (config: any) => {
-  const accessToken = getLocalStorgeActToken()
-  // If there is an access token, set the authorization header
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`
-  }
-}
-
-// Add a request interceptor to the Axios instance
 axiosInstance.interceptors.request.use(
-  async (config: any) => {
-    // Set the authorization header
-    await setAuthorizationHeader(config)
-
-    // If the request is a refresh token request, return the config
-    if (config.url === '/auth/rotate') {
-      return config
-    }
-
-    // If the access token is not present, return the config
-    if (!config.headers.Authorization) {
-      return config
-    }
-
-    // If the access token is present and the refresh flag is false, return the config
-    if (!isRefreshing) {
-      return config
-    }
-
-    // If the access token is present and the refresh flag is true, block the request and add it to the subscribers array
-    await new Promise((resolve) => refreshSubscribers.push(resolve))
-    config.headers.Authorization = `Bearer ${getLocalStorgeRefreshToken()}`
+  (config) => {
+    config.headers['Content-Type'] = 'application/json' // Change to your preferred content type
     return config
   },
-  (error: AxiosError) => {
-    // If there is an error, return the Promise.reject() method
+  (error) => {
+    // Handle request error
     return Promise.reject(error)
   },
 )
 
-// Add a response interceptor to the Axios instance
+axiosInstance.interceptors.request.use(async (config: any) => {
+  const authenticationManager = new AuthenticationManager()
+  if (authenticationManager.getToken() !== '') {
+    config.headers = {
+      Authorization: 'Bearer ' + authenticationManager.getToken(),
+      ...config.headers,
+    }
+    return config
+  }
+  await new Promise((resolve) => {
+    let interval = null as any
+    interval = setInterval(() => {
+      if (authenticationManager.getToken()) {
+        config.headers = {
+          Authorization: 'Bearer ' + authenticationManager.getToken(),
+          ...config.headers,
+        }
+        clearInterval(interval)
+        resolve(config)
+      }
+    }, 100)
+  })
+
+  return config
+})
+
 axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => {
-    // If the response is successful,
+  function (response: AxiosResponse) {
     return response
   },
-
   async (error: any) => {
-    // If the error is not an authentication error, return the Promise.reject() method
-    const errorCode: string = error?.response?.data?.error?.code
-    const errorMessage = exceptions[errorCode as keyof typeof exceptions]
-
-    const isLoginPage = window.location.pathname === PageLink.AUTH_LOGIN
-
-    // if (error.response && error.response.status === 404) {
-    //   store.dispatch(getLogoutUser())
-    //   window.location.href = PageLink.AUTH_LOGIN
-    // }
-    // If the error is an authentication error and the refresh flag is false, set the refresh flag and refresh the access token
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !isRefreshing &&
-      !isLoginPage
-    ) {
-      isRefreshing = true
-      const accessToken = await refreshAccessToken()
-
-      // If the access token is refreshed, retry the original request
-      if (accessToken) {
-        const originalRequest = error.config
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`
-        return axiosInstance(originalRequest)
-      }
-    }
-
-    // If the error is an authentication error and the refresh flag is true, block the request and add it to the subscribers array
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      isRefreshing &&
-      !isLoginPage
-    ) {
-      return new Promise((resolve) => {
-        refreshSubscribers.push((accessToken: string) => {
-          error.config.headers.Authorization = `Bearer ${accessToken}`
-          resolve(axiosInstance(error.config))
-        })
-      })
-    }
-
-    if (isLoginPage && error.response?.config?.url !== '/me') {
-      if (
-        error?.response?.status !== 422 &&
-        error?.response?.data?.error?.code !== '401|0000' &&
-        error?.response?.data?.error?.code !== '403|0001' &&
-        error?.response?.data?.error?.code !== '400|060710' &&
-        error?.response?.data?.error?.code !== '403|000010'
-      ) {
-        toast.error(
-          capitalize(
-            errorMessage ||
-              error?.response?.statusText ||
-              error?.message ||
-              'Unknown error!',
-          ),
-        )
-      }
-      return Promise.reject(error)
-    }
-
-    if (error.response && errorCode === '400|2001') {
-      return Promise.reject(error)
-    }
+    const originalRequest = error.config
 
     if (error.response && error.response.status !== 401) {
-      if (
-        error?.response?.status !== 422 &&
-        error?.response?.data?.error?.code !== '403|0001' &&
-        error?.response?.data?.error?.code !== '400|060710'
-      ) {
-        toast.error(
-          errorMessage ||
-            error?.response?.statusText ||
-            error?.response?.data?.message ||
-            error?.message ||
-            'Unknown error!',
-        )
-      }
       return Promise.reject(error)
     }
 
-    // If there is an error that is not related to authentication, return the Promise.reject() method
+    if (error.response && error.response.status === 401) {
+      const authenticationManager = new AuthenticationManager()
+
+      await authenticationManager.refreshToken()
+      originalRequest.headers['Authorization'] =
+        'Bearer ' + authenticationManager.getToken()
+      return axios(originalRequest)
+    }
+    return Promise.reject(error)
+  },
+)
+
+const toastException = [
+  '400|060915',
+  '400|060904',
+  '403|000010',
+  '400|010833',
+  '400|010433',
+  '400|010008',
+]
+
+const formatedExceptions = exceptions.reduce(
+  (acc: { [key: string]: string }, { code, message }) => {
+    acc[code] = message
+    return acc
+  },
+  {},
+)
+
+axiosInstance.interceptors.response.use(
+  function (response: any) {
+    return response
+  },
+  async function (error: any) {
+    const errorCode: string = error?.response?.data?.error?.code
+    const errorMessage =
+      formatedExceptions[errorCode as keyof typeof formatedExceptions]
+    if (!toastException.includes(errorCode)) {
+      toast.error(
+        errorMessage ||
+          error?.response?.statusText ||
+          error?.message ||
+          'Unknown error!',
+      )
+    }
     return Promise.reject(error)
   },
 )
