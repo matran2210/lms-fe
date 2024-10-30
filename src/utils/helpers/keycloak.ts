@@ -42,11 +42,9 @@ export class AuthenticationManager {
       clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
     }
 
-    if (this.router.pathname !== CERTIFICATE_DETAIL) {
-      this.keyCloak = new Keycloak(keycloakConfig)
-      await this.keyCloak.init({ onLoad: 'login-required' })
-      await handleFirebaseToken()
-    }
+    this.keyCloak = new Keycloak(keycloakConfig)
+    await this.keyCloak.init({ onLoad: 'login-required' })
+    await handleFirebaseToken()
   }
 
   getToken(): string {
