@@ -1,6 +1,4 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import SappButton from '@components/base/button/SappButton'
-import React from 'react'
 import TabLayout from './TabLayout'
 
 interface IProp {

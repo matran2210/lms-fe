@@ -5,7 +5,7 @@ export const ProfilePages = {
   Logout: 'logout',
   Devices: 'devices',
   LoginHistory: 'login_history',
-  ExamInfo: 'exam_info',
+  ExamInfo: 'exam_information',
   ChangePassword: 'change_password',
 } as const
 

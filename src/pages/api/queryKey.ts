@@ -13,3 +13,7 @@ export const ClassKey = {
   ExamList: 'classExamList',
   ExamInfo: 'examInfo',
 }
+
+export const UserKey = {
+  ExamList: 'userExamList',
+}
