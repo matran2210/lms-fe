@@ -9,6 +9,8 @@ import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import TabLayout from '../TabLayout'
 import dayjs from 'dayjs'
+import ExamEditDrawer from './ExamEditDrawer'
+import { Daum } from './type'
 
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
@@ -23,13 +25,16 @@ const headers = [
 ].map((label) => ({ label, className: commonHeaderCellStyle }))
 
 const ExamInformationTab = () => {
+  const [openActionRowId, setOpenActionRowId] = useState<string | null>(null) // Track open state by row ID
   const [actionOpen, setActionOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [currentRow, setCurrentRow] = useState<Daum>()
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data, isLoading, isFetching, isError } = useQuery({
+  const { data, isLoading, isFetching, isSuccess } = useQuery({
     // Fetch lại data khi filter thay đổi
     queryKey: [UserKey.ExamList],
     queryFn: () => {
@@ -93,15 +98,20 @@ const ExamInformationTab = () => {
                       )}
                     >
                       <ActionCell
-                        open={actionOpen}
-                        setOpen={setActionOpen}
+                        open={openActionRowId === row.id} // Only open if this row ID matches openActionRowId
+                        setOpen={(isOpen) =>
+                          setOpenActionRowId(isOpen ? row.id : null)
+                        } // Toggle by row ID
                         customWidth="w-[150px] top-0"
                       >
-                        <div
-                          className="py-3"
-                          // onClick={handleMarkAll}
-                        >
-                          <p className="cursor-pointer rounded-md p-2 text-action transition-all hover:bg-primary-light hover:text-primary">
+                        <div className="py-3">
+                          <p
+                            className="cursor-pointer rounded-md p-2 text-action transition-all hover:bg-primary-light hover:text-primary"
+                            onClick={(e) => {
+                              setCurrentRow(row)
+                              setIsDrawerOpen(true)
+                            }}
+                          >
                             Edit
                           </p>
                         </div>
@@ -123,6 +133,13 @@ const ExamInformationTab = () => {
           />
         </div>
       </TabLayout>
+      {currentRow && (
+        <ExamEditDrawer
+          isOpen={isDrawerOpen}
+          setIsOpen={setIsDrawerOpen}
+          data={currentRow}
+        />
+      )}
     </React.Fragment>
   )
 }

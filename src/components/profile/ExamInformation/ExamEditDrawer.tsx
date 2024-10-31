@@ -3,16 +3,16 @@ import SappButton from '@components/base/button/SappButton'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Dispatch, SetStateAction } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { ClassAPI } from 'src/pages/api/class'
-import { ClassKey } from 'src/pages/api/queryKey'
+import { UserKey } from 'src/pages/api/queryKey'
 import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 
 interface Iprops {
   isOpen: boolean
@@ -21,7 +21,6 @@ interface Iprops {
 }
 
 const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
-  const router = useRouter()
   const validationSchema = z.object({
     note: z.string(),
     examination_subject_id: z.object({
@@ -34,8 +33,8 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     resolver: zodResolver(validationSchema),
     defaultValues: {
       examination_subject_id: {
-        label: data?.data?.exam?.examination?.name,
-        value: data?.data?.exam?.id,
+        label: data?.examination_subject?.examination?.name,
+        value: data?.examination_subject?.examination?.id,
       },
     },
   })
@@ -43,7 +42,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   const queryClient = useQueryClient()
 
   const { exams, hasNextPage, fetchNextPage } = useSelectExams(
-    router.query.courseId as string,
+    data?.class?.id as string,
   )
   const { mutate, isLoading } = useMutation({
     mutationFn: (value: {
@@ -55,10 +54,13 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     }) => {
       return ClassAPI.changeExamDate(value?.id, value?.data)
     },
-    onSuccess: () => {
-      setIsOpen(false)
-      queryClient.invalidateQueries(ClassKey.ExamInfo)
-      reset()
+    onSuccess: (res) => {
+      if (res.success) {
+        toast.success(res.data.message)
+        setIsOpen(false)
+        queryClient.invalidateQueries(UserKey.ExamList)
+        reset()
+      }
     },
   })
   const options = exams?.data?.map((exam) => ({
@@ -66,13 +68,13 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     value: exam.id,
   }))
 
-  const onSubmit: SubmitHandler<ExaminationForm> = (data) => {
+  const onSubmit: SubmitHandler<any> = (formData) => {
     const output = {
-      examination_subject_id: data.examination_subject_id?.value,
-      note: data.note,
+      examination_subject_id: formData.examination_subject_id?.value,
+      note: formData.note,
     }
     mutate({
-      id: router.query.courseId as string,
+      id: data?.class?.id as string,
       data: output,
     })
   }
