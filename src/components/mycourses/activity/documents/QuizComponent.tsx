@@ -457,6 +457,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
               name={`${activeQuestion?.id}_${document_id}_answer`}
+              solution={activeQuestion?.solution}
             />
           )
 
@@ -470,6 +471,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
               name={`${activeQuestion?.id}_${document_id}_answer`}
+              solution={activeQuestion?.solution}
             />
           )
 
@@ -483,6 +485,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
+              solution={activeQuestion?.solution}
             />
           )
 
@@ -495,6 +498,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
+              solution={activeQuestion?.solution}
             />
           )
 
@@ -510,6 +514,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               ref={DragDropRef}
               isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
+              solution={activeQuestion?.solution}
             />
           )
 
@@ -522,6 +527,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
+              solution={activeQuestion?.solution}
             />
           )
 
