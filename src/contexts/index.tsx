@@ -1,3 +1,4 @@
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { getActToken } from '@utils/index'
 import React, {
   PropsWithChildren,
@@ -64,8 +65,6 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    */
   const [submitEventTest, setSubmitEventTest] = useState(false)
 
-  const accessToken = getActToken()
-
   async function fetchEventTest() {
     const res = await EventTestAPI.get({})
     if (res.success) {
@@ -74,9 +73,7 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
   }
 
   useEffect(() => {
-    if (accessToken) {
-      fetchEventTest()
-    }
+    fetchEventTest()
   }, [])
 
   return (

@@ -31,6 +31,7 @@ const Certificate = () => {
 
     return useQuery([queryKey, params], fetchData, {
       enabled: router.query.id !== undefined,
+      retry: false,
     })
   }
 

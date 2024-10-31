@@ -43,7 +43,7 @@ const TestResultPage = ({
           : 'fit-content'
       yourScoreDetailElem.style.marginBottom =
         window.innerWidth > 1777
-          ? '0px'
+          ? '24px'
           : `${multipleQuestionElem.offsetHeight}px`
       yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
     }

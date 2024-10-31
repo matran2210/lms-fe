@@ -345,6 +345,7 @@ const TestModal = ({
                     }
                   }}
                   isResultSelect
+                  maxMenuHeight={130}
                   onFocus={(e) => {
                     setIsFocus(true)
                   }}

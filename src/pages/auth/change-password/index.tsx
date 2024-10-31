@@ -3,21 +3,22 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LAYOUT } from '@utils/constants'
 // import { useState } from 'react'
 import SappButton from '@components/base/button/SappButton'
+import SingleDialogLayout from '@components/layout/SingleDialog'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
 import {
+  VALIDATE_MIN_LENGTH_PASSWORD,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
-  VALIDATE_MIN_LENGTH_PASSWORD,
 } from '@utils/helpers/ValidateMessage'
 import { display422Errors } from '@utils/helpers/form'
+import { removeJwtToken } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import { z } from 'zod'
 import { AuthAPI } from '../../api/profile/index'
-import { removeJwtToken } from '@utils/index'
-import SingleDialogLayout from '@components/layout/SingleDialog'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 interface IInputProps {
   password: string
@@ -79,9 +80,10 @@ const ChangePasswordPage = () => {
       setLoading(false)
     }
   }
-  const redirectLogin = () => {
+  const redirectLogin = async () => {
     removeJwtToken()
-    router.push(PageLink.AUTH_LOGIN)
+    const authenticationManager = new AuthenticationManager()
+    await authenticationManager.logout(window.location.origin)
   }
 
   return (

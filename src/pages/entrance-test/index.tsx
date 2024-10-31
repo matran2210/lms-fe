@@ -18,7 +18,7 @@ const EntranceTest = () => {
       return data
     }
 
-    return useQuery([queryKey, params], fetchData)
+    return useQuery([queryKey, params], fetchData, { retry: false })
   }
 
   const router = useRouter()

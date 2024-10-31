@@ -169,6 +169,7 @@ const ResultCourse = ({
             }
           }}
           isResultSelect
+          maxMenuHeight={130}
           onFocus={(e) => {
             setIsFocus(true)
           }}

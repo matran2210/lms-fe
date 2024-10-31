@@ -1708,7 +1708,7 @@ const TestDetail = () => {
     if (questions) {
       fetchTabs()
     }
-  }, [questions])
+  }, [questions, router])
 
   // useEffect(() => {
 
@@ -1716,6 +1716,7 @@ const TestDetail = () => {
   const exhibits = useMemo(() => {
     let exhibitsOptions = []
     const topics = currentTabContent?.topicDescription
+
     const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
 
     if (exhibitTopic?.length) {
@@ -1736,6 +1737,7 @@ const TestDetail = () => {
       value: exhibit.id,
     }))
   }, [currentTabContent])
+
   useEffect(() => {
     if (watch('exhibits')) {
       setOpenScratchPad((prev) => {
@@ -2009,6 +2011,7 @@ const TestDetail = () => {
                   activeShowAll={activeShowAll}
                   setActiveShowAll={setActiveShowAll}
                   setValueFilter={setValueFilter}
+                  isScrollCenter={false}
                 />
                 {/* </div> */}
               </div>
@@ -2310,7 +2313,10 @@ const TestDetail = () => {
                         exhibitsDes?.files?.length > 0 &&
                         exhibitsDes?.files?.map((e: any, index: number) => {
                           return (
-                            <div key={index} className="overflow-auto bg-white">
+                            <div
+                              key={index}
+                              className="h-full overflow-auto bg-white"
+                            >
                               <PDFViewer file={e?.resource?.url} />
                             </div>
                           )
@@ -2454,10 +2460,10 @@ const TestDetail = () => {
                               key={e?.value}
                               className={`p-3 ${
                                 !watch('exhibits')?.includes(e?.value) &&
-                                'text-gray-1'
+                                'min-w-[100px] text-gray-1'
                               }`}
                               onClick={() => handleOpenExhibit(e?.value)}
-                            >{`Exhibit (${index + 1})`}</button>
+                            >{`Exhibit ${index + 1}`}</button>
                           )
                         },
                       )}

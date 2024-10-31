@@ -1,7 +1,12 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { trackGAEvent } from '@utils/google-analytics'
-import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import {
+  getLocalStorageItem,
+  removeLocalStorageItem,
+  removeLocalStorageJwtToken,
+} from '@utils/index'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -72,7 +77,8 @@ const ProfileSideBar = ({ page, children }: IProps) => {
           removeLocalStorageItem('pinnedId')
         }
       })
-      // router.push(PageLink.AUTH_LOGIN)
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout(window.location.origin)
     } catch (error) {}
   }
 
@@ -252,7 +258,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
             </li>
           </div>
           <div className="text-center text-sm font-normal text-gray-1">
-            LMS Pro Version 1.9.0
+            LMS Pro Version 2.0.0
           </div>
         </ul>
       </div>

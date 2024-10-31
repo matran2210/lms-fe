@@ -112,18 +112,8 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
 
   const router = useRouter()
 
-  const isLoginPage = ![
-    PageLink.AUTH_LOGIN,
-    PageLink.AUTH_FORGOT_PASSWORD,
-    PageLink.AUTH_FORGOT_PASSWORD_RECOVER,
-    PageLink.AUTH_CHANGE_PASSWORD,
-    PageLink.AUTH_CHANGE_PASSWORD_SUCCESS,
-  ].includes(router.pathname)
-
   useEffect(() => {
-    if (isLoginPage) {
-      getPinnedData()
-    }
+    getPinnedData()
   }, [router.pathname])
 
   return (

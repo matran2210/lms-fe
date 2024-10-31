@@ -3,6 +3,7 @@ import { apiURL, httpService } from 'src/redux/services/httpService'
 import {
   ChangePasswordReq,
   LoginReq,
+  PostLoginReq,
   ResetPassword,
   SendEmailReq,
   VerifyOtpReq,
@@ -22,24 +23,6 @@ export default MyProfileAPI
 export class AuthAPI {
   static me() {
     return fetcher(`${apiURL}/me`)
-  }
-
-  static login(request: LoginReq) {
-    return fetcher(`${apiURL}/auth/login`, {
-      data: {
-        login: request.login?.trim(),
-        password: request.password?.trim(),
-        remember_me: request.remember_me,
-        device_id: request?.device_id,
-      },
-      method: 'POST',
-    })
-  }
-
-  static logout() {
-    return fetcher(`${apiURL}/auth/logout`, {
-      method: 'POST',
-    })
   }
 
   static sendEmail(request: SendEmailReq) {

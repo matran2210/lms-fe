@@ -54,6 +54,7 @@ module.exports = removeImports(
           hostname: '**',
         },
       ],
+      unoptimized: true,
     },
     swcMinify: true,
     async headers() {

@@ -20,6 +20,7 @@ interface IProps {
   isResultSelect?: boolean
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
+  maxMenuHeight?: number
 }
 
 const HookFormSelect = ({
@@ -38,6 +39,7 @@ const HookFormSelect = ({
   isResultSelect = false,
   onFocus,
   onBlur,
+  maxMenuHeight,
 }: IProps) => {
   const DropdownIndicator: React.FC<DropdownIndicatorProps> = (props) => {
     return (
@@ -77,6 +79,7 @@ const HookFormSelect = ({
         onMenuScrollToBottom={onMenuScrollToBottom}
         isClearable={isClearable}
         components={{ DropdownIndicator }}
+        maxMenuHeight={maxMenuHeight}
         onMenuOpen={onMenuOpen}
         onFocus={(e) => {
           onFocus && onFocus(e)

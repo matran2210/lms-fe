@@ -70,6 +70,7 @@ const ActivityPage = () => {
       () => getActivityById(id, course_id),
       {
         enabled: id !== undefined && course_id !== undefined,
+        retry: false,
       },
     )
   }
@@ -449,6 +450,7 @@ const ActivityPage = () => {
       () => CoursesAPI.getBreadcumb(id, section_id),
       {
         enabled: id !== undefined && section_id !== undefined,
+        retry: false,
       },
     )
   }
@@ -834,6 +836,11 @@ const ActivityPage = () => {
                         <div className="text-base font-semibold">Resource:</div>
                         <ul className="list-disc text-base">
                           {activity?.files.map((e: any, index: number) => {
+                            const isPreviewFile =
+                              e.resource.suffix_type !==
+                                SUFFIX_TYPE.GENERAL_FILE &&
+                              e.resource.name.slice(-4) !== '.csv'
+
                             return (
                               <div
                                 className={`flex justify-between ${
@@ -847,8 +854,7 @@ const ActivityPage = () => {
                                   </div>
                                   <SappTooltip
                                     title={
-                                      e.resource.suffix_type !==
-                                      SUFFIX_TYPE.GENERAL_FILE
+                                      isPreviewFile
                                         ? 'Preview File'
                                         : 'Download file'
                                     }
@@ -858,8 +864,7 @@ const ActivityPage = () => {
                                     <p
                                       className="cursor-pointer text-gray-1 hover:text-primary"
                                       onClick={() => {
-                                        e.resource.suffix_type !==
-                                        SUFFIX_TYPE.GENERAL_FILE
+                                        isPreviewFile
                                           ? handleOpenScratchPad(
                                               {
                                                 type: 'file',
@@ -1171,18 +1176,8 @@ const ActivityPage = () => {
                       {e?.files?.length > 0 &&
                         e?.files.map((e: any, index: number) => {
                           return (
-                            <div
-                              key={index}
-                              className="cursor-pointer text-state-info hover:underline"
-                              onClick={() =>
-                                handleOpenScratchPad(
-                                  { type: 'file' },
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                              }
-                            >
-                              {e?.resource?.name}
+                            <div key={index} className="h-full cursor-pointer">
+                              <PdfViewer file={e?.resource?.url} />
                             </div>
                           )
                         })}

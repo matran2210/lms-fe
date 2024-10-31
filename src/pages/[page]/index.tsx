@@ -2,7 +2,6 @@ import Layout from '@components/layout'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
 import Certificate from '@components/profile/Certificate'
-import CertificateContent from '@components/profile/CertificateContent'
 import ChangePassword from '@components/profile/ChangePassword'
 import Devices from '@components/profile/Devices'
 import LoginHistory from '@components/profile/LoginHistory'
@@ -10,20 +9,16 @@ import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
 import Settings from '@components/profile/Settings'
-import { GetServerSideProps } from 'next'
 import Image, { StaticImageData } from 'next/image'
+import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import { ITabs } from 'src/type'
 import { IProfilePages } from 'src/type/Profile'
 
-interface IProps {
-  page: IProfilePages
-}
-
-const ProfilePage = ({ page }: any) => {
-  // const router = useRouter()
-  // const page = router.query.page as IProfilePages
+const ProfilePage = () => {
+  const router = useRouter()
+  const page = router.query.page as IProfilePages
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
   const inputFileRef = useRef<HTMLInputElement | null>(null)
@@ -152,25 +147,25 @@ const ProfilePage = ({ page }: any) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps<IProps> = async (
-  context,
-) => {
-  const params = context.query
-  if (
-    !params?.page ||
-    typeof params?.page !== 'string'
-    // ||
-    // !PROFILE_PAGES[
-    //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
-    // ]
-  ) {
-    return {
-      notFound: true,
-    }
-  }
+// export const getServerSideProps: GetServerSideProps<IProps> = async (
+//   context,
+// ) => {
+//   const params = context.query
+//   if (
+//     !params?.page ||
+//     typeof params?.page !== 'string'
+//     // ||
+//     // !PROFILE_PAGES[
+//     //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
+//     // ]
+//   ) {
+//     return {
+//       notFound: true,
+//     }
+//   }
 
-  return {
-    props: { page: params?.page as IProfilePages },
-  }
-}
+//   return {
+//     props: { page: params?.page as IProfilePages },
+//   }
+// }
 export default ProfilePage

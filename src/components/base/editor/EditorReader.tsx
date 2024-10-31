@@ -2,16 +2,14 @@ import {
   DeserializeHighlight,
   replaceTextAlignCenterToWebKitCenter,
 } from '@utils/index'
-import parseHTML from 'html-react-parser'
+import parseHTML, { Element } from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@utils/constants'
 import 'src/utils/global.d.ts'
 import clsx from 'clsx'
+import SAPPVideo from '@components/base/video/SAPPVideo'
 import React from 'react'
-import SappModalV3 from '../modal/SappModalV3'
-import SAPPVideo from '../video/SAPPVideo'
-import { isEmpty, isNull, isUndefined } from 'lodash'
 
 type Props = {
   text_editor_content: string | undefined
@@ -36,31 +34,13 @@ const EditorReader = ({
   highlighArea = 'hightlight_area',
   pinned,
 }: Props) => {
-  const refDocument = useRef<HTMLDivElement>(null)
   const [src, setSrc] = useState<string>()
-  const [type, setType] = useState<'VIDEO' | 'IMG' | 'MATH'>('VIDEO')
-  const [content, setContent] = useState<any>(text_editor_content)
+  const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
+  const [content, setContent] = useState<any>()
   const editorRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
     {},
   )
-  const [openMathType, setOpenMathType] = useState(false)
-
-  useEffect(() => {
-    if (extenalRef) {
-      extenalRef?.current?.addEventListener('click', handleOnclick)
-
-      return () => {
-        extenalRef?.current?.removeEventListener('click', handleOnclick)
-      }
-    } else {
-      refDocument?.current?.addEventListener('click', handleOnclick)
-
-      return () => {
-        refDocument?.current?.removeEventListener('click', handleOnclick)
-      }
-    }
-  }, [refDocument?.current, extenalRef?.current])
 
   useEffect(() => {
     if (highlighArea === 'hightlight_area_topic') {
@@ -70,28 +50,23 @@ const EditorReader = ({
     } else if (highlighArea === 'hightlight_area') {
       DeserializeHighlight(highlighted)
     }
-  }, [content, highlighted, text_editor_content])
+  }, [content, highlighted])
 
   useEffect(() => {
-    // Update the state with the modified content
-    if (
-      !isEmpty(text_editor_content) ||
-      !isNull(text_editor_content) ||
-      !isUndefined(text_editor_content)
-    ) {
+    if (text_editor_content !== content) {
       setContent(text_editor_content)
     }
-  })
+  }, [text_editor_content])
 
-  // const convertMathToImage = async (element: any) => {
-  //   const viewer = com?.wiris?.js?.JsPluginViewer
+  const convertMathToImage = async (element: any) => {
+    const viewer = com?.wiris?.js?.JsPluginViewer
 
-  //   if (element && viewer) {
-  //     try {
-  //       await viewer.parseElement(element, true, function () {})
-  //     } catch (error) {}
-  //   }
-  // }
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {})
+      } catch (error) {}
+    }
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -116,9 +91,9 @@ const EditorReader = ({
           }
         })
 
-        let mathElement = editor?.querySelectorAll('math')
         // Replace quote in font family
-        if (mathElement && mathElement?.length) {
+        const mathElement = editor?.querySelectorAll('math')
+        if (mathElement) {
           mathElement?.forEach((el: any) => {
             if (el?.hasAttribute('style')) {
               let styleValue = el?.getAttribute('style')
@@ -126,26 +101,14 @@ const EditorReader = ({
               el?.setAttribute('style', styleValue)
             }
           })
-          // editor && convertMathToImage(editor)
+          convertMathToImage(editor)
         }
       }
     }, 100)
-  }, [editorRef?.current, text_editor_content])
+  })
 
-  const handleOnclick = async (e: MouseEvent) => {
+  const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement
-    if (['mroot', 'mn', 'math', 'mi', 'mo', 'msub'].includes(target?.tagName)) {
-      const mathElement = target.closest('math')
-      if (mathElement) {
-        setType('MATH')
-        const mathElementString = mathElement.outerHTML
-        setSrc(
-          `<p style="text-align: -webkit-center;"><span style="font-size: 30px;">${mathElementString}</span></p>`,
-        )
-        setOpenMathType(true)
-      }
-    }
-
     if (target.className === 'sapp_overlay_video') {
       // const overlay = target.nextSibling as any
       const video = target?.previousSibling as any
@@ -209,15 +172,18 @@ const EditorReader = ({
         ref={editorRef}
       >
         <div
-          ref={extenalRef || refDocument}
+          ref={extenalRef}
           className={clsx({ 'pt-2 text-white': pinned })}
+          key={content}
+          onClick={handleOnclick}
+          translate="no"
         >
           {parseHTML(replaceTextAlignCenterToWebKitCenter(content || ''), {
-            replace: (domNode: any) => {
+            replace: (domNode) => {
               if (domNode.type === 'tag' && domNode.name === 'video') {
                 const sourceChild = (domNode.children as Element[]).find(
-                  (child: any) => child.name === 'source',
-                ) as any
+                  (child) => child.name === 'source',
+                )
                 const videoToken = sourceChild?.attribs?.token
                 if (videoToken) {
                   if (!videoRefs.current[videoToken]) {
@@ -249,22 +215,6 @@ const EditorReader = ({
       </div>
       {type === 'IMG' && (
         <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
-      )}
-      {type === 'MATH' && (
-        <SappModalV3
-          showFooter={false}
-          showOkButton={false}
-          open={openMathType}
-          handleCancel={() => setOpenMathType(false)}
-          onOk={() => setOpenMathType(false)}
-          icon={undefined}
-          header={''}
-          classNameModal="sapp-modal--math"
-        >
-          <div className="mx-auto w-fit min-w-[100%] max-w-full">
-            <div dangerouslySetInnerHTML={{ __html: src || '' }} />
-          </div>
-        </SappModalV3>
       )}
     </>
   )

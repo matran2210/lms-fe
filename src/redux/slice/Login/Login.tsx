@@ -1,23 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-hot-toast'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { removeJwtToken, removeLocalStorageJwtToken } from '@utils/index'
+import { AuthAPI } from 'src/pages/api/profile'
 import { RootState } from '../../store'
-
 import {
   ChangePasswordReq,
   ChangePasswordRes,
-  LoginReq,
   LoginState,
 } from '../../types/Login/login'
-import {
-  removeJwtToken,
-  removeLocalStorageJwtToken,
-  setActToken,
-  setCookieActToken,
-  setCookieRefreshToken,
-  setRefreshToken,
-} from '@utils/index'
-import { PageLink } from 'src/constants'
-import { AuthAPI } from 'src/pages/api/profile'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -31,38 +21,27 @@ const initialState: LoginState = {
   unsavedChange: false,
 }
 
-export const getLoginUser = createAsyncThunk(
-  'loginReducer/handleLogin',
-  async (body: LoginReq, thunkAPI) => {
+export const createAuthenticationManager = createAsyncThunk(
+  'loginReducer/handleInitKeyCloak',
+  async (authenticationManager: AuthenticationManager, thunkAPI) => {
     try {
-      const res = await AuthAPI.login(body)
-
-      if (!res.success) {
-        return
-      }
-      setActToken(res.data.tokens.act)
-      setRefreshToken(res.data.tokens.rft)
-      setCookieActToken(res.data.tokens?.act)
-      setCookieRefreshToken(res.data.tokens?.rft)
-
-      return { ...res }
+      return authenticationManager
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
     }
   },
 )
+
 export const getLogoutUser = createAsyncThunk(
   'loginReducer/handleLogout',
   async ({}, thunkAPI) => {
     try {
-      const res = await AuthAPI.logout()
+      const authenticationManager = new AuthenticationManager()
       localStorage.clear()
       removeJwtToken()
-      if (!res.success) {
-        toast.error(res.error.message)
-        return
-      }
-      return { ...res }
+      removeLocalStorageJwtToken()
+      await authenticationManager.logout(window.location.origin)
+      return {}
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
     }
@@ -103,30 +82,6 @@ export const loginSlice = createSlice({
     builder.addCase(disableUnsavedChange.fulfilled, (state, action) => {
       state.unsavedChange = false
     })
-    builder.addCase(getLoginUser.pending, (state) => {
-      state.loading = true
-    })
-    builder.addCase(getLoginUser.fulfilled, (state, action) => {
-      state.loading = false
-      state.changePass = false
-
-      if (action?.payload?.data?.tokens?.act) {
-        const accessToken = action.payload?.data.tokens.act
-        const refreshToken = action.payload?.data.tokens.rft
-        state.accessToken = accessToken
-        state.user = action.payload.data.user
-
-        setActToken(accessToken)
-        setRefreshToken(refreshToken)
-        // setCookieActToken(accessToken)
-        // setCookieRefreshToken(refreshToken)
-      }
-    })
-    builder.addCase(getLoginUser.rejected, (state, action) => {
-      state.loading = false
-      state.accessToken = ''
-    })
-
     builder.addCase(getLogoutUser.pending, (state) => {
       state.loading = true
     })
@@ -139,9 +94,8 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
+      removeJwtToken()
       removeLocalStorageJwtToken()
-
-      window.location.href = PageLink.AUTH_LOGIN
     })
     builder.addCase(getLogoutUser.rejected, (state, action) => {
       state.accessToken = ''
@@ -163,6 +117,7 @@ export const loginSlice = createSlice({
       if (action.payload.code === 200) {
         state.changePass = true
         removeJwtToken()
+        removeLocalStorageJwtToken()
       }
     })
     builder.addCase(changePassword.rejected, (state, action) => {
