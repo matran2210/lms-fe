@@ -297,6 +297,7 @@ const QuizDocument = ({
               dispatch(showPopup(e.data.class_user_score))
             }, 4000)
           }
+          reload()
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
