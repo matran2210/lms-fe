@@ -1221,8 +1221,8 @@ const TestDetail = () => {
                       return {
                         ...req,
                         answer_file: {
-                          file_key: file.file_key,
-                          file_name: file.name,
+                          file_key: file?.file_key,
+                          file_name: file?.name,
                         },
                       }
                     }
