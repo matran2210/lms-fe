@@ -76,12 +76,11 @@ function DiscussionElement({
       const params = {
         content: e?.editData,
       }
-      console.log('selectFile', discussion)
       if (selectFile) {
         await CourseActivityApi.uploadImagesDiscussion({
           discussion_id: discussion?.id,
           new_discussion_file: selectFile,
-          discussion_file_ids: discussion?.course_discussion_files
+          discussion_file_ids: discussion.course_discussion_files
             .filter((el) => {
               const isNotDelete = discussionFile.find(
                 (item) => item.id === el.id,
@@ -132,7 +131,6 @@ function DiscussionElement({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e?.target?.files
-    console.log(files)
     if (files) {
       const imageFiles = Array.from(files).filter((file) =>
         file?.type?.startsWith('image/'),
