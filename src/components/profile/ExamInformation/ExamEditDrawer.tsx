@@ -80,7 +80,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   }
   return (
     <SappDrawerV2
-      open={isOpen}
+      open={data?.examination_subject && isOpen}
       title="Change my exam date"
       handleCancel={() => setIsOpen(false)}
     >

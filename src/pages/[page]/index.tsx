@@ -4,7 +4,7 @@ import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'
 import Devices from '@components/profile/Devices'
-import ExamInformationTab from '@components/profile/ExamInformation/ExamInformationTab'
+import ExamInfoTab from '@components/profile/ExamInformation/ExamInfoTab'
 import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
@@ -89,7 +89,7 @@ const ProfilePage = () => {
   } else if (page === ProfilePages.Settings) {
     selectedContent = <Settings />
   } else if (page === ProfilePages.ExamInfo) {
-    selectedContent = <ExamInformationTab />
+    selectedContent = <ExamInfoTab />
   } else {
     selectedContent = <NotFound />
   }

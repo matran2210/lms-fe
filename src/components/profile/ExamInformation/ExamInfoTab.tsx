@@ -11,6 +11,7 @@ import TabLayout from '../TabLayout'
 import dayjs from 'dayjs'
 import ExamEditDrawer from './ExamEditDrawer'
 import { Daum } from './type'
+import ExamInfoActionCell from './ExamInfoActionCell'
 
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
@@ -24,7 +25,7 @@ const headers = [
   'Scheduled Exam Date',
 ].map((label) => ({ label, className: commonHeaderCellStyle }))
 
-const ExamInformationTab = () => {
+const ExamInfoTab = () => {
   const [openActionRowId, setOpenActionRowId] = useState<string | null>(null) // Track open state by row ID
   const [actionOpen, setActionOpen] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -66,9 +67,9 @@ const ExamInformationTab = () => {
                 ))}
               </>
             ) : (
-              data?.data?.map((row) => {
+              data?.data?.map((row, index) => {
                 return (
-                  <tr key={row.id}>
+                  <tr key={row.id ?? index}>
                     <td className={clsx(commonDataCellStyle)}>
                       {row.class.course.name ?? '-'}
                     </td>
@@ -97,25 +98,17 @@ const ExamInformationTab = () => {
                         'sticky -right-4 bg-white',
                       )}
                     >
-                      <ActionCell
-                        open={openActionRowId === row.id} // Only open if this row ID matches openActionRowId
-                        setOpen={(isOpen) =>
-                          setOpenActionRowId(isOpen ? row.id : null)
-                        } // Toggle by row ID
-                        customWidth="w-[150px] top-0"
-                      >
-                        <div className="py-3">
-                          <p
-                            className="cursor-pointer rounded-md p-2 text-action transition-all hover:bg-primary-light hover:text-primary"
-                            onClick={(e) => {
-                              setCurrentRow(row)
-                              setIsDrawerOpen(true)
-                            }}
-                          >
-                            Edit
-                          </p>
-                        </div>
-                      </ActionCell>
+                      <ExamInfoActionCell>
+                        <p
+                          className="cursor-pointer rounded-md p-1 pl-2 transition-colors hover:bg-primary-light hover:text-primary"
+                          onClick={() => {
+                            setIsDrawerOpen(true)
+                            setCurrentRow(row)
+                          }}
+                        >
+                          Edit
+                        </p>
+                      </ExamInfoActionCell>
                     </td>
                   </tr>
                 )
@@ -133,15 +126,13 @@ const ExamInformationTab = () => {
           />
         </div>
       </TabLayout>
-      {currentRow && (
-        <ExamEditDrawer
-          isOpen={isDrawerOpen}
-          setIsOpen={setIsDrawerOpen}
-          data={currentRow}
-        />
-      )}
+      <ExamEditDrawer
+        isOpen={isDrawerOpen}
+        setIsOpen={setIsDrawerOpen}
+        data={currentRow}
+      />
     </React.Fragment>
   )
 }
 
-export default ExamInformationTab
+export default ExamInfoTab

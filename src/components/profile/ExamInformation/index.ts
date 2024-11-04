@@ -1,1 +1,1 @@
-export { default } from './ExamInformationTab'
+export { default } from './ExamInfoTab'
