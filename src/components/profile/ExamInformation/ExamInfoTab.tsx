@@ -26,8 +26,6 @@ const headers = [
 ].map((label) => ({ label, className: commonHeaderCellStyle }))
 
 const ExamInfoTab = () => {
-  const [openActionRowId, setOpenActionRowId] = useState<string | null>(null) // Track open state by row ID
-  const [actionOpen, setActionOpen] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState<Daum>()
   const [pageIndex, setPageIndex] = useState<number>(1)
@@ -35,7 +33,7 @@ const ExamInfoTab = () => {
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data, isLoading, isFetching, isSuccess } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     // Fetch lại data khi filter thay đổi
     queryKey: [UserKey.ExamList],
     queryFn: () => {
@@ -126,11 +124,13 @@ const ExamInfoTab = () => {
           />
         </div>
       </TabLayout>
-      <ExamEditDrawer
-        isOpen={isDrawerOpen}
-        setIsOpen={setIsDrawerOpen}
-        data={currentRow}
-      />
+      {currentRow && (
+        <ExamEditDrawer
+          isOpen={isDrawerOpen}
+          setIsOpen={setIsDrawerOpen}
+          data={currentRow}
+        />
+      )}
     </React.Fragment>
   )
 }

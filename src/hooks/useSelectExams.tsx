@@ -13,7 +13,7 @@ const useSelectExams = (courseId: string) => {
 
     return res
   }
-  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({
+  const { data, hasNextPage, fetchNextPage, isLoading } = useInfiniteQuery({
     queryKey: [ClassKey.ExamList],
     queryFn: getExams,
     enabled: !!courseId,
@@ -22,10 +22,11 @@ const useSelectExams = (courseId: string) => {
         ? lastPage?.metadata.page_index + 1
         : undefined
     },
+    refetchOnWindowFocus: false,
     retry: false,
   })
 
-  return { exams: data?.pages?.[0], hasNextPage, fetchNextPage }
+  return { exams: data?.pages?.[0], hasNextPage, fetchNextPage, isLoading }
 }
 
 export default useSelectExams

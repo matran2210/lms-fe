@@ -4,7 +4,7 @@ import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
@@ -22,14 +22,14 @@ interface Iprops {
 
 const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   const validationSchema = z.object({
-    note: z.string(),
+    note: z.string().optional(),
     examination_subject_id: z.object({
       label: z.string().min(1),
       value: z.string().min(1),
     }),
   })
 
-  const { control, handleSubmit, reset } = useForm<ExaminationForm>({
+  const { control, handleSubmit, reset, setValue } = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       examination_subject_id: {
@@ -44,7 +44,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   const { exams, hasNextPage, fetchNextPage } = useSelectExams(
     data?.class?.id as string,
   )
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isLoading: isChangingLoad } = useMutation({
     mutationFn: (value: {
       id: string
       data: {
@@ -78,11 +78,24 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
       data: output,
     })
   }
+
+  useEffect(() => {
+    if (data) {
+      setValue('examination_subject_id', {
+        label: data?.examination_subject?.examination?.name,
+        value: data?.examination_subject?.examination?.id,
+      })
+    }
+  }, [data])
+
   return (
     <SappDrawerV2
       open={data?.examination_subject && isOpen}
       title="Change my exam date"
-      handleCancel={() => setIsOpen(false)}
+      handleCancel={() => {
+        setIsOpen(false)
+        reset()
+      }}
     >
       <div className="flex flex-col gap-3">
         <Controller
@@ -92,12 +105,13 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
             <div>
               <label className="mb-2 block text-base font-medium">
                 <span>{'Change My Exam Date'}</span>
+                <span className="ml-2 text-red-500">*</span>
               </label>
               <HookFormSelect
                 classParent="w-full md:max-w-full"
                 placeholder="Exam Date"
-                isClearable={true}
                 options={options}
+                required
                 onChange={(e) => {
                   return onChange(e === undefined || null ? {} : e)
                 }}
@@ -124,7 +138,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
           onClick={handleSubmit(onSubmit)}
           size="medium"
           title={'Save'}
-          loading={isLoading}
+          loading={isChangingLoad}
         />
       </div>
     </SappDrawerV2>

@@ -23,7 +23,7 @@ interface Iprops {
 const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   const router = useRouter()
   const validationSchema = z.object({
-    note: z.string(),
+    note: z.string().optional(),
     examination_subject_id: z.object({
       label: z.string().min(1),
       value: z.string().min(1),
@@ -90,11 +90,11 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
             <div>
               <label className="mb-2 block text-base font-medium">
                 <span>{'Change My Exam Date'}</span>
+                <span className="ml-2 text-red-500">*</span>
               </label>
               <HookFormSelect
                 classParent="w-full md:max-w-full"
                 placeholder="Exam Date"
-                isClearable={true}
                 options={options}
                 onChange={(e) => {
                   return onChange(e === undefined || null ? {} : e)
