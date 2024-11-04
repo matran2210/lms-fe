@@ -39,15 +39,24 @@ const CourseActivityApi = {
     const uri = url.uploadImageDiscussion
     const formData = new FormData()
 
-    formData.append('discussion_id', discussion_id)
+    if(discussion_id) {
+      console.log('chay vào day 1', discussion_id)
+      formData.append('discussion_id', discussion_id)
+    }
+    if(new_discussion_file) {
+      console.log('chay vào day 2', new_discussion_file)
+      new_discussion_file?.forEach((file, index) => {
+        formData.append(`discussion_images[${index}]`, file)
+      })
+      console.log('chay vào day 2', formData.get(`discussion_images[0]`))
+    }
 
-    new_discussion_file?.forEach((file, index) => {
-      formData.append(`discussion_images[${index}]`, file)
-    })
-
-    discussion_file_ids?.forEach((discussion_file_id, index) => {
-      formData.append(`discussion_file_ids[${index}]`, discussion_file_id)
-    })
+    if(discussion_file_ids) {
+      console.log('chay vào day 3')
+      discussion_file_ids?.forEach((discussion_file_id, index) => {
+        formData.append(`discussion_file_ids[${index}]`, discussion_file_id)
+      })
+    }
 
     // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
     return httpService.POST_FORM_DATA<any, any>({
