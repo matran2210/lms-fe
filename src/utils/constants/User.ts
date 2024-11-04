@@ -9,6 +9,7 @@ export const PROFILE_PAGES = {
   },
   EXAM_INFO: {
     label: 'Exam information',
+    children: [] as { label: string }[],
   },
   SETTINGS: {
     label: 'Settings',
