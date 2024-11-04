@@ -13,20 +13,27 @@ const useSelectExams = (courseId: string) => {
 
     return res
   }
-  const { data, hasNextPage, fetchNextPage, isLoading } = useInfiniteQuery({
-    queryKey: [ClassKey.ExamList],
-    queryFn: getExams,
-    enabled: !!courseId,
-    getNextPageParam: (lastPage) => {
-      return lastPage?.metadata?.page_index < lastPage?.metadata?.total_pages
-        ? lastPage?.metadata.page_index + 1
-        : undefined
-    },
-    refetchOnWindowFocus: false,
-    retry: false,
-  })
+  const { data, hasNextPage, fetchNextPage, isLoading, refetch } =
+    useInfiniteQuery({
+      queryKey: [ClassKey.ExamList],
+      queryFn: getExams,
+      enabled: !!courseId,
+      getNextPageParam: (lastPage) => {
+        return lastPage?.metadata?.page_index < lastPage?.metadata?.total_pages
+          ? lastPage?.metadata.page_index + 1
+          : undefined
+      },
+      refetchOnWindowFocus: false,
+      retry: 0,
+    })
 
-  return { exams: data?.pages?.[0], hasNextPage, fetchNextPage, isLoading }
+  return {
+    exams: data?.pages?.[0],
+    hasNextPage,
+    fetchNextPage,
+    isLoading,
+    refetch,
+  }
 }
 
 export default useSelectExams

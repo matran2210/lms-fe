@@ -41,9 +41,10 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
 
   const queryClient = useQueryClient()
 
-  const { exams, hasNextPage, fetchNextPage } = useSelectExams(
+  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(
     data?.class?.id as string,
   )
+
   const { mutate, isLoading: isChangingLoad } = useMutation({
     mutationFn: (value: {
       id: string
@@ -63,6 +64,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
       }
     },
   })
+
   const options = exams?.data?.map((exam) => ({
     label: exam.examination.name,
     value: exam.id,
@@ -87,6 +89,10 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
       })
     }
   }, [data])
+
+  useEffect(() => {
+    isOpen && refetch()
+  }, [isOpen, refetch])
 
   return (
     <SappDrawerV2
