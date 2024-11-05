@@ -1,11 +1,12 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import TabLayout from './TabLayout'
+import { SetStateAction } from 'react'
 
 interface IProp {
-  onOpenTab?: () => void
+  onBack: (value: SetStateAction<boolean>) => void
 }
 
-const Settings = ({ onOpenTab }: IProp) => {
+const Settings = ({ onBack }: IProp) => {
   return (
     <div className="relative h-full">
       <form className="flex h-full flex-col">
@@ -19,8 +20,9 @@ const Settings = ({ onOpenTab }: IProp) => {
                   title: 'Cancel',
                   size: 'medium',
                   isPaddingHorizontal: false,
-                  disabled: true,
+                  disabled: false,
                   className: 'min-w-fit !px-0 text-base w-30',
+                  onClick: onBack,
                 }}
                 submit={{
                   title: 'Save',

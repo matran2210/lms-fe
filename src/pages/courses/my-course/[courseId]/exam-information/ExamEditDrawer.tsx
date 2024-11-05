@@ -3,16 +3,17 @@ import SappButton from '@components/base/button/SappButton'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from 'react-query'
+import { zodMsg } from 'src/constants'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
 import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 
 interface Iprops {
   isOpen: boolean
@@ -24,13 +25,25 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   const router = useRouter()
   const validationSchema = z.object({
     note: z.string().optional(),
-    examination_subject_id: z.object({
-      label: z.string().min(1),
-      value: z.string().min(1),
-    }),
+    examination_subject_id: z.object(
+      {
+        label: z
+          .string({ required_error: zodMsg.required })
+          .min(1, { message: zodMsg.required }),
+        value: z
+          .string({ required_error: zodMsg.required })
+          .min(1, { message: zodMsg.required }),
+      },
+      { message: zodMsg.required },
+    ),
   })
 
-  const { control, handleSubmit, reset } = useForm<ExaminationForm>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       examination_subject_id: {
@@ -76,6 +89,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
       data: output,
     })
   }
+
   return (
     <SappDrawerV2
       open={isOpen}
@@ -89,9 +103,14 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
           render={({ field: { onChange, value } }) => (
             <div>
               <label className="mb-2 block text-base font-medium">
-                <span>{'Change My Exam Date'}</span>
+                <span>{'New Exam Date'}</span>
                 <span className="ml-2 text-red-500">*</span>
               </label>
+              {errors.examination_subject_id && (
+                <p className="mb-2 text-red-500">
+                  {errors.examination_subject_id?.message}
+                </p>
+              )}
               <HookFormSelect
                 classParent="w-full md:max-w-full"
                 placeholder="Exam Date"

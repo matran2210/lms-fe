@@ -1,17 +1,17 @@
-import ActionCell from '@components/base/action/ActionCell'
+import SappButton from '@components/base/button/SappButton'
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
 import LoadingRow from '@components/common/LoadingRow'
 import { UserKey } from '@pages/api/queryKey'
 import { UserApi } from '@pages/api/user'
 import clsx from 'clsx'
-import React, { useState } from 'react'
+import dayjs from 'dayjs'
+import React, { SetStateAction, useState } from 'react'
 import { useQuery } from 'react-query'
 import TabLayout from '../TabLayout'
-import dayjs from 'dayjs'
 import ExamEditDrawer from './ExamEditDrawer'
-import { Daum } from './type'
 import ExamInfoActionCell from './ExamInfoActionCell'
+import { Daum } from './type'
 
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
@@ -25,7 +25,10 @@ const headers = [
   'Scheduled Exam Date',
 ].map((label) => ({ label, className: commonHeaderCellStyle }))
 
-const ExamInfoTab = () => {
+interface IProp {
+  onBack?: (value: SetStateAction<boolean>) => void
+}
+const ExamInfoTab = ({ onBack }: IProp) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState<Daum>()
   const [pageIndex, setPageIndex] = useState<number>(1)
@@ -49,7 +52,16 @@ const ExamInfoTab = () => {
     <React.Fragment>
       <TabLayout
         title="Exam Information"
-        headerButtons={<div className="flex items-center"></div>}
+        headerButtons={
+          <SappButton
+            onClick={onBack}
+            size="medium"
+            title={'Back'}
+            color="textUnderline"
+            className="block min-w-[120px] pr-0 text-base lg:hidden"
+            loading={isLoading || isFetching}
+          />
+        }
       >
         <div className="relative mx-auto my-0 mb-6 max-w-xxl bg-white px-8 pb-3 pt-8">
           <SappTable

@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
+import { zodMsg } from 'src/constants'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { ClassAPI } from 'src/pages/api/class'
 import { UserKey } from 'src/pages/api/queryKey'
@@ -23,13 +24,26 @@ interface Iprops {
 const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   const validationSchema = z.object({
     note: z.string().optional(),
-    examination_subject_id: z.object({
-      label: z.string().min(1),
-      value: z.string().min(1),
-    }),
+    examination_subject_id: z.object(
+      {
+        label: z
+          .string({ required_error: zodMsg.required })
+          .min(1, { message: zodMsg.required }),
+        value: z
+          .string({ required_error: zodMsg.required })
+          .min(1, { message: zodMsg.required }),
+      },
+      { message: zodMsg.required },
+    ),
   })
 
-  const { control, handleSubmit, reset, setValue } = useForm<ExaminationForm>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       examination_subject_id: {
@@ -110,9 +124,14 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
           render={({ field: { onChange, value } }) => (
             <div>
               <label className="mb-2 block text-base font-medium">
-                <span>{'Change My Exam Date'}</span>
+                <span>{'New Exam Date'}</span>
                 <span className="ml-2 text-red-500">*</span>
               </label>
+              {errors.examination_subject_id && (
+                <p className="mb-2 text-red-500">
+                  {errors.examination_subject_id?.message}
+                </p>
+              )}
               <HookFormSelect
                 classParent="w-full md:max-w-full"
                 placeholder="Exam Date"

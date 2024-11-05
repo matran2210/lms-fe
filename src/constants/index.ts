@@ -254,3 +254,4 @@ export const CERTIFICATE_DETAIL = '/certificates/[id]'
 
 export * from './socketEvents'
 export * from './localStorageKeys'
+export * from './form'

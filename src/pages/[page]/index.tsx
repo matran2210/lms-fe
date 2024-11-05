@@ -87,9 +87,9 @@ const ProfilePage = () => {
   } else if (page === ProfilePages.ChangePassword) {
     selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
   } else if (page === ProfilePages.Settings) {
-    selectedContent = <Settings />
+    selectedContent = <Settings onBack={() => setSelectPage(true)} />
   } else if (page === ProfilePages.ExamInfo) {
-    selectedContent = <ExamInfoTab />
+    selectedContent = <ExamInfoTab onBack={() => setSelectPage(true)} />
   } else {
     selectedContent = <NotFound />
   }
