@@ -178,7 +178,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 <>
                   <PinnedNotifications />
                   <Component {...pageProps} />
-                  {getActToken() && showHelp && (
+                  {showHelp && (
                     <>
                       <BackToTop />
                       <Help showHelp={showHelp} />
