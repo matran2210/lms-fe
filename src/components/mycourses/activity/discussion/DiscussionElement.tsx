@@ -27,6 +27,7 @@ import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import ActionDiscussion from './ActionDiscussion'
 import SappDisplayText from 'src/common/SappDisplayText'
 import SendComment from './SendComment'
+import { isEmpty } from 'lodash'
 
 type Props = {
   rank?: number
@@ -76,7 +77,7 @@ function DiscussionElement({
       const params = {
         content: e?.editData,
       }
-      if (selectFile) {
+      if (!isEmpty(selectFile)) {
         await CourseActivityApi.uploadImagesDiscussion({
           discussion_id: discussion?.id,
           new_discussion_file: selectFile,
