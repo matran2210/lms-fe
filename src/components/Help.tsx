@@ -20,7 +20,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
 
   useEffect(() => {
     // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
-    if (getLocalStorgeActToken() && showHelp) {
+    if (showHelp) {
       // Tạo một thẻ script mới
       const scriptElement = document.createElement('script')
       scriptElement.type = 'text/javascript'
