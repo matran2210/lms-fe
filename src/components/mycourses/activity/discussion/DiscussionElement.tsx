@@ -77,7 +77,7 @@ function DiscussionElement({
       const params = {
         content: e?.editData,
       }
-      if (!isEmpty(selectFile)) {
+      if (selectFile) {
         await CourseActivityApi.uploadImagesDiscussion({
           discussion_id: discussion?.id,
           new_discussion_file: selectFile,
