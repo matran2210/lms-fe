@@ -22,7 +22,7 @@ import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
 import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,
@@ -33,10 +33,6 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import {
-  createAuthenticationManager,
-  loginReducer,
-} from 'src/redux/slice/Login/Login'
 
 type MyAppProps = AppProps & {
   Component: {

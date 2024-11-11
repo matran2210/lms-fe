@@ -6,7 +6,7 @@ import {
   ScratchPadIcon,
   UnHighLightIcon,
 } from '@assets/icons'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import SappButton from '@components/base/button/SappButton'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import EditorReader from '@components/base/editor/EditorReader'
 import PDFViewer from '@components/base/pdf/pdf-viewer'
@@ -24,6 +24,7 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -39,15 +40,13 @@ import {
   loadMoreQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
+import { IRequirement } from 'src/type/case-study'
 import { IExhibit } from 'src/type/exhibit'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-import SappButton from '@components/base/button/SappButton'
-import { IRequirement } from 'src/type/case-study'
-import clsx from 'clsx'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -492,7 +491,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     } else {
       value.push({
         question_id: listFullQuestions?.[index]?.id,
-        answer_id: '' ?? undefined,
+        answer_id: '',
       })
     }
 
@@ -726,12 +725,12 @@ const CaseStudyDetail = ({ questions }: any) => {
           total_attempt_time: total_attempt_time,
           topic_scratch_pad: scratchPadValues.value,
         })
-        toast.success('Submitted successfully')
+        toast.success('Submission successful')
         router.replace(
           `/case-study/result/${quizAttempId}?class_user_id=${router.query.class_user_id}&class_id=${router.query.class_id}&course_section_id=${router.query.course_section_id}`,
         )
       } catch (err) {
-        toast.error('submit failed')
+        toast.error('Submission failed. Please try again.')
       } finally {
         // setUnsavedChanges(false)
       }
