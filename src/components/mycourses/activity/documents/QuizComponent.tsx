@@ -641,35 +641,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     </div>
                   </>
                 )}
-
-                {activeQuestion?.question_topic?.files?.length > 0 && (
-                  <div>
-                    <div className="my-6 border border-b-gray-2"></div>
-                    <div>
-                      <div className="mb-2 font-semibold">Topic Resource:</div>
-                      {activeQuestion?.question_topic?.files.map(
-                        (e: any, index: number) => {
-                          return (
-                            <div
-                              className="cursor-pointer text-state-info hover:underline"
-                              onClick={() => {
-                                setOpenFile &&
-                                  setOpenFile(
-                                    { type: 'file' },
-                                    e?.resource?.url,
-                                    e?.resource?.name,
-                                  )
-                              }}
-                              key={index}
-                            >
-                              {e?.resource?.name}
-                            </div>
-                          )
-                        },
-                      )}
-                    </div>
-                  </div>
-                )}
               </div>
               <div className="my-6"></div>
               <EssayQuestionPreview
@@ -796,6 +767,35 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             text_editor_content={activeQuestion?.question_topic?.description}
             className="sapp-questions"
           />
+          {activeQuestion?.question_topic?.files?.length > 0 && (
+            <div className="mb-2">
+              {!!activeQuestion?.question_topic?.description && (
+                <div className="my-6 border border-b-gray-2" />
+              )}
+              <div className="mb-2 font-semibold">Topic Resource:</div>
+              {activeQuestion?.question_topic?.files.map(
+                (e: any, index: number) => {
+                  return (
+                    <div
+                      className="cursor-pointer text-state-info hover:underline"
+                      onClick={() => {
+                        setOpenFile &&
+                          setOpenFile(
+                            { type: 'file' },
+                            e?.resource?.url,
+                            e?.resource?.name,
+                          )
+                      }}
+                      key={index}
+                    >
+                      {e?.resource?.name}
+                    </div>
+                  )
+                },
+              )}
+              <div className="my-6 border border-b-gray-2" />
+            </div>
+          )}
           <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
         {/* <div>
