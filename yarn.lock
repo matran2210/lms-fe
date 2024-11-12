@@ -8569,10 +8569,10 @@ preview-part-grading@^1.2.5:
     aos "^2.3.4"
     lodash "^4.17.21"
 
-preview-part@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.2.tgz#1b1a5b78ea2f6b8ee3f507d34191e0664d600c30"
-  integrity sha512-EZwqv5e6jOKNGD9GV4aa6cRWZrWfujgiaTv72DX4qoWAimr8XufqG06MWWr1bSVc6rQZWo1aM6dmpW8ntIxk9g==
+preview-part@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.6.tgz#f1aed1274ec1f9040a6fab6afea39c0da20379cf"
+  integrity sha512-ILcY2m+z6ywPzsua7QZTalQnpUFtZP94jVbVGuC8VoJYEfM6BMmUpbpiMNAnQ6FWdTtzC48XHpJ0Kt0UtHg2Og==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/aos" "^3.0.7"
@@ -8677,10 +8677,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.2.31:
-  version "1.2.31"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.31.tgz#5213933d710509eddaeb1067f97873d1227ad442"
-  integrity sha512-TMYB9MtXmtEzNQHVEAE0P30PAwmeuejlxHE1kiydIsJ9sbaq51UdizYegXqVoyTj2yojGZSNFdIbYHqKZIyrCA==
+quiz-result-package@^1.2.34:
+  version "1.2.34"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.34.tgz#8532fca9a853d36e92c8693f0052d73ed0337b53"
+  integrity sha512-6rdzTHsyqEWiYJ5okEUe704QD20Vk09XgIW3oYNzeco96L2zU10YJPJsmmSgKeu1Y8GPoGGcu7uC68p/7T9Aeg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 
