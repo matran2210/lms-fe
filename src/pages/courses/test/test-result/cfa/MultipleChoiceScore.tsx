@@ -1,13 +1,15 @@
 import TotalScore from '@components/mycourses/test/TotalScore'
 import { roundNumber } from '@utils/helpers'
-import { QuizAttemptChart } from 'src/type'
+import { IQuizAttempComment, QuizAttemptChart } from 'src/type'
 import ChartCFAScore from './chartCFAScore'
+import Recommendation from '@components/test/Recommendation'
 
 interface IProps {
   chartData: QuizAttemptChart
+  recommendation: IQuizAttempComment[]
 }
 
-const MultipleChoiceScore = ({ chartData }: IProps) => {
+const MultipleChoiceScore = ({ chartData, recommendation }: IProps) => {
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
   return (
     <div className="mb-4 w-full max-w-full items-start bg-white p-6 shadow-sidebar xl:mb-6 xl:px-24">
@@ -19,6 +21,9 @@ const MultipleChoiceScore = ({ chartData }: IProps) => {
       <div className="block w-full">
         <ChartCFAScore data={chartData?.chart_data} />
       </div>
+      {recommendation?.map((item, index) => (
+        <Recommendation data={item} key={index} />
+      ))}
     </div>
   )
 }
