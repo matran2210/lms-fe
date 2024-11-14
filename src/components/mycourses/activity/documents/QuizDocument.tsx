@@ -97,7 +97,6 @@ const QuizDocument = ({
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
-  const [openReportModal, setOpenReportModal] = useState<boolean>(false)
   const questionRef = useRef<QuizComponentRef>(null)
 
   const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
@@ -592,9 +591,6 @@ const QuizDocument = ({
                   if (loading) {
                     return
                   }
-                  if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                    handleConfirmQuestion(false)
-                  }
                   handleNextQuestion()
                   trackGAEvent('Click Next Question Quiz Activity')
                 }}
@@ -629,9 +625,6 @@ const QuizDocument = ({
                       handleConfirmQuestion(true)
                       trackGAEvent('Click Button Confirm Quiz Activity')
                     } else {
-                      if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                        handleConfirmQuestion(false)
-                      }
                       handleNextQuestion()
                       trackGAEvent('Click Button Next Quiz Activity')
                     }
