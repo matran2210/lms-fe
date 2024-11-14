@@ -16,7 +16,6 @@ import { IResultsList, QuizActivity, Results } from 'src/type/results'
 import headers from './headers'
 import ResultQuizModal from './ResultQuizModal'
 import ResultsTableFilter from './ResultsTableFilter'
-import styles from './results.module.scss'
 
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
@@ -235,7 +234,6 @@ const ResultsTable = () => {
         onCancel={() => setOpenModal(false)}
         footer={null}
         width={800}
-        className={styles.modalContainer}
         styles={{
           content: {
             padding: 32,
