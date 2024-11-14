@@ -13,11 +13,48 @@ import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import { IResultsList, QuizActivity, Results } from 'src/type/results'
-import { headers } from './headers'
 import ResultQuizModal from './ResultQuizModal'
 import ResultsTableFilter from './ResultsTableFilter'
 
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
+
+// Là essay nên không có điểm
+const commonHeaderCellStyle =
+  'text-left text-medium-sm text-gray-1 font-semibold pb-3 min-w-28'
+
+export const headers = [
+  ...['Name', 'Type'].map((label) => ({
+    label,
+    className: commonHeaderCellStyle,
+  })),
+  {
+    label: 'Graded Activity',
+    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
+  },
+  {
+    label: 'Status',
+    className: clsx(commonHeaderCellStyle),
+  },
+  {
+    label: 'Score',
+    className: clsx(commonHeaderCellStyle, 'text-center'),
+  },
+  {
+    label: 'Time Spent',
+    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
+  },
+  {
+    label: 'Last submission',
+    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
+  },
+  {
+    label: 'Quizzes/Tests',
+    className: commonHeaderCellStyle,
+  },
+] as {
+  label: string
+  className: string
+}[]
 
 const ResultsTable = () => {
   const router = useRouter()
