@@ -41,6 +41,7 @@ const HookFormSelect = ({
   onFocus,
   onBlur,
   isLoading = false,
+  maxMenuHeight,
 }: IProps) => {
   const DropdownIndicator: React.FC<DropdownIndicatorProps> = (props) => {
     return (

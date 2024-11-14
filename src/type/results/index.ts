@@ -1,13 +1,8 @@
-// export interface IResultsList {
-//     success: boolean
-//     data: Data
-//   }
-
 import { GradingMethod, GradingStatus } from '@utils/constants'
 
 export interface IResultsList {
   metadata: Metadata
-  data: Daum[]
+  data: Results[]
 }
 
 export interface Metadata {
@@ -17,12 +12,23 @@ export interface Metadata {
   page_size: number
 }
 
-export interface Daum {
+export interface Results {
   id: string
   name: string
   course_section_type: string
   quiz: Quiz
+  quiz_activity: QuizActivity[]
   path: any
+}
+
+export interface QuizActivity {
+  required_percent_score: number
+  name: string
+  quiz_timed: number
+  quiz_type: string
+  id: string
+  is_graded: boolean
+  attempts: Attempt[]
 }
 
 export interface Quiz {

@@ -2,7 +2,7 @@ import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
 import { GradingMethod, GradingStatus, TEST_TYPE } from '@utils/constants'
 import { getTimeFromInput, truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
+import { Modal, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import Link from 'next/link'
@@ -12,46 +12,20 @@ import { useQuery } from 'react-query'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
-import { Daum, IResultsList } from 'src/type/results'
+import { IResultsList, QuizActivity, Results } from 'src/type/results'
+import headers from './headers'
+import ResultQuizModal from './ResultQuizModal'
 import ResultsTableFilter from './ResultsTableFilter'
-
-// Là essay nên không có điểm
-const commonHeaderCellStyle =
-  'text-left text-medium-sm text-gray-1 font-semibold pb-3 min-w-28'
+import styles from './results.module.scss'
 
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
-const headers = [
-  ...['Name', 'Belong To', 'Type'].map((label) => ({
-    label,
-    className: commonHeaderCellStyle,
-  })),
-  {
-    label: 'Graded Activity',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-  {
-    label: 'Status',
-    className: clsx(commonHeaderCellStyle),
-  },
-  {
-    label: 'Score',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-  {
-    label: 'Time Spent',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-  {
-    label: 'Last submission',
-    className: commonHeaderCellStyle,
-  },
-] as {
-  label: string
-  className: string
-}[]
 
 const ResultsTable = () => {
   const router = useRouter()
+  const [quizActivities, setQuizActivities] = useState<
+    QuizActivity[] | undefined
+  >(undefined)
+  const [openModal, setOpenModal] = useState(false)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
 
@@ -93,7 +67,10 @@ const ResultsTable = () => {
     retry: 1,
   })
 
-  const getScore = (rowData: Daum, grading_method: GradingMethod): string => {
+  const getScore = (
+    rowData: Results,
+    grading_method: GradingMethod,
+  ): string => {
     const attempt = rowData?.quiz?.attempts[0]
 
     if (!attempt) return '-'
@@ -109,6 +86,25 @@ const ResultsTable = () => {
     }
 
     return '-'
+  }
+
+  const getNameTooltipContent = (row: Results) => {
+    return (
+      <div>
+        {true ? (
+          <Link
+            href={`/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`}
+          >
+            <strong className="cursor-pointer text-base text-bw-1 hover:underline">
+              {row?.name}
+            </strong>
+          </Link>
+        ) : (
+          <strong className="text-base text-bw-1">{row?.name}</strong>
+        )}
+        <p className="text-ssm text-gray-1">{row?.path}</p>
+      </div>
+    )
   }
 
   isLoading && <></>
@@ -141,8 +137,10 @@ const ResultsTable = () => {
               {/* Name */}
               <td className={clsx(commonDataCellStyle)}>
                 <Tooltip
-                  title={row?.name?.length > 30 && row?.name}
+                  title={getNameTooltipContent(row)}
                   color="white"
+                  arrow={false}
+                  placement="topLeft"
                 >
                   {row?.quiz?.attempts?.[0]?.id ? (
                     <Link
@@ -153,16 +151,6 @@ const ResultsTable = () => {
                   ) : (
                     truncateString(row?.name, 30)
                   )}
-                </Tooltip>
-              </td>
-
-              {/* Belong to */}
-              <td className={clsx(commonDataCellStyle)}>
-                <Tooltip
-                  title={row?.path?.length > 30 && row?.path && row.path}
-                  color="white"
-                >
-                  {truncateString(row?.path || '-', 30)}
                 </Tooltip>
               </td>
 
@@ -201,6 +189,27 @@ const ResultsTable = () => {
                     )
                   : '-'}
               </td>
+              {/* Quizzes/Tests */}
+              <td className={clsx('!pr-0', commonDataCellStyle)}>
+                {row.quiz_activity && row?.quiz_activity.length >= 0 ? (
+                  <span
+                    onClick={() => {
+                      if (row?.quiz_activity.length > 0) {
+                        setOpenModal(true)
+                        setQuizActivities(row.quiz_activity)
+                      }
+                    }}
+                    className={clsx(
+                      row?.quiz_activity.length > 0 &&
+                        `cursor-pointer text-state-info underline`,
+                    )}
+                  >
+                    {row.quiz_activity.length}
+                  </span>
+                ) : (
+                  <span>-</span>
+                )}
+              </td>
             </tr>
           )
         })}
@@ -216,6 +225,25 @@ const ResultsTable = () => {
           classname="mt-3"
         />
       )}
+      <Modal
+        open={openModal}
+        centered
+        onOk={() => {
+          setOpenModal(false)
+        }}
+        title="List Quiz of Activity"
+        onCancel={() => setOpenModal(false)}
+        footer={null}
+        width={800}
+        className={styles.modalContainer}
+        styles={{
+          content: {
+            padding: 32,
+          },
+        }}
+      >
+        {quizActivities && <ResultQuizModal quizActivities={quizActivities} />}
+      </Modal>
     </>
   )
 }
