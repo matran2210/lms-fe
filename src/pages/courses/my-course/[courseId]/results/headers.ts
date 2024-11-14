@@ -4,7 +4,7 @@ import clsx from 'clsx'
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3 min-w-28'
 
-const headers = [
+export const headers = [
   ...['Name', 'Type'].map((label) => ({
     label,
     className: commonHeaderCellStyle,
@@ -37,5 +37,3 @@ const headers = [
   label: string
   className: string
 }[]
-
-export default headers

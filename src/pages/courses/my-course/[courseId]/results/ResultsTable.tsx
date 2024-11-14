@@ -13,7 +13,7 @@ import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import { IResultsList, QuizActivity, Results } from 'src/type/results'
-import headers from './headers'
+import { headers } from './headers'
 import ResultQuizModal from './ResultQuizModal'
 import ResultsTableFilter from './ResultsTableFilter'
 
