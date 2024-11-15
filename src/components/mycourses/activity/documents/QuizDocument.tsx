@@ -377,12 +377,13 @@ const QuizDocument = ({
 
   // Test Unopend or Expired
   const getType = (startTime: Dayjs, endTime: Dayjs) => {
-    if (dayjs().isBefore(startTime)) return 'unopened'
-    if (dayjs().isAfter(dayjs(endTime))) return 'expired'
+    if (startTime && dayjs().isBefore(startTime)) return 'unopened'
+    if (endTime && dayjs().isAfter(dayjs(endTime))) return 'expired'
     return null
   }
 
   const type = getType(startTime, endTime)
+
   const BluredNotification = () => (
     <>
       {type !== null && (
@@ -391,11 +392,11 @@ const QuizDocument = ({
             <p className="text-center">
               This Quiz will be opened at{' '}
               <span className="font-semi-bold text-primary">
-                {dayjs(startTime).format('DD/MM/YYYY')}{' '}
+                {dayjs(startTime).format('DD/MM/YYYY HH:mm')}{' '}
               </span>
               and closed at{' '}
               <span className="font-semi-bold text-primary">
-                {dayjs(endTime).format('DD/MM/YYYY')}{' '}
+                {dayjs(endTime).format('DD/MM/YYYY HH:mm')}{' '}
               </span>
             </p>
           )}
