@@ -1,10 +1,6 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import {
-  removeHtmlTags,
-  removeStyleAttributes,
-  truncateString,
-} from '@utils/index'
+import { removeHtmlTags, truncateString } from '@utils/index'
 import { Tooltip } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
@@ -13,7 +9,12 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION, QUESTION_TYPES } from 'src/constants'
+import {
+  ANIMATION,
+  COMMON_TEXT_ENUM,
+  GRADE_STATUS,
+  QUESTION_TYPES,
+} from 'src/constants'
 import {
   IAnswearGroup,
   IAnswer,
@@ -33,12 +34,14 @@ interface ScoreDetailProps {
   className?: string
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
+  gradingStatus?: string
 }
 
 const ScoreDetail = ({
   className,
   yourScoreDetailRef,
   type,
+  gradingStatus,
 }: ScoreDetailProps) => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
@@ -164,9 +167,12 @@ const ScoreDetail = ({
 
   const renderBoxesAndLineClass = (type: string, data: IAnswer) => {
     if (type === 'Constructed') {
-      return data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
-        ? ' text-pinned-1 border-pinned-1'
-        : ' text-gray-1 border-gray-1'
+      return gradingStatus === GRADE_STATUS.FINISHED_GRADING
+        ? ' text-[#4077E0] border-pinned-1'
+        : data?.question?.qType === QUESTION_TYPES.ESSAY &&
+            data?.active === COMMON_TEXT_ENUM.SUBMITED
+          ? ' text-pinned-1 border-pinned-1'
+          : ' text-gray-1 border-gray-1'
     }
     return data?.is_correct
       ? ' text-state-success border-success'
@@ -282,9 +288,11 @@ const ScoreDetail = ({
                               <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>
                             ) : (
                               <>
-                                {e?.active === 'SUBMITED'
-                                  ? 'Completed'
-                                  : 'Not Completed'}
+                                {gradingStatus === GRADE_STATUS.FINISHED_GRADING
+                                  ? 'Graded'
+                                  : e?.active === 'SUBMITED'
+                                    ? 'Completed'
+                                    : 'Not Completed'}
                               </>
                             )}
                           </div>

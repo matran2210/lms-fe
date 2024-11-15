@@ -58,6 +58,7 @@ const Explanation = () => {
         ...resultResponse.data.answer.question,
         answer_file: resultResponse.data.answer.answer_file,
         confirmed: true,
+        grading_question: resultResponse.data.answer.grading_question,
         corrects: getCorrect(
           resultResponse?.data?.answer?.question?.qType !==
             QUESTION_TYPES.MATCHING
