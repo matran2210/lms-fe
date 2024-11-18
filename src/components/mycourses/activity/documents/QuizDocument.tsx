@@ -527,7 +527,7 @@ const QuizDocument = ({
 
       {/* )} */}
       <div
-        className={`text-black-1 max-h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {type !== null && <BluredNotification />}
