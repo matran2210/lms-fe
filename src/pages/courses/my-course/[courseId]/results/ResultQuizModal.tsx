@@ -73,49 +73,32 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
             </td>
 
             {/* Type */}
-            <td className={clsx(commonDataCellStyle, 'text-black')}>
+            <td className={clsx(commonDataCellStyle, 'font-medium text-bw-1')}>
               {TEST_TYPE[row?.quiz_type]}
             </td>
 
             {/* Graded Activity */}
-            <td
-              className={clsx(
-                commonDataCellStyle,
-                'text-center  text-bw-black-3',
-              )}
-            >
+            <td className={clsx(commonDataCellStyle, 'text-center  text-bw-1')}>
               {row?.is_graded ? 'Yes' : 'No'}
             </td>
 
             {/* Status */}
-            <td className={clsx(commonDataCellStyle, ' text-bw-black-3')}>
+            <td className={clsx(commonDataCellStyle, ' text-bw-1')}>
               {row?.attempts.length > 0 ? row?.attempts?.[0]?.status : '-'}
             </td>
 
             {/* Score */}
-            <td
-              className={clsx(
-                commonDataCellStyle,
-                'text-center  text-bw-black-3',
-              )}
-            >
+            <td className={clsx(commonDataCellStyle, 'text-center  text-bw-1')}>
               {row?.attempts[0]?.score ?? '-'}
             </td>
 
             {/* Time Spent */}
-            <td
-              className={clsx(
-                commonDataCellStyle,
-                'text-center text-bw-black-3',
-              )}
-            >
+            <td className={clsx(commonDataCellStyle, 'text-center text-bw-1')}>
               {getTimeFromInput(row?.attempts[0]?.total_attempt_time)}
             </td>
 
             {/* Last Submission */}
-            <td
-              className={clsx('!pr-0', commonDataCellStyle, ' text-bw-black-3')}
-            >
+            <td className={clsx('!pr-0', commonDataCellStyle, ' text-bw-1')}>
               {row?.attempts.length > 0
                 ? dayjs(row?.attempts[0]?.finished_at).format(
                     'DD/MM/YYYY hh:mm',

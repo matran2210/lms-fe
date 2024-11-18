@@ -76,9 +76,6 @@ module.exports = {
           9: '#C3C3C3',
           10: 'rgba(0, 0, 0, 0.80)',
         },
-        'bw-black': {
-          3: '#5D5D5D',
-        },
         gray: {
           1: '#A1A1A1',
           2: '#DCDDDD',
