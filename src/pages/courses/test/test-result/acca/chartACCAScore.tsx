@@ -15,7 +15,7 @@ interface IProps {
  */
 const ChartACCAScore = ({ data, recommendation }: IProps) => {
   return (
-    <div className=" mb-4 block h-[152px] bg-white pb-3 pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">
+    <div className=" mb-4 block h-fit bg-white pb-3 pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">
       <div className="pb-4 pt-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Multiple Choice Score by Part
       </div>
