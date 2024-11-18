@@ -839,12 +839,11 @@ const TestDetail = () => {
         )
       }
       const res = await QuestionAPI.getQuestionDetail(currentPage)
-      return { topicDescription, question: res.data, success: res.success }
+      return { topicDescription, question: res.data }
     } catch (err) {
       return {
         topicDescription: { data: {} },
         question: null,
-        success: false,
       }
     }
   }
@@ -854,9 +853,8 @@ const TestDetail = () => {
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     if (!currentContent?.viewed) {
-      const { question, topicDescription, success } =
-        await getDetail(currentTab)
-      if (success) {
+      const { question, topicDescription } = await getDetail(currentTab)
+      if (question) {
         const newData = tabs?.map((item: any) => {
           if (currentTab === item.id) {
             if (item.viewed) {
@@ -1598,13 +1596,13 @@ const TestDetail = () => {
             response_type: 0,
           }
           if (+i === 0) {
-            const { topicDescription, question, success } = await getDetail(
+            const { topicDescription, question } = await getDetail(
               questions?.[0]?.id,
             )
             baseData = {
               ...baseData,
-              viewed: success ? true : false,
-              ...(success && {
+              viewed: question ? true : false,
+              ...(question && {
                 data: question,
                 topicDescription: topicDescription?.data,
               }),
