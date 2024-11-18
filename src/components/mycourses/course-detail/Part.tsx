@@ -16,7 +16,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   const percentProgress = round(
     (course?.learning_progress?.total_course_sections_completed /
       course?.learning_progress?.total_course_sections) *
-      100,
+    100,
     2,
   )
 
@@ -27,7 +27,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   const formattedTime = Number(
     formatTime(
       course?.learning_progress?.duration -
-        course?.learning_progress?.time_spent || 0,
+      course?.learning_progress?.time_spent || 0,
     ),
   )
 
@@ -72,7 +72,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   }
 
   return (
-    <div data-aos={ANIMATION.DATA_AOS} className="flex h-full flex-col">
+    <div data-aos={ANIMATION.DATA_AOS} className="flex h-full flex-col inner">
       <div
         className={`name-course text-2xl font-medium text-bw-1 xl:h-[60px]`}
         onClick={() => {
