@@ -14,7 +14,6 @@ import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
-import SkeletonButton from 'antd/es/skeleton/Button'
 import { Skeleton } from 'antd'
 
 interface IProps {
@@ -64,6 +63,7 @@ const CoursePartDetail = () => {
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
+
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await CoursesAPI.getPartDetail(
@@ -377,6 +377,7 @@ const CoursePartDetail = () => {
               readMore={readMore}
               setReadMore={setReadMore}
               defaultActive={defaultActive}
+              focus_id={router?.query?.focus_id as string}
             />
           </div>
 

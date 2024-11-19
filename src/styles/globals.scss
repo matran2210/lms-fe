@@ -1078,3 +1078,47 @@ td.py-5.px-3.sapp-table-quiz {
 .sapp-border-none {
   border: 0;
 }
+
+
+.card {
+  width: 100%;
+  border-radius: var(--border-radius);
+}
+
+.card .inner {
+  color: #fff;
+  border-radius: var(--border-radius);
+}
+
+.active-section {
+  outline-width: 1px;
+  outline-offset: 0;
+  outline-color: #FFB800;
+  outline-style: solid;
+  animation: animateOutline 4s ease infinite;
+}
+
+@keyframes animateOutline {
+  0% {
+    outline-width: 1px;
+    outline-offset: 0;
+    outline-color: rgba(0, 130, 206, 0);
+  }
+
+  10% {
+    outline-color: #FFB800;
+  }
+
+  /* The animation finishes at 50% */
+  50% {
+    outline-width: 3px;
+    outline-offset: 4px;
+    outline-color: rgba(0, 130, 206, 0);
+  }
+
+  100% {
+    outline-width: 4px;
+    outline-offset: 4px;
+    outline-color: rgba(102, 102, 102, 0);
+  }
+}
