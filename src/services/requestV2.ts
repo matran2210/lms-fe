@@ -3,14 +3,8 @@ import { toast } from 'react-hot-toast'
 import { apiURL } from 'src/redux/services/httpService'
 import exceptions from './en.exceptions.json'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-
-type ApiConfig<T = any> = {
-  uri: string
-  params?: Object
-  data?: Object
-  request?: any
-  token?: String
-}
+import Router from 'next/router'
+import { CERTIFICATE_DETAIL } from 'src/constants'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
@@ -42,17 +36,22 @@ request.interceptors.request.use(
 
 request.interceptors.request.use(async (config: any) => {
   const authenticationManager = new AuthenticationManager()
-  if (authenticationManager.getToken() !== '') {
+
+  const checkRouteCertificate =
+    (Router?.router as any)?.state?.pathname === CERTIFICATE_DETAIL
+
+  if (authenticationManager.getToken() || checkRouteCertificate) {
     config.headers = {
       Authorization: 'Bearer ' + authenticationManager.getToken(),
       ...config.headers,
     }
     return config
   }
+
   await new Promise((resolve) => {
     let interval = null as any
     interval = setInterval(() => {
-      if (authenticationManager.getToken()) {
+      if (authenticationManager.getToken() || checkRouteCertificate) {
         config.headers = {
           Authorization: 'Bearer ' + authenticationManager.getToken(),
           ...config.headers,

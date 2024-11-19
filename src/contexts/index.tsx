@@ -1,5 +1,4 @@
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { getActToken } from '@utils/index'
+import { useRouter } from 'next/router'
 import React, {
   PropsWithChildren,
   createContext,
@@ -7,6 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+import { CERTIFICATE_DETAIL } from 'src/constants'
 import { EventTestAPI } from 'src/pages/api/event-test'
 
 // type for context
@@ -65,6 +65,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    */
   const [submitEventTest, setSubmitEventTest] = useState(false)
 
+  const router = useRouter()
+
   async function fetchEventTest() {
     const res = await EventTestAPI.get({})
     if (res.success) {
@@ -73,7 +75,9 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
   }
 
   useEffect(() => {
-    fetchEventTest()
+    if (router.pathname !== CERTIFICATE_DETAIL) {
+      fetchEventTest()
+    }
   }, [])
 
   return (
