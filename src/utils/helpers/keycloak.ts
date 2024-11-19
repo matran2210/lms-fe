@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
+import { CERTIFICATE } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
 import { NextRouter, useRouter } from 'next/router'
 import { CERTIFICATE_DETAIL } from 'src/constants'
 
 const handleFirebaseToken = async () => {
-  const router = useRouter()
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
   if (!accessDeviceToken) {
     if (window?.Notification?.permission !== 'denied') {
@@ -20,7 +20,7 @@ const handleFirebaseToken = async () => {
     return
   }
 
-  if (router?.pathname !== CERTIFICATE_DETAIL) {
+  if (window.location.pathname?.split('/')?.[1] !== CERTIFICATE) {
     await setDeviceFirebaseToSession(accessDeviceToken ?? '')
   }
 }
