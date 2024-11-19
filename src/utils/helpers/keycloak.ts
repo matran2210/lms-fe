@@ -7,6 +7,7 @@ import { NextRouter, useRouter } from 'next/router'
 import { CERTIFICATE_DETAIL } from 'src/constants'
 
 const handleFirebaseToken = async () => {
+  const router = useRouter()
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
   if (!accessDeviceToken) {
     if (window?.Notification?.permission !== 'denied') {
@@ -18,7 +19,10 @@ const handleFirebaseToken = async () => {
     }
     return
   }
-  await setDeviceFirebaseToSession(accessDeviceToken ?? '')
+
+  if (router?.pathname !== CERTIFICATE_DETAIL) {
+    await setDeviceFirebaseToSession(accessDeviceToken ?? '')
+  }
 }
 export class AuthenticationManager {
   keyCloak: Keycloak = null as any
