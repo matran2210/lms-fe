@@ -247,5 +247,7 @@ export const COMMON_TEXT_ENUM = {
   SUBMITED: 'SUBMITED',
 }
 
+export const CERTIFICATE_DETAIL = '/certificates/[id]'
+
 export * from './socketEvents'
 export * from './localStorageKeys'
