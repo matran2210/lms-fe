@@ -274,7 +274,7 @@ const TestDetail = () => {
         result.push(index + 1)
       } else if (
         !item.done &&
-        !validateAnswer({ answer: item.answer, answer_file: item.answer_file })
+        !validateAnswer({ answer: item.answer, answer_file: item?.answer_file })
       ) {
         result.push(index + 1)
       }
