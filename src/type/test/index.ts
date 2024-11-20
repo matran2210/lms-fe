@@ -1,4 +1,8 @@
 export interface Answer {
+  answer_file?: {
+    file_key?: string
+    file_name?: string
+  }
   answer: string | string[] | Object[]
   attempted?: boolean
   done?: boolean
