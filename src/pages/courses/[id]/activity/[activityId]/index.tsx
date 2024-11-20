@@ -166,6 +166,7 @@ const ActivityPage = () => {
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
+      CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
