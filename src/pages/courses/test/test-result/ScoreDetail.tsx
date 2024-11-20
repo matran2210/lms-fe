@@ -11,7 +11,12 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import { ANIMATION, QUESTION_TYPES } from 'src/constants'
+import {
+  ANIMATION,
+  COMMON_TEXT_ENUM,
+  GRADE_STATUS,
+  QUESTION_TYPES,
+} from 'src/constants'
 import { IAnswer, IQuizAttemptChartType, QuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
 
@@ -24,12 +29,14 @@ interface ScoreDetailProps {
   className?: string
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
+  gradingStatus?: string
 }
 
 const ScoreDetail = ({
   className,
   type,
   yourScoreDetailRef,
+  gradingStatus,
 }: ScoreDetailProps) => {
   const router = useRouter()
   const { ref, inView } = useInView()
@@ -117,9 +124,12 @@ const ScoreDetail = ({
   // Xử lý scroll phân trang
   const renderBoxesAndLineClass = (type: string, data: IAnswer | undefined) => {
     if (type === 'Constructed') {
-      return data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
-        ? ' text-pinned-1 border-pinned-1'
-        : ' text-gray-1 border-gray-1'
+      return gradingStatus === GRADE_STATUS.FINISHED_GRADING
+        ? ' text-[#4077E0] border-pinned-1'
+        : data?.question?.qType === QUESTION_TYPES.ESSAY &&
+            data?.active === COMMON_TEXT_ENUM.SUBMITED
+          ? ' text-pinned-1 border-pinned-1'
+          : ' text-gray-1 border-gray-1'
     }
     return data?.is_correct
       ? ' text-state-success border-success'

@@ -1,9 +1,10 @@
+import Recommendation from '@components/test/Recommendation'
 import { formatNumber } from '@utils/formatNumber'
 import { roundNumber } from '@utils/helpers'
 import { Tooltip } from 'antd'
 import _ from 'lodash'
 import Image from 'next/image'
-import { ChartDatum } from 'src/type'
+import { ChartDatum, IQuizAttempComment } from 'src/type'
 
 interface IProps {
   data: ChartDatum[]
@@ -11,6 +12,7 @@ interface IProps {
   score?: number
   isGraded?: boolean
   passingScore?: number
+  recommendation?: IQuizAttempComment[]
 }
 
 const ChartCMAScore = ({
@@ -19,6 +21,7 @@ const ChartCMAScore = ({
   score,
   passingScore,
   isGraded,
+  recommendation,
 }: IProps) => {
   return (
     <div className="mb-4 w-full max-w-full items-start overflow-x-auto bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 xl:mb-6 xl:px-24">
@@ -138,6 +141,9 @@ const ChartCMAScore = ({
           )
         })}
       </div>
+      {recommendation?.map((item, index) => (
+        <Recommendation data={item} key={index} />
+      ))}
     </div>
   )
 }

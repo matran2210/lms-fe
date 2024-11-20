@@ -97,7 +97,6 @@ const QuizDocument = ({
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
-  const [openReportModal, setOpenReportModal] = useState<boolean>(false)
   const questionRef = useRef<QuizComponentRef>(null)
 
   const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
@@ -297,6 +296,7 @@ const QuizDocument = ({
               dispatch(showPopup(e.data.class_user_score))
             }, 4000)
           }
+          reload()
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
@@ -376,12 +376,13 @@ const QuizDocument = ({
 
   // Test Unopend or Expired
   const getType = (startTime: Dayjs, endTime: Dayjs) => {
-    if (dayjs().isBefore(startTime)) return 'unopened'
-    if (dayjs().isAfter(dayjs(endTime))) return 'expired'
+    if (startTime && dayjs().isBefore(startTime)) return 'unopened'
+    if (endTime && dayjs().isAfter(dayjs(endTime))) return 'expired'
     return null
   }
 
   const type = getType(startTime, endTime)
+
   const BluredNotification = () => (
     <>
       {type !== null && (
@@ -390,11 +391,11 @@ const QuizDocument = ({
             <p className="text-center">
               This Quiz will be opened at{' '}
               <span className="font-semi-bold text-primary">
-                {dayjs(startTime).format('DD/MM/YYYY')}{' '}
+                {dayjs(startTime).format('DD/MM/YYYY HH:mm')}{' '}
               </span>
               and closed at{' '}
               <span className="font-semi-bold text-primary">
-                {dayjs(endTime).format('DD/MM/YYYY')}{' '}
+                {dayjs(endTime).format('DD/MM/YYYY HH:mm')}{' '}
               </span>
             </p>
           )}
@@ -590,9 +591,6 @@ const QuizDocument = ({
                   if (loading) {
                     return
                   }
-                  if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                    handleConfirmQuestion(false)
-                  }
                   handleNextQuestion()
                   trackGAEvent('Click Next Question Quiz Activity')
                 }}
@@ -627,9 +625,6 @@ const QuizDocument = ({
                       handleConfirmQuestion(true)
                       trackGAEvent('Click Button Confirm Quiz Activity')
                     } else {
-                      if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                        handleConfirmQuestion(false)
-                      }
                       handleNextQuestion()
                       trackGAEvent('Click Button Next Quiz Activity')
                     }

@@ -64,9 +64,9 @@ const initialState: ICourseActivityState = {
 
 export const getCourseActivityTapById = createAsyncThunk(
   'courseActivityReducer/getTapById',
-  async ({ id }: { id: string }, thunkAPI) => {
+  async ({ courseId, id }: { courseId: string; id: string }, thunkAPI) => {
     try {
-      const res = await CoursesAPI.getCourseActivityTapById(id)
+      const res = await CoursesAPI.getCourseActivityTapById(courseId, id)
       if (!res?.data) {
         return
       }

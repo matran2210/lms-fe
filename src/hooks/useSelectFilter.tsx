@@ -58,6 +58,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
   const {
     hasNextPage: hasNextSectionPage,
     fetchNextPage: fetchNextSectionPage,
+    isLoading: isSectionLoading,
   } = useInfiniteQuery({
     queryKey: [CourseKey.SectionList],
     queryFn: getCourseSectionList,
@@ -95,6 +96,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     hasNextPage: hasNextSubsectionPage,
     fetchNextPage: fetchNextSubsectionPage,
     refetch: refetchSubsections,
+    isLoading: isSubsectionLoading,
   } = useInfiniteQuery({
     queryKey: [CourseKey.SubsectionList],
     queryFn: getCourseSubsectionList,
@@ -131,6 +133,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     hasNextPage: hasNextUnitPage,
     fetchNextPage: fetchNextUnitPage,
     refetch: refetchUnits,
+    isLoading: isUnitLoading,
   } = useInfiniteQuery({
     queryKey: [CourseKey.UnitList],
     queryFn: getCourseUnitList,
@@ -170,6 +173,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     hasNextPage: hasNextActivityPage,
     fetchNextPage: fetchNextActivityPage,
     refetch: refetchActivities,
+    isLoading: isActivityLoading,
   } = useInfiniteQuery({
     queryKey: [CourseKey.ActivityList, selectedUnit],
     queryFn: getCourseActivityList,
@@ -184,18 +188,18 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     setSelectedSubsection(null)
     setSelectedUnit(null)
     setSelectedActivity(null)
-  }, [selectedSection])
+  }, [refetchSubsections, selectedSection])
 
   useEffect(() => {
     !!selectedSubsection && refetchUnits()
     setSelectedUnit(null)
     setSelectedActivity(null)
-  }, [selectedSubsection])
+  }, [refetchUnits, selectedSubsection])
 
   useEffect(() => {
     !!selectedUnit && refetchActivities()
     setSelectedActivity(null)
-  }, [selectedUnit])
+  }, [refetchActivities, selectedUnit])
 
   return {
     selected,
@@ -208,6 +212,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     setSelectedSection,
     hasNextSectionPage,
     fetchNextSectionPage,
+    isSectionLoading,
 
     // Sub-Section
     subSections,
@@ -216,6 +221,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     setSelectedSubsection,
     hasNextSubsectionPage,
     fetchNextSubsectionPage,
+    isSubsectionLoading,
 
     // Units
     units,
@@ -224,6 +230,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     setSelectedUnit,
     hasNextUnitPage,
     fetchNextUnitPage,
+    isUnitLoading,
 
     // Activities
     activities,
@@ -232,6 +239,7 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
     setSelectedActivity,
     hasNextActivityPage,
     fetchNextActivityPage,
+    isActivityLoading,
   }
 }
 

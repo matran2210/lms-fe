@@ -1,6 +1,6 @@
+import Icon from '@components/icons'
 import React, { ReactNode } from 'react'
 import Select, { type DropdownIndicatorProps, components } from 'react-select'
-import Icon from '@components/icons'
 import { ISelect } from 'src/type'
 
 interface IProps {
@@ -21,6 +21,7 @@ interface IProps {
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
   maxMenuHeight?: number
+  isLoading?: boolean
 }
 
 const HookFormSelect = ({
@@ -39,6 +40,7 @@ const HookFormSelect = ({
   isResultSelect = false,
   onFocus,
   onBlur,
+  isLoading = false,
   maxMenuHeight,
 }: IProps) => {
   const DropdownIndicator: React.FC<DropdownIndicatorProps> = (props) => {
@@ -87,6 +89,7 @@ const HookFormSelect = ({
         onBlur={(e) => {
           onBlur && onBlur(e)
         }}
+        isLoading={isLoading}
       />
     </div>
   )

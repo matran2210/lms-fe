@@ -33,3 +33,32 @@ export interface QuizAttemptChart {
   quiz: Quiz
   multiple_choice_score: number
 }
+
+export interface IQuizAttempComment {
+  comment: string
+  created_at: Date
+  id: string
+  recommendation: string
+}
+
+export interface IQuizAttempt {
+  attempt_gradings: {
+    comment: string
+    created_at: Date
+    id: string
+    recommendation: string
+  }[]
+  class_user_id: string
+  english_score: number
+  grading_status: string
+  id: string
+  is_graded: boolean
+  major_score: number
+  number_of_attempts: number
+  quiz: Object
+  quiz_position_mapping: Array<Object>
+  ratio_score: string
+  score: number
+  status: string
+  total_attempt_time: number
+}

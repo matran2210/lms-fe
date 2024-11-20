@@ -1,8 +1,10 @@
+import Recommendation from '@components/test/Recommendation'
 import { calculatePercentage } from '@utils/helpers'
-import { ChartDatum } from 'src/type'
+import { ChartDatum, IQuizAttempComment } from 'src/type'
 
 interface IProps {
   data: ChartDatum[]
+  recommendation: IQuizAttempComment[]
 }
 
 /**
@@ -11,7 +13,7 @@ interface IProps {
  * Renders a horizontal bar chart displaying ACCA - Low F scores by part.
  *
  */
-const ChartACCAScore = ({ data }: IProps) => {
+const ChartACCAScore = ({ data, recommendation }: IProps) => {
   return (
     <div className=" mb-4 block h-[152px] bg-white pb-3 pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">
       <div className="pb-4 pt-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
@@ -44,6 +46,11 @@ const ChartACCAScore = ({ data }: IProps) => {
               )}%`}
             </div>
           </div>
+        ))}
+      </div>
+      <div>
+        {recommendation?.map((item, index) => (
+          <Recommendation data={item} key={index} />
         ))}
       </div>
     </div>

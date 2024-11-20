@@ -6,9 +6,9 @@ import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { MY_COURSES } from 'src/constants/lang'
 import { CoursesAPI } from 'src/pages/api/courses'
 import ResultsTable from './ResultsTable'
-import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 10
 
@@ -58,7 +58,6 @@ const Results = () => {
    * @description biến này lấy name của course
    */
   const courseNameDetail = courseData?.courseDetail?.data?.name
-  const courseId = courseData?.courseDetail?.data?.id
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -85,6 +84,7 @@ const Results = () => {
                       courseId={router.query.courseId}
                     />
                   )}
+
                   {/* <FilterCourseDetail totalResult={courses?.length || 0} /> */}
                 </div>
               </div>
@@ -92,7 +92,7 @@ const Results = () => {
                 <Heading greeting="" title={'Results'} />
               </div>
               <div className="mx-auto my-0 mb-6 mt-6 max-w-xxl bg-white px-8 pb-3 pt-8 xl-max:container">
-                {isSuccess && <ResultsTable courseId={courseId} />}
+                {isSuccess && <ResultsTable />}
               </div>
             </>
           )}

@@ -359,7 +359,7 @@ const TestDetail = () => {
   const router = useRouter()
 
   const useGetQuizDetail = () => {
-    const [quizDetail, setQuizDetail] = useState<any>(null)
+    const [quizDetail, setQuizDetail] = useState<any>(undefined)
     const [loading, setLoading] = useState(true)
     const router = useRouter()
 
@@ -384,7 +384,7 @@ const TestDetail = () => {
   }
 
   const useGetQuestionTabs = () => {
-    const [questions, setQuestionTabs] = useState<any>(null)
+    const [questions, setQuestionTabs] = useState<any>(undefined)
     const [loading, setLoading] = useState(true)
     const router = useRouter()
 
@@ -412,7 +412,6 @@ const TestDetail = () => {
 
   const { quizDetail } = useGetQuizDetail()
   const { questions } = useGetQuestionTabs()
-
   const type = router.query.type
 
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
@@ -1221,8 +1220,8 @@ const TestDetail = () => {
                       return {
                         ...req,
                         answer_file: {
-                          file_key: file.file_key,
-                          file_name: file.name,
+                          file_key: file?.file_key,
+                          file_name: file?.name,
                         },
                       }
                     }

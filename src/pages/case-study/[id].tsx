@@ -492,7 +492,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     } else {
       value.push({
         question_id: listFullQuestions?.[index]?.id,
-        answer_id: '' ?? undefined,
+        answer_id: '',
       })
     }
 

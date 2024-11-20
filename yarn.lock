@@ -4498,9 +4498,9 @@ caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001599, caniuse-lite@^1.0.300016
   integrity sha512-3XQ0DoRgLijXJErLSl+bLnJ+Et4KqV1PY6JJBGAFlsNsz31zeAIncyeZfLCabHK/jtSh+671RM9YMldxjUPZtA==
 
 caniuse-lite@^1.0.30001651:
-  version "1.0.30001667"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001667.tgz#99fc5ea0d9c6e96897a104a8352604378377f949"
-  integrity sha512-7LTwJjcRkzKFmtqGsibMeuXmvFDfZq/nzIjnmgCGzKKRVzjD72selLDK1oPF/Oxzmt4fNcPvTDvGqSDG4tCALw==
+  version "1.0.30001669"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001669.tgz#fda8f1d29a8bfdc42de0c170d7f34a9cf19ed7a3"
+  integrity sha512-DlWzFDJqstqtIVx1zeSpIMLjunf5SmwOw0N2Ck/QSQdS8PLS4+9HrLaYei4w8BIAL7IB/UEDu889d8vhCTPA0w==
 
 chalk@1.1.3, chalk@^1.0.0:
   version "1.1.3"
@@ -8582,10 +8582,10 @@ preview-part-grading@^1.2.5:
     aos "^2.3.4"
     lodash "^4.17.21"
 
-preview-part@^1.3.5:
-  version "1.3.9"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.9.tgz#df5d04f6a5777f4508c77b864ab1bec55843e44d"
-  integrity sha512-I1PK7izsB09gKVk9J/OZtnb2Z3OOEF1j2Fwka6EmCk3rIsQXP5mfowGebBlRmHHjWYEePwGcFops3LrJDfzjsw==
+preview-part@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.6.tgz#f1aed1274ec1f9040a6fab6afea39c0da20379cf"
+  integrity sha512-ILcY2m+z6ywPzsua7QZTalQnpUFtZP94jVbVGuC8VoJYEfM6BMmUpbpiMNAnQ6FWdTtzC48XHpJ0Kt0UtHg2Og==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/aos" "^3.0.7"

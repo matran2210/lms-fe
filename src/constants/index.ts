@@ -243,5 +243,9 @@ export const GRADING_METHOD = {
 
 export const FINISHED_TEST_TITLE = 'Submitted Successfully'
 
+export const COMMON_TEXT_ENUM = {
+  SUBMITED: 'SUBMITED',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'
