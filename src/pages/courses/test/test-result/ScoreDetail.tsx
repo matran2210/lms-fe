@@ -32,7 +32,7 @@ const ScoreDetail = ({
   yourScoreDetailRef,
 }: ScoreDetailProps) => {
   const router = useRouter()
-  const { ref, inView } = useInView()
+
   const headers = [
     {
       label: '#',
@@ -65,6 +65,8 @@ const ScoreDetail = ({
     fetchNextPage,
     hasNextPage,
     isLoading,
+    isFetchingNextPage,
+    status,
   } = useInfiniteQuery({
     queryKey: ['scoreDetails', router.query.id],
     queryFn: async ({ pageParam }) => {
@@ -88,6 +90,12 @@ const ScoreDetail = ({
     },
     enabled: router.query.id !== undefined,
     retry: false,
+  })
+
+  const { ref, inView } = useInView({
+    threshold: 0.9,
+    skip: isFetchingNextPage || isLoading,
+    delay: 300,
   })
 
   // Hàm ánh xạ giá trị enum với tên tương ứng
@@ -171,7 +179,7 @@ const ScoreDetail = ({
                   {program}
                 </td>
               </tr>
-              {rows?.map((answer, pageNum) => {
+              {rows?.map((answer) => {
                 rowIndex++
                 return (
                   <React.Fragment key={answer?.id}>
@@ -298,7 +306,7 @@ const ScoreDetail = ({
           ))}
         </SappTable>
       </div>
-      <div ref={ref} />
+      <span ref={ref} />
     </div>
   )
 }
