@@ -1,5 +1,3 @@
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { getActToken } from '@utils/index'
 import React, {
   PropsWithChildren,
   createContext,

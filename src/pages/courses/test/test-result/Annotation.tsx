@@ -11,7 +11,7 @@ const Annotation = ({ openAnnotaion, setOpenAnnotaion }: IAnnotation) => {
     <SappModalV2
       title={undefined}
       open={openAnnotaion}
-      handleCancel={() => {}}
+      handleCancel={() => setOpenAnnotaion(false)}
       onOk={() => {}}
       showFooter={false}
       classNameModal="max-w-[634px]"
@@ -20,7 +20,7 @@ const Annotation = ({ openAnnotaion, setOpenAnnotaion }: IAnnotation) => {
         className="flex cursor-pointer justify-end text-white"
         onClick={() => setOpenAnnotaion(false)}
       >
-        <CloseIcon className="group-hover:stroke-black transform stroke-bw-1 transition-all duration-300 ease-in-out" />
+        <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-black" />
       </div>
       <div className="mx-auto my-auto flex flex-col px-2 md:px-12">
         <div className="mt-4 text-4xl font-semibold text-bw-1">
