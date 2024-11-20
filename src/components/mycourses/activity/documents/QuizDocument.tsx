@@ -204,9 +204,6 @@ const QuizDocument = ({
         tabId: tabId,
         quizId: quizId,
         then: () => {
-          if (isFinish) {
-            setRunHandleFinishQuiz((e) => e + 1)
-          }
           setLoading(false)
         },
         onFinally: () => {
@@ -610,20 +607,10 @@ const QuizDocument = ({
                     if (loading) {
                       return
                     }
-                    if (
-                      isLastQuestion &&
-                      grading_preference === 'AFTER_EACH_QUESTION'
-                    ) {
+                    if (isLastQuestion) {
                       setRunHandleFinishQuiz((e) => e + 1)
                       trackGAEvent('Click Button Finish Quiz Activity')
                       return
-                    }
-                    if (
-                      isLastQuestion &&
-                      grading_preference !== 'AFTER_EACH_QUESTION'
-                    ) {
-                      handleConfirmQuestion(true)
-                      trackGAEvent('Click Button Confirm Quiz Activity')
                     } else {
                       handleNextQuestion()
                       trackGAEvent('Click Button Next Quiz Activity')
