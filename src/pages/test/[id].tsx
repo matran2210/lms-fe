@@ -270,7 +270,12 @@ const TestDetail = () => {
     const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
     let result: number[] = []
     answers?.map((item: Answer, index: number) => {
-      if (!item.done && !validateAnswer({ answer: item.answer })) {
+      if (!item.attempted) {
+        result.push(index + 1)
+      } else if (
+        !item.done &&
+        !validateAnswer({ answer: item.answer, answer_file: item.answer_file })
+      ) {
         result.push(index + 1)
       }
     })
@@ -279,7 +284,11 @@ const TestDetail = () => {
   }
 
   // Validate các câu hỏi xem đã trả lời chưa
-  const validateAnswer = (item: { answer: string | Object[] | string[] }) => {
+  const validateAnswer = (item: {
+    answer: string | Object[] | string[]
+    answer_file?: { file_key?: string; file_name?: string }
+  }) => {
+    if (item?.answer_file?.file_key) return true
     if (typeof item?.answer === 'string' && !item?.answer) {
       return false
     }
@@ -966,8 +975,8 @@ const TestDetail = () => {
             newItem = {
               ...item,
               answer_file: {
-                file_key: file.file_key,
-                file_name: file.name,
+                file_key: file?.file_key,
+                file_name: file?.name,
               },
             }
           }
