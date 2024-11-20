@@ -145,6 +145,7 @@ export const courseActivitySlice = createSlice({
       return {
         ...state,
         ...action.payload,
+        tabs: action?.payload?.tabs,
         currentTabId: action.payload?.tabs?.[0]?.id,
       }
     },
