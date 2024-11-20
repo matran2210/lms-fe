@@ -5736,10 +5736,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.0.75:
-  version "1.0.75"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.0.75.tgz#cf61ff9e8e117301f921bc87763dec28a1cbd4bc"
-  integrity sha512-t/5LMWDpK4+kidkgoVCoXqxz/bhkeSbWKbbQtGw/i9xADdFnvFIC/snWKX7dDypdgv8ltz28ZX98ID/KzlzZLQ==
+explanation-package@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.1.0.tgz#a593062599ebf85c7574143da559cf6e28836bfa"
+  integrity sha512-4T/CDyEDpA81Ph6jaP/BWdiWd12VFVLPo2oqni+dZNbpVKH3aRCOLjs+1IwdAh25yTFPLbGsafLaKcp886CKFA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -9384,6 +9384,11 @@ react-hot-toast@^2.4.1:
   integrity sha512-j8z+cQbWIM5LY37pR6uZR6D4LfseplqnuAO4co4u8917hBUvXlEqyP1ZzqVLcqoyUesZZv/ImreoCeHVDpE5pQ==
   dependencies:
     goober "^2.1.10"
+
+react-intersection-observer@^9.13.1:
+  version "9.13.1"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.13.1.tgz#6c61a75801162491c6348bad09967f2caf445584"
+  integrity sha512-tSzDaTy0qwNPLJHg8XZhlyHTgGW6drFKTtvjdL+p6um12rcnp8Z5XstE+QNBJ7c64n5o0Lj4ilUleA41bmDoMw==
 
 react-is@^16.13.1, react-is@^16.3.2, react-is@^16.7.0:
   version "16.13.1"

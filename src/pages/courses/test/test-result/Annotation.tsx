@@ -17,7 +17,7 @@ const Annotation = ({
     <SappModalV2
       title={undefined}
       open={openAnnotaion}
-      handleCancel={() => {}}
+      handleCancel={() => setOpenAnnotaion(false)}
       onOk={() => {}}
       showFooter={false}
       classNameModal="max-w-[634px]"
