@@ -10,6 +10,7 @@ import MultipleChoiceScore from './cfa/MultipleChoiceScore'
 import ChartCMAScore from './cma/chartCMAScore'
 import MultipleQuestion from './multipleQuestion'
 import ScoreDetail from './ScoreDetail'
+import { GRADE_STATUS } from 'src/constants'
 
 interface IProps {
   questions: {
@@ -78,6 +79,11 @@ const TestResultPage = ({
             <ChartACCAScore
               data={chartData?.chart_data}
               recommendation={questions?.quizAttempt?.attempt_gradings}
+              isGraded={
+                questions?.quizAttempt?.grading_status ===
+                GRADE_STATUS.FINISHED_GRADING
+              }
+              gradedScore={questions?.quizAttempt?.score}
             />
             <ScoreDetail
               className={'relative'}
@@ -130,6 +136,11 @@ const TestResultPage = ({
                 <MultipleChoiceScore
                   chartData={chartData}
                   recommendation={questions?.quizAttempt?.attempt_gradings}
+                  isGraded={
+                    questions?.quizAttempt?.grading_status ===
+                    GRADE_STATUS.FINISHED_GRADING
+                  }
+                  gradedScore={questions?.quizAttempt?.score}
                 />
                 <ScoreDetail
                   className={''}
@@ -154,9 +165,13 @@ const TestResultPage = ({
                       data={chartData?.chart_data}
                       GlobalAverage={GlobalAverage}
                       score={chartData?.multiple_choice_score}
-                      isGraded={chartData?.quiz?.is_graded}
+                      isGraded={
+                        questions?.quizAttempt?.grading_status ===
+                        GRADE_STATUS.FINISHED_GRADING
+                      }
                       passingScore={chartData?.quiz?.required_percent_score}
                       recommendation={questions?.quizAttempt?.attempt_gradings}
+                      gradedScore={questions?.quizAttempt?.score}
                     />
                     <ScoreDetail
                       className={''}

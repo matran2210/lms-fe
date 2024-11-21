@@ -1,6 +1,7 @@
 import Recommendation from '@components/test/Recommendation'
 import { formatNumber } from '@utils/formatNumber'
 import { roundNumber } from '@utils/helpers'
+import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
 
@@ -11,6 +12,7 @@ interface IProps {
   isGraded?: boolean
   passingScore?: number
   recommendation?: IQuizAttempComment[]
+  gradedScore?: number
 }
 
 const ChartCMAScore = ({
@@ -19,6 +21,7 @@ const ChartCMAScore = ({
   score,
   passingScore,
   isGraded,
+  gradedScore,
   recommendation,
 }: IProps) => {
   return (
@@ -27,10 +30,15 @@ const ChartCMAScore = ({
         <div>
           <div className="flex flex-col">
             <div className="text-black-1 text-xl font-medium">
-              Multiple Choice Score
+              {isGraded ? 'Overral' : 'Multiple Choice Score'}
             </div>
             <div className="my-2 text-6xl font-bold text-primary">
-              {score !== undefined ? formatNumber(score) : '--'}%
+              {isGraded && !isNull(gradedScore) && !isUndefined(gradedScore)
+                ? formatNumber(Number(gradedScore))
+                : score !== undefined
+                  ? formatNumber(score)
+                  : '--'}
+              %
             </div>
           </div>
           <div className="text-black-1 mb-6 text-lg-xl font-semibold xl:text-xl xl:font-medium">

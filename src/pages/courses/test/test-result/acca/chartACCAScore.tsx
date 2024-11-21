@@ -1,10 +1,14 @@
 import Recommendation from '@components/test/Recommendation'
 import { calculatePercentage } from '@utils/helpers'
+import { formatNumber } from '@utils/formatNumber'
+import { isNull, isUndefined } from 'lodash'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
 
 interface IProps {
   data: ChartDatum[]
   recommendation: IQuizAttempComment[]
+  isGraded: boolean
+  gradedScore?: number
 }
 
 /**
@@ -13,9 +17,25 @@ interface IProps {
  * Renders a horizontal bar chart displaying ACCA - Low F scores by part.
  *
  */
-const ChartACCAScore = ({ data, recommendation }: IProps) => {
+const ChartACCAScore = ({
+  data,
+  recommendation,
+  isGraded,
+  gradedScore,
+}: IProps) => {
   return (
     <div className=" mb-4 block h-fit bg-white pb-3 pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">
+      {isGraded && (
+        <div className="flex flex-col">
+          <div className="text-black-1 text-xl font-medium">Overall</div>
+          <div className="my-2 text-6xl font-bold text-primary">
+            {isGraded && !isNull(gradedScore) && !isUndefined(gradedScore)
+              ? formatNumber(Number(gradedScore))
+              : '--'}
+            %
+          </div>
+        </div>
+      )}
       <div className="pb-4 pt-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Multiple Choice Score by Part
       </div>
