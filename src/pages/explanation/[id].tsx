@@ -114,7 +114,7 @@ const Explanation = () => {
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
-        <div data-aos={ANIMATION.DATA_AOS}>
+        <div className="min-h-screen" data-aos={ANIMATION.DATA_AOS}>
           <div
             className="absolute right-6 top-[14px] ml-auto cursor-pointer"
             onClick={() => {
