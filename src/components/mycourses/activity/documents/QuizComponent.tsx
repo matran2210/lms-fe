@@ -137,7 +137,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       index: number
       name: string
       files: any
-    }>()
+    } | null>()
 
     const [openUpload, setOpenUpload] = useState<{
       requirement_id?: string
@@ -711,7 +711,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const handleDefaultRequirement = () => {
       const defaultRequirement = activeQuestion?.requirements?.[0]
-      if (defaultRequirement) {
+      if (defaultRequirement?.id) {
         setShowRequirement({
           name: defaultRequirement?.name,
           id: defaultRequirement?.id,
@@ -719,6 +719,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           files: defaultRequirement?.files,
           index: 1,
         })
+      } else {
+        setShowRequirement(null)
       }
     }
 
