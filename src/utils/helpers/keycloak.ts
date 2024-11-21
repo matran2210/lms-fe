@@ -4,8 +4,6 @@ import { fetcher } from '@services/requestV2'
 import { CERTIFICATE } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
-import { NextRouter, useRouter } from 'next/router'
-import { CERTIFICATE_DETAIL } from 'src/constants'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
@@ -26,7 +24,6 @@ const handleFirebaseToken = async () => {
 }
 export class AuthenticationManager {
   keyCloak: Keycloak = null as any
-  router: NextRouter | null = null
 
   constructor() {
     if (AuthenticationManager.instance) {
@@ -38,14 +35,12 @@ export class AuthenticationManager {
   }
 
   async initKeyCloakConnect() {
-    this.router = useRouter()
-
     const keycloakConfig: KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
       clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
     }
-    if (this.router.pathname !== CERTIFICATE_DETAIL) {
+    if (window.location.pathname?.split('/')?.[1] !== CERTIFICATE) {
       this.keyCloak = new Keycloak(keycloakConfig)
       await this.keyCloak.init({ onLoad: 'login-required' })
     }
