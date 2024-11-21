@@ -330,23 +330,20 @@ const QuizDocument = ({
       )
 
       const newQuestionResponse: IQuestionResultResponse = {
-        meta: response?.data?.meta,
+        meta: response?.data?.metadata,
         data: (modalResult?.questions?.data ?? []).concat(
-          response?.data?.answer_groups?.flatMap((group: IAnswers) => {
-            const answers = group?.answers?.map((answer: IAnswer) => {
-              return {
-                id: answer?.id,
-                content: answer?.question?.question_content,
-                section: answer?.question?.question_filter_id?.part?.name,
-                type: answer?.question?.qType,
-                is_correct: answer?.is_correct,
-                time_spent: answer?.time_spent,
-                question: answer?.question,
-                active: answer?.active,
-              }
-            })
-            return answers || []
-          }) || [],
+          response?.data?.answers?.map((answer) => {
+            return {
+              id: answer?.id,
+              content: answer?.question?.question_content,
+              section: answer?.question?.question_filter_id?.part?.name,
+              type: answer?.question?.qType,
+              is_correct: answer?.is_correct,
+              time_spent: answer?.time_spent,
+              question: answer?.question,
+              active: answer?.active,
+            }
+          }),
         ),
       }
       if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
