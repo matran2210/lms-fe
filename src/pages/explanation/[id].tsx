@@ -1,4 +1,4 @@
-import { ExplanationPackage } from 'explanation-package-graded-test'
+import { ExplanationPackage } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { httpService } from 'src/redux/services/httpService'
