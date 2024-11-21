@@ -35,7 +35,7 @@ const TableEntranceResult = () => {
         },
       )
       const newQuestionResponse: IQuestionResultResponse = {
-        meta: response.data.meta,
+        meta: response.data.metadata,
         data: (modalResult?.questions?.data || []).concat(
           response.data.answers?.map((e: any) => ({
             active: e.active,
