@@ -1,4 +1,4 @@
-import { ExplanationPackage } from 'explanation-package'
+import { ExplanationPackage } from 'explanation-package-graded-test'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { httpService } from 'src/redux/services/httpService'
@@ -114,7 +114,7 @@ const Explanation = () => {
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
-        <div className="min-h-screen" data-aos={ANIMATION.DATA_AOS}>
+        <div className="h-full" data-aos={ANIMATION.DATA_AOS}>
           <div
             className="absolute right-6 top-[14px] ml-auto cursor-pointer"
             onClick={() => {
