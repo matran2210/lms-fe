@@ -53,6 +53,7 @@ type Props = {
   quizName?: string
   reload: () => void
   grading_method?: string
+  refreshTab: () => void
 }
 
 interface IAnswer {
@@ -93,6 +94,7 @@ const QuizDocument = ({
   quizName,
   reload,
   grading_method,
+  refreshTab,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -293,7 +295,6 @@ const QuizDocument = ({
               dispatch(showPopup(e.data.class_user_score))
             }, 4000)
           }
-          reload()
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
@@ -609,6 +610,7 @@ const QuizDocument = ({
                     }
                     if (isLastQuestion) {
                       setRunHandleFinishQuiz((e) => e + 1)
+                      handleSaveAnswer()
                       trackGAEvent('Click Button Finish Quiz Activity')
                       return
                     } else {
@@ -662,7 +664,10 @@ const QuizDocument = ({
         <div className="relative">
           <div
             className="absolute right-6 top-5  ml-auto cursor-pointer"
-            onClick={() => setModalResult(undefined)}
+            onClick={() => {
+              refreshTab()
+              setModalResult(undefined)
+            }}
           >
             <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
@@ -686,7 +691,7 @@ const QuizDocument = ({
         okButtonCaption="Back"
         handleCancel={() => {}}
         onOk={() => {
-          reload()
+          refreshTab()
           setOpenGradedReport(false)
         }}
         isMaskClosable={false}
