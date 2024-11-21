@@ -327,6 +327,20 @@ const ActivityPage = () => {
     }
   }
 
+  const handleRefreshCurrentTab = () => {
+    try {
+      selector?.currentTabId &&
+        delete CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION[selector?.currentTabId]
+      dispatch(
+        getCourseActivityTapById({
+          courseId: courseId as string,
+          id: selector?.currentTabId ?? '',
+        }),
+      )
+      setActiveButtonId(selector?.currentTabId)
+    } catch (error) {}
+  }
+
   /**
    * Hàm xử lý khi thay đổi tab.
    * @param {string} id - ID của tab.
@@ -781,6 +795,7 @@ const ActivityPage = () => {
                               gradeStatus={gradeStatus}
                               quizName={e?.quiz?.name}
                               grading_method={e?.quiz?.grading_method}
+                              refreshTab={() => handleRefreshCurrentTab()}
                             />
                           </div>
                         )

@@ -20,7 +20,6 @@ import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
 import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
-import { MY_COURSES } from 'src/constants/lang'
 import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
