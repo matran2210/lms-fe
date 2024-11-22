@@ -215,8 +215,8 @@ function DiscussionElement({
               className="rounded-full"
               src={
                 discussion.is_sapp_supporter
-                  ? discussion?.avatar['50x50'] ||
-                    discussion?.avatar['ORIGIN'] ||
+                  ? discussion?.avatar?.['50x50'] ||
+                    discussion?.avatar?.['ORIGIN'] ||
                     sappAvatar
                   : discussion?.avatar?.['50x50'] ||
                     discussion?.avatar?.['ORIGIN'] ||
