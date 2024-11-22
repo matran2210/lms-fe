@@ -114,28 +114,26 @@ const Explanation = () => {
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
-        <div className="h-full" data-aos={ANIMATION.DATA_AOS}>
-          <div
-            className="absolute right-6 top-[14px] ml-auto cursor-pointer"
-            onClick={() => {
-              if (activeQuestion?.answer?.quiz_attempt?.id) {
-                router.push(
-                  `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
-                )
-              } else {
-                router.back()
-              }
-            }}
-          >
-            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
-          </div>
-          <ExplanationPackage
-            getActiveQuestion={getActiveQuestion}
-            activeQuestion={activeQuestion}
-            document_id={''}
-            handleDownload={handleDownload}
-          />
+        <div
+          className="absolute right-6 top-[14px] ml-auto cursor-pointer"
+          onClick={() => {
+            if (activeQuestion?.answer?.quiz_attempt?.id) {
+              router.push(
+                `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
+              )
+            } else {
+              router.back()
+            }
+          }}
+        >
+          <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
+        <ExplanationPackage
+          getActiveQuestion={getActiveQuestion}
+          activeQuestion={activeQuestion}
+          document_id={''}
+          handleDownload={handleDownload}
+        />
       </FullScreenLayout>
     </SappLoadingGlobal>
   )
