@@ -21,7 +21,10 @@ export const F_LOW_CODES = ['F1', 'F2', 'F3', 'F4']
 export const F_HIGH_CODES = ['F5', 'F6']
 
 export const video_url = process.env.NEXT_PUBLIC_VIDEO_URL
-export * from './Course'
-export * from './LocalStorageKey'
 
 export const CERTIFICATE_DETAIL = '/certificates/[id]'
+export const CERTIFICATE = 'certificates'
+
+export * from './Course'
+export * from './LocalStorageKey'
+export * from './Test'

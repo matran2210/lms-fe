@@ -53,6 +53,7 @@ type Props = {
   quizName?: string
   reload: () => void
   grading_method?: string
+  refreshTab: () => void
 }
 
 interface IAnswer {
@@ -93,11 +94,11 @@ const QuizDocument = ({
   quizName,
   reload,
   grading_method,
+  refreshTab,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
-  const [openReportModal, setOpenReportModal] = useState<boolean>(false)
   const questionRef = useRef<QuizComponentRef>(null)
 
   const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
@@ -205,9 +206,6 @@ const QuizDocument = ({
         tabId: tabId,
         quizId: quizId,
         then: () => {
-          if (isFinish) {
-            setRunHandleFinishQuiz((e) => e + 1)
-          }
           setLoading(false)
         },
         onFinally: () => {
@@ -297,7 +295,6 @@ const QuizDocument = ({
               dispatch(showPopup(e.data.class_user_score))
             }, 4000)
           }
-          reload()
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
@@ -377,12 +374,13 @@ const QuizDocument = ({
 
   // Test Unopend or Expired
   const getType = (startTime: Dayjs, endTime: Dayjs) => {
-    if (dayjs().isBefore(startTime)) return 'unopened'
-    if (dayjs().isAfter(dayjs(endTime))) return 'expired'
+    if (startTime && dayjs().isBefore(startTime)) return 'unopened'
+    if (endTime && dayjs().isAfter(dayjs(endTime))) return 'expired'
     return null
   }
 
   const type = getType(startTime, endTime)
+
   const BluredNotification = () => (
     <>
       {type !== null && (
@@ -391,11 +389,11 @@ const QuizDocument = ({
             <p className="text-center">
               This Quiz will be opened at{' '}
               <span className="font-semi-bold text-primary">
-                {dayjs(startTime).format('DD/MM/YYYY')}{' '}
+                {dayjs(startTime).format('DD/MM/YYYY HH:mm')}{' '}
               </span>
               and closed at{' '}
               <span className="font-semi-bold text-primary">
-                {dayjs(endTime).format('DD/MM/YYYY')}{' '}
+                {dayjs(endTime).format('DD/MM/YYYY HH:mm')}{' '}
               </span>
             </p>
           )}
@@ -527,7 +525,7 @@ const QuizDocument = ({
 
       {/* )} */}
       <div
-        className={`text-black-1 max-h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {type !== null && <BluredNotification />}
@@ -591,9 +589,6 @@ const QuizDocument = ({
                   if (loading) {
                     return
                   }
-                  if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                    handleConfirmQuestion(false)
-                  }
                   handleNextQuestion()
                   trackGAEvent('Click Next Question Quiz Activity')
                 }}
@@ -613,24 +608,12 @@ const QuizDocument = ({
                     if (loading) {
                       return
                     }
-                    if (
-                      isLastQuestion &&
-                      grading_preference === 'AFTER_EACH_QUESTION'
-                    ) {
+                    if (isLastQuestion) {
                       setRunHandleFinishQuiz((e) => e + 1)
+                      handleSaveAnswer()
                       trackGAEvent('Click Button Finish Quiz Activity')
                       return
-                    }
-                    if (
-                      isLastQuestion &&
-                      grading_preference !== 'AFTER_EACH_QUESTION'
-                    ) {
-                      handleConfirmQuestion(true)
-                      trackGAEvent('Click Button Confirm Quiz Activity')
                     } else {
-                      if (grading_preference !== 'AFTER_EACH_QUESTION') {
-                        handleConfirmQuestion(false)
-                      }
                       handleNextQuestion()
                       trackGAEvent('Click Button Next Quiz Activity')
                     }
@@ -681,7 +664,10 @@ const QuizDocument = ({
         <div className="relative">
           <div
             className="absolute right-6 top-5  ml-auto cursor-pointer"
-            onClick={() => setModalResult(undefined)}
+            onClick={() => {
+              refreshTab()
+              setModalResult(undefined)
+            }}
           >
             <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
@@ -705,7 +691,7 @@ const QuizDocument = ({
         okButtonCaption="Back"
         handleCancel={() => {}}
         onOk={() => {
-          reload()
+          refreshTab()
           setOpenGradedReport(false)
         }}
         isMaskClosable={false}

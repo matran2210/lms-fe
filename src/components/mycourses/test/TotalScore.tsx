@@ -1,4 +1,5 @@
 import { formatNumber } from '@utils/formatNumber'
+import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
 interface IProps {
   score: number
@@ -7,6 +8,8 @@ interface IProps {
   classGlobal?: string
   classCountAll?: string
   globalAverage?: number | string
+  isGraded?: boolean
+  gradedScore?: number
 }
 
 const TotalScore = ({
@@ -16,6 +19,8 @@ const TotalScore = ({
   classGlobal = '',
   classCountAll = '',
   globalAverage = '',
+  isGraded,
+  gradedScore,
 }: IProps) => {
   return (
     <div
@@ -24,12 +29,17 @@ const TotalScore = ({
       <div className="flex w-full flex-row justify-between">
         <div className="block">
           <div className="mb-3 text-xl font-semibold text-bw-1 xl:font-medium">
-            Multiple Choice Score
+            {isGraded ? 'Overall' : 'Multiple Choice Score'}
           </div>
           <div
             className={`${classScore} font-inter text-6xl font-bold text-primary xl:text-6xl`}
           >
-            {score !== undefined ? formatNumber(score) : '--'}%
+            {isGraded && !isNull(gradedScore) && !isUndefined(gradedScore)
+              ? formatNumber(gradedScore)
+              : score !== undefined
+                ? formatNumber(score)
+                : '--'}
+            %
           </div>
         </div>
         <div className="flex flex-row">

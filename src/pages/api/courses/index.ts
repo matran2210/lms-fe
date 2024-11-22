@@ -268,10 +268,13 @@ export class CoursesAPI {
    * @param {string} id - ID của tab.
    * @returns {Promise<IResponse<ITab>>} - Dữ liệu tab.
    */
-  static async getCourseActivityTapById(id: string): Promise<any> {
+  static async getCourseActivityTapById(
+    courseId: string,
+    id: string,
+  ): Promise<any> {
     if (!this.CACHE_GET_TOPIC_DESCRIPTION[id]) {
       this.CACHE_GET_TOPIC_DESCRIPTION[id] = await fetcher(
-        `${apiURL}/course-sections/tab/${id}`,
+        `${apiURL}/course-sections/${courseId}/tab/${id}`,
       )
     }
     return this.CACHE_GET_TOPIC_DESCRIPTION[id]
@@ -466,7 +469,7 @@ export const getActivityById = async (
     promises.push(
       new Promise(async (resolve, reject) => {
         const responseTab = await fetcher(
-          `${apiURL}/course-sections/tab/${tab.id}`,
+          `${apiURL}/course-sections/${course_id}/tab/${tab.id}`,
         )
         if (responseTab?.data) {
           return resolve(responseTab.data)

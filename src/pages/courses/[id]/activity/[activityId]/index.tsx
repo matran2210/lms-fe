@@ -166,6 +166,7 @@ const ActivityPage = () => {
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
+      CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
@@ -326,13 +327,27 @@ const ActivityPage = () => {
     }
   }
 
+  const handleRefreshCurrentTab = () => {
+    try {
+      selector?.currentTabId &&
+        delete CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION[selector?.currentTabId]
+      dispatch(
+        getCourseActivityTapById({
+          courseId: courseId as string,
+          id: selector?.currentTabId ?? '',
+        }),
+      )
+      setActiveButtonId(selector?.currentTabId)
+    } catch (error) {}
+  }
+
   /**
    * Hàm xử lý khi thay đổi tab.
    * @param {string} id - ID của tab.
    */
-  const handleChangeTab = (id: string) => {
+  const handleChangeTab = (courseId: string, id: string) => {
     try {
-      dispatch(getCourseActivityTapById({ id }))
+      dispatch(getCourseActivityTapById({ courseId, id }))
       setActiveButtonId(id)
     } catch (error) {}
   }
@@ -731,7 +746,7 @@ const ActivityPage = () => {
                       showTooltip={e?.name?.length > 20}
                       toolTipTitle={e?.name}
                       onClick={() => {
-                        handleChangeTab(e?.id)
+                        handleChangeTab(courseId as string, e?.id)
                         trackGAEvent('Click Button Tab Activity')
                       }}
                     />
@@ -780,6 +795,7 @@ const ActivityPage = () => {
                               gradeStatus={gradeStatus}
                               quizName={e?.quiz?.name}
                               grading_method={e?.quiz?.grading_method}
+                              refreshTab={() => handleRefreshCurrentTab()}
                             />
                           </div>
                         )
@@ -913,7 +929,10 @@ const ActivityPage = () => {
                         <div className="relative">
                           <div
                             onClick={() => {
-                              handleChangeTab(getPreviousTabId() || '')
+                              handleChangeTab(
+                                courseId as string,
+                                getPreviousTabId() || '',
+                              )
                               trackGAEvent('Click Button Previous Tab Activity')
                             }}
                             className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold text-bw-1 hover:text-primary"
@@ -942,7 +961,10 @@ const ActivityPage = () => {
                         <div className="relative">
                           <div
                             onClick={() => {
-                              handleChangeTab(getNextTabId() || '')
+                              handleChangeTab(
+                                courseId as string,
+                                getNextTabId() || '',
+                              )
                               trackGAEvent('Click Button Next Tab Activity')
                             }}
                             className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold text-bw-1 hover:text-primary"

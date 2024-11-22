@@ -1,14 +1,8 @@
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-} from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import getConfig from 'next/config'
-
-import toast from 'react-hot-toast'
 import exceptions from 'src/services/en.exceptions.json'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
+import toast from 'react-hot-toast'
 
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -20,10 +14,12 @@ type ApiConfig<T = any> = {
   request?: any
   token?: String
 }
+
 let store: any
 export const injectStore = (_store: any) => {
   store = _store
 }
+
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
     return apiURL
@@ -34,55 +30,48 @@ export const axiosInstance: AxiosInstance = axios.create({
   baseURL: apiURL,
 })
 
-export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
-  axiosInstance(url, config)
-    .then((res) => res?.data)
-    .catch((err) => {
-      throw err
+// Add a request interceptor to the Axios instance
+axiosInstance.interceptors.request.use(
+  async (config: any) => {
+    const authenticationManager = new AuthenticationManager()
+    if (authenticationManager.getToken() !== '') {
+      config.headers = {
+        Authorization: 'Bearer ' + authenticationManager.getToken(),
+        ...config.headers,
+      }
+      return config
+    }
+    await new Promise((resolve) => {
+      let interval = null as any
+      interval = setInterval(() => {
+        if (authenticationManager.getToken()) {
+          config.headers = {
+            Authorization: 'Bearer ' + authenticationManager.getToken(),
+            ...config.headers,
+          }
+          clearInterval(interval)
+          resolve(config)
+        }
+      }, 100)
     })
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    config.headers['Content-Type'] = 'application/json' // Change to your preferred content type
     return config
   },
-  (error) => {
-    // Handle request error
+  (error: AxiosError) => {
+    // If there is an error, return the Promise.reject() method
     return Promise.reject(error)
   },
 )
 
-axiosInstance.interceptors.request.use(async (config: any) => {
-  const authenticationManager = new AuthenticationManager()
-  if (authenticationManager.getToken() !== '') {
-    config.headers = {
-      Authorization: 'Bearer ' + authenticationManager.getToken(),
-      ...config.headers,
-    }
-    return config
-  }
-  await new Promise((resolve) => {
-    let interval = null as any
-    interval = setInterval(() => {
-      if (authenticationManager.getToken()) {
-        config.headers = {
-          Authorization: 'Bearer ' + authenticationManager.getToken(),
-          ...config.headers,
-        }
-        clearInterval(interval)
-        resolve(config)
-      }
-    }, 100)
-  })
-
-  return config
-})
-
+// Add a response interceptor to the Axios instance
 axiosInstance.interceptors.response.use(
-  function (response: AxiosResponse) {
+  (response: AxiosResponse) => {
+    // If the response is successful,
     return response
   },
+
   async (error: any) => {
+    // If the error is not an authentication error, return the Promise.reject() method
     const originalRequest = error.config
 
     if (error.response && error.response.status !== 401) {

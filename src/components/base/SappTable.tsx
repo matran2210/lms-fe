@@ -21,7 +21,6 @@ interface IProps {
 const SappTable = ({
   children,
   headers,
-  loading,
   isCheckedAll,
   onChange,
   hasCheckAll = true,

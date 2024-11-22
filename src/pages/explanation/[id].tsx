@@ -58,6 +58,7 @@ const Explanation = () => {
         ...resultResponse.data.answer.question,
         answer_file: resultResponse.data.answer.answer_file,
         confirmed: true,
+        grading_question: resultResponse.data.answer.grading_question,
         corrects: getCorrect(
           resultResponse?.data?.answer?.question?.qType !==
             QUESTION_TYPES.MATCHING
@@ -113,7 +114,7 @@ const Explanation = () => {
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
-        <div data-aos={ANIMATION.DATA_AOS}>
+        <div className="h-full" data-aos={ANIMATION.DATA_AOS}>
           <div
             className="absolute right-6 top-[14px] ml-auto cursor-pointer"
             onClick={() => {

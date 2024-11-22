@@ -1,4 +1,5 @@
 import HookFormSelect from '@components/base/select/HookFormSelect'
+import { Dispatch, SetStateAction } from 'react'
 import { ISection, ISelect } from 'src/type'
 
 interface IProps {
@@ -9,24 +10,31 @@ interface IProps {
   setSelectedSection: React.Dispatch<ISelect | null>
   fetchNextSectionPage: any
   hasNextSectionPage: any
+  isSectionLoading: boolean
 
   subSections: ISection[]
+  setSubSections: Dispatch<SetStateAction<ISection[]>>
   selectedSubsection: ISelect | null
   setSelectedSubsection: React.Dispatch<ISelect | null>
   hasNextSubsectionPage: any
   fetchNextSubsectionPage: any
+  isSubsectionLoading: boolean
 
   units: ISection[]
   selectedUnit: ISelect | null
+  setUnits: Dispatch<SetStateAction<ISection[]>>
   setSelectedUnit: React.Dispatch<ISelect | null>
   hasNextUnitPage: any
   fetchNextUnitPage: any
+  isUnitLoading: boolean
 
   activities: ISection[]
   selectedActivity: ISelect | null
+  setActivities: Dispatch<SetStateAction<ISection[]>>
   setSelectedActivity: React.Dispatch<ISelect | null>
   hasNextActivityPage: any
   fetchNextActivityPage: any
+  isActivityLoading: boolean
 }
 const ResultsTableFilter = ({
   setSelected,
@@ -36,24 +44,31 @@ const ResultsTableFilter = ({
   setSelectedSection,
   hasNextSectionPage,
   fetchNextSectionPage,
+  isSectionLoading,
 
   subSections,
+  setSubSections,
   selectedSubsection,
   setSelectedSubsection,
   hasNextSubsectionPage,
   fetchNextSubsectionPage,
+  isSubsectionLoading,
 
   units,
+  setUnits,
   selectedUnit,
   setSelectedUnit,
   hasNextUnitPage,
   fetchNextUnitPage,
+  isUnitLoading,
 
   activities,
+  setActivities,
   selectedActivity,
   setSelectedActivity,
   hasNextActivityPage,
   fetchNextActivityPage,
+  isActivityLoading,
 }: IProps) => {
   return (
     <>
@@ -66,7 +81,7 @@ const ResultsTableFilter = ({
         onChange={(selected: ISelect) => {
           setSelected(selected)
           setSelectedSection(selected)
-          // queryClient.invalidateQueries(CourseKey.SubsectionList)
+          setSubSections([])
         }}
         options={
           sections
@@ -77,6 +92,7 @@ const ResultsTableFilter = ({
             : []
         }
         onMenuScrollToBottom={hasNextSectionPage && fetchNextSectionPage}
+        isLoading={isSectionLoading}
       />
 
       {/* SubSection */}
@@ -90,6 +106,7 @@ const ResultsTableFilter = ({
           selected === null
             ? setSelected(selectedSection)
             : setSelected(selected)
+          setUnits([])
         }}
         options={
           selectedSection
@@ -101,6 +118,7 @@ const ResultsTableFilter = ({
         }
         isDisabled={selectedSection === null || selectedSection?.value === ''}
         onMenuScrollToBottom={hasNextSubsectionPage && fetchNextSubsectionPage}
+        isLoading={isSubsectionLoading}
       />
 
       {/* Unit */}
@@ -114,6 +132,7 @@ const ResultsTableFilter = ({
           selected === null
             ? setSelected(selectedSubsection)
             : setSelected(selected)
+          setActivities([])
         }}
         options={
           selectedSubsection
@@ -125,6 +144,7 @@ const ResultsTableFilter = ({
         }
         isDisabled={selectedSubsection === null}
         onMenuScrollToBottom={hasNextUnitPage && fetchNextUnitPage}
+        isLoading={isUnitLoading}
       />
 
       {/* Activity */}
@@ -147,6 +167,7 @@ const ResultsTableFilter = ({
         }
         isDisabled={selectedUnit === null}
         onMenuScrollToBottom={hasNextActivityPage && fetchNextActivityPage}
+        isLoading={isActivityLoading}
       />
     </>
   )

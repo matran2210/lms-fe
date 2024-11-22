@@ -3,16 +3,23 @@ import { roundNumber } from '@utils/helpers'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import SappLoading from 'src/common/SappLoading'
-import { IQuizAttemptChartType, QuizAttemptChart } from 'src/type'
+import { IQuizAttempt, IQuizAttemptChartType, QuizAttemptChart } from 'src/type'
 import ChartACCAScore from './acca/chartACCAScore'
 import Annotation from './Annotation'
 import MultipleChoiceScore from './cfa/MultipleChoiceScore'
 import ChartCMAScore from './cma/chartCMAScore'
 import MultipleQuestion from './multipleQuestion'
 import ScoreDetail from './ScoreDetail'
+import { GRADE_STATUS } from 'src/constants'
 
 interface IProps {
-  questions: Object
+  questions: {
+    class_id: string
+    constructedResponseAnswers: Array<Object>
+    course: Object
+    quizAttempt: IQuizAttempt
+    selectedResponseAnswers: Array<Object>
+  }
   type: IQuizAttemptChartType
   chartData: QuizAttemptChart
   subjectCode: string
@@ -69,11 +76,20 @@ const TestResultPage = ({
       {type === 'ACCA' && F_LOW_CODES.includes(subjectCode) ? (
         <div className={commonMultipleScoreStyle}>
           <div className="flex max-h-full flex-col overflow-y-auto">
-            <ChartACCAScore data={chartData?.chart_data} />
+            <ChartACCAScore
+              data={chartData?.chart_data}
+              recommendation={questions?.quizAttempt?.attempt_gradings}
+              isGraded={
+                questions?.quizAttempt?.grading_status ===
+                GRADE_STATUS.FINISHED_GRADING
+              }
+              gradedScore={questions?.quizAttempt?.score}
+            />
             <ScoreDetail
               className={'relative'}
               yourScoreDetailRef={yourScoreDetailRef}
               type={type}
+              gradingStatus={questions?.quizAttempt?.grading_status}
             />
           </div>
           <div className="-order-1 mb-4 xl:order-1">
@@ -117,11 +133,20 @@ const TestResultPage = ({
           {type === 'CFA' ? (
             <div className={commonMultipleScoreStyle}>
               <div className="flex max-h-full flex-col">
-                <MultipleChoiceScore chartData={chartData} />
+                <MultipleChoiceScore
+                  chartData={chartData}
+                  recommendation={questions?.quizAttempt?.attempt_gradings}
+                  isGraded={
+                    questions?.quizAttempt?.grading_status ===
+                    GRADE_STATUS.FINISHED_GRADING
+                  }
+                  gradedScore={questions?.quizAttempt?.score}
+                />
                 <ScoreDetail
                   className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
+                  gradingStatus={questions?.quizAttempt?.grading_status}
                 />
               </div>
               <MultipleQuestion
@@ -140,13 +165,19 @@ const TestResultPage = ({
                       data={chartData?.chart_data}
                       GlobalAverage={GlobalAverage}
                       score={chartData?.multiple_choice_score}
-                      isGraded={chartData?.quiz?.is_graded}
+                      isGraded={
+                        questions?.quizAttempt?.grading_status ===
+                        GRADE_STATUS.FINISHED_GRADING
+                      }
                       passingScore={chartData?.quiz?.required_percent_score}
+                      recommendation={questions?.quizAttempt?.attempt_gradings}
+                      gradedScore={questions?.quizAttempt?.score}
                     />
                     <ScoreDetail
                       className={''}
                       yourScoreDetailRef={yourScoreDetailRef}
                       type={type}
+                      gradingStatus={questions?.quizAttempt?.grading_status}
                     />
                   </div>
                   <MultipleQuestion
@@ -164,6 +195,7 @@ const TestResultPage = ({
         </>
       )}
       <Annotation
+        gradingStatus={questions?.quizAttempt?.grading_status}
         openAnnotaion={openAnnotaion}
         setOpenAnnotaion={setOpenAnnotaion}
       />

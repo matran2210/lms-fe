@@ -27,6 +27,7 @@ import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import ActionDiscussion from './ActionDiscussion'
 import SappDisplayText from 'src/common/SappDisplayText'
 import SendComment from './SendComment'
+import { isEmpty } from 'lodash'
 
 type Props = {
   rank?: number
