@@ -4,10 +4,10 @@ import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
-import { CoursesAPI } from '../../api/courses/index'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { CoursesAPI } from 'src/pages/api/courses'
 
-const TableEntranceResult = () => {
+const QuizResults = () => {
   const router = useRouter()
   const { id } = router.query
   const [loading, setLoading] = useState<boolean>(false)
@@ -91,5 +91,5 @@ const TableEntranceResult = () => {
     </FullScreenLayout>
   )
 }
-export default TableEntranceResult
-TableEntranceResult.layout = LAYOUT.FULLSCREEN_LAYOUT
+export default QuizResults
+QuizResults.layout = LAYOUT.FULLSCREEN_LAYOUT
