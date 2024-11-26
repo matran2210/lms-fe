@@ -1,14 +1,16 @@
 import { CloseIcon } from '@assets/icons'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { CoursesAPI } from 'src/pages/api/courses'
+import { ActivityInfo } from 'src/type'
 
 const QuizResults = () => {
   const router = useRouter()
+  const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null)
   const { id } = router.query
   const [loading, setLoading] = useState<boolean>(false)
   const [modalResult, setModalResult] = useState<{
@@ -34,6 +36,7 @@ const QuizResults = () => {
           page_size,
         },
       )
+      setActivitiInfo(response.data.activity_info)
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.metadata,
         data: (modalResult?.questions?.data || []).concat(
@@ -72,7 +75,10 @@ const QuizResults = () => {
         <div
           className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
           onClick={() => {
-            router.push('/entrance-test')
+            activityInfo !== null &&
+              router.push(
+                `/courses/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}`,
+              )
           }}
         >
           <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
