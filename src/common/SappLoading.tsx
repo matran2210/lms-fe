@@ -11,7 +11,7 @@ const SappLoading = ({ className }: { className?: string }) => {
         src={animation}
         autoplay
         loop
-        className="left-0 top-0 z-[9999] bg-white backdrop-blur-[2000px]"
+        className="left-0 top-0 z-[9999] max-h-[90px] max-w-[90px] !bg-white backdrop-blur-[2000px]"
         speed={3}
       />
     </div>

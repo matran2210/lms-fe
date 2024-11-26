@@ -239,7 +239,7 @@ export default function MenuItem({
         `}
       >
         <div
-          className={`sidebar-item flex items-center ${
+          className={`sidebar-item flex max-h-[24px]  items-center ${
             Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
           }`}
           onClick={() => closeSideBar()}
