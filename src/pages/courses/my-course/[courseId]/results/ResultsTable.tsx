@@ -1,6 +1,6 @@
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import SappTable from '@components/base/SappTable'
-import { GradingMethod, GradingStatus, TEST_TYPE } from '@utils/constants'
+import { GradingMethod, TEST_TYPE } from '@utils/constants'
 import { getTimeFromInput, truncateString } from '@utils/index'
 import { Modal, Tooltip } from 'antd'
 import clsx from 'clsx'
@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
+import { GRADE_STATUS } from 'src/constants'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
@@ -116,7 +117,7 @@ const ResultsTable = () => {
 
     if (
       grading_method === GradingMethod.MANUAL &&
-      attempt?.grading_status === GradingStatus.FINISHED
+      attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
     ) {
       return `${attempt?.score}%`
     }
