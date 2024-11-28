@@ -163,10 +163,7 @@ const PartFailed = ({
                   title="Retake"
                   full={false}
                   size="small"
-                  className={`${
-                    coursePart?.quiz?.attempt?.number_of_attempts !==
-                      coursePart?.quiz?.limit_count && ''
-                  } ml-auto max-h-[40px]`}
+                  className="ml-auto max-h-8"
                   onClick={() => {
                     setOpen(true)
                     trackGAEvent(`Click Button Retake ${showTitleFinalTest}`)
