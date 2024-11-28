@@ -149,7 +149,7 @@ const CourseDetail = () => {
         ) : (
           <>
             <div className="main relative">
-              <div className="flex w-full items-center justify-between pb-4">
+              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
                 <BreadcrumbFilter name={courseNameDetail} />
                 <FilterCourseDetail totalResult={courses?.length || 0} />
               </div>
@@ -157,10 +157,7 @@ const CourseDetail = () => {
             <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
               <Heading greeting="Welcome to" title={courseNameDetail} />
             </div>
-            <div
-              className="pt-6 xl-max:container"
-              data-aos={ANIMATION.DATA_AOS}
-            >
+            <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
               <CourseParts
                 courses={courses}
                 is_passed_course={is_passed_course}

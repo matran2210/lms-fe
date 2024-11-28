@@ -42,7 +42,7 @@ const EntranceTest = () => {
         ) : (
           <>
             <div className="main relative">
-              <div className="flex w-full items-center justify-between pb-4">
+              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
                 <h2 className="text-medium-sm font-medium text-bw-1 ">
                   Entrance Test
                 </h2>
@@ -57,7 +57,7 @@ const EntranceTest = () => {
               />
             </div>
             <div
-              className="mx-8 my-0 max-w-xxl pt-6 lg:mx-8 xl:mx-auto"
+              className="my-0 max-w-xxl pt-6 xl:mx-auto"
               data-aos={ANIMATION.DATA_AOS}
             >
               <EntranceTestList entranceTestLists={entranceTestLists} />

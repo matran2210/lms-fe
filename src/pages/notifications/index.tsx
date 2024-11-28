@@ -181,9 +181,9 @@ const Notifications = () => {
           />
         </div>
       </div>
-      <div className="lg:px-20" data-aos={ANIMATION.DATA_AOS}>
+      <div className="px-5 lg:px-20" data-aos={ANIMATION.DATA_AOS}>
         <div
-          className="main mx-auto my-0 max-w-xxl px-4 pt-6 lg:px-0"
+          className="main mx-auto my-0 max-w-xxl pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}
         >
           <h2 className="pb-4 text-medium-sm font-medium text-bw-1">
