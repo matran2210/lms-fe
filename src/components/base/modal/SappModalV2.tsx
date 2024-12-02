@@ -48,7 +48,7 @@ interface IProps {
   disabled?: boolean
   onOk: () => void
   classNameModal?: string | undefined
-  width?: number
+  width?: number | string
   handleClose?: () => void
 }
 
