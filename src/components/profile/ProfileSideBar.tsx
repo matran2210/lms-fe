@@ -2,11 +2,7 @@ import ExpandIcon from '@components/layout/ExpandIcon'
 import { PROFILE_PAGES } from '@utils/constants/User'
 import { trackGAEvent } from '@utils/google-analytics'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import {
-  getLocalStorageItem,
-  removeLocalStorageItem,
-  removeLocalStorageJwtToken,
-} from '@utils/index'
+import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'

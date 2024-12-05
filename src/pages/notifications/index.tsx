@@ -7,7 +7,6 @@ import NotifyActions from '@components/notification/NotifyActions'
 import NotifyList from '@components/notification/NotifyList'
 import NotifyTab from '@components/notification/NotifyTab'
 import { trackGAEvent } from '@utils/google-analytics'
-import { getActToken } from '@utils/index'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS } from 'src/constants'
@@ -148,12 +147,9 @@ const Notifications = () => {
   }
 
   useEffect(() => {
-    const accessToken = getActToken()
-    if (accessToken) {
-      try {
-        dispatch(getCountUnRead())
-      } catch (error) {}
-    }
+    try {
+      dispatch(getCountUnRead())
+    } catch (error) {}
   }, [])
 
   useEffect(() => {
