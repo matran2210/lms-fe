@@ -1,4 +1,5 @@
-import { GradingMethod, GradingStatus } from '@utils/constants'
+import { GradingMethod } from '@utils/constants'
+import { GRADE_STATUS } from 'src/constants'
 
 export interface IResultsList {
   metadata: Metadata
@@ -53,7 +54,7 @@ export interface Attempt {
   multiple_choice_score: number
   constructed_score: number
   status: string
-  grading_status: GradingStatus | null
+  grading_status: (typeof GRADE_STATUS)[keyof typeof GRADE_STATUS] | null
   started_at: string
   finished_at: string
 }
