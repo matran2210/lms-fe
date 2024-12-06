@@ -33,15 +33,15 @@ const EventTest = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout title={LANG_SIGNIN.eventTest}>
         <div className="border-b border-default bg-white">
-          <div className="mx-auto my-0 flex max-w-xxl py-[18px]">
+          <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6 ">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="main mx-8 my-0 max-w-xxl lg:mx-auto">
-          <div className="flex justify-between pb-4 pt-6">
+        <div className="main mx-8 my-0 max-w-xxl xl:mx-auto">
+          <div className="flex flex-col justify-between gap-3 pb-4 pt-6 sm:flex-row">
             <h2 className="text-medium-sm font-medium text-bw-1 ">
               {LANG_SIGNIN.eventTest}
             </h2>

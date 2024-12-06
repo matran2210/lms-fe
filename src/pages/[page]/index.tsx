@@ -118,7 +118,7 @@ const ProfilePage = () => {
             />
           </div>
         </div>
-        <div className="mx-auto my-0 flex w-full max-w-xxl grow flex-col px-5 lg:px-0">
+        <div className="mx-auto my-0 flex w-full max-w-xxl grow flex-col px-5 xl:px-0">
           <div className="main sm:mx-4 lg:mx-0 ">
             <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
           </div>

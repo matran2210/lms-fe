@@ -713,7 +713,6 @@ textarea.is-invalid:focus {
 
 .sapp-modal .ant-modal-content {
   padding: 70px 76px !important;
-  width: 630px;
 }
 
 .sapp-modal--math .ant-modal-content {
@@ -1079,7 +1078,6 @@ td.py-5.px-3.sapp-table-quiz {
   border: 0;
 }
 
-
 .card {
   width: 100%;
   border-radius: var(--border-radius);
@@ -1093,7 +1091,7 @@ td.py-5.px-3.sapp-table-quiz {
 .active-section {
   outline-width: 1px;
   outline-offset: 0;
-  outline-color: #FFB800;
+  outline-color: #ffb800;
   outline-style: solid;
   animation: animateOutline 4s ease infinite;
 }
@@ -1106,7 +1104,7 @@ td.py-5.px-3.sapp-table-quiz {
   }
 
   10% {
-    outline-color: #FFB800;
+    outline-color: #ffb800;
   }
 
   /* The animation finishes at 50% */

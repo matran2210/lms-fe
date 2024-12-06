@@ -15,7 +15,7 @@ const BreadcrumbFilter = ({
 }) => {
   return (
     <nav
-      className="breadcrumbs max-w-[70%]"
+      className="breadcrumbs md:max-w-[70%]"
       role="navigation"
       aria-label="breadcrumbs"
     >
