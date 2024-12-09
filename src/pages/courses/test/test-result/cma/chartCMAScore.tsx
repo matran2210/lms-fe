@@ -30,7 +30,7 @@ const ChartCMAScore = ({
         <div>
           <div className="flex flex-col">
             <div className="text-black-1 text-xl font-medium">
-              {isGraded ? 'Overral' : 'Multiple Choice Score'}
+              {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
             </div>
             <div className="my-2 text-6xl font-bold text-primary">
               {isGraded && !isNull(gradedScore) && !isUndefined(gradedScore)

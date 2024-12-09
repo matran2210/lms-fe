@@ -27,7 +27,7 @@ const ChartACCAScore = ({
     <div className=" mb-4 block h-fit bg-white pb-3 pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">
       {isGraded && (
         <div className="flex flex-col">
-          <div className="text-black-1 text-xl font-medium">Overall</div>
+          <div className="text-black-1 text-xl font-medium">Overall Score</div>
           <div className="my-2 text-6xl font-bold text-primary">
             {isGraded && !isNull(gradedScore) && !isUndefined(gradedScore)
               ? formatNumber(Number(gradedScore))
