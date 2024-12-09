@@ -73,17 +73,12 @@ const TestResultPage = ({
 
   return (
     <>
-      {type === 'ACCA' && F_LOW_CODES.includes(subjectCode) ? (
+      {type === 'ACCA' && !F_LOW_CODES.includes(subjectCode) ? (
         <div className={commonMultipleScoreStyle}>
           <div className="flex max-h-full flex-col overflow-y-auto">
             <ChartACCAScore
               data={chartData?.chart_data}
               recommendation={questions?.quizAttempt?.attempt_gradings}
-              isGraded={
-                questions?.quizAttempt?.grading_status ===
-                GRADE_STATUS.FINISHED_GRADING
-              }
-              gradedScore={questions?.quizAttempt?.score}
             />
             <ScoreDetail
               className={'relative'}
@@ -98,13 +93,24 @@ const TestResultPage = ({
                 className={`$ flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
               >
                 <div className="mb-5 text-xl font-semibold text-bw-1 xl:font-medium">
-                  Multiple Choice Score
+                  {questions?.quizAttempt?.grading_status ===
+                  GRADE_STATUS.FINISHED_GRADING
+                    ? 'Overall Score'
+                    : 'Multiple Choice Score'}
                 </div>
                 <div className="flex w-full items-end justify-between">
                   <div
                     className={`$ -mb-[13px] font-inter text-6xl font-bold text-primary xl:text-6xl`}
                   >
-                    <>{Math.round(chartData?.multiple_choice_score)}%</>
+                    <>
+                      {Math.round(
+                        questions?.quizAttempt?.grading_status ===
+                          GRADE_STATUS.FINISHED_GRADING
+                          ? questions?.quizAttempt?.score
+                          : chartData?.multiple_choice_score,
+                      )}
+                      %
+                    </>
                   </div>
                   <div className={`flex items-center gap-1`}>
                     <Image
