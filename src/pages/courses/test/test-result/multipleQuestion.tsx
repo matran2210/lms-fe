@@ -186,13 +186,13 @@ const MultipleQuestion = ({
           >
             <div className="flex w-full flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
-                className="flex cursor-pointer flex-row pr-2 text-center"
+                className="flex cursor-pointer flex-row pr-2 text-center text-gray-1  hover:text-primary"
                 onClick={() => setOpenAnnotaion(true)}
               >
                 <div className="my-auto">
                   <IconAnnotationGuide />
                 </div>
-                <div className="text-xs my-auto ml-1 font-normal text-gray-1">
+                <div className="text-xs my-auto ml-1 font-normal">
                   Annotation Guide
                 </div>
               </div>
@@ -218,7 +218,7 @@ const MultipleQuestion = ({
                 )}
               </div>
             </div>
-            <div className="mb-2 flex max-h-[40px] grow items-center justify-end md:w-1/5">
+            <div className="flex max-h-[40px] grow items-center justify-end md:w-1/5">
               {Number(questions?.selectedResponseAnswers?.length || 0) +
                 Number(questions?.constructedResponseAnswers?.length || 0) >=
                 8 && (
@@ -238,7 +238,9 @@ const MultipleQuestion = ({
                 <ButtonPrimary
                   title={'Quit'}
                   size={'medium'}
-                  className={'max-w-[120px] px-11 text-medium-sm !font-medium'}
+                  className={
+                    'mb-0 max-w-[120px] px-11 text-medium-sm !font-medium'
+                  }
                 />
               </Link>
             </div>

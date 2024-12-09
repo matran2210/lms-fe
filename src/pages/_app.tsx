@@ -11,7 +11,7 @@ import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
 import initializeGA from '@utils/google-analytics'
-import { getActToken, pageview } from '@utils/index'
+import { pageview } from '@utils/index'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import type { AppProps } from 'next/app'
@@ -153,14 +153,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [showHelp])
 
-  const accessToken = getActToken()
   useEffect(() => {
-    if (accessToken) {
-      try {
-        dispatch(getCountUnRead())
-      } catch (error) {}
-    }
-  }, [accessToken])
+    try {
+      dispatch(getCountUnRead())
+    } catch (error) {}
+  }, [])
 
   return (
     <main>

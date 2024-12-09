@@ -67,7 +67,7 @@ const Annotation = ({
               <div className="h-2 bg-pinned-1 text-pinned-1"></div>
             </div>
             <div className="content-center text-right text-pinned-1">
-              Compeleted
+              Completed
             </div>
           </div>
         )}

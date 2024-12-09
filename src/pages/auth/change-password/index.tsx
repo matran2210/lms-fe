@@ -11,7 +11,6 @@ import {
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
 import { display422Errors } from '@utils/helpers/form'
-import { removeJwtToken } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -81,7 +80,6 @@ const ChangePasswordPage = () => {
     }
   }
   const redirectLogin = async () => {
-    removeJwtToken()
     const authenticationManager = new AuthenticationManager()
     await authenticationManager.logout(window.location.origin)
   }

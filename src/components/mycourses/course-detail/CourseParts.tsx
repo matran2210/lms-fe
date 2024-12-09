@@ -36,7 +36,7 @@ const CourseParts = ({
       className={`${
         isEmpty(courses)
           ? 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
-          : 'mb-10 grid gap-6 md:grid-cols-2 2xl-min:grid-cols-3'
+          : 'mb-10 grid gap-6 md:grid-cols-2 2xl:grid-cols-3'
       }`}
     >
       {!isEmpty(courses) ? (
