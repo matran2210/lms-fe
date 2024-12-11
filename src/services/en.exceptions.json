@@ -244,6 +244,14 @@
     "message": "Foundation Class Can Not Be Modified"
   },
   {
+    "code": "400|070224",
+    "message": "Graded test/quiz can not be created due to course completion of students"
+  },
+  {
+    "code": "400|070206",
+    "message": "Course already has Mock Test. You can not change type of course"
+  },
+  {
     "code": "400|070305",
     "message": "Invalid Course Type"
   },
@@ -429,7 +437,7 @@
   },
   {
     "code": "400|100204",
-    "message": "Area Not Found"
+    "message": "Class Facility Not Found"
   },
   {
     "code": "400|100304",
@@ -1122,5 +1130,21 @@
   {
     "code": "400|470304",
     "message": "Ward Not Found"
+  },
+  {
+    "code": "400|041105",
+    "message": "User Import Check Duplicate Contact Invalid"
+  },
+  {
+    "code": "400|010912",
+    "message": "User Teacher Not Choose Facility"
+  },
+  {
+    "code": "400|101309",
+    "message": "Class Mentor Has Quizzes For Grading"
+  },
+  {
+    "code": "400|310005",
+    "message": "The Event Primary Category Update Itself"
   }
 ]
