@@ -1,17 +1,10 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import { SocketContext } from '@contexts/SocketContext'
 import { trackGAEvent } from '@utils/google-analytics'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
-import { TitleSidebar } from 'src/constants'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { PageLink, TitleSidebar } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
@@ -49,9 +42,8 @@ export default function MenuItem({
   //     router.asPath === '/login_history' ||
   //     router.asPath === '/devices')
 
-  const selected = router.pathname === url
-
   const isNested = subItems && subItems?.length > 0
+  const selected = router.pathname === url
 
   const onClick = () => {
     toggleExpanded((prev) => !prev)
@@ -204,9 +196,10 @@ export default function MenuItem({
       <div
         className={`group cursor-pointer hover:bg-secondary ${
           selected &&
-          type === 'level-1' &&
-          Icon !== 'avatar' &&
-          Icon !== 'profile-detail'
+          ((type === 'level-1' &&
+            Icon !== 'avatar' &&
+            Icon !== 'profile-detail') ||
+            (type === 'level-2' && Icon === 'result'))
             ? 'border-l-4 border-active pl-6 pr-1'
             : 'pl-7'
         } sidebar-list-items relative mb-4 py-2 last:mb-0 ${
@@ -245,7 +238,14 @@ export default function MenuItem({
           onClick={() => closeSideBar()}
         >
           {url !== '#' ? (
-            <Link href={url} passHref>
+            <Link
+              href={
+                url === PageLink.RESULTS
+                  ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
+                  : url
+              }
+              passHref
+            >
               {renderMenuContent()}
             </Link>
           ) : (
