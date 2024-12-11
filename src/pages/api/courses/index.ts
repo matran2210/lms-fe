@@ -317,6 +317,7 @@ export class CoursesAPI {
     parentId?: string,
     classId?: string,
     page_index?: number,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
       `${apiURL}/course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
@@ -324,6 +325,7 @@ export class CoursesAPI {
       }&type=${type}&parentId=${parentId ?? ''}${
         classId ? `&classId=${classId}` : ''
       }`,
+      { params: params },
     )
   }
 
