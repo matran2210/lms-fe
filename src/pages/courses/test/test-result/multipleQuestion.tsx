@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, GRADE_STATUS } from 'src/constants'
 import { IAnswer } from 'src/type'
 
 interface MultipleQuestionProps {
@@ -51,9 +51,12 @@ const MultipleQuestion = ({
 
   const renderBoxesAndLineClass = (type: string, data: IAnswer) => {
     if (type === 'Constructed Questions') {
-      return data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
-        ? ' text-pinned-1 border-pinned-1'
-        : ' text-gray-1 border-gray-1'
+      return questions?.quizAttempt?.grading_status ===
+        GRADE_STATUS.FINISHED_GRADING
+        ? ' text-graded-finish border-graded-finish'
+        : data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
+          ? ' text-pinned-1 border-pinned-1'
+          : ' text-gray-1 border-gray-1'
     }
     return data?.is_correct
       ? ' text-state-success border-success'
