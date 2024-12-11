@@ -130,7 +130,7 @@ const QuizDocument = ({
 
   useEffect(() => {
     ;(async () => {
-      if (questions?.[0]) {
+      if (questions?.[0]?.id) {
         // Load the first question when the component mounts
         try {
           dispatch(
@@ -144,7 +144,7 @@ const QuizDocument = ({
         } catch (error) {}
       }
     })()
-  }, [questions, dispatch])
+  }, [questions?.[0]?.id])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
