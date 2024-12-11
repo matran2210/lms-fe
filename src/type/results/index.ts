@@ -4,6 +4,7 @@ import { GRADE_STATUS } from 'src/constants'
 export interface IResultsList {
   metadata: Metadata
   data: Results[]
+  class_user_id: string
 }
 
 export interface Metadata {
@@ -28,6 +29,7 @@ export interface QuizActivity {
   quiz_timed: number
   quiz_type: string
   id: string
+  grading_method: GradingMethod
   is_graded: boolean
   attempts: Attempt[]
 }

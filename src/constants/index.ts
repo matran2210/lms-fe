@@ -20,6 +20,7 @@ export const PageLink = {
   TEST_RESULT: '/courses/test/test-result/[id]',
   USERPAGE: '/[page]',
   EVENT_TEST: '/event-test',
+  RESULTS: '/courses/my-course/[courseId]/results',
 }
 
 export const TitleSidebar = {
@@ -65,6 +66,7 @@ export enum TEST_TYPE {
   CHAPTER_TEST = 'CHAPTER_TEST',
   PART_TEST = 'PART_TEST',
   EVENT_TEST = 'EVENT_TEST',
+  ACTIVITY = 'ACTIVITY',
 }
 
 export enum COURSE_TYPE {
