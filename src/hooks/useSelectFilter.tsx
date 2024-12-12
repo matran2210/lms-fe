@@ -156,7 +156,6 @@ const useSelectFilter = (courseId: string | string[] | undefined) => {
           selectedUnit?.value,
           '',
           page.pageParam,
-          { type_tab_document: 'QUIZ' },
         )
 
       if (success) {
