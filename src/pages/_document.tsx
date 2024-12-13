@@ -7,7 +7,8 @@ class MyDocument extends Document {
       <Html>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GTM_ID || ''} />
         <Head>
-          <link rel="icon" href="/sapp.svg" />
+          <link rel="icon" type="image/png" href="/icon.png" sizes="96x96" />
+          <link href="/sapp.svg" type="image/x-icon" rel="shortcut icon" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
           <meta charSet="utf-8"></meta>
           <meta

@@ -5,8 +5,7 @@
 }
 
 .calc__display {
-  @apply grid items-center text-right;
-  background: $color-display;
+  @apply grid items-center bg-pinned-1 text-right;
   font-size: 1.9rem;
   padding: 1.5em 2rem 1em;
   grid-template: 1fr 1fr / 1fr 2fr;
@@ -27,13 +26,12 @@
 }
 
 .calc__btns-container {
-  @apply grid gap-[0.4rem] rounded-b-lg bg-white p-[0.8rem];
+  @apply grid gap-[0.4rem] rounded-b-md bg-white p-[0.8rem];
   grid-template-columns: repeat(4, 1fr);
 }
 
 .calc__btn {
-  @apply cursor-pointer border-none;
-  background: $color-calc-btn;
+  @apply cursor-pointer border-none bg-gray-2;
   color: $color-display;
   padding: 1.5em 2rem;
   border-radius: 0.2rem;
@@ -44,7 +42,7 @@
 }
 
 .btn--colored {
-  background: $color-calc-btn-colored;
+  @apply bg-primary;
   color: $color-display;
 }
 
