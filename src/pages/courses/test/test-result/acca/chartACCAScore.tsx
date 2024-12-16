@@ -1,7 +1,5 @@
 import Recommendation from '@components/test/Recommendation'
 import { calculatePercentage } from '@utils/helpers'
-import { formatNumber } from '@utils/formatNumber'
-import { isNull, isUndefined } from 'lodash'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
 
 interface IProps {
@@ -22,33 +20,33 @@ const ChartACCAScore = ({ data, recommendation }: IProps) => {
         Multiple Choice Score by Part
       </div>
       <div className="flex-start dashboard-scroll-x flex w-full snap-x flex-row gap-14 scroll-smooth">
-        {data?.map((item: ChartDatum) => (
-          <div
-            key={item?.part_id}
-            className="flex w-11/12 max-w-78 shrink-0 snap-start flex-col items-start justify-end gap-2 md:w-1/2 xl:w-1/3"
-          >
-            <div className="line-clamp-2 font-normal text-bw-1">
-              {item?.title}
+        {data?.map((item: ChartDatum) => {
+          const percentage = calculatePercentage(
+            item?.section_score,
+            item?.max_section_score,
+          )
+          return (
+            <div
+              key={item?.part_id}
+              className="flex w-11/12 max-w-78 shrink-0 snap-start flex-col items-start justify-end gap-2 md:w-1/2 xl:w-1/3"
+            >
+              <div className="line-clamp-2 font-normal text-bw-1">
+                {item?.title}
+              </div>
+              <div className="relative h-2 w-full bg-gray-3">
+                <div
+                  className="absolute left-0 top-0 h-2 bg-primary"
+                  style={{
+                    width: `${percentage}%`,
+                  }}
+                ></div>
+              </div>
+              <div className="flex w-full items-center justify-end text-base font-normal text-bw-1">
+                {`${percentage}%`}
+              </div>
             </div>
-            <div className="relative h-2 w-full bg-gray-3">
-              <div
-                className="absolute left-0 top-0 h-2 bg-primary"
-                style={{
-                  width: `${calculatePercentage(
-                    item?.total_correct_answers,
-                    item?.total_questions,
-                  )}%`,
-                }}
-              ></div>
-            </div>
-            <div className="flex w-full items-center justify-end text-base font-normal text-bw-1">
-              {`${calculatePercentage(
-                item?.total_correct_answers,
-                item?.total_questions,
-              )}%`}
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
       <div>
         {recommendation?.map((item, index) => (
