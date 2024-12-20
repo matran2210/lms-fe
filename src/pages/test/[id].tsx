@@ -835,9 +835,9 @@ const TestDetail = () => {
       return tabs
     }
   }
-
   async function getDetail(currentPage: string) {
     let topicDescription
+    let question
     try {
       if (!isUndefined(quizDetail) && !isUndefined(questions)) {
         topicDescription = await CoursesAPI.getTopicDescription(
@@ -845,9 +845,9 @@ const TestDetail = () => {
             ?.question_topic_id,
           quizDetail?.id,
         )
+        question = await QuestionAPI.getQuestionDetail(currentPage)
       }
-      const res = await QuestionAPI.getQuestionDetail(currentPage)
-      return { topicDescription, question: res.data }
+      return { topicDescription, question: question?.data }
     } catch (err) {
       return {
         topicDescription: { data: {} },
@@ -1627,7 +1627,7 @@ const TestDetail = () => {
     if (questions) {
       fetchTabs()
     }
-  }, [questions, router])
+  }, [questions, router, quizDetail?.id])
 
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>

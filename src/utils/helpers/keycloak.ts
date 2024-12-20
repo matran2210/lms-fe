@@ -4,6 +4,8 @@ import { fetcher } from '@services/requestV2'
 import { CERTIFICATE } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
+import { PageLink } from 'src/constants'
+import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
@@ -35,14 +37,43 @@ export class AuthenticationManager {
   }
 
   async initKeyCloakConnect() {
+    if (typeof window === 'undefined') {
+      return
+    }
+
     const keycloakConfig: KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
       clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
     }
+
+    // Kiểm tra trạng thái login lần đầu tiên
+    let isFirstLogin = false
     if (window.location.pathname?.split('/')?.[1] !== CERTIFICATE) {
       this.keyCloak = new Keycloak(keycloakConfig)
-      await this.keyCloak.init({ onLoad: 'login-required' })
+      const authenticated = await this.keyCloak.init({
+        onLoad: 'login-required',
+      })
+
+      if (authenticated) {
+        // Kiểm tra lần login đầu tiên
+        if (!localStorage.getItem('hasLoggedInBefore')) {
+          isFirstLogin = true // Lần đầu tiên login
+          localStorage.setItem('hasLoggedInBefore', 'true') // Đánh dấu đã login lần đầu
+          const res = await EntranceTestAPI.getEntranceCount()
+          if (isFirstLogin) {
+            localStorage.setItem('enstranceTest', 'true')
+            if (res?.data?.count > 0) {
+              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
+            } else {
+              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
+            }
+          }
+        } else {
+          isFirstLogin = false // Các lần login tiếp theo
+        }
+      } else {
+      }
     }
 
     await handleFirebaseToken()

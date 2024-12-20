@@ -3,15 +3,21 @@ import EntranceTestList from '@components/entrance-test/EntranceTestList'
 import Layout from '@components/layout'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
 import { EntranceTestAPI } from '../api/entrance-test'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { MY_COURSES } from 'src/constants/lang'
+import { useEffect, useState } from 'react'
+import { useAppDispatch } from 'src/redux/hook'
+import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 
 const EntranceTest = () => {
+  const router = useRouter()
+  const [open, setOpen] = useState<boolean>(false)
+  const dispatch = useAppDispatch()
+
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await EntranceTestAPI.get(params)
@@ -21,10 +27,15 @@ const EntranceTest = () => {
     return useQuery([queryKey, params], fetchData, { retry: false })
   }
 
-  const router = useRouter()
   const { data: entranceTestLists, isLoading } = useGetData('entrance-test', {
     attempt_status: router?.query?.attempt_status,
   })
+
+  const getEntranceTestCount = async () => await dispatch(getEntranceCount())
+
+  useEffect(() => {
+    getEntranceTestCount()
+  }, [])
 
   return (
     <Layout title="Entrance Test">
@@ -60,12 +71,15 @@ const EntranceTest = () => {
               className="my-0 max-w-xxl pt-6 xl:mx-auto"
               data-aos={ANIMATION.DATA_AOS}
             >
-              <EntranceTestList entranceTestLists={entranceTestLists} />
+              <EntranceTestList
+                entranceTestLists={entranceTestLists}
+                setOpen={setOpen}
+                open={open}
+              />
             </div>
           </>
         )}
       </div>
-      <PopUpRemindEntrance />
     </Layout>
   )
 }
