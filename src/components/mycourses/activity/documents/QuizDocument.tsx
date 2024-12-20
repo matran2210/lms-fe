@@ -18,10 +18,6 @@ import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
 import dayjs, { Dayjs } from 'dayjs'
 import { QuizResultComponent } from 'quiz-result-package'
-import {
-  IQuestionResult,
-  IQuestionResultResponse,
-} from 'quiz-result-package/dist/type'
 import toast from 'react-hot-toast'
 import {
   ANIMATION,
@@ -37,6 +33,10 @@ import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import {
+  IQuestionResult,
+  IQuestionResultResponse,
+} from 'src/type/course/my-course/Activity'
 
 type Props = {
   questions: IQuestion[]
@@ -342,6 +342,7 @@ const QuizDocument = ({
             }
           }) || [],
         ),
+        attempt_info: response?.data?.attempt_info,
       }
 
       if (is_graded && grading_method === GRADING_METHOD.MANUAL) {

@@ -6,6 +6,10 @@ export interface IScoreDetails {
   metadata: IMeta
   answers: IAnswer[]
   activity_info: ActivityInfo
+  attempt_info: {
+    is_graded: boolean
+    score: number
+  }
 }
 
 export interface ActivityInfo {

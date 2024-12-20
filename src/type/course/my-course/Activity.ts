@@ -116,3 +116,48 @@ export interface IBreadcrumb {
   parent_id?: string
   url?: string
 }
+
+export interface IQuestionResultResponse {
+  data: IQuestionResult[]
+  meta: {
+    total_pages: number
+    total_records: number
+    page_index: number
+    page_size: number
+  }
+  attempt_info: {
+    is_graded: boolean
+    score: number
+  }
+}
+
+export interface IQuestionResult {
+  active?: string
+  question?: {
+    quiz_question_instances?: {
+      section: {
+        name: string
+      }
+    }
+    question_filter?: {
+      part: {
+        name: string
+      }
+    }
+    qType?: string
+    question_report: {
+      average_time: number
+      ratio: number
+    }
+    question_topic?: {
+      id: string
+      name: string
+    }
+  }
+  id: string
+  content: string
+  section: string
+  type: string
+  is_correct: boolean
+  time_spent: number
+}
