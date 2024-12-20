@@ -130,6 +130,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       initializeGA()
       window.GA_INITIALIZED = true
     }
+    dispatch(getCountUnRead())
   }, [])
 
   const excludedPathsHelp = [
