@@ -31,7 +31,7 @@ import {
   SOCIAL_LINK,
 } from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
-import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'
 import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
@@ -275,6 +275,11 @@ const QuizDocument = ({
       )
         .unwrap()
         .then((e: any) => {
+          if (e?.progress?.is_completed) {
+            setTimeout(() => {
+              dispatch(showPopupCompletedCourse(e?.progress?.content))
+            }, 4000)
+          }
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
           dispatch(
             removeQuizFinished({
@@ -289,11 +294,6 @@ const QuizDocument = ({
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
             setOpenGradedReport(true)
             return
-          }
-          if (e?.data?.class_user_score) {
-            setTimeout(() => {
-              dispatch(showPopup(e.data.class_user_score))
-            }, 4000)
           }
         })
     } catch (error: any) {
