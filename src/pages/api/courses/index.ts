@@ -439,7 +439,11 @@ export const submitQuizTest = async (
       data: data,
       method: 'POST',
     })
-    return { ...response, quizAttemptId }
+    return {
+      ...response,
+      quizAttemptId,
+      progress: quizAttemptResponse?.data?.progress,
+    }
   }
 }
 
