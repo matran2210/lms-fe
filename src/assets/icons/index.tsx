@@ -1565,7 +1565,7 @@ export const IconDownArrow = () => {
       <path
         d="M0.667317 1.66657L5.00065 5.3999L9.33398 1.66657"
         stroke="#404041"
-        stroke-linecap="square"
+        strokeLinecap="square"
       />
     </svg>
   )

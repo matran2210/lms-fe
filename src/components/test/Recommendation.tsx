@@ -53,7 +53,7 @@ const CommentModal = ({
       <div className="flex items-center justify-between">
         <h4 className="mb-1 font-medium">{title}</h4>
         <button onClick={() => setIsOpen(!isOpen)}>
-          {title ? <IconDownArrow /> : <ArrowUpIcon />}
+          {isOpen ? <IconDownArrow /> : <ArrowUpIcon />}
         </button>
       </div>
       <div

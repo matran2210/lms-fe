@@ -12,7 +12,6 @@ interface IProps {
   isGraded?: boolean
   passingScore?: number
   recommendation?: IQuizAttempComment[]
-  gradedScore?: number
 }
 
 const ChartCMAScore = ({
@@ -21,7 +20,6 @@ const ChartCMAScore = ({
   score,
   passingScore,
   isGraded,
-  gradedScore,
   recommendation,
 }: IProps) => {
   return (
@@ -33,11 +31,7 @@ const ChartCMAScore = ({
               {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
             </div>
             <div className="my-2 text-6xl font-bold text-primary">
-              {isGraded && !isNull(gradedScore) && !isUndefined(gradedScore)
-                ? formatNumber(Number(gradedScore))
-                : score !== undefined
-                  ? formatNumber(score)
-                  : '--'}
+              {isNull(score) || isUndefined(score) ? '--' : formatNumber(score)}
               %
             </div>
           </div>

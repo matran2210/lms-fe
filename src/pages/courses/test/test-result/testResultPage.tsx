@@ -17,6 +17,7 @@ import MultipleQuestion from './multipleQuestion'
 import ScoreDetail from './ScoreDetail'
 import { GRADE_STATUS } from 'src/constants'
 import Recommendation from '@components/test/Recommendation'
+import { isUndefined, isNull } from 'lodash'
 
 interface IProps {
   questions: {
@@ -29,6 +30,7 @@ interface IProps {
   type: IQuizAttemptChartType
   chartData: QuizAttemptChart
   subjectCode: string
+  score: number
 }
 
 const TestResultPage = ({
@@ -36,6 +38,7 @@ const TestResultPage = ({
   type,
   chartData,
   subjectCode,
+  score,
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
@@ -108,19 +111,14 @@ const TestResultPage = ({
                     </div>
                     <div className="flex w-full items-end justify-between">
                       <div
-                        className={`$ -mb-[13px] font-inter text-6xl font-bold text-primary xl:text-6xl`}
+                        className={`font-inter text-6xl font-bold text-primary xl:text-6xl`}
                       >
-                        <>
-                          {Math.round(
-                            questions?.quizAttempt?.grading_status ===
-                              GRADE_STATUS.FINISHED_GRADING
-                              ? questions?.quizAttempt?.score
-                              : chartData?.multiple_choice_score,
-                          )}
-                          %
-                        </>
+                        {isNull(score) || isUndefined(score)
+                          ? '--'
+                          : Math.round(score)}
+                        %
                       </div>
-                      <div className={`flex items-center gap-1`}>
+                      <div className={`mb-3 flex items-center gap-1`}>
                         <Image
                           src="https://file.rendit.io/n/XnLyBdd8onI3Zbp3i20X.svg"
                           width={16}
@@ -150,14 +148,13 @@ const TestResultPage = ({
                 <ChartCMAScore
                   data={chartData?.chart_data}
                   GlobalAverage={GlobalAverage}
-                  score={chartData?.multiple_choice_score}
+                  score={score}
                   isGraded={
                     questions?.quizAttempt?.grading_status ===
                     GRADE_STATUS.FINISHED_GRADING
                   }
                   passingScore={chartData?.quiz?.required_percent_score}
                   recommendation={questions?.quizAttempt?.attempt_gradings}
-                  gradedScore={questions?.quizAttempt?.score}
                 />
                 <ScoreDetail
                   className={''}
@@ -187,7 +184,7 @@ const TestResultPage = ({
                   questions?.quizAttempt?.grading_status ===
                   GRADE_STATUS.FINISHED_GRADING
                 }
-                gradedScore={questions?.quizAttempt?.score}
+                score={score}
               />
               <ScoreDetail
                 className={''}
@@ -212,14 +209,13 @@ const TestResultPage = ({
               <ChartCMAScore
                 data={chartData?.chart_data}
                 GlobalAverage={GlobalAverage}
-                score={chartData?.multiple_choice_score}
+                score={score}
                 isGraded={
                   questions?.quizAttempt?.grading_status ===
                   GRADE_STATUS.FINISHED_GRADING
                 }
                 passingScore={chartData?.quiz?.required_percent_score}
                 recommendation={questions?.quizAttempt?.attempt_gradings}
-                gradedScore={questions?.quizAttempt?.score}
               />
               <ScoreDetail
                 className={''}
@@ -247,7 +243,7 @@ const TestResultPage = ({
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <div className="-order-1 mb-4 xl:order-1">
+            <div className="order-1 mb-4 xl:order-1">
               <div className="max-h-full w-full xl:sticky xl:top-6 ">
                 <div
                   className={`flex min-h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
@@ -258,19 +254,14 @@ const TestResultPage = ({
                       ? 'Overall Score'
                       : 'Multiple Choice Score'}
                   </div>
-                  <div className="flex w-full items-end justify-between">
+                  <div className="flex w-full flex-wrap items-end justify-between">
                     <div
-                      className={`$ -mb-[13px] font-inter text-6xl font-bold text-primary xl:text-6xl`}
+                      className={`mb-[13px] font-inter text-6xl font-bold text-primary xl:text-6xl`}
                     >
-                      <>
-                        {Math.round(
-                          questions?.quizAttempt?.grading_status ===
-                            GRADE_STATUS.FINISHED_GRADING
-                            ? questions?.quizAttempt?.score
-                            : chartData?.multiple_choice_score,
-                        )}
-                        %
-                      </>
+                      {isNull(score) || isUndefined(score)
+                        ? '--'
+                        : Math.round(score)}
+                      %
                     </div>
                     <div className={`flex items-center gap-1`}>
                       <Image
@@ -304,7 +295,7 @@ const TestResultPage = ({
           </div>
         )
     }
-  }, [type])
+  }, [type, score])
 
   return (
     <>
