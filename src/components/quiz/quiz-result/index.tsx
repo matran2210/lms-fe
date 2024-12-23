@@ -51,6 +51,7 @@ const QuizResults = () => {
             question: e.question as any,
           })) || [],
         ),
+        attempt_info: response?.data?.attempt_info,
       }
 
       setModalResult((e) => ({
