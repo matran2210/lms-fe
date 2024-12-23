@@ -918,6 +918,23 @@ const TestDetail = () => {
   }
 
   const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
+    // Lọc lấy answer_id tồn tại thực sự trong câu hỏi
+    // To do : Tìm vị trí set data đang lỗi khi mang cả answer_id của câu hỏi phía trước vào
+    const tab_current = tabs?.find((e: any) => e.id === tabId)
+    if (
+      tab_current &&
+      tab_current?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
+      Array.isArray(data)
+    ) {
+      const answer_ids = tab_current?.data?.answers?.map((e: any) => e.id)
+      data = data.filter((e: string) => {
+        if (answer_ids?.includes(e)) {
+          return true
+        }
+        return false
+      })
+    }
+
     setStartTime(Date.now())
     let newData = [] as any
     for (let item of tabs) {
