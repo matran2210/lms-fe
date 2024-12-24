@@ -148,7 +148,7 @@ const ActivityPage = () => {
             videos:
               course_tab.videos?.map((document) => {
                 return {
-                  file_id: document.file.id,
+                  file_id: document?.file?.id,
                   is_click: false,
                 }
               }) ?? [],
