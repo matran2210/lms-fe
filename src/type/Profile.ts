@@ -6,3 +6,7 @@ export type IProfilePages =
   | 'devices'
   | 'login_history'
   | 'change_password'
+  | 'overview'
+  | 'cma'
+  | 'cfa'
+  | 'acca'
