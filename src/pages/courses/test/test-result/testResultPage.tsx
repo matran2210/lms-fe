@@ -243,7 +243,7 @@ const TestResultPage = ({
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <div className="order-1 mb-4 xl:order-1">
+            <div className="-order-1 mb-4 xl:order-1">
               <div className="max-h-full w-full xl:sticky xl:top-6 ">
                 <div
                   className={`flex min-h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
@@ -263,7 +263,7 @@ const TestResultPage = ({
                         : Math.round(score)}
                       %
                     </div>
-                    <div className={`flex items-center gap-1`}>
+                    <div className={`mb-5 flex items-center gap-1`}>
                       <Image
                         src="https://file.rendit.io/n/XnLyBdd8onI3Zbp3i20X.svg"
                         width={16}
