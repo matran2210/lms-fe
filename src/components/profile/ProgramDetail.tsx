@@ -145,8 +145,8 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
       resetField('hubspot_account_info')
       resetField('user_hubspot_examination_subjects')
       fetchSubjectOfHub()
-      const programData = user.user_hubspot_program_infos.find(
-        (item) => item.course_category.name === typeProgram,
+      const programData = user?.user_hubspot_program_infos?.find(
+        (item) => item?.course_category?.name === typeProgram,
       )
       if (programData) {
         setValue('course_category_id', programData?.course_category_id ?? '')
