@@ -62,7 +62,7 @@ import LimitQuizModal from './limitQuizModal'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import { trackGAEvent } from '@utils/google-analytics'
-import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
   AnswerList,
@@ -394,6 +394,10 @@ const TestDetail = () => {
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [routeBack, setRouteBack] = useState(false)
   const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
+  const [isCompletedCourse, setIsCompletedCourse] = useState({
+    status: false,
+    content: '',
+  })
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [quizAttempId, setQuizAttempId] = useState({
@@ -1175,8 +1179,10 @@ const TestDetail = () => {
         scratch_pads: scratchPads || [],
       })
       if (res) {
-        if (res?.data?.class_user_score) {
-          dispatch(showPopup(res?.data?.class_user_score))
+        if (isCompletedCourse.status) {
+          setTimeout(() => {
+            dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+          }, 2000)
         }
 
         if (
@@ -1225,8 +1231,10 @@ const TestDetail = () => {
           (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       })
       if (res) {
-        if (res?.data?.class_user_score) {
-          dispatch(showPopup(res?.data?.class_user_score))
+        if (isCompletedCourse.status) {
+          setTimeout(() => {
+            dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+          }, 2000)
         }
         setScoreFinalTest(res?.data?.score)
         setQuizResultId(() => {
@@ -1521,6 +1529,12 @@ const TestDetail = () => {
           router.query.id as string,
           router.query.class_user_id as string,
         )
+        if (res?.data?.progress?.is_completed) {
+          setIsCompletedCourse({
+            status: res?.data?.progress?.is_completed,
+            content: res?.data?.progress?.content,
+          })
+        }
         setQuizAttempId(res.data)
         setIsQuizAttemptCreated(true) // Mark the attempt as created
       } catch (err: any) {

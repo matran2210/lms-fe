@@ -73,21 +73,6 @@ interface IPinned {
   updated_at: string
 }
 
-export interface ICourseScore {
-  is_passed: boolean
-  course: {
-    id: string
-    name: string
-  }
-  user_certificate: {
-    id: string
-  }
-  content: {
-    title: string
-    content: string
-  }
-}
-
 export interface PinnedNotifications {
   data: IPinned
 }
