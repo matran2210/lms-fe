@@ -1182,7 +1182,7 @@ const TestDetail = () => {
         if (isCompletedCourse.status) {
           setTimeout(() => {
             dispatch(showPopupCompletedCourse(isCompletedCourse.content))
-          }, 4000)
+          }, 2000)
         }
 
         if (
@@ -1234,7 +1234,7 @@ const TestDetail = () => {
         if (isCompletedCourse.status) {
           setTimeout(() => {
             dispatch(showPopupCompletedCourse(isCompletedCourse.content))
-          }, 4000)
+          }, 2000)
         }
         setScoreFinalTest(res?.data?.score)
         setQuizResultId(() => {

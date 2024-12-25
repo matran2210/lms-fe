@@ -278,7 +278,7 @@ const QuizDocument = ({
           if (e?.progress?.is_completed) {
             setTimeout(() => {
               dispatch(showPopupCompletedCourse(e?.progress?.content))
-            }, 4000)
+            }, 2000)
           }
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
           dispatch(

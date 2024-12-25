@@ -325,7 +325,7 @@ const ActivityPage = () => {
     if (response?.data?.progress?.is_completed) {
       setTimeout(() => {
         dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
-      }, 4000)
+      }, 2000)
     }
   }
 
