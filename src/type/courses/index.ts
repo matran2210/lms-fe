@@ -193,6 +193,8 @@ export interface IQuizSetting {
   start_time: any
   end_time: any
   quiz_id: string
+  allow_attempt: boolean
+  reason_for_reject: 'EXPIRED' | 'NOT_OPEN_YET'
 }
 
 export interface IMyCourseDetail {
