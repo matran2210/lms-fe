@@ -35,6 +35,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
   const [subjects, setSubjects] = useState<ISubjectItem[]>()
   const { user, loading } = useAppSelector(userReducer)
   const [exams, setExams] = useState<IExaminationList>()
+  const [typeOfProgram, setTypeOfProgram] = useState<string>('')
   const validationSchema = z.object({
     course_category_id: z.string().optional().default(''),
     hubspot_account_info: z.string().optional().default(''),
@@ -54,10 +55,11 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
       .default([]),
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { handleSubmit, setValue, control, getValues, resetField } = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(validationSchema),
-  })
+  const { handleSubmit, setValue, control, getValues, resetField, reset } =
+    useForm({
+      mode: 'onSubmit',
+      resolver: zodResolver(validationSchema),
+    })
 
   const onSubmit = async (data: IForm) => {
     setIsLoading(true)
@@ -90,6 +92,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
     try {
       const res = await MyProfileAPI.getSubjectOfhubspot(typeProgram)
       setSubjects(res.subjects)
+      setValue('course_category_id', res?.course_category_id ?? '')
     } catch (err) {}
   }
 
@@ -144,17 +147,14 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
       resetField('course_category_id')
       resetField('hubspot_account_info')
       resetField('user_hubspot_examination_subjects')
-      fetchSubjectOfHub()
+      if (typeProgram && typeProgram !== typeOfProgram) {
+        setTypeOfProgram(typeProgram)
+        fetchSubjectOfHub()
+      }
       const programData = user?.user_hubspot_program_infos?.find(
         (item) => item?.course_category?.name === typeProgram,
       )
-      if (programData) {
-        setValue('course_category_id', programData?.course_category_id ?? '')
-        setValue(
-          'hubspot_account_info',
-          programData?.hubspot_account_info ?? '',
-        )
-      }
+      setValue('hubspot_account_info', programData?.hubspot_account_info ?? '')
     }
   }, [typeProgram])
 
