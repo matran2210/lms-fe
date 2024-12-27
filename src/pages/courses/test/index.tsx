@@ -169,7 +169,10 @@ const TestModal = ({
   const startTime = data?.quiz?.quiz_setting?.start_time
   // const endTime = dayjs().subtract(1, 'year')
   // Test Unopend or Expired
-  if (!data?.quiz?.quiz_setting?.allow_attempt) {
+  if (
+    !isNull(data?.quiz?.quiz_setting) &&
+    !data?.quiz?.quiz_setting?.allow_attempt
+  ) {
     return (
       <TestAnnouncementModal
         open={open}
