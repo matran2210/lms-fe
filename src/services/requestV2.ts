@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { toast } from 'react-hot-toast'
-import { apiURL } from 'src/redux/services/httpService'
 import exceptions from './en.exceptions.json'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import Router from 'next/router'
@@ -8,7 +7,7 @@ import { CERTIFICATE_DETAIL } from 'src/constants'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
-    return apiURL
+    return process.env.NEXT_PUBLIC_BASE_API_URL
   }
 }
 
