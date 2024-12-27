@@ -367,25 +367,14 @@ const QuizDocument = ({
     setShowQuestionResultDetail({ id: data?.id, isOpen: true })
   }
 
-  // const startTime = dayjs().add(1, 'day')
   const startTime = quizSetting?.start_time
   const endTime = quizSetting?.end_time
-  // const endTime = dayjs().subtract(1, 'year')
-
-  // Test Unopend or Expired
-  const getType = (startTime: Dayjs, endTime: Dayjs) => {
-    if (startTime && dayjs().isBefore(startTime)) return 'unopened'
-    if (endTime && dayjs().isAfter(dayjs(endTime))) return 'expired'
-    return null
-  }
-
-  const type = getType(startTime, endTime)
 
   const BluredNotification = () => (
     <>
-      {type !== null && (
+      {!quizSetting?.allow_attempt && (
         <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
-          {type === 'unopened' && (
+          {quizSetting?.reason_for_reject === 'NOT_OPEN_YET' && (
             <p className="text-center">
               This Quiz will be opened at{' '}
               <span className="font-semi-bold text-primary">
@@ -397,7 +386,7 @@ const QuizDocument = ({
               </span>
             </p>
           )}
-          {type === 'expired' && (
+          {quizSetting?.reason_for_reject === 'EXPIRED' && (
             <p className="text-center">
               The time for this Quiz has ended, you can no longer submit
               answers. For further support, please contact SAPP Academy via{' '}
@@ -419,8 +408,8 @@ const QuizDocument = ({
       {/* Fake Question */}
       <div>
         <div>
-          <div className="sapp-questions editor-wrap mce-content-body" id="">
-            <div className="">
+          <div className="sapp-questions editor-wrap mce-content-body">
+            <div>
               <p>Câu hỏi số 1</p>
             </div>
           </div>
@@ -515,7 +504,7 @@ const QuizDocument = ({
   }
 
   return (
-    <div className="">
+    <div>
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
@@ -528,8 +517,8 @@ const QuizDocument = ({
         className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
-        {type !== null && <BluredNotification />}
-        {activeQuestion && type === null && (
+        {!quizSetting?.allow_attempt && <BluredNotification />}
+        {activeQuestion && quizSetting?.allow_attempt && (
           <QuizComponent
             activityId={activityId}
             tabId={tabId}
@@ -561,7 +550,7 @@ const QuizDocument = ({
             getGradedLabel(gradeStatus)}
         </div>
 
-        {type === null && (
+        {quizSetting?.allow_attempt && (
           <>
             <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
               <button
