@@ -295,7 +295,7 @@ const TestResultPage = ({
           </div>
         )
     }
-  }, [type, score])
+  }, [type, score, chartData, questions])
 
   return (
     <>
