@@ -15,7 +15,6 @@ import {
   UnHighLightIcon,
   WordIcon,
 } from '@assets/icons'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -73,8 +72,8 @@ import {
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
-import Countdown from './countdown'
 import TestScratchPads from './TestScratchPads'
+import HeaderTest from '@components/test/HeaderTest'
 
 declare global {
   interface Window {
@@ -145,6 +144,9 @@ const TestDetail = () => {
             allowUnHighLight={allowUnHighLight}
             corrects={corrects}
             solution={solution}
+            getValue={getValues}
+            tabs={tabs}
+            currentPage={currentPage}
           />
         )
       case QUESTION_TYPES.MATCHING:
@@ -918,23 +920,6 @@ const TestDetail = () => {
   }
 
   const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
-    // Lọc lấy answer_id tồn tại thực sự trong câu hỏi
-    // To do : Tìm vị trí set data đang lỗi khi mang cả answer_id của câu hỏi phía trước vào
-    const tab_current = tabs?.find((e: any) => e.id === tabId)
-    if (
-      tab_current &&
-      tab_current?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
-      Array.isArray(data)
-    ) {
-      const answer_ids = tab_current?.data?.answers?.map((e: any) => e.id)
-      data = data.filter((e: string) => {
-        if (answer_ids?.includes(e)) {
-          return true
-        }
-        return false
-      })
-    }
-
     setStartTime(Date.now())
     let newData = [] as any
     for (let item of tabs) {
@@ -1675,70 +1660,20 @@ const TestDetail = () => {
         >
           {/** Header */}
           <div>
-            <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
-              <div className="w-2/6 truncate text-lg-xl font-medium">
-                {quizDetail?.name}
-              </div>
-              {quizDetail?.quiz_timed && (
-                <Countdown
-                  remainTime={quizDetail?.quiz_timed}
-                  onTimeOut={() => {
-                    if (!openLimit) {
-                      dispatch(disableUnsavedChange())
-                      handleSubmitQuestion('timeout')
-                    }
-                  }}
-                  ref={timeRef}
-                />
-              )}
-
-              <div className="flex w-2/6 items-center justify-end">
-                {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(
-                  quizDetail?.quiz_type,
-                ) && (
-                  <div className="mr-6 text-medium-sm text-bw-1">
-                    Attempt: {quizAttempId?.number_of_attempts}
-                    {quizDetail?.is_limited
-                      ? `/${quizDetail?.limit_count}`
-                      : ''}
-                  </div>
-                )}
-                <ButtonCancelSubmit
-                  className={'flex flex-row-reverse gap-4'}
-                  submit={{
-                    title: 'Finish',
-                    size: 'small',
-                    loading: false,
-                    disabled: submited,
-                    className: 'border border-bw-1',
-                    color: 'secondary',
-                    onClick: () => {
-                      if (checkUnSubmitAnswer()?.length > 0) {
-                        setUnSubmitAnswer(true)
-                      } else {
-                        setOpenSubmit(true)
-                      }
-                      dispatch(disableUnsavedChange())
-                    },
-                  }}
-                  cancel={{
-                    title: 'Quit',
-                    size: 'small',
-                    className: 'border border-bw-1 !w-[109px]',
-                    color: 'secondary',
-                    onClick: () => {
-                      setOpenQuit(true)
-                      dispatch(disableUnsavedChange())
-                      if (type === 'event-test') {
-                        setSubmitEventTest(true)
-                      }
-                    },
-                    loading: false,
-                    //   full: fullWidthBtn,
-                  }}
-                ></ButtonCancelSubmit>
-              </div>
-            </div>
+            <HeaderTest
+              quizDetail={quizDetail}
+              openLimit={openLimit}
+              handleSubmitQuestion={handleSubmitQuestion}
+              timeRef={timeRef}
+              quizAttempId={quizAttempId}
+              setUnSubmitAnswer={setUnSubmitAnswer}
+              checkUnSubmitAnswer={checkUnSubmitAnswer}
+              setOpenQuit={setOpenQuit}
+              setSubmitEventTest={setSubmitEventTest}
+              type={type}
+              submited={submited}
+              setOpenSubmit={setOpenSubmit}
+            />
 
             {/** Tabs */}
             {tabs?.length > 0 && (
