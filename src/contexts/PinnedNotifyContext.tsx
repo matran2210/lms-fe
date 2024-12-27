@@ -102,10 +102,11 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
   }
 
   const router = useRouter()
-
   useEffect(() => {
-    getPinnedData()
-  }, [router.pathname])
+    if (router.pathname !== '/certificates/[id]') {
+      getPinnedData()
+    }
+  }, [])
 
   return (
     <PinnedNotifyContext.Provider

@@ -155,7 +155,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     try {
-      dispatch(getCountUnRead())
+      if (router.pathname !== '/certificates/[id]') {
+        dispatch(getCountUnRead())
+      }
     } catch (error) {}
   }, [])
 
