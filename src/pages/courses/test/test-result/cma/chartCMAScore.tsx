@@ -1,6 +1,6 @@
 import Recommendation from '@components/test/Recommendation'
 import { formatNumber } from '@utils/formatNumber'
-import { roundNumber } from '@utils/helpers'
+import { calculatePercentage, roundNumber } from '@utils/helpers'
 import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
@@ -12,7 +12,6 @@ interface IProps {
   isGraded?: boolean
   passingScore?: number
   recommendation?: IQuizAttempComment[]
-  gradedScore?: number
 }
 
 const ChartCMAScore = ({
@@ -21,7 +20,6 @@ const ChartCMAScore = ({
   score,
   passingScore,
   isGraded,
-  gradedScore,
   recommendation,
 }: IProps) => {
   return (
@@ -33,11 +31,7 @@ const ChartCMAScore = ({
               {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
             </div>
             <div className="my-2 text-6xl font-bold text-primary">
-              {isGraded && !isNull(gradedScore) && !isUndefined(gradedScore)
-                ? formatNumber(Number(gradedScore))
-                : score !== undefined
-                  ? formatNumber(score)
-                  : '--'}
+              {isNull(score) || isUndefined(score) ? '--' : formatNumber(score)}
               %
             </div>
           </div>
@@ -107,11 +101,10 @@ const ChartCMAScore = ({
                     <div
                       className="absolute bottom-0 w-14 border border-l-primary border-r-primary border-t-primary bg-secondary "
                       style={{
-                        height: `${
-                          (item?.total_correct_answers /
-                            item?.total_questions) *
-                          100
-                        }%`,
+                        height: `${calculatePercentage(
+                          item?.section_score,
+                          item?.max_section_score,
+                        )}%`,
                       }}
                     />
                     <div className="bg-black-1 absolute -bottom-2.5 left-1/2 h-2.5 w-[1px]" />
@@ -120,10 +113,7 @@ const ChartCMAScore = ({
                     {item?.short_name}
                   </div>
                   <div className="text-black-1 w-full text-center text-medium-sm font-normal">
-                    {`${roundNumber(
-                      (item?.total_questions / item?.total_quiz_questions) *
-                        100,
-                    )}%`}
+                    {`${roundNumber(item?.max_section_score)}%`}
                   </div>
                 </div>
               ))}

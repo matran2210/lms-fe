@@ -167,19 +167,9 @@ const TestModal = ({
 
   // const startTime = dayjs().add(1, 'day')
   const startTime = data?.quiz?.quiz_setting?.start_time
-  const endTime = data?.quiz?.quiz_setting?.end_time
   // const endTime = dayjs().subtract(1, 'year')
-
   // Test Unopend or Expired
-  const getType = (startTime: string, endTime: string) => {
-    if (dayjs().isBefore(startTime)) return 'unopened'
-    if (dayjs().isAfter(dayjs(endTime))) return 'expired'
-    return null
-  }
-
-  const type = getType(startTime, endTime)
-
-  if (type !== null) {
+  if (!data?.quiz?.quiz_setting?.allow_attempt) {
     return (
       <TestAnnouncementModal
         open={open}
@@ -187,7 +177,7 @@ const TestModal = ({
           setOpen(false)
           trackGAEvent('Click Button Cancel Modal Test')
         }}
-        type={type}
+        type={data?.quiz?.quiz_setting?.reason_for_reject}
         start_time={startTime}
       />
     )
