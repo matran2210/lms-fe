@@ -43,7 +43,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
-import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -148,7 +148,7 @@ const ActivityPage = () => {
             videos:
               course_tab.videos?.map((document) => {
                 return {
-                  file_id: document.file.id,
+                  file_id: document?.file?.id,
                   is_click: false,
                 }
               }) ?? [],
@@ -322,8 +322,10 @@ const ActivityPage = () => {
     )
     isFinishRef.current = true
     setFetch_progress([...fetch_progress, sectionId])
-    if (response?.data?.class_user_score) {
-      dispatch(showPopup(response?.data?.class_user_score))
+    if (response?.data?.progress?.is_completed) {
+      setTimeout(() => {
+        dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
+      }, 2000)
     }
   }
 
@@ -540,7 +542,7 @@ const ActivityPage = () => {
                       }
                       title={e?.name}
                     >
-                      {truncateBySpace(e?.name, 5) ?? ''}
+                      {truncateBySpace(e?.name, 3) ?? ''}
                       <span>/</span>
                     </li>
                   </SappTooltip>
@@ -638,7 +640,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }
                 >
-                  <span>{truncateBySpace(nameActivity?.name, 13)}</span>
+                  <span>{truncateBySpace(nameActivity?.name, 5)}</span>
                 </Link>
               </li>
             </Tooltip>

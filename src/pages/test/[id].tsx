@@ -15,7 +15,6 @@ import {
   UnHighLightIcon,
   WordIcon,
 } from '@assets/icons'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -62,7 +61,7 @@ import LimitQuizModal from './limitQuizModal'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import { trackGAEvent } from '@utils/google-analytics'
-import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
   AnswerList,
@@ -73,8 +72,8 @@ import {
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
-import Countdown from './countdown'
 import TestScratchPads from './TestScratchPads'
+import HeaderTest from '@components/test/HeaderTest'
 
 declare global {
   interface Window {
@@ -145,6 +144,9 @@ const TestDetail = () => {
             allowUnHighLight={allowUnHighLight}
             corrects={corrects}
             solution={solution}
+            getValue={getValues}
+            tabs={tabs}
+            currentPage={currentPage}
           />
         )
       case QUESTION_TYPES.MATCHING:
@@ -394,6 +396,10 @@ const TestDetail = () => {
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [routeBack, setRouteBack] = useState(false)
   const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
+  const [isCompletedCourse, setIsCompletedCourse] = useState({
+    status: false,
+    content: '',
+  })
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [quizAttempId, setQuizAttempId] = useState({
@@ -835,9 +841,9 @@ const TestDetail = () => {
       return tabs
     }
   }
-
   async function getDetail(currentPage: string) {
     let topicDescription
+    let question
     try {
       if (!isUndefined(quizDetail) && !isUndefined(questions)) {
         topicDescription = await CoursesAPI.getTopicDescription(
@@ -845,9 +851,9 @@ const TestDetail = () => {
             ?.question_topic_id,
           quizDetail?.id,
         )
+        question = await QuestionAPI.getQuestionDetail(currentPage)
       }
-      const res = await QuestionAPI.getQuestionDetail(currentPage)
-      return { topicDescription, question: res.data }
+      return { topicDescription, question: question?.data }
     } catch (err) {
       return {
         topicDescription: { data: {} },
@@ -1158,8 +1164,10 @@ const TestDetail = () => {
         scratch_pads: scratchPads || [],
       })
       if (res) {
-        if (res?.data?.class_user_score) {
-          dispatch(showPopup(res?.data?.class_user_score))
+        if (isCompletedCourse.status) {
+          setTimeout(() => {
+            dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+          }, 2000)
         }
 
         if (
@@ -1208,8 +1216,10 @@ const TestDetail = () => {
           (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       })
       if (res) {
-        if (res?.data?.class_user_score) {
-          dispatch(showPopup(res?.data?.class_user_score))
+        if (isCompletedCourse.status) {
+          setTimeout(() => {
+            dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+          }, 2000)
         }
         setScoreFinalTest(res?.data?.score)
         setQuizResultId(() => {
@@ -1504,6 +1514,12 @@ const TestDetail = () => {
           router.query.id as string,
           router.query.class_user_id as string,
         )
+        if (res?.data?.progress?.is_completed) {
+          setIsCompletedCourse({
+            status: res?.data?.progress?.is_completed,
+            content: res?.data?.progress?.content,
+          })
+        }
         setQuizAttempId(res.data)
         setIsQuizAttemptCreated(true) // Mark the attempt as created
       } catch (err: any) {
@@ -1627,7 +1643,7 @@ const TestDetail = () => {
     if (questions) {
       fetchTabs()
     }
-  }, [questions, router])
+  }, [questions, router, quizDetail?.id])
 
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
@@ -1644,70 +1660,20 @@ const TestDetail = () => {
         >
           {/** Header */}
           <div>
-            <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
-              <div className="w-2/6 truncate text-lg-xl font-medium">
-                {quizDetail?.name}
-              </div>
-              {quizDetail?.quiz_timed && (
-                <Countdown
-                  remainTime={quizDetail?.quiz_timed}
-                  onTimeOut={() => {
-                    if (!openLimit) {
-                      dispatch(disableUnsavedChange())
-                      handleSubmitQuestion('timeout')
-                    }
-                  }}
-                  ref={timeRef}
-                />
-              )}
-
-              <div className="flex w-2/6 items-center justify-end">
-                {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(
-                  quizDetail?.quiz_type,
-                ) && (
-                  <div className="mr-6 text-medium-sm text-bw-1">
-                    Attempt: {quizAttempId?.number_of_attempts}
-                    {quizDetail?.is_limited
-                      ? `/${quizDetail?.limit_count}`
-                      : ''}
-                  </div>
-                )}
-                <ButtonCancelSubmit
-                  className={'flex flex-row-reverse gap-4'}
-                  submit={{
-                    title: 'Finish',
-                    size: 'small',
-                    loading: false,
-                    disabled: submited,
-                    className: 'border border-bw-1',
-                    color: 'secondary',
-                    onClick: () => {
-                      if (checkUnSubmitAnswer()?.length > 0) {
-                        setUnSubmitAnswer(true)
-                      } else {
-                        setOpenSubmit(true)
-                      }
-                      dispatch(disableUnsavedChange())
-                    },
-                  }}
-                  cancel={{
-                    title: 'Quit',
-                    size: 'small',
-                    className: 'border border-bw-1 !w-[109px]',
-                    color: 'secondary',
-                    onClick: () => {
-                      setOpenQuit(true)
-                      dispatch(disableUnsavedChange())
-                      if (type === 'event-test') {
-                        setSubmitEventTest(true)
-                      }
-                    },
-                    loading: false,
-                    //   full: fullWidthBtn,
-                  }}
-                ></ButtonCancelSubmit>
-              </div>
-            </div>
+            <HeaderTest
+              quizDetail={quizDetail}
+              openLimit={openLimit}
+              handleSubmitQuestion={handleSubmitQuestion}
+              timeRef={timeRef}
+              quizAttempId={quizAttempId}
+              setUnSubmitAnswer={setUnSubmitAnswer}
+              checkUnSubmitAnswer={checkUnSubmitAnswer}
+              setOpenQuit={setOpenQuit}
+              setSubmitEventTest={setSubmitEventTest}
+              type={type}
+              submited={submited}
+              setOpenSubmit={setOpenSubmit}
+            />
 
             {/** Tabs */}
             {tabs?.length > 0 && (

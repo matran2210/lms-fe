@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import EntranceTest from './EntranceTest'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
@@ -6,10 +6,14 @@ import NoData from 'src/common/NoData'
 
 interface EntranceTestListProps {
   entranceTestLists: any[]
+  setOpen: Dispatch<SetStateAction<boolean>>
+  open: boolean
 }
 
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
   entranceTestLists,
+  setOpen,
+  open,
 }) => {
   return (
     <div
@@ -26,7 +30,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
             key={index}
             className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
           >
-            <EntranceTest data={e} />
+            <EntranceTest data={e} setOpen={setOpen} open={open} />
           </div>
         ))
       ) : (

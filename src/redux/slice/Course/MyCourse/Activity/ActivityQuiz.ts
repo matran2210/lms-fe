@@ -1,11 +1,11 @@
 import { Slice, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { FieldValues } from 'react-hook-form'
 import { QUESTION_TYPES } from 'src/constants'
+import { QuestionAPI } from 'src/pages/api/question'
 import { RootState } from 'src/redux/store'
+import { IRequirement } from 'src/type/case-study'
 import { IQuestion } from 'src/type/course/Question'
 import { submitQuizTest } from '../../../../../pages/api/courses/index'
-import { QuestionAPI } from 'src/pages/api/question'
-import { IRequirement } from 'src/type/case-study'
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -204,8 +204,7 @@ const submitQuiz = createAsyncThunk(
         },
         class_user_id,
       )
-
-      if (result.success) {
+      if (result?.success) {
         return { ...result }
       }
     } catch (error) {
@@ -750,12 +749,12 @@ const {
 } = quizSlice.actions
 
 export {
+  clearFileEssay,
   confirmQuestion,
   fetchQuestionById,
-  submitQuiz,
   removeQuizFinished,
   resetQuizActivity,
-  saveFileEssay,
-  clearFileEssay,
   saveAnswer,
+  saveFileEssay,
+  submitQuiz,
 }

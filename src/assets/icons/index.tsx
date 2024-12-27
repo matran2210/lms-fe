@@ -1553,5 +1553,23 @@ export const IconSendHover = ({ width, height, className }: ISVG) => {
   )
 }
 
+export const IconDownArrow = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="10"
+      height="7"
+      viewBox="0 0 10 7"
+      fill="none"
+    >
+      <path
+        d="M0.667317 1.66657L5.00065 5.3999L9.33398 1.66657"
+        stroke="#404041"
+        strokeLinecap="square"
+      />
+    </svg>
+  )
+}
+
 export { default as NotificationIcon } from './NotificationIcon'
 export { SadIcon } from './SadIcon'
