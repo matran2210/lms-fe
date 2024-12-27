@@ -43,7 +43,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
-import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -322,8 +322,10 @@ const ActivityPage = () => {
     )
     isFinishRef.current = true
     setFetch_progress([...fetch_progress, sectionId])
-    if (response?.data?.class_user_score) {
-      dispatch(showPopup(response?.data?.class_user_score))
+    if (response?.data?.progress?.is_completed) {
+      setTimeout(() => {
+        dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
+      }, 2000)
     }
   }
 
