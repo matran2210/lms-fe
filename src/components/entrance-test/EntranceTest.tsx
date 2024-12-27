@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import EntrancePopup from './EntrancePopup'
@@ -6,9 +6,12 @@ import { useRouter } from 'next/router'
 import SappButton from '@components/base/button/SappButton'
 import PopupExtend from './PopupExtend'
 import { trackGAEvent } from '@utils/google-analytics'
+import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 
 interface EntranceTestProps {
   data: any
+  setOpen: Dispatch<SetStateAction<boolean>>
+  open: boolean
 }
 
 enum EAttemptStatus {
@@ -17,9 +20,9 @@ enum EAttemptStatus {
   UN_FINISHED = 'UN_FINISHED',
 }
 
-const EntranceTest = ({ data }: EntranceTestProps) => {
+const EntranceTest = ({ data, setOpen, open }: EntranceTestProps) => {
+  const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
-  const [open, setOpen] = useState<boolean>(false)
   const handleOnClick = () => {
     if (data?.attempt_times >= 1) {
       router.push(`entrance-test/test-result/${data?.quiz_attempt_id}`)
@@ -121,10 +124,13 @@ const EntranceTest = ({ data }: EntranceTestProps) => {
           )}
         </div>
       </div>
+      <PopUpRemindEntrance setOpenFillForm={setOpenFillForm} />
       <EntrancePopup
         open={open}
         setOpen={setOpen}
         entrancePopupContent={data}
+        openFillForn={openFillForn}
+        setOpenFillForm={setOpenFillForm}
       />
       <PopupExtend open={openExpired} setOpen={setOpenExpired} />
     </>

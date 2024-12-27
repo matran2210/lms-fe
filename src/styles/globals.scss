@@ -396,7 +396,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
-  @apply relative inline-block min-h-[17px] min-w-[100px] border-0 border-b border-gray-500;
+  @apply relative min-h-[50px] min-w-[100px] border-0 border-b border-gray-500;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box))::after {
@@ -410,11 +410,11 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop {
-  @apply mt-2 inline-block;
+  @apply inline-block;
 }
 
 .sapp-input-dragNDrop-answer {
-  @apply m-1 inline-block min-w-[100px] border border border-gray-500 bg-gray-4 p-1;
+  @apply m-1 inline-block min-w-[100px] border border-gray-500 bg-gray-4 p-1;
 
   &.corrects {
     @apply border-success text-state-success;
