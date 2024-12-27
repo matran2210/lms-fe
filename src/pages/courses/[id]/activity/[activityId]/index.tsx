@@ -542,7 +542,7 @@ const ActivityPage = () => {
                       }
                       title={e?.name}
                     >
-                      {truncateBySpace(e?.name, 5) ?? ''}
+                      {truncateBySpace(e?.name, 3) ?? ''}
                       <span>/</span>
                     </li>
                   </SappTooltip>
@@ -640,7 +640,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }
                 >
-                  <span>{truncateBySpace(nameActivity?.name, 13)}</span>
+                  <span>{truncateBySpace(nameActivity?.name, 5)}</span>
                 </Link>
               </li>
             </Tooltip>

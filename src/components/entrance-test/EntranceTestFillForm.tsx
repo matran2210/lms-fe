@@ -111,7 +111,7 @@ const EntranceTestFillForm = ({
     if (user && open) {
       if (user?.university) {
         setValue('univers_id', {
-          value: user?.university?.code,
+          value: user?.university?.id,
           label: user?.university?.name,
         })
       }

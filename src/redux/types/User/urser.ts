@@ -1,3 +1,4 @@
+import { IMetaData } from 'src/type'
 export interface IUser {
   id: string
   created_at: string
@@ -19,10 +20,18 @@ export interface IUser {
   user_contacts: IUserContact[]
   certificates: number
   courses: number
-  university?: any
+  university?: IUniversity
   university_program?: any
-  major?: any
+  major?: IMajor
   english_level?: any
+  main_class?: string[]
+  reserve_retook_class?: string[]
+  user_hubspot_program_infos?: IUserHubspotProgramInfo[]
+  course_tab_groups?: {
+    CMA?: ICourseTabGroup
+    ACCA?: ICourseTabGroup
+    CFA?: ICourseTabGroup
+  }
 }
 interface IUserContact {
   id: string
@@ -65,9 +74,9 @@ interface IUserDetail {
   lastName: null | string
   full_name: string
   address: string
-  major: string
+  major?: IMajor
   level: string
-  university: string
+  university?: IUniversity
   provinceCode: null | string
   districtCode: null | string
   wardCode: null | string
@@ -101,4 +110,100 @@ export interface UserState {
   user: IUser
   loginHistory: any
   loadHistory: boolean
+}
+
+export interface IUniversity {
+  id?: string
+  created_at?: Date
+  updated_at?: Date
+  deleted_at?: Date
+  code?: string
+  name?: string
+  description?: string
+  score?: number
+  address?: string
+}
+
+export interface IMajor {
+  id?: string
+  created_at?: Date
+  updated_at?: Date
+  deleted_at?: Date
+  code?: string
+  name?: string
+  score?: number
+  description?: string
+}
+
+export interface ISubjectItem {
+  id: string
+  created_at: Date
+  updated_at: Date
+  deleted_at?: Date
+  course_category_id?: string
+  name: string
+  code: string
+}
+
+export interface IUserHubspotProgramInfo {
+  id?: string
+  created_at?: Date
+  updated_at?: Date
+  deleted_at?: Date
+  user_id?: string
+  course_category_id?: string
+  hubspot_account_info?: string
+  course_category?: {
+    id?: string
+    created_at?: Date
+    updated_at?: Date
+    deleted_at?: Date
+    name?: string
+    description?: string
+  }
+}
+
+export interface ICourseTabGroup {
+  id: string
+  user_hubspot_examination_subjects: [
+    {
+      id: string
+      examination_subject_id: string
+      result: string
+      examination_subject: {
+        id: string
+        subject_id: string
+        examination_id: string
+        subject: ISubjectItem
+        examination: {
+          id: string
+          name: string
+        }
+      }
+      is_final_examination_subject: boolean
+    },
+  ]
+}
+
+export interface IExamination {
+  id: string
+  created_at?: Date
+  updated_at?: Date
+  deleted_at?: Date
+  code_exam?: string
+  start_date?: string
+  end_date?: string
+  examination?: {
+    id?: string
+    created_at?: Date
+    updated_at?: Date
+    deleted_at?: Date
+    name?: string
+  }
+  subject?: ISubjectItem
+}
+
+export interface IExaminationList {
+  examination_subjects: IExamination[]
+  metadata: IMetaData
 }
