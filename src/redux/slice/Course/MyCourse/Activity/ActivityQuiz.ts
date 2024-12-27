@@ -143,7 +143,7 @@ const confirmQuestion = createAsyncThunk(
       quizId: string
       questionId: string
       myAnswers: FieldValues
-      time_spent: number
+      time_spent?: number
     },
     { rejectWithValue },
   ) => {

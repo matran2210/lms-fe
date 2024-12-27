@@ -59,7 +59,7 @@ export type QuizComponentRef = {
     activityId: string
     tabId: string
     quizId: string
-    time_spent: number
+    time_spent?: number
     then?: (e: any) => void
     onError?: (e: any) => void
     onFinally?: () => void
@@ -375,7 +375,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       activityId: string
       tabId: string
       quizId: string
-      time_spent: number
+      time_spent?: number
       then?: (e: any) => void
       onError?: (e: any) => void
       onFinally?: () => void
