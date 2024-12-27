@@ -37,6 +37,7 @@ import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import { isNull } from 'lodash'
 
 type Props = {
   questions: IQuestion[]
@@ -369,10 +370,9 @@ const QuizDocument = ({
 
   const startTime = quizSetting?.start_time
   const endTime = quizSetting?.end_time
-
   const BluredNotification = () => (
     <>
-      {!quizSetting?.allow_attempt && (
+      {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
         <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
           {quizSetting?.reason_for_reject === 'NOT_OPEN_YET' && (
             <p className="text-center">
@@ -517,24 +517,28 @@ const QuizDocument = ({
         className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
-        {!quizSetting?.allow_attempt && <BluredNotification />}
-        {activeQuestion && quizSetting?.allow_attempt && (
-          <QuizComponent
-            activityId={activityId}
-            tabId={tabId}
-            quizId={quizId}
-            showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
-            activeQuestion={activeQuestion}
-            ref={questionRef}
-            key={quizComponentKey}
-            document_id={document_id}
-            setOpenFile={setOpenFile}
-            grading_preference={grading_preference}
-            showQuestionContent={false}
-            isHideExhibit={false}
-            saveAnswer={handleSaveAnswer}
-          />
+        {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
+          <BluredNotification />
         )}
+        {activeQuestion &&
+          ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+            isNull(quizSetting)) && (
+            <QuizComponent
+              activityId={activityId}
+              tabId={tabId}
+              quizId={quizId}
+              showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
+              activeQuestion={activeQuestion}
+              ref={questionRef}
+              key={quizComponentKey}
+              document_id={document_id}
+              setOpenFile={setOpenFile}
+              grading_preference={grading_preference}
+              showQuestionContent={false}
+              isHideExhibit={false}
+              saveAnswer={handleSaveAnswer}
+            />
+          )}
       </div>
       <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
         <div className="col-span-1 flex flex-wrap items-center gap-2">
@@ -550,7 +554,7 @@ const QuizDocument = ({
             getGradedLabel(gradeStatus)}
         </div>
 
-        {quizSetting?.allow_attempt && (
+        {quizSetting?.allow_attempt && !isNull(quizSetting) && (
           <>
             <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
               <button
