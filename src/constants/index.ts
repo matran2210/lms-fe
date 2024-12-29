@@ -250,6 +250,7 @@ export const COMMON_TEXT_ENUM = {
 }
 
 export const CERTIFICATE_DETAIL = '/certificates/[id]'
+export const ENTRANCE_TEST_RESULT = '/entrance-test/test-result/[id]'
 
 export * from './socketEvents'
 export * from './localStorageKeys'
