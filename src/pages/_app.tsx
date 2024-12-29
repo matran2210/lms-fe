@@ -21,7 +21,12 @@ import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
-import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
+import {
+  ANIMATION,
+  ENTRANCE_TEST_RESULT,
+  LOCAL_STORAGE_KEYS,
+  SOCKET_EVENTS,
+} from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
@@ -154,9 +159,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [showHelp])
 
   useEffect(() => {
-    try {
-      dispatch(getCountUnRead())
-    } catch (error) {}
+    if (router.pathname !== ENTRANCE_TEST_RESULT) {
+      try {
+        dispatch(getCountUnRead())
+      } catch (error) {}
+    }
   }, [])
 
   return (

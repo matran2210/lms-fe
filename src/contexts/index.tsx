@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { CERTIFICATE_DETAIL } from 'src/constants'
+import { CERTIFICATE_DETAIL, ENTRANCE_TEST_RESULT } from 'src/constants'
 import { EventTestAPI } from 'src/pages/api/event-test'
 
 // type for context
@@ -75,7 +75,7 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
   }
 
   useEffect(() => {
-    if (router.pathname !== CERTIFICATE_DETAIL) {
+    if ([ENTRANCE_TEST_RESULT, CERTIFICATE_DETAIL].includes(router.pathname)) {
       fetchEventTest()
     }
   }, [])
