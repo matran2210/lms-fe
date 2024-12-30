@@ -182,6 +182,12 @@ export class CoursesAPI {
   static getQuizAttemptsChartData(
     id: string | string[] | undefined,
   ): Promise<any> {
+    return fetcher(`${apiURL}${url.getQuizAttemptsChartData}/${id}`)
+  }
+
+  static getQuizAttemptsEntranceTestChartData(
+    id: string | string[] | undefined,
+  ): Promise<any> {
     return fetcher(`${apiURL}/entrance-test/chart-data/${id}`)
   }
 
@@ -195,6 +201,21 @@ export class CoursesAPI {
   }
 
   static getQuizAttemptsTable(
+    id: string,
+    { page_index, page_size }: { page_index: number; page_size: number },
+  ): Promise<{
+    success: boolean
+    data: IScoreDetails
+  }> {
+    return fetcher(`${apiURL}/quiz-attempts/${id}/answers`, {
+      params: {
+        page_index: page_index || 1,
+        page_size: page_size || 10,
+      },
+    })
+  }
+
+  static getQuizAttemptsTableEntranceTest(
     id: string,
     { page_index, page_size }: { page_index: number; page_size: number },
   ): Promise<{

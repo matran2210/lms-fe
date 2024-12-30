@@ -28,7 +28,7 @@ const TableEntranceResult = () => {
   }) => {
     setLoading(true)
     try {
-      const response = await CoursesAPI.getQuizAttemptsTable(
+      const response = await CoursesAPI.getQuizAttemptsTableEntranceTest(
         id || modalResult?.id || '',
         {
           page_index,

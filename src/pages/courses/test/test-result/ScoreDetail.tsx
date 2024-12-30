@@ -153,7 +153,7 @@ const ScoreDetail = ({
   // Flatten pages into a single array
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
   // Group data by program
-  const groupedData = _.groupBy(allData, (item) => item?.belong_to.name)
+  const groupedData = _.groupBy(allData, (item) => item?.belong_to.id)
   let rowIndex = 0 // Counter for row numbers
   return (
     <div
@@ -186,7 +186,7 @@ const ScoreDetail = ({
                   className="w-full pt-6 text-base font-medium text-bw-1"
                   colSpan={6}
                 >
-                  {program}
+                  {rows[0]?.belong_to?.name}
                 </td>
               </tr>
               {rows?.map((answer) => {
