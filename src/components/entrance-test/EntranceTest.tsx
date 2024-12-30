@@ -12,6 +12,7 @@ interface EntranceTestProps {
   data: any
   setOpen: Dispatch<SetStateAction<boolean>>
   open: boolean
+  test_id_default?: string | undefined
 }
 
 enum EAttemptStatus {
@@ -20,7 +21,12 @@ enum EAttemptStatus {
   UN_FINISHED = 'UN_FINISHED',
 }
 
-const EntranceTest = ({ data, setOpen, open }: EntranceTestProps) => {
+const EntranceTest = ({
+  data,
+  setOpen,
+  open,
+  test_id_default,
+}: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
   const handleOnClick = () => {
@@ -131,6 +137,7 @@ const EntranceTest = ({ data, setOpen, open }: EntranceTestProps) => {
         entrancePopupContent={data}
         openFillForn={openFillForn}
         setOpenFillForm={setOpenFillForm}
+        test_id_default={test_id_default}
       />
       <PopupExtend open={openExpired} setOpen={setOpenExpired} />
     </>

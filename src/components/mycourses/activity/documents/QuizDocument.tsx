@@ -566,92 +566,92 @@ const QuizDocument = ({
             getGradedLabel(gradeStatus)}
         </div>
 
-        {(quizSetting?.allow_attempt && !isNull(quizSetting)) ||
-          (isNull(quizSetting) && (
-            <>
-              <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
-                <button
-                  disabled={activeQuestionIndex === 0 || loading}
-                  className={`cursor-pointer select-none ${
-                    activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
-                  }`}
+        {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+          isNull(quizSetting)) && (
+          <>
+            <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
+              <button
+                disabled={activeQuestionIndex === 0 || loading}
+                className={`cursor-pointer select-none ${
+                  activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
+                }`}
+                onClick={() => {
+                  if (loading) {
+                    return
+                  }
+                  handlePrevQuestion()
+                  trackGAEvent('Click Prev Question Quiz Activity')
+                }}
+              >
+                <SappIcon icon="arrow_left" />
+              </button>
+              Question: {activeQuestionIndex + 1} of {questions?.length || 0}
+              <button
+                disabled={isLastQuestion || loading}
+                className={`cursor-pointer select-none ${
+                  isLastQuestion || loading ? 'opacity-50' : ''
+                }`}
+                onClick={() => {
+                  if (loading) {
+                    return
+                  }
+                  handleNextQuestion()
+                  trackGAEvent('Click Next Question Quiz Activity')
+                }}
+              >
+                <SappIcon icon="arrow_right" />
+              </button>
+            </div>
+            <div className="col-span-1 flex flex-wrap items-center justify-end gap-2">
+              {(isQuestionConfirmed ||
+                grading_preference !== 'AFTER_EACH_QUESTION' ||
+                (isQuestionConfirmed && isLastQuestion)) && (
+                <SappButton
+                  title={isLastQuestion ? 'Finish' : 'Next'}
+                  full={false}
+                  size={'small'}
                   onClick={() => {
                     if (loading) {
                       return
                     }
-                    handlePrevQuestion()
-                    trackGAEvent('Click Prev Question Quiz Activity')
-                  }}
-                >
-                  <SappIcon icon="arrow_left" />
-                </button>
-                Question: {activeQuestionIndex + 1} of {questions?.length || 0}
-                <button
-                  disabled={isLastQuestion || loading}
-                  className={`cursor-pointer select-none ${
-                    isLastQuestion || loading ? 'opacity-50' : ''
-                  }`}
-                  onClick={() => {
-                    if (loading) {
+                    if (isLastQuestion) {
+                      setRunHandleFinishQuiz((e) => e + 1)
+                      handleSaveAnswer()
+                      trackGAEvent('Click Button Finish Quiz Activity')
                       return
+                    } else {
+                      handleNextQuestion()
+                      trackGAEvent('Click Button Next Quiz Activity')
                     }
-                    handleNextQuestion()
-                    trackGAEvent('Click Next Question Quiz Activity')
                   }}
-                >
-                  <SappIcon icon="arrow_right" />
-                </button>
-              </div>
-              <div className="col-span-1 flex flex-wrap items-center justify-end gap-2">
-                {(isQuestionConfirmed ||
-                  grading_preference !== 'AFTER_EACH_QUESTION' ||
-                  (isQuestionConfirmed && isLastQuestion)) && (
+                  color="primary"
+                  loading={loading}
+                />
+              )}
+              {!isQuestionConfirmed &&
+                grading_preference === 'AFTER_EACH_QUESTION' && (
                   <SappButton
-                    title={isLastQuestion ? 'Finish' : 'Next'}
+                    title={'View Answer'}
                     full={false}
                     size={'small'}
+                    disabled={
+                      (grading_method === GRADING_METHOD.MANUAL &&
+                        !!gradeStatus) ||
+                      loading
+                    }
                     onClick={() => {
-                      if (loading) {
-                        return
+                      if (!loading) {
+                        handleConfirmQuestion()
                       }
-                      if (isLastQuestion) {
-                        setRunHandleFinishQuiz((e) => e + 1)
-                        handleSaveAnswer()
-                        trackGAEvent('Click Button Finish Quiz Activity')
-                        return
-                      } else {
-                        handleNextQuestion()
-                        trackGAEvent('Click Button Next Quiz Activity')
-                      }
+                      trackGAEvent('Click Button Confirm Quiz Activity')
                     }}
                     color="primary"
                     loading={loading}
                   />
                 )}
-                {!isQuestionConfirmed &&
-                  grading_preference === 'AFTER_EACH_QUESTION' && (
-                    <SappButton
-                      title={'View Answer'}
-                      full={false}
-                      size={'small'}
-                      disabled={
-                        (grading_method === GRADING_METHOD.MANUAL &&
-                          !!gradeStatus) ||
-                        loading
-                      }
-                      onClick={() => {
-                        if (!loading) {
-                          handleConfirmQuestion()
-                        }
-                        trackGAEvent('Click Button Confirm Quiz Activity')
-                      }}
-                      color="primary"
-                      loading={loading}
-                    />
-                  )}
-              </div>
-            </>
-          ))}
+            </div>
+          </>
+        )}
       </div>
       <SappModal
         open={modalResult?.status}

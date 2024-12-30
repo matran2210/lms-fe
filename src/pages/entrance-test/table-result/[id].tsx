@@ -68,12 +68,14 @@ const TableEntranceResult = () => {
   }, [id])
 
   return (
-    <FullScreenLayout title="">
+    <FullScreenLayout title="Entrance Test Result">
       <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
         <div
           className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
           onClick={() => {
-            router.push(PageLink.ENTRANCE_TEST)
+            router
+              .push(PageLink.ENTRANCE_TEST)
+              .then(() => window.location.reload())
           }}
         >
           <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
@@ -82,9 +84,11 @@ const TableEntranceResult = () => {
           <QuizResultComponent
             questionResponse={modalResult?.questions || []}
             getTable={getTable}
-            onShowDetail={(e) => {
-              router.push(`/explanation/${e.id}?title=Entrance Test`)
-            }}
+            onShowDetail={(e) =>
+              router
+                .push(`/explanation/${e.id}?title=Entrance Test`)
+                .then(() => window.location.reload())
+            }
             loading={loading}
           />
         )}

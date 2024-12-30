@@ -15,6 +15,7 @@ export type EntrancePopupProps = {
   entrancePopupContent?: any
   setOpenFillForm: Dispatch<SetStateAction<boolean>>
   openFillForn: boolean
+  test_id_default?: string | undefined
 }
 
 // create the confirm dialog component
@@ -24,6 +25,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   entrancePopupContent,
   openFillForn,
   setOpenFillForm,
+  test_id_default,
 }) => {
   const handleOnClick = () => {
     setOpen && setOpen(false)
@@ -75,7 +77,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
           }
           if (count === 1) {
             router.push({
-              pathname: `/test/${entrancePopupContent?.id}`,
+              pathname: `/test/${test_id_default}`,
               query: {
                 type: 'entrance',
               },
@@ -87,7 +89,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
             }
           }
         }}
-        showOkButton={!checkLimit}
+        showOkButton={!checkLimit || count === 1}
         showHeader={false}
         buttonSize="medium"
         title={undefined}
