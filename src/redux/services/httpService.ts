@@ -22,12 +22,12 @@ export const injectStore = (_store: any) => {
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
-    return apiURL
+    return process.env.NEXT_PUBLIC_BASE_API_URL
   }
 }
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: apiURL,
+  baseURL: getBaseUrl(),
 })
 
 // Add a request interceptor to the Axios instance

@@ -14,7 +14,7 @@ const CourseAPI = {
     })
     if (res?.success) {
       const link = document.createElement('a')
-      link.href = `${apiURL}/resource/download?token=${res?.data}`
+      link.href = `${process.env.NEXT_PUBLIC_BASE_API_URL}resource/download?token=${res?.data}`
       link.download = data.files[0].name
       link.style.display = 'none'
       document.body.appendChild(link)
@@ -31,7 +31,7 @@ export class CoursesAPI {
     course_section_id: string | number,
     course_id?: string | number,
   ): Promise<any> {
-    return fetcher(`${apiURL}/course-section-notes/${course_section_id}`, {
+    return fetcher(`course-section-notes/${course_section_id}`, {
       params: {
         course_id: course_id,
       },
@@ -39,21 +39,21 @@ export class CoursesAPI {
   }
 
   static createNote(params: Object): Promise<any> {
-    return fetcher(`${apiURL}/course-section-notes`, {
+    return fetcher(`course-section-notes`, {
       method: 'POST',
       data: params,
     })
   }
 
   static activeCourse(params: Object): Promise<any> {
-    return fetcher(`${apiURL}/courses/active`, {
+    return fetcher(`courses/active`, {
       method: 'POST',
       data: params,
     })
   }
 
   static extendCourse(params: Object): Promise<any> {
-    return fetcher(`${apiURL}/courses/extend`, {
+    return fetcher(`courses/extend`, {
       method: 'POST',
       data: params,
     })
@@ -65,16 +65,16 @@ export class CoursesAPI {
     caseStudyId: string | string[] | undefined,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/course/${course_id}/section/${section_id}/progress?story_topic_id=${caseStudyId}`,
+      `course-sections/course/${course_id}/section/${section_id}/progress?story_topic_id=${caseStudyId}`,
     )
   }
 
   static userGuideActive(): Promise<any> {
-    return fetcher(`${apiURL}/guide-active`)
+    return fetcher(`guide-active`)
   }
 
   static deleteCourseNoteList(id: string): Promise<any> {
-    return fetcher(`${apiURL}/course-section-notes/${id}`, {
+    return fetcher(`course-section-notes/${id}`, {
       method: 'DELETE',
     })
   }
@@ -84,12 +84,9 @@ export class CoursesAPI {
     page_size: number,
     params: Object,
   ): Promise<any> {
-    return fetcher(
-      `${apiURL}/courses?page_index=${page_index}&page_size=${page_size}`,
-      {
-        params: params,
-      },
-    )
+    return fetcher(`courses?page_index=${page_index}&page_size=${page_size}`, {
+      params: params,
+    })
   }
 
   static getCourseDetail(
@@ -99,7 +96,7 @@ export class CoursesAPI {
     params: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/courses/${id}?page_index=${page_index}&page_size=${page_size}`,
+      `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
@@ -107,18 +104,18 @@ export class CoursesAPI {
   }
 
   static getQuestionTabsById(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${apiURL}${url.getQuestionTabs}/${id}/shuffle`)
+    return fetcher(`${url.getQuestionTabs}/${id}/shuffle`)
   }
 
   static getDetailQuizById(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${apiURL}${url.getQuestionTabs}/${id}`)
+    return fetcher(`${url.getQuestionTabs}/${id}`)
   }
 
   static createQuizAttempt(
     id: string | string[] | undefined,
     class_user_id: string | undefined,
   ): Promise<any> {
-    return fetcher(`${apiURL}${url.createQuizAttemp}`, {
+    return fetcher(`${url.createQuizAttemp}`, {
       method: 'POST',
       data: {
         quiz_id: id,
@@ -135,7 +132,6 @@ export class CoursesAPI {
     cache = false,
   ): Promise<any> {
     const uri =
-      apiURL +
       url.getTopicDescription +
       `/${id}?quiz_id=${quiz_id}&include_questions=false`
 
@@ -153,7 +149,7 @@ export class CoursesAPI {
     sectionId: string | string[] | undefined,
   ): Promise<any> {
     const uri = `/course-sections/course/${courseId}/section/${sectionId}/progress`
-    return fetcher(`${apiURL}${uri}`)
+    return fetcher(`${uri}`)
   }
 
   static learningOutcomeProgress(
@@ -162,7 +158,7 @@ export class CoursesAPI {
     params?: Object,
   ): Promise<any> {
     const uri = `course-sections/course/${course_id}/section/${section_id}/progress`
-    return fetcher(`${apiURL}/${uri}`, {
+    return fetcher(`${uri}`, {
       params: params,
     })
   }
@@ -172,7 +168,7 @@ export class CoursesAPI {
    */
   static getQuestionsDetail(id: string): Promise<any> {
     const uri = url.getQuestionDetail
-    return fetcher(`${apiURL}${uri}`, {
+    return fetcher(`${uri}`, {
       params: {
         question_ids: id,
       },
@@ -182,7 +178,7 @@ export class CoursesAPI {
   static getQuizAttemptsChartData(
     id: string | string[] | undefined,
   ): Promise<any> {
-    return fetcher(`${apiURL}${url.getQuizAttemptsChartData}/${id}`)
+    return fetcher(`${url.getQuizAttemptsChartData}/${id}`)
   }
 
   static getQuizAttemptsEntranceTestChartData(
@@ -196,7 +192,7 @@ export class CoursesAPI {
     course_section_id: string | string[] | undefined,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/${id}?course_section_id=${course_section_id}`,
+      `/course-sections/${id}?course_section_id=${course_section_id}`,
     )
   }
 
@@ -207,7 +203,7 @@ export class CoursesAPI {
     success: boolean
     data: IScoreDetails
   }> {
-    return fetcher(`${apiURL}/quiz-attempts/${id}/answers`, {
+    return fetcher(`/quiz-attempts/${id}/answers`, {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
@@ -231,12 +227,12 @@ export class CoursesAPI {
   }
 
   static getQuizAttempts(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${apiURL}${url.getQuizAttempts}/${id}`)
+    return fetcher(`${url.getQuizAttempts}/${id}`)
   }
 
   static submitQuestion(id: string, data: any): Promise<any> {
     const uri = url.submitQuestion + `/${id}` + '/submit'
-    return fetcher(`${apiURL}${uri}`, {
+    return fetcher(`${uri}`, {
       data: data,
       method: 'POST',
     })
@@ -244,7 +240,7 @@ export class CoursesAPI {
 
   static submitCaseStudy(id: string, data: any): Promise<any> {
     const uri = url.submitCaseStudy + `/${id}` + '/submit'
-    return fetcher(`${apiURL}${uri}`, {
+    return fetcher(`${uri}`, {
       data: data,
       method: 'POST',
     })
@@ -256,12 +252,12 @@ export class CoursesAPI {
     page_size: number,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/quiz-attempts/case-study/table/${id}?page_index=${page_index}&page_size=${page_size}`,
+      `quiz-attempts/case-study/table/${id}?page_index=${page_index}&page_size=${page_size}`,
     )
   }
 
   static getTopicAttemptsDetail(id: string): Promise<any> {
-    return fetcher(`${apiURL}/quiz-attempts/topic/${id}/score`)
+    return fetcher(`quiz-attempts/topic/${id}/score`)
   }
 
   /**
@@ -274,7 +270,7 @@ export class CoursesAPI {
     class_id: string,
     course_section_id: string,
   ): Promise<any> {
-    return fetcher(`${apiURL}/course-discussions`, {
+    return fetcher(`course-discussions`, {
       params: {
         page_index: 1,
         page_size: 9999,
@@ -298,7 +294,7 @@ export class CoursesAPI {
   ): Promise<any> {
     if (!this.CACHE_GET_TOPIC_DESCRIPTION[id]) {
       this.CACHE_GET_TOPIC_DESCRIPTION[id] = await fetcher(
-        `${apiURL}/course-sections/${courseId}/tab/${id}`,
+        `course-sections/${courseId}/tab/${id}`,
       )
     }
     return this.CACHE_GET_TOPIC_DESCRIPTION[id]
@@ -312,17 +308,15 @@ export class CoursesAPI {
    * @deprecated replace by replace by QuestionAPI.getQuestionDetail with query after-test = true
    */
   static getQuestionResults(id: string): Promise<any> {
-    return fetcher(`${apiURL}/question/results?question_ids=${id}`)
+    return fetcher(`question/results?question_ids=${id}`)
   }
 
   static getCourseLearningOutcome(id: string): Promise<any> {
-    return fetcher(`${apiURL}/course_learning_outcomes/${id}`)
+    return fetcher(`course_learning_outcomes/${id}`)
   }
 
   static getCourse(page_size: number, queryString?: string): Promise<any> {
-    return fetcher(
-      `${apiURL}/courses?page_index=1&page_size=${page_size}${queryString}`,
-    )
+    return fetcher(`courses?page_index=1&page_size=${page_size}${queryString}`)
   }
 
   static getCourseSectionList(
@@ -331,7 +325,7 @@ export class CoursesAPI {
     page_index?: number,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${page_size}&classId=${id}&type=PART`,
+      `course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${page_size}&classId=${id}&type=PART`,
     )
   }
 
@@ -344,7 +338,7 @@ export class CoursesAPI {
     params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
+      `course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
         page_size || 10
       }&type=${type}&parentId=${parentId ?? ''}${
         classId ? `&classId=${classId}` : ''
@@ -357,12 +351,9 @@ export class CoursesAPI {
     id: string | string[] | undefined,
     params?: Object,
   ): Promise<any> {
-    return fetcher(
-      `${apiURL}/courses/${id}/resources?&attachment_type=attached`,
-      {
-        params: params,
-      },
-    )
+    return fetcher(`courses/${id}/resources?&attachment_type=attached`, {
+      params: params,
+    })
   }
 
   static getCourseResults(
@@ -372,7 +363,7 @@ export class CoursesAPI {
     params: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/courses/${id}/quizzes?page_index=${page_index}&page_size=${page_size}`,
+      `courses/${id}/quizzes?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
@@ -380,19 +371,16 @@ export class CoursesAPI {
   }
 
   static getCourseNotesList(page_size: number, params?: Object): Promise<any> {
-    return fetcher(
-      `${apiURL}/course-section-notes?page_index=1&page_size=${page_size}`,
-      {
-        params: params,
-      },
-    )
+    return fetcher(`course-section-notes?page_index=1&page_size=${page_size}`, {
+      params: params,
+    })
   }
 
   static updateCourseNotesList(
     id: string | undefined,
     params?: Object,
   ): Promise<any> {
-    return fetcher(`${apiURL}/course-section-notes/${id}`, {
+    return fetcher(`course-section-notes/${id}`, {
       data: params,
       method: 'PUT',
     })
@@ -408,16 +396,14 @@ export class CoursesAPI {
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ): Promise<any> {
-    return fetcher(
-      `${apiURL}/courses/${id}/section/${course_section_id}/breadcumb`,
-    )
+    return fetcher(`courses/${id}/section/${course_section_id}/breadcumb`)
   }
 
   /**
    * @description lấy thông tin Certificate
    */
   static getCertificate(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${apiURL}/certificate/public/${id}`)
+    return fetcher(`certificate/public/${id}`)
   }
 }
 
@@ -428,7 +414,7 @@ export const getQuestionsById = async (
   question_ids: string[],
 ): Promise<any> => {
   const response = await fetcher(
-    `${apiURL}/question?question_ids=${question_ids?.join(',')}`,
+    `question?question_ids=${question_ids?.join(',')}`,
   )
 
   return {
@@ -459,7 +445,7 @@ export const submitQuizTest = async (
   const quizAttemptId = quizAttemptResponse.data?.id
   if (quizAttemptId) {
     const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
-    const response = await fetcher(`${apiURL}${uri}`, {
+    const response = await fetcher(`${uri}`, {
       data: data,
       method: 'POST',
     })
@@ -483,12 +469,8 @@ export const getActivityById = async (
   id: string | string[] | undefined,
   course_id: string | string[] | undefined,
 ): Promise<any> => {
-  const responseActivity = await fetcher(
-    `${apiURL}/courses/${course_id}/activity/${id}`,
-  )
-  const responseTabs = await fetcher(
-    `${apiURL}/course-sections/activity/${id}/tabs`,
-  )
+  const responseActivity = await fetcher(`courses/${course_id}/activity/${id}`)
+  const responseTabs = await fetcher(`course-sections/activity/${id}/tabs`)
 
   if (responseActivity?.data && !responseTabs?.data?.length) {
     return responseActivity.data
@@ -499,7 +481,7 @@ export const getActivityById = async (
     promises.push(
       new Promise(async (resolve, reject) => {
         const responseTab = await fetcher(
-          `${apiURL}/course-sections/${course_id}/tab/${tab.id}`,
+          `course-sections/${course_id}/tab/${tab.id}`,
         )
         if (responseTab?.data) {
           return resolve(responseTab.data)

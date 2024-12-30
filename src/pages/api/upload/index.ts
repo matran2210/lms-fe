@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 import { IResponse } from 'src/redux/types'
-import { apiURL, httpService } from 'src/redux/services/httpService'
+import { httpService } from 'src/redux/services/httpService'
 import { fetcher, request } from '@services/requestV2'
 
 type PartUploadDto = { part_number: number; upload_url: string }
@@ -83,7 +83,7 @@ export class UploadAPI {
       })
       if (responseToken?.success) {
         const link = document.createElement('a')
-        link.href = `${apiURL}/resource/download?token=${responseToken?.data}`
+        link.href = `resource/download?token=${responseToken?.data}`
         link.download = data.files[0].name
         link.style.display = 'none'
         document.body.appendChild(link)
@@ -112,7 +112,7 @@ const preUpload = async ({
     name: string
   }>
 > => {
-  return fetcher(`${apiURL}/resource/pre-upload/metadata`, {
+  return fetcher(`resource/pre-upload/metadata`, {
     params: {
       content_type,
       name,
