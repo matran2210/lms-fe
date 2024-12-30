@@ -5,6 +5,17 @@ import { IMetaData } from '..'
 export interface IScoreDetails {
   metadata: IMeta
   answers: IAnswer[]
+  activity_info: ActivityInfo
+  attempt_info: {
+    is_graded: boolean
+    score: number
+  }
+}
+
+export interface ActivityInfo {
+  activity_id: string
+  class_id: string
+  class_user_id: string
 }
 
 export interface IAnswer {

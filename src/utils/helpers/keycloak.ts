@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
+import { CERTIFICATE } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
-import { NextRouter, useRouter } from 'next/router'
+import { PageLink } from 'src/constants'
+import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
@@ -17,30 +19,74 @@ const handleFirebaseToken = async () => {
     }
     return
   }
-  await setDeviceFirebaseToSession(accessDeviceToken ?? '')
+
+  if (
+    window.location.pathname?.split('/')?.[1] !== CERTIFICATE &&
+    window.location.pathname?.split('test-result/')?.[0] !==
+      '/entrance-test/' &&
+    window.location.pathname?.split('table-result/')?.[0] !== '/entrance-test/'
+  ) {
+    await setDeviceFirebaseToSession(accessDeviceToken ?? '')
+  }
 }
 export class AuthenticationManager {
   keyCloak: Keycloak = null as any
-  router: NextRouter | null = null
 
-  constructor() {
-    if (AuthenticationManager.instance) {
-      return AuthenticationManager.instance
-    }
+  // constructor() {
+  //   if (AuthenticationManager.instance) {
+  //     return AuthenticationManager.instance
+  //   }
 
-    this.initKeyCloakConnect()
-    AuthenticationManager.instance = this
-  }
+  //   this.initKeyCloakConnect()
+  //   AuthenticationManager.instance = this
+  // }
 
   async initKeyCloakConnect() {
+    if (typeof window === 'undefined') {
+      return
+    }
+
     const keycloakConfig: KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
       clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
     }
 
-    this.keyCloak = new Keycloak(keycloakConfig)
-    await this.keyCloak.init({ onLoad: 'login-required' })
+    // Kiểm tra trạng thái login lần đầu tiên
+    let isFirstLogin = false
+    if (
+      window.location.pathname?.split('/')?.[1] !== CERTIFICATE &&
+      window.location.pathname?.split('test-result/')?.[0] !==
+        '/entrance-test/' &&
+      window.location.pathname?.split('table-result/')?.[0] !==
+        '/entrance-test/'
+    ) {
+      this.keyCloak = new Keycloak(keycloakConfig)
+      const authenticated = await this.keyCloak.init({
+        onLoad: 'login-required',
+      })
+
+      if (authenticated) {
+        // Kiểm tra lần login đầu tiên
+        if (!localStorage.getItem('hasLoggedInBefore')) {
+          isFirstLogin = true // Lần đầu tiên login
+          localStorage.setItem('hasLoggedInBefore', 'true') // Đánh dấu đã login lần đầu
+          const res = await EntranceTestAPI.getEntranceCount()
+          if (isFirstLogin) {
+            localStorage.setItem('enstranceTest', 'true')
+            if (res?.data?.count > 0) {
+              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
+            } else {
+              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
+            }
+          }
+        } else {
+          isFirstLogin = false // Các lần login tiếp theo
+        }
+      } else {
+      }
+    }
+
     await handleFirebaseToken()
   }
 
@@ -51,9 +97,9 @@ export class AuthenticationManager {
   async refreshToken() {
     const response = await this.keyCloak?.updateToken(30)
     if (!response) {
-      await this.keyCloak.login()
+      await this?.keyCloak?.login()
     }
-    return this.keyCloak?.token
+    return this?.keyCloak?.token
   }
 
   async logout(redirectUri: string) {

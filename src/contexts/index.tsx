@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React, {
   PropsWithChildren,
   createContext,
@@ -5,6 +6,11 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+import {
+  CERTIFICATE_DETAIL,
+  ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,
+} from 'src/constants'
 import { EventTestAPI } from 'src/pages/api/event-test'
 
 // type for context
@@ -63,6 +69,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    */
   const [submitEventTest, setSubmitEventTest] = useState(false)
 
+  const router = useRouter()
+
   async function fetchEventTest() {
     const res = await EventTestAPI.get({})
     if (res.success) {
@@ -71,7 +79,15 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
   }
 
   useEffect(() => {
-    fetchEventTest()
+    if (
+      ![
+        ENTRANCE_TEST_RESULT,
+        CERTIFICATE_DETAIL,
+        ENTRANCE_TEST_TABLE_RESULT,
+      ].includes(router.pathname)
+    ) {
+      fetchEventTest()
+    }
   }, [])
 
   return (

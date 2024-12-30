@@ -1,8 +1,8 @@
 import Recommendation from '@components/test/Recommendation'
 import { formatNumber } from '@utils/formatNumber'
-import { roundNumber } from '@utils/helpers'
+import { calculatePercentage, roundNumber } from '@utils/helpers'
 import { Tooltip } from 'antd'
-import _ from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
 
@@ -29,10 +29,11 @@ const ChartCMAScore = ({
         <div>
           <div className="flex flex-col">
             <div className="text-black-1 text-xl font-medium">
-              Multiple Choice Score
+              {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
             </div>
             <div className="my-2 text-6xl font-bold text-primary">
-              {score !== undefined ? formatNumber(score) : '--'}%
+              {isNull(score) || isUndefined(score) ? '--' : formatNumber(score)}
+              %
             </div>
           </div>
           <div className="text-black-1 mb-6 text-lg-xl font-semibold xl:text-xl xl:font-medium">
@@ -100,16 +101,18 @@ const ChartCMAScore = ({
                   <div className="absolute bottom-full left-1/2 h-[250px] w-14 -translate-x-1/2">
                     <Tooltip
                       color="white"
-                      title={`${_.round((item?.total_correct_answers / item?.total_questions) * 100, 2)}%`}
+                      title={`${calculatePercentage(
+                        item?.section_score,
+                        item?.max_section_score,
+                      )}%`}
                     >
                       <div
-                        className="absolute bottom-0 w-14 border border-l-primary border-r-primary border-t-primary bg-secondary hover:bg-primary"
+                        className="absolute bottom-0 w-14 border border-l-primary border-r-primary border-t-primary bg-secondary "
                         style={{
-                          height: `${
-                            (item?.total_correct_answers /
-                              item?.total_questions) *
-                            100
-                          }%`,
+                          height: `${calculatePercentage(
+                            item?.section_score,
+                            item?.max_section_score,
+                          )}%`,
                         }}
                       />
                     </Tooltip>
@@ -119,10 +122,7 @@ const ChartCMAScore = ({
                     {item?.short_name}
                   </div>
                   <div className="text-black-1 w-full text-center text-medium-sm font-normal">
-                    {`${roundNumber(
-                      (item?.total_questions / item?.total_quiz_questions) *
-                        100,
-                    )}%`}
+                    {`${roundNumber(item?.max_section_score)}%`}
                   </div>
                 </div>
               ))}

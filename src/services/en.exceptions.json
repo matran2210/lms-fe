@@ -89,7 +89,7 @@
   },
   {
     "code": "400|030022",
-    "message": "Test/Quiz/Case Study Included The Question(S)"
+    "message": "Test/Quiz/Case Study Included The Question(s)"
   },
   {
     "code": "400|030108",
@@ -133,11 +133,11 @@
   },
   {
     "code": "400|060001",
-    "message": "Entrance Test Existed"
+    "message": "Please Change Status Of Entrance Test {QUIZ_NAME} From {FROM_STATUS} To {TO_STATUS} Before Changing This One"
   },
   {
     "code": "400|060002",
-    "message": "You already have completed the course"
+    "message": "Course Include Quiz Already Passed"
   },
   {
     "code": "400|060004",
@@ -242,6 +242,14 @@
   {
     "code": "400|070218",
     "message": "Foundation Class Can Not Be Modified"
+  },
+  {
+    "code": "400|070224",
+    "message": "Graded test/quiz can not be created due to course completion of students"
+  },
+  {
+    "code": "400|070206",
+    "message": "Course already has Mock Test. You can not change type of course"
   },
   {
     "code": "400|070305",
@@ -429,11 +437,7 @@
   },
   {
     "code": "400|100204",
-    "message": "Area Not Found"
-  },
-  {
-    "code": "400|100204",
-    "message": "Class Area Not Found"
+    "message": "Class Facility Not Found"
   },
   {
     "code": "400|100304",
@@ -454,10 +458,6 @@
   {
     "code": "400|100320",
     "message": "Student Not Allowed To Extend Course"
-  },
-  {
-    "code": "400|100322",
-    "message": "Students Have Learned The Course In This Class!"
   },
   {
     "code": "400|100322",
@@ -780,11 +780,375 @@
     "message": "S3 Key Not Found"
   },
   {
-    "code": "404|450004",
-    "message": "Event Not Found"
-  },
-  {
     "code": "400|450035",
     "message": "Event Expired"
+  },
+  {
+    "code": "400|340001",
+    "message": "Product Existed"
+  },
+  {
+    "code": "404|340004",
+    "message": "The Product Not Found"
+  },
+  {
+    "code": "400|350001",
+    "message": "The Product Category Existed"
+  },
+  {
+    "code": "404|350004",
+    "message": "The Product Category Not Found"
+  },
+  {
+    "code": "400|320001",
+    "message": "The Event Sponsor Existed"
+  },
+  {
+    "code": "404|320004",
+    "message": "The Event Sponsor Not Found"
+  },
+  {
+    "code": "400|280001",
+    "message": "The Faq Question Existed"
+  },
+  {
+    "code": "404|280004",
+    "message": "The Faq Question Not Found"
+  },
+  {
+    "code": "404|280025",
+    "message": "The FAQ Question Is Blocked"
+  },
+  {
+    "code": "400|260001",
+    "message": "The Faq Existed"
+  },
+  {
+    "code": "404|260004",
+    "message": "The Faq Not Found"
+  },
+  {
+    "code": "404|260025",
+    "message": "The FAQ Is Blocked"
+  },
+  {
+    "code": "400|270001",
+    "message": "The Faq Category Existed"
+  },
+  {
+    "code": "404|270004",
+    "message": "The Faq Category Not Found"
+  },
+  {
+    "code": "404|270025",
+    "message": "The Faq Category Can Not Be Deleted"
+  },
+  {
+    "code": "400|310001",
+    "message": "The Event Category Existed"
+  },
+  {
+    "code": "404|310004",
+    "message": "The Event Category Not Found"
+  },
+  {
+    "code": "400|310002",
+    "message": "The Event Category Children Existed"
+  },
+  {
+    "code": "400|310003",
+    "message": "The Event Primary And Other Category Is Duplicate"
+  },
+  {
+    "code": "400|310004",
+    "message": "The Event Primary Category Update Itself"
+  },
+  {
+    "code": "400|290001",
+    "message": "The Event Existed"
+  },
+  {
+    "code": "404|290004",
+    "message": "The Event Not Found"
+  },
+  {
+    "code": "400|300001",
+    "message": "The Event Speaker Existed"
+  },
+  {
+    "code": "404|300004",
+    "message": "The Event Speaker Not Found"
+  },
+  {
+    "code": "400|240001",
+    "message": "Blog Tag Existed"
+  },
+  {
+    "code": "404|240004",
+    "message": "Blog Tag Not Found"
+  },
+  {
+    "code": "400|360001",
+    "message": "Blog Existed"
+  },
+  {
+    "code": "404|360004",
+    "message": "Blog Not Found"
+  },
+  {
+    "code": "400|250001",
+    "message": "Blog Author Existed"
+  },
+  {
+    "code": "404|250004",
+    "message": "Blog Author Not Found"
+  },
+  {
+    "code": "400|230001",
+    "message": "Blog Category Existed"
+  },
+  {
+    "code": "404|230004",
+    "message": "Blog Category Not Found"
+  },
+  {
+    "code": "404|450004",
+    "message": "Event Test Not Found"
+  },
+  {
+    "code": "403|000000",
+    "message": "Tạm thời bạn không có quyền thực hiện thao tác này"
+  },
+  {
+    "code": "400|010010",
+    "message": "User Is Not Sysn To Keycloak"
+  },
+  {
+    "code": "400|010804",
+    "message": "User Teacher Status Not Found"
+  },
+  {
+    "code": "400|010805",
+    "message": "Staff Manager Not Found"
+  },
+  {
+    "code": "400|010806",
+    "message": "User Teacher Subject Duplicate"
+  },
+  {
+    "code": "400|010807",
+    "message": "User Teacher Teachable Not Match Data"
+  },
+  {
+    "code": "400|010808",
+    "message": "User Teacher Please Choose Teachables"
+  },
+  {
+    "code": "400|010809",
+    "message": "User Teacher Not Choose Type User"
+  },
+  {
+    "code": "400|010810",
+    "message": "User Teacher Not Choose Employee Code"
+  },
+  {
+    "code": "400|010811",
+    "message": "User Teacher Please Choose Course Category"
+  },
+  {
+    "code": "400|010812",
+    "message": "User Teacher Feature Section Duplicate"
+  },
+  {
+    "code": "400|010904",
+    "message": "User Student Not Choose Subject"
+  },
+  {
+    "code": "400|010905",
+    "message": "User Student Not Choose Teacher Status"
+  },
+  {
+    "code": "400|010906",
+    "message": "User Student Not Choose Staff"
+  },
+  {
+    "code": "400|010907",
+    "message": "User Course Not Choose Course Category"
+  },
+  {
+    "code": "400|040008",
+    "message": "User Not Choose Employee Code"
+  },
+  {
+    "code": "400|040009",
+    "message": "User Not Choose Hubspot Contact Id"
+  },
+  {
+    "code": "400|040010",
+    "message": "User Please Choose Employee Code"
+  },
+  {
+    "code": "400|040011",
+    "message": "User Please Choose Hubspot Contact Id"
+  },
+  {
+    "code": "400|040905",
+    "message": "User Student Please Choose Type User"
+  },
+  {
+    "code": "400|060800",
+    "message": "Quiz Attempt Grading Not Found"
+  },
+  {
+    "code": "400|060801",
+    "message": "Quiz Attempt Question Grading Not Found"
+  },
+  {
+    "code": "400|060802",
+    "message": "Invalid Grading Payload"
+  },
+  {
+    "code": "400|060803",
+    "message": "Can Not Grade"
+  },
+  {
+    "code": "400|060804",
+    "message": "Can Not Ungrade"
+  },
+  {
+    "code": "400|060805",
+    "message": "Quiz Attempt Answer Grading Not Found"
+  },
+  {
+    "code": "400|060806",
+    "message": "Grading Item Not Found"
+  },
+  {
+    "code": "400|100022",
+    "message": "Class Has Been Sold"
+  },
+  {
+    "code": "400|350004",
+    "message": "Lecturer Not Found"
+  },
+  {
+    "code": "400|360005",
+    "message": "Feature Section Not Found"
+  },
+  {
+    "code": "400|410401",
+    "message": "Class Quiz Setting Has Mentor"
+  },
+  {
+    "code": "400|100301",
+    "message": "Facility Name existed"
+  },
+  {
+    "code": "400|100404",
+    "message": "The Facility Code Existed"
+  },
+  {
+    "code": "400|100405",
+    "message": "The Facility Cannot Delete"
+  },
+  {
+    "code": "400|101204",
+    "message": "Room Not Found"
+  },
+  {
+    "code": "400|101301",
+    "message": "Room Name Exists"
+  },
+  {
+    "code": "400|101405",
+    "message": "Invalid Room Capacity"
+  },
+  {
+    "code": "400|101505",
+    "message": "Room Cannot Delete"
+  },
+  {
+    "code": "400|100501",
+    "message": "The facility has some active class"
+  },
+  {
+    "code": "400|370101",
+    "message": "Subject Name Exists"
+  },
+  {
+    "code": "400|360022",
+    "message": "Subject In Used"
+  },
+  {
+    "code": "400|370001",
+    "message": "Subject Code Exists"
+  },
+  {
+    "code": "400|101605",
+    "message": "Room Status Can Not Be Updated When Facility Closed"
+  },
+  {
+    "code": "401|010833",
+    "message": "User Password Incorrect"
+  },
+  {
+    "code": "400|010931",
+    "message": "Duplicate Staff"
+  },
+  {
+    "code": "400|060807",
+    "message": "Grading Score Exceeds Question's Maximum Score {MAX_SCORE}"
+  },
+  {
+    "code": "400|470001",
+    "message": "Facility Name Exist"
+  },
+  {
+    "code": "400|470003",
+    "message": "Facility Code Exist"
+  },
+  {
+    "code": "400|470004",
+    "message": "Facility Not Found"
+  },
+  {
+    "code": "400|470005",
+    "message": "Facility Cannot Delete"
+  },
+  {
+    "code": "400|470022",
+    "message": "Facility Has Active Class"
+  },
+  {
+    "code": "400|470104",
+    "message": "Province Not Found"
+  },
+  {
+    "code": "400|470204",
+    "message": "District Not Found"
+  },
+  {
+    "code": "400|470304",
+    "message": "Ward Not Found"
+  },
+  {
+    "code": "400|041105",
+    "message": "User Import Check Duplicate Contact Invalid"
+  },
+  {
+    "code": "400|010912",
+    "message": "User Teacher Not Choose Facility"
+  },
+  {
+    "code": "400|101309",
+    "message": "Class Mentor Has Quizzes For Grading"
+  },
+  {
+    "code": "400|310005",
+    "message": "The Event Primary Category Update Itself"
+  },
+  {
+    "code": "400|170305",
+    "message": "Property values were not valid"
   }
 ]

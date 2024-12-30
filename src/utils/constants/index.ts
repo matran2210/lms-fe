@@ -14,7 +14,22 @@ export const TEST_TYPE = {
   // STORY = 'STORY',
   TOPIC_TEST: 'Part/Topic Test',
   CHAPTER_TEST: 'Chapter/Module Test',
+  ACTIVITY: 'Quiz',
 } as any
+
+export enum TEST_TYPE_ENUM {
+  QUIZ = 'QUIZ',
+  MID_TERM_TEST = 'MID_TERM_TEST',
+  FINAL_TEST = 'FINAL_TEST',
+  MOCK_TEST = 'MOCK_TEST',
+  ENTRANCE_TEST = 'ENTRANCE_TEST',
+  // STORY = 'STORY',
+  TOPIC_TEST = 'TOPIC_TEST',
+  CHAPTER_TEST = 'CHAPTER_TEST',
+  PART_TEST = 'PART_TEST',
+  EVENT_TEST = 'EVENT_TEST',
+  ACTIVITY = 'ACTIVITY',
+}
 
 // Danh sách F thấp (< F4)
 export const F_LOW_CODES = ['F1', 'F2', 'F3', 'F4']
@@ -23,6 +38,7 @@ export const F_HIGH_CODES = ['F5', 'F6']
 export const video_url = process.env.NEXT_PUBLIC_VIDEO_URL
 
 export const CERTIFICATE_DETAIL = '/certificates/[id]'
+export const CERTIFICATE = 'certificates'
 
 export * from './Course'
 export * from './LocalStorageKey'

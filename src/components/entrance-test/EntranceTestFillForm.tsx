@@ -1,8 +1,7 @@
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { EntrancePopupProps } from './EntrancePopup'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAppSelector } from 'src/redux/hook'
@@ -10,12 +9,20 @@ import { userReducer } from 'src/redux/slice/User/User'
 import { useRouter } from 'next/router'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
+import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
 
+interface IProps {
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  entrancePopupContent: any
+  setOpenTestInfo: Dispatch<SetStateAction<boolean>> | undefined
+}
 const EntranceTestFillForm = ({
   open,
   setOpen,
   entrancePopupContent,
-}: EntrancePopupProps) => {
+  setOpenTestInfo,
+}: IProps) => {
   const [listUnivers, setListUnivers] = useState<any>()
   const [listUniverPrograms, setListUniverPrograms] = useState<any>()
   const [listMajors, setListMajors] = useState<any>()
@@ -56,7 +63,7 @@ const EntranceTestFillForm = ({
     const res = await EntranceTestAPI.getListUnivers()
     let optionUnivers = []
     for (let e of res?.data) {
-      optionUnivers?.push({ value: e?.code, label: e?.name })
+      optionUnivers?.push({ value: e?.id, label: e?.name })
     }
     setListUnivers(optionUnivers)
     // return res?.data?.[0]
@@ -104,7 +111,7 @@ const EntranceTestFillForm = ({
     if (user && open) {
       if (user?.university) {
         setValue('univers_id', {
-          value: user?.university?.code,
+          value: user?.university?.id,
           label: user?.university?.name,
         })
       }
@@ -133,6 +140,9 @@ const EntranceTestFillForm = ({
     reset()
     setOpen && setOpen(false)
   }
+
+  const { count } = useAppSelector(entranceTestReducer)
+
   const onSubmit = async (dataValue: any) => {
     if (
       user?.major &&
@@ -149,12 +159,16 @@ const EntranceTestFillForm = ({
         university_id: dataValue?.univers_id?.value,
       })
       setOpen && setOpen(false)
-      router.push({
-        pathname: `/test/${entrancePopupContent?.id}`,
-        query: {
-          type: 'entrance',
-        },
-      })
+      if (count === 1) {
+        setOpenTestInfo && setOpenTestInfo(true)
+      } else {
+        router.push({
+          pathname: `/test/${entrancePopupContent?.id}`,
+          query: {
+            type: 'entrance',
+          },
+        })
+      }
     }
   }
 

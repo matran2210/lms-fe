@@ -56,7 +56,7 @@ const BackToTop = () => {
   return (
     <div
       id="back-to-top"
-      className={`fixed bottom-[160px] right-[31px] rounded-[50%] text-white ${isVisible ? 'visible ' : 'hidden'} cursor-pointer`}
+      className={`fixed bottom-[160px] right-[27px] rounded-[50%] text-white ${isVisible ? 'visible ' : 'hidden'} cursor-pointer`}
       onClick={scrollToTop}
     >
       <div className="flex h-[40px] w-[40px] items-center justify-center self-center">

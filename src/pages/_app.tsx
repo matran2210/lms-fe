@@ -4,14 +4,14 @@ import { RouteGuard } from '@components/auth/RouteGuard'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
-import PopupCert from '@components/mycourses/PopupCert'
+import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
 import initializeGA from '@utils/google-analytics'
-import { getActToken, pageview } from '@utils/index'
+import { pageview } from '@utils/index'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import type { AppProps } from 'next/app'
@@ -21,8 +21,14 @@ import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
-import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import {
+  ANIMATION,
+  ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,
+  LOCAL_STORAGE_KEYS,
+  SOCKET_EVENTS,
+} from 'src/constants'
+import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,
@@ -33,10 +39,6 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import {
-  createAuthenticationManager,
-  loginReducer,
-} from 'src/redux/slice/Login/Login'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -157,14 +159,17 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [showHelp])
 
-  const accessToken = getActToken()
   useEffect(() => {
-    if (accessToken) {
+    if (
+      ![ENTRANCE_TEST_TABLE_RESULT, ENTRANCE_TEST_RESULT].includes(
+        router.pathname,
+      )
+    ) {
       try {
         dispatch(getCountUnRead())
       } catch (error) {}
     }
-  }, [accessToken])
+  }, [])
 
   return (
     <main>
@@ -185,7 +190,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                     </>
                   )}
                   <LearningNotesList />
-                  <PopupCert />
+                  <PopupCompletedCourse />
                 </>
               </RouteGuard>
             </SocketContext.Provider>

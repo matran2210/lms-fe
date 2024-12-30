@@ -182,8 +182,13 @@ export class CoursesAPI {
   static getQuizAttemptsChartData(
     id: string | string[] | undefined,
   ): Promise<any> {
-    const uri = url.getQuestionDetail
     return fetcher(`${apiURL}${url.getQuizAttemptsChartData}/${id}`)
+  }
+
+  static getQuizAttemptsEntranceTestChartData(
+    id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(`${apiURL}/entrance-test/chart-data/${id}`)
   }
 
   static getPartDetail(
@@ -203,6 +208,21 @@ export class CoursesAPI {
     data: IScoreDetails
   }> {
     return fetcher(`${apiURL}/quiz-attempts/${id}/answers`, {
+      params: {
+        page_index: page_index || 1,
+        page_size: page_size || 10,
+      },
+    })
+  }
+
+  static getQuizAttemptsTableEntranceTest(
+    id: string,
+    { page_index, page_size }: { page_index: number; page_size: number },
+  ): Promise<{
+    success: boolean
+    data: IScoreDetails
+  }> {
+    return fetcher(`${apiURL}/entrance-test/quiz-attempts/${id}/answers`, {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
@@ -321,6 +341,7 @@ export class CoursesAPI {
     parentId?: string,
     classId?: string,
     page_index?: number,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
       `${apiURL}/course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
@@ -328,6 +349,7 @@ export class CoursesAPI {
       }&type=${type}&parentId=${parentId ?? ''}${
         classId ? `&classId=${classId}` : ''
       }`,
+      { params: params },
     )
   }
 
@@ -441,7 +463,11 @@ export const submitQuizTest = async (
       data: data,
       method: 'POST',
     })
-    return { ...response, quizAttemptId }
+    return {
+      ...response,
+      quizAttemptId,
+      progress: quizAttemptResponse?.data?.progress,
+    }
   }
 }
 

@@ -21,8 +21,8 @@ const CourseSkeleton = forwardRef<
           </h1>
         </div>
       </div>
-      <div className="pt-6 xl-max:container">
-        <div className="mb-6 grid grid-cols-2 gap-6 xl-max:px-6 2xl-min:grid-cols-3">
+      <div className="pt-6">
+        <div className="mb-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {Array(9)
             .fill([])
             .map((_, index) => (

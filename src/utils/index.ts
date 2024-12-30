@@ -6,43 +6,8 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import DOMPurify from 'dompurify'
-import Cookies from 'js-cookie'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
-
-export const getActToken = (): string => {
-  return Cookies.get('accessToken') || ''
-}
-
-export const getRefreshToken = (): string => {
-  return Cookies.get('refreshToken') || ''
-}
-
-export const setCookieActToken = (accToken: string) => {
-  Cookies.set('accessToken', accToken, { path: '/' })
-}
-
-export const setCookieRefreshToken = (refreshToken: string) => {
-  Cookies.set('refreshToken', refreshToken, { path: '/' })
-}
-
-export const removeJwtToken = () => {
-  Cookies.remove('accessToken')
-  Cookies.remove('refreshToken')
-}
-
-export const removeLocalStorageJwtToken = () => {
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('refreshToken')
-}
-
-export const setActToken = (accToken: string) => {
-  localStorage.setItem('accessToken', accToken)
-}
-
-export const setRefreshToken = (refreshToken: string) => {
-  localStorage.setItem('refreshToken', refreshToken)
-}
 
 export const getLocalStorgeActToken = (): string => {
   return ''

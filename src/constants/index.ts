@@ -12,7 +12,7 @@ export const PageLink = {
   AUTH_CHANGE_PASSWORD_SUCCESS: '/auth/change-password/change-password-success',
   NOTIFICATION: '/notifications',
   ENTRANCE_TEST: '/entrance-test',
-  MYPROFILE: '/myprofile',
+  MYPROFILE: '/overview',
   PAGE_NOT_FOUND: '/404',
   COURSE_DETAIL: '/courses/my-course/[courseId]',
   COURSE_PART_DETAIL: '/courses/[id]/section/[course_section_id]',
@@ -20,6 +20,7 @@ export const PageLink = {
   TEST_RESULT: '/courses/test/test-result/[id]',
   USERPAGE: '/[page]',
   EVENT_TEST: '/event-test',
+  RESULTS: '/courses/my-course/[courseId]/results',
 }
 
 export const TitleSidebar = {
@@ -65,6 +66,7 @@ export enum TEST_TYPE {
   CHAPTER_TEST = 'CHAPTER_TEST',
   PART_TEST = 'PART_TEST',
   EVENT_TEST = 'EVENT_TEST',
+  ACTIVITY = 'ACTIVITY',
 }
 
 export enum COURSE_TYPE {
@@ -246,6 +248,10 @@ export const FINISHED_TEST_TITLE = 'Submitted Successfully'
 export const COMMON_TEXT_ENUM = {
   SUBMITED: 'SUBMITED',
 }
+
+export const CERTIFICATE_DETAIL = '/certificates/[id]'
+export const ENTRANCE_TEST_RESULT = '/entrance-test/test-result/[id]'
+export const ENTRANCE_TEST_TABLE_RESULT = '/entrance-test/table-result/[id]'
 
 export * from './socketEvents'
 export * from './localStorageKeys'

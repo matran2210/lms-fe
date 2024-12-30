@@ -108,6 +108,9 @@ module.exports = {
           yellow: '#FFB8001A',
           green: '#3978391A',
         },
+        graded: {
+          finish: '#4077E0',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -121,6 +124,7 @@ module.exports = {
         'gray-4': '#F3F3F3',
         'pinned-1': '#18355D',
         active: '#FFB800',
+        'graded-finish': '#4077E0',
         dark: '#1C2039',
       },
       borderWidth: {

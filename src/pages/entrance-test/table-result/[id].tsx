@@ -6,6 +6,7 @@ import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from '../../api/courses/index'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { PageLink } from 'src/constants'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -27,7 +28,7 @@ const TableEntranceResult = () => {
   }) => {
     setLoading(true)
     try {
-      const response = await CoursesAPI.getQuizAttemptsTable(
+      const response = await CoursesAPI.getQuizAttemptsTableEntranceTest(
         id || modalResult?.id || '',
         {
           page_index,
@@ -66,16 +67,13 @@ const TableEntranceResult = () => {
     }
   }, [id])
 
-  //todo: call api, make UI
-  // return <></>
-
   return (
     <FullScreenLayout title="">
       <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
         <div
           className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
           onClick={() => {
-            router.push('/entrance-test')
+            router.push(PageLink.ENTRANCE_TEST)
           }}
         >
           <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />

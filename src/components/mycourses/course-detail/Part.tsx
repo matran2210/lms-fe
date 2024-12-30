@@ -72,15 +72,15 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   }
 
   return (
-    <div data-aos={ANIMATION.DATA_AOS} className="flex h-full flex-col">
+    <div data-aos={ANIMATION.DATA_AOS} className="inner flex h-full flex-col">
       <div
         className={`name-course text-2xl font-medium text-bw-1 xl:h-[60px]`}
         onClick={() => {
-          course?.course_section_type === 'PART' ? {} : {}
+          course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
           trackGAEvent('Title Course Detail')
         }}
       >
-        <div className="line-clamp-2 cursor-pointer text-ellipsis ">
+        <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
           <SappTooltip
             title={course?.name}
             showTooltip={(course?.name as string)?.length > 40}
@@ -111,7 +111,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
         </div>
       </div>
       <div className="mt-auto">
-        <div className="progress mb-6">
+        <div className="progress mb-7">
           <div className="info mb-2 flex justify-between">
             <div className="text flex items-end">
               <Icon type={`${iconType}`} />

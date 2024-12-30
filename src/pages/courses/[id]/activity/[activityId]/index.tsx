@@ -43,7 +43,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
-import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -148,7 +148,7 @@ const ActivityPage = () => {
             videos:
               course_tab.videos?.map((document) => {
                 return {
-                  file_id: document.file.id,
+                  file_id: document?.file?.id,
                   is_click: false,
                 }
               }) ?? [],
@@ -166,6 +166,7 @@ const ActivityPage = () => {
   useLayoutEffect(() => {
     if (activity) {
       dispatch(resetQuizActivity({}))
+      CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
@@ -321,9 +322,25 @@ const ActivityPage = () => {
     )
     isFinishRef.current = true
     setFetch_progress([...fetch_progress, sectionId])
-    if (response?.data?.class_user_score) {
-      dispatch(showPopup(response?.data?.class_user_score))
+    if (response?.data?.progress?.is_completed) {
+      setTimeout(() => {
+        dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
+      }, 2000)
     }
+  }
+
+  const handleRefreshCurrentTab = () => {
+    try {
+      selector?.currentTabId &&
+        delete CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION[selector?.currentTabId]
+      dispatch(
+        getCourseActivityTapById({
+          courseId: courseId as string,
+          id: selector?.currentTabId ?? '',
+        }),
+      )
+      setActiveButtonId(selector?.currentTabId)
+    } catch (error) {}
   }
 
   /**
@@ -525,7 +542,7 @@ const ActivityPage = () => {
                       }
                       title={e?.name}
                     >
-                      {truncateBySpace(e?.name, 5) ?? ''}
+                      {truncateBySpace(e?.name, 3) ?? ''}
                       <span>/</span>
                     </li>
                   </SappTooltip>
@@ -623,7 +640,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }
                 >
-                  <span>{truncateBySpace(nameActivity?.name, 13)}</span>
+                  <span>{truncateBySpace(nameActivity?.name, 5)}</span>
                 </Link>
               </li>
             </Tooltip>
@@ -653,8 +670,8 @@ const ActivityPage = () => {
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute left-0 top-0  h-full w-full border">
-                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                  <div className="absolute left-0 top-0  h-full w-full">
+                    <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {
@@ -780,6 +797,7 @@ const ActivityPage = () => {
                               gradeStatus={gradeStatus}
                               quizName={e?.quiz?.name}
                               grading_method={e?.quiz?.grading_method}
+                              refreshTab={() => handleRefreshCurrentTab()}
                             />
                           </div>
                         )

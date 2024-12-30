@@ -69,7 +69,7 @@ const MENU_OPTIONS: MenuOption[] = [
   {
     name: `${TitleSidebar.RESULTS}`,
     icon: 'result',
-    url: '#',
+    url: PageLink.RESULTS,
     type: 'level-2',
   },
   {
@@ -120,7 +120,7 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
   {
     name: `${TitleSidebar.RESULTS}`,
     icon: 'result',
-    url: '#',
+    url: PageLink.RESULTS,
     type: 'level-2',
   },
   {
