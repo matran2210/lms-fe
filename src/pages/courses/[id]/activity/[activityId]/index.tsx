@@ -5,6 +5,7 @@ import PdfViewer from '@components/base/pdf/pdf-viewer'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
+import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
@@ -521,32 +522,34 @@ const ActivityPage = () => {
           return (
             <React.Fragment key={e?.id}>
               {e?.course_section_type !== 'ACTIVITY' ? (
-                <li
-                  title={e?.name}
-                  onClick={() => {
-                    ;['CHAPTER', 'UNIT', 'PART'].includes(
-                      e.course_section_type,
-                    ) && localStorage.setItem('course_chapter_id', chapterId)
-                    router.push(url)
-
-                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
-                  }}
-                >
-                  <SappTooltip
+                <>
+                  <li
                     title={e?.name}
-                    showTooltip={e?.name?.length > 45}
+                    onClick={() => {
+                      ;['CHAPTER', 'UNIT', 'PART'].includes(
+                        e.course_section_type,
+                      ) && localStorage.setItem('course_chapter_id', chapterId)
+                      router.push(url)
+
+                      trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
+                    }}
                   >
-                    <li
-                      className={
-                        'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
-                      }
+                    <SappTooltip
                       title={e?.name}
+                      showTooltip={e?.name?.length > 45}
                     >
-                      {truncateBySpace(e?.name, 3) ?? ''}
-                      <span>/</span>
-                    </li>
-                  </SappTooltip>
-                </li>
+                      <li
+                        className={
+                          'responsive-truncate-container cursor-pointer text-gray-1 hover:text-primary '
+                        }
+                        title={e?.name}
+                      >
+                        <ResponsiveTextTruncate text={e?.name} />
+                      </li>
+                    </SappTooltip>
+                  </li>
+                  <li className="text-gray-1">/</li>
+                </>
               ) : null}
             </React.Fragment>
           )
@@ -628,10 +631,10 @@ const ActivityPage = () => {
       <Layout title="Activity">
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="line-clamp-1 flex flex-wrap gap-1 overflow-x-auto py-6 text-medium-sm font-medium">
+          <ul className="line-clamp-1 flex gap-x-1 overflow-x-auto py-6 text-medium-sm font-medium">
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name} color="white">
-              <li className="text-bw-1">
+              <li className="responsive-truncate-container text-bw-1">
                 <Link
                   href={'#'}
                   className="breadcrumbs__link"
@@ -640,7 +643,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }
                 >
-                  <span>{truncateBySpace(nameActivity?.name, 5)}</span>
+                  <ResponsiveTextTruncate text={nameActivity?.name ?? ''} />
                 </Link>
               </li>
             </Tooltip>
