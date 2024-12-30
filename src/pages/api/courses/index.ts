@@ -1,6 +1,7 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL, httpService } from 'src/redux/services/httpService'
+import { IScoreDetails } from 'src/type'
 
 const CourseAPI = {
   downloadResource: async (data: {
@@ -196,7 +197,10 @@ export class CoursesAPI {
   static getQuizAttemptsTable(
     id: string,
     { page_index, page_size }: { page_index: number; page_size: number },
-  ): Promise<any> {
+  ): Promise<{
+    success: boolean
+    data: IScoreDetails
+  }> {
     return fetcher(`${apiURL}/entrance-test/quiz-attempts/${id}/answers`, {
       params: {
         page_index: page_index || 1,
@@ -438,7 +442,11 @@ export const submitQuizTest = async (
       data: data,
       method: 'POST',
     })
-    return { ...response, quizAttemptId }
+    return {
+      ...response,
+      quizAttemptId,
+      progress: quizAttemptResponse?.data?.progress,
+    }
   }
 }
 

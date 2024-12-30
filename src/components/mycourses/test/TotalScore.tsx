@@ -2,14 +2,13 @@ import { formatNumber } from '@utils/formatNumber'
 import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
 interface IProps {
-  score: number
+  score?: number
   className?: string
   classScore?: string
   classGlobal?: string
   classCountAll?: string
   globalAverage?: number | string
   isGraded?: boolean
-  gradedScore?: number
 }
 
 const TotalScore = ({
@@ -20,7 +19,6 @@ const TotalScore = ({
   classCountAll = '',
   globalAverage = '',
   isGraded,
-  gradedScore,
 }: IProps) => {
   return (
     <div
@@ -34,17 +32,13 @@ const TotalScore = ({
           <div
             className={`${classScore} font-inter text-6xl font-bold text-primary xl:text-6xl`}
           >
-            {isGraded && !isNull(gradedScore) && !isUndefined(gradedScore)
-              ? formatNumber(gradedScore)
-              : score !== undefined
-                ? formatNumber(score)
-                : '--'}
+            {!isNull(score) && !isUndefined(score) ? formatNumber(score) : '--'}
             %
           </div>
         </div>
-        <div className="flex flex-row">
+        <div className="flex items-end">
           <div
-            className={`${classGlobal} flex w-fit flex-row items-start gap-1`}
+            className={`${classGlobal} mb-2 flex w-fit flex-row items-center gap-1`}
           >
             <Image
               src="https://file.rendit.io/n/XnLyBdd8onI3Zbp3i20X.svg"

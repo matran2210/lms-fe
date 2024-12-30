@@ -19,6 +19,8 @@ interface IProps {
   label?: string
   labelClass?: string
   isSearchable?: boolean
+  onMenuScrollToBottom?: () => void
+  onFocus?: () => void
 }
 
 const SappHookFormSelect = ({
@@ -34,6 +36,8 @@ const SappHookFormSelect = ({
   label,
   required,
   isSearchable = true,
+  onMenuScrollToBottom,
+  onFocus,
 }: IProps) => {
   return (
     <>
@@ -72,6 +76,8 @@ const SappHookFormSelect = ({
                 }}
                 isSearchable={isSearchable}
                 defaultValue={defaultValue}
+                onMenuScrollToBottom={onMenuScrollToBottom}
+                onFocus={onFocus}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>

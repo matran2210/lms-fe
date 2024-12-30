@@ -12,7 +12,7 @@ export const PageLink = {
   AUTH_CHANGE_PASSWORD_SUCCESS: '/auth/change-password/change-password-success',
   NOTIFICATION: '/notifications',
   ENTRANCE_TEST: '/entrance-test',
-  MYPROFILE: '/myprofile',
+  MYPROFILE: '/overview',
   PAGE_NOT_FOUND: '/404',
   COURSE_DETAIL: '/courses/my-course/[courseId]',
   COURSE_PART_DETAIL: '/courses/[id]/section/[course_section_id]',

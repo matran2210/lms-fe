@@ -4,7 +4,7 @@ import { RouteGuard } from '@components/auth/RouteGuard'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
-import PopupCert from '@components/mycourses/PopupCert'
+import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
@@ -185,7 +185,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                     </>
                   )}
                   <LearningNotesList />
-                  <PopupCert />
+                  <PopupCompletedCourse />
                 </>
               </RouteGuard>
             </SocketContext.Provider>
