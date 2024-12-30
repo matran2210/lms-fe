@@ -561,7 +561,8 @@ const QuizDocument = ({
             getGradedLabel(gradeStatus)}
         </div>
 
-        {type === null && (
+        {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+          isNull(quizSetting)) && (
           <>
             <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
               <button
@@ -635,7 +636,7 @@ const QuizDocument = ({
                     }
                     onClick={() => {
                       if (!loading) {
-                        handleConfirmQuestion(false)
+                        handleConfirmQuestion()
                       }
                       trackGAEvent('Click Button Confirm Quiz Activity')
                     }}
