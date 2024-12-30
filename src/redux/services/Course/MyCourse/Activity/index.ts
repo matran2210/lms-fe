@@ -1,11 +1,6 @@
-import { IResponse } from 'src/redux/types'
-import {
-  ICreateDiscussionUploadRequest,
-  IDiscussion,
-} from 'src/redux/types/Course/MyCourse/Activity/activity'
-import { IBreadcrumb } from 'src/type/course/my-course/Activity'
-import { httpService } from '../../../httpService'
-import url from './url'
+import { ICreateDiscussionUploadRequest } from 'src/redux/types/Course/MyCourse/Activity/activity'
+import { fetchFormData } from '@services/requestV2'
+import { apiURL } from '@components/mycourses/LearningResource'
 
 /**
  * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.
@@ -13,30 +8,16 @@ import url from './url'
  */
 const CourseActivityApi = {
   /**
-   * @description Lấy Breadcrumb ID.
-   * @async
-   * @param {string} id - ID của activity.
-   * @returns {Promise<IResponse<ITab>>} - Dữ liệu tab.
-   */
-  setBreadcrumb: async (id: string): Promise<IResponse<IBreadcrumb>> => {
-    const response = await httpService.GET<any, any>({
-      uri: `course-sections/tab/${id}`,
-    })
-    return response
-  },
-
-  /**
    * @description upload ảnh cho cuộc thảo luận.
    * @async
    * @param {ICreateDiscussionUploadRequest} request - Dữ liệu yêu cầu upload cuộc thảo luận.
    * @returns {Promise<IResponse<IDiscussion>>} - Dữ liệu cuộc thảo luận đã upload.
    */
-  uploadImagesDiscussion: async ({
+  uploadImagesDiscussion: ({
     discussion_id,
     new_discussion_file,
     discussion_file_ids,
-  }: ICreateDiscussionUploadRequest): Promise<IResponse<IDiscussion>> => {
-    const uri = url.uploadImageDiscussion
+  }: ICreateDiscussionUploadRequest): Promise<any> => {
     const formData = new FormData()
 
     formData.append('discussion_id', discussion_id)
@@ -50,9 +31,9 @@ const CourseActivityApi = {
     })
 
     // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
-    return httpService.POST_FORM_DATA<any, any>({
-      uri,
-      request: formData,
+    return fetchFormData({
+      url: `${apiURL}/course-discussions/detail/upload`,
+      formData,
     })
   },
 }

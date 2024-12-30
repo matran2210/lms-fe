@@ -13,13 +13,14 @@ import React, {
   useState,
 } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { IResourceDetail, ISection } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
+import { UploadAPI } from 'src/pages/api/upload'
 
 interface IProps {
   open: boolean
@@ -261,7 +262,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
   const download = async (name: string, file_key: string) => {
-    await CourseAPI.downloadResource({
+    await UploadAPI.downloadFile({
       files: [
         {
           name: name,
