@@ -28,7 +28,7 @@ interface IProps {
   disabled?: boolean
   onOk: () => void
   classNameModal?: string | undefined
-  width?: string
+  width?: number
   handleClose?: () => void
   icon: ReactNode
   header: string
@@ -59,7 +59,7 @@ const SappModalV3 = ({
   cancelButtonCaption,
   cancelButtonClass,
   classNameModal,
-  width,
+  width = 630,
   handleClose,
   header,
   icon,

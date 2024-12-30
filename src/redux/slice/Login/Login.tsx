@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { removeJwtToken, removeLocalStorageJwtToken } from '@utils/index'
 import { AuthAPI } from 'src/pages/api/profile'
 import { RootState } from '../../store'
 import {
@@ -38,8 +37,6 @@ export const getLogoutUser = createAsyncThunk(
     try {
       const authenticationManager = new AuthenticationManager()
       localStorage.clear()
-      removeJwtToken()
-      removeLocalStorageJwtToken()
       await authenticationManager.logout(window.location.origin)
       return {}
     } catch (error: any) {
@@ -94,8 +91,6 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
-      removeJwtToken()
-      removeLocalStorageJwtToken()
     })
     builder.addCase(getLogoutUser.rejected, (state, action) => {
       state.accessToken = ''
@@ -106,7 +101,6 @@ export const loginSlice = createSlice({
         email: '',
         username: '',
       }
-      removeLocalStorageJwtToken()
     })
 
     builder.addCase(changePassword.pending, (state) => {
@@ -116,8 +110,6 @@ export const loginSlice = createSlice({
       state.loading = false
       if (action.payload.code === 200) {
         state.changePass = true
-        removeJwtToken()
-        removeLocalStorageJwtToken()
       }
     })
     builder.addCase(changePassword.rejected, (state, action) => {

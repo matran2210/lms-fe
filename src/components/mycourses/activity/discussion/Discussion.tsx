@@ -378,12 +378,12 @@ const Discussion = ({ class_id }: Props) => {
                       height={50}
                       className="rounded-full"
                       src={
-                        e.is_sapp_supporter
-                          ? e.avatar['50x50'] ||
-                            e.avatar['ORIGIN'] ||
+                        e?.is_sapp_supporter
+                          ? e?.avatar?.['50x50'] ||
+                            e?.avatar?.['ORIGIN'] ||
                             sappAvatar
-                          : user?.detail?.avatar['50x50'] ||
-                            user?.detail?.avatar['ORIGIN'] ||
+                          : user?.detail?.avatar?.['50x50'] ||
+                            user?.detail?.avatar?.['ORIGIN'] ||
                             blankAvatar
                       }
                       loading="eager"

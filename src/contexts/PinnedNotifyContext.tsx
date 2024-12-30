@@ -1,9 +1,5 @@
 import { convertUTCToLocalTime } from '@utils/helpers'
-import {
-  getActToken,
-  getLocalStorageItem,
-  setLocalStorageItem,
-} from '@utils/index'
+import { getLocalStorageItem, setLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
 import {
   PropsWithChildren,
@@ -12,7 +8,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { PageLink } from 'src/constants'
+import { ENTRANCE_TEST_RESULT } from 'src/constants'
 import UserApi from 'src/redux/services/User/user'
 import { PinnedNotifications } from 'src/type'
 
@@ -73,39 +69,35 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
       },
     })
 
-  const authToken = getActToken()
-
   const getPinnedData = async () => {
-    if (authToken) {
-      const res: PinnedNotifications = await UserApi.getPinnedNotifications()
-      const oldPinnedId = getLocalStorageItem('pinnedId')
-      const oldPinnedFlag = getLocalStorageItem('openPinned')
+    const res: PinnedNotifications = await UserApi.getPinnedNotifications()
+    const oldPinnedId = getLocalStorageItem('pinnedId')
+    const oldPinnedFlag = getLocalStorageItem('openPinned')
 
-      if (oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')) {
-        // * Logic đúng
-        const pin_start = convertUTCToLocalTime(res?.data?.send_time)
-        const unix_pin_start = pin_start.getTime()
+    if (oldPinnedId !== res?.data?.id || Boolean(oldPinnedFlag === 'true')) {
+      // * Logic đúng
+      const pin_start = convertUTCToLocalTime(res?.data?.send_time)
+      const unix_pin_start = pin_start.getTime()
 
-        const pin_end = convertUTCToLocalTime(res?.data?.send_finish_time)
-        const unix_pin_end = pin_end.getTime()
+      const pin_end = convertUTCToLocalTime(res?.data?.send_finish_time)
+      const unix_pin_end = pin_end.getTime()
 
-        const now = new Date()
-        const unix_now = now.getTime()
+      const now = new Date()
+      const unix_now = now.getTime()
 
-        // * Kiểm tra thời gian pin có hợp lệ để show cho client
-        if (unix_pin_start <= unix_now && unix_now <= unix_pin_end) {
-          setPinnedNotifications(res)
-          setOpenPinned(true)
-          setLocalStorageItem('pinnedId', res?.data?.id)
-          setLocalStorageItem('openPinned', 'true')
-          setLocalStorageItem('pinnedStatus', res?.data?.status)
-        }
+      // * Kiểm tra thời gian pin có hợp lệ để show cho client
+      if (unix_pin_start <= unix_now && unix_now <= unix_pin_end) {
+        setPinnedNotifications(res)
+        setOpenPinned(true)
+        setLocalStorageItem('pinnedId', res?.data?.id)
+        setLocalStorageItem('openPinned', 'true')
+        setLocalStorageItem('pinnedStatus', res?.data?.status)
+      }
+    } else {
+      if (Boolean(oldPinnedFlag === 'false')) {
+        setOpenPinned(false)
       } else {
-        if (Boolean(oldPinnedFlag === 'false')) {
-          setOpenPinned(false)
-        } else {
-          setOpenPinned(true)
-        }
+        setOpenPinned(true)
       }
     }
   }
@@ -113,7 +105,9 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
   const router = useRouter()
 
   useEffect(() => {
-    getPinnedData()
+    if (router.pathname !== ENTRANCE_TEST_RESULT) {
+      getPinnedData()
+    }
   }, [router.pathname])
 
   return (

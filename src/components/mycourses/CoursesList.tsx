@@ -22,12 +22,12 @@ const CoursesList: React.FC<CoursesProps> = ({
 }) => {
   if (isFetching && !isFetchingNextPage) {
     return (
-      <div className="mb-6 grid grid-cols-2 gap-6 xl-max:px-6 2xl-min:grid-cols-3">
+      <div className="mb-6 grid w-full gap-6 md:grid-cols-2 xl:grid-cols-3 xl-max:px-6">
         {Array(9)
           .fill([])
           .map((_, index) => (
             <div
-              className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+              className={`item flex w-full flex-col bg-white p-7.5 shadow-sidebar`}
               key={index}
             >
               <div className={`flex min-h-352 flex-col`}>
@@ -42,7 +42,10 @@ const CoursesList: React.FC<CoursesProps> = ({
   return (
     <>
       {!isEmpty(courses) && (
-        <div className="mb-6 grid grid-cols-2 gap-6 xl-max:px-6 2xl-min:grid-cols-3">
+        <div
+          className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3"
+          // data-aos={ANIMATION.DATA_AOS}
+        >
           {courses?.map((course, index: number) => (
             <Course
               key={index}

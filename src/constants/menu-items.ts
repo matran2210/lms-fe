@@ -66,12 +66,12 @@ const MENU_OPTIONS: MenuOption[] = [
     url: `${PageLink.ENTRANCE_TEST}`,
     type: 'level-1',
   },
-  // {
-  //   name: `${TitleSidebar.RESULTS}`,
-  //   icon: 'result',
-  //   url: '#',
-  //   type: 'level-2',
-  // },
+  {
+    name: `${TitleSidebar.RESULTS}`,
+    icon: 'result',
+    url: PageLink.RESULTS,
+    type: 'level-2',
+  },
   {
     name: `${TitleSidebar.NEW_NOTE}`,
     icon: 'create-note',
@@ -117,12 +117,12 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
     url: PageLink.EVENT_TEST,
     type: 'level-1',
   },
-  // {
-  //   name: `${TitleSidebar.RESULTS}`,
-  //   icon: 'result',
-  //   url: '#',
-  //   type: 'level-2',
-  // },
+  {
+    name: `${TitleSidebar.RESULTS}`,
+    icon: 'result',
+    url: PageLink.RESULTS,
+    type: 'level-2',
+  },
   {
     name: `${TitleSidebar.NEW_NOTE}`,
     icon: 'create-note',

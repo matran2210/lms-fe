@@ -8,6 +8,7 @@ import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
+import ProgramDetail from '@components/profile/ProgramDetail'
 import Settings from '@components/profile/Settings'
 import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
@@ -65,30 +66,56 @@ const ProfilePage = () => {
 
   let selectedContent: JSX.Element | null = null
 
-  if (page === 'myprofile') {
-    selectedContent = (
-      <ProfileContent
-        setReViewImageSrc={setReViewImageSrc}
-        isEdit={isEdit}
-        setIsEdit={handleSetIsEdit}
-        page={page}
-        avatar={avatar}
-        handleSetAvatar={handleSetAvatar}
-        onOpenTab={() => setSelectPage(true)}
-      />
-    )
-  } else if (page === 'certificates') {
-    selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
-  } else if (page === 'devices') {
-    selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
-  } else if (page === 'login_history') {
-    selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
-  } else if (page === 'change_password') {
-    selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
-  } else if (page === 'settings') {
-    selectedContent = <Settings />
-  } else {
-    selectedContent = <NotFound />
+  switch (page) {
+    case 'certificates':
+      selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
+      break
+
+    case 'devices':
+      selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
+      break
+
+    case 'login_history':
+      selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
+      break
+
+    case 'change_password':
+      selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
+      break
+
+    case 'settings':
+      selectedContent = <Settings />
+      break
+
+    case 'overview':
+      selectedContent = (
+        <ProfileContent
+          setReViewImageSrc={setReViewImageSrc}
+          isEdit={isEdit}
+          setIsEdit={handleSetIsEdit}
+          page={page}
+          avatar={avatar}
+          handleSetAvatar={handleSetAvatar}
+          onOpenTab={() => setSelectPage(true)}
+        />
+      )
+      break
+
+    case 'cfa':
+      selectedContent = <ProgramDetail typeProgram="CFA" />
+      break
+
+    case 'cma':
+      selectedContent = <ProgramDetail typeProgram="CMA" />
+      break
+
+    case 'acca':
+      selectedContent = <ProgramDetail typeProgram="ACCA" />
+      break
+
+    default:
+      selectedContent = <NotFound />
+      break
   }
   const handleResize = () => {
     if (window.innerWidth < 1024) {
@@ -118,7 +145,7 @@ const ProfilePage = () => {
             />
           </div>
         </div>
-        <div className="mx-auto my-0 flex w-full max-w-xxl grow flex-col px-5 lg:px-0">
+        <div className="mx-auto my-0 flex w-full max-w-xxl grow flex-col px-5 xl:px-0">
           <div className="main sm:mx-4 lg:mx-0 ">
             <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
           </div>

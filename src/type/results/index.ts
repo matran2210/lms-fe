@@ -1,8 +1,10 @@
-import { GradingMethod, GradingStatus } from '@utils/constants'
+import { GradingMethod } from '@utils/constants'
+import { GRADE_STATUS } from 'src/constants'
 
 export interface IResultsList {
   metadata: Metadata
   data: Results[]
+  class_user_id: string
 }
 
 export interface Metadata {
@@ -27,6 +29,7 @@ export interface QuizActivity {
   quiz_timed: number
   quiz_type: string
   id: string
+  grading_method: GradingMethod
   is_graded: boolean
   attempts: Attempt[]
 }
@@ -53,7 +56,7 @@ export interface Attempt {
   multiple_choice_score: number
   constructed_score: number
   status: string
-  grading_status: GradingStatus | null
+  grading_status: (typeof GRADE_STATUS)[keyof typeof GRADE_STATUS] | null
   started_at: string
   finished_at: string
 }

@@ -24,7 +24,7 @@ const ProfileContent = ({
   onOpenTab,
 }: IProps) => {
   return (
-    page === 'myprofile' && (
+    page === 'overview' && (
       <MyProfile
         isEdit={isEdit}
         setIsEdit={setIsEdit}
