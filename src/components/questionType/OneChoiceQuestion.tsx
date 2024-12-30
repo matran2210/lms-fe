@@ -2,6 +2,7 @@ import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
+import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
@@ -25,6 +26,9 @@ export type IPreviewProp = {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => void
   isHideExhibit?: boolean
+  getValue?: any | undefined
+  tabs?: Array<{ id: string }> | undefined
+  currentPage?: string | undefined
 }
 
 type IAnswers = {

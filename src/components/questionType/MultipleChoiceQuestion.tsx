@@ -7,12 +7,17 @@ import { MY_COURSES } from 'src/constants/lang'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 // import {IPreviewProp} from '../true-false-question'
 
+interface IDataAnswer {
+  data: {
+    answers: Array<{ id: string }>
+  }
+}
+
 const MultiChoiceQuestion = ({
   data,
   control,
   corrects,
   name,
-  defaultValues,
   setValue,
   handleSaveHighLight,
   highlighted,
@@ -21,6 +26,9 @@ const MultiChoiceQuestion = ({
   allowUnHighLight,
   setOpenFile,
   isHideExhibit = true,
+  getValue,
+  tabs,
+  currentPage,
 }: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
@@ -40,18 +48,24 @@ const MultiChoiceQuestion = ({
     }
     return answers
   }, [data])
+
   useEffect(() => {
-    if (defaultValues) {
-      setValue(name, defaultValues)
-    } else {
-      setValue(name, '')
+    const tab_current = tabs?.find((e) => e.id === currentPage) as
+      | IDataAnswer
+      | undefined
+
+    if (tab_current && Array.isArray(getValue(name))) {
+      const answer_ids = tab_current?.data?.answers?.map((e) => e.id)
+
+      const filteredData = getValue(name)?.filter((e: string) =>
+        answer_ids?.includes(e),
+      )
+
+      // Cập nhật lại giá trị sau khi lọc
+      setValue(name, filteredData) // Cần hàm `setValue` để thay đổi giá trị getValue(name)
     }
-  }, [defaultValues])
-  // useEffect(() => {
-  //   if (data) {
-  //     DeserializeHighlight(highlighted)
-  //   }
-  // }, [data])
+  }, [tabs, currentPage, getValue, name, setValue])
+
   return (
     <div>
       <div
@@ -142,7 +156,7 @@ const MultiChoiceQuestion = ({
           name={name || 'multiples'}
           multiple
           corrects={corrects}
-          defaultValue={defaultValues || ''}
+          // defaultValue={defaultValues || ''}
           // justify='start'
           positionCheckBox="start"
         />
