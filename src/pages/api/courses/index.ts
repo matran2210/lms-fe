@@ -182,8 +182,7 @@ export class CoursesAPI {
   static getQuizAttemptsChartData(
     id: string | string[] | undefined,
   ): Promise<any> {
-    const uri = url.getQuestionDetail
-    return fetcher(`${apiURL}${url.getQuizAttemptsChartData}/${id}`)
+    return fetcher(`${apiURL}/entrance-test/chart-data/${id}`)
   }
 
   static getPartDetail(
@@ -202,7 +201,7 @@ export class CoursesAPI {
     success: boolean
     data: IScoreDetails
   }> {
-    return fetcher(`${apiURL}/quiz-attempts/${id}/answers`, {
+    return fetcher(`${apiURL}/entrance-test/quiz-attempts/${id}/answers`, {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,

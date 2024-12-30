@@ -51,7 +51,7 @@ export class AuthenticationManager {
     let isFirstLogin = false
     if (
       window.location.pathname?.split('/')?.[1] !== CERTIFICATE &&
-      window.location.pathname?.split('/test-result')?.[0] !== '/entrance-test'
+      window.location.pathname?.split('test-result/')?.[0] !== '/entrance-test/'
     ) {
       this.keyCloak = new Keycloak(keycloakConfig)
       const authenticated = await this.keyCloak.init({
