@@ -75,7 +75,7 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
   }
 
   useEffect(() => {
-    if ([ENTRANCE_TEST_RESULT, CERTIFICATE_DETAIL].includes(router.pathname)) {
+    if (![ENTRANCE_TEST_RESULT, CERTIFICATE_DETAIL].includes(router.pathname)) {
       fetchEventTest()
     }
   }, [])

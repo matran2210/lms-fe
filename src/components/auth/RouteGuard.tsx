@@ -1,7 +1,7 @@
 import { CERTIFICATE_DETAIL } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { PageLink } from 'src/constants'
+import { ENTRANCE_TEST_RESULT, PageLink } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getMe, userReducer } from 'src/redux/slice/User/User'
 
@@ -34,7 +34,10 @@ export const RouteGuard = ({ children }: IProps) => {
   }, [router.pathname])
 
   const callGetMe = async () => {
-    if (userSlice.user.id || router.pathname === CERTIFICATE_DETAIL) {
+    if (
+      userSlice.user.id ||
+      [CERTIFICATE_DETAIL, ENTRANCE_TEST_RESULT].includes(router.pathname)
+    ) {
       setAuthorized(true)
       return
     }
