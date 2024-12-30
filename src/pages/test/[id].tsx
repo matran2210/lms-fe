@@ -920,7 +920,6 @@ const TestDetail = () => {
   }
 
   const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
-    setStartTime(Date.now())
     let newData = [] as any
     for (let item of tabs) {
       if (tabId === item?.id) {

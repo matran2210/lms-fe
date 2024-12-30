@@ -7,5 +7,5 @@ export interface IEssayAnswer {
   question_id: string
   requirement_id: string
   response_option: string
-  short_answer: string
+  short_answer?: string
 }

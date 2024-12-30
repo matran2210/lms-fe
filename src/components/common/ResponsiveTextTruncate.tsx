@@ -49,7 +49,11 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     document.body.removeChild(tempElement)
 
     // If the text was truncated, add ellipsis
-    return truncatedText === text ? truncatedText : `${truncatedText.trim()}...`
+    return truncatedText === text
+      ? truncatedText
+      : isSlash
+        ? `${truncatedText.trim()}.../`
+        : `${truncatedText.trim()}...`
   }
 
   /**
@@ -63,7 +67,7 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     tempElement.style.visibility = 'hidden'
     tempElement.style.fontSize = `${fontSize}px`
     tempElement.style.whiteSpace = 'nowrap'
-    tempElement.textContent = '...'
+    tempElement.textContent = isSlash ? '.../' : '...'
     document.body.appendChild(tempElement)
     const ellipsisWidth = tempElement.offsetWidth
     document.body.removeChild(tempElement)
