@@ -18,10 +18,6 @@ import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
 import dayjs, { Dayjs } from 'dayjs'
 import { QuizResultComponent } from 'quiz-result-package'
-import {
-  IQuestionResult,
-  IQuestionResultResponse,
-} from 'quiz-result-package/dist/type'
 import toast from 'react-hot-toast'
 import {
   ANIMATION,
@@ -31,12 +27,17 @@ import {
   SOCIAL_LINK,
 } from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
-import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'
 import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import {
+  IQuestionResult,
+  IQuestionResultResponse,
+} from 'src/type/course/my-course/Activity'
+import { isNull } from 'lodash'
 
 type Props = {
   questions: IQuestion[]
@@ -275,6 +276,11 @@ const QuizDocument = ({
       )
         .unwrap()
         .then((e: any) => {
+          if (e?.progress?.is_completed) {
+            setTimeout(() => {
+              dispatch(showPopupCompletedCourse(e?.progress?.content))
+            }, 2000)
+          }
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
           dispatch(
             removeQuizFinished({
@@ -283,17 +289,11 @@ const QuizDocument = ({
               quizId: quizId,
             }),
           )
-          setLoading(false)
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
             setOpenGradedReport(true)
             return
-          }
-          if (e?.data?.class_user_score) {
-            setTimeout(() => {
-              dispatch(showPopup(e.data.class_user_score))
-            }, 4000)
           }
         })
     } catch (error: any) {
@@ -316,8 +316,8 @@ const QuizDocument = ({
   }) => {
     setLoading(true)
     try {
-      const checkId = id || modalResult?.id
-      if (checkId === resultId) return
+      // const checkId = id || modalResult?.id
+      // if (checkId === resultId) return
       setResultId(id ?? modalResult?.id ?? '')
       const response = await CoursesAPI.getQuizAttemptsTable(
         id || modalResult?.id || '',
@@ -328,25 +328,24 @@ const QuizDocument = ({
       )
 
       const newQuestionResponse: IQuestionResultResponse = {
-        meta: response?.data?.meta,
+        meta: response?.data?.metadata,
         data: (modalResult?.questions?.data ?? []).concat(
-          response?.data?.answer_groups?.flatMap((group: IAnswers) => {
-            const answers = group?.answers?.map((answer: IAnswer) => {
-              return {
-                id: answer?.id,
-                content: answer?.question?.question_content,
-                section: answer?.question?.question_filter_id?.part?.name,
-                type: answer?.question?.qType,
-                is_correct: answer?.is_correct,
-                time_spent: answer?.time_spent,
-                question: answer?.question,
-                active: answer?.active,
-              }
-            })
-            return answers || []
+          response?.data?.answers?.map((answer) => {
+            return {
+              active: answer?.active,
+              id: answer?.id,
+              content: answer?.question?.question_content,
+              section: answer?.question?.question_filter?.part?.name,
+              type: answer?.question?.qType,
+              is_correct: answer?.is_correct,
+              time_spent: answer?.time_spent,
+              question: answer?.question,
+            }
           }) || [],
         ),
+        attempt_info: response?.data?.attempt_info,
       }
+
       if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
         setOpenGradedReport(true)
         return
@@ -367,25 +366,13 @@ const QuizDocument = ({
     setShowQuestionResultDetail({ id: data?.id, isOpen: true })
   }
 
-  // const startTime = dayjs().add(1, 'day')
   const startTime = quizSetting?.start_time
   const endTime = quizSetting?.end_time
-  // const endTime = dayjs().subtract(1, 'year')
-
-  // Test Unopend or Expired
-  const getType = (startTime: Dayjs, endTime: Dayjs) => {
-    if (startTime && dayjs().isBefore(startTime)) return 'unopened'
-    if (endTime && dayjs().isAfter(dayjs(endTime))) return 'expired'
-    return null
-  }
-
-  const type = getType(startTime, endTime)
-
   const BluredNotification = () => (
     <>
-      {type !== null && (
+      {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
         <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
-          {type === 'unopened' && (
+          {quizSetting?.reason_for_reject === 'NOT_OPEN_YET' && (
             <p className="text-center">
               This Quiz will be opened at{' '}
               <span className="font-semi-bold text-primary">
@@ -397,7 +384,7 @@ const QuizDocument = ({
               </span>
             </p>
           )}
-          {type === 'expired' && (
+          {quizSetting?.reason_for_reject === 'EXPIRED' && (
             <p className="text-center">
               The time for this Quiz has ended, you can no longer submit
               answers. For further support, please contact SAPP Academy via{' '}
@@ -419,8 +406,8 @@ const QuizDocument = ({
       {/* Fake Question */}
       <div>
         <div>
-          <div className="sapp-questions editor-wrap mce-content-body" id="">
-            <div className="">
+          <div className="sapp-questions editor-wrap mce-content-body">
+            <div>
               <p>Câu hỏi số 1</p>
             </div>
           </div>
@@ -515,7 +502,7 @@ const QuizDocument = ({
   }
 
   return (
-    <div className="">
+    <div>
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
@@ -523,29 +510,32 @@ const QuizDocument = ({
         handleCancel={() => {}}
       />
 
-      {/* )} */}
       <div
         className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
-        {type !== null && <BluredNotification />}
-        {activeQuestion && type === null && (
-          <QuizComponent
-            activityId={activityId}
-            tabId={tabId}
-            quizId={quizId}
-            showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
-            activeQuestion={activeQuestion}
-            ref={questionRef}
-            key={quizComponentKey}
-            document_id={document_id}
-            setOpenFile={setOpenFile}
-            grading_preference={grading_preference}
-            showQuestionContent={false}
-            isHideExhibit={false}
-            saveAnswer={handleSaveAnswer}
-          />
+        {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
+          <BluredNotification />
         )}
+        {activeQuestion &&
+          ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+            isNull(quizSetting)) && (
+            <QuizComponent
+              activityId={activityId}
+              tabId={tabId}
+              quizId={quizId}
+              showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
+              activeQuestion={activeQuestion}
+              ref={questionRef}
+              key={quizComponentKey}
+              document_id={document_id}
+              setOpenFile={setOpenFile}
+              grading_preference={grading_preference}
+              showQuestionContent={false}
+              isHideExhibit={false}
+              saveAnswer={handleSaveAnswer}
+            />
+          )}
       </div>
       <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
         <div className="col-span-1 flex flex-wrap items-center gap-2">
@@ -561,91 +551,92 @@ const QuizDocument = ({
             getGradedLabel(gradeStatus)}
         </div>
 
-        {type === null && (
-          <>
-            <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
-              <button
-                disabled={activeQuestionIndex === 0 || loading}
-                className={`cursor-pointer select-none ${
-                  activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
-                }`}
-                onClick={() => {
-                  if (loading) {
-                    return
-                  }
-                  handlePrevQuestion()
-                  trackGAEvent('Click Prev Question Quiz Activity')
-                }}
-              >
-                <SappIcon icon="arrow_left" />
-              </button>
-              Question: {activeQuestionIndex + 1} of {questions?.length || 0}
-              <button
-                disabled={isLastQuestion || loading}
-                className={`cursor-pointer select-none ${
-                  isLastQuestion || loading ? 'opacity-50' : ''
-                }`}
-                onClick={() => {
-                  if (loading) {
-                    return
-                  }
-                  handleNextQuestion()
-                  trackGAEvent('Click Next Question Quiz Activity')
-                }}
-              >
-                <SappIcon icon="arrow_right" />
-              </button>
-            </div>
-            <div className="col-span-1 flex flex-wrap items-center justify-end gap-2">
-              {(isQuestionConfirmed ||
-                grading_preference !== 'AFTER_EACH_QUESTION' ||
-                (isQuestionConfirmed && isLastQuestion)) && (
-                <SappButton
-                  title={isLastQuestion ? 'Finish' : 'Next'}
-                  full={false}
-                  size={'small'}
+        {(quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+          (isNull(quizSetting) && (
+            <>
+              <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
+                <button
+                  disabled={activeQuestionIndex === 0 || loading}
+                  className={`cursor-pointer select-none ${
+                    activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
+                  }`}
                   onClick={() => {
                     if (loading) {
                       return
                     }
-                    if (isLastQuestion) {
-                      setRunHandleFinishQuiz((e) => e + 1)
-                      handleSaveAnswer()
-                      trackGAEvent('Click Button Finish Quiz Activity')
-                      return
-                    } else {
-                      handleNextQuestion()
-                      trackGAEvent('Click Button Next Quiz Activity')
-                    }
+                    handlePrevQuestion()
+                    trackGAEvent('Click Prev Question Quiz Activity')
                   }}
-                  color="primary"
-                  loading={loading}
-                />
-              )}
-              {!isQuestionConfirmed &&
-                grading_preference === 'AFTER_EACH_QUESTION' && (
+                >
+                  <SappIcon icon="arrow_left" />
+                </button>
+                Question: {activeQuestionIndex + 1} of {questions?.length || 0}
+                <button
+                  disabled={isLastQuestion || loading}
+                  className={`cursor-pointer select-none ${
+                    isLastQuestion || loading ? 'opacity-50' : ''
+                  }`}
+                  onClick={() => {
+                    if (loading) {
+                      return
+                    }
+                    handleNextQuestion()
+                    trackGAEvent('Click Next Question Quiz Activity')
+                  }}
+                >
+                  <SappIcon icon="arrow_right" />
+                </button>
+              </div>
+              <div className="col-span-1 flex flex-wrap items-center justify-end gap-2">
+                {(isQuestionConfirmed ||
+                  grading_preference !== 'AFTER_EACH_QUESTION' ||
+                  (isQuestionConfirmed && isLastQuestion)) && (
                   <SappButton
-                    title={'View Answer'}
+                    title={isLastQuestion ? 'Finish' : 'Next'}
                     full={false}
                     size={'small'}
-                    disabled={
-                      (grading_method === GRADING_METHOD.MANUAL &&
-                        !!gradeStatus) ||
-                      loading
-                    }
                     onClick={() => {
-                      if (!loading) {
-                        handleConfirmQuestion(false)
+                      if (loading) {
+                        return
                       }
-                      trackGAEvent('Click Button Confirm Quiz Activity')
+                      if (isLastQuestion) {
+                        setRunHandleFinishQuiz((e) => e + 1)
+                        handleSaveAnswer()
+                        trackGAEvent('Click Button Finish Quiz Activity')
+                        return
+                      } else {
+                        handleNextQuestion()
+                        trackGAEvent('Click Button Next Quiz Activity')
+                      }
                     }}
                     color="primary"
                     loading={loading}
                   />
                 )}
-            </div>
-          </>
-        )}
+                {!isQuestionConfirmed &&
+                  grading_preference === 'AFTER_EACH_QUESTION' && (
+                    <SappButton
+                      title={'View Answer'}
+                      full={false}
+                      size={'small'}
+                      disabled={
+                        (grading_method === GRADING_METHOD.MANUAL &&
+                          !!gradeStatus) ||
+                        loading
+                      }
+                      onClick={() => {
+                        if (!loading) {
+                          handleConfirmQuestion(false)
+                        }
+                        trackGAEvent('Click Button Confirm Quiz Activity')
+                      }}
+                      color="primary"
+                      loading={loading}
+                    />
+                  )}
+              </div>
+            </>
+          ))}
       </div>
       <SappModal
         open={modalResult?.status}
@@ -661,7 +652,7 @@ const QuizDocument = ({
         refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all z-[100000]"
         showHeader={false}
       >
-        <div className="relative">
+        <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
           <div
             className="absolute right-6 top-5  ml-auto cursor-pointer"
             onClick={() => {
@@ -671,21 +662,20 @@ const QuizDocument = ({
           >
             <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
-          <div className="mx-auto max-w-[1114px] overflow-auto">
-            <QuizResultComponent
-              questionResponse={modalResult?.questions || []}
-              getTable={getTable}
-              onShowDetail={handleShowQuestionResultDetail}
-              loading={loading}
-            />
-          </div>
+          <QuizResultComponent
+            questionResponse={modalResult?.questions || []}
+            getTable={getTable}
+            onShowDetail={handleShowQuestionResultDetail}
+            loading={loading}
+          />
         </div>
       </SappModal>
+
       <ModalExplanationPackage
         quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
         open={showQuestionResultDetail?.isOpen || false}
         setOpen={() => setShowQuestionResultDetail(undefined)}
-      ></ModalExplanationPackage>
+      />
       <SappModalV3
         open={openGradedReport}
         okButtonCaption="Back"

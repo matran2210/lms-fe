@@ -1,6 +1,7 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
-import { httpService } from 'src/redux/services/httpService'
+import { apiURL, httpService } from 'src/redux/services/httpService'
+import { IScoreDetails } from 'src/type'
 
 const CourseAPI = {
   downloadResource: async (data: {
@@ -177,8 +178,13 @@ export class CoursesAPI {
   static getQuizAttemptsChartData(
     id: string | string[] | undefined,
   ): Promise<any> {
-    const uri = url.getQuestionDetail
     return fetcher(`${url.getQuizAttemptsChartData}/${id}`)
+  }
+
+  static getQuizAttemptsEntranceTestChartData(
+    id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(`${apiURL}/entrance-test/chart-data/${id}`)
   }
 
   static getPartDetail(
@@ -186,15 +192,33 @@ export class CoursesAPI {
     course_section_id: string | string[] | undefined,
   ): Promise<any> {
     return fetcher(
-      `course-sections/${id}?course_section_id=${course_section_id}`,
+      `/course-sections/${id}?course_section_id=${course_section_id}`,
     )
   }
 
   static getQuizAttemptsTable(
     id: string,
     { page_index, page_size }: { page_index: number; page_size: number },
-  ): Promise<any> {
-    return fetcher(`quiz-attempts/table/${id}`, {
+  ): Promise<{
+    success: boolean
+    data: IScoreDetails
+  }> {
+    return fetcher(`/quiz-attempts/${id}/answers`, {
+      params: {
+        page_index: page_index || 1,
+        page_size: page_size || 10,
+      },
+    })
+  }
+
+  static getQuizAttemptsTableEntranceTest(
+    id: string,
+    { page_index, page_size }: { page_index: number; page_size: number },
+  ): Promise<{
+    success: boolean
+    data: IScoreDetails
+  }> {
+    return fetcher(`${apiURL}/entrance-test/quiz-attempts/${id}/answers`, {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
@@ -425,7 +449,11 @@ export const submitQuizTest = async (
       data: data,
       method: 'POST',
     })
-    return { ...response, quizAttemptId }
+    return {
+      ...response,
+      quizAttemptId,
+      progress: quizAttemptResponse?.data?.progress,
+    }
   }
 }
 

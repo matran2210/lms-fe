@@ -16,6 +16,41 @@ const MyProfileAPI = {
     })
     return response
   },
+
+  getSubjectOfhubspot: (courseCategoryName: string) => {
+    return fetcher(
+      `${apiURL}/users/subject-of-hubspot?course_category_name=${courseCategoryName}&sort=name%3DASC`,
+    )
+  },
+
+  getExamBySubjectId: ({
+    pageIndex,
+    pageSize,
+    params,
+  }: {
+    pageIndex: number
+    pageSize: number
+    params?: Object
+  }) => {
+    return fetcher(
+      `${apiURL}/users/examination-subjects?page_index=${pageIndex}&page_size=${pageSize}`,
+      {
+        params,
+      },
+    )
+  },
+
+  updateProgram: (data: {
+    course_category_id?: string
+    user_hubspot_examination_subjects?: {
+      examination_subject_id?: string
+    }[]
+  }) => {
+    return fetcher(`${apiURL}/users/programs`, {
+      data,
+      method: 'PUT',
+    })
+  },
 }
 
 export default MyProfileAPI

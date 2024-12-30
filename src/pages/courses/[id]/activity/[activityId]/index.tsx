@@ -5,6 +5,7 @@ import PdfViewer from '@components/base/pdf/pdf-viewer'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
+import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
@@ -43,7 +44,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
-import { showPopup } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -148,7 +149,7 @@ const ActivityPage = () => {
             videos:
               course_tab.videos?.map((document) => {
                 return {
-                  file_id: document.file.id,
+                  file_id: document?.file?.id,
                   is_click: false,
                 }
               }) ?? [],
@@ -322,8 +323,10 @@ const ActivityPage = () => {
     )
     isFinishRef.current = true
     setFetch_progress([...fetch_progress, sectionId])
-    if (response?.data?.class_user_score) {
-      dispatch(showPopup(response?.data?.class_user_score))
+    if (response?.data?.progress?.is_completed) {
+      setTimeout(() => {
+        dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
+      }, 2000)
     }
   }
 
@@ -519,32 +522,34 @@ const ActivityPage = () => {
           return (
             <React.Fragment key={e?.id}>
               {e?.course_section_type !== 'ACTIVITY' ? (
-                <li
-                  title={e?.name}
-                  onClick={() => {
-                    ;['CHAPTER', 'UNIT', 'PART'].includes(
-                      e.course_section_type,
-                    ) && localStorage.setItem('course_chapter_id', chapterId)
-                    router.push(url)
-
-                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
-                  }}
-                >
-                  <SappTooltip
+                <>
+                  <li
                     title={e?.name}
-                    showTooltip={e?.name?.length > 45}
+                    onClick={() => {
+                      ;['CHAPTER', 'UNIT', 'PART'].includes(
+                        e.course_section_type,
+                      ) && localStorage.setItem('course_chapter_id', chapterId)
+                      router.push(url)
+
+                      trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
+                    }}
                   >
-                    <li
-                      className={
-                        'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
-                      }
+                    <SappTooltip
                       title={e?.name}
+                      showTooltip={e?.name?.length > 45}
                     >
-                      {truncateBySpace(e?.name, 5) ?? ''}
-                      <span>/</span>
-                    </li>
-                  </SappTooltip>
-                </li>
+                      <li
+                        className={
+                          'responsive-truncate-container cursor-pointer text-gray-1 hover:text-primary '
+                        }
+                        title={e?.name}
+                      >
+                        <ResponsiveTextTruncate text={e?.name} />
+                      </li>
+                    </SappTooltip>
+                  </li>
+                  <li className="text-gray-1">/</li>
+                </>
               ) : null}
             </React.Fragment>
           )
@@ -626,10 +631,10 @@ const ActivityPage = () => {
       <Layout title="Activity">
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="line-clamp-1 flex flex-wrap gap-1 overflow-x-auto py-6 text-medium-sm font-medium">
+          <ul className="line-clamp-1 flex gap-x-1 overflow-x-auto py-6 text-medium-sm font-medium">
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name} color="white">
-              <li className="text-bw-1">
+              <li className="responsive-truncate-container text-bw-1">
                 <Link
                   href={'#'}
                   className="breadcrumbs__link"
@@ -638,7 +643,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }
                 >
-                  <span>{truncateBySpace(nameActivity?.name, 13)}</span>
+                  <ResponsiveTextTruncate text={nameActivity?.name ?? ''} />
                 </Link>
               </li>
             </Tooltip>

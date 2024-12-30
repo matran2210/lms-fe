@@ -10,12 +10,6 @@ interface IProps {}
 const PopupCert = ({}: IProps) => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector((state) => state.popupReducer)
-  const onClickCertificate = () => {
-    window.open(
-      `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${selector?.content?.user_certificate?.id}`,
-      '_blank',
-    )
-  }
 
   const onClickBackCourse = () => {
     dispatch({ type: hidePopup })
@@ -26,12 +20,8 @@ const PopupCert = ({}: IProps) => {
       title={undefined}
       open={selector.is_open}
       handleCancel={onClickBackCourse}
-      onOk={
-        !isEmpty(selector?.content?.user_certificate?.id)
-          ? onClickCertificate
-          : onClickBackCourse
-      }
-      showCancelButton={!isEmpty(selector?.content?.user_certificate?.id)}
+      onOk={onClickBackCourse}
+      // showCancelButton={true}
       size="max-w-[646px]"
       footerButtonClassName="flex flex-col-reverse gap-8"
       position="center"
@@ -40,12 +30,8 @@ const PopupCert = ({}: IProps) => {
       buttonSize="extra"
       scrollbale={false}
       confirmOnclose={false}
-      okButtonCaption={
-        !isEmpty(selector?.content?.user_certificate?.id)
-          ? 'View your Certificate'
-          : 'Back'
-      }
-      cancelButtonCaption="Back"
+      okButtonCaption={'Back'}
+      // cancelButtonCaption="Back"
       handleClose={onClickBackCourse}
       showOkButton
     >
@@ -53,11 +39,11 @@ const PopupCert = ({}: IProps) => {
         <IRibbon />
       </div>
       <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
-        {selector?.content?.content?.title}
+        Congratulations
       </div>
 
       <EditorReader
-        text_editor_content={selector?.content?.content?.content}
+        text_editor_content={selector?.content}
         className="content-course mt-4 px-1 text-center text-medium-sm text-gray-1"
       />
     </SappModalV2>

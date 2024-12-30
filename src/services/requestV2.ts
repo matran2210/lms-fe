@@ -3,7 +3,11 @@ import { toast } from 'react-hot-toast'
 import exceptions from './en.exceptions.json'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import Router from 'next/router'
-import { CERTIFICATE_DETAIL } from 'src/constants'
+import {
+  CERTIFICATE_DETAIL,
+  ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,
+} from 'src/constants'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
@@ -36,8 +40,11 @@ request.interceptors.request.use(
 request.interceptors.request.use(async (config: any) => {
   const authenticationManager = new AuthenticationManager()
 
-  const checkRouteCertificate =
-    (Router?.router as any)?.state?.pathname === CERTIFICATE_DETAIL
+  const checkRouteCertificate = [
+    ENTRANCE_TEST_RESULT,
+    CERTIFICATE_DETAIL,
+    ENTRANCE_TEST_TABLE_RESULT,
+  ].includes((Router?.router as any)?.state?.pathname)
 
   if (authenticationManager.getToken() || checkRouteCertificate) {
     config.headers = {

@@ -318,7 +318,7 @@ const ResultsTable = () => {
               <td className={clsx('!pr-0', commonDataCellStyle)}>
                 {row.quiz?.attempts?.length > 0
                   ? dayjs(row?.quiz?.attempts[0]?.updated_at).format(
-                      'DD/MM/YYYY hh:mm',
+                      'DD/MM/YYYY HH:mm',
                     )
                   : '-'}
               </td>

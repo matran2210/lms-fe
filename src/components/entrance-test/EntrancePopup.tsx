@@ -1,17 +1,20 @@
 // ConfirmDialog.tsx
-import { Dispatch, FC, SetStateAction, useMemo, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useMemo } from 'react'
 import EntrancePopupContent from './EntrancePopupContent'
 import EntranceTestFillForm from './EntranceTestFillForm'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { useRouter } from 'next/router'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
 
 // define the props for the confirm dialog component
 export type EntrancePopupProps = {
   open: boolean
   setOpen?: Dispatch<SetStateAction<boolean>>
   entrancePopupContent?: any
+  setOpenFillForm: Dispatch<SetStateAction<boolean>>
+  openFillForn: boolean
 }
 
 // create the confirm dialog component
@@ -19,17 +22,24 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   open,
   setOpen,
   entrancePopupContent,
+  openFillForn,
+  setOpenFillForm,
 }) => {
   const handleOnClick = () => {
     setOpen && setOpen(false)
     // setOpenFillForm(true)
   }
+
+  const { count } = useAppSelector(entranceTestReducer)
   const { user } = useAppSelector(userReducer)
-  const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
 
   const checkInfo = useMemo(() => {
-    if (user?.university && user?.university_program && user?.english_level) {
+    if (
+      (user?.detail?.university as any)?.id &&
+      user?.university_program?.id &&
+      user?.english_level?.id
+    ) {
       return true
     }
     return false
@@ -62,9 +72,19 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
                 type: 'entrance',
               },
             })
+          }
+          if (count === 1) {
+            router.push({
+              pathname: `/test/${entrancePopupContent?.id}`,
+              query: {
+                type: 'entrance',
+              },
+            })
           } else {
-            setOpenFillForm(true)
-            setOpen && setOpen(false)
+            if (!checkInfo) {
+              setOpenFillForm(true)
+              setOpen && setOpen(false)
+            }
           }
         }}
         showOkButton={!checkLimit}
@@ -87,6 +107,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         open={openFillForn}
         setOpen={setOpenFillForm}
         entrancePopupContent={entrancePopupContent}
+        setOpenTestInfo={setOpen}
       />
     </>
   )
