@@ -49,11 +49,7 @@ export class AuthenticationManager {
 
     // Kiểm tra trạng thái login lần đầu tiên
     let isFirstLogin = false
-    if (
-      window.location.pathname?.split('/')?.[1] !== CERTIFICATE ||
-      (window.location.pathname?.split('/')?.[1] !== 'entrance-test' &&
-        window.location.pathname?.split('/')?.[2] !== 'test-result')
-    ) {
+    if (window.location.pathname?.split('/')?.[1] !== CERTIFICATE) {
       this.keyCloak = new Keycloak(keycloakConfig)
       const authenticated = await this.keyCloak.init({
         onLoad: 'login-required',
