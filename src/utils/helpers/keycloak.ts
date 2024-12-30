@@ -32,14 +32,14 @@ const handleFirebaseToken = async () => {
 export class AuthenticationManager {
   keyCloak: Keycloak = null as any
 
-  // constructor() {
-  //   if (AuthenticationManager.instance) {
-  //     return AuthenticationManager.instance
-  //   }
+  constructor() {
+    if (AuthenticationManager.instance) {
+      return AuthenticationManager.instance
+    }
 
-  //   this.initKeyCloakConnect()
-  //   AuthenticationManager.instance = this
-  // }
+    this.initKeyCloakConnect()
+    AuthenticationManager.instance = this
+  }
 
   async initKeyCloakConnect() {
     if (typeof window === 'undefined') {
