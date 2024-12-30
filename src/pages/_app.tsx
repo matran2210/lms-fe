@@ -24,6 +24,7 @@ import { io } from 'socket.io-client'
 import {
   ANIMATION,
   ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,
   LOCAL_STORAGE_KEYS,
   SOCKET_EVENTS,
 } from 'src/constants'
@@ -159,7 +160,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [showHelp])
 
   useEffect(() => {
-    if (router.pathname !== ENTRANCE_TEST_RESULT) {
+    if (
+      ![ENTRANCE_TEST_TABLE_RESULT, ENTRANCE_TEST_RESULT].includes(
+        router.pathname,
+      )
+    ) {
       try {
         dispatch(getCountUnRead())
       } catch (error) {}
