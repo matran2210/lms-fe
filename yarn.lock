@@ -4017,9 +4017,9 @@ antd@^5.21.1:
     throttle-debounce "^5.0.2"
 
 antd@^5.22.5:
-  version "5.22.6"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-5.22.6.tgz#453aa60429e31ce70e1c82d78b7866e648cabb76"
-  integrity sha512-ZYURSV3FR8qQgbfpa554thlO07L6PeHwhAM0wmxnobOBogND/HqSnTU+UZTqT2b2y9MxSfAIu5Xn1uEM9UpceQ==
+  version "5.22.7"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-5.22.7.tgz#90a0eb3e4cd65b7fc042318132d34b7c492783dd"
+  integrity sha512-koT5QMliDgXc21yNcs4Uyuq6TeB5AJbzGZ2qjNExzE7Tjr8yYIX6sJsQfunsEV80wC1mpF7m9ldKuNj+PafcFA==
   dependencies:
     "@ant-design/colors" "^7.1.0"
     "@ant-design/cssinjs" "^1.21.1"
@@ -8730,10 +8730,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.2.34:
-  version "1.2.34"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.34.tgz#8532fca9a853d36e92c8693f0052d73ed0337b53"
-  integrity sha512-6rdzTHsyqEWiYJ5okEUe704QD20Vk09XgIW3oYNzeco96L2zU10YJPJsmmSgKeu1Y8GPoGGcu7uC68p/7T9Aeg==
+quiz-result-package@^1.2.36:
+  version "1.2.36"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.36.tgz#5d3c15f625369c23e93ea872424d684bd4f5d294"
+  integrity sha512-iQ6B+G5CNHsvkbesoe5Lh+2ECKMca8hsh5knXVt3s4WHFCryg1Mw+EQI9u2txwwgEKLr5xG3n/hVgJkF0qvl3A==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
 
@@ -9634,6 +9634,11 @@ react-hot-toast@^2.4.1:
   integrity sha512-j8z+cQbWIM5LY37pR6uZR6D4LfseplqnuAO4co4u8917hBUvXlEqyP1ZzqVLcqoyUesZZv/ImreoCeHVDpE5pQ==
   dependencies:
     goober "^2.1.10"
+
+react-intersection-observer@^9.13.1:
+  version "9.13.1"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.13.1.tgz#6c61a75801162491c6348bad09967f2caf445584"
+  integrity sha512-tSzDaTy0qwNPLJHg8XZhlyHTgGW6drFKTtvjdL+p6um12rcnp8Z5XstE+QNBJ7c64n5o0Lj4ilUleA41bmDoMw==
 
 react-is@^16.13.1, react-is@^16.3.2, react-is@^16.7.0:
   version "16.13.1"
