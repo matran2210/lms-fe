@@ -1120,3 +1120,10 @@ td.py-5.px-3.sapp-table-quiz {
     outline-color: rgba(102, 102, 102, 0);
   }
 }
+
+.responsive-truncate-container {
+  overflow: auto;
+  width: 95%;
+  min-width: 100px;
+  max-width: 100%;
+}

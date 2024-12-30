@@ -11,12 +11,11 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 const TestEntranceResult = () => {
   const router = useRouter()
   //todo: call api, make UI
-  // return <></>
 
   const { data: chartData, isLoading } = useGetDataQuery(
     'QuizAttemptsChart',
     {},
-    () => CoursesAPI.getQuizAttemptsChartData(router.query.id),
+    () => CoursesAPI.getQuizAttemptsEntranceTestChartData(router.query.id),
     router.query.id !== undefined,
   )
 

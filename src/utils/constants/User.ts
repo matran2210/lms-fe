@@ -1,16 +1,37 @@
 export const PROFILE_PAGES = {
   MYPROFILE: {
     label: 'My Profile',
-    children: [] as { label: string }[],
+    children: [
+      {
+        OVERVIEW: {
+          label: 'Overview',
+        },
+      },
+      {
+        CMA: {
+          label: 'CMA',
+        },
+      },
+      {
+        CFA: {
+          label: 'CFA',
+        },
+      },
+      {
+        ACCA: {
+          label: 'ACCA',
+        },
+      },
+    ],
   },
   CERTIFICATES: {
     label: 'Certificates',
     children: [] as { label: string }[],
   },
-  SETTINGS: {
-    label: 'Settings',
-    children: [] as { label: string }[],
-  },
+  // SETTINGS: {
+  //   label: 'Settings',
+  //   children: [] as { label: string }[],
+  // },
   SECURITY: {
     label: 'Security',
     children: [
@@ -55,3 +76,6 @@ export const USER_TYPE = {
 export const USER_STATUS = {
   ACTIVE: { key: 'ACTIVE', label: 'Active', color: 'text-state-success' },
 }
+
+export const SECURITY_TREE = ['devices', 'login_history', 'change_password']
+export const MYPROFILE_TREE = ['overview', 'cfa', 'cma', 'acca']

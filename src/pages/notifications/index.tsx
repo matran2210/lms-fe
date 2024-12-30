@@ -129,6 +129,7 @@ const Notifications = () => {
   useEffect(() => {
     const getNotifications = async (params: Object) => {
       try {
+        await dispatch(getCountUnRead())
         await dispatch(getNotification(params))
       } catch (error) {}
     }
@@ -140,17 +141,11 @@ const Notifications = () => {
         is_read: false,
       }),
     })
-  }, [router, getTotal, dispatch])
+  }, [router, dispatch])
 
   const handleCancel = () => {
     setOpenModel(false)
   }
-
-  useEffect(() => {
-    try {
-      dispatch(getCountUnRead())
-    } catch (error) {}
-  }, [])
 
   useEffect(() => {
     window.addEventListener('storage', (e) => {
@@ -177,7 +172,7 @@ const Notifications = () => {
           />
         </div>
       </div>
-      <div className="px-5 lg:px-20" data-aos={ANIMATION.DATA_AOS}>
+      <div className="h-full px-5 lg:px-20" data-aos={ANIMATION.DATA_AOS}>
         <div
           className="main mx-auto my-0 max-w-xxl pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}

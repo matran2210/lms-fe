@@ -232,37 +232,13 @@ const MyProfile = ({
         >
           <>
             <ul className="m-6">
-              {/* start:: Code*/}
-              <li
-                className={`block gap-[1.4rem] transition-[margin] md:flex ${
-                  !isEdit ? 'mb-5' : 'mb-6'
-                } `}
-              >
-                <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                  Code
-                </div>
-                <div className="max-w-[300px] flex-auto font-medium text-bw-1">
-                  <TextSkeleton loading={loading && !isEdit}>
-                    {user?.code?.toString() ?? user?.key?.toString()}
-                  </TextSkeleton>
-                </div>
-              </li>
-              {/* end:: Code*/}
-
-              {/* start:: Full Name*/}
-              <li
-                className={`block transition-[margin] md:flex ${
-                  !isEdit ? 'mb-5 gap-[1.4rem]' : 'mb-5 gap-2 gap-y-6 '
-                }`}
-              >
-                <div
-                  className={`w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%] ${
-                    isEdit ? 'py-2.5' : ''
-                  }`}
-                >
-                  Full Name
-                </div>
-
+              <TextWrapper
+                title="Code"
+                value={user?.code?.toString() ?? user?.key?.toString()}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper title="Full Name" isEdit={isEdit} loading={loading}>
                 {isEdit ? (
                   <HookFormTextField
                     control={control}
@@ -277,73 +253,88 @@ const MyProfile = ({
                     </TextSkeleton>
                   </div>
                 )}
-              </li>
-
-              {/* start:: Username*/}
-              <li
-                className={`block gap-[1.4rem] transition-[margin] md:flex ${
-                  !isEdit ? 'mb-5' : 'mb-8'
-                }`}
-              >
-                <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                  Username
-                </div>
-                <div className="max-w-[300px] flex-auto font-medium text-bw-1">
-                  <TextSkeleton loading={loading && !isEdit}>
-                    {user?.username}
-                  </TextSkeleton>
-                </div>
-              </li>
-              {/* end:: Username*/}
-
-              {/* start:: Role*/}
-              <li
-                className={`block gap-[1.4rem] md:flex ${
-                  !isEdit ? 'mb-5' : 'mb-8 transition-[margin]'
-                }`}
-              >
-                <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                  Role
-                </div>
-                <div className="max-w-[300px] flex-auto font-medium text-bw-1">
-                  <TextSkeleton loading={loading && !isEdit}>
-                    {USER_TYPE[user?.type]?.label}
-                  </TextSkeleton>
-                </div>
-              </li>
-              {/* end:: Role*/}
-
-              {/* start:: Status*/}
-              <li
-                className={`block gap-[1.4rem] md:flex ${!isEdit ? 'mb-5' : ''}`}
-              >
-                <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                  Status
-                </div>
-                <div className={`max-w-[300px] flex-auto font-medium`}>
-                  <TextSkeleton loading={loading && !isEdit}>
-                    <span className={`${USER_STATUS[user?.status]?.color}`}>
-                      {USER_STATUS[user.status]?.label}
-                    </span>
-                  </TextSkeleton>
-                </div>
-              </li>
-              {/* end:: Status*/}
-
-              {/* start:: Updated At*/}
+              </TextWrapper>
+              <TextWrapper
+                title="Username"
+                value={user?.username}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="Role"
+                value={USER_TYPE[user?.type]?.label}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="D.O.B"
+                value={
+                  user?.detail?.dob ? formatDate(user?.detail?.dob, true) : ''
+                }
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="Email"
+                value={user?.user_contacts?.[0]?.email}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="Phone"
+                value={user?.user_contacts?.[0]?.phone}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="University"
+                value={user?.detail?.university?.name ?? ''}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="Major"
+                value={user?.detail?.major?.name}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="Field of work"
+                value={user?.detail?.company_type ?? ''}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="Position"
+                value={user?.detail?.company_position ?? ''}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="Main Class"
+                value={user?.main_class?.join(',') ?? ''}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper
+                title="Deferred/Retake class"
+                value={user?.reserve_retook_class?.join(', ') ?? ''}
+                isEdit={isEdit}
+                loading={loading}
+              />
+              <TextWrapper title="Status" isEdit={isEdit} loading={loading}>
+                <span className={`${USER_STATUS[user?.status]?.color}`}>
+                  {USER_STATUS[user.status]?.label}
+                </span>
+              </TextWrapper>
               {!isEdit && (
-                <li className={`block gap-[1.4rem] md:flex`}>
-                  <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
-                    Updated At
-                  </div>
-                  <div className="max-w-[300px] flex-auto font-medium text-bw-1">
-                    <TextSkeleton loading={loading && !isEdit}>
-                      {formatDate(user?.updated_at)}
-                    </TextSkeleton>
-                  </div>
-                </li>
+                <TextWrapper
+                  title="Updated At"
+                  value={formatDate(user?.updated_at) ?? ''}
+                  isEdit={isEdit}
+                  loading={loading}
+                />
               )}
-              {/* end:: Updated At*/}
             </ul>
             {sortByCreatedAtAndDefault(user?.user_contacts || [])?.map(
               (e, i) => {
@@ -445,6 +436,38 @@ const MyProfile = ({
         )}
       </SappDrawer>
     </div>
+  )
+}
+
+const TextWrapper = ({
+  title,
+  isEdit,
+  value,
+  loading,
+  children,
+}: {
+  title: string
+  children?: React.ReactNode
+  isEdit: boolean
+  value?: string
+  loading: boolean
+}) => {
+  return (
+    <li
+      className={`block gap-[1.4rem] md:flex ${
+        !isEdit ? 'mb-5' : 'mb-8 transition-[margin]'
+      }`}
+    >
+      <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
+        {title}
+      </div>
+      <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+        {value && (
+          <TextSkeleton loading={loading && !isEdit}>{value}</TextSkeleton>
+        )}
+        {children}
+      </div>
+    </li>
   )
 }
 

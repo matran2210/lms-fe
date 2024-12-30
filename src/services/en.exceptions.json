@@ -1146,5 +1146,9 @@
   {
     "code": "400|310005",
     "message": "The Event Primary Category Update Itself"
+  },
+  {
+    "code": "400|170305",
+    "message": "Property values were not valid"
   }
 ]

@@ -3,26 +3,39 @@ import { IMeta } from '../courses'
 import { IMetaData } from '..'
 
 export interface IScoreDetails {
-  meta: IMeta
+  metadata: IMeta
   answers: IAnswer[]
-  answer_groups?: IAnswearGroup[]
+  activity_info: ActivityInfo
+  attempt_info: {
+    is_graded: boolean
+    score: number
+  }
 }
 
-export interface IAnswearGroup {
-  answers?: IAnswer[]
-  id?: string
-  name?: string
+export interface ActivityInfo {
+  activity_id: string
+  class_id: string
+  class_user_id: string
 }
+
 export interface IAnswer {
   id: string
   quiz_attempt_id: string
   question_id: string
+  answer_file: any
   is_correct: boolean
   time_spent: number
-  active: string
-  topic_attempt_id: string | null
+  active: any
+  topic_attempt_id: any
+  requirement_id: any
   question: Question
   index: number
+  belong_to: BelongTo
+}
+
+interface BelongTo {
+  id: string
+  name: string
 }
 
 interface QuestionFilter {
@@ -40,6 +53,12 @@ interface QuestionFilter {
   part: {
     id: string
     name: string
+    short_name: string
+  }
+  chapter: {
+    id: string
+    name: string
+    short_name: string
   }
 }
 
