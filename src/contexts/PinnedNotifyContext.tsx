@@ -8,6 +8,7 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { ENTRANCE_TEST_RESULT } from 'src/constants'
 import UserApi from 'src/redux/services/User/user'
 import { PinnedNotifications } from 'src/type'
 
@@ -104,7 +105,9 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
   const router = useRouter()
 
   useEffect(() => {
-    getPinnedData()
+    if (router.pathname !== ENTRANCE_TEST_RESULT) {
+      getPinnedData()
+    }
   }, [router.pathname])
 
   return (
