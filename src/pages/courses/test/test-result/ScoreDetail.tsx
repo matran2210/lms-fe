@@ -153,7 +153,7 @@ const ScoreDetail = ({
   // Flatten pages into a single array
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
   // Group data by program
-  const groupedData = _.groupBy(allData, (item) => item?.belong_to.name)
+  const groupedData = _.groupBy(allData, (item) => item?.belong_to.id)
   let rowIndex = 0 // Counter for row numbers
   return (
     <div
