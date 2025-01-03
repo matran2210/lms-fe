@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React from 'react'
 import EntranceTest from './EntranceTest'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
@@ -6,14 +6,10 @@ import NoData from 'src/common/NoData'
 
 interface EntranceTestListProps {
   entranceTestLists: any[]
-  setOpen: Dispatch<SetStateAction<boolean>>
-  open: boolean
 }
 
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
   entranceTestLists,
-  setOpen,
-  open,
 }) => {
   return (
     <div
@@ -32,13 +28,9 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
           >
             <EntranceTest
               data={e}
-              setOpen={setOpen}
-              open={open}
-              test_id_default={
-                entranceTestLists.find(
-                  (entrance) => entrance.is_attempt === false,
-                )?.id
-              }
+              test_id_default={entranceTestLists.find(
+                (entrance) => entrance.is_attempt === false,
+              )}
             />
           </div>
         ))
