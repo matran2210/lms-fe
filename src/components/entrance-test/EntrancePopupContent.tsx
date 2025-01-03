@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { formatTime } from '@components/common/timer'
+import { useAppSelector } from 'src/redux/hook'
+import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
 
 interface EntrancePopupContentProps {
   name: string
@@ -8,6 +10,7 @@ interface EntrancePopupContentProps {
   timeAllow: number
   attemps: string
   status: boolean
+  limit_count: number
 }
 
 const EntrancePopupContent = ({
@@ -16,6 +19,7 @@ const EntrancePopupContent = ({
   timeAllow,
   attemps,
   status,
+  limit_count,
 }: EntrancePopupContentProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const timeAllowFormatted = timeAllow
@@ -42,7 +46,9 @@ const EntrancePopupContent = ({
           </div>
           <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
             <p>No of Attempts:</p>
-            <p className="font-medium text-bw-1">{attemps}</p>
+            <p className="font-medium text-bw-1">
+              {attemps}/{limit_count}
+            </p>
           </div>
           <div className="flex justify-between py-6 text-base capitalize text-gray-1">
             <p>Status:</p>

@@ -9,13 +9,12 @@ import { ANIMATION } from 'src/constants'
 import { EntranceTestAPI } from '../api/entrance-test'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { MY_COURSES } from 'src/constants/lang'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 
 const EntranceTest = () => {
   const router = useRouter()
-  const [open, setOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch()
 
   const useGetData = (queryKey: string, params: Object) => {
@@ -71,11 +70,7 @@ const EntranceTest = () => {
               className="my-0 max-w-xxl pt-6 xl:mx-auto"
               data-aos={ANIMATION.DATA_AOS}
             >
-              <EntranceTestList
-                entranceTestLists={entranceTestLists}
-                setOpen={setOpen}
-                open={open}
-              />
+              <EntranceTestList entranceTestLists={entranceTestLists} />
             </div>
           </>
         )}

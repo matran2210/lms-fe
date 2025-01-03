@@ -16,12 +16,14 @@ interface IProps {
   setOpen: Dispatch<SetStateAction<boolean>>
   entrancePopupContent: any
   setOpenTestInfo: Dispatch<SetStateAction<boolean>> | undefined
+  checkInfo: boolean
 }
 const EntranceTestFillForm = ({
   open,
   setOpen,
   entrancePopupContent,
   setOpenTestInfo,
+  checkInfo,
 }: IProps) => {
   const [listUnivers, setListUnivers] = useState<any>()
   const [listUniverPrograms, setListUniverPrograms] = useState<any>()
@@ -158,16 +160,21 @@ const EntranceTestFillForm = ({
         english_level_id: dataValue?.englishLevel_id?.value,
         university_id: dataValue?.univers_id?.value,
       })
-      setOpen && setOpen(false)
+
+      if (count > 1) {
+        setOpenTestInfo && setOpenTestInfo(true)
+        setOpen(true)
+        // router.push({
+        //   pathname: `/test/${entrancePopupContent?.id}`,
+        //   query: {
+        //     type: 'entrance',
+        //   },
+        // })
+      }
+
       if (count === 1) {
         setOpenTestInfo && setOpenTestInfo(true)
-      } else {
-        router.push({
-          pathname: `/test/${entrancePopupContent?.id}`,
-          query: {
-            type: 'entrance',
-          },
-        })
+        setOpen(false)
       }
     }
   }
@@ -176,13 +183,11 @@ const EntranceTestFillForm = ({
     <SappModalV2
       open={open}
       cancelButtonCaption="Cancel"
-      okButtonCaption="Start"
+      okButtonCaption={count > 0 ? 'Next' : 'Start'}
       handleCancel={handleOnClick}
       onOk={handleSubmit(onSubmit)}
       showHeader={false}
       footerButtonClassName="justify-between flex"
-      childClass=""
-      parentChildClass=""
       position="center"
       buttonSize="medium"
       scrollbale={false}
