@@ -270,9 +270,11 @@ const ScoreDetail = ({
                             <>{answer?.is_correct ? 'Correct' : 'Incorrect'}</>
                           ) : (
                             <>
-                              {answer?.active === 'SUBMITED'
-                                ? 'Completed'
-                                : 'Not Completed'}
+                              {gradingStatus === GRADE_STATUS.FINISHED_GRADING
+                                ? 'Graded'
+                                : answer?.active === 'SUBMITED'
+                                  ? 'Completed'
+                                  : 'Not Completed'}
                             </>
                           )}
                         </div>
