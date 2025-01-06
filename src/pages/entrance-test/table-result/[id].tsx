@@ -66,7 +66,6 @@ const TableEntranceResult = () => {
       getTable({ id: id as string, page_index: 1, page_size: 10 })
     }
   }, [id])
-
   return (
     <FullScreenLayout title="Entrance Test Result">
       <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
@@ -74,7 +73,9 @@ const TableEntranceResult = () => {
           className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
           onClick={() => {
             router
-              .push(PageLink.ENTRANCE_TEST)
+              .push(
+                localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
+              )
               .then(() => window.location.reload())
           }}
         >
