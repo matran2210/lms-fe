@@ -171,6 +171,21 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [])
 
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Lưu URL hiện tại vào localStorage trước khi đổi sang URL mới
+      localStorage.setItem('previousUrl', router.asPath)
+    }
+
+    // Lắng nghe sự kiện chuyển route
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    // Cleanup listener
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router])
+
   return (
     <main>
       <PinnedNotifyProvider>
