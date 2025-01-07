@@ -86,6 +86,7 @@ const TableEntranceResult = () => {
               router.push(`/explanation/${e.id}?title=Entrance Test`)
             }}
             loading={loading}
+            showTotal={false}
           />
         )}
       </div>
