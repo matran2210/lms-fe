@@ -5,6 +5,7 @@ import PdfViewer from '@components/base/pdf/pdf-viewer'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
+import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
@@ -538,12 +539,11 @@ const ActivityPage = () => {
                   >
                     <li
                       className={
-                        'line-clamp-1 cursor-pointer text-gray-1 hover:text-primary'
+                        ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-gray-1 hover:text-primary'
                       }
                       title={e?.name}
                     >
-                      {truncateBySpace(e?.name, 3) ?? ''}
-                      <span>/</span>
+                      {truncateBySpace(e.name, 3) + '/'}
                     </li>
                   </SappTooltip>
                 </li>
@@ -628,10 +628,10 @@ const ActivityPage = () => {
       <Layout title="Activity">
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="line-clamp-1 flex flex-wrap gap-1 overflow-x-auto py-6 text-medium-sm font-medium">
+          <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name} color="white">
-              <li className="text-bw-1">
+              <li className="responsive-truncate-container text-bw-1">
                 <Link
                   href={'#'}
                   className="breadcrumbs__link"
@@ -640,7 +640,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }
                 >
-                  <span>{truncateBySpace(nameActivity?.name, 5)}</span>
+                  <ResponsiveTextTruncate text={nameActivity?.name ?? ''} />
                 </Link>
               </li>
             </Tooltip>

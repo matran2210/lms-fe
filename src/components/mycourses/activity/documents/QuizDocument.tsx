@@ -113,6 +113,7 @@ const QuizDocument = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [resultId, setResultId] = useState<string>('')
   const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
+  const [startWorkTime, setStartWorkTime] = useState(Date.now())
 
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -132,6 +133,7 @@ const QuizDocument = ({
   useEffect(() => {
     ;(async () => {
       if (questions?.[0]?.id) {
+        setStartWorkTime(Date.now())
         // Load the first question when the component mounts
         try {
           dispatch(
@@ -153,6 +155,15 @@ const QuizDocument = ({
     }
   }, [runHandleFinishQuiz])
 
+  const calculateWorkTime = () => {
+    return activeQuestion?.confirmed
+      ? (activeQuestion?.time_spent ?? 0)
+      : activeQuestion?.time_spent !== 0
+        ? Math.ceil((Date.now() - startWorkTime) / 1000) +
+          activeQuestion?.time_spent
+        : Math.ceil((Date.now() - startWorkTime) / 1000)
+  }
+
   const handleNextQuestion = async () => {
     if (activeQuestionIndex < questions?.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
@@ -169,6 +180,7 @@ const QuizDocument = ({
               questionId: nextQuestionId || '',
             }),
           )
+          setStartWorkTime(Date.now())
         } catch (error) {}
       }
 
@@ -192,6 +204,7 @@ const QuizDocument = ({
               questionId: prevQuestionId || '',
             }),
           )
+          setStartWorkTime(Date.now())
         } catch (error) {}
       }
 
@@ -199,13 +212,14 @@ const QuizDocument = ({
     }
   }
 
-  const handleConfirmQuestion = (isFinish: boolean = false) => {
+  const handleConfirmQuestion = () => {
     setLoading(true)
     if (activeQuestion) {
       questionRef?.current?.onSubmit({
         activityId: activityId,
         tabId: tabId,
         quizId: quizId,
+        time_spent: calculateWorkTime(),
         then: () => {
           setLoading(false)
         },
@@ -230,6 +244,7 @@ const QuizDocument = ({
           quizId,
           myAnswers,
           question: activeQuestion,
+          time_spent: calculateWorkTime(),
         }),
       )
     }
@@ -551,7 +566,8 @@ const QuizDocument = ({
             getGradedLabel(gradeStatus)}
         </div>
 
-        {quizSetting?.allow_attempt && !isNull(quizSetting) && (
+        {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+          isNull(quizSetting)) && (
           <>
             <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
               <button
@@ -625,7 +641,7 @@ const QuizDocument = ({
                     }
                     onClick={() => {
                       if (!loading) {
-                        handleConfirmQuestion(false)
+                        handleConfirmQuestion()
                       }
                       trackGAEvent('Click Button Confirm Quiz Activity')
                     }}

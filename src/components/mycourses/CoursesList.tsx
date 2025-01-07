@@ -1,9 +1,8 @@
-import Course from './Course'
-import { ICourse } from 'src/type/courses'
-import React from 'react'
-import NoData from 'src/common/NoData'
-import { isEmpty } from 'lodash'
 import { Skeleton } from 'antd'
+import { isEmpty } from 'lodash'
+import React from 'react'
+import { ICourse } from 'src/type/courses'
+import Course from './Course'
 
 interface CoursesProps {
   courses: ICourse[]
@@ -42,10 +41,7 @@ const CoursesList: React.FC<CoursesProps> = ({
   return (
     <>
       {!isEmpty(courses) && (
-        <div
-          className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3"
-          // data-aos={ANIMATION.DATA_AOS}
-        >
+        <div className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
           {courses?.map((course, index: number) => (
             <Course
               key={index}

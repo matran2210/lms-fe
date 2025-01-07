@@ -228,10 +228,7 @@ const TestModal = ({
   }
 
   const isShowDetail = () => {
-    if (
-      data?.quiz?.is_graded &&
-      data?.quiz?.grading_method === GRADING_METHOD.MANUAL
-    ) {
+    if (data?.quiz?.grading_method == GRADING_METHOD.MANUAL) {
       return (
         data?.quiz?.attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
       )

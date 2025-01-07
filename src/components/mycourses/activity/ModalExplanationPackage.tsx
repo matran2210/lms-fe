@@ -60,6 +60,7 @@ const ModalExplanationPackage = ({
       setActiveQuestion({
         ...resultResponse?.data?.answer?.question,
         answer_file: resultResponse.data.answer.answer_file,
+        active: resultResponse.data.answer.active,
         confirmed: true,
         corrects: getCorrect(
           resultResponse?.data?.answer?.question?.qType !==

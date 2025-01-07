@@ -1,39 +1,38 @@
 import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/redux/services/httpService'
 
 export class EntranceTestAPI {
   static get(params: Object): Promise<any> {
-    return fetcher(`${apiURL}/entrance-test`, {
+    return fetcher(`entrance-test`, {
       params: params,
     })
   }
 
   static getListUnivers(): Promise<any> {
-    return fetcher(`${apiURL}/universities`)
+    return fetcher(`universities`)
   }
 
   static getListUniversProgram(): Promise<any> {
-    return fetcher(`${apiURL}/university-programs`)
+    return fetcher(`university-programs`)
   }
 
   static getListMajors(): Promise<any> {
-    return fetcher(`${apiURL}/majors`)
+    return fetcher(`majors`)
   }
 
   static getListEngLevel(): Promise<any> {
-    return fetcher(`${apiURL}/english-levels`)
+    return fetcher(`english-levels`)
   }
 
   static getEntranceCount(): Promise<any> {
-    return fetcher(`${apiURL}/users/entrance-test/count`)
+    return fetcher(`users/entrance-test/count`)
   }
 
   static getListEntranceTestLogin(): Promise<any> {
-    return fetcher(`${apiURL}/entrance-test`)
+    return fetcher(`entrance-test`)
   }
 
   static putLevel(data: any) {
-    return fetcher(`${apiURL}/users/input-level`, {
+    return fetcher(`users/input-level`, {
       method: 'PUT',
       data: data,
     })

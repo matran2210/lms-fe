@@ -15,6 +15,7 @@ export type EntrancePopupProps = {
   entrancePopupContent?: any
   setOpenFillForm: Dispatch<SetStateAction<boolean>>
   openFillForn: boolean
+  entranceTest?: Record<any, any> | undefined
 }
 
 // create the confirm dialog component
@@ -24,6 +25,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   entrancePopupContent,
   openFillForn,
   setOpenFillForm,
+  entranceTest,
 }) => {
   const handleOnClick = () => {
     setOpen && setOpen(false)
@@ -44,6 +46,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
     }
     return false
   }, [user])
+
   const checkLimit = useMemo(() => {
     if (entrancePopupContent?.is_limited) {
       if (
@@ -61,33 +64,17 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
       <SappModalV2
         open={open}
         cancelButtonCaption="Cancel"
-        okButtonCaption={`${!checkInfo ? 'Next' : 'Start'}`}
+        okButtonCaption="Start"
         handleCancel={handleOnClick}
         onOk={() => {
-          if (checkInfo) {
-            // router.push(`/test/${entrancePopupContent.id}`)
-            router.push({
-              pathname: `/test/${entrancePopupContent?.id}`,
-              query: {
-                type: 'entrance',
-              },
-            })
-          }
-          if (count === 1) {
-            router.push({
-              pathname: `/test/${entrancePopupContent?.id}`,
-              query: {
-                type: 'entrance',
-              },
-            })
-          } else {
-            if (!checkInfo) {
-              setOpenFillForm(true)
-              setOpen && setOpen(false)
-            }
-          }
+          router.push({
+            pathname: `/test/${count === 1 ? entranceTest?.id : entrancePopupContent?.id}`,
+            query: {
+              type: 'entrance',
+            },
+          })
         }}
-        showOkButton={!checkLimit}
+        showOkButton={!checkLimit || count >= 1}
         showHeader={false}
         buttonSize="medium"
         title={undefined}
@@ -96,11 +83,28 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
           Entrance Test Info
         </h2>
         <EntrancePopupContent
-          name={entrancePopupContent?.name || ''}
-          score={entrancePopupContent?.score}
-          timeAllow={entrancePopupContent?.quiz_timed}
-          attemps={`${entrancePopupContent?.attempt_times || '0'}`}
-          status={entrancePopupContent?.is_attempt}
+          name={
+            count === 1 ? entranceTest?.name : entrancePopupContent?.name || ''
+          }
+          score={
+            count === 1 ? entranceTest?.score : entrancePopupContent?.score
+          }
+          timeAllow={
+            count === 1
+              ? entranceTest?.quiz_timed
+              : entrancePopupContent?.quiz_timed
+          }
+          attemps={`${count === 1 ? entranceTest?.attempt_times || 0 : entrancePopupContent?.attempt_times || '0'}`}
+          status={
+            count === 1
+              ? entranceTest?.is_attempt
+              : entrancePopupContent?.is_attempt
+          }
+          limit_count={
+            count === 1
+              ? entranceTest?.limit_count
+              : entrancePopupContent?.limit_count
+          }
         />
       </SappModalV2>
       <EntranceTestFillForm
@@ -108,6 +112,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         setOpen={setOpenFillForm}
         entrancePopupContent={entrancePopupContent}
         setOpenTestInfo={setOpen}
+        checkInfo={checkInfo}
       />
     </>
   )

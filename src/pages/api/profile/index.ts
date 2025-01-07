@@ -57,11 +57,11 @@ export default MyProfileAPI
 
 export class AuthAPI {
   static me() {
-    return fetcher(`${apiURL}/me`)
+    return fetcher(`me`)
   }
 
   static sendEmail(request: SendEmailReq) {
-    return fetcher(`${apiURL}/auth/forgot-password`, {
+    return fetcher(`auth/forgot-password`, {
       method: 'POST',
       data: {
         email: request.email?.trim(),
@@ -70,14 +70,14 @@ export class AuthAPI {
   }
 
   static verifyOtp(data: VerifyOtpReq) {
-    return fetcher(`${apiURL}/auth/forgot-password/verify-otp`, {
+    return fetcher(`auth/forgot-password/verify-otp`, {
       method: 'POST',
       data: data,
     })
   }
 
   static resetPassword(data: ResetPassword) {
-    return fetcher(`${apiURL}/auth/reset-password`, {
+    return fetcher(`auth/reset-password`, {
       method: 'POST',
       data: {
         new_password: data.new_password?.trim(),
@@ -86,21 +86,21 @@ export class AuthAPI {
   }
 
   static changePassword(data: ChangePasswordReq) {
-    return fetcher(`${apiURL}/changepassword`, {
+    return fetcher(`changepassword`, {
       method: 'POST',
       data: data,
     })
   }
 
   static getUserInformation() {
-    return fetcher(`${apiURL}/users/course-certificate/count`)
+    return fetcher(`users/course-certificate/count`)
   }
 
   static updateUser(
     full_name: string,
     avatar?: { [key: string]: string } | null,
   ) {
-    return fetcher(`${apiURL}/users`, {
+    return fetcher(`users`, {
       method: 'PUT',
       data: {
         full_name,
@@ -110,29 +110,27 @@ export class AuthAPI {
   }
 
   static makeContactDefault(id: string) {
-    return fetcher(`${apiURL}/users/contacts/${id}/make-this-default`, {
+    return fetcher(`users/contacts/${id}/make-this-default`, {
       method: 'POST',
     })
   }
 
   static getListDevices() {
-    return fetcher(`${apiURL}/users/devices`)
+    return fetcher(`users/devices`)
   }
 
   static getListHistory(params: Object) {
-    return fetcher(`${apiURL}/users/activities`, {
+    return fetcher(`users/activities`, {
       params: params,
     })
   }
 
   static getCertificate(pageSize: number, pageIndex: number) {
-    return fetcher(
-      `${apiURL}/certificate?page_size=${pageIndex}&page_index=${pageSize}`,
-    )
+    return fetcher(`certificate?page_size=${pageIndex}&page_index=${pageSize}`)
   }
 
   static changeUserPassword(current_password: string) {
-    return fetcher(`${apiURL}/users/change-password/send-otp`, {
+    return fetcher(`users/change-password/send-otp`, {
       data: {
         type: 'CHANGE_PASSWORD',
         current_password: current_password,
@@ -146,7 +144,7 @@ export class AuthAPI {
     new_password: string,
     otp_code: string,
   ) {
-    return fetcher(`${apiURL}/users/change-password`, {
+    return fetcher(`users/change-password`, {
       data: {
         current_password: current_password,
         new_password: new_password,
@@ -157,6 +155,6 @@ export class AuthAPI {
   }
 
   static getPinnedNotifications() {
-    return fetcher(`${apiURL}/notifications/pinned`)
+    return fetcher(`notifications/pinned`)
   }
 }

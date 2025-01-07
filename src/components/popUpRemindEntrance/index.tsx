@@ -9,8 +9,12 @@ import {
 
 const PopUpRemindEntrance = ({
   setOpenFillForm,
+  setOpenTest,
+  checkInfo,
 }: {
   setOpenFillForm: Dispatch<SetStateAction<boolean>>
+  setOpenTest: Dispatch<SetStateAction<boolean>>
+  checkInfo: boolean
 }) => {
   const { shouldShowRemind, count } = useAppSelector(entranceTestReducer)
   const dispatch = useAppDispatch()
@@ -21,7 +25,11 @@ const PopUpRemindEntrance = ({
   }
 
   const onOk = () => {
-    count === 1 ? setOpenFillForm(true) : dispatch(closeShowRemind())
+    count === 1 && !checkInfo
+      ? setOpenFillForm(true)
+      : count === 1 && checkInfo
+        ? setOpenTest(true)
+        : dispatch(closeShowRemind())
     localStorage.setItem('enstranceTest', 'false')
   }
 

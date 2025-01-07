@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import EntrancePopup from './EntrancePopup'
@@ -7,11 +7,13 @@ import SappButton from '@components/base/button/SappButton'
 import PopupExtend from './PopupExtend'
 import { trackGAEvent } from '@utils/google-analytics'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
+import { useAppSelector } from 'src/redux/hook'
+import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
+import { userReducer } from 'src/redux/slice/User/User'
 
 interface EntranceTestProps {
   data: any
-  setOpen: Dispatch<SetStateAction<boolean>>
-  open: boolean
+  test_id_default?: any | undefined
 }
 
 enum EAttemptStatus {
@@ -20,11 +22,28 @@ enum EAttemptStatus {
   UN_FINISHED = 'UN_FINISHED',
 }
 
-const EntranceTest = ({ data, setOpen, open }: EntranceTestProps) => {
+const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
+  const { count } = useAppSelector(entranceTestReducer)
+
+  const { user } = useAppSelector(userReducer)
+  const [open, setOpen] = useState<boolean>(false)
+  const checkInfo = useMemo(() => {
+    if (
+      (user?.detail?.university as any)?.id &&
+      user?.university_program?.id &&
+      user?.english_level?.id
+    ) {
+      return true
+    }
+    return false
+  }, [user])
+
   const handleOnClick = () => {
-    if (data?.attempt_times >= 1) {
+    if (count >= 1 && !checkInfo) {
+      setOpenFillForm(true)
+    } else if (data?.attempt_times >= 1) {
       router.push(`entrance-test/test-result/${data?.quiz_attempt_id}`)
       trackGAEvent('Click Button Result Entrance Test List')
     } else {
@@ -87,7 +106,7 @@ const EntranceTest = ({ data, setOpen, open }: EntranceTestProps) => {
                 </p>
               </>
             ) : (
-              <span className="">--</span>
+              <span>--</span>
             )}
           </div>
         </div>
@@ -124,13 +143,18 @@ const EntranceTest = ({ data, setOpen, open }: EntranceTestProps) => {
           )}
         </div>
       </div>
-      <PopUpRemindEntrance setOpenFillForm={setOpenFillForm} />
+      <PopUpRemindEntrance
+        setOpenFillForm={setOpenFillForm}
+        setOpenTest={setOpen}
+        checkInfo={checkInfo}
+      />
       <EntrancePopup
         open={open}
         setOpen={setOpen}
         entrancePopupContent={data}
         openFillForn={openFillForn}
         setOpenFillForm={setOpenFillForm}
+        entranceTest={test_id_default}
       />
       <PopupExtend open={openExpired} setOpen={setOpenExpired} />
     </>
