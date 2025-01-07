@@ -72,11 +72,7 @@ const TableEntranceResult = () => {
         <div
           className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
           onClick={() => {
-            router
-              .push(
-                localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
-              )
-              .then(() => window.location.reload())
+            router.push(`/entrance-test/test-result/${id}`)
           }}
         >
           <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
