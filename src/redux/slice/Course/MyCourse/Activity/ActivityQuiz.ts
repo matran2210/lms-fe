@@ -249,6 +249,9 @@ const quizSlice: Slice = createSlice({
       if (state[activityId]?.[tabId]?.[quizId]) {
         state[activityId]?.[tabId]?.[quizId]?.questions?.forEach(
           (element: any, i: number) => {
+            if (element) {
+              element.time_spent = 0
+            }
             delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.corrects
             delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.myAnswers
             delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.confirmed
