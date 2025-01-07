@@ -6,7 +6,7 @@ import { QUESTION_TYPES } from 'src/type/course/Question'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
@@ -123,7 +123,9 @@ const Explanation = () => {
                 `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
               )
             } else {
-              router.back()
+              router.push(
+                localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
+              )
             }
           }}
         >
