@@ -91,6 +91,7 @@ const TableEntranceResult = () => {
                 .then(() => window.location.reload())
             }
             loading={loading}
+            showTotal={false}
           />
         )}
       </div>
