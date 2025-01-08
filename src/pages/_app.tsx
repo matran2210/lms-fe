@@ -21,7 +21,13 @@ import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
-import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
+import {
+  ANIMATION,
+  ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,
+  LOCAL_STORAGE_KEYS,
+  SOCKET_EVENTS,
+} from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
@@ -154,10 +160,31 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [showHelp])
 
   useEffect(() => {
-    try {
-      dispatch(getCountUnRead())
-    } catch (error) {}
+    if (
+      ![ENTRANCE_TEST_TABLE_RESULT, ENTRANCE_TEST_RESULT].includes(
+        router.pathname,
+      )
+    ) {
+      try {
+        dispatch(getCountUnRead())
+      } catch (error) {}
+    }
   }, [])
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Lưu URL hiện tại vào localStorage trước khi đổi sang URL mới
+      localStorage.setItem('previousUrl', router.asPath)
+    }
+
+    // Lắng nghe sự kiện chuyển route
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    // Cleanup listener
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router])
 
   return (
     <main>

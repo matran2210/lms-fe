@@ -92,6 +92,9 @@ const CoursePartDetail = () => {
   ) => {
     setLoadingChapter(true)
     try {
+      if (course_section_id !== router.query.chapter) {
+        router.push(`${location.pathname}?chapter=${course_section_id}`)
+      }
       const res = await CoursesAPI.getPartDetail(id, course_section_id)
 
       const nodeList = res?.data?.course_section_tree
@@ -257,36 +260,32 @@ const CoursePartDetail = () => {
   }
 
   useEffect(() => {
-    if (partDetail?.id) {
-      if (router.query.unit_id) {
-        setDefaultActive(String(router?.query?.unit_id) || '')
-      } else if (partDetail?.children?.learning_progress !== '') {
-        const filteredChildren = partDetail?.children.filter(
-          (child: any) => child?.course_section_type === 'CHAPTER',
-        )
-        const matchingChild = filteredChildren?.find(
-          (child: {
-            learning_progress: {
-              total_course_sections: any
-              total_course_sections_completed: any
-            }
-          }) => {
-            if (child.learning_progress) {
-              const { total_course_sections, total_course_sections_completed } =
-                child.learning_progress
-              const progressRatio =
-                (total_course_sections_completed / total_course_sections) * 100
-              return progressRatio < 100
-            }
-            return false
-          },
-        )
+    if (partDetail?.id && partDetail?.children?.learning_progress !== '') {
+      const filteredChildren = partDetail?.children.filter(
+        (child: any) => child?.course_section_type === 'CHAPTER',
+      )
+      const matchingChild = filteredChildren?.find(
+        (child: {
+          learning_progress: {
+            total_course_sections: any
+            total_course_sections_completed: any
+          }
+        }) => {
+          if (child.learning_progress) {
+            const { total_course_sections, total_course_sections_completed } =
+              child.learning_progress
+            const progressRatio =
+              (total_course_sections_completed / total_course_sections) * 100
+            return progressRatio < 100
+          }
+          return false
+        },
+      )
 
-        if (matchingChild) {
-          !courseChapterId && setDefaultActive(matchingChild.id)
-        } else if (filteredChildren?.length > 0) {
-          !courseChapterId && setDefaultActive(filteredChildren[0].id) // Set default to the first child
-        }
+      if (matchingChild) {
+        !courseChapterId && setDefaultActive(matchingChild.id)
+      } else if (filteredChildren?.length > 0) {
+        !courseChapterId && setDefaultActive(filteredChildren[0].id) // Set default to the first child
       }
     }
   }, [router?.asPath, partDetail?.id])
@@ -376,7 +375,7 @@ const CoursePartDetail = () => {
               handleRouterChapter={handleRouterChapter}
               readMore={readMore}
               setReadMore={setReadMore}
-              defaultActive={defaultActive}
+              defaultActive={router.query.chapter ?? defaultActive}
               focus_id={router?.query?.focus_id as string}
             />
           </div>

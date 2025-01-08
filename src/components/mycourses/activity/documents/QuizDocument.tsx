@@ -18,10 +18,6 @@ import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
 import dayjs, { Dayjs } from 'dayjs'
 import { QuizResultComponent } from 'quiz-result-package'
-import {
-  IQuestionResult,
-  IQuestionResultResponse,
-} from 'quiz-result-package/dist/type'
 import toast from 'react-hot-toast'
 import {
   ANIMATION,
@@ -37,6 +33,11 @@ import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import {
+  IQuestionResult,
+  IQuestionResultResponse,
+} from 'src/type/course/my-course/Activity'
+import { isNull } from 'lodash'
 
 type Props = {
   questions: IQuestion[]
@@ -112,6 +113,7 @@ const QuizDocument = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [resultId, setResultId] = useState<string>('')
   const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
+  const [startWorkTime, setStartWorkTime] = useState(Date.now())
 
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -131,6 +133,7 @@ const QuizDocument = ({
   useEffect(() => {
     ;(async () => {
       if (questions?.[0]?.id) {
+        setStartWorkTime(Date.now())
         // Load the first question when the component mounts
         try {
           dispatch(
@@ -152,6 +155,15 @@ const QuizDocument = ({
     }
   }, [runHandleFinishQuiz])
 
+  const calculateWorkTime = () => {
+    return activeQuestion?.confirmed
+      ? (activeQuestion?.time_spent ?? 0)
+      : activeQuestion?.time_spent !== 0
+        ? Math.ceil((Date.now() - startWorkTime) / 1000) +
+          activeQuestion?.time_spent
+        : Math.ceil((Date.now() - startWorkTime) / 1000)
+  }
+
   const handleNextQuestion = async () => {
     if (activeQuestionIndex < questions?.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
@@ -168,6 +180,7 @@ const QuizDocument = ({
               questionId: nextQuestionId || '',
             }),
           )
+          setStartWorkTime(Date.now())
         } catch (error) {}
       }
 
@@ -191,6 +204,7 @@ const QuizDocument = ({
               questionId: prevQuestionId || '',
             }),
           )
+          setStartWorkTime(Date.now())
         } catch (error) {}
       }
 
@@ -198,13 +212,14 @@ const QuizDocument = ({
     }
   }
 
-  const handleConfirmQuestion = (isFinish: boolean = false) => {
+  const handleConfirmQuestion = () => {
     setLoading(true)
     if (activeQuestion) {
       questionRef?.current?.onSubmit({
         activityId: activityId,
         tabId: tabId,
         quizId: quizId,
+        time_spent: calculateWorkTime(),
         then: () => {
           setLoading(false)
         },
@@ -229,6 +244,7 @@ const QuizDocument = ({
           quizId,
           myAnswers,
           question: activeQuestion,
+          time_spent: calculateWorkTime(),
         }),
       )
     }
@@ -288,7 +304,6 @@ const QuizDocument = ({
               quizId: quizId,
             }),
           )
-          setLoading(false)
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
@@ -316,8 +331,8 @@ const QuizDocument = ({
   }) => {
     setLoading(true)
     try {
-      const checkId = id || modalResult?.id
-      if (checkId === resultId) return
+      // const checkId = id || modalResult?.id
+      // if (checkId === resultId) return
       setResultId(id ?? modalResult?.id ?? '')
       const response = await CoursesAPI.getQuizAttemptsTable(
         id || modalResult?.id || '',
@@ -328,25 +343,24 @@ const QuizDocument = ({
       )
 
       const newQuestionResponse: IQuestionResultResponse = {
-        meta: response?.data?.meta,
+        meta: response?.data?.metadata,
         data: (modalResult?.questions?.data ?? []).concat(
-          response?.data?.answer_groups?.flatMap((group: IAnswers) => {
-            const answers = group?.answers?.map((answer: IAnswer) => {
-              return {
-                id: answer?.id,
-                content: answer?.question?.question_content,
-                section: answer?.question?.question_filter_id?.part?.name,
-                type: answer?.question?.qType,
-                is_correct: answer?.is_correct,
-                time_spent: answer?.time_spent,
-                question: answer?.question,
-                active: answer?.active,
-              }
-            })
-            return answers || []
+          response?.data?.answers?.map((answer) => {
+            return {
+              active: answer?.active,
+              id: answer?.id,
+              content: answer?.question?.question_content,
+              section: answer?.question?.question_filter?.part?.name,
+              type: answer?.question?.qType,
+              is_correct: answer?.is_correct,
+              time_spent: answer?.time_spent,
+              question: answer?.question,
+            }
           }) || [],
         ),
+        attempt_info: response?.data?.attempt_info,
       }
+
       if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
         setOpenGradedReport(true)
         return
@@ -367,25 +381,13 @@ const QuizDocument = ({
     setShowQuestionResultDetail({ id: data?.id, isOpen: true })
   }
 
-  // const startTime = dayjs().add(1, 'day')
   const startTime = quizSetting?.start_time
   const endTime = quizSetting?.end_time
-  // const endTime = dayjs().subtract(1, 'year')
-
-  // Test Unopend or Expired
-  const getType = (startTime: Dayjs, endTime: Dayjs) => {
-    if (startTime && dayjs().isBefore(startTime)) return 'unopened'
-    if (endTime && dayjs().isAfter(dayjs(endTime))) return 'expired'
-    return null
-  }
-
-  const type = getType(startTime, endTime)
-
   const BluredNotification = () => (
     <>
-      {type !== null && (
+      {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
         <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
-          {type === 'unopened' && (
+          {quizSetting?.reason_for_reject === 'NOT_OPEN_YET' && (
             <p className="text-center">
               This Quiz will be opened at{' '}
               <span className="font-semi-bold text-primary">
@@ -397,7 +399,7 @@ const QuizDocument = ({
               </span>
             </p>
           )}
-          {type === 'expired' && (
+          {quizSetting?.reason_for_reject === 'EXPIRED' && (
             <p className="text-center">
               The time for this Quiz has ended, you can no longer submit
               answers. For further support, please contact SAPP Academy via{' '}
@@ -419,8 +421,8 @@ const QuizDocument = ({
       {/* Fake Question */}
       <div>
         <div>
-          <div className="sapp-questions editor-wrap mce-content-body" id="">
-            <div className="">
+          <div className="sapp-questions editor-wrap mce-content-body">
+            <div>
               <p>Câu hỏi số 1</p>
             </div>
           </div>
@@ -515,7 +517,7 @@ const QuizDocument = ({
   }
 
   return (
-    <div className="">
+    <div>
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
@@ -523,29 +525,32 @@ const QuizDocument = ({
         handleCancel={() => {}}
       />
 
-      {/* )} */}
       <div
         className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
-        {type !== null && <BluredNotification />}
-        {activeQuestion && type === null && (
-          <QuizComponent
-            activityId={activityId}
-            tabId={tabId}
-            quizId={quizId}
-            showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
-            activeQuestion={activeQuestion}
-            ref={questionRef}
-            key={quizComponentKey}
-            document_id={document_id}
-            setOpenFile={setOpenFile}
-            grading_preference={grading_preference}
-            showQuestionContent={false}
-            isHideExhibit={false}
-            saveAnswer={handleSaveAnswer}
-          />
+        {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
+          <BluredNotification />
         )}
+        {activeQuestion &&
+          ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+            isNull(quizSetting)) && (
+            <QuizComponent
+              activityId={activityId}
+              tabId={tabId}
+              quizId={quizId}
+              showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
+              activeQuestion={activeQuestion}
+              ref={questionRef}
+              key={quizComponentKey}
+              document_id={document_id}
+              setOpenFile={setOpenFile}
+              grading_preference={grading_preference}
+              showQuestionContent={false}
+              isHideExhibit={false}
+              saveAnswer={handleSaveAnswer}
+            />
+          )}
       </div>
       <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
         <div className="col-span-1 flex flex-wrap items-center gap-2">
@@ -561,7 +566,8 @@ const QuizDocument = ({
             getGradedLabel(gradeStatus)}
         </div>
 
-        {type === null && (
+        {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+          isNull(quizSetting)) && (
           <>
             <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
               <button
@@ -635,7 +641,7 @@ const QuizDocument = ({
                     }
                     onClick={() => {
                       if (!loading) {
-                        handleConfirmQuestion(false)
+                        handleConfirmQuestion()
                       }
                       trackGAEvent('Click Button Confirm Quiz Activity')
                     }}
@@ -661,7 +667,7 @@ const QuizDocument = ({
         refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all z-[100000]"
         showHeader={false}
       >
-        <div className="relative">
+        <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
           <div
             className="absolute right-6 top-5  ml-auto cursor-pointer"
             onClick={() => {
@@ -671,21 +677,20 @@ const QuizDocument = ({
           >
             <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
-          <div className="mx-auto max-w-[1114px] overflow-auto">
-            <QuizResultComponent
-              questionResponse={modalResult?.questions || []}
-              getTable={getTable}
-              onShowDetail={handleShowQuestionResultDetail}
-              loading={loading}
-            />
-          </div>
+          <QuizResultComponent
+            questionResponse={modalResult?.questions || []}
+            getTable={getTable}
+            onShowDetail={handleShowQuestionResultDetail}
+            loading={loading}
+          />
         </div>
       </SappModal>
+
       <ModalExplanationPackage
         quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
         open={showQuestionResultDetail?.isOpen || false}
         setOpen={() => setShowQuestionResultDetail(undefined)}
-      ></ModalExplanationPackage>
+      />
       <SappModalV3
         open={openGradedReport}
         okButtonCaption="Back"

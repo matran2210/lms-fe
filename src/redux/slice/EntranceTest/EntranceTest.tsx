@@ -43,7 +43,7 @@ export const entranceTestSlice = createSlice({
     })
     builder.addCase(getEntranceCount.fulfilled, (state, action) => {
       state.count = action.payload.data.count
-      if (action.payload.data.count >= 2) {
+      if (action.payload.data.count >= 1) {
         state.shouldShowRemind = true
       }
     })
