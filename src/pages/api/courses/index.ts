@@ -14,7 +14,7 @@ const CourseAPI = {
     })
     if (res?.success) {
       const link = document.createElement('a')
-      link.href = `${process.env.NEXT_PUBLIC_BASE_API_URL}resource/download?token=${res?.data}`
+      link.href = `${process.env.NEXT_PUBLIC_BASE_API_URL}/resource/download?token=${res?.data}`
       link.download = data.files[0].name
       link.style.display = 'none'
       document.body.appendChild(link)
