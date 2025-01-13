@@ -71,6 +71,20 @@ const DragNDropPreivew = forwardRef(
 
     function allowDrop(ev: any) {
       ev.preventDefault()
+
+      // Lấy tọa độ của sự kiện kéo
+      const x = ev.clientX // Tọa độ ngang
+      const y = ev.clientY // Tọa độ dọc
+
+      // Giới hạn tọa độ tối đa
+      const maxX = 535
+      const maxY = 160
+
+      // Kiểm tra tọa độ có trong giới hạn
+      if (x <= maxX && y <= maxY) {
+      } else {
+        ev.stopPropagation() // Ngăn sự kiện nếu không chấp thuận
+      }
     }
 
     function drag(ev: any) {
@@ -159,6 +173,7 @@ const DragNDropPreivew = forwardRef(
         }
       } else return
     }
+
     const str = data?.question_content
     const parser = new DOMParser()
 
@@ -182,14 +197,14 @@ const DragNDropPreivew = forwardRef(
       const elementsCorrects = doc2?.querySelectorAll('.question-content-tag')
       if (corrects) {
         elementsCorrects.forEach((element: any, index: number) => {
-          element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop-answer corrects">
+          element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop-answer corrects ">
         <span id="${corrects[index].id}" class="flex justify-center w-full">${corrects[index].answer}</span>
         </span>`
         })
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer?.[index]?.value !== '') {
-              element.outerHTML = `<span  id="${element?.id}" class="sapp-input-dragNDrop-answer ${
+              element.outerHTML = `<span  id="${element?.id}" class="sapp-input-dragNDrop-answer  ${
                 defaultAnswer?.[index]?.idAnswer === corrects?.[index]?.id ||
                 isSelfReflection === true
                   ? 'corrects'
@@ -237,7 +252,7 @@ const DragNDropPreivew = forwardRef(
               }"> </span>`
             }
           } else {
-            element.outerHTML = `<span  id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
+            element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
               index + 1
             }"> </span>`
           }
@@ -245,7 +260,7 @@ const DragNDropPreivew = forwardRef(
         setQuestionContent(doc)
       }
       // }
-    }, [defaultAnswer, corrects])
+    }, [defaultAnswer, corrects, str])
 
     const options = {
       replace(domNode: any) {
@@ -283,6 +298,9 @@ const DragNDropPreivew = forwardRef(
                 onDrop={() => drop(event, data?.id)}
                 onDragOver={allowDrop}
                 {...{ indexBox: domNode?.attribs?.indexbox }}
+                style={{
+                  height: '60px',
+                }}
               ></span>
             )
           }

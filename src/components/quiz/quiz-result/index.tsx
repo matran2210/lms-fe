@@ -1,15 +1,16 @@
 import { CloseIcon } from '@assets/icons'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
-import { CoursesAPI } from '../../api/courses/index'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { PageLink } from 'src/constants'
+import { CoursesAPI } from 'src/pages/api/courses'
+import { ActivityInfo } from 'src/type'
 
-const TableEntranceResult = () => {
+const QuizResults = () => {
   const router = useRouter()
+  const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null)
   const { id } = router.query
   const [loading, setLoading] = useState<boolean>(false)
   const [modalResult, setModalResult] = useState<{
@@ -28,13 +29,14 @@ const TableEntranceResult = () => {
   }) => {
     setLoading(true)
     try {
-      const response = await CoursesAPI.getQuizAttemptsTableEntranceTest(
+      const response = await CoursesAPI.getQuizAttemptsTable(
         id || modalResult?.id || '',
         {
           page_index,
           page_size,
         },
       )
+      setActivitiInfo(response.data.activity_info)
       const newQuestionResponse: IQuestionResultResponse = {
         meta: response.data.metadata,
         data: (modalResult?.questions?.data || []).concat(
@@ -49,6 +51,7 @@ const TableEntranceResult = () => {
             question: e.question as any,
           })) || [],
         ),
+        attempt_info: response?.data?.attempt_info,
       }
 
       setModalResult((e) => ({
@@ -66,13 +69,17 @@ const TableEntranceResult = () => {
       getTable({ id: id as string, page_index: 1, page_size: 10 })
     }
   }, [id])
+
   return (
-    <FullScreenLayout title="Entrance Test Result">
+    <FullScreenLayout title="">
       <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
         <div
           className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
           onClick={() => {
-            router.push(`/entrance-test/test-result/${id}`)
+            activityInfo !== null &&
+              router.push(
+                `/courses/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}`,
+              )
           }}
         >
           <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
@@ -81,18 +88,15 @@ const TableEntranceResult = () => {
           <QuizResultComponent
             questionResponse={modalResult?.questions || []}
             getTable={getTable}
-            onShowDetail={(e) =>
-              router
-                .push(`/explanation/${e.id}?title=Entrance Test`)
-                .then(() => window.location.reload())
-            }
+            onShowDetail={(e) => {
+              router.push(`/explanation/${e.id}?title=Entrance Test`)
+            }}
             loading={loading}
-            showTotal={false}
           />
         )}
       </div>
     </FullScreenLayout>
   )
 }
-export default TableEntranceResult
-TableEntranceResult.layout = LAYOUT.FULLSCREEN_LAYOUT
+export default QuizResults
+QuizResults.layout = LAYOUT.FULLSCREEN_LAYOUT

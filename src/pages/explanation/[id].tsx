@@ -8,6 +8,7 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { PageLink } from 'src/constants'
 
 const Explanation = () => {
   const router = useRouter()
@@ -53,6 +54,7 @@ const Explanation = () => {
       setActiveQuestion({
         ...resultResponse.data.answer.question,
         answer_file: resultResponse.data.answer.answer_file,
+        active: resultResponse.data.answer.active,
         confirmed: true,
         grading_question: resultResponse.data.answer.grading_question,
         corrects: getCorrect(
@@ -118,7 +120,9 @@ const Explanation = () => {
                 `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
               )
             } else {
-              router.back()
+              router.push(
+                localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
+              )
             }
           }}
         >

@@ -1,14 +1,17 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { toast } from 'react-hot-toast'
-import { apiURL } from 'src/redux/services/httpService'
 import exceptions from './en.exceptions.json'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import Router from 'next/router'
-import { CERTIFICATE_DETAIL } from 'src/constants'
+import {
+  CERTIFICATE_DETAIL,
+  ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,
+} from 'src/constants'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
-    return apiURL
+    return process.env.NEXT_PUBLIC_BASE_API_URL
   }
 }
 
@@ -28,34 +31,39 @@ export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
     })
 
 // Request Interceptor
-request.interceptors.request.use(
-  async (config) => {
-    const authenticationManager = new AuthenticationManager()
+request.interceptors.request.use(async (config: any) => {
+  const authenticationManager = new AuthenticationManager()
 
-    const isCertificateRoute =
-      (Router?.router as any)?.state?.pathname === CERTIFICATE_DETAIL
+  const checkRouteCertificate = [
+    ENTRANCE_TEST_RESULT,
+    CERTIFICATE_DETAIL,
+    ENTRANCE_TEST_TABLE_RESULT,
+  ].includes((Router?.router as any)?.state?.pathname)
 
-    const token = authenticationManager.getToken()
-    if (token || isCertificateRoute) {
-      config.headers.Authorization = `Bearer ${token}`
-      return config
+  if (authenticationManager.getToken() || checkRouteCertificate) {
+    config.headers = {
+      Authorization: 'Bearer ' + authenticationManager.getToken(),
+      ...config.headers,
     }
-
-    // Handle token availability with a delay if necessary
-    await new Promise((resolve) => {
-      const interval = setInterval(() => {
-        if (authenticationManager.getToken() || isCertificateRoute) {
-          config.headers.Authorization = `Bearer ${authenticationManager.getToken()}`
-          clearInterval(interval)
-          resolve(config)
-        }
-      }, 100)
-    })
-
     return config
-  },
-  (error) => Promise.reject(error),
-)
+  }
+
+  await new Promise((resolve) => {
+    let interval = null as any
+    interval = setInterval(() => {
+      if (authenticationManager.getToken() || checkRouteCertificate) {
+        config.headers = {
+          Authorization: 'Bearer ' + authenticationManager.getToken(),
+          ...config.headers,
+        }
+        clearInterval(interval)
+        resolve(config)
+      }
+    }, 100)
+  })
+
+  return config
+})
 
 // Response Interceptor
 request.interceptors.response.use(

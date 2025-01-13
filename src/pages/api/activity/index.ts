@@ -1,5 +1,4 @@
 import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/redux/services/httpService'
 import {
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
@@ -16,14 +15,14 @@ export class ActivityAPI {
   static createDiscussionComment(
     request: ICreateDiscussionRequest,
   ): Promise<any> {
-    return fetcher(`${apiURL}/course-discussions`, {
+    return fetcher(`course-discussions`, {
       data: request,
       method: 'POST',
     })
   }
 
   static getQuizAttemptsAnswer(id: string): Promise<any> {
-    return fetcher(`${apiURL}/quiz-attempts/answers/${id}`)
+    return fetcher(`quiz-attempts/answers/${id}`)
   }
 
   /**
@@ -33,9 +32,7 @@ export class ActivityAPI {
    * @returns {Promise<IResponse<{ questions: IQuestion[] }>>} - Dữ liệu câu hỏi.
    */
   static getQuestions(id: string): Promise<any> {
-    return fetcher(
-      `${apiURL}/quiz/${id}/questions?page_index=1&page_size=99999`,
-    )
+    return fetcher(`quiz/${id}/questions?page_index=1&page_size=99999`)
   }
 
   /**
@@ -45,7 +42,7 @@ export class ActivityAPI {
    * @returns {Promise<IResponse<ICreateDiscussionRepReact>>} - Dữ liệu phản ứng.
    */
   static reactDiscussion(data: ICreateDiscussionResReact): Promise<any> {
-    return fetcher(`${apiURL}/course-discussions/react`, {
+    return fetcher(`course-discussions/react`, {
       data: data,
     })
   }
@@ -62,7 +59,7 @@ export class ActivityAPI {
     sectionId: string,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/course-sections/course/${courseId}/section/${sectionId}/progress`,
+      `course-sections/course/${courseId}/section/${sectionId}/progress`,
       {
         params: {
           status: 'FINISHED',
@@ -88,7 +85,7 @@ export class ActivityAPI {
       formData.append(`discussion_file_ids[${index}]`, discussion_file_id)
     })
 
-    return fetcher(`${apiURL}/course-discussions/detail/upload`, {
+    return fetcher(`course-discussions/detail/upload`, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -105,7 +102,7 @@ export class ActivityAPI {
     id: string | undefined,
     params?: Object,
   ): Promise<any> {
-    return fetcher(`${apiURL}/course-discussions/${id}`, {
+    return fetcher(`course-discussions/${id}`, {
       data: params,
       method: 'PUT',
     })
@@ -116,7 +113,7 @@ export class ActivityAPI {
    * @async
    */
   static deleteDiscussion(id: string): Promise<any> {
-    return fetcher(`${apiURL}/course-discussions/${id}`, {
+    return fetcher(`course-discussions/${id}`, {
       method: 'DELETE',
     })
   }
@@ -132,13 +129,13 @@ export class ActivityAPI {
 // export const downloadResource = async (data: {
 //   files: { name: string; file_key: string }[]
 // }): Promise<any> => {
-//   const res = await fetcher(`${apiURL}/resource/get-token-download`, {
+//   const res = await fetcher(`resource/get-token-download`, {
 //     method: 'POST',
 //     data: data,
 //   })
 //   if (res?.success) {
 //     const link = document.createElement('a')
-//     link.href = `${apiURL}/resource/download?token=${res?.data}`
+//     link.href = `resource/download?token=${res?.data}`
 //     link.download = data.files[0].name
 //     link.style.display = 'none'
 //     document.body.appendChild(link)

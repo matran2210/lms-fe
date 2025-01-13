@@ -1,4 +1,4 @@
-import { roundNumber } from '@utils/helpers'
+import { calculatePercentage, roundNumber } from '@utils/helpers'
 import { ChartDatum } from 'src/type'
 
 interface IProps {
@@ -68,10 +68,10 @@ const ChartCFAScore = ({ data }: IProps) => {
                   <div
                     className="absolute left-6 h-1 w-16 bg-primary"
                     style={{
-                      bottom: `${
-                        (item?.total_correct_answers / item?.total_questions) *
-                        100
-                      }%`,
+                      bottom: `${calculatePercentage(
+                        item?.section_score,
+                        item?.max_section_score,
+                      )}%`,
                     }}
                   ></div>
                 </div>
@@ -79,9 +79,7 @@ const ChartCFAScore = ({ data }: IProps) => {
                   {item?.title}
                 </div>
                 <div className="text-medium-sm font-normal text-gray-1">
-                  {`${roundNumber(
-                    (item?.total_questions / item?.total_quiz_questions) * 100,
-                  )}%`}
+                  {`${roundNumber(item?.max_section_score)}%`}
                 </div>
               </div>
             ))}

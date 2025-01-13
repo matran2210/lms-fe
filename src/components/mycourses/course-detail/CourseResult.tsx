@@ -2,7 +2,7 @@ import SappButton from '@components/base/button/SappButton'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import router from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { GRADE_STATUS } from 'src/constants'
+import { GRADE_STATUS, GRADING_METHOD } from 'src/constants'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type'
 
@@ -120,8 +120,9 @@ const ResultCourse = ({
       className="!p-0 font-medium underline"
       onClick={() => {
         if (
-          coursePart?.quiz?.attempt?.grading_status ===
-          GRADE_STATUS.AWAITING_GRADING
+          coursePart?.quiz?.attempt?.grading_status !==
+            GRADE_STATUS.FINISHED_GRADING &&
+          coursePart.quiz?.grading_method === GRADING_METHOD.MANUAL
         ) {
           setOpenReport(true)
         } else if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {

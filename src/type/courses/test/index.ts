@@ -9,6 +9,8 @@ export interface ChartDatum {
   total_correct_answers: number
   title: string
   total_quiz_questions: number
+  section_score: number
+  max_section_score: number
   short_name: string
 }
 

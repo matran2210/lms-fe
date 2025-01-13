@@ -26,7 +26,12 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
             key={index}
             className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
           >
-            <EntranceTest data={e} />
+            <EntranceTest
+              data={e}
+              test_id_default={entranceTestLists.find(
+                (entrance) => entrance.is_attempt === false,
+              )}
+            />
           </div>
         ))
       ) : (
