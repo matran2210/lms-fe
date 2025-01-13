@@ -1,9 +1,10 @@
 import { IUser } from 'src/redux/types/User/urser'
-import { httpService } from '../httpService'
+import { apiURL } from '../httpService'
 import url from './url'
 import { IResponse } from 'src/redux/types'
 import { AuthAPI } from 'src/pages/api/profile'
 import { PinnedNotifications } from 'src/type'
+import { fetchFormData } from '@services/requestV2'
 
 const UserApi = {
   /**
@@ -44,31 +45,12 @@ const UserApi = {
    * @returns {Promise<any>} Một promise chứa dữ liệu trả về từ api
    */
   updateUserAvatar: (avatar: File): Promise<any> => {
-    // Đường dẫn api để cập nhật avatar
-    const uri = url.userAvatar
     // Tạo một đối tượng formData để chứa file ảnh
     const formData = new FormData()
     formData.append('avatar', avatar)
     // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
-    return httpService.POST_FORM_DATA<any, any>({
-      uri,
-      request: formData,
-    })
+    return fetchFormData({ url: `${apiURL}/users/avatar`, formData })
   },
-  // getListDevicesServerSide: async (
-  //   accessToken: string,
-  // ): Promise<IResponse<any>> => {
-  //   const headers = {
-  //     Authorization: 'Bearer ' + accessToken,
-  //   }
-  //   const response = await axios.get<{}, IResponse<{ data: any }>>(
-  //     `${apiURL}${url.devices}`,
-  //     {
-  //       headers,
-  //     },
-  //   )
-  //   return response.data?.data
-  // },
   getListDevices: async (): Promise<IResponse<any>> => {
     return AuthAPI.getListDevices()
   },

@@ -33,7 +33,8 @@ import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import { ANIMATION } from 'src/constants'
-import CourseAPI, { CoursesAPI, getActivityById } from 'src/pages/api/courses'
+import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
+import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   closeCalculator,
@@ -606,7 +607,7 @@ const ActivityPage = () => {
   }
 
   const download = async (name: string, file_key: string) => {
-    await CourseAPI.downloadResource({
+    await UploadAPI.downloadFile({
       files: [
         {
           name: name,

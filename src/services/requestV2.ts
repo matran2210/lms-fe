@@ -15,8 +15,12 @@ export const getBaseUrl = () => {
   }
 }
 
+// Initialize Axios instance
 export const request: AxiosInstance = axios.create({
   baseURL: getBaseUrl(),
+  headers: {
+    'Content-Type': 'application/json',
+  },
 })
 
 export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
@@ -26,17 +30,7 @@ export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
       throw err
     })
 
-request.interceptors.request.use(
-  (config) => {
-    config.headers['Content-Type'] = 'application/json' // Change to your preferred content type
-    return config
-  },
-  (error) => {
-    // Handle request error
-    return Promise.reject(error)
-  },
-)
-
+// Request Interceptor
 request.interceptors.request.use(async (config: any) => {
   const authenticationManager = new AuthenticationManager()
 
@@ -71,30 +65,32 @@ request.interceptors.request.use(async (config: any) => {
   return config
 })
 
+// Response Interceptor
 request.interceptors.response.use(
-  function (response: AxiosResponse) {
-    return response
-  },
-  async (error: any) => {
+  (response: AxiosResponse) => response,
+  async (error) => {
     const originalRequest = error.config
 
-    if (error.response && error.response.status !== 401) {
-      return Promise.reject(error)
-    }
-
-    if (error.response && error.response.status === 401) {
+    // Handle token expiration (401 error)
+    if (error.response?.status === 401) {
       const authenticationManager = new AuthenticationManager()
 
-      await authenticationManager.refreshToken()
-      originalRequest.headers['Authorization'] =
-        'Bearer ' + authenticationManager.getToken()
-      return axios(originalRequest)
+      try {
+        await authenticationManager.refreshToken()
+        originalRequest.headers.Authorization = `Bearer ${authenticationManager.getToken()}`
+        return axios(originalRequest)
+      } catch (refreshError) {
+        return Promise.reject(refreshError)
+      }
     }
+
+    // Handle other errors
     return Promise.reject(error)
   },
 )
 
-const toastException = [
+// Toast for specific exceptions
+const toastExceptions = [
   '400|060915',
   '400|060904',
   '403|000010',
@@ -103,30 +99,48 @@ const toastException = [
   '400|010008',
 ]
 
-const formatedExceptions = exceptions.reduce(
-  (acc: { [key: string]: string }, { code, message }) => {
+// Map exceptions
+const formattedExceptions: { [key: string]: string } = exceptions.reduce(
+  (acc: any, { code, message }) => {
     acc[code] = message
     return acc
   },
   {},
 )
 
+// Global error handler
 request.interceptors.response.use(
-  function (response: any) {
-    return response
-  },
-  async function (error: any) {
+  (response) => response,
+  (error) => {
     const errorCode: string = error?.response?.data?.error?.code
     const errorMessage =
-      formatedExceptions[errorCode as keyof typeof formatedExceptions]
-    if (!toastException.includes(errorCode)) {
-      toast.error(
-        errorMessage ||
-          error?.response?.statusText ||
-          error?.message ||
-          'Unknown error!',
-      )
+      formattedExceptions[errorCode] ||
+      error?.response?.statusText ||
+      error?.message ||
+      'Unknown error!'
+
+    if (!toastExceptions.includes(errorCode)) {
+      toast.error(errorMessage)
     }
+
     return Promise.reject(error)
   },
 )
+
+export const fetchFormData = async ({
+  url,
+  formData,
+}: {
+  url: string
+  formData: FormData
+}) => {
+  if (!formData || [...formData.entries()].length === 0) {
+    throw new Error('FormData cannot be empty.')
+  }
+
+  return request.post(url, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+}
+
+export default request
