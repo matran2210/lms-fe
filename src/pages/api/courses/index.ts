@@ -384,11 +384,11 @@ export class CoursesAPI {
   }
 
   static getResource(id: string) {
-    return fetcher(`${apiURL}/resource/${id}`)
+    return fetcher(`/resource/${id}`)
   }
 
   static getQuizAttempt(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${apiURL}/quiz-attempts/answers/${id}`)
+    return fetcher(`/quiz-attempts/answers/${id}`)
   }
 }
 

@@ -1,6 +1,5 @@
 import { ICreateDiscussionUploadRequest } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import { fetchFormData } from '@services/requestV2'
-import { apiURL } from '@components/mycourses/LearningResource'
 
 /**
  * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.
@@ -32,7 +31,7 @@ const CourseActivityApi = {
 
     // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
     return fetchFormData({
-      url: `${apiURL}/course-discussions/detail/upload`,
+      url: `/course-discussions/detail/upload`,
       formData,
     })
   },
