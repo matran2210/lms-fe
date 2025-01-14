@@ -83,10 +83,10 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '400px',
+            width: '25rem',
             height: 'fit-content',
-            top: 'calc(25% - 150px)',
-            left: 'calc(25% - 200px)',
+            top: 'calc(25% - 9.375rem)',
+            left: 'calc(25% - 12.5rem)',
           }}
           key={e.id}
           onClick={() => setOnFocusingPad(e.id)}
@@ -109,10 +109,10 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '400px',
-            height: '300px',
-            top: 'calc(50% - 150px)',
-            left: 'calc(50% - 200px)',
+            width: '25rem',
+            height: '18.75rem',
+            top: 'calc(50% - 9.375rem)',
+            left: 'calc(50% - 12.5rem)',
           }}
           key={currentPage}
           onClick={() => {
@@ -149,9 +149,9 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '600px',
-            height: '400px',
-            top: 'calc(75% - 250px)',
+            width: '37.5rem',
+            height: '25rem',
+            top: 'calc(75% - 15.625rem)',
             left: 'calc(0%)',
           }}
           key={e.id}
@@ -176,7 +176,7 @@ const TestScratchPads = ({
                 <CloseIcon />
               </button>
             </div>
-            <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+            <div className="h-[calc(100%-2.5rem)] overflow-auto bg-white p-5">
               <EditorReader
                 text_editor_content={exhibitsDes?.description}
                 className=" w-full"
@@ -197,10 +197,10 @@ const TestScratchPads = ({
     } else if (e.type === 'file') {
       return (
         <MovableWindow
-          className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
+          className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[52.625rem]"
           position={{
-            width: '595px',
-            height: '650px',
+            width: '37.1875rem',
+            height: '40.625rem',
             top: 'calc(50%)',
             left: 'calc(50%)',
           }}
@@ -220,7 +220,7 @@ const TestScratchPads = ({
             </div>
             <div
               className="overflow-auto bg-white p-4"
-              style={{ height: 'calc(100% - 40px' }}
+              style={{ height: 'calc(100% - 2.5rem' }}
             >
               {/* <div className='flex flex-'> */}
               <PdfViewer file={e?.file} />

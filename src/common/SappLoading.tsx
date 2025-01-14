@@ -5,13 +5,13 @@ import animation from 'src/assets/images/animation.json'
 const SappLoading = ({ className }: { className?: string }) => {
   return (
     <div
-      className={`fixed z-[9999] block h-full w-full bg-white backdrop-blur-[2000px] ${className ?? ''}`}
+      className={`fixed z-[9999] block h-full w-full bg-white backdrop-blur-[125rem] ${className ?? ''}`}
     >
       <Player
         src={animation}
         autoplay
         loop
-        className="left-0 top-0 z-[9999] max-h-[90px] max-w-[90px] !bg-white backdrop-blur-[2000px]"
+        className="left-0 top-0 z-[9999] max-h-[5.625rem] max-w-[5.625rem] !bg-white backdrop-blur-[125rem]"
         speed={3}
       />
     </div>

@@ -25,8 +25,8 @@ const STATE = {
 
 const SIZES = {
   small: 'w-4.5 h-4.5',
-  medium: 'w-[24px] h-[24px]',
-  lager: 'w-[30px] h-[30px]',
+  medium: 'w-[1.5rem] h-[1.5rem]',
+  lager: 'w-[1.875rem] h-[1.875rem]',
 }
 
 const SAPPCheckbox = ({

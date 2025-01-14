@@ -1,3 +1,4 @@
+import { BASE_FONT_SIZE } from '@utils/constants'
 import React, { Component } from 'react'
 
 // Định nghĩa các trạng thái của component
@@ -100,7 +101,7 @@ class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
   performExit() {
     if (this.elementRef?.current && this.coverRef?.current) {
       const height = this.elementRef.current?.offsetHeight
-      this.coverRef.current.style.minHeight = height + 'px'
+      this.coverRef.current.style.minHeight = height / BASE_FONT_SIZE + 'rem'
     }
     this.setState({ status: Status.EXITING }, () => {
       setTimeout(() => {
@@ -116,7 +117,7 @@ class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
       <div className="relative">
         <div
           ref={this.coverRef}
-          className={`bg-black absolute inset-0 z-50 flex h-full w-full items-center justify-center opacity-50 transition-all ease-in-out ${
+          className={`absolute inset-0 z-50 flex h-full w-full items-center justify-center bg-black opacity-50 transition-all ease-in-out ${
             status !== Status.ENTERED ? '' : 'hidden'
           }`}
         >

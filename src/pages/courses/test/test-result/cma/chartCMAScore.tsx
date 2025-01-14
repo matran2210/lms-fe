@@ -42,7 +42,7 @@ const ChartCMAScore = ({
         </div>
         <div className="content-center">
           <div className="flex flex-row">
-            <div className="mr-2 pt-[2px]">
+            <div className="mr-2 pt-[0.125rem]">
               <Image
                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                 width={16}
@@ -57,7 +57,7 @@ const ChartCMAScore = ({
         </div>
       </div>
       <div className="">
-        <div className="group relative h-[250px]">
+        <div className="group relative h-[15.625rem]">
           <div className="h-full w-full border-b border-l border-gray-2 " />
           <div>
             {isGraded && (
@@ -96,9 +96,9 @@ const ChartCMAScore = ({
               {data?.map((item) => (
                 <div
                   key={item?.part_id}
-                  className="relative flex w-28 shrink-0 flex-col items-center justify-between gap-1 px-3 py-2 first:ml-6 4xl:w-[150px]"
+                  className="relative flex w-28 shrink-0 flex-col items-center justify-between gap-1 px-3 py-2 first:ml-6 4xl:w-[9.375rem]"
                 >
-                  <div className="absolute bottom-full left-1/2 h-[250px] w-14 -translate-x-1/2">
+                  <div className="absolute bottom-full left-1/2 h-[15.625rem] w-14 -translate-x-1/2">
                     <Tooltip
                       color="white"
                       title={`${calculatePercentage(
@@ -116,7 +116,7 @@ const ChartCMAScore = ({
                         }}
                       />
                     </Tooltip>
-                    <div className="bg-black-1 absolute -bottom-2.5 left-1/2 h-2.5 w-[1px]" />
+                    <div className="bg-black-1 absolute -bottom-2.5 left-1/2 h-2.5 w-[0.0625rem]" />
                   </div>
                   <div className="mt-4 line-clamp-2 w-full text-center text-medium-sm font-medium text-bw-1">
                     {item?.short_name}

@@ -137,14 +137,14 @@ const NewFiltext = forwardRef(
                 className="my-0.5"
                 style={{
                   display: 'inline-block',
-                  height: ' 35px',
-                  width: '110px',
+                  height: ' 2.1875rem',
+                  width: '6.875rem',
                 }}
               >
                 <HookFormTextField
                   control={control}
                   name={`${name}.${Number((domNode as Element).attribs.index)}`}
-                  inputClassName="!h-[35px]"
+                  inputClassName="!h-[2.1875rem]"
                 />
               </span>
             )
@@ -222,7 +222,7 @@ const NewFiltext = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="mt-[38px] text-base font-semibold">
+            <div className="mt-[2.375rem] text-base font-semibold">
               Correct Answer
             </div>
             <EditorReader

@@ -38,7 +38,7 @@ const ModalMobile = () => {
     <Modal
       footer={false}
       className="p-0"
-      width={'398px'}
+      width={'24.875rem'}
       centered
       styles={{
         content: {
@@ -51,7 +51,7 @@ const ModalMobile = () => {
     >
       <div className="grid place-items-center px-6 py-20">
         <SadIcon />
-        <p className="mt-10 text-center text-[32px] font-semibold leading-10">
+        <p className="mt-10 text-center text-[2rem] font-semibold leading-10">
           Sorry, page is not mobile friendly
         </p>
         <p className="my-4 text-center text-gray-1">
@@ -60,7 +60,7 @@ const ModalMobile = () => {
         </p>
         <ButtonPrimary
           title={'Continue'}
-          className="mt-10 h-10 w-[200px]"
+          className="mt-10 h-10 w-[12.5rem]"
           onClick={handleCancel}
         />
       </div>

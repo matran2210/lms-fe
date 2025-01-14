@@ -12,6 +12,7 @@ import { IButtonColors } from 'src/type'
 
 import { CloseIcon } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import { BASE_FONT_SIZE } from '@utils/constants'
 
 interface IProps {
   open?: boolean
@@ -138,7 +139,8 @@ const SappModalCerti: React.FC<IProps> = ({
       if (open) {
         const scrollBarWidth = window.innerWidth - document.body.clientWidth
         setTimeout(() => {
-          document.body.style.paddingRight = scrollBarWidth + 'px'
+          document.body.style.paddingRight =
+            scrollBarWidth / BASE_FONT_SIZE + 'rem'
           document.body.classList.add('overflow-hidden')
         })
       } else {
@@ -269,7 +271,7 @@ const SappModalCerti: React.FC<IProps> = ({
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
-              } bg-black  inset-0 animate-fade-in-overlay opacity-80 transition-opacity ${overlayClass}`}
+              } inset-0  animate-fade-in-overlay bg-black opacity-80 transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${
@@ -299,7 +301,7 @@ const SappModalCerti: React.FC<IProps> = ({
                         </div>
                       </div>
                       {isBordered && (
-                        <div className="absolute inset-0 bottom-0 -z-10 -mx-6 h-[1px] border-b border-gray-2"></div>
+                        <div className="absolute inset-0 bottom-0 -z-10 -mx-6 h-[0.0625rem] border-b border-gray-2"></div>
                       )}
                     </div>
                   ))}
