@@ -22,7 +22,7 @@ const TabLayout: React.FC<TabheaderProps> = ({
         <div className="ml-6 pb-5 pt-6 text-xl font-medium">{title}</div>
         <span className="mr-6">{headerButtons}</span>
       </div>
-      <div onScroll={onScroll} className="h-[calc(604px-70px)] overflow-y-auto">
+      <div onScroll={onScroll} className="h-[33.375rem] overflow-y-auto">
         {children}
       </div>
     </div>

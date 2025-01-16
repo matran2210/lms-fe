@@ -337,7 +337,7 @@ const MatchingQuestion = forwardRef(
               </>
             )}
           <EditorReader
-            className="sapp-questions !mb-[32px]"
+            className="sapp-questions !mb-[2rem]"
             text_editor_content={data?.question_content}
             highlighted={highlighted}
           />
@@ -400,7 +400,7 @@ const MatchingQuestion = forwardRef(
           </div>
         ) : (
           <>
-            <div className="flex flex-col gap-y-5 px-[123px]">
+            <div className="flex flex-col gap-y-5 px-[7.6875rem]">
               {data?.question_matchings.map((e: any, index: number) => {
                 return (
                   <div className="flex flex-nowrap justify-between" key={index}>
@@ -453,13 +453,13 @@ const MatchingQuestion = forwardRef(
                 )
               })}
             </div>
-            <div className="flex flex-col gap-y-5 pt-[42px]">
+            <div className="flex flex-col gap-y-5 pt-[2.625rem]">
               <div className=" text-base font-semibold">Correct Answer</div>
 
               {data?.question_matchings?.map((e: any, index: number) => {
                 return (
                   <div
-                    className="flex flex-nowrap justify-between px-[123px]"
+                    className="flex flex-nowrap justify-between px-[7.6875rem]"
                     key={index}
                   >
                     <QuestionCard

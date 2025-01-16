@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react'
 import Icon from '@components/icons'
+import { BASE_FONT_SIZE } from '@utils/constants'
 
 type Props = {
   open?: boolean
@@ -43,7 +44,8 @@ function SappModelSidebar({
     if (open) {
       const scrollBarWidth = window.innerWidth - document.body.clientWidth
       setTimeout(() => {
-        document.body.style.paddingRight = scrollBarWidth + 'px'
+        document.body.style.paddingRight =
+          scrollBarWidth / BASE_FONT_SIZE + 'rem'
         document.body.classList.add('overflow-hidden')
       })
     } else {

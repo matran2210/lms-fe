@@ -1,4 +1,4 @@
-import { F_LOW_CODES } from '@utils/constants'
+import { BASE_FONT_SIZE, F_LOW_CODES } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
 import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -55,13 +55,13 @@ const TestResultPage = ({
       )
       multipleQuestionElem.style.height =
         window.innerWidth > 1777
-          ? `calc(100vh - ${maxHeight}px)`
+          ? `calc(100vh - ${maxHeight / BASE_FONT_SIZE}rem)`
           : 'fit-content'
       yourScoreDetailElem.style.marginBottom =
         window.innerWidth > 1777
-          ? '24px'
-          : `${multipleQuestionElem.offsetHeight}px`
-      yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
+          ? '1.5rem'
+          : `${multipleQuestionElem.offsetHeight / BASE_FONT_SIZE}rem`
+      yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight / BASE_FONT_SIZE}rem)`
     }
   }
   useEffect(() => {
@@ -101,7 +101,7 @@ const TestResultPage = ({
               <div className="-order-1 mb-4 xl:order-1">
                 <div className="max-h-full w-full xl:sticky xl:top-6 ">
                   <div
-                    className={`$ flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
+                    className={`$ flex h-[9.5rem] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
                   >
                     <div className="mb-5 text-xl font-semibold text-bw-1 xl:font-medium">
                       {questions?.quizAttempt?.grading_status ===
@@ -195,7 +195,7 @@ const TestResultPage = ({
             </div>
             <MultipleQuestion
               questions={questions}
-              className={'xl:!h-[calc(100vh-241px)] xl:w-full'}
+              className={'xl:!h-[calc(100vh-15.0625rem)] xl:w-full'}
               multipleQuestionRef={multipleQuestionRef}
               setOpenAnnotaion={setOpenAnnotaion}
             />
@@ -246,7 +246,7 @@ const TestResultPage = ({
             <div className="-order-1 mb-4 xl:order-1">
               <div className="max-h-full w-full xl:sticky xl:top-6 ">
                 <div
-                  className={`flex min-h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
+                  className={`flex min-h-[9.5rem] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
                 >
                   <div className="mb-5 text-xl font-semibold text-bw-1 xl:font-medium">
                     {questions?.quizAttempt?.grading_status ===
@@ -256,7 +256,7 @@ const TestResultPage = ({
                   </div>
                   <div className="flex w-full flex-wrap items-end justify-between">
                     <div
-                      className={`mb-[13px] font-inter text-6xl font-bold text-primary xl:text-6xl`}
+                      className={`mb-[0.8125rem] font-inter text-6xl font-bold text-primary xl:text-6xl`}
                     >
                       {isNull(score) || isUndefined(score)
                         ? '--'

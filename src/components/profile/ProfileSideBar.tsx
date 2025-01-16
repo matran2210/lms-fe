@@ -217,7 +217,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
               return (
                 <li
-                  className={`${className} group relative cursor-pointer border-b-[1px] border-gray-2`}
+                  className={`${className} group relative cursor-pointer border-b-[0.0625rem] border-gray-2`}
                   key={key}
                 >
                   <a

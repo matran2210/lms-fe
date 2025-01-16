@@ -1,4 +1,5 @@
 import useResizeObserver from '@react-hook/resize-observer'
+import { BASE_FONT_SIZE } from '@utils/constants'
 import React, { useEffect, useRef, useState } from 'react'
 
 interface ResponsiveTextTruncateProps {
@@ -31,7 +32,7 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     const tempElement = document.createElement('span')
     tempElement.style.position = 'absolute'
     tempElement.style.visibility = 'hidden'
-    tempElement.style.fontSize = `${fontSize}px`
+    tempElement.style.fontSize = `${fontSize / BASE_FONT_SIZE}rem`
     tempElement.style.whiteSpace = 'nowrap'
     document.body.appendChild(tempElement)
 
@@ -65,7 +66,7 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     const tempElement = document.createElement('span')
     tempElement.style.position = 'absolute'
     tempElement.style.visibility = 'hidden'
-    tempElement.style.fontSize = `${fontSize}px`
+    tempElement.style.fontSize = `${fontSize / BASE_FONT_SIZE}rem`
     tempElement.style.whiteSpace = 'nowrap'
     tempElement.textContent = isSlash ? '.../' : '...'
     document.body.appendChild(tempElement)

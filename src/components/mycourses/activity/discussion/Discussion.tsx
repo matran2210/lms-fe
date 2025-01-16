@@ -347,7 +347,7 @@ const Discussion = ({ class_id }: Props) => {
                       className="bg-size-100-30 absolute bottom-0 left-0 top-0 -mt-1 w-0.5"
                       style={{
                         background:
-                          'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
+                          'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 0.75rem, white 0.375rem, white 1.5625rem)',
                       }}
                     ></div>
                     {e?.children?.map((f, index) => {

@@ -180,14 +180,14 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
               size="medium"
               title="Edit"
               disabled={loading || isLoading}
-              className="min-w-[120px] text-base"
+              className="min-w-[7.5rem] text-base"
               onClick={() => setIsEdit(true)}
             />
           ) : (
             <SappButton
               size="medium"
               title="Save"
-              className="min-w-[120px] text-base"
+              className="min-w-[7.5rem] text-base"
               disabled={isLoading || loading}
               onClick={handleSubmit(onSubmit)}
             />
@@ -197,10 +197,10 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
     >
       <div className="m-6">
         <div className="grid grid-cols-2">
-          <div className="col-span-1 flex w-[17.43rem] max-w-[200px] flex-none items-center text-gray-700 lg:max-w-[50%]">
+          <div className="col-span-1 flex w-[17.43rem] max-w-[12.5rem] flex-none items-center text-gray-700 lg:max-w-[50%]">
             ACCOUNT ID:
           </div>
-          <div className="col-span-1 max-w-[300px] flex-auto font-medium text-bw-1">
+          <div className="col-span-1 max-w-[18.75rem] flex-auto font-medium text-bw-1">
             {getValues('hubspot_account_info')}
           </div>
         </div>

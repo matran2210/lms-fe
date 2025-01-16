@@ -95,10 +95,10 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
     <>
       <MovableWindow
         position={{
-          width: '412px',
-          height: '350px',
-          top: 'calc(50% - 150px)',
-          left: `calc(${22 + count}% - 200px)`,
+          width: '25.75rem',
+          height: '21.875rem',
+          top: 'calc(50% - 9.375rem)',
+          left: `calc(${22 + count}% - 12.5rem)`,
         }}
         key={'testtesttest'}
         onClick={() => {}}
@@ -139,12 +139,12 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
               </button>
             </div>
           </div>
-          <div className="h-[calc(100%-30px)]">
+          <div className="h-[calc(100%-1.875rem)]">
             <HookFormTextArea
               placeholder="Take a note..."
               control={control}
               name={`description_${id ? id : uuid}`}
-              className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
+              className="not-resizer sapp-text-area h-[calc(100%-2.5rem)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
               defaultValue={content}
             />
           </div>

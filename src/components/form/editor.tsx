@@ -210,7 +210,7 @@ const TinyEditor = ({
           init={{
             placeholder: placeholder,
             font_size_formats:
-              '8px 10px 12px 14px 16px 18px 20px 22px 24px 36px',
+              '0.5rem 0.625rem 0.75rem 0.875rem 1rem 1.125rem 1.25rem 1.375rem 1.5rem 2.25rem',
             height: height || 500,
             selector: 'textarea' as any,
             font_family_formats:
@@ -262,7 +262,7 @@ const TinyEditor = ({
           { 
             font-family: Roboto,sans-serif;
             color:#5E6278;
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 500;
             line-height: 1.5;
             appearance: none;
@@ -273,7 +273,7 @@ const TinyEditor = ({
             opacity: 1;
             display: block;
             font-family: Roboto,sans-serif;
-            font-size: 14px;
+            font-size: 0.875rem;
           }
           .mce-content-body [contentEditable=false][data-mce-selected] {
             cursor: default

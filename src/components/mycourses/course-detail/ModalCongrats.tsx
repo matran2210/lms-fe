@@ -82,7 +82,7 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
       showCancelButton={passFoundation}
       showOkButton={true}
       showHeader={false}
-      size="max-w-[646px]"
+      size="max-w-[40.375rem]"
       footerButtonClassName="flex flex-col-reverse gap-6"
       childClass="flex flex-col justify-center items-center"
       position="center"

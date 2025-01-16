@@ -113,7 +113,7 @@ const Explanation = () => {
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
         <div
-          className="absolute right-6 top-[14px] ml-auto cursor-pointer"
+          className="absolute right-6 top-[0.875rem] ml-auto cursor-pointer"
           onClick={() => {
             if (activeQuestion?.answer?.quiz_attempt?.id) {
               router.push(
