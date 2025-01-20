@@ -13,17 +13,17 @@ const CountDown = forwardRef(
     const time = useCountdown(remainTime)
     useImperativeHandle(ref, () => ({
       handleGetTime() {
-        return time[2]
+        return time?.[2]
       },
     }))
     useEffect(() => {
-      if (time[2] === 0) {
+      if (time?.[2] === 0) {
         onTimeOut && onTimeOut()
       }
     }, [time[2]])
     return (
       <div className="flex w-2/6 justify-center font-tech text-[1.3125rem] font-bold tracking-[0.125rem] text-bw-1">
-        {formatTime(time[2])}
+        {formatTime(time?.[2])}
       </div>
     )
   },
