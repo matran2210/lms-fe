@@ -46,7 +46,7 @@ const HeaderTest = ({
   const dispatch = useAppDispatch()
   return (
     <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
-      <div className="w-2/6 truncate text-lg-xl font-medium">
+      <div className="w-2/6 truncate text-[18px] font-medium">
         {quizDetail?.name}
       </div>
       {quizDetail?.quiz_timed && (
