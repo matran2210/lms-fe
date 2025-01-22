@@ -41,7 +41,7 @@ const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
       buttonSize="extra"
       showCloseIcon
     >
-      <div className="h-[calc(100vh-104px)] w-full">
+      <div className="h-[calc(100vh-6.5rem)] w-full">
         <PDFViewer file={url} />
       </div>
     </SappModal>

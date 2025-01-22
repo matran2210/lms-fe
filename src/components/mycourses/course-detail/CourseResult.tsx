@@ -141,7 +141,7 @@ const ResultCourse = ({
       </div>
       <div>
         <HookFormSelect
-          classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
+          classParent="w-full md:max-w-full border-none h-[3.125rem] forcus:text-primary"
           placeholder=""
           className="right-top"
           value={selectedResult}

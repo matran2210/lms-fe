@@ -115,7 +115,7 @@ const HookFormRadioGroup = ({
                           key={index}
                           value={option.value.toString()}
                           checked={checked}
-                          className="mt-[3px] flex-none"
+                          className="mt-[0.1875rem] flex-none"
                           size="small"
                           state={state}
                         />

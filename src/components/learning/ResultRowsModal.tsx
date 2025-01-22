@@ -238,7 +238,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
           hasCheckAll={false}
           theadClass=""
           tbodyClass=""
-          classTableRes="max-h-[calc(100vh-73px)]"
+          classTableRes="max-h-[calc(100vh-2.6875rem)]"
           onChange={() => {}}
         >
           <ResultTableRows resultTablerows={listResults} />

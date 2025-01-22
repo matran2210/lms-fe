@@ -11,6 +11,7 @@ import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { IButtonColors } from 'src/type'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import { CloseIcon } from '@assets/icons'
+import { BASE_FONT_SIZE } from '@utils/constants'
 
 interface IProps {
   open?: boolean
@@ -146,7 +147,8 @@ const SappModal: React.FC<IProps> = ({
       if (open) {
         const scrollBarWidth = window.innerWidth - document.body.clientWidth
         setTimeout(() => {
-          document.body.style.paddingRight = scrollBarWidth + 'px'
+          document.body.style.paddingRight =
+            scrollBarWidth / BASE_FONT_SIZE + 'rem'
           document.body.classList.add('overflow-hidden')
         })
       } else {

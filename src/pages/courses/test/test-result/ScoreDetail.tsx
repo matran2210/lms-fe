@@ -43,19 +43,19 @@ const ScoreDetail = ({
   const headers = [
     {
       label: '#',
-      className: clsx(commonHeaderClass, 'min-w-[20px] xl:min-w-[50px]'),
+      className: clsx(commonHeaderClass, 'min-w-[1.25rem] xl:min-w-[3.125rem]'),
     },
     {
       label: 'Question',
-      className: clsx(commonHeaderClass, 'min-w-[180px]'),
+      className: clsx(commonHeaderClass, 'min-w-[11.25rem]'),
     },
     {
       label: type === QuizAttemptChartType.CFA ? 'Module' : 'Chapter',
-      className: clsx(commonHeaderClass, 'min-w-[198px]'),
+      className: clsx(commonHeaderClass, 'min-w-[12.375rem]'),
     },
     {
       label: 'Type',
-      className: clsx(commonHeaderClass, 'min-w-[150px]'),
+      className: clsx(commonHeaderClass, 'min-w-[9.375rem]'),
     },
     {
       label: 'Result',
@@ -63,7 +63,7 @@ const ScoreDetail = ({
     },
     {
       label: 'Time Spent',
-      className: clsx(commonHeaderClass, ' min-w-[80px] !pr-0 text-center'),
+      className: clsx(commonHeaderClass, ' min-w-[5rem] !pr-0 text-center'),
     },
   ]
 
@@ -158,7 +158,7 @@ const ScoreDetail = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit min-h-[237px] bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
+      className={`!h-fit min-h-[14.8125rem] bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
@@ -256,7 +256,7 @@ const ScoreDetail = ({
 
                       {/* Type */}
                       <td className="p-0 pr-4 text-bw-1">
-                        <div className="min-w-[111px]">
+                        <div className="min-w-[6.9375rem]">
                           {getTypeName(answer?.question?.qType)}
                         </div>
                       </td>

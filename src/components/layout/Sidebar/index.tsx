@@ -51,28 +51,28 @@ export default function Sidebar({
       <div
         className={`${className} ${
           guideStatus && (guideStep === 2 || guideStep === 3) ? 'z-50' : 'z-30'
-        } ${isOpened ? 'w-[200px]' : ''}`}
+        } ${isOpened ? 'w-[12.5rem]' : ''}`}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative pb-6 pt-5.25 ${
+          className={`max-h-[calc(100vh-9.0625rem) relative pb-6 pt-5.25 ${
             guideStatus && guideStep == 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'
           }`}
         >
           <div
-            className="group-logos mx-auto h-[71px] px-5 pb-5.25"
+            className="group-logos mx-auto h-[4.4375rem] px-5 pb-5.25"
             onClick={() => closeSideBar()}
           >
             <div
-              className="flex h-[50px] items-end justify-start text-center"
+              className="flex h-[3.125rem] items-end justify-start text-center"
               onClick={() => trackGAEvent('Click Logo SAPP Menu')}
             >
               <ExpandIcon type={'logo-default'} />
               <ExpandIcon type={'logo-full'} />
             </div>
           </div>
-          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
+          <div className="mx-auto mb-6 h-px w-[calc(100%-3rem)] bg-gray-2 text-center"></div>
           <MenuItemsList
             options={
               Number(localStorage.getItem('countEvent')) <= 0
@@ -97,7 +97,7 @@ export default function Sidebar({
           className={`absolute bottom-0 w-full bg-white pb-6 
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
-          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
+          <div className="mx-auto mb-6 h-px w-[calc(100%-3rem)] bg-gray-2 text-center"></div>
           <MenuItemsList
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}

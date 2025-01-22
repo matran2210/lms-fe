@@ -1,30 +1,7 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
-import { apiURL, httpService } from 'src/redux/services/httpService'
+import { apiURL } from 'src/redux/services/httpService'
 import { IScoreDetails } from 'src/type'
-
-const CourseAPI = {
-  downloadResource: async (data: {
-    files: { name: string; file_key: string }[]
-  }): Promise<any> => {
-    const uri = '/resource/get-token-download'
-    const res = await httpService.POST<any, any>({
-      uri,
-      request: data,
-    })
-    if (res?.success) {
-      const link = document.createElement('a')
-      link.href = `${process.env.NEXT_PUBLIC_BASE_API_URL}resource/download?token=${res?.data}`
-      link.download = data.files[0].name
-      link.style.display = 'none'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    }
-  },
-}
-
-export default CourseAPI
 
 export class CoursesAPI {
   static getNoteDetail(
@@ -404,6 +381,14 @@ export class CoursesAPI {
    */
   static getCertificate(id: string | string[] | undefined): Promise<any> {
     return fetcher(`certificate/public/${id}`)
+  }
+
+  static getResource(id: string) {
+    return fetcher(`/resource/${id}`)
+  }
+
+  static getQuizAttempt(id: string | string[] | undefined): Promise<any> {
+    return fetcher(`/quiz-attempts/answers/${id}`)
   }
 }
 

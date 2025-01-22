@@ -23,7 +23,7 @@ const LimitQuizModal = ({ open, setOpen, handleQuit }: IProps) => {
       showCancelButton={false}
       okButtonCaption="Quit"
       onOk={onSubmit}
-      size="max-w-[646px]"
+      size="max-w-[40.375rem]"
       fullWidthBtn={true}
       buttonSize="extra"
       handleCancel={onCancel}

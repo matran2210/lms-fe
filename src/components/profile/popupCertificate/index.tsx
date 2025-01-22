@@ -1,7 +1,6 @@
 import { CloseIconPreview } from '@assets/icons'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useEffect } from 'react'
-import MyProfileAPI from 'src/pages/api/profile'
+import { Dispatch, SetStateAction } from 'react'
 import SappModalCerti from './CertificatePopup'
 
 interface PopupProp {
@@ -35,7 +34,7 @@ const PopUpCertificate = ({
       showHeader={false}
       showFooter={false}
       title={data?.course?.name ?? 'Preview Certification'}
-      size="max-w-[1200px] max-h-[1200px] w-fit h-fit"
+      size="max-w-[75rem] max-h-[75rem] w-fit h-fit"
       footerButtonClassName="flex flex-col-reverse gap-6"
       childClass="flex flex-col justify-center items-center"
       parentChildClass=""

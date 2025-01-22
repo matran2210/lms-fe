@@ -1,5 +1,5 @@
 import styles from '@styles/components/SAPPVideo.module.scss'
-import { video_url } from '@utils/constants'
+import { BASE_FONT_SIZE, video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
 import {
@@ -472,7 +472,7 @@ const SAPPVideo = ({
       seekTooltipRef.current.textContent = `${
         t.hours !== '00' ? t.hours + ':' : ''
       }${t.minutes}:${t.seconds}`
-      seekTooltipRef.current.style.left = `${event.pageX - rect.left}px`
+      seekTooltipRef.current.style.left = `${(event.pageX - rect.left) / BASE_FONT_SIZE}rem`
     }
   }
 
@@ -851,7 +851,7 @@ const SAPPVideo = ({
                       defaultValue="0"
                     />
                     <div
-                      className="seek-tooltip absolute top-[-50px] -ml-5 hidden bg-overlay-dark p-1 text-xsm font-semibold text-white"
+                      className="seek-tooltip absolute top-[-3.125rem] -ml-5 hidden bg-overlay-dark p-1 text-xsm font-semibold text-white"
                       ref={seekTooltipRef}
                     >
                       00:00
@@ -1001,9 +1001,9 @@ const SAPPVideo = ({
                                 <li
                                   key={'auto-switch'}
                                   onClick={() => changeQuality('auto', 'Auto')}
-                                  className={`hover:text-black text-xsm hover:bg-white ${
+                                  className={`text-xsm hover:bg-white hover:text-black ${
                                     'Auto' === playbackQuality
-                                      ? 'text-black bg-white'
+                                      ? 'bg-white text-black'
                                       : ''
                                   }`}
                                 >
@@ -1019,9 +1019,9 @@ const SAPPVideo = ({
                                           quality?.bitrate,
                                         )
                                       }
-                                      className={`hover:text-black text-xsm hover:bg-white ${
+                                      className={`text-xsm hover:bg-white hover:text-black ${
                                         quality?.bitrate === playbackQuality
-                                          ? 'text-black bg-white'
+                                          ? 'bg-white text-black'
                                           : ''
                                       }`}
                                     >
@@ -1053,9 +1053,9 @@ const SAPPVideo = ({
                                     key={speed.value}
                                     onClick={handlePlaybackRateChange}
                                     data-speed={speed.value}
-                                    className={`hover:text-black text-xsm hover:bg-white ${
+                                    className={`text-xsm hover:bg-white hover:text-black ${
                                       parseFloat(speed.value) === playbackRate
-                                        ? 'text-black bg-white'
+                                        ? 'bg-white text-black'
                                         : ''
                                     }`}
                                   >
@@ -1085,9 +1085,9 @@ const SAPPVideo = ({
                                   key={-1}
                                   onClick={handleLanguageChange}
                                   data-cc={-1}
-                                  className={`hover:text-black text-xsm hover:bg-white ${
+                                  className={`text-xsm hover:bg-white hover:text-black ${
                                     -1 === playbackCC
-                                      ? 'text-black bg-white'
+                                      ? 'bg-white text-black'
                                       : ''
                                   }`}
                                 >
@@ -1098,9 +1098,9 @@ const SAPPVideo = ({
                                     key={cc.index}
                                     onClick={handleLanguageChange}
                                     data-cc={cc.index}
-                                    className={`hover:text-black text-xsm hover:bg-white ${
+                                    className={`text-xsm hover:bg-white hover:text-black ${
                                       cc.index === playbackCC
-                                        ? 'text-black bg-white'
+                                        ? 'bg-white text-black'
                                         : ''
                                     }`}
                                   >

@@ -170,7 +170,7 @@ const MyCourse = () => {
             {guideStatus && guideStep === 1 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_1}
-                className="left-0 top-full mt-3 w-full max-w-[365px]"
+                className="left-0 top-full mt-3 w-full max-w-[22.8125rem]"
                 index={1}
                 total={6}
                 handleNext={nextStep}
@@ -179,93 +179,97 @@ const MyCourse = () => {
             )}
           </div>
         </div>
-        <div className="main mx-auto my-0 max-w-xxl">
-          <div className="flex justify-end xl-max:mx-6">
-            <div
-              className={`relative pb-4 pt-6 ${
-                guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white px-4' : ''
-              }`}
-            >
-              <Filter courses={data?.pages?.[0]?.category} />
-              {guideStatus && guideStep === 6 && (
-                <PopupStep
-                  content={UserGuide.CONTENT_STEP_6}
-                  className="right-full top-full mt-3 w-screen max-w-365px"
-                  index={6}
-                  total={6}
-                  handleNext={closeUserGuide}
-                  showCancel={false}
-                  titleButtonNext="Done"
-                />
-              )}
+        <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
+          <div className="main mx-auto my-0 max-w-xxl">
+            <div className="flex justify-end xl-max:mx-6">
+              <div
+                className={`relative pb-4 pt-6 ${
+                  guideStatus && guideStep === 6
+                    ? 'z-50 -mr-4 bg-white px-4'
+                    : ''
+                }`}
+              >
+                <Filter courses={data?.pages?.[0]?.category} />
+                {guideStatus && guideStep === 6 && (
+                  <PopupStep
+                    content={UserGuide.CONTENT_STEP_6}
+                    className="right-full top-full mt-3 w-screen max-w-365px"
+                    index={6}
+                    total={6}
+                    handleNext={closeUserGuide}
+                    showCancel={false}
+                    titleButtonNext="Done"
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          className={`heading relative mx-auto my-0 flex max-w-xxl bg-white xl-max:mx-6
-        ${guideStatus && guideStep === 4 ? 'z-50' : ''}
-      `}
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <Heading
-            greeting="Welcome to"
-            title="My Course"
-            des={
-              <div>
-                Welcome to the start of your learning journey.
-                <br /> It&apos;s time to advance your expertise with our
-                well-designed courses.
-              </div>
-            }
-          />
-          {guideStatus && guideStep === 4 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_4}
-              className="left-0 top-full mt-3 w-full max-w-365px"
-              index={4}
-              total={6}
-              handleNext={
-                Number(window.sessionStorage.getItem('totalCourse')) > 0
-                  ? nextStep
-                  : closeUserGuide
-              }
-              handleCancel={closeUserGuide}
-            />
-          )}
-        </div>
-        <div
-          // data-aos={ANIMATION.DATA_AOS}
-          className={`relative mx-auto my-0 max-w-xxl pt-6 ${
-            isEmpty(courses)
-              ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
-              : ''
-          } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
-        >
-          {guideStatus && guideStep === 5 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_5}
-              className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[362px]"
-              index={5}
-              total={6}
-              handleNext={nextStep}
-              handleCancel={closeUserGuide}
-            />
-          )}
-          <CoursesList
-            courses={courses}
-            lastElementRef={lastElementRef}
-            refetch={refetch}
-            isFetching={isFetching}
-            isFetchingNextPage={isFetchingNextPage}
-          />
-        </div>
-        {guideStatus && guideStep == 0 && <PopupWelcome />}
-        {guideStatus && (
           <div
-            ref={confirmDialogOverLayRef}
-            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
-          ></div>
-        )}
+            className={`heading relative mx-auto my-0 flex max-w-xxl bg-white xl-max:mx-6
+          ${guideStatus && guideStep === 4 ? 'z-50' : ''}
+        `}
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <Heading
+              greeting="Welcome to"
+              title="My Course"
+              des={
+                <div>
+                  Welcome to the start of your learning journey.
+                  <br /> It&apos;s time to advance your expertise with our
+                  well-designed courses.
+                </div>
+              }
+            />
+            {guideStatus && guideStep === 4 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_4}
+                className="left-0 top-full mt-3 w-full max-w-365px"
+                index={4}
+                total={6}
+                handleNext={
+                  Number(window.sessionStorage.getItem('totalCourse')) > 0
+                    ? nextStep
+                    : closeUserGuide
+                }
+                handleCancel={closeUserGuide}
+              />
+            )}
+          </div>
+          <div
+            // data-aos={ANIMATION.DATA_AOS}
+            className={`relative mx-auto my-0 max-w-xxl pt-6 ${
+              isEmpty(courses)
+                ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
+                : ''
+            } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
+          >
+            {guideStatus && guideStep === 5 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_5}
+                className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[22.625rem]"
+                index={5}
+                total={6}
+                handleNext={nextStep}
+                handleCancel={closeUserGuide}
+              />
+            )}
+            <CoursesList
+              courses={courses}
+              lastElementRef={lastElementRef}
+              refetch={refetch}
+              isFetching={isFetching}
+              isFetchingNextPage={isFetchingNextPage}
+            />
+          </div>
+          {guideStatus && guideStep == 0 && <PopupWelcome />}
+          {guideStatus && (
+            <div
+              ref={confirmDialogOverLayRef}
+              className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
+            ></div>
+          )}
+        </div>
       </Layout>
     </SappLoadingGlobal>
   )

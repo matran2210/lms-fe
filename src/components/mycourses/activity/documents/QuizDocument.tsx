@@ -526,7 +526,7 @@ const QuizDocument = ({
       />
 
       <div
-        className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        className={`text-black-1 h-[31.25rem] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
@@ -552,7 +552,7 @@ const QuizDocument = ({
             />
           )}
       </div>
-      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
+      <div className="grid min-h-[3.125rem] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
         <div className="col-span-1 flex flex-wrap items-center gap-2">
           <div
             className={`${

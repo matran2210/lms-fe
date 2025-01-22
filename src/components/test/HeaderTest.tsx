@@ -46,7 +46,7 @@ const HeaderTest = ({
   const dispatch = useAppDispatch()
   return (
     <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
-      <div className="w-2/6 truncate text-lg-xl font-medium">
+      <div className="w-2/6 truncate text-[18px] font-medium">
         {quizDetail?.name}
       </div>
       {quizDetail?.quiz_timed && (
@@ -90,7 +90,7 @@ const HeaderTest = ({
           cancel={{
             title: 'Quit',
             size: 'small',
-            className: 'border border-bw-1 !w-[109px]',
+            className: 'border border-bw-1 !w-[6.8125rem]',
             color: 'secondary',
             onClick: () => {
               setOpenQuit(true)

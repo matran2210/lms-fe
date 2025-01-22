@@ -56,10 +56,10 @@ const BackToTop = () => {
   return (
     <div
       id="back-to-top"
-      className={`fixed bottom-[160px] right-[27px] rounded-[50%] text-white ${isVisible ? 'visible ' : 'hidden'} cursor-pointer`}
+      className={`fixed bottom-[10rem] right-[1.6875rem] rounded-[50%] text-white ${isVisible ? 'visible ' : 'hidden'} cursor-pointer`}
       onClick={scrollToTop}
     >
-      <div className="flex h-[40px] w-[40px] items-center justify-center self-center">
+      <div className="flex h-[2.5rem] w-[2.5rem] items-center justify-center self-center">
         <svg
           width="48"
           height="48"
