@@ -18,6 +18,7 @@ module.exports = {
       '3xl': '96rem',
       '3.5xl': '1030.75rem',
       '4xl': '120rem',
+      mxl: '992px',
     },
     fontSize: {
       '6xl': ['4rem', { lineHeight: '4.8125rem ' }],

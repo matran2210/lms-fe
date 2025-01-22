@@ -65,7 +65,6 @@ function PinnedHoliday({
                           pauseOnHover={true}
                           className={clsx({ 'leading-5': showPinNoti })}
                           delay={2}
-                          // play={false}
                         >
                           <EditorReader
                             text_editor_content={
