@@ -6,6 +6,7 @@ module.exports = {
       mxl: '992px',
       xs: '23.5rem',
       sm: '40rem',
+      mxl: '992px',
       md: '48rem',
       mxl: '992px',
       lg: '64rem',

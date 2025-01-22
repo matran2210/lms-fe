@@ -46,10 +46,8 @@ function PinnedHoliday({
               className={`fixed z-50 h-12 w-full`}
               style={{
                 backgroundImage: `url(${isTablet || isMobile ? 'pined_tablet.svg' : isIpadPro ? 'holiday_ipadpro.svg' : 'pined_desktop.svg'})`,
-                backgroundRepeat: 'no-repeat' /* Không lặp lại ảnh */,
-                backgroundPosition:
-                  'center center' /* Căn giữa cả theo chiều ngang và dọc */,
-                backgroundSize: '100%',
+                backgroundPosition: 'center center', // Căn giữa cả theo chiều ngang và dọc
+                backgroundSize: '100%', // Chiều cao 100%, chiều rộng tự động giữ đúng tỷ lệ
               }}
             >
               <Row className="flex h-12 flex-row">
@@ -60,13 +58,14 @@ function PinnedHoliday({
                       <div className="flex content-center items-center text-center">
                         <SoundPrimary />
                       </div>
-                      <div className="flex flex-row content-center  items-center md:w-[500px] lg:w-full xl:w-[1380px]">
+                      <div className="flex flex-row content-center items-center xs:w-[250px] md:w-[500px] xl:w-[1000px] 3.5xl:w-[1380px]">
                         <Marquee
                           gradient={false}
                           speed={showPinNoti ? 0 : 50}
                           pauseOnHover={true}
                           className={clsx({ 'leading-5': showPinNoti })}
                           delay={2}
+                          // play={false}
                         >
                           <EditorReader
                             text_editor_content={
@@ -90,11 +89,6 @@ function PinnedHoliday({
                     </div>
                   </div>
                 </Col>
-                {/* <img
-                                    src="/pear_right.svg" // Đường dẫn tới hình ảnh nếu cần ảnh cụ thể
-                                    alt="Left Image"
-                                    className="h-full w-full absolute right-0" // Đặt ảnh bên trái
-                                /> */}
               </Row>
             </div>
           </React.Fragment>
