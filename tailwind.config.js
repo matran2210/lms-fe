@@ -3,9 +3,11 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     screens: {
+      mxl: '992px',
       xs: '23.5rem',
       sm: '40rem',
       md: '48rem',
+      mxl: '992px',
       lg: '64rem',
       xl: '80rem',
       'xl-max': { max: '74.9375rem' },
