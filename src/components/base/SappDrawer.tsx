@@ -66,6 +66,15 @@ const SappDrawer = ({
       drawerElement.classList.toggle('pr-6', hasScrollBar)
     }
   }, [drawerSubId, heightBody, drawerRef, children])
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('overflow-y-hidden')
+    } else {
+      document.body.classList.remove('overflow-y-hidden')
+    }
+  }, [isOpen])
+
   return (
     <>
       {isOpen && (
