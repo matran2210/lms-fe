@@ -69,7 +69,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
           <div
             id="floating-button"
             onClick={handleButtonClick}
-            className={`${visible ? 'clicked bottom-5' : 'bottom-[90px]'} right-[16px]`}
+            className={`${visible ? 'clicked bottom-5' : 'bottom-[5.625rem]'} right-[1rem]`}
           >
             <div className="plus flex items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
               <svg
@@ -100,7 +100,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             <div
               id="floating-button"
               onClick={handleButtonClick}
-              className={`${visible ? 'clicked bottom-5' : 'bottom-[90px]'} right-[16px]`}
+              className={`${visible ? 'clicked bottom-5' : 'bottom-[5.625rem]'} right-[1rem]`}
             >
               <div className="plus flex items-center justify-center delay-300 hover:rounded-full hover:opacity-100">
                 <IconClose />

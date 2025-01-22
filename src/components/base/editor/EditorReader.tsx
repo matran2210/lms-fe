@@ -154,9 +154,9 @@ const EditorReader = ({
         const tdElements = tableElement?.querySelectorAll('td')
         tdElements?.forEach((td) => {
           if (newBorderStyle !== 'none' && newBorderStyle !== 'hidden') {
-            td?.classList?.add('border-[1px]')
+            td?.classList?.add('border-[0.0625rem]')
           } else {
-            td?.classList?.remove('border-[1px]')
+            td?.classList?.remove('border-[0.0625rem]')
           }
         })
       }

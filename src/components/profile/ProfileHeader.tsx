@@ -217,7 +217,7 @@ const ProfileHeader = ({
         </div>
 
         <div className="my-6 flex-1 lg:my-0">
-          <div className="mb-4 max-w-[600px] truncate text-2xl font-bold text-bw-1">
+          <div className="mb-4 max-w-[37.5rem] truncate text-2xl font-bold text-bw-1">
             <TextSkeleton loading={loading || loadingEditName}>
               {user.detail.full_name}
             </TextSkeleton>

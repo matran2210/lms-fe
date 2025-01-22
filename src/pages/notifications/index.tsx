@@ -7,6 +7,7 @@ import NotifyActions from '@components/notification/NotifyActions'
 import NotifyList from '@components/notification/NotifyList'
 import NotifyTab from '@components/notification/NotifyTab'
 import { trackGAEvent } from '@utils/google-analytics'
+import Aos from 'aos'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS } from 'src/constants'
@@ -75,8 +76,9 @@ const Notifications = () => {
   const markAllRead = async () => {
     try {
       await dispatch(markAllNotifications())
-      await coutNotificationsUnRead()
       dispatch(updateStatusAll())
+      await coutNotificationsUnRead()
+      Aos.refresh()
     } catch (error) {}
   }
 

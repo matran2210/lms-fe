@@ -67,7 +67,7 @@ const TestResultDetail = () => {
 
   return (
     <FullScreenLayout title="Test Result" className="!bg-gray-3">
-      <div className="mx-auto max-w-[1570px]">
+      <div className="mx-auto max-w-[98.125rem]">
         <div className="px-5 xl:container md:px-10">
           <Breadcrumb
             tabs={breadcrumbs}

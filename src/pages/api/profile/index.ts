@@ -1,25 +1,20 @@
 import { fetcher } from '@services/requestV2'
-import { apiURL, httpService } from 'src/redux/services/httpService'
+import { apiURL } from 'src/redux/services/httpService'
 import {
   ChangePasswordReq,
-  LoginReq,
-  PostLoginReq,
   ResetPassword,
   SendEmailReq,
   VerifyOtpReq,
 } from 'src/redux/types/Login/login'
 
 const MyProfileAPI = {
-  getProfile: async (params?: Object): Promise<any> => {
-    const response = await httpService.GET<any, any>({
-      uri: `users/profile`,
-    })
-    return response
+  getProfile: async (): Promise<any> => {
+    return fetcher('/users/profile')
   },
 
   getSubjectOfhubspot: (courseCategoryName: string) => {
     return fetcher(
-      `${apiURL}/users/subject-of-hubspot?course_category_name=${courseCategoryName}&sort=name%3DASC`,
+      `/users/subject-of-hubspot?course_category_name=${courseCategoryName}&sort=name%3DASC`,
     )
   },
 
@@ -33,7 +28,7 @@ const MyProfileAPI = {
     params?: Object
   }) => {
     return fetcher(
-      `${apiURL}/users/examination-subjects?page_index=${pageIndex}&page_size=${pageSize}`,
+      `/users/examination-subjects?page_index=${pageIndex}&page_size=${pageSize}`,
       {
         params,
       },
@@ -46,7 +41,7 @@ const MyProfileAPI = {
       examination_subject_id?: string
     }[]
   }) => {
-    return fetcher(`${apiURL}/users/programs`, {
+    return fetcher(`/users/programs`, {
       data,
       method: 'PUT',
     })
@@ -56,6 +51,10 @@ const MyProfileAPI = {
 export default MyProfileAPI
 
 export class AuthAPI {
+  static getProfile() {
+    return fetcher(`${apiURL}/users/profile`)
+  }
+
   static me() {
     return fetcher(`me`)
   }

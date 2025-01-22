@@ -24,7 +24,7 @@ const PopupNotCus = ({ open, setOpen }: IProps) => {
       >
         <CloseIcon className="stroke-white" />
       </div>
-      <div className="flex h-[calc(100vh-50px)] items-center justify-center text-base font-normal text-white">
+      <div className="flex h-[calc(100vh-3.125rem)] items-center justify-center text-base font-normal text-white">
         <span className="text-center">
           <span className="text-white">
             Bạn tạm thời chưa thể xem kết quả chi tiết. Mọi thắc mắc vui lòng

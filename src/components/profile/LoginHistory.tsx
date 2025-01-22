@@ -46,7 +46,7 @@ const LoginHistory = ({ onOpenTab }: IProp) => {
           size="medium"
           title={'Back'}
           color="textUnderline"
-          className="-mr-8 block min-w-[120px] text-base lg:hidden"
+          className="-mr-8 block min-w-[7.5rem] text-base lg:hidden"
         />
       }
       onScroll={(e) => {
