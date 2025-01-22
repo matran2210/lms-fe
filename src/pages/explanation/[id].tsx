@@ -1,15 +1,14 @@
 import { ExplanationPackage } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { httpService } from 'src/redux/services/httpService'
 import { QUESTION_TYPES } from 'src/type/course/Question'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
-import { ANIMATION, PageLink } from 'src/constants'
 import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { PageLink } from 'src/constants'
 
 const Explanation = () => {
   const router = useRouter()
@@ -47,9 +46,7 @@ const Explanation = () => {
     try {
       // const quizAttempts = axiosInstance.get('')
       // const selectedResponseAnswers = data.data.selectedResponseAnswers
-      const resultResponse = (await httpService.GET({
-        uri: 'quiz-attempts/answers/' + id,
-      })) as any
+      const resultResponse = await CoursesAPI.getQuizAttempt(id)
       const topicDescription = await CoursesAPI.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
@@ -116,7 +113,7 @@ const Explanation = () => {
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
         <div
-          className="absolute right-6 top-[14px] ml-auto cursor-pointer"
+          className="absolute right-6 top-[0.875rem] ml-auto cursor-pointer"
           onClick={() => {
             if (activeQuestion?.answer?.quiz_attempt?.id) {
               router.push(

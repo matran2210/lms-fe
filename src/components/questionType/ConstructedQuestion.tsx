@@ -401,7 +401,7 @@ const EssayQuestionPreview = ({
             question_data?.display_type === DISPLAY_TYPE.VERTICAL ||
             forCaseStudy
               ? { width: '100%' }
-              : { width: '100%', marginTop: '10px' }
+              : { width: '100%', marginTop: '0.625rem' }
           }
           key={key}
           className={`${showRequiment ? 'pointer-events-none' : ''}`}
@@ -424,7 +424,7 @@ const EssayQuestionPreview = ({
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[31.25rem] w-full border`}
             >
               <Controller
                 name={name}
@@ -518,7 +518,7 @@ const EssayQuestionPreview = ({
             />
           ) : (
             <div
-              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[31.25rem] w-full border`}
             >
               <Controller
                 name={name}

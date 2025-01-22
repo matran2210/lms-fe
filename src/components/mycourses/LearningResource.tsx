@@ -13,13 +13,14 @@ import React, {
   useState,
 } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import CourseAPI, { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { IResourceDetail, ISection } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
+import { UploadAPI } from 'src/pages/api/upload'
 
 interface IProps {
   open: boolean
@@ -261,7 +262,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
   const download = async (name: string, file_key: string) => {
-    await CourseAPI.downloadResource({
+    await UploadAPI.downloadFile({
       files: [
         {
           name: name,
@@ -298,7 +299,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       title="Resource"
       footer={false}
       confirmOnClose={false}
-      heightBody={'h-[calc(100vh-112px)]'}
+      heightBody={'h-[calc(100vh-7rem)]'}
     >
       <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
         <HookFormSelect
@@ -411,8 +412,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           {resources?.resources?.map((resource) => (
             <div key={resource.id}>
               <div
-                className="mt-6 flex h-[92px] items-center justify-between p-6 last:mb-6"
-                style={{ border: '1px solid #DCDDDD' }}
+                className="mt-6 flex h-[5.75rem] items-center justify-between p-6 last:mb-6"
+                style={{ border: '0.0625rem solid #DCDDDD' }}
               >
                 <div>
                   <div className="text-base font-normal text-bw-1">

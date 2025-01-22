@@ -59,7 +59,7 @@ const Certificate = ({ onOpenTab }: IProp) => {
             size="medium"
             title={'Back'}
             color="textUnderline"
-            className="-mr-8 block min-w-[120px] text-base lg:hidden"
+            className="-mr-8 block min-w-[7.5rem] text-base lg:hidden"
           />
         }
       >
@@ -67,7 +67,7 @@ const Certificate = ({ onOpenTab }: IProp) => {
           return (
             <div key={certificate?.id}>
               <div
-                className="group relative flex min-h-[88px] w-full cursor-pointer flex-row items-start gap-2 self-center border-b border-gray-3 px-6 pt-5  hover:bg-secondary hover:text-primary"
+                className="group relative flex min-h-[5.5rem] w-full cursor-pointer flex-row items-start gap-2 self-center border-b border-gray-3 px-6 pt-5  hover:bg-secondary hover:text-primary"
                 onClick={() =>
                   window.open(
                     `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`,
@@ -76,16 +76,16 @@ const Certificate = ({ onOpenTab }: IProp) => {
                 }
               >
                 <div className=" border-bottom mb-5 flex flex-row  items-start justify-center border bg-gray-4 ">
-                  <a className="h-[48px] w-[80px] border border-solid px-5 py-1 hover:text-primary group-hover:border-active group-hover:bg-secondary ">
+                  <a className="h-[3rem] w-[5rem] border border-solid px-5 py-1 hover:text-primary group-hover:border-active group-hover:bg-secondary ">
                     <CertificateImg className="border-none text-gray-1 group-hover:text-primary" />
                   </a>
                 </div>
 
                 <div className="relative flex w-full cursor-pointer flex-col items-start gap-1">
-                  <div className="text-active text-base font-medium leading-[24px] hover:text-primary">
+                  <div className="text-active text-base font-medium leading-[1.5rem] hover:text-primary">
                     {certificate?.course?.name}
                   </div>
-                  <div className="cursor-pointer text-[13px] leading-[16px] text-gray-1">
+                  <div className="cursor-pointer text-[0.8125rem] leading-[1rem] text-gray-1">
                     <div> Grade Achieved: {certificate?.pass_point} %</div>
                   </div>
                 </div>

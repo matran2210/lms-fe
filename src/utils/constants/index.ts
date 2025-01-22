@@ -39,6 +39,7 @@ export const video_url = process.env.NEXT_PUBLIC_VIDEO_URL
 
 export const CERTIFICATE_DETAIL = '/certificates/[id]'
 export const CERTIFICATE = 'certificates'
+export const BASE_FONT_SIZE = 16
 
 export * from './Course'
 export * from './LocalStorageKey'

@@ -74,13 +74,13 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   return (
     <div data-aos={ANIMATION.DATA_AOS} className="inner flex h-full flex-col">
       <div
-        className={`name-course text-2xl font-medium text-bw-1 xl:h-[60px]`}
+        className={`name-course text-2xl font-medium text-bw-1 xl:h-[3.75rem]`}
         onClick={() => {
           course?.course_section_type === 'PART' ? onClickPart(course?.id) : {}
           trackGAEvent('Title Course Detail')
         }}
       >
-        <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
+        <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[3.75rem]">
           <SappTooltip
             title={course?.name}
             showTooltip={(course?.name as string)?.length > 40}
@@ -90,7 +90,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
         </div>
       </div>
       <div className="des mb-15 mt-6">
-        <div className="h-[120px]">
+        <div className="h-[7.5rem]">
           <SappTooltip
             title={
               <p
@@ -105,7 +105,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
               dangerouslySetInnerHTML={{
                 __html: truncateHTML(25, course?.description) ?? '',
               }}
-              className="h-[120px] text-base text-bw-1"
+              className="h-[7.5rem] text-base text-bw-1"
             />
           </SappTooltip>
         </div>
@@ -115,7 +115,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
           <div className="info mb-2 flex justify-between">
             <div className="text flex items-end">
               <Icon type={`${iconType}`} />
-              <p className="ml-px pl-1 text-medium-sm font-medium leading-[14px] text-bw-1">
+              <p className="ml-px pl-1 text-medium-sm font-medium leading-[0.875rem] text-bw-1">
                 {showStatus}
               </p>
               <span className="ml-px pl-1 text-medium-sm font-medium text-gray-1">

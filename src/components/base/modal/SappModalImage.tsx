@@ -26,13 +26,13 @@ function SappModalImage({ src, setSrc }: Props) {
       classNameModal="sapp-preview--image"
       width="65%"
     >
-      <div className="mx-auto w-fit min-w-[100%] max-w-full md:min-h-[350px]">
+      <div className="mx-auto w-fit min-w-[100%] max-w-full md:min-h-[21.875rem]">
         {src && (
           <Image
             src={src}
             width="1000"
             height="1000"
-            className="h-full max-h-[550px] w-full object-contain md:min-h-[500px] "
+            className="h-full max-h-[31.25rem] w-full object-contain md:min-h-[31.25rem] "
             alt={'image'}
             loading={'eager'}
             priority={true}

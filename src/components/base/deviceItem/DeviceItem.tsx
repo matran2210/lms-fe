@@ -39,10 +39,10 @@ const DeviceItem = ({ data }: any) => {
         </div>
         <div className="flex items-center gap-2">
           <div className="text-xsm text-gray-1">{formattedDate}</div>
-          <div className="h-[4px] w-[4px] rounded-full bg-gray-1"></div>
+          <div className="h-[0.25rem] w-[0.25rem] rounded-full bg-gray-1"></div>
           <div className="text-xsm text-gray-1">{data.ip}</div>
           {data.location && (
-            <div className="h-[4px] w-[4px] rounded-full bg-gray-1"></div>
+            <div className="h-[0.25rem] w-[0.25rem] rounded-full bg-gray-1"></div>
           )}
           <div>{data.location || ''}</div>
         </div>

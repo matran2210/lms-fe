@@ -66,7 +66,7 @@ const Pagination = ({
       <div
         className={`${
           type === 'row' && activeShowAll
-            ? 'relative mx-7 w-[calc(100%-141px)]'
+            ? 'relative mx-7 w-[calc(100%-8.8125rem)]'
             : ' flex items-center gap-6'
         }`}
       >

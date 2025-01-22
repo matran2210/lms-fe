@@ -164,7 +164,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
               type="text"
               value={otp}
               onChange={(event) => onEnterDigit(index, event)}
-              inputClassName={`text-center h-[67px] w-[67px] ${
+              inputClassName={`text-center h-[4.1875rem] w-[4.1875rem] ${
                 errorMessage ? 'border-state-error' : 'border-gray-2'
               } pt-5.25 pb-5 px-0`}
               onPaste={(e: any) =>

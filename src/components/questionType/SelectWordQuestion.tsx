@@ -166,11 +166,11 @@ const SelectWord = forwardRef(
                   if (i === 0) {
                     return `<option value="${e?.value}" ${
                       isSelected ? 'selected' : ''
-                    } class="w-[50px] break-all">${el}</option>`
+                    } class="w-[3.125rem] break-all">${el}</option>`
                   }
                   return `<option disabled value="${e?.value}" ${
                     isSelected ? 'selected' : ''
-                  } class="w-[50px] break-all">${el}</option>`
+                  } class="w-[3.125rem] break-all">${el}</option>`
                 })
                 ?.join('')
 
@@ -178,7 +178,7 @@ const SelectWord = forwardRef(
             } else {
               return `<option value="${e?.value}" ${
                 isSelected ? 'selected' : ''
-              } class="w-[50px] break-all">${e?.label}</option>
+              } class="w-[3.125rem] break-all">${e?.label}</option>
               `
             }
           })}
@@ -307,7 +307,7 @@ const SelectWord = forwardRef(
         />
         {answerContent && (
           <>
-            <div className="pt-[18px] text-base font-semibold">
+            <div className="pt-[1.125rem] text-base font-semibold">
               Correct Answer
             </div>
             <EditorReader

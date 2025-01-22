@@ -18,7 +18,7 @@ export default function Page() {
           alignItems: 'center',
         }}
       >
-        <h1 style={{ fontSize: '4rem', margin: '14px 0' }}>
+        <h1 style={{ fontSize: '4rem', margin: '0.875rem 0' }}>
           <svg
             style={{
               height: '1em',
@@ -37,14 +37,14 @@ export default function Page() {
         <button
           type="button"
           style={{
-            padding: '12px',
+            padding: '0.75rem',
             cursor: 'pointer',
             backgroundColor: '#AD6CAA',
-            borderRadius: '4px',
+            borderRadius: '0.25rem',
             border: 'none',
             color: 'white',
-            fontSize: '14px',
-            margin: '18px',
+            fontSize: '0.875rem',
+            margin: '1.125rem',
           }}
           onClick={async () => {
             await Sentry.startSpan(
@@ -71,7 +71,7 @@ export default function Page() {
           </a>
           .
         </p>
-        <p style={{ marginTop: '24px' }}>
+        <p style={{ marginTop: '1.5rem' }}>
           For more information, see{' '}
           <a href="https://docs.sentry.io/platforms/javascript/guides/nextjs/">
             https://docs.sentry.io/platforms/javascript/guides/nextjs/
