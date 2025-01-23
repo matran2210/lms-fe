@@ -256,13 +256,17 @@ export const capitalizeFirstLetter = (str?: string) => {
     .join(' ')
 }
 
-export const truncateBySpace = (text: string, maxWords: number): string => {
+export const truncateBySpace = (
+  text: string,
+  maxWords: number,
+  isSlash: boolean = false,
+): string => {
   if (isEmpty(text) || isUndefined(text) || isNull(text)) return ''
   const words = text?.split(' ')
   if (words?.length <= maxWords) {
-    return text
+    return text + (isSlash ? ' /' : '')
   }
-  return words?.slice(0, maxWords).join(' ') + '...'
+  return words?.slice(0, maxWords).join(' ') + `...${isSlash ? '/' : ''}`
 }
 
 export const truncateTextOnly = (htmlString: string, limit: number) => {
