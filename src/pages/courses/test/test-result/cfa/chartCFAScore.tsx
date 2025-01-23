@@ -25,7 +25,7 @@ const ChartCFAScore = ({ data }: IProps) => {
         Multiple Choice Score by Topic
       </div>
       <div className="relative mb-4 flex w-full">
-        <div className="absolute left-[-2.625rem] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-medium-sm font-normal text-bw-1">
+        <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-medium-sm font-normal text-bw-1">
           Available Points
         </div>
         <div className="absolute left-27 top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-gray-1"></div>
@@ -62,9 +62,9 @@ const ChartCFAScore = ({ data }: IProps) => {
             {data?.map((item: any, index: number) => (
               <div
                 key={item?.id + index}
-                className="relative flex w-full min-w-[8.375rem] max-w-[8.375rem] shrink-0 flex-col items-start justify-between gap-1 bg-gray-4 py-3 pl-6 pr-6"
+                className="relative flex w-full min-w-[134px] max-w-[134px] shrink-0 flex-col items-start justify-between gap-1 bg-gray-4 py-3 pl-6 pr-6"
               >
-                <div className="absolute bottom-[calc(100%+1rem)] left-0 h-40 w-auto">
+                <div className="absolute bottom-[calc(100%+16px)] left-0 h-40 w-auto">
                   <div
                     className="absolute left-6 h-1 w-16 bg-primary"
                     style={{

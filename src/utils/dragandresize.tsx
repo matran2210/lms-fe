@@ -1,5 +1,3 @@
-import { BASE_FONT_SIZE } from './constants'
-
 export const moveAndResizeElement = (
   element: HTMLElement,
 
@@ -56,10 +54,8 @@ export const moveAndResizeElement = (
         y: e.clientY,
       }
       if (!currentResizer) {
-        element.style.left =
-          (mousePosition.x + offset[0]) / BASE_FONT_SIZE + 'rem'
-        element.style.top =
-          (mousePosition.y + offset[1]) / BASE_FONT_SIZE + 'rem'
+        element.style.left = mousePosition.x + offset[0] + 'px'
+        element.style.top = mousePosition.y + offset[1] + 'px'
         return
       }
 
@@ -69,10 +65,10 @@ export const moveAndResizeElement = (
             const width = original_width + (e.pageX - original_mouse_x)
             const height = original_height + (e.pageY - original_mouse_y)
             if (width > minimum_size) {
-              element.style.width = width / BASE_FONT_SIZE + 'rem'
+              element.style.width = width + 'px'
             }
             if (height > minimum_size) {
-              element.style.height = height / BASE_FONT_SIZE + 'rem'
+              element.style.height = height + 'px'
             }
           }
           break
@@ -81,13 +77,12 @@ export const moveAndResizeElement = (
             const height = original_height + (e.pageY - original_mouse_y)
             const width = original_width - (e.pageX - original_mouse_x)
             if (height > minimum_size) {
-              element.style.height = height / BASE_FONT_SIZE + 'rem'
+              element.style.height = height + 'px'
             }
             if (width > minimum_size) {
-              element.style.width = width / BASE_FONT_SIZE + 'rem'
+              element.style.width = width + 'px'
               element.style.left =
-                (original_x + (e.pageX - original_mouse_x)) / BASE_FONT_SIZE +
-                'rem'
+                original_x + (e.pageX - original_mouse_x) + 'px'
             }
           }
           break
@@ -96,13 +91,12 @@ export const moveAndResizeElement = (
             const width = original_width + (e.pageX - original_mouse_x)
             const height = original_height - (e.pageY - original_mouse_y)
             if (width > minimum_size) {
-              element.style.width = width / BASE_FONT_SIZE + 'rem'
+              element.style.width = width + 'px'
             }
             if (height > minimum_size) {
-              element.style.height = height / BASE_FONT_SIZE + 'rem'
+              element.style.height = height + 'px'
               element.style.top =
-                (original_y + (e.pageY - original_mouse_y)) / BASE_FONT_SIZE +
-                'rem'
+                original_y + (e.pageY - original_mouse_y) + 'px'
             }
           }
           break
@@ -111,15 +105,14 @@ export const moveAndResizeElement = (
             const width = original_width - (e.pageX - original_mouse_x)
             const height = original_height - (e.pageY - original_mouse_y)
             if (width > minimum_size) {
-              element.style.width = width / BASE_FONT_SIZE + 'rem'
+              element.style.width = width + 'px'
               element.style.left =
-                (original_x + (e.pageX - original_mouse_x)) / BASE_FONT_SIZE +
-                'rem'
+                original_x + (e.pageX - original_mouse_x) + 'px'
             }
             if (height > minimum_size) {
-              element.style.height = height / BASE_FONT_SIZE + 'rem'
+              element.style.height = height + 'px'
               element.style.top =
-                original_y + (e.pageY - original_mouse_y) + 'rem'
+                original_y + (e.pageY - original_mouse_y) + 'px'
             }
           }
           break
@@ -127,7 +120,7 @@ export const moveAndResizeElement = (
           {
             const width = original_width + (e.pageX - original_mouse_x)
             if (width > minimum_size) {
-              element.style.width = width / BASE_FONT_SIZE + 'rem'
+              element.style.width = width + 'px'
             }
           }
           break
@@ -135,9 +128,9 @@ export const moveAndResizeElement = (
           {
             const width = original_width - (e.pageX - original_mouse_x)
             if (width > minimum_size) {
-              element.style.width = width / BASE_FONT_SIZE + 'rem'
+              element.style.width = width + 'px'
               element.style.left =
-                original_x + (e.pageX - original_mouse_x) + 'rem'
+                original_x + (e.pageX - original_mouse_x) + 'px'
             }
           }
           break

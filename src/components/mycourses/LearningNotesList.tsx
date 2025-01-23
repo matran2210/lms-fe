@@ -358,7 +358,7 @@ const LearningNotesList = () => {
       footer={false}
       drawerSubId={'-notes-list'}
       confirmOnClose={false}
-      heightBody={'h-[calc(100vh-7rem)]'}
+      heightBody={'h-[calc(100vh-112px)]'}
     >
       <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
         <HookFormSelect

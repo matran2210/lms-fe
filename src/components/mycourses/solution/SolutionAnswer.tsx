@@ -24,11 +24,11 @@ const SolutionAnswer = ({
       >
         {isYourAnswer ? (
           <>
-            <Icon type="group-fill" className="h-[1.125rem] w-[1.125rem]" />
+            <Icon type="group-fill" className="h-[18px] w-[18px]" />
           </>
         ) : (
           <>
-            <Icon type="group-empty" className="h-[1.125rem] w-[1.125rem]" />
+            <Icon type="group-empty" className="h-[18px] w-[18px]" />
           </>
         )}
         <div className="w-fit">

@@ -311,7 +311,7 @@ const TestModal = ({
             {resultList.data.length > 1 && (
               <div className="flex gap-2">
                 <HookFormSelect
-                  classParent="w-full md:max-w-full border-none h-[3.125rem] forcus:text-primary"
+                  classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
                   placeholder=""
                   value={selectedResult}
                   onChange={(selectedOption) => {

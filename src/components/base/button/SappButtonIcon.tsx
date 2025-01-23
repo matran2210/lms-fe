@@ -45,7 +45,7 @@ const SappButtonIcon = ({
           isBgPrimary
             ? 'primary'
             : 'button-icon border border-solid border-[#404041]'
-        } flex h-8 min-w-[7.5rem] items-center justify-center`}
+        } flex h-8 min-w-[120px] items-center justify-center`}
       >
         {children}
         <div
@@ -63,7 +63,7 @@ const SappButtonIcon = ({
     <button
       className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${
         isBgPrimary ? 'primary' : 'border border-solid border-[#404041]'
-      } ${clsx({ 'button-icon': ishover })} flex h-8 min-w-[7.5rem] items-center justify-center`}
+      } ${clsx({ 'button-icon': ishover })} flex h-8 min-w-[120px] items-center justify-center`}
       onClick={onClick}
       disabled={loading || disabled}
       type={type ?? 'button'}

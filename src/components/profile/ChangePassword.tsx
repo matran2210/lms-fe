@@ -114,7 +114,7 @@ const ChangePassword = ({ onOpenTab }: IProp) => {
                   size="medium"
                   title={'Back'}
                   color="textUnderline"
-                  className="block min-w-[7.5rem] pr-0 text-base lg:hidden"
+                  className="block min-w-[120px] pr-0 text-base lg:hidden"
                 />
                 <ButtonCancelSubmit
                   className="flex"

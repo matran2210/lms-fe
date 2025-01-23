@@ -44,10 +44,10 @@ const SolutionModalContent = ({
 
   return (
     <div
-      className={`pt-6 ${classModalParent} h-[calc(100vh-3.75rem)] overflow-y-auto`}
+      className={`pt-6 ${classModalParent} h-[calc(100vh-60px)] overflow-y-auto`}
     >
       <div
-        className={`topic ${classModalContent} text-base text-bw-1 [&>.content]:max-h-full [&>.content]:overflow-y-auto [&>img]:mx-auto [&>img]:my-6 [&>img]:max-w-[14.0625rem] [&>p]:mb-6`}
+        className={`topic ${classModalContent} text-base text-bw-1 [&>.content]:max-h-full [&>.content]:overflow-y-auto [&>img]:mx-auto [&>img]:my-6 [&>img]:max-w-[225px] [&>p]:mb-6`}
         dangerouslySetInnerHTML={{ __html: topic }}
       ></div>
       <div className={`content ${classModalContent}`}>

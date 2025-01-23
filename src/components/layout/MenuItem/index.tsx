@@ -191,7 +191,7 @@ export default function MenuItem({
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
-        <div className="mx-auto h-px w-[calc(100%-3rem)] bg-gray-2 text-center"></div>
+        <div className="mx-auto h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
       )}
       <div
         className={`group cursor-pointer hover:bg-secondary ${
@@ -232,7 +232,7 @@ export default function MenuItem({
         `}
       >
         <div
-          className={`sidebar-item flex max-h-[1.5rem]  items-center ${
+          className={`sidebar-item flex max-h-[24px]  items-center ${
             Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
           }`}
           onClick={() => closeSideBar()}

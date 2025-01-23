@@ -1,5 +1,5 @@
 import styles from '@styles/components/SAPPVideo.module.scss'
-import { BASE_FONT_SIZE, video_url } from '@utils/constants'
+import { video_url } from '@utils/constants'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
 import {
@@ -472,7 +472,7 @@ const SAPPVideo = ({
       seekTooltipRef.current.textContent = `${
         t.hours !== '00' ? t.hours + ':' : ''
       }${t.minutes}:${t.seconds}`
-      seekTooltipRef.current.style.left = `${(event.pageX - rect.left) / BASE_FONT_SIZE}rem`
+      seekTooltipRef.current.style.left = `${event.pageX - rect.left}px`
     }
   }
 
@@ -851,7 +851,7 @@ const SAPPVideo = ({
                       defaultValue="0"
                     />
                     <div
-                      className="seek-tooltip absolute top-[-3.125rem] -ml-5 hidden bg-overlay-dark p-1 text-xsm font-semibold text-white"
+                      className="seek-tooltip absolute top-[-50px] -ml-5 hidden bg-overlay-dark p-1 text-xsm font-semibold text-white"
                       ref={seekTooltipRef}
                     >
                       00:00

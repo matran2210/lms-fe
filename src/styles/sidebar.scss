@@ -1,7 +1,7 @@
 body:not(.no-hover) {
   .menu-sidebar-left {
     &:hover {
-      @apply w-[12.5rem];
+      @apply w-[200px];
 
       .group-logos {
         @apply pb-5;

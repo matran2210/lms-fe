@@ -62,7 +62,7 @@ const Results = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Result">
-        <div className="h-[4.375rem] border-b border-default bg-white">
+        <div className="h-[70px] border-b border-default bg-white">
           <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}

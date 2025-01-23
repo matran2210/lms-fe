@@ -43,7 +43,7 @@ function PinnedNotifications() {
                       <div className="flex content-center items-center text-center">
                         <IconLoudSpeaker />
                       </div>
-                      <div className="flex w-[14.0625rem] flex-row content-center items-center lg:w-full">
+                      <div className="flex w-[225px] flex-row content-center items-center lg:w-full">
                         <Marquee
                           gradient={false}
                           speed={showPinNoti ? 0 : 50}

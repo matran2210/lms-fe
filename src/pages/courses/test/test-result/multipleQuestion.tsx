@@ -155,7 +155,7 @@ const MultipleQuestion = ({
     <div className="relative">
       <div
         className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto bg-white p-6 shadow-sidebar-tablet 
-        xl:sticky xl:top-6 xl:!h-fit xl:max-h-[calc(100vh-4.0625rem)] xl:pb-0 xl:pl-7 xl:shadow-sidebar`}
+        xl:sticky xl:top-6 xl:!h-fit xl:max-h-[calc(100vh-65px)] xl:pb-0 xl:pl-7 xl:shadow-sidebar`}
         data-aos={ANIMATION.DATA_AOS}
         ref={multipleQuestionRef}
       >
@@ -207,7 +207,7 @@ const MultipleQuestion = ({
                 onMouseLeave={() => setIsDragging(false)}
                 className={`${
                   !showMore ? 'block' : 'hidden'
-                } grid !max-h-[65rem] w-full grid-cols-2 gap-3 duration-300 xl:hidden`}
+                } grid !max-h-[1040px] w-full grid-cols-2 gap-3 duration-300 xl:hidden`}
               >
                 {renderLines(
                   'Multiple Choice Questions',
@@ -221,7 +221,7 @@ const MultipleQuestion = ({
                 )}
               </div>
             </div>
-            <div className="flex max-h-[2.5rem] grow items-center justify-end md:w-1/5">
+            <div className="flex max-h-[40px] grow items-center justify-end md:w-1/5">
               {Number(questions?.selectedResponseAnswers?.length || 0) +
                 Number(questions?.constructedResponseAnswers?.length || 0) >=
                 8 && (
@@ -242,7 +242,7 @@ const MultipleQuestion = ({
                   title={'Quit'}
                   size={'medium'}
                   className={
-                    'mb-0 max-w-[7.5rem] px-11 text-medium-sm !font-medium'
+                    'mb-0 max-w-[120px] px-11 text-medium-sm !font-medium'
                   }
                 />
               </Link>

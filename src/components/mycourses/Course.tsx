@@ -286,7 +286,7 @@ const Course = ({
         >
           <div className={`flex min-h-352 flex-col`}>
             <div
-              className={`name-course mb-4 text-2xl font-medium xl:h-[3.75rem] ${
+              className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
               }`}
             >
@@ -344,7 +344,7 @@ const Course = ({
                 )}
               </div>
             </div>
-            <div className="des mb-8 mt-6 line-clamp-5 h-[7.25rem] text-ellipsis">
+            <div className="des mb-8 mt-6 line-clamp-5 h-[116px] text-ellipsis">
               {(course?.description as string)?.length > 250 ? (
                 <Tooltip
                   title={

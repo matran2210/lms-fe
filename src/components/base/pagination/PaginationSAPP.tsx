@@ -47,7 +47,7 @@ const PaginationSAPP = ({
           <label className="flex items-center">
             <span className="mr-2.5 text-xsm text-gray-1">Show</span>
             <select
-              className="w-[4.375rem] cursor-pointer border-0 bg-gray-4 px-2.5 py-1 shadow-0"
+              className="w-[70px] cursor-pointer border-0 bg-gray-4 px-2.5 py-1 shadow-0"
               onChange={(e) => {
                 const pageNumber = parseInt(e.target.value)
                 handlePageChange(pageNumber)

@@ -196,7 +196,7 @@ const MyProfile = ({
                 size="medium"
                 title={'Back'}
                 color="textUnderline"
-                className="block min-w-[7.5rem] pr-0 text-base lg:hidden"
+                className="block min-w-[120px] pr-0 text-base lg:hidden"
                 loading={loading && !isEdit}
               ></SappButton>
               {!isEdit ? (
@@ -204,7 +204,7 @@ const MyProfile = ({
                   onClick={handleChangeToEditForm}
                   size="medium"
                   title={'Edit'}
-                  className="min-w-[7.5rem] text-base"
+                  className="min-w-[120px] text-base"
                   loading={loading && !isEdit}
                 ></SappButton>
               ) : (
@@ -247,7 +247,7 @@ const MyProfile = ({
                     className="w-full flex-1"
                   ></HookFormTextField>
                 ) : (
-                  <div className="max-w-[18.75rem] flex-auto font-medium text-bw-1">
+                  <div className="max-w-[300px] flex-auto font-medium text-bw-1">
                     <TextSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
                     </TextSkeleton>
@@ -348,7 +348,7 @@ const MyProfile = ({
                       <div>
                         <span className="text-gray-1">Profile {i + 1}</span>
                         {e?.is_default && (
-                          <span className="ml-[0.625rem] inline-block select-none bg-blue-600 bg-opacity-5 px-2 py-1 text-medium-sm leading-4 text-state-info">
+                          <span className="ml-[10px] inline-block select-none bg-blue-600 bg-opacity-5 px-2 py-1 text-medium-sm leading-4 text-state-info">
                             Default
                           </span>
                         )}
@@ -410,12 +410,12 @@ const MyProfile = ({
         showSubmitButton={makeDefaultDrawer?.is_default ? false : true}
       >
         <div className="text-bw-1">
-          <span className="inline-block w-[18.875rem] text-gray-1">Email:</span>
+          <span className="inline-block w-[302px] text-gray-1">Email:</span>
           <span className="font-medium">{makeDefaultDrawer?.email || ''}</span>
         </div>
         {makeDefaultDrawer?.phone && (
           <div className="mt-5 text-bw-1">
-            <span className="inline-block w-[18.875rem] text-gray-1">
+            <span className="inline-block w-[302px] text-gray-1">
               Phone Number:
             </span>
             <span className="font-medium">
@@ -425,7 +425,7 @@ const MyProfile = ({
         )}
         {makeDefaultDrawer?.address && (
           <div className="mt-5 text-bw-1">
-            <span className="inline-block w-[18.875rem] text-gray-1">
+            <span className="inline-block w-[302px] text-gray-1">
               {' '}
               Address:{' '}
             </span>
@@ -458,10 +458,10 @@ const TextWrapper = ({
         !isEdit ? 'mb-5' : 'mb-8 transition-[margin]'
       }`}
     >
-      <div className="w-[17.43rem] max-w-[12.5rem] flex-none text-gray-1 lg:max-w-[50%]">
+      <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
         {title}
       </div>
-      <div className="max-w-[18.75rem] flex-auto font-medium text-bw-1">
+      <div className="max-w-[300px] flex-auto font-medium text-bw-1">
         {value && (
           <TextSkeleton loading={loading && !isEdit}>{value}</TextSkeleton>
         )}

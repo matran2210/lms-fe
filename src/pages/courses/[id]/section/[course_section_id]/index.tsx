@@ -385,7 +385,7 @@ const CoursePartDetail = () => {
             widthDrawer="w-6/12"
             handleSubmit={handleNextLesson}
             confirmOnClose={false}
-            heightBody="h-[calc(100vh-11.625rem)] pb-6"
+            heightBody="h-[calc(100vh-186px)] pb-6"
             sizeTextBtn="medium"
           >
             <TextSkeleton
@@ -395,7 +395,7 @@ const CoursePartDetail = () => {
               classChild="rounded"
             >
               <div
-                style={{ borderBottom: '0.0625rem solid #DCDDDD' }}
+                style={{ borderBottom: '1px solid #DCDDDD' }}
                 className="learningOutcome-description pb-6 text-bw-1"
                 dangerouslySetInnerHTML={{
                   __html: learningOutcome?.description ?? '',

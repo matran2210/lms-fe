@@ -47,7 +47,6 @@ import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-import { BASE_FONT_SIZE } from '@utils/constants'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
@@ -904,17 +903,15 @@ const CaseStudyDetail = ({ questions }: any) => {
             </div>
             {/* End Header */}
             <div
-              className="flex h-[calc(100%-6.5rem)] bg-gray-3"
+              className="flex h-[calc(100%-104px)] bg-gray-3"
               id={'preview-question'}
             >
               <div
                 className={`h-full overflow-auto bg-white p-6`}
-                style={{
-                  width: `calc(50% - ${leftWidth / BASE_FONT_SIZE}rem)`,
-                }}
+                style={{ width: `calc(50% - ${leftWidth}px)` }}
               >
                 <div
-                  className="min-w-[43.75rem]"
+                  className="min-w-[700px]"
                   id="hightlight_area_topic"
                   onMouseUp={(e: any) => {
                     if (
@@ -976,7 +973,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 </div>
               </div>
               <div
-                className="h-full w-[1.25rem] cursor-ew-resize bg-gray-3"
+                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -985,9 +982,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               ></div>
               <div
                 className={` h-full overflow-auto bg-white py-6 `}
-                style={{
-                  width: `calc(50% + ${leftWidth / BASE_FONT_SIZE}rem)`,
-                }}
+                style={{ width: `calc(50% + ${leftWidth}px)` }}
                 onScroll={(e) => {
                   const { target } = e
                   if (
@@ -998,7 +993,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   }
                 }}
               >
-                <div className="min-w-[43.75rem]">
+                <div className="min-w-[700px]">
                   <div
                     className="px-6"
                     id="hightlight_area"
@@ -1072,10 +1067,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                 return (
                   <MovableWindow
                     position={{
-                      width: '25rem',
+                      width: '400px',
                       height: 'fit-content',
-                      top: 'calc(25% - 9.375rem)',
-                      left: 'calc(25% - 12.5rem)',
+                      top: 'calc(25% - 150px)',
+                      left: 'calc(25% - 200px)',
                     }}
                     key={e?.id}
                     onClick={() => setOnFocusingPad(e?.id)}
@@ -1102,10 +1097,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                 return (
                   <MovableWindow
                     position={{
-                      width: '25rem',
-                      height: '18.75rem',
-                      top: 'calc(50% - 9.375rem)',
-                      left: 'calc(50% - 12.5rem)',
+                      width: '400px',
+                      height: '300px',
+                      top: 'calc(50% - 150px)',
+                      left: 'calc(50% - 200px)',
                     }}
                     key={e?.id}
                     onClick={() => setOnFocusingPad(e?.id)}
@@ -1132,7 +1127,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         onChange={(event) =>
                           handleChangeScratchPad(event, e?.id)
                         }
-                        className="sapp-text-area h-[calc(100%-2.5rem)] w-full p-5"
+                        className="sapp-text-area h-[calc(100%-40px)] w-full p-5"
                       />
                       {/* </div> */}
                     </div>
@@ -1148,9 +1143,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                 return (
                   <MovableWindow
                     position={{
-                      width: '37.5rem',
-                      height: '25rem',
-                      top: 'calc(75% - 15.625rem)',
+                      width: '600px',
+                      height: '400px',
+                      top: 'calc(75% - 250px)',
                       left: 'calc(0%)',
                     }}
                     key={e?.id}
@@ -1173,7 +1168,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                           <CloseIcon />
                         </button>
                       </div>
-                      <div className="h-[calc(100%-2.5rem)] overflow-auto bg-white p-5">
+                      <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                         <EditorReader
                           text_editor_content={exhibitsDes?.description}
                           className=" w-full"
@@ -1197,10 +1192,10 @@ const CaseStudyDetail = ({ questions }: any) => {
               } else if (e.type === 'file') {
                 return (
                   <MovableWindow
-                    className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[52.625rem]"
+                    className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
                     position={{
-                      width: '37.1875rem',
-                      height: '40625rem',
+                      width: '595px',
+                      height: '650px',
                       top: 'calc(50%)',
                       left: 'calc(50%)',
                     }}
@@ -1224,7 +1219,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       </div>
                       <div
                         className="overflow-auto bg-white p-4"
-                        style={{ height: 'calc(100% - 2.5rem' }}
+                        style={{ height: 'calc(100% - 40px' }}
                       >
                         <PDFViewer file={e?.file} />
                       </div>
@@ -1233,7 +1228,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 )
               }
             })}
-            <div className=" relative flex h-[3rem] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
               <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">

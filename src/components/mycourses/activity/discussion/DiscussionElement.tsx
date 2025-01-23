@@ -264,7 +264,7 @@ function DiscussionElement({
                   />
                   {isEdit && (
                     <div
-                      className="absolute right-[-0.625rem] top-[-0.625rem] rounded-[5rem] bg-white p-[0.3125rem] shadow-md"
+                      className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
                       onClick={() => handleDeleteFile(e.id, false)}
                     >
                       <CloseIconPreview width={12} height={12} />
@@ -290,7 +290,7 @@ function DiscussionElement({
                   ></Image>
                   {isEdit && (
                     <div
-                      className="absolute right-[-0.625rem] top-[-0.625rem] rounded-[5rem] bg-white p-[0.3125rem] shadow-md"
+                      className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
                       onClick={() => {
                         handleDeleteFile(index, true)
                       }}

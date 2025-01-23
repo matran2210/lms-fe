@@ -74,7 +74,6 @@ import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
 import TestScratchPads from './TestScratchPads'
 import HeaderTest from '@components/test/HeaderTest'
-import { BASE_FONT_SIZE } from '@utils/constants'
 
 declare global {
   interface Window {
@@ -1705,12 +1704,10 @@ const TestDetail = () => {
                 >
                   <div
                     className="h-full overflow-auto bg-white p-6"
-                    style={{
-                      width: `calc(50% - ${leftWidth / BASE_FONT_SIZE}px)`,
-                    }}
+                    style={{ width: `calc(50% - ${leftWidth}px)` }}
                   >
                     <div
-                      className="min-w-[43.75rem]"
+                      className="min-w-[700px]"
                       id="hightlight_area_topic"
                       onMouseUp={(e: any) => {
                         if (
@@ -1767,7 +1764,7 @@ const TestDetail = () => {
                     </div>
                   </div>
                   <div
-                    className="h-full w-[1.25rem] cursor-ew-resize bg-gray-3"
+                    className="h-full w-[20px] cursor-ew-resize bg-gray-3"
                     onMouseDown={() => {
                       setStartResize(true)
                     }}
@@ -1775,12 +1772,10 @@ const TestDetail = () => {
                   ></div>
                   <div
                     className="h-full overflow-auto bg-white py-6 "
-                    style={{
-                      width: `calc(50% + ${leftWidth / BASE_FONT_SIZE}rem)`,
-                    }}
+                    style={{ width: `calc(50% + ${leftWidth}px)` }}
                     ref={rightSideRef}
                   >
-                    <div className="min-w-[43.75rem] px-6">
+                    <div className="min-w-[700px] px-6">
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,
@@ -1824,7 +1819,7 @@ const TestDetail = () => {
                         }
                       }
                     }}
-                    className="editor-wrap m-auto mb-3 w-full max-w-[59.375rem]"
+                    className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
                   >
                     <EditorReader
                       className="mb-4"
@@ -1856,7 +1851,7 @@ const TestDetail = () => {
                       )}
                   </div>
 
-                  <div className="m-auto w-full max-w-[59.375rem]">
+                  <div className="m-auto w-full max-w-[950px]">
                     {checkType(
                       currentTabContent?.data,
                       currentTabContent?.data?.qType,
@@ -1875,7 +1870,7 @@ const TestDetail = () => {
           {/** End Question Content */}
 
           {/** Scratchpads */}
-          <div className=" z-10 flex h-[3rem]  items-center justify-between bg-gray-3 shadow-question-footer">
+          <div className=" z-10 flex h-[48px]  items-center justify-between bg-gray-3 shadow-question-footer">
             <div className="flex h-full items-center">
               <button
                 className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -1951,7 +1946,7 @@ const TestDetail = () => {
                               key={e?.value}
                               className={`p-3 ${
                                 !watch('exhibits')?.includes(e?.value) &&
-                                'min-w-[6.25rem] text-gray-1'
+                                'min-w-[100px] text-gray-1'
                               }`}
                               onClick={() => handleOpenExhibit(e?.value)}
                             >{`Exhibit ${index + 1}`}</button>
@@ -2062,7 +2057,7 @@ const TestDetail = () => {
                   </div>
                 )}
               <button
-                className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[9.375rem] "
+                className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px] "
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2079,7 +2074,7 @@ const TestDetail = () => {
                   !currentTabContent?.done
                     ? 'border-gray-1 text-bw-1'
                     : 'border-default text-gray-2'
-                } w-[9.375rem] justify-center p-1 py-2`}
+                } w-[150px] justify-center p-1 py-2`}
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
@@ -2094,7 +2089,7 @@ const TestDetail = () => {
               !currentTabContent?.done &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 <button
-                  className="flex w-[9.375rem] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
                     const data = await getResult(currentTabContent)
                     confirmAnswer(
@@ -2113,7 +2108,7 @@ const TestDetail = () => {
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <
                   filteredTabs.length - 1 && (
                   <button
-                    className="flex w-[9.375rem] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                     onClick={async () => {
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,

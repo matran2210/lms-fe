@@ -48,7 +48,7 @@ const CourseParts = ({
             >
               {router?.query?.focus_id === coursePart.id ? (
                 <div
-                  className={`item card active-section aspect-h-16 relative flex h-[25.75rem] flex-col justify-between bg-white p-[1.875rem] shadow-sidebar`}
+                  className={`item card active-section aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
                   data-aos={ANIMATION.DATA_AOS}
                   style={{ zIndex: courses?.length - index }}
                   ref={lastElementRef}
@@ -71,7 +71,7 @@ const CourseParts = ({
               ) : (
                 <div
                   key={coursePart?.id}
-                  className={`item aspect-h-16 relative flex h-[25.75rem] flex-col justify-between bg-white p-[1.875rem] shadow-sidebar`}
+                  className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
                   ref={lastElementRef}
                   data-aos={ANIMATION.DATA_AOS}
                   style={{ zIndex: courses?.length - index }}

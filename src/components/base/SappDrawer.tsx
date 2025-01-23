@@ -36,7 +36,7 @@ const SappDrawer = ({
   drawerSubId = '',
   confirmOnClose = true,
   showSubmitButton = true,
-  heightBody = 'h-[calc(100vh-5rem)]',
+  heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
 }: IProps) => {
   const dispatch = useAppDispatch()
@@ -92,7 +92,7 @@ const SappDrawer = ({
         ease-in-out`}
       >
         <div className="flex flex-col justify-between">
-          <div className="w-100 relative flex min-h-[5rem] items-center justify-between bg-bw-1 px-8 py-2 text-2xl font-medium text-white">
+          <div className="w-100 relative flex min-h-[80px] items-center justify-between bg-bw-1 px-8 py-2 text-2xl font-medium text-white">
             <span className="line-clamp-3 pr-4">{title}</span>
             <div className="shrink-0">
               <Image
@@ -113,17 +113,17 @@ const SappDrawer = ({
           <div className="">{children}</div>
         </div>
         {footer && (
-          <div className="absolute bottom-0 left-0 right-0 flex h-[4.125rem] w-full items-center justify-between border-t border-default bg-white">
+          <div className="absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-between border-t border-default bg-white">
             <ButtonText
               title="Cancel"
-              className="ms-[0.25rem]"
+              className="ms-[4px]"
               onClick={handleMaskClick}
               size={sizeTextBtn}
             />
             {showSubmitButton && (
               <ButtonPrimary
                 title={btnSubmitTile}
-                className="me-[2rem]"
+                className="me-[32px]"
                 onClick={handleSubmit}
                 size={sizeTextBtn}
               />

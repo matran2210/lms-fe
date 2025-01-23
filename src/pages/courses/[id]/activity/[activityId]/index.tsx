@@ -13,7 +13,7 @@ import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
-import { BASE_FONT_SIZE, CourseSectionType } from '@utils/constants'
+import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateBySpace, truncateString } from '@utils/index'
 import { Tooltip } from 'antd'
@@ -105,8 +105,8 @@ const ActivityPage = () => {
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
-    top: 'calc(50% - 15.625rem)',
-    left: 'calc(50% - 12.5rem)',
+    top: 'calc(50% - 250px)',
+    left: 'calc(50% - 200px)',
   })
 
   const settingDoneProcessActivity = (activity: IActivity) => {
@@ -411,10 +411,7 @@ const ActivityPage = () => {
   ) => {
     if (event) {
       var mouseY = event?.pageY - 300
-      setExhibitsPopupPosition({
-        top: mouseY / BASE_FONT_SIZE + 'rem',
-        left: '33%',
-      })
+      setExhibitsPopupPosition({ top: mouseY + 'px', left: '33%' })
     }
 
     setOnFocusingPad('')
@@ -666,10 +663,10 @@ const ActivityPage = () => {
               {selector?.calculator_status && (
                 <MovableWindow
                   position={{
-                    width: '25rem',
-                    height: '18.75rem',
-                    top: 'calc(25% - 9.375rem)',
-                    left: 'calc(25% - 12.5rem)',
+                    width: '400px',
+                    height: '300px',
+                    top: 'calc(25% - 150px)',
+                    left: 'calc(25% - 200px)',
                   }}
                   zIndex={500}
                   fixed
@@ -764,12 +761,10 @@ const ActivityPage = () => {
               length={1}
               loading={selector.loading}
               className="mb-6 bg-white"
-              classChild="w-11/12 mx-auto max-w-[59.375rem]"
+              classChild="w-11/12 mx-auto max-w-[950px]"
             >
               <div className="mb-6 bg-white pb-6">
-                <div
-                  className={`mx-auto my-0 w-full max-w-[62.5rem] px-6 pt-6`}
-                >
+                <div className={`mx-auto my-0 w-full max-w-[1000px] px-6 pt-6`}>
                   <div className="tab-content overflow-x-auto overflow-y-hidden">
                     {course_tab_documents?.map((e, i) => {
                       const gradeStatus = e?.quiz?.attempt?.grading_status
@@ -960,7 +955,7 @@ const ActivityPage = () => {
                             </svg>
                             Previous Tab
                           </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[8.0625rem] bg-gray-3"></div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
                         </div>
                       </div>
                     )}
@@ -992,7 +987,7 @@ const ActivityPage = () => {
                               />
                             </svg>
                           </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[6.125rem] -translate-x-1 bg-gray-3"></div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-3"></div>
                         </div>
                       </div>
                     )}
@@ -1131,10 +1126,10 @@ const ActivityPage = () => {
               return (
                 <MovableWindow
                   position={{
-                    width: '37.1875rem',
-                    height: '52.625rem',
-                    top: 'calc(50% - 26.3125rem)',
-                    left: 'calc(50% - 18.75rem)',
+                    width: '595px',
+                    height: '842px',
+                    top: 'calc(50% - 421px)',
+                    left: 'calc(50% - 300px)',
                   }}
                   key={e?.id}
                   onClick={() => setOnFocusingPad(e?.id)}
@@ -1159,7 +1154,7 @@ const ActivityPage = () => {
                     </div>
                     <div
                       // className="overflow-auto p-4 bg-white"
-                      style={{ height: 'calc(100% - 2.5rem' }}
+                      style={{ height: 'calc(100% - 40px' }}
                       className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                     >
                       {/* <div className='flex flex-'> */}
@@ -1173,8 +1168,8 @@ const ActivityPage = () => {
               return (
                 <MovableWindow
                   position={{
-                    width: '37.5rem',
-                    height: '25rem',
+                    width: '600px',
+                    height: '400px',
                     top: exhibitsPopupPosition.top,
                     left: exhibitsPopupPosition.left,
                   }}
@@ -1198,7 +1193,7 @@ const ActivityPage = () => {
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="h-[calc(100%-2.5rem)] overflow-auto bg-white p-5">
+                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
                         text_editor_content={e?.description}
                         className=" w-full "

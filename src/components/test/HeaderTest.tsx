@@ -90,7 +90,7 @@ const HeaderTest = ({
           cancel={{
             title: 'Quit',
             size: 'small',
-            className: 'border border-bw-1 !w-[6.8125rem]',
+            className: 'border border-bw-1 !w-[109px]',
             color: 'secondary',
             onClick: () => {
               setOpenQuit(true)

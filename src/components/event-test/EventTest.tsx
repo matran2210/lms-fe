@@ -168,7 +168,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
             </p>
           </div>
         </div>
-        <div className="action relative mt-10 flex min-h-[2rem] items-center justify-between">
+        <div className="action relative mt-10 flex min-h-[32px] items-center justify-between">
           <div className="text flex items-center">
             <Icon
               type={`${data?.is_attempt ? 'completed' : resultFinishAt === 1 && !data?.is_attempt ? 'expired' : !data?.is_attempt ? 'like' : ''}`}
