@@ -14,6 +14,8 @@ import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
+import { truncateBySpace } from '@utils/index'
+import SappTooltip from 'src/common/SappTooltip'
 
 interface IProps {
   course_section_type: string
@@ -327,32 +329,32 @@ const CoursePartDetail = () => {
       ) : (
         <div className="main default-content-editor mx-auto my-0 max-w-xxl">
           <div className="w-full ">
-            <div className="flex items-center px-5 pt-6 xl:px-0">
-              <span
-                className="ml-1 flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
+            <div className="flex items-center gap-2 px-5 pt-6 xl:px-0">
+              <div
+                className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
                 onClick={() => {
                   router.push(`/courses/my-course/${router.query.id}`)
                   trackGAEvent('Click Breadcrumb My Course Detail')
                 }}
               >
-                <div className="responsive-truncate-container mx-0.5 inline-block w-full max-w-78 shrink-0">
-                  <ResponsiveTextTruncate
-                    textTooltip={previewPart?.name}
-                    text={previewPart?.name}
-                    maxLength={5}
-                    isShowTooltip
-                    isSlash
-                  />
+                <div className=" mx-0.5 inline-block w-full">
+                  <SappTooltip
+                    title={previewPart?.name}
+                    showTooltip={previewPart?.name?.length > 4}
+                    placement={'bottomLeft'}
+                  >
+                    {truncateBySpace(previewPart?.name, 2, true)}
+                  </SappTooltip>
                 </div>
-              </span>
-              <span className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
+              </div>
+              <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
                 <ResponsiveTextTruncate
                   placementTooltip="bottomLeft"
                   textTooltip={partDetail?.name}
                   text={partDetail?.name}
                   isShowTooltip
                 />
-              </span>
+              </div>
             </div>
           </div>
           <div data-aos={ANIMATION.DATA_AOS}>
