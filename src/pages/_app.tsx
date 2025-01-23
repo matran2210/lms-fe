@@ -189,7 +189,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [router])
 
   const [openPopupHoliday, setOpenPopupHoliday] = useState(true)
-  const test =
+  const showPopupHoliday =
     typeof window !== 'undefined' &&
     window.localStorage.getItem('showPopupHoliday')
 
@@ -254,7 +254,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   <PopupCompletedCourse />
                   {!isMobile && (
                     <SappModalV4
-                      open={test === 'true' && openPopupHoliday}
+                      open={showPopupHoliday === 'true' && openPopupHoliday}
                       handleCancel={() => {}}
                       onOk={() => {}}
                       icon={undefined}
@@ -267,7 +267,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                           src={`${isTablet ? '/holiday-tablet.png' : '/holiday-desktop.png'}`}
                           className="md:h-[440px] md:w-[530px] xl:h-[560px] xl:w-[754px]"
                         />
-                        <div className="absolute left-1/2 flex -translate-x-1/2 transform gap-4 md:bottom-[40px] mxl:bottom-[40px] xl:bottom-[60px]">
+                        <div className="absolute left-1/2 flex -translate-x-1/2 transform gap-4 mxl:bottom-[40px] md:bottom-[40px] xl:bottom-[60px]">
                           <ButtonHoliday
                             title="Đóng"
                             onClick={() => setOpenPopupHoliday(false)}

@@ -45,20 +45,20 @@ function PinnedHoliday({
             <div
               className={`fixed z-50 h-12 w-full`}
               style={{
-                backgroundImage: `url(${isTablet || isMobile ? 'pined_tablet.svg' : isIpadPro ? 'holiday_ipadpro.svg' : 'pined_desktop.svg'})`,
+                backgroundImage: `url(${isTablet || isMobile ? '/pined_tablet.svg' : isIpadPro ? '/holiday_ipadpro.svg' : '/pined_desktop.svg'})`,
                 backgroundPosition: 'center center', // Căn giữa cả theo chiều ngang và dọc
                 backgroundSize: '100%', // Chiều cao 100%, chiều rộng tự động giữ đúng tỷ lệ
               }}
             >
               <Row className="flex h-12 flex-row">
-                <Col xl={3} lg={3} md={1} xs={3}></Col>
-                <Col xl={18} lg={18} md={20} xs={15}>
+                <Col xl={3} lg={2} md={2} xs={3}></Col>
+                <Col xl={18} lg={20} md={20} xs={15}>
                   <div className="flex h-12 flex-row justify-items-center">
                     <div className="mx-auto flex flex-row">
                       <div className="flex content-center items-center text-center">
                         <SoundPrimary />
                       </div>
-                      <div className="flex flex-row content-center items-center xs:w-[250px] md:w-[500px] xl:w-[1000px] 3.5xl:w-[1380px]">
+                      <div className="flex flex-row content-center items-center mxl:w-[750px] xs:w-[280px] md:w-[500px] xl:w-[1000px] 3.5xl:w-[1380px] 5xl:w-[1900px] 6xl:w-[2900px]">
                         <Marquee
                           gradient={false}
                           speed={showPinNoti ? 0 : 50}
@@ -78,10 +78,10 @@ function PinnedHoliday({
                     </div>
                   </div>
                 </Col>
-                <Col xl={3} md={3} lg={3} xs={6} className="h-full">
+                <Col xl={3} md={2} lg={2} xs={6} className="h-full">
                   <div
                     onClick={handleClosePinned}
-                    className="float-right flex h-full cursor-pointer content-center items-center rounded-full pr-9"
+                    className="float-right flex h-full cursor-pointer content-center items-center rounded-full pr-5 md:pr-9"
                   >
                     <div className="flex h-[24px] w-[24px] items-center justify-center rounded-full bg-white">
                       <CloseHoliday />
