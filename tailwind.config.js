@@ -6,6 +6,7 @@ module.exports = {
       xs: '376px',
       sm: '640px',
       md: '768px',
+      mxl: '992px',
       lg: '1024px',
       xl: '1280px',
       'xl-max': { max: '1199px' },
@@ -15,6 +16,8 @@ module.exports = {
       '3xl': '1536px',
       '3.5xl': '1660px',
       '4xl': '1920px',
+      '5xl': '2000px',
+      '6xl': '3000px',
     },
     fontSize: {
       '6xl': ['64px', { lineHeight: '77px ' }],
