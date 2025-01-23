@@ -21,8 +21,8 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       handleCancel={() => setOpen(false)}
       showCancelButton={false}
       showHeader={false}
-      refClass="p-6 md:p-8 3xl:py-[4.375rem] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
-      size="max-w-[40.375rem]"
+      refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
+      size="max-w-[646px]"
       footerButtonClassName="flex flex-col-reverse gap-8"
       position="center"
       fullWidthBtn={true}

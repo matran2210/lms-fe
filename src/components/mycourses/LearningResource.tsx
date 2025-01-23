@@ -299,7 +299,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       title="Resource"
       footer={false}
       confirmOnClose={false}
-      heightBody={'h-[calc(100vh-7rem)]'}
+      heightBody={'h-[calc(100vh-112px)]'}
     >
       <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
         <HookFormSelect
@@ -412,8 +412,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           {resources?.resources?.map((resource) => (
             <div key={resource.id}>
               <div
-                className="mt-6 flex h-[5.75rem] items-center justify-between p-6 last:mb-6"
-                style={{ border: '0.0625rem solid #DCDDDD' }}
+                className="mt-6 flex h-[92px] items-center justify-between p-6 last:mb-6"
+                style={{ border: '1px solid #DCDDDD' }}
               >
                 <div>
                   <div className="text-base font-normal text-bw-1">

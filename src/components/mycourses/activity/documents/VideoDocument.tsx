@@ -374,8 +374,8 @@ const VideoDocument = ({
             <></>
           )}
 
-          <div className="max-w-[6.25rem]: absolute -right-[0.1875rem] bottom-0 hidden w-[25.75rem] translate-y-full animate-fade-in-overlay overflow-hidden bg-white py-3 shadow-single-dialog group-hover:block">
-            <div className="h-full max-h-[25.75rem] flex-1 snap-y overflow-y-auto bg-white">
+          <div className="max-w-[100px]: absolute -right-[3px] bottom-0 hidden w-[412px] translate-y-full animate-fade-in-overlay overflow-hidden bg-white py-3 shadow-single-dialog group-hover:block">
+            <div className="h-full max-h-[412px] flex-1 snap-y overflow-y-auto bg-white">
               {timeLine?.map((e, i) => {
                 return (
                   <div
@@ -385,7 +385,7 @@ const VideoDocument = ({
                       handleGoTimeline(e?.time)
                     }}
                   >
-                    <div className="mim-w-[3.875rem] text-state-info">
+                    <div className="mim-w-[62px] text-state-info">
                       {formatTime(e?.time)}
                     </div>
                     <div className="line-clamp-2 text-bw-1 text-inherit">

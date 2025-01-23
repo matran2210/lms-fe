@@ -1,7 +1,7 @@
 .calc {
   @apply relative mx-auto max-w-[50rem] rounded-lg;
   color: $color-btns-container;
-  box-shadow: rgba(0, 0, 0, 0.15) 0.1875rem 0.1875rem 0.3125rem;
+  box-shadow: rgba(0, 0, 0, 0.15) 3px 3px 5px;
 }
 
 .calc__display {

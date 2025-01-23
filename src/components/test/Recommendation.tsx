@@ -57,7 +57,7 @@ const CommentModal = ({
         </button>
       </div>
       <div
-        className={`${isOpen ? 'block' : 'hidden'} max-h-[18.75rem]  overflow-y-auto break-words transition-all`}
+        className={`${isOpen ? 'block' : 'hidden'} max-h-[300px]  overflow-y-auto break-words transition-all`}
         dangerouslySetInnerHTML={{ __html: content ?? '' }}
       />
     </div>

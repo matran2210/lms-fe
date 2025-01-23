@@ -25,7 +25,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
                 {tab.link && !tab?.disable ? (
                   <Link href={tab.link}>
                     <a
-                      className={`line-clamp-1 w-fit max-w-[0.820rem] ${
+                      className={`line-clamp-1 w-fit max-w-[210px] ${
                         currentPage === tab.title ? 'text-bw-1' : 'text-gray-1'
                       }
                       `}

@@ -22,7 +22,7 @@ const PopupCert = ({}: IProps) => {
       handleCancel={onClickBackCourse}
       onOk={onClickBackCourse}
       // showCancelButton={true}
-      size="max-w-[40.375rem]"
+      size="max-w-[646px]"
       footerButtonClassName="flex flex-col-reverse gap-8"
       position="center"
       fullWidthBtn={true}

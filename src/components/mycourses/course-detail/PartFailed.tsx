@@ -65,7 +65,7 @@ const PartFailed = ({
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
-          className={`name-part line-clamp-2 h-[3.75rem] cursor-pointer text-2xl font-medium`}
+          className={`name-part line-clamp-2 h-[60px] cursor-pointer text-2xl font-medium`}
           onClick={() => {
             setOpen(true)
             trackGAEvent(`Click Title ${showTitleFinalTest}`)

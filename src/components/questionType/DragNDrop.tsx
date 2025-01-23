@@ -212,12 +212,12 @@ const DragNDropPreivew = forwardRef(
               }">
             <span id="${
               defaultAnswer?.[index]?.idAnswer
-            }" class="flex justify-center w-full min-w-[6.25rem]">${
+            }" class="flex justify-center w-full min-w-[100px]">${
               defaultAnswer?.[index]?.value
             }</span>
             </span>`
             } else {
-              element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer min-w-[6.25rem] ${
+              element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer min-w-[100px] ${
                 isSelfReflection === true ? 'corrects' : 'wrongs'
               }">
               <span class="sapp-input-dragNDrop-empty"></span>
@@ -299,7 +299,7 @@ const DragNDropPreivew = forwardRef(
                 onDragOver={allowDrop}
                 {...{ indexBox: domNode?.attribs?.indexbox }}
                 style={{
-                  height: '3.75rem',
+                  height: '60px',
                 }}
               ></span>
             )
@@ -450,7 +450,7 @@ const DragNDropPreivew = forwardRef(
         )}
         {answerContent && (
           <>
-            <div className="pt-[1.9375rem] text-base font-semibold">
+            <div className="pt-[31px] text-base font-semibold">
               Correct Answer
             </div>
             <EditorReader

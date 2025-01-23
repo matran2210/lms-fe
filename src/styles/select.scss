@@ -79,7 +79,7 @@
 
   .select__single-value,
   .select__placeholder {
-    @apply m-0 p-0 text-[0.9375rem] font-normal leading-4.5;
+    @apply m-0 p-0 text-[15px] font-normal leading-4.5;
   }
 
   .select__control {
@@ -111,7 +111,7 @@
   }
 
   .select__indicator {
-    @apply w-[1.875rem] text-gray-1;
+    @apply w-[30px] text-gray-1;
   }
 
   .select__indicator-separator {
@@ -139,6 +139,6 @@
 
 .right-top {
   .select__menu {
-    @apply left-[3.125rem] top-[-100%];
+    @apply left-[50px] top-[-100%];
   }
 }

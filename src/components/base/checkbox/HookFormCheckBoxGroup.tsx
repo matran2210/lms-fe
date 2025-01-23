@@ -135,7 +135,7 @@ const HookFormCheckBoxGroup = ({
                   >
                     <SAPPCheckbox
                       className={`me-2 ${className} ${
-                        positionCheckBox === 'start' && 'mt-[0.125rem]'
+                        positionCheckBox === 'start' && 'mt-[2px]'
                       }`}
                       checked={checked}
                       lowerOptions={lowerOptions && !checked && checkHasChecked}

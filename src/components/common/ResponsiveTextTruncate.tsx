@@ -1,5 +1,4 @@
 import useResizeObserver from '@react-hook/resize-observer'
-import { BASE_FONT_SIZE } from '@utils/constants'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import React, { useEffect, useRef, useState } from 'react'
 import SappTooltip from 'src/common/SappTooltip'
@@ -42,7 +41,7 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     const tempElement = document.createElement('span')
     tempElement.style.position = 'absolute'
     tempElement.style.visibility = 'hidden'
-    tempElement.style.fontSize = `${fontSize / BASE_FONT_SIZE}rem`
+    tempElement.style.fontSize = `${fontSize}px`
     tempElement.style.whiteSpace = 'nowrap'
     document.body.appendChild(tempElement)
 
@@ -76,7 +75,7 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     const tempElement = document.createElement('span')
     tempElement.style.position = 'absolute'
     tempElement.style.visibility = 'hidden'
-    tempElement.style.fontSize = `${fontSize / BASE_FONT_SIZE}rem`
+    tempElement.style.fontSize = `${fontSize}px`
     tempElement.style.whiteSpace = 'nowrap'
     tempElement.textContent = isSlash ? '.../' : '...'
     document.body.appendChild(tempElement)

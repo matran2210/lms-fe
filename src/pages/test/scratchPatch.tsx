@@ -32,7 +32,7 @@ const ScratchPatch = ({
       name={scratchPadValues?.id ?? ''}
       defaultValue={scratchPads?.scratch_pad ?? ''}
       onChange={handleChangeScratchPad}
-      className="sapp-text-area not-resizer h-[calc(100%-2.5rem)] w-full px-5 py-3 placeholder:text-sm placeholder:font-normal"
+      className="sapp-text-area not-resizer h-[calc(100%-40px)] w-full px-5 py-3 placeholder:text-sm placeholder:font-normal"
     />
   )
 }

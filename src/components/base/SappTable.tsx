@@ -51,7 +51,7 @@ const SappTable = ({
                 </th>
               )}
               {showHashtag && (
-                <th className="w-40px" style={{ lineHeight: '0.75rem' }}>
+                <th className="w-40px" style={{ lineHeight: '12px' }}>
                   #
                 </th>
               )}

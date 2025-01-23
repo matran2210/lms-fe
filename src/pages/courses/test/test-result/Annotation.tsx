@@ -20,7 +20,7 @@ const Annotation = ({
       handleCancel={() => setOpenAnnotaion(false)}
       onOk={() => {}}
       showFooter={false}
-      classNameModal="max-w-[39.625rem]"
+      classNameModal="max-w-[634px]"
     >
       <div
         className="flex cursor-pointer justify-end text-white"
@@ -36,7 +36,7 @@ const Annotation = ({
           The annotation uses colors as labels for the status of the question in
           your test/ quiz.
         </div>
-        <div className="my-[1.25rem] grid w-full grid-cols-[80%,20%]">
+        <div className="my-[18px] grid w-full grid-cols-[80%,20%]">
           <div className="content-center">
             <div className="h-2 bg-state-success text-state-success"></div>
           </div>
@@ -44,7 +44,7 @@ const Annotation = ({
             Correct
           </div>
         </div>
-        <div className="my-[1.125rem] grid w-full grid-cols-[75%,25%]">
+        <div className="my-[18px] grid w-full grid-cols-[75%,25%]">
           <div className="content-center">
             <div className="h-2 bg-state-error text-state-error"></div>
           </div>
@@ -53,7 +53,7 @@ const Annotation = ({
           </div>
         </div>
         {gradingStatus === GRADE_STATUS.FINISHED_GRADING ? (
-          <div className="my-[1.125rem] grid w-full grid-cols-[70%,30%]">
+          <div className="my-[18px] grid w-full grid-cols-[70%,30%]">
             <div className="content-center">
               <div className="h-2 bg-[#4077E0] text-[#4077E0]"></div>
             </div>
@@ -62,7 +62,7 @@ const Annotation = ({
             </div>
           </div>
         ) : (
-          <div className="my-[1.125rem] grid w-full grid-cols-[70%,30%]">
+          <div className="my-[18px] grid w-full grid-cols-[70%,30%]">
             <div className="content-center">
               <div className="h-2 bg-pinned-1 text-pinned-1"></div>
             </div>
@@ -72,7 +72,7 @@ const Annotation = ({
           </div>
         )}
         {gradingStatus !== GRADE_STATUS.FINISHED_GRADING && (
-          <div className="my-[1.125rem] grid w-full grid-cols-[65%,35%]">
+          <div className="my-[18px] grid w-full grid-cols-[65%,35%]">
             <div className="content-center">
               <div className="h-2 bg-gray-1 text-gray-1"></div>
             </div>

@@ -169,14 +169,14 @@ const TabSlide = ({
 
   return (
     <ul
-      className={`pagination flex min-h-[2.5rem] w-full flex-wrap items-center gap-3`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3`}
       aria-label="Pagination"
     >
       <div
         className={`${
           !activeShowAll
             ? `relative ${
-                hasScrollBar ? 'w-[calc(100%-8.8125rem)]' : 'w-full'
+                hasScrollBar ? 'w-[calc(100%-141px)]' : 'w-full'
               } mx-7`
             : ' flex w-full items-center gap-6'
         }`}
@@ -275,11 +275,11 @@ const TabSlide = ({
                         </PageLink>
                       ) : (
                         <div className="flex h-full items-center justify-center">
-                          <div className="h-full w-[0.0625rem] border"></div>
+                          <div className="h-full w-[1px] border"></div>
                         </div>
                       )
                     ) : (
-                      <div className="h-full w-[2.5rem]"></div>
+                      <div className="h-full w-[40px]"></div>
                     )}
                     {pageNum[1] ? (
                       pageNum[1] !== 'split' ? (
@@ -300,11 +300,11 @@ const TabSlide = ({
                         </PageLink>
                       ) : (
                         <div className="flex h-full items-center justify-center">
-                          <div className="h-full w-[0.0625rem] border"></div>
+                          <div className="h-full w-[1px] border"></div>
                         </div>
                       )
                     ) : (
-                      <div className="h-full w-[2.5rem]"></div>
+                      <div className="h-full w-[40px]"></div>
                     )}
                   </div>
                 )

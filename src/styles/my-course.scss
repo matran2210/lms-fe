@@ -1,5 +1,5 @@
 .filter .select-single .select__control {
-  @apply h-[1.0625rem] min-h-[1.0625rem] items-baseline border-0 bg-transparent shadow-none;
+  @apply h-[17px] min-h-[17px] items-baseline border-0 bg-transparent shadow-none;
 }
 
 .name-course a {
@@ -64,8 +64,8 @@
 }
 
 .select__menu {
-  min-width: 9.375rem !important;
-  right: 0;
+  min-width: 150px !important;
+  right: 0px;
 }
 
 .group-resource:hover {
@@ -97,7 +97,7 @@
   tfoot,
   td,
   th {
-    border-width: 0.0625rem;
+    border-width: 1px;
     border-style: inset;
     @apply border-gray-1; /* Add this line to set the border color to gray-2 */
   }
@@ -110,7 +110,7 @@
   ol,
   ul,
   menu {
-    padding-inline-start: 2.5rem !important;
+    padding-inline-start: 40px !important;
     list-style: auto;
   }
   ul {

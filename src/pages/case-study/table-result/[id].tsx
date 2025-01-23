@@ -19,22 +19,22 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-max xl:min-w-[45.3125rem]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-max xl:min-w-[725px]',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[7.3125rem]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[117px]',
   },
   {
     label: 'Result',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[4.375rem]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[70px]',
   },
   {
     label: '',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[1.25rem]',
+      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[20px]',
   },
 ]
 
@@ -153,7 +153,7 @@ const TableCaseStudyResult = () => {
         >
           <CloseIcon />
         </div>
-        <div className="m-auto max-h-full max-w-[71.5rem] bg-white pt-8">
+        <div className="m-auto max-h-full max-w-[1144px] bg-white pt-8">
           <div className="mb-10 flex flex-row items-center justify-between px-6 xl:px-0">
             <div className="pr-4">
               <div className="line-clamp-1 text-xl font-medium text-bw-1">
