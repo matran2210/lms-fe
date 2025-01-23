@@ -41,6 +41,7 @@ import { store, wrapper } from '../redux/store'
 import PinnedHoliday from '@components/layout/PinnedNotifications/PinnedHoliday'
 import ButtonHoliday from '@components/layout/PinnedNotifications/ButtonHoliday'
 import SappModalV4 from '@components/base/modal/SappModalV4'
+import { CERTIFICATE_DETAIL } from '@utils/constants'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -163,9 +164,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (
-      ![ENTRANCE_TEST_TABLE_RESULT, ENTRANCE_TEST_RESULT].includes(
-        router.pathname,
-      )
+      ![
+        ENTRANCE_TEST_TABLE_RESULT,
+        ENTRANCE_TEST_RESULT,
+        CERTIFICATE_DETAIL,
+      ].includes(router.pathname)
     ) {
       try {
         dispatch(getCountUnRead())
