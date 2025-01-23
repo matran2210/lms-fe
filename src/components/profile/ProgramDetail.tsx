@@ -301,7 +301,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
                         )
                       }
                     }}
-                    onMenuClose={() => setExams(null)}
+                    onBlur={() => setExams(null)}
                     onMenuScrollToBottom={() => handleScrollExam(subject?.id)}
                   />
                 </div>
