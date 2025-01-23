@@ -23,6 +23,7 @@ interface IProps {
   onFocus?: () => void
   isClearable?: boolean
   onMenuClose?: () => void
+  onBlur?: () => void
 }
 
 const SappHookFormSelect = ({
@@ -42,6 +43,7 @@ const SappHookFormSelect = ({
   onFocus,
   isClearable,
   onMenuClose,
+  onBlur,
 }: IProps) => {
   return (
     <>
@@ -84,6 +86,7 @@ const SappHookFormSelect = ({
                 defaultValue={defaultValue}
                 onMenuScrollToBottom={onMenuScrollToBottom}
                 onFocus={onFocus}
+                onBlur={onBlur}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>
