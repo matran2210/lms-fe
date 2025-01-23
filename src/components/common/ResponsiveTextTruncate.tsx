@@ -36,7 +36,7 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     width: number,
     fontSize: number,
   ): string => {
-    const words = text.split(' ')
+    const words = text?.split(' ')
     let truncatedText = ''
     const tempElement = document.createElement('span')
     tempElement.style.position = 'absolute'
