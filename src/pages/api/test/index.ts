@@ -1,5 +1,4 @@
 import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/redux/services/httpService'
 
 export class TestAPI {
   static createTopicAttempt(
@@ -8,7 +7,7 @@ export class TestAPI {
     class_user_id?: string,
     story_topic_id?: string | string[] | undefined,
   ) {
-    return fetcher(`${apiURL}/quiz/case-study/topic-attempt`, {
+    return fetcher(`quiz/case-study/topic-attempt`, {
       method: 'POST',
       data: {
         quiz_id,
@@ -20,7 +19,7 @@ export class TestAPI {
   }
 
   static getQuestionAnswer(id: string) {
-    return fetcher(`${apiURL}/question/results`, {
+    return fetcher(`question/results`, {
       params: {
         question_ids: id,
       },
@@ -28,6 +27,6 @@ export class TestAPI {
   }
 
   static getResource(id: string) {
-    return fetcher(`${apiURL}/resource/${id}`)
+    return fetcher(`resource/${id}`)
   }
 }

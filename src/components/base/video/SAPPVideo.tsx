@@ -1001,9 +1001,9 @@ const SAPPVideo = ({
                                 <li
                                   key={'auto-switch'}
                                   onClick={() => changeQuality('auto', 'Auto')}
-                                  className={`hover:text-black text-xsm hover:bg-white ${
+                                  className={`text-xsm hover:bg-white hover:text-black ${
                                     'Auto' === playbackQuality
-                                      ? 'text-black bg-white'
+                                      ? 'bg-white text-black'
                                       : ''
                                   }`}
                                 >
@@ -1019,9 +1019,9 @@ const SAPPVideo = ({
                                           quality?.bitrate,
                                         )
                                       }
-                                      className={`hover:text-black text-xsm hover:bg-white ${
+                                      className={`text-xsm hover:bg-white hover:text-black ${
                                         quality?.bitrate === playbackQuality
-                                          ? 'text-black bg-white'
+                                          ? 'bg-white text-black'
                                           : ''
                                       }`}
                                     >
@@ -1053,9 +1053,9 @@ const SAPPVideo = ({
                                     key={speed.value}
                                     onClick={handlePlaybackRateChange}
                                     data-speed={speed.value}
-                                    className={`hover:text-black text-xsm hover:bg-white ${
+                                    className={`text-xsm hover:bg-white hover:text-black ${
                                       parseFloat(speed.value) === playbackRate
-                                        ? 'text-black bg-white'
+                                        ? 'bg-white text-black'
                                         : ''
                                     }`}
                                   >
@@ -1085,9 +1085,9 @@ const SAPPVideo = ({
                                   key={-1}
                                   onClick={handleLanguageChange}
                                   data-cc={-1}
-                                  className={`hover:text-black text-xsm hover:bg-white ${
+                                  className={`text-xsm hover:bg-white hover:text-black ${
                                     -1 === playbackCC
-                                      ? 'text-black bg-white'
+                                      ? 'bg-white text-black'
                                       : ''
                                   }`}
                                 >
@@ -1098,9 +1098,9 @@ const SAPPVideo = ({
                                     key={cc.index}
                                     onClick={handleLanguageChange}
                                     data-cc={cc.index}
-                                    className={`hover:text-black text-xsm hover:bg-white ${
+                                    className={`text-xsm hover:bg-white hover:text-black ${
                                       cc.index === playbackCC
-                                        ? 'text-black bg-white'
+                                        ? 'bg-white text-black'
                                         : ''
                                     }`}
                                   >

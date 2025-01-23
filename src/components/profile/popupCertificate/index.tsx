@@ -1,7 +1,6 @@
 import { CloseIconPreview } from '@assets/icons'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useEffect } from 'react'
-import MyProfileAPI from 'src/pages/api/profile'
+import { Dispatch, SetStateAction } from 'react'
 import SappModalCerti from './CertificatePopup'
 
 interface PopupProp {

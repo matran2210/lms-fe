@@ -7,6 +7,7 @@ import NotifyActions from '@components/notification/NotifyActions'
 import NotifyList from '@components/notification/NotifyList'
 import NotifyTab from '@components/notification/NotifyTab'
 import { trackGAEvent } from '@utils/google-analytics'
+import Aos from 'aos'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS } from 'src/constants'
@@ -75,8 +76,9 @@ const Notifications = () => {
   const markAllRead = async () => {
     try {
       await dispatch(markAllNotifications())
-      await coutNotificationsUnRead()
       dispatch(updateStatusAll())
+      await coutNotificationsUnRead()
+      Aos.refresh()
     } catch (error) {}
   }
 
@@ -129,6 +131,7 @@ const Notifications = () => {
   useEffect(() => {
     const getNotifications = async (params: Object) => {
       try {
+        await dispatch(getCountUnRead())
         await dispatch(getNotification(params))
       } catch (error) {}
     }
@@ -140,17 +143,11 @@ const Notifications = () => {
         is_read: false,
       }),
     })
-  }, [router, getTotal, dispatch])
+  }, [router, dispatch])
 
   const handleCancel = () => {
     setOpenModel(false)
   }
-
-  useEffect(() => {
-    try {
-      dispatch(getCountUnRead())
-    } catch (error) {}
-  }, [])
 
   useEffect(() => {
     window.addEventListener('storage', (e) => {
@@ -177,7 +174,7 @@ const Notifications = () => {
           />
         </div>
       </div>
-      <div className="px-5 lg:px-20" data-aos={ANIMATION.DATA_AOS}>
+      <div className="h-full px-5 lg:px-20" data-aos={ANIMATION.DATA_AOS}>
         <div
           className="main mx-auto my-0 max-w-xxl pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}

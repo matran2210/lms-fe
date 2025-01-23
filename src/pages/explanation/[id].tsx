@@ -1,15 +1,14 @@
 import { ExplanationPackage } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { httpService } from 'src/redux/services/httpService'
 import { QUESTION_TYPES } from 'src/type/course/Question'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
-import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { PageLink } from 'src/constants'
 
 const Explanation = () => {
   const router = useRouter()
@@ -47,9 +46,7 @@ const Explanation = () => {
     try {
       // const quizAttempts = axiosInstance.get('')
       // const selectedResponseAnswers = data.data.selectedResponseAnswers
-      const resultResponse = (await httpService.GET({
-        uri: 'quiz-attempts/answers/' + id,
-      })) as any
+      const resultResponse = await CoursesAPI.getQuizAttempt(id)
       const topicDescription = await CoursesAPI.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
@@ -57,6 +54,7 @@ const Explanation = () => {
       setActiveQuestion({
         ...resultResponse.data.answer.question,
         answer_file: resultResponse.data.answer.answer_file,
+        active: resultResponse.data.answer.active,
         confirmed: true,
         grading_question: resultResponse.data.answer.grading_question,
         corrects: getCorrect(
@@ -122,7 +120,9 @@ const Explanation = () => {
                 `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
               )
             } else {
-              router.back()
+              router.push(
+                localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
+              )
             }
           }}
         >

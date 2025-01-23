@@ -1,20 +1,19 @@
 import SappDrawer from '@components/base/SappDrawer'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import { trackGAEvent } from '@utils/google-analytics'
-import { truncateBySpace, truncateString } from '@utils/index'
+import { Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import SappTooltip from 'src/common/SappTooltip'
 import { ANIMATION } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
-import { Skeleton } from 'antd'
 
 interface IProps {
   course_section_type: string
@@ -92,6 +91,9 @@ const CoursePartDetail = () => {
   ) => {
     setLoadingChapter(true)
     try {
+      if (course_section_id !== router.query.chapter) {
+        router.push(`${location.pathname}?chapter=${course_section_id}`)
+      }
       const res = await CoursesAPI.getPartDetail(id, course_section_id)
 
       const nodeList = res?.data?.course_section_tree
@@ -257,36 +259,32 @@ const CoursePartDetail = () => {
   }
 
   useEffect(() => {
-    if (partDetail?.id) {
-      if (router.query.unit_id) {
-        setDefaultActive(String(router?.query?.unit_id) || '')
-      } else if (partDetail?.children?.learning_progress !== '') {
-        const filteredChildren = partDetail?.children.filter(
-          (child: any) => child?.course_section_type === 'CHAPTER',
-        )
-        const matchingChild = filteredChildren?.find(
-          (child: {
-            learning_progress: {
-              total_course_sections: any
-              total_course_sections_completed: any
-            }
-          }) => {
-            if (child.learning_progress) {
-              const { total_course_sections, total_course_sections_completed } =
-                child.learning_progress
-              const progressRatio =
-                (total_course_sections_completed / total_course_sections) * 100
-              return progressRatio < 100
-            }
-            return false
-          },
-        )
+    if (partDetail?.id && partDetail?.children?.learning_progress !== '') {
+      const filteredChildren = partDetail?.children.filter(
+        (child: any) => child?.course_section_type === 'CHAPTER',
+      )
+      const matchingChild = filteredChildren?.find(
+        (child: {
+          learning_progress: {
+            total_course_sections: any
+            total_course_sections_completed: any
+          }
+        }) => {
+          if (child.learning_progress) {
+            const { total_course_sections, total_course_sections_completed } =
+              child.learning_progress
+            const progressRatio =
+              (total_course_sections_completed / total_course_sections) * 100
+            return progressRatio < 100
+          }
+          return false
+        },
+      )
 
-        if (matchingChild) {
-          !courseChapterId && setDefaultActive(matchingChild.id)
-        } else if (filteredChildren?.length > 0) {
-          !courseChapterId && setDefaultActive(filteredChildren[0].id) // Set default to the first child
-        }
+      if (matchingChild) {
+        !courseChapterId && setDefaultActive(matchingChild.id)
+      } else if (filteredChildren?.length > 0) {
+        !courseChapterId && setDefaultActive(filteredChildren[0].id) // Set default to the first child
       }
     }
   }, [router?.asPath, partDetail?.id])
@@ -337,25 +335,23 @@ const CoursePartDetail = () => {
                   trackGAEvent('Click Breadcrumb My Course Detail')
                 }}
               >
-                <p className="mx-0.5 inline-block w-full max-w-78 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap">
-                  <SappTooltip
-                    title={previewPart?.name}
-                    showTooltip={previewPart?.name?.length > 45}
-                  >
-                    {truncateString(previewPart?.name, 50)}
-                  </SappTooltip>
-                </p>
+                <div className="responsive-truncate-container mx-0.5 inline-block w-full max-w-78 shrink-0">
+                  <ResponsiveTextTruncate
+                    textTooltip={previewPart?.name}
+                    text={previewPart?.name}
+                    maxLength={5}
+                    isShowTooltip
+                    isSlash
+                  />
+                </div>
               </span>
-              <span className="flex cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap">
-                <p className="inline-block w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-medium-sm font-medium text-bw-1">
-                  /{' '}
-                  <SappTooltip
-                    title={partDetail?.name}
-                    showTooltip={partDetail?.name?.length > 90}
-                  >
-                    {truncateBySpace(partDetail?.name, 10) ?? ''}
-                  </SappTooltip>
-                </p>
+              <span className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
+                <ResponsiveTextTruncate
+                  placementTooltip="bottomLeft"
+                  textTooltip={partDetail?.name}
+                  text={partDetail?.name}
+                  isShowTooltip
+                />
               </span>
             </div>
           </div>
@@ -376,7 +372,7 @@ const CoursePartDetail = () => {
               handleRouterChapter={handleRouterChapter}
               readMore={readMore}
               setReadMore={setReadMore}
-              defaultActive={defaultActive}
+              defaultActive={router.query.chapter ?? defaultActive}
               focus_id={router?.query?.focus_id as string}
             />
           </div>
