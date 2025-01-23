@@ -34,25 +34,36 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
   const [isEdit, setIsEdit] = useState(false)
   const [subjects, setSubjects] = useState<ISubjectItem[]>()
   const { user, loading } = useAppSelector(userReducer)
-  const [exams, setExams] = useState<IExaminationList>()
+  const [exams, setExams] = useState<IExaminationList | null>()
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
   const validationSchema = z.object({
     course_category_id: z.string().optional().default(''),
     hubspot_account_info: z.string().optional().default(''),
-    user_hubspot_examination_subjects: z
-      .array(
-        z.object({
-          examination_subject_id: z
-            .object({
-              value: z.string().optional().default(''),
-              label: z.string().optional().default(''),
-            })
-            .optional(),
-          result: z.string().optional().default(''),
-        }),
-      )
-      .optional()
-      .default([]),
+    user_hubspot_examination_subjects: z.preprocess(
+      (value: any) => {
+        if (
+          value?.examination_subject_id === null ||
+          value?.examination_subject_id === undefined
+        ) {
+          return []
+        }
+        return value
+      },
+      z.array(
+        z
+          .object({
+            examination_subject_id: z
+              .object({
+                value: z.string().optional().default(''),
+                label: z.string().optional().default(''),
+              })
+              .optional(),
+            result: z.string().optional().default(''),
+          })
+          .optional()
+          .nullable(),
+      ),
+    ),
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { handleSubmit, setValue, control, getValues, resetField, reset } =
@@ -254,11 +265,11 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
                     control={control}
                     name={`user_hubspot_examination_subjects.[${index}].examination_subject_id`}
                     required
-                    isSearchable={false}
+                    isClearable
                     isDisabled={
                       !isEdit || courseTabData?.is_final_examination_subject
                     }
-                    placeholder="Select Exam"
+                    placeholder=""
                     defaultValue={defaultValue}
                     options={
                       exams?.examination_subjects.length
@@ -290,6 +301,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
                         )
                       }
                     }}
+                    onMenuClose={() => setExams(null)}
                     onMenuScrollToBottom={() => handleScrollExam(subject?.id)}
                   />
                 </div>
