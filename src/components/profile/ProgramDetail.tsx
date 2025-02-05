@@ -17,6 +17,11 @@ interface IProps {
   typeProgram: 'CMA' | 'ACCA' | 'CFA'
 }
 
+interface IExaminationSubject {
+  examination_subject_id: { value: string; label: string }
+  result: string
+}
+
 interface IForm {
   course_category_id?: string
   hubspot_account_info?: string
@@ -41,14 +46,19 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
     hubspot_account_info: z.string().optional().default(''),
     user_hubspot_examination_subjects: z.preprocess(
       (value: any) => {
-        const result = value.filter(
-          (item: {
-            examination_subject_id: { value: string; label: string }
-            result: string
-          }) =>
-            !isEmpty(item?.examination_subject_id?.value) &&
-            !isNull(item?.examination_subject_id?.value),
-        )
+        const result = value
+          .filter(
+            (item: IExaminationSubject) =>
+              !isEmpty(item?.examination_subject_id?.value) &&
+              !isNull(item?.examination_subject_id?.value),
+          )
+          .map((item: IExaminationSubject) => ({
+            examination_subject_id: {
+              value: item?.examination_subject_id?.value,
+              label: item?.examination_subject_id?.label,
+            },
+            result: item?.result ?? '',
+          }))
         return result ?? []
       },
       z.array(
