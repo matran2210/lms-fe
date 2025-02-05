@@ -41,13 +41,15 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
     hubspot_account_info: z.string().optional().default(''),
     user_hubspot_examination_subjects: z.preprocess(
       (value: any) => {
-        if (
-          value?.examination_subject_id === null ||
-          value?.examination_subject_id === undefined
-        ) {
-          return []
-        }
-        return value
+        const result = value.filter(
+          (item: {
+            examination_subject_id: { value: string; label: string }
+            result: string
+          }) =>
+            !isEmpty(item?.examination_subject_id?.value) &&
+            !isNull(item?.examination_subject_id?.value),
+        )
+        return result ?? []
       },
       z.array(
         z
