@@ -38,10 +38,8 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import PinnedHoliday from '@components/layout/PinnedNotifications/PinnedHoliday'
-import ButtonHoliday from '@components/layout/PinnedNotifications/ButtonHoliday'
-import SappModalV4 from '@components/base/modal/SappModalV4'
 import { CERTIFICATE_DETAIL } from '@utils/constants'
+import PinnedNotifications from '@components/layout/PinnedNotifications'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -191,46 +189,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router])
 
-  const [openPopupHoliday, setOpenPopupHoliday] = useState(true)
-  const showPopupHoliday =
-    typeof window !== 'undefined' &&
-    window.localStorage.getItem('showPopupHoliday')
-
-  const [isTablet, setIsTablet] = useState(false)
-  const [isIpadPro, setIpadPro] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkIsTablet = () => {
-      const width = window.innerWidth
-      setIsTablet(width >= 768 && width < 1024) // Tablet range
-    }
-
-    const checkIsTabletPro = () => {
-      const width = window.innerWidth
-      setIpadPro(width === 1024) // Specific size for iPad Pro
-    }
-
-    const checkIsMobile = () => {
-      const width = window.innerWidth
-      setIsMobile(width < 575) // Specific size for iPad Pro
-    }
-
-    const handleResize = () => {
-      checkIsTablet()
-      checkIsTabletPro()
-      checkIsMobile()
-    }
-
-    // Kiểm tra ngay khi trang load
-    handleResize()
-
-    // Lắng nghe sự thay đổi kích thước màn hình
-    window.addEventListener('resize', handleResize)
-
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
   return (
     <main>
       <PinnedNotifyProvider>
@@ -241,11 +199,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               <SappConfirmDialogContainer />
               <RouteGuard>
                 <>
-                  <PinnedHoliday
-                    isTablet={isTablet}
-                    isIpadPro={isIpadPro}
-                    isMobile={isMobile}
-                  />
+                  <PinnedNotifications />
                   <Component {...pageProps} />
                   {showHelp && (
                     <>
@@ -255,38 +209,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   )}
                   <LearningNotesList />
                   <PopupCompletedCourse />
-                  {!isMobile && (
-                    <SappModalV4
-                      open={showPopupHoliday === 'true' && openPopupHoliday}
-                      handleCancel={() => {}}
-                      onOk={() => {}}
-                      icon={undefined}
-                      header=""
-                      showFooter={false}
-                      classNameModal="sapp-popup--holiday"
-                    >
-                      <div className="relative md:h-[440px] md:w-[530px] xl:h-[560px] xl:w-[754px]">
-                        <img
-                          src={`${isTablet ? '/holiday-tablet.png' : '/holiday-desktop.png'}`}
-                          className="md:h-[440px] md:w-[530px] xl:h-[560px] xl:w-[754px]"
-                        />
-                        <div className="absolute left-1/2 flex -translate-x-1/2 transform gap-4 mxl:bottom-[40px] md:bottom-[40px] xl:bottom-[60px]">
-                          <ButtonHoliday
-                            title="Đóng"
-                            onClick={() => setOpenPopupHoliday(false)}
-                          />
-                          <ButtonHoliday
-                            title="Xác nhận đã đọc"
-                            onClick={() => {
-                              localStorage.setItem('showPopupHoliday', 'false')
-                              setOpenPopupHoliday(false)
-                            }}
-                            showButtonPrimay
-                          />
-                        </div>
-                      </div>
-                    </SappModalV4>
-                  )}
                 </>
               </RouteGuard>
             </SocketContext.Provider>
