@@ -174,7 +174,7 @@ const EditorReader = ({
         <div
           ref={extenalRef}
           className={clsx({
-            'pined-noti text-[14px] font-semibold text-[#FFD81B]': pinned,
+            'pined-noti text-[14px] text-white': pinned,
           })}
           key={content}
           onClick={handleOnclick}
