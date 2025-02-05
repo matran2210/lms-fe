@@ -73,7 +73,7 @@ const CommentModal = ({
 }: ICommentModal) => {
   return (
     <div className={`mb-6 bg-gray-4 p-4 ${className ?? ''}`}>
-      <div className="flex items-center justify-between">
+      <div className="mb-1.5 flex items-center justify-between">
         <div className="text-base font-medium">{title}</div>
         <div
           className="cursor-pointer text-sm text-state-info"
