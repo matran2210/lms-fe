@@ -1128,6 +1128,12 @@ td.py-5.px-3.sapp-table-quiz {
   max-width: 100%;
 }
 
+.sapp-modal--comment .ant-modal-content {
+  padding: 0px;
+  max-height: 640px;
+  min-height: 400px;
+}
+
 .pined-noti p {
   margin-bottom: 0px;
 }
