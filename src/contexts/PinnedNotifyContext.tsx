@@ -1,3 +1,4 @@
+import { CERTIFICATE_DETAIL } from '@utils/constants'
 import { convertUTCToLocalTime } from '@utils/helpers'
 import { getLocalStorageItem, setLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
@@ -103,12 +104,13 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
   }
 
   const router = useRouter()
-
   useEffect(() => {
     if (
-      ![ENTRANCE_TEST_TABLE_RESULT, ENTRANCE_TEST_RESULT].includes(
-        router.pathname,
-      )
+      ![
+        ENTRANCE_TEST_TABLE_RESULT,
+        ENTRANCE_TEST_RESULT,
+        CERTIFICATE_DETAIL,
+      ].includes(router.pathname)
     ) {
       getPinnedData()
     }

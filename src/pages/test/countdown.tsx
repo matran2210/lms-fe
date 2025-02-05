@@ -13,11 +13,11 @@ const CountDown = forwardRef(
     const time = useCountdown(remainTime)
     useImperativeHandle(ref, () => ({
       handleGetTime() {
-        return time[2]
+        return time?.[2]
       },
     }))
     useEffect(() => {
-      if (time[2] === 0) {
+      if (time?.[2] === 0) {
         onTimeOut && onTimeOut()
       }
     }, [time[2]])

@@ -1180,6 +1180,7 @@ export const IconLoudSpeaker = () => {
     </svg>
   )
 }
+
 export const LockIcon = () => {
   return (
     <svg

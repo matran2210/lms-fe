@@ -2,7 +2,6 @@ import BackToTop from '@components/BackToTop'
 import Help from '@components/Help'
 import { RouteGuard } from '@components/auth/RouteGuard'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
-import PinnedNotifications from '@components/layout/PinnedNotifications'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
@@ -39,6 +38,8 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
+import { CERTIFICATE_DETAIL } from '@utils/constants'
+import PinnedNotifications from '@components/layout/PinnedNotifications'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -161,9 +162,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (
-      ![ENTRANCE_TEST_TABLE_RESULT, ENTRANCE_TEST_RESULT].includes(
-        router.pathname,
-      )
+      ![
+        ENTRANCE_TEST_TABLE_RESULT,
+        ENTRANCE_TEST_RESULT,
+        CERTIFICATE_DETAIL,
+      ].includes(router.pathname)
     ) {
       try {
         dispatch(getCountUnRead())
