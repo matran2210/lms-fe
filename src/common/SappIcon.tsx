@@ -12,6 +12,8 @@ type iconType =
   | 'arrow_down'
   | 'x'
   | 'nodata'
+  | 'closeicon'
+  | 'seemore'
 
 type SAPP_ICONS_TYPE = {
   [key in iconType]: React.ReactNode
@@ -238,6 +240,43 @@ const SappIcon = ({ icon, className }: Props) => {
             <rect width="70" height="70" fill="white" />
           </clipPath>
         </defs>
+      </svg>
+    ),
+    closeicon: (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M6.21967 6.21967C6.51256 5.92678 6.98744 5.92678 7.28033 6.21967L17.7803 16.7197C18.0732 17.0126 18.0732 17.4874 17.7803 17.7803C17.4874 18.0732 17.0126 18.0732 16.7197 17.7803L6.21967 7.28033C5.92678 6.98744 5.92678 6.51256 6.21967 6.21967Z"
+          fill="#21272A"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M17.7803 6.21967C18.0732 6.51256 18.0732 6.98744 17.7803 7.28033L7.28033 17.7803C6.98744 18.0732 6.51256 18.0732 6.21967 17.7803C5.92678 17.4874 5.92678 17.0126 6.21967 16.7197L16.7197 6.21967C17.0126 5.92678 17.4874 5.92678 17.7803 6.21967Z"
+          fill="#21272A"
+        />
+      </svg>
+    ),
+    seemore: (
+      <svg
+        className="ms-2.5 group-hover:fill-primary"
+        width="12"
+        height="7"
+        viewBox="0 0 12 7"
+        fill="#3964EA" // Original color
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.78317 4.16666H0.666504V2.83333H8.78317L6.88319 0.933387L7.83319 5.34058e-05L11.3332 3.5L7.83311 7.00005L6.88311 6.06672L8.78317 4.16666Z"
+          className="transition-all duration-300 ease-in-out group-hover:fill-primary" // Added hover class for fill
+        />
       </svg>
     ),
   }

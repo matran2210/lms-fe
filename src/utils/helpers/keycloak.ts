@@ -6,7 +6,6 @@ import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
 import { PageLink } from 'src/constants'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
-import { isMobileExtensive } from '.'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
@@ -75,10 +74,6 @@ export class AuthenticationManager {
           const res = await EntranceTestAPI.getEntranceCount()
           if (isFirstLogin) {
             localStorage.setItem('enstranceTest', 'true')
-            localStorage.setItem(
-              'showPopupHoliday',
-              isMobileExtensive() ? 'false' : 'true',
-            )
             if (res?.data?.count > 0) {
               window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
             } else {

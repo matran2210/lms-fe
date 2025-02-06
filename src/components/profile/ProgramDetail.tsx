@@ -17,6 +17,11 @@ interface IProps {
   typeProgram: 'CMA' | 'ACCA' | 'CFA'
 }
 
+interface IExaminationSubject {
+  examination_subject_id: { value: string; label: string }
+  result: string
+}
+
 interface IForm {
   course_category_id?: string
   hubspot_account_info?: string
@@ -34,25 +39,43 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
   const [isEdit, setIsEdit] = useState(false)
   const [subjects, setSubjects] = useState<ISubjectItem[]>()
   const { user, loading } = useAppSelector(userReducer)
-  const [exams, setExams] = useState<IExaminationList>()
+  const [exams, setExams] = useState<IExaminationList | null>()
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
   const validationSchema = z.object({
     course_category_id: z.string().optional().default(''),
     hubspot_account_info: z.string().optional().default(''),
-    user_hubspot_examination_subjects: z
-      .array(
-        z.object({
-          examination_subject_id: z
-            .object({
-              value: z.string().optional().default(''),
-              label: z.string().optional().default(''),
-            })
-            .optional(),
-          result: z.string().optional().default(''),
-        }),
-      )
-      .optional()
-      .default([]),
+    user_hubspot_examination_subjects: z.preprocess(
+      (value: any) => {
+        const result = value
+          .filter(
+            (item: IExaminationSubject) =>
+              !isEmpty(item?.examination_subject_id?.value) &&
+              !isNull(item?.examination_subject_id?.value),
+          )
+          .map((item: IExaminationSubject) => ({
+            examination_subject_id: {
+              value: item?.examination_subject_id?.value,
+              label: item?.examination_subject_id?.label,
+            },
+            result: item?.result ?? '',
+          }))
+        return result ?? []
+      },
+      z.array(
+        z
+          .object({
+            examination_subject_id: z
+              .object({
+                value: z.string().optional().default(''),
+                label: z.string().optional().default(''),
+              })
+              .optional(),
+            result: z.string().optional().default(''),
+          })
+          .optional()
+          .nullable(),
+      ),
+    ),
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { handleSubmit, setValue, control, getValues, resetField, reset } =
@@ -128,6 +151,29 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
     }
   }
 
+  const handleCạncel = () => {
+    subjects?.map((subject: ISubjectItem, index: number) => {
+      const courseTabData = user.course_tab_groups?.[
+        typeProgram
+      ]?.user_hubspot_examination_subjects?.find(
+        (item) => item.examination_subject.subject.id === subject.id,
+      )
+      const defaultValue = {
+        label: courseTabData?.examination_subject?.examination?.name ?? '',
+        value: courseTabData?.examination_subject_id ?? '',
+      }
+      setValue(
+        `user_hubspot_examination_subjects.[${index}].examination_subject_id`,
+        defaultValue,
+      )
+      setValue(
+        `user_hubspot_examination_subjects.[${index}].result`,
+        courseTabData?.result,
+      )
+    })
+    setIsEdit(false)
+  }
+
   const handleScrollExam = (subjectId: string) => {
     if (!subjectId) return
     if (
@@ -144,6 +190,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
 
   useEffect(() => {
     if (user) {
+      setIsEdit(false)
       resetField('course_category_id')
       resetField('hubspot_account_info')
       resetField('user_hubspot_examination_subjects')
@@ -171,7 +218,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
               title="Cancel"
               color="textUnderline"
               onClick={() => {
-                setIsEdit(false)
+                handleCạncel()
               }}
             />
           )}
@@ -230,11 +277,11 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
                     control={control}
                     name={`user_hubspot_examination_subjects.[${index}].examination_subject_id`}
                     required
-                    isSearchable={false}
+                    isClearable
                     isDisabled={
                       !isEdit || courseTabData?.is_final_examination_subject
                     }
-                    placeholder="Select Exam"
+                    placeholder=""
                     defaultValue={defaultValue}
                     options={
                       exams?.examination_subjects.length
@@ -266,6 +313,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
                         )
                       }
                     }}
+                    onBlur={() => setExams(null)}
                     onMenuScrollToBottom={() => handleScrollExam(subject?.id)}
                   />
                 </div>

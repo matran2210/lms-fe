@@ -1,14 +1,24 @@
 import useResizeObserver from '@react-hook/resize-observer'
+import { TooltipPlacement } from 'antd/es/tooltip'
 import React, { useEffect, useRef, useState } from 'react'
+import SappTooltip from 'src/common/SappTooltip'
 
 interface ResponsiveTextTruncateProps {
   text: string
   isSlash?: boolean
+  isShowTooltip?: boolean
+  maxLength?: number
+  textTooltip?: string
+  placementTooltip?: TooltipPlacement
 }
 
 const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
   text,
   isSlash,
+  isShowTooltip,
+  maxLength,
+  textTooltip,
+  placementTooltip,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [visibleText, setVisibleText] = useState<string>(text)
@@ -26,7 +36,7 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     width: number,
     fontSize: number,
   ): string => {
-    const words = text.split(' ')
+    const words = text?.split(' ')
     let truncatedText = ''
     const tempElement = document.createElement('span')
     tempElement.style.position = 'absolute'
@@ -105,7 +115,17 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
         textOverflow: 'ellipsis', // Ensure the ellipsis styling is intact
       }}
     >
-      {visibleText}
+      {isShowTooltip && textTooltip ? (
+        <SappTooltip
+          title={textTooltip}
+          showTooltip={textTooltip?.length > (maxLength ?? 60)}
+          placement={placementTooltip}
+        >
+          {visibleText}
+        </SappTooltip>
+      ) : (
+        visibleText
+      )}
     </div>
   )
 }

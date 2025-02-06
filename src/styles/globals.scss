@@ -1128,12 +1128,10 @@ td.py-5.px-3.sapp-table-quiz {
   max-width: 100%;
 }
 
-.sapp-popup--holiday .ant-modal-content {
+.sapp-modal--comment .ant-modal-content {
   padding: 0px;
-}
-
-.ant-modal-root .ant-modal-mask {
-  opacity: 0.4;
+  max-height: 640px;
+  min-height: 400px;
 }
 
 .pined-noti p {
