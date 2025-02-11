@@ -186,8 +186,9 @@ const EntranceTestFillForm = ({
       <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
         Fill This Form
       </h2>
-      <div className='text-gray-1 text-sm'>
-        The information below will help SAPP evaluate your profile and suggest a suitable learning path. Click 'Next' to see the test details.
+      <div className="text-sm text-gray-1">
+        The information below will help SAPP evaluate your profile and suggest a
+        suitable learning path. Click &apos;Next&apos; to see the test details.
       </div>
       <div className="mt-10">
         <SappHookFormSelect
