@@ -16,14 +16,12 @@ interface IProps {
   setOpen: Dispatch<SetStateAction<boolean>>
   entrancePopupContent: any
   setOpenTestInfo: Dispatch<SetStateAction<boolean>> | undefined
-  checkInfo: boolean
 }
 const EntranceTestFillForm = ({
   open,
   setOpen,
   entrancePopupContent,
   setOpenTestInfo,
-  checkInfo,
 }: IProps) => {
   const [listUnivers, setListUnivers] = useState<any>()
   const [listUniverPrograms, setListUniverPrograms] = useState<any>()
@@ -146,36 +144,26 @@ const EntranceTestFillForm = ({
   const { count } = useAppSelector(entranceTestReducer)
 
   const onSubmit = async (dataValue: any) => {
-    if (
-      user?.major &&
-      user?.university &&
-      user?.english_level &&
-      user?.university_program
-    ) {
-      return
-    } else {
-      await EntranceTestAPI.putLevel({
-        university_program_id: dataValue?.univers_program_id?.value,
-        major_id: dataValue?.majors_id?.value,
-        english_level_id: dataValue?.englishLevel_id?.value,
-        university_id: dataValue?.univers_id?.value,
-      })
+    await EntranceTestAPI.putLevel({
+      university_program_id: dataValue?.univers_program_id?.value,
+      major_id: dataValue?.majors_id?.value,
+      english_level_id: dataValue?.englishLevel_id?.value,
+      university_id: dataValue?.univers_id?.value,
+    })
 
-      if (count > 1) {
-        setOpenTestInfo && setOpenTestInfo(true)
-        setOpen(true)
-        // router.push({
-        //   pathname: `/test/${entrancePopupContent?.id}`,
-        //   query: {
-        //     type: 'entrance',
-        //   },
-        // })
-      }
+    if (count > 1) {
+      setOpenTestInfo && setOpenTestInfo(true)
+      setOpen(true)
+      // router.push({
+      //   pathname: `/test/${entrancePopupContent?.id}`,
+      //   query: {
+      //     type: 'entrance',
+      //   },
+      // })
+    }
 
-      if (count === 1) {
-        setOpenTestInfo && setOpenTestInfo(true)
-        setOpen(false)
-      }
+    if (count === 1) {
+      setOpenTestInfo && setOpenTestInfo(true)
     }
   }
 
@@ -197,13 +185,17 @@ const EntranceTestFillForm = ({
       <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
         Fill This Form
       </h2>
+      <div className="text-sm text-gray-1">
+        The information below will help SAPP evaluate your profile and suggest a
+        suitable learning path. Click &apos;Next&apos; to see the test details.
+      </div>
       <div className="mt-10">
         <SappHookFormSelect
           control={control}
           name="univers_id"
-          label="Trường đại học"
+          label="University"
           required
-          placeholder="Chọn 1 lựa chọn"
+          placeholder="Select one option"
           options={listUnivers}
         />
       </div>
@@ -212,9 +204,9 @@ const EntranceTestFillForm = ({
           <SappHookFormSelect
             control={control}
             name="univers_program_id"
-            label="Hệ đã/ đang theo học"
+            label="Program"
             required
-            placeholder="Chọn 1 lựa chọn"
+            placeholder="Select one option"
             options={listUniverPrograms}
           />
         </div>
@@ -222,9 +214,9 @@ const EntranceTestFillForm = ({
           <SappHookFormSelect
             control={control}
             name="majors_id"
-            label="Chuyên ngành học"
+            label="Major"
             required
-            placeholder="Chọn 1 lựa chọn"
+            placeholder="Select one option"
             options={listMajors}
           />
         </div>
@@ -233,9 +225,9 @@ const EntranceTestFillForm = ({
         <SappHookFormSelect
           control={control}
           name="englishLevel_id"
-          label="Trình độ tiếng Anh"
+          label="English Level"
           required
-          placeholder="Chọn 1 lựa chọn"
+          placeholder="Select one option"
           options={listEngLevel}
         />
       </div>
