@@ -144,27 +144,28 @@ const EntranceTestFillForm = ({
   const { count } = useAppSelector(entranceTestReducer)
 
   const onSubmit = async (dataValue: any) => {
-    await EntranceTestAPI.putLevel({
-      university_program_id: dataValue?.univers_program_id?.value,
-      major_id: dataValue?.majors_id?.value,
-      english_level_id: dataValue?.englishLevel_id?.value,
-      university_id: dataValue?.univers_id?.value,
-    })
+      await EntranceTestAPI.putLevel({
+        university_program_id: dataValue?.univers_program_id?.value,
+        major_id: dataValue?.majors_id?.value,
+        english_level_id: dataValue?.englishLevel_id?.value,
+        university_id: dataValue?.univers_id?.value,
+      })
+      
+      if (count > 1) {
+        setOpenTestInfo && setOpenTestInfo(true)
+        setOpen(true)
+        // router.push({
+        //   pathname: `/test/${entrancePopupContent?.id}`,
+        //   query: {
+        //     type: 'entrance',
+        //   },
+        // })
+      }
 
-    if (count > 1) {
-      setOpenTestInfo && setOpenTestInfo(true)
-      setOpen(true)
-      // router.push({
-      //   pathname: `/test/${entrancePopupContent?.id}`,
-      //   query: {
-      //     type: 'entrance',
-      //   },
-      // })
-    }
-
-    if (count === 1) {
-      setOpenTestInfo && setOpenTestInfo(true)
-    }
+      if (count === 1) {
+        setOpenTestInfo && setOpenTestInfo(true)
+      }
+    
   }
 
   return (
