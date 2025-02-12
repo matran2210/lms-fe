@@ -27,21 +27,10 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const router = useRouter()
   const { count } = useAppSelector(entranceTestReducer)
 
-  const { user } = useAppSelector(userReducer)
   const [open, setOpen] = useState<boolean>(false)
-  const checkInfo = useMemo(() => {
-    if (
-      (user?.detail?.university as any)?.id &&
-      user?.university_program?.id &&
-      user?.english_level?.id
-    ) {
-      return true
-    }
-    return false
-  }, [user])
 
   const handleOnClick = () => {
-    if (count >= 1 && !checkInfo) {
+    if (count >= 1) {
       setOpenFillForm(true)
     } else if (data?.attempt_times >= 1) {
       router.push(`entrance-test/test-result/${data?.quiz_attempt_id}`)
