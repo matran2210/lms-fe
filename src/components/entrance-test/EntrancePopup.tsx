@@ -66,8 +66,10 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         buttonSize="medium"
         title={undefined}
       >
-        <h2 className="mb-2 max-w-screen-sm text-4xl font-bold text-bw-1">Test Information</h2>
-        <div className='text-gray-1 text-sm'>Let’s start</div>
+        <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
+          Test Information
+        </h2>
+        <div className="text-sm text-gray-1">Let’s start</div>
         <EntrancePopupContent
           name={
             count === 1 ? entranceTest?.name : entrancePopupContent?.name || ''
@@ -83,9 +85,11 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
               ? entranceTest?.limit_count
               : entrancePopupContent?.limit_count
           }
-          total_question={count === 1
-            ? entranceTest?.total_question
-            : entrancePopupContent?.total_question}
+          total_question={
+            count === 1
+              ? entranceTest?.total_question
+              : entrancePopupContent?.total_question
+          }
         />
       </SappModalV2>
       <EntranceTestFillForm
