@@ -109,10 +109,10 @@ const EntranceTestFillForm = ({
   }, [open])
   useEffect(() => {
     if (user && open) {
-      if (user?.university) {
+      if (user?.detail?.university) {
         setValue('univers_id', {
-          value: user?.university?.id,
-          label: user?.university?.name,
+          value: user?.detail?.university?.id,
+          label: user?.detail?.university?.name,
         })
       }
       if (user?.university_program) {
@@ -121,13 +121,13 @@ const EntranceTestFillForm = ({
           label: user?.university_program?.name,
         })
       }
-      if (user.major) {
+      if (user?.detail?.major) {
         setValue('majors_id', {
-          value: user?.major?.id,
-          label: user?.major?.name,
+          value: user?.detail?.major?.id,
+          label: user?.detail?.major?.name,
         })
       }
-      if (user.english_level) {
+      if (user?.english_level) {
         setValue('englishLevel_id', {
           value: user?.english_level?.id,
           label: user?.english_level?.name,
