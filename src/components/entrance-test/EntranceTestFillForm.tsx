@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAppSelector } from 'src/redux/hook'
-import { userReducer } from 'src/redux/slice/User/User'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { getMe, userReducer } from 'src/redux/slice/User/User'
 import { useRouter } from 'next/router'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
@@ -142,14 +142,19 @@ const EntranceTestFillForm = ({
   }
 
   const { count } = useAppSelector(entranceTestReducer)
+  const dispatch = useAppDispatch()
 
   const onSubmit = async (dataValue: any) => {
-    await EntranceTestAPI.putLevel({
+    const res = await EntranceTestAPI.putLevel({
       university_program_id: dataValue?.univers_program_id?.value,
       major_id: dataValue?.majors_id?.value,
       english_level_id: dataValue?.englishLevel_id?.value,
       university_id: dataValue?.univers_id?.value,
     })
+
+    if (res?.success) {
+      await dispatch(getMe()).unwrap()
+    }
 
     if (count > 1) {
       setOpenTestInfo && setOpenTestInfo(true)
