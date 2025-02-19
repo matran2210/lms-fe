@@ -55,6 +55,7 @@ type Props = {
   reload: () => void
   grading_method?: string
   refreshTab: () => void
+  exhibitText: string
 }
 
 interface IAnswer {
@@ -96,6 +97,7 @@ const QuizDocument = ({
   reload,
   grading_method,
   refreshTab,
+  exhibitText,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -430,7 +432,7 @@ const QuizDocument = ({
             <div id="hightlight_area">
               <div className="my-6 border border-b-gray-2"></div>
               <div className="mb-4 flex items-center">
-                <div className="font-semibold">Exhibits (6)</div>
+                <div className="font-semibold">{exhibitText}s (6)</div>
                 <div className="ml-4">
                   <span className="text-state-error">* </span>
                   <span className="text-gray-1">Click to view</span>
@@ -438,19 +440,19 @@ const QuizDocument = ({
               </div>
               <div className="flex flex-col gap-2">
                 <div className="cursor-pointer hover:text-primary">
-                  Exhibit 1: Quản lý nhân sự
+                  {exhibitText} 1: Quản lý nhân sự
                 </div>
                 <div className="cursor-pointer hover:text-primary">
-                  Exhibit 2: email csv
+                  {exhibitText} 2: email csv
                 </div>
                 <div className="cursor-pointer hover:text-primary">
-                  Exhibit 3: csv semi
+                  {exhibitText} 3: csv semi
                 </div>
                 <div className="cursor-pointer hover:text-primary">
-                  Exhibit 4: File Data mẫu
+                  {exhibitText} 4: File Data mẫu
                 </div>
                 <div className="cursor-pointer hover:text-primary">
-                  Exhibit 5: csv short
+                  {exhibitText} 5: csv short
                 </div>
               </div>
               <div className="my-6 border border-b-gray-2"></div>
@@ -549,6 +551,7 @@ const QuizDocument = ({
               showQuestionContent={false}
               isHideExhibit={false}
               saveAnswer={handleSaveAnswer}
+              exhibitText={exhibitText}
             />
           )}
       </div>

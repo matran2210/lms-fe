@@ -53,6 +53,7 @@ const Explanation = () => {
       ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
       setActiveQuestion({
         ...resultResponse.data.answer.question,
+        program: resultResponse.data.program,
         answer_file: resultResponse.data.answer.answer_file,
         active: resultResponse.data.answer.active,
         confirmed: true,

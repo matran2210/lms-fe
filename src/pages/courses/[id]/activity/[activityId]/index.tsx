@@ -32,7 +32,7 @@ import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -108,6 +108,7 @@ const ActivityPage = () => {
     top: 'calc(50% - 250px)',
     left: 'calc(50% - 200px)',
   })
+  const [exhibitText, setExhibitText] = useState<string>('')
 
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
@@ -167,6 +168,11 @@ const ActivityPage = () => {
 
   useLayoutEffect(() => {
     if (activity) {
+      setExhibitText(
+        activity.program === PROGRAM.CMA
+          ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+          : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+      )
       dispatch(resetQuizActivity({}))
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
@@ -799,6 +805,7 @@ const ActivityPage = () => {
                               quizName={e?.quiz?.name}
                               grading_method={e?.quiz?.grading_method}
                               refreshTab={() => handleRefreshCurrentTab()}
+                              exhibitText={exhibitText}
                             />
                           </div>
                         )
@@ -1184,7 +1191,7 @@ const ActivityPage = () => {
                   <div className="absolute left-0 top-0  h-full w-full border">
                     <div className="flex h-10 w-full items-center justify-between bg-white px-5">
                       <div className="truncate">
-                        <span className="text-base font-semibold text-bw-1">{`Exhibit ${
+                        <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
                           e?.index + 1
                         }: `}</span>
                         {e?.name}

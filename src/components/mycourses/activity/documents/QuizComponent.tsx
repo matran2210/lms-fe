@@ -85,6 +85,7 @@ type Props = {
   showQuestionContent?: boolean
   isHideExhibit?: boolean
   saveAnswer?: () => void
+  exhibitText: string
 }
 
 type RefEditor = {
@@ -105,6 +106,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       showQuestionContent = true,
       isHideExhibit = true,
       saveAnswer,
+      exhibitText,
     }: Props,
     ref,
   ) => {
@@ -462,6 +464,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               isHideExhibit={isHideExhibit}
               name={`${activeQuestion?.id}_${document_id}_answer`}
               solution={activeQuestion?.solution}
+              exhibitText={exhibitText}
             />
           )
 
@@ -476,6 +479,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               isHideExhibit={isHideExhibit}
               name={`${activeQuestion?.id}_${document_id}_answer`}
               solution={activeQuestion?.solution}
+              exhibitText={exhibitText}
             />
           )
 
@@ -490,6 +494,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
+              exhibitText={exhibitText}
             />
           )
 
@@ -519,6 +524,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
+              exhibitText={exhibitText}
             />
           )
 
@@ -532,6 +538,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
+              exhibitText={exhibitText}
             />
           )
 
@@ -609,7 +616,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     <div className="my-6 border border-b-gray-2"></div>
                     <div className="mb-4 flex items-center">
                       <div className="font-semibold">
-                        Exhibits ({exhibitData?.length || 0})
+                        {exhibitText}s ({exhibitData?.length || 0})
                       </div>
                       <div className="ml-4">
                         <span className="text-state-error">* </span>
@@ -638,7 +645,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                                 )
                             }}
                           >
-                            Exhibit {i + 1}: {e?.name}
+                            {exhibitText} {i + 1}: {e?.name}
                           </div>
                         )
                       })}

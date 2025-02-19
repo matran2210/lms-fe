@@ -26,7 +26,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { QUESTION_TYPES } from 'src/constants'
+import { EXHIBIT_TEXT_REPLACE, PROGRAM, QUESTION_TYPES } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from 'src/type/exhibit'
@@ -70,6 +70,7 @@ const CaseStudyResult = () => {
   const [scratchPadValues, setScratchPadValues] = useState<{ value: string }>({
     value: '',
   })
+  const [exhibitText, setExhibitText] = useState<string>('')
 
   /**
    * Declare form to handle exhibit
@@ -409,6 +410,13 @@ const CaseStudyResult = () => {
     try {
       const res = await CoursesAPI.getCaseStudyAttemptsTable(id, 1, 10)
       res?.data?.answers && handleExhibit(res?.data?.answers?.[0])
+      if (res.data.programs) {
+        setExhibitText(
+          res.data.program === PROGRAM.CMA
+            ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+            : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+        )
+      }
       setResult(res.data)
     } catch (err) {
     } finally {
@@ -419,7 +427,7 @@ const CaseStudyResult = () => {
   const exhibits = useMemo(() => {
     return (
       exhibitData?.map((exhibit, index: number) => ({
-        label: `Exhibit ${+index + 1}`,
+        label: `${exhibitText} ${+index + 1}`,
         value: exhibit.id,
       })) ?? []
     )
@@ -794,7 +802,7 @@ const CaseStudyResult = () => {
                     <div className="absolute left-0 top-0  h-full w-full border">
                       <div className="flex h-10 w-6-percent w-full items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="text-base font-semibold ">{`Exhibit ${
+                          <span className="text-base font-semibold ">{`${exhibitText} ${
                             (i ?? 0) + 1
                           }: `}</span>
                           {exhibitsDes?.name}
@@ -929,7 +937,7 @@ const CaseStudyResult = () => {
                       <div className="flex items-center gap-3 text-sm font-normal">
                         <div>
                           <span className="hidden  lg:inline-block 3xl:me-1">
-                            {`Exhibits (${exhibits?.length})`}
+                            {`${exhibitText}s (${exhibits?.length})`}
                           </span>
                         </div>
                       </div>
