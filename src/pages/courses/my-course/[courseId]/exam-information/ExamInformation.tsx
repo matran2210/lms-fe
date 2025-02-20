@@ -36,7 +36,7 @@ const ExamInformation = () => {
             <div className="main relative mx-auto my-0 max-w-xxl">
               <div className="flex w-full items-center justify-between pb-4 pt-6">
                 <BreadcrumbFilter
-                  name={''}
+                  name={data?.data.course.name}
                   subpath="Exam Information"
                   courseId={router.query.courseId}
                 />
