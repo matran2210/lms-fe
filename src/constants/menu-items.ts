@@ -73,6 +73,12 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-2',
   },
   {
+    name: `${TitleSidebar.EXAM_INFORMATION}`,
+    icon: 'exam_information',
+    url: '#',
+    type: 'level-2',
+  },
+  {
     name: `${TitleSidebar.NEW_NOTE}`,
     icon: 'create-note',
     url: '#',

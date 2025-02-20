@@ -30,6 +30,7 @@ module.exports = {
       'medium-sm': ['14px', { lineHeight: '16.9px' }],
       xsm: ['13px', { lineHeight: '19.5px' }],
       ssm: ['12px', { lineHeight: '20px' }],
+      action: ['0.8rem', { lineHeight: '17px' }],
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
@@ -52,6 +53,7 @@ module.exports = {
           DEFAULT: '#FFB800',
           2: '#FFC83A',
           3: '#E5A600',
+          light: 'rgba(255, 187, 0, .071)',
         },
         secondary: {
           DEFAULT: '#FFFAF0',

@@ -15,7 +15,7 @@ const EntrancePopupContent = ({
   timeAllow,
   attemps,
   limit_count,
-  total_question
+  total_question,
 }: EntrancePopupContentProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const timeAllowFormatted = timeAllow
