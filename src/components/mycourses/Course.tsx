@@ -35,8 +35,6 @@ const Course = ({
   index: number
   lastElementRef: (node: HTMLDivElement) => void
   refetch: () => void
-  // setData: Dispatch<SetStateAction<ICourseAll>>
-  // setLoading: Dispatch<SetStateAction<boolean>>
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
@@ -191,23 +189,13 @@ const Course = ({
       toast.success('Active thành công!')
     } catch (error) {}
   }
-
   async function extendCourse() {
     try {
-      const params = {
-        classId: `${classInstance?.id}`,
+      const res = await CoursesAPI.extendCourse({ classId: classInstance?.id })
+      if (res?.success) {
+        refetch()
+        toast.success('Gia hạn hành công!')
       }
-      if (
-        course?.course_type === 'TRIAL_COURSE' &&
-        !student &&
-        classInstance?.duration_type === 'FIXED'
-      ) {
-        Object.assign(params, {
-          is_student_in_class: false,
-        })
-      }
-      refetch()
-      toast.success('Gia hạn hành công!')
     } catch (error) {}
   }
 
