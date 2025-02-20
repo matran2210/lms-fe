@@ -2,9 +2,8 @@ import BackToTop from '@components/BackToTop'
 import Help from '@components/Help'
 import { RouteGuard } from '@components/auth/RouteGuard'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
-import PinnedNotifications from '@components/layout/PinnedNotifications'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
-import PopupCert from '@components/mycourses/PopupCert'
+import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
@@ -21,7 +20,13 @@ import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { io } from 'socket.io-client'
-import { ANIMATION, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from 'src/constants'
+import {
+  ANIMATION,
+  ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,
+  LOCAL_STORAGE_KEYS,
+  SOCKET_EVENTS,
+} from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
@@ -33,6 +38,8 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
+import { CERTIFICATE_DETAIL } from '@utils/constants'
+import PinnedNotifications from '@components/layout/PinnedNotifications'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -154,10 +161,33 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [showHelp])
 
   useEffect(() => {
-    try {
-      dispatch(getCountUnRead())
-    } catch (error) {}
+    if (
+      ![
+        ENTRANCE_TEST_TABLE_RESULT,
+        ENTRANCE_TEST_RESULT,
+        CERTIFICATE_DETAIL,
+      ].includes(router.pathname)
+    ) {
+      try {
+        dispatch(getCountUnRead())
+      } catch (error) {}
+    }
   }, [])
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Lưu URL hiện tại vào localStorage trước khi đổi sang URL mới
+      localStorage.setItem('previousUrl', router.asPath)
+    }
+
+    // Lắng nghe sự kiện chuyển route
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    // Cleanup listener
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router])
 
   return (
     <main>
@@ -178,7 +208,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                     </>
                   )}
                   <LearningNotesList />
-                  <PopupCert />
+                  <PopupCompletedCourse />
                 </>
               </RouteGuard>
             </SocketContext.Provider>

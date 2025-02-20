@@ -1,11 +1,15 @@
 import ExpandIcon from '@components/layout/ExpandIcon'
-import { PROFILE_PAGES } from '@utils/constants/User'
+import {
+  MYPROFILE_TREE,
+  PROFILE_PAGES,
+  SECURITY_TREE,
+} from '@utils/constants/User'
 import { trackGAEvent } from '@utils/google-analytics'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
@@ -40,11 +44,38 @@ interface ChildWithChangePassword {
   }
 }
 
+interface ChildWithOverview {
+  OVERVIEW: {
+    label: string
+  }
+}
+
+interface ChildWithACCA {
+  ACCA: {
+    label: string
+  }
+}
+interface ChildWithCMA {
+  CMA: {
+    label: string
+  }
+}
+
+interface ChildWithCFA {
+  CFA: {
+    label: string
+  }
+}
+
 type Child =
   | ChildWithLabel
   | ChildWithDevices
   | ChildWithLoginHistory
   | ChildWithChangePassword
+  | ChildWithOverview
+  | ChildWithACCA
+  | ChildWithCMA
+  | ChildWithCFA
 
 const ProfileSideBar = ({ page, children }: IProps) => {
   const dispatch = useAppDispatch()
@@ -59,6 +90,14 @@ const ProfileSideBar = ({ page, children }: IProps) => {
       return child.LOGIN_HISTORY.label
     } else if ('CHANGE_PASSWORD' in child) {
       return child.CHANGE_PASSWORD.label
+    } else if ('OVERVIEW' in child) {
+      return child.OVERVIEW.label
+    } else if ('ACCA' in child) {
+      return child.ACCA.label
+    } else if ('CFA' in child) {
+      return child.CFA.label
+    } else if ('CMA' in child) {
+      return child.CMA.label
     }
 
     // Mặc định trả về chuỗi rỗng nếu không tìm thấy
@@ -116,18 +155,43 @@ const ProfileSideBar = ({ page, children }: IProps) => {
     // Chuyển trang
     let formattedChildLabel = childLabel.toLowerCase()
 
-    if (formattedChildLabel === 'my_profile') {
-      formattedChildLabel = formattedChildLabel.replace(/_/g, '') // hoặc có thể sử dụng ' ' để thay thế bằng khoảng trắng
-    }
-
     router.push(`/${formattedChildLabel}`)
   }
 
-  const [isExpanded, toggleExpanded] = useState(false)
+  const [isExpanded, toggleExpanded] = useState({ urlPage: '', isOpen: false })
 
-  const onClickExpand = () => {
-    toggleExpanded((prev) => !prev) // Sử dụng callback để đảm bảo sử dụng giá trị mới nhất
+  const onClickExpand = (urlPage: string) => {
+    toggleExpanded((prev) => ({
+      urlPage,
+      isOpen: urlPage !== prev.urlPage ? true : !prev.isOpen,
+    }))
   }
+
+  const hanldeClickMenu = (urlPage: string, childLabel: string) => {
+    if (urlPage === 'myprofile') {
+      onClickExpand(urlPage)
+      setChildActivationStates({ myprofile: true, security: false })
+      trackGAEvent(`Click Button Programs My Profile`)
+    } else if (urlPage !== 'security') {
+      handleChildClick(childLabel)
+      setChildActivationStates({ security: false, myprofile: false })
+      trackGAEvent(`Click Button ${childLabel} My Profile`)
+    } else if (urlPage === 'security') {
+      onClickExpand(urlPage)
+      setChildActivationStates({ security: true, myprofile: false })
+      trackGAEvent(`Click Button Security My Profile`)
+    }
+  }
+
+  useEffect(() => {
+    const rootMenu = SECURITY_TREE.includes(router.query.page as string)
+      ? 'security'
+      : MYPROFILE_TREE.includes(router.query.page as string)
+        ? 'myprofile'
+        : null
+    rootMenu && onClickExpand(rootMenu)
+    handleChildClick(router.query.page as string)
+  }, [])
 
   return (
     <div className="grid w-full grid-cols-4 gap-6">
@@ -137,13 +201,10 @@ const ProfileSideBar = ({ page, children }: IProps) => {
             {Object.entries(PROFILE_PAGES).map(([key, value]) => {
               const urlPage = key?.toLowerCase()
               const urlChildren = (value?.children || []) as Child[]
-
               const childLabel = getLabelFromChild(value)?.replace(/\s+/g, '_')
               const isActive = urlPage === page
-
               let className =
                 'text-gray-1 relative hover:text-primary font-normal'
-
               if (isActive) {
                 className = 'bg-secondary font-medium text-primary'
               }
@@ -159,7 +220,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                   <a
                     className={`hover-transition-font-weight flex w-full justify-between p-5 text-left hover:bg-secondary  ${
                       isActive ||
-                      (urlPage === 'security' &&
+                      (urlPage === isExpanded.urlPage &&
                         Object.values(childActivationStates)?.some(
                           (active) => active,
                         ) &&
@@ -171,27 +232,15 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                       position: 'relative', // Đặt position là relative
                       zIndex: 2, // Thiết lập z-index của thẻ a
                     }}
-                    onClick={() => {
-                      if (urlPage !== 'security') {
-                        // If not 'security', use existing logic
-                        handleChildClick(childLabel)
-                        setChildActivationStates({ security: false })
-                        trackGAEvent(`Click Button ${childLabel} My Profile`)
-                      } else if (childActivationStates[childLabel] === false) {
-                        // If 'security' and not a child, set only 'security' to active
-                        setChildActivationStates({ security: true })
-                      } else if (urlPage === 'security') {
-                        onClickExpand()
-                        setChildActivationStates({ security: true })
-                        trackGAEvent(`Click Button Security My Profile`)
-                      }
-                    }}
+                    onClick={() => hanldeClickMenu(urlPage, childLabel)}
                   >
                     {value?.label}
-                    {urlPage === 'security' && (
+                    {['security', 'myprofile'].includes(urlPage) && (
                       <div className="mt-2">
                         <ExpandIcon
-                          isExpanded={isExpanded}
+                          isExpanded={
+                            isExpanded.isOpen && isExpanded.urlPage === urlPage
+                          }
                           type={'ontoggle'}
                           className={''}
                         />
@@ -202,15 +251,17 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                     <div
                       className={clsx(
                         'ml-5 border-l border-gray-2',
-                        isExpanded && 'my-5',
+                        isExpanded.isOpen &&
+                          isExpanded.urlPage === urlPage &&
+                          'my-5',
                       )}
                     >
-                      {isExpanded &&
+                      {isExpanded.isOpen &&
+                        isExpanded.urlPage === urlPage &&
                         urlChildren?.map((child) => {
-                          const childLabel = getLabelFromChild(child).replace(
-                            /\s+/g,
-                            '_',
-                          )
+                          const childLabel = getLabelFromChild(child)
+                            ?.toLowerCase()
+                            ?.replace(/\s+/g, '_')
                           const childIsActive =
                             childActivationStates[childLabel] || false
                           return (
@@ -251,7 +302,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
             </li>
           </div>
           <div className="text-center text-sm font-normal text-gray-1">
-            LMS Pro Version 2.2.0
+            LMS Pro Version 2.4.0
           </div>
         </ul>
       </div>

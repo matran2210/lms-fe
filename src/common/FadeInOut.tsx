@@ -116,7 +116,7 @@ class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
       <div className="relative">
         <div
           ref={this.coverRef}
-          className={`bg-black absolute inset-0 z-50 flex h-full w-full items-center justify-center opacity-50 transition-all ease-in-out ${
+          className={`absolute inset-0 z-50 flex h-full w-full items-center justify-center bg-black opacity-50 transition-all ease-in-out ${
             status !== Status.ENTERED ? '' : 'hidden'
           }`}
         >

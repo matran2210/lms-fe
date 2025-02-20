@@ -19,6 +19,11 @@ interface IProps {
   label?: string
   labelClass?: string
   isSearchable?: boolean
+  onMenuScrollToBottom?: () => void
+  onFocus?: () => void
+  isClearable?: boolean
+  onMenuClose?: () => void
+  onBlur?: () => void
 }
 
 const SappHookFormSelect = ({
@@ -34,6 +39,11 @@ const SappHookFormSelect = ({
   label,
   required,
   isSearchable = true,
+  onMenuScrollToBottom,
+  onFocus,
+  isClearable,
+  onMenuClose,
+  onBlur,
 }: IProps) => {
   return (
     <>
@@ -64,14 +74,19 @@ const SappHookFormSelect = ({
                 instanceId="selectInstanceId"
                 placeholder={placeholder}
                 isDisabled={isDisabled}
+                isClearable={isClearable}
                 onChange={(selectedOption) => {
                   // Gọi hàm onChange truyền từ props
                   onChange && onChange(selectedOption)
                   // Gọi hàm onChange của field
                   field.onChange(selectedOption)
                 }}
+                onMenuClose={onMenuClose}
                 isSearchable={isSearchable}
                 defaultValue={defaultValue}
+                onMenuScrollToBottom={onMenuScrollToBottom}
+                onFocus={onFocus}
+                onBlur={onBlur}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>

@@ -9,6 +9,7 @@ import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
+import ProgramDetail from '@components/profile/ProgramDetail'
 import Settings from '@components/profile/Settings'
 import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
@@ -66,32 +67,60 @@ const ProfilePage = () => {
 
   let selectedContent: JSX.Element | null = null
 
-  if (page === 'myprofile') {
-    selectedContent = (
-      <ProfileContent
-        setReViewImageSrc={setReViewImageSrc}
-        isEdit={isEdit}
-        setIsEdit={handleSetIsEdit}
-        page={page}
-        avatar={avatar}
-        handleSetAvatar={handleSetAvatar}
-        onOpenTab={() => setSelectPage(true)}
-      />
-    )
-  } else if (page === ProfilePages.Certificates) {
-    selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
-  } else if (page === ProfilePages.Devices) {
-    selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
-  } else if (page === ProfilePages.LoginHistory) {
-    selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
-  } else if (page === ProfilePages.ChangePassword) {
-    selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
-  } else if (page === ProfilePages.Settings) {
-    selectedContent = <Settings onBack={() => setSelectPage(true)} />
-  } else if (page === ProfilePages.ExamInfo) {
-    selectedContent = <ExamInfoTab onBack={() => setSelectPage(true)} />
-  } else {
-    selectedContent = <NotFound />
+  switch (page) {
+    case ProfilePages.Certificates:
+      selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
+      break
+
+    case ProfilePages.Devices:
+      selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
+      break
+
+    case ProfilePages.LoginHistory:
+      selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
+      break
+
+    case ProfilePages.ChangePassword:
+      selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
+      break
+
+    case ProfilePages.Settings:
+      selectedContent = <Settings onBack={() => setSelectPage(true)} />
+      break
+
+    case ProfilePages.OVERVIEW:
+      selectedContent = (
+        <ProfileContent
+          setReViewImageSrc={setReViewImageSrc}
+          isEdit={isEdit}
+          setIsEdit={handleSetIsEdit}
+          page={page}
+          avatar={avatar}
+          handleSetAvatar={handleSetAvatar}
+          onOpenTab={() => setSelectPage(true)}
+        />
+      )
+      break
+
+    case ProfilePages.CFA:
+      selectedContent = <ProgramDetail typeProgram="CFA" />
+      break
+
+    case ProfilePages.CMA:
+      selectedContent = <ProgramDetail typeProgram="CMA" />
+      break
+
+    case ProfilePages.ACCA:
+      selectedContent = <ProgramDetail typeProgram="ACCA" />
+      break
+
+    case ProfilePages.ExamInfo:
+      selectedContent = <ExamInfoTab onBack={() => setSelectPage(true)} />
+      break
+
+    default:
+      selectedContent = <NotFound />
+      break
   }
   const handleResize = () => {
     if (window.innerWidth < 1024) {

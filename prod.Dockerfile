@@ -20,5 +20,6 @@ COPY tailwind.config.js .
 COPY sentry.client.config.ts .
 COPY sentry.edge.config.ts .
 COPY sentry.server.config.ts .
+ENV NODE_OPTIONS=--max-old-space-size=8192 
 RUN yarn build
 CMD ["yarn", "start"]

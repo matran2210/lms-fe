@@ -134,6 +134,7 @@ export interface IQuestion {
   setting_grade?: string
   time?: string
   question_topic?: IQuestionTopic
+  time_spent: number
 }
 
 export enum ANSWER_CORRECT_TYPE {

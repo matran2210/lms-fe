@@ -5,8 +5,8 @@ import { SOCIAL_LINK } from 'src/constants'
 
 interface IProps {
   open: boolean
-  handleCancel: any
-  type?: 'expired' | 'unopened'
+  handleCancel: () => void
+  type?: 'NOT_OPEN_YET' | 'EXPIRED'
   start_time?: string
 }
 
@@ -17,7 +17,7 @@ const TestAnnouncementModal = ({
   start_time,
 }: IProps) => {
   // TEST EXPIRED
-  if (type === 'expired') {
+  if (type === 'EXPIRED') {
     return (
       <SappModalV3
         open={open}
@@ -49,7 +49,7 @@ const TestAnnouncementModal = ({
   }
 
   // TEST UNOPENED
-  if (type === 'unopened') {
+  if (type === 'NOT_OPEN_YET') {
     return (
       <SappModalV3
         open={open}

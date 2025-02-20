@@ -25,6 +25,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
   const activityId = router.query.activityId
   const [activeSectionId, setActiveSectionId] = useState<string>()
   const dispatch = useAppDispatch()
+  const [loading, setLoading] = useState<boolean>(false)
 
   const validationSchema = z.object({
     [`description_${id ? id : uuid}`]: z
@@ -50,6 +51,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
 
   const createNewNote = async (data: any) => {
     try {
+      setLoading(true)
       const params = {
         course_section_id: activityId,
         name: 'Note',
@@ -60,22 +62,24 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
       toast.success('Tạo thành công!')
     } catch (error) {
       toast.error('Tạo không thành công!')
+    } finally {
+      setLoading(false)
     }
   }
 
   const updateNote = async (data: any) => {
     try {
+      setLoading(true)
       const params = {
         name: 'Note',
         description: data?.[`description_${id ? id : uuid}`],
       }
-      const res = await CoursesAPI.updateCourseNotesList(
-        id || activeSectionId,
-        params,
-      )
+      await CoursesAPI.updateCourseNotesList(id || activeSectionId, params)
       toast.success('Cập nhật thành công!')
     } catch (error) {
       toast.error('Cập nhật không thành công!')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -119,6 +123,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
                     onSubmit(data)
                   })()
                 }}
+                disabled={loading}
               >
                 <SaveIcon />
               </button>
@@ -128,18 +133,21 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
                 onClick={() => {
                   removeNote()
                 }}
+                disabled={loading}
               >
                 <CloseIconNote />
               </button>
             </div>
           </div>
-          <HookFormTextArea
-            placeholder="Take a note..."
-            control={control}
-            name={`description_${id ? id : uuid}`}
-            className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
-            defaultValue={content}
-          />
+          <div className="h-[calc(100%-30px)]">
+            <HookFormTextArea
+              placeholder="Take a note..."
+              control={control}
+              name={`description_${id ? id : uuid}`}
+              className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
+              defaultValue={content}
+            />
+          </div>
         </div>
       </MovableWindow>
     </>

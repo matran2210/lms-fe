@@ -60,7 +60,7 @@ const EventTest = () => {
         >
           <EventTestList entranceTestLists={eventTestLists} />
         </div>
-        <PopUpRemindEntrance />
+        {/* <PopUpRemindEntrance /> */}
       </Layout>
     </SappLoadingGlobal>
   )

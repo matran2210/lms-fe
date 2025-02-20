@@ -1,21 +1,20 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { ICourseScore } from 'src/type'
 import { RootState } from 'src/redux/store'
 export interface ResultTestState {
   is_open: boolean
-  content: ICourseScore
+  content: string
 }
 
 const initialState: ResultTestState = {
   is_open: false,
-  content: {} as ICourseScore,
+  content: '',
 }
 
 export const popupSlice = createSlice({
   name: 'popupReducer',
   initialState,
   reducers: {
-    showPopup: (state, action: PayloadAction<ICourseScore>) => {
+    showPopupCompletedCourse: (state, action: PayloadAction<string>) => {
       state.is_open = true
       state.content = action.payload
     },
@@ -24,7 +23,7 @@ export const popupSlice = createSlice({
     },
   },
 })
-export const { showPopup, hidePopup } = popupSlice.actions
+export const { showPopupCompletedCourse, hidePopup } = popupSlice.actions
 export const notificationReducer = (state: RootState) =>
   state.notificationReducer
 

@@ -1,21 +1,28 @@
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { EntrancePopupProps } from './EntrancePopup'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAppSelector } from 'src/redux/hook'
-import { userReducer } from 'src/redux/slice/User/User'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { getMe, userReducer } from 'src/redux/slice/User/User'
 import { useRouter } from 'next/router'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
+import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
 
+interface IProps {
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  entrancePopupContent: any
+  setOpenTestInfo: Dispatch<SetStateAction<boolean>> | undefined
+}
 const EntranceTestFillForm = ({
   open,
   setOpen,
   entrancePopupContent,
-}: EntrancePopupProps) => {
+  setOpenTestInfo,
+}: IProps) => {
   const [listUnivers, setListUnivers] = useState<any>()
   const [listUniverPrograms, setListUniverPrograms] = useState<any>()
   const [listMajors, setListMajors] = useState<any>()
@@ -56,7 +63,7 @@ const EntranceTestFillForm = ({
     const res = await EntranceTestAPI.getListUnivers()
     let optionUnivers = []
     for (let e of res?.data) {
-      optionUnivers?.push({ value: e?.code, label: e?.name })
+      optionUnivers?.push({ value: e?.id, label: e?.name })
     }
     setListUnivers(optionUnivers)
     // return res?.data?.[0]
@@ -102,10 +109,10 @@ const EntranceTestFillForm = ({
   }, [open])
   useEffect(() => {
     if (user && open) {
-      if (user?.university) {
+      if (user?.detail?.university) {
         setValue('univers_id', {
-          value: user?.university?.code,
-          label: user?.university?.name,
+          value: user?.detail?.university?.id,
+          label: user?.detail?.university?.name,
         })
       }
       if (user?.university_program) {
@@ -114,13 +121,13 @@ const EntranceTestFillForm = ({
           label: user?.university_program?.name,
         })
       }
-      if (user.major) {
+      if (user?.detail?.major) {
         setValue('majors_id', {
-          value: user?.major?.id,
-          label: user?.major?.name,
+          value: user?.detail?.major?.id,
+          label: user?.detail?.major?.name,
         })
       }
-      if (user.english_level) {
+      if (user?.english_level) {
         setValue('englishLevel_id', {
           value: user?.english_level?.id,
           label: user?.english_level?.name,
@@ -133,28 +140,35 @@ const EntranceTestFillForm = ({
     reset()
     setOpen && setOpen(false)
   }
+
+  const { count } = useAppSelector(entranceTestReducer)
+  const dispatch = useAppDispatch()
+
   const onSubmit = async (dataValue: any) => {
-    if (
-      user?.major &&
-      user?.university &&
-      user?.english_level &&
-      user?.university_program
-    ) {
-      return
-    } else {
-      await EntranceTestAPI.putLevel({
-        university_program_id: dataValue?.univers_program_id?.value,
-        major_id: dataValue?.majors_id?.value,
-        english_level_id: dataValue?.englishLevel_id?.value,
-        university_id: dataValue?.univers_id?.value,
-      })
-      setOpen && setOpen(false)
-      router.push({
-        pathname: `/test/${entrancePopupContent?.id}`,
-        query: {
-          type: 'entrance',
-        },
-      })
+    const res = await EntranceTestAPI.putLevel({
+      university_program_id: dataValue?.univers_program_id?.value,
+      major_id: dataValue?.majors_id?.value,
+      english_level_id: dataValue?.englishLevel_id?.value,
+      university_id: dataValue?.univers_id?.value,
+    })
+
+    if (res?.success) {
+      await dispatch(getMe()).unwrap()
+    }
+
+    if (count > 1) {
+      setOpenTestInfo && setOpenTestInfo(true)
+      setOpen(true)
+      // router.push({
+      //   pathname: `/test/${entrancePopupContent?.id}`,
+      //   query: {
+      //     type: 'entrance',
+      //   },
+      // })
+    }
+
+    if (count === 1) {
+      setOpenTestInfo && setOpenTestInfo(true)
     }
   }
 
@@ -162,13 +176,11 @@ const EntranceTestFillForm = ({
     <SappModalV2
       open={open}
       cancelButtonCaption="Cancel"
-      okButtonCaption="Start"
+      okButtonCaption={count > 0 ? 'Next' : 'Start'}
       handleCancel={handleOnClick}
       onOk={handleSubmit(onSubmit)}
       showHeader={false}
       footerButtonClassName="justify-between flex"
-      childClass=""
-      parentChildClass=""
       position="center"
       buttonSize="medium"
       scrollbale={false}
@@ -178,13 +190,17 @@ const EntranceTestFillForm = ({
       <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
         Fill This Form
       </h2>
+      <div className="text-sm text-gray-1">
+        The information below will help SAPP evaluate your profile and suggest a
+        suitable learning path. Click &apos;Next&apos; to see the test details.
+      </div>
       <div className="mt-10">
         <SappHookFormSelect
           control={control}
           name="univers_id"
-          label="Trường đại học"
+          label="University"
           required
-          placeholder="Chọn 1 lựa chọn"
+          placeholder="Select one option"
           options={listUnivers}
         />
       </div>
@@ -193,9 +209,9 @@ const EntranceTestFillForm = ({
           <SappHookFormSelect
             control={control}
             name="univers_program_id"
-            label="Hệ đã/ đang theo học"
+            label="Program"
             required
-            placeholder="Chọn 1 lựa chọn"
+            placeholder="Select one option"
             options={listUniverPrograms}
           />
         </div>
@@ -203,9 +219,9 @@ const EntranceTestFillForm = ({
           <SappHookFormSelect
             control={control}
             name="majors_id"
-            label="Chuyên ngành học"
+            label="Major"
             required
-            placeholder="Chọn 1 lựa chọn"
+            placeholder="Select one option"
             options={listMajors}
           />
         </div>
@@ -214,9 +230,9 @@ const EntranceTestFillForm = ({
         <SappHookFormSelect
           control={control}
           name="englishLevel_id"
-          label="Trình độ tiếng Anh"
+          label="English Level"
           required
-          placeholder="Chọn 1 lựa chọn"
+          placeholder="Select one option"
           options={listEngLevel}
         />
       </div>

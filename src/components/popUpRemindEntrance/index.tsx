@@ -1,31 +1,35 @@
 import { LoginIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import { useRouter } from 'next/router'
+import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   closeShowRemind,
   entranceTestReducer,
 } from 'src/redux/slice/EntranceTest/EntranceTest'
 
-const PopUpRemindEntrance = () => {
+const PopUpRemindEntrance = ({
+  setOpenFillForm,
+  setOpenTest,
+}: {
+  setOpenFillForm: Dispatch<SetStateAction<boolean>>
+  setOpenTest: Dispatch<SetStateAction<boolean>>
+}) => {
   const { shouldShowRemind, count } = useAppSelector(entranceTestReducer)
   const dispatch = useAppDispatch()
-  const router = useRouter()
   const getEnstranceTest = localStorage.getItem('enstranceTest')
   const onCancel = () => {
     dispatch(closeShowRemind())
     localStorage.setItem('enstranceTest', 'false')
   }
+
   const onOk = () => {
-    dispatch(closeShowRemind())
-    router.push('/entrance-test')
+    count === 1 ? setOpenFillForm(true) : dispatch(closeShowRemind())
     localStorage.setItem('enstranceTest', 'false')
   }
 
   return (
     <SappModalV3
       open={shouldShowRemind && getEnstranceTest === 'true'}
-      // setOpen={() => dispatch(closeShowRemind())}
       cancelButtonCaption="Close"
       okButtonCaption="Take Your Test"
       handleCancel={onCancel}

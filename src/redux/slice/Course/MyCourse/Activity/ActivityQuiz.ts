@@ -1,11 +1,12 @@
 import { Slice, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { FieldValues } from 'react-hook-form'
 import { QUESTION_TYPES } from 'src/constants'
+import { QuestionAPI } from 'src/pages/api/question'
 import { RootState } from 'src/redux/store'
+import { IRequirement } from 'src/type/case-study'
 import { IQuestion } from 'src/type/course/Question'
 import { submitQuizTest } from '../../../../../pages/api/courses/index'
-import { QuestionAPI } from 'src/pages/api/question'
-import { IRequirement } from 'src/type/case-study'
+import { IEssayAnswer } from 'src/type/answer'
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -107,6 +108,7 @@ const fetchQuestionById = createAsyncThunk(
           ...result,
           question: {
             ...response.data,
+            time_spent: 0,
             quiz_position_mapping: [
               {
                 question_id: questionId,
@@ -134,12 +136,14 @@ const confirmQuestion = createAsyncThunk(
       quizId,
       questionId,
       myAnswers,
+      time_spent,
     }: {
       activityId: string
       tabId: string
       quizId: string
       questionId: string
       myAnswers: FieldValues
+      time_spent?: number
     },
     { rejectWithValue },
   ) => {
@@ -149,6 +153,7 @@ const confirmQuestion = createAsyncThunk(
         tabId,
         quizId,
         myAnswers,
+        time_spent,
       }
       const question = await QuestionAPI.getQuestionDetail(questionId, {
         after_test: true,
@@ -204,8 +209,7 @@ const submitQuiz = createAsyncThunk(
         },
         class_user_id,
       )
-
-      if (result.success) {
+      if (result?.success) {
         return { ...result }
       }
     } catch (error) {
@@ -245,6 +249,9 @@ const quizSlice: Slice = createSlice({
       if (state[activityId]?.[tabId]?.[quizId]) {
         state[activityId]?.[tabId]?.[quizId]?.questions?.forEach(
           (element: any, i: number) => {
+            if (element) {
+              element.time_spent = 0
+            }
             delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.corrects
             delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.myAnswers
             delete state[activityId]?.[tabId]?.[quizId]?.questions[i]?.confirmed
@@ -339,6 +346,7 @@ const quizSlice: Slice = createSlice({
         quizId: string
         question: IActivityStateQuestion
         myAnswers: any
+        time_spent: number
       }
       const questions =
         state[payload.activityId]?.[payload.tabId]?.[payload.quizId]?.questions
@@ -352,6 +360,7 @@ const quizSlice: Slice = createSlice({
         if (questionToUpdate) {
           questionToUpdate.isDrafAnswer = true
           questionToUpdate.defaultValue = payload.myAnswers
+          questionToUpdate.time_spent = payload.time_spent
 
           questionToUpdate.quiz_position_mapping = [
             ...(questionToUpdate?.quiz_position_mapping?.filter(
@@ -375,6 +384,7 @@ const quizSlice: Slice = createSlice({
                 {
                   question_id: payload.question.id,
                   question_answer_id: payload.myAnswers,
+                  time_spent: payload.time_spent,
                 },
               ]
               break
@@ -390,6 +400,7 @@ const quizSlice: Slice = createSlice({
                   answer: (payload.myAnswers || [])?.map((e: string) => ({
                     answer_id: e,
                   })),
+                  time_spent: payload.time_spent,
                 },
               ]
               break
@@ -408,6 +419,7 @@ const quizSlice: Slice = createSlice({
                       answer_position: i + 1,
                     }),
                   ),
+                  time_spent: payload.time_spent,
                 },
               ]
               break
@@ -426,6 +438,7 @@ const quizSlice: Slice = createSlice({
                       answer_id: e,
                       answer_position: i + 1,
                     })),
+                  time_spent: payload.time_spent,
                 },
               ]
               break
@@ -446,6 +459,7 @@ const quizSlice: Slice = createSlice({
                         answer_id: e.answer_id,
                       }),
                     ),
+                  time_spent: payload.time_spent,
                 },
               ]
               break
@@ -464,6 +478,7 @@ const quizSlice: Slice = createSlice({
                       answer_position: i + 1,
                     }),
                   ),
+                  time_spent: payload.time_spent,
                 },
               ]
 
@@ -475,7 +490,7 @@ const quizSlice: Slice = createSlice({
                     q.question_id !== payload?.question?.id,
                 ) || []),
                 ...(payload?.myAnswers || {}),
-              ]
+              ].map((item) => ({ ...item, time_spent: payload.time_spent }))
               questionToUpdate.myAnswers = answers
               break
             default:
@@ -539,6 +554,7 @@ const quizSlice: Slice = createSlice({
             quizId: string
             question: IActivityStateQuestion
             myAnswers: any
+            time_spent: number
           }
           const questions =
             state[payload.activityId]?.[payload.tabId]?.[payload.quizId]
@@ -570,6 +586,7 @@ const quizSlice: Slice = createSlice({
                 {
                   question_id: payload.question.id,
                   answers: payload.question?.answers,
+                  time_spent: payload.time_spent,
                 },
               ]
 
@@ -584,6 +601,7 @@ const quizSlice: Slice = createSlice({
                     {
                       question_id: payload.question.id,
                       question_answer_id: payload.myAnswers,
+                      time_spent: payload.time_spent,
                     },
                   ]
 
@@ -607,6 +625,7 @@ const quizSlice: Slice = createSlice({
                       answer: (payload.myAnswers || [])?.map((e: string) => ({
                         answer_id: e,
                       })),
+                      time_spent: payload.time_spent,
                     },
                   ]
 
@@ -632,6 +651,7 @@ const quizSlice: Slice = createSlice({
                           answer_position: i + 1,
                         }),
                       ),
+                      time_spent: payload.time_spent,
                     },
                   ]
                   questionToUpdate.corrects = payload.question.answers
@@ -651,6 +671,7 @@ const quizSlice: Slice = createSlice({
                           answer_id: e,
                           answer_position: i + 1,
                         })),
+                      time_spent: payload.time_spent,
                     },
                   ]
                   questionToUpdate.corrects = payload.question.answers
@@ -672,6 +693,7 @@ const quizSlice: Slice = createSlice({
                             answer_id: e.answer_id,
                           }),
                         ),
+                      time_spent: payload.time_spent,
                     },
                   ]
                   questionToUpdate.corrects =
@@ -692,6 +714,7 @@ const quizSlice: Slice = createSlice({
                           answer_position: i + 1,
                         }),
                       ),
+                      time_spent: payload.time_spent,
                     },
                   ]
                   const corrects = [...(payload.question.answers || [])]
@@ -707,7 +730,10 @@ const quizSlice: Slice = createSlice({
                       (q: { question_id: string | undefined }) =>
                         q.question_id !== payload.question.id,
                     ) || []),
-                    ...(payload.myAnswers || {}),
+                    ...(payload.myAnswers || {}).map((item: IEssayAnswer) => ({
+                      ...item,
+                      time_spent: payload.time_spent,
+                    })),
                   ]
                   break
                 default:
@@ -750,12 +776,12 @@ const {
 } = quizSlice.actions
 
 export {
+  clearFileEssay,
   confirmQuestion,
   fetchQuestionById,
-  submitQuiz,
   removeQuizFinished,
   resetQuizActivity,
-  saveFileEssay,
-  clearFileEssay,
   saveAnswer,
+  saveFileEssay,
+  submitQuiz,
 }

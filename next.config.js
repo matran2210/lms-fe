@@ -44,7 +44,7 @@ module.exports = removeImports(
     optimizeFonts: false,
     output: 'standalone',
     publicRuntimeConfig: {
-      apiURL: process.env.REACT_APP_API_PUBLIC,
+      apiURL: process.env.NEXT_PUBLIC_BASE_API_URL,
     },
     images: {
       minimumCacheTTL: 43200,

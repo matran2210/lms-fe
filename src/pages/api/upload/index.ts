@@ -1,7 +1,6 @@
 import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 import { IResponse } from 'src/redux/types'
-import { apiURL, httpService } from 'src/redux/services/httpService'
-import { fetcher, request } from '@services/requestV2'
+import request, { fetcher, getBaseUrl } from '@services/requestV2'
 
 type PartUploadDto = { part_number: number; upload_url: string }
 
@@ -77,13 +76,13 @@ export class UploadAPI {
       const responseToken: IResponse<{
         data: string
         success: boolean
-      }> = await httpService.POST({
-        uri: 'resource/get-token-download',
-        request: data,
+      }> = await request('resource/get-token-download', {
+        data: data,
+        method: 'POST',
       })
-      if (responseToken?.success) {
+      if (responseToken?.data?.success) {
         const link = document.createElement('a')
-        link.href = `${apiURL}/resource/download?token=${responseToken?.data}`
+        link.href = `${getBaseUrl()}/resource/download?token=${responseToken?.data?.data}`
         link.download = data.files[0].name
         link.style.display = 'none'
         document.body.appendChild(link)
@@ -112,44 +111,12 @@ const preUpload = async ({
     name: string
   }>
 > => {
-  return fetcher(`${apiURL}/resource/pre-upload/metadata`, {
+  return fetcher(`resource/pre-upload/metadata`, {
     params: {
       content_type,
       name,
       location,
       size,
-    },
-  })
-}
-
-const addFileResource = async ({
-  name,
-  file_key,
-  location,
-  description,
-  size,
-  parent_id,
-}: {
-  name: string
-  file_key: string
-  location: string
-  description: string
-  size: string
-  parent_id: string | null
-}) => {
-  return await httpService.POST<any, any>({
-    uri: `/resources/upload/add-file-resource`,
-    data: {
-      files: [
-        {
-          name,
-          file_key,
-          location,
-          description,
-          size,
-          parent_id,
-        },
-      ],
     },
   })
 }
