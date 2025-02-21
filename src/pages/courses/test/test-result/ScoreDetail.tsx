@@ -73,7 +73,6 @@ const ScoreDetail = ({
     hasNextPage,
     isLoading,
     isFetchingNextPage,
-    status,
   } = useInfiniteQuery({
     queryKey: ['scoreDetails', router.query.id],
     queryFn: async ({ pageParam }) => {
@@ -154,7 +153,6 @@ const ScoreDetail = ({
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
   // Group data by program
   const groupedData = _.groupBy(allData, (item) => item?.belong_to.id)
-  let rowIndex = 0 // Counter for row numbers
   return (
     <div
       id="sapp-drawer-test-result-list"
@@ -190,12 +188,11 @@ const ScoreDetail = ({
                 </td>
               </tr>
               {rows?.map((answer) => {
-                rowIndex++
                 return (
                   <React.Fragment key={answer?.id}>
                     <tr key={answer?.id}>
-                      <td className="sapp-border p-0 pr-3 font-semibold text-gray-1">
-                        {rowIndex}
+                      <td className="p-0 pr-3 font-semibold text-gray-1">
+                        {answer?.index}
                       </td>
 
                       {/* Question */}
