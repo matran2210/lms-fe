@@ -351,6 +351,20 @@ export default function ExpandIcon({
           ></path>
         </svg>
       )}
+      {type === 'exam_information' && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          className={`${className}`}
+        >
+          <path
+            fill="#DCDDDD"
+            d="M2 2v20a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1Zm9 13H5v-2h6v2Zm5-4H5V9h11v2Zm0-4H5V5h11v2Z"
+          />
+        </svg>
+      )}
     </>
   )
 }

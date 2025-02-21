@@ -181,7 +181,7 @@ const ScoreDetail = ({
             <React.Fragment key={program}>
               <tr>
                 <td
-                  className="w-full pt-6 text-base font-medium text-bw-1"
+                  className="sapp-border w-full pt-6 text-base font-medium text-bw-1"
                   colSpan={6}
                 >
                   {rows[0]?.belong_to?.name}
@@ -196,7 +196,7 @@ const ScoreDetail = ({
                       </td>
 
                       {/* Question */}
-                      <td className="p-0 pr-4">
+                      <td className="sapp-border p-0 pr-4">
                         <Tooltip
                           color="white"
                           title={
@@ -231,7 +231,7 @@ const ScoreDetail = ({
 
                       {/* Chapter/Module */}
                       <td
-                        className="my-5 line-clamp-1 p-0 text-start text-bw-1"
+                        className="sapp-border my-5 line-clamp-1 p-0 text-start text-bw-1"
                         title={
                           answer?.question?.question_filter?.chapter?.name ??
                           '--'
@@ -252,14 +252,16 @@ const ScoreDetail = ({
                       </td>
 
                       {/* Type */}
-                      <td className="p-0 pr-4 text-bw-1">
+                      <td className="sapp-border p-0 pr-4 text-bw-1">
                         <div className="min-w-[111px]">
                           {getTypeName(answer?.question?.qType)}
                         </div>
                       </td>
 
                       {/* Result */}
-                      <td className={`flex justify-between gap-12 pr-4`}>
+                      <td
+                        className={`sapp-border flex justify-between gap-12 pr-4`}
+                      >
                         <div
                           className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
                         >
@@ -294,7 +296,7 @@ const ScoreDetail = ({
                       </td>
 
                       {/* Time Spent */}
-                      <td className="m-6 p-0">
+                      <td className="sapp-border m-6 p-0">
                         <div className="text-center">
                           {(() => {
                             if (answer?.time_spent !== null) {

@@ -1129,11 +1129,13 @@ td.py-5.px-3.sapp-table-quiz {
 }
 
 .sapp-modal--comment .ant-modal-content {
-  padding: 0px;
-  max-height: 640px;
-  min-height: 400px;
+  @apply max-h-[640px] min-h-[400px] p-0;
 }
 
 .pined-noti p {
-  margin-bottom: 0px;
+  @apply mb-0;
+}
+
+td.sapp-border {
+  @apply border-0;
 }

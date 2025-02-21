@@ -190,7 +190,11 @@ const Notifications = () => {
         >
           <NotifyTab tabs={tabs} />
           <div className="settings relative flex items-center">
-            <ActionCell open={openToolTip} setOpen={setOpenToolTip}>
+            <ActionCell
+              open={openToolTip}
+              setOpen={setOpenToolTip}
+              className="top-2"
+            >
               <NotifyActions handleMarkAll={handleMarkAll} />
             </ActionCell>
           </div>

@@ -35,6 +35,7 @@ export const TitleSidebar = {
   TEACHER: 'Teacher',
   NOTIFICATION: 'Notifications',
   RESULTS: 'Results',
+  EXAM_INFORMATION: 'Exam Information',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
   CALCULATOR: 'Calculator',
@@ -255,3 +256,4 @@ export const ENTRANCE_TEST_TABLE_RESULT = '/entrance-test/table-result/[id]'
 
 export * from './socketEvents'
 export * from './localStorageKeys'
+export * from './form'
