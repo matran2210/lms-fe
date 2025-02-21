@@ -85,7 +85,7 @@ type Props = {
   showQuestionContent?: boolean
   isHideExhibit?: boolean
   saveAnswer?: () => void
-  exhibitText: string
+  exhibitText?: string
 }
 
 type RefEditor = {
@@ -106,7 +106,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       showQuestionContent = true,
       isHideExhibit = true,
       saveAnswer,
-      exhibitText,
+      exhibitText = 'Exhibit',
     }: Props,
     ref,
   ) => {
