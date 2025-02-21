@@ -28,7 +28,7 @@ interface IProps {
   disabled?: boolean
   onOk: () => void
   classNameModal?: string | undefined
-  width?: number | undefined
+  width?: number | undefined | string
   handleClose?: () => void
   icon: ReactNode
   header: string
