@@ -43,6 +43,7 @@ import PinnedNotifications from '@components/layout/PinnedNotifications'
 import SappModal from '@components/base/modal/SappModal'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import SappModalV3 from '@components/base/modal/SappModalV3'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -192,31 +193,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [router])
 
-  const [showForm, setShowForm] = useState(false)
-
-  useEffect(() => {
-    if (!showForm) return
-
-    const script = document.createElement('script')
-    script.src = 'https://js.hsforms.net/forms/v2.js'
-    document.body.appendChild(script)
-
-    script.addEventListener('load', () => {
-      if ((window as any).hbspt) {
-        ;(window as any).hbspt.forms.create({
-          portalId: '1774127',
-          formId: 'c7ebbaff-bff3-420b-9f14-c55418c0843d',
-          target: '#hubspotForm',
-          region: 'na1',
-        })
-      }
-    })
-
-    return () => {
-      document.body.removeChild(script)
-    }
-  }, [showForm])
-
   return (
     <main>
       <PinnedNotifyProvider>
@@ -227,35 +203,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               <SappConfirmDialogContainer />
               <RouteGuard>
                 <>
-                  <PinnedNotifications />
-                  <SappModalV3
-                    title={undefined}
-                    open={showForm}
-                    handleCancel={() => {}}
-                    onOk={() => {}}
-                    showFooter={false}
-                    icon={undefined}
-                    header={''}
-                    width={''}
-                  >
-                    <div className="text-4xl font-semibold text-bw-1">
-                      Bạn cần tư vấn khóa học
-                    </div>
-                    <div className="mt-2 text-sm text-gray-1">
-                      Với thông tin bạn cung cấp, SAPP sẽ liên hệ với bạn để tư
-                      vấn khóa học.
-                    </div>
-                    {showForm && (
-                      <div id="hubspotForm" className="hubspotForm mt-4"></div>
-                    )}
-                  </SappModalV3>
-                  <button
-                    onClick={() => setShowForm(true)}
-                    className="rounded bg-blue-500 px-4 py-2 text-white"
-                  >
-                    Hiện Form
-                  </button>
-                  <Component {...pageProps} />
+                  <div className="relative">
+                    <PinnedNotifications />
+                    <CtaTrial />
+                    <Component {...pageProps} />
+                  </div>
                   {showHelp && (
                     <>
                       <BackToTop />
