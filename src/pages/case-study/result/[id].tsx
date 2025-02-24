@@ -410,13 +410,11 @@ const CaseStudyResult = () => {
     try {
       const res = await CoursesAPI.getCaseStudyAttemptsTable(id, 1, 10)
       res?.data?.answers && handleExhibit(res?.data?.answers?.[0])
-      if (res.data.programs) {
-        setExhibitText(
-          res.data.program === PROGRAM.CMA
-            ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
-            : EXHIBIT_TEXT_REPLACE.EXHIBIT,
-        )
-      }
+      setExhibitText(
+        res.data.program === PROGRAM.CMA
+          ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+          : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+      )
       setResult(res.data)
     } catch (err) {
     } finally {
