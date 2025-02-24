@@ -1146,7 +1146,7 @@ td.sapp-border {
 
 .tooltip-text {
   @apply invisible absolute z-10 rounded-lg border border-gray-200 bg-white p-4 text-left text-gray-800 shadow-lg transition-transform duration-300;
-  min-width: 400px;
+  min-width: 300px;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
