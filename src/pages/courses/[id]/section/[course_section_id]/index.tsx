@@ -16,6 +16,7 @@ import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
 import { truncateBySpace } from '@utils/index'
 import SappTooltip from 'src/common/SappTooltip'
+import toast from 'react-hot-toast'
 
 interface IProps {
   course_section_type: string
@@ -144,10 +145,14 @@ const CoursePartDetail = () => {
     }
   }, [openLearningOutcome])
 
-  const handleRouterActivity = (id: string) => {
-    router.push({
-      pathname: `/courses/${router.query.id}/activity/${id}`,
-    })
+  const handleRouterActivity = (id: string, chapter: any) => {
+    if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+      toast.error('Sorry, you do not have access to this content')
+    } else {
+      router.push({
+        pathname: `/courses/${router.query.id}/activity/${id}`,
+      })
+    }
   }
 
   const handleRouterCaseStudy = async (
@@ -155,6 +160,7 @@ const CoursePartDetail = () => {
     topicId: string,
     sectionId?: string | undefined,
     caseStudyId?: string | undefined,
+    chapter?: any
   ) => {
     const filteredData = chapterDetail?.children?.find(
       (item: any) => item?.id === sectionId,
@@ -172,32 +178,40 @@ const CoursePartDetail = () => {
       totalCourseSections !== undefined &&
       totalCourseSectionsCompleted !== undefined
     ) {
-      router.push({
-        pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
-        query: {
-          class_user_id: previewPart.class_user_id,
-          class_id: router?.query?.id,
-          course_section_id: router?.query?.course_section_id,
-        },
-      })
+      if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+        toast.error('Sorry, you do not have access to this content')
+      } else {
+        router.push({
+          pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
+          query: {
+            class_user_id: previewPart.class_user_id,
+            class_id: router?.query?.id,
+            course_section_id: router?.query?.course_section_id,
+          },
+        })
+      }
     } else {
       if (sectionId && caseStudyId) {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
-      router.push({
-        pathname: `/case-study/${topicId}`,
-        query: {
-          quiz_id: quizId,
-          class_user_id: previewPart.class_user_id,
-          caseStudyId: caseStudyId,
-          class_id: router?.query?.id,
-          course_section_id: router?.query?.course_section_id,
-        },
-      })
+      if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+        toast.error('Sorry, you do not have access to this content')
+      } else {
+        router.push({
+          pathname: `/case-study/${topicId}`,
+          query: {
+            quiz_id: quizId,
+            class_user_id: previewPart.class_user_id,
+            caseStudyId: caseStudyId,
+            class_id: router?.query?.id,
+            course_section_id: router?.query?.course_section_id,
+          },
+        })
+      }
     }
   }
 
-  const handleRouterChapter = (id: string) => {
+  const handleRouterChapter = (id: string, chapter?: any) => {
     const partData = partDetail?.children?.filter(
       (item: any) => item?.id === id,
     )
@@ -212,7 +226,12 @@ const CoursePartDetail = () => {
       setChapterTestId(filteredData?.[0]?.id)
     }
 
-    setOpen(true)
+
+    if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+      toast.error(' Sorry, you do not have access to this content')
+    } else {
+      setOpen(true)
+    }
   }
 
   const course_section = chapterDetail?.children?.[0]
@@ -222,7 +241,7 @@ const CoursePartDetail = () => {
     if (course_section?.course_section_type === 'CHAPTER_TEST') {
       handleRouterChapter(course_section?.quiz?.id)
     } else if (course_section?.course_section_type === 'ACTIVITY') {
-      handleRouterActivity(course_section?.children?.[0]?.id)
+      handleRouterActivity(course_section?.children?.[0]?.id, undefined)
     } else if (course_section?.course_section_type === 'STORY') {
       handleRouterCaseStudy(
         quiz?.id,
@@ -231,7 +250,7 @@ const CoursePartDetail = () => {
         quiz?.case_study_story?.instances?.[0]?.id,
       )
     } else if (course_section?.course_section_type === 'UNIT') {
-      handleRouterActivity(course_section?.children?.[0]?.id)
+      handleRouterActivity(course_section?.children?.[0]?.id, undefined)
     }
   }
 
@@ -431,7 +450,7 @@ const CoursePartDetail = () => {
             setOpen={setOpen}
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
-            activeCourse={() => {}}
+            activeCourse={() => { }}
             is_passed_course={isPassedCourse}
           />
         </div>

@@ -229,6 +229,13 @@ export interface IMyCourseDetail {
     grading_method?: string
   }
   user_section_learning_status: string
+  course_section_link_parents?: [{
+    course_section_id: string
+    id: string
+    is_preview_locked: boolean
+    position: number
+  }]
+  cta_status?: 'BEGIN' | 'PREVIEW'
 }
 
 export enum QuizAttemptChartType {

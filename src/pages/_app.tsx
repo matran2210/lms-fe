@@ -40,9 +40,6 @@ import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
 import { CERTIFICATE_DETAIL } from '@utils/constants'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
-import SappModal from '@components/base/modal/SappModal'
-import SappModalV2 from '@components/base/modal/SappModalV2'
-import SappModalV3 from '@components/base/modal/SappModalV3'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 type MyAppProps = AppProps & {
@@ -199,7 +196,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <CourseProvider>
           <QueryClientProvider client={queryClient}>
             <SocketContext.Provider value={socket}>
-              <Toaster />
+              <Toaster
+                toastOptions={{
+                  style: {
+                    minWidth: '400px', // Tăng chiều rộng của toast
+                  },
+                }}
+              />
               <SappConfirmDialogContainer />
               <RouteGuard>
                 <>
