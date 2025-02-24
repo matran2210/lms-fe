@@ -1,6 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { DeserializeHighlight, runHighlight } from '@utils/index'
-import { uniqueId } from 'lodash'
+import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
   forwardRef,
@@ -37,6 +37,11 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
 }
+
+interface ChangeEvent extends Event {
+  target: HTMLSelectElement
+}
+
 const SelectWord = forwardRef(
   (
     {
@@ -99,12 +104,24 @@ const SelectWord = forwardRef(
       const elements = doc?.querySelectorAll('.question-content-tag')
       const doc2 = parser?.parseFromString(str, 'text/html')
       const elementCorrects = doc2?.querySelectorAll('.question-content-tag')
-
       elements.forEach((element, index) => {
         const selectElement = document?.createElement('select')
         selectElement.classList?.add('sapp-select--selectword-preview')
         selectElement.setAttribute('required', 'true')
         selectElement.id = element?.id
+        const tooltip = document.createElement('div')
+        tooltip.classList.add('tooltip-container')
+        const answer =
+          data.answers?.find(
+            (answer: { id: string; value: string }) =>
+              !isUndefined(defaultAnswer?.[index]) &&
+              !isNull(defaultAnswer?.[index]) &&
+              answer?.id === defaultAnswer?.[index],
+          )?.answer || ''
+        tooltip.innerHTML = `
+          <div class="tooltip-text ${!!answer && answer.length > 7 ? 'block' : 'hidden'}">${answer}</div>
+        `
+        tooltip.appendChild(selectElement)
 
         const defaultAnswerValue = defaultAnswer?.[index] || ''
         let optionClass = ''
@@ -184,8 +201,7 @@ const SelectWord = forwardRef(
           })}
           `
         }
-
-        element.replaceWith(selectElement)
+        element.replaceWith(tooltip)
       })
       if (corrects) {
         elementCorrects.forEach((element, index) => {
@@ -210,16 +226,56 @@ const SelectWord = forwardRef(
         })
         setAnswerContent(doc2)
       }
-
       setQuestionContent(doc)
-    }, [defaultAnswer])
+    }, [defaultAnswer, data])
 
-    // useEffect(() => {
-    //   if (questionContent) {
+    const handleChangeElement = (event: Event, select: HTMLSelectElement) => {
+      if (event.target instanceof HTMLSelectElement) {
+        const sibling = select.previousElementSibling
+        const answer =
+          data?.answers?.find(
+            (item: { id: string; answer: string }) =>
+              (event?.target as HTMLSelectElement)?.value &&
+              item.id === (event?.target as HTMLSelectElement)?.value,
+          )?.answer || ''
+        if (sibling) {
+          sibling.innerHTML = answer || ''
+          if (!!answer && answer.length > 7) {
+            sibling.classList.remove('hidden')
+            sibling.classList.add('block')
+          } else {
+            sibling.classList.remove('block')
+            sibling.classList.add('hidden')
+          }
+        }
+      }
+    }
 
-    //     DeserializeHighlight(highlighted)
-    //   }
-    // }, [questionContent])
+    useEffect(() => {
+      const setupSelectListeners = () => {
+        const selectList = document.querySelectorAll(
+          'select.sapp-select--selectword-preview',
+        )
+        selectList.forEach((select) => {
+          const htmlSelect = select as HTMLSelectElement
+          if (!htmlSelect.dataset.listenerAttached) {
+            htmlSelect.addEventListener('change', (event: Event) =>
+              handleChangeElement(event, htmlSelect),
+            )
+            htmlSelect.dataset.listenerAttached = 'true'
+          }
+        })
+      }
+      const observer = new MutationObserver(() => {
+        setupSelectListeners()
+      })
+      observer.observe(document.body, { childList: true, subtree: true })
+      setupSelectListeners()
+
+      return () => {
+        observer.disconnect()
+      }
+    }, [data])
     return (
       <div ref={extenalRef}>
         {data?.question_topic?.exhibits &&
