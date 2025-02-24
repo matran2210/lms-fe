@@ -254,6 +254,17 @@ export const CERTIFICATE_DETAIL = '/certificates/[id]'
 export const ENTRANCE_TEST_RESULT = '/entrance-test/test-result/[id]'
 export const ENTRANCE_TEST_TABLE_RESULT = '/entrance-test/table-result/[id]'
 
+export enum PROGRAM {
+  ACCA = 'ACCA',
+  CFA = 'CFA',
+  CMA = 'CMA',
+}
+
+export enum EXHIBIT_TEXT_REPLACE {
+  EXHIBIT = 'Exhibit',
+  EXHIBIT_REPLACE = 'Time Value Table',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './form'

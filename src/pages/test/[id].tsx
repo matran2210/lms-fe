@@ -40,9 +40,11 @@ import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,
   ESSAY_TYPE,
+  EXHIBIT_TEXT_REPLACE,
   FINISHED_TEST_TITLE,
   GRADING_METHOD,
   PageLink,
+  PROGRAM,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   TEST_TYPE,
@@ -431,6 +433,7 @@ const TestDetail = () => {
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
     [],
   )
+  const [exhibitText, setExhibitText] = useState<string>('')
   const [openReportModal, setOpenReportModal] = useState(false)
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
@@ -1417,7 +1420,7 @@ const TestDetail = () => {
 
     setExhibitData(exhibitsOptions)
     return exhibitsOptions?.map((exhibit, index: number) => ({
-      label: `Exhibit ${+index + 1}`,
+      label: `${exhibitText} ${+index + 1}`,
       value: exhibit.id,
     }))
   }, [currentTabContent])
@@ -1509,6 +1512,11 @@ const TestDetail = () => {
         const res = await CoursesAPI.createQuizAttempt(
           router.query.id as string,
           router.query.class_user_id as string,
+        )
+        setExhibitText(
+          res.data.program === PROGRAM.CMA
+            ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+            : EXHIBIT_TEXT_REPLACE.EXHIBIT,
         )
         if (res?.data?.progress?.is_completed) {
           setIsCompletedCourse({
@@ -1928,7 +1936,7 @@ const TestDetail = () => {
                     <div className="flex items-center gap-3 text-sm font-normal">
                       <div>
                         <span className="hidden xl:inline-block 3xl:me-1">
-                          {`Exhibits (${exhibitData?.length || 0})`}
+                          {`${exhibitText}s (${exhibitData?.length || 0})`}
                         </span>
                       </div>
                       <ArrowUpIcon />
@@ -1944,12 +1952,12 @@ const TestDetail = () => {
                           return (
                             <button
                               key={e?.value}
-                              className={`p-3 ${
+                              className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
                                 !watch('exhibits')?.includes(e?.value) &&
-                                'min-w-[100px] text-gray-1'
+                                'text-gray-1 '
                               }`}
                               onClick={() => handleOpenExhibit(e?.value)}
-                            >{`Exhibit ${index + 1}`}</button>
+                            >{`${exhibitText} ${index + 1}`}</button>
                           )
                         },
                       )}
