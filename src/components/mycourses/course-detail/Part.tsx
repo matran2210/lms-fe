@@ -71,26 +71,25 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
     }
   }
 
+  const handleRouterPartDetail = () => {
+    if (course?.cta_status === 'PREVIEW') {
+      onClickPart(course?.id)
+    }
+
+    course?.course_section_type === 'PART' &&
+    !course?.course_section_link_parents?.[0]?.is_preview_locked
+      ? onClickPart(course?.id)
+      : course?.course_section_link_parents?.[0]?.is_preview_locked &&
+          course?.cta_status === 'BEGIN'
+        ? toast.error('Sorry, you do not have access to this content')
+        : {}
+  }
+
   return (
     <div data-aos={ANIMATION.DATA_AOS} className="inner flex h-full flex-col">
       <div
         className={`name-course text-2xl font-medium text-bw-1 xl:h-[60px]`}
-        onClick={() => {
-          if (
-            course?.cta_status === 'PREVIEW' ||
-            (course?.course_section_type === 'PART' &&
-              !course?.course_section_link_parents?.[0]?.is_preview_locked)
-          ) {
-            onClickPart(course?.id)
-          } else {
-            if (course?.course_section_link_parents?.[0]?.is_preview_locked) {
-              toast.error(' Sorry, you do not have access to this content')
-            } else {
-              {
-              }
-            }
-          }
-        }}
+        onClick={handleRouterPartDetail}
       >
         {course?.course_section_link_parents?.[0]?.is_preview_locked ? (
           <div className="flex justify-between">
@@ -206,17 +205,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
             size={'small'}
             className="ml-auto"
             onClick={() => {
-              if (course?.cta_status === 'PREVIEW') {
-                onClickPart(course?.id)
-              }
-
-              course?.course_section_type === 'PART' &&
-              !course?.course_section_link_parents?.[0]?.is_preview_locked
-                ? onClickPart(course?.id)
-                : course?.course_section_link_parents?.[0]?.is_preview_locked &&
-                    course?.cta_status === 'BEGIN'
-                  ? toast.error('Sorry, you do not have access to this content')
-                  : {}
+              handleRouterPartDetail()
               trackGAEventBasedOnProgress(percentProgress)
             }}
           />

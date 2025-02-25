@@ -1,4 +1,4 @@
-import { CloseIconNote } from '@assets/icons'
+import { CloseIconNote, CursorIcon } from '@assets/icons'
 import { Col, Row } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
@@ -71,15 +71,14 @@ function CtaTrial() {
     <>
       {isEnablePinnedPages && showPinnedTrial && (
         <div
-          className={`fixed z-50 h-[64px] w-full bg-primary text-white ${isEnablePinnedNotiPages && openPinned && pinnedNotifications?.data?.content ? 'top-12' : ''}`}
+          className={`fixed z-50 h-[54px] w-full bg-primary text-white ${isEnablePinnedNotiPages && openPinned && pinnedNotifications?.data?.content ? 'top-12' : ''}`}
         >
-          <Row className="flex h-[64px] w-[225px] flex-row content-center items-center justify-center lg:w-full">
+          <Row className="flex h-[54px] w-[225px] flex-row content-center items-center justify-center lg:w-full">
             <Col span={1}></Col>
             <Col
               span={22}
-              className="flex items-center justify-center font-sans"
+              className="flex h-full items-center justify-center font-sans"
             >
-              <span className="text-lg font-semibold">Upgrade Now!&nbsp;</span>
               <span className="text-base">
                 You have{' '}
                 <span className="text-base font-semibold">
@@ -88,13 +87,16 @@ function CtaTrial() {
                 days left on your free trial.{' '}
                 <span className="text-lg font-semibold">Upgrade</span> today to
                 unlock the full course.
-              </span>{' '}
+              </span>
               <button
-                className="ms-8 h-[32px] bg-white px-4 text-sm font-medium text-primary"
+                className="ms-8 h-[32px] bg-white px-4 text-[14px] font-medium leading-[17px] text-primary"
                 onClick={() => setShowForm(true)}
               >
-                Update Now
+                Upgrade Now
               </button>
+              <div className="ms-1 mt-2 flex h-full items-center">
+                <CursorIcon />
+              </div>
             </Col>
             <Col span={1}>
               <div
