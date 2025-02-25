@@ -25,6 +25,8 @@ type Context = {
   setSubmitTest: React.Dispatch<React.SetStateAction<boolean>>
   submitEventTest: boolean
   setSubmitEventTest: React.Dispatch<React.SetStateAction<boolean>>
+  showPinnedTrial: boolean
+  setShowPinnedTrial: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 // initContext
@@ -39,6 +41,8 @@ const initContext: Context = {
   setSubmitTest: () => {},
   submitEventTest: false,
   setSubmitEventTest: () => {},
+  showPinnedTrial: false,
+  setShowPinnedTrial: () => {},
 }
 
 const CourseContext = createContext<Context>(initContext)
@@ -68,6 +72,11 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    * @description state này bằng true khi submit bài test
    */
   const [submitEventTest, setSubmitEventTest] = useState(false)
+
+  /**
+   * @description state này bằng true khi hiển thị form hubspot
+   */
+  const [showPinnedTrial, setShowPinnedTrial] = useState(false)
 
   const router = useRouter()
 
@@ -103,6 +112,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
         submitTest,
         submitEventTest,
         setSubmitEventTest,
+        setShowPinnedTrial,
+        showPinnedTrial
       }}
       {...props}
     />

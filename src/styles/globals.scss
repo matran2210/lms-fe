@@ -1172,3 +1172,71 @@ td.sapp-border {
   @apply visible opacity-100;
   transform: translateY(0);
 }
+
+.form-columns-2 .input,
+.form-columns-1 .input {
+  @apply w-full;
+}
+
+.hs-button {
+  @apply h-[48px] w-full cursor-pointer text-lg font-semibold;
+}
+
+.form-columns-1 .hs-input {
+  @apply w-full;
+}
+
+form fieldset.form-columns-2 {
+  @apply w-[565px];
+}
+
+.input .hs-input {
+  @apply h-[50px] w-full border-gray-2;
+}
+
+fieldset.form-columns-2 .hs-form-field {
+  @apply mb-6;
+}
+
+fieldset.form-columns-1 .hs-input {
+  width: 100% !important;
+}
+
+.hs-dependent-field {
+  @apply mb-8;
+}
+
+.hs_firstname.hs-firstname,
+.hs_email.hs-email,
+.hs_phone.hs-phone,
+.hs_n_m_sinh.hs-n_m_sinh,
+.hs_kh_a_h_c.hs-kh_a_h_c,
+.hs_khu_v_c.hs-khu_v_c {
+  label {
+    span {
+      @apply text-sm font-medium text-bw-1;
+    }
+
+    .hs-form-required {
+      @apply ms-1 text-state-error;
+    }
+  }
+}
+
+.hs_khu_v_c.hs-khu_v_c.hs-fieldtype-select.field.hs-form-field {
+  @apply mt-6;
+}
+
+.hs_firstname.hs-firstname.hs-fieldtype-text.field.hs-form-field,
+.hs_phone.hs-phone.hs-fieldtype-phonenumber.field.hs-form-field {
+  @apply pr-3;
+}
+
+.hs_email.hs-email.hs-fieldtype-text.field.hs-form-field,
+.hs_n_m_sinh.hs-n_m_sinh.hs-fieldtype-number.field.hs-form-field {
+  @apply ps-3;
+}
+
+.sapp-trial .ant-modal-content {
+  @apply p-[68px];
+}

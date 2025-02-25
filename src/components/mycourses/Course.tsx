@@ -24,6 +24,7 @@ import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
 import { CoursesAPI } from 'src/pages/api/courses'
+import { useCourseContext } from '@contexts/index'
 
 const Course = ({
   course,
@@ -199,12 +200,29 @@ const Course = ({
     } catch (error) {}
   }
 
+  const { courseType } = useCourseContext()
+
+  useEffect(() => {
+    if (course?.course_type === 'TRIAL_COURSE') {
+      localStorage.setItem('daysDifference', '')
+    } else {
+      localStorage.removeItem('daysDifference')
+    }
+  }, [courseType])
+
   const handleCourseDetail = () => {
     router.push(`/courses/my-course/${classInstance?.id}`)
     localStorage.setItem(
       'courseDetail',
       `/courses/my-course/${classInstance?.id}`,
     )
+    if (course?.course_type === 'TRIAL_COURSE') {
+      localStorage.setItem('daysDifference', daysDifference as any)
+      localStorage.setItem('showPinTrial', 'true')
+    } else {
+      localStorage.removeItem('daysDifference')
+      localStorage.removeItem('showPinTrial')
+    }
   }
 
   const courseAction = () => {
