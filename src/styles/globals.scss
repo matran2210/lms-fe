@@ -1240,3 +1240,11 @@ fieldset.form-columns-1 .hs-input {
 .sapp-trial .ant-modal-content {
   @apply p-[68px];
 }
+
+[type='text']:focus,
+[type='email']:focus,
+[type='tel']:focus,
+[type='number']:focus,
+select:focus {
+  --tw-ring-color: #ffb800;
+}

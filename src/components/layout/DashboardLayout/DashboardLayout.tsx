@@ -38,29 +38,27 @@ export default function DashboardLayout({
     PageLink.COURSE_ACTIVITY,
   ].includes(router.pathname)
 
-  let paddingTop = '';
+  let paddingTop = ''
 
   if (isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content) {
-    paddingTop = showPinnedTrial ? 'pt-[112px]' : 'pt-12';
+    paddingTop = showPinnedTrial ? 'pt-[102px]' : 'pt-12'
   } else if (showPinnedTrial) {
-    paddingTop = 'pt-[64px]';
+    paddingTop = 'pt-[54px]'
   }
-
 
   return (
     <div className="flex flex-nowrap">
       <Sidebar
         isOpened={isOpened}
         toggleDrawer={toggleDrawer}
-        className={`menu-sidebar-left max-w-screen fixed top-0 h-screen w-20 bg-white shadow-sidebar md:left-0 ${openDrawer ? 'opacity-5' : ''
-          } ${guideStatus ? '' : 'overflow-hidden'} ${paddingTop}`}
+        className={`menu-sidebar-left max-w-screen fixed top-0 h-screen w-20 bg-white shadow-sidebar md:left-0 ${
+          openDrawer ? 'opacity-5' : ''
+        } ${guideStatus ? '' : 'overflow-hidden'} ${paddingTop}`}
         setOpenResource={setOpenResource}
         openResource={openResource}
       />
       <div className="min-h-screen w-full">
-        <div
-          className={`${paddingTop} h-full bg-gray-4`}
-        >
+        <div className={`${paddingTop} h-full bg-gray-4`}>
           <div className="sapp-loading ml-0 ml-20 h-full">{children}</div>
         </div>
       </div>
