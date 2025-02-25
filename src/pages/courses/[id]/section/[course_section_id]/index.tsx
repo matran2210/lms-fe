@@ -87,32 +87,40 @@ const CoursePartDetail = () => {
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
-
+  const [activeItem, setActiveItem] = useState<any>()
+  const handleTest = (item: any) => {
+    setActiveItem(item)
+  }
   const fetchChapterDetail = async (
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ) => {
     setLoadingChapter(true)
     try {
-      if (course_section_id !== router.query.chapter) {
-        router.push(`${location.pathname}?chapter=${course_section_id}`)
-      }
-      const res = await CoursesAPI.getPartDetail(id, course_section_id)
-
-      const nodeList = res?.data?.course_section_tree
-      setIsPassedCourse(res?.data?.is_passed_course)
-      const newData = nodeList.map((item: IProps) => {
-        if (item.id === course_section_id) {
-          const { parent_id, ...rest } = item
-          return rest
+      if (activeItem?.course_section_link_parents?.[0]?.is_preview_locked) {
+        toast.error('dđ')
+        setChapterDetail(undefined)
+      } else {
+        if (course_section_id !== router.query.chapter) {
+          router.push(`${location.pathname}?chapter=${course_section_id}`)
         }
-        return item
-      })
-      const tree = TreeHelper.convertFromArray(newData)
+        const res = await CoursesAPI.getPartDetail(id, course_section_id)
 
-      const detail = tree[0]
-      setChapterDetail(detail)
-      localStorage.removeItem('course_chapter_id')
+        const nodeList = res?.data?.course_section_tree
+        setIsPassedCourse(res?.data?.is_passed_course)
+        const newData = nodeList.map((item: IProps) => {
+          if (item.id === course_section_id) {
+            const { parent_id, ...rest } = item
+            return rest
+          }
+          return item
+        })
+        const tree = TreeHelper.convertFromArray(newData)
+
+        const detail = tree[0]
+        setChapterDetail(detail)
+        localStorage.removeItem('course_chapter_id')
+      }
     } catch (error) {
     } finally {
       setLoadingChapter(false)
@@ -160,7 +168,7 @@ const CoursePartDetail = () => {
     topicId: string,
     sectionId?: string | undefined,
     caseStudyId?: string | undefined,
-    chapter?: any
+    chapter?: any,
   ) => {
     const filteredData = chapterDetail?.children?.find(
       (item: any) => item?.id === sectionId,
@@ -225,7 +233,6 @@ const CoursePartDetail = () => {
       setChapterData(filteredData?.[0])
       setChapterTestId(filteredData?.[0]?.id)
     }
-
 
     if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
       toast.error(' Sorry, you do not have access to this content')
@@ -395,6 +402,7 @@ const CoursePartDetail = () => {
               setReadMore={setReadMore}
               defaultActive={router.query.chapter ?? defaultActive}
               focus_id={router?.query?.focus_id as string}
+              handleGetItem={handleTest}
             />
           </div>
 
@@ -450,7 +458,7 @@ const CoursePartDetail = () => {
             setOpen={setOpen}
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
-            activeCourse={() => { }}
+            activeCourse={() => {}}
             is_passed_course={isPassedCourse}
           />
         </div>
