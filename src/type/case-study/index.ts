@@ -7,6 +7,7 @@ export interface ICaseStudyResult {
   previous_topic: ICaseStudyPage & ICaseStudyResultPage
   next_topic: ICaseStudyPage & ICaseStudyResultPage
   quiz_id: string
+  program: string
 }
 
 export interface ICaseStudyPage {

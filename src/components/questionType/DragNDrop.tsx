@@ -33,6 +33,7 @@ interface IProps {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => void
   isHideExhibit?: boolean
+  exhibitText?: string
 }
 let dragParentIdRef: string
 const DragNDropPreivew = forwardRef(
@@ -53,6 +54,7 @@ const DragNDropPreivew = forwardRef(
       uuid,
       setOpenFile,
       isHideExhibit = true,
+      exhibitText,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -365,7 +367,8 @@ const DragNDropPreivew = forwardRef(
                     )}
                     <div className="mb-4 flex items-center">
                       <div className="font-semibold">
-                        Exhibits ({data?.question_topic?.exhibits?.length || 0})
+                        {exhibitText ? exhibitText + 's' : 'Exhibits'} (
+                        {data?.question_topic?.exhibits?.length || 0})
                       </div>
                       <div className="ml-4">
                         <span className="text-state-error">* </span>
@@ -395,7 +398,7 @@ const DragNDropPreivew = forwardRef(
                                   )
                               }}
                             >
-                              Exhibit {i + 1}: {e?.name}
+                              {exhibitText || 'Exhibit'} {i + 1}: {e?.name}
                             </div>
                           )
                         },

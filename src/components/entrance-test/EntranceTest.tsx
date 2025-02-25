@@ -25,32 +25,7 @@ enum EAttemptStatus {
 const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
-  const { count } = useAppSelector(entranceTestReducer)
-
-  const { user } = useAppSelector(userReducer)
   const [open, setOpen] = useState<boolean>(false)
-  const checkInfo = useMemo(() => {
-    if (
-      (user?.detail?.university as any)?.id &&
-      user?.university_program?.id &&
-      user?.english_level?.id
-    ) {
-      return true
-    }
-    return false
-  }, [user])
-
-  const handleOnClick = () => {
-    if (count >= 1 && !checkInfo) {
-      setOpenFillForm(true)
-    } else if (data?.attempt_times >= 1) {
-      router.push(`entrance-test/test-result/${data?.quiz_attempt_id}`)
-      trackGAEvent('Click Button Result Entrance Test List')
-    } else {
-      setOpen(true)
-      trackGAEvent('Click Button Begin Entrance Test List')
-    }
-  }
 
   const timeTakenFormatted = data?.total_attempt_time
     ? formatTime(data?.total_attempt_time)
@@ -123,7 +98,11 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             data.attempt_status === 'SUBMITTED' || 'UN_FINISHED' ? (
               <SappButton
                 title="Result"
-                onClick={handleOnClick}
+                onClick={() =>
+                  router.push(
+                    `/entrance-test/test-result/${data?.quiz_attempt_id}`,
+                  )
+                }
                 isUnderLine
                 color="text"
                 className="!p-0 font-medium underline"
@@ -138,7 +117,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
               full={false}
               size={'small'}
               className="ml-auto"
-              onClick={handleOnClick}
+              onClick={() => setOpenFillForm(true)}
             />
           )}
         </div>
@@ -146,7 +125,6 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
       <PopUpRemindEntrance
         setOpenFillForm={setOpenFillForm}
         setOpenTest={setOpen}
-        checkInfo={checkInfo}
       />
       <EntrancePopup
         open={open}

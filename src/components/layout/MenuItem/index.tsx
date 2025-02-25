@@ -79,6 +79,12 @@ export default function MenuItem({
     })
   }
 
+  const handleOpenExaminationInfoPage = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.courseId || router.query.id}/exam-information`,
+    })
+  }
+
   const handleActive = () => {
     if (router?.query?.courseId || router.query.id) {
       name === TitleSidebar.RESOURCES && handleOpenResource()
@@ -86,6 +92,7 @@ export default function MenuItem({
       name === TitleSidebar.NEW_NOTE && handleAddNote()
       name === TitleSidebar.CALCULATOR && handleOpenCalculator()
       name === TitleSidebar.RESULTS && handleOpenResultsPage()
+      name === TitleSidebar.EXAM_INFORMATION && handleOpenExaminationInfoPage()
     }
   }
 
@@ -215,6 +222,7 @@ export default function MenuItem({
           (name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
             name === TitleSidebar.RESULTS ||
+            name === TitleSidebar.EXAM_INFORMATION ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
             ? 'hidden'

@@ -35,6 +35,7 @@ export const TitleSidebar = {
   TEACHER: 'Teacher',
   NOTIFICATION: 'Notifications',
   RESULTS: 'Results',
+  EXAM_INFORMATION: 'Exam Information',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
   CALCULATOR: 'Calculator',
@@ -253,5 +254,17 @@ export const CERTIFICATE_DETAIL = '/certificates/[id]'
 export const ENTRANCE_TEST_RESULT = '/entrance-test/test-result/[id]'
 export const ENTRANCE_TEST_TABLE_RESULT = '/entrance-test/table-result/[id]'
 
+export enum PROGRAM {
+  ACCA = 'ACCA',
+  CFA = 'CFA',
+  CMA = 'CMA',
+}
+
+export enum EXHIBIT_TEXT_REPLACE {
+  EXHIBIT = 'Exhibit',
+  EXHIBIT_REPLACE = 'Time Value Table',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'
+export * from './form'

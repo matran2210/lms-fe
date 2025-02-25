@@ -1,4 +1,3 @@
-// ConfirmDialog.tsx
 import { Dispatch, FC, SetStateAction, useMemo } from 'react'
 import EntrancePopupContent from './EntrancePopupContent'
 import EntranceTestFillForm from './EntranceTestFillForm'
@@ -33,19 +32,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   }
 
   const { count } = useAppSelector(entranceTestReducer)
-  const { user } = useAppSelector(userReducer)
   const router = useRouter()
-
-  const checkInfo = useMemo(() => {
-    if (
-      (user?.detail?.university as any)?.id &&
-      user?.university_program?.id &&
-      user?.english_level?.id
-    ) {
-      return true
-    }
-    return false
-  }, [user])
 
   const checkLimit = useMemo(() => {
     if (entrancePopupContent?.is_limited) {
@@ -63,7 +50,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
     <>
       <SappModalV2
         open={open}
-        cancelButtonCaption="Cancel"
+        cancelButtonCaption="Back"
         okButtonCaption="Start"
         handleCancel={handleOnClick}
         onOk={() => {
@@ -80,14 +67,12 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         title={undefined}
       >
         <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
-          Entrance Test Info
+          Test Information
         </h2>
+        <div className="text-sm text-gray-1">Let’s start!</div>
         <EntrancePopupContent
           name={
             count === 1 ? entranceTest?.name : entrancePopupContent?.name || ''
-          }
-          score={
-            count === 1 ? entranceTest?.score : entrancePopupContent?.score
           }
           timeAllow={
             count === 1
@@ -95,15 +80,15 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
               : entrancePopupContent?.quiz_timed
           }
           attemps={`${count === 1 ? entranceTest?.attempt_times || 0 : entrancePopupContent?.attempt_times || '0'}`}
-          status={
-            count === 1
-              ? entranceTest?.is_attempt
-              : entrancePopupContent?.is_attempt
-          }
           limit_count={
             count === 1
               ? entranceTest?.limit_count
               : entrancePopupContent?.limit_count
+          }
+          total_question={
+            count === 1
+              ? entranceTest?.total_question
+              : entrancePopupContent?.total_question
           }
         />
       </SappModalV2>
@@ -112,7 +97,6 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         setOpen={setOpenFillForm}
         entrancePopupContent={entrancePopupContent}
         setOpenTestInfo={setOpen}
-        checkInfo={checkInfo}
       />
     </>
   )

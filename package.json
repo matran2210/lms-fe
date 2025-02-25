@@ -45,8 +45,8 @@
     "date-fns": "^3.0.6",
     "dayjs": "^1.11.12",
     "dompurify": "^3.1.6",
-    "entrance-test-result-package": "^1.1.17",
-    "explanation-package": "^1.1.16",
+    "entrance-test-result-package": "^1.1.22",
+    "explanation-package": "^1.1.17",
     "file-saver": "^2.0.5",
     "firebase": "^10.7.1",
     "html-docx-js-typescript-papersize-thenn": "^0.1.5",
@@ -80,6 +80,7 @@
     "sass": "^1.53.0",
     "sharp": "^0.30.7",
     "socket.io-client": "^4.7.5",
+    "test-result-view-package": "^1.0.2",
     "usehooks-ts": "^3.1.0",
     "zod": "^3.22.4"
   },

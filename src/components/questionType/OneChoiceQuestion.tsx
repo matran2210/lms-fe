@@ -29,6 +29,7 @@ export type IPreviewProp = {
   getValue?: any | undefined
   tabs?: Array<{ id: string }> | undefined
   currentPage?: string | undefined
+  exhibitText?: string
 }
 
 type IAnswers = {
@@ -49,6 +50,7 @@ const OneChoiceQuestion = ({
   allowUnHighLight,
   setOpenFile,
   isHideExhibit = true,
+  exhibitText,
 }: IPreviewProp) => {
   useEffect(() => {
     if (defaultValues) {
@@ -121,7 +123,8 @@ const OneChoiceQuestion = ({
             )}
             <div className="mb-4 flex items-center">
               <div className="font-semibold">
-                Exhibits({data?.question_topic?.exhibits?.length || 0})
+                {exhibitText ? exhibitText + 's' : 'Exhibits'} (
+                {data?.question_topic?.exhibits?.length || 0})
               </div>
               <div className="ml-4">
                 <span className="text-state-error">* </span>
@@ -150,7 +153,7 @@ const OneChoiceQuestion = ({
                         )
                     }}
                   >
-                    Exhibit {i + 1}: {e?.name}
+                    {exhibitText || 'Exhibit'} {i + 1}: {e?.name}
                   </div>
                 )
               })}
