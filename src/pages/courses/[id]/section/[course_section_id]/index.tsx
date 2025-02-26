@@ -93,6 +93,7 @@ const CoursePartDetail = () => {
     setActiveItem(item)
     if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
       toast.error(ERROR_MESSAGE_TRIAL)
+      setChapterDetail(undefined)
     }
   }
 
