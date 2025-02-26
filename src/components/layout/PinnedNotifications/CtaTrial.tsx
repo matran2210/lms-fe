@@ -1,5 +1,5 @@
 import { CloseIconNote, CursorIcon } from '@assets/icons'
-import { Col, Row } from 'antd'
+import { Col, Row, Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
@@ -40,8 +40,12 @@ function CtaTrial() {
     }
   }, [router])
 
+  const [isLoading, setIsLoading] = useState(false)
+
   useEffect(() => {
     if (!showForm) return
+
+    setIsLoading(true) // Bắt đầu loading khi form chưa được render
 
     const script = document.createElement('script')
     script.src = 'https://js.hsforms.net/forms/v2.js'
@@ -54,6 +58,7 @@ function CtaTrial() {
           formId: process.env.NEXT_PUBLIC_FORM_ID,
           target: '#hubspotForm',
           region: 'na1',
+          onFormReady: () => setIsLoading(false), // Khi form sẵn sàng, tắt loading
           onFormSubmit: () => {
             toast.success('Thank you. Your Submission has been sent.')
             setShowForm(false)
@@ -66,6 +71,8 @@ function CtaTrial() {
       document.body.removeChild(script)
     }
   }, [showForm])
+
+  const fields = [1, 2, 3, 4] // Số lượng hàng có 4 ô input
 
   return (
     <>
@@ -94,7 +101,7 @@ function CtaTrial() {
               >
                 Upgrade Now
               </button>
-              <div className="ms-1 mt-2 flex h-full items-center">
+              <div className="ms-1.5 mt-5 flex h-full items-center">
                 <CursorIcon />
               </div>
             </Col>
@@ -131,7 +138,39 @@ function CtaTrial() {
           Với thông tin bạn cung cấp, SAPP sẽ liên hệ với bạn để tư vấn khóa
           học.
         </div>
-        {showForm && <div id="hubspotForm" className="hubspotForm mt-8"></div>}
+
+        {isLoading && (
+          <>
+            {fields.map((_, index) => (
+              <div key={index} className="mt-5 flex">
+                {[1, 2].map((_, colIndex) => (
+                  <div key={colIndex} className="flex w-1/2 flex-col">
+                    <Skeleton.Input
+                      active
+                      size="small"
+                      className="mb-1 w-full"
+                    />
+                    <Skeleton.Input active size="large" className="w-full" />
+                  </div>
+                ))}
+              </div>
+            ))}
+
+            {/* Skeleton cho toàn bộ hàng cuối cùng */}
+            <div className="w-full">
+              <Skeleton.Input
+                block
+                className="mt-5 w-full"
+                active
+                size="large"
+              />
+            </div>
+          </>
+        )}
+        <div
+          id="hubspotForm"
+          className={`${isLoading ? 'hidden' : 'block'} mt-8`}
+        ></div>
       </SappModalV3>
     </>
   )
