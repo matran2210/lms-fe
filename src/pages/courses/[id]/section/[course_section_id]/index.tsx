@@ -9,7 +9,7 @@ import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, ERROR_MESSAGE_TRIAL } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
@@ -88,24 +88,26 @@ const CoursePartDetail = () => {
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
   const [activeItem, setActiveItem] = useState<any>()
+
   const handleActive = (item: any) => {
     setActiveItem(item)
-  }
-
-  const handleShowToast = () => {
-    toast.error('Sorry, you do not have access to this content')
+    if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
+      toast.error(ERROR_MESSAGE_TRIAL)
+    }
   }
 
   const fetchChapterDetail = async (
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ) => {
-    setLoadingChapter(true)
-    try {
-      if (activeItem?.course_section_link_parents?.[0]?.is_preview_locked) {
-        toast.error('Sorry, you do not have access to this content')
-        setChapterDetail(undefined)
-      } else {
+    if (
+      activeItem?.id &&
+      activeItem?.course_section_link_parents?.[0]?.is_preview_locked
+    ) {
+      setChapterDetail(undefined)
+    } else {
+      setLoadingChapter(true)
+      try {
         if (course_section_id !== router.query.chapter) {
           router.push(`${location.pathname}?chapter=${course_section_id}`)
         }
@@ -125,10 +127,10 @@ const CoursePartDetail = () => {
         const detail = tree[0]
         setChapterDetail(detail)
         localStorage.removeItem('course_chapter_id')
+      } catch (error) {
+      } finally {
+        setLoadingChapter(false)
       }
-    } catch (error) {
-    } finally {
-      setLoadingChapter(false)
     }
   }
 
@@ -160,7 +162,7 @@ const CoursePartDetail = () => {
 
   const handleRouterActivity = (id: string, chapter: any) => {
     if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-      toast.error('Sorry, you do not have access to this content')
+      toast.error(ERROR_MESSAGE_TRIAL)
     } else {
       router.push({
         pathname: `/courses/${router.query.id}/activity/${id}`,
@@ -192,7 +194,7 @@ const CoursePartDetail = () => {
       totalCourseSectionsCompleted !== undefined
     ) {
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-        toast.error('Sorry, you do not have access to this content')
+        toast.error(ERROR_MESSAGE_TRIAL)
       } else {
         router.push({
           pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
@@ -208,7 +210,7 @@ const CoursePartDetail = () => {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-        toast.error('Sorry, you do not have access to this content')
+        toast.error(ERROR_MESSAGE_TRIAL)
       } else {
         router.push({
           pathname: `/case-study/${topicId}`,
@@ -240,7 +242,6 @@ const CoursePartDetail = () => {
     }
 
     if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-      toast.error(' Sorry, you do not have access to this content')
       setChapterDetail(undefined)
     } else {
       setOpen(true)
@@ -409,7 +410,7 @@ const CoursePartDetail = () => {
               defaultActive={router.query.chapter ?? defaultActive}
               focus_id={router?.query?.focus_id as string}
               handleGetItem={handleActive}
-              handleShowToast={handleShowToast}
+              // handleShowToast={handleShowToast}
             />
           </div>
 

@@ -265,6 +265,9 @@ export enum EXHIBIT_TEXT_REPLACE {
   EXHIBIT_REPLACE = 'Time Value Table',
 }
 
+export const ERROR_MESSAGE_TRIAL =
+  'Sorry, you do not have access to this content'
+
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './form'
