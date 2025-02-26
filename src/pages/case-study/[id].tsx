@@ -454,6 +454,20 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
   }, [watch('exhibits')])
 
+  const handleOpenExhibit = (exhibitId?: string) => {
+    if (!exhibitId) return
+    const exhibitIds = getValuesExhibits('exhibits') ?? []
+    if (exhibitIds.includes(exhibitId)) {
+      setValueExhibits(
+        'exhibits',
+        exhibitIds.filter((id: string) => id !== exhibitId),
+      )
+    } else {
+      exhibitIds.push(exhibitId)
+      setValueExhibits('exhibits', exhibitIds)
+    }
+  }
+
   const backToPart = () => {
     router.replace(
       `/courses/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
@@ -1320,17 +1334,24 @@ const CaseStudyDetail = ({ questions }: any) => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="absolute bottom-full z-[1400] flex h-fit max-w-max justify-center bg-gray-3 p-4 shadow-questions-exhibits 3xl:w-full 3xl:max-w-none">
-                        <HookFormCheckBoxGroup
-                          control={controlExhibits}
-                          name="exhibits"
-                          options={exhibits}
-                          multiple
-                          lowerOptions={true}
-                          widthOptions="w-full"
-                          seprateLine={true}
-                          maxWidthContent
-                        />
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                        {exhibits?.map(
+                          (
+                            e: { label: string; value: string },
+                            index: number,
+                          ) => {
+                            return (
+                              <button
+                                key={e?.value}
+                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
+                                  !watch('exhibits')?.includes(e?.value) &&
+                                  'text-gray-1 '
+                                }`}
+                                onClick={() => handleOpenExhibit(e?.value)}
+                              >{`${exhibitText} ${index + 1}`}</button>
+                            )
+                          },
+                        )}
                       </div>
                     )}
                   </button>
