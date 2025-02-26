@@ -88,17 +88,23 @@ const CoursePartDetail = () => {
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
   const [activeItem, setActiveItem] = useState<any>()
-  const handleTest = (item: any) => {
+  const handleActive = (item: any) => {
     setActiveItem(item)
   }
+
+  const handleShowToast = () => {
+    toast.error('Sorry, you do not have access to this content')
+  }
+
   const fetchChapterDetail = async (
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ) => {
     setLoadingChapter(true)
+    handleShowToast()
     try {
       if (activeItem?.course_section_link_parents?.[0]?.is_preview_locked) {
-        toast.error('dđ')
+        toast.error('Sorry, you do not have access to this content')
         setChapterDetail(undefined)
       } else {
         if (course_section_id !== router.query.chapter) {
@@ -236,6 +242,7 @@ const CoursePartDetail = () => {
 
     if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
       toast.error(' Sorry, you do not have access to this content')
+      setChapterDetail(undefined)
     } else {
       setOpen(true)
     }
@@ -402,7 +409,8 @@ const CoursePartDetail = () => {
               setReadMore={setReadMore}
               defaultActive={router.query.chapter ?? defaultActive}
               focus_id={router?.query?.focus_id as string}
-              handleGetItem={handleTest}
+              handleGetItem={handleActive}
+              handleShowToast={handleShowToast}
             />
           </div>
 

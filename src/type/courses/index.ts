@@ -235,10 +235,10 @@ export interface IMyCourseDetail {
       id: string
       is_preview_locked: boolean
       position: number
+      is_showing_locked: boolean
     },
   ]
   cta_status?: 'BEGIN' | 'PREVIEW'
-  is_showing_locked?: boolean
 }
 
 export enum QuizAttemptChartType {

@@ -72,7 +72,10 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   }
 
   const handleRouterPartDetail = () => {
-    if (course?.cta_status === 'PREVIEW' || course?.is_showing_locked) {
+    if (
+      course?.cta_status === 'PREVIEW' ||
+      course?.course_section_link_parents?.[0]?.is_showing_locked
+    ) {
       onClickPart(course?.id)
     }
 
@@ -92,7 +95,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
         onClick={handleRouterPartDetail}
       >
         {course?.course_section_link_parents?.[0]?.is_preview_locked ||
-        course?.is_showing_locked ? (
+        course?.course_section_link_parents?.[0]?.is_showing_locked ? (
           <div className="flex justify-between">
             <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
               <SappTooltip
