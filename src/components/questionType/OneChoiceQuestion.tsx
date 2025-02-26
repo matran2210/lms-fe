@@ -50,7 +50,7 @@ const OneChoiceQuestion = ({
   allowUnHighLight,
   setOpenFile,
   isHideExhibit = true,
-  exhibitText,
+  exhibitText = 'Exhibit',
 }: IPreviewProp) => {
   useEffect(() => {
     if (defaultValues) {

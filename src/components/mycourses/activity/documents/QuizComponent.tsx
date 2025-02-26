@@ -508,6 +508,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               solution={activeQuestion?.solution}
+              exhibitText={exhibitText}
             />
           )
 

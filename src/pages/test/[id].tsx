@@ -2144,6 +2144,7 @@ const TestDetail = () => {
             setOnFocusingPad={setOnFocusingPad}
             handleCloseScratchPad={handleCloseScratchPad}
             openScratchPad={openScratchPad}
+            exhibitText={exhibitText}
           />
           {/** End Scratchpads */}
 
