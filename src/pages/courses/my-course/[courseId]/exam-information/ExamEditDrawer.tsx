@@ -95,6 +95,10 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
       open={isOpen}
       title="Change my exam date"
       handleCancel={() => setIsOpen(false)}
+      rootStyle={{
+        position: 'relative',
+        zIndex: 9999,
+      }}
     >
       <div className="flex flex-col gap-3">
         <Controller
