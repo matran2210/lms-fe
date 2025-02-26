@@ -101,7 +101,6 @@ const CoursePartDetail = () => {
     course_section_id: string | string[] | undefined,
   ) => {
     setLoadingChapter(true)
-    handleShowToast()
     try {
       if (activeItem?.course_section_link_parents?.[0]?.is_preview_locked) {
         toast.error('Sorry, you do not have access to this content')
