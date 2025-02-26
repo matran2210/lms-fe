@@ -1148,7 +1148,211 @@
     "message": "The Event Primary Category Update Itself"
   },
   {
+    "code": "404|450004",
+    "message": "The event does not found"
+  },
+  {
+    "code": "404|450022",
+    "message": "The event in used"
+  },
+  {
+    "code": "404|490004",
+    "message": "The event phase does not found"
+  },
+  {
+    "code": "400|450035",
+    "message": "The event expired."
+  },
+  {
+    "code": "400|450037",
+    "message": "The event link is deactived test"
+  },
+  {
     "code": "400|170305",
-    "message": "Property values were not valid"
+    "message": "Hubspot Contact Data Invalid"
+  },
+  {
+    "code": "400|060808",
+    "message": "Quiz Attempt Question Grading Not Allowed For Non Mentor"
+  },
+  {
+    "code": "400|041005",
+    "message": "User Examination Result Invalid"
+  },
+  {
+    "code": "400|041205",
+    "message": "User Student Not Change Subject Examination Final"
+  },
+  {
+    "code": "400|100309",
+    "message": "Examination Is Finalized"
+  },
+  {
+    "code": "400|100409",
+    "message": "Class User Not Create Ticket Hubspot"
+  },
+  {
+    "code": "400|101705",
+    "message": "Room Mode Missing Field"
+  },
+  {
+    "code": "400|171305",
+    "message": "Hubspot Contact Email Invalid"
+  },
+  {
+    "code": "400|420007",
+    "message": "Subject And Examination Not Match"
+  },
+  {
+    "code": "400|430037",
+    "message": "Can Not Calculate Score"
+  },
+  {
+    "code": "400|480004",
+    "message": "Department Not Found"
+  },
+  {
+    "code": "400|480005",
+    "message": "Invalid Department Type"
+  },
+  {
+    "code": "400|480006",
+    "message": "Department No Parent"
+  },
+  {
+    "code": "400|480007",
+    "message": "Invalid Department Unit"
+  },
+  {
+    "code": "400|480008",
+    "message": "Department With Child Department"
+  },
+  {
+    "code": "400|480024",
+    "message": "Invalid Department Parent"
+  },
+  {
+    "code": "400|480106",
+    "message": "Department Related To Staff"
+  },
+  {
+    "code": "400|480206",
+    "message": "Department Related To Support Group"
+  },
+  {
+    "code": "400|481004",
+    "message": "University Not Found"
+  },
+  {
+    "code": "400|482004",
+    "message": "Major Not Found"
+  },
+  {
+    "code": "400|483004",
+    "message": "University Program Not Found"
+  },
+  {
+    "code": "400|490004",
+    "message": "Start Date Of The Next Recurrence Overlaps With The End Date Of The Previous Recurrence"
+  },
+  {
+    "code": "400|480604",
+    "message": "Room Schedule Cannot Modify Old Schedule"
+  },
+  {
+    "code": "400|480704",
+    "message": "Room Schedule End Date Repeat Over 2 Years"
+  },
+  {
+    "code": "400|480804",
+    "message": "Room Schedule Not Found"
+  },
+  {
+    "code": "400|480904",
+    "message": "Room Schedule Rental Update Invalid Input"
+  },
+  {
+    "code": "400|481904",
+    "message": "Room Schedule The Loop Interval"
+  },
+  {
+    "code": "400|482904",
+    "message": "Room Schedule Not Clear Occurred Exception"
+  },
+  {
+    "code": "400|490104",
+    "message": "Schedule Start Date Is Less Than End Date"
+  },
+  {
+    "code": "400|490204",
+    "message": "Schedule End Date Is Less Than End Date Repeat"
+  },
+  {
+    "code": "400|490304",
+    "message": "Schedule Start Date Is More Than Date Now"
+  },
+  {
+    "code": "400|491004",
+    "message": "Schedule Holiday Has Been Taken Place"
+  },
+  {
+    "code": "400|500005",
+    "message": "Course Section Prerequisite Itself"
+  },
+  {
+    "code": "400|500006",
+    "message": "Course Section Circular Prerequisite"
+  },
+  {
+    "code": "400|500024",
+    "message": "Course Section Used As Prerequisite"
+  },
+  {
+    "code": "400|500105",
+    "message": "Course Section Prerequisite Different Parent"
+  },
+  {
+    "code": "400|500107",
+    "message": "Course Section Prerequisite Different Type"
+  },
+  {
+    "code": "400|510004",
+    "message": "Course Timeline Not Found"
+  },
+  {
+    "code": "400|510006",
+    "message": "Course Timeline Invalid Section Order"
+  },
+  {
+    "code": "400|510008",
+    "message": "Course Section Already Scheduled"
+  },
+  {
+    "code": "400|510012",
+    "message": "Course Timeline Invalid Course Content"
+  },
+  {
+    "code": "400|510033",
+    "message": "Course Timeline Duplicate Name"
+  },
+  {
+    "code": "400|510104",
+    "message": "Course Schedule Version Not Found"
+  },
+  {
+    "code": "400|510116",
+    "message": "Course Timeline Version Not Active"
+  },
+  {
+    "code": "400|510210",
+    "message": "Course Timeline Multiple Section"
+  },
+  {
+    "code": "400|520004",
+    "message": "Class Timeline Not Found"
+  },
+  {
+    "code": "400|520104",
+    "message": "Class Schedule Version Not Found"
   }
 ]
