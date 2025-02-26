@@ -8440,10 +8440,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.3.40:
-  version "1.3.40"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.40.tgz#cc53a621ad56cc0b92d477d34fcd6a0bad318682"
-  integrity sha512-OmPrC98Ya2IQGeWnkIgbvLhQk8dQ9c7odwxbbsjPMw8Lwk51fwTrkNleKt+rTS47y0j1FWjvErNL6dPKdMNcew==
+preview-part@^1.3.42:
+  version "1.3.42"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.42.tgz#e05f9b608a95575c13621fb6e22a577b4ccb9e6e"
+  integrity sha512-E5BUTd+SIsDxQ7Z+IfnxOemw5WRfHKHuimgNiLH6ExQi+6cA0LXVGFTVLiENDS4jgfuTQQFno5xMoHMeqfJfYA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
