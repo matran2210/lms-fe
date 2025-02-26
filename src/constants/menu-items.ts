@@ -94,51 +94,9 @@ const MENU_OPTIONS: MenuOption[] = [
 
 const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
   {
-    name: `${TitleSidebar.COURSES}`,
-    icon: 'course',
-    url: `${PageLink.COURSES}`,
-    type: 'level-1',
-  },
-  {
-    name: `${TitleSidebar.NOTES_LIST}`,
-    icon: 'notes-list',
-    url: '#',
-    type: 'level-1',
-  },
-  {
-    name: `${TitleSidebar.RESOURCES}`,
-    icon: 'learning-resource',
-    url: '#',
-    type: 'level-1',
-  },
-  {
-    name: `${TitleSidebar.ENTRANCE_TEST}`,
-    icon: 'entrance-test',
-    url: `${PageLink.ENTRANCE_TEST}`,
-    type: 'level-1',
-  },
-  {
     name: LANG_SIGNIN.eventTest,
     icon: 'event-test',
     url: PageLink.EVENT_TEST,
-    type: 'level-1',
-  },
-  {
-    name: `${TitleSidebar.RESULTS}`,
-    icon: 'result',
-    url: PageLink.RESULTS,
-    type: 'level-2',
-  },
-  {
-    name: `${TitleSidebar.NEW_NOTE}`,
-    icon: 'create-note',
-    url: '#',
-    type: 'level-1',
-  },
-  {
-    name: `${TitleSidebar.CALCULATOR}`,
-    icon: 'caculator',
-    url: '#',
     type: 'level-1',
   },
 ]
