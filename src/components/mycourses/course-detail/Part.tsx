@@ -72,18 +72,14 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   }
 
   const handleRouterPartDetail = () => {
-    if (
-      course?.cta_status === 'PREVIEW' ||
-      course?.course_section_link_parents?.[0]?.is_showing_locked
-    ) {
+    if (course?.course_section_link_parents?.[0]?.is_showing_locked) {
       onClickPart(course?.id)
     }
 
     course?.course_section_type === 'PART' &&
     !course?.course_section_link_parents?.[0]?.is_preview_locked
       ? onClickPart(course?.id)
-      : course?.course_section_link_parents?.[0]?.is_preview_locked &&
-          course?.cta_status === 'BEGIN'
+      : course?.course_section_link_parents?.[0]?.is_preview_locked
         ? toast.error(ERROR_MESSAGE_TRIAL)
         : {}
   }
