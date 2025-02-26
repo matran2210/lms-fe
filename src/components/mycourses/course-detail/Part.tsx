@@ -5,7 +5,7 @@ import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { formatTime, truncateBySpace, truncateHTML } from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, ERROR_MESSAGE_TRIAL } from 'src/constants'
 import SappTooltip from 'src/common/SappTooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 import toast from 'react-hot-toast'
@@ -84,7 +84,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
       ? onClickPart(course?.id)
       : course?.course_section_link_parents?.[0]?.is_preview_locked &&
           course?.cta_status === 'BEGIN'
-        ? toast.error('Sorry, you do not have access to this content')
+        ? toast.error(ERROR_MESSAGE_TRIAL)
         : {}
   }
 
