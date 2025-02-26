@@ -63,7 +63,7 @@ const MatchingQuestion = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       isAlwaysShowAnswer = false,
-      exhibitText,
+      exhibitText = 'Exhibit',
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {

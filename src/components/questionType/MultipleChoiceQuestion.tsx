@@ -29,7 +29,7 @@ const MultiChoiceQuestion = ({
   getValue,
   tabs,
   currentPage,
-  exhibitText,
+  exhibitText = 'Exhibit',
 }: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
