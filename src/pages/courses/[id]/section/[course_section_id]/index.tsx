@@ -9,7 +9,7 @@ import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION, ERROR_MESSAGE_TRIAL } from 'src/constants'
+import { ANIMATION, ERROR_MESSAGE_TRIAL, TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
@@ -242,10 +242,21 @@ const CoursePartDetail = () => {
       setChapterTestId(filteredData?.[0]?.id)
     }
 
-    if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+    if (
+      chapter?.course_section_link_parents?.[0]?.is_preview_locked &&
+      chapter?.course_section_type === TEST_TYPE.CHAPTER_TEST
+    ) {
+      toast.error(ERROR_MESSAGE_TRIAL)
+    }
+    if (
+      chapter?.course_section_link_parents?.[0]?.is_preview_locked &&
+      chapter?.course_section_type === TEST_TYPE.TOPIC_TEST
+    ) {
       setChapterDetail(undefined)
     } else {
-      setOpen(true)
+      if (!chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+        setOpen(true)
+      }
     }
   }
 
