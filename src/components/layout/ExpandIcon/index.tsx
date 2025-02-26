@@ -360,7 +360,7 @@ export default function ExpandIcon({
           className={`${className}`}
         >
           <path
-            fill="#DCDDDD"
+            fill="currentColor"
             d="M2 2v20a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1Zm9 13H5v-2h6v2Zm5-4H5V9h11v2Zm0-4H5V5h11v2Z"
           />
         </svg>
