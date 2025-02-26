@@ -268,6 +268,15 @@ export enum EXHIBIT_TEXT_REPLACE {
 export const ERROR_MESSAGE_TRIAL =
   'Sorry, you do not have access to this content'
 
+export enum TEST_ATTEMPT_TYPE {
+  MID_TERM_TEST = 'MID_TERM_TEST',
+  FINAL_TEST = 'FINAL_TEST',
+  MOCK_TEST = 'MOCK_TEST',
+  TOPIC_TEST = 'TOPIC_TEST',
+  CHAPTER_TEST = 'CHAPTER_TEST',
+  ENTRANCE_TEST = 'ENTRANCE_TEST',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './form'
