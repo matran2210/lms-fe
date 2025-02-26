@@ -199,7 +199,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               <Toaster
                 toastOptions={{
                   style: {
-                    minWidth: '400px', // Tăng chiều rộng của toast
+                    maxWidth: '400px', // Tăng chiều rộng của toast
                   },
                 }}
               />
