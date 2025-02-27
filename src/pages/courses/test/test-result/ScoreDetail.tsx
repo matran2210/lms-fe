@@ -191,7 +191,7 @@ const ScoreDetail = ({
                 return (
                   <React.Fragment key={answer?.id}>
                     <tr key={answer?.id}>
-                      <td className="p-0 pr-3 font-semibold text-gray-1">
+                      <td className="sapp-border p-0 pr-3 font-semibold text-gray-1">
                         {answer?.index}
                       </td>
 

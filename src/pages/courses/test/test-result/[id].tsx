@@ -5,78 +5,11 @@ import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
+import TestResultPage from './testResultPage'
 import { GRADE_STATUS } from 'src/constants'
-import { ResultDashBoard } from 'test-result-view-package'
-import 'test-result-view-package/dist/index.css'
-import { useEffect, useState } from 'react'
-
-interface IScoreDetail {
-  metadata: {
-    page_index: number
-    page_size: number
-    total_pages: number
-    total_records: number
-  }
-  answers: Array<any>
-}
 
 const TestResultDetail = () => {
   const router = useRouter()
-
-  const useGetScoreDetail = () => {
-    const [scoreDetails, setScoreDetails] = useState<IScoreDetail>({
-      metadata: {
-        total_pages: 0,
-        total_records: 0,
-        page_index: 0,
-        page_size: 10,
-      },
-      answers: [],
-    })
-
-    const fetchScoreDetails = async (
-      pageIndex: number = 1,
-      pageSize: number = 10,
-    ) => {
-      try {
-        const res = await CoursesAPI.getQuizAttemptsTable(
-          router.query.id as string,
-          {
-            page_index: pageIndex ?? 1,
-            page_size: pageSize ?? 10,
-          },
-        )
-        if (res.data) {
-          setScoreDetails({
-            metadata: res.data.metadata,
-            answers: [...scoreDetails.answers, ...res.data.answers],
-          })
-        }
-      } catch {}
-    }
-
-    useEffect(() => {
-      fetchScoreDetails(1, 10)
-    }, [])
-
-    const handleScoreDetailScroll = () => {
-      if (
-        scoreDetails.metadata.page_index < scoreDetails.metadata.total_pages
-      ) {
-        fetchScoreDetails(
-          scoreDetails.metadata.page_index + 1,
-          scoreDetails.metadata.page_size,
-        )
-      }
-    }
-
-    return {
-      scoreDetails,
-      setScoreDetails,
-      handleScoreDetailScroll,
-      fetchScoreDetails,
-    }
-  }
 
   const useGetQuizAttempts = (queryKey: string, params: Object) => {
     return useGetDataQuery(
@@ -97,7 +30,6 @@ const TestResultDetail = () => {
     )
   }
 
-  const { scoreDetails, handleScoreDetailScroll } = useGetScoreDetail()
   // Sử dụng hook useGetQuizDetail trong component
   const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
 
@@ -133,12 +65,6 @@ const TestResultDetail = () => {
     },
   ]
 
-  useEffect(() => {
-    if (document) {
-      document.body.style.fontFamily = 'Roboto, sans-serif'
-    }
-  }, [document])
-
   return (
     <FullScreenLayout title="Test Result" className="!bg-gray-3">
       <div className="mx-auto max-w-[1570px]">
@@ -146,24 +72,20 @@ const TestResultDetail = () => {
           <Breadcrumb
             tabs={breadcrumbs}
             currentPage={'Results'}
-            className="!text-sm 2xl-max:py-4"
+            className="2xl-max:py-4"
           />
         </div>
         <div className="px-5 xl:container md:px-10">
-          <ResultDashBoard
+          <TestResultPage
             questions={questions}
+            type={questions?.course?.course_categories?.[0]?.name}
             chartData={chartData}
-            scoreDetails={scoreDetails}
-            onScoreDetailScroll={handleScoreDetailScroll}
+            subjectCode={questions?.course?.subject?.code ?? ''}
             score={
               questions?.quizAttempt?.grading_status ===
               GRADE_STATUS.FINISHED_GRADING
                 ? questions?.quizAttempt?.score
                 : chartData?.multiple_choice_score
-            }
-            explanationUrl={'/explanation/{}?title=My Course'}
-            onBack={() =>
-              router.push(`/courses/my-course/${questions?.class_id ?? ''}`)
             }
           />
         </div>
