@@ -32,7 +32,12 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
-import { ESSAY_TYPE, QUESTION_TYPES } from 'src/constants'
+import {
+  ESSAY_TYPE,
+  EXHIBIT_TEXT_REPLACE,
+  PROGRAM,
+  QUESTION_TYPES,
+} from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   clearFileEssay,
@@ -256,6 +261,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
+  const [exhibitText, setExhibitText] = useState<string>('')
 
   /**
    * LIST DANH SÁCH CÁC CÂU CHƯA LÀM
@@ -365,6 +371,11 @@ const CaseStudyDetail = ({ questions }: any) => {
         class_user_id,
         router.query.caseStudyId,
       )
+      setExhibitText(
+        res.data.program === PROGRAM.CMA
+          ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+          : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+      )
       if (res?.success === false) {
         setBreadCrumb(res?.data?.breadcumb)
         setClassId(res?.data?.class_id)
@@ -419,10 +430,10 @@ const CaseStudyDetail = ({ questions }: any) => {
     setExhibitData(exhibitsOptions)
 
     return exhibitsOptions?.map((exhibit, index: number) => ({
-      label: `Exhibit ${+index + 1}`,
+      label: `${exhibitText} ${+index + 1}`,
       value: exhibit.id,
     }))
-  }, [topics])
+  }, [topics, exhibitText])
 
   /**
    * Check value of exhibit to open ScratchPad
@@ -442,6 +453,20 @@ const CaseStudyDetail = ({ questions }: any) => {
       })
     }
   }, [watch('exhibits')])
+
+  const handleOpenExhibit = (exhibitId?: string) => {
+    if (!exhibitId) return
+    const exhibitIds = getValuesExhibits('exhibits') ?? []
+    if (exhibitIds.includes(exhibitId)) {
+      setValueExhibits(
+        'exhibits',
+        exhibitIds.filter((id: string) => id !== exhibitId),
+      )
+    } else {
+      exhibitIds.push(exhibitId)
+      setValueExhibits('exhibits', exhibitIds)
+    }
+  }
 
   const backToPart = () => {
     router.replace(
@@ -1159,7 +1184,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     <div className="absolute left-0 top-0  h-full w-full border">
                       <div className="flex h-10 w-6-percent w-full items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="text-base font-semibold ">{`Exhibit ${
+                          <span className="text-base font-semibold ">{`${exhibitText} ${
                             (i ?? 0) + 1
                           }: `}</span>
                           {exhibitsDes?.name}
@@ -1303,23 +1328,30 @@ const CaseStudyDetail = ({ questions }: any) => {
                       <div className="flex items-center gap-3 text-sm font-normal">
                         <div>
                           <span className="hidden  lg:inline-block 3xl:me-1">
-                            {`Exhibits (${exhibits?.length})`}
+                            {`${exhibitText}s (${exhibits?.length})`}
                           </span>
                         </div>
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="absolute bottom-full z-[1400] flex h-fit max-w-max justify-center bg-gray-3 p-4 shadow-questions-exhibits 3xl:w-full 3xl:max-w-none">
-                        <HookFormCheckBoxGroup
-                          control={controlExhibits}
-                          name="exhibits"
-                          options={exhibits}
-                          multiple
-                          lowerOptions={true}
-                          widthOptions="w-full"
-                          seprateLine={true}
-                          maxWidthContent
-                        />
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                        {exhibits?.map(
+                          (
+                            e: { label: string; value: string },
+                            index: number,
+                          ) => {
+                            return (
+                              <button
+                                key={e?.value}
+                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
+                                  !watch('exhibits')?.includes(e?.value) &&
+                                  'text-gray-1 '
+                                }`}
+                                onClick={() => handleOpenExhibit(e?.value)}
+                              >{`${exhibitText} ${index + 1}`}</button>
+                            )
+                          },
+                        )}
                       </div>
                     )}
                   </button>

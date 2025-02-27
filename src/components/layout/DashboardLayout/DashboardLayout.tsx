@@ -4,6 +4,7 @@ import { useAppSelector } from 'src/redux/hook'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { PageLink } from 'src/constants'
 import { useRouter } from 'next/router'
+import { useCourseContext } from '@contexts/index'
 
 type DashboardLayoutProps = {
   children: React.ReactNode
@@ -17,10 +18,10 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const router = useRouter()
   const [isOpened, setOpened] = useState(false)
-  const toggleDrawer = () => {
-    setOpened((prev) => !prev)
-  }
+  const toggleDrawer = () => setOpened((prev) => !prev)
+
   const { openPinned, pinnedNotifications } = usePinnedNotifyContext()
+  const { showPinnedTrial } = useCourseContext()
 
   const guideStatus = useAppSelector(
     (state: { userGuideReducer: { status: any } }) =>
@@ -37,6 +38,14 @@ export default function DashboardLayout({
     PageLink.COURSE_ACTIVITY,
   ].includes(router.pathname)
 
+  let paddingTop = ''
+
+  if (isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content) {
+    paddingTop = showPinnedTrial ? 'pt-[102px]' : 'pt-12'
+  } else if (showPinnedTrial) {
+    paddingTop = 'pt-[54px]'
+  }
+
   return (
     <div className="flex flex-nowrap">
       <Sidebar
@@ -44,14 +53,12 @@ export default function DashboardLayout({
         toggleDrawer={toggleDrawer}
         className={`menu-sidebar-left max-w-screen fixed top-0 h-screen w-20 bg-white shadow-sidebar md:left-0 ${
           openDrawer ? 'opacity-5' : ''
-        } ${guideStatus ? '' : 'overflow-hidden'} ${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''}`}
+        } ${guideStatus ? '' : 'overflow-hidden'} ${paddingTop}`}
         setOpenResource={setOpenResource}
         openResource={openResource}
       />
       <div className="min-h-screen w-full">
-        <div
-          className={`${isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content ? 'pt-12' : ''} h-full bg-gray-4`}
-        >
+        <div className={`${paddingTop} h-full bg-gray-4`}>
           <div className="sapp-loading ml-0 ml-20 h-full">{children}</div>
         </div>
       </div>

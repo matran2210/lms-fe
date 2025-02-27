@@ -9,13 +9,14 @@ import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, ERROR_MESSAGE_TRIAL, TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
 import { truncateBySpace } from '@utils/index'
 import SappTooltip from 'src/common/SappTooltip'
+import toast from 'react-hot-toast'
 
 interface IProps {
   course_section_type: string
@@ -86,35 +87,51 @@ const CoursePartDetail = () => {
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
+  const [activeItem, setActiveItem] = useState<any>()
+
+  const handleActive = (item: any) => {
+    setActiveItem(item)
+    if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
+      toast.error(ERROR_MESSAGE_TRIAL)
+      setChapterDetail(undefined)
+    }
+  }
 
   const fetchChapterDetail = async (
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ) => {
-    setLoadingChapter(true)
-    try {
-      if (course_section_id !== router.query.chapter) {
-        router.push(`${location.pathname}?chapter=${course_section_id}`)
-      }
-      const res = await CoursesAPI.getPartDetail(id, course_section_id)
-
-      const nodeList = res?.data?.course_section_tree
-      setIsPassedCourse(res?.data?.is_passed_course)
-      const newData = nodeList.map((item: IProps) => {
-        if (item.id === course_section_id) {
-          const { parent_id, ...rest } = item
-          return rest
+    if (
+      activeItem?.id &&
+      activeItem?.course_section_link_parents?.[0]?.is_preview_locked
+    ) {
+      setChapterDetail(undefined)
+    } else {
+      setLoadingChapter(true)
+      try {
+        if (course_section_id !== router.query.chapter) {
+          router.push(`${location.pathname}?chapter=${course_section_id}`)
         }
-        return item
-      })
-      const tree = TreeHelper.convertFromArray(newData)
+        const res = await CoursesAPI.getPartDetail(id, course_section_id)
 
-      const detail = tree[0]
-      setChapterDetail(detail)
-      localStorage.removeItem('course_chapter_id')
-    } catch (error) {
-    } finally {
-      setLoadingChapter(false)
+        const nodeList = res?.data?.course_section_tree
+        setIsPassedCourse(res?.data?.is_passed_course)
+        const newData = nodeList.map((item: IProps) => {
+          if (item.id === course_section_id) {
+            const { parent_id, ...rest } = item
+            return rest
+          }
+          return item
+        })
+        const tree = TreeHelper.convertFromArray(newData)
+
+        const detail = tree[0]
+        setChapterDetail(detail)
+        localStorage.removeItem('course_chapter_id')
+      } catch (error) {
+      } finally {
+        setLoadingChapter(false)
+      }
     }
   }
 
@@ -144,10 +161,14 @@ const CoursePartDetail = () => {
     }
   }, [openLearningOutcome])
 
-  const handleRouterActivity = (id: string) => {
-    router.push({
-      pathname: `/courses/${router.query.id}/activity/${id}`,
-    })
+  const handleRouterActivity = (id: string, chapter: any) => {
+    if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+      toast.error(ERROR_MESSAGE_TRIAL)
+    } else {
+      router.push({
+        pathname: `/courses/${router.query.id}/activity/${id}`,
+      })
+    }
   }
 
   const handleRouterCaseStudy = async (
@@ -155,6 +176,7 @@ const CoursePartDetail = () => {
     topicId: string,
     sectionId?: string | undefined,
     caseStudyId?: string | undefined,
+    chapter?: any,
   ) => {
     const filteredData = chapterDetail?.children?.find(
       (item: any) => item?.id === sectionId,
@@ -172,32 +194,40 @@ const CoursePartDetail = () => {
       totalCourseSections !== undefined &&
       totalCourseSectionsCompleted !== undefined
     ) {
-      router.push({
-        pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
-        query: {
-          class_user_id: previewPart.class_user_id,
-          class_id: router?.query?.id,
-          course_section_id: router?.query?.course_section_id,
-        },
-      })
+      if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+        toast.error(ERROR_MESSAGE_TRIAL)
+      } else {
+        router.push({
+          pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
+          query: {
+            class_user_id: previewPart.class_user_id,
+            class_id: router?.query?.id,
+            course_section_id: router?.query?.course_section_id,
+          },
+        })
+      }
     } else {
       if (sectionId && caseStudyId) {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
-      router.push({
-        pathname: `/case-study/${topicId}`,
-        query: {
-          quiz_id: quizId,
-          class_user_id: previewPart.class_user_id,
-          caseStudyId: caseStudyId,
-          class_id: router?.query?.id,
-          course_section_id: router?.query?.course_section_id,
-        },
-      })
+      if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+        toast.error(ERROR_MESSAGE_TRIAL)
+      } else {
+        router.push({
+          pathname: `/case-study/${topicId}`,
+          query: {
+            quiz_id: quizId,
+            class_user_id: previewPart.class_user_id,
+            caseStudyId: caseStudyId,
+            class_id: router?.query?.id,
+            course_section_id: router?.query?.course_section_id,
+          },
+        })
+      }
     }
   }
 
-  const handleRouterChapter = (id: string) => {
+  const handleRouterChapter = (id: string, chapter?: any) => {
     const partData = partDetail?.children?.filter(
       (item: any) => item?.id === id,
     )
@@ -212,7 +242,22 @@ const CoursePartDetail = () => {
       setChapterTestId(filteredData?.[0]?.id)
     }
 
-    setOpen(true)
+    if (
+      chapter?.course_section_link_parents?.[0]?.is_preview_locked &&
+      chapter?.course_section_type === TEST_TYPE.CHAPTER_TEST
+    ) {
+      toast.error(ERROR_MESSAGE_TRIAL)
+    }
+    if (
+      chapter?.course_section_link_parents?.[0]?.is_preview_locked &&
+      chapter?.course_section_type === TEST_TYPE.TOPIC_TEST
+    ) {
+      setChapterDetail(undefined)
+    } else {
+      if (!chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+        setOpen(true)
+      }
+    }
   }
 
   const course_section = chapterDetail?.children?.[0]
@@ -222,7 +267,7 @@ const CoursePartDetail = () => {
     if (course_section?.course_section_type === 'CHAPTER_TEST') {
       handleRouterChapter(course_section?.quiz?.id)
     } else if (course_section?.course_section_type === 'ACTIVITY') {
-      handleRouterActivity(course_section?.children?.[0]?.id)
+      handleRouterActivity(course_section?.children?.[0]?.id, undefined)
     } else if (course_section?.course_section_type === 'STORY') {
       handleRouterCaseStudy(
         quiz?.id,
@@ -231,7 +276,7 @@ const CoursePartDetail = () => {
         quiz?.case_study_story?.instances?.[0]?.id,
       )
     } else if (course_section?.course_section_type === 'UNIT') {
-      handleRouterActivity(course_section?.children?.[0]?.id)
+      handleRouterActivity(course_section?.children?.[0]?.id, undefined)
     }
   }
 
@@ -376,6 +421,8 @@ const CoursePartDetail = () => {
               setReadMore={setReadMore}
               defaultActive={router.query.chapter ?? defaultActive}
               focus_id={router?.query?.focus_id as string}
+              handleGetItem={handleActive}
+              // handleShowToast={handleShowToast}
             />
           </div>
 

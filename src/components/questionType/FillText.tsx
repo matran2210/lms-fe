@@ -37,6 +37,7 @@ interface IProps {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => void
   isHideExhibit?: boolean
+  exhibitText?: string
 }
 const AddWordPreview = forwardRef(
   (
@@ -54,6 +55,7 @@ const AddWordPreview = forwardRef(
       allowUnHighLight,
       setOpenFile,
       isHideExhibit = true,
+      exhibitText = 'Exhibit',
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -180,7 +182,7 @@ const AddWordPreview = forwardRef(
               )}
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">
-                  Exhibits ({data?.question_topic?.exhibits?.length || 0})
+                  {exhibitText}s ({data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
                   <span className="text-state-error">* </span>
@@ -209,7 +211,7 @@ const AddWordPreview = forwardRef(
                           )
                       }}
                     >
-                      Exhibit {i + 1}: {e?.name}
+                      {exhibitText} {i + 1}: {e?.name}
                     </div>
                   )
                 })}

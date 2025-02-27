@@ -22,6 +22,7 @@ interface IProps {
     SetStateAction<ScratchPadValue | null | undefined>
   >
   scratchPadValues: ScratchPadValue | null | undefined
+  exhibitText?: string
 }
 
 const TestScratchPads = ({
@@ -35,6 +36,7 @@ const TestScratchPads = ({
   exhibitData,
   scratchPadValues,
   setScratchPadValues,
+  exhibitText = 'Exhibit',
 }: IProps) => {
   const handleChangeScratchPad = (
     e: ChangeEvent<HTMLInputElement>,
@@ -167,7 +169,7 @@ const TestScratchPads = ({
           <div className="absolute left-0 top-0  h-full w-full border">
             <div className="flex h-10 w-full items-center justify-between bg-white px-5">
               <div className="truncate">
-                <span className="text-base font-semibold">{`Exhibit ${
+                <span className="text-base font-semibold">{`${exhibitText} ${
                   (i ?? 0) + 1
                 }: `}</span>
                 {exhibitsDes?.name}

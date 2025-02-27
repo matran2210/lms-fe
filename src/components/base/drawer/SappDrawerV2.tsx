@@ -1,8 +1,8 @@
 import Icon from '@components/icons'
-import { Drawer } from 'antd'
+import { Drawer, DrawerProps } from 'antd'
 import React, { ReactNode } from 'react'
 
-interface IProps {
+interface IProps extends DrawerProps {
   open: boolean
   handleCancel: () => void
   width?: number
@@ -16,6 +16,7 @@ const SappDrawerV2 = ({
   width,
   title,
   children,
+  ...props
 }: IProps) => {
   return (
     <Drawer
@@ -24,6 +25,7 @@ const SappDrawerV2 = ({
       onClose={handleCancel}
       width={width ?? '45%'}
       closeIcon={false}
+      {...props}
     >
       <div className={`w-full bg-white`}>
         <div className="relative bg-bw-1 px-8 py-6">

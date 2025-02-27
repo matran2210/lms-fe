@@ -37,6 +37,7 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
   isAlwaysShowAnswer?: boolean
+  exhibitText?: string
 }
 type IProp = {
   value: string
@@ -62,6 +63,7 @@ const MatchingQuestion = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       isAlwaysShowAnswer = false,
+      exhibitText = 'Exhibit',
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -299,7 +301,8 @@ const MatchingQuestion = forwardRef(
                 )}
                 <div className="mb-4 flex items-center">
                   <div className="font-semibold">
-                    Exhibits({data?.question_topic?.exhibits?.length || 0})
+                    {exhibitText ? exhibitText + 's' : 'Exhibits'} (
+                    {data?.question_topic?.exhibits?.length || 0})
                   </div>
                   <div className="ml-4">
                     <span className="text-state-error">* </span>
@@ -328,7 +331,7 @@ const MatchingQuestion = forwardRef(
                             )
                         }}
                       >
-                        Exhibit {i + 1}: {e?.name}
+                        {exhibitText} {i + 1}: {e?.name}
                       </div>
                     )
                   })}

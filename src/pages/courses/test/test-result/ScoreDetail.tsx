@@ -73,7 +73,6 @@ const ScoreDetail = ({
     hasNextPage,
     isLoading,
     isFetchingNextPage,
-    status,
   } = useInfiniteQuery({
     queryKey: ['scoreDetails', router.query.id],
     queryFn: async ({ pageParam }) => {
@@ -154,7 +153,6 @@ const ScoreDetail = ({
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
   // Group data by program
   const groupedData = _.groupBy(allData, (item) => item?.belong_to.id)
-  let rowIndex = 0 // Counter for row numbers
   return (
     <div
       id="sapp-drawer-test-result-list"
@@ -183,23 +181,22 @@ const ScoreDetail = ({
             <React.Fragment key={program}>
               <tr>
                 <td
-                  className="w-full pt-6 text-base font-medium text-bw-1"
+                  className="sapp-border w-full pt-6 text-base font-medium text-bw-1"
                   colSpan={6}
                 >
                   {rows[0]?.belong_to?.name}
                 </td>
               </tr>
               {rows?.map((answer) => {
-                rowIndex++
                 return (
                   <React.Fragment key={answer?.id}>
                     <tr key={answer?.id}>
-                      <td className="p-0 pr-3 font-semibold text-gray-1">
-                        {rowIndex}
+                      <td className="sapp-border p-0 pr-3 font-semibold text-gray-1">
+                        {answer?.index}
                       </td>
 
                       {/* Question */}
-                      <td className="p-0 pr-4">
+                      <td className="sapp-border p-0 pr-4">
                         <Tooltip
                           color="white"
                           title={
@@ -234,7 +231,7 @@ const ScoreDetail = ({
 
                       {/* Chapter/Module */}
                       <td
-                        className="my-5 line-clamp-1 p-0 text-start text-bw-1"
+                        className="sapp-border my-5 line-clamp-1 p-0 text-start text-bw-1"
                         title={
                           answer?.question?.question_filter?.chapter?.name ??
                           '--'
@@ -255,14 +252,16 @@ const ScoreDetail = ({
                       </td>
 
                       {/* Type */}
-                      <td className="p-0 pr-4 text-bw-1">
+                      <td className="sapp-border p-0 pr-4 text-bw-1">
                         <div className="min-w-[111px]">
                           {getTypeName(answer?.question?.qType)}
                         </div>
                       </td>
 
                       {/* Result */}
-                      <td className={`flex justify-between gap-12 pr-4`}>
+                      <td
+                        className={`sapp-border flex justify-between gap-12 pr-4`}
+                      >
                         <div
                           className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
                         >
@@ -297,7 +296,7 @@ const ScoreDetail = ({
                       </td>
 
                       {/* Time Spent */}
-                      <td className="m-6 p-0">
+                      <td className="sapp-border m-6 p-0">
                         <div className="text-center">
                           {(() => {
                             if (answer?.time_spent !== null) {

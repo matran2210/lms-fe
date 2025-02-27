@@ -60,3 +60,19 @@ export interface Attempt {
   started_at: string
   finished_at: string
 }
+
+export interface IAtempt {
+  id: string
+  quiz_position_mapping: any[]
+  class_user_id: string
+  quiz: {
+    id: string
+    quiz_type:
+      | 'MID_TERM_TEST'
+      | 'FINAL_TEST'
+      | 'MOCK_TEST'
+      | 'TOPIC_TEST'
+      | 'CHAPTER_TEST'
+      | 'ENTRANCE_TEST'
+  }
+}

@@ -35,6 +35,7 @@ export const TitleSidebar = {
   TEACHER: 'Teacher',
   NOTIFICATION: 'Notifications',
   RESULTS: 'Results',
+  EXAM_INFORMATION: 'Exam Information',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
   CALCULATOR: 'Calculator',
@@ -253,5 +254,29 @@ export const CERTIFICATE_DETAIL = '/certificates/[id]'
 export const ENTRANCE_TEST_RESULT = '/entrance-test/test-result/[id]'
 export const ENTRANCE_TEST_TABLE_RESULT = '/entrance-test/table-result/[id]'
 
+export enum PROGRAM {
+  ACCA = 'ACCA',
+  CFA = 'CFA',
+  CMA = 'CMA',
+}
+
+export enum EXHIBIT_TEXT_REPLACE {
+  EXHIBIT = 'Exhibit',
+  EXHIBIT_REPLACE = 'Time Value Table',
+}
+
+export const ERROR_MESSAGE_TRIAL =
+  'Sorry, you do not have access to this content'
+
+export enum TEST_ATTEMPT_TYPE {
+  MID_TERM_TEST = 'MID_TERM_TEST',
+  FINAL_TEST = 'FINAL_TEST',
+  MOCK_TEST = 'MOCK_TEST',
+  TOPIC_TEST = 'TOPIC_TEST',
+  CHAPTER_TEST = 'CHAPTER_TEST',
+  ENTRANCE_TEST = 'ENTRANCE_TEST',
+}
+
 export * from './socketEvents'
 export * from './localStorageKeys'
+export * from './form'

@@ -8,11 +8,13 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { PageLink } from 'src/constants'
+import { PageLink, TEST_ATTEMPT_TYPE } from 'src/constants'
+import { IAtempt } from 'src/type/results'
 
 const Explanation = () => {
   const router = useRouter()
   const [activeQuestion, setActiveQuestion] = useState<any>()
+  const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
   function getCorrect(answers: any, questionType: any) {
     switch (questionType as QUESTION_TYPES) {
@@ -51,8 +53,10 @@ const Explanation = () => {
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
+      setAttempt(resultResponse?.data?.answer?.quiz_attempt)
       setActiveQuestion({
         ...resultResponse.data.answer.question,
+        program: resultResponse.data.program,
         answer_file: resultResponse.data.answer.answer_file,
         active: resultResponse.data.answer.active,
         confirmed: true,
@@ -98,9 +102,6 @@ const Explanation = () => {
     }
   }, [router.query.id])
 
-  //todo: call api, make UI
-  // return <></>
-
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]
   }) => {
@@ -115,10 +116,24 @@ const Explanation = () => {
         <div
           className="absolute right-6 top-[14px] ml-auto cursor-pointer"
           onClick={() => {
-            if (activeQuestion?.answer?.quiz_attempt?.id) {
-              router.push(
-                `/entrance-test/table-result/${activeQuestion?.answer?.quiz_attempt?.id}`,
-              )
+            if (attempt?.quiz.id) {
+              switch (attempt?.quiz.quiz_type) {
+                case TEST_ATTEMPT_TYPE.ENTRANCE_TEST:
+                  router.push(`/entrance-test/table-result/${attempt?.id}`)
+                  break
+                case TEST_ATTEMPT_TYPE.CHAPTER_TEST:
+                case TEST_ATTEMPT_TYPE.FINAL_TEST:
+                case TEST_ATTEMPT_TYPE.MID_TERM_TEST:
+                case TEST_ATTEMPT_TYPE.MOCK_TEST:
+                case TEST_ATTEMPT_TYPE.TOPIC_TEST:
+                  router.push(`/courses/test/test-result/${attempt?.id}`)
+                  break
+                default:
+                  router.push(
+                    localStorage.getItem('previousUrl') ??
+                      PageLink.ENTRANCE_TEST,
+                  )
+              }
             } else {
               router.push(
                 localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,

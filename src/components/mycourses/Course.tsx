@@ -24,6 +24,7 @@ import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
 import { CoursesAPI } from 'src/pages/api/courses'
+import { useCourseContext } from '@contexts/index'
 
 const Course = ({
   course,
@@ -35,8 +36,6 @@ const Course = ({
   index: number
   lastElementRef: (node: HTMLDivElement) => void
   refetch: () => void
-  // setData: Dispatch<SetStateAction<ICourseAll>>
-  // setLoading: Dispatch<SetStateAction<boolean>>
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
@@ -191,25 +190,25 @@ const Course = ({
       toast.success('Active thành công!')
     } catch (error) {}
   }
-
   async function extendCourse() {
     try {
-      const params = {
-        classId: `${classInstance?.id}`,
+      const res = await CoursesAPI.extendCourse({ classId: classInstance?.id })
+      if (res?.success) {
+        refetch()
+        toast.success('Gia hạn hành công!')
       }
-      if (
-        course?.course_type === 'TRIAL_COURSE' &&
-        !student &&
-        classInstance?.duration_type === 'FIXED'
-      ) {
-        Object.assign(params, {
-          is_student_in_class: false,
-        })
-      }
-      refetch()
-      toast.success('Gia hạn hành công!')
     } catch (error) {}
   }
+
+  const { courseType } = useCourseContext()
+
+  useEffect(() => {
+    if (course?.course_type === 'TRIAL_COURSE') {
+      localStorage.setItem('daysDifference', '')
+    } else {
+      localStorage.removeItem('daysDifference')
+    }
+  }, [courseType])
 
   const handleCourseDetail = () => {
     router.push(`/courses/my-course/${classInstance?.id}`)
@@ -217,6 +216,13 @@ const Course = ({
       'courseDetail',
       `/courses/my-course/${classInstance?.id}`,
     )
+    if (course?.course_type === 'TRIAL_COURSE') {
+      localStorage.setItem('daysDifference', daysDifference as any)
+      localStorage.setItem('showPinTrial', 'true')
+    } else {
+      localStorage.removeItem('daysDifference')
+      localStorage.removeItem('showPinTrial')
+    }
   }
 
   const courseAction = () => {

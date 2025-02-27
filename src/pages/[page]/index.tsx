@@ -4,6 +4,7 @@ import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'
 import Devices from '@components/profile/Devices'
+import ExamInfoTab from '@components/profile/ExamInformation/ExamInfoTab'
 import LoginHistory from '@components/profile/LoginHistory'
 import ProfileContent from '@components/profile/ProfileContent'
 import ProfileHeader from '@components/profile/ProfileHeader'
@@ -15,7 +16,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import { ITabs } from 'src/type'
-import { IProfilePages } from 'src/type/Profile'
+import { IProfilePages, ProfilePages } from 'src/type/Profile'
 
 const ProfilePage = () => {
   const router = useRouter()
@@ -67,27 +68,27 @@ const ProfilePage = () => {
   let selectedContent: JSX.Element | null = null
 
   switch (page) {
-    case 'certificates':
+    case ProfilePages.Certificates:
       selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
       break
 
-    case 'devices':
+    case ProfilePages.Devices:
       selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
       break
 
-    case 'login_history':
+    case ProfilePages.LoginHistory:
       selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
       break
 
-    case 'change_password':
+    case ProfilePages.ChangePassword:
       selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
       break
 
-    case 'settings':
-      selectedContent = <Settings />
+    case ProfilePages.Settings:
+      selectedContent = <Settings onBack={() => setSelectPage(true)} />
       break
 
-    case 'overview':
+    case ProfilePages.OVERVIEW:
       selectedContent = (
         <ProfileContent
           setReViewImageSrc={setReViewImageSrc}
@@ -101,16 +102,20 @@ const ProfilePage = () => {
       )
       break
 
-    case 'cfa':
+    case ProfilePages.CFA:
       selectedContent = <ProgramDetail typeProgram="CFA" />
       break
 
-    case 'cma':
+    case ProfilePages.CMA:
       selectedContent = <ProgramDetail typeProgram="CMA" />
       break
 
-    case 'acca':
+    case ProfilePages.ACCA:
       selectedContent = <ProgramDetail typeProgram="ACCA" />
+      break
+
+    case ProfilePages.ExamInfo:
+      selectedContent = <ExamInfoTab onBack={() => setSelectPage(true)} />
       break
 
     default:

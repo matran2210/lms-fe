@@ -212,9 +212,9 @@ const MyCourse = () => {
             title="My Course"
             des={
               <div>
-                Welcome to the start of your learning journey.
-                <br /> It&apos;s time to advance your expertise with our
-                well-designed courses.
+                Here you can find all your courses, each packed with expert
+                lessons, study materials, and interactive exercises. Select a
+                course to start learning!
               </div>
             }
           />

@@ -77,7 +77,7 @@ export default function Sidebar({
             options={
               Number(localStorage.getItem('countEvent')) <= 0
                 ? MENU_ITEMS
-                : MENU_ITEMS_EVENT
+                : MENU_ITEMS.concat(MENU_ITEMS_EVENT)
             }
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}

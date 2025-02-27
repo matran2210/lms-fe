@@ -194,11 +194,8 @@ const ProfileSideBar = ({ page, children }: IProps) => {
   }, [])
 
   return (
-    <>
-      <div
-        className="w-full shadow-box lg:w-[22.8rem]"
-        data-aos={ANIMATION.DATA_AOS}
-      >
+    <div className="grid w-full grid-cols-4 gap-6">
+      <div className="w-full shadow-box" data-aos={ANIMATION.DATA_AOS}>
         <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
           <div>
             {Object.entries(PROFILE_PAGES).map(([key, value]) => {
@@ -305,14 +302,14 @@ const ProfileSideBar = ({ page, children }: IProps) => {
             </li>
           </div>
           <div className="text-center text-sm font-normal text-gray-1">
-            LMS Pro Version 2.4.0
+            LMS Pro Version 2.5.0
           </div>
         </ul>
       </div>
-      <div className="mb-6 hidden w-full bg-white shadow-box lg:mb-0 lg:block">
+      <div className="col-span-3 mb-6 hidden bg-white shadow-box lg:mb-0 lg:block">
         {children}
       </div>
-    </>
+    </div>
   )
 }
 

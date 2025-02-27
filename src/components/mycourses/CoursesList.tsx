@@ -38,6 +38,7 @@ const CoursesList: React.FC<CoursesProps> = ({
       </div>
     )
   }
+
   return (
     <>
       {!isEmpty(courses) && (
