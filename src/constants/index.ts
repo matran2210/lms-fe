@@ -22,6 +22,8 @@ export const PageLink = {
   EVENT_TEST: '/event-test',
   RESULTS: '/courses/my-course/[courseId]/results',
   MY_CALENDAR: '/my-calendar',
+  REQUEST: '/request',
+  MY_REQUEST: '/my-request',
 }
 
 export const TitleSidebar = {
@@ -42,6 +44,7 @@ export const TitleSidebar = {
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
   MY_CALENDER: 'My Calender',
+  MY_REQUEST: 'My Request',
 }
 
 export const GUIDELINE_PASSWORD = [
@@ -448,6 +451,16 @@ export enum TEST_ATTEMPT_TYPE {
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
 
-export * from './socketEvents'
+export enum BADGE_TYPES {
+  error = 'error',
+  warning = 'warning',
+  info = 'info',
+  success = 'success',
+  default = 'default',
+}
+
+export const DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm'
+
 export * from './localStorageKeys'
-export * from './form'
+export * from './request'
+export * from './socketEvents'

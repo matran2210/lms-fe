@@ -73,6 +73,12 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
   },
   {
+    name: TitleSidebar.MY_REQUEST,
+    icon: 'my-request',
+    url: `${PageLink.REQUEST}${PageLink.MY_REQUEST}`,
+    type: 'level-1',
+  },
+  {
     name: `${TitleSidebar.RESULTS}`,
     icon: 'result',
     url: PageLink.RESULTS,
@@ -97,6 +103,12 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
     name: LANG_SIGNIN.eventTest,
     icon: 'event-test',
     url: PageLink.EVENT_TEST,
+    type: 'level-1',
+  },
+  {
+    name: TitleSidebar.MY_REQUEST,
+    icon: 'my-request',
+    url: `${PageLink.REQUEST}${PageLink.MY_REQUEST}`,
     type: 'level-1',
   },
   {
