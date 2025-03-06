@@ -37,6 +37,7 @@ module.exports = {
       // sans: ['Inter', 'sans-serif'],
       tech: 'techNology',
       inter: ['Inter', 'sans-serif'],
+      fira: ['Fira Sans', 'sans-serif'],
     },
     container: {
       center: true,
@@ -77,6 +78,8 @@ module.exports = {
           7: '#EDEFF5',
           9: '#C3C3C3',
           10: 'rgba(0, 0, 0, 0.80)',
+          11: '#1F2937',
+          12: '#374151',
         },
         gray: {
           1: '#A1A1A1',
@@ -87,6 +90,9 @@ module.exports = {
           6: '#D8D8E5',
           7: '#E3E3E3',
           8: '#F3F3F3',
+          10: '#F2F4F7',
+          11: '#9CA3AF',
+          12: '#78829D',
           900: '#181C32',
         },
         overlay: {
@@ -99,6 +105,7 @@ module.exports = {
         },
         blue: {
           1: '#0000EE',
+          2: '#025EFF',
         },
         pinned: {
           1: '#18355D',
@@ -124,6 +131,7 @@ module.exports = {
         'gray-2': '#F1F1F1',
         'gray-3': '#F8F8F8',
         'gray-4': '#F3F3F3',
+        'gray-5': '#F1F1F4',
         'pinned-1': '#18355D',
         active: '#FFB800',
         'graded-finish': '#4077E0',
@@ -193,6 +201,7 @@ module.exports = {
         dl: '646px',
         '2dl': '950px',
         xxl: '1144px',
+        '2xl': '1440px',
         '8xl': '1920px',
       },
       lineHeight: {
@@ -316,6 +325,7 @@ module.exports = {
       gridTemplateColumns: {
         'test-result': 'minmax(0, 3fr) minmax(0, 1fr)',
         15: 'repeat(15, minmax(0, 1fr))',
+        'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
       },
     },
   },

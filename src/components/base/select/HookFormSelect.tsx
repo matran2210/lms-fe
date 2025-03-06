@@ -17,6 +17,7 @@ interface IProps {
   onMenuScrollToBottom?: any
   classParent?: string
   isClearable?: boolean
+  isSearchable?: boolean
   isResultSelect?: boolean
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
@@ -37,6 +38,7 @@ const HookFormSelect = ({
   onMenuScrollToBottom,
   classParent = '',
   isClearable = false,
+  isSearchable = true,
   isResultSelect = false,
   onFocus,
   onBlur,
@@ -80,6 +82,7 @@ const HookFormSelect = ({
         isDisabled={isDisabled}
         onMenuScrollToBottom={onMenuScrollToBottom}
         isClearable={isClearable}
+        isSearchable={isSearchable}
         components={{ DropdownIndicator }}
         maxMenuHeight={maxMenuHeight}
         onMenuOpen={onMenuOpen}

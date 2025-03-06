@@ -113,7 +113,7 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
         submitEventTest,
         setSubmitEventTest,
         setShowPinnedTrial,
-        showPinnedTrial
+        showPinnedTrial,
       }}
       {...props}
     />

@@ -8,7 +8,7 @@ interface IProps {
   control: Control<any>
   required?: boolean
   className?: string
-  options?: Array<{ label: string; value: string }>
+  options?: Array<{ label: string; value: string; isDisabled?: boolean }>
   isMulti?: boolean
   children?: ReactNode
   placeholder?: string

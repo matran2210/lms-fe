@@ -52,7 +52,7 @@ const SAPPTextFiled = ({
     <>
       {label && (
         <label className={labelClass}>
-          {label} {`${required ? '*' : ''}`}
+          <span className={`${required ? 'required' : ''}`}>{label}</span>
         </label>
       )}
       <div className={`${className ?? ''} relative w-full`}>
