@@ -5,17 +5,16 @@ import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
-
 import { useRequestContext } from '@contexts/RequestContext'
 import { useForm } from 'react-hook-form'
 import {
   OPTIONS_REQUEST_STATUS,
   OPTIONS_REQUEST_TYPE,
 } from 'src/constants/request'
-import { IRequestFilterForm } from 'src/type/request'
-import RequestTable from './PersonalScheduleTable'
+import { IRequestFilterForm } from 'src/type'
+import TimeOffTable from '../request-tables/TimeOffTable'
 
-const PersonalScheduleTab = () => {
+const TimeOffTab = () => {
   const { setOpenAddModal } = useRequestContext()
 
   const { control, reset } = useForm<IRequestFilterForm>()
@@ -72,9 +71,9 @@ const PersonalScheduleTab = () => {
           </div>
         </div>
       </div>
-      <RequestTable />
+      <TimeOffTable />
     </div>
   )
 }
 
-export default PersonalScheduleTab
+export default TimeOffTab

@@ -1,7 +1,3 @@
-import { FixedType } from 'rc-table/lib/interface'
-import { ReactNode } from 'react'
-import { IMeta } from './courses'
-
 export type IButtonColors =
   | 'primary'
   | 'info'
@@ -103,80 +99,11 @@ export interface ISVG {
   className?: string
 }
 
-export interface ITabs {
-  link: string
-  title: string
-}
-
-export interface IResponse<T> {
-  error: any
-  status: number
-  success: boolean
-  data: T
-}
-export interface ITable {
-  headers:
-    | {
-        key?: string | undefined
-        label: any
-        className?: string
-        onClick?: () => void
-      }[]
-    | undefined
-  dataResponse?:
-    | {
-        metadata: IMeta
-        meta: IMeta
-        [key: string]: any
-      }
-    | undefined
-    | any
-  children: ReactNode
-  loading: boolean
-  handlePaginationChange?: (page_index: number, page_size: number) => void
-  onChange?: ((e: React.ChangeEvent<any>) => void | undefined) | undefined
-  hasCheck?: boolean
-  isCheckedAll?: boolean | undefined
-  data?: Array<any> | undefined
-  totalItems?: number | undefined
-  className?: string
-  classNameTable?: string | undefined
-  showHashtag?: boolean
-}
-
-export interface IBreadcrumb {
-  title: string
-  link: string
-}
-
-export type Placement =
-  | 'topLeft'
-  | 'topCenter'
-  | 'topRight'
-  | 'bottomLeft'
-  | 'bottomCenter'
-  | 'bottomRight'
-  | 'top'
-  | 'bottom'
-
-export interface OtherColumn {
-  index: string | number
-  method: React.ReactNode
-}
-
-export interface TableColumn<T, O = OtherColumn> {
-  title: React.ReactNode
-  dataIndex: keyof T | keyof O
-  key?: string | number
-  width?: number | string
-  render?: (value: any) => React.ReactNode
-  fixed?: FixedType
-}
-
-export * from './course'
+export * from './common'
 export * from './courses'
 // export * from './exhibit'
 export * from './Icon'
 export * from './notification'
 export * from './quiz'
+export * from './request'
 export * from './test'

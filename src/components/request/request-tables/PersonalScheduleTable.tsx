@@ -4,11 +4,10 @@ import { Table, TablePaginationConfig } from 'antd'
 import { useState } from 'react'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants'
 import { IUserDetail } from 'src/redux/types/User/urser'
-import { TableColumn } from 'src/type'
-import { Request } from 'src/type/request'
-import RequestActionCell from './RequestActionCell'
+import { IRequest, TableColumn } from 'src/type'
+import RequestActionCell from '../RequestActionCell'
 
-const columnsTitles: TableColumn<Request>[] = [
+const columnsTitles: TableColumn<IRequest>[] = [
   {
     title: '#',
     dataIndex: 'index',
@@ -93,7 +92,7 @@ const columnsTitles: TableColumn<Request>[] = [
   },
 ]
 
-const fakeData: Request[] = [
+const fakeData: IRequest[] = [
   {
     id: '1',
     requestName: 'Quỳnh Anh_ Busy Schedule 1024',
@@ -233,7 +232,8 @@ const fakeData: Request[] = [
 ]
 
 const PersonalScheduleTable = () => {
-  const [data, setData] = useState<Request[]>(fakeData)
+  const [data, setData] = useState<IRequest[]>(fakeData)
+
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 10,
@@ -241,7 +241,7 @@ const PersonalScheduleTable = () => {
     showSizeChanger: true,
   })
 
-  const getColumns = (): TableColumn<Request>[] => {
+  const getColumns = (): TableColumn<IRequest>[] => {
     return columnsTitles.map((item, index) => {
       return {
         ...item,

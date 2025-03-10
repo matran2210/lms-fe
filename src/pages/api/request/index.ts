@@ -1,8 +1,7 @@
 import { fetcher } from '@services/requestV2'
-import { IResponse } from 'src/type'
-import { IRequestList } from 'src/type/requests'
+import { IRequest, IRequestList, IResponse } from 'src/type'
 
-export class RequestsApi {
+export class RequestAPI {
   static getRequests({
     page_index,
     page_size,
@@ -45,7 +44,7 @@ export class RequestsApi {
     page_index: number
     page_size: number
     params?: Object
-  }): Promise<IResponse<IRequestList>> {
+  }): Promise<IResponse<IRequest>> {
     return fetcher(
       `/request-schedules?page_index=${page_index}&page_size=${page_size}&request_type=TEACHER_SCHEDULE_TIME_OFF`,
       {
