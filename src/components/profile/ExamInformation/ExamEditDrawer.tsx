@@ -41,16 +41,9 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     control,
     handleSubmit,
     reset,
-    setValue,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
-    defaultValues: {
-      examination_subject_id: {
-        label: data?.examination_subject?.examination?.name,
-        value: data?.examination_subject?.examination?.id,
-      },
-    },
   })
 
   const queryClient = useQueryClient()
@@ -89,20 +82,26 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
       examination_subject_id: formData.examination_subject_id?.value,
       note: formData.note,
     }
-    mutate({
-      id: data?.class?.id as string,
-      data: output,
-    })
+    if (isDirty) {
+      mutate({
+        id: data?.class?.id as string,
+        data: output,
+      })
+    } else {
+      setIsOpen(false)
+    }
   }
 
   useEffect(() => {
     if (data) {
-      setValue('examination_subject_id', {
-        label: data?.examination_subject?.examination?.name,
-        value: data?.examination_subject?.examination?.id,
+      reset({
+        examination_subject_id: {
+          label: data?.examination_subject?.examination?.name,
+          value: data?.examination_subject?.id,
+        },
       })
     }
-  }, [data])
+  }, [data, reset])
 
   useEffect(() => {
     isOpen && refetch()
