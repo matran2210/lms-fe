@@ -212,9 +212,11 @@ const MyCourse = () => {
             title="My Course"
             des={
               <div>
-                Here you can find all your courses, each packed with expert
-                lessons, study materials, and interactive exercises. Select a
-                course to start learning!
+                Here you can find all your courses, each packed with{' '}
+                <span className="font-medium">expert lessons</span>,{' '}
+                <span className="font-medium">study materials</span>, and{' '}
+                <span className="font-medium">interactive exercises</span>.
+                Select a course to start learning!
               </div>
             }
           />

@@ -1,3 +1,4 @@
+import { IPopupFormState } from '@components/mycourses/hubspot/PopupLockContent'
 import { useRouter } from 'next/router'
 import React, {
   PropsWithChildren,
@@ -27,6 +28,8 @@ type Context = {
   setSubmitEventTest: React.Dispatch<React.SetStateAction<boolean>>
   showPinnedTrial: boolean
   setShowPinnedTrial: React.Dispatch<React.SetStateAction<boolean>>
+  openPopupCTA: IPopupFormState
+  setOpenPopupCTA: React.Dispatch<React.SetStateAction<IPopupFormState>>
 }
 
 // initContext
@@ -43,6 +46,12 @@ const initContext: Context = {
   setSubmitEventTest: () => {},
   showPinnedTrial: false,
   setShowPinnedTrial: () => {},
+  openPopupCTA: {
+    lockSection: false,
+    ctaUpgrade: false,
+    thankYou: false,
+  },
+  setOpenPopupCTA: () => {},
 }
 
 const CourseContext = createContext<Context>(initContext)
@@ -78,6 +87,15 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    */
   const [showPinnedTrial, setShowPinnedTrial] = useState(false)
 
+  /**
+   * @description state này bằng true khi hiển thị form hubspot
+   */
+  const [openPopupCTA, setOpenPopupCTA] = useState<IPopupFormState>({
+    lockSection: false,
+    ctaUpgrade: false,
+    thankYou: false,
+  })
+
   const router = useRouter()
 
   async function fetchEventTest() {
@@ -99,25 +117,42 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
     }
   }, [])
 
-  return (
-    <CourseContext.Provider
-      value={{
-        openPopupCongrats,
-        setOpenPopupCongrats,
-        setCourseType,
-        courseType,
-        scoreQuestion,
-        setScoreQuestion,
-        setSubmitTest,
-        submitTest,
-        submitEventTest,
-        setSubmitEventTest,
-        setShowPinnedTrial,
-        showPinnedTrial
-      }}
-      {...props}
-    />
+  const contextValue = React.useMemo(
+    () => ({
+      openPopupCongrats,
+      setOpenPopupCongrats,
+      setCourseType,
+      courseType,
+      scoreQuestion,
+      setScoreQuestion,
+      setSubmitTest,
+      submitTest,
+      submitEventTest,
+      setSubmitEventTest,
+      setShowPinnedTrial,
+      showPinnedTrial,
+      openPopupCTA,
+      setOpenPopupCTA,
+    }),
+    [
+      openPopupCongrats,
+      setOpenPopupCongrats,
+      setCourseType,
+      courseType,
+      scoreQuestion,
+      setScoreQuestion,
+      setSubmitTest,
+      submitTest,
+      submitEventTest,
+      setSubmitEventTest,
+      setShowPinnedTrial,
+      showPinnedTrial,
+      openPopupCTA,
+      setOpenPopupCTA,
+    ],
   )
+
+  return <CourseContext.Provider value={contextValue} {...props} />
 }
 
 export function useCourseContext(): Context {

@@ -17,6 +17,7 @@ import { CoursesAPI } from '../../../../api/courses/index'
 import { truncateBySpace } from '@utils/index'
 import SappTooltip from 'src/common/SappTooltip'
 import toast from 'react-hot-toast'
+import { useCourseContext } from '@contexts/index'
 
 interface IProps {
   course_section_type: string
@@ -66,6 +67,8 @@ const CoursePartDetail = () => {
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
 
+  const { setOpenPopupCTA } = useCourseContext()
+
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await CoursesAPI.getPartDetail(
@@ -92,7 +95,10 @@ const CoursePartDetail = () => {
   const handleActive = (item: any) => {
     setActiveItem(item)
     if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
-      toast.error(ERROR_MESSAGE_TRIAL)
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+      })
       setChapterDetail(undefined)
     }
   }
@@ -163,7 +169,10 @@ const CoursePartDetail = () => {
 
   const handleRouterActivity = (id: string, chapter: any) => {
     if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-      toast.error(ERROR_MESSAGE_TRIAL)
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+      })
     } else {
       router.push({
         pathname: `/courses/${router.query.id}/activity/${id}`,
@@ -195,7 +204,10 @@ const CoursePartDetail = () => {
       totalCourseSectionsCompleted !== undefined
     ) {
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-        toast.error(ERROR_MESSAGE_TRIAL)
+        setOpenPopupCTA({
+          lockSection: true,
+          ctaUpgrade: false,
+        })
       } else {
         router.push({
           pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
@@ -211,7 +223,10 @@ const CoursePartDetail = () => {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-        toast.error(ERROR_MESSAGE_TRIAL)
+        setOpenPopupCTA({
+          lockSection: true,
+          ctaUpgrade: false,
+        })
       } else {
         router.push({
           pathname: `/case-study/${topicId}`,
@@ -246,7 +261,10 @@ const CoursePartDetail = () => {
       chapter?.course_section_link_parents?.[0]?.is_preview_locked &&
       chapter?.course_section_type === TEST_TYPE.CHAPTER_TEST
     ) {
-      toast.error(ERROR_MESSAGE_TRIAL)
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+      })
     }
     if (
       chapter?.course_section_link_parents?.[0]?.is_preview_locked &&

@@ -390,6 +390,12 @@ export class CoursesAPI {
   static getQuizAttempt(id: string | string[] | undefined): Promise<any> {
     return fetcher(`/quiz-attempts/answers/${id}`)
   }
+
+  static upgradeNowTrial(id: string | string[] | undefined): Promise<any> {
+    return fetcher(`courses/${id}/trial/upgrage-now`, {
+      method: 'POST',
+    })
+  }
 }
 
 /**
