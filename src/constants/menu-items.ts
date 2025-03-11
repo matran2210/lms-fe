@@ -9,6 +9,12 @@ const MENU_OPTIONS: MenuOption[] = [
   //   type: 'level-1',
   // },
   {
+    name: `${TitleSidebar.MY_CALENDER}`,
+    icon: 'my-calendar',
+    url: PageLink.MY_CALENDAR,
+    type: 'level-1',
+  },
+  {
     name: `${TitleSidebar.COURSES}`,
     icon: 'course',
     url: `${PageLink.COURSES}`,
