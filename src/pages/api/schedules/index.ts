@@ -5,13 +5,10 @@ import {
   ICreateSchedulePayload,
   IResponseSchedule,
 } from 'src/redux/types/Schedule/schedule'
-// const apiURL = 'https://ops-sapp.merket.io/api/v1'
 
 export class SchedulesAPI {
   static get(params: Object): Promise<IResponse<IResponseSchedule[]>> {
-    return fetcher(`${apiURL}/schedules/teachers`, {
-      params: params,
-    })
+    return fetcher(`${apiURL}/schedules/teachers`, { params: params })
   }
 
   static create(
