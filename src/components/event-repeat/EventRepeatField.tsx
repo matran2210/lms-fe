@@ -104,10 +104,7 @@ const EventRepeatField = ({
         label: 'Does not repeat',
         value: EVENT_REPEAT_TYPES.NO_REPEAT,
       },
-      repeat_frequency: {
-        interval: 1,
-        unit: FREQUENCY_UNITS.WEEK,
-      },
+      repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
       end_on: initDate,
     },
@@ -189,7 +186,10 @@ const EventRepeatField = ({
 
         return undefined
       }
-      const recurrence_end_date = value?.end_on || initDate
+
+      const recurrence_end_date = value?.end_on
+        ? dayjs(value?.end_on).endOf('day')
+        : initDate
 
       onChange({
         repeat: value?.repeat_type?.value !== EVENT_REPEAT_TYPES.NO_REPEAT,

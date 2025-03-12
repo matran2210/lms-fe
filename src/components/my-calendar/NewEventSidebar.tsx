@@ -42,9 +42,7 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
   const validationSchema = z.object({
     event_name: z.string().trim().min(1, VALIDATE_REQUIRED),
     range: z
-      .array(z.date(), {
-        invalid_type_error: 'Required',
-      })
+      .array(z.date(), { invalid_type_error: 'Required' })
       .refine((val) => val.length === 2, {
         message: 'Both start and end time are required',
       })
@@ -88,10 +86,15 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
       start_time: formValues.range[0].toISOString(),
       end_time: formValues.range[1].toISOString(),
       description: formValues.description,
-      repeat: formValues.repeat.recurring_schedule,
+      repeat: formValues.repeat?.recurring_schedule,
     } as ICreateSchedulePayload
+    const formattedPayload = Object.fromEntries(
+      Object.entries(payload).filter(
+        ([_, value]) => value !== null && value !== '' && value !== undefined,
+      ),
+    ) as ICreateSchedulePayload
 
-    const response = await SchedulesAPI.create(payload)
+    const response = await SchedulesAPI.create(formattedPayload)
     if (response.success) {
       toast.success(
         'Request created successfully. Please wait for CX Admin to approve your request',
@@ -101,10 +104,7 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
 
   const onClose = () => {
     dispatch(
-      confirmDialog.open({
-        message: CONFIRM_CANCEL,
-        onConfirm: onCancel,
-      }),
+      confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: onCancel }),
     )
   }
 
