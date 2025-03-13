@@ -1242,6 +1242,14 @@ fieldset.form-columns-1 .hs-input {
   @apply p-[68px];
 }
 
+.ellipsis-text {
+  max-width: 150px; /* Adjust width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
 [type='text']:focus,
 [type='email']:focus,
 [type='tel']:focus,

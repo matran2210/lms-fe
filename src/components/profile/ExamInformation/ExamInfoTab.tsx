@@ -12,10 +12,11 @@ import TabLayout from '../TabLayout'
 import ExamEditDrawer from './ExamEditDrawer'
 import ExamInfoActionCell from './ExamInfoActionCell'
 import { Daum } from './type'
+import { Tooltip, Typography } from 'antd'
 
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
-const commonDataCellStyle = 'col text-start py-5 pr-4 whitespace-nowrap'
+const commonDataCellStyle = 'col text-start py-5 pr-6 whitespace-nowrap'
 const headers = [
   'Course',
   'Class Code',
@@ -29,6 +30,7 @@ interface IProp {
   onBack?: (value: SetStateAction<boolean>) => void
 }
 const ExamInfoTab = ({ onBack }: IProp) => {
+  const { Text } = Typography
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState<Daum>()
   const [pageIndex, setPageIndex] = useState<number>(1)
@@ -81,16 +83,34 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                 return (
                   <tr key={row.id ?? index}>
                     <td className={clsx(commonDataCellStyle)}>
-                      {row.class.course.name ?? '-'}
+                      <Tooltip
+                        title={row.class.course.name ?? '-'}
+                        color="white"
+                      >
+                        <div className="ellipsis-text">
+                          {row.class.course.name ?? '-'}
+                        </div>
+                      </Tooltip>
                     </td>
                     <td className={clsx(commonDataCellStyle)}>
-                      {row.class.code ?? '-'}
+                      <Tooltip title={row.class.code ?? '-'} color="white">
+                        <div className="ellipsis-text">
+                          {row.class.code ?? '-'}
+                        </div>
+                      </Tooltip>
                     </td>
                     <td className={clsx(commonDataCellStyle)}>
                       {row.class.course.course_categories[0].name ?? '-'}
                     </td>
                     <td className={clsx(commonDataCellStyle)}>
-                      {row.class.course.subject.name ?? '-'}
+                      <Tooltip
+                        title={row.class.course.subject.name ?? '-'}
+                        color="white"
+                      >
+                        <div className="ellipsis-text ">
+                          {row.class.course.subject.name ?? '-'}
+                        </div>
+                      </Tooltip>
                     </td>
                     <td className={clsx(commonDataCellStyle)}>
                       {row.started_at &&
@@ -99,7 +119,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                       {row.finished_at &&
                         dayjs(row.finished_at).format('DD/MM/YYYY')}
                     </td>
-                    <td className={clsx(commonDataCellStyle)}>
+                    <td className={clsx(commonDataCellStyle, 'min-w-36')}>
                       {row.examination_subject.examination.name ?? '-'}
                     </td>
                     <td
