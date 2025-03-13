@@ -4,6 +4,7 @@ import PersonalScheduleTab from '@components/request/request-tabs/PersonalSchedu
 import TimeOffTab from '@components/request/request-tabs/TimeOffTab'
 import { RequestProvider } from '@contexts/RequestContext'
 import { Tabs } from 'antd'
+import { useRouter } from 'next/router'
 import { TitleSidebar } from 'src/constants'
 
 const breadcrumbs = [
@@ -36,6 +37,11 @@ const tabs = [
 ]
 
 const RequestPage = () => {
+  const router = useRouter()
+  const handleChangeTab = () => {
+    router.push('')
+  }
+
   return (
     <Layout title={TitleSidebar.MY_REQUEST}>
       <PageContainer
@@ -43,7 +49,7 @@ const RequestPage = () => {
         breadcrumbs={breadcrumbs}
       >
         <RequestProvider>
-          <Tabs defaultActiveKey="1" items={tabs} />
+          <Tabs defaultActiveKey="1" items={tabs} onChange={handleChangeTab} />
         </RequestProvider>
       </PageContainer>
     </Layout>

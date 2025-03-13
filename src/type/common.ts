@@ -40,3 +40,14 @@ export interface TableColumn<T, O = OtherColumn> {
   render?: (value: any) => React.ReactNode
   fixed?: FixedType
 }
+
+export interface IQueryParams {
+  page_index: number
+  page_size: number
+  otherParams?: Record<string, any>
+}
+
+export interface IOption {
+  label: string
+  value: string
+}

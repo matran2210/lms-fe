@@ -374,4 +374,5 @@ export const removeHtmlTags = (htmlString?: string) => {
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
 
+export * from './common'
 export * from './formatNumber'

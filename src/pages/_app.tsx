@@ -198,6 +198,21 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           token: {
             fontFamily: 'Roboto, sans-serif',
           },
+          components: {
+            Input: {
+              colorPrimaryHover: '#ffb800',
+              colorPrimary: '#ffb800',
+              borderRadius: 4,
+            },
+            Select: {
+              colorPrimaryHover: '#ffb800',
+              colorPrimary: '#ffb800',
+            },
+            DatePicker: {
+              colorPrimaryHover: '#ffb800',
+              colorPrimary: '#ffb800',
+            },
+          },
         }}
       >
         <PinnedNotifyProvider>

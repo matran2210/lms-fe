@@ -1,11 +1,29 @@
 import SAPPBadge from '@components/base/Badge/SAPPBadge'
-import { requestStatusToBadge, requestTypeToTitle } from '@utils/request'
+import { formatDate } from '@utils/common'
 import { Table, TablePaginationConfig } from 'antd'
-import { useState } from 'react'
-import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants'
-import { IUserDetail } from 'src/redux/types/User/urser'
-import { IRequest, TableColumn } from 'src/type'
+import { Dispatch, SetStateAction, useMemo } from 'react'
+import {
+  DATE_TIME_FORMAT,
+  REQUEST_STATUS,
+  REQUEST_TYPE,
+  requestStatusToBadge,
+  requestTypeToTitle,
+} from 'src/constants'
+import { IUser } from 'src/redux/types/User/urser'
+import {
+  IRequest,
+  ITeacherSchedule,
+  ITeacherWeeklyNorm,
+  TableColumn,
+} from 'src/type'
 import RequestActionCell from '../RequestActionCell'
+
+interface PersonalScheduleTableProps {
+  loading: boolean
+  requests: IRequest[]
+  pagination: TablePaginationConfig
+  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
+}
 
 const columnsTitles: TableColumn<IRequest>[] = [
   {
@@ -14,16 +32,16 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
   {
     title: 'Request name',
-    dataIndex: 'requestName',
+    dataIndex: 'name',
   },
   {
     title: 'Request type',
-    dataIndex: 'requestType',
+    dataIndex: 'type',
     render: (value: REQUEST_TYPE) => requestTypeToTitle[value],
   },
   {
     title: 'Status',
-    dataIndex: 'requestStatus',
+    dataIndex: 'status',
     render: (value: REQUEST_STATUS) => (
       <SAPPBadge
         key={value}
@@ -34,55 +52,63 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
   {
     title: 'Time',
-    dataIndex: 'time',
-    render: (value: string[]) => (
+    dataIndex: 'teacher_schedules',
+    render: (teacherSchedules: ITeacherSchedule[]) => (
       <ul className="flex flex-col gap-1">
-        {value.map((item, index) => (
-          <li key={index}>{item}</li>
+        {teacherSchedules.map(({ schedule }, index) => (
+          <li key={index}>
+            {formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z') +
+              ' - ' +
+              formatDate(schedule.end_date + 'T' + schedule.end_time + 'Z')}
+          </li>
         ))}
       </ul>
     ),
   },
   {
     title: 'Reason',
-    dataIndex: 'reason',
-    render: (value: string[]) => (
+    dataIndex: 'teacher_schedules',
+    render: (teacherSchedules: ITeacherSchedule[]) => (
       <ul className="flex flex-col gap-1">
-        {value.map((item, index) => (
-          <li key={index}>{item}</li>
+        {teacherSchedules.map(({ request_reason }, index) => (
+          <li key={index}>{request_reason}</li>
         ))}
       </ul>
     ),
   },
   {
     title: 'Quantity',
-    dataIndex: 'quantity',
-    render: (value: number[]) => (
-      <ul className="flex flex-col gap-1">
-        {value.map((item, index) => (
-          <li key={index}>{item}</li>
+    dataIndex: 'teacher_weekly_norms',
+    render: (teacher_weekly_norms: ITeacherWeeklyNorm[]) => (
+      <ul className="flex flex-col gap-1 text-center">
+        {teacher_weekly_norms.map(({ max_shift }, index) => (
+          <li key={index}>{max_shift}</li>
         ))}
       </ul>
     ),
   },
   {
     title: 'Approver',
-    dataIndex: 'approver',
-    render: (value: Partial<IUserDetail>) => (
-      <div className="text-secondary">{value?.full_name}</div>
+    dataIndex: 'staff_assignee',
+    render: (value: Partial<IUser>) => (
+      <div className="text-secondary">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Creator',
     dataIndex: 'creator',
-    render: (value: Partial<IUserDetail>) => (
-      <div className="text-secondary">{value?.full_name}</div>
+    render: (value: Partial<IUser>) => (
+      <div className="text-secondary">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Create date',
-    dataIndex: 'createDate',
-    render: (value: string) => <div className="text-secondary">{value}</div>,
+    dataIndex: 'created_at',
+    render: (value: string) => (
+      <div className="text-secondary">
+        {formatDate(value, DATE_TIME_FORMAT)}
+      </div>
+    ),
   },
   {
     title: '',
@@ -92,180 +118,37 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
 ]
 
-const fakeData: IRequest[] = [
-  {
-    id: '1',
-    requestName: 'Quỳnh Anh_ Busy Schedule 1024',
-    requestType: REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
-    requestStatus: REQUEST_STATUS.PENDING,
-    time: [
-      '07/11/2024 - 09/11/2024',
-      '20/11/2024 13:45-23:00',
-      '30/11/2024 00:00 - 23:00',
-    ],
-    reason: ['Đi du lịch', 'Đi thi bằng Ô tô', 'Đi công tác'],
-    quantity: [],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Ân Nguyễn Quỳnh Anh' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '2',
-    requestName: 'Quỳnh Anh_ Busy Schedule 1024',
-    requestType: REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
-    requestStatus: REQUEST_STATUS.REJECT,
-    time: ['07/11/2024 - 07/12/2024', '08/12/2024 - 08/01/2025'],
-    reason: [],
-    quantity: [4, 3],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Mai Thu Huyền' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '3',
-    requestName: 'Quỳnh Anh_ Busy Schedule 1024',
-    requestType: REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
-    requestStatus: REQUEST_STATUS.CANCELLED,
-    time: ['07/11/2024 - 09/11/2024', '20/11/2024 13:45-23:00'],
-    reason: ['Đi du lịch', 'Đi học văn bằng 2'],
-    quantity: [],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Mai Thu Huyền' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '4',
-    requestName: 'Quỳnh Anh_ Busy Schedule 1024',
-    requestType: REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
-    requestStatus: REQUEST_STATUS.PENDING,
-    time: [
-      '07/11/2024 - 09/11/2024',
-      '20/11/2024 13:45-23:00',
-      '30/11/2024 00:00 - 23:00',
-    ],
-    reason: ['Đi du lịch', 'Đi thi bằng Ô tô', 'Đi công tác'],
-    quantity: [],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Mai Thu Huyền' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '5',
-    requestName: 'Quỳnh Anh_ Weekly Norm 1024',
-    requestType: REQUEST_TYPE.TEACHER_WEEKLY_NORMS,
-    requestStatus: REQUEST_STATUS.APPROVED,
-    time: ['07/11/2024 - 07/12/2024', '08/12/2024 - 08/01/2025'],
-    reason: [],
-    quantity: [5, 4],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Mai Thu Huyền' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '6',
-    requestName: 'Quỳnh Anh_ Weekly Norm 1024',
-    requestType: REQUEST_TYPE.TEACHER_WEEKLY_NORMS,
-    requestStatus: REQUEST_STATUS.APPROVED,
-    time: ['07/11/2024 - 07/12/2024', '08/12/2024 - 08/01/2025'],
-    reason: [],
-    quantity: [5, 4],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Mai Thu Huyền' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '7',
-    requestName: 'Quỳnh Anh_ Busy Schedule 1024',
-    requestType: REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
-    requestStatus: REQUEST_STATUS.APPROVED,
-    time: ['07/11/2024 - 09/11/2024', '20/11/2024 13:45-23:00'],
-    reason: ['Đi du lịch', 'Đi học văn bằng 2'],
-    quantity: [],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Ân Nguyễn Quỳnh Anh' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '8',
-    requestName: 'Quỳnh Anh_ Busy Schedule 1024',
-    requestType: REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
-    requestStatus: REQUEST_STATUS.REJECT,
-    time: [
-      '07/11/2024 - 09/11/2024',
-      '20/11/2024 13:45-23:00',
-      '30/11/2024 00:00 - 23:00',
-    ],
-    reason: ['Đi du lịch', 'Đi thi bằng Ô tô', 'Đi công tác'],
-    quantity: [],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Ân Nguyễn Quỳnh Anh' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '9',
-    requestName: 'Quỳnh Anh_ Weekly Norm 1024',
-    requestType: REQUEST_TYPE.TEACHER_WEEKLY_NORMS,
-    requestStatus: REQUEST_STATUS.APPROVED,
-    time: [
-      '07/11/2024 - 09/11/2024',
-      '20/11/2024 13:45-23:00',
-      '30/11/2024 00:00 - 23:00',
-    ],
-    reason: [],
-    quantity: [4, 5, 3],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Ân Nguyễn Quỳnh Anh' },
-    createDate: ['07/11/2023'],
-  },
-  {
-    id: '10',
-    requestName: 'Quỳnh Anh_ Weekly Norm 1024',
-    requestType: REQUEST_TYPE.TEACHER_WEEKLY_NORMS,
-    requestStatus: REQUEST_STATUS.CANCELLED,
-    time: ['07/11/2024 - 09/11/2024', '20/11/2024 13:45-23:00'],
-    reason: [],
-    quantity: [2, 3],
-    approver: { id: '1', full_name: 'Nguyễn Hoàng Nguyên' },
-    creator: { id: '2', full_name: 'Ân Nguyễn Quỳnh Anh' },
-    createDate: ['07/11/2023'],
-  },
-]
-
-const PersonalScheduleTable = () => {
-  const [data, setData] = useState<IRequest[]>(fakeData)
-
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: 1,
-    pageSize: 10,
-    total: 10,
-    showSizeChanger: true,
+const PersonalScheduleTable = ({
+  loading,
+  requests,
+  pagination,
+  setPagination,
+}: PersonalScheduleTableProps) => {
+  const { current, pageSize } = pagination
+  const tableColumns = columnsTitles.map((item, index) => {
+    return {
+      ...item,
+      key: index,
+    }
   })
 
-  const getColumns = (): TableColumn<IRequest>[] => {
-    return columnsTitles.map((item, index) => {
-      return {
-        ...item,
-        key: index,
-      }
-    })
-  }
-
-  const getTableData = () => {
-    return data.map((item, index) => {
-      return {
-        ...item,
-        index: index + 1,
-      }
-    })
-  }
+  const tableData = useMemo(() => {
+    return requests.map((item, index) => ({
+      ...item,
+      index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
+      creator: item.staff_request || item.user_request,
+    }))
+  }, [requests, current, pageSize])
 
   return (
     <Table
+      loading={loading}
       rowKey={(record) => record.id}
-      columns={getColumns()}
-      dataSource={getTableData()}
+      columns={tableColumns}
+      dataSource={tableData}
       scroll={{ x: 'max-content' }}
       pagination={pagination}
+      onChange={setPagination}
     />
   )
 }

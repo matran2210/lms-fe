@@ -2,27 +2,116 @@ import { Plus } from '@assets/icons'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
-import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
+import SAPPSelect from '@components/base/select/SAPPSelect'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
 import { useRequestContext } from '@contexts/RequestContext'
+import { RequestAPI } from '@pages/api/request'
+import { cleanParams } from '@utils/common'
+import { TablePaginationConfig } from 'antd'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   OPTIONS_REQUEST_STATUS,
-  OPTIONS_REQUEST_TYPE,
+  OPTIONS_TIME_OFF_REQUEST_TYPE,
+  REQUEST_TYPE,
 } from 'src/constants/request'
-import { IRequestFilterForm } from 'src/type'
+import { IRequest, IRequestFilterForm } from 'src/type'
 import TimeOffTable from '../request-tables/TimeOffTable'
 
 const TimeOffTab = () => {
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [requests, setRequests] = useState<IRequest[]>([])
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    defaultCurrent: 1,
+    defaultPageSize: 10,
+    showSizeChanger: true,
+  })
   const { setOpenAddModal } = useRequestContext()
+  const router = useRouter()
 
-  const { control, reset } = useForm<IRequestFilterForm>()
+  const { control, getValues, reset } = useForm<IRequestFilterForm>()
 
-  const handleFilter = () => {}
+  const getValuesFilter = () => ({
+    request_name: getValues('request_name')?.trim(),
+    type: getValues('type'),
+    status: getValues('status'),
+    from_date: getValues('rangeDate')?.[0]?.toISOString(),
+    to_date: getValues('rangeDate')?.[1]?.toISOString(),
+  })
+
+  const getParams = () => ({
+    request_name: router.query?.request_name,
+    type: router.query?.type,
+    status: router.query?.status,
+    from_date: router.query?.from_date,
+    to_date: router.query?.to_date,
+  })
+
+  const fetchRequests = async (
+    page_index: number,
+    page_size: number,
+    otherParams: Record<string, any> = {},
+  ) => {
+    otherParams['type'] = otherParams['type']
+      ? [otherParams['type']]
+      : [REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF, REQUEST_TYPE.TEACHING_MODE]
+
+    setIsLoading(true)
+    try {
+      const res = await RequestAPI.getRequests({
+        page_index,
+        page_size,
+        otherParams,
+      })
+
+      if (res.success) {
+        const data = res.data
+        setRequests(data.results)
+        setPagination({
+          ...pagination,
+          current: data.meta_data.page_index,
+          pageSize: data.meta_data.page_size,
+          total: data.meta_data.total_records,
+        })
+      }
+    } catch (error) {
+      // Handled by axios interceptor
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    const cleanedParams = !isFirstLoad ? cleanParams(getParams()) : {} // Refetch params in first load
+    handleChangeParams(cleanedParams)
+    fetchRequests(
+      pagination?.current || 1,
+      pagination?.pageSize || 10,
+      cleanedParams,
+    )
+
+    isFirstLoad && setIsFirstLoad(false)
+  }, [pagination.current, pagination.pageSize])
+
+  const handleChangeParams = (params: Record<string, any>) => {
+    const queryString = new URLSearchParams(params).toString()
+
+    router.replace(`?${queryString}`)
+  }
+
+  const handleFilter = () => {
+    const cleanedParams = cleanParams(getValuesFilter())
+    handleChangeParams(cleanedParams)
+    fetchRequests(1, 10, cleanedParams)
+  }
 
   const handleResetFilter = () => {
     reset()
+    router.push('')
+    fetchRequests(1, 10)
   }
 
   const handleOpenAddModal = () => {
@@ -34,32 +123,36 @@ const TimeOffTab = () => {
       <div className="flex flex-col gap-4">
         <FilterGrid>
           <HookFormTextField
-            name="search"
+            name="request_name"
             control={control}
             placeholder="Search name"
-            inputClassName="rounded"
+            inputClassName="!h-10 rounded"
           />
 
-          <SappHookFormSelect
-            name="request-type"
+          <SAPPSelect
+            name="type"
             control={control}
             placeholder="Request type"
-            options={OPTIONS_REQUEST_TYPE}
+            options={OPTIONS_TIME_OFF_REQUEST_TYPE}
           />
 
-          <SappHookFormSelect
-            name="request-status"
+          <SAPPSelect
+            name="status"
             control={control}
             placeholder="Status"
             options={OPTIONS_REQUEST_STATUS}
           />
 
-          <SAPPRangePicker name="range-date" control={control} />
+          <SAPPRangePicker name="rangeDate" control={control} />
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
             <ButtonSecondary title="Reset" onClick={handleResetFilter} />
-            <ButtonPrimary title="Search" onClick={handleFilter} />
+            <ButtonPrimary
+              title="Search"
+              onClick={handleFilter}
+              loading={isLoading}
+            />
           </div>
           <div>
             <ButtonPrimary
@@ -71,7 +164,13 @@ const TimeOffTab = () => {
           </div>
         </div>
       </div>
-      <TimeOffTable />
+
+      <TimeOffTable
+        loading={isLoading}
+        requests={requests}
+        pagination={pagination}
+        setPagination={setPagination}
+      />
     </div>
   )
 }

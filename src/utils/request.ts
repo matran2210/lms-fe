@@ -13,9 +13,9 @@ export const requestStatusToBadge = {
     type: 'error',
     label: 'Rejected',
   },
-  [REQUEST_STATUS.CANCELLED]: {
+  [REQUEST_STATUS.CANCEL]: {
     type: 'default',
-    label: 'Cancelled',
+    label: 'Canceled',
   },
 } as const
 

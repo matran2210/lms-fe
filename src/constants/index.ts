@@ -451,16 +451,7 @@ export enum TEST_ATTEMPT_TYPE {
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
 
-export enum BADGE_TYPES {
-  error = 'error',
-  warning = 'warning',
-  info = 'info',
-  success = 'success',
-  default = 'default',
-}
-
-export const DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm'
-
+export * from './common'
 export * from './localStorageKeys'
 export * from './request'
 export * from './socketEvents'

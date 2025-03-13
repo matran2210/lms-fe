@@ -34,7 +34,7 @@ const SAPPRangePicker = ({
   formatDate = 'DD/MM/YYYY',
   suffixIcon,
   needConfirm = false,
-  size = 'large',
+  size,
 }: SAPPRangePickerProps) => {
   return (
     <Controller
@@ -46,7 +46,6 @@ const SAPPRangePicker = ({
         return (
           <>
             <RangePicker
-              style={{ width: '100%' }}
               status={fieldState.error ? 'error' : undefined}
               placeholder={placeholder}
               ref={field.ref}
@@ -58,10 +57,7 @@ const SAPPRangePicker = ({
                 field.value?.[0] ? dayjs(field.value?.[0]) : null,
                 field.value?.[1] ? dayjs(field.value?.[1]) : null,
               ]}
-              className={clsx(
-                'px-4 py-3 focus-within:border-primary hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none',
-                className,
-              )}
+              className={clsx('h-10 w-full', className)}
               allowClear={allowClear}
               disabled={disabled}
               suffixIcon={suffixIcon}

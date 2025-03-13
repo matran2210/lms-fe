@@ -1,3 +1,5 @@
+import { IOption } from 'src/type'
+
 export enum REQUEST_TYPE {
   TEACHING_MODE = 'TEACHING_MODE',
   TEACHER_SCHEDULE_BUSY = 'TEACHER_SCHEDULE_BUSY',
@@ -6,39 +8,84 @@ export enum REQUEST_TYPE {
   TEACHER_WEEKLY_NORMS = 'TEACHER_WEEKLY_NORMS',
 }
 
-export const OPTIONS_REQUEST_TYPE = [
+export enum REQUEST_STATUS {
+  PENDING = 'PENDING',
+  REJECT = 'REJECT',
+  CANCEL = 'CANCEL',
+  APPROVED = 'APPROVED',
+}
+
+export const requestStatusToTitle = {
+  [REQUEST_STATUS.APPROVED]: 'Approved',
+  [REQUEST_STATUS.PENDING]: 'Pending',
+  [REQUEST_STATUS.REJECT]: 'Rejected',
+  [REQUEST_STATUS.CANCEL]: 'Canceled',
+} as const
+
+export const requestTypeToTitle = {
+  [REQUEST_TYPE.TEACHING_MODE]: 'Xin đổi hình thức',
+  [REQUEST_TYPE.TEACHER_SCHEDULE_BUSY]: 'Busy schedule',
+  [REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF]: 'Lịch nghỉ',
+  [REQUEST_TYPE.TEACHER_WEEKLY_NORMS]: 'Weekly norm',
+  [REQUEST_TYPE.TEACHER_OTHER]: 'Lịch khác',
+} as const
+
+export const requestStatusToBadge = {
+  [REQUEST_STATUS.APPROVED]: {
+    type: 'success',
+    label: requestStatusToTitle[REQUEST_STATUS.APPROVED],
+  },
+  [REQUEST_STATUS.PENDING]: {
+    type: 'warning',
+    label: requestStatusToTitle[REQUEST_STATUS.PENDING],
+  },
+  [REQUEST_STATUS.REJECT]: {
+    type: 'error',
+    label: requestStatusToTitle[REQUEST_STATUS.REJECT],
+  },
+  [REQUEST_STATUS.CANCEL]: {
+    type: 'default',
+    label: requestStatusToTitle[REQUEST_STATUS.CANCEL],
+  },
+} as const
+
+export const OPTIONS_PERSONAL_SCHEDULE_REQUEST_TYPE: IOption[] = [
   {
     label: 'Busy schedule',
     value: REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
   },
   {
     label: 'Weekly norm',
-    value: REQUEST_TYPE.TEACHER_OTHER,
+    value: REQUEST_TYPE.TEACHER_WEEKLY_NORMS,
   },
 ]
 
-export enum REQUEST_STATUS {
-  PENDING = 'PENDING',
-  REJECT = 'REJECT',
-  CANCELLED = 'CANCELLED',
-  APPROVED = 'APPROVED',
-}
-
-export const OPTIONS_REQUEST_STATUS = [
+export const OPTIONS_TIME_OFF_REQUEST_TYPE: IOption[] = [
   {
-    label: 'Pending',
+    label: 'Xin nghỉ',
+    value: REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF,
+  },
+  {
+    label: 'Xin đổi hình thức',
+    value: REQUEST_TYPE.TEACHING_MODE,
+  },
+]
+
+export const OPTIONS_REQUEST_STATUS: IOption[] = [
+  {
+    label: requestStatusToTitle[REQUEST_STATUS.PENDING],
     value: REQUEST_STATUS.PENDING,
   },
   {
-    label: 'Reject',
+    label: requestStatusToTitle[REQUEST_STATUS.REJECT],
     value: REQUEST_STATUS.REJECT,
   },
   {
-    label: 'Approved',
+    label: requestStatusToTitle[REQUEST_STATUS.APPROVED],
     value: REQUEST_STATUS.APPROVED,
   },
   {
-    label: 'Cancelled',
-    value: REQUEST_STATUS.CANCELLED,
+    label: requestStatusToTitle[REQUEST_STATUS.CANCEL],
+    value: REQUEST_STATUS.CANCEL,
   },
 ]
