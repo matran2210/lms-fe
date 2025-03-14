@@ -52,8 +52,8 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
       return {
         id: item.id,
         title: item.name,
-        startDate: new Date(`${item.start_date}T${item.start_time}`),
-        endDate: new Date(`${item.end_date}T${item.end_time}`),
+        startDate: new Date(`${item.start_date}T${item.start_time}Z`),
+        endDate: new Date(`${item.end_date}T${item.end_time}Z`),
         type: EVENT_TYPES_RESPONSE[item.teacher_type],
         description: item.description,
         classroomAddress: item.classroom_address,
@@ -129,7 +129,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
         events={schedulesData?.data || []}
         onOpenDetail={onOpenDetail}
         onOpenCreate={onOpenCreate}
-        weeklyNorms={[]}
+        norms={[]}
         onRefetchAPI={handleRefetch}
       />
     </>
