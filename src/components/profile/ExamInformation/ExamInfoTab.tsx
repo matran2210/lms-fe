@@ -4,15 +4,15 @@ import SappTable from '@components/base/SappTable'
 import LoadingRow from '@components/common/LoadingRow'
 import { UserKey } from '@pages/api/queryKey'
 import { UserApi } from '@pages/api/user'
+import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import React, { SetStateAction, useState } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import TabLayout from '../TabLayout'
 import ExamEditDrawer from './ExamEditDrawer'
 import ExamInfoActionCell from './ExamInfoActionCell'
 import { Daum } from './type'
-import { Tooltip, Typography } from 'antd'
 
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
@@ -30,15 +30,15 @@ interface IProp {
   onBack?: (value: SetStateAction<boolean>) => void
 }
 const ExamInfoTab = ({ onBack }: IProp) => {
-  const { Text } = Typography
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState<Daum>()
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
+  const queryClient = useQueryClient()
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, isSuccess } = useQuery({
     // Fetch lại data khi filter thay đổi
     queryKey: [UserKey.ExamList],
     queryFn: () => {
@@ -79,6 +79,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                 ))}
               </>
             ) : (
+              isSuccess &&
               data?.data?.map((row, index) => {
                 return (
                   <tr key={row.id ?? index}>
@@ -163,6 +164,8 @@ const ExamInfoTab = ({ onBack }: IProp) => {
           isOpen={isDrawerOpen}
           setIsOpen={setIsDrawerOpen}
           data={currentRow}
+          classId={currentRow.class.id}
+          onSuccess={() => queryClient.invalidateQueries(UserKey.ExamList)}
         />
       )}
     </React.Fragment>

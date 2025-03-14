@@ -3,7 +3,7 @@ import { fetcher, fetchFormData } from '@services/requestV2'
 import { AxiosPromise } from 'axios'
 import { IResponse } from 'src/redux/types'
 import { ExaminationsResponse } from 'src/redux/types/Course/MyCourse/ExamInformation'
-import { IQuizResultList } from 'src/type'
+import { ExamInformation, IQuizResultList } from 'src/type'
 
 export class ClassAPI {
   static getAllResultOfQuiz(
@@ -37,7 +37,7 @@ export class ClassAPI {
     })
   }
 
-  static getExamInfo(id: string): Promise<IResponse<any>> {
+  static getExamInfo(id: string): Promise<ExamInformation> {
     return fetcher(`${apiURL}/classes/${id}/exam-info`, { method: 'GET' })
   }
 }

@@ -6,14 +6,13 @@ import HookFormSelect from '@components/base/select/HookFormSelect'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, GetProp, Upload, UploadFile, UploadProps, message } from 'antd'
 import { RcFile } from 'antd/es/upload'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation } from 'react-query'
 import { zodMsg } from 'src/constants'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { ClassAPI } from 'src/pages/api/class'
-import { UserKey } from 'src/pages/api/queryKey'
 import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
 import { z } from 'zod'
 
@@ -21,12 +20,20 @@ interface Iprops {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   data: any
+  classId: string
+  onSuccess?: () => void
 }
 
 const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
-const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
+const ExamEditDrawer = ({
+  isOpen,
+  setIsOpen,
+  data,
+  classId,
+  onSuccess,
+}: Iprops) => {
   const validationSchema = z.object({
     note: z.any().optional(),
     examination_subject_id: z.object(
@@ -52,9 +59,8 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   } = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
   })
-  const fileList = watch('note')
 
-  const queryClient = useQueryClient()
+  const fileList = watch('note')
 
   const getUploadProps = (onChange: (file: RcFile[]) => void): UploadProps => ({
     beforeUpload: (file) => {
@@ -74,9 +80,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     },
   })
 
-  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(
-    data?.class?.id as string,
-  )
+  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(classId)
 
   const { mutate, isLoading: isChangingLoad } = useMutation({
     mutationFn: ({
@@ -88,16 +92,16 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     }) => {
       const formData = new FormData()
       formData.append('examination_subject_id', examination_subject_id)
-      formData.append('note', note[0] as FileType)
+      note && formData.append('note', note[0] as FileType)
 
-      return ClassAPI.changeExamDate(data?.class?.id, formData)
+      return ClassAPI.changeExamDate(classId, formData)
     },
     onSuccess: (res) => {
-      if (res.data.data.success) {
-        toast.success(res.data.data.success)
+      if (res.data.success) {
+        toast.success(res.data.data.message)
         setIsOpen(false)
-        queryClient.invalidateQueries(UserKey.ExamList)
         reset()
+        onSuccess?.()
       }
     },
   })
@@ -119,7 +123,10 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   }
 
   useEffect(() => {
-    isOpen && refetch()
+    if (isOpen) {
+      reset({})
+      refetch()
+    }
   }, [isOpen, refetch])
 
   const closeModal = () => {
@@ -129,7 +136,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
 
   return (
     <SappDrawerV2
-      open={data?.examination_subject && isOpen}
+      open={isOpen}
       title="Change my exam date"
       handleCancel={closeModal}
     >
@@ -137,30 +144,31 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
         <Controller
           control={control}
           name="examination_subject_id"
-          render={({ field: { onChange, value } }) => (
-            <div>
-              <label className="mb-2 block text-base font-medium">
-                <span>{'New Exam Date'}</span>
-                <span className="ml-2 text-red-500">*</span>
-              </label>
-              {errors.examination_subject_id && (
-                <p className="mb-2 text-red-500">
-                  {errors.examination_subject_id?.message}
-                </p>
-              )}
-              <HookFormSelect
-                classParent="w-full md:max-w-full"
-                placeholder="Exam Date"
-                options={options}
-                required
-                onChange={(e) => {
-                  return onChange(e === undefined || null ? {} : e)
-                }}
-                value={value}
-                onMenuScrollToBottom={hasNextPage && fetchNextPage}
-              />
-            </div>
-          )}
+          render={({ field: { onChange } }) => {
+            return (
+              <div>
+                <label className="mb-2 block text-base font-medium">
+                  <span>{'New Exam Date'}</span>
+                  <span className="ml-2 text-red-500">*</span>
+                </label>
+                {errors.examination_subject_id && (
+                  <p className="mb-2 text-red-500">
+                    {errors.examination_subject_id?.message}
+                  </p>
+                )}
+                <HookFormSelect
+                  classParent="w-full md:max-w-full"
+                  placeholder="Exam Date"
+                  options={{ options }}
+                  required
+                  onChange={(e) => {
+                    return onChange(e === undefined || null ? {} : e)
+                  }}
+                  onMenuScrollToBottom={hasNextPage && fetchNextPage}
+                />
+              </div>
+            )
+          }}
         />
         <div>
           <label className="mb-2 block text-base font-medium">
@@ -177,8 +185,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
                 fileList={fileList}
               >
                 <Button icon={<UploadOutlined />}>
-                  Please upload an image file to explain why you need to change
-                  your exam date.
+                  Please upload your exam registration evidence.
                 </Button>
               </Upload>
             )}

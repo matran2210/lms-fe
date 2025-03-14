@@ -13,7 +13,7 @@ interface ISelectExamPopup {
 
 const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const router = useRouter()
-  const [selectedExam, setSelectedExam] = useState<null | string>(null)
+  const [selectedExam, setSelectedExam] = useState<boolean>(false)
   const [examModal, setExamModal] = useState(false)
 
   const { exams, hasNextPage, fetchNextPage } = useSelectExams(
@@ -27,13 +27,11 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
 
   useEffect(() => {
     setExamModal(
-      courseData?.pages[0].courseDetail.status ===
-        CLASS_USER_STATUS.READY_TO_LEARN &&
-        courseData?.pages[0].data.course_type === 'TRIAL_COURSE' &&
-        !courseData?.pages[0].courseDetail.exam?.id &&
-        [...(options ?? [])].length > 0,
+      courseData?.pages[0].courseDetail.remind_choosing_exam &&
+        (exams?.metadata?.total_records ?? 0) > 0,
     )
-  }, [courseData?.pages])
+  }, [courseData?.pages, exams?.metadata?.total_records])
+
   return (
     <Modal
       open={examModal}
