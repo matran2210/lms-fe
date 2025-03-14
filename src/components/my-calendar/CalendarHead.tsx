@@ -56,7 +56,7 @@ const CalendarHead = ({ onSearch, onOpenCreate }: IProps) => {
             <HookFormTextField
               name="event_name"
               control={control}
-              placeholder="Search by name"
+              placeholder="Search event name"
               className="h-10 max-w-[326px]"
               inputClassName="h-10 font-inter text-xsm font-medium leading-[14px] tracking-normal text-gray-11"
             />
