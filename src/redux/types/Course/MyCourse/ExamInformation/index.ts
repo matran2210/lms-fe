@@ -3,6 +3,7 @@ import { UploadFile } from 'antd'
 export interface ExaminationsResponse {
   metadata: Metadata
   data: Exam[]
+  current_exam_name: string
 }
 
 export interface Metadata {

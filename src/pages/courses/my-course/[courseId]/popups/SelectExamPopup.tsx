@@ -1,11 +1,12 @@
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import HookFormSelect from '@components/base/select/HookFormSelect'
+import { ClassAPI } from '@pages/api/class'
 import { Modal } from 'antd'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import useSelectExams from 'src/hooks/useSelectExams'
-import { CLASS_USER_STATUS } from 'src/type'
 
 interface ISelectExamPopup {
   courseData: any
@@ -13,12 +14,39 @@ interface ISelectExamPopup {
 
 const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const router = useRouter()
-  const [selectedExam, setSelectedExam] = useState<boolean>(false)
+  const [selectedExam, setSelectedExam] = useState<null | {
+    label: string
+    value: string
+  }>(null)
   const [examModal, setExamModal] = useState(false)
 
   const { exams, hasNextPage, fetchNextPage } = useSelectExams(
     router.query.courseId as string,
   )
+
+  const confirmExamDate = async () => {
+    const formData = new FormData()
+    if (selectedExam) {
+      if (selectedExam.value === 'NOT_DECIDED') {
+        formData.append('not_decided', 'true')
+      } else {
+        formData.append('examination_subject_id', selectedExam.value)
+        formData.append('not_decided', 'false')
+      }
+    }
+    try {
+      if (router.query.courseId) {
+        const res = await ClassAPI.changeExamDate(
+          router.query.courseId as string,
+          formData,
+        )
+        if (res.data.success) {
+          setExamModal(false)
+          toast.success(res.data.data.message)
+        }
+      }
+    } catch {}
+  }
 
   const options = exams?.data?.map((exam) => ({
     label: exam.examination.name,
@@ -48,9 +76,15 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
         <HookFormSelect
           classParent="w-full md:max-w-full"
           placeholder="Exam Date"
-          options={[...(options ?? [])]}
-          onChange={(option: { label: string; value: string | null }) => {
-            option !== null && setSelectedExam(option.value)
+          options={[
+            ...(options ?? []),
+            {
+              label: 'Not decided yet',
+              value: 'NOT_DECIDED',
+            },
+          ]}
+          onChange={(option: { label: string; value: string }) => {
+            option !== null && setSelectedExam(option)
           }}
           onMenuScrollToBottom={hasNextPage && fetchNextPage}
           className="mt-3"
@@ -62,7 +96,11 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
             className="pl-0 text-base"
             onClick={() => setExamModal(false)}
           />
-          <ButtonPrimary title="Confirm Exam" className="h-12 text-base" />
+          <ButtonPrimary
+            title="Confirm Exam"
+            className="h-12 text-base"
+            onClick={confirmExamDate}
+          />
         </div>
       </div>
     </Modal>

@@ -4,7 +4,15 @@ import SappButton from '@components/base/button/SappButton'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, GetProp, Upload, UploadFile, UploadProps, message } from 'antd'
+import {
+  Button,
+  GetProp,
+  Popconfirm,
+  Upload,
+  UploadFile,
+  UploadProps,
+  message,
+} from 'antd'
 import { RcFile } from 'antd/es/upload'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -35,7 +43,7 @@ const ExamEditDrawer = ({
   onSuccess,
 }: Iprops) => {
   const validationSchema = z.object({
-    note: z.any().optional(),
+    note: z.any(),
     examination_subject_id: z.object(
       {
         label: z
@@ -101,7 +109,7 @@ const ExamEditDrawer = ({
         toast.success(res.data.data.message)
         setIsOpen(false)
         reset()
-        onSuccess?.()
+        onSuccess && onSuccess()
       }
     },
   })
@@ -144,7 +152,7 @@ const ExamEditDrawer = ({
         <Controller
           control={control}
           name="examination_subject_id"
-          render={({ field: { onChange } }) => {
+          render={({ field: { onChange, value } }) => {
             return (
               <div>
                 <label className="mb-2 block text-base font-medium">
@@ -159,11 +167,13 @@ const ExamEditDrawer = ({
                 <HookFormSelect
                   classParent="w-full md:max-w-full"
                   placeholder="Exam Date"
-                  options={{ options }}
+                  options={options}
+                  isDisabled={(options?.length ?? 0) <= 0}
                   required
                   onChange={(e) => {
                     return onChange(e === undefined || null ? {} : e)
                   }}
+                  value={value}
                   onMenuScrollToBottom={hasNextPage && fetchNextPage}
                 />
               </div>
@@ -171,7 +181,7 @@ const ExamEditDrawer = ({
           }}
         />
         <div>
-          <label className="mb-2 block text-base font-medium">
+          <label className="required mb-2 block text-base font-medium">
             <span>{'Note'}</span>
           </label>
           <Controller
@@ -183,6 +193,7 @@ const ExamEditDrawer = ({
                 multiple={false}
                 maxCount={1}
                 fileList={fileList}
+                disabled={(options?.length ?? 0) <= 0}
               >
                 <Button icon={<UploadOutlined />}>
                   Please upload your exam registration evidence.
@@ -194,12 +205,28 @@ const ExamEditDrawer = ({
       </div>
       <div className="absolute bottom-6 right-8">
         <ButtonText title="Cancel" onClick={closeModal} size={'medium'} />
-        <SappButton
-          onClick={handleSubmit(onSubmit)}
-          size="medium"
-          title={'Save'}
-          loading={isChangingLoad}
-        />
+        <Popconfirm
+          title=" Are you sure?"
+          description={`Your learning progress in the Revision class for the ${exams?.current_exam_name} exam cannot be saved. Do you want to continue making changes?`}
+          onCancel={() => setIsOpen(false)}
+          okText="Change anyway"
+          cancelText="No"
+          onConfirm={handleSubmit(onSubmit)}
+          disabled={exams?.current_exam_name === ''}
+          okButtonProps={{ loading: isChangingLoad }}
+        >
+          <SappButton
+            disabled={(options?.length ?? 0) <= 0}
+            size="medium"
+            title={'Save'}
+            loading={isChangingLoad}
+            onClick={
+              exams?.current_exam_name === ''
+                ? handleSubmit(onSubmit)
+                : undefined
+            }
+          />
+        </Popconfirm>
       </div>
     </SappDrawerV2>
   )

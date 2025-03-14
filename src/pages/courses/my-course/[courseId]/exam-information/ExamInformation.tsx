@@ -106,9 +106,11 @@ const ExamInformation = () => {
                       setIsOpen={setIsOpen}
                       data={data}
                       classId={router.query.courseId as string}
-                      onSuccess={() =>
-                        queryClient.invalidateQueries(ClassKey.ExamInfo)
-                      }
+                      onSuccess={() => {
+                        queryClient.invalidateQueries({
+                          queryKey: [ClassKey.ExamInfo],
+                        })
+                      }}
                     />
                   </>
                 )
