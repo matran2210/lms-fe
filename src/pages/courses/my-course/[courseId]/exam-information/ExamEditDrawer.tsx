@@ -66,7 +66,13 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
         note: string
       }
     }) => {
-      return ClassAPI.changeExamDate(value?.id, value?.data)
+      const formData = new FormData()
+      formData.append(
+        'examination_subject_id',
+        data.examination_subject_id?.value,
+      )
+      formData.append('note', data.note)
+      return ClassAPI.changeExamDate(value?.id, formData)
     },
     onSuccess: () => {
       setIsOpen(false)
@@ -74,6 +80,7 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
       reset()
     },
   })
+
   const options = exams?.data?.map((exam) => ({
     label: exam.examination.name,
     value: exam.id,

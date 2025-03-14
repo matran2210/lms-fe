@@ -1,3 +1,5 @@
+import { UploadFile } from 'antd'
+
 export interface ExaminationsResponse {
   metadata: Metadata
   data: Exam[]
@@ -34,7 +36,7 @@ export interface ExaminationForm {
     label: string
     value: string
   }
-  note: string
+  note: UploadFile[]
 }
 
 export interface ExaminationPut {

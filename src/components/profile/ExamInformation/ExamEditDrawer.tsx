@@ -1,10 +1,12 @@
+import { UploadOutlined } from '@ant-design/icons'
 import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Button, GetProp, Upload, UploadFile, UploadProps, message } from 'antd'
+import { RcFile } from 'antd/es/upload'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
@@ -21,9 +23,12 @@ interface Iprops {
   data: any
 }
 
+const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
+
 const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
   const validationSchema = z.object({
-    note: z.string().optional(),
+    note: z.any().optional(),
     examination_subject_id: z.object(
       {
         label: z
@@ -42,36 +47,54 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
-    defaultValues: {
-      examination_subject_id: {
-        label: data?.examination_subject?.examination?.name,
-        value: data?.examination_subject?.examination?.id,
-      },
-    },
   })
+  const fileList = watch('note')
 
   const queryClient = useQueryClient()
+
+  const getUploadProps = (onChange: (file: RcFile[]) => void): UploadProps => ({
+    beforeUpload: (file) => {
+      const isValidType = allowedTypes.includes(file.type)
+
+      if (!isValidType) {
+        message.error(
+          `${file.name} is not a valid image file (only PNG, JPG, and JPEG allowed).`,
+        )
+        return Upload.LIST_IGNORE
+      }
+      onChange([file]) // Manually update form state
+      return false // Prevent default upload behavior
+    },
+    onRemove: () => {
+      setValue('note', [])
+    },
+  })
 
   const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(
     data?.class?.id as string,
   )
 
   const { mutate, isLoading: isChangingLoad } = useMutation({
-    mutationFn: (value: {
-      id: string
-      data: {
-        examination_subject_id: string
-        note: string
-      }
+    mutationFn: ({
+      examination_subject_id,
+      note,
+    }: {
+      examination_subject_id: string
+      note: UploadFile[]
     }) => {
-      return ClassAPI.changeExamDate(value?.id, value?.data)
+      const formData = new FormData()
+      formData.append('examination_subject_id', examination_subject_id)
+      formData.append('note', note[0] as FileType)
+
+      return ClassAPI.changeExamDate(data?.class?.id, formData)
     },
     onSuccess: (res) => {
-      if (res.success) {
-        toast.success(res.data.message)
+      if (res.data.data.success) {
+        toast.success(res.data.data.success)
         setIsOpen(false)
         queryClient.invalidateQueries(UserKey.ExamList)
         reset()
@@ -79,43 +102,36 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     },
   })
 
-  const options = exams?.data?.map((exam) => ({
-    label: exam.examination.name,
-    value: exam.id,
-  }))
+  const options = exams?.data
+    ?.map((exam) => ({
+      label: exam.examination.name,
+      value: exam.id,
+    }))
+    .filter((item) => {
+      return item.value !== data?.examination_subject_id
+    })
 
-  const onSubmit: SubmitHandler<any> = (formData) => {
-    const output = {
-      examination_subject_id: formData.examination_subject_id?.value,
-      note: formData.note,
-    }
+  const onSubmit: SubmitHandler<ExaminationForm> = (data) => {
     mutate({
-      id: data?.class?.id as string,
-      data: output,
+      examination_subject_id: data.examination_subject_id?.value,
+      note: data.note,
     })
   }
-
-  useEffect(() => {
-    if (data) {
-      setValue('examination_subject_id', {
-        label: data?.examination_subject?.examination?.name,
-        value: data?.examination_subject?.examination?.id,
-      })
-    }
-  }, [data])
 
   useEffect(() => {
     isOpen && refetch()
   }, [isOpen, refetch])
 
+  const closeModal = () => {
+    setIsOpen(false)
+    reset({})
+  }
+
   return (
     <SappDrawerV2
       open={data?.examination_subject && isOpen}
       title="Change my exam date"
-      handleCancel={() => {
-        setIsOpen(false)
-        reset()
-      }}
+      handleCancel={closeModal}
     >
       <div className="flex flex-col gap-3">
         <Controller
@@ -150,15 +166,27 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
           <label className="mb-2 block text-base font-medium">
             <span>{'Note'}</span>
           </label>
-          <HookFormTextArea control={control} name="note" />
+          <Controller
+            control={control}
+            name="note"
+            render={({ field: { onChange } }) => (
+              <Upload
+                {...getUploadProps(onChange)}
+                multiple={false}
+                maxCount={1}
+                fileList={fileList}
+              >
+                <Button icon={<UploadOutlined />}>
+                  Please upload an image file to explain why you need to change
+                  your exam date.
+                </Button>
+              </Upload>
+            )}
+          />
         </div>
       </div>
       <div className="absolute bottom-6 right-8">
-        <ButtonText
-          title="Cancel"
-          onClick={() => setIsOpen(false)}
-          size={'medium'}
-        />
+        <ButtonText title="Cancel" onClick={closeModal} size={'medium'} />
         <SappButton
           onClick={handleSubmit(onSubmit)}
           size="medium"

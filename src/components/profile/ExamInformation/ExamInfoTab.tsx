@@ -128,17 +128,19 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                         'sticky -right-4 bg-white',
                       )}
                     >
-                      <ExamInfoActionCell>
-                        <p
-                          className="cursor-pointer rounded-md p-1 pl-2 transition-colors hover:bg-primary-light hover:text-primary"
-                          onClick={() => {
-                            setIsDrawerOpen(true)
-                            setCurrentRow(row)
-                          }}
-                        >
-                          Edit
-                        </p>
-                      </ExamInfoActionCell>
+                      {!row.is_final_examination_subject && (
+                        <ExamInfoActionCell>
+                          <p
+                            className="cursor-pointer rounded-md p-1 pl-2 transition-colors hover:bg-primary-light hover:text-primary"
+                            onClick={() => {
+                              setIsDrawerOpen(true)
+                              setCurrentRow(row)
+                            }}
+                          >
+                            Edit
+                          </p>
+                        </ExamInfoActionCell>
+                      )}
                     </td>
                   </tr>
                 )
