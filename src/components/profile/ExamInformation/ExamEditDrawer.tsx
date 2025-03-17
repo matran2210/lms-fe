@@ -43,7 +43,9 @@ const ExamEditDrawer = ({
   onSuccess,
 }: Iprops) => {
   const validationSchema = z.object({
-    note: z.any(),
+    note: z
+      .array(z.any(), { message: zodMsg.required })
+      .min(1, { message: zodMsg.required }),
     examination_subject_id: z.object(
       {
         label: z
@@ -165,6 +167,7 @@ const ExamEditDrawer = ({
                   </p>
                 )}
                 <HookFormSelect
+                  isClearable={true}
                   classParent="w-full md:max-w-full"
                   placeholder="Exam Date"
                   options={options}
@@ -173,7 +176,7 @@ const ExamEditDrawer = ({
                   onChange={(e) => {
                     return onChange(e === undefined || null ? {} : e)
                   }}
-                  value={value}
+                  value={value ?? null}
                   onMenuScrollToBottom={hasNextPage && fetchNextPage}
                 />
               </div>
@@ -181,9 +184,13 @@ const ExamEditDrawer = ({
           }}
         />
         <div>
-          <label className="required mb-2 block text-base font-medium">
+          <label className="mb-2 block text-base font-medium">
             <span>{'Note'}</span>
+            <span className="ml-2 text-red-500">*</span>
           </label>
+          {errors.note && (
+            <p className="mb-2 text-red-500">{errors.note.message}</p>
+          )}
           <Controller
             control={control}
             name="note"
