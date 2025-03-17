@@ -8,6 +8,10 @@ import {
 import DOMPurify from 'dompurify'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 export const getLocalStorgeActToken = (): string => {
   return ''
@@ -371,3 +375,17 @@ export const removeHtmlTags = (htmlString?: string) => {
 }
 
 export * from './formatNumber'
+
+export const containsKeyword = (input: unknown, keyword: string): boolean => {
+  if (typeof input !== 'string' || typeof keyword !== 'string') return false
+  return input.includes(keyword)
+}
+export const formatNotificationHTML = (input: string): string => {
+  return input.replace(
+    /<strong\s+data-time\s*=\s*["']([^"']+)["']\s*><\/strong>/g,
+    (match, dateTime) => {
+      const formattedDate = dayjs.utc(dateTime).local().format('DD/MM/YYYY')
+      return `<strong>${formattedDate}</strong>`
+    },
+  )
+}
