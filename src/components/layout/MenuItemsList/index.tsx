@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 import { MenuItem as MenuItemType } from '../../../constants/menu-items'
-import SidebarMenu from 'src/components/layout/MenuItemsList/TeacherMenu'
+import MenuItem from '../MenuItem'
 
 type MenuItemsListProps = {
   options: MenuItemType[]
@@ -16,7 +16,12 @@ export default function MenuItemsList({
   return (
     <div className="menu-items-list">
       {options.map((option) => (
-        <SidebarMenu className={'menu-item'} key={option.id} />
+        <MenuItem
+          menuItem={option}
+          key={option.id}
+          setOpenResource={setOpenResource}
+          closeSideBar={closeSideBar}
+        />
       ))}
     </div>
   )
