@@ -5,9 +5,13 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import dayjs from 'dayjs'
+import weekday from 'dayjs/plugin/weekday'
 import DOMPurify from 'dompurify'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
+
+dayjs.extend(weekday)
 
 export const getLocalStorgeActToken = (): string => {
   return ''
@@ -370,4 +374,5 @@ export const removeHtmlTags = (htmlString?: string) => {
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
 
+export * from './common'
 export * from './formatNumber'

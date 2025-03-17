@@ -31,6 +31,7 @@ export interface IButtonProps {
   classNameLoading?: string
   showTooltip?: boolean
   toolTipTitle?: string
+  icon?: React.ReactNode
 }
 
 export interface ITabs {
@@ -98,10 +99,11 @@ export interface ISVG {
   className?: string
 }
 
-export * from './course'
+export * from './common'
 export * from './courses'
 // export * from './exhibit'
+export * from './Icon'
 export * from './notification'
 export * from './quiz'
-export * from './Icon'
+export * from './request'
 export * from './test'

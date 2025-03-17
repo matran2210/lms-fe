@@ -25,3 +25,13 @@ export const MY_COURSES = {
   hotline: '19002225',
   placeholderSearch: 'Search for your course here',
 }
+
+export const DESCRIPTION_POPUPCONFIRM = 'Bạn có chắc chắn muốn hủy không?'
+export const DELETE_POPUPCONFIRM = 'Bạn có chắc chắn muốn xóa không?'
+export const DUPLICATE_POPUPCONFIRM = 'Bạn có chắc chắn muốn sao chép không?'
+export const CONFIRM_STATUS_CHANGE =
+  'Bạn có chắc chắn muốn đổi trạng thái không?'
+export const ACTIVE_POPUPCONFIRM = 'Bạn có muốn kích hoạt chức năng không?'
+export const DEACTIVE_POPUPCONFIRM =
+  'Bạn có muốn dừng kích hoạt chức năng không?'
+export const REFRESH_POPUPCONFIRM = 'Bạn có muốn làm mới chức năng không?'

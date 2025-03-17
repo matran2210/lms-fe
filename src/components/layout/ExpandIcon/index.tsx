@@ -1,4 +1,4 @@
-import { NotificationIcon } from '@assets/icons'
+import { File, NotificationIcon } from '@assets/icons'
 import ArrowUp from './ArrowUp'
 import LogoDefault from './LogoDefault'
 import LogoFull from './LogoFull'
@@ -384,6 +384,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
+      {type === 'my-request' && <File className={className} />}
     </>
   )
 }

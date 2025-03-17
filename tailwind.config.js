@@ -120,6 +120,13 @@ module.exports = {
         graded: {
           finish: '#4077E0',
         },
+        accent: {
+          success: '#07AF17',
+          info: '#176CDD',
+          warning: '#F89707',
+          error: '#F01919',
+          default: '#99A1B7',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -326,6 +333,11 @@ module.exports = {
         'test-result': 'minmax(0, 3fr) minmax(0, 1fr)',
         15: 'repeat(15, minmax(0, 1fr))',
         'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
+      },
+      textColor: {
+        primary: '#1F2937',
+        secondary: '#9CA3AF',
+        heading: '#374151',
       },
     },
   },

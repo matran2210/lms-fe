@@ -2,6 +2,8 @@ import BackToTop from '@components/BackToTop'
 import Help from '@components/Help'
 import { RouteGuard } from '@components/auth/RouteGuard'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
+import PinnedNotifications from '@components/layout/PinnedNotifications'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
@@ -9,8 +11,10 @@ import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
+import { CERTIFICATE_DETAIL } from '@utils/constants'
 import initializeGA from '@utils/google-analytics'
 import { pageview } from '@utils/index'
+import { ConfigProvider } from 'antd'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import type { AppProps } from 'next/app'
@@ -38,9 +42,6 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import { CERTIFICATE_DETAIL } from '@utils/constants'
-import PinnedNotifications from '@components/layout/PinnedNotifications'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -192,39 +193,62 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   return (
     <main>
-      <PinnedNotifyProvider>
-        <CourseProvider>
-          <QueryClientProvider client={queryClient}>
-            <SocketContext.Provider value={socket}>
-              <Toaster
-                toastOptions={{
-                  style: {
-                    maxWidth: '400px', // Tăng chiều rộng của toast
-                  },
-                }}
-              />
-              <SappConfirmDialogContainer />
-              <RouteGuard>
-                <>
-                  <div className="relative">
-                    <PinnedNotifications />
-                    <CtaTrial />
-                    <Component {...pageProps} />
-                  </div>
-                  {showHelp && (
-                    <>
-                      <BackToTop />
-                      <Help showHelp={showHelp} />
-                    </>
-                  )}
-                  <LearningNotesList />
-                  <PopupCompletedCourse />
-                </>
-              </RouteGuard>
-            </SocketContext.Provider>
-          </QueryClientProvider>
-        </CourseProvider>
-      </PinnedNotifyProvider>
+      <ConfigProvider
+        theme={{
+          token: {
+            fontFamily: 'Roboto, sans-serif',
+          },
+          components: {
+            Input: {
+              colorPrimaryHover: '#ffb800',
+              colorPrimary: '#ffb800',
+              borderRadius: 4,
+            },
+            Select: {
+              colorPrimaryHover: '#ffb800',
+              colorPrimary: '#ffb800',
+            },
+            DatePicker: {
+              colorPrimaryHover: '#ffb800',
+              colorPrimary: '#ffb800',
+            },
+          },
+        }}
+      >
+        <PinnedNotifyProvider>
+          <CourseProvider>
+            <QueryClientProvider client={queryClient}>
+              <SocketContext.Provider value={socket}>
+                <Toaster
+                  toastOptions={{
+                    style: {
+                      maxWidth: '400px', // Tăng chiều rộng của toast
+                    },
+                  }}
+                />
+                <SappConfirmDialogContainer />
+                <RouteGuard>
+                  <>
+                    <div className="relative">
+                      <PinnedNotifications />
+                      <CtaTrial />
+                      <Component {...pageProps} />
+                    </div>
+                    {showHelp && (
+                      <>
+                        <BackToTop />
+                        <Help showHelp={showHelp} />
+                      </>
+                    )}
+                    <LearningNotesList />
+                    <PopupCompletedCourse />
+                  </>
+                </RouteGuard>
+              </SocketContext.Provider>
+            </QueryClientProvider>
+          </CourseProvider>
+        </PinnedNotifyProvider>
+      </ConfigProvider>
     </main>
   )
 }
