@@ -28,7 +28,7 @@ export const PROFILE_PAGES = {
     label: 'Certificates',
     children: [] as { label: string }[],
   },
-  EXAM_INFO: {
+  EXAM_INFORMATION: {
     label: 'Exam Information',
     children: [] as { label: string }[],
   },
