@@ -142,3 +142,11 @@
     @apply left-[50px] top-[-100%];
   }
 }
+
+.select-options.repeat-unit {
+  .select-single {
+    .select__control {
+      @apply h-11.25;
+    }
+  }
+}

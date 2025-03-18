@@ -43,7 +43,7 @@ export const TitleSidebar = {
   NEW_NOTE: 'New Note',
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
-  MY_CALENDER: 'My Calender',
+  MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
 }
 
@@ -286,7 +286,6 @@ export const CALENDAR_SIDEBAR_EVENT_FORM = {
   EVENT_TIME: 'Start Time - end time',
   REPEAT: 'Repeat',
   DESCRIPTION: 'Description',
-  PLACEHOLDER: 'Input Text',
 }
 
 export const EVENT_TYPES = {
@@ -297,10 +296,10 @@ export const EVENT_TYPES = {
 } as const
 
 export const EVENT_TYPES_RESPONSE = {
-  TEACHING: 'TEACHING_MODE',
-  BUSY: 'TEACHER_SCHEDULE_BUSY',
-  TIME_OFF: 'TEACHER_SCHEDULE_TIME_OFF',
-  OTHER: 'TEACHER_OTHER',
+  TEACHING: 'TEACHING',
+  BUSY: 'BUSY',
+  TIME_OFF: 'TIME_OFF',
+  OTHER: 'OTHER',
 } as const
 
 export const EVENT_TYPES_RESPONSE_MAPPED = {

@@ -1,6 +1,7 @@
 import BackToTop from '@components/BackToTop'
 import Help from '@components/Help'
 import { RouteGuard } from '@components/auth/RouteGuard'
+import AntConfigProvider from '@components/base/Provider/AntConfigProvider'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
@@ -14,7 +15,6 @@ import '@styles/globals.scss'
 import { CERTIFICATE_DETAIL } from '@utils/constants'
 import initializeGA from '@utils/google-analytics'
 import { pageview } from '@utils/index'
-import { ConfigProvider } from 'antd'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import type { AppProps } from 'next/app'
@@ -193,28 +193,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   return (
     <main>
-      <ConfigProvider
-        theme={{
-          token: {
-            fontFamily: 'Roboto, sans-serif',
-          },
-          components: {
-            Input: {
-              colorPrimaryHover: '#ffb800',
-              colorPrimary: '#ffb800',
-              borderRadius: 4,
-            },
-            Select: {
-              colorPrimaryHover: '#ffb800',
-              colorPrimary: '#ffb800',
-            },
-            DatePicker: {
-              colorPrimaryHover: '#ffb800',
-              colorPrimary: '#ffb800',
-            },
-          },
-        }}
-      >
+      <AntConfigProvider>
         <PinnedNotifyProvider>
           <CourseProvider>
             <QueryClientProvider client={queryClient}>
@@ -248,7 +227,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
             </QueryClientProvider>
           </CourseProvider>
         </PinnedNotifyProvider>
-      </ConfigProvider>
+      </AntConfigProvider>
     </main>
   )
 }

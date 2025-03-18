@@ -1,9 +1,10 @@
-import { Control, Controller } from 'react-hook-form'
+import type { GetProps } from 'antd'
 import { DatePicker } from 'antd'
-import type { DatePickerProps, GetProps } from 'antd'
-import SappIcon from 'src/common/SappIcon'
-import ErrorMessage from 'src/common/ErrorMessage'
 import dayjs from 'dayjs'
+import { Control, Controller } from 'react-hook-form'
+import ErrorMessage from 'src/common/ErrorMessage'
+import SappIcon from 'src/common/SappIcon'
+import SAPPLabel from '../Label/SAPPLabel'
 
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
 
@@ -24,6 +25,7 @@ interface IProps {
   required?: boolean
   inputClassName?: string | undefined
   suffixIcon?: React.ReactNode
+  allowClear?: boolean
 }
 
 const HookFormDateRange = ({
@@ -57,11 +59,11 @@ const HookFormDateRange = ({
           {!skeleton ? (
             <div className={className}>
               {label && (
-                <label className={labelClass}>
-                  <span className={`${required ? 'required' : ''}`}>
-                    {label}
-                  </span>
-                </label>
+                <SAPPLabel
+                  title={label}
+                  required={required}
+                  className={labelClass}
+                />
               )}
               <DatePicker.RangePicker
                 {...field}

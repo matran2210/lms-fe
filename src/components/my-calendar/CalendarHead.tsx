@@ -1,10 +1,10 @@
-import SappButton from '@components/base/button/SappButton'
-import SappButtonIcon from '@components/base/button/SappButtonIcon'
-import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { Plus } from '@assets/icons'
+import SAPPInput from '@components/base/Input/SAPPInput'
+import SAPPButton from '@components/base/button/SAPPButton'
+import SAPPSelect from '@components/base/select/SAPPSelect'
+import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import SappIcon from 'src/common/SappIcon'
 import { EVENT_TYPE_OPTIONS, EVENT_TYPES_ARRAY } from 'src/constants'
 
 interface IProps {
@@ -25,11 +25,11 @@ const CalendarHead = ({ onSearch, onOpenCreate }: IProps) => {
   })
 
   const onSubmit = useCallback((data: any) => {
-    if (!data || (!data.event_name && !data.event_type)) return
+    if (!data) return
 
     onSearch({
       eventName: data.event_name,
-      eventType: data.event_type ? data.event_type.value : '',
+      eventType: data.event_type,
     })
   }, [])
 
@@ -49,50 +49,34 @@ const CalendarHead = ({ onSearch, onOpenCreate }: IProps) => {
   }, [])
 
   return (
-    <div className="-mb-8 w-full rounded-tl-lg rounded-tr-lg bg-white px-8 py-8">
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
-        <div className="mb-4 flex">
-          <div className="mr-6 min-w-[326px]">
-            <HookFormTextField
-              name="event_name"
-              control={control}
-              placeholder="Search by name"
-              className="h-10 max-w-[326px]"
-              inputClassName="h-10 font-inter text-xsm font-medium leading-[14px] tracking-normal text-gray-11"
-            />
-          </div>
-          <SappHookFormSelect
+    <div className="flex flex-col gap-6 p-8">
+      <div className="flex flex-col gap-4">
+        <FilterGrid>
+          <SAPPInput
+            name="event_name"
+            control={control}
+            placeholder="Search event name"
+          />
+
+          <SAPPSelect
             name="event_type"
             control={control}
             options={EVENT_TYPE_OPTIONS}
-            isSearchable={false}
-            isClearable={true}
             placeholder="Event type"
-            className="rounded-0 h-10 w-[326px] text-gray-11 placeholder:text-gray-11"
+          />
+        </FilterGrid>
+        <div className="flex justify-between">
+          <div className="flex gap-3">
+            <SAPPButton title="Reset" color="secondary" onClick={handleReset} />
+            <SAPPButton title="Search" onClick={handleSubmit(onSubmit)} />
+          </div>
+          <SAPPButton
+            title="Add Busy Schedule"
+            icon={<Plus />}
+            onClick={handleOpenCreate}
           />
         </div>
-        <div className="flex justify-between">
-          <div className="a">
-            <SappButton
-              type="reset"
-              title="Reset"
-              className="mr-3 !h-10 text-gray-12"
-              color="secondary"
-              onClick={handleReset}
-            />
-            <SappButton type="submit" title="Search" className="!h-10" />
-          </div>
-          <SappButtonIcon
-            title="Add Busy Schedule"
-            isBgPrimary={true}
-            className="!h-10 px-4"
-            classTitle="text-white"
-            onClick={handleOpenCreate}
-          >
-            <SappIcon icon="plus" />
-          </SappButtonIcon>
-        </div>
-      </form>
+      </div>
       <div className="h-[1px] border-b border-b-gray-5"></div>
     </div>
   )

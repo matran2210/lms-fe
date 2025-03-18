@@ -2,11 +2,11 @@ import HookFormSelect from '@components/base/select/HookFormSelect'
 import { InputNumber } from 'antd'
 import { memo, useEffect, useMemo, useState } from 'react'
 import {
-  FREQUENCY_UNITS_OBJECT,
   FREQUENCY_OPTIONS,
   FREQUENCY_OPTIONS_PLURAL,
-  FREQUENCY_UNITS_LIMIT,
   FREQUENCY_UNITS,
+  FREQUENCY_UNITS_LIMIT,
+  FREQUENCY_UNITS_OBJECT,
 } from 'src/constants'
 import { IRepeatFrequency, IRepeatUnitOption } from 'src/type/my-calendar'
 
@@ -63,7 +63,7 @@ const RepeatFrequency = ({ className, defaultValue, onChange }: IProps) => {
         defaultValue={FREQUENCY_UNITS_LIMIT.MIN}
         value={frequency.interval}
         onChange={onNumberChange}
-        className="mr-5 flex h-full min-w-[50px] max-w-[55px] rounded-none shadow-none"
+        className="mr-5 flex h-11.25 min-w-[50px] max-w-[55px]"
         name="repeat_every"
       />
       <HookFormSelect
@@ -71,7 +71,7 @@ const RepeatFrequency = ({ className, defaultValue, onChange }: IProps) => {
         options={unitOptions}
         value={unitOptions.find((option) => option.value === frequency.unit)}
         onChange={onUnitChange}
-        className="rounded-0"
+        classParent="repeat-unit"
       />
     </div>
   )

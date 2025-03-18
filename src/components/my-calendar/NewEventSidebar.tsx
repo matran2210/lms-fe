@@ -1,11 +1,10 @@
-import SappButton from '@components/base/button/SappButton'
+import SAPPButton from '@components/base/button/SAPPButton'
 import HookFormDateRange from '@components/base/date/HookFormDateRange'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import type { DatePickerProps, GetProps } from 'antd'
-import { ConfigProvider, DatePicker, Drawer } from 'antd'
+import { ConfigProvider, Drawer } from 'antd'
 import { memo, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -18,7 +17,6 @@ import {
   CALENDAR_SIDEBAR_TITLE,
   CONFIRM_CANCEL,
   EVENT_TYPES,
-  REPEAT_ON_MAPPED_PAYLOAD,
 } from 'src/constants'
 import { SchedulesAPI } from 'src/pages/api/schedules'
 import { useAppDispatch } from 'src/redux/hook'
@@ -31,12 +29,15 @@ import { z } from 'zod'
 
 interface IProps {
   currentDate: Date | null
-  onCancel: () => void
+  isOpenCreate: boolean
+  setIsOpenCreate: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
-
-const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
+const NewEventSidebar = ({
+  currentDate,
+  isOpenCreate,
+  setIsOpenCreate,
+}: IProps) => {
   const dispatch = useAppDispatch()
 
   const validationSchema = z.object({
@@ -99,12 +100,18 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
       toast.success(
         'Request created successfully. Please wait for CX Admin to approve your request',
       )
+      handleClose()
     }
   }
 
-  const onClose = () => {
+  const handleClose = () => {
+    setIsOpenCreate(false)
+    reset()
+  }
+
+  const handleCancel = () => {
     dispatch(
-      confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: onCancel }),
+      confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: handleClose }),
     )
   }
 
@@ -124,19 +131,19 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
   return (
     <ConfigProvider theme={ANT_THEME_CONFIG}>
       <Drawer
-        open={currentDate !== null}
+        open={isOpenCreate}
         title={undefined}
-        onClose={onClose}
+        onClose={handleCancel}
         width={'960px'}
         closeIcon={false}
         maskClosable={false}
       >
         <div className="flex h-full w-full flex-col">
           <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
-            <span className="font-sans text-xl font-semibold leading-[30px] tracking-normal">
+            <span className="font-sans text-lg font-semibold">
               {CALENDAR_SIDEBAR_TITLE}
             </span>
-            <span className="cursor-pointer" onClick={onClose}>
+            <span className="cursor-pointer" onClick={handleCancel}>
               <SappIcon icon="closeicon" />
             </span>
           </div>
@@ -145,14 +152,13 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 {/* Event name */}
                 <div className="mb-6">
-                  <HookFormTextField
+                  <SAPPInput
                     label={CALENDAR_SIDEBAR_EVENT_FORM.EVENT_NAME}
                     name="event_name"
-                    placeholder={CALENDAR_SIDEBAR_EVENT_FORM.PLACEHOLDER}
-                    className=""
-                    inputClassName="h-12"
+                    placeholder="Please enter event name"
                     control={control}
-                    required={true}
+                    required
+                    className="h-11.25"
                   />
                 </div>
 
@@ -162,7 +168,8 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
                     name="range"
                     label="Start Time - End Time"
                     control={control}
-                    required={true}
+                    required
+                    inputClassName="h-11.25 w-full rounded-md"
                   />
                 </div>
 
@@ -177,30 +184,28 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
                 </div>
 
                 {/* Description */}
-                <div>
-                  <HookFormTextField
+                <div className="mb-6">
+                  <SAPPInput
                     label={CALENDAR_SIDEBAR_EVENT_FORM.DESCRIPTION}
                     name="description"
-                    placeholder={CALENDAR_SIDEBAR_EVENT_FORM.PLACEHOLDER}
-                    className="mb-6"
+                    placeholder="Please enter description"
                     control={control}
-                    required={true}
+                    required
+                    className="h-11.25"
                   />
                 </div>
               </form>
             )}
           </div>
           <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
-            <SappButton
+            <SAPPButton
               title={CALENDAR_SIDEBAR_CANCEL_BUTTON}
-              onClick={onClose}
-              className="mr-4 rounded-[6px]"
-              childClass="text-gray-12"
+              onClick={handleCancel}
+              className="mr-4"
               color="secondary"
             />
-            <SappButton
+            <SAPPButton
               title={CALENDAR_SIDEBAR_SAVE_BUTTON}
-              className="rounded-[6px]"
               onClick={handleSubmit(onSubmit)}
             />
           </div>
