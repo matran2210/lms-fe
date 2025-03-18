@@ -9,7 +9,7 @@ const MENU_OPTIONS: MenuOption[] = [
   //   type: 'level-1',
   // },
   {
-    name: `${TitleSidebar.MY_CALENDER}`,
+    name: `${TitleSidebar.MY_CALENDAR}`,
     icon: 'my-calendar',
     url: PageLink.MY_CALENDAR,
     type: 'level-1',
@@ -130,7 +130,7 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
     type: 'level-1',
   },
   {
-    name: `${TitleSidebar.MY_CALENDER}`,
+    name: `${TitleSidebar.MY_CALENDAR}`,
     icon: 'my-calendar',
     url: PageLink.MY_CALENDAR,
     type: 'level-1',

@@ -43,7 +43,7 @@ export const TitleSidebar = {
   NEW_NOTE: 'New Note',
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
-  MY_CALENDER: 'My Calender',
+  MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
 }
 

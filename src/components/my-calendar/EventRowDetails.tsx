@@ -4,7 +4,6 @@ import SappIcon from 'src/common/SappIcon'
 import {
   EVENT_TYPES,
   EVENT_TYPES_LABEL,
-  EVENT_TYPES_RESPONSE_MAPPED,
   POPUP_EVENT_DETAILS,
 } from 'src/constants'
 
@@ -66,9 +65,7 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
         <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
           <div className="flex flex-row content-center justify-start">
             {getEventTypeIcon(event.type)}
-            <span className="ml-3">
-              {EVENT_TYPES_LABEL[EVENT_TYPES_RESPONSE_MAPPED[event.type]]}
-            </span>
+            <span className="ml-3">{EVENT_TYPES_LABEL[event.type]}</span>
           </div>
         </div>
       </div>
