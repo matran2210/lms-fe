@@ -25,7 +25,7 @@ const CalendarHead = ({ onSearch, onOpenCreate }: IProps) => {
   })
 
   const onSubmit = useCallback((data: any) => {
-    if (!data || (!data.event_name && !data.event_type)) return
+    if (!data) return
 
     onSearch({
       eventName: data.event_name,
