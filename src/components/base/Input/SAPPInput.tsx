@@ -4,6 +4,7 @@ import { ButtonSize } from 'antd/es/button'
 import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
+import SAPPLabel from '../Label/SAPPLabel'
 
 interface SAPPInputProps {
   control: Control<any>
@@ -12,6 +13,9 @@ interface SAPPInputProps {
   className?: string
   placeholder?: string
   size?: ButtonSize
+  label?: string
+  required?: boolean
+  labelClass?: string
 }
 
 const SAPPInput = ({
@@ -21,28 +25,36 @@ const SAPPInput = ({
   className,
   placeholder,
   size,
+  label,
+  required,
+  labelClass,
 }: SAPPInputProps) => {
   return (
-    <Controller
-      key={name}
-      name={name}
-      control={control}
-      defaultValue={defaultValue}
-      render={({ field, fieldState: { error } }) => {
-        return (
-          <StyleProvider hashPriority="high">
-            <Input
-              {...field}
-              className={clsx('h-10 w-full font-medium', className)}
-              placeholder={placeholder}
-              value={field?.value}
-              size={size}
-            />
-            <ErrorMessage>{error?.message}</ErrorMessage>
-          </StyleProvider>
-        )
-      }}
-    />
+    <>
+      {label && (
+        <SAPPLabel title={label} required={required} className={labelClass} />
+      )}
+      <Controller
+        key={name}
+        name={name}
+        control={control}
+        defaultValue={defaultValue}
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <StyleProvider hashPriority="high">
+              <Input
+                {...field}
+                className={clsx('h-10 w-full font-medium', className)}
+                placeholder={placeholder}
+                value={field?.value}
+                size={size}
+              />
+              <ErrorMessage>{error?.message}</ErrorMessage>
+            </StyleProvider>
+          )
+        }}
+      />
+    </>
   )
 }
 

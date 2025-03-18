@@ -286,7 +286,6 @@ export const CALENDAR_SIDEBAR_EVENT_FORM = {
   EVENT_TIME: 'Start Time - end time',
   REPEAT: 'Repeat',
   DESCRIPTION: 'Description',
-  PLACEHOLDER: 'Input Text',
 }
 
 export const EVENT_TYPES = {

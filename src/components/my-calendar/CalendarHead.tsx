@@ -68,15 +68,10 @@ const CalendarHead = ({ onSearch, onOpenCreate }: IProps) => {
         <div className="flex justify-between">
           <div className="flex gap-3">
             <SAPPButton title="Reset" color="secondary" onClick={handleReset} />
-            <SAPPButton
-              title="Search"
-              color="primary"
-              onClick={handleSubmit(onSubmit)}
-            />
+            <SAPPButton title="Search" onClick={handleSubmit(onSubmit)} />
           </div>
           <SAPPButton
             title="Add Busy Schedule"
-            color="primary"
             icon={<Plus />}
             onClick={handleOpenCreate}
           />

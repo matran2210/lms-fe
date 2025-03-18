@@ -12,7 +12,7 @@ interface SAPPButtonProps {
   children?: ReactNode
   className?: string
   size?: ButtonSize
-  color: ButtonColor
+  color?: ButtonColor
   icon?: ReactNode
   iconPosition?: 'start' | 'end'
   onClick?: any
@@ -24,7 +24,7 @@ const SAPPButton = ({
   children,
   className,
   size,
-  color,
+  color = 'primary',
   icon,
   iconPosition = 'start',
   onClick,
