@@ -376,10 +376,19 @@ export const removeHtmlTags = (htmlString?: string) => {
 
 export * from './formatNumber'
 
-export const containsKeyword = (input: unknown, keyword: string): boolean => {
+export const containsKeyword = (
+  input: unknown,
+  keyword: string = 'data-time=',
+): boolean => {
   if (typeof input !== 'string' || typeof keyword !== 'string') return false
   return input.includes(keyword)
 }
+
+/**
+ * @description Chuyển đổi chuỗi HTML chứa thẻ <strong> với thuộc tính data-time thành định dạng ngày tháng có thể đọc được.
+ * @param {string} input - Chuỗi HTML đầu vào.
+ * @return {string} - Chuỗi HTML đã được định dạng lại với ngày tháng hiển thị theo định dạng DD/MM/YYYY.
+ */
 export const formatNotificationHTML = (input: string): string => {
   return input.replace(
     /<strong\s+data-time\s*=\s*["']([^"']+)["']\s*><\/strong>/g,
