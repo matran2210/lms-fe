@@ -23,6 +23,7 @@ const breadcrumbs = [
 const MyCalendar = () => {
   const [eventDetails, setEventDetails] = useState<IPopupDetails | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [isOpenCreate, setIsOpenCreate] = useState(false)
 
   const handleOpenDetail = useCallback((date: Date, events: IEvent[]) => {
     setEventDetails({ date, events })
@@ -32,13 +33,13 @@ const MyCalendar = () => {
     setEventDetails(null)
   }, [])
 
-  const handleOpenCreate = useCallback((date: Date) => {
-    setSelectedDate(date)
-  }, [])
-
-  const handleCloseSidebar = useCallback(() => {
-    setSelectedDate(null)
-  }, [])
+  const handleOpenCreate = useCallback(
+    (date: Date) => {
+      setSelectedDate(date)
+      setIsOpenCreate(true)
+    },
+    [setSelectedDate, setIsOpenCreate],
+  )
 
   return (
     <Layout title={TitleSidebar.MY_CALENDAR}>
@@ -53,7 +54,8 @@ const MyCalendar = () => {
         <EventDetails details={eventDetails} handleClose={handleCloseDetail} />
         <NewEventSidebar
           currentDate={selectedDate}
-          onCancel={handleCloseSidebar}
+          isOpenCreate={isOpenCreate}
+          setIsOpenCreate={setIsOpenCreate}
         />
       </PageContainer>
     </Layout>

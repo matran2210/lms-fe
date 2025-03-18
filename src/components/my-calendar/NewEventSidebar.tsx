@@ -4,8 +4,7 @@ import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import type { DatePickerProps, GetProps } from 'antd'
-import { ConfigProvider, DatePicker, Drawer } from 'antd'
+import { ConfigProvider, Drawer } from 'antd'
 import { memo, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -18,7 +17,6 @@ import {
   CALENDAR_SIDEBAR_TITLE,
   CONFIRM_CANCEL,
   EVENT_TYPES,
-  REPEAT_ON_MAPPED_PAYLOAD,
 } from 'src/constants'
 import { SchedulesAPI } from 'src/pages/api/schedules'
 import { useAppDispatch } from 'src/redux/hook'
@@ -31,12 +29,15 @@ import { z } from 'zod'
 
 interface IProps {
   currentDate: Date | null
-  onCancel: () => void
+  isOpenCreate: boolean
+  setIsOpenCreate: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
-
-const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
+const NewEventSidebar = ({
+  currentDate,
+  isOpenCreate,
+  setIsOpenCreate,
+}: IProps) => {
   const dispatch = useAppDispatch()
 
   const validationSchema = z.object({
@@ -99,12 +100,18 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
       toast.success(
         'Request created successfully. Please wait for CX Admin to approve your request',
       )
+      handleClose()
     }
   }
 
-  const onClose = () => {
+  const handleClose = () => {
+    setIsOpenCreate(false)
+    reset()
+  }
+
+  const handleCancel = () => {
     dispatch(
-      confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: onCancel }),
+      confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: handleClose }),
     )
   }
 
@@ -124,9 +131,9 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
   return (
     <ConfigProvider theme={ANT_THEME_CONFIG}>
       <Drawer
-        open={currentDate !== null}
+        open={isOpenCreate}
         title={undefined}
-        onClose={onClose}
+        onClose={handleCancel}
         width={'960px'}
         closeIcon={false}
         maskClosable={false}
@@ -136,7 +143,7 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
             <span className="font-sans text-xl font-semibold leading-[30px] tracking-normal">
               {CALENDAR_SIDEBAR_TITLE}
             </span>
-            <span className="cursor-pointer" onClick={onClose}>
+            <span className="cursor-pointer" onClick={handleCancel}>
               <SappIcon icon="closeicon" />
             </span>
           </div>
@@ -193,7 +200,7 @@ const NewEventSidebar = ({ currentDate, onCancel }: IProps) => {
           <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
             <SappButton
               title={CALENDAR_SIDEBAR_CANCEL_BUTTON}
-              onClick={onClose}
+              onClick={handleCancel}
               className="mr-4 rounded-[6px]"
               childClass="text-gray-12"
               color="secondary"
