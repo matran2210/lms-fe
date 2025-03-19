@@ -1,9 +1,8 @@
 import { Plus } from '@assets/icons'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import SAPPButton from '@components/base/button/SAPPButton'
+import SAPPInput from '@components/base/Input/SAPPInput'
 import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
 import SAPPSelect from '@components/base/select/SAPPSelect'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
 import { useRequestContext } from '@contexts/RequestContext'
 import { RequestAPI } from '@pages/api/request'
@@ -122,11 +121,10 @@ const TimeOffTab = () => {
     <div className="flex flex-col gap-6 p-8 pt-1">
       <div className="flex flex-col gap-4">
         <FilterGrid>
-          <HookFormTextField
+          <SAPPInput
             name="request_name"
             control={control}
             placeholder="Search name"
-            inputClassName="!h-10 rounded"
           />
 
           <SAPPSelect
@@ -147,15 +145,15 @@ const TimeOffTab = () => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <ButtonSecondary title="Reset" onClick={handleResetFilter} />
-            <ButtonPrimary
-              title="Search"
-              onClick={handleFilter}
-              loading={isLoading}
+            <SAPPButton
+              title="Reset"
+              color="secondary"
+              onClick={handleResetFilter}
             />
+            <SAPPButton title="Search" onClick={handleFilter} />
           </div>
           <div>
-            <ButtonPrimary
+            <SAPPButton
               title="Create Request"
               className="flex"
               icon={<Plus />}
