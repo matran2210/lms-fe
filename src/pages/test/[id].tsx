@@ -438,6 +438,7 @@ const TestDetail = () => {
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+  const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
 
   useClickOutside({
     ref: dropUpRef,
@@ -1017,6 +1018,9 @@ const TestDetail = () => {
     useCourseContext()
 
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
+    if (listQuestionDone.includes(currentTabContent?.id)) {
+      return
+    }
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let answers: {
       question_id: any
@@ -1030,17 +1034,12 @@ const TestDetail = () => {
       answer_file?: any
     }[] = []
     let isLastQuestion = false
-    let isDoneQuestion = false
     let answerItem = {}
     let reformTabs: any[] = [...allQuest]
     setLoading(true)
-    setSubmited(true)
+
     for (let [index, e] of allQuest.entries()) {
       if (e.id === currentTabContent?.id) {
-        if (e.done) {
-          isDoneQuestion = true
-          break
-        }
         if (index === allQuest.length - 1) {
           isLastQuestion = true
         }
@@ -1157,19 +1156,11 @@ const TestDetail = () => {
             }
           }
         }
+        break
       }
     }
 
-    //The Question has been done
-    if (isDoneQuestion) return
-
     if (type_submit === 'submit') {
-      setTabs(async () => {
-        await handleChangeTab(tabs[0].id)
-        // ref.setKey
-        return reformTabs
-      })
-
       dispatch(disableUnsavedChange())
       const res = await CoursesAPI.submitAnswer(quizAttempId?.id as string, {
         question_id: currentTabContent?.id,
@@ -1180,6 +1171,7 @@ const TestDetail = () => {
         ...answerItem,
       })
       if (res) {
+        setListQuestionDone((prev) => [...prev, currentTabContent?.id])
         if (isCompletedCourse.status) {
           setTimeout(() => {
             dispatch(showPopupCompletedCourse(isCompletedCourse.content))
@@ -1192,6 +1184,7 @@ const TestDetail = () => {
         }
 
         if (isLastQuestion) {
+          setSubmited(true)
           if (type === 'entrance') {
             router.replace(`/entrance-test/test-result/${res?.data?.id}`)
           } else if (type === 'event-test') {
