@@ -106,7 +106,7 @@ const NotifyList = ({
                   dangerouslySetInnerHTML={{
                     __html: notifyItem?.created_by
                       ? notifyItem?.title
-                      : containsKeyword(notifyItem?.content ?? '', 'data-time=')
+                      : containsKeyword(notifyItem?.content ?? '')
                         ? formatNotificationHTML(notifyItem?.content ?? '')
                         : (notifyItem?.content ?? ''),
                   }}

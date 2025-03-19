@@ -376,12 +376,9 @@ export const removeHtmlTags = (htmlString?: string) => {
 
 export * from './formatNumber'
 
-export const containsKeyword = (
-  input: unknown,
-  keyword: string = 'data-time=',
-): boolean => {
-  if (typeof input !== 'string' || typeof keyword !== 'string') return false
-  return input.includes(keyword)
+export const containsKeyword = (input: unknown, keyword?: string): boolean => {
+  if (typeof input !== 'string') return false
+  return input.includes(keyword ?? 'data-time=')
 }
 
 /**
