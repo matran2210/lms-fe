@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/messaging'
 
