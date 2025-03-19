@@ -2,7 +2,7 @@ interface IProps {
   title: string
   percent?: any
 }
-const Progress = ({ title, percent }: IProps) => {
+const ClassProgress = ({ title, percent }: IProps) => {
   return (
     <div className="my-3 flex w-48 flex-col items-center sm:w-72">
       <div className="mt-auto flex w-full justify-between">
@@ -19,4 +19,4 @@ const Progress = ({ title, percent }: IProps) => {
   )
 }
 
-export default Progress
+export default ClassProgress

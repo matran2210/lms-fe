@@ -6,11 +6,20 @@ interface IProps {
   onSubmit: () => void
   onReset: () => void
   loading: boolean
+  layoutAction?: ReactNode
+  className?: string
 }
 
-const LayoutFilter = ({ listFilter, loading, onReset, onSubmit }: IProps) => {
+const LayoutFilter = ({
+  listFilter,
+  loading,
+  onReset,
+  onSubmit,
+  layoutAction,
+  className,
+}: IProps) => {
   return (
-    <div className="main bg-white px-7.5 py-7.5">
+    <div className={`main bg-white ${className}`}>
       {listFilter}
       <div className="mt-4">
         <div className="flex">
@@ -23,6 +32,7 @@ const LayoutFilter = ({ listFilter, loading, onReset, onSubmit }: IProps) => {
             loading={loading}
           />
         </div>
+        {layoutAction}
       </div>
     </div>
   )
