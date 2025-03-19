@@ -211,14 +211,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                     <CtaTrial />
                     <Component {...pageProps} />
                   </div>
+                  <LearningNotesList />
+                  <PopupCompletedCourse />
+
                   {showHelp && (
                     <>
                       <BackToTop />
                       <Help showHelp={showHelp} />
                     </>
                   )}
-                  <LearningNotesList />
-                  <PopupCompletedCourse />
                 </>
               </RouteGuard>
             </SocketContext.Provider>
