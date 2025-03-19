@@ -21,8 +21,8 @@ const LayoutFilter = ({
   return (
     <div className={`main bg-white ${className}`}>
       {listFilter}
-      <div className="mt-4">
-        <div className="flex">
+      <div className="mt-4 flex justify-between">
+        <div className="flex ">
           <SappFilterButton
             titleReset="Reset"
             titleSubmit="Search"
