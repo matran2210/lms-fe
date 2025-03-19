@@ -29,18 +29,6 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  // const isDetailCourse =
-  //   router.pathname.includes('/my-course') ||
-  //   router.pathname.includes('/section') ||
-  //   router.pathname.includes('/activity')
-
-  // const isProfile =
-  //   Icon === 'avatar' &&
-  //   (router.asPath === '/myprofile' ||
-  //     router.asPath === '/certificates' ||
-  //     router.asPath === '/settings' ||
-  //     router.asPath === '/login_history' ||
-  //     router.asPath === '/devices')
 
   const isNested = subItems && subItems?.length > 0
   const selected = router.pathname === url

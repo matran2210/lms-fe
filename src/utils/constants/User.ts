@@ -76,7 +76,7 @@ export const MYCOURSE_PAGES = {
 export const USER_TYPE = {
   STUDENT: { key: 'STUDENT', label: 'Học viên' },
   TEACHER: { key: 'TEACHER', label: 'Giáo viên' },
-}
+} as const
 export const USER_STATUS = {
   ACTIVE: { key: 'ACTIVE', label: 'Active', color: 'text-state-success' },
 }

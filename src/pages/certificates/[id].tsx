@@ -1,14 +1,13 @@
+import { IconDownload, ShareLinkIcon } from '@assets/icons'
+import SappButtonIcon from '@components/base/button/SappButtonIcon'
+import SinglePageLayout from '@components/layout/SinglePage'
 import { LAYOUT } from '@utils/constants'
-import React from 'react'
-import { CoursesAPI } from '../api/courses'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import Image from 'next/image'
-import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import { ClickToCopyButton } from 'src/common/SappCopyLink'
-import { IconDownload, ShareLinkIcon } from '@assets/icons'
-import SinglePageLayout from '@components/layout/SinglePage'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { CoursesAPI } from '../api/courses'
 
 export interface ICertificate {
   certificate_url: string
