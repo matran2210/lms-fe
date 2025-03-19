@@ -1018,7 +1018,6 @@ const TestDetail = () => {
 
   const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let quiz_position_mapping = []
     let answers: {
       question_id: any
       question_answer_id?: any
@@ -1030,125 +1029,139 @@ const TestDetail = () => {
       active?: string
       answer_file?: any
     }[] = []
-    let reformTabs: any[] = []
+    let isLastQuestion = false
+    let isDoneQuestion = false
+    let answerItem = {}
+    let reformTabs: any[] = [...allQuest]
     setLoading(true)
     setSubmited(true)
-    for (let e of allQuest) {
-      reformTabs.push({ ...e, done: true })
-      if (e.answer) {
-        if (
-          e.qType === QUESTION_TYPES.ONE_CHOICE ||
-          e.qType === QUESTION_TYPES.TRUE_FALSE
-        ) {
-          answers.push({
-            question_id: e.id,
-            question_answer_id: e.answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-          let answer = []
-          for (let el of e.answer) {
-            answer.push({ answer_id: el })
-          }
-          answers.push({
-            question_id: e.id,
-            answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.MATCHING) {
-          answers.push({
-            question_id: e.id,
-            answer: e.answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
-          let answer = []
-          for (let i in e.answer) {
-            if (e?.answer?.[i].idAnswer) {
-              answer.push({
-                answer_id: e?.answer?.[i]?.idAnswer,
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({
-            question_id: e.id,
-            answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
-          let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i] && e.answer[i] !== '') {
-              answer.push({
-                answer_id: e.answer[i],
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({
-            question_id: e.id,
-            answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
-          let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i] && e.answer[i] !== '') {
-              answer.push({
-                answer_text: e.answer[i],
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({
-            question_id: e.id,
-            answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
+    for (let [index, e] of allQuest.entries()) {
+      if (e.id === currentTabContent?.id) {
+        if (e.done) {
+          isDoneQuestion = true
+          break
         }
-      }
-      if (e.qType === QUESTION_TYPES.ESSAY) {
-        if (checkAnswered(e, true)) {
-          const requirements = e?.data?.requirements?.length
-            ? e?.data?.requirements
-            : [null]
-          if (requirements?.length) {
-            requirements?.forEach((requirement: Requirement | null) => {
+        if (index === allQuest.length - 1) {
+          isLastQuestion = true
+        }
+        reformTabs[index].done = true
+
+        if (e.answer) {
+          if (
+            e.qType === QUESTION_TYPES.ONE_CHOICE ||
+            e.qType === QUESTION_TYPES.TRUE_FALSE
+          ) {
+            answerItem = {
+              question_id: e.id,
+              question_answer_id: e.answer,
+              time_spent: Math.ceil(e.timeSpent / 1000),
+            }
+          } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+            let answer = []
+            for (let el of e.answer) {
+              answer.push({ answer_id: el })
+            }
+            answerItem = {
+              question_id: e.id,
+              answer,
+              time_spent: Math.ceil(e.timeSpent / 1000),
+            }
+          } else if (e.qType === QUESTION_TYPES.MATCHING) {
+            answerItem = {
+              question_id: e.id,
+              answer: e.answer,
+              time_spent: Math.ceil(e.timeSpent / 1000),
+            }
+          } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
+            let answer = []
+            for (let i in e.answer) {
+              if (e?.answer?.[i].idAnswer) {
+                answer.push({
+                  answer_id: e?.answer?.[i]?.idAnswer,
+                  answer_position: +i + 1,
+                })
+              }
+            }
+            answerItem = {
+              question_id: e.id,
+              answer,
+              time_spent: Math.ceil(e.timeSpent / 1000),
+            }
+          } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
+            let answer = []
+            for (let i in e.answer) {
+              if (e.answer[i] && e.answer[i] !== '') {
+                answer.push({
+                  answer_id: e.answer[i],
+                  answer_position: +i + 1,
+                })
+              }
+            }
+            answerItem = {
+              question_id: e.id,
+              answer,
+              time_spent: Math.ceil(e.timeSpent / 1000),
+            }
+          } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
+            let answer = []
+            for (let i in e.answer) {
+              if (e.answer[i] && e.answer[i] !== '') {
+                answer.push({
+                  answer_text: e.answer[i],
+                  answer_position: +i + 1,
+                })
+              }
+            }
+            answerItem = {
+              question_id: e.id,
+              answer,
+              time_spent: Math.ceil(e.timeSpent / 1000),
+            }
+          }
+        }
+        if (e.qType === QUESTION_TYPES.ESSAY) {
+          //chua lam den day
+          if (checkAnswered(e, true)) {
+            const requirements = e?.data?.requirements?.length
+              ? e?.data?.requirements
+              : [null]
+            if (requirements?.length) {
+              requirements?.forEach((requirement: Requirement | null) => {
+                answers.push({
+                  question_id: e.id,
+                  short_answer:
+                    answerListRef?.current?.[requirement?.id || ''] ??
+                    (requirement?.id ? '' : e?.answer || ''),
+                  requirement_id: requirement?.id || null,
+                  response_option:
+                    e?.data?.response_option ??
+                    (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+                  time_spent: Math.ceil(e?.timeSpent / 1000),
+                  active: 'SUBMITED',
+                  answer_file:
+                    requirement?.answer_file || e?.answer_file || null,
+                })
+              })
+            } else {
               answers.push({
                 question_id: e.id,
-                short_answer:
-                  answerListRef?.current?.[requirement?.id || ''] ??
-                  (requirement?.id ? '' : e?.answer || ''),
-                requirement_id: requirement?.id || null,
+                short_answer: e?.answer || '',
+                requirement_id: null,
                 response_option:
                   e?.data?.response_option ??
-                  (e?.response_type === 0 ? 'WORD' : 'SHEET'),
+                  (e?.response_type === 0 ? ESSAY_TYPE.WORD : ESSAY_TYPE.SHEET),
                 time_spent: Math.ceil(e?.timeSpent / 1000),
                 active: 'SUBMITED',
-                answer_file: requirement?.answer_file || e?.answer_file || null,
+                answer_file: e?.answer_file || null,
               })
-            })
-          } else {
-            answers.push({
-              question_id: e.id,
-              short_answer: e?.answer || '',
-              requirement_id: null,
-              response_option:
-                e?.data?.response_option ??
-                (e?.response_type === 0 ? ESSAY_TYPE.WORD : ESSAY_TYPE.SHEET),
-              time_spent: Math.ceil(e?.timeSpent / 1000),
-              active: 'SUBMITED',
-              answer_file: e?.answer_file || null,
-            })
+            }
           }
         }
       }
-      quiz_position_mapping.push({
-        question_id: e.id,
-        answers: e.data?.answers,
-      })
     }
+
+    //The Question has been done
+    if (isDoneQuestion) return
 
     if (type_submit === 'submit') {
       setTabs(async () => {
@@ -1156,14 +1169,15 @@ const TestDetail = () => {
         // ref.setKey
         return reformTabs
       })
+
       dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitQuestion(quizAttempId?.id as string, {
-        answers: answers,
-        quiz_position_mapping: quiz_position_mapping,
+      const res = await CoursesAPI.submitAnswer(quizAttempId?.id as string, {
+        question_id: currentTabContent?.id,
         total_attempt_time:
           quizDetail?.quiz_timed * 60 -
           (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
         scratch_pads: scratchPads || [],
+        ...answerItem,
       })
       if (res) {
         if (isCompletedCourse.status) {
@@ -1176,44 +1190,52 @@ const TestDetail = () => {
           setOpenReportModal(true)
           return
         }
-        if (type === 'entrance') {
-          router.replace(`/entrance-test/test-result/${res?.data?.id}`)
-        } else if (type === 'event-test') {
-          router.replace(`/event-test`)
-          setSubmitEventTest(true)
-          localStorage.setItem(
-            'category',
-            JSON.stringify(res?.data?.course_category?.name),
-          )
-        } else {
-          if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
-            router.replace(`/courses/test/test-result/${res?.data?.id}`)
+
+        if (isLastQuestion) {
+          if (type === 'entrance') {
+            router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+          } else if (type === 'event-test') {
+            router.replace(`/event-test`)
+            setSubmitEventTest(true)
+            localStorage.setItem(
+              'category',
+              JSON.stringify(res?.data?.course_category?.name),
+            )
           } else {
-            if (
-              courseType === 'FOUNDATION_COURSE' &&
-              quizDetail?.quiz_type == 'FINAL_TEST'
-            ) {
-              router.push(localStorage.getItem('courseDetail') || '')
-            } else {
+            if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
               router.replace(`/courses/test/test-result/${res?.data?.id}`)
+            } else {
+              if (
+                courseType === 'FOUNDATION_COURSE' &&
+                quizDetail?.quiz_type == 'FINAL_TEST'
+              ) {
+                router.push(localStorage.getItem('courseDetail') || '')
+              } else {
+                router.replace(`/courses/test/test-result/${res?.data?.id}`)
+              }
             }
           }
         }
       }
     } else {
+      //chua dung vao day
       setTabs(async () => {
         // ref.setKey
         handleChangeTab(tabs[0].id)
         return reformTabs
       })
       dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitQuestion(quizAttempId?.id as string, {
-        answers: answers,
-        quiz_position_mapping: quiz_position_mapping,
-        total_attempt_time:
-          quizDetail.quiz_timed * 60 -
-          (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-      })
+      const res = await CoursesAPI.submitAllQuestion(
+        quizAttempId?.id as string,
+        {
+          answers: answers,
+          total_attempt_time:
+            quizDetail.quiz_timed * 60 -
+            (quizDetail.quiz_timed
+              ? timeRef?.current?.handleGetTime() || 0
+              : 0),
+        },
+      )
       if (res) {
         if (isCompletedCourse.status) {
           setTimeout(() => {
@@ -1688,7 +1710,12 @@ const TestDetail = () => {
                   setCurrentTab={setCurrentPage}
                   optionShowAll={<OptionShowAll />}
                   handleChangeTab={async (id?: string) => {
-                    id && handleChangeTab(id)
+                    if (id) {
+                      handleChangeTab(id)
+                      if (checkAnswered(currentTabContent)) {
+                        handleSubmitQuestion('submit')
+                      }
+                    }
                   }}
                   activeShowAll={activeShowAll}
                   setActiveShowAll={setActiveShowAll}

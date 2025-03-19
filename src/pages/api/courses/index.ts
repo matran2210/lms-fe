@@ -207,7 +207,17 @@ export class CoursesAPI {
     return fetcher(`${url.getQuizAttempts}/${id}`)
   }
 
-  static submitQuestion(id: string, data: any): Promise<any> {
+  //submit a question
+  static submitAnswer(id: string, data: any): Promise<any> {
+    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
+    return fetcher(`${uri}`, {
+      data: data,
+      method: 'POST',
+    })
+  }
+
+  static submitAllQuestion(id: string, data: any): Promise<any> {
+    //is submit test
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
