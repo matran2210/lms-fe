@@ -179,11 +179,10 @@ const ExamEditDrawer = ({
                   onMenuScrollToBottom={hasNextPage && fetchNextPage}
                 />
                 <em className="mt-1 inline-block">
-                  Please select a new exam date carefully. You can only change
-                  it twice.
+                  You can only change the exam date up to two times.
                 </em>
                 <em className="block">
-                  {remainingChange || remainingChange === 0
+                  {remainingChange
                     ? `Remaining ${pluralize('change', remainingChange)}: ${remainingChange}`
                     : ''}
                 </em>
