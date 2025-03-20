@@ -1,20 +1,14 @@
 import { UploadOutlined } from '@ant-design/icons'
+import { IconCongrats } from '@assets/icons'
 import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  Button,
-  GetProp,
-  Popconfirm,
-  Upload,
-  UploadFile,
-  UploadProps,
-  message,
-} from 'antd'
+import { Button, GetProp, Upload, UploadFile, UploadProps, message } from 'antd'
 import { RcFile } from 'antd/es/upload'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useMutation } from 'react-query'
@@ -42,6 +36,7 @@ const ExamEditDrawer = ({
   classId,
   onSuccess,
 }: Iprops) => {
+  const [openConfirmModal, setOpenConfirmModal] = useState(false)
   const validationSchema = z.object({
     note: z
       .array(z.any(), { message: zodMsg.required })
@@ -113,6 +108,7 @@ const ExamEditDrawer = ({
         reset()
         onSuccess && onSuccess()
       }
+      setOpenConfirmModal(false)
     },
   })
 
@@ -200,9 +196,11 @@ const ExamEditDrawer = ({
                 multiple={false}
                 maxCount={1}
                 fileList={fileList}
-                disabled={(options?.length ?? 0) <= 0}
               >
-                <Button icon={<UploadOutlined />}>
+                <Button
+                  icon={<UploadOutlined />}
+                  disabled={(options?.length ?? 0) <= 0}
+                >
                   Please upload your exam registration evidence.
                 </Button>
               </Upload>
@@ -212,29 +210,42 @@ const ExamEditDrawer = ({
       </div>
       <div className="absolute bottom-6 right-8">
         <ButtonText title="Cancel" onClick={closeModal} size={'medium'} />
-        <Popconfirm
-          title=" Are you sure?"
-          description={`Your learning progress in the Revision class for the ${exams?.current_exam_name} exam cannot be saved. Do you want to continue making changes?`}
-          onCancel={() => setIsOpen(false)}
-          okText="Change anyway"
-          cancelText="No"
-          onConfirm={handleSubmit(onSubmit)}
-          disabled={exams?.current_exam_name === ''}
-          okButtonProps={{ loading: isChangingLoad }}
-        >
-          <SappButton
-            disabled={(options?.length ?? 0) <= 0}
-            size="medium"
-            title={'Save'}
-            loading={isChangingLoad}
-            onClick={
-              exams?.current_exam_name === ''
-                ? handleSubmit(onSubmit)
-                : undefined
+
+        <SappButton
+          disabled={(options?.length ?? 0) <= 0}
+          size="medium"
+          title={'Save'}
+          loading={isChangingLoad}
+          onClick={() => {
+            if (exams?.current_exam_name === '') {
+              handleSubmit(onSubmit)()
+            } else {
+              setOpenConfirmModal(true)
             }
-          />
-        </Popconfirm>
+          }}
+        />
       </div>
+      <SappModalV3
+        open={openConfirmModal}
+        cancelButtonCaption="No"
+        okButtonCaption="Change Anyway"
+        handleCancel={() => setOpenConfirmModal(false)}
+        onOk={handleSubmit(onSubmit, (errors) => {
+          if (errors) {
+            setOpenConfirmModal(false)
+          }
+        })}
+        fullWidthBtn={true}
+        buttonSize="extra"
+        icon={<IconCongrats />}
+        header="Are you sure?"
+        loading={isChangingLoad}
+      >
+        <p className="mt-6">
+          {`Your learning progress in the Revision class for the ${exams?.current_exam_name} exam cannot be saved. Do you want to continue
+        making changes?`}
+        </p>
+      </SappModalV3>
     </SappDrawerV2>
   )
 }
