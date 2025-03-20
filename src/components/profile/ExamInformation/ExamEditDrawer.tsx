@@ -6,6 +6,7 @@ import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { pluralize } from '@utils/helpers/plurarize'
 import { Button, GetProp, Upload, UploadFile, UploadProps, message } from 'antd'
 import { RcFile } from 'antd/es/upload'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
@@ -24,6 +25,7 @@ interface Iprops {
   data: any
   classId: string
   onSuccess?: () => void
+  remainingChanges: number
 }
 
 const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
@@ -35,6 +37,7 @@ const ExamEditDrawer = ({
   data,
   classId,
   onSuccess,
+  remainingChanges: remainingChange,
 }: Iprops) => {
   const [openConfirmModal, setOpenConfirmModal] = useState(false)
   const validationSchema = z.object({
@@ -175,6 +178,15 @@ const ExamEditDrawer = ({
                   value={value ?? null}
                   onMenuScrollToBottom={hasNextPage && fetchNextPage}
                 />
+                <em className="mt-1 inline-block">
+                  Please select a new exam date carefully. You can only change
+                  it twice.
+                </em>
+                <em className="block">
+                  {remainingChange !== undefined
+                    ? `Remaining ${pluralize('change', remainingChange)}: ${remainingChange}`
+                    : ''}
+                </em>
               </div>
             )
           }}
