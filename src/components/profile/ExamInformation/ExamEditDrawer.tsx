@@ -183,7 +183,7 @@ const ExamEditDrawer = ({
                   it twice.
                 </em>
                 <em className="block">
-                  {remainingChange !== undefined
+                  {remainingChange || remainingChange === 0
                     ? `Remaining ${pluralize('change', remainingChange)}: ${remainingChange}`
                     : ''}
                 </em>
