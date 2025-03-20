@@ -1,4 +1,4 @@
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ButtonIconSapp from '@components/base/button/ButtonIconSapp'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -25,6 +25,7 @@ import PopupLesson from 'src/components/mycourses/PopupLesson'
 import PopupOpenClass from 'src/components/mycourses/PopupOpenClass'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useCourseContext } from '@contexts/index'
+import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
 
 const statusConfig: Record<any['status'], { text: string; color: string }> = {
   'not-started': { text: 'Not Started', color: 'bg-gray-500' },
@@ -298,38 +299,25 @@ const ItemClassesByStatus = ({
           ref={lastElementRef}
         >
           <div className={`flex min-h-352 flex-col`}>
-            <div className="relative h-60 bg-transparent">
-              <div className="absolute inset-0 rounded-sm bg-gray-200 opacity-50"></div>
-              <div className="absolute left-4 top-4 inline-flex w-30 items-center rounded-md bg-gray-300 bg-opacity-50 px-3 py-1 text-sm font-medium text-gray-600">
-                <span className={`h-3 w-3 ${color} mr-2 rounded-full`}></span>
-                {text}
-              </div>
-            </div>
-
             <div className="mb-3 mt-4 flex items-center justify-between">
               {enableCourse ? (
-                <div className="name-class text-medium-sm text-gray-1">
-                  <span className="ml-1 font-medium text-bw-1">
-                    <SappTooltip
-                      title={course?.classes?.[0]?.code}
-                      showTooltip={course?.classes?.[0]?.code?.length > 15}
-                    >
-                      {truncateString(course?.classes?.[0]?.code, 15)}
-                    </SappTooltip>
-                  </span>
-                </div>
+                <span className="flex items-center gap-2 text-sm text-gray-1">
+                  <BookInClassIcon />
+                  {truncateString(course?.classes?.[0]?.code, 15)}
+                </span>
               ) : (
                 <div className="name-class text-medium-sm text-gray-1">
                   <span className="ml-1 font-medium text-bw-1" />
                 </div>
               )}
-              <div className="time-class text-medium-sm text-gray-2">
+              <div className="time-class text-sm text-gray-2">
                 {determineButtonToShow !== 'Active' && (
-                  <span>
+                  <span className="flex items-center">
+                    <ClockInClassIcon />
                     <span
                       className={`font-medium ${
                         enableCourse ? 'text-bw-1' : 'text-gray-1'
-                      }`}
+                      } ml-2`}
                     >
                       {daysDifference > 0
                         ? daysDifference
@@ -337,7 +325,7 @@ const ItemClassesByStatus = ({
                           ? 1
                           : 0}{' '}
                     </span>
-                    {daysDifference > 1 ? 'days left' : 'day left'}
+                    &nbsp;{daysDifference > 1 ? 'days left' : 'day left'}
                   </span>
                 )}
               </div>
@@ -405,16 +393,18 @@ const ItemClassesByStatus = ({
               </div>
               <div className="action relative flex items-center justify-end">
                 {determineButtonToShow !== 'Disabled' ? (
-                  <ButtonSecondary
-                    title={'Xem chi tiết'}
-                    full={false}
-                    size={'medium'}
-                    className="w-full rounded-md"
+                  <ButtonIconSapp
+                    title="Add Progress"
+                    icon="arrow"
+                    variant="secondary"
+                    full
+                    position="end"
+                    className="border border-[#1F2937] hover:border-[#FFB800] hover:bg-[#FFB800] hover:text-white"
                     onClick={() => {
                       if (isActiveStudent) {
                         courseAction()
                       }
-                      trackGAEvent('CLick Button ItemClassesByStatus Item')
+                      trackGAEvent('Click Button ItemClassesByStatus Item')
                     }}
                   />
                 ) : (
