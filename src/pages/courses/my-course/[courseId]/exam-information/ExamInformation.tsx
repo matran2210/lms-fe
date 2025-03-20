@@ -111,6 +111,7 @@ const ExamInformation = () => {
                           queryKey: [ClassKey.ExamInfo],
                         })
                       }}
+                      remainingChanges={data.data.remaining_changes}
                     />
                   </>
                 )
