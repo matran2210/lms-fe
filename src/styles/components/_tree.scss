@@ -1,0 +1,38 @@
+.lessonFormTree {
+  .ant-tree-treenode {
+    @apply leading-[40px];
+  }
+
+  .ant-tree-switcher {
+    @apply flex items-center justify-center;
+  }
+
+  .ant-tree-switcher:before {
+    @apply top-1/2 -translate-y-1/2 transform;
+  }
+
+  .ant-tree-checkbox:not(.ant-tree-checkbox-disabled):hover
+    .ant-tree-checkbox-inner {
+    @apply border-primary;
+  }
+
+  .ant-tree-checkbox-checked .ant-tree-checkbox-inner {
+    @apply border-primary bg-primary;
+
+    &::after {
+      @apply top-[45%] h-3 w-2;
+    }
+  }
+
+  .ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner::after {
+    @apply bg-primary;
+  }
+
+  .ant-tree-checkbox-inner {
+    @apply h-6 w-6;
+  }
+}
+
+.error-message {
+  @apply absolute bottom-0 text-danger;
+}
