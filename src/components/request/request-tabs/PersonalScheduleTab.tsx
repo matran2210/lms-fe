@@ -149,8 +149,13 @@ const PersonalScheduleTab = () => {
               title="Reset"
               color="secondary"
               onClick={handleResetFilter}
+              disabled={isLoading}
             />
-            <SAPPButton title="Search" onClick={handleFilter} />
+            <SAPPButton
+              title="Search"
+              onClick={handleFilter}
+              disabled={isLoading}
+            />
           </div>
           <div>
             <SAPPButton

@@ -136,7 +136,6 @@ const NewEventSidebar = ({
         onClose={handleCancel}
         width={'960px'}
         closeIcon={false}
-        maskClosable={false}
       >
         <div className="flex h-full w-full flex-col">
           <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
