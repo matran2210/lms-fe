@@ -25,7 +25,7 @@ interface Iprops {
   data: any
   classId: string
   onSuccess?: () => void
-  remainingChanges: number
+  remainingChanges?: number
 }
 
 const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
