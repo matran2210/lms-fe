@@ -1,17 +1,13 @@
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
 import { SAPPCalendar } from 'sapp-common-package'
 import { IEvent } from 'sapp-common-package/dist/types'
-import {
-  EVENT_TYPES,
-  EVENT_TYPES_ARRAY,
-  EVENT_TYPES_RESPONSE,
-} from 'src/constants'
+import { EVENT_TYPES_ARRAY, EVENT_TYPES_RESPONSE } from 'src/constants'
 import { SchedulesAPI } from 'src/pages/api/schedules'
-import CalendarHead from './CalendarHead'
-import dayjs from 'dayjs'
 import { IResponseSchedule } from 'src/redux/types/Schedule/schedule'
+import CalendarHead from './CalendarHead'
 
 interface IProps {
   onOpenDetail: (date: Date, events: IEvent[]) => void
@@ -131,6 +127,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
         onOpenCreate={onOpenCreate}
         norms={[]}
         onRefetchAPI={handleRefetch}
+        loading={isLoading}
       />
     </>
   )

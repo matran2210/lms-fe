@@ -16,6 +16,7 @@ interface SAPPButtonProps {
   icon?: ReactNode
   iconPosition?: 'start' | 'end'
   onClick?: any
+  loading?: boolean
 }
 
 const SAPPButton = ({
@@ -28,6 +29,7 @@ const SAPPButton = ({
   icon,
   iconPosition = 'start',
   onClick,
+  loading,
 }: SAPPButtonProps) => {
   let colorClass = ''
   switch (color) {
@@ -51,6 +53,7 @@ const SAPPButton = ({
       icon={icon}
       iconPosition={iconPosition}
       onClick={onClick}
+      loading={loading}
     >
       {title}
       {children}

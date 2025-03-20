@@ -39,7 +39,7 @@ const tabs = [
 const RequestPage = () => {
   const router = useRouter()
   const handleChangeTab = () => {
-    router.push('')
+    router.push(router.pathname)
   }
 
   return (
