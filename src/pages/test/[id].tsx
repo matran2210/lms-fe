@@ -1017,10 +1017,12 @@ const TestDetail = () => {
   const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
     useCourseContext()
 
-  const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
+  const handleSubmitAnswer = async (action?: string) => {
     if (listQuestionDone.includes(currentTabContent?.id)) {
       return
     }
+    if (!checkAnswered(currentTabContent)) return
+
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let answers: {
       question_id: any
@@ -1033,16 +1035,11 @@ const TestDetail = () => {
       active?: string
       answer_file?: any
     }[] = []
-    let isLastQuestion = false
     let answerItem = {}
     let reformTabs: any[] = [...allQuest]
-    setLoading(true)
 
     for (let [index, e] of allQuest.entries()) {
       if (e.id === currentTabContent?.id) {
-        if (index === allQuest.length - 1) {
-          isLastQuestion = true
-        }
         reformTabs[index].done = true
 
         if (e.answer) {
@@ -1159,19 +1156,68 @@ const TestDetail = () => {
         break
       }
     }
+    dispatch(disableUnsavedChange())
 
-    if (type_submit === 'submit') {
-      dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitAnswer(quizAttempId?.id as string, {
-        question_id: currentTabContent?.id,
-        total_attempt_time:
-          quizDetail?.quiz_timed * 60 -
-          (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-        scratch_pads: scratchPads || [],
-        ...answerItem,
+    const res = await CoursesAPI.submitAnswer(quizAttempId?.id as string, {
+      question_id: currentTabContent?.id,
+      total_attempt_time:
+        quizDetail?.quiz_timed * 60 -
+        (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+      scratch_pads: scratchPads || [],
+      ...answerItem,
+    })
+    if (res?.success) {
+      setListQuestionDone((prev) => [...prev, currentTabContent?.id])
+      if (action === 'next-tab') {
+        setTabs(reformTabs)
+      }
+
+      // if (isCompletedCourse.status) {
+      //   setTimeout(() => {
+      //     dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+      //   }, 2000)
+      // }
+
+      // if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
+      //   setOpenReportModal(true)
+      //   return
+    }
+    // clearInterval(intervalRef.current)
+    return
+  }
+
+  const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
+    const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
+    let quiz_position_mapping = []
+    let reformTabs: any[] = []
+    setLoading(true)
+    setSubmited(true)
+
+    for (let e of allQuest) {
+      reformTabs.push({ ...e, done: true })
+      quiz_position_mapping.push({
+        question_id: e.id,
+        answers: e.data?.answers,
       })
-      if (res) {
-        setListQuestionDone((prev) => [...prev, currentTabContent?.id])
+    }
+
+    setTabs(async () => {
+      // ref.setKey
+      handleChangeTab(tabs[0].id)
+      return reformTabs
+    })
+    dispatch(disableUnsavedChange())
+
+    const res = await CoursesAPI.submitAllQuestion(quizAttempId?.id as string, {
+      quiz_position_mapping: quiz_position_mapping,
+      scratch_pads: scratchPads || [],
+      total_attempt_time:
+        quizDetail.quiz_timed * 60 -
+        (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+    })
+
+    if (res?.success) {
+      if (typeSubmit === 'submit') {
         if (isCompletedCourse.status) {
           setTimeout(() => {
             dispatch(showPopupCompletedCourse(isCompletedCourse.content))
@@ -1182,54 +1228,30 @@ const TestDetail = () => {
           setOpenReportModal(true)
           return
         }
-
-        if (isLastQuestion) {
-          setSubmited(true)
-          if (type === 'entrance') {
-            router.replace(`/entrance-test/test-result/${res?.data?.id}`)
-          } else if (type === 'event-test') {
-            router.replace(`/event-test`)
-            setSubmitEventTest(true)
-            localStorage.setItem(
-              'category',
-              JSON.stringify(res?.data?.course_category?.name),
-            )
+        if (type === 'entrance') {
+          router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+        } else if (type === 'event-test') {
+          router.replace(`/event-test`)
+          setSubmitEventTest(true)
+          localStorage.setItem(
+            'category',
+            JSON.stringify(res?.data?.course_category?.name),
+          )
+        } else {
+          if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
+            router.replace(`/courses/test/test-result/${res?.data?.id}`)
           } else {
-            if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
-              router.replace(`/courses/test/test-result/${res?.data?.id}`)
+            if (
+              courseType === 'FOUNDATION_COURSE' &&
+              quizDetail?.quiz_type == 'FINAL_TEST'
+            ) {
+              router.push(localStorage.getItem('courseDetail') || '')
             } else {
-              if (
-                courseType === 'FOUNDATION_COURSE' &&
-                quizDetail?.quiz_type == 'FINAL_TEST'
-              ) {
-                router.push(localStorage.getItem('courseDetail') || '')
-              } else {
-                router.replace(`/courses/test/test-result/${res?.data?.id}`)
-              }
+              router.replace(`/courses/test/test-result/${res?.data?.id}`)
             }
           }
         }
-      }
-    } else {
-      //chua dung vao day
-      setTabs(async () => {
-        // ref.setKey
-        handleChangeTab(tabs[0].id)
-        return reformTabs
-      })
-      dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitAllQuestion(
-        quizAttempId?.id as string,
-        {
-          answers: answers,
-          total_attempt_time:
-            quizDetail.quiz_timed * 60 -
-            (quizDetail.quiz_timed
-              ? timeRef?.current?.handleGetTime() || 0
-              : 0),
-        },
-      )
-      if (res) {
+      } else {
         if (isCompletedCourse.status) {
           setTimeout(() => {
             dispatch(showPopupCompletedCourse(isCompletedCourse.content))
@@ -1242,10 +1264,7 @@ const TestDetail = () => {
         })
       }
     }
-
-    // clearInterval(intervalRef.current)
     setLoading(false)
-    return
   }
 
   const handleClearSelection = (currentTabContent: any) => {
@@ -1682,7 +1701,7 @@ const TestDetail = () => {
             <HeaderTest
               quizDetail={quizDetail}
               openLimit={openLimit}
-              handleSubmitQuestion={handleSubmitQuestion}
+              handleSubmitQuestions={handleSubmitQuestions}
               timeRef={timeRef}
               quizAttempId={quizAttempId}
               setUnSubmitAnswer={setUnSubmitAnswer}
@@ -1692,6 +1711,7 @@ const TestDetail = () => {
               type={type}
               submited={submited}
               setOpenSubmit={setOpenSubmit}
+              onSubmitAnswer={handleSubmitAnswer}
             />
 
             {/** Tabs */}
@@ -1705,9 +1725,7 @@ const TestDetail = () => {
                   handleChangeTab={async (id?: string) => {
                     if (id) {
                       handleChangeTab(id)
-                      if (checkAnswered(currentTabContent)) {
-                        handleSubmitQuestion('submit')
-                      }
+                      handleSubmitAnswer('next-tab')
                     }
                   }}
                   activeShowAll={activeShowAll}
@@ -2119,6 +2137,7 @@ const TestDetail = () => {
                 <button
                   className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
+                    handleSubmitAnswer()
                     const data = await getResult(currentTabContent)
                     confirmAnswer(
                       data?.corrects,
@@ -2235,7 +2254,7 @@ const TestDetail = () => {
               } else {
                 setOpenSubmit(false)
               }
-              handleSubmitQuestion('submit')
+              handleSubmitQuestions('submit')
             }}
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2253,7 +2272,7 @@ const TestDetail = () => {
               } else {
                 setUnSubmitAnswer(false)
               }
-              handleSubmitQuestion('submit')
+              handleSubmitQuestions('submit')
             }}
             handleCancel={() => setUnSubmitAnswer(false)}
           />

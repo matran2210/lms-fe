@@ -13,7 +13,7 @@ interface IProps {
     limit_count: string
   }
   openLimit: boolean
-  handleSubmitQuestion: (type_submit: 'timeout' | 'submit') => Promise<void>
+  handleSubmitQuestions: (type_submit: 'timeout' | 'submit') => Promise<void>
   timeRef: ForwardedRef<any>
   quizAttempId: {
     id: string
@@ -27,11 +27,12 @@ interface IProps {
   type: string | string[] | undefined
   submited: boolean
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
+  onSubmitAnswer: () => Promise<void>
 }
 
 const HeaderTest = ({
   checkUnSubmitAnswer,
-  handleSubmitQuestion,
+  handleSubmitQuestions,
   openLimit,
   quizAttempId,
   quizDetail,
@@ -42,6 +43,7 @@ const HeaderTest = ({
   type,
   setOpenSubmit,
   submited,
+  onSubmitAnswer,
 }: IProps) => {
   const dispatch = useAppDispatch()
   return (
@@ -55,7 +57,7 @@ const HeaderTest = ({
           onTimeOut={() => {
             if (!openLimit) {
               dispatch(disableUnsavedChange())
-              handleSubmitQuestion('timeout')
+              handleSubmitQuestions('timeout')
             }
           }}
           ref={timeRef}
@@ -79,6 +81,7 @@ const HeaderTest = ({
             className: 'border border-bw-1',
             color: 'secondary',
             onClick: () => {
+              onSubmitAnswer()
               if (checkUnSubmitAnswer()?.length > 0) {
                 setUnSubmitAnswer(true)
               } else {
