@@ -12,6 +12,7 @@ import { useInfiniteQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { MY_COURSES } from 'src/constants/lang'
+import PopupModalTest from '@components/survey/PopupModalTest'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -168,6 +169,10 @@ const CourseDetail = () => {
           </>
         )}
       </div>
+      <PopupModalTest
+        course_name={data?.pages?.[0]?.courseDetail?.data?.name}
+        learning_progress={50}
+      />
     </Layout>
   )
 }
