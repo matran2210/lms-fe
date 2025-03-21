@@ -67,7 +67,7 @@ const CoursePartDetail = () => {
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
 
-  const { handleOpenLockSection } = useCourseContext()
+  const { setOpenPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
@@ -95,7 +95,12 @@ const CoursePartDetail = () => {
   const handleActive = (item: any) => {
     setActiveItem(item)
     if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
-      handleOpenLockSection()
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+        thankYou: false,
+        thankYouLater: false,
+      })
       setChapterDetail(undefined)
     }
   }
@@ -166,7 +171,12 @@ const CoursePartDetail = () => {
 
   const handleRouterActivity = (id: string, chapter: any) => {
     if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-      handleOpenLockSection()
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+        thankYou: false,
+        thankYouLater: false,
+      })
     } else {
       router.push({
         pathname: `/courses/${router.query.id}/activity/${id}`,
@@ -198,7 +208,12 @@ const CoursePartDetail = () => {
       totalCourseSectionsCompleted !== undefined
     ) {
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-        handleOpenLockSection()
+        setOpenPopupCTA({
+          lockSection: true,
+          ctaUpgrade: false,
+          thankYou: false,
+          thankYouLater: false,
+        })
       } else {
         router.push({
           pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
@@ -214,7 +229,12 @@ const CoursePartDetail = () => {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-        handleOpenLockSection()
+        setOpenPopupCTA({
+          lockSection: true,
+          ctaUpgrade: false,
+          thankYou: false,
+          thankYouLater: false,
+        })
       } else {
         router.push({
           pathname: `/case-study/${topicId}`,
@@ -249,7 +269,12 @@ const CoursePartDetail = () => {
       chapter?.course_section_link_parents?.[0]?.is_preview_locked &&
       chapter?.course_section_type === TEST_TYPE.CHAPTER_TEST
     ) {
-      handleOpenLockSection()
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+        thankYou: false,
+        thankYouLater: false,
+      })
     }
     if (
       chapter?.course_section_link_parents?.[0]?.is_preview_locked &&
