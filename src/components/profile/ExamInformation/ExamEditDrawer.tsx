@@ -170,8 +170,8 @@ const ExamEditDrawer = ({
                   classParent="w-full md:max-w-full"
                   placeholder="Exam Date"
                   options={options}
-                  isDisabled={(options?.length ?? 0) <= 0}
                   required
+                  noOptionsMessage={() => 'No data'}
                   onChange={(e) => {
                     return onChange(e === undefined || null ? {} : e)
                   }}
