@@ -34,15 +34,15 @@ const statusConfig: Record<any['status'], { text: string; color: string }> = {
   completed: { text: 'Completed', color: 'bg-green-500' },
 }
 const ItemClassesByStatus = ({
-  course,
+  classes,
   index,
   lastElementRef,
   refetch,
 }: {
-  course: ICourse
+  classes: any
   index: number
-  lastElementRef: (node: HTMLDivElement) => void
-  refetch: () => void
+  lastElementRef?: (node: HTMLDivElement) => void
+  refetch?: () => void
 }) => {
   const { text, color } = statusConfig['In Progress']
   const [open, setOpen] = useState<boolean>(false)
@@ -52,8 +52,8 @@ const ItemClassesByStatus = ({
   const [openLesson, setOpenLesson] = useState<boolean>(false)
   const [openClass, setOpenClass] = useState<boolean>(false)
   const router = useRouter()
-  const student = course?.classes?.[0]?.class_user_instances?.[0]
-  const classInstance = course?.classes[0]
+  const student = classes?.classes?.[0]?.class_user_instances?.[0]
+  const classInstance = classes?.classes?.[0]
   const [daysDifference, setDaysDifference] = useState(0)
   const currentDate = useMemo(() => new Date(), [])
 
@@ -73,7 +73,7 @@ const ItemClassesByStatus = ({
       // Update state with the difference
       setDaysDifference(dayLefts)
     }
-  }, [course, student?.finished_at])
+  }, [classes, student?.finished_at])
 
   const percentProgress =
     round(
@@ -93,9 +93,9 @@ const ItemClassesByStatus = ({
     CLASS_USER_TYPES.CANCELED,
   ]
 
-  // Function để hiển thị status của course
+  // Function để hiển thị status của classes
   const checkStatusCourse = () => {
-    const courseStatus = course?.status
+    const courseStatus = classes?.status
     const classStatus = classInstance?.status
     const classUserType = classInstance?.class_user_instances[0].type
     const studentStatus = student?.status
@@ -119,7 +119,7 @@ const ItemClassesByStatus = ({
         classStatus === CLASS_STATUS.PUBLIC ||
         classStatus === CLASS_STATUS.ENDED
       ) {
-        if (course?.course_type === 'TRIAL_COURSE' && !student) {
+        if (classes?.course_type === 'TRIAL_COURSE' && !student) {
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
           if (
@@ -139,7 +139,7 @@ const ItemClassesByStatus = ({
         if (startedAt && finishedAt) {
           const finishedAtDate = new Date(student?.finished_at as any)
           if (
-            course?.course_type === 'TRIAL_COURSE' &&
+            classes?.course_type === 'TRIAL_COURSE' &&
             finishedAtDate <= formattedDate
           )
             return BUTTON_STATUS.Extend
@@ -172,7 +172,7 @@ const ItemClassesByStatus = ({
 
   const determineButtonToShow = checkStatusCourse() as any
 
-  // Set active course dựa theo trạng thái của học viên
+  // Set active classes dựa theo trạng thái của học viên
   const renderStatusUser = (status: string) => {
     switch (status) {
       case CLASS_USER_TYPES.RESERVED:
@@ -194,7 +194,7 @@ const ItemClassesByStatus = ({
       }
       await CoursesAPI.activeCourse(params)
       // await fetchCourseList()
-      refetch()
+      // refetch()
       toast.success('Active thành công!')
     } catch (error) {}
   }
@@ -202,7 +202,7 @@ const ItemClassesByStatus = ({
     try {
       const res = await CoursesAPI.extendCourse({ classId: classInstance?.id })
       if (res?.success) {
-        refetch()
+        // refetch()
         toast.success('Gia hạn hành công!')
       }
     } catch (error) {}
@@ -210,21 +210,13 @@ const ItemClassesByStatus = ({
 
   const { courseType } = useCourseContext()
 
-  useEffect(() => {
-    if (course?.course_type === 'TRIAL_COURSE') {
-      localStorage.setItem('daysDifference', '')
-    } else {
-      localStorage.removeItem('daysDifference')
-    }
-  }, [courseType])
-
   const handleCourseDetail = () => {
-    router.push(`/courses/my-course/${classInstance?.id}`)
+    router.push(`/courses/my-classes/${classInstance?.id}`)
     localStorage.setItem(
       'courseDetail',
-      `/courses/my-course/${classInstance?.id}`,
+      `/courses/my-classes/${classInstance?.id}`,
     )
-    if (course?.course_type === 'TRIAL_COURSE') {
+    if (classes?.course_type === 'TRIAL_COURSE') {
       localStorage.setItem('daysDifference', daysDifference as any)
       localStorage.setItem('showPinTrial', 'true')
     } else {
@@ -255,11 +247,11 @@ const ItemClassesByStatus = ({
     } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
       setOpenClass(true)
     } else {
-      course.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
+      classes.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
     }
   }
 
-  // Set enable course dựa theo trạng thái của course
+  // Set enable classes dựa theo trạng thái của classes
   const statusMap = {
     [CLASS_USER_STATUS.READY_TO_LEARN]: 'Ready to learn',
     [CLASS_USER_STATUS.COMPLETED]: 'Completed',
@@ -272,7 +264,7 @@ const ItemClassesByStatus = ({
   const enableCourse =
     determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'
 
-  // Set active course dựa theo trạng thái của học viên
+  // Set active classes dựa theo trạng thái của học viên
   const renderStatusIcon = (status: string) => {
     switch (status) {
       case `${CLASS_USER_STATUS.READY_TO_LEARN}`:
@@ -291,131 +283,130 @@ const ItemClassesByStatus = ({
 
   return (
     <>
-      {determineButtonToShow !== 'Hidden' && (
-        <div
-          key={index}
-          className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
-          data-aos={ANIMATION.DATA_AOS}
-          ref={lastElementRef}
-        >
-          <div className={`flex min-h-352 flex-col`}>
-            <div className="mb-3 mt-4 flex items-center justify-between">
-              {enableCourse ? (
-                <span className="flex items-center gap-2 text-sm text-gray-1">
-                  <BookInClassIcon />
-                  {truncateString(course?.classes?.[0]?.code, 15)}
-                </span>
-              ) : (
-                <div className="name-class text-medium-sm text-gray-1">
-                  <span className="ml-1 font-medium text-bw-1" />
-                </div>
-              )}
-              <div className="time-class text-sm text-gray-2">
-                {determineButtonToShow !== 'Active' && (
-                  <span className="flex items-center">
-                    <ClockInClassIcon />
-                    <span
-                      className={`font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-1'
-                      } ml-2`}
-                    >
-                      {daysDifference > 0
-                        ? daysDifference
-                        : enableCourse
-                          ? 1
-                          : 0}{' '}
-                    </span>
-                    &nbsp;{daysDifference > 1 ? 'days left' : 'day left'}
+      {/* {determineButtonToShow !== 'Hidden' && ( */}
+      <div
+        key={index}
+        className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+        data-aos={ANIMATION.DATA_AOS}
+        ref={lastElementRef}
+      >
+        <div className={`flex min-h-352 flex-col`}>
+          <div className="mb-3 mt-4 flex items-center justify-between">
+            {enableCourse ? (
+              <span className="flex items-center gap-2 text-sm text-gray-1">
+                <BookInClassIcon />
+                {truncateString(classes?.classes?.[0]?.code, 15)}
+              </span>
+            ) : (
+              <div className="name-class text-medium-sm text-gray-1">
+                <span className="ml-1 font-medium text-bw-1" />
+              </div>
+            )}
+            <div className="time-class text-sm text-gray-2">
+              {determineButtonToShow !== 'Active' && (
+                <span className="flex items-center">
+                  <ClockInClassIcon />
+                  <span
+                    className={`font-medium ${
+                      enableCourse ? 'text-bw-1' : 'text-gray-1'
+                    } ml-2`}
+                  >
+                    {daysDifference > 0
+                      ? daysDifference
+                      : enableCourse
+                        ? 1
+                        : 0}{' '}
                   </span>
-                )}
-              </div>
+                  &nbsp;{daysDifference > 1 ? 'days left' : 'day left'}
+                </span>
+              )}
             </div>
-
-            <div
-              className={`name-course mb-2 text-xl font-medium xl:h-[60px] ${
-                !enableCourse ? 'text-gray-2' : 'text-bw-1'
-              }`}
-            >
-              <div
-                className="line-clamp-2 cursor-pointer text-ellipsis"
-                onClick={() => {
-                  if (isActiveStudent && enableCourse) {
-                    courseAction()
-                  }
-                  trackGAEvent('Click Title ItemClassesByStatus Item')
-                }}
-              >
-                <SappTooltip
-                  title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 50}
-                >
-                  {truncateString(course?.name, 50)}
-                </SappTooltip>
-              </div>
-            </div>
-
-            <div className="mt-auto">
-              <div className="progress mb-6 h-8">
-                <div className="info mb-2 flex items-center justify-between">
-                  <div className="text flex items-center">
-                    <Icon
-                      type={enableCourse ? iconType : 'expired'}
-                      className={`relative ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2'
-                      }`}
-                    />
-                    <p
-                      className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
-                      } ml-px pl-2`}
-                    >
-                      {enableCourse ? showStatus : 'Expired'}
-                    </p>
-                  </div>
-                  <div className="number">
-                    <p
-                      className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
-                      }`}
-                    >
-                      {progressPart}%
-                    </p>
-                  </div>
-                </div>
-                <div className="progressbar h-1.5 bg-gray-3">
-                  <div
-                    className={`progress-percentage ${
-                      enableCourse ? 'bg-primary ' : 'bg-gray-2'
-                    } h-1.5`}
-                    style={{ width: `${progressPart}%` }}
-                  ></div>
-                </div>
-              </div>
-              <div className="action relative flex items-center justify-end">
-                {determineButtonToShow !== 'Disabled' ? (
-                  <ButtonIconSapp
-                    title="Add Progress"
-                    icon="arrow"
-                    variant="secondary"
-                    full
-                    position="end"
-                    className="border border-[#1F2937] hover:border-[#FFB800] hover:bg-[#FFB800] hover:text-white"
-                    onClick={() => {
-                      if (isActiveStudent) {
-                        courseAction()
-                      }
-                      trackGAEvent('Click Button ItemClassesByStatus Item')
-                    }}
-                  />
-                ) : (
-                  <div className="action relative flex h-8 items-center justify-end"></div>
-                )}
-              </div>
-            </div>
-            <ResultRowsModal open={open} setOpen={setOpen} />
           </div>
+
+          <div
+            className={`name-classes mb-2 text-xl font-medium xl:h-[60px] ${
+              !enableCourse ? 'text-gray-2' : 'text-bw-1'
+            }`}
+          >
+            <div
+              className="line-clamp-2 cursor-pointer text-ellipsis"
+              onClick={() => {
+                if (isActiveStudent && enableCourse) {
+                  courseAction()
+                }
+                trackGAEvent('Click Title ItemClassesByStatus Item')
+              }}
+            >
+              <SappTooltip
+                title={classes?.name}
+                showTooltip={(classes?.name as string)?.length > 50}
+              >
+                {truncateString(classes?.name, 50)}
+              </SappTooltip>
+            </div>
+          </div>
+
+          <div className="mt-auto">
+            <div className="progress mb-6 h-8">
+              <div className="info mb-2 flex items-center justify-between">
+                <div className="text flex items-center">
+                  <Icon
+                    type={enableCourse ? iconType : 'expired'}
+                    className={`relative ${
+                      enableCourse ? 'text-bw-1' : 'text-gray-2'
+                    }`}
+                  />
+                  <p
+                    className={`text-medium-sm font-medium ${
+                      enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                    } ml-px pl-2`}
+                  >
+                    {enableCourse ? showStatus : 'Expired'}
+                  </p>
+                </div>
+                <div className="number">
+                  <p
+                    className={`text-medium-sm font-medium ${
+                      enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                    }`}
+                  >
+                    {progressPart}%
+                  </p>
+                </div>
+              </div>
+              <div className="progressbar h-1.5 bg-gray-3">
+                <div
+                  className={`progress-percentage ${
+                    enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                  } h-1.5`}
+                  style={{ width: `${progressPart}%` }}
+                ></div>
+              </div>
+            </div>
+            <div className="action relative flex items-center justify-end">
+              {determineButtonToShow !== 'Disabled' ? (
+                <ButtonIconSapp
+                  title="Xem chi tiết"
+                  icon="arrow"
+                  variant="secondary"
+                  full
+                  position="end"
+                  className="border border-[#1F2937] hover:border-[#FFB800] hover:bg-[#FFB800] hover:text-white"
+                  onClick={() => {
+                    if (classes?.id) {
+                      router.push(`/teacher/my-class/${classes?.id}`)
+                    }
+                  }}
+                />
+              ) : (
+                <div className="action relative flex h-8 items-center justify-end"></div>
+              )}
+            </div>
+          </div>
+          <ResultRowsModal open={open} setOpen={setOpen} />
         </div>
-      )}
+      </div>
+      {/* )} */}
       <PopupExtend
         open={openExtend}
         setOpen={setOpenExtend}

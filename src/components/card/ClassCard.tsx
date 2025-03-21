@@ -7,19 +7,24 @@ import { Tag, Typography } from 'antd'
 import { CalendarOutlined, EnvironmentOutlined } from '@ant-design/icons'
 const { Title } = Typography
 interface IProps {
-  userDetail: any | undefined
-  tabs: ITabs[]
-  loading: boolean
-  progress: number
+  userDetail?: any | undefined
+  tabs?: ITabs[]
+  loading?: boolean
+  progress?: number
 }
 
-const ClassCard = ({ userDetail, tabs, loading, progress }: IProps) => {
+const ClassCard = ({
+  userDetail,
+  tabs = [],
+  loading,
+  progress = 0,
+}: IProps) => {
   return (
     <>
       {loading ? (
         <LoadingCard />
       ) : (
-        <div className="mb-6 rounded-xl bg-white px-7 pt-7">
+        <div className="mb-6 rounded-xl bg-white">
           <div className="flex flex-col">
             <Title level={4} className="text-gray-700">
               Certificate in International Financial Reporting (CertIFR)

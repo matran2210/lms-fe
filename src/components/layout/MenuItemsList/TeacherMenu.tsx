@@ -11,6 +11,14 @@ import {
   HelpMenuIcon,
   LogOutMenuIcon,
 } from 'src/assets/icons/index'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
+import { useRouter } from 'next/router'
+import { useAppDispatch } from 'src/redux/hook'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
+import { NOTIFICATION_STATUS } from 'src/type'
+import Link from 'next/link'
+
 const { Sider } = Layout
 interface SidebarMenuProps {
   className?: string
@@ -19,23 +27,43 @@ interface SidebarMenuProps {
 export default function SidebarMenu({ className }: SidebarMenuProps) {
   const [collapsed, setCollapsed] = useState(true)
   const [selectedKey, setSelectedKey] = useState('home')
-
-  const handleMenuClick = (key: string) => {
-    setSelectedKey(key)
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const handleMenuClick = (item: any) => {
+    const selectedItem = menuItems.find((menuItem) => menuItem.key === item.key)
+    setSelectedKey(item.key)
+    if (selectedItem?.link) {
+      router.push(selectedItem.link)
+    }
+  }
+  const handleLogout = async () => {
+    try {
+      await dispatch(getLogoutUser()).then(() => {
+        const pinnedStatus = getLocalStorageItem('pinnedStatus')
+        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
+          removeLocalStorageItem('pinnedId')
+        }
+      })
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout(window.location.origin)
+    } catch (error) {}
   }
 
   const menuItems = [
     {
       key: 'home',
       icon: <HomeMenuIcon selected={selectedKey === 'home'} />,
+      link: '/teacher',
     },
     {
       key: 'book',
       icon: <BookMenuIcon selected={selectedKey === 'book'} />,
+      link: '/teacher/my-class',
     },
     {
       key: 'calender',
       icon: <CalenderMenuIcon selected={selectedKey === 'calender'} />,
+      link: '/',
     },
     {
       key: 'file',
@@ -79,7 +107,7 @@ export default function SidebarMenu({ className }: SidebarMenuProps) {
             theme="dark"
             mode="inline"
             selectedKeys={[selectedKey]}
-            onSelect={({ key }) => handleMenuClick(key)}
+            onSelect={(item) => handleMenuClick(item)}
             items={menuItems.map((item) => ({
               key: item.key,
               icon: item.icon,
@@ -98,7 +126,7 @@ export default function SidebarMenu({ className }: SidebarMenuProps) {
         </div>
         {/* Bottom Menu */}
         <div className="mb-6 flex flex-col items-center gap-6">
-          <div>
+          <Link href="/overview">
             <Image
               alt="avatar"
               src={sapp}
@@ -106,11 +134,11 @@ export default function SidebarMenu({ className }: SidebarMenuProps) {
               height={32}
               className="cursor-pointer rounded-full p-2"
             />
-          </div>
+          </Link>
           <div className="cursor-pointer p-2">
             <HelpMenuIcon />
           </div>
-          <div className="cursor-pointer p-2">
+          <div className="cursor-pointer p-2" onClick={handleLogout}>
             <LogOutMenuIcon />
           </div>
         </div>

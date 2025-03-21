@@ -20,6 +20,7 @@ interface IProps {
   textSize?: 'base' | 'sm'
   isError?: boolean
   onPaste?: (e: any) => void
+  style?: React.CSSProperties
 }
 
 const TEXT_SIZES = {
@@ -44,6 +45,7 @@ const SAPPTextFiled = ({
   field,
   textSize = 'base',
   isError,
+  style,
   onPaste,
 }: IProps) => {
   const [showPassword, setShowPassword] = useState(false)
@@ -73,6 +75,7 @@ const SAPPTextFiled = ({
             }`}
             placeholder={placeholder}
             disabled={disabled}
+            style={style}
             maxLength={maxLength}
             onPaste={onPaste}
           />

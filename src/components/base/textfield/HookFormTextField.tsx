@@ -23,6 +23,7 @@ interface IProps {
   maxLength?: number
   textSize?: 'base' | 'sm'
   inputClassName?: string
+  style?: React.CSSProperties
 }
 
 const HookFormTextField = ({
@@ -41,6 +42,7 @@ const HookFormTextField = ({
   maxLength,
   textSize,
   inputClassName,
+  style,
 }: IProps) => {
   return (
     <Controller
@@ -73,6 +75,7 @@ const HookFormTextField = ({
                   required={required}
                   maxLength={maxLength}
                   field={field}
+                  style={style}
                   isError={!!error?.message}
                   inputClassName={inputClassName}
                 />

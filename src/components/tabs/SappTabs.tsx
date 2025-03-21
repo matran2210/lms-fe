@@ -7,7 +7,7 @@ const SappTabs = ({ tabs }: { tabs: ITabs[] }) => {
   return (
     <ul className="flex">
       {tabs.map((tab) => {
-        const isActive = tab.link.includes(router.query.page as string)
+        const isActive = tab.link.includes(router.asPath as string)
         return (
           <li key={tab.title} className="relative pr-6">
             <Link href={tab.link} passHref>

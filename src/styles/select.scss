@@ -64,7 +64,7 @@
 }
 
 .select-single .select__single-value {
-  @apply text-bw-1;
+  @apply text-[#99A1B7];
 }
 
 // style css for result popup
@@ -140,5 +140,11 @@
 .right-top {
   .select__menu {
     @apply left-[50px] top-[-100%];
+  }
+}
+
+.select-single-custom {
+  .select__control {
+    @apply h-10 rounded-md;
   }
 }
