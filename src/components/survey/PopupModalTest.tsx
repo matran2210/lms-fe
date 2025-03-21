@@ -1,14 +1,27 @@
 import SappModalV2 from '@components/base/modal/SappModalV2'
-import React from 'react'
+import { CoursesAPI } from '@pages/api/courses'
+import { onLinkSocial } from '@utils/index'
+import { round } from 'lodash'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 
 interface SurveyModalProps {
-  open?: {
-    middtermCourse: boolean
-    finalCourse: boolean
-    completeCourse: boolean
-  }
   learning_progress?: number
   course_name?: string
+  program?: 'CMA' | 'ACCA' | 'CFA' | undefined
+  data: any
+}
+
+interface SurveyState {
+  middtermCourse: boolean
+  finalCourse: boolean
+  completeCourse: boolean
+}
+
+const SURVEY_URLS = {
+  ACCA: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
+  CFA: 'https://survey.hsforms.com/1EmIZK95sTWqhk1G3ozRyIw120xb',
+  CMA: 'https://survey.hsforms.com/1jlTMbpPsTaai6oKwrjEv1g120xb',
 }
 
 const SURVEY_ICONS = {
@@ -98,23 +111,98 @@ const SURVEY_TITLES = {
   completeCourse: 'Hoàn thành khảo sát để khép lại hành trình!',
 }
 
-const PopupModalTest: React.FC<SurveyModalProps> = ({
-  open,
-  course_name,
-  learning_progress,
-}) => {
+const PopupModalTest: React.FC<SurveyModalProps> = ({ course_name, program, data }) => {
+  const [open, setOpen] = useState<SurveyState>({
+    middtermCourse: false,
+    finalCourse: false,
+    completeCourse: false,
+  })
+
+  const router = useRouter()
+
+  /**
+   * Xác định loại khảo sát hiện tại dựa trên trạng thái
+   */
   const getSurveyType = () => {
-    if (open?.middtermCourse) return 'middtermCourse'
-    if (open?.finalCourse) return 'finalCourse'
+    if (open.middtermCourse) return 'middtermCourse'
+    if (open.finalCourse) return 'finalCourse'
     return 'completeCourse'
   }
 
+  /**
+   * Xử lý khi người dùng submit khảo sát
+   * Chuyển hướng đến form khảo sát tương ứng với chương trình
+   */
+  const handleSubmit = () => {
+    const surveyUrl = SURVEY_URLS[program || 'CMA']
+    onLinkSocial(surveyUrl)
+
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: true,
+    })
+  }
+
+  /**
+   * Xử lý khi người dùng hoàn thành khảo sát
+   */
+  const handleCompleteSurvey = async () => {
+    await CoursesAPI.createTest(router?.query?.courseId, {
+      is_disabled: true,
+    })
+  }
+
+  /**
+   * Xử lý khi người dùng muốn nhắc lại khảo sát sau
+   */
+  const handleRemindSurvey = async () => {
+    await CoursesAPI.createTest(router?.query?.courseId, {
+      remind_late: true,
+    })
+  }
+
+  /**
+   * Xử lý đóng modal
+   */
+  const handleClose = () => {
+    handleRemindSurvey()
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: false,
+    })
+  }
+
+  const handleTest = () => {
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: false,
+    })
+  }
+
+  /**
+   * Xử lý khi người dùng xác nhận đã hoàn thành khảo sát
+   */
+  const handleConfirmComplete = () => {
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: false,
+    })
+    handleCompleteSurvey()
+  }
+
+  /**
+   * Nội dung khảo sát cho từng loại
+   */
   const SURVEY_CONTENTS = {
     middtermCourse: (
       <span>
         Chúc mừng bạn đã hoàn thành{' '}
         <span className="text-sm font-medium text-bw-1">
-          {learning_progress}%
+          {round(data?.survey_attributes?.progress_percent * 100, 2)}%
         </span>{' '}
         khóa học{' '}
         <span className="text-sm font-medium text-bw-1">{course_name}</span>.
@@ -127,7 +215,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     finalCourse: (
       <span>
         Bạn đã đi đến chặng đường cuối cùng của khóa học{' '}
-        <span className="text-sm font-medium text-bw-1">[Tên khóa học]</span>!
+        <span className="text-sm font-medium text-bw-1">{course_name}</span>!
         Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm đáng
         nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy thấu
         hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong nhận
@@ -146,26 +234,47 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     ),
   }
 
+  /**
+   * Xử lý hiển thị modal dựa trên tiến độ học tập
+   */
+  useEffect(() => {
+    if (data?.class_type !== 'LESSON' || !data?.survey_attributes?.is_survey_popup) return
+
+    const progress = data.survey_attributes.progress_percent
+
+    if (progress >= 0.9 && progress <= 1) {
+      setOpen({
+        middtermCourse: false,
+        finalCourse: true,
+        completeCourse: false,
+      })
+    } else if (progress >= 0.5 && progress < 0.9) {
+      setOpen({
+        middtermCourse: true,
+        finalCourse: false,
+        completeCourse: false,
+      })
+    }
+  }, [data])
+
   const surveyType = getSurveyType()
+
+  const isSurveyActive = open.middtermCourse || open.finalCourse || open.completeCourse
 
   return (
     <SappModalV2
       footerButtonClassName="flex flex-col-reverse gap-8"
       position="center"
       title={undefined}
-      open={
-        open?.middtermCourse ||
-        open?.finalCourse ||
-        open?.completeCourse ||
-        true
-      }
-      handleCancel={() => {}}
-      onOk={() => {}}
-      okButtonCaption="Thực hiện khảo sát"
+      open={isSurveyActive}
+      handleClose={handleTest}
+      handleCancel={handleClose}
+      onOk={open.completeCourse ? handleConfirmComplete : handleSubmit}
+      okButtonCaption={open.completeCourse ? 'Tôi đã hoàn thành' : 'Thực hiện khảo sát'}
       fullWidthBtn={true}
       buttonSize="extra"
       showFooter
-      cancelButtonCaption="Nhắc lại sau"
+      cancelButtonCaption={open.completeCourse ? 'Tôi sẽ làm sau' : 'Nhắc lại sau'}
     >
       <div className="flex justify-center">
         <div className="w-fit rounded-full bg-secondary p-8">
