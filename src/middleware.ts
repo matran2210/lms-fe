@@ -1,5 +1,5 @@
+import type { NextFetchEvent, NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
 // Define route patterns for different roles
 const roleRoutePatterns: Record<string, string[]> = {
@@ -20,11 +20,9 @@ const publicRoutes = [
   '/overview',
   '/dashboard',
 ]
-
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Check if the route is public
   if (
     publicRoutes.some(
       (route) => pathname === route || pathname.startsWith(`${route}/`),
