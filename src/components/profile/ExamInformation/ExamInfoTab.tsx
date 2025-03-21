@@ -121,7 +121,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                         dayjs(row.finished_at).format('DD/MM/YYYY')}
                     </td>
                     <td className={clsx(commonDataCellStyle, 'min-w-36')}>
-                      {row.examination_subject.examination.name ?? '-'}
+                      {row?.examination_subject?.examination?.name ?? '-'}
                     </td>
                     <td
                       className={clsx(
