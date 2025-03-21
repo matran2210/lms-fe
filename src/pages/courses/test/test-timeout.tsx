@@ -30,7 +30,7 @@ const TestTimeOutModal = ({
   return (
     <SappModalV3
       open={open}
-      cancelButtonCaption="Quit"
+      // cancelButtonCaption="Quit"
       okButtonCaption="Submit"
       handleCancel={onCancel}
       onOk={onSubmit}

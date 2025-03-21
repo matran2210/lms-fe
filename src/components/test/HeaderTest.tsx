@@ -1,4 +1,5 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import dayjs from 'dayjs'
 import React, { Dispatch, ForwardedRef, SetStateAction } from 'react'
 import Countdown from 'src/pages/test/countdown'
 import { useAppDispatch } from 'src/redux/hook'
@@ -12,13 +13,14 @@ interface IProps {
     is_limited: boolean
     limit_count: string
   }
-  openLimit: boolean
   handleSubmitQuestions: (type_submit: 'timeout' | 'submit') => Promise<void>
   timeRef: ForwardedRef<any>
-  quizAttempId: {
+  quizAttempt: {
     id: string
     number_of_attempts: number
     is_limited: boolean
+    created_at?: string
+    quiz_timed?: number
   }
   setUnSubmitAnswer: Dispatch<SetStateAction<boolean>>
   checkUnSubmitAnswer: () => number[]
@@ -27,14 +29,23 @@ interface IProps {
   type: string | string[] | undefined
   submited: boolean
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
-  onSubmitAnswer: () => Promise<void>
+  onSubmitAnswer: () => void
+  handleTimeoutSubmit: () => void
+}
+
+const calculateRemainingTime = (
+  createdAt: string | undefined,
+  quizTimed: number,
+): number => {
+  const endTime = dayjs(createdAt).add(quizTimed, 'minutes')
+  const now = dayjs()
+  const diffInSeconds = endTime.diff(now, 'second')
+  return Math.max(0, diffInSeconds) // Return 0 if time has expired
 }
 
 const HeaderTest = ({
   checkUnSubmitAnswer,
-  handleSubmitQuestions,
-  openLimit,
-  quizAttempId,
+  quizAttempt,
   quizDetail,
   setOpenQuit,
   setSubmitEventTest,
@@ -44,8 +55,11 @@ const HeaderTest = ({
   setOpenSubmit,
   submited,
   onSubmitAnswer,
+  handleTimeoutSubmit,
 }: IProps) => {
   const dispatch = useAppDispatch()
+  // const remainingTime = calculateRemainingTime(quizAttempt?.created_at, quizAttempt?.quiz_timed);
+  // console.log(remainingTime)
   return (
     <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
       <div className="w-2/6 truncate text-[18px] font-medium">
@@ -54,12 +68,7 @@ const HeaderTest = ({
       {quizDetail?.quiz_timed && (
         <Countdown
           remainTime={quizDetail?.quiz_timed}
-          onTimeOut={() => {
-            if (!openLimit) {
-              dispatch(disableUnsavedChange())
-              handleSubmitQuestions('timeout')
-            }
-          }}
+          onTimeOut={handleTimeoutSubmit}
           ref={timeRef}
         />
       )}
@@ -67,7 +76,7 @@ const HeaderTest = ({
       <div className="flex w-2/6 items-center justify-end">
         {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(quizDetail?.quiz_type) && (
           <div className="mr-6 text-medium-sm text-bw-1">
-            Attempt: {quizAttempId?.number_of_attempts}
+            Attempt: {quizAttempt?.number_of_attempts}
             {quizDetail?.is_limited ? `/${quizDetail?.limit_count}` : ''}
           </div>
         )}

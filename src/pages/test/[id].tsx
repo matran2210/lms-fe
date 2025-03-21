@@ -62,7 +62,9 @@ import LimitQuizModal from './limitQuizModal'
 
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
+import HeaderTest from '@components/test/HeaderTest'
 import { trackGAEvent } from '@utils/google-analytics'
+import { setQuizAttempt } from 'src/redux/slice/Course/MyCourse/QuizAttempt/QuizAttempt'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
@@ -75,7 +77,6 @@ import {
 import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
 import TestScratchPads from './TestScratchPads'
-import HeaderTest from '@components/test/HeaderTest'
 
 declare global {
   interface Window {
@@ -404,11 +405,6 @@ const TestDetail = () => {
   })
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
-  const [quizAttempId, setQuizAttempId] = useState({
-    id: '',
-    number_of_attempts: 0,
-    is_limited: false,
-  })
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
   const timeRef = useRef(null) as any
@@ -439,6 +435,8 @@ const TestDetail = () => {
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
   const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
+  const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
+  const { quizAttempt } = useAppSelector((state) => state.quizAttemptReducer)
 
   useClickOutside({
     ref: dropUpRef,
@@ -1017,7 +1015,7 @@ const TestDetail = () => {
   const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
     useCourseContext()
 
-  const handleSubmitAnswer = async (action?: string) => {
+  const handleSubmitAnswer = async () => {
     if (listQuestionDone.includes(currentTabContent?.id)) {
       return
     }
@@ -1036,12 +1034,9 @@ const TestDetail = () => {
       answer_file?: any
     }[] = []
     let answerItem = {}
-    let reformTabs: any[] = [...allQuest]
 
     for (let [index, e] of allQuest.entries()) {
       if (e.id === currentTabContent?.id) {
-        reformTabs[index].done = true
-
         if (e.answer) {
           if (
             e.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -1153,12 +1148,13 @@ const TestDetail = () => {
             }
           }
         }
+
         break
       }
     }
     dispatch(disableUnsavedChange())
 
-    const res = await CoursesAPI.submitAnswer(quizAttempId?.id as string, {
+    const res = await CoursesAPI.submitAnswer(quizAttempt?.id as string, {
       question_id: currentTabContent?.id,
       total_attempt_time:
         quizDetail?.quiz_timed * 60 -
@@ -1168,22 +1164,10 @@ const TestDetail = () => {
     })
     if (res?.success) {
       setListQuestionDone((prev) => [...prev, currentTabContent?.id])
-      if (action === 'next-tab') {
-        setTabs(reformTabs)
-      }
-
-      // if (isCompletedCourse.status) {
-      //   setTimeout(() => {
-      //     dispatch(showPopupCompletedCourse(isCompletedCourse.content))
-      //   }, 2000)
+      // if (action === 'next-tab') {
+      //   setTabs(reformTabs)
       // }
-
-      // if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
-      //   setOpenReportModal(true)
-      //   return
     }
-    // clearInterval(intervalRef.current)
-    return
   }
 
   const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
@@ -1208,7 +1192,7 @@ const TestDetail = () => {
     })
     dispatch(disableUnsavedChange())
 
-    const res = await CoursesAPI.submitAllQuestion(quizAttempId?.id as string, {
+    const res = await CoursesAPI.submitAllQuestion(quizAttempt?.id as string, {
       quiz_position_mapping: quiz_position_mapping,
       scratch_pads: scratchPads || [],
       total_attempt_time:
@@ -1541,55 +1525,78 @@ const TestDetail = () => {
   }, [watch('exhibits')])
 
   useEffect(() => {
-    async function createQuizAttempt() {
-      try {
-        const res = await CoursesAPI.createQuizAttempt(
-          router.query.id as string,
-          router.query.class_user_id as string,
-        )
-        setExhibitText(
-          res.data.program === PROGRAM.CMA
-            ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
-            : EXHIBIT_TEXT_REPLACE.EXHIBIT,
-        )
-        if (res?.data?.progress?.is_completed) {
-          setIsCompletedCourse({
-            status: res?.data?.progress?.is_completed,
-            content: res?.data?.progress?.content,
-          })
-        }
-        setQuizAttempId(res.data)
-        setIsQuizAttemptCreated(true) // Mark the attempt as created
-      } catch (err: any) {
-        if (err.response?.data?.error.code === '400|060710') {
-          dispatch(disableUnsavedChange())
-          setOpenLimit(true)
-        }
-        if (err.response?.data?.success === false) {
-          setRouteBack(true)
-          setIsQuizAttemptCreated(true) // Mark the attempt as created even on error
-          switch (
-            quizDetail?.quiz_type ||
-            quizDetail?.quiz_type === undefined
-          ) {
-            case TEST_TYPE.MID_TERM_TEST:
-            case TEST_TYPE.FINAL_TEST:
-            case TEST_TYPE.TOPIC_TEST:
-            case TEST_TYPE.CHAPTER_TEST:
-            case TEST_TYPE.PART_TEST:
-              return router.push(PageLink.COURSES)
-            case TEST_TYPE.ENTRANCE_TEST:
-              return router.push(PageLink.ENTRANCE_TEST)
-            default:
-              return router.push(PageLink.COURSES)
-          }
+    if (quizAttempt?.id) {
+      const fetchAnswersSubmitted = async () => {
+        try {
+          setLoading(true)
+          const response = await CoursesAPI.getAnswersSubmitted(quizAttempt.id)
+          setIsQuizAttemptCreated(true) // Mark the attempt as created
+          setAnswersSubmitted(response.data)
+        } catch (err) {
+          // console.log(err)
+        } finally {
+          setLoading(false)
         }
       }
-    }
-    if (router.query.id) {
-      createQuizAttempt()
+
+      fetchAnswersSubmitted()
+    } else {
+      if (router.query.id) {
+        const createQuizAttempt = async () => {
+          try {
+            const res = await CoursesAPI.createQuizAttempt(
+              router.query.id as string,
+              router.query.class_user_id as string,
+            )
+            setExhibitText(
+              res.data.program === PROGRAM.CMA
+                ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+                : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+            )
+            if (res?.data?.progress?.is_completed) {
+              setIsCompletedCourse({
+                status: res?.data?.progress?.is_completed,
+                content: res?.data?.progress?.content,
+              })
+            }
+            dispatch(setQuizAttempt(res.data))
+            setIsQuizAttemptCreated(true) // Mark the attempt as created
+          } catch (err: any) {
+            if (err.response?.data?.error.code === '400|060710') {
+              dispatch(disableUnsavedChange())
+              setOpenLimit(true)
+            }
+            if (err.response?.data?.success === false) {
+              setRouteBack(true)
+              setIsQuizAttemptCreated(true) // Mark the attempt as created even on error
+              switch (
+                quizDetail?.quiz_type ||
+                quizDetail?.quiz_type === undefined
+              ) {
+                case TEST_TYPE.MID_TERM_TEST:
+                case TEST_TYPE.FINAL_TEST:
+                case TEST_TYPE.TOPIC_TEST:
+                case TEST_TYPE.CHAPTER_TEST:
+                case TEST_TYPE.PART_TEST:
+                  return router.push(PageLink.COURSES)
+                case TEST_TYPE.ENTRANCE_TEST:
+                  return router.push(PageLink.ENTRANCE_TEST)
+                default:
+                  return router.push(PageLink.COURSES)
+              }
+            }
+          }
+        }
+        createQuizAttempt()
+      }
     }
   }, [router.query.id])
+
+  useEffect(() => {
+    return () => {
+      dispatch(setQuizAttempt({}))
+    }
+  }, [])
 
   useEffect(() => {
     if (!isQuizAttemptCreated) return
@@ -1700,10 +1707,9 @@ const TestDetail = () => {
           <div>
             <HeaderTest
               quizDetail={quizDetail}
-              openLimit={openLimit}
               handleSubmitQuestions={handleSubmitQuestions}
               timeRef={timeRef}
-              quizAttempId={quizAttempId}
+              quizAttempt={quizAttempt}
               setUnSubmitAnswer={setUnSubmitAnswer}
               checkUnSubmitAnswer={checkUnSubmitAnswer}
               setOpenQuit={setOpenQuit}
@@ -1712,6 +1718,36 @@ const TestDetail = () => {
               submited={submited}
               setOpenSubmit={setOpenSubmit}
               onSubmitAnswer={handleSubmitAnswer}
+              handleTimeoutSubmit={() => {
+                if (!openLimit) {
+                  handleSubmitQuestions('timeout')
+                  dispatch(disableUnsavedChange())
+                    .unwrap()
+                    .then(() => {
+                      // console.log(type)
+                      // if (type === 'entrance') {
+                      //   router.replace(`/entrance-test/test-result/${QuizResultId}`)
+                      // } else if (type === 'event-test') {
+                      //   router.replace(`/event-test`)
+                      //   setSubmitEventTest(true)
+                      // } else {
+                      //   if (
+                      //     type !== 'entrance' &&
+                      //     quizDetail?.quiz_type !== 'FINAL_TEST'
+                      //   ) {
+                      //     router.replace(
+                      //       `/courses/test/test-result/${QuizResultId}`,
+                      //     )
+                      //   } else {
+                      //     router.back()
+                      //     setScoreQuestion(scoreFinalTest)
+                      //     setSubmitTest(true)
+                      //   }
+                      // }
+                      trackGAEvent('Click Button Submit Time Out Test')
+                    })
+                }
+              }}
             />
 
             {/** Tabs */}
@@ -1725,7 +1761,7 @@ const TestDetail = () => {
                   handleChangeTab={async (id?: string) => {
                     if (id) {
                       handleChangeTab(id)
-                      handleSubmitAnswer('next-tab')
+                      handleSubmitAnswer()
                     }
                   }}
                   activeShowAll={activeShowAll}
@@ -2191,6 +2227,7 @@ const TestDetail = () => {
             open={openTimeOut}
             setOpen={setOpenTimeOut}
             handleSubmit={() => {
+              handleSubmitQuestions('timeout')
               dispatch(disableUnsavedChange())
                 .unwrap()
                 .then(() => {
@@ -2217,8 +2254,8 @@ const TestDetail = () => {
                 })
             }}
             handleQuit={() => {
-              trackGAEvent('Click Button Quit Time Out Test')
-              router.back()
+              // trackGAEvent('Click Button Quit Time Out Test')
+              // router.back()
             }}
           />
 

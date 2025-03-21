@@ -207,6 +207,11 @@ export class CoursesAPI {
     return fetcher(`${url.getQuizAttempts}/${id}`)
   }
 
+  //get answer a question
+  static getAnswersSubmitted(id: string): Promise<any> {
+    return fetcher(`${url.getQuizAttempts}/user-answers/${id}`)
+  }
+
   //submit a question
   static submitAnswer(id: string, data: any): Promise<any> {
     const uri = url.submitQuestion + `/${id}` + '/submit-answer'

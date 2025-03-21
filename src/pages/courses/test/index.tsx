@@ -13,6 +13,8 @@ import { IQuizResultList } from 'src/type/quiz'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
 import { capitalizeFirstLetter } from '@utils/index'
+import { useDispatch } from 'react-redux'
+import { setQuizAttempt } from 'src/redux/slice/Course/MyCourse/QuizAttempt/QuizAttempt'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -29,6 +31,16 @@ interface IProps {
   activeCourse?: any
   is_passed_course: boolean
 }
+
+const calculateEndTime = (createdAt: string, quizTimed: number): Date => {
+  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
+}
+
+const isQuizExpired = (createdAt: string, quizTimed: number): boolean => {
+  const endTime = calculateEndTime(createdAt, quizTimed)
+  return dayjs().isAfter(endTime)
+}
+
 const TestModal = ({
   open,
   setOpen,
@@ -38,6 +50,7 @@ const TestModal = ({
   is_passed_course,
 }: IProps) => {
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
@@ -57,6 +70,8 @@ const TestModal = ({
   }>()
   const [isFocus, setIsFocus] = useState<boolean>(false)
   const [openResource, setOpenPopup] = useState(false)
+  const [isContinue, setIsContinue] = useState(false)
+
   const onCancel = () => {
     setTimeout(() => {
       setOpen(false)
@@ -88,6 +103,25 @@ const TestModal = ({
           status: results?.[0]?.status,
           grading_method: results?.[0]?.quiz?.grading_method,
         })
+
+        //check điều kiện xem có được tiếp tục làm bài hay không
+        const isExpired = isQuizExpired(
+          results?.[0]?.created_at,
+          data?.quiz?.quiz_timed,
+        )
+        const isContinue = results?.[0]?.status === 'IN_PROGRESS'
+        if (isContinue && !isExpired) {
+          setIsContinue(true)
+          dispatch(
+            setQuizAttempt({
+              id: results?.[0]?.id,
+              number_of_attempts: data?.attempt?.number_of_attempts,
+              is_limited: data?.is_limited,
+              quiz_timed: data?.quiz?.quiz_timed,
+              created_at: results?.[0]?.created_at,
+            }),
+          )
+        }
       }
     }
   }
@@ -257,7 +291,11 @@ const TestModal = ({
       }
       onOk={onSubmit}
       okButtonCaption={
-        status === StatusQuizAttempt.Unsubmitted ? 'Start' : 'Retake'
+        status === StatusQuizAttempt.Unsubmitted
+          ? 'Start'
+          : isContinue
+            ? 'Continue'
+            : 'Retake'
       }
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
@@ -320,9 +358,23 @@ const TestModal = ({
                   }}
                   options={resultList.data.map((item) => ({
                     value: item.id,
-                    label: item.name,
+                    label: `Attempt ${item.name} - ${
+                      item.status === 'IN_PROGRESS'
+                        ? 'Currently in progress - Resume from last checkpoint'
+                        : item.status === 'FINISHED'
+                          ? `Completed with score ${item.ratio_score}% - Full review available`
+                          : 'Not started - Begin new attempt'
+                    } | ${
+                      item.quiz?.grading_method === 'MANUAL'
+                        ? 'Awaiting instructor review'
+                        : 'Automated scoring completed'
+                    }`,
                     status: item.status,
-                    ratio_score: item.ratio_score,
+                    ratio_score: `${item.ratio_score}% - ${
+                      Number(item.ratio_score) >= 75
+                        ? 'Exceeds requirements'
+                        : 'Below passing threshold'
+                    }`,
                   }))}
                   onMenuScrollToBottom={(e: React.UIEvent<HTMLDivElement>) => {
                     const { target } = e
