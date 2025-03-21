@@ -67,7 +67,7 @@ const CoursePartDetail = () => {
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
 
-  const { setOpenPopupCTA } = useCourseContext()
+  const { handleOpenLockSection } = useCourseContext()
 
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
@@ -95,10 +95,7 @@ const CoursePartDetail = () => {
   const handleActive = (item: any) => {
     setActiveItem(item)
     if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
-      setOpenPopupCTA({
-        lockSection: true,
-        ctaUpgrade: false,
-      })
+      handleOpenLockSection()
       setChapterDetail(undefined)
     }
   }
@@ -169,10 +166,7 @@ const CoursePartDetail = () => {
 
   const handleRouterActivity = (id: string, chapter: any) => {
     if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-      setOpenPopupCTA({
-        lockSection: true,
-        ctaUpgrade: false,
-      })
+      handleOpenLockSection()
     } else {
       router.push({
         pathname: `/courses/${router.query.id}/activity/${id}`,
@@ -204,10 +198,7 @@ const CoursePartDetail = () => {
       totalCourseSectionsCompleted !== undefined
     ) {
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-        setOpenPopupCTA({
-          lockSection: true,
-          ctaUpgrade: false,
-        })
+        handleOpenLockSection()
       } else {
         router.push({
           pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
@@ -223,10 +214,7 @@ const CoursePartDetail = () => {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
-        setOpenPopupCTA({
-          lockSection: true,
-          ctaUpgrade: false,
-        })
+        handleOpenLockSection()
       } else {
         router.push({
           pathname: `/case-study/${topicId}`,
@@ -261,10 +249,7 @@ const CoursePartDetail = () => {
       chapter?.course_section_link_parents?.[0]?.is_preview_locked &&
       chapter?.course_section_type === TEST_TYPE.CHAPTER_TEST
     ) {
-      setOpenPopupCTA({
-        lockSection: true,
-        ctaUpgrade: false,
-      })
+      handleOpenLockSection()
     }
     if (
       chapter?.course_section_link_parents?.[0]?.is_preview_locked &&

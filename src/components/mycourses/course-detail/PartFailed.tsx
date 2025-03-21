@@ -62,7 +62,7 @@ const PartFailed = ({
     }
   }, [runOutAttemp])
 
-  const { setOpenPopupCTA } = useCourseContext()
+  const { handleOpenLockSection } = useCourseContext()
 
   return (
     <>
@@ -94,10 +94,7 @@ const PartFailed = ({
               if (
                 coursePart?.course_section_link_parents?.[0]?.is_preview_locked
               ) {
-                setOpenPopupCTA({
-                  lockSection: true,
-                  ctaUpgrade: false,
-                })
+                handleOpenLockSection()
               } else {
                 setOpen(true)
               }
@@ -175,10 +172,7 @@ const PartFailed = ({
                     coursePart?.course_section_link_parents?.[0]
                       ?.is_preview_locked
                   ) {
-                    setOpenPopupCTA({
-                      lockSection: true,
-                      ctaUpgrade: false,
-                    })
+                    handleOpenLockSection()
                   } else {
                     setOpen(true)
                   }
@@ -214,10 +208,7 @@ const PartFailed = ({
                       coursePart?.course_section_link_parents?.[0]
                         ?.is_preview_locked
                     ) {
-                      setOpenPopupCTA({
-                        lockSection: true,
-                        ctaUpgrade: false,
-                      })
+                      handleOpenLockSection()
                     } else {
                       setOpen(true)
                     }

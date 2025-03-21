@@ -72,7 +72,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
     }
   }
 
-  const { setOpenPopupCTA } = useCourseContext()
+  const { handleOpenLockSection } = useCourseContext()
 
   const handleRouterPartDetail = () => {
     if (course?.course_section_link_parents?.[0]?.is_showing_locked) {
@@ -85,10 +85,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
     ) {
       onClickPart(course?.id)
     } else if (course?.course_section_link_parents?.[0]?.is_preview_locked) {
-      setOpenPopupCTA({
-        lockSection: true,
-        ctaUpgrade: false,
-      })
+      handleOpenLockSection()
     }
   }
 

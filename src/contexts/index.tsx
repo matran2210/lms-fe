@@ -30,6 +30,7 @@ type Context = {
   setShowPinnedTrial: React.Dispatch<React.SetStateAction<boolean>>
   openPopupCTA: IPopupFormState
   setOpenPopupCTA: React.Dispatch<React.SetStateAction<IPopupFormState>>
+  handleOpenLockSection: () => void
 }
 
 // initContext
@@ -50,8 +51,10 @@ const initContext: Context = {
     lockSection: false,
     ctaUpgrade: false,
     thankYou: false,
+    thankYouLater: false,
   },
   setOpenPopupCTA: () => {},
+  handleOpenLockSection: () => {},
 }
 
 const CourseContext = createContext<Context>(initContext)
@@ -94,6 +97,7 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
     lockSection: false,
     ctaUpgrade: false,
     thankYou: false,
+    thankYouLater: false,
   })
 
   const router = useRouter()
@@ -117,6 +121,15 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
     }
   }, [])
 
+  const handleOpenLockSection = () => {
+    setOpenPopupCTA({
+      lockSection: true,
+      ctaUpgrade: false,
+      thankYou: false,
+      thankYouLater: false,
+    })
+  }
+
   const contextValue = React.useMemo(
     () => ({
       openPopupCongrats,
@@ -133,6 +146,7 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
       showPinnedTrial,
       openPopupCTA,
       setOpenPopupCTA,
+      handleOpenLockSection,
     }),
     [
       openPopupCongrats,
@@ -149,6 +163,7 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
       showPinnedTrial,
       openPopupCTA,
       setOpenPopupCTA,
+      handleOpenLockSection,
     ],
   )
 
