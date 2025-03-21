@@ -10,7 +10,6 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
-import { CoursesAPI } from 'src/pages/api/courses'
 import { MY_COURSES } from 'src/constants/lang'
 
 const DEFAULT_PAGESIZE = 18

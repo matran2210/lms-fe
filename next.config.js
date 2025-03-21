@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const path = require('path')
-const { i18n } = require('./next-i18next.config')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -35,7 +34,6 @@ module.exports = removeImports(
 
       return config
     },
-    i18n,
     reactStrictMode: false,
     productionBrowserSourceMaps: true,
     sassOptions: {
@@ -72,6 +70,15 @@ module.exports = removeImports(
       },
     },
     experimental: { optimizeCss: true, forceSwcTransforms: true },
+    async redirects() {
+      return [
+        {
+          source: '/',
+          destination: '/dashboard', // Change this to your default route
+          permanent: true, // Set to false if this is temporary
+        },
+      ]
+    },
   }),
 )
 
