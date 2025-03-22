@@ -105,10 +105,13 @@ const TestModal = ({
         })
 
         //check điều kiện xem có được tiếp tục làm bài hay không
-        const isExpired = isQuizExpired(
-          results?.[0]?.created_at,
-          data?.quiz?.quiz_timed,
-        )
+        let isExpired = false
+        if (data?.quiz?.quiz_timed) {
+          isExpired = isQuizExpired(
+            results?.[0]?.created_at,
+            data?.quiz?.quiz_timed,
+          )
+        }
         const isContinue = results?.[0]?.status === 'IN_PROGRESS'
         if (isContinue && !isExpired) {
           setIsContinue(true)
