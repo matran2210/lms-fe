@@ -32,11 +32,11 @@ interface IProps {
   is_passed_course: boolean
 }
 
-const calculateEndTime = (createdAt: string, quizTimed: number): Date => {
+const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
   return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
 }
 
-const isQuizExpired = (createdAt: string, quizTimed: number): boolean => {
+const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
   const endTime = calculateEndTime(createdAt, quizTimed)
   return dayjs().isAfter(endTime)
 }
@@ -85,7 +85,10 @@ const TestModal = ({
         data?.quiz?.id,
         { page_index: pageIndex ?? 1, page_size: pageSize ?? 10 },
       )
-      if (response?.data?.data && response?.data?.metadata?.total_records > 1) {
+      if (
+        response?.data?.data &&
+        response?.data?.metadata?.total_records >= 1
+      ) {
         const results = response.data.data
         setResultList((prev: IQuizResultList) => {
           return {
@@ -103,17 +106,20 @@ const TestModal = ({
           status: results?.[0]?.status,
           grading_method: results?.[0]?.quiz?.grading_method,
         })
-
         //check điều kiện xem có được tiếp tục làm bài hay không
         let isExpired = false
         if (data?.quiz?.quiz_timed) {
           isExpired = isQuizExpired(
-            results?.[0]?.created_at,
+            new Date(results?.[0]?.created_at),
             data?.quiz?.quiz_timed,
           )
         }
         const isContinue = results?.[0]?.status === 'IN_PROGRESS'
-        if (isContinue && !isExpired) {
+        if (
+          isContinue &&
+          !isExpired &&
+          data?.quiz?.limit_count === data?.quiz?.attempt?.number_of_attempts
+        ) {
           setIsContinue(true)
           dispatch(
             setQuizAttempt({
@@ -277,6 +283,38 @@ const TestModal = ({
     }
   }
 
+  const renderShowOkButton = () => {
+    if (status === StatusQuizAttempt.Unsubmitted || !data?.quiz?.is_limited)
+      return true
+    if (
+      (isContinue &&
+        data?.quiz?.limit_count === data?.quiz?.attempt?.number_of_attempts) ||
+      (data?.quiz?.is_limited &&
+        data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count) ||
+      isNull(data?.quiz?.attempt)
+    ) {
+      return true
+    }
+    return false
+  }
+  const renderOkButtonCaption = () => {
+    if (
+      status === StatusQuizAttempt.Unsubmitted ||
+      !data?.quiz?.is_limited ||
+      isNull(data?.quiz?.attempt)
+    )
+      return 'Start'
+    if (
+      isContinue &&
+      data?.quiz?.limit_count === data?.quiz?.attempt?.number_of_attempts
+    )
+      return 'Continue'
+    if (
+      data?.quiz?.is_limited &&
+      data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count
+    )
+      return 'Retake'
+  }
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}
@@ -285,24 +323,9 @@ const TestModal = ({
         setOpen(false)
         trackGAEvent('Click Button Cancel Modal Test')
       }}
-      showOkButton={
-        !data?.quiz?.is_limited
-          ? true
-          : (data?.quiz?.is_limited &&
-                data?.quiz?.attempt?.number_of_attempts <
-                  data?.quiz?.limit_count) ||
-              isNull(data?.quiz?.attempt)
-            ? true
-            : false
-      }
+      showOkButton={renderShowOkButton()}
       onOk={onSubmit}
-      okButtonCaption={
-        status === StatusQuizAttempt.Unsubmitted
-          ? 'Start'
-          : isContinue
-            ? 'Continue'
-            : 'Retake'
-      }
+      okButtonCaption={renderOkButtonCaption()}
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
     >
