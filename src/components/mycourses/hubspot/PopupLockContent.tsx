@@ -80,7 +80,9 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
    * Dựa vào kết quả API để hiển thị thông báo thank you phù hợp
    */
   const handleUpgrade = async () => {
-    const res = await CoursesAPI.upgradeNowTrial(router.query.courseId)
+    const res = await CoursesAPI.upgradeNowTrial(
+      router.query.courseId || router.query.id,
+    )
     if (res.success) {
       setShowForm({
         lockSection: false,
