@@ -6,7 +6,7 @@ import React, { useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
 import { cleanParamsAPI } from 'src/utils/index'
-import StudentCell from './StudentCell'
+import StudentCell from '../../pages/teachers/my-class/components/StudentCell'
 
 const { Title } = Typography
 interface IStudentData {

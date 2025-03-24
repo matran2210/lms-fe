@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Layout, Menu } from 'antd'
 import Image from 'next/image'
 import sapp from 'src/assets/images/sapp_menu.svg'
@@ -18,13 +18,14 @@ import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { NOTIFICATION_STATUS } from 'src/type'
 import Link from 'next/link'
+import { PageLink } from 'src/constants'
 
 const { Sider } = Layout
 interface SidebarMenuProps {
   className?: string
 }
 
-export default function SidebarMenu({ className }: SidebarMenuProps) {
+export default function TeacherMenu({ className }: SidebarMenuProps) {
   const [collapsed, setCollapsed] = useState(true)
   const [selectedKey, setSelectedKey] = useState('home')
   const router = useRouter()
@@ -58,7 +59,7 @@ export default function SidebarMenu({ className }: SidebarMenuProps) {
     {
       key: 'book',
       icon: <BookMenuIcon selected={selectedKey === 'book'} />,
-      link: '/teacher/my-class',
+      link: PageLink.TEACHER_MY_CLASS,
     },
     {
       key: 'calender',
@@ -74,6 +75,11 @@ export default function SidebarMenu({ className }: SidebarMenuProps) {
       icon: <BellIcon selected={selectedKey === 'bell'} />,
     },
   ]
+  useEffect(() => {
+    if (router.pathname.includes(PageLink.TEACHER_MY_CLASS)) {
+      setSelectedKey('book')
+    }
+  }, [router.pathname])
 
   return (
     <Sider

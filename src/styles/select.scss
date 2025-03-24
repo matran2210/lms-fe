@@ -147,4 +147,7 @@
   .select__control {
     @apply h-10 rounded-md;
   }
+  .select__placeholder {
+    @apply text-sm font-medium text-[#99A1B7];
+  }
 }

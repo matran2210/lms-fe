@@ -1,14 +1,13 @@
 import LayoutFilter from '@components/layout/Filter/index'
-import Search from './Search'
+import Search from 'src/pages/teachers/my-class/components/StudentFilter'
 import { Typography } from 'antd'
 import SappTable from '@components/table/SappTable'
 import React, { useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
 import { cleanParamsAPI } from 'src/utils/index'
-import StudentCell from '../../pages/teachers/my-class/components/StudentCell'
-import ButtonIconSapp from '@components/base/button/ButtonIconSapp'
-import TeachingProgressAction from '@components/classes/TeachingProgressAction'
+import StudentCell from 'src/pages/teachers/my-class/components/StudentCell'
+import ClassDetail from 'src/pages/teachers/my-class/components/ClassDetail'
 
 const { Title } = Typography
 interface IStudentData {
@@ -224,11 +223,10 @@ const studentsData: IStudentData[] = [
   },
 ]
 
-export default function TeachingProgress() {
+export default function Students() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<
     Map<number, React.Key[]>
   >(new Map())
-  const [openToolTip, setOpenToolTip] = useState('')
   const router = useRouter()
 
   const queryParams = {
@@ -259,12 +257,6 @@ export default function TeachingProgress() {
     () => [...selectedRowKeys.values()].flat(),
     [selectedRowKeys],
   )
-  const Action = (type: string) => {
-    if (type === 'attendance-history') {
-      // setOpenDrawerAttendanceHistory(true)
-    }
-  }
-
   const columnsValue = [
     {
       title: 'ID',
@@ -312,49 +304,33 @@ export default function TeachingProgress() {
         <StudentCell data={record?.examDate ?? ''} />
       ),
     },
-    {
-      title: '',
-      fixed: 'right',
-      render: (record: any) => (
-        <>
-          <TeachingProgressAction Action={Action} />
-        </>
-      ),
-    },
   ]
 
   return (
-    <div className="w-full">
-      <div className="mb-6 rounded-xl bg-white p-7">
-        <LayoutFilter
-          listFilter={<Search />}
-          loading={false}
-          onReset={() => {}}
-          onSubmit={() => {}}
-          layoutAction={
-            <ButtonIconSapp
-              title="Add Progress"
-              icon="plus"
-              variant="primary"
-              onClick={() => {}}
-            />
-          }
-        />
-        <SappTable
-          handleChangeParams={() => {}}
-          filterParams={filterParams}
-          columns={columnsValue}
-          fetchData={() => {}}
-          data={studentsData ?? []}
-          pagination={pagination}
-          setPagination={() => {}}
-          fetchTableData={() => {}}
-          loading={false}
-          showCheckbox={false}
-          setSelection={setSelectedRowKeys}
-          selections={selectedRowKeys}
-        />
-      </div>
-    </div>
+    <ClassDetail>
+      <LayoutFilter
+        listFilter={<></>}
+        loading={false}
+        onReset={() => {}}
+        onSubmit={() => {}}
+      />
+      <Title level={5} className="mt-6 text-gray-700">
+        Student List: 60 Students
+      </Title>
+      <SappTable
+        handleChangeParams={() => {}}
+        filterParams={filterParams}
+        columns={columnsValue}
+        fetchData={() => {}}
+        data={studentsData ?? []}
+        pagination={pagination}
+        setPagination={() => {}}
+        fetchTableData={() => {}}
+        loading={false}
+        showCheckbox={false}
+        setSelection={setSelectedRowKeys}
+        selections={selectedRowKeys}
+      />
+    </ClassDetail>
   )
 }

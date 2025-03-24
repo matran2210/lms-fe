@@ -17,3 +17,7 @@ export const ClassKey = {
 export const UserKey = {
   ExamList: 'userExamList',
 }
+
+export const TeacherKey = {
+  MyClass: 'myClass',
+}

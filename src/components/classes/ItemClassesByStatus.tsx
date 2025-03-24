@@ -17,6 +17,7 @@ import {
   CLASS_STATUS,
   CLASS_USER_TYPES,
   COURSE_STATUS,
+  PageLink,
 } from 'src/constants'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 import PopupActive from 'src/components/mycourses/PopupActive'
@@ -286,29 +287,29 @@ const ItemClassesByStatus = ({
       {/* {determineButtonToShow !== 'Hidden' && ( */}
       <div
         key={index}
-        className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+        className={`item flex flex-col bg-white p-6 shadow-sidebar`}
         data-aos={ANIMATION.DATA_AOS}
         ref={lastElementRef}
       >
         <div className={`flex min-h-352 flex-col`}>
-          <div className="mb-3 mt-4 flex items-center justify-between">
+          <div className="mb-6 flex items-center justify-between">
             {enableCourse ? (
-              <span className="flex items-center gap-2 text-sm text-gray-1">
+              <span className="flex items-center gap-2 text-sm text-gray-400">
                 <BookInClassIcon />
-                {truncateString(classes?.classes?.[0]?.code, 15)}
+                {truncateString(classes?.code, 15)}
               </span>
             ) : (
-              <div className="name-class text-medium-sm text-gray-1">
+              <div className="name-class text-medium-sm text-gray-400">
                 <span className="ml-1 font-medium text-bw-1" />
               </div>
             )}
-            <div className="time-class text-sm text-gray-2">
+            <div className="time-class text-sm text-gray-400">
               {determineButtonToShow !== 'Active' && (
                 <span className="flex items-center">
                   <ClockInClassIcon />
                   <span
                     className={`font-medium ${
-                      enableCourse ? 'text-bw-1' : 'text-gray-1'
+                      enableCourse ? 'text-bw-1' : 'text-gray-400'
                     } ml-2`}
                   >
                     {daysDifference > 0
@@ -394,7 +395,9 @@ const ItemClassesByStatus = ({
                   className="border border-[#1F2937] hover:border-[#FFB800] hover:bg-[#FFB800] hover:text-white"
                   onClick={() => {
                     if (classes?.id) {
-                      router.push(`/teacher/my-class/${classes?.id}`)
+                      router.push(
+                        `${PageLink.TEACHER_MY_CLASS}/${classes?.id}/${PageLink.MYPROFILE}`,
+                      )
                     }
                   }}
                 />

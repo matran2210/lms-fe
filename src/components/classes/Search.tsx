@@ -20,9 +20,9 @@ const SearchStudentInput: React.FC<SearchStudentInputProps> = ({
     <div className="flex gap-6">
       <HookFormTextField
         control={control}
-        name="class_name"
+        name="course_name"
         placeholder="Search course name"
-        inputClassName="placeholder:font-normal placeholder:text-[#99A1B7] placeholder:text-[14px] "
+        inputClassName="placeholder:text-sm placeholder:text-[#99A1B8]"
         style={{
           borderRadius: '6px',
           height: 40,
@@ -30,10 +30,10 @@ const SearchStudentInput: React.FC<SearchStudentInputProps> = ({
       />
       <SappHookFormSelect
         control={control}
-        name="univers_program_id"
+        name="program"
         required
         className="select-single-custom w-full"
-        placeholder="Select one option"
+        placeholder="Program"
         options={listUniverPrograms}
       />
       <SappHookFormSelect
@@ -41,7 +41,7 @@ const SearchStudentInput: React.FC<SearchStudentInputProps> = ({
         name="univers_program_id"
         required
         className="select-single-custom w-full"
-        placeholder="Select one option"
+        placeholder="Status"
         options={listUniverPrograms}
       />
       <SappHookFormSelect
@@ -49,7 +49,7 @@ const SearchStudentInput: React.FC<SearchStudentInputProps> = ({
         name="univers_program_id"
         required
         className="select-single-custom w-full"
-        placeholder="Select one option"
+        placeholder="Belong to"
         options={listUniverPrograms}
       />
     </div>
