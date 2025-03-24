@@ -391,10 +391,19 @@ export class CoursesAPI {
     return fetcher(`/quiz-attempts/answers/${id}`)
   }
 
-  static createTest(class_id: string | string[] | undefined, data: any): Promise<any> {
-    return fetcher(`/courses/${class_id}/change-survey-popup-status`,{
+  static upgradeNowTrial(id: string | string[] | undefined): Promise<any> {
+    return fetcher(`courses/${id}/trial/upgrade-now`, {
       method: 'POST',
-      data: data
+    })
+  }
+
+  static createTest(
+    class_id: string | string[] | undefined,
+    data: any,
+  ): Promise<any> {
+    return fetcher(`/courses/${class_id}/change-survey-popup-status`, {
+      method: 'POST',
+      data: data,
     })
   }
 }

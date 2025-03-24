@@ -91,7 +91,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý khi người dùng hoàn thành khảo sát
    */
   const handleCompleteSurvey = async () => {
-    await CoursesAPI.createTest(router?.query?.courseId, {
+    await CoursesAPI.changeSurvey(router?.query?.courseId, {
       is_disabled: true,
     })
   }
@@ -100,7 +100,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý khi người dùng muốn nhắc lại khảo sát sau
    */
   const handleRemindSurvey = async () => {
-    await CoursesAPI.createTest(router?.query?.courseId, {
+    await CoursesAPI.changeSurvey(router?.query?.courseId, {
       remind_late: true,
     })
   }
