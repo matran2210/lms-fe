@@ -26,7 +26,7 @@ const MODAL_CONTENT = {
   ctaUpgrade: {
     header: 'Unlock Your Learning Journey',
     content:
-      'Sorry, you do not have access to this content. Connect with our admissions consultant now to unlock your personalized learning pathway!',
+      'Connect with our admissions consultant now to unlock your personalized learning pathway!',
     icon: <UnlockIcon />,
   },
   thankYou: {

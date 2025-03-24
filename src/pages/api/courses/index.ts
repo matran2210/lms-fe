@@ -392,7 +392,7 @@ export class CoursesAPI {
   }
 
   static upgradeNowTrial(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`courses/${id}/trial/upgrage-now`, {
+    return fetcher(`courses/${id}/trial/upgrade-now`, {
       method: 'POST',
     })
   }
