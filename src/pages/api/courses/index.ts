@@ -396,6 +396,19 @@ export class CoursesAPI {
       method: 'POST',
     })
   }
+
+  static changeSurvey(
+    class_id: string | string[] | undefined,
+    data: {
+      is_disabled?: boolean
+      remind_late?: boolean
+    },
+  ): Promise<any> {
+    return fetcher(`/courses/${class_id}/change-survey-popup-status`, {
+      method: 'POST',
+      data: data,
+    })
+  }
 }
 
 /**
