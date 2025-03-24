@@ -5,13 +5,13 @@ import { roundNumber } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 import { useEffect, useMemo, useState } from 'react'
 import SappTooltip from 'src/common/SappTooltip'
-import { ANIMATION, ERROR_MESSAGE_TRIAL, TEST_TYPE } from 'src/constants'
+import { ANIMATION, TEST_TYPE } from 'src/constants'
 import TestModal from 'src/pages/courses/test'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import { ConfirmIcon } from '@assets/icons'
-import toast from 'react-hot-toast'
+import { ConfirmIcon, LockClosedIcon } from '@assets/icons'
+import { useCourseContext } from '@contexts/index'
 
 const PartFailed = ({
   coursePart,
@@ -62,6 +62,8 @@ const PartFailed = ({
     }
   }, [runOutAttemp])
 
+  const { setOpenPopupCTA } = useCourseContext()
+
   return (
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
@@ -82,35 +84,7 @@ const PartFailed = ({
               </SappTooltip>
             </div>
             <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M18 13H8C6.89543 13 6 13.8954 6 15V21C6 22.1046 6.89543 23 8 23H18C19.1046 23 20 22.1046 20 21V15C20 13.8954 19.1046 13 18 13Z"
-                  stroke="#B90E0A"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M13 19C13.5523 19 14 18.5523 14 18C14 17.4477 13.5523 17 13 17C12.4477 17 12 17.4477 12 18C12 18.5523 12.4477 19 13 19Z"
-                  stroke="#B90E0A"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M9 13V9C9 7.93913 9.42143 6.92172 10.1716 6.17157C10.9217 5.42143 11.9391 5 13 5C14.0609 5 15.0783 5.42143 15.8284 6.17157C16.5786 6.92172 17 7.93913 17 9V13"
-                  stroke="#B90E0A"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <LockClosedIcon />
             </div>
           </div>
         ) : (
@@ -120,7 +94,12 @@ const PartFailed = ({
               if (
                 coursePart?.course_section_link_parents?.[0]?.is_preview_locked
               ) {
-                toast.error(ERROR_MESSAGE_TRIAL)
+                setOpenPopupCTA({
+                  lockSection: true,
+                  ctaUpgrade: false,
+                  thankYou: false,
+                  thankYouLater: false,
+                })
               } else {
                 setOpen(true)
               }
@@ -198,7 +177,12 @@ const PartFailed = ({
                     coursePart?.course_section_link_parents?.[0]
                       ?.is_preview_locked
                   ) {
-                    toast.error(ERROR_MESSAGE_TRIAL)
+                    setOpenPopupCTA({
+                      lockSection: true,
+                      ctaUpgrade: false,
+                      thankYou: false,
+                      thankYouLater: false,
+                    })
                   } else {
                     setOpen(true)
                   }
@@ -234,7 +218,12 @@ const PartFailed = ({
                       coursePart?.course_section_link_parents?.[0]
                         ?.is_preview_locked
                     ) {
-                      toast.error(ERROR_MESSAGE_TRIAL)
+                      setOpenPopupCTA({
+                        lockSection: true,
+                        ctaUpgrade: false,
+                        thankYou: false,
+                        thankYouLater: false,
+                      })
                     } else {
                       setOpen(true)
                     }

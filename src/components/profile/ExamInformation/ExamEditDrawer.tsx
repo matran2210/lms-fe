@@ -136,7 +136,7 @@ const ExamEditDrawer = ({
       reset({})
       refetch()
     }
-  }, [isOpen, refetch])
+  }, [isOpen, refetch, reset])
 
   const closeModal = () => {
     setIsOpen(false)
