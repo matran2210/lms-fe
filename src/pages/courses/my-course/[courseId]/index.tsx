@@ -13,6 +13,7 @@ import { ANIMATION } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import { CoursesAPI } from 'src/pages/api/courses'
 import SelectExamPopup from './popups/SelectExamPopup'
+import PopupModalTest from '@components/survey/PopupModalTest'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -172,6 +173,12 @@ const CourseDetail = () => {
       {isSuccess && data.pages[0].courseDetail.remind_choosing_exam && (
         <SelectExamPopup courseData={data} />
       )}
+
+      <PopupModalTest
+        course_name={data?.pages?.[0]?.courseDetail?.data?.name}
+        program={data?.pages?.[0]?.courseDetail?.data?.program}
+        data={data?.pages?.[0]?.courseDetail}
+      />
     </Layout>
   )
 }
