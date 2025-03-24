@@ -22,10 +22,10 @@ import { z } from 'zod'
 interface Iprops {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
-  data: any
   classId: string
   onSuccess?: () => void
   remainingChanges?: number
+  currentValue?: string
 }
 
 const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
@@ -34,10 +34,10 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 const ExamEditDrawer = ({
   isOpen,
   setIsOpen,
-  data,
   classId,
   onSuccess,
-  remainingChanges: remainingChange,
+  remainingChanges,
+  currentValue,
 }: Iprops) => {
   const [openConfirmModal, setOpenConfirmModal] = useState(false)
   const validationSchema = z.object({
@@ -121,7 +121,7 @@ const ExamEditDrawer = ({
       value: exam.id,
     }))
     .filter((item) => {
-      return item.value !== data?.examination_subject_id
+      return item.value !== currentValue
     })
 
   const onSubmit: SubmitHandler<ExaminationForm> = (data) => {
@@ -182,8 +182,8 @@ const ExamEditDrawer = ({
                   You can only change the exam date up to two times.
                 </em>
                 <em className="block">
-                  {remainingChange
-                    ? `Remaining ${pluralize('change', remainingChange)}: ${remainingChange}`
+                  {remainingChanges
+                    ? `Remaining ${pluralize('change', remainingChanges)}: ${remainingChanges}`
                     : ''}
                 </em>
               </div>

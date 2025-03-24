@@ -104,7 +104,6 @@ const ExamInformation = () => {
                     <ExamEditDrawer
                       isOpen={isOpen}
                       setIsOpen={setIsOpen}
-                      data={data}
                       classId={router.query.courseId as string}
                       onSuccess={() => {
                         queryClient.invalidateQueries({
@@ -112,6 +111,7 @@ const ExamInformation = () => {
                         })
                       }}
                       remainingChanges={data.data.remaining_changes}
+                      currentValue={data.data.exam.examination.id}
                     />
                   </>
                 )
