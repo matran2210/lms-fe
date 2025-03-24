@@ -200,6 +200,11 @@ const CourseDetail = () => {
         )}
       </div>
       {isSuccess && <SelectExamPopup courseData={data} />}
+      <PopupModalTest
+        course_name={data?.pages?.[0]?.courseDetail?.data?.name}
+        program={data?.pages?.[0]?.courseDetail?.data?.program}
+        data={data?.pages?.[0]?.courseDetail}
+      />
     </Layout>
   )
 }
