@@ -12,7 +12,7 @@ import { useQuery, useQueryClient } from 'react-query'
 import TabLayout from '../TabLayout'
 import ExamEditDrawer from './ExamEditDrawer'
 import ExamInfoActionCell from './ExamInfoActionCell'
-import { Daum } from './type'
+import { IExamInformation } from './type'
 
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'
@@ -31,7 +31,7 @@ interface IProp {
 }
 const ExamInfoTab = ({ onBack }: IProp) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [currentRow, setCurrentRow] = useState<Daum>()
+  const [currentRow, setCurrentRow] = useState<IExamInformation>()
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const queryClient = useQueryClient()
@@ -129,19 +129,20 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                         'sticky -right-4 bg-white',
                       )}
                     >
-                      {!row.is_final_examination_subject && (
-                        <ExamInfoActionCell>
-                          <p
-                            className="cursor-pointer rounded-md p-1 pl-2 transition-colors hover:bg-primary-light hover:text-primary"
-                            onClick={() => {
-                              setIsDrawerOpen(true)
-                              setCurrentRow(row)
-                            }}
-                          >
-                            Edit
-                          </p>
-                        </ExamInfoActionCell>
-                      )}
+                      {!row?.is_final_examination_subject &&
+                        row?.remaining_changes > 0 && (
+                          <ExamInfoActionCell>
+                            <p
+                              className="cursor-pointer rounded-md p-1 pl-2 transition-colors hover:bg-primary-light hover:text-primary"
+                              onClick={() => {
+                                setIsDrawerOpen(true)
+                                setCurrentRow(row)
+                              }}
+                            >
+                              Edit
+                            </p>
+                          </ExamInfoActionCell>
+                        )}
                     </td>
                   </tr>
                 )
@@ -163,9 +164,10 @@ const ExamInfoTab = ({ onBack }: IProp) => {
         <ExamEditDrawer
           isOpen={isDrawerOpen}
           setIsOpen={setIsDrawerOpen}
-          data={currentRow}
           classId={currentRow.class.id}
           onSuccess={() => queryClient.invalidateQueries(UserKey.ExamList)}
+          currentValue={currentRow.examination_subject_id}
+          remainingChanges={currentRow.remaining_changes}
         />
       )}
     </React.Fragment>
