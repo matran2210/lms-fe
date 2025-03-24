@@ -7,18 +7,11 @@ import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useCourseContext } from '@contexts/index'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
-import { CoursesAPI } from 'src/pages/api/courses'
 import { MY_COURSES } from 'src/constants/lang'
-import { Modal } from 'antd'
-import Select from '@components/base/select/Select'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
-import { CLASS_USER_STATUS } from 'src/type'
-import useSelectExams from 'src/hooks/useSelectExams'
-import HookFormSelect from '@components/base/select/HookFormSelect'
+import { CoursesAPI } from 'src/pages/api/courses'
 import SelectExamPopup from './popups/SelectExamPopup'
 
 const DEFAULT_PAGESIZE = 18
@@ -26,7 +19,6 @@ const DEFAULT_PAGESIZE = 18
 const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
-  const [setselectedExam, setSelectedExam] = useState(null)
 
   const params = {
     user_section_learning_status:
@@ -83,27 +75,6 @@ const CourseDetail = () => {
     enabled: router.query.courseId !== undefined,
     retry: false,
   })
-
-  const [examModal, setExamModal] = useState(true)
-
-  // useEffect(() => {
-  //   setExamModal(
-  //     data?.pages[0].courseDetail.status === CLASS_USER_STATUS.READY_TO_LEARN &&
-  //       data?.pages[0].data.course_type === 'TRIAL_COURSE' &&
-  //       !data?.pages[0].courseDetail.exam?.id,
-  //   )
-  // }, [isSuccess, data])
-
-  const {
-    exams,
-    hasNextPage: hasNextExamPage,
-    fetchNextPage: fetchNextExamPage,
-  } = useSelectExams(router.query.courseId as string)
-
-  const options = exams?.data?.map((exam) => ({
-    label: exam.examination.name,
-    value: exam.id,
-  }))
 
   /**
    * @description gọi lại API khi courseID khác undefined
@@ -198,7 +169,9 @@ const CourseDetail = () => {
           </>
         )}
       </div>
-      {isSuccess && <SelectExamPopup courseData={data} />}
+      {isSuccess && data.pages[0].courseDetail.remind_choosing_exam && (
+        <SelectExamPopup courseData={data} />
+      )}
     </Layout>
   )
 }
