@@ -2,7 +2,6 @@ import { IconClose } from '@assets/icons'
 import { Popover, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import PopupSupportCenter from './PopupSupportCenter'
-import { getLocalStorgeActToken } from '@utils/index'
 
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   const [visible, setVisible] = useState(false)
