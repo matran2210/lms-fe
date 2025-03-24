@@ -225,7 +225,11 @@ const PartFailed = ({
               coursePart?.quiz?.attempt?.number_of_attempts ===
                 coursePart?.quiz?.limit_count ? null : (
                 <ButtonSecondary
-                  title="Retake"
+                  title={
+                    coursePart?.quiz?.attempt?.status === 'IN_PROGRESS'
+                      ? 'Continue'
+                      : 'Retake'
+                  }
                   full={false}
                   size="small"
                   className="ml-auto max-h-8"

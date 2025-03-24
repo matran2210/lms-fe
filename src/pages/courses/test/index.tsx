@@ -124,6 +124,9 @@ const TestModal = ({
               created_at: results?.[0]?.created_at,
             }),
           )
+        } else {
+          setIsContinue(false)
+          dispatch(setQuizAttempt({}))
         }
       }
     }

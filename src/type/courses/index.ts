@@ -219,6 +219,7 @@ export interface IMyCourseDetail {
       ratio_score: string
       total_attempt_time: number
       grading_status?: string
+      status?: string
     }
     id: string
     is_graded: boolean
