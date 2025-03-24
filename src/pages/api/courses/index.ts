@@ -397,7 +397,7 @@ export class CoursesAPI {
     })
   }
 
-  static createTest(
+  static changeSurvey(
     class_id: string | string[] | undefined,
     data: any,
   ): Promise<any> {
