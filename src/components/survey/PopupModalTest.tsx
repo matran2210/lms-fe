@@ -2,13 +2,19 @@ import { IconBuildingModify } from '@assets/icons'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { CoursesAPI } from '@pages/api/courses'
 import { onLinkSocial } from '@utils/index'
-import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
+enum ECourseProgram {
+  CMA = 'CMA',
+  CFA = 'CFA',
+  ACCA = 'ACCA',
+  CERT_DIP = 'CERT_DIP',
+}
+
 interface SurveyModalProps {
-  course_name?: string
-  program: 'CMA' | 'ACCA' | 'CFA'
+  class_code?: string
+  program: CourseProgram
   data: Record<string, any>
 }
 
@@ -22,12 +28,14 @@ const SURVEY_URLS = {
   ACCA: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
   CFA: 'https://survey.hsforms.com/1EmIZK95sTWqhk1G3ozRyIw120xb',
   CMA: 'https://survey.hsforms.com/1jlTMbpPsTaai6oKwrjEv1g120xb',
+  CERT_DIP: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
 }
 
 const SURVEY_URLS_COMPLETE = {
   ACCA: 'https://survey.hsforms.com/140B1nhjYSmaP0uQ-A7oFKQ120xb',
   CFA: 'https://survey.hsforms.com/13S3QNf3rSEScA7mlwjPzjw120xb',
   CMA: 'https://survey.hsforms.com/1szRbvrk9S6SgcE9WsHpFZw120xb',
+  CERT_DIP: 'https://survey.hsforms.com/140B1nhjYSmaP0uQ-A7oFKQ120xb',
 }
 
 const SURVEY_ICONS = {
@@ -42,11 +50,22 @@ const SURVEY_TITLES = {
   completeCourse: 'Hoàn thành khảo sát để khép lại hành trình!',
 }
 
+type CourseProgram =
+  | ECourseProgram.ACCA
+  | ECourseProgram.CERT_DIP
+  | ECourseProgram.CFA
+  | ECourseProgram.CMA
+
 const PopupModalTest: React.FC<SurveyModalProps> = ({
-  course_name,
+  class_code,
   program,
   data,
 }) => {
+  const convertCertDip = (input: string) => {
+    if (!input) return ''
+    return input.replace(/\//g, '_').toUpperCase()
+  }
+
   const [open, setOpen] = useState<SurveyState>({
     middtermCourse: false,
     finalCourse: false,
@@ -76,8 +95,20 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    */
   const handleSubmit = () => {
     const surveyUrl = completeMiddterm
-      ? SURVEY_URLS[program]
-      : SURVEY_URLS_COMPLETE[program]
+      ? SURVEY_URLS[
+          convertCertDip(program) as
+            | ECourseProgram.ACCA
+            | ECourseProgram.CERT_DIP
+            | ECourseProgram.CFA
+            | ECourseProgram.CMA
+        ]
+      : SURVEY_URLS_COMPLETE[
+          convertCertDip(program) as
+            | ECourseProgram.ACCA
+            | ECourseProgram.CERT_DIP
+            | ECourseProgram.CFA
+            | ECourseProgram.CMA
+        ]
     onLinkSocial(surveyUrl)
 
     setOpen({
@@ -144,12 +175,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     middtermCourse: (
       <span>
         Chúc mừng bạn đã hoàn thành{' '}
-        <span className="text-sm font-medium text-bw-1">
-          {round(data?.survey_attributes?.progress_percent * 100, 2)}%
-        </span>{' '}
-        khóa học{' '}
-        <span className="text-sm font-medium text-bw-1">{course_name}</span>.
-        Tại SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập tốt
+        <span className="text-sm font-medium text-bw-1">50%</span> khóa học{' '}
+        <span className="text-sm font-medium text-bw-1">{class_code}</span>. Tại
+        SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập tốt
         nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp quý
         giá này sẽ giúp chúng tôi nâng cao chất lượng khóa học và dịch vụ học
         tập. Cảm ơn bạn đã đồng hành cùng chúng tôi!
@@ -158,7 +186,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     finalCourse: (
       <span>
         Bạn đã đi đến chặng đường cuối cùng của khóa học{' '}
-        <span className="text-sm font-medium text-bw-1">{course_name}</span>!
+        <span className="text-sm font-medium text-bw-1">{class_code}</span>!
         Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm đáng
         nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy thấu
         hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong nhận
@@ -183,7 +211,13 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   useEffect(() => {
     if (
       data?.class_type !== 'LESSON' ||
-      !data?.survey_attributes?.is_survey_popup
+      !data?.survey_attributes?.is_survey_popup ||
+      ![
+        ECourseProgram.ACCA,
+        ECourseProgram.CERT_DIP,
+        ECourseProgram.CFA,
+        ECourseProgram.CMA,
+      ].includes(convertCertDip(program) as ECourseProgram)
     )
       return
 
