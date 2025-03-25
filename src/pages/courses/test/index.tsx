@@ -117,7 +117,9 @@ const TestModal = ({
           status: results?.[0]?.status,
           grading_method: results?.[0]?.quiz?.grading_method,
           created_at: new Date(results?.[0]?.created_at),
-          // number_of_attempts: results?.[0]?.
+          number_of_attempt: Number(
+            (results?.[0]?.name ?? '').split('/').at(0) ?? 0,
+          ),
         })
         //check điều kiện xem có được tiếp tục làm bài hay không
         let isExpired = false
@@ -356,9 +358,10 @@ const TestModal = ({
   const renderShowOkButton = () => {
     if (
       selectedResult &&
-      selectedResult?.number_of_attempt &&
-      selectedResult?.number_of_attempt !==
-        data?.quiz?.attempt?.number_of_attempts
+      (selectedResult?.status === 'SUBMITTED' ||
+        (selectedResult?.number_of_attempt &&
+          selectedResult?.number_of_attempt !==
+            data?.quiz?.attempt?.number_of_attempts))
     ) {
       return false
     }
@@ -371,8 +374,7 @@ const TestModal = ({
     if (
       data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ||
       (data?.quiz?.is_limited &&
-        data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count &&
-        data?.quiz?.status === 'IN_PROGRESS') ||
+        data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count) ||
       isNull(data?.quiz?.attempt)
     ) {
       return true
@@ -481,10 +483,16 @@ const TestModal = ({
                   placeholder=""
                   value={selectedResult}
                   onChange={(selectedOption) => {
-                    setSelectedResult(selectedOption)
+                    setSelectedResult({
+                      ...selectedOption,
+                      number_of_attempt: Number(
+                        (selectedOption?.name ?? '').split('/').at(0) ?? 0,
+                      ),
+                    })
                     setIsFocus(false)
                   }}
                   options={resultList.data.map((item, index) => ({
+                    name: item.name,
                     value: item.id,
                     label: `Attempt ${item.name} - ${
                       item.status === 'IN_PROGRESS'
