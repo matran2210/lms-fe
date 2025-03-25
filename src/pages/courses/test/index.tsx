@@ -115,8 +115,9 @@ const TestModal = ({
         const isContinue = results?.[0]?.status === 'IN_PROGRESS'
         if (isContinue && !isExpired) {
           setIsContinue(true)
-          dispatch(
-            setQuizAttempt({
+          localStorage.setItem(
+            'quizAttempt',
+            JSON.stringify({
               id: results?.[0]?.id,
               number_of_attempts: data?.attempt?.number_of_attempts,
               is_limited: data?.is_limited,
@@ -126,7 +127,7 @@ const TestModal = ({
           )
         } else {
           setIsContinue(false)
-          dispatch(setQuizAttempt({}))
+          localStorage.removeItem('quizAttempt')
         }
       }
     }

@@ -30,7 +30,7 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
+import { debounce, isEmpty, isUndefined, transform, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -242,9 +242,10 @@ const TestDetail = () => {
             solution={solution}
             name={`${currentTabID}_${essayData?.index}_answer`}
             setValue={setValue}
-            defaultValue={getValues(
-              `${currentTabID}_${essayData?.index}_answer`,
-            )}
+            defaultValue={
+              getValues(`${currentTabID}_${essayData?.index}_answer`) ||
+              currentTabContent?.answer
+            }
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -436,7 +437,7 @@ const TestDetail = () => {
   const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
   const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
-  const { quizAttempt } = useAppSelector((state) => state.quizAttemptReducer)
+  const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
 
   useClickOutside({
     ref: dropUpRef,
@@ -450,9 +451,80 @@ const TestDetail = () => {
 
   const currentTabContent = useMemo(() => {
     if (tabs && tabs.length > 0) {
-      return tabs.find((e: any) => e.id === currentPage)
+      const answerSubmitted = answersSubmitted.find(
+        (e: any) => e.questionId === currentPage,
+      )
+      const objTab = tabs.find((e: any) => e.id === currentPage)
+
+      if (answerSubmitted) {
+        if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
+          return {
+            ...objTab,
+            ...answerSubmitted,
+            // done: true,
+            attempted: true,
+            answer: answerSubmitted?.short_answer,
+          }
+        }
+
+        if (
+          objTab?.data?.qType === QUESTION_TYPES.ONE_CHOICE ||
+          objTab?.data?.qType === QUESTION_TYPES.TRUE_FALSE
+        ) {
+          if (answerSubmitted?.question_answer_id) {
+            return {
+              ...objTab,
+              // done: true,
+              attempted: true,
+              answer: answerSubmitted?.question_answer_id,
+            }
+          } else {
+            return objTab
+          }
+        }
+
+        const transformAnswerData = answerSubmitted?.answer?.map((e: any) => {
+          if (objTab?.data?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+            return e.answer_id
+          } else if (objTab?.data?.qType === QUESTION_TYPES.MATCHING) {
+            return {
+              answer_id: e.answer_id,
+              question_id: e.question_id,
+            }
+          } else if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+            let objAnswer: any
+            for (let i = 0; i < objTab?.data?.answers?.length; i++) {
+              if (objTab?.data?.answers[i].id === e.answer_id) {
+                objAnswer = {
+                  ...e,
+                  idAnswer: e.answer_id,
+                  value: objTab?.data?.answers[i].answer,
+                }
+                break
+              }
+            }
+            return objAnswer
+          } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
+            return e.answer_id
+          } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
+            return e.answer_text
+          }
+        })
+
+        if (transformAnswerData?.length > 0) {
+          return {
+            ...objTab,
+            answer: transformAnswerData,
+            // done: true,
+          }
+        } else {
+          return objTab
+        }
+      } else {
+        return objTab
+      }
     } else return undefined
-  }, [currentPage, tabs])
+  }, [currentPage, tabs, answersSubmitted])
 
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
@@ -1022,17 +1094,17 @@ const TestDetail = () => {
     if (!checkAnswered(currentTabContent)) return
 
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let answers: {
-      question_id: any
-      question_answer_id?: any
-      time_spent: number
-      answer?: any
-      short_answer?: any
-      requirement_id?: any
-      response_option?: any
-      active?: string
-      answer_file?: any
-    }[] = []
+    // let answers: {
+    //   question_id: any
+    //   question_answer_id?: any
+    //   time_spent: number
+    //   answer?: any
+    //   short_answer?: any
+    //   requirement_id?: any
+    //   response_option?: any
+    //   active?: string
+    //   answer_file?: any
+    // }[] = []
     let answerItem = {}
 
     for (let [index, e] of allQuest.entries()) {
@@ -1111,14 +1183,13 @@ const TestDetail = () => {
           }
         }
         if (e.qType === QUESTION_TYPES.ESSAY) {
-          //chua lam den day
           if (checkAnswered(e, true)) {
             const requirements = e?.data?.requirements?.length
               ? e?.data?.requirements
               : [null]
             if (requirements?.length) {
               requirements?.forEach((requirement: Requirement | null) => {
-                answers.push({
+                answerItem = {
                   question_id: e.id,
                   short_answer:
                     answerListRef?.current?.[requirement?.id || ''] ??
@@ -1131,10 +1202,10 @@ const TestDetail = () => {
                   active: 'SUBMITED',
                   answer_file:
                     requirement?.answer_file || e?.answer_file || null,
-                })
+                }
               })
             } else {
-              answers.push({
+              answerItem = {
                 question_id: e.id,
                 short_answer: e?.answer || '',
                 requirement_id: null,
@@ -1144,7 +1215,7 @@ const TestDetail = () => {
                 time_spent: Math.ceil(e?.timeSpent / 1000),
                 active: 'SUBMITED',
                 answer_file: e?.answer_file || null,
-              })
+              }
             }
           }
         }
@@ -1153,7 +1224,6 @@ const TestDetail = () => {
       }
     }
     dispatch(disableUnsavedChange())
-
     const res = await CoursesAPI.submitAnswer(quizAttempt?.id as string, {
       question_id: currentTabContent?.id,
       total_attempt_time:
@@ -1559,7 +1629,7 @@ const TestDetail = () => {
                 content: res?.data?.progress?.content,
               })
             }
-            dispatch(setQuizAttempt(res.data))
+            localStorage.setItem('quizAttempt', JSON.stringify(res.data))
             setIsQuizAttemptCreated(true) // Mark the attempt as created
           } catch (err: any) {
             if (err.response?.data?.error.code === '400|060710') {
@@ -1654,7 +1724,6 @@ const TestDetail = () => {
     async function fetchTabs() {
       if (questions?.length > 0) {
         const arr = []
-
         for (let i in questions) {
           let baseData = {
             ...questions[i],
@@ -1768,6 +1837,7 @@ const TestDetail = () => {
                   setActiveShowAll={setActiveShowAll}
                   setValueFilter={setValueFilter}
                   isScrollCenter={false}
+                  answerSubmitted={answersSubmitted}
                 />
               </div>
             )}

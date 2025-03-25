@@ -15,6 +15,7 @@ interface IProps {
   setActiveShowAll: any
   setValueFilter: UseFormSetValue<FieldValues>
   isScrollCenter?: boolean
+  answerSubmitted?: Array<any>
 }
 
 const TabSlide = ({
@@ -27,6 +28,7 @@ const TabSlide = ({
   setActiveShowAll,
   setValueFilter,
   isScrollCenter = true,
+  answerSubmitted,
 }: IProps) => {
   const elementRef = useRef(null) as any
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
@@ -167,6 +169,14 @@ const TabSlide = ({
     elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
   }
 
+  const checkTabHasAnswerSubmitted = (tab: any) => {
+    const answer = answerSubmitted?.find((e: any) => e.questionId === tab.id)
+    if (answer) {
+      return true
+    }
+    return false
+  }
+
   return (
     <ul
       className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3`}
@@ -226,7 +236,11 @@ const TabSlide = ({
                           handleChangeTab(pageNum.id)
                         }
                       }}
-                      isViewedProp={pageNum.attempted || pageNum.done}
+                      isViewedProp={
+                        pageNum.attempted ||
+                        pageNum.done ||
+                        checkTabHasAnswerSubmitted(pageNum)
+                      }
                       isFlagedProp={pageNum.flaged}
                       //   type={type}
                     >
@@ -243,7 +257,9 @@ const TabSlide = ({
                         handleChangeTab(pageNum.id)
                       }
                     }}
-                    isViewedProp={pageNum.attempted}
+                    isViewedProp={
+                      pageNum.attempted || checkTabHasAnswerSubmitted(pageNum)
+                    }
                     isFlagedProp={pageNum.flaged}
                     //   type={type}
                   >
@@ -253,7 +269,6 @@ const TabSlide = ({
               )
             ) : (
               renderTab.map((pageNum: any, idx: number) => {
-                // if (pageNum) {
                 return (
                   <div className="flex flex-col gap-2" key={idx}>
                     {pageNum[0] ? (
@@ -267,7 +282,10 @@ const TabSlide = ({
                               handleChangeTab(pageNum[0].id)
                             }
                           }}
-                          isViewedProp={pageNum[0].attempted}
+                          isViewedProp={
+                            pageNum[0].attempted ||
+                            checkTabHasAnswerSubmitted(pageNum[0])
+                          }
                           isFlagedProp={pageNum[0].flaged}
                           //   type={type}
                         >
@@ -292,7 +310,10 @@ const TabSlide = ({
                               handleChangeTab(pageNum[1].id)
                             }
                           }}
-                          isViewedProp={pageNum[1].attempted}
+                          isViewedProp={
+                            pageNum[1].attempted ||
+                            checkTabHasAnswerSubmitted(pageNum[1])
+                          }
                           isFlagedProp={pageNum[1].flaged}
                           //   type={type}
                         >
