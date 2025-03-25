@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { IconCongrats } from '@assets/icons'
+import { AlertTriagle, IconCongrats } from '@assets/icons'
 import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
@@ -248,7 +248,7 @@ const ExamEditDrawer = ({
         })}
         fullWidthBtn={true}
         buttonSize="extra"
-        icon={<IconCongrats />}
+        icon={<AlertTriagle />}
         header="Are you sure?"
         loading={isChangingLoad}
       >
