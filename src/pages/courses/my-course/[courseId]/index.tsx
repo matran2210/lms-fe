@@ -175,7 +175,7 @@ const CourseDetail = () => {
       )}
 
       <PopupModalTest
-        class_code={data?.pages?.[0]?.courseDetail?.data?.code}
+        class_code={data?.pages?.[0]?.courseDetail?.code}
         program={data?.pages?.[0]?.courseDetail?.data?.program}
         data={data?.pages?.[0]?.courseDetail}
       />
