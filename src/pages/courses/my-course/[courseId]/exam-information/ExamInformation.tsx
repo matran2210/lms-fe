@@ -111,7 +111,7 @@ const ExamInformation = () => {
                         })
                       }}
                       remainingChanges={data?.data?.remaining_changes}
-                      currentValue={data?.data?.exam?.examination?.id}
+                      currentValue={data?.data?.exam?.id}
                     />
                   </>
                 )
