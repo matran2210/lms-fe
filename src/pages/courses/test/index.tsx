@@ -16,7 +16,6 @@ import { capitalizeFirstLetter } from '@utils/index'
 import { useDispatch } from 'react-redux'
 import { setQuizAttempt } from 'src/redux/slice/Course/MyCourse/QuizAttempt/QuizAttempt'
 import PopupSelectRetakeOrContinueAttempt from '@components/mycourses/PopupSelectRetakeOrContinueAttempt'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import SappButton from '@components/base/button/SappButton'
 import { ClockIcon } from '@assets/icons'
 
