@@ -37,7 +37,7 @@ const ExamInformation = () => {
             <div className="main relative mx-auto my-0 max-w-xxl">
               <div className="flex w-full items-center justify-between pb-4 pt-6">
                 <BreadcrumbFilter
-                  name={data?.data.course.name ?? ''}
+                  name={data?.data?.course?.name ?? ''}
                   subpath="Exam Information"
                   courseId={router.query.courseId}
                 />
@@ -85,7 +85,7 @@ const ExamInformation = () => {
                             <CheckCircleTwoTone twoToneColor={'#52c41a'} />
                           </SappTooltip>
                         ) : (
-                          data.data.remaining_changes > 0 && (
+                          data?.data?.remaining_changes > 0 && (
                             <SappTooltip
                               showTooltip={true}
                               title={'Change Exam Date'}
@@ -110,8 +110,8 @@ const ExamInformation = () => {
                           queryKey: [ClassKey.ExamInfo],
                         })
                       }}
-                      remainingChanges={data.data.remaining_changes}
-                      currentValue={data.data.exam.examination.id}
+                      remainingChanges={data?.data?.remaining_changes}
+                      currentValue={data?.data?.exam?.examination?.id}
                     />
                   </>
                 )

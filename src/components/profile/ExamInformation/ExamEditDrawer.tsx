@@ -117,8 +117,8 @@ const ExamEditDrawer = ({
 
   const options = exams?.data
     ?.map((exam) => ({
-      label: exam.examination.name,
-      value: exam.id,
+      label: exam?.examination?.name,
+      value: exam?.id,
     }))
     .filter((item) => {
       return item.value !== currentValue
