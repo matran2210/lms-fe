@@ -28,7 +28,6 @@ const TabSlide = ({
   setActiveShowAll,
   setValueFilter,
   isScrollCenter = true,
-  answerSubmitted,
 }: IProps) => {
   const elementRef = useRef(null) as any
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
@@ -169,14 +168,6 @@ const TabSlide = ({
     elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
   }
 
-  const checkTabHasAnswerSubmitted = (tab: any) => {
-    const answer = answerSubmitted?.find((e: any) => e.questionId === tab.id)
-    if (answer) {
-      return true
-    }
-    return false
-  }
-
   return (
     <ul
       className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3`}
@@ -236,11 +227,7 @@ const TabSlide = ({
                           handleChangeTab(pageNum.id)
                         }
                       }}
-                      isViewedProp={
-                        pageNum.attempted ||
-                        pageNum.done ||
-                        checkTabHasAnswerSubmitted(pageNum)
-                      }
+                      isViewedProp={pageNum.attempted || pageNum.done}
                       isFlagedProp={pageNum.flaged}
                       //   type={type}
                     >
@@ -257,9 +244,7 @@ const TabSlide = ({
                         handleChangeTab(pageNum.id)
                       }
                     }}
-                    isViewedProp={
-                      pageNum.attempted || checkTabHasAnswerSubmitted(pageNum)
-                    }
+                    isViewedProp={pageNum.attempted}
                     isFlagedProp={pageNum.flaged}
                     //   type={type}
                   >
@@ -282,10 +267,7 @@ const TabSlide = ({
                               handleChangeTab(pageNum[0].id)
                             }
                           }}
-                          isViewedProp={
-                            pageNum[0].attempted ||
-                            checkTabHasAnswerSubmitted(pageNum[0])
-                          }
+                          isViewedProp={pageNum[0].attempted}
                           isFlagedProp={pageNum[0].flaged}
                           //   type={type}
                         >
@@ -310,10 +292,7 @@ const TabSlide = ({
                               handleChangeTab(pageNum[1].id)
                             }
                           }}
-                          isViewedProp={
-                            pageNum[1].attempted ||
-                            checkTabHasAnswerSubmitted(pageNum[1])
-                          }
+                          isViewedProp={pageNum[1].attempted}
                           isFlagedProp={pageNum[1].flaged}
                           //   type={type}
                         >

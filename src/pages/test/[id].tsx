@@ -435,7 +435,15 @@ const TestDetail = () => {
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
-  const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
+  // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
+  const [listSubmitError, setListSubmitError] = useState<
+    Array<{
+      question_id: string
+      total_attempt_time: number
+      scratch_pads: ScratchPad[]
+      [key: string]: any
+    }>
+  >([])
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
 
@@ -863,57 +871,53 @@ const TestDetail = () => {
   }
 
   const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
-    if (!currentContent?.done) {
-      if (
-        currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-        currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-        currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-      ) {
-        const answers = handleSaveAnswer(
-          getValues(`${currentPage}_answer`),
-          currentPage,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-        const answers = handleSaveAnswer(
-          getAnswerMatching(),
-          currentContent?.id,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-        const answers = handleSaveAnswer(
-          getAnswerDragNDrop(),
-          currentContent?.id,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
-        const answers = handleSaveAnswer(
-          getValueSelectText(),
-          currentContent?.id,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
-        const answers = handleSaveAnswer(
-          getValues(`${currentPage}_fillword`),
-          currentPage,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
-        const answers = handleSaveAnswer(
-          getValues(`${currentPage}_${essayData?.index}_answer`),
-          currentContent?.id,
-          tabs,
-        )
-        return answers
-      } else return tabs
-    } else {
-      return tabs
-    }
+    if (
+      currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_answer`),
+        currentPage,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
+      const answers = handleSaveAnswer(
+        getAnswerMatching(),
+        currentContent?.id,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      const answers = handleSaveAnswer(
+        getAnswerDragNDrop(),
+        currentContent?.id,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
+      const answers = handleSaveAnswer(
+        getValueSelectText(),
+        currentContent?.id,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_fillword`),
+        currentPage,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_${essayData?.index}_answer`),
+        currentContent?.id,
+        tabs,
+      )
+      return answers
+    } else return tabs
   }
   async function getDetail(currentPage: string) {
     let topicDescription
@@ -1088,23 +1092,12 @@ const TestDetail = () => {
     useCourseContext()
 
   const handleSubmitAnswer = async () => {
-    if (listQuestionDone.includes(currentTabContent?.id)) {
-      return
-    }
+    // if (listQuestionDone.includes(currentTabContent?.id)) {
+    //   return
+    // }
     if (!checkAnswered(currentTabContent)) return
 
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
-    // let answers: {
-    //   question_id: any
-    //   question_answer_id?: any
-    //   time_spent: number
-    //   answer?: any
-    //   short_answer?: any
-    //   requirement_id?: any
-    //   response_option?: any
-    //   active?: string
-    //   answer_file?: any
-    // }[] = []
     let answerItem = {}
 
     for (let [index, e] of allQuest.entries()) {
@@ -1224,19 +1217,53 @@ const TestDetail = () => {
       }
     }
     dispatch(disableUnsavedChange())
-    const res = await CoursesAPI.submitAnswer(quizAttempt?.id as string, {
+    let payload = {
       question_id: currentTabContent?.id,
       total_attempt_time:
         quizDetail?.quiz_timed * 60 -
         (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       scratch_pads: scratchPads || [],
       ...answerItem,
-    })
-    if (res?.success) {
-      setListQuestionDone((prev) => [...prev, currentTabContent?.id])
-      // if (action === 'next-tab') {
-      //   setTabs(reformTabs)
-      // }
+    }
+
+    try {
+      const res = await CoursesAPI.submitAnswer(
+        quizAttempt?.id as string,
+        payload,
+      )
+      if (res?.success) {
+        // setListQuestionDone((prev) => [...prev, currentTabContent?.id])
+        // if (action === 'next-tab') {
+        //   setTabs(reformTabs)
+        // }
+        setListSubmitError((prev) =>
+          prev.filter((item) => item.question_id !== currentTabContent?.id),
+        )
+      } else {
+        setListSubmitError((prev) => {
+          const index = prev.findIndex(
+            (item) => item.question_id === currentTabContent?.id,
+          )
+          if (index !== -1) {
+            const newList = [...prev]
+            newList[index] = payload
+            return newList
+          }
+          return [...prev, payload]
+        })
+      }
+    } catch (err) {
+      setListSubmitError((prev) => {
+        const index = prev.findIndex(
+          (item) => item.question_id === currentTabContent?.id,
+        )
+        if (index !== -1) {
+          const newList = [...prev]
+          newList[index] = payload
+          return newList
+        }
+        return [...prev, payload]
+      })
     }
   }
 
@@ -1723,31 +1750,39 @@ const TestDetail = () => {
   useEffect(() => {
     async function fetchTabs() {
       if (questions?.length > 0) {
-        const arr = []
-        for (let i in questions) {
-          let baseData = {
-            ...questions[i],
-            viewed: +i === 0,
-            flaged: false,
-            done: false,
-            index: +i,
-            response_type: 0,
-          }
-          if (+i === 0) {
-            const { topicDescription, question } = await getDetail(
-              questions?.[0]?.id,
-            )
-            baseData = {
-              ...baseData,
-              viewed: question ? true : false,
-              ...(question && {
-                data: question,
-                topicDescription: topicDescription?.data,
-              }),
+        const answerMap = new Map(
+          answersSubmitted.map((answer: any) => [answer.questionId, answer]),
+        )
+
+        const arr = await Promise.all(
+          questions.map(async (question: any, index: any) => {
+            const hasAnswer = answerMap.has(question.id)
+            let baseData = {
+              ...question,
+              viewed: index === 0,
+              flaged: false,
+              done: hasAnswer,
+              attempted: hasAnswer,
+              index,
+              response_type: 0,
             }
-          }
-          arr.push(baseData)
-        }
+
+            if (index === 0) {
+              const { topicDescription, question: questionDetail } =
+                await getDetail(question.id)
+              baseData = {
+                ...baseData,
+                viewed: !!questionDetail,
+                ...(questionDetail && {
+                  data: questionDetail,
+                  topicDescription: topicDescription?.data,
+                }),
+              }
+            }
+            return baseData
+          }),
+        )
+
         setTabs(arr)
       } else {
         router.push(PageLink.PAGE_NOT_FOUND)
@@ -1757,7 +1792,21 @@ const TestDetail = () => {
     if (questions) {
       fetchTabs()
     }
-  }, [questions, router, quizDetail?.id])
+  }, [questions, router, quizDetail?.id, answersSubmitted])
+
+  const handleSubmitAnswerError = async (answerSubmitErr: any) => {
+    const res = await CoursesAPI.submitAnswer(
+      quizAttempt?.id as string,
+      answerSubmitErr,
+    )
+    if (res?.success) {
+      setListSubmitError((prev) =>
+        prev.filter(
+          (item) => item.question_id !== answerSubmitErr?.question_id,
+        ),
+      )
+    }
+  }
 
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
@@ -1787,8 +1836,14 @@ const TestDetail = () => {
               submited={submited}
               setOpenSubmit={setOpenSubmit}
               onSubmitAnswer={handleSubmitAnswer}
-              handleTimeoutSubmit={() => {
+              handleTimeoutSubmit={async () => {
                 if (!openLimit) {
+                  if (listSubmitError.length > 0) {
+                    for (const el of listSubmitError) {
+                      await handleSubmitAnswerError(el)
+                    }
+                  }
+                  await handleSubmitAnswer()
                   handleSubmitQuestions('timeout')
                   dispatch(disableUnsavedChange())
                     .unwrap()
@@ -1837,7 +1892,6 @@ const TestDetail = () => {
                   setActiveShowAll={setActiveShowAll}
                   setValueFilter={setValueFilter}
                   isScrollCenter={false}
-                  answerSubmitted={answersSubmitted}
                 />
               </div>
             )}
@@ -2297,7 +2351,6 @@ const TestDetail = () => {
             open={openTimeOut}
             setOpen={setOpenTimeOut}
             handleSubmit={() => {
-              handleSubmitQuestions('timeout')
               dispatch(disableUnsavedChange())
                 .unwrap()
                 .then(() => {
