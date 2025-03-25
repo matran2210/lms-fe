@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { Typography } from 'antd'
 import LayoutFilter from '@components/layout/Filter/index'
 import Search from '@components/classes/Search'
 import { useForm } from 'react-hook-form'
@@ -15,26 +14,18 @@ import { PageLink } from 'src/constants'
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import { TeacherKey } from '@pages/api/queryKey'
 
-const { Title } = Typography
-
 const breadcrumbs: ITabs[] = [
-  {
-    link: `${PageLink.TEACHERS}`,
-    title: 'LMS',
-  },
-  {
-    link: `${PageLink.TEACHER_MY_CLASS}`,
-    title: 'My Class',
-  },
+  { link: PageLink.TEACHERS, title: 'LMS' },
+  { link: PageLink.TEACHER_MY_CLASS, title: 'My Class' },
 ]
+
 interface FilterParams {
-  course_name: string
-  program: string
-  status: string
-  belong_to: string
+  course_name?: string
+  program?: string
+  status?: string
+  belong_to?: string
 }
 
-// Sử dụng
 const initialValues: FilterParams = {
   course_name: '',
   program: '',
@@ -44,11 +35,14 @@ const initialValues: FilterParams = {
 
 const MyClass = () => {
   const router = useRouter()
-  const [listUniverPrograms, setListUniverPrograms] = useState<any>()
-  const [pageIndex, setPageIndex] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(10)
+  const [listUniverPrograms, setListUniverPrograms] = useState<
+    { value: string; label: string }[]
+  >([])
+  const [pageIndex, setPageIndex] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [params, setParams] = useState<FilterParams>(initialValues)
-  const { control, getValues, reset, setValue, watch } = useForm({
+
+  const { control, getValues, reset } = useForm({
     mode: 'onSubmit',
     defaultValues: {
       course_name: router.query.course_name || '',
@@ -58,76 +52,84 @@ const MyClass = () => {
     },
   })
 
-  const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: [TeacherKey.MyClass, params],
-    queryFn: () => TeacherAPI.getListClass(pageIndex, pageSize, params),
-    select: (data) => {
-      return data
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: [TeacherKey.MyClass, pageIndex, pageSize, params],
+    queryFn: async () => {
+      try {
+        return await TeacherAPI.getListClass(pageIndex, pageSize, params)
+      } catch (error) {
+        return null
+      }
     },
     retry: false,
   })
+
   const handleResetFilter = () => {
     reset(initialValues)
-    router.push({
-      pathname: router.pathname,
-      query: {},
-    })
+    router.replace(router.pathname, undefined, { shallow: true })
     setParams(initialValues)
   }
 
   const onSubmit = () => {
-    const cleanedParams = {
-      course_name: getValues('course_name') || undefined,
-      program: getValues('program')?.value || undefined,
-      status: getValues('status') || undefined,
-      belong_to: getValues('belong_to') || undefined,
+    const searchParams: FilterParams = {
+      course_name: (getValues('course_name') as string) || undefined,
+      // program: getValues('program')?.value || undefined,
+      status: (getValues('status') as string) || undefined,
+      belong_to: (getValues('belong_to') as string) || undefined,
     }
-    setParams(cleanedParams as FilterParams)
+    setParams(searchParams)
   }
-  const getListUniverPrograms = async () => {
-    const res = await EntranceTestAPI.getListUniversProgram()
-    let optionUniverProgram = []
-    for (let e of res?.data) {
-      optionUniverProgram?.push({ value: e?.id, label: e?.name })
-    }
-    setListUniverPrograms(optionUniverProgram)
-  }
+
   useEffect(() => {
-    refetch()
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, ...params },
+    EntranceTestAPI.getListUniversProgram().then((res) => {
+      setListUniverPrograms(
+        res?.data?.map((e: any) => ({ value: e.id, label: e.name })) || [],
+      )
     })
-  }, [params])
-  useEffect(() => {
-    getListUniverPrograms()
   }, [])
 
+  useEffect(() => {
+    refetch()
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          page_index: pageIndex,
+          page_size: pageSize,
+          ...params,
+        },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }, [pageIndex, pageSize, params])
+
   return (
-    <SappLoadingGlobal loading={false}>
+    <SappLoadingGlobal loading={isLoading}>
       <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
         <LayoutFilter
           listFilter={
             <Search control={control} listUniverPrograms={listUniverPrograms} />
           }
-          loading={false}
+          loading={isLoading}
           onReset={handleResetFilter}
           onSubmit={onSubmit}
         />
         <div className="mb-10 mt-6">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {data?.classes.map((item: any, index: number) => (
+            {data?.classes?.map((item: any, index: number) => (
               <ItemClassesByStatus key={index} classes={item} index={index} />
             ))}
           </div>
         </div>
         <PaginationSAPP
-          currentPage={data?.metadata.page_index as number}
-          pageSize={data?.metadata?.page_size as number}
-          totalItems={data?.metadata?.total_records as number}
+          currentPage={data?.metadata?.page_index ?? 1}
+          pageSize={data?.metadata?.page_size ?? 10}
+          totalItems={data?.metadata?.total_records ?? 0}
           setCurrentPage={setPageIndex}
           setPageSize={setPageSize}
-          type={'table'}
+          type="table"
           classname="mt-3"
         />
       </LayoutTeacher>

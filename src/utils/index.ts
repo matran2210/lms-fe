@@ -8,6 +8,10 @@ import {
 import DOMPurify from 'dompurify'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 export const getLocalStorgeActToken = (): string => {
   return ''
@@ -369,5 +373,7 @@ export const removeHtmlTags = (htmlString?: string) => {
   if (!htmlString) return ''
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
+export const formatDateFromUTC = (date: string) =>
+  dayjs.utc(date).local().format('DD/MM/YYYY')
 
 export * from './formatNumber'

@@ -19,4 +19,17 @@ export class TeacherAPI {
   static getClassById(id: string): Promise<any> {
     return fetcher(`${apiURL}/classes/${id}/teacher`)
   }
+  static getStudentById(
+    id: string,
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/classes/${id}/teacher/student?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
+  }
 }

@@ -4,17 +4,18 @@ import SappTabs from 'src/components/tabs/SappTabs'
 import { ITabs } from 'src/type'
 import LoadingCard from 'src/common/LoadingCard'
 import { Tag, Typography } from 'antd'
-import { CalendarOutlined, EnvironmentOutlined } from '@ant-design/icons'
+import { GeoLocationIcon, CalendarIcon } from '@assets/icons'
+import { formatDateFromUTC } from '@utils/index'
 const { Title } = Typography
 interface IProps {
-  userDetail?: any | undefined
+  dataDetail?: any | undefined
   tabs?: ITabs[]
   loading?: boolean
   progress?: number
 }
 
 const ClassCard = ({
-  userDetail,
+  dataDetail,
   tabs = [],
   loading,
   progress = 0,
@@ -27,20 +28,21 @@ const ClassCard = ({
         <div className="h-fit w-full rounded-xl bg-white">
           <div className="flex flex-col">
             <Title level={4} className="text-gray-700" style={{ margin: 0 }}>
-              Certificate in International Financial Reporting (CertIFR)
+              {dataDetail?.course?.name}
             </Title>
             <div className="mb-4 flex justify-between">
               <div className="flex items-center text-sm text-gray-500">
                 <Tag className="text-xs mr-6 rounded border border-transparent bg-[#01711f]/5 font-semibold text-[#07af17]">
-                  Completed
+                  {dataDetail?.status}
                 </Tag>
-                <EnvironmentOutlined className="mr-1" />
-                <span className="mr-6 text-sm font-medium text-gray-400">
+                <GeoLocationIcon />
+                <span className="ml-1 mr-6 text-sm font-medium text-gray-400">
                   54 Lê Thanh Nghị, Hai Bà Trưng
                 </span>
-                <CalendarOutlined className="mr-1" />
-                <span className="text-sm font-medium text-gray-400">
-                  02/12/2024 - 29/05/2025
+                <CalendarIcon />
+                <span className="ml-1  text-sm font-medium text-gray-400">
+                  {formatDateFromUTC(dataDetail?.started_at)}&nbsp;-&nbsp;
+                  {formatDateFromUTC(dataDetail?.finished_at)}
                 </span>
               </div>
               <div>

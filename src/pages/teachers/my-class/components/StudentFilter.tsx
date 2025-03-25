@@ -1,31 +1,21 @@
-import { Input } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
-import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
-import HookFormSelect from '@components/base/select/HookFormSelect'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { Control } from 'react-hook-form'
 interface StudentFilterProps {
-  placeholder?: string
-  width?: string
-  control?: any
-  listUniverPrograms?: any
+  control: Control<any>
 }
 
-const StudentFilter: React.FC<StudentFilterProps> = ({
-  placeholder = 'Search student',
-  width = 'max-w-sm',
-  control,
-  listUniverPrograms,
-}) => {
+const StudentFilter: React.FC<StudentFilterProps> = ({ control }) => {
   return (
     <div className="flex gap-6">
       <HookFormTextField
         control={control}
-        name="class_name"
-        placeholder="Search course name"
-        inputClassName="placeholder:text-sm placeholder:text-[#99A1B8]"
+        name="text"
+        placeholder="Search student"
+        inputClassName="placeholder:text-sm placeholder:text-[#99A1B7] placeholder:font-medium"
         style={{
           borderRadius: '6px',
           height: 40,
+          width: 330,
         }}
       />
     </div>
