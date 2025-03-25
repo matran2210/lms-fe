@@ -23,7 +23,7 @@ const HookFormEventRepeat = ({
   control,
   defaultDate,
   defaultValue,
-  required = false,
+  required,
   skeleton,
 }: IProps) => {
   return (

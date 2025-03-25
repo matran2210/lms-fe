@@ -95,12 +95,16 @@ const NewEventSidebar = ({
       ),
     ) as ICreateSchedulePayload
 
-    const response = await SchedulesAPI.create(formattedPayload)
-    if (response.success) {
-      toast.success(
-        'Request created successfully. Please wait for CX Admin to approve your request',
-      )
-      handleClose()
+    try {
+      const response = await SchedulesAPI.create(formattedPayload)
+      if (response.success) {
+        toast.success(
+          'Request created successfully. Please wait for CX Admin to approve your request',
+        )
+        handleClose()
+      }
+    } catch (error) {
+      // Handled by axios interceptor
     }
   }
 
@@ -178,7 +182,7 @@ const NewEventSidebar = ({
                   <HookFormEventRepeat
                     control={control}
                     name="repeat"
-                    required={true}
+                    required
                     defaultDate={currentDate}
                   />
                 </div>

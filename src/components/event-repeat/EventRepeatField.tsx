@@ -55,7 +55,7 @@ const EventRepeatField = ({
   defaultDate,
   defaultValue,
   onChange,
-  required = false,
+  required,
   field,
 }: IProps) => {
   const initDate = useMemo(() => defaultDate || new Date(), [defaultDate])
@@ -225,14 +225,14 @@ const EventRepeatField = ({
           label="Repeat"
           control={control}
           options={repeatTypeOptions}
-          required
+          required={required}
           className="h-11.25"
         />
         {is_repeat && (
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
-                <p className="flex items-center pr-6">Repeat every</p>
+                <p className="required flex items-center pr-6">Repeat every</p>
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
@@ -242,7 +242,7 @@ const EventRepeatField = ({
 
             {repeat_on_visible && (
               <>
-                <p className="flex items-center pr-6">Repeat on</p>
+                <p className="required flex items-center pr-6">Repeat on</p>
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
@@ -250,7 +250,7 @@ const EventRepeatField = ({
               </>
             )}
 
-            <p className="flex items-center pr-6">End on</p>
+            <p className="required flex items-center pr-6">End on</p>
             <Controller
               control={control}
               name="end_on"
@@ -265,6 +265,7 @@ const EventRepeatField = ({
                   color="secondary"
                   suffixIcon={<SappIcon icon="input_calendar" />}
                   allowClear={false}
+                  required
                 />
               )}
             />

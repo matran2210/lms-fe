@@ -42,31 +42,45 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
    * @description Gọi API My Course
    * @param {eventName, eventType, params} eventName: string, eventType: string, params: Object
    */
-  const fetchSchedules = async ({ params }: { params: Object }) => {
-    const response = await SchedulesAPI.get(params)
-    const data = response.data?.map((item: IResponseSchedule) => {
-      return {
-        id: item.id,
-        title: item.name,
-        startDate: new Date(`${item.start_date}T${item.start_time}Z`),
-        endDate: new Date(`${item.end_date}T${item.end_time}Z`),
-        type: EVENT_TYPES_RESPONSE[item.teacher_type],
-        description: item.description,
-        classroomAddress: item.classroom_address,
-        classroomName: item.classroom_name,
-        meetingLink: item.meeting_link,
-      } as IEvent
-    })
+  const fetchData = async ({ params }: { params: Record<string, any> }) => {
+    const [resSchedule, resWeeklyNorms] = await Promise.all([
+      SchedulesAPI.get(params),
+      SchedulesAPI.getWeeklyNorms({
+        fromDate: params.start_date,
+        toDate: params.end_date,
+      }),
+    ])
+    const events =
+      resSchedule.data?.map(
+        (item: IResponseSchedule) =>
+          ({
+            id: item.id,
+            title: item.name,
+            startDate: new Date(`${item.start_date}T${item.start_time}Z`),
+            endDate: new Date(`${item.end_date}T${item.end_time}Z`),
+            type: EVENT_TYPES_RESPONSE[item.teacher_type],
+            description: item.description,
+            classroomAddress: item.classroom_address,
+            classroomName: item.classroom_name,
+            meetingLink: item.meeting_link,
+          }) as IEvent,
+      ) || []
+    const norms =
+      resWeeklyNorms.data.map((weeklyNorm) => ({
+        id: weeklyNorm.id,
+        startDate: new Date(weeklyNorm.start_date),
+        endDate: new Date(weeklyNorm.end_date),
+        maxShift: weeklyNorm.max_shift,
+      })) || []
 
-    return { data: data || [], success: response.success }
+    return {
+      events,
+      norms,
+      success: resSchedule.success && resWeeklyNorms.success,
+    }
   }
 
-  const {
-    data: schedulesData,
-    isSuccess,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['schedules', startTime, endTime, eventName, eventType],
     queryFn: () => {
       const formatter = new Intl.DateTimeFormat('en-CA')
@@ -90,7 +104,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
         }
       }
 
-      return fetchSchedules({ params: finalParams })
+      return fetchData({ params: finalParams })
     },
     enabled: router.isReady,
     refetchOnWindowFocus: true,
@@ -122,10 +136,10 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
     <>
       <CalendarHead onSearch={handleOnSearch} onOpenCreate={onOpenCreate} />
       <SAPPCalendar
-        events={schedulesData?.data || []}
+        events={data?.events || []}
         onOpenDetail={onOpenDetail}
         onOpenCreate={onOpenCreate}
-        norms={[]}
+        norms={data?.norms || []}
         onRefetchAPI={handleRefetch}
         loading={isLoading}
       />
