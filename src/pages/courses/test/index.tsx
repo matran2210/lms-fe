@@ -18,6 +18,7 @@ import { setQuizAttempt } from 'src/redux/slice/Course/MyCourse/QuizAttempt/Quiz
 import PopupSelectRetakeOrContinueAttempt from '@components/mycourses/PopupSelectRetakeOrContinueAttempt'
 import SappButton from '@components/base/button/SappButton'
 import { ClockIcon } from '@assets/icons'
+import { CoursesAPI } from '@pages/api/courses'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -248,13 +249,17 @@ const TestModal = ({
         : () => trackGAEvent('Click Button Start Modal Test')
     } catch (err) {}
   }
-  const onSubmit = async () => {
-    if (
-      renderOkButtonCaption() === 'Continue' &&
-      isExpiredLastAttempt &&
-      selectedResult?.status === 'IN_PROGRESS'
-    ) {
-      // Call api submit
+
+  const handleFinishTest = async () => {
+    const res = await CoursesAPI.submitAllQuestion(
+      selectedResult?.value as string,
+      {
+        scratch_pads: [],
+        total_attempt_time: data?.quiz?.quiz_timed,
+      },
+    )
+
+    if (res?.success) {
       dispatch(
         setQuizAttempt({
           id: selectedResult?.value,
@@ -265,6 +270,17 @@ const TestModal = ({
         }),
       )
       handleSubmit()
+    }
+  }
+
+  const onSubmit = async () => {
+    if (
+      renderOkButtonCaption() === 'Continue' &&
+      isExpiredLastAttempt &&
+      selectedResult?.status === 'IN_PROGRESS'
+    ) {
+      // Call api finish test
+      handleFinishTest()
     }
     if (
       renderOkButtonCaption() === 'Retake' &&
