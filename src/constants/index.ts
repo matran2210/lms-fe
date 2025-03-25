@@ -315,7 +315,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.TEACHING]: 'Teaching schedule',
   [EVENT_TYPES.BUSY]: 'Busy schedule',
   [EVENT_TYPES.TIME_OFF]: 'Holiday schedule',
-  [EVENT_TYPES.OTHER]: 'Different calendar',
+  [EVENT_TYPES.OTHER]: 'Other calendar',
 }
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL).map(

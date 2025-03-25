@@ -28,6 +28,7 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
           },
           Button: {
             controlOutlineWidth: 0,
+            colorBorder: 'transparent',
           },
         },
       }}

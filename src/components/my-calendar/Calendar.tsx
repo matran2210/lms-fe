@@ -120,7 +120,11 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
 
   return (
     <>
-      <CalendarHead onSearch={handleOnSearch} onOpenCreate={onOpenCreate} />
+      <CalendarHead
+        onSearch={handleOnSearch}
+        onOpenCreate={onOpenCreate}
+        loading={isLoading}
+      />
       <SAPPCalendar
         events={schedulesData?.data || []}
         onOpenDetail={onOpenDetail}

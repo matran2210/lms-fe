@@ -16,9 +16,10 @@ interface IProps {
     eventType: (typeof EVENT_TYPES_ARRAY)[number] | ''
   }) => void
   onOpenCreate: (date: Date) => void
+  loading?: boolean
 }
 
-const CalendarHead = ({ onSearch, onOpenCreate }: IProps) => {
+const CalendarHead = ({ onSearch, onOpenCreate, loading }: IProps) => {
   const { control, handleSubmit, getValues, reset } = useForm<any>({
     // resolver: zodResolver(schema),
     mode: 'onSubmit',
@@ -67,8 +68,17 @@ const CalendarHead = ({ onSearch, onOpenCreate }: IProps) => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <SAPPButton title="Reset" color="secondary" onClick={handleReset} />
-            <SAPPButton title="Search" onClick={handleSubmit(onSubmit)} />
+            <SAPPButton
+              title="Reset"
+              color="secondary"
+              onClick={handleReset}
+              disabled={loading}
+            />
+            <SAPPButton
+              title="Search"
+              onClick={handleSubmit(onSubmit)}
+              disabled={loading}
+            />
           </div>
           <SAPPButton
             title="Add Busy Schedule"
