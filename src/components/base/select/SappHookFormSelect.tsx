@@ -24,6 +24,8 @@ interface IProps {
   isClearable?: boolean
   onMenuClose?: () => void
   onBlur?: () => void
+  onSearch?: () => void
+  isLoading?: boolean
 }
 
 const SappHookFormSelect = ({
@@ -34,7 +36,7 @@ const SappHookFormSelect = ({
   defaultValue,
   options,
   placeholder,
-  onChange,
+  onChange: onSelectChange,
   labelClass = 'text-base block font-medium mb-2',
   label,
   required,
@@ -44,6 +46,8 @@ const SappHookFormSelect = ({
   isClearable,
   onMenuClose,
   onBlur,
+  onSearch,
+  isLoading = false,
 }: IProps) => {
   return (
     <>
@@ -57,36 +61,32 @@ const SappHookFormSelect = ({
         control={control}
         defaultValue={defaultValue}
         render={({ field, fieldState: { error } }) => {
-          const customStyles = {
-            control: (base: any) => ({
-              ...base,
-              borderColor: error && 'red !important',
-            }),
-          }
           return (
             <>
               <Select
                 {...field}
                 options={options}
-                styles={customStyles}
-                className={`select-single ${className}`}
+                // styles={customStyles}
+                className={`select-single ${className} `}
                 classNamePrefix="select"
                 instanceId="selectInstanceId"
                 placeholder={placeholder}
                 isDisabled={isDisabled}
                 isClearable={isClearable}
                 onChange={(selectedOption) => {
-                  // Gọi hàm onChange truyền từ props
-                  onChange && onChange(selectedOption)
                   // Gọi hàm onChange của field
                   field.onChange(selectedOption)
+                  // Gọi hàm onChange truyền từ props
+                  onSelectChange && onSelectChange?.(selectedOption)
                 }}
+                onMenuOpen={() => onSearch?.()}
                 onMenuClose={onMenuClose}
                 isSearchable={isSearchable}
                 defaultValue={defaultValue}
                 onMenuScrollToBottom={onMenuScrollToBottom}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                isLoading={isLoading}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>
