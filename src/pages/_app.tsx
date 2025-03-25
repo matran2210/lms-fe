@@ -56,7 +56,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 3000000, // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
+        staleTime: 3000000,
+        refetchOnWindowFocus: false,
+        // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
       },
     },
   })

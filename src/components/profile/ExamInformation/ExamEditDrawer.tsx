@@ -107,9 +107,9 @@ const ExamEditDrawer = ({
     onSuccess: (res) => {
       if (res.data.success) {
         toast.success(res.data.data.message)
+        onSuccess && onSuccess()
         setIsOpen(false)
         reset()
-        onSuccess && onSuccess()
       }
       setOpenConfirmModal(false)
     },

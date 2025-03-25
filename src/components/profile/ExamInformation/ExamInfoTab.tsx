@@ -38,8 +38,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data, isLoading, isFetching, isSuccess } = useQuery({
-    // Fetch lại data khi filter thay đổi
+  const { data, isLoading, isFetching, isSuccess, refetch } = useQuery({
     queryKey: [UserKey.ExamList],
     queryFn: () => {
       return UserApi.getExamination(pageIndex || 1, pageSize)
@@ -47,7 +46,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
     select: (data) => {
       return data.data.data
     },
-    retry: false,
+    staleTime: 0,
   })
 
   return (
@@ -165,7 +164,9 @@ const ExamInfoTab = ({ onBack }: IProp) => {
           isOpen={isDrawerOpen}
           setIsOpen={setIsDrawerOpen}
           classId={currentRow.class.id}
-          onSuccess={() => queryClient.invalidateQueries(UserKey.ExamList)}
+          onSuccess={() => {
+            refetch()
+          }}
           currentValue={currentRow.examination_subject_id}
           remainingChanges={currentRow.remaining_changes}
         />
