@@ -110,8 +110,8 @@ const ExamInformation = () => {
                           queryKey: [ClassKey.ExamInfo],
                         })
                       }}
-                      remainingChanges={data.data.remaining_changes}
-                      currentValue={data.data.exam.examination.id}
+                      remainingChanges={data.data?.remaining_changes}
+                      currentValue={data.data?.exam?.id}
                     />
                   </>
                 )
