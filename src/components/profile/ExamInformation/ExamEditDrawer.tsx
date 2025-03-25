@@ -252,10 +252,11 @@ const ExamEditDrawer = ({
         header="Are you sure?"
         loading={isChangingLoad}
       >
-        <p className="mt-6">
-          {`Your learning progress in the Revision class for the ${exams?.current_exam_name} exam cannot be saved. Do you want to continue
-        making changes?`}
-        </p>
+        Your learning progress in the Revision class for the{' '}
+        <span className="text-sm font-medium text-bw-1">
+          {exams?.current_exam_name}
+        </span>{' '}
+        exam cannot be saved. Do you want to continue making changes?
       </SappModalV3>
     </SappDrawerV2>
   )

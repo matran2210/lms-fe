@@ -87,17 +87,17 @@ const SappModalV3 = ({
       )}
       {header && (
         <div
-          className={`mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-12': !content })}`}
+          className={`mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`}
         >
           {header}
         </div>
       )}
-      {content && (
+
+      {(content || children) && (
         <div className="mb-12 mt-4 text-center text-medium-sm text-gray-1">
-          {content}
+          {content ?? children}
         </div>
       )}
-      {children}
 
       {showFooter && (
         <div className={`relative`}>
