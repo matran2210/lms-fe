@@ -6,6 +6,7 @@ interface IProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   type?: 'number' | 'password' | 'email' | 'text'
   placeholder?: string
+  placeholderIcon?: React.ReactNode
   className?: string
   inputClassName?: string
   value?: any
@@ -13,7 +14,6 @@ interface IProps {
   disabled?: boolean
   label?: string
   labelClass?: string
-  tooltipIcon?: string | undefined
   required?: boolean
   maxLength?: number
   field?: ControllerRenderProps<any, string>
@@ -37,6 +37,7 @@ const SAPPTextFiled = ({
   className,
   inputClassName,
   placeholder,
+  placeholderIcon,
   disabled,
   label,
   labelClass = 'text-base block font-medium mb-2',
@@ -57,29 +58,32 @@ const SAPPTextFiled = ({
           {label} {`${required ? '*' : ''}`}
         </label>
       )}
-      <div className={`${className ?? ''} relative w-full`}>
-        <div className="">
-          <input
-            {...field}
-            ref={inputRef}
-            type={
-              type == 'password' ? (showPassword ? 'text' : 'password') : type
-            }
-            value={value ?? ''}
-            defaultValue={value ? defaultValue : undefined}
-            onChange={onChange}
-            className={`${inputClassName} ${TEXT_SIZES[textSize]} ${
-              isError ? '!border-error' : ''
-            } form-control h-[50px] w-full border border-solid border-default px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none ${
-              disabled ? 'bg-gray-4' : 'bg-transparent'
-            }`}
-            placeholder={placeholder}
-            disabled={disabled}
-            style={style}
-            maxLength={maxLength}
-            onPaste={onPaste}
-          />
-        </div>
+      <div className={`${className ?? ''} relative flex w-full items-center`}>
+        {placeholderIcon && (
+          <span className="absolute left-4 text-gray-500">
+            {placeholderIcon}
+          </span>
+        )}
+        <input
+          {...field}
+          ref={inputRef}
+          type={
+            type == 'password' ? (showPassword ? 'text' : 'password') : type
+          }
+          value={value ?? ''}
+          defaultValue={value ? defaultValue : undefined}
+          onChange={onChange}
+          className={`${inputClassName} ${TEXT_SIZES[textSize]} ${
+            isError ? '!border-error' : ''
+          } form-control h-[50px] w-full border border-solid border-default px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none ${
+            disabled ? 'bg-gray-4' : 'bg-transparent'
+          } ${placeholderIcon ? 'pl-12' : ''}`}
+          placeholder={placeholder}
+          disabled={disabled}
+          style={style}
+          maxLength={maxLength}
+          onPaste={onPaste}
+        />
         {type == 'password' && (
           <div
             className={`${

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import LayoutFilter from '@components/layout/Filter/index'
-import Search from '@components/classes/Search'
+import MyClassFilter from 'src/pages/teachers/my-class/components/MyClassFilter'
 import { useForm } from 'react-hook-form'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import ItemClassesByStatus from '@components/classes/ItemClassesByStatus'
@@ -110,7 +110,10 @@ const MyClass = () => {
       <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
         <LayoutFilter
           listFilter={
-            <Search control={control} listUniverPrograms={listUniverPrograms} />
+            <MyClassFilter
+              control={control}
+              listUniverPrograms={listUniverPrograms}
+            />
           }
           loading={isLoading}
           onReset={handleResetFilter}

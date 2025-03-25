@@ -1,3 +1,4 @@
+import { SearchIcon } from '@assets/icons'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { Control } from 'react-hook-form'
 interface StudentFilterProps {
@@ -10,7 +11,8 @@ const StudentFilter: React.FC<StudentFilterProps> = ({ control }) => {
       <HookFormTextField
         control={control}
         name="text"
-        placeholder="Search student"
+        placeholder={'Search student'}
+        placeholderIcon={<SearchIcon />}
         inputClassName="placeholder:text-sm placeholder:text-[#99A1B7] placeholder:font-medium"
         style={{
           borderRadius: '6px',

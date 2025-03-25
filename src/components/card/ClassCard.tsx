@@ -27,10 +27,14 @@ const ClassCard = ({
       ) : (
         <div className="h-fit w-full rounded-xl bg-white">
           <div className="flex flex-col">
-            <Title level={4} className="text-gray-700" style={{ margin: 0 }}>
+            <Title
+              level={4}
+              className="text-gray-700"
+              style={{ marginBottom: 4 }}
+            >
               {dataDetail?.course?.name}
             </Title>
-            <div className="mb-4 flex justify-between">
+            <div className="mb-5 flex justify-between">
               <div className="flex items-center text-sm text-gray-500">
                 <Tag className="text-xs mr-6 rounded border border-transparent bg-[#01711f]/5 font-semibold text-[#07af17]">
                   {dataDetail?.status}

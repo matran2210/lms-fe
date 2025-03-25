@@ -32,4 +32,17 @@ export class TeacherAPI {
       },
     )
   }
+  static getListTestQuiz(
+    id: string,
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/classes/${id}/teacher/class-quiz?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
+  }
 }

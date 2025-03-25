@@ -396,7 +396,7 @@ const ItemClassesByStatus = ({
                   onClick={() => {
                     if (classes?.id) {
                       router.push(
-                        `${PageLink.TEACHER_MY_CLASS}/${classes?.id}/${PageLink.MYPROFILE}`,
+                        `${PageLink.TEACHER_MY_CLASS}/${classes?.id}${PageLink.MYPROFILE}`,
                       )
                     }
                   }}

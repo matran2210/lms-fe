@@ -72,19 +72,19 @@ const ClassDetail = (props: PropsWithChildren<IProps>) => {
             tabs={[
               {
                 title: 'Overview',
-                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}/${PageLink.MYPROFILE}`,
+                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}${PageLink.MYPROFILE}`,
               },
               {
                 title: 'Students',
-                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}/${PageLink.STUDENTS}`,
+                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}${PageLink.STUDENTS}`,
               },
               {
                 title: 'Teaching Progress',
-                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}/${PageLink.TEACHING_PROCESS}`,
+                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}${PageLink.TEACHING_PROGRESS}`,
               },
               {
                 title: 'Students Test Result',
-                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}/${PageLink.STUDENTS_TEST_RESULT}`,
+                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}${PageLink.STUDENTS_TEST_RESULT}`,
               },
             ]}
           />

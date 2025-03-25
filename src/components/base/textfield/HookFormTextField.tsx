@@ -24,6 +24,7 @@ interface IProps {
   textSize?: 'base' | 'sm'
   inputClassName?: string
   style?: React.CSSProperties
+  placeholderIcon?: React.ReactNode
 }
 
 const HookFormTextField = ({
@@ -43,6 +44,7 @@ const HookFormTextField = ({
   textSize,
   inputClassName,
   style,
+  placeholderIcon,
 }: IProps) => {
   return (
     <Controller
@@ -78,6 +80,7 @@ const HookFormTextField = ({
                   style={style}
                   isError={!!error?.message}
                   inputClassName={inputClassName}
+                  placeholderIcon={placeholderIcon}
                 />
 
                 <>
