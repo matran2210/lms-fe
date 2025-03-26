@@ -65,9 +65,14 @@ const HeaderTest = ({
       <div className="w-2/6 truncate text-[18px] font-medium">
         {quizDetail?.name}
       </div>
-      {quizDetail?.quiz_timed && (
+      {quizDetail?.quiz_timed && quizAttempt.created_at && (
         <Countdown
-          remainTime={quizDetail?.quiz_timed}
+          remainTime={dayjs(
+            dayjs(new Date(quizAttempt.created_at ?? '')).add(
+              quizDetail?.quiz_timed,
+              'minutes',
+            ),
+          ).diff(dayjs(), 'minutes')}
           onTimeOut={handleTimeoutSubmit}
           ref={timeRef}
         />

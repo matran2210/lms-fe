@@ -6,12 +6,13 @@ import { truncateString } from '@utils/index'
 import { useEffect, useMemo, useState } from 'react'
 import SappTooltip from 'src/common/SappTooltip'
 import { ANIMATION, ERROR_MESSAGE_TRIAL, TEST_TYPE } from 'src/constants'
-import TestModal from 'src/pages/courses/test'
+import TestModal, { isQuizExpired } from 'src/pages/courses/test'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
 import toast from 'react-hot-toast'
+import { isNull } from 'lodash'
 
 const PartFailed = ({
   coursePart,
@@ -26,6 +27,7 @@ const PartFailed = ({
   const [open, setOpen] = useState(false)
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
   const [openReport, setOpenReport] = useState<boolean>(false)
+  const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
@@ -61,6 +63,19 @@ const PartFailed = ({
       setIsRunoutAttemp(false)
     }
   }, [runOutAttemp])
+
+  const isShowButtonAction = () => {
+    if (!coursePart?.quiz?.attempt || !coursePart?.quiz?.limit_count)
+      return true
+    if (
+      coursePart?.quiz?.is_limited &&
+      coursePart?.quiz?.attempt?.number_of_attempts <
+        coursePart?.quiz?.limit_count
+    ) {
+      return true
+    }
+    return false
+  }
 
   return (
     <>
@@ -221,15 +236,9 @@ const PartFailed = ({
                   }}
                 />
               )}
-              {coursePart?.quiz?.is_limited &&
-              coursePart?.quiz?.attempt?.number_of_attempts ===
-                coursePart?.quiz?.limit_count ? null : (
+              {isShowButtonAction() && (
                 <ButtonSecondary
-                  title={
-                    coursePart?.quiz?.attempt?.status === 'IN_PROGRESS'
-                      ? 'Continue'
-                      : 'Retake'
-                  }
+                  title={'Retake'}
                   full={false}
                   size="small"
                   className="ml-auto max-h-8"

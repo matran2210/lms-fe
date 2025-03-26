@@ -220,6 +220,7 @@ export interface IMyCourseDetail {
       total_attempt_time: number
       grading_status?: string
       status?: string
+      created_at?: Date
     }
     id: string
     is_graded: boolean
