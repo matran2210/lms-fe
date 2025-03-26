@@ -70,7 +70,7 @@ const HookFormDateTime = ({
               format={format}
               onBlur={field.onBlur}
               value={field.value ? dayjs(field.value) : null} // Convert the date to dayjs object for the DateTimePicker
-              className={`createDateRangePicker w-full placeholder:font-bold ${className ?? ''} ${
+              className={`create-date-range-picker w-full placeholder:font-bold ${className ?? ''} ${
                 isListScreen ? 'h-[45px]' : 'h-[50px]'
               }`}
               disabled={disabled}
