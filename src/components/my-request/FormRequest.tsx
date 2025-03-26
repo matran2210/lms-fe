@@ -127,6 +127,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       request_name: data.request_name,
       teacher_id: data.request_teacher_id,
       scheduleAdjusment: data.request_time_off,
+      status: data.request_status,
     }
     try {
       let response: IResponse<any> = {

@@ -37,7 +37,7 @@ interface ITeacher {
   }
 }
 
-interface ITeacherSchedules {
+export interface ITeacherSchedules {
   id: string
   created_at: string
   updated_at: string
@@ -50,9 +50,10 @@ interface ITeacherSchedules {
   before_active_id: string | null
   request_id: string
   user: ITeacher
+  request_reason: string
   schedule: ISchedule
 }
-interface IWeeklyNorms {
+export interface IWeeklyNorms {
   id: string
   created_at: string
   updated_at: string

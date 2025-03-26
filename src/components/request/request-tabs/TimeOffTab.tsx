@@ -1,5 +1,5 @@
 import { Plus } from '@assets/icons'
-import SAPPButton from '@components/base/button/SAPPButton'
+
 import SAPPInput from '@components/base/Input/SAPPInput'
 import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
 import SAPPSelect from '@components/base/select/SAPPSelect'
@@ -18,6 +18,9 @@ import {
 } from 'src/constants/request'
 import { IRequest, IRequestFilterForm } from 'src/type'
 import TimeOffTable from '../request-tables/TimeOffTable'
+import SAPPButton from '@components/base/button/SappButton'
+import FormRequest from '@components/my-request/FormRequest'
+import RequestDetail from '@components/my-request/RequestDetail'
 
 const TimeOffTab = () => {
   const [isFirstLoad, setIsFirstLoad] = useState(true)
@@ -28,7 +31,12 @@ const TimeOffTab = () => {
     defaultPageSize: 10,
     showSizeChanger: true,
   })
-  const { setOpenAddModal } = useRequestContext()
+  const {
+    setOpenAddModal,
+    isOpenAddModal,
+    setIsOpenViewModal,
+    isOpenViewModal,
+  } = useRequestContext()
   const router = useRouter()
 
   const { control, getValues, reset } = useForm<IRequestFilterForm>()
@@ -169,6 +177,21 @@ const TimeOffTab = () => {
         pagination={pagination}
         setPagination={setPagination}
       />
+      {isOpenAddModal ? (
+        <FormRequest
+          open={isOpenAddModal}
+          setOpen={setOpenAddModal}
+          reloadPage={handleFilter}
+        />
+      ) : null}
+      {isOpenViewModal ? (
+        <RequestDetail
+          open={isOpenViewModal}
+          setOpen={setIsOpenViewModal}
+          setOpenEdit={setOpenAddModal}
+          reloadPage={handleFilter}
+        />
+      ) : null}
     </div>
   )
 }
