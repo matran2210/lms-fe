@@ -2,8 +2,9 @@ import { AlertIcon, ClockIcon } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import SappButton from '@components/base/button/SappButton'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { formatTime } from '@components/common/timer'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, ReactNode, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
@@ -11,6 +12,7 @@ interface IProps {
   setOpen: Dispatch<SetStateAction<boolean>>
   onOk: () => void
   remainingTimeLastAttempt: number
+  title: ReactNode
 }
 const PopupSelectRetakeOrContinueAttempt = ({
   open,
@@ -18,12 +20,13 @@ const PopupSelectRetakeOrContinueAttempt = ({
   setOpen,
   onOk,
   remainingTimeLastAttempt,
+  title,
 }: IProps) => {
   return (
-    <SappModalV2
+    <SappModalV3
       open={open}
-      okButtonCaption="Continue the previous attempt"
-      cancelButtonCaption={'Start a new attempt'}
+      okButtonCaption="Start"
+      cancelButtonCaption={'Cancel'}
       onOk={() => {
         onOk()
         setOpen(false)
@@ -31,51 +34,19 @@ const PopupSelectRetakeOrContinueAttempt = ({
       handleCancel={() => {
         setOpen(false)
       }}
-      showFooter={false}
-      footerButtonClassName="flex flex-row-reverse gap-8"
-      parentChildClass=""
-      position="center"
-      fullWidthBtn={true}
-      closeAfterSubmit={true}
+      footerButtonClassName="flex justify-between item-center"
       buttonSize="medium"
-      confirmOnclose={false}
-      title={undefined}
+      title={title}
+      icon={undefined}
+      header=""
+      content={
+        'Your last attempt was unexpectedly ended. Do you want to continue from where you left off in the previous one?'
+      }
     >
       <div>
-        <div className="flex justify-center text-xl font-semibold text-bw-1 md:text-2xl">
-          Your last attempt was unexpectedly ended. Do you want to continue from
-          where you left off in the previous one?
-        </div>
-
-        <div className={`relative pt-5 md:pt-9`}>
-          <div className={'flex justify-between gap-3'}>
-            <div>
-              <SappButton
-                color={'primary'}
-                title="Continue the previous attempt"
-                onClick={onCancel}
-                size="small"
-              />
-              {remainingTimeLastAttempt > 0 && (
-                <div className="item-center flex gap-2 pt-2 font-semibold text-green-600">
-                  <ClockIcon color={'#16a34a'} size={24} />
-                  <span className="pt-[3px]">
-                    {formatTime(remainingTimeLastAttempt)}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <SappButton
-              color={'text'}
-              title={'Start a new attempt'}
-              onClick={onOk}
-              size="small"
-            />
-          </div>
-        </div>
+        <div className={`relative pt-5 md:pt-9`}>{/* Select Option */}</div>
       </div>
-    </SappModalV2>
+    </SappModalV3>
   )
 }
 

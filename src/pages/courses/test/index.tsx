@@ -55,7 +55,13 @@ const TestModal = ({
 }: IProps) => {
   const router = useRouter()
   const dispatch = useDispatch()
-
+  const isSubmitted =
+    data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
+  const isUnsubmitted =
+    data?.quiz?.attempt && data?.quiz?.attempt?.status === 'UN_SUBMITTED'
+  const isContinue =
+    !data?.quiz?.attempt ||
+    (data?.quiz?.attempt && data?.quiz?.attempt?.status === 'IN_PROGRESS')
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
       page_index: 1,
@@ -79,7 +85,6 @@ const TestModal = ({
   const [openLastAttempt, setOpenLastAttempt] = useState(false)
   const [remainingTime, setRemainingTime] = useState(0)
   let remainingTimeLastAttempt = useRef<number>(0)
-  const [isContinue, setIsContinue] = useState(false)
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
   const onCancel = () => {
@@ -131,14 +136,8 @@ const TestModal = ({
         }
 
         setIsExpiredLastAttempt(isExpired)
-        const isContinue = results?.[0]?.status === 'IN_PROGRESS'
-
-        if (
-          isContinue &&
-          !isExpired &&
-          data?.quiz?.limit_count === data?.quiz?.attempt?.number_of_attempts
-        ) {
-          setIsContinue(true)
+        const isContinueAttempt = results?.[0]?.status === 'IN_PROGRESS'
+        if (isContinueAttempt && !isExpired) {
           localStorage.setItem(
             'quizAttempt',
             JSON.stringify({
@@ -150,7 +149,6 @@ const TestModal = ({
             }),
           )
         } else {
-          setIsContinue(false)
           localStorage.removeItem('quizAttempt')
         }
       }
@@ -400,14 +398,6 @@ const TestModal = ({
     return false
   }
   const renderOkButtonCaption = () => {
-    const isSubmitted =
-      data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
-    const isUnsubmitted =
-      data?.quiz?.attempt && data?.quiz?.attempt?.status === 'UN_SUBMITTED'
-    const isContinue =
-      !data?.quiz?.attempt ||
-      (data?.quiz?.attempt && data?.quiz?.attempt?.status === 'IN_PROGRESS')
-
     // Case: Unlimited time attempt and submitted
     if (!data?.quiz?.is_limited && (isSubmitted || isUnsubmitted))
       return 'Start'
@@ -439,7 +429,6 @@ const TestModal = ({
     handleSubmit()
   }
   const handleRetakeNewAttempt = async () => {
-    setIsContinue(false)
     dispatch(setQuizAttempt({}))
     handleSubmit()
   }
@@ -645,6 +634,21 @@ const TestModal = ({
           setOpen={setOpenLastAttempt}
           onOk={() => handleRetakeNewAttempt()}
           remainingTimeLastAttempt={remainingTimeLastAttempt.current}
+          title={
+            <div className="flex items-center justify-between gap-2">
+              <div>{TEST_TYPE[data?.course_section_type]}</div>
+              {remainingTimeLastAttempt.current > 0 && (
+                <div className="item-center flex gap-2 font-normal text-[#3964EA]">
+                  <div className="m-auto">
+                    <ClockIcon color={'#3964EA'} size={24} />
+                  </div>
+                  <div className="text-[20px]">
+                    {formatTime(remainingTimeLastAttempt.current)}
+                  </div>
+                </div>
+              )}
+            </div>
+          }
         />
       )}
     </SappModalV2>
