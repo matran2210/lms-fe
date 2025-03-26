@@ -7,8 +7,6 @@ export const PageLink = {
   TEACHERS: '/teacher',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
-  TEACHING_PROGRESS: '/teaching-progress',
-  STUDENTS_TEST_RESULT: '/students-test-result',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',

@@ -395,9 +395,7 @@ const ItemClassesByStatus = ({
                   className="border border-[#1F2937] hover:border-[#FFB800] hover:bg-[#FFB800] hover:text-white"
                   onClick={() => {
                     if (classes?.id) {
-                      router.push(
-                        `${PageLink.TEACHER_MY_CLASS}/${classes?.id}${PageLink.MYPROFILE}`,
-                      )
+                      router.push(`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`)
                     }
                   }}
                 />

@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
 import { formatDateFromUTC } from 'src/utils/index'
 import StudentCell from 'src/pages/teachers/my-class/components/StudentCell'
-import ClassDetail from 'src/pages/teachers/my-class/components/ClassDetail'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
 import StudentFilter from 'src/pages/teachers/my-class/components/StudentFilter'
@@ -139,7 +138,7 @@ export default function Students() {
   ]
 
   return (
-    <ClassDetail>
+    <>
       <LayoutFilter
         listFilter={<StudentFilter control={control} />}
         loading={false}
@@ -163,6 +162,6 @@ export default function Students() {
         setSelection={() => {}}
         selections={new Map()}
       />
-    </ClassDetail>
+    </>
   )
 }

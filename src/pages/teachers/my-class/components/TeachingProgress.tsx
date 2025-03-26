@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
 import { formatDateFromUTC } from 'src/utils/index'
 import StudentCell from 'src/pages/teachers/my-class/components/StudentCell'
-import ClassDetail from 'src/pages/teachers/my-class/components/ClassDetail'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
 import { useForm } from 'react-hook-form'
@@ -32,7 +31,7 @@ const initialValues: FilterParams = {
   text: '',
 }
 
-export default function Students() {
+export default function TeachingProgress() {
   const { control, reset, getValues } = useForm()
   const router = useRouter()
   const studentId = router?.query?.id as string
@@ -154,7 +153,7 @@ export default function Students() {
   ]
 
   return (
-    <ClassDetail>
+    <>
       <LayoutFilter
         listFilter={<TeachingProgressFilter control={control} />}
         loading={false}
@@ -183,6 +182,6 @@ export default function Students() {
         setSelection={() => {}}
         selections={new Map()}
       />
-    </ClassDetail>
+    </>
   )
 }

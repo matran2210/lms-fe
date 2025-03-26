@@ -6,10 +6,9 @@ import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
 import { formatDateFromUTC } from 'src/utils/index'
 import StudentCell from 'src/pages/teachers/my-class/components/StudentCell'
-import ClassDetail from 'src/pages/teachers/my-class/components/ClassDetail'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
-import StudentFilter from 'src/pages/teachers/my-class/components/StudentFilter'
+import StudentsTestResultFilter from 'src/pages/teachers/my-class/components/StudentsTestResultFilter'
 import { useForm } from 'react-hook-form'
 
 const { Title } = Typography
@@ -131,9 +130,9 @@ export default function StudentsTestResult() {
   ]
 
   return (
-    <ClassDetail>
+    <div>
       <LayoutFilter
-        listFilter={<StudentFilter control={control} />}
+        listFilter={<StudentsTestResultFilter control={control} />}
         loading={false}
         onReset={handleResetFilter}
         onSubmit={onSubmit}
@@ -155,6 +154,6 @@ export default function StudentsTestResult() {
         setSelection={() => {}}
         selections={new Map()}
       />
-    </ClassDetail>
+    </div>
   )
 }

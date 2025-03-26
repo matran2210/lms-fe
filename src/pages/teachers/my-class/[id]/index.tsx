@@ -6,8 +6,12 @@ import { ITabs } from 'src/type'
 import { PageLink } from 'src/constants'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
-import { PropsWithChildren, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { formatDateFromUTC } from '@utils/index'
+import Overview from 'src/pages/teachers/my-class/components/OverView'
+import Students from '../components/Students'
+import TeachingProgress from '../components/TeachingProgress'
+import StudentsTestResult from '../components/StudentsTestResult'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -23,13 +27,31 @@ const breadcrumbs: ITabs[] = [
     title: 'Class Detail',
   },
 ]
-interface IProps {
-  setDataOverView?: (data: any[]) => void
-}
-const ClassDetail = (props: PropsWithChildren<IProps>) => {
-  const { setDataOverView } = props
+
+const tabs = [
+  {
+    id: 1,
+    title: 'Overview',
+  },
+  {
+    id: 2,
+    title: 'Students',
+  },
+  {
+    id: 3,
+    title: 'Teaching Progress',
+  },
+  {
+    id: 4,
+    title: 'Students Test Result',
+  },
+]
+
+const ClassDetail = () => {
+  const [certificateData, setCertificateData] = useState<any>([])
   const router = useRouter()
   const classId = router?.query?.id as string
+  const [selected, setSelected] = useState<number>(tabs[0].id)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['class', classId],
@@ -38,7 +60,7 @@ const ClassDetail = (props: PropsWithChildren<IProps>) => {
   })
 
   useEffect(() => {
-    if (data && setDataOverView) {
+    if (data) {
       const certificateDataInit: any[] = [
         { label: 'Name', value: data?.name },
         { label: 'Code', value: data?.code },
@@ -55,9 +77,23 @@ const ClassDetail = (props: PropsWithChildren<IProps>) => {
         { label: 'Exam', value: data?.examination_subject ?? '-' },
         { label: 'Description', value: data?.description },
       ]
-      setDataOverView(certificateDataInit)
+      setCertificateData(certificateDataInit)
     }
-  }, [data, setDataOverView])
+  }, [data])
+  const renderClassDetail = (selected: number) => {
+    switch (selected) {
+      case 1:
+        return <Overview certificateData={certificateData} />
+      case 2:
+        return <Students />
+      case 3:
+        return <TeachingProgress />
+      case 4:
+        return <StudentsTestResult />
+      default:
+        return <Overview certificateData={certificateData} />
+    }
+  }
 
   return (
     <SappLoadingGlobal loading={false}>
@@ -69,29 +105,14 @@ const ClassDetail = (props: PropsWithChildren<IProps>) => {
         <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
           <ClassCard
             dataDetail={data}
-            tabs={[
-              {
-                title: 'Overview',
-                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}${PageLink.MYPROFILE}`,
-              },
-              {
-                title: 'Students',
-                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}${PageLink.STUDENTS}`,
-              },
-              {
-                title: 'Teaching Progress',
-                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}${PageLink.TEACHING_PROGRESS}`,
-              },
-              {
-                title: 'Students Test Result',
-                link: `${PageLink.TEACHER_MY_CLASS}/${router?.query?.id}${PageLink.STUDENTS_TEST_RESULT}`,
-              },
-            ]}
+            tabs={tabs}
+            selected={selected}
+            setSelected={setSelected}
           />
         </div>
 
         <div className="h-fit w-full rounded-xl bg-white px-8 py-6">
-          {props.children}
+          {renderClassDetail(selected)}
         </div>
       </LayoutTeacher>
     </SappLoadingGlobal>

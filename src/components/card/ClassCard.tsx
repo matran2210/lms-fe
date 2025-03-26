@@ -1,7 +1,7 @@
 import { multiply, round } from 'lodash'
 import ClassProgress from '@components/progress/ClassProgress'
 import SappTabs from 'src/components/tabs/SappTabs'
-import { ITabs } from 'src/type'
+import { ITabsTeacher } from 'src/type'
 import LoadingCard from 'src/common/LoadingCard'
 import { Tag, Typography } from 'antd'
 import { GeoLocationIcon, CalendarIcon } from '@assets/icons'
@@ -9,9 +9,11 @@ import { formatDateFromUTC } from '@utils/index'
 const { Title } = Typography
 interface IProps {
   dataDetail?: any | undefined
-  tabs?: ITabs[]
+  tabs?: ITabsTeacher[]
   loading?: boolean
   progress?: number
+  setSelected: React.Dispatch<React.SetStateAction<number>>
+  selected: number
 }
 
 const ClassCard = ({
@@ -19,6 +21,8 @@ const ClassCard = ({
   tabs = [],
   loading,
   progress = 0,
+  setSelected,
+  selected,
 }: IProps) => {
   return (
     <>
@@ -57,7 +61,11 @@ const ClassCard = ({
               </div>
             </div>
 
-            <SappTabs tabs={tabs} />
+            <SappTabs
+              tabs={tabs}
+              setSelected={setSelected}
+              selected={selected}
+            />
           </div>
         </div>
       )}
