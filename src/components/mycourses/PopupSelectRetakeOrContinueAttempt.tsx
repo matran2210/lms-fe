@@ -31,7 +31,6 @@ const PopupSelectRetakeOrContinueAttempt = ({
       handleCancel={() => {
         setOpen(false)
       }}
-      showHeader={false}
       showFooter={false}
       footerButtonClassName="flex flex-row-reverse gap-8"
       parentChildClass=""

@@ -372,46 +372,59 @@ const TestModal = ({
   }
 
   const renderShowOkButton = () => {
+    // Case: selected attempt is not now attempt
     if (
       selectedResult &&
-      (selectedResult?.status === 'SUBMITTED' ||
-        (selectedResult?.number_of_attempt &&
-          selectedResult?.number_of_attempt !==
-            data?.quiz?.attempt?.number_of_attempts))
+      selectedResult?.number_of_attempt &&
+      selectedResult?.number_of_attempt !==
+        data?.quiz?.attempt?.number_of_attempts
     ) {
       return false
     }
-    if (
-      (status === StatusQuizAttempt.Unsubmitted &&
-        !data?.quiz?.attempt?.number_of_attempts) ||
-      !data?.quiz?.is_limited
-    )
-      return true
-    if (
-      data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ||
-      (data?.quiz?.is_limited &&
-        data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count) ||
-      isNull(data?.quiz?.attempt)
-    ) {
-      return true
+
+    // Case: Unlimited time attempt
+    if (!data?.quiz?.is_limited) return true
+
+    // Case: Limited time attempt
+    if (data?.quiz?.is_limited && !!data?.quiz?.limit_count) {
+      // & Case: Not Attempt
+      if (!data?.quiz?.attempt) return true
+
+      // & Case: Last attempt
+      if (data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count)
+        return true
+      // & Case: has more than 1 attempt
+      if (data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count)
+        return true
     }
     return false
   }
   const renderOkButtonCaption = () => {
-    if (
-      (status === StatusQuizAttempt.Unsubmitted &&
-        isNull(data?.quiz?.attempt)) ||
-      !data?.quiz?.is_limited
-    )
-      return 'Start'
-    if (data?.quiz?.limit_count === data?.quiz?.attempt?.number_of_attempts)
-      return 'Continue'
+    const isSubmitted =
+      data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
+    const isUnsubmitted =
+      data?.quiz?.attempt && data?.quiz?.attempt?.status === 'UN_SUBMITTED'
+    const isContinue =
+      !data?.quiz?.attempt ||
+      (data?.quiz?.attempt && data?.quiz?.attempt?.status === 'IN_PROGRESS')
 
-    if (
-      data?.quiz?.is_limited &&
-      data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count
-    )
-      return 'Retake'
+    // Case: Unlimited time attempt and submitted
+    if (!data?.quiz?.is_limited && (isSubmitted || isUnsubmitted))
+      return 'Start'
+    // Case: Unlimited time attempt and continue
+    if (!data?.quiz?.is_limited && isContinue) return 'Continue'
+    // Case: Limited time attempt
+    if (data?.quiz?.is_limited && !!data?.quiz?.limit_count) {
+      // & Case: Not Attempt
+      if (!data?.quiz?.attempt) return 'Start'
+
+      // & Case: Last attempt
+      if (data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count)
+        return 'Continue'
+      // & Case: has more than 1 attempt
+      if (data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count)
+        return 'Retake'
+    }
   }
   const handleContinueLastAttempt = async () => {
     dispatch(
