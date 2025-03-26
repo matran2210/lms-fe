@@ -1,15 +1,12 @@
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { UploadFile } from 'antd/es/upload'
 import axios, { CancelTokenSource } from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
-import toast from 'react-hot-toast'
-// import SappModal from '../../SappModal'
-// import '../..//ModalUploadFile.scss'
-import { IResource } from './UploadFileInterface'
-import UploadFileHandle from './UploadFileHandle'
-import { UPLOAD_TYPE } from './UploadFileInterface'
-import { UploadAPI } from 'src/pages/api/upload'
 import { capitalize } from 'lodash'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { useEffect, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
+import { UploadAPI } from 'src/pages/api/upload'
+import UploadFileHandle from './UploadFileHandle'
+import { IResource, UPLOAD_TYPE } from './UploadFileInterface'
 
 interface IModalUploadProps {
   open: boolean
@@ -45,19 +42,12 @@ const ModalUploadFile = ({
   open,
   handleClose,
   setSelectedFile,
-  setUnSelectedFile,
   fileType,
   isMultiple,
-  fileChecked,
-  onlyTab,
   title,
-  getDefaultChecked,
   customValidate,
-  parentId,
   maxCount,
   location,
-  className,
-  overlayClass,
 }: IModalUploadProps) => {
   const sourceRef = useRef<CancelTokenSource>()
   const isCancel = useRef<boolean>()

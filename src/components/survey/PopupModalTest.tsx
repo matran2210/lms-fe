@@ -1,0 +1,280 @@
+import { IconBuildingModify } from '@assets/icons'
+import SappModalV2 from '@components/base/modal/SappModalV2'
+import { CoursesAPI } from '@pages/api/courses'
+import { onLinkSocial } from '@utils/index'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+
+enum ECourseProgram {
+  CMA = 'CMA',
+  CFA = 'CFA',
+  ACCA = 'ACCA',
+  CERT_DIP = 'CERT_DIP',
+}
+
+interface SurveyModalProps {
+  class_code?: string
+  program: CourseProgram
+  data: Record<string, any>
+}
+
+interface SurveyState {
+  middtermCourse: boolean
+  finalCourse: boolean
+  completeCourse: boolean
+}
+
+const SURVEY_URLS = {
+  ACCA: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
+  CFA: 'https://survey.hsforms.com/1EmIZK95sTWqhk1G3ozRyIw120xb',
+  CMA: 'https://survey.hsforms.com/1jlTMbpPsTaai6oKwrjEv1g120xb',
+  CERT_DIP: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
+}
+
+const SURVEY_URLS_COMPLETE = {
+  ACCA: 'https://survey.hsforms.com/140B1nhjYSmaP0uQ-A7oFKQ120xb',
+  CFA: 'https://survey.hsforms.com/13S3QNf3rSEScA7mlwjPzjw120xb',
+  CMA: 'https://survey.hsforms.com/1szRbvrk9S6SgcE9WsHpFZw120xb',
+  CERT_DIP: 'https://survey.hsforms.com/140B1nhjYSmaP0uQ-A7oFKQ120xb',
+}
+
+const SURVEY_ICONS = {
+  middtermCourse: <IconBuildingModify />,
+  finalCourse: <IconBuildingModify />,
+  completeCourse: <IconBuildingModify />,
+}
+
+const SURVEY_TITLES = {
+  middtermCourse: 'Khảo sát phản hồi giữa khóa',
+  finalCourse: 'Khảo sát phản hồi cuối khóa',
+  completeCourse: 'Hoàn thành khảo sát để khép lại hành trình!',
+}
+
+type CourseProgram =
+  | ECourseProgram.ACCA
+  | ECourseProgram.CERT_DIP
+  | ECourseProgram.CFA
+  | ECourseProgram.CMA
+
+const PopupModalTest: React.FC<SurveyModalProps> = ({
+  class_code,
+  program,
+  data,
+}) => {
+  const convertCertDip = (input: string) => {
+    if (!input) return ''
+    return input.replace(/\//g, '_').toUpperCase()
+  }
+
+  const [open, setOpen] = useState<SurveyState>({
+    middtermCourse: false,
+    finalCourse: false,
+    completeCourse: false,
+  })
+
+  const progress = data?.survey_attributes?.progress_percent
+
+  const completeMiddterm = progress >= 0.5 && progress < 0.9
+
+  const completeFinal = progress >= 0.9 && progress <= 1
+
+  const router = useRouter()
+
+  /**
+   * Xác định loại khảo sát hiện tại dựa trên trạng thái
+   */
+  const getSurveyType = () => {
+    if (open.middtermCourse) return 'middtermCourse'
+    if (open.finalCourse) return 'finalCourse'
+    return 'completeCourse'
+  }
+
+  /**
+   * Xử lý khi người dùng submit khảo sát
+   * Chuyển hướng đến form khảo sát tương ứng với chương trình
+   */
+  const handleSubmit = () => {
+    const surveyUrl = completeMiddterm
+      ? SURVEY_URLS[
+          convertCertDip(program) as
+            | ECourseProgram.ACCA
+            | ECourseProgram.CERT_DIP
+            | ECourseProgram.CFA
+            | ECourseProgram.CMA
+        ]
+      : SURVEY_URLS_COMPLETE[
+          convertCertDip(program) as
+            | ECourseProgram.ACCA
+            | ECourseProgram.CERT_DIP
+            | ECourseProgram.CFA
+            | ECourseProgram.CMA
+        ]
+    onLinkSocial(surveyUrl)
+
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: true,
+    })
+  }
+
+  /**
+   * Xử lý khi người dùng hoàn thành khảo sát
+   */
+  const handleCompleteSurvey = async () => {
+    await CoursesAPI.changeSurvey(router?.query?.courseId, {
+      is_disabled: true,
+    })
+  }
+
+  /**
+   * Xử lý khi người dùng muốn nhắc lại khảo sát sau
+   */
+  const handleRemindSurvey = async () => {
+    await CoursesAPI.changeSurvey(router?.query?.courseId, {
+      remind_late: true,
+    })
+  }
+
+  /**
+   * Xử lý đóng modal
+   */
+  const handleClose = () => {
+    handleRemindSurvey()
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: false,
+    })
+  }
+
+  const handleTest = () => {
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: false,
+    })
+  }
+
+  /**
+   * Xử lý khi người dùng xác nhận đã hoàn thành khảo sát
+   */
+  const handleConfirmComplete = () => {
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: false,
+    })
+    handleCompleteSurvey()
+  }
+
+  /**
+   * Nội dung khảo sát cho từng loại
+   */
+  const SURVEY_CONTENTS = {
+    middtermCourse: (
+      <span>
+        Chúc mừng bạn đã hoàn thành{' '}
+        <span className="text-sm font-medium text-bw-1">50%</span> khóa học{' '}
+        <span className="text-sm font-medium text-bw-1">{class_code}</span>. Tại
+        SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập tốt
+        nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp quý
+        giá này sẽ giúp chúng tôi nâng cao chất lượng khóa học và dịch vụ học
+        tập. Cảm ơn bạn đã đồng hành cùng chúng tôi!
+      </span>
+    ),
+    finalCourse: (
+      <span>
+        Bạn đã đi đến chặng đường cuối cùng của khóa học{' '}
+        <span className="text-sm font-medium text-bw-1">{class_code}</span>!
+        Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm đáng
+        nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy thấu
+        hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong nhận
+        được phản hồi từ bạn. Chỉ với 2 phút, đóng góp của bạn sẽ giúp chúng tôi
+        cải thiện chất lượng khóa học và mang đến trải nghiệm học tập tốt hơn
+        cho các học viên sau. Cảm ơn bạn đã đồng hành cùng chúng tôi!
+      </span>
+    ),
+    completeCourse: (
+      <span>
+        Chúng tôi thực sự trân trọng những đóng góp của bạn! Nếu bạn chưa hoàn
+        thành khảo sát, đây là cơ hội để chia sẻ suy nghĩ và giúp chúng tôi nâng
+        cao chất lượng khóa học. Chỉ mất 2 phút, nhưng ý kiến của bạn sẽ tạo ra
+        giá trị lâu dài! Cảm ơn bạn đã đồng hành cùng SAPP Academy!
+      </span>
+    ),
+  }
+
+  /**
+   * Xử lý hiển thị modal dựa trên tiến độ học tập
+   */
+  useEffect(() => {
+    if (
+      data?.class_type !== 'LESSON' ||
+      !data?.survey_attributes?.is_survey_popup ||
+      ![
+        ECourseProgram.ACCA,
+        ECourseProgram.CERT_DIP,
+        ECourseProgram.CFA,
+        ECourseProgram.CMA,
+      ].includes(convertCertDip(program) as ECourseProgram)
+    )
+      return
+
+    if (completeFinal) {
+      setOpen({
+        middtermCourse: false,
+        finalCourse: true,
+        completeCourse: false,
+      })
+    } else if (completeMiddterm) {
+      setOpen({
+        middtermCourse: true,
+        finalCourse: false,
+        completeCourse: false,
+      })
+    }
+  }, [data])
+
+  const surveyType = getSurveyType()
+
+  const isSurveyActive =
+    open.middtermCourse || open.finalCourse || open.completeCourse
+
+  return (
+    <SappModalV2
+      footerButtonClassName="flex flex-col-reverse gap-8"
+      position="center"
+      title={undefined}
+      open={isSurveyActive}
+      handleClose={handleTest}
+      handleCancel={handleClose}
+      onOk={open.completeCourse ? handleConfirmComplete : handleSubmit}
+      okButtonCaption={
+        open.completeCourse ? 'Tôi đã hoàn thành' : 'Thực hiện khảo sát'
+      }
+      fullWidthBtn={true}
+      buttonSize="extra"
+      showFooter
+      cancelButtonCaption={
+        open.completeCourse ? 'Tôi sẽ làm sau' : 'Nhắc lại sau'
+      }
+    >
+      <div className="flex justify-center">
+        <div className="w-fit rounded-full bg-secondary p-8">
+          {SURVEY_ICONS[surveyType]}
+        </div>
+      </div>
+
+      <div className="mt-6 flex justify-center text-center text-4xl font-semibold text-bw-1">
+        {SURVEY_TITLES[surveyType]}
+      </div>
+
+      <div className="mb-3 mt-4 text-center text-medium-sm leading-[150%] text-gray-1">
+        {SURVEY_CONTENTS[surveyType]}
+      </div>
+    </SappModalV2>
+  )
+}
+
+export default PopupModalTest

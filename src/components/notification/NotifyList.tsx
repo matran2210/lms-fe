@@ -8,6 +8,7 @@ import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
 import { trackGAEvent } from '@utils/google-analytics'
+import { containsKeyword, formatNotificationHTML } from 'src/utils/index'
 
 interface IProps {
   notifyLists: any[]
@@ -105,7 +106,9 @@ const NotifyList = ({
                   dangerouslySetInnerHTML={{
                     __html: notifyItem?.created_by
                       ? notifyItem?.title
-                      : notifyItem?.content,
+                      : containsKeyword(notifyItem?.content ?? '')
+                        ? formatNotificationHTML(notifyItem?.content ?? '')
+                        : (notifyItem?.content ?? ''),
                   }}
                 ></h4>
                 <p className="text-left text-medium-sm text-gray-1">

@@ -5,7 +5,7 @@ export const ProfilePages = {
   Logout: 'logout',
   Devices: 'devices',
   LoginHistory: 'login_history',
-  ExamInfo: 'exam_information',
+  ExamInformation: 'exam_information',
   ChangePassword: 'change_password',
   OVERVIEW: 'overview',
   CMA: 'cma',

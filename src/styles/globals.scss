@@ -8,6 +8,7 @@
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
+@import './components/_select.scss';
 
 @tailwind base;
 @tailwind components;
@@ -712,7 +713,7 @@ textarea.is-invalid:focus {
 }
 
 .sapp-modal .ant-modal-content {
-  padding: 70px 76px !important;
+  padding: 70px !important;
 }
 
 .sapp-modal--math .ant-modal-content {
@@ -969,6 +970,10 @@ p a {
 
 .ant-popover {
   font-family: 'Roboto', sans-serif !important;
+}
+
+#lms-pro #hubspot-messages-iframe-container {
+  z-index: 999 !important;
 }
 
 #hubspot-messages-iframe-container.visible-icon iframe,
@@ -1239,6 +1244,14 @@ fieldset.form-columns-1 .hs-input {
 
 .sapp-trial .ant-modal-content {
   @apply p-[68px];
+}
+
+.ellipsis-text {
+  max-width: 150px; /* Adjust width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 [type='text']:focus,

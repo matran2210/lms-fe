@@ -114,7 +114,7 @@ const ProfilePage = () => {
       selectedContent = <ProgramDetail typeProgram="ACCA" />
       break
 
-    case ProfilePages.ExamInfo:
+    case ProfilePages.ExamInformation:
       selectedContent = <ExamInfoTab onBack={() => setSelectPage(true)} />
       break
 
