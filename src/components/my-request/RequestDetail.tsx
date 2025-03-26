@@ -7,8 +7,8 @@ import { REQUEST_TYPE } from 'src/constants/my-request'
 import { IBusyRequestDetailResponse } from 'src/type/my-request'
 import { RequestStatus } from 'src/type/my-request/enum'
 import { capitalizeFirstLetter } from '@utils/index'
-import moment from 'moment'
 import toast from 'react-hot-toast'
+import dayjs from 'dayjs'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -136,7 +136,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 <td className="text-sm  text-bw-9">Create Date</td>
                 <td className="text-sm">
                   {' '}
-                  {moment(requestDetail?.created_at).format('DD/MM/YYYY hh:mm')}
+                  {dayjs(requestDetail?.created_at).format('DD/MM/YYYY hh:mm')}
                   {/* 10/02/2025 | 22:00 */}
                 </td>
               </tr>
@@ -158,10 +158,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             {
               requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value ? (
                 requestDetail?.teacher_schedules.map((item, index) => {
-                  let startTime = moment(
+                  let startTime = dayjs(
                     `${item.schedule.start_date} ${item.schedule.start_time}`,
                   ).format('DD/MM/YYYY | HH:mm')
-                  let endTime = moment(
+                  let endTime = dayjs(
                     `${item.schedule.end_date} ${item.schedule.end_time}`,
                   ).format('DD/MM/YYYY | HH:mm')
 
@@ -183,10 +183,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 //   )
                 // })
                 requestDetail?.teacher_weekly_norms.map((item, index) => {
-                  let startTime = moment(`${item.start_date}`).format(
+                  let startTime = dayjs(`${item.start_date}`).format(
                     'DD/MM/YYYY',
                   )
-                  let endTime = moment(`${item.end_date}`).format('DD/MM/YYYY')
+                  let endTime = dayjs(`${item.end_date}`).format('DD/MM/YYYY')
 
                   return (
                     <div
