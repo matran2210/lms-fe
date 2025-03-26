@@ -7,7 +7,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import dayjs, { Dayjs } from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type/quiz'
 import HookFormSelect from '@components/base/select/HookFormSelect'
@@ -15,6 +15,10 @@ import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
 import { capitalizeFirstLetter } from '@utils/index'
 import { useDispatch } from 'react-redux'
 import { setQuizAttempt } from 'src/redux/slice/Course/MyCourse/QuizAttempt/QuizAttempt'
+import PopupSelectRetakeOrContinueAttempt from '@components/mycourses/PopupSelectRetakeOrContinueAttempt'
+import SappButton from '@components/base/button/SappButton'
+import { ClockIcon } from '@assets/icons'
+import { CoursesAPI } from '@pages/api/courses'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -32,11 +36,11 @@ interface IProps {
   is_passed_course: boolean
 }
 
-const calculateEndTime = (createdAt: string, quizTimed: number): Date => {
+const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
   return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
 }
 
-const isQuizExpired = (createdAt: string, quizTimed: number): boolean => {
+export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
   const endTime = calculateEndTime(createdAt, quizTimed)
   return dayjs().isAfter(endTime)
 }
@@ -67,10 +71,16 @@ const TestModal = ({
     ratio_score?: string
     status: string
     grading_method?: string
+    created_at?: Date
+    number_of_attempt?: number
   }>()
   const [isFocus, setIsFocus] = useState<boolean>(false)
   const [openResource, setOpenPopup] = useState(false)
+  const [openLastAttempt, setOpenLastAttempt] = useState(false)
+  const [remainingTime, setRemainingTime] = useState(0)
+  let remainingTimeLastAttempt = useRef<number>(0)
   const [isContinue, setIsContinue] = useState(false)
+  const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
   const onCancel = () => {
     setTimeout(() => {
@@ -85,7 +95,10 @@ const TestModal = ({
         data?.quiz?.id,
         { page_index: pageIndex ?? 1, page_size: pageSize ?? 10 },
       )
-      if (response?.data?.data && response?.data?.metadata?.total_records > 1) {
+      if (
+        response?.data?.data &&
+        response?.data?.metadata?.total_records >= 1
+      ) {
         const results = response.data.data
         setResultList((prev: IQuizResultList) => {
           return {
@@ -96,24 +109,35 @@ const TestModal = ({
             ),
           }
         })
+
         setSelectedResult({
           label: results?.[0]?.name,
           value: results?.[0]?.id,
           ratio_score: results?.[0]?.ratio_score,
           status: results?.[0]?.status,
           grading_method: results?.[0]?.quiz?.grading_method,
+          created_at: new Date(results?.[0]?.created_at),
+          number_of_attempt: Number(
+            (results?.[0]?.name ?? '').split('/').at(0) ?? 0,
+          ),
         })
-
         //check điều kiện xem có được tiếp tục làm bài hay không
         let isExpired = false
         if (data?.quiz?.quiz_timed) {
           isExpired = isQuizExpired(
-            results?.[0]?.created_at,
+            new Date(results?.[0]?.created_at),
             data?.quiz?.quiz_timed,
           )
         }
+
+        setIsExpiredLastAttempt(isExpired)
         const isContinue = results?.[0]?.status === 'IN_PROGRESS'
-        if (isContinue && !isExpired) {
+
+        if (
+          isContinue &&
+          !isExpired &&
+          data?.quiz?.limit_count === data?.quiz?.attempt?.number_of_attempts
+        ) {
           setIsContinue(true)
           localStorage.setItem(
             'quizAttempt',
@@ -134,6 +158,30 @@ const TestModal = ({
   }
 
   useEffect(() => {
+    if (open && selectedResult) {
+      if (data?.quiz?.quiz_timed && selectedResult?.status === 'IN_PROGRESS') {
+        remainingTimeLastAttempt.current = dayjs(
+          dayjs(selectedResult.created_at).add(
+            data?.quiz?.quiz_timed,
+            'minutes',
+          ),
+        ).diff(dayjs(), 'seconds')
+        const remainingTimeInterval = setInterval(() => {
+          setRemainingTime(remainingTimeLastAttempt.current)
+          remainingTimeLastAttempt.current -= 1
+          if (remainingTimeLastAttempt.current < 0) {
+            clearInterval(remainingTimeInterval)
+          }
+        }, 1000)
+
+        return () => {
+          clearInterval(remainingTimeInterval)
+        }
+      }
+    }
+  }, [selectedResult])
+
+  useEffect(() => {
     if (open) {
       fetchResult(1, 10)
     }
@@ -151,8 +199,8 @@ const TestModal = ({
     attempt: { status: string; score: number },
     quiz: { is_graded: boolean; required_percent_score: number },
   ) => {
-    if (attempt?.status === 'UN_SUBMITTED' || !attempt) {
-      return StatusQuizAttempt.Unsubmitted
+    if (attempt?.status === 'SUBMITTED') {
+      return StatusQuizAttempt.Submitted
     }
     if (quiz?.is_graded) {
       const status =
@@ -161,7 +209,7 @@ const TestModal = ({
           : StatusQuizAttempt.Passed
       return status
     }
-    return StatusQuizAttempt.Submitted
+    return StatusQuizAttempt.Unsubmitted
   }
 
   const can_retake = useMemo(() => {
@@ -186,11 +234,8 @@ const TestModal = ({
       return handleCheckStatus(data?.quiz?.attempt, data?.quiz)
     }
   }, [selectedResult?.value, data?.quiz?.attempt])
-  const onSubmit = async () => {
-    if (!can_retake) {
-      setOpenPopup(true)
-      return
-    }
+
+  const handleSubmit = async () => {
     //to do: start test
     try {
       activeCourse && (await activeCourse())
@@ -204,6 +249,54 @@ const TestModal = ({
         ? () => trackGAEvent('Click Button Retake Modal Test')
         : () => trackGAEvent('Click Button Start Modal Test')
     } catch (err) {}
+  }
+
+  const handleFinishTest = async () => {
+    const res = await CoursesAPI.submitAllQuestion(
+      selectedResult?.value as string,
+      {
+        scratch_pads: [],
+        total_attempt_time: data?.quiz?.quiz_timed,
+      },
+    )
+
+    if (res?.success) {
+      dispatch(
+        setQuizAttempt({
+          id: selectedResult?.value,
+          number_of_attempts: data?.attempt?.number_of_attempts,
+          is_limited: data?.is_limited,
+          quiz_timed: data?.quiz?.quiz_timed,
+          created_at: selectedResult?.created_at,
+        }),
+      )
+      handleSubmit()
+    }
+  }
+
+  const onSubmit = async () => {
+    if (
+      renderOkButtonCaption() === 'Continue' &&
+      isExpiredLastAttempt &&
+      selectedResult?.status === 'IN_PROGRESS'
+    ) {
+      // Call api finish test
+      handleFinishTest()
+    }
+    if (
+      renderOkButtonCaption() === 'Retake' &&
+      !isExpiredLastAttempt &&
+      selectedResult?.status === 'IN_PROGRESS' &&
+      remainingTimeLastAttempt.current > 0
+    ) {
+      setOpenLastAttempt(true)
+    } else {
+      if (!can_retake) {
+        setOpenPopup(true)
+        return
+      }
+      handleSubmit()
+    }
   }
 
   // const startTime = dayjs().add(1, 'day')
@@ -278,6 +371,66 @@ const TestModal = ({
     }
   }
 
+  const renderShowOkButton = () => {
+    if (
+      selectedResult &&
+      (selectedResult?.status === 'SUBMITTED' ||
+        (selectedResult?.number_of_attempt &&
+          selectedResult?.number_of_attempt !==
+            data?.quiz?.attempt?.number_of_attempts))
+    ) {
+      return false
+    }
+    if (
+      (status === StatusQuizAttempt.Unsubmitted &&
+        !data?.quiz?.attempt?.number_of_attempts) ||
+      !data?.quiz?.is_limited
+    )
+      return true
+    if (
+      data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ||
+      (data?.quiz?.is_limited &&
+        data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count) ||
+      isNull(data?.quiz?.attempt)
+    ) {
+      return true
+    }
+    return false
+  }
+  const renderOkButtonCaption = () => {
+    if (
+      (status === StatusQuizAttempt.Unsubmitted &&
+        isNull(data?.quiz?.attempt)) ||
+      !data?.quiz?.is_limited
+    )
+      return 'Start'
+    if (data?.quiz?.limit_count === data?.quiz?.attempt?.number_of_attempts)
+      return 'Continue'
+
+    if (
+      data?.quiz?.is_limited &&
+      data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count
+    )
+      return 'Retake'
+  }
+  const handleContinueLastAttempt = async () => {
+    dispatch(
+      setQuizAttempt({
+        id: selectedResult?.value,
+        number_of_attempts: data?.attempt?.number_of_attempts,
+        is_limited: data?.is_limited,
+        quiz_timed: data?.quiz?.quiz_timed,
+        created_at: selectedResult?.created_at,
+      }),
+    )
+    handleSubmit()
+  }
+  const handleRetakeNewAttempt = async () => {
+    setIsContinue(false)
+    dispatch(setQuizAttempt({}))
+    handleSubmit()
+  }
+
   return (
     <SappModalV2
       title={TEST_TYPE[data?.course_section_type]}
@@ -286,26 +439,12 @@ const TestModal = ({
         setOpen(false)
         trackGAEvent('Click Button Cancel Modal Test')
       }}
-      showOkButton={
-        !data?.quiz?.is_limited
-          ? true
-          : (data?.quiz?.is_limited &&
-                data?.quiz?.attempt?.number_of_attempts <
-                  data?.quiz?.limit_count) ||
-              isNull(data?.quiz?.attempt)
-            ? true
-            : false
-      }
+      showOkButton={renderShowOkButton()}
       onOk={onSubmit}
-      okButtonCaption={
-        status === StatusQuizAttempt.Unsubmitted
-          ? 'Start'
-          : isContinue
-            ? 'Continue'
-            : 'Retake'
-      }
+      okButtonCaption={renderOkButtonCaption()}
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
+      showFooter={false}
     >
       <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
         <div className="text-gray-1">Name:</div>
@@ -360,10 +499,16 @@ const TestModal = ({
                   placeholder=""
                   value={selectedResult}
                   onChange={(selectedOption) => {
-                    setSelectedResult(selectedOption)
+                    setSelectedResult({
+                      ...selectedOption,
+                      number_of_attempt: Number(
+                        (selectedOption?.name ?? '').split('/').at(0) ?? 0,
+                      ),
+                    })
                     setIsFocus(false)
                   }}
-                  options={resultList.data.map((item) => ({
+                  options={resultList.data.map((item, index) => ({
+                    name: item.name,
                     value: item.id,
                     label: `Attempt ${item.name} - ${
                       item.status === 'IN_PROGRESS'
@@ -382,6 +527,7 @@ const TestModal = ({
                         ? 'Exceeds requirements'
                         : 'Below passing threshold'
                     }`,
+                    number_of_attempt: 3 - index,
                   }))}
                   onMenuScrollToBottom={(e: React.UIEvent<HTMLDivElement>) => {
                     const { target } = e
@@ -437,11 +583,57 @@ const TestModal = ({
           </div>
         )}
       </div>
+      <div className={`relative pt-5 md:pt-9`}>
+        <div className={'flex justify-between gap-3'}>
+          <SappButton
+            color={'text'}
+            title="Cancel"
+            onClick={() => {
+              setOpen(false)
+              trackGAEvent('Click Button Cancel Modal Test')
+            }}
+            isPadding={false}
+            size="medium"
+          />
+
+          {renderShowOkButton() && (
+            <div>
+              <SappButton
+                color={'primary'}
+                title={renderOkButtonCaption() ?? ''}
+                onClick={onSubmit}
+                size="medium"
+              />
+              {isContinue &&
+                data?.quiz?.limit_count ===
+                  data?.quiz?.attempt?.number_of_attempts &&
+                remainingTimeLastAttempt.current > 0 && (
+                  <div className="item-center flex gap-2 pt-2 font-semibold text-green-600">
+                    <ClockIcon color={'#16a34a'} size={24} />
+                    <span className="pt-[3px]">
+                      {formatTime(remainingTimeLastAttempt.current)}
+                    </span>
+                  </div>
+                )}
+            </div>
+          )}
+        </div>
+      </div>
+
       <PopupCanNotRetakeTest
         open={openResource}
         setOpen={setOpenPopup}
         onCancel={() => onCancel()}
       />
+      {openLastAttempt && remainingTimeLastAttempt.current > 0 && (
+        <PopupSelectRetakeOrContinueAttempt
+          open={openLastAttempt}
+          onCancel={() => handleContinueLastAttempt()}
+          setOpen={setOpenLastAttempt}
+          onOk={() => handleRetakeNewAttempt()}
+          remainingTimeLastAttempt={remainingTimeLastAttempt.current}
+        />
+      )}
     </SappModalV2>
   )
 }

@@ -1091,15 +1091,22 @@ const TestDetail = () => {
   const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
     useCourseContext()
 
-  const handleSubmitAnswer = async () => {
-    // if (listQuestionDone.includes(currentTabContent?.id)) {
-    //   return
-    // }
-    if (!checkAnswered(currentTabContent)) return
+  const handleSubmitAnswer = async (action?: string) => {
+    // Handle different submission scenarios:
+    // - "change-tab": When user switches to a different question tab
+    // - "view-answer": When user wants to see the answer for current question
+    // - "timeout": When test time runs out
 
+    // For tab changes, only submit if user has answered the question
+    if (action === 'change-tab') {
+      if (!checkAnswered(currentTabContent)) return
+    }
+
+    // Get all questions with their current answers
     let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let answerItem = {}
 
+    // Find and format the answer for the current question
     for (let [index, e] of allQuest.entries()) {
       if (e.id === currentTabContent?.id) {
         if (e.answer) {
@@ -1232,14 +1239,12 @@ const TestDetail = () => {
         payload,
       )
       if (res?.success) {
-        // setListQuestionDone((prev) => [...prev, currentTabContent?.id])
-        // if (action === 'next-tab') {
-        //   setTabs(reformTabs)
-        // }
+        // Remove from error list if submission successful
         setListSubmitError((prev) =>
           prev.filter((item) => item.question_id !== currentTabContent?.id),
         )
       } else {
+        // Add to error list if submission failed
         setListSubmitError((prev) => {
           const index = prev.findIndex(
             (item) => item.question_id === currentTabContent?.id,
@@ -1253,6 +1258,7 @@ const TestDetail = () => {
         })
       }
     } catch (err) {
+      // Handle API errors by adding to error list
       setListSubmitError((prev) => {
         const index = prev.findIndex(
           (item) => item.question_id === currentTabContent?.id,
@@ -1751,7 +1757,12 @@ const TestDetail = () => {
     async function fetchTabs() {
       if (questions?.length > 0) {
         const answerMap = new Map(
-          answersSubmitted.map((answer: any) => [answer.questionId, answer]),
+          answersSubmitted.map(
+            (answer: { questionId: string; flaged?: boolean }) => [
+              answer.questionId,
+              answer,
+            ],
+          ),
         )
 
         const arr = await Promise.all(
@@ -1760,7 +1771,9 @@ const TestDetail = () => {
             let baseData = {
               ...question,
               viewed: index === 0,
-              flaged: false,
+              flaged:
+                (answerMap.get(question.id) as { flaged?: boolean } | undefined)
+                  ?.flaged || false,
               done: hasAnswer,
               attempted: hasAnswer,
               index,
@@ -1885,7 +1898,7 @@ const TestDetail = () => {
                   handleChangeTab={async (id?: string) => {
                     if (id) {
                       handleChangeTab(id)
-                      handleSubmitAnswer()
+                      handleSubmitAnswer('change-tab')
                     }
                   }}
                   activeShowAll={activeShowAll}
@@ -2377,8 +2390,8 @@ const TestDetail = () => {
                 })
             }}
             handleQuit={() => {
-              // trackGAEvent('Click Button Quit Time Out Test')
-              // router.back()
+              trackGAEvent('Click Button Quit Time Out Test')
+              router.back()
             }}
           />
 
