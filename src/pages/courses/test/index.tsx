@@ -249,20 +249,6 @@ const TestModal = ({
     } catch (err) {}
   }
 
-  const handleFinishTest = async () => {
-    const res = await CoursesAPI.submitAllQuestion(
-      selectedResult?.value as string,
-      {
-        scratch_pads: [],
-        total_attempt_time: data?.quiz?.quiz_timed,
-      },
-    )
-
-    if (res?.success) {
-      handleSubmit()
-    }
-  }
-
   // const startTime = dayjs().add(1, 'day')
   const startTime = data?.quiz?.quiz_setting?.start_time
   // const endTime = dayjs().subtract(1, 'year')
@@ -401,15 +387,8 @@ const TestModal = ({
     dispatch(setQuizAttempt({}))
     handleSubmit()
   }
+
   const onSubmit = async () => {
-    if (
-      renderOkButtonCaption() === 'Continue' &&
-      isExpiredLastAttempt &&
-      isContinue
-    ) {
-      // Call api finish test
-      handleFinishTest()
-    }
     if (
       renderOkButtonCaption() === 'Retake' &&
       !isExpiredLastAttempt &&
