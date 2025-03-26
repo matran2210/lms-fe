@@ -249,6 +249,20 @@ const TestModal = ({
     } catch (err) {}
   }
 
+  const handleFinishTest = async () => {
+    localStorage.setItem(
+      'quizAttempt',
+      JSON.stringify({
+        id: selectedResult?.value,
+        number_of_attempts: data?.attempt?.number_of_attempts,
+        is_limited: data?.is_limited,
+        quiz_timed: data?.quiz?.quiz_timed,
+        created_at: selectedResult?.created_at,
+      }),
+    )
+    handleSubmit()
+  }
+
   // const startTime = dayjs().add(1, 'day')
   const startTime = data?.quiz?.quiz_setting?.start_time
   // const endTime = dayjs().subtract(1, 'year')
@@ -389,6 +403,14 @@ const TestModal = ({
   }
 
   const onSubmit = async () => {
+    if (
+      renderOkButtonCaption() === 'Continue' &&
+      remainingTimeLastAttempt.current <= 0 &&
+      isContinue
+    ) {
+      // Call api finish test
+      handleFinishTest()
+    }
     if (
       renderOkButtonCaption() === 'Retake' &&
       !isExpiredLastAttempt &&
