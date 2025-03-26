@@ -16,7 +16,6 @@ import { capitalizeFirstLetter } from '@utils/index'
 import { useDispatch } from 'react-redux'
 import { setQuizAttempt } from 'src/redux/slice/Course/MyCourse/QuizAttempt/QuizAttempt'
 import PopupSelectRetakeOrContinueAttempt from '@components/mycourses/PopupSelectRetakeOrContinueAttempt'
-import SappButton from '@components/base/button/SappButton'
 import { ClockIcon } from '@assets/icons'
 import { CoursesAPI } from '@pages/api/courses'
 import SappModalV3 from '@components/base/modal/SappModalV3'
@@ -356,7 +355,10 @@ const TestModal = ({
       if (!data?.quiz?.attempt) return true
 
       // & Case: Last attempt
-      if (data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count)
+      if (
+        data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count &&
+        !isSubmitted
+      )
         return true
       // & Case: has more than 1 attempt
       if (data?.quiz?.attempt?.number_of_attempts < data?.quiz?.limit_count)
@@ -450,9 +452,9 @@ const TestModal = ({
       showOkButton={renderShowOkButton()}
       onOk={onSubmit}
       okButtonCaption={renderOkButtonCaption()}
+      footerButtonClassName="flex justify-between item-center"
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
-      showFooter={false}
       icon={undefined}
       header={''}
     >
@@ -593,43 +595,6 @@ const TestModal = ({
           </div>
         )}
       </div>
-      <div className={`relative pt-5 md:pt-9`}>
-        <div className={'flex justify-between gap-3'}>
-          <SappButton
-            color={'text'}
-            title="Cancel"
-            onClick={() => {
-              setOpen(false)
-              trackGAEvent('Click Button Cancel Modal Test')
-            }}
-            isPadding={false}
-            size="medium"
-          />
-
-          {renderShowOkButton() && (
-            <div>
-              <SappButton
-                color={'primary'}
-                title={renderOkButtonCaption() ?? ''}
-                onClick={onSubmit}
-                size="medium"
-              />
-              {isContinue &&
-                data?.quiz?.limit_count ===
-                  data?.quiz?.attempt?.number_of_attempts &&
-                remainingTimeLastAttempt.current > 0 && (
-                  <div className="item-center flex gap-2 pt-2 font-semibold text-green-600">
-                    <ClockIcon color={'#16a34a'} size={24} />
-                    <span className="pt-[3px]">
-                      {formatTime(remainingTimeLastAttempt.current)}
-                    </span>
-                  </div>
-                )}
-            </div>
-          )}
-        </div>
-      </div>
-
       <PopupCanNotRetakeTest
         open={openResource}
         setOpen={setOpenPopup}

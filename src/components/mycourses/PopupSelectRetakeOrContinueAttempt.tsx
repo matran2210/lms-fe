@@ -10,9 +10,9 @@ import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 
 interface IProps {
   open: boolean
-  handleContinue: () => void
+  handleContinue: () => Promise<void>
   setOpen: Dispatch<SetStateAction<boolean>>
-  handleRetake: () => void
+  handleRetake: () => Promise<void>
   title: ReactNode
 }
 const PopupSelectRetakeOrContinueAttempt = ({
@@ -28,14 +28,14 @@ const PopupSelectRetakeOrContinueAttempt = ({
     setValue(e.target.value)
   }
 
-  const handleOK = () => {
+  const handleOK = async () => {
     switch (value) {
       case 'continue':
-        handleContinue()
+        await handleContinue()
         setOpen(false)
         break
       case 'retake':
-        handleRetake()
+        await handleRetake()
         setOpen(false)
       default:
         setOpen(false)
