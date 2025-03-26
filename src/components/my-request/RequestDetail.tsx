@@ -51,9 +51,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           description: item.schedule.description,
         }
       }),
-      note: requestDetail?.description?.length
-        ? requestDetail?.description
-        : null,
+      note: requestDetail?.description || null,
     }
 
     const formattedWeeklyNormData = {
@@ -67,9 +65,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           quantity: item.max_shift,
         }
       }),
-      note: requestDetail?.description?.length
-        ? requestDetail?.description
-        : null,
+      note: requestDetail?.description || null,
     }
 
     const formattedTimeoffData = {
