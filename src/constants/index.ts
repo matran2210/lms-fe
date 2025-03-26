@@ -385,7 +385,7 @@ export const FREQUENCY_OPTIONS = Object.entries(FREQUENCY_UNITS).map(
 
 export const FREQUENCY_OPTIONS_PLURAL = Object.entries(FREQUENCY_UNITS).map(
   ([key, value]) => ({
-    value: key,
+    value: value,
     label: FREQUENCY_UNITS_LABEL_PLURAL[value],
   }),
 )

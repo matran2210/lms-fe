@@ -52,3 +52,10 @@ export interface IResponseSchedule {
   classroom_name: string | null
   meeting_link: string | null
 }
+
+export interface IWeeklyNorm {
+  id: string
+  start_date: string
+  end_date: string
+  max_shift: number
+}

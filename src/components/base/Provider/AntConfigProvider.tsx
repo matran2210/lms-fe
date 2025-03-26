@@ -19,6 +19,10 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
             colorPrimary: '#ffb800',
             colorTextPlaceholder: '#9CA3AF',
             controlOutlineWidth: 0,
+            optionSelectedBg: '#ffbb0012',
+            optionSelectedColor: '#ffb800',
+            controlItemBgHover: '#ffbb0012',
+            colorPrimaryTextHover: '#ffb800',
           },
           DatePicker: {
             colorPrimaryHover: '#ffb800',
