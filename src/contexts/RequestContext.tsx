@@ -7,6 +7,8 @@ interface Context {
   setOpenEditModal: React.Dispatch<React.SetStateAction<boolean>>
   isOpenDeleteModal: boolean
   setOpenDeleteModal: React.Dispatch<React.SetStateAction<boolean>>
+  isOpenViewModal: boolean
+  setIsOpenViewModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const RequestContext = createContext<Context | null>(null)
@@ -15,7 +17,7 @@ export const RequestProvider = (props: PropsWithChildren) => {
   const [isOpenAddModal, setOpenAddModal] = useState(false)
   const [isOpenEditModal, setOpenEditModal] = useState(false)
   const [isOpenDeleteModal, setOpenDeleteModal] = useState(false)
-
+  const [isOpenViewModal, setIsOpenViewModal] = useState(false)
   return (
     <RequestContext.Provider
       value={{
@@ -25,6 +27,8 @@ export const RequestProvider = (props: PropsWithChildren) => {
         setOpenEditModal,
         isOpenDeleteModal,
         setOpenDeleteModal,
+        isOpenViewModal,
+        setIsOpenViewModal,
       }}
       {...props}
     />

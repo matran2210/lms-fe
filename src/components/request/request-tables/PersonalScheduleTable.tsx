@@ -23,6 +23,8 @@ interface PersonalScheduleTableProps {
   requests: IRequest[]
   pagination: TablePaginationConfig
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
+  setIsEdit: Dispatch<SetStateAction<boolean>>
+  setIsInspect: Dispatch<SetStateAction<boolean>>
 }
 
 const columnsTitles: TableColumn<IRequest>[] = [
@@ -113,7 +115,9 @@ const columnsTitles: TableColumn<IRequest>[] = [
   {
     title: '',
     dataIndex: 'method',
-    render: () => <RequestActionCell />,
+    render: (value: string) => {
+      return <RequestActionCell id={value} />
+    },
     fixed: 'right',
   },
 ]
@@ -123,6 +127,8 @@ const PersonalScheduleTable = ({
   requests,
   pagination,
   setPagination,
+  setIsEdit,
+  setIsInspect,
 }: PersonalScheduleTableProps) => {
   const { current, pageSize } = pagination
   const tableColumns = columnsTitles.map((item, index) => {
@@ -137,6 +143,7 @@ const PersonalScheduleTable = ({
       ...item,
       index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
       creator: item.staff_request || item.user_request,
+      method: item.id,
     }))
   }, [requests, current, pageSize])
 
