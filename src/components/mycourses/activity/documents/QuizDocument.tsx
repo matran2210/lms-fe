@@ -618,8 +618,9 @@ const QuizDocument = ({
                       return
                     }
                     if (isLastQuestion) {
+                      handlePrevQuestion()
+                      // handleSaveAnswer()
                       setRunHandleFinishQuiz((e) => e + 1)
-                      handleSaveAnswer()
                       trackGAEvent('Click Button Finish Quiz Activity')
                       return
                     } else {
