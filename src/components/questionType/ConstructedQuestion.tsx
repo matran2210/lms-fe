@@ -337,16 +337,14 @@ const EssayQuestionPreview = ({
                 >
                   {fileData.name}
                 </div>
-                {!fullData?.done &&
-                  !fullData?.confirmed &&
-                  !fullData.data.confirmed && (
-                    <button
-                      onClick={() => handleClearFile(index)}
-                      className="cursor-pointer"
-                    >
-                      <CloseIcon />
-                    </button>
-                  )}
+                {!fullData?.confirmed && !fullData.data.confirmed && (
+                  <button
+                    onClick={() => handleClearFile(index)}
+                    className="cursor-pointer"
+                  >
+                    <CloseIcon />
+                  </button>
+                )}
               </div>
               {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy && (
@@ -376,11 +374,8 @@ const EssayQuestionPreview = ({
                   <div
                     className="title-btn-preview"
                     onClick={() =>
-                      !(
-                        fullData?.done ||
-                        fullData?.confirmed ||
-                        fullData?.data?.confirmed
-                      ) && openChooseFile(true)
+                      !(fullData?.confirmed || fullData?.data?.confirmed) &&
+                      openChooseFile(true)
                     }
                   >
                     Choose file to upload
@@ -414,11 +409,7 @@ const EssayQuestionPreview = ({
               height={500}
               placeholder="Your answer here"
               defaultValue={defaultValue}
-              disabled={
-                fullData?.done ||
-                fullData?.confirmed ||
-                fullData?.data?.confirmed
-              }
+              disabled={fullData?.confirmed || fullData?.data?.confirmed}
               handleChange={() => handleChange && handleChange(data?.id)}
               // externalRef={externalRef}
             />

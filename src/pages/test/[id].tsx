@@ -466,8 +466,8 @@ const TestDetail = () => {
       if (answerSubmitted) {
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           return {
-            ...objTab,
             ...answerSubmitted,
+            ...objTab,
             // done: true,
             attempted: true,
             answer: answerSubmitted?.short_answer,
