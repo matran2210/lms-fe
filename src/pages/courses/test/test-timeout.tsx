@@ -39,6 +39,7 @@ const TestTimeOutModal = ({
       icon={<TimeIcon />}
       header="Time Out"
       content="The test has timed out and has been submitted automatically."
+      isMaskClosable={false}
     />
   )
 }

@@ -64,7 +64,6 @@ import SappModalV3 from '@components/base/modal/SappModalV3'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import HeaderTest from '@components/test/HeaderTest'
 import { trackGAEvent } from '@utils/google-analytics'
-import { setQuizAttempt } from 'src/redux/slice/Course/MyCourse/QuizAttempt/QuizAttempt'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
@@ -1092,13 +1091,15 @@ const TestDetail = () => {
     useCourseContext()
 
   const handleSubmitAnswer = async (action?: string) => {
+    if (!currentTabContent) return
+
     // Handle different submission scenarios:
     // - "change-tab": When user switches to a different question tab
     // - "view-answer": When user wants to see the answer for current question
     // - "timeout": When test time runs out
 
     // For tab changes, only submit if user has answered the question
-    if (action === 'change-tab') {
+    if (action === 'change-tab' || action === 'timeout') {
       if (!checkAnswered(currentTabContent)) return
     }
 
@@ -1274,11 +1275,11 @@ const TestDetail = () => {
   }
 
   const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
+    if (!currentTabContent) return
     const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
     let quiz_position_mapping = []
     let reformTabs: any[] = []
     setLoading(true)
-    setSubmited(true)
 
     for (let e of allQuest) {
       reformTabs.push({ ...e, done: true })
@@ -1304,6 +1305,14 @@ const TestDetail = () => {
     })
 
     if (res?.success) {
+      setSubmited(true)
+      localStorage.setItem(
+        'quizAttempt',
+        JSON.stringify({
+          ...quizAttempt,
+          is_submitted: true,
+        }),
+      )
       if (typeSubmit === 'submit') {
         if (isCompletedCourse.status) {
           setTimeout(() => {
@@ -1696,12 +1705,6 @@ const TestDetail = () => {
   }, [router.query.id])
 
   useEffect(() => {
-    return () => {
-      dispatch(setQuizAttempt({}))
-    }
-  }, [])
-
-  useEffect(() => {
     if (!isQuizAttemptCreated) return
 
     const handleWindowClose = (e: any) => {
@@ -1851,38 +1854,42 @@ const TestDetail = () => {
               onSubmitAnswer={handleSubmitAnswer}
               handleTimeoutSubmit={async () => {
                 if (!openLimit) {
-                  if (listSubmitError.length > 0) {
-                    for (const el of listSubmitError) {
-                      await handleSubmitAnswerError(el)
+                  if (!submited && !quizAttempt?.is_submitted) {
+                    if (listSubmitError.length > 0) {
+                      for (const el of listSubmitError) {
+                        await handleSubmitAnswerError(el)
+                      }
                     }
+                    await handleSubmitAnswer('timeout')
+                    handleSubmitQuestions('timeout')
+                    dispatch(disableUnsavedChange())
+                      .unwrap()
+                      .then(() => {
+                        // if (type === 'entrance') {
+                        //   router.replace(`/entrance-test/test-result/${QuizResultId}`)
+                        // } else if (type === 'event-test') {
+                        //   router.replace(`/event-test`)
+                        //   setSubmitEventTest(true)
+                        // } else {
+                        //   if (
+                        //     type !== 'entrance' &&
+                        //     quizDetail?.quiz_type !== 'FINAL_TEST'
+                        //   ) {
+                        //     router.replace(
+                        //       `/courses/test/test-result/${QuizResultId}`,
+                        //     )
+                        //   } else {
+                        //     router.back()
+                        //     setScoreQuestion(scoreFinalTest)
+                        //     setSubmitTest(true)
+                        //   }
+                        // }
+                        trackGAEvent('Click Button Submit Time Out Test')
+                      })
+                  } else {
+                    setOpenTimeOut(true)
+                    setQuizResultId(quizAttempt?.id)
                   }
-                  await handleSubmitAnswer()
-                  handleSubmitQuestions('timeout')
-                  dispatch(disableUnsavedChange())
-                    .unwrap()
-                    .then(() => {
-                      // console.log(type)
-                      // if (type === 'entrance') {
-                      //   router.replace(`/entrance-test/test-result/${QuizResultId}`)
-                      // } else if (type === 'event-test') {
-                      //   router.replace(`/event-test`)
-                      //   setSubmitEventTest(true)
-                      // } else {
-                      //   if (
-                      //     type !== 'entrance' &&
-                      //     quizDetail?.quiz_type !== 'FINAL_TEST'
-                      //   ) {
-                      //     router.replace(
-                      //       `/courses/test/test-result/${QuizResultId}`,
-                      //     )
-                      //   } else {
-                      //     router.back()
-                      //     setScoreQuestion(scoreFinalTest)
-                      //     setSubmitTest(true)
-                      //   }
-                      // }
-                      trackGAEvent('Click Button Submit Time Out Test')
-                    })
                 }
               }}
             />

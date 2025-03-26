@@ -14,11 +14,11 @@ import HookFormSelect from '@components/base/select/HookFormSelect'
 import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
 import { capitalizeFirstLetter } from '@utils/index'
 import { useDispatch } from 'react-redux'
-import { setQuizAttempt } from 'src/redux/slice/Course/MyCourse/QuizAttempt/QuizAttempt'
 import PopupSelectRetakeOrContinueAttempt from '@components/mycourses/PopupSelectRetakeOrContinueAttempt'
 import { ClockIcon } from '@assets/icons'
 import { CoursesAPI } from '@pages/api/courses'
 import SappModalV3 from '@components/base/modal/SappModalV3'
+import { setOpenModalTimeOut } from 'src/redux/slice/Course/MyCourse/Test/Test'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -386,19 +386,10 @@ const TestModal = ({
     }
   }
   const handleContinueLastAttempt = async () => {
-    dispatch(
-      setQuizAttempt({
-        id: selectedResult?.value,
-        number_of_attempts: data?.attempt?.number_of_attempts,
-        is_limited: data?.is_limited,
-        quiz_timed: data?.quiz?.quiz_timed,
-        created_at: selectedResult?.created_at,
-      }),
-    )
     handleSubmit()
   }
   const handleRetakeNewAttempt = async () => {
-    dispatch(setQuizAttempt({}))
+    localStorage.removeItem('quizAttempt')
     handleSubmit()
   }
   const onSubmit = async () => {

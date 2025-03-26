@@ -11,7 +11,7 @@ import caseStudyTestReducer from './slice/Course/MyCourse/Case-study/CaseStudy'
 import entranceTestReducer from './slice/EntranceTest/EntranceTest'
 import notesListReducer from './slice/Course/NotesList'
 import popupReducer from './slice/Popup/Result-test'
-import quizAttemptReducer from './slice/Course/MyCourse/QuizAttempt/QuizAttempt'
+
 export const store = configureStore({
   reducer: {
     loginReducer,
@@ -25,7 +25,6 @@ export const store = configureStore({
     caseStudyTestReducer,
     entranceTestReducer,
     notesListReducer,
-    quizAttemptReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
