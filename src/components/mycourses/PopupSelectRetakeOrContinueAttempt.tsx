@@ -3,34 +3,51 @@ import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import SappButton from '@components/base/button/SappButton'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import SappModalV3 from '@components/base/modal/SappModalV3'
+import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { formatTime } from '@components/common/timer'
-import { Dispatch, ReactNode, SetStateAction } from 'react'
+import { Radio, RadioChangeEvent } from 'antd'
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 
 interface IProps {
   open: boolean
-  onCancel: () => void
+  handleContinue: () => void
   setOpen: Dispatch<SetStateAction<boolean>>
-  onOk: () => void
-  remainingTimeLastAttempt: number
+  handleRetake: () => void
   title: ReactNode
 }
 const PopupSelectRetakeOrContinueAttempt = ({
   open,
-  onCancel,
+  handleContinue,
   setOpen,
-  onOk,
-  remainingTimeLastAttempt,
+  handleRetake,
   title,
 }: IProps) => {
+  const [value, setValue] = useState('continue')
+
+  const onChange = (e: RadioChangeEvent) => {
+    setValue(e.target.value)
+  }
+
+  const handleOK = () => {
+    switch (value) {
+      case 'continue':
+        handleContinue()
+        setOpen(false)
+        break
+      case 'retake':
+        handleRetake()
+        setOpen(false)
+      default:
+        setOpen(false)
+        break
+    }
+  }
   return (
     <SappModalV3
       open={open}
       okButtonCaption="Start"
       cancelButtonCaption={'Cancel'}
-      onOk={() => {
-        onOk()
-        setOpen(false)
-      }}
+      onOk={handleOK}
       handleCancel={() => {
         setOpen(false)
       }}
@@ -44,7 +61,18 @@ const PopupSelectRetakeOrContinueAttempt = ({
       }
     >
       <div>
-        <div className={`relative pt-5 md:pt-9`}>{/* Select Option */}</div>
+        <div className={`relative pt-5 md:pt-9`}>
+          {/* Select Option */}
+          <Radio.Group
+            className="sapp-group-radio-wrapper flex flex-col gap-5"
+            onChange={onChange}
+            value={value}
+            options={[
+              { value: 'continue', label: 'Continue the previous attempt' },
+              { value: 'retake', label: 'Start a new attempt' },
+            ]}
+          />
+        </div>
       </div>
     </SappModalV3>
   )

@@ -60,6 +60,18 @@ const HeaderTest = ({
   const dispatch = useAppDispatch()
   // const remainingTime = calculateRemainingTime(quizAttempt?.created_at, quizAttempt?.quiz_timed);
   // console.log(remainingTime)
+  const remainingTimeinSeconds = quizDetail?.quiz_timed
+    ? dayjs(
+        dayjs(new Date(quizAttempt.created_at ?? '')).add(
+          quizDetail?.quiz_timed,
+          'minutes',
+        ),
+      ).diff(dayjs(), 'seconds')
+    : null
+  const remainingTimeAttempt =
+    (remainingTimeinSeconds ?? 0) > 0
+      ? Math.ceil((remainingTimeinSeconds ?? 0) / 60)
+      : 1
   return (
     <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
       <div className="w-2/6 truncate text-[18px] font-medium">
@@ -67,12 +79,7 @@ const HeaderTest = ({
       </div>
       {quizDetail?.quiz_timed && quizAttempt.created_at && (
         <Countdown
-          remainTime={dayjs(
-            dayjs(new Date(quizAttempt.created_at ?? '')).add(
-              quizDetail?.quiz_timed,
-              'minutes',
-            ),
-          ).diff(dayjs(), 'minutes')}
+          remainTime={remainingTimeAttempt}
           onTimeOut={handleTimeoutSubmit}
           ref={timeRef}
         />

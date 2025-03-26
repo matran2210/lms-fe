@@ -19,6 +19,7 @@ import PopupSelectRetakeOrContinueAttempt from '@components/mycourses/PopupSelec
 import SappButton from '@components/base/button/SappButton'
 import { ClockIcon } from '@assets/icons'
 import { CoursesAPI } from '@pages/api/courses'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -259,40 +260,6 @@ const TestModal = ({
     )
 
     if (res?.success) {
-      dispatch(
-        setQuizAttempt({
-          id: selectedResult?.value,
-          number_of_attempts: data?.attempt?.number_of_attempts,
-          is_limited: data?.is_limited,
-          quiz_timed: data?.quiz?.quiz_timed,
-          created_at: selectedResult?.created_at,
-        }),
-      )
-      handleSubmit()
-    }
-  }
-
-  const onSubmit = async () => {
-    if (
-      renderOkButtonCaption() === 'Continue' &&
-      isExpiredLastAttempt &&
-      selectedResult?.status === 'IN_PROGRESS'
-    ) {
-      // Call api finish test
-      handleFinishTest()
-    }
-    if (
-      renderOkButtonCaption() === 'Retake' &&
-      !isExpiredLastAttempt &&
-      selectedResult?.status === 'IN_PROGRESS' &&
-      remainingTimeLastAttempt.current > 0
-    ) {
-      setOpenLastAttempt(true)
-    } else {
-      if (!can_retake) {
-        setOpenPopup(true)
-        return
-      }
       handleSubmit()
     }
   }
@@ -432,10 +399,49 @@ const TestModal = ({
     dispatch(setQuizAttempt({}))
     handleSubmit()
   }
-
+  const onSubmit = async () => {
+    if (
+      renderOkButtonCaption() === 'Continue' &&
+      isExpiredLastAttempt &&
+      isContinue
+    ) {
+      // Call api finish test
+      handleFinishTest()
+    }
+    if (
+      renderOkButtonCaption() === 'Retake' &&
+      !isExpiredLastAttempt &&
+      selectedResult?.status === 'IN_PROGRESS' &&
+      remainingTimeLastAttempt.current > 0
+    ) {
+      setOpenLastAttempt(true)
+    } else {
+      if (!can_retake) {
+        setOpenPopup(true)
+        return
+      }
+      handleSubmit()
+    }
+  }
   return (
-    <SappModalV2
-      title={TEST_TYPE[data?.course_section_type]}
+    <SappModalV3
+      title={
+        <div className="flex items-center justify-between gap-2">
+          <div>{TEST_TYPE[data?.course_section_type]}</div>
+          {remainingTimeLastAttempt.current > 0 &&
+            renderShowOkButton() &&
+            renderOkButtonCaption() === 'Continue' && (
+              <div className="item-center flex gap-2 font-normal text-[#3964EA]">
+                <div className="m-auto">
+                  <ClockIcon color={'#3964EA'} size={24} />
+                </div>
+                <div className="text-[20px]">
+                  {formatTime(remainingTimeLastAttempt.current)}
+                </div>
+              </div>
+            )}
+        </div>
+      }
       open={open}
       handleCancel={() => {
         setOpen(false)
@@ -447,6 +453,8 @@ const TestModal = ({
       cancelButtonCaption={'Cancel'}
       buttonSize="medium"
       showFooter={false}
+      icon={undefined}
+      header={''}
     >
       <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
         <div className="text-gray-1">Name:</div>
@@ -630,10 +638,9 @@ const TestModal = ({
       {openLastAttempt && remainingTimeLastAttempt.current > 0 && (
         <PopupSelectRetakeOrContinueAttempt
           open={openLastAttempt}
-          onCancel={() => handleContinueLastAttempt()}
+          handleContinue={handleContinueLastAttempt}
+          handleRetake={handleRetakeNewAttempt}
           setOpen={setOpenLastAttempt}
-          onOk={() => handleRetakeNewAttempt()}
-          remainingTimeLastAttempt={remainingTimeLastAttempt.current}
           title={
             <div className="flex items-center justify-between gap-2">
               <div>{TEST_TYPE[data?.course_section_type]}</div>
@@ -651,7 +658,7 @@ const TestModal = ({
           }
         />
       )}
-    </SappModalV2>
+    </SappModalV3>
   )
 }
 
