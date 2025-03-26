@@ -64,17 +64,30 @@ const ClassDetail = () => {
       const certificateDataInit: any[] = [
         { label: 'Name', value: data?.name },
         { label: 'Code', value: data?.code },
-        { label: 'Status', value: data?.status, isTag: true, color: 'blue' },
+        {
+          label: 'Status',
+          value: data?.status,
+          isTag: true,
+          color:
+            data?.status === 'COMPLETED'
+              ? '#07af17'
+              : data?.status === 'IN_PROGRESS'
+                ? '#07af17'
+                : '',
+        },
         { label: 'Facility', value: data?.facility?.name },
         { label: 'Instruction Mode', value: data?.instruction_mode },
         { label: 'Type', value: data?.type },
         { label: 'Capacity', value: data?.capacity ?? '-' },
         {
           label: 'Duration',
-          value: `${formatDateFromUTC(data?.started_at)} - ${formatDateFromUTC(data?.finished_at)}`,
+          value: data?.flexible_days ?? '-',
         },
         { label: 'Course', value: data?.course?.name },
-        { label: 'Exam', value: data?.examination_subject ?? '-' },
+        {
+          label: 'Exam',
+          value: data?.examination_subject?.examination.name ?? '-',
+        },
         { label: 'Description', value: data?.description },
       ]
       setCertificateData(certificateDataInit)

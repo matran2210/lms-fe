@@ -21,7 +21,11 @@ export default function Overview({
             </div>
             <div className="col-span-2">
               {item.isTag ? (
-                <Tag color={item.color}>{item.value}</Tag>
+                <Tag
+                  className={`text-xs mr-6 rounded border border-transparent bg-[#01711f]/5 font-semibold text-[${item.color}]`}
+                >
+                  {item.value}
+                </Tag>
               ) : (
                 <Text strong>{item.value}</Text>
               )}

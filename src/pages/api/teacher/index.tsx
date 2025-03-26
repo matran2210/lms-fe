@@ -45,4 +45,18 @@ export class TeacherAPI {
       },
     )
   }
+  static getDetailTestQuiz(
+    id: string,
+    chapter_test_id: string,
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<any> {
+    return fetcher(
+      `${apiURL}/classes/${id}/teacher/class-quiz/${chapter_test_id}?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
+  }
 }

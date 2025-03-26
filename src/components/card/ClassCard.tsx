@@ -43,10 +43,14 @@ const ClassCard = ({
                 <Tag className="text-xs mr-6 rounded border border-transparent bg-[#01711f]/5 font-semibold text-[#07af17]">
                   {dataDetail?.status}
                 </Tag>
-                <GeoLocationIcon />
-                <span className="ml-1 mr-6 text-sm font-medium text-gray-400">
-                  54 Lê Thanh Nghị, Hai Bà Trưng
-                </span>
+                {dataDetail?.facility?.address && (
+                  <>
+                    <GeoLocationIcon />
+                    <span className="ml-1 mr-6 text-sm font-medium text-gray-400">
+                      {dataDetail?.facility?.address}
+                    </span>
+                  </>
+                )}
                 <CalendarIcon />
                 <span className="ml-1  text-sm font-medium text-gray-400">
                   {formatDateFromUTC(dataDetail?.started_at)}&nbsp;-&nbsp;
@@ -56,7 +60,7 @@ const ClassCard = ({
               <div>
                 <ClassProgress
                   title="Progress"
-                  percent={round(multiply(progress, 100), 0)}
+                  percent={dataDetail?.progress ?? 0}
                 />
               </div>
             </div>

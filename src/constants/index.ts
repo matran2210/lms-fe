@@ -181,6 +181,17 @@ export const defaultStatusEventTest = [
   },
 ]
 
+export const QUIZ_ATTEMPT_STATUS_AUTO = [
+  {
+    label: 'Unsubmitted',
+    value: 'UN_SUBMITTED',
+  },
+  {
+    label: 'Submitted',
+    value: 'SUBMITTED',
+  },
+]
+
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
 export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]

@@ -2,16 +2,12 @@ import { SearchIcon } from '@assets/icons'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { Control } from 'react-hook-form'
-import { QUIZ_TYPE } from 'src/type/classes'
-import { convertQuizType } from '@utils/index'
-import { QUIZ_GRADING_METHOD } from '@utils/constants'
-interface StudentsTestResultFilterProps {
+import { QUIZ_ATTEMPT_STATUS_AUTO } from 'src/constants'
+interface ChapterTestFilterProps {
   control: Control<any>
 }
 
-const StudentsTestResultFilter: React.FC<StudentsTestResultFilterProps> = ({
-  control,
-}) => {
+const ChapterTestFilter: React.FC<ChapterTestFilterProps> = ({ control }) => {
   return (
     <div className="grid grid-cols-4 gap-4">
       <HookFormTextField
@@ -27,25 +23,14 @@ const StudentsTestResultFilter: React.FC<StudentsTestResultFilterProps> = ({
       />
       <SappHookFormSelect
         control={control}
-        name="quiz_type"
+        name="status"
         required
         className="select-single-custom w-full"
-        placeholder="Type"
-        options={Object.keys(QUIZ_TYPE).map((key) => ({
-          label: convertQuizType(key),
-          value: QUIZ_TYPE[key as keyof typeof QUIZ_TYPE],
-        }))}
-      />
-      <SappHookFormSelect
-        control={control}
-        name="grading_method"
-        required
-        className="select-single-custom w-full"
-        placeholder="Manual Grading"
-        options={QUIZ_GRADING_METHOD}
+        placeholder="Status"
+        options={QUIZ_ATTEMPT_STATUS_AUTO}
       />
     </div>
   )
 }
 
-export default StudentsTestResultFilter
+export default ChapterTestFilter

@@ -5,20 +5,26 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
 import { formatDateFromUTC } from 'src/utils/index'
-import StudentCell from 'src/pages/teachers/my-class/components/StudentCell'
+import NameNoActionCell from 'src/pages/teachers/my-class/components/NameNoActionCell'
+import NameActionCell from '@pages/teachers/my-class/components/NameActionCell'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
 import StudentsTestResultFilter from 'src/pages/teachers/my-class/components/StudentsTestResultFilter'
 import { useForm } from 'react-hook-form'
+import { PageLink } from 'src/constants'
 
 const { Title } = Typography
 
 interface FilterParams {
   text?: string
+  grading_method?: string
+  quiz_type?: string
 }
 
 const initialValues: FilterParams = {
-  text: '',
+  text: undefined,
+  quiz_type: undefined,
+  grading_method: undefined,
 }
 
 export default function StudentsTestResult() {
@@ -61,7 +67,7 @@ export default function StudentsTestResult() {
       undefined,
       { shallow: true },
     )
-  }, [pagination, params, router])
+  }, [pagination, params])
 
   const handleChangeParams = (currentPage: number, pageSize: number) => {
     setPagination((prev) => ({
@@ -77,46 +83,64 @@ export default function StudentsTestResult() {
   }
 
   const onSubmit = () => {
-    setParams({ text: getValues('text') || undefined })
+    setParams({
+      text: getValues('text') || undefined,
+      quiz_type: getValues('quiz_type')?.value || undefined,
+      grading_method: getValues('grading_method')?.value || undefined,
+    })
   }
 
   const columnsValue = [
     {
       title: 'Test name',
-      render: (record: any) => <StudentCell data={record?.quiz?.name ?? ''} />,
+      render: (record: any) => (
+        <NameActionCell
+          data={record?.quiz?.name ?? ''}
+          linkView={`${PageLink.TEACHER_MY_CLASS}/${studentId}/test-quiz-list/chapter-test/${record?.quiz?.id}`}
+        />
+      ),
+      onCell: () => ({
+        style: { cursor: 'pointer' },
+      }),
     },
     {
       title: 'Type',
       render: (record: any) => (
-        <StudentCell data={record?.quiz?.quiz_type ?? ''} />
+        <NameNoActionCell data={record?.quiz?.quiz_type ?? ''} />
       ),
     },
     {
       title: 'Mode',
-      render: (record: any) => <StudentCell data={record?.mode ?? ''} />,
+      render: (record: any) => <NameNoActionCell data={record?.mode ?? ''} />,
     },
     {
       title: 'Manual Grading',
       render: (record: any) => (
-        <StudentCell data={record?.total_grading_attempts ?? ''} />
+        <NameNoActionCell
+          data={record?.grading_method === 'AUTO' ? 'No' : 'Yes'}
+        />
       ),
     },
     {
       title: 'Start time',
       render: (record: any) => (
-        <StudentCell data={formatDateFromUTC(record?.quiz?.created_at) ?? ''} />
+        <NameNoActionCell
+          data={
+            record?.start_time ? formatDateFromUTC(record?.start_time) : '-'
+          }
+        />
       ),
     },
     {
       title: 'Đã làm',
       render: (record: any) => (
-        <StudentCell data={record?.total_attempts ?? ''} />
+        <NameNoActionCell data={record?.total_attempts ?? ''} />
       ),
     },
     {
       title: 'Đã chấm',
       render: (record: any) => (
-        <StudentCell
+        <NameNoActionCell
           data={`${record?.total_grading_attempts}/${record?.total_attempts}`}
         />
       ),
@@ -124,7 +148,9 @@ export default function StudentsTestResult() {
     {
       title: 'Thời gian chấm',
       render: (record: any) => (
-        <StudentCell data={formatDateFromUTC(record?.quiz?.created_at) ?? ''} />
+        <NameNoActionCell
+          data={record?.end_time ? formatDateFromUTC(record?.end_time) : '-'}
+        />
       ),
     },
   ]

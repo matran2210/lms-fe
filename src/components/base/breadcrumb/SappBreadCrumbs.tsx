@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import { ITabs } from 'src/type'
 
 const SappBreadCrumbs = ({ breadcrumbs = [] }: { breadcrumbs?: ITabs[] }) => {
@@ -14,7 +13,7 @@ const SappBreadCrumbs = ({ breadcrumbs = [] }: { breadcrumbs?: ITabs[] }) => {
               className={`${index === lastIndex ? 'justify-start text-medium-sm font-medium text-gray-800' : ''}`}
             >
               {index !== lastIndex ? (
-                <Link href={breadcrumb.link}>{breadcrumb.title}</Link>
+                <a href={breadcrumb.link}>{breadcrumb.title}</a>
               ) : (
                 <span>{breadcrumb.title}</span>
               )}

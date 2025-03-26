@@ -20,4 +20,5 @@ export const UserKey = {
 
 export const TeacherKey = {
   MyClass: 'myClass',
+  ChapterTest: 'chapterTest',
 }

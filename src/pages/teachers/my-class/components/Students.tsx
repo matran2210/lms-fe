@@ -61,7 +61,7 @@ export default function Students() {
       undefined,
       { shallow: true },
     )
-  }, [pagination, params, router])
+  }, [pagination, params])
 
   const handleChangeParams = (currentPage: number, pageSize: number) => {
     setPagination((prev) => ({
@@ -83,7 +83,9 @@ export default function Students() {
   const columnsValue = [
     {
       title: 'ID',
-      render: (record: any) => <StudentCell data={record.id ?? ''} />,
+      render: (record: any) => (
+        <StudentCell data={record?.user?.hubspot_contact_id ?? ''} />
+      ),
     },
     {
       title: 'Student Name',
