@@ -1,6 +1,6 @@
 import type { GetProps } from 'antd'
 import { DatePicker } from 'antd'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SappIcon from 'src/common/SappIcon'
@@ -26,6 +26,8 @@ interface IProps {
   inputClassName?: string | undefined
   suffixIcon?: React.ReactNode
   allowClear?: boolean
+  disabledDate?: (targetDate: Dayjs) => boolean
+  disabledTime?: (targetDate: Dayjs) => any
 }
 
 const HookFormDateRange = ({
@@ -44,6 +46,8 @@ const HookFormDateRange = ({
   required,
   inputClassName = 'h-12.5 w-full rounded-none',
   suffixIcon = <SappIcon icon="input_calendar" />,
+  disabledDate,
+  disabledTime,
 }: IProps) => {
   const formattedDefaultValue = defaultValue
     ? [dayjs(defaultValue[0]), dayjs(defaultValue[1])]
@@ -85,6 +89,8 @@ const HookFormDateRange = ({
                 suffixIcon={suffixIcon}
                 disabled={disabled}
                 placeholder={placeholder}
+                disabledDate={disabledDate}
+                disabledTime={disabledTime}
               />
 
               <>
