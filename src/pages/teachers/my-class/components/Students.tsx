@@ -137,7 +137,7 @@ export default function Students() {
     {
       title: 'Exam Date',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.examDate ?? ''} />
+        <StudentCell data={record?.examination_subject ?? ''} />
       ),
     },
   ]

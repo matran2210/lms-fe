@@ -1,7 +1,6 @@
 import type { TablePaginationConfig, TableProps } from 'antd'
 import { Table } from 'antd'
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
-// import './sapp_table.scss'
 
 interface BaseTableProps {
   columns: Array<any>
@@ -76,7 +75,7 @@ const SappTable = <T extends { id: React.Key }>({
       loading={loading}
       rowKey={(record) => record?.id || 'id'} // Trả về id làm key
       scroll={{ x: 'max-content' }}
-      className="sapp-table"
+      className="sappTable"
     />
   )
 }

@@ -1,13 +1,11 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import ClassCard from '@components/card/ClassCard'
 import { ITabs } from 'src/type'
-import { PageLink } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { useEffect, useState } from 'react'
-import { formatDateFromUTC } from '@utils/index'
 import Overview from 'src/pages/teachers/my-class/components/OverView'
 import Students from '../components/Students'
 import TeachingProgress from '../components/TeachingProgress'
@@ -110,26 +108,27 @@ const ClassDetail = () => {
   }
 
   return (
-    <SappLoadingGlobal loading={false}>
-      <LayoutTeacher
-        title="Class Detail"
-        breadcrumbs={breadcrumbs}
-        className="bg-[#F2F4F7] p-0"
-      >
-        <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
-          <ClassCard
-            dataDetail={data}
-            tabs={tabs}
-            selected={selected}
-            setSelected={setSelected}
-          />
-        </div>
+    <LayoutTeacher
+      title="Class Detail"
+      breadcrumbs={breadcrumbs}
+      className="bg-[#F2F4F7] p-0"
+    >
+      <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
+        <ClassCard
+          dataDetail={data}
+          tabs={tabs}
+          selected={selected}
+          setSelected={setSelected}
+        />
+      </div>
 
-        <div className="h-fit w-full rounded-xl bg-white px-8 py-6">
-          {renderClassDetail(selected)}
-        </div>
-      </LayoutTeacher>
-    </SappLoadingGlobal>
+      <div
+        data-aos={ANIMATION.DATA_AOS}
+        className="h-fit w-full rounded-xl bg-white px-8 py-6"
+      >
+        {renderClassDetail(selected)}
+      </div>
+    </LayoutTeacher>
   )
 }
 

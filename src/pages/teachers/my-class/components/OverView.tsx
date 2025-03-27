@@ -1,5 +1,5 @@
+import HeaderTeacher from '@components/layout/Header/HeaderTeacher'
 import { Typography } from 'antd'
-import Header from '@components/classes/Header'
 import { ICertificateData } from 'src/type/classes'
 
 const { Text } = Typography
@@ -37,7 +37,7 @@ export default function Overview({
 }) {
   return (
     <>
-      <Header title="Overview" />
+      <HeaderTeacher title="Overview" />
       <div className="grid grid-cols-1 gap-y-4">
         {certificateData?.map((item: ICertificateData, index: number) => (
           <div key={index} className="grid grid-cols-5 items-center">

@@ -122,8 +122,6 @@ const MyClass = () => {
         onReset={handleResetFilter}
         onSubmit={onSubmit}
       />
-
-      {/* Dùng flex-col để căn dưới */}
       <div className="flex min-h-screen flex-col">
         {/* Danh sách lớp */}
         <div className="mb-10 mt-8 flex-grow">
@@ -133,8 +131,6 @@ const MyClass = () => {
             ))}
           </div>
         </div>
-
-        {/* Pagination đẩy xuống cuối */}
         {data?.metadata?.total_records && (
           <div className="mt-auto">
             <PaginationSAPP

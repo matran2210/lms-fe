@@ -14,6 +14,7 @@ interface IProps {
   disabled?: boolean
   label?: string
   labelClass?: string
+  tooltipIcon?: string | undefined
   required?: boolean
   maxLength?: number
   field?: ControllerRenderProps<any, string>
