@@ -12,6 +12,7 @@ import { useQuery } from 'react-query'
 import StudentsTestResultFilter from 'src/pages/teachers/my-class/components/StudentsTestResultFilter'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
+import { IStudentTestResult } from 'src/type/classes'
 
 const { Title } = Typography
 
@@ -93,7 +94,7 @@ export default function StudentsTestResult() {
   const columnsValue = [
     {
       title: 'Test name',
-      render: (record: any) => (
+      render: (record: IStudentTestResult) => (
         <NameActionCell
           data={record?.quiz?.name ?? ''}
           linkView={`${PageLink.TEACHER_MY_CLASS}/${studentId}/test-quiz-list/chapter-test/${record?.quiz?.id}`}
@@ -105,17 +106,19 @@ export default function StudentsTestResult() {
     },
     {
       title: 'Type',
-      render: (record: any) => (
+      render: (record: IStudentTestResult) => (
         <NameNoActionCell data={record?.quiz?.quiz_type ?? ''} />
       ),
     },
     {
       title: 'Mode',
-      render: (record: any) => <NameNoActionCell data={record?.mode ?? ''} />,
+      render: (record: IStudentTestResult) => (
+        <NameNoActionCell data={record?.mode ?? ''} />
+      ),
     },
     {
       title: 'Manual Grading',
-      render: (record: any) => (
+      render: (record: IStudentTestResult) => (
         <NameNoActionCell
           data={record?.grading_method === 'AUTO' ? 'No' : 'Yes'}
         />
@@ -123,7 +126,7 @@ export default function StudentsTestResult() {
     },
     {
       title: 'Start time',
-      render: (record: any) => (
+      render: (record: IStudentTestResult) => (
         <NameNoActionCell
           data={
             record?.start_time ? formatDateFromUTC(record?.start_time) : '-'
@@ -133,13 +136,13 @@ export default function StudentsTestResult() {
     },
     {
       title: 'Đã làm',
-      render: (record: any) => (
+      render: (record: IStudentTestResult) => (
         <NameNoActionCell data={record?.total_attempts ?? ''} />
       ),
     },
     {
       title: 'Đã chấm',
-      render: (record: any) => (
+      render: (record: IStudentTestResult) => (
         <NameNoActionCell
           data={`${record?.total_grading_attempts}/${record?.total_attempts}`}
         />
@@ -147,7 +150,7 @@ export default function StudentsTestResult() {
     },
     {
       title: 'Thời gian chấm',
-      render: (record: any) => (
+      render: (record: IStudentTestResult) => (
         <NameNoActionCell
           data={record?.end_time ? formatDateFromUTC(record?.end_time) : '-'}
         />

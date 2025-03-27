@@ -24,13 +24,17 @@ const { Sider } = Layout
 interface SidebarMenuProps {
   className?: string
 }
-
+interface MenuItem {
+  key: string
+  icon: React.ReactNode
+  link?: string
+}
 export default function TeacherMenu({ className }: SidebarMenuProps) {
   const [collapsed, setCollapsed] = useState(true)
   const [selectedKey, setSelectedKey] = useState('home')
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const handleMenuClick = (item: any) => {
+  const handleMenuClick = (item: { key: string }) => {
     const selectedItem = menuItems.find((menuItem) => menuItem.key === item.key)
     setSelectedKey(item.key)
     if (selectedItem?.link) {
@@ -50,7 +54,7 @@ export default function TeacherMenu({ className }: SidebarMenuProps) {
     } catch (error) {}
   }
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     {
       key: 'home',
       icon: <HomeMenuIcon selected={selectedKey === 'home'} />,

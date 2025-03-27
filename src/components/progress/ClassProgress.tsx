@@ -1,6 +1,6 @@
 interface IProps {
   title: string
-  percent?: any
+  percent?: number
 }
 const ClassProgress = ({ title, percent }: IProps) => {
   return (

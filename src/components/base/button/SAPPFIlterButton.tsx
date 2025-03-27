@@ -27,7 +27,7 @@ const SappFilterButton = ({
     <div className="flex">
       <ButtonSecondary
         title={titleReset}
-        className={`${classNameCancel ?? ''} me-4 rounded-md`}
+        className={`${classNameCancel ?? ''} me-4 h-10 rounded-md`}
         onClick={resetClick}
         disabled={disabled}
         size="small"
@@ -38,7 +38,7 @@ const SappFilterButton = ({
         disabled={disabled}
         loading={loading}
         size="small"
-        className={`${classNameSubmit ?? ''}rounded-md`}
+        className={`${classNameSubmit ?? ''}rounded-md h-10`}
       />
     </div>
   )

@@ -10,6 +10,7 @@ import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
 import StudentFilter from 'src/pages/teachers/my-class/components/StudentFilter'
 import { useForm } from 'react-hook-form'
+import { IStudentClassDetail } from 'src/type/classes'
 
 const { Title } = Typography
 
@@ -83,37 +84,37 @@ export default function Students() {
   const columnsValue = [
     {
       title: 'ID',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell data={record?.user?.hubspot_contact_id ?? ''} />
       ),
     },
     {
       title: 'Student Name',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell data={record?.user?.detail?.full_name ?? ''} />
       ),
     },
     {
       title: 'Email',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell data={record?.user?.user_contacts?.[0]?.email ?? ''} />
       ),
     },
     {
       title: 'Phone',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell data={record?.user?.user_contacts?.[0]?.phone ?? ''} />
       ),
     },
     {
       title: 'Level',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell data={record?.user?.detail?.level ?? ''} />
       ),
     },
     {
       title: 'Duration',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell
           data={`${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
             record?.updated_at ?? '',
@@ -123,7 +124,7 @@ export default function Students() {
     },
     {
       title: 'Progress',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell
           data={`${Math.round(
             ((record?.learning_progress?.total_course_sections_completed ?? 0) /
@@ -135,7 +136,9 @@ export default function Students() {
     },
     {
       title: 'Exam Date',
-      render: (record: any) => <StudentCell data={record?.examDate ?? ''} />,
+      render: (record: IStudentClassDetail) => (
+        <StudentCell data={record?.examDate ?? ''} />
+      ),
     },
   ]
 

@@ -7,8 +7,6 @@ import LayoutFilter from '@components/layout/Filter/index'
 import ChapterTestFilter from 'src/pages/teachers/my-class/[id]/test-quiz-list/chapter-test/components/ChapterTestFilter'
 import { useForm } from 'react-hook-form'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
-import ItemClassesByStatus from '@components/classes/ItemClassesByStatus'
-import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 import { ITabs } from 'src/type'
 import { PageLink } from 'src/constants'
 import SappTable from '@components/table/SappTable'
@@ -16,6 +14,7 @@ import { TeacherKey } from '@pages/api/queryKey'
 import { TablePaginationConfig } from 'antd'
 import StudentCell from '@pages/teachers/my-class/components/StudentCell'
 import { formatDateFromUTC } from '@utils/index'
+import { IStudentClassDetail } from 'src/type/classes'
 
 interface FilterParams {
   status?: string
@@ -29,9 +28,6 @@ const ChapterTest = () => {
   const router = useRouter()
   const classId = router?.query?.id as string
   const chapterTestId = router?.query?.chapterTestId as string
-  const [listUniverPrograms, setListUniverPrograms] = useState<
-    { value: string; label: string }[]
-  >([])
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number(router.query.page_index) || 1,
     pageSize: Number(router.query.page_size) || 10,
@@ -45,13 +41,8 @@ const ChapterTest = () => {
 
   const { control, getValues, reset } = useForm({
     mode: 'onSubmit',
-    defaultValues: {
-      course_name: router.query.course_name || '',
-      program: router.query.program || '',
-      status: router.query.status || undefined,
-      belong_to: router.query.belong_to || '',
-    },
   })
+
   const breadcrumbs: ITabs[] = [
     { link: PageLink.TEACHERS, title: 'LMS' },
     { link: PageLink.TEACHER_MY_CLASS, title: 'My Class' },
@@ -100,14 +91,6 @@ const ChapterTest = () => {
   }
 
   useEffect(() => {
-    EntranceTestAPI.getListUniversProgram().then((res) => {
-      setListUniverPrograms(
-        res?.data?.map((e: any) => ({ value: e.id, label: e.name })) || [],
-      )
-    })
-  }, [])
-
-  useEffect(() => {
     refetch()
     router.replace(
       {
@@ -127,33 +110,35 @@ const ChapterTest = () => {
   const columnsValue = [
     {
       title: 'Student ID',
-      render: (record: any) => <StudentCell data={record?.user?.id ?? ''} />,
+      render: (record: IStudentClassDetail) => (
+        <StudentCell data={record?.user?.id ?? ''} />
+      ),
     },
     {
       title: 'Name',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell data={record?.user?.detail?.full_name ?? ''} />
       ),
     },
     {
       title: 'Email',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell data={record?.user?.user_contacts?.[0]?.email ?? ''} />
       ),
     },
     {
       title: 'Access Period',
-      render: (record: any) => <StudentCell data={''} />,
+      render: (record: IStudentClassDetail) => <StudentCell data={''} />,
     },
     {
       title: 'Level',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell data={record?.user?.detail?.level ?? ''} />
       ),
     },
     {
       title: 'Duration',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell
           data={`${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
             record?.updated_at ?? '',
@@ -163,7 +148,7 @@ const ChapterTest = () => {
     },
     {
       title: 'Progress',
-      render: (record: any) => (
+      render: (record: IStudentClassDetail) => (
         <StudentCell
           data={`${Math.round(
             ((record?.learning_progress?.total_course_sections_completed ?? 0) /
@@ -175,7 +160,9 @@ const ChapterTest = () => {
     },
     {
       title: 'Exam Date',
-      render: (record: any) => <StudentCell data={record?.examDate ?? ''} />,
+      render: (record: IStudentClassDetail) => (
+        <StudentCell data={record?.examDate ?? ''} />
+      ),
     },
   ]
 
@@ -183,12 +170,7 @@ const ChapterTest = () => {
     <SappLoadingGlobal loading={isLoading}>
       <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
         <LayoutFilter
-          listFilter={
-            <ChapterTestFilter
-              control={control}
-              //   listUniverPrograms={listUniverPrograms}
-            />
-          }
+          listFilter={<ChapterTestFilter control={control} />}
           className="mb-6"
           loading={isLoading}
           onReset={handleResetFilter}

@@ -12,6 +12,7 @@ import Overview from 'src/pages/teachers/my-class/components/OverView'
 import Students from '../components/Students'
 import TeachingProgress from '../components/TeachingProgress'
 import StudentsTestResult from '../components/StudentsTestResult'
+import { ICertificateData } from 'src/type/classes'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -48,7 +49,7 @@ const tabs = [
 ]
 
 const ClassDetail = () => {
-  const [certificateData, setCertificateData] = useState<any>([])
+  const [certificateData, setCertificateData] = useState<ICertificateData[]>([])
   const router = useRouter()
   const classId = router?.query?.id as string
   const [selected, setSelected] = useState<number>(tabs[0].id)
@@ -61,7 +62,7 @@ const ClassDetail = () => {
 
   useEffect(() => {
     if (data) {
-      const certificateDataInit: any[] = [
+      const certificateDataInit: ICertificateData[] = [
         { label: 'Name', value: data?.name },
         { label: 'Code', value: data?.code },
         {
