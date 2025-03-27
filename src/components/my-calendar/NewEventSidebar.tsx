@@ -3,8 +3,10 @@ import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { handleDisableDate, handleDisableTime } from '@utils/calendar'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
+import { Dayjs } from 'dayjs'
 import { memo, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -173,6 +175,10 @@ const NewEventSidebar = ({
                     control={control}
                     required
                     inputClassName="h-11.25 w-full rounded-md"
+                    disabledDate={(targetDate: Dayjs) =>
+                      handleDisableDate(new Date(), targetDate)
+                    }
+                    disabledTime={handleDisableTime}
                   />
                 </div>
 
