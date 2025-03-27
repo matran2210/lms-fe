@@ -19,8 +19,8 @@ import {
 import { IRequest, IRequestFilterForm } from 'src/type'
 import PersonalScheduleTable from '../request-tables/PersonalScheduleTable'
 import SAPPButton from '@components/base/button/SappButton'
-import FormRequest from '@components/my-request/FormRequest'
-import RequestDetail from '@components/my-request/RequestDetail'
+import FormRequest from '../request-forms/FormRequest'
+import RequestDetail from '../request-forms/RequestDetail'
 
 const PersonalScheduleTab = () => {
   const [isFirstLoad, setIsFirstLoad] = useState(true)
