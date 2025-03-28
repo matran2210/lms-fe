@@ -37,6 +37,7 @@ export interface Requirement {
   description: string
   files: FileType[]
   answer_file?: FileType | null
+  answer_text?: string
 }
 
 export interface DataType {
@@ -51,4 +52,16 @@ export type TabItem = {
 
 export type AnswerList = {
   [key: string]: string | undefined
+}
+
+export interface DragDropAnswerItem {
+  id: string
+  idAnswer: string
+  value: string
+}
+export interface AnswerItem extends DragDropAnswerItem {
+  question_id: string
+  answer_id: string
+  answer_position: number
+  answer_text: string
 }
