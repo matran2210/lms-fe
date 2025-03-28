@@ -30,9 +30,9 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { debounce, isEmpty, isUndefined, transform, uniqueId } from 'lodash'
+import { debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappLoading from 'src/common/SappLoading'
@@ -457,79 +457,170 @@ const TestDetail = () => {
   })
 
   const currentTabContent = useMemo(() => {
+    const convertAnswerSubmitted = (
+      currentTabContent: any,
+      answerSubmmited: any,
+    ) => {
+      let corrects = {} as any
+      if (
+        currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+        currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+        currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+      ) {
+        corrects = answerSubmmited?.[0].answers?.reduce(
+          (previousValue: any, currentValue: any) => {
+            return {
+              ...previousValue,
+              [currentValue.id]: currentValue.is_correct,
+            }
+          },
+          {} as { [key: string]: boolean },
+        )
+      } else if (
+        currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
+        currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
+      ) {
+        corrects = { corrects: [...answerSubmmited?.[0]?.answers] }
+      } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+        corrects = { corrects: [...answerSubmmited?.[0]?.question_matchings] }
+      } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+        corrects = {
+          corrects: [
+            ...answerSubmmited?.[0]?.answers?.sort(
+              (a: any, b: any) => a?.answer_position - b?.answer_position,
+            ),
+          ],
+        }
+      }
+      return {
+        corrects: corrects,
+        solution: answerSubmmited?.[0]?.solution,
+        isSelfReflection: answerSubmmited?.[0]?.is_self_reflection,
+        requirements: answerSubmmited?.[0]?.requirements,
+      }
+    }
+
     if (tabs && tabs.length > 0) {
       const answerSubmitted = answersSubmitted.find(
         (e: any) => e.questionId === currentPage,
       )
-      const objTab = tabs.find((e: any) => e.id === currentPage)
 
-      if (answerSubmitted) {
-        if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
-          return {
-            ...answerSubmitted,
-            ...objTab,
-            // done: true,
-            attempted: true,
-            answer: answerSubmitted?.short_answer,
-          }
+      let objTab = tabs.find((e: any) => e.id === currentPage)
+
+      console.log('answerSubmitted', answerSubmitted)
+      console.log('objTab', objTab)
+      if (answerSubmitted?.results && objTab && convertAnswerSubmitted) {
+        convertAnswerSubmitted(objTab, answerSubmitted?.results)
+        const dataConvert = convertAnswerSubmitted(
+          objTab,
+          answerSubmitted?.results,
+        )
+        console.log('dataConvert', dataConvert)
+        objTab = {
+          ...objTab?.data,
+          data: dataConvert,
         }
 
-        if (
-          objTab?.data?.qType === QUESTION_TYPES.ONE_CHOICE ||
-          objTab?.data?.qType === QUESTION_TYPES.TRUE_FALSE
-        ) {
-          if (answerSubmitted?.question_answer_id) {
-            return {
-              ...objTab,
-              // done: true,
-              attempted: true,
-              answer: answerSubmitted?.question_answer_id,
-            }
-          } else {
-            return objTab
-          }
-        }
-
-        const transformAnswerData = answerSubmitted?.answer?.map((e: any) => {
-          if (objTab?.data?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-            return e.answer_id
-          } else if (objTab?.data?.qType === QUESTION_TYPES.MATCHING) {
-            return {
-              answer_id: e.answer_id,
-              question_id: e.question_id,
-            }
-          } else if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
-            let objAnswer: any
-            for (let i = 0; i < objTab?.data?.answers?.length; i++) {
-              if (objTab?.data?.answers[i].id === e.answer_id) {
-                objAnswer = {
-                  ...e,
-                  idAnswer: e.answer_id,
-                  value: objTab?.data?.answers[i].answer,
-                }
-                break
-              }
-            }
-            return objAnswer
-          } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
-            return e.answer_id
-          } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
-            return e.answer_text
-          }
-        })
-
-        if (transformAnswerData?.length > 0) {
-          return {
-            ...objTab,
-            answer: transformAnswerData,
-            // done: true,
-          }
-        } else {
-          return objTab
-        }
+        console.log('objTab', objTab)
       } else {
         return objTab
       }
+
+      // if (answerSubmitted?.results) {
+      //   objTab = {
+      //     ...objTab,
+      //     data: {
+      //       ...objTab.data,
+      //       answers:
+      //         answerSubmitted.results?.flatMap(
+      //           (result: any) => result.answers || [],
+      //         ) || [],
+      //     },
+      //     topicDescription: objTab.topicDescription,
+      //     corrects: { corrects: answerSubmitted?.results || [] },
+      //     solution: answerSubmitted.solution ?? '',
+      //     timeSpent: answerSubmitted.timeSpent ?? 0,
+      //     answer:
+      //       answerSubmitted.answer?.map((e: any) => ({
+      //         id: e?.id || '',
+      //         value: e?.value || '',
+      //       })) || [],
+      //   }
+
+      //   if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
+      //     return {
+      //       ...answerSubmitted,
+      //       ...objTab,
+      //       // done: true,
+      //       attempted: true,
+      //       answer: answerSubmitted?.short_answer,
+      //       solution: answerSubmitted.results?.[0]?.solution || null,
+      //     }
+      //   }
+
+      //   if (
+      //     objTab?.data?.qType === QUESTION_TYPES.ONE_CHOICE ||
+      //     objTab?.data?.qType === QUESTION_TYPES.TRUE_FALSE
+      //   ) {
+      //     if (answerSubmitted?.question_answer_id) {
+      //       return {
+      //         ...objTab,
+      //         // done: true,
+      //         attempted: true,
+      //         answer: answerSubmitted?.question_answer_id,
+      //       }
+      //     } else {
+      //       return objTab
+      //     }
+      //   }
+
+      //   const transformAnswerData = answerSubmitted?.answer?.map((e: any) => {
+      //     if (objTab?.data?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+      //       return e.answer_id
+      //     } else if (objTab?.data?.qType === QUESTION_TYPES.MATCHING) {
+      //       return {
+      //         answer_id: e.answer_id,
+      //         question_id: e.question_id,
+      //       }
+      //     } else if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+      //       let objAnswer: any
+      //       for (let i = 0; i < objTab?.data?.answers?.length; i++) {
+      //         if (objTab?.data?.answers[i].id === e.answer_id) {
+      //           objAnswer = {
+      //             ...e,
+      //             idAnswer: e.answer_id,
+      //             value: objTab?.data?.answers[i].answer,
+      //           }
+      //           break
+      //         }
+      //       }
+      //       return objAnswer
+      //     } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
+      //       return {
+      //         ...answerSubmitted,
+      //         ...objTab,
+      //         // done: true,
+      //         attempted: true,
+      //         answer: answerSubmitted?.short_answer,
+      //         solution: answerSubmitted.results?.[0]?.solution || null,
+      //       }
+      //     } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
+      //       return e.answer_text
+      //     }
+      //   })
+
+      //   if (transformAnswerData?.length > 0) {
+      //     return {
+      //       ...objTab,
+      //       answer: transformAnswerData,
+      //       // done: true,
+      //     }
+      //   } else {
+      //     return objTab
+      //   }
+      // } else {
+      //   return objTab
+      // }
     } else return undefined
   }, [currentPage, tabs, answersSubmitted])
 
@@ -572,22 +663,20 @@ const TestDetail = () => {
     })
   }
 
-  const handleFlagQuestion = (tab: any) => {
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
-        if (tab === item.id) {
-          if (!item.flaged) {
-            toast.success('The question has been marked!')
-          } else {
-            toast.success('The question has been unmaked!')
-          }
-          return { ...item, flaged: !item.flaged }
-        }
-        return item
-      })
-      return newData
-    })
+  interface Tab {
+    id: string
+    flag?: boolean
+    is_viewed_answer?: boolean
+    [key: string]: any
   }
+
+  const handleFlagQuestion = useCallback((tabId: string) => {
+    setTabs((prevTabs: Tab[]) =>
+      prevTabs.map((tab) =>
+        tab.id === tabId ? { ...tab, flag: !tab.flag } : tab,
+      ),
+    )
+  }, [])
 
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
@@ -992,6 +1081,7 @@ const TestDetail = () => {
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
     }
+    handleSubmitAnswer('change-tab')
     setLoading(false)
     setScratchPadValues(null)
   }
@@ -1231,9 +1321,13 @@ const TestDetail = () => {
         quizDetail?.quiz_timed * 60 -
         (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       scratch_pads: scratchPads || [],
+      flag: currentTabContent?.flag,
+      is_viewed_answer: currentTabContent?.is_viewed_answer,
       ...answerItem,
     }
-
+    if (action === 'view-answer') {
+      payload.is_viewed_answer = true
+    }
     try {
       const res = await CoursesAPI.submitAnswer(
         quizAttempt?.id as string,
@@ -1271,6 +1365,7 @@ const TestDetail = () => {
         }
         return [...prev, payload]
       })
+      return false
     }
   }
 
@@ -1567,7 +1662,7 @@ const TestDetail = () => {
         setFilterTabs(tabs.filter((e: any) => !e?.attempted && !e?.done))
         return
       } else if (filter === 'flag') {
-        setFilterTabs(tabs.filter((e: any) => e?.flaged === true))
+        setFilterTabs(tabs.filter((e: any) => e?.flag === true))
         return
       } else setFilterTabs(tabs)
     }
@@ -1761,7 +1856,7 @@ const TestDetail = () => {
       if (questions?.length > 0) {
         const answerMap = new Map(
           answersSubmitted.map(
-            (answer: { questionId: string; flaged?: boolean }) => [
+            (answer: { questionId: string; flag?: boolean }) => [
               answer.questionId,
               answer,
             ],
@@ -1774,9 +1869,9 @@ const TestDetail = () => {
             let baseData = {
               ...question,
               viewed: index === 0,
-              flaged:
-                (answerMap.get(question.id) as { flaged?: boolean } | undefined)
-                  ?.flaged || false,
+              flag:
+                (answerMap.get(question.id) as { flag?: boolean } | undefined)
+                  ?.flag || false,
               done: hasAnswer,
               attempted: hasAnswer,
               index,
@@ -2317,7 +2412,7 @@ const TestDetail = () => {
                 <button
                   className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
-                    handleSubmitAnswer()
+                    handleSubmitAnswer('view-answer')
                     const data = await getResult(currentTabContent)
                     confirmAnswer(
                       data?.corrects,

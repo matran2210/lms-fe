@@ -6,7 +6,7 @@ export interface Answer {
   answer: string | string[] | Object[]
   attempted?: boolean
   done?: boolean
-  flaged?: boolean
+  flag?: boolean
   id?: string
   index?: string
   qType?: string

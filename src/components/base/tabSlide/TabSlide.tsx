@@ -228,7 +228,7 @@ const TabSlide = ({
                         }
                       }}
                       isViewedProp={pageNum.attempted || pageNum.done}
-                      isFlagedProp={pageNum.flaged}
+                      isFlagedProp={pageNum.flag}
                       //   type={type}
                     >
                       {pageNum.index + 1}
@@ -245,7 +245,7 @@ const TabSlide = ({
                       }
                     }}
                     isViewedProp={pageNum.attempted}
-                    isFlagedProp={pageNum.flaged}
+                    isFlagedProp={pageNum.flag}
                     //   type={type}
                   >
                     {pageNum.index + 1}
@@ -268,7 +268,7 @@ const TabSlide = ({
                             }
                           }}
                           isViewedProp={pageNum[0].attempted}
-                          isFlagedProp={pageNum[0].flaged}
+                          isFlagedProp={pageNum[0].flag}
                           //   type={type}
                         >
                           {pageNum[0].index + 1}
@@ -293,7 +293,7 @@ const TabSlide = ({
                             }
                           }}
                           isViewedProp={pageNum[1].attempted}
-                          isFlagedProp={pageNum[1].flaged}
+                          isFlagedProp={pageNum[1].flag}
                           //   type={type}
                         >
                           {pageNum[1].index + 1}
