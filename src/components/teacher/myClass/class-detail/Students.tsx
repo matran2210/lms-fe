@@ -155,17 +155,12 @@ export default function Students() {
       </Title>
       <SappTable
         handleChangeParams={handleChangeParams}
-        filterParams={params}
-        fetchData={() => {}}
-        fetchTableData={() => {}}
         columns={columnsValue}
         data={data?.students ?? []}
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
         showCheckbox={false}
-        setSelection={() => {}}
-        selections={new Map()}
       />
     </>
   )

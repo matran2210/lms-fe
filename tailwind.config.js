@@ -53,6 +53,8 @@ module.exports = {
           DEFAULT: '#FFB800',
           2: '#FFC83A',
           3: '#E5A600',
+          4: '#f57c00',
+          5: '#f57c000D',
           light: 'rgba(255, 187, 0, .071)',
         },
         secondary: {
@@ -92,6 +94,10 @@ module.exports = {
           11: '#99A1B7',
           900: '#181C32',
         },
+        green: {
+          1: '#07af17',
+          2: '#01711f0D',
+        },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
           'dark-sidebar': 'rgba(0, 0, 0, 0.8)',
@@ -103,6 +109,8 @@ module.exports = {
         blue: {
           1: '#0000EE',
           2: '#091D37',
+          3: '#025eff',
+          4: '#025eff0D',
         },
         pinned: {
           1: '#18355D',

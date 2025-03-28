@@ -67,12 +67,6 @@ const ClassDetail = () => {
           label: 'Status',
           value: data?.status,
           isTag: true,
-          color:
-            data?.status === 'COMPLETED'
-              ? '#07af17'
-              : data?.status === 'IN_PROGRESS'
-                ? '#07af17'
-                : '',
         },
         { label: 'Facility', value: data?.facility?.name },
         { label: 'Instruction Mode', value: data?.instruction_mode },

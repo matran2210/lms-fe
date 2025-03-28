@@ -171,17 +171,12 @@ export default function StudentsTestResult() {
       </Title>
       <SappTable
         handleChangeParams={handleChangeParams}
-        filterParams={params}
-        fetchData={() => {}}
-        fetchTableData={() => {}}
         columns={columnsValue}
         data={data?.class_quizzes ?? []}
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
         showCheckbox={false}
-        setSelection={() => {}}
-        selections={new Map()}
       />
     </div>
   )

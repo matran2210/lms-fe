@@ -174,17 +174,12 @@ const ChapterTest = () => {
       />
       <SappTable
         handleChangeParams={handleChangeParams}
-        filterParams={params}
-        fetchData={() => {}}
-        fetchTableData={() => {}}
         columns={columnsValue}
         data={data?.data?.class_user_quizzes ?? []}
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
         showCheckbox={false}
-        setSelection={() => {}}
-        selections={new Map()}
       />
     </LayoutTeacher>
   )
