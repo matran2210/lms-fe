@@ -373,7 +373,23 @@ export const removeHtmlTags = (htmlString?: string) => {
   if (!htmlString) return ''
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
-
+export const formatDateFromUTC = (date: string) =>
+  dayjs.utc(date).local().format('DD/MM/YYYY')
+export const convertQuizType = (quizType: string) => {
+  // Convert the enum value to a readable string
+  return quizType
+    .split('_') // Split the string by underscores
+    .map(
+      (
+        word,
+        index, // Capitalize the first letter of each word
+      ) =>
+        index === 0
+          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    )
+    .join(' ')
+}
 export * from './formatNumber'
 
 export const containsKeyword = (input: unknown, keyword?: string): boolean => {

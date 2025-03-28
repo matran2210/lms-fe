@@ -38,7 +38,10 @@ export interface ITabs {
   title: string
   disable?: boolean
 }
-
+export interface ITabsTeacher {
+  id: number
+  title: string
+}
 export type IButtonCancelSubmitProps = {
   submit: IButtonProps
   cancel: IButtonProps
