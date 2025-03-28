@@ -20,14 +20,14 @@ export default function LayoutTeacher({
   return (
     <div className="flex flex-nowrap">
       <TeacherMenu />
-      <div className="min-h-screen w-full bg-[#F2F4F7]">
-        <div className="min-h-screen w-full py-6 pl-56 pr-56">
+      <div className="min-h-screen w-full bg-gray-10">
+        <div className="min-h-screen w-full px-56 py-6">
           <SappBreadCrumbs breadcrumbs={breadcrumbs} />
           <Title level={3} className="mt-1 pb-2 text-gray-700">
             {title}
           </Title>
           <div
-            className={`min-h-screen w-full rounded-xl ${className ? className : 'bg-white px-8  py-6'}`}
+            className={`min-h-screen w-full rounded-xl ${className ? className : 'bg-white px-8 py-6'}`}
           >
             {children}
           </div>

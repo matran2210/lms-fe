@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Layout, Menu } from 'antd'
 import Image from 'next/image'
 import sapp from 'src/assets/images/sapp_menu.svg'
+import { userReducer } from 'src/redux/slice/User/User'
 import {
   HomeMenuIcon,
   BookMenuIcon,
@@ -11,29 +12,30 @@ import {
   HelpMenuIcon,
   LogOutMenuIcon,
 } from 'src/assets/icons/index'
+import blankAvatar from '@assets/images/blank_avatar.webp'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { NOTIFICATION_STATUS } from 'src/type'
 import Link from 'next/link'
 import { PageLink } from 'src/constants'
 
 const { Sider } = Layout
-interface SidebarMenuProps {
-  className?: string
-}
+
 interface MenuItem {
   key: string
   icon: React.ReactNode
   link?: string
 }
-export default function TeacherMenu({ className }: SidebarMenuProps) {
+
+export default function TeacherMenu() {
   const [collapsed, setCollapsed] = useState(true)
   const [selectedKey, setSelectedKey] = useState('home')
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const { user } = useAppSelector(userReducer)
   const handleMenuClick = (item: { key: string }) => {
     const selectedItem = menuItems.find((menuItem) => menuItem.key === item.key)
     setSelectedKey(item.key)
@@ -79,11 +81,24 @@ export default function TeacherMenu({ className }: SidebarMenuProps) {
       icon: <BellIcon selected={selectedKey === 'bell'} />,
     },
   ]
+
   useEffect(() => {
     if (router.pathname.includes(PageLink.TEACHER_MY_CLASS)) {
       setSelectedKey('book')
     }
   }, [router.pathname])
+
+  const ItemMenu = ({
+    icon,
+    action,
+  }: {
+    icon: React.ReactNode
+    action?: () => void
+  }) => (
+    <div className="cursor-pointer p-2" onClick={action}>
+      {icon}
+    </div>
+  )
 
   return (
     <Sider
@@ -92,14 +107,13 @@ export default function TeacherMenu({ className }: SidebarMenuProps) {
       onCollapse={(value) => setCollapsed(value)}
       trigger={null}
       width={80}
-      className={`sidebar-left flex h-screen flex-col items-center ${className || ''}`}
+      className="sidebar-left flex h-screen flex-col items-center bg-blue-2"
       style={{
         overflow: 'auto',
         position: 'fixed',
         left: 0,
         top: 0,
         bottom: 0,
-        backgroundColor: '#091D37',
       }}
     >
       <div className="flex h-full flex-col items-center justify-between">
@@ -121,17 +135,9 @@ export default function TeacherMenu({ className }: SidebarMenuProps) {
             items={menuItems.map((item) => ({
               key: item.key,
               icon: item.icon,
-              label: '',
+              title: item.key,
             }))}
-            className="[&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center"
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 48,
-              gap: 24,
-            }}
+            className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center [&_.ant-menu-item]:p-3"
           />
         </div>
         {/* Bottom Menu */}
@@ -139,18 +145,18 @@ export default function TeacherMenu({ className }: SidebarMenuProps) {
           <Link href="/overview">
             <Image
               alt="avatar"
-              src={sapp}
+              src={
+                user.detail.avatar['32x32'] ||
+                user.detail.avatar['ORIGIN'] ||
+                blankAvatar
+              }
               width={32}
               height={32}
               className="cursor-pointer rounded-full p-2"
             />
           </Link>
-          <div className="cursor-pointer p-2">
-            <HelpMenuIcon />
-          </div>
-          <div className="cursor-pointer p-2" onClick={handleLogout}>
-            <LogOutMenuIcon />
-          </div>
+          <ItemMenu icon={<HelpMenuIcon />} />
+          <ItemMenu icon={<LogOutMenuIcon />} action={handleLogout} />
         </div>
       </div>
     </Sider>

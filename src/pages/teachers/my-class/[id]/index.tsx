@@ -111,7 +111,7 @@ const ClassDetail = () => {
     <LayoutTeacher
       title="Class Detail"
       breadcrumbs={breadcrumbs}
-      className="bg-[#F2F4F7] p-0"
+      className="bg-gray-10 p-0"
     >
       <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
         <ClassCard
