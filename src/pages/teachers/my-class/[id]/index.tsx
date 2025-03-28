@@ -10,7 +10,7 @@ import Overview from 'src/pages/teachers/my-class/components/OverView'
 import Students from '../components/Students'
 import StudentsTestResult from '../components/StudentsTestResult'
 import { ICertificateData } from 'src/type/classes'
-import TeachingProgress from '@components/teacher/my-class/TeachingProgress'
+import TeachingProgress from '@components/teacher/class-detail/TeachingProgress'
 
 const breadcrumbs: ITabs[] = [
   {
