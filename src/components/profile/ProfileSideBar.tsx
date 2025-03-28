@@ -203,6 +203,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
               const urlChildren = (value?.children || []) as Child[]
               const childLabel = getLabelFromChild(value)?.replace(/\s+/g, '_')
               const isActive = urlPage === page
+
               let className =
                 'text-gray-1 relative hover:text-primary font-normal'
               if (isActive) {
@@ -302,7 +303,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
             </li>
           </div>
           <div className="text-center text-sm font-normal text-gray-1">
-            LMS Pro Version 2.5.0
+            LMS Pro Version 2.6.0
           </div>
         </ul>
       </div>

@@ -23,11 +23,13 @@ interface IProps {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
   maxMenuHeight?: number
   isLoading?: boolean
+  noOptionsMessage?: ((obj: { inputValue: string }) => ReactNode) | undefined
 }
 
 const HookFormSelect = ({
   className,
   defaultValue,
+  noOptionsMessage,
   required = false,
   options,
   isMulti = false,
@@ -86,6 +88,7 @@ const HookFormSelect = ({
         components={{ DropdownIndicator }}
         maxMenuHeight={maxMenuHeight}
         onMenuOpen={onMenuOpen}
+        noOptionsMessage={noOptionsMessage}
         onFocus={(e) => {
           onFocus && onFocus(e)
         }}

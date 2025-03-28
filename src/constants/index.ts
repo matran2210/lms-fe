@@ -4,7 +4,9 @@ export const PageLink = {
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
   CASE_STUDY: '/casestudy',
-  TEACHER: '/teacher',
+  TEACHERS: '/teacher',
+  STUDENTS: '/students',
+  TEACHER_MY_CLASS: '/teachers/my-class',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -181,6 +183,17 @@ export const defaultStatusEventTest = [
   {
     label: 'Uncompleted',
     value: 'UN_SUBMITTED',
+  },
+]
+
+export const QUIZ_ATTEMPT_STATUS_AUTO = [
+  {
+    label: 'Unsubmitted',
+    value: 'UN_SUBMITTED',
+  },
+  {
+    label: 'Submitted',
+    value: 'SUBMITTED',
   },
 ]
 
