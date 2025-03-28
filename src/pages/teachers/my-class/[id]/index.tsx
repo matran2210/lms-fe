@@ -8,9 +8,9 @@ import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { useEffect, useState } from 'react'
 import Overview from 'src/pages/teachers/my-class/components/OverView'
 import Students from '../components/Students'
-import TeachingProgress from '../components/TeachingProgress'
 import StudentsTestResult from '../components/StudentsTestResult'
 import { ICertificateData } from 'src/type/classes'
+import TeachingProgress from '@components/teacher/my-class/TeachingProgress'
 
 const breadcrumbs: ITabs[] = [
   {
