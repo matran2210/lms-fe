@@ -114,7 +114,7 @@ class MyDocument extends Document {
           ></script>
           <script src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"></script>
         </Head>
-        <body>
+        <body id="lms-pro">
           <Main />
           <NextScript />
         </body>

@@ -391,3 +391,23 @@ export const convertQuizType = (quizType: string) => {
     .join(' ')
 }
 export * from './formatNumber'
+
+export const containsKeyword = (input: unknown, keyword?: string): boolean => {
+  if (typeof input !== 'string') return false
+  return input.includes(keyword ?? 'data-time=')
+}
+
+/**
+ * @description Chuyển đổi chuỗi HTML chứa thẻ <strong> với thuộc tính data-time thành định dạng ngày tháng có thể đọc được.
+ * @param {string} input - Chuỗi HTML đầu vào.
+ * @return {string} - Chuỗi HTML đã được định dạng lại với ngày tháng hiển thị theo định dạng DD/MM/YYYY.
+ */
+export const formatNotificationHTML = (input: string): string => {
+  return input.replace(
+    /<strong\s+data-time\s*=\s*["']([^"']+)["']\s*><\/strong>/g,
+    (match, dateTime) => {
+      const formattedDate = dayjs.utc(dateTime).local().format('DD/MM/YYYY')
+      return `<strong>${formattedDate}</strong>`
+    },
+  )
+}
