@@ -1,9 +1,9 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import LayoutFilter from '@components/layout/Filter/index'
-import ChapterTestFilter from 'src/pages/teachers/my-class/[id]/test-quiz-list/chapter-test/components/ChapterTestFilter'
+import ChapterTestFilter from '@components/teacher/components/ChapterTestFilter'
 import { useForm } from 'react-hook-form'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { ITabs } from 'src/type'
@@ -11,7 +11,7 @@ import { PageLink } from 'src/constants'
 import SappTable from '@components/table/SappTable'
 import { TeacherKey } from '@pages/api/queryKey'
 import { TablePaginationConfig } from 'antd'
-import StudentCell from '@pages/teachers/my-class/components/StudentCell'
+import StudentCell from '@components/teacher/components/StudentCell'
 import { formatDateFromUTC } from '@utils/index'
 import { IStudentClassDetail } from 'src/type/classes'
 
@@ -27,7 +27,7 @@ const initialValues: FilterParams = {
 
 const ChapterTest = () => {
   const router = useRouter()
-  const classId = router?.query?.id as string
+  const studentId = router?.query?.studentId as string
   const chapterTestId = router?.query?.chapterTestId as string
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number(router.query.page_index) || 1,
@@ -45,9 +45,12 @@ const ChapterTest = () => {
   const breadcrumbs: ITabs[] = [
     { link: PageLink.TEACHERS, title: 'LMS' },
     { link: PageLink.TEACHER_MY_CLASS, title: 'My Class' },
-    { link: `${PageLink.TEACHER_MY_CLASS}/${classId}`, title: 'Class Detail' },
     {
-      link: `${PageLink.TEACHER_MY_CLASS}/${classId}`,
+      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}`,
+      title: 'Class Detail',
+    },
+    {
+      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}`,
       title: 'Test/Quiz List',
     },
     { link: '', title: 'Chapter Test' },
@@ -57,7 +60,7 @@ const ChapterTest = () => {
     queryFn: async () => {
       try {
         return await TeacherAPI.getDetailTestQuiz(
-          classId,
+          studentId,
           chapterTestId,
           pagination.current ?? 1,
           pagination.pageSize ?? 10,

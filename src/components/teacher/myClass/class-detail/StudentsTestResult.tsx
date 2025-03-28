@@ -5,24 +5,30 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
 import { formatDateFromUTC } from 'src/utils/index'
-import StudentCell from 'src/pages/teachers/my-class/components/StudentCell'
+import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
+import NameActionCell from '@components/teacher/components/NameActionCell'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
-import StudentFilter from 'src/pages/teachers/my-class/components/StudentFilter'
+import StudentsTestResultFilter from '@components/teacher/components/StudentsTestResultFilter'
 import { useForm } from 'react-hook-form'
-import { IStudentClassDetail } from 'src/type/classes'
+import { PageLink } from 'src/constants'
+import { IStudentTestResult } from 'src/type/classes'
 
 const { Title } = Typography
 
 interface FilterParams {
   text?: string
+  grading_method?: string
+  quiz_type?: string
 }
 
 const initialValues: FilterParams = {
-  text: '',
+  text: undefined,
+  quiz_type: undefined,
+  grading_method: undefined,
 }
 
-export default function Students() {
+export default function StudentsTestResult() {
   const { control, reset, getValues } = useForm()
   const router = useRouter()
   const studentId = router?.query?.id as string
@@ -39,7 +45,7 @@ export default function Students() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['student', studentId, pagination, params],
     queryFn: () =>
-      TeacherAPI.getStudentById(
+      TeacherAPI.getListTestQuiz(
         studentId,
         pagination.current ?? 1,
         pagination.pageSize ?? 10,
@@ -73,85 +79,95 @@ export default function Students() {
   }
 
   const handleResetFilter = () => {
-    reset(initialValues)
+    reset({ text: '', quiz_type: '', grading_method: '' })
     setParams(initialValues)
   }
 
   const onSubmit = () => {
-    setParams({ text: getValues('text') || undefined })
+    setParams({
+      text: getValues('text') || undefined,
+      quiz_type: getValues('quiz_type')?.value || undefined,
+      grading_method: getValues('grading_method')?.value || undefined,
+    })
   }
 
   const columnsValue = [
     {
-      title: 'ID',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.hubspot_contact_id ?? ''} />
+      title: 'Test name',
+      render: (record: IStudentTestResult) => (
+        <NameActionCell
+          data={record?.quiz?.name ?? ''}
+          linkView={`${PageLink.TEACHER_MY_CLASS}/chapter-test?studentId=${studentId}&chapterTestId=${record?.quiz?.id}`}
+        />
+      ),
+      onCell: () => ({
+        style: { cursor: 'pointer' },
+      }),
+    },
+    {
+      title: 'Type',
+      render: (record: IStudentTestResult) => (
+        <NameNoActionCell data={record?.quiz?.quiz_type ?? ''} />
       ),
     },
     {
-      title: 'Student Name',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.full_name ?? ''} />
+      title: 'Mode',
+      render: (record: IStudentTestResult) => (
+        <NameNoActionCell data={record?.mode ?? ''} />
       ),
     },
     {
-      title: 'Email',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.user_contacts?.[0]?.email ?? ''} />
-      ),
-    },
-    {
-      title: 'Phone',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.user_contacts?.[0]?.phone ?? ''} />
-      ),
-    },
-    {
-      title: 'Level',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.level ?? ''} />
-      ),
-    },
-    {
-      title: 'Duration',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell
-          data={`${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
-            record?.updated_at ?? '',
-          )}`}
+      title: 'Manual Grading',
+      render: (record: IStudentTestResult) => (
+        <NameNoActionCell
+          data={record?.quiz?.grading_method === 'AUTO' ? 'No' : 'Yes'}
         />
       ),
     },
     {
-      title: 'Progress',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell
-          data={`${Math.round(
-            ((record?.learning_progress?.total_course_sections_completed ?? 0) /
-              (record?.learning_progress?.total_course_sections || 1)) *
-              100,
-          )}%`}
+      title: 'Start time',
+      render: (record: IStudentTestResult) => (
+        <NameNoActionCell
+          data={
+            record?.start_time ? formatDateFromUTC(record?.start_time) : '-'
+          }
         />
       ),
     },
     {
-      title: 'Exam Date',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.examination_subject ?? ''} />
+      title: 'Đã làm',
+      render: (record: IStudentTestResult) => (
+        <NameNoActionCell data={record?.total_attempts ?? ''} />
+      ),
+    },
+    {
+      title: 'Đã chấm',
+      render: (record: IStudentTestResult) => (
+        <NameNoActionCell
+          data={`${record?.total_grading_attempts}/${record?.total_attempts}`}
+        />
+      ),
+    },
+    {
+      title: 'Thời gian chấm',
+      render: (record: IStudentTestResult) => (
+        <NameNoActionCell
+          data={record?.end_time ? formatDateFromUTC(record?.end_time) : '-'}
+        />
       ),
     },
   ]
 
   return (
-    <>
+    <div>
       <LayoutFilter
-        listFilter={<StudentFilter control={control} />}
+        listFilter={<StudentsTestResultFilter control={control} />}
         loading={false}
         onReset={handleResetFilter}
         onSubmit={onSubmit}
       />
       <Title level={5} className="mt-6 text-gray-700">
-        Student List: {data?.meta?.total_records ?? 0} Students
+        Test/Quiz List: {data?.metadata?.total_records ?? 0}
       </Title>
       <SappTable
         handleChangeParams={handleChangeParams}
@@ -159,7 +175,7 @@ export default function Students() {
         fetchData={() => {}}
         fetchTableData={() => {}}
         columns={columnsValue}
-        data={data?.students ?? []}
+        data={data?.class_quizzes ?? []}
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
@@ -167,6 +183,6 @@ export default function Students() {
         setSelection={() => {}}
         selections={new Map()}
       />
-    </>
+    </div>
   )
 }

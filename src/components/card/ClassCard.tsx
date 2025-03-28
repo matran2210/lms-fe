@@ -8,7 +8,7 @@ import { IClassCard } from 'src/type/classes'
 import {
   StatusTag,
   statusMap,
-} from '@pages/teachers/my-class/components/OverView'
+} from '@components/teacher/myClass/class-detail/OverView'
 const { Title } = Typography
 interface IProps {
   dataDetail?: IClassCard | undefined
@@ -27,7 +27,9 @@ const ClassCard = ({
     <div className="mb-5 flex justify-between">
       <div className="flex items-center text-sm text-gray-500">
         <div className="mr-6">
-          <StatusTag status={dataDetail?.status as keyof typeof statusMap} />
+          {dataDetail?.status && (
+            <StatusTag status={dataDetail?.status as keyof typeof statusMap} />
+          )}
         </div>
         {dataDetail?.facility?.address && (
           <>

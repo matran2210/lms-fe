@@ -1,9 +1,8 @@
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
-import { ISubjectList, IUniversityProgram } from 'src/type/classes'
 import { listStatusMyClass } from 'src/pages/teachers/my-class/index'
 import { TeacherAPI } from '@pages/api/teacher'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { isEmpty } from 'lodash'
 
 interface MyClassFilterProps {

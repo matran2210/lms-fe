@@ -6,11 +6,11 @@ import { ANIMATION, PageLink } from 'src/constants'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { useEffect, useState } from 'react'
-import Overview from 'src/pages/teachers/my-class/components/OverView'
-import Students from '../components/Students'
-import StudentsTestResult from '../components/StudentsTestResult'
+import Overview from '@components/teacher/myClass/class-detail/OverView'
+import Students from '@components/teacher/myClass/class-detail/Students'
+import StudentsTestResult from '@components/teacher/myClass/class-detail/StudentsTestResult'
 import { ICertificateData } from 'src/type/classes'
-import TeachingProgress from '@components/teacher/class-detail/TeachingProgress'
+import TeachingProgress from '@components/teacher/myClass/class-detail/TeachingProgress'
 
 const breadcrumbs: ITabs[] = [
   {
