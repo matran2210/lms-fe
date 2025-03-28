@@ -10,6 +10,10 @@ import weekday from 'dayjs/plugin/weekday'
 import DOMPurify from 'dompurify'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
+export * from './common'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 dayjs.extend(weekday)
 
@@ -374,5 +378,41 @@ export const removeHtmlTags = (htmlString?: string) => {
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
 
-export * from './common'
+export const formatDateFromUTC = (date: string) =>
+  dayjs.utc(date).local().format('DD/MM/YYYY')
+export const convertQuizType = (quizType: string) => {
+  // Convert the enum value to a readable string
+  return quizType
+    .split('_') // Split the string by underscores
+    .map(
+      (
+        word,
+        index, // Capitalize the first letter of each word
+      ) =>
+        index === 0
+          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    )
+    .join(' ')
+}
 export * from './formatNumber'
+
+export const containsKeyword = (input: unknown, keyword?: string): boolean => {
+  if (typeof input !== 'string') return false
+  return input.includes(keyword ?? 'data-time=')
+}
+
+/**
+ * @description Chuyển đổi chuỗi HTML chứa thẻ <strong> với thuộc tính data-time thành định dạng ngày tháng có thể đọc được.
+ * @param {string} input - Chuỗi HTML đầu vào.
+ * @return {string} - Chuỗi HTML đã được định dạng lại với ngày tháng hiển thị theo định dạng DD/MM/YYYY.
+ */
+export const formatNotificationHTML = (input: string): string => {
+  return input.replace(
+    /<strong\s+data-time\s*=\s*["']([^"']+)["']\s*><\/strong>/g,
+    (match, dateTime) => {
+      const formattedDate = dayjs.utc(dateTime).local().format('DD/MM/YYYY')
+      return `<strong>${formattedDate}</strong>`
+    },
+  )
+}

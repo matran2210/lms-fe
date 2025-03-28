@@ -2061,7 +2061,7 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@lottiefiles/react-lottie-player@^3.5.3", "@lottiefiles/react-lottie-player@^3.5.4":
+"@lottiefiles/react-lottie-player@^3.5.3":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@lottiefiles/react-lottie-player/-/react-lottie-player-3.6.0.tgz#c278a3709cfcb9a67996b8a669b00a30346f1517"
   integrity sha512-WK5TriLJT93VF3w4IjSVyveiedraZCnDhKzCPhpbeLgQeMi6zufxa3dXNc4HmAFRXq+LULPAy+Idv1rAfkReMA==
@@ -3322,14 +3322,6 @@
     prop-types "^15.6.2"
     tinymce "^6.0.0 || ^5.5.1"
 
-"@tinymce/tinymce-react@^5.1.1":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-react/-/tinymce-react-5.1.1.tgz#3b8555ceaccfa6bb8bb03c3b0c8baaccde138bde"
-  integrity sha512-DQ0wpvnf/9z8RsOEAmrWZ1DN1PKqcQHfU+DpM3llLze7FHmxVtzuN8O+FYh0oAAF4stzAXwiCIVacfqjMwRieQ==
-  dependencies:
-    prop-types "^15.6.2"
-    tinymce "^7.0.0 || ^6.0.0 || ^5.5.1"
-
 "@tsconfig/node10@^1.0.7":
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/@tsconfig/node10/-/node10-1.0.11.tgz#6ee46400685f130e278128c7b38b7e031ff5b2f2"
@@ -3392,7 +3384,7 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/lodash@*", "@types/lodash@^4.14.202", "@types/lodash@^4.17.13":
+"@types/lodash@*", "@types/lodash@^4.14.202":
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.15.tgz#12d4af0ed17cc7600ce1f9980cec48fc17ad1e89"
   integrity sha512-w/P33JFeySuhN6JLkysYUK2gEmy9kHHFN7E8ro0tkfmlDOgxBDzWEZ/J8cWA+fHqFevpswDTFZnDx+R9lbL6xw==
@@ -3652,7 +3644,7 @@
     dompurify "^3.0.10"
     uuid "^8.3.2"
 
-"@wiris/mathtype-tinymce6@^8.12.0", "@wiris/mathtype-tinymce6@^8.5.0":
+"@wiris/mathtype-tinymce6@^8.5.0":
   version "8.12.0"
   resolved "https://registry.yarnpkg.com/@wiris/mathtype-tinymce6/-/mathtype-tinymce6-8.12.0.tgz#05b6494eaf44530d6b4f247dae613a142e4f38a0"
   integrity sha512-YEXnPbvqJ+P1zCiISV86BSseb7AQHOIm4WsvWGSF4Z+m2HJKjaqPkSRzkst/Y0u3+2Bja39twKObkNtDN87Gww==
@@ -3824,7 +3816,7 @@ ansi-styles@^6.0.0, ansi-styles@^6.1.0:
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.1.tgz#0e62320cf99c21afff3b3012192546aacbfb05c5"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
 
-antd@^5.21.1, antd@^5.22.1, antd@^5.22.2, antd@^5.22.5, antd@^5.22.7:
+antd@^5.21.1, antd@^5.22.2, antd@^5.22.5, antd@^5.22.7:
   version "5.24.2"
   resolved "https://registry.yarnpkg.com/antd/-/antd-5.24.2.tgz#df28583b68279821096234920584dadea6f9b283"
   integrity sha512-7Z9HsE3ZIK3sE/WuUqii3w7Gl1IJuRL21sDUTtkN95JS5KhRYP8ISv7m/HxsJ3Mn/yxgojBCgLPJ212+Dn+aPw==
@@ -5087,7 +5079,7 @@ domhandler@5.0.3, domhandler@^5.0.2, domhandler@^5.0.3:
   dependencies:
     domelementtype "^2.3.0"
 
-dompurify@*, dompurify@^3.0.10, dompurify@^3.1.6, dompurify@^3.2.0:
+dompurify@*, dompurify@^3.0.10, dompurify@^3.1.6:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.2.4.tgz#af5a5a11407524431456cf18836c55d13441cd8e"
   integrity sha512-ysFSFEDVduQpyhzAob/kkuJjf5zWkZD8/A9ywSp1byueyuCfHamrCBa14/Oc2iiB0e51B+NpxSl5gmzn+Ms/mg==
@@ -5639,10 +5631,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.1.17:
-  version "1.1.18"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.1.18.tgz#025539b6cdc38762047ec07c28a8dfde850fdbb7"
-  integrity sha512-x7KoLPJETqP0EOiKiV0FJAj4+XKoaD6lOP4SdG1QtDP4xnmw+nWvy55R5ibmNchKKoGFRxg6kRfEWCLvTIQLlw==
+explanation-package@^1.1.19:
+  version "1.1.19"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.1.19.tgz#c3c0a2461e8667411b25395951d4328d24ec8229"
+  integrity sha512-UfWfsIwzrbzm8p0N8it5BgCBJ+IezUSLyVQWai6B663PyYZnfA1retesa8ElkGSCdcBw6CyXJCvqcf5ADaNGFA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -6239,7 +6231,7 @@ html-entities@^1.2.1:
   resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-1.4.0.tgz#cfbd1b01d2afaf9adca1b10ae7dffab98c71d2dc"
   integrity sha512-8nxjcBcd8wovbeKx7h3wTji4e6+rhaVuPNpMqwWgnHh+N9ToqsCs6XztWRBPQ+UtzsoMAdKZtUENoVzU/EMtZA==
 
-html-react-parser@^5.0.11, html-react-parser@^5.1.10, html-react-parser@^5.2.2:
+html-react-parser@^5.0.11, html-react-parser@^5.1.10:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-5.2.2.tgz#a4159c14f08c06280ff793ce35f872c2283227cb"
   integrity sha512-yA5012CJGSFWYZsgYzfr6HXJgDap38/AEP4ra8Cw+WHIi2ZRDXRX/QVYdumRf1P8zKyScKd6YOrWYvVEiPfGKg==
@@ -8500,10 +8492,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.3.42:
-  version "1.3.42"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.42.tgz#e05f9b608a95575c13621fb6e22a577b4ccb9e6e"
-  integrity sha512-E5BUTd+SIsDxQ7Z+IfnxOemw5WRfHKHuimgNiLH6ExQi+6cA0LXVGFTVLiENDS4jgfuTQQFno5xMoHMeqfJfYA==
+preview-part@^1.3.55:
+  version "1.3.55"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.55.tgz#7ee532edfd596202a659d013120e9372439aa97b"
+  integrity sha512-vICIC7VO6m0YGhGy/zgvRHljhkZ3C3TdTUzHm0otK9isIjqsjGmLNqFCwZ5mYbovVY3HqtioEHUslQHZDH/tVA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -9078,7 +9070,7 @@ react-hot-toast@^2.4.1:
     csstype "^3.1.3"
     goober "^2.1.16"
 
-react-intersection-observer@^9.13.1, react-intersection-observer@^9.15.0:
+react-intersection-observer@^9.13.1:
   version "9.15.1"
   resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.15.1.tgz#5866b6fdfef24be9f288b74b35b773f63d90c3eb"
   integrity sha512-vGrqYEVWXfH+AGu241uzfUpNK4HAdhCkSAyFdkMb9VWWXs6mxzBLpWCxEy9YcnDNY2g9eO6z7qUtTBdA9hc8pA==
@@ -9567,7 +9559,7 @@ sass@1.50.1:
     immutable "^4.0.0"
     source-map-js ">=0.6.2 <2.0.0"
 
-sass@^1.53.0, sass@^1.67.0, sass@^1.69.5, sass@^1.80.7:
+sass@^1.53.0, sass@^1.67.0, sass@^1.69.5:
   version "1.85.1"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.85.1.tgz#18ab0bb48110ae99163778f06445b406148ca0d5"
   integrity sha512-Uk8WpxM5v+0cMR0XjX9KfRIacmSG86RH4DCCZjLU2rFh5tyutt9siAXJ7G+YfxQ99Q6wrRMbMlVl6KqUms71ag==
@@ -10219,25 +10211,6 @@ tar-stream@^2.1.4:
     inherits "^2.0.3"
     readable-stream "^3.1.1"
 
-test-result-view-package@^1.0.2:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/test-result-view-package/-/test-result-view-package-1.0.4.tgz#c0ce0d03b903cb02997209e3788196475953ff1c"
-  integrity sha512-FDl0q41+yBGkD8mH9a9PTTOoQ+4OmD6ItFmrP3/f6ebJOmuceAzs1uDyzgnkaviB4+QNKzozcVVRk6r0j8Si1w==
-  dependencies:
-    "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
-    "@funktechno/texthighlighter" "^2.1.2"
-    "@lottiefiles/react-lottie-player" "^3.5.4"
-    "@tinymce/tinymce-react" "^5.1.1"
-    "@types/lodash" "^4.17.13"
-    "@wiris/mathtype-tinymce6" "^8.12.0"
-    antd "^5.22.1"
-    clsx "^2.1.1"
-    dompurify "^3.2.0"
-    html-react-parser "^5.2.2"
-    lodash "^4.17.21"
-    react-intersection-observer "^9.15.0"
-    sass "^1.80.7"
-
 text-extensions@^1.0.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/text-extensions/-/text-extensions-1.9.0.tgz#1853e45fee39c945ce6f6c36b2d659b5aabc2a26"
@@ -10303,11 +10276,6 @@ tiny-warning@^1.0.0:
   version "6.8.5"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.8.5.tgz#aa9a711c4e0b59d506dd281bade857d35a7b3c59"
   integrity sha512-qAL/FxL7cwZHj4BfaF818zeJJizK9jU5IQzTcSLL4Rj5MaJdiVblEj7aDr80VCV1w9h4Lak9hlnALhq/kVtN1g==
-
-"tinymce@^7.0.0 || ^6.0.0 || ^5.5.1":
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.7.0.tgz#4630c24d6696c58a43a9f5ba131ab331d6feb497"
-  integrity sha512-zDFPXeje5fQIxuYzv9fE6YmjFBQmeB9SU+85ofizIHqCCkbBnDdEWhD5R8rBu9MwdjIQP3aNohgGe9D6JOhNaw==
 
 tmp@^0.0.33:
   version "0.0.33"
