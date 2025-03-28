@@ -30,9 +30,9 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { debounce, isEmpty, isUndefined, transform, uniqueId } from 'lodash'
+import { debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappLoading from 'src/common/SappLoading'
@@ -76,6 +76,10 @@ import {
 import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
 import TestScratchPads from './TestScratchPads'
+import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
+import CompletingReportModal from './modal/CompletingReportModal'
+import { checkTypeAndRenderTitle } from './functions/helper'
 
 declare global {
   interface Window {
@@ -319,60 +323,9 @@ const TestDetail = () => {
 
   const router = useRouter()
 
-  const useGetQuizDetail = () => {
-    const [quizDetail, setQuizDetail] = useState<any>(undefined)
-    const [loading, setLoading] = useState(true)
-    const router = useRouter()
+  const { quizDetail } = useGetQuizDetail(router.query.id as string)
+  const { questions } = useGetQuestionTabs(router.query.id as string)
 
-    useEffect(() => {
-      const fetchQuizDetail = async () => {
-        if (router.query.id) {
-          try {
-            setLoading(true)
-            const response = await CoursesAPI.getDetailQuizById(router.query.id)
-            setQuizDetail(response.data)
-          } catch (err) {
-          } finally {
-            setLoading(false)
-          }
-        }
-      }
-
-      fetchQuizDetail()
-    }, [router.query.id]) // Dependency on router.query.id
-
-    return { quizDetail, loading }
-  }
-
-  const useGetQuestionTabs = () => {
-    const [questions, setQuestionTabs] = useState<any>(undefined)
-    const [loading, setLoading] = useState(true)
-    const router = useRouter()
-
-    useEffect(() => {
-      const fetchQuestionTabs = async () => {
-        if (router.query.id) {
-          try {
-            setLoading(true)
-            const response = await CoursesAPI.getQuestionTabsById(
-              router.query.id,
-            )
-            setQuestionTabs(response.data)
-          } catch (err) {
-          } finally {
-            setLoading(false)
-          }
-        }
-      }
-
-      fetchQuestionTabs()
-    }, [router.query.id]) // Dependency on router.query.id
-
-    return { questions, loading }
-  }
-
-  const { quizDetail } = useGetQuizDetail()
-  const { questions } = useGetQuestionTabs()
   const type = router.query.type
 
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
@@ -457,80 +410,217 @@ const TestDetail = () => {
   })
 
   const currentTabContent = useMemo(() => {
-    if (tabs && tabs.length > 0) {
-      const answerSubmitted = answersSubmitted.find(
-        (e: any) => e.questionId === currentPage,
-      )
-      const objTab = tabs.find((e: any) => e.id === currentPage)
+    // Early return if no tabs
+    if (!tabs?.length) {
+      return undefined
+    }
 
-      if (answerSubmitted) {
-        if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
-          return {
-            ...answerSubmitted,
-            ...objTab,
-            // done: true,
-            attempted: true,
-            answer: answerSubmitted?.short_answer,
-          }
+    // Find current tab and submitted answer
+    const currentTab = tabs.find((tab: any) => tab.id === currentPage)
+    const answerSubmitted = answersSubmitted.find(
+      (answer: any) => answer.questionId === currentPage,
+    )
+
+    if (!currentTab || !answerSubmitted?.results) {
+      return currentTab
+    }
+
+    // Define question type groups
+    const QUESTION_TYPE_GROUPS = {
+      CHOICE: [
+        QUESTION_TYPES.ONE_CHOICE,
+        QUESTION_TYPES.TRUE_FALSE,
+        QUESTION_TYPES.MULTIPLE_CHOICE,
+      ],
+      TEXT: [QUESTION_TYPES.FILL_WORD, QUESTION_TYPES.SELECT_WORD],
+      COMPLEX: [QUESTION_TYPES.MATCHING, QUESTION_TYPES.DRAG_DROP],
+      SINGLE_CHOICE: [QUESTION_TYPES.ONE_CHOICE, QUESTION_TYPES.TRUE_FALSE],
+    } as const
+
+    // Helper function to get correct answers and solution
+    const getCorrectAndSolution = (
+      currentTabContent: any,
+      answerSubmitted: any,
+    ): {
+      corrects: any
+      solution: any
+      isSelfReflection: boolean
+      requirements: any[]
+    } => {
+      if (!answerSubmitted?.[0]) {
+        return {
+          corrects: {},
+          solution: null,
+          isSelfReflection: false,
+          requirements: [],
         }
-
-        if (
-          objTab?.data?.qType === QUESTION_TYPES.ONE_CHOICE ||
-          objTab?.data?.qType === QUESTION_TYPES.TRUE_FALSE
-        ) {
-          if (answerSubmitted?.question_answer_id) {
-            return {
-              ...objTab,
-              // done: true,
-              attempted: true,
-              answer: answerSubmitted?.question_answer_id,
-            }
-          } else {
-            return objTab
-          }
-        }
-
-        const transformAnswerData = answerSubmitted?.answer?.map((e: any) => {
-          if (objTab?.data?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-            return e.answer_id
-          } else if (objTab?.data?.qType === QUESTION_TYPES.MATCHING) {
-            return {
-              answer_id: e.answer_id,
-              question_id: e.question_id,
-            }
-          } else if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
-            let objAnswer: any
-            for (let i = 0; i < objTab?.data?.answers?.length; i++) {
-              if (objTab?.data?.answers[i].id === e.answer_id) {
-                objAnswer = {
-                  ...e,
-                  idAnswer: e.answer_id,
-                  value: objTab?.data?.answers[i].answer,
-                }
-                break
-              }
-            }
-            return objAnswer
-          } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
-            return e.answer_id
-          } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
-            return e.answer_text
-          }
-        })
-
-        if (transformAnswerData?.length > 0) {
-          return {
-            ...objTab,
-            answer: transformAnswerData,
-            // done: true,
-          }
-        } else {
-          return objTab
-        }
-      } else {
-        return objTab
       }
-    } else return undefined
+
+      const {
+        answers,
+        question_matchings,
+        solution,
+        is_self_reflection,
+        requirements,
+      } = answerSubmitted[0]
+
+      // Handle different question types
+      if (QUESTION_TYPE_GROUPS.CHOICE.includes(currentTabContent.qType)) {
+        return {
+          corrects:
+            answers?.reduce(
+              (acc: { [key: string]: boolean }, curr: any) => ({
+                ...acc,
+                [curr.id]: curr.is_correct,
+              }),
+              {},
+            ) || {},
+          solution,
+          isSelfReflection: is_self_reflection || false,
+          requirements: requirements || [],
+        }
+      }
+
+      if (QUESTION_TYPE_GROUPS.TEXT.includes(currentTabContent.qType)) {
+        return {
+          corrects: { corrects: answers || [] },
+          solution,
+          isSelfReflection: is_self_reflection || false,
+          requirements: requirements || [],
+        }
+      }
+
+      if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+        return {
+          corrects: { corrects: question_matchings || [] },
+          solution,
+          isSelfReflection: is_self_reflection || false,
+          requirements: requirements || [],
+        }
+      }
+
+      if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+        return {
+          corrects: {
+            corrects: (answers || []).sort(
+              (a: any, b: any) => a?.answer_position - b?.answer_position,
+            ),
+          },
+          solution,
+          isSelfReflection: is_self_reflection || false,
+          requirements: requirements || [],
+        }
+      }
+
+      return {
+        corrects: {},
+        solution: null,
+        isSelfReflection: false,
+        requirements: [],
+      }
+    }
+
+    // Helper function to transform answer data
+    const transformAnswerData = (answer: any, questionType: string) => {
+      if (questionType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+        return answer.answer_id
+      }
+
+      if (questionType === QUESTION_TYPES.MATCHING) {
+        return {
+          answer_id: answer.answer_id,
+          question_id: answer.question_id,
+        }
+      }
+
+      if (questionType === QUESTION_TYPES.DRAG_DROP) {
+        const matchingAnswer = currentTab.data.answers?.find(
+          (a: any) => a.id === answer.answer_id,
+        )
+        return matchingAnswer
+          ? {
+              ...answer,
+              idAnswer: answer.answer_id,
+              value: matchingAnswer.answer,
+            }
+          : null
+      }
+
+      if (questionType === QUESTION_TYPES.SELECT_WORD) {
+        return {
+          ...answerSubmitted,
+          ...currentTab,
+          attempted: true,
+          answer: answerSubmitted.short_answer,
+          solution: answerSubmitted.results[0]?.solution || null,
+        }
+      }
+
+      if (questionType === QUESTION_TYPES.FILL_WORD) {
+        return answer.answer_text
+      }
+
+      return null
+    }
+
+    // Get correct answers and solution data
+    const dataCorrectAndSolution = getCorrectAndSolution(
+      currentTab,
+      answerSubmitted.results,
+    )
+
+    // Build base tab object
+    const baseTabObject = {
+      ...currentTab,
+      data: {
+        ...currentTab.data,
+        answers:
+          answerSubmitted.results?.flatMap(
+            (result: any) => result.answers || [],
+          ) || [],
+      },
+      topicDescription: currentTab.topicDescription,
+      ...dataCorrectAndSolution,
+      timeSpent: answerSubmitted.timeSpent ?? 0,
+      answer:
+        answerSubmitted.answer?.map((e: any) => ({
+          id: e?.id || '',
+          value: e?.value || '',
+        })) || [],
+    }
+
+    // Handle special cases
+    if (currentTab.data.qType === QUESTION_TYPES.ESSAY) {
+      return {
+        ...answerSubmitted,
+        ...baseTabObject,
+        attempted: true,
+        answer: answerSubmitted.short_answer,
+        solution: answerSubmitted.results[0]?.solution || null,
+      }
+    }
+
+    if (QUESTION_TYPE_GROUPS.SINGLE_CHOICE.includes(currentTab.data.qType)) {
+      return answerSubmitted.question_answer_id
+        ? {
+            ...baseTabObject,
+            attempted: true,
+            answer: answerSubmitted.question_answer_id,
+          }
+        : baseTabObject
+    }
+
+    // Transform answers for other question types
+    const transformedAnswers = answerSubmitted.answer
+      ?.map((answer: any) => transformAnswerData(answer, currentTab.data.qType))
+      .filter(Boolean)
+
+    return transformedAnswers?.length
+      ? {
+          ...baseTabObject,
+          answer: transformedAnswers,
+        }
+      : baseTabObject
   }, [currentPage, tabs, answersSubmitted])
 
   const checkCalExist = useMemo(() => {
@@ -572,22 +662,20 @@ const TestDetail = () => {
     })
   }
 
-  const handleFlagQuestion = (tab: any) => {
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
-        if (tab === item.id) {
-          if (!item.flaged) {
-            toast.success('The question has been marked!')
-          } else {
-            toast.success('The question has been unmaked!')
-          }
-          return { ...item, flaged: !item.flaged }
-        }
-        return item
-      })
-      return newData
-    })
+  interface Tab {
+    id: string
+    flag?: boolean
+    is_viewed_answer?: boolean
+    [key: string]: any
   }
+
+  const handleFlagQuestion = useCallback((tabId: string) => {
+    setTabs((prevTabs: Tab[]) =>
+      prevTabs.map((tab) =>
+        tab.id === tabId ? { ...tab, flag: !tab.flag } : tab,
+      ),
+    )
+  }, [])
 
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
@@ -910,11 +998,7 @@ const TestDetail = () => {
       )
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
-      const answers = handleSaveAnswer(
-        getValues(`${currentPage}_${essayData?.index}_answer`),
-        currentContent?.id,
-        tabs,
-      )
+      const answers = handleSaveAnswerEssay(currentContent, tabs)
       return answers
     } else return tabs
   }
@@ -992,6 +1076,7 @@ const TestDetail = () => {
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
     }
+    handleSubmitAnswer('change-tab')
     setLoading(false)
     setScratchPadValues(null)
   }
@@ -1002,7 +1087,60 @@ const TestDetail = () => {
       if (tabId === item?.id) {
         var newItem = {
           ...item,
+          data: {
+            ...item?.data,
+            answers: (item?.data?.answers ?? []).map(
+              (answer: Answer, index: number) => {
+                const existAnswer = data?.find(
+                  (e: any) => e.idAnswer === answer.id,
+                )
+                return {
+                  ...answer,
+                  dropId: existAnswer?.id,
+                }
+              },
+            ),
+          },
           answer: data,
+          attempted: item?.attempted || checkAnswered(item),
+          timeSpent: !item?.done
+            ? item?.timeSpent
+              ? Date.now() - startTime + item?.timeSpent
+              : Date.now() - startTime <= 0
+                ? 0
+                : Date.now() - startTime
+            : item?.timeSpent,
+        }
+
+        newData.push(newItem)
+      } else {
+        newData.push(item)
+      }
+    }
+    return newData
+  }
+
+  const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
+    let newData = [] as any
+    for (let item of tabs) {
+      if (tabContent?.id === item?.id) {
+        var newItem = {
+          ...item,
+          data: {
+            ...item?.data,
+            requirements: (item?.data?.requirements ?? []).map(
+              (requirement: Requirement, reqIndex: number) => {
+                const editorContent = getValues(
+                  `${currentPage}_${reqIndex}_answer`,
+                )
+                return {
+                  ...requirement,
+                  answer_text: editorContent,
+                }
+              },
+            ),
+          },
+
           attempted: item?.attempted || checkAnswered(item),
           timeSpent: !item?.done
             ? item?.timeSpent
@@ -1093,185 +1231,202 @@ const TestDetail = () => {
   const handleSubmitAnswer = async (action?: string) => {
     if (!currentTabContent) return
 
-    // Handle different submission scenarios:
-    // - "change-tab": When user switches to a different question tab
-    // - "view-answer": When user wants to see the answer for current question
-    // - "timeout": When test time runs out
-
-    // For tab changes, only submit if user has answered the question
-    if (action === 'change-tab' || action === 'timeout') {
-      if (!checkAnswered(currentTabContent)) return
+    // Early return for tab changes if question not answered
+    if (
+      (action === 'change-tab' || action === 'timeout') &&
+      !checkAnswered(currentTabContent)
+    ) {
+      return
     }
 
-    // Get all questions with their current answers
-    let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let answerItem = {}
+    // Get current answers and prepare submission data
+    const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
+    const currentQuestion = allQuest.find(
+      (e: any) => e.id === currentTabContent?.id,
+    )
 
-    // Find and format the answer for the current question
-    for (let [index, e] of allQuest.entries()) {
-      if (e.id === currentTabContent?.id) {
-        if (e.answer) {
-          if (
-            e.qType === QUESTION_TYPES.ONE_CHOICE ||
-            e.qType === QUESTION_TYPES.TRUE_FALSE
-          ) {
-            answerItem = {
-              question_id: e.id,
-              question_answer_id: e.answer,
-              time_spent: Math.ceil(e.timeSpent / 1000),
-            }
-          } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-            let answer = []
-            for (let el of e.answer) {
-              answer.push({ answer_id: el })
-            }
-            answerItem = {
-              question_id: e.id,
-              answer,
-              time_spent: Math.ceil(e.timeSpent / 1000),
-            }
-          } else if (e.qType === QUESTION_TYPES.MATCHING) {
-            answerItem = {
-              question_id: e.id,
-              answer: e.answer,
-              time_spent: Math.ceil(e.timeSpent / 1000),
-            }
-          } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
-            let answer = []
-            for (let i in e.answer) {
-              if (e?.answer?.[i].idAnswer) {
-                answer.push({
-                  answer_id: e?.answer?.[i]?.idAnswer,
-                  answer_position: +i + 1,
-                })
-              }
-            }
-            answerItem = {
-              question_id: e.id,
-              answer,
-              time_spent: Math.ceil(e.timeSpent / 1000),
-            }
-          } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
-            let answer = []
-            for (let i in e.answer) {
-              if (e.answer[i] && e.answer[i] !== '') {
-                answer.push({
-                  answer_id: e.answer[i],
-                  answer_position: +i + 1,
-                })
-              }
-            }
-            answerItem = {
-              question_id: e.id,
-              answer,
-              time_spent: Math.ceil(e.timeSpent / 1000),
-            }
-          } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
-            let answer = []
-            for (let i in e.answer) {
-              if (e.answer[i] && e.answer[i] !== '') {
-                answer.push({
-                  answer_text: e.answer[i],
-                  answer_position: +i + 1,
-                })
-              }
-            }
-            answerItem = {
-              question_id: e.id,
-              answer,
-              time_spent: Math.ceil(e.timeSpent / 1000),
-            }
-          }
-        }
-        if (e.qType === QUESTION_TYPES.ESSAY) {
-          if (checkAnswered(e, true)) {
-            const requirements = e?.data?.requirements?.length
-              ? e?.data?.requirements
-              : [null]
-            if (requirements?.length) {
-              requirements?.forEach((requirement: Requirement | null) => {
-                answerItem = {
-                  question_id: e.id,
-                  short_answer:
-                    answerListRef?.current?.[requirement?.id || ''] ??
-                    (requirement?.id ? '' : e?.answer || ''),
-                  requirement_id: requirement?.id || null,
-                  response_option:
-                    e?.data?.response_option ??
-                    (e?.response_type === 0 ? 'WORD' : 'SHEET'),
-                  time_spent: Math.ceil(e?.timeSpent / 1000),
-                  active: 'SUBMITED',
-                  answer_file:
-                    requirement?.answer_file || e?.answer_file || null,
-                }
-              })
-            } else {
-              answerItem = {
-                question_id: e.id,
-                short_answer: e?.answer || '',
-                requirement_id: null,
-                response_option:
-                  e?.data?.response_option ??
-                  (e?.response_type === 0 ? ESSAY_TYPE.WORD : ESSAY_TYPE.SHEET),
-                time_spent: Math.ceil(e?.timeSpent / 1000),
-                active: 'SUBMITED',
-                answer_file: e?.answer_file || null,
-              }
-            }
-          }
-        }
+    if (!currentQuestion?.answer) return
 
-        break
-      }
-    }
-    dispatch(disableUnsavedChange())
-    let payload = {
+    // Format answer based on question type
+    const answerItem = formatAnswerItem(currentQuestion)
+
+    // Prepare submission payload
+    const payload = {
       question_id: currentTabContent?.id,
       total_attempt_time:
         quizDetail?.quiz_timed * 60 -
         (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
       scratch_pads: scratchPads || [],
+      flag: currentTabContent?.flag,
+      is_viewed_answer:
+        action === 'view-answer' ? true : currentTabContent?.is_viewed_answer,
       ...answerItem,
     }
+
+    // Disable unsaved changes tracking
+    dispatch(disableUnsavedChange())
 
     try {
       const res = await CoursesAPI.submitAnswer(
         quizAttempt?.id as string,
         payload,
       )
+
       if (res?.success) {
-        // Remove from error list if submission successful
+        // Remove from error list on success
         setListSubmitError((prev) =>
           prev.filter((item) => item.question_id !== currentTabContent?.id),
         )
       } else {
-        // Add to error list if submission failed
-        setListSubmitError((prev) => {
-          const index = prev.findIndex(
-            (item) => item.question_id === currentTabContent?.id,
-          )
-          if (index !== -1) {
-            const newList = [...prev]
-            newList[index] = payload
-            return newList
-          }
-          return [...prev, payload]
-        })
+        // Add to error list on failure
+        handleSubmissionError(payload)
       }
     } catch (err) {
-      // Handle API errors by adding to error list
-      setListSubmitError((prev) => {
-        const index = prev.findIndex(
-          (item) => item.question_id === currentTabContent?.id,
-        )
-        if (index !== -1) {
-          const newList = [...prev]
-          newList[index] = payload
-          return newList
-        }
-        return [...prev, payload]
-      })
+      // Handle API errors
+      handleSubmissionError(payload)
+      return false
     }
+  }
+
+  // Helper function to format answer based on question type
+  const formatAnswerItem = (question: any) => {
+    const baseAnswer = {
+      question_id: question.id,
+      time_spent: Math.ceil(question.timeSpent / 1000),
+    }
+
+    // Handle essay questions
+    if (question.qType === QUESTION_TYPES.ESSAY) {
+      if (!checkAnswered(question, true)) return null
+
+      const requirements =
+        question?.data?.requirements?.length > 0
+          ? question?.data?.requirements
+          : []
+
+      if (requirements?.length > 0) {
+        const requirementAnswers = requirements.map(
+          (requirement: Requirement | null) => ({
+            question_id: question.id,
+            short_answer: requirement?.answer_text ?? '',
+            requirement_id: requirement?.id || null,
+            response_option:
+              question?.data?.response_option ??
+              (question?.response_type === 0 ? 'WORD' : 'SHEET'),
+            time_spent: Math.ceil(question.timeSpent / 1000),
+            active: 'SUBMITED',
+            answer_file:
+              requirement?.answer_file || question?.answer_file || null,
+          }),
+        )
+
+        return {
+          question_id: question.id,
+          total_attempt_time:
+            quizDetail?.quiz_timed * 60 -
+            (quizDetail?.quiz_timed
+              ? timeRef?.current?.handleGetTime() || 0
+              : 0),
+          scratch_pads: scratchPads || [],
+          answer: requirementAnswers,
+        }
+      }
+
+      return {
+        ...baseAnswer,
+        short_answer: question?.answer || '',
+        requirement_id: null,
+        response_option:
+          question?.data?.response_option ??
+          (question?.response_type === 0 ? 'WORD' : 'SHEET'),
+        active: 'SUBMITED',
+        answer_file: question?.answer_file || null,
+      }
+    }
+
+    // Handle single choice and true/false questions
+    if (
+      [QUESTION_TYPES.ONE_CHOICE, QUESTION_TYPES.TRUE_FALSE].includes(
+        question.qType,
+      )
+    ) {
+      return {
+        ...baseAnswer,
+        question_answer_id: question.answer,
+      }
+    }
+
+    // Handle multiple choice questions
+    if (question.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+      return {
+        ...baseAnswer,
+        answer: question.answer.map((el: string) => ({ answer_id: el })),
+      }
+    }
+
+    // Handle matching questions
+    if (question.qType === QUESTION_TYPES.MATCHING) {
+      return {
+        ...baseAnswer,
+        answer: question.answer,
+      }
+    }
+
+    // Handle drag and drop questions
+    if (question.qType === QUESTION_TYPES.DRAG_DROP) {
+      return {
+        ...baseAnswer,
+        answer: question.answer
+          .filter((item: any) => item?.idAnswer)
+          .map((item: any, index: number) => ({
+            answer_id: item.idAnswer,
+            answer_position: index + 1,
+          })),
+      }
+    }
+
+    // Handle select word questions
+    if (question.qType === QUESTION_TYPES.SELECT_WORD) {
+      return {
+        ...baseAnswer,
+        answer: question.answer
+          .filter((item: string) => item && item !== '')
+          .map((item: string, index: number) => ({
+            answer_id: item,
+            answer_position: index + 1,
+          })),
+      }
+    }
+
+    // Handle fill word questions
+    if (question.qType === QUESTION_TYPES.FILL_WORD) {
+      return {
+        ...baseAnswer,
+        answer: question.answer
+          .filter((item: string) => item && item !== '')
+          .map((item: string, index: number) => ({
+            answer_text: item,
+            answer_position: index + 1,
+          })),
+      }
+    }
+
+    return null
+  }
+
+  // Helper function to handle submission errors
+  const handleSubmissionError = (payload: any) => {
+    setListSubmitError((prev) => {
+      const index = prev.findIndex(
+        (item) => item.question_id === payload.question_id,
+      )
+      if (index !== -1) {
+        const newList = [...prev]
+        newList[index] = payload
+        return newList
+      }
+      return [...prev, payload]
+    })
   }
 
   const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
@@ -1489,28 +1644,6 @@ const TestDetail = () => {
     })
   }
 
-  const checkTypeAndRenderTitle = (type: string) => {
-    let pageTitle = ''
-    switch (type) {
-      case TEST_TYPE.MID_TERM_TEST:
-        return (pageTitle = 'Midterm Test')
-      case TEST_TYPE.FINAL_TEST:
-        return (pageTitle = 'Final Test')
-      case TEST_TYPE.TOPIC_TEST:
-        return (pageTitle = 'Topic Test')
-      case TEST_TYPE.CHAPTER_TEST:
-        return (pageTitle = 'Chapter Test')
-      case TEST_TYPE.PART_TEST:
-        return (pageTitle = 'Part Test')
-      case TEST_TYPE.ENTRANCE_TEST:
-        return (pageTitle = 'Entrance Test')
-      case TEST_TYPE.ENTRANCE_TEST:
-        return (pageTitle = 'Event Test')
-      default:
-        return pageTitle
-    }
-  }
-
   const handleOpenExhibit = (exhibitId?: string) => {
     if (!exhibitId) return
     const exhibitIds = getValuesExhibits('exhibits') ?? []
@@ -1567,7 +1700,7 @@ const TestDetail = () => {
         setFilterTabs(tabs.filter((e: any) => !e?.attempted && !e?.done))
         return
       } else if (filter === 'flag') {
-        setFilterTabs(tabs.filter((e: any) => e?.flaged === true))
+        setFilterTabs(tabs.filter((e: any) => e?.flag === true))
         return
       } else setFilterTabs(tabs)
     }
@@ -1761,7 +1894,7 @@ const TestDetail = () => {
       if (questions?.length > 0) {
         const answerMap = new Map(
           answersSubmitted.map(
-            (answer: { questionId: string; flaged?: boolean }) => [
+            (answer: { questionId: string; flag?: boolean }) => [
               answer.questionId,
               answer,
             ],
@@ -1774,9 +1907,9 @@ const TestDetail = () => {
             let baseData = {
               ...question,
               viewed: index === 0,
-              flaged:
-                (answerMap.get(question.id) as { flaged?: boolean } | undefined)
-                  ?.flaged || false,
+              flag:
+                (answerMap.get(question.id) as { flag?: boolean } | undefined)
+                  ?.flag || false,
               done: hasAnswer,
               attempted: hasAnswer,
               index,
@@ -1969,7 +2102,7 @@ const TestDetail = () => {
                       />
                       {currentTabContent?.topicDescription?.files?.length > 0 &&
                         currentTabContent?.topicDescription?.files?.map(
-                          (e: any, index: number) => {
+                          (e: any, indexReq: number) => {
                             return (
                               <div
                                 className="cursor-pointer text-state-info hover:underline"
@@ -1980,7 +2113,7 @@ const TestDetail = () => {
                                     e?.resource?.name,
                                   )
                                 }
-                                key={index}
+                                key={indexReq}
                               >
                                 {e?.resource?.name}
                               </div>
@@ -2205,22 +2338,22 @@ const TestDetail = () => {
                   {showListRequirement && (
                     <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
                       {currentTabContent?.data?.requirements?.map(
-                        (e: any, index: number) => {
+                        (e: any, indexReq: number) => {
                           return (
                             <button
                               key={e.id}
                               className={`p-3 ${
-                                essayData.index !== index && 'text-gray-1'
+                                essayData?.index !== indexReq && 'text-gray-1'
                               }`}
                               onClick={() => {
-                                setEssayData({ req: e, index: index })
+                                setEssayData({ req: e, index: indexReq })
                                 rightSideRef?.current &&
                                   rightSideRef.current.scrollTo({
                                     top: 0,
                                     behavior: 'smooth',
                                   })
                               }}
-                            >{`Requirement (${index + 1})`}</button>
+                            >{`Requirement (${indexReq + 1})`}</button>
                           )
                         },
                       )}
@@ -2317,7 +2450,7 @@ const TestDetail = () => {
                 <button
                   className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
-                    handleSubmitAnswer()
+                    handleSubmitAnswer('view-answer')
                     const data = await getResult(currentTabContent)
                     confirmAnswer(
                       data?.corrects,
@@ -2474,19 +2607,14 @@ const TestDetail = () => {
             }
           />
 
-          <SappModalV3
+          <CompletingReportModal
             open={openReportModal}
-            okButtonCaption="Back"
             handleCancel={() => {}}
             onOk={() => {
               setOpenReportModal(false)
               router.back()
             }}
-            fullWidthBtn={true}
-            buttonSize="extra"
-            icon={<ConfirmIcon />}
-            header={FINISHED_TEST_TITLE}
-            content={`Congratulations on completing ${quizDetail?.name}. The result will be sent to you via email after the grading is finished.`}
+            quizName={quizDetail?.name}
           />
         </div>
       </CourseProvider>

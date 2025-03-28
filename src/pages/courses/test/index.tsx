@@ -1,10 +1,9 @@
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import { formatTime } from '@components/common/timer'
 import TestAnnouncementModal from '@components/mycourses/course-detail/TestAnnoucementModal'
 import PopupCanNotRetakeTest from '@components/mycourses/PogupCannotRetakeTest'
 import { TEST_TYPE } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -16,9 +15,7 @@ import { capitalizeFirstLetter } from '@utils/index'
 import { useDispatch } from 'react-redux'
 import PopupSelectRetakeOrContinueAttempt from '@components/mycourses/PopupSelectRetakeOrContinueAttempt'
 import { ClockIcon } from '@assets/icons'
-import { CoursesAPI } from '@pages/api/courses'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import { setOpenModalTimeOut } from 'src/redux/slice/Course/MyCourse/Test/Test'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',

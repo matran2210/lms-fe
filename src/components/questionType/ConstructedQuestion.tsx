@@ -178,33 +178,7 @@ const EssayQuestionPreview = ({
     }
   }
   return (
-    <div
-      style={{ background: 'white' }}
-      // id="hightlight_area"
-      // onMouseUp={(e: any) => {
-      //   if (
-      //     e.target.tagName.charAt(0) !== 'm' &&
-      //     e.target.firstChild?.tagName !== 'math'
-      //   ) {
-      //     if (e) {
-      //       if (allowHighLight) {
-      //         runHighlight(
-      //           handleSaveHighLight,
-      //           allowHighLight || false,
-      //           'hightlight_area',
-      //         )
-      //       } else if (allowUnHighLight) {
-      //         runHighlight(
-      //           handleSaveHighLight,
-      //           allowUnHighLight || false,
-      //           'hightlight_area',
-      //           { color: 'white' },
-      //         )
-      //       }
-      //     }
-      //   }
-      // }}
-    >
+    <div style={{ background: 'white' }}>
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
