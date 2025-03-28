@@ -12,7 +12,7 @@ const ChapterTestFilter: React.FC<ChapterTestFilterProps> = ({ control }) => {
     <div className="grid grid-cols-4 gap-4">
       <HookFormTextField
         control={control}
-        name="text"
+        name="search"
         placeholder={'Search student'}
         placeholderIcon={<SearchIcon />}
         inputClassName="placeholder:text-sm placeholder:text-[#99A1B7] placeholder:font-medium"

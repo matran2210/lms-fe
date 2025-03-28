@@ -2,7 +2,6 @@ import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import LayoutFilter from '@components/layout/Filter/index'
 import ChapterTestFilter from 'src/pages/teachers/my-class/[id]/test-quiz-list/chapter-test/components/ChapterTestFilter'
 import { useForm } from 'react-hook-form'
@@ -18,9 +17,11 @@ import { IStudentClassDetail } from 'src/type/classes'
 
 interface FilterParams {
   status?: string
+  search?: string
 }
 
 const initialValues: FilterParams = {
+  search: undefined,
   status: undefined,
 }
 
@@ -35,8 +36,6 @@ const ChapterTest = () => {
     showSizeChanger: true,
     showQuickJumper: true,
   })
-  const [pageIndex, setPageIndex] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
   const [params, setParams] = useState<FilterParams>(initialValues)
 
   const { control, getValues, reset } = useForm({
@@ -54,14 +53,14 @@ const ChapterTest = () => {
     { link: '', title: 'Chapter Test' },
   ]
   const { data, isLoading, refetch } = useQuery({
-    queryKey: [TeacherKey.ChapterTest, pageIndex, pageSize, params],
+    queryKey: [TeacherKey.ChapterTest, pagination, params],
     queryFn: async () => {
       try {
         return await TeacherAPI.getDetailTestQuiz(
           classId,
           chapterTestId,
-          pageIndex,
-          pageSize,
+          pagination.current ?? 1,
+          pagination.pageSize ?? 10,
           params,
         )
       } catch (error) {
@@ -78,40 +77,23 @@ const ChapterTest = () => {
     }))
   }
   const handleResetFilter = () => {
-    reset(initialValues)
-    router.replace(router.pathname, undefined, { shallow: true })
+    reset({ search: '', status: '' })
     setParams(initialValues)
   }
 
   const onSubmit = () => {
     const searchParams: FilterParams = {
       status: getValues('status')?.value || undefined,
+      search: getValues('search') || undefined,
     }
     setParams(searchParams)
   }
-
-  useEffect(() => {
-    refetch()
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          page_index: pageIndex,
-          page_size: pageSize,
-          ...params,
-        },
-      },
-      undefined,
-      { shallow: true },
-    )
-  }, [pageIndex, pageSize, params])
 
   const columnsValue = [
     {
       title: 'Student ID',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.id ?? ''} />
+        <StudentCell data={record?.user?.hubspot_contact_id ?? ''} />
       ),
     },
     {
@@ -123,26 +105,38 @@ const ChapterTest = () => {
     {
       title: 'Email',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.user_contacts?.[0]?.email ?? ''} />
+        <StudentCell data={record?.user?.user_contacts?.[0]?.email ?? '-'} />
       ),
     },
     {
       title: 'Access Period',
-      render: (record: IStudentClassDetail) => <StudentCell data={''} />,
+      render: (record: IStudentClassDetail) => (
+        <StudentCell
+          data={
+            record?.start_time && record?.end_time
+              ? `${formatDateFromUTC(record?.start_time)} - ${formatDateFromUTC(
+                  record?.end_time,
+                )}`
+              : '-'
+          }
+        />
+      ),
     },
     {
       title: 'Level',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.level ?? ''} />
+        <StudentCell data={record?.user?.detail?.level ?? '-'} />
       ),
     },
     {
       title: 'Duration',
       render: (record: IStudentClassDetail) => (
         <StudentCell
-          data={`${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
-            record?.updated_at ?? '',
-          )}`}
+          data={
+            record?.attempt?.finished_at
+              ? formatDateFromUTC(record?.attempt?.finished_at)
+              : '-'
+          }
         />
       ),
     },
@@ -161,37 +155,35 @@ const ChapterTest = () => {
     {
       title: 'Exam Date',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.examDate ?? ''} />
+        <StudentCell data={record?.examination_subject ?? '-'} />
       ),
     },
   ]
 
   return (
-    <SappLoadingGlobal loading={isLoading}>
-      <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
-        <LayoutFilter
-          listFilter={<ChapterTestFilter control={control} />}
-          className="mb-6"
-          loading={isLoading}
-          onReset={handleResetFilter}
-          onSubmit={onSubmit}
-        />
-        <SappTable
-          handleChangeParams={handleChangeParams}
-          filterParams={params}
-          fetchData={() => {}}
-          fetchTableData={() => {}}
-          columns={columnsValue}
-          data={data?.data?.class_user_quizzes ?? []}
-          pagination={pagination}
-          setPagination={setPagination}
-          loading={isLoading}
-          showCheckbox={false}
-          setSelection={() => {}}
-          selections={new Map()}
-        />
-      </LayoutTeacher>
-    </SappLoadingGlobal>
+    <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
+      <LayoutFilter
+        listFilter={<ChapterTestFilter control={control} />}
+        className="mb-6"
+        loading={isLoading}
+        onReset={handleResetFilter}
+        onSubmit={onSubmit}
+      />
+      <SappTable
+        handleChangeParams={handleChangeParams}
+        filterParams={params}
+        fetchData={() => {}}
+        fetchTableData={() => {}}
+        columns={columnsValue}
+        data={data?.data?.class_user_quizzes ?? []}
+        pagination={pagination}
+        setPagination={setPagination}
+        loading={isLoading}
+        showCheckbox={false}
+        setSelection={() => {}}
+        selections={new Map()}
+      />
+    </LayoutTeacher>
   )
 }
 

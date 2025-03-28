@@ -45,6 +45,11 @@ export interface IStudentClassDetail {
       phone?: string
     }[]
   }
+  attempt?: {
+    finished_at?: string
+  }
+  start_time?: string
+  end_time?: string
   started_at?: string
   updated_at?: string
   examination_subject?: string
@@ -58,9 +63,9 @@ export interface IStudentTestResult {
     id?: string
     name?: string
     quiz_type?: string
+    grading_method?: string
   }
   mode?: string
-  grading_method?: string
   start_time?: string
   total_attempts?: number
   total_grading_attempts?: number

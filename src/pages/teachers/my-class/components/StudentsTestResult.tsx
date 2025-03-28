@@ -79,7 +79,7 @@ export default function StudentsTestResult() {
   }
 
   const handleResetFilter = () => {
-    reset(initialValues)
+    reset({ text: '', quiz_type: '', grading_method: '' })
     setParams(initialValues)
   }
 
@@ -120,7 +120,7 @@ export default function StudentsTestResult() {
       title: 'Manual Grading',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          data={record?.grading_method === 'AUTO' ? 'No' : 'Yes'}
+          data={record?.quiz?.grading_method === 'AUTO' ? 'No' : 'Yes'}
         />
       ),
     },
