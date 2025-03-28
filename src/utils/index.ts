@@ -373,23 +373,31 @@ export const removeHtmlTags = (htmlString?: string) => {
   if (!htmlString) return ''
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
+
+/**
+ * @description Chuyển đổi chuỗi ngày từ UTC sang múi giờ địa phương và định dạng theo 'DD/MM/YYYY'.
+ * @param {string} date - Chuỗi ngày ở UTC cần chuyển đổi và định dạng.
+ * @return {string} - Chuỗi ngày theo múi giờ địa phương với định dạng 'DD/MM/YYYY'.
+ */
 export const formatDateFromUTC = (date: string) =>
   dayjs.utc(date).local().format('DD/MM/YYYY')
+
+/**
+ * @description Chuyển đổi giá trị enum của loại bài kiểm tra thành chuỗi dễ đọc.
+ * @param {string} quizType - Giá trị enum của loại bài kiểm tra.
+ * @return {string} - Chuỗi mô tả loại bài kiểm tra dễ đọc.
+ */
 export const convertQuizType = (quizType: string) => {
-  // Convert the enum value to a readable string
   return quizType
-    .split('_') // Split the string by underscores
-    .map(
-      (
-        word,
-        index, // Capitalize the first letter of each word
-      ) =>
-        index === 0
-          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-          : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    .split('_')
+    .map((word, index) =>
+      index === 0
+        ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
     )
     .join(' ')
 }
+
 export * from './formatNumber'
 
 export const containsKeyword = (input: unknown, keyword?: string): boolean => {

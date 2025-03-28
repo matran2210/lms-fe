@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd'
 import Image from 'next/image'
 import sapp from 'src/assets/images/sapp_menu.svg'
 import { userReducer } from 'src/redux/slice/User/User'
+
 import {
   HomeMenuIcon,
   BookMenuIcon,
@@ -12,6 +13,7 @@ import {
   HelpMenuIcon,
   LogOutMenuIcon,
 } from 'src/assets/icons/index'
+
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
@@ -142,7 +144,7 @@ export default function TeacherMenu() {
         </div>
         {/* Bottom Menu */}
         <div className="mb-6 flex flex-col items-center gap-6">
-          <Link href="/overview">
+          <Link href={PageLink.MYPROFILE}>
             <Image
               alt="avatar"
               src={
