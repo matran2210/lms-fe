@@ -2,8 +2,22 @@ import SappButton from '@components/base/button/SappButton'
 import { LAYOUT } from '@utils/constants'
 import Link from 'next/link'
 import { PageLink } from 'src/constants'
+import { useAppSelector } from 'src/redux/hook'
+import { userReducer } from 'src/redux/slice/User/User'
 
 const ErrorPage = () => {
+  const userSlice = useAppSelector(userReducer)
+
+  const getRedirectPath = () => {
+    if (userSlice.user.type === 'STUDENT') {
+      return PageLink.COURSES
+    }
+    if (userSlice.user.type === 'TEACHER') {
+      return PageLink.TEACHER
+    }
+    return '/'
+  }
+
   return (
     <div className="flex h-screen flex-col flex-nowrap items-center justify-center overflow-y-auto p-4 text-center">
       <img
@@ -18,10 +32,10 @@ const ErrorPage = () => {
         PAGE NOT FOUND
       </h1>
       <span className="mt-3 max-w-dl px-4 text-base text-gray-1">
-        We are very sorry for the inconvenience. It looks like you’re trying to
+        We are very sorry for the inconvenience. It looks like you're trying to
         access a page that has been deleted or never even existed.
       </span>
-      <Link href={PageLink.DASHBOARD}>
+      <Link href={getRedirectPath()}>
         <div className="mt-8">
           <SappButton
             title="Back to Home"
@@ -32,7 +46,6 @@ const ErrorPage = () => {
           />
         </div>
       </Link>
-      {/* <Luckysheet/> */}
     </div>
   )
 }

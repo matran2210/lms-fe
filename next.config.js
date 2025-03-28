@@ -70,15 +70,6 @@ module.exports = removeImports(
       },
     },
     experimental: { optimizeCss: true, forceSwcTransforms: true },
-    async redirects() {
-      return [
-        {
-          source: '/',
-          destination: '/dashboard', // Change this to your default route
-          permanent: true, // Set to false if this is temporary
-        },
-      ]
-    },
   }),
 )
 

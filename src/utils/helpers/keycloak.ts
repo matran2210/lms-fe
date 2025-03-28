@@ -68,6 +68,7 @@ export class AuthenticationManager {
 
       if (authenticated) {
         // Kiểm tra lần login đầu tiên
+        document.cookie = `keycloak-token=${this.keyCloak.token}; path=/`
         if (!localStorage.getItem('hasLoggedInBefore')) {
           isFirstLogin = true // Lần đầu tiên login
           localStorage.setItem('hasLoggedInBefore', 'true') // Đánh dấu đã login lần đầu
