@@ -1,177 +1,104 @@
 import { CloseIconNote, CursorIcon } from '@assets/icons'
-import { Col, Row, Skeleton } from 'antd'
+import { Col, Row } from 'antd'
 import { useRouter } from 'next/router'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { PageLink } from 'src/constants'
-import SappModalV3 from '@components/base/modal/SappModalV3'
-import toast from 'react-hot-toast'
 import { useCourseContext } from '@contexts/index'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
+import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
+
+const ENABLED_PINNED_PAGES = [
+  PageLink.COURSE_DETAIL,
+  PageLink.COURSE_PART_DETAIL,
+  PageLink.COURSE_ACTIVITY,
+]
+
+const ENABLED_PINNED_NOTI_PAGES = [
+  PageLink.COURSES,
+  PageLink.USERPAGE,
+  ...ENABLED_PINNED_PAGES,
+]
 
 function CtaTrial() {
   const router = useRouter()
-
-  const isEnablePinnedPages = [
-    PageLink.COURSE_DETAIL,
-    PageLink.COURSE_PART_DETAIL,
-    PageLink.COURSE_ACTIVITY,
-  ].includes(router.pathname)
-
-  const [showForm, setShowForm] = useState(false)
-  const { setShowPinnedTrial, showPinnedTrial } = useCourseContext()
-
+  const { setShowPinnedTrial, showPinnedTrial, openPopupCTA, setOpenPopupCTA } =
+    useCourseContext()
   const { openPinned, pinnedNotifications } = usePinnedNotifyContext()
-  const isEnablePinnedNotiPages = [
-    PageLink.COURSES,
-    PageLink.USERPAGE,
-    PageLink.COURSE_DETAIL,
-    PageLink.COURSE_PART_DETAIL,
-    PageLink.COURSE_ACTIVITY,
-  ].includes(router.pathname)
+
+  const isEnablePinnedPages = ENABLED_PINNED_PAGES.includes(router.pathname)
+  const isEnablePinnedNotiPages = ENABLED_PINNED_NOTI_PAGES.includes(
+    router.pathname,
+  )
 
   useLayoutEffect(() => {
-    if (
-      localStorage.getItem('showPinTrial') === 'true' &&
-      isEnablePinnedPages
-    ) {
-      setShowPinnedTrial(true)
-    } else {
-      setShowPinnedTrial(false)
-    }
-  }, [router])
+    setShowPinnedTrial(
+      localStorage.getItem('showPinTrial') === 'true' && isEnablePinnedPages,
+    )
+  }, [router, isEnablePinnedPages, setShowPinnedTrial])
 
-  const [isLoading, setIsLoading] = useState(false)
+  const handleClose = () => {
+    localStorage.setItem('showPinTrial', 'false')
+    setShowPinnedTrial(false)
+  }
 
-  useEffect(() => {
-    if (!showForm) return
-
-    setIsLoading(true) // Bắt đầu loading khi form chưa được render
-
-    const script = document.createElement('script')
-    script.src = 'https://js.hsforms.net/forms/v2.js'
-    document.body.appendChild(script)
-
-    script.addEventListener('load', () => {
-      if ((window as any).hbspt) {
-        ;(window as any).hbspt.forms.create({
-          portalId: process.env.NEXT_PUBLIC_PORTAL_ID,
-          formId: process.env.NEXT_PUBLIC_FORM_ID,
-          target: '#hubspotForm',
-          region: 'na1',
-          onFormReady: () => setIsLoading(false), // Khi form sẵn sàng, tắt loading
-          onFormSubmit: () => {
-            toast.success('Thank you. Your Submission has been sent.')
-            setShowForm(false)
-          },
-        })
-      }
+  const handleUpgrade = () => {
+    setOpenPopupCTA({
+      lockSection: false,
+      ctaUpgrade: true,
+      thankYou: false,
+      thankYouLater: false,
     })
+  }
 
-    return () => {
-      document.body.removeChild(script)
-    }
-  }, [showForm])
-
-  const fields = [1, 2, 3, 4] // Số lượng hàng có 4 ô input
+  if (!isEnablePinnedPages || !showPinnedTrial) return null
 
   return (
     <>
-      {isEnablePinnedPages && showPinnedTrial && (
-        <div
-          className={`fixed z-50 h-[54px] w-full bg-primary text-white ${isEnablePinnedNotiPages && openPinned && pinnedNotifications?.data?.content ? 'top-12' : ''}`}
-        >
-          <Row className="flex h-[54px] w-[225px] flex-row content-center items-center justify-center lg:w-full">
-            <Col span={1}></Col>
-            <Col
-              span={22}
-              className="flex h-full items-center justify-center font-sans"
-            >
-              <span className="text-base">
-                You have{' '}
-                <span className="text-base font-semibold">
-                  {localStorage.getItem('daysDifference')}
-                </span>{' '}
-                days left on your free trial.{' '}
-                <span className="text-lg font-semibold">Upgrade</span> today to
-                unlock the full course.
-              </span>
-              <button
-                className="ms-8 h-[32px] bg-white px-4 text-[14px] font-medium leading-[17px] text-primary"
-                onClick={() => setShowForm(true)}
-              >
-                Upgrade Now
-              </button>
-              <div className="ms-1.5 mt-5 flex h-full items-center">
-                <CursorIcon />
-              </div>
-            </Col>
-            <Col span={1}>
-              <div
-                onClick={() =>
-                  setShowPinnedTrial(
-                    localStorage.setItem('showPinTrial', 'false') as any,
-                  )
-                }
-                className="float-right flex h-full cursor-pointer content-center items-center pr-6"
-              >
-                <CloseIconNote />
-              </div>
-            </Col>
-          </Row>
-        </div>
-      )}
-      <SappModalV3
-        title={undefined}
-        open={showForm}
-        handleCancel={() => setShowForm(false)}
-        onOk={() => {}}
-        showFooter={false}
-        icon={undefined}
-        header={''}
-        width={''}
-        classNameModal="sapp-trial"
+      <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
+      <div
+        className={`fixed z-50 h-[54px] w-full bg-primary text-white ${
+          isEnablePinnedNotiPages &&
+          openPinned &&
+          pinnedNotifications?.data?.content
+            ? 'top-12'
+            : ''
+        }`}
       >
-        <div className="text-4xl font-semibold text-bw-1">
-          Bạn cần tư vấn khóa học
-        </div>
-        <div className="mt-2 text-sm text-gray-1">
-          Với thông tin bạn cung cấp, SAPP sẽ liên hệ với bạn để tư vấn khóa
-          học.
-        </div>
-
-        {isLoading && (
-          <>
-            {fields.map((_, index) => (
-              <div key={index} className="mt-5 flex">
-                {[1, 2].map((_, colIndex) => (
-                  <div key={colIndex} className="flex w-1/2 flex-col">
-                    <Skeleton.Input
-                      active
-                      size="small"
-                      className="mb-1 w-full"
-                    />
-                    <Skeleton.Input active size="large" className="w-full" />
-                  </div>
-                ))}
-              </div>
-            ))}
-
-            {/* Skeleton cho toàn bộ hàng cuối cùng */}
-            <div className="w-full">
-              <Skeleton.Input
-                block
-                className="mt-5 w-full"
-                active
-                size="large"
-              />
+        <Row className="flex h-[54px] w-[225px] flex-row content-center items-center justify-center lg:w-full">
+          <Col span={1} />
+          <Col
+            span={22}
+            className="flex h-full items-center justify-center font-sans"
+          >
+            <span className="text-base">
+              You have{' '}
+              <span className="text-base font-semibold">
+                {localStorage.getItem('daysDifference')}
+              </span>{' '}
+              days left on your free trial.{' '}
+              <span className="text-lg font-semibold">Upgrade</span> today to
+              unlock the full course.
+            </span>
+            <button
+              className="ms-8 h-[32px] bg-white px-4 text-[14px] font-medium leading-[17px] text-primary"
+              onClick={handleUpgrade}
+            >
+              Upgrade Now
+            </button>
+            <div className="ms-1.5 mt-5 flex h-full items-center">
+              <CursorIcon />
             </div>
-          </>
-        )}
-        <div
-          id="hubspotForm"
-          className={`${isLoading ? 'hidden' : 'block'} mt-8`}
-        ></div>
-      </SappModalV3>
+          </Col>
+          <Col span={1}>
+            <div
+              onClick={handleClose}
+              className="float-right flex h-full cursor-pointer content-center items-center pr-6"
+            >
+              <CloseIconNote />
+            </div>
+          </Col>
+        </Row>
+      </div>
     </>
   )
 }

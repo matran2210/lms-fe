@@ -1354,5 +1354,21 @@
   {
     "code": "400|520104",
     "message": "Class Schedule Version Not Found"
+  },
+  {
+    "code": "400|100312",
+    "message": "Empty Examination Change Reason"
+  },
+  {
+    "code": "400|420008",
+    "message": "User Examination Out Of Range"
+  },
+  {
+    "code": "400|420010",
+    "message": "Maximum 2 Examination Change"
+  },
+  {
+    "code": "400|480104",
+    "message": "Lessee Tag Not Found"
   }
 ]
