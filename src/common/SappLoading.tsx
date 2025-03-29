@@ -1,11 +1,4 @@
-import dynamic from 'next/dynamic'
-
-const Player = dynamic(
-  () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
-  {
-    ssr: false,
-  },
-)
+import { Player } from '@lottiefiles/react-lottie-player'
 import React from 'react'
 import animation from 'src/assets/images/animation.json'
 
