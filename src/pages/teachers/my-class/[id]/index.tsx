@@ -56,6 +56,7 @@ const ClassDetail = () => {
     queryKey: ['class', classId],
     queryFn: () => TeacherAPI.getClassById(classId),
     enabled: !!classId,
+    retry: false,
   })
 
   useEffect(() => {

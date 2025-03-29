@@ -46,6 +46,7 @@ export default function Students() {
         params,
       ),
     enabled: !!studentId,
+    retry: false,
   })
 
   useEffect(() => {
@@ -85,38 +86,38 @@ export default function Students() {
     {
       title: 'ID',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.hubspot_contact_id ?? ''} />
+        <StudentCell dataColumn={record?.user?.hubspot_contact_id} />
       ),
     },
     {
       title: 'Student Name',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.full_name ?? ''} />
+        <StudentCell dataColumn={record?.user?.detail?.full_name} />
       ),
     },
     {
       title: 'Email',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.user_contacts?.[0]?.email ?? ''} />
+        <StudentCell dataColumn={record?.user?.user_contacts?.[0]?.email} />
       ),
     },
     {
       title: 'Phone',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.user_contacts?.[0]?.phone ?? ''} />
+        <StudentCell dataColumn={record?.user?.user_contacts?.[0]?.phone} />
       ),
     },
     {
       title: 'Level',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.level ?? ''} />
+        <StudentCell dataColumn={record?.user?.detail?.level} />
       ),
     },
     {
       title: 'Duration',
       render: (record: IStudentClassDetail) => (
         <StudentCell
-          data={`${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
+          dataColumn={`${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
             record?.updated_at ?? '',
           )}`}
         />
@@ -126,7 +127,7 @@ export default function Students() {
       title: 'Progress',
       render: (record: IStudentClassDetail) => (
         <StudentCell
-          data={`${Math.round(
+          dataColumn={`${Math.round(
             ((record?.learning_progress?.total_course_sections_completed ?? 0) /
               (record?.learning_progress?.total_course_sections || 1)) *
               100,
@@ -137,7 +138,7 @@ export default function Students() {
     {
       title: 'Exam Date',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.examination_subject ?? ''} />
+        <StudentCell dataColumn={record?.examination_subject} />
       ),
     },
   ]
@@ -146,7 +147,7 @@ export default function Students() {
     <>
       <LayoutFilter
         listFilter={<StudentFilter control={control} />}
-        loading={false}
+        loading={isLoading}
         onReset={handleResetFilter}
         onSubmit={onSubmit}
       />

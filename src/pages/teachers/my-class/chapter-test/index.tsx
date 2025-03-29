@@ -96,26 +96,28 @@ const ChapterTest = () => {
     {
       title: 'Student ID',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.hubspot_contact_id ?? ''} />
+        <StudentCell dataColumn={record?.user?.hubspot_contact_id} />
       ),
     },
     {
       title: 'Name',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.full_name ?? ''} />
+        <StudentCell dataColumn={record?.user?.detail?.full_name} />
       ),
     },
     {
       title: 'Email',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.user_contacts?.[0]?.email ?? '-'} />
+        <StudentCell
+          dataColumn={record?.user?.user_contacts?.[0]?.email ?? '-'}
+        />
       ),
     },
     {
       title: 'Access Period',
       render: (record: IStudentClassDetail) => (
         <StudentCell
-          data={
+          dataColumn={
             record?.start_time && record?.end_time
               ? `${formatDateFromUTC(record?.start_time)} - ${formatDateFromUTC(
                   record?.end_time,
@@ -128,14 +130,14 @@ const ChapterTest = () => {
     {
       title: 'Level',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.level ?? '-'} />
+        <StudentCell dataColumn={record?.user?.detail?.level} />
       ),
     },
     {
       title: 'Duration',
       render: (record: IStudentClassDetail) => (
         <StudentCell
-          data={
+          dataColumn={
             record?.attempt?.finished_at
               ? formatDateFromUTC(record?.attempt?.finished_at)
               : '-'
@@ -147,7 +149,7 @@ const ChapterTest = () => {
       title: 'Progress',
       render: (record: IStudentClassDetail) => (
         <StudentCell
-          data={`${Math.round(
+          dataColumn={`${Math.round(
             ((record?.learning_progress?.total_course_sections_completed ?? 0) /
               (record?.learning_progress?.total_course_sections || 1)) *
               100,
@@ -158,7 +160,7 @@ const ChapterTest = () => {
     {
       title: 'Exam Date',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.examination_subject ?? '-'} />
+        <StudentCell dataColumn={record?.examination_subject} />
       ),
     },
   ]

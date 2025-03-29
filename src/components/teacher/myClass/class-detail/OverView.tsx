@@ -39,8 +39,8 @@ export default function Overview({
     <>
       <HeaderTeacher title="Overview" />
       <div className="grid grid-cols-1 gap-y-4">
-        {certificateData?.map((item: ICertificateData, index: number) => (
-          <div key={index} className="grid grid-cols-5 items-center">
+        {certificateData?.map((item: ICertificateData) => (
+          <div key={item?.value} className="grid grid-cols-5 items-center">
             <div className="col-span-1">
               <Text className="text-sm font-normal text-gray-400">
                 {item.label}

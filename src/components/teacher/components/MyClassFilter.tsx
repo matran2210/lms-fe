@@ -6,8 +6,6 @@ import { useState } from 'react'
 import { isEmpty } from 'lodash'
 
 interface MyClassFilterProps {
-  placeholder?: string
-  width?: string
   control: any
   setValue: (name: string, value: string) => void
   courseCategoryId?: { value: string }
@@ -34,8 +32,6 @@ interface SubjectResponse {
 }
 
 const MyClassFilter: React.FC<MyClassFilterProps> = ({
-  placeholder = 'Search student',
-  width = 'max-w-sm',
   control,
   setValue,
   courseCategoryId,

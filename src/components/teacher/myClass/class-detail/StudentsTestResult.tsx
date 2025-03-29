@@ -52,6 +52,7 @@ export default function StudentsTestResult() {
         params,
       ),
     enabled: !!studentId,
+    retry: false,
   })
 
   useEffect(() => {
@@ -96,7 +97,7 @@ export default function StudentsTestResult() {
       title: 'Test name',
       render: (record: IStudentTestResult) => (
         <NameActionCell
-          data={record?.quiz?.name ?? ''}
+          dataColumn={record?.quiz?.name}
           linkView={`${PageLink.TEACHER_MY_CLASS}/chapter-test?studentId=${studentId}&chapterTestId=${record?.quiz?.id}`}
         />
       ),
@@ -107,20 +108,20 @@ export default function StudentsTestResult() {
     {
       title: 'Type',
       render: (record: IStudentTestResult) => (
-        <NameNoActionCell data={record?.quiz?.quiz_type ?? ''} />
+        <NameNoActionCell dataColumn={record?.quiz?.quiz_type} />
       ),
     },
     {
       title: 'Mode',
       render: (record: IStudentTestResult) => (
-        <NameNoActionCell data={record?.mode ?? ''} />
+        <NameNoActionCell dataColumn={record?.mode} />
       ),
     },
     {
       title: 'Manual Grading',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          data={record?.quiz?.grading_method === 'AUTO' ? 'No' : 'Yes'}
+          dataColumn={record?.quiz?.grading_method === 'AUTO' ? 'No' : 'Yes'}
         />
       ),
     },
@@ -128,7 +129,7 @@ export default function StudentsTestResult() {
       title: 'Start time',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          data={
+          dataColumn={
             record?.start_time ? formatDateFromUTC(record?.start_time) : '-'
           }
         />
@@ -137,14 +138,14 @@ export default function StudentsTestResult() {
     {
       title: 'Đã làm',
       render: (record: IStudentTestResult) => (
-        <NameNoActionCell data={record?.total_attempts ?? ''} />
+        <NameNoActionCell dataColumn={record?.total_attempts} />
       ),
     },
     {
       title: 'Đã chấm',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          data={`${record?.total_grading_attempts}/${record?.total_attempts}`}
+          dataColumn={`${record?.total_grading_attempts}/${record?.total_attempts}`}
         />
       ),
     },
@@ -152,7 +153,9 @@ export default function StudentsTestResult() {
       title: 'Thời gian chấm',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          data={record?.end_time ? formatDateFromUTC(record?.end_time) : '-'}
+          dataColumn={
+            record?.end_time ? formatDateFromUTC(record?.end_time) : '-'
+          }
         />
       ),
     },
@@ -162,7 +165,7 @@ export default function StudentsTestResult() {
     <div>
       <LayoutFilter
         listFilter={<StudentsTestResultFilter control={control} />}
-        loading={false}
+        loading={isLoading}
         onReset={handleResetFilter}
         onSubmit={onSubmit}
       />
