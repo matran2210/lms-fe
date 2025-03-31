@@ -79,6 +79,7 @@ import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import { checkTypeAndRenderTitle, getResult } from './functions/helper'
 import CompletingReportModal from './modal/CompletingReportModal'
+import dayjs from 'dayjs'
 
 declare global {
   interface Window {
@@ -1549,11 +1550,11 @@ const TestDetail = () => {
       })
     }
 
-    setTabs(async () => {
-      // ref.setKey
-      handleChangeTab(tabs[0].id)
-      return reformTabs
-    })
+    // setTabs(async () => {
+    //   // ref.setKey
+    //   // handleChangeTab(tabs[0].id)
+    //   return reformTabs
+    // })
     dispatch(disableUnsavedChange())
 
     const res = await CoursesAPI.submitAllQuestion(quizAttempt?.id as string, {
@@ -2092,35 +2093,28 @@ const TestDetail = () => {
               handleTimeoutSubmit={async () => {
                 if (!openLimit) {
                   if (!submited && !quizAttempt?.is_submitted) {
-                    if (listSubmitError.length > 0) {
-                      for (const el of listSubmitError) {
-                        await handleSubmitAnswerError(el)
+                    const remainingTimeinSeconds = quizDetail?.quiz_timed
+                      ? dayjs(
+                          dayjs(new Date(quizAttempt.created_at ?? '')).add(
+                            quizDetail?.quiz_timed,
+                            'minutes',
+                          ),
+                        ).diff(dayjs(), 'seconds')
+                      : null
+                    // No call when time out > 60s
+                    if ((remainingTimeinSeconds ?? 0) > -60) {
+                      if (listSubmitError.length > 0) {
+                        for (const el of listSubmitError) {
+                          await handleSubmitAnswerError(el)
+                        }
                       }
+                      await handleSubmitAnswer('timeout')
                     }
-                    await handleSubmitAnswer('timeout')
+
                     handleSubmitQuestions('timeout')
                     dispatch(disableUnsavedChange())
                       .unwrap()
                       .then(() => {
-                        // if (type === 'entrance') {
-                        //   router.replace(`/entrance-test/test-result/${QuizResultId}`)
-                        // } else if (type === 'event-test') {
-                        //   router.replace(`/event-test`)
-                        //   setSubmitEventTest(true)
-                        // } else {
-                        //   if (
-                        //     type !== 'entrance' &&
-                        //     quizDetail?.quiz_type !== 'FINAL_TEST'
-                        //   ) {
-                        //     router.replace(
-                        //       `/courses/test/test-result/${QuizResultId}`,
-                        //     )
-                        //   } else {
-                        //     router.back()
-                        //     setScoreQuestion(scoreFinalTest)
-                        //     setSubmitTest(true)
-                        //   }
-                        // }
                         trackGAEvent('Click Button Submit Time Out Test')
                       })
                   } else {
