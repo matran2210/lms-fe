@@ -1,4 +1,4 @@
-import LayoutFilter from '@components/layout/Filter/index'
+import LayoutFilter from '@components/layout/TeacherFilter/index'
 import { Typography } from 'antd'
 import SappTable from '@components/table/SappTable'
 import React, { useEffect, useState } from 'react'

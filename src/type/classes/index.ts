@@ -41,6 +41,9 @@ export interface IUser {
 
 export interface IStudentClassDetail {
   user?: IUser
+  flexible_duration?: number
+  finished_at?: string
+  is_passed?: boolean
   attempt?: {
     finished_at?: string
     status?: QUIZ_ATTEMPT_STATUS

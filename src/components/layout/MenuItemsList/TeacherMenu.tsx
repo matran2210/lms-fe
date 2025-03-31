@@ -33,11 +33,37 @@ interface MenuItem {
 }
 
 export default function TeacherMenu() {
-  const [collapsed, setCollapsed] = useState(true)
-  const [selectedKey, setSelectedKey] = useState('home')
+  const [selectedKey, setSelectedKey] = useState<string>('book')
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const { user } = useAppSelector(userReducer)
+  const { user } = useAppSelector(userReducer) // Lấy thông tin user đang đăng nhập
+  const menuItems: MenuItem[] = [
+    {
+      key: 'home',
+      icon: <HomeMenuIcon selected={selectedKey === 'home'} />,
+      link: PageLink.TEACHER_MY_CLASS,
+    },
+    {
+      key: 'book',
+      icon: <BookMenuIcon selected={selectedKey === 'book'} />,
+      link: PageLink.TEACHER_MY_CLASS,
+    },
+    {
+      key: 'calender',
+      icon: <CalenderMenuIcon selected={selectedKey === 'calender'} />,
+      link: PageLink.TEACHER_MY_CLASS,
+    },
+    {
+      key: 'file',
+      icon: <FileMenuIcon selected={selectedKey === 'file'} />,
+      link: PageLink.TEACHER_MY_CLASS,
+    },
+    {
+      key: 'bell',
+      icon: <BellIcon selected={selectedKey === 'bell'} />,
+      link: PageLink.TEACHER_MY_CLASS,
+    },
+  ]
   const handleMenuClick = (item: { key: string }) => {
     const selectedItem = menuItems.find((menuItem) => menuItem.key === item.key)
     setSelectedKey(item.key)
@@ -58,38 +84,6 @@ export default function TeacherMenu() {
     } catch (error) {}
   }
 
-  const menuItems: MenuItem[] = [
-    {
-      key: 'home',
-      icon: <HomeMenuIcon selected={selectedKey === 'home'} />,
-      link: '/teacher',
-    },
-    {
-      key: 'book',
-      icon: <BookMenuIcon selected={selectedKey === 'book'} />,
-      link: PageLink.TEACHER_MY_CLASS,
-    },
-    {
-      key: 'calender',
-      icon: <CalenderMenuIcon selected={selectedKey === 'calender'} />,
-      link: '/',
-    },
-    {
-      key: 'file',
-      icon: <FileMenuIcon selected={selectedKey === 'file'} />,
-    },
-    {
-      key: 'bell',
-      icon: <BellIcon selected={selectedKey === 'bell'} />,
-    },
-  ]
-
-  useEffect(() => {
-    if (router.pathname.includes(PageLink.TEACHER_MY_CLASS)) {
-      setSelectedKey('book')
-    }
-  }, [router.pathname])
-
   const ItemMenu = ({
     icon,
     action,
@@ -104,19 +98,9 @@ export default function TeacherMenu() {
 
   return (
     <Sider
-      collapsible
-      collapsed={collapsed}
-      onCollapse={(value) => setCollapsed(value)}
-      trigger={null}
       width={80}
-      className="sidebar-left flex h-screen flex-col items-center bg-blue-2"
-      style={{
-        overflow: 'auto',
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        bottom: 0,
-      }}
+      collapsed
+      className="sidebar-left fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center overflow-auto bg-blue-2"
     >
       <div className="flex h-full flex-col items-center justify-between">
         <div className="flex flex-col items-center">

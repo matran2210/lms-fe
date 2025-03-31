@@ -1,4 +1,4 @@
-import LayoutFilter from '@components/layout/Filter/index'
+import LayoutFilter from '@components/layout/TeacherFilter/index'
 import { Typography } from 'antd'
 import SappTable from '@components/table/SappTable'
 import React, { useEffect, useState } from 'react'
@@ -12,6 +12,8 @@ import StudentFilter from '@components/teacher/components/StudentFilter'
 import { useForm } from 'react-hook-form'
 import { IStudentClassDetail } from 'src/type/classes'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
+import { round } from 'lodash'
+import { FOUNDATION } from '@utils/constants'
 
 const { Title } = Typography
 
@@ -74,6 +76,15 @@ export default function Students() {
     }))
   }
 
+  const calculateProgress = (record: IStudentClassDetail): number => {
+    const totalSections = record?.learning_progress?.total_course_sections ?? 0
+    const completedSections =
+      record?.learning_progress?.total_course_sections_completed ?? 0
+
+    return totalSections > 0
+      ? round((completedSections / totalSections) * 100, 2)
+      : 0
+  }
   const handleResetFilter = () => {
     reset(initialValues)
     setParams(initialValues)
@@ -84,6 +95,22 @@ export default function Students() {
   }
 
   const columnsValue = [
+    {
+      title: '#',
+      render: (
+        _: IStudentClassDetail,
+        record: IStudentClassDetail,
+        index: number,
+      ) => (
+        <NameNoActionCell
+          dataColumn={
+            index +
+            1 +
+            ((pagination?.current || 1) - 1) * (pagination?.pageSize || 10)
+          }
+        />
+      ),
+    },
     {
       title: 'ID',
       render: (record: IStudentClassDetail) => (
@@ -122,9 +149,17 @@ export default function Students() {
       title: 'Duration',
       render: (record: IStudentClassDetail) => (
         <NameNoActionCell
-          dataColumn={`${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
-            record?.updated_at ?? '',
-          )}`}
+          dataColumn={
+            record?.flexible_duration &&
+            record?.started_at === null &&
+            record?.finished_at === null
+              ? `${record?.flexible_duration} ${
+                  record?.flexible_duration > 1 ? 'days' : 'day'
+                }`
+              : `${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
+                  record?.finished_at ?? '',
+                )}`
+          }
         />
       ),
     },
@@ -132,11 +167,9 @@ export default function Students() {
       title: 'Progress',
       render: (record: IStudentClassDetail) => (
         <StudentCell
-          dataColumn={`${Math.round(
-            ((record?.learning_progress?.total_course_sections_completed ?? 0) /
-              (record?.learning_progress?.total_course_sections || 1)) *
-              100,
-          )}%`}
+          dataColumn={
+            record?.is_passed ? `${calculateProgress(record)}%` : FOUNDATION
+          }
         />
       ),
     },
