@@ -122,7 +122,9 @@ export default function StudentsTestResult() {
       title: 'Manual Grading',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          dataColumn={record?.quiz?.grading_method === 'AUTO' ? 'No' : 'Yes'}
+          dataColumn={
+            record?.quiz?.grading_method === GradingMethod.AUTO ? 'No' : 'Yes'
+          }
         />
       ),
     },

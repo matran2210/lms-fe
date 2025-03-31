@@ -375,12 +375,13 @@ export const removeHtmlTags = (htmlString?: string) => {
 }
 
 /**
- * @description Chuyển đổi chuỗi ngày từ UTC sang múi giờ địa phương và định dạng theo 'DD/MM/YYYY'.
- * @param {string} date - Chuỗi ngày ở UTC cần chuyển đổi và định dạng.
- * @return {string} - Chuỗi ngày theo múi giờ địa phương với định dạng 'DD/MM/YYYY'.
+ * @description Chuyển đổi một chuỗi ngày UTC thành chuỗi ngày địa phương được định dạng.
+ * @param {string} date - Chuỗi ngày UTC cần chuyển đổi.
+ * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày địa phương trả về.
+ * @return {string} - Chuỗi ngày địa phương đã được định dạng.
  */
-export const formatDateFromUTC = (date: string) =>
-  dayjs.utc(date).local().format('DD/MM/YYYY')
+export const formatDateFromUTC = (date: string, format = 'DD/MM/YYYY') =>
+  dayjs.utc(date).local().format(format)
 
 /**
  * @description Chuyển đổi giá trị enum của loại bài kiểm tra thành chuỗi dễ đọc.
@@ -410,6 +411,7 @@ export const containsKeyword = (input: unknown, keyword?: string): boolean => {
  * @param {string} input - Chuỗi HTML đầu vào.
  * @return {string} - Chuỗi HTML đã được định dạng lại với ngày tháng hiển thị theo định dạng DD/MM/YYYY.
  */
+
 export const formatNotificationHTML = (input: string): string => {
   return input.replace(
     /<strong\s+data-time\s*=\s*["']([^"']+)["']\s*><\/strong>/g,

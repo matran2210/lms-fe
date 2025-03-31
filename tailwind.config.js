@@ -63,6 +63,8 @@ module.exports = {
         danger: {
           DEFAULT: '#D35563',
           2: '#dd4339',
+          3: '#f01919',
+          4: '#0Df01919',
         },
         state: {
           info: '#3964EA',

@@ -24,6 +24,8 @@ interface IProps {
   isClearable?: boolean
   onMenuClose?: () => void
   onBlur?: () => void
+  isCustom?: boolean
+  onSearch?: (value: string) => Promise<void> | any
 }
 
 const SappHookFormSelect = ({
@@ -44,6 +46,8 @@ const SappHookFormSelect = ({
   isClearable,
   onMenuClose,
   onBlur,
+  isCustom = false,
+  onSearch,
 }: IProps) => {
   return (
     <>
@@ -69,7 +73,7 @@ const SappHookFormSelect = ({
                 {...field}
                 options={options}
                 styles={customStyles}
-                className={`select-single ${className}`}
+                className={`select-single ${isCustom && 'select-single-custom'}  ${className}`}
                 classNamePrefix="select"
                 instanceId="selectInstanceId"
                 placeholder={placeholder}
@@ -87,6 +91,7 @@ const SappHookFormSelect = ({
                 onMenuScrollToBottom={onMenuScrollToBottom}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                onInputChange={onSearch}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>

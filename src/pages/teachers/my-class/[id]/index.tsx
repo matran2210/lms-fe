@@ -45,7 +45,29 @@ const tabs = [
     title: 'Students Test Result',
   },
 ]
-
+const getCertificateData = (data: any): ICertificateData[] => [
+  { label: 'Name', value: data?.name },
+  { label: 'Code', value: data?.code },
+  {
+    label: 'Status',
+    value: data?.status,
+    isTag: true,
+  },
+  { label: 'Facility', value: data?.facility?.name },
+  { label: 'Instruction Mode', value: data?.instruction_mode },
+  { label: 'Type', value: data?.type },
+  { label: 'Capacity', value: data?.capacity ?? '-' },
+  {
+    label: 'Duration',
+    value: data?.flexible_days ?? '-',
+  },
+  { label: 'Course', value: data?.course?.name },
+  {
+    label: 'Exam',
+    value: data?.examination_subject?.examination?.name ?? '-',
+  },
+  { label: 'Description', value: data?.description },
+]
 const ClassDetail = () => {
   const [certificateData, setCertificateData] = useState<ICertificateData[]>([])
   const router = useRouter()
@@ -61,32 +83,10 @@ const ClassDetail = () => {
 
   useEffect(() => {
     if (data) {
-      const certificateDataInit: ICertificateData[] = [
-        { label: 'Name', value: data?.name },
-        { label: 'Code', value: data?.code },
-        {
-          label: 'Status',
-          value: data?.status,
-          isTag: true,
-        },
-        { label: 'Facility', value: data?.facility?.name },
-        { label: 'Instruction Mode', value: data?.instruction_mode },
-        { label: 'Type', value: data?.type },
-        { label: 'Capacity', value: data?.capacity ?? '-' },
-        {
-          label: 'Duration',
-          value: data?.flexible_days ?? '-',
-        },
-        { label: 'Course', value: data?.course?.name },
-        {
-          label: 'Exam',
-          value: data?.examination_subject?.examination.name ?? '-',
-        },
-        { label: 'Description', value: data?.description },
-      ]
-      setCertificateData(certificateDataInit)
+      setCertificateData(getCertificateData(data))
     }
   }, [data])
+
   const renderClassDetail = (selected: number) => {
     switch (selected) {
       case 1:

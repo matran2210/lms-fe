@@ -1,3 +1,4 @@
+import { QUIZ_ATTEMPT_STATUS } from 'src/constants'
 import { Metadata } from '../results'
 
 export interface IUniversityProgram {
@@ -40,7 +41,11 @@ export interface IUser {
 
 export interface IStudentClassDetail {
   user?: IUser
-  attempt?: { finished_at?: string; status?: string; score?: number }
+  attempt?: {
+    finished_at?: string
+    status?: QUIZ_ATTEMPT_STATUS
+    score?: number
+  }
   start_time?: string
   end_time?: string
   started_at?: string

@@ -3,7 +3,7 @@ import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { listStatusMyClass } from 'src/pages/teachers/my-class/index'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useState } from 'react'
-import { isEmpty } from 'lodash'
+import { debounce, isEmpty } from 'lodash'
 
 interface MyClassFilterProps {
   control: any
@@ -30,26 +30,34 @@ interface SubjectResponse {
   subjects: Subject[]
   metadata: Metadata
 }
-
+const initialSubjectsValues = {
+  subjects: [],
+  metadata: { page_index: 0, page_size: 10, total_pages: 0 },
+}
+const initialCourseValues = {
+  course_categories: [],
+  metadata: { page_index: 0, page_size: 10, total_pages: 0 },
+}
 const MyClassFilter: React.FC<MyClassFilterProps> = ({
   control,
   setValue,
   courseCategoryId,
 }) => {
-  const [subjects, setSubjects] = useState<SubjectResponse>({
-    subjects: [],
-    metadata: { page_index: 0, page_size: 10, total_pages: 0 },
-  })
-  const [subjectCourse, setSubjectCourse] = useState<CourseCategoryResponse>({
-    course_categories: [],
-    metadata: { page_index: 0, page_size: 10, total_pages: 0 },
-  })
-
+  const [subjects, setSubjects] = useState<SubjectResponse>(
+    initialSubjectsValues,
+  )
+  const [subjectCourse, setSubjectCourse] =
+    useState<CourseCategoryResponse>(initialCourseValues)
+  const createDebouncedSearch = (
+    fetchFunction: (text: string) => void,
+    delay = 350,
+  ) => debounce((text: string) => fetchFunction(text), delay)
   const fetchSubjectCourse = async (
     page_index: number,
     page_size: number,
     params?: object,
-  ) => {
+    isSearch: boolean = false,
+  ): Promise<void> => {
     try {
       const { data } = await TeacherAPI.getCourseCategory(
         page_index,
@@ -57,10 +65,9 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
         params,
       )
       setSubjectCourse((prev) => ({
-        course_categories: [
-          ...prev.course_categories,
-          ...data.course_categories,
-        ],
+        course_categories: isSearch
+          ? data.course_categories
+          : [...prev.course_categories, ...data.course_categories],
         metadata: data.metadata,
       }))
     } catch (error) {}
@@ -96,6 +103,7 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
         subjectCourse.metadata.page_index + 1,
         subjectCourse.metadata.page_size,
         {},
+        false,
       )
     }
   }
@@ -113,9 +121,15 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
       )
     }
   }
+  const debouncedSearchCourse = createDebouncedSearch((text) =>
+    fetchSubjectCourse(1, 10, { name: text }, true),
+  )
+  const debouncedSearchSubject = createDebouncedSearch((text) =>
+    fetchSubject(1, 10, { name: text }, false),
+  )
 
   return (
-    <div className="flex gap-6">
+    <div className="grid grid-cols-4 gap-4">
       <HookFormTextField
         control={control}
         name="search"
@@ -127,45 +141,62 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
         control={control}
         onFocus={() => {
           if (isEmpty(subjectCourse.course_categories)) {
-            fetchSubjectCourse(1, 10, {})
+            fetchSubjectCourse(1, 10, {}, true)
           }
         }}
         name="course_category_id"
-        required
-        className="select-single-custom w-full"
+        isCustom
         placeholder="Program"
         options={subjectCourse.course_categories.map((category) => ({
           label: category.name,
           value: category.id,
         }))}
-        onChange={(courseCategoryId: { value: string }) => {
-          setValue('subject_id', '')
-          fetchSubject(
-            1,
-            10,
-            { course_category_id: courseCategoryId.value },
-            false,
-          )
+        onSearch={(text) => {
+          if (text) {
+            debouncedSearchCourse(text)
+          }
         }}
+        onChange={(courseCategoryId: { value: string }) => {
+          if (courseCategoryId) {
+            fetchSubject(
+              1,
+              10,
+              { course_category_id: courseCategoryId.value },
+              false,
+            )
+          } else {
+            setSubjects(initialSubjectsValues)
+            setValue('subject_id', '')
+            fetchSubjectCourse(1, 10, {}, true)
+          }
+        }}
+        isClearable
         onMenuScrollToBottom={handleScrollCourse}
       />
       <SappHookFormSelect
         control={control}
         name="subject_id"
-        required
-        className="select-single-custom w-full"
+        isCustom
         placeholder="Subject"
-        options={subjects.subjects.map((subject) => ({
+        options={subjects?.subjects?.map((subject) => ({
           label: subject.name,
           value: subject.id,
         }))}
+        onSearch={(text) => {
+          if (text) {
+            debouncedSearchSubject(text)
+          }
+        }}
+        onChange={(subjectId: { value: string }) => {
+          setValue('subject_id', subjectId ? subjectId.value : '')
+        }}
         onMenuScrollToBottom={handleScrollSubject}
+        isClearable
       />
       <SappHookFormSelect
         control={control}
         name="class_teacher_status"
-        required
-        className="select-single-custom w-full"
+        isCustom
         placeholder="Status"
         options={listStatusMyClass}
       />

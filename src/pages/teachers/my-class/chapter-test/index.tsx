@@ -7,13 +7,15 @@ import ChapterTestFilter from '@components/teacher/components/ChapterTestFilter'
 import { useForm } from 'react-hook-form'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { ITabs } from 'src/type'
-import { PageLink, QUIZ_ATTEMPT_STATUS } from 'src/constants'
+import { PageLink } from 'src/constants'
 import SappTable from '@components/table/SappTable'
 import { TeacherKey } from '@pages/api/queryKey'
 import { TablePaginationConfig } from 'antd'
 import StudentCell from '@components/teacher/components/StudentCell'
-import { formatDateFromUTC } from '@utils/index'
 import { IStudentClassDetail } from 'src/type/classes'
+import DateActionCell from '@components/teacher/components/DateActionCell'
+import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
+import StatusActionCell from '@components/teacher/components/StatusActionCell'
 
 interface FilterParams {
   status?: string
@@ -96,7 +98,7 @@ const ChapterTest = () => {
     {
       title: 'Student ID',
       render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.user?.hubspot_contact_id} />
+        <NameNoActionCell dataColumn={record?.user?.hubspot_contact_id} />
       ),
     },
     {
@@ -108,7 +110,7 @@ const ChapterTest = () => {
     {
       title: 'Email',
       render: (record: IStudentClassDetail) => (
-        <StudentCell
+        <NameNoActionCell
           dataColumn={record?.user?.user_contacts?.[0]?.email ?? '-'}
         />
       ),
@@ -116,39 +118,28 @@ const ChapterTest = () => {
     {
       title: 'Access Period',
       render: (record: IStudentClassDetail) => (
-        <StudentCell
-          dataColumn={
-            record?.start_time && record?.end_time
-              ? `${formatDateFromUTC(record?.start_time)} - ${formatDateFromUTC(
-                  record?.end_time,
-                )}`
-              : '-'
-          }
+        <DateActionCell
+          dataColumn={{
+            firstLine: record?.start_time as string,
+            secondLine: record?.end_time as string,
+          }}
         />
       ),
     },
     {
       title: 'Submission Time',
       render: (record: IStudentClassDetail) => (
-        <StudentCell
-          dataColumn={
-            record?.attempt?.finished_at
-              ? formatDateFromUTC(record?.attempt?.finished_at)
-              : '-'
-          }
+        <DateActionCell
+          dataColumn={{
+            firstLine: record?.attempt?.finished_at as string,
+          }}
         />
       ),
     },
     {
       title: 'Status',
       render: (record: IStudentClassDetail) => (
-        <StudentCell
-          dataColumn={
-            record?.attempt?.status === QUIZ_ATTEMPT_STATUS.SUBMITTED
-              ? 'Submitted'
-              : 'Unsubmitted'
-          }
-        />
+        <StatusActionCell dataColumn={record?.attempt?.status} />
       ),
     },
     {
@@ -160,7 +151,7 @@ const ChapterTest = () => {
     {
       title: 'Người chấm',
       render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.staff?.detail?.full_name} />
+        <NameNoActionCell dataColumn={record?.staff?.detail?.full_name} />
       ),
     },
   ]

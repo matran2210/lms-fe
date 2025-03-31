@@ -45,10 +45,6 @@ const initialValues: FilterParams = {
   subject_id: undefined,
 }
 
-interface APIUniversityProgram {
-  id: string
-  name: string
-}
 const MyClass = () => {
   const router = useRouter()
   const [pageIndex, setPageIndex] = useState<number>(1)

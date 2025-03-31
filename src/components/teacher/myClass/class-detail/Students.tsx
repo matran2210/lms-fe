@@ -11,6 +11,7 @@ import { useQuery } from 'react-query'
 import StudentFilter from '@components/teacher/components/StudentFilter'
 import { useForm } from 'react-hook-form'
 import { IStudentClassDetail } from 'src/type/classes'
+import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 
 const { Title } = Typography
 
@@ -86,7 +87,7 @@ export default function Students() {
     {
       title: 'ID',
       render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.user?.hubspot_contact_id} />
+        <NameNoActionCell dataColumn={record?.user?.hubspot_contact_id} />
       ),
     },
     {
@@ -98,25 +99,29 @@ export default function Students() {
     {
       title: 'Email',
       render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.user?.user_contacts?.[0]?.email} />
+        <NameNoActionCell
+          dataColumn={record?.user?.user_contacts?.[0]?.email}
+        />
       ),
     },
     {
       title: 'Phone',
       render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.user?.user_contacts?.[0]?.phone} />
+        <NameNoActionCell
+          dataColumn={record?.user?.user_contacts?.[0]?.phone}
+        />
       ),
     },
     {
       title: 'Level',
       render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.user?.detail?.level} />
+        <NameNoActionCell dataColumn={record?.user?.detail?.level} />
       ),
     },
     {
       title: 'Duration',
       render: (record: IStudentClassDetail) => (
-        <StudentCell
+        <NameNoActionCell
           dataColumn={`${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
             record?.updated_at ?? '',
           )}`}
@@ -138,7 +143,7 @@ export default function Students() {
     {
       title: 'Exam Date',
       render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.examination_subject} />
+        <NameNoActionCell dataColumn={record?.examination_subject} />
       ),
     },
   ]

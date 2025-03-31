@@ -27,8 +27,7 @@ const StudentsTestResultFilter: React.FC<StudentsTestResultFilterProps> = ({
       <SappHookFormSelect
         control={control}
         name="quiz_type"
-        required
-        className="select-single-custom w-full"
+        isCustom
         placeholder="Type"
         options={Object.keys(TEST_TYPE_ENUM).map((key) => ({
           label: convertQuizType(key),
@@ -38,8 +37,7 @@ const StudentsTestResultFilter: React.FC<StudentsTestResultFilterProps> = ({
       <SappHookFormSelect
         control={control}
         name="grading_method"
-        required
-        className="select-single-custom w-full"
+        isCustom
         placeholder="Manual Grading"
         options={QUIZ_GRADING_METHOD}
       />

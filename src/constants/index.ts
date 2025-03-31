@@ -289,13 +289,13 @@ export enum TEST_ATTEMPT_TYPE {
   CHAPTER_TEST = 'CHAPTER_TEST',
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
-export const QUIZ_ATTEMPT_STATUS = {
-  UN_SUBMITTED: 'UN_SUBMITTED', // đổi thành IN_PROGRESS, / tạo mới bản bản ghi quiz attempt hoặc đóng trình duyệt khi đang làm
-  UN_FINISHED: 'UN_FINISHED', // đổi thành UN_SUMMITTED, / click nút quit
-  SUBMITTED: 'SUBMITTED', // nộp bài (click Finish), dành cho bài ko chấm ko chấm
-  AWAITING_GRADING: 'AWAITING_GRADING', // dành cho bài chấm điểm, làm bài xong và đang đợi chấm
-  FINISHED_GRADING: 'FINISHED_GRADING', // dành cho bài chấm điểm, bài đã được chấm xong
+
+export enum QUIZ_ATTEMPT_STATUS {
+  SUBMITTED = 'SUBMITTED',
+  UN_SUBMITTED = 'UN_SUBMITTED',
+  IN_PROGRESS = 'IN_PROGRESS',
 }
+
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './form'
