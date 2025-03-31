@@ -621,6 +621,8 @@ const TestDetail = () => {
               attempted: true,
               answer: objTab?.question_answer_id,
             }
+          } else if (objTab?.answer) {
+            return objTab
           }
           // Case: objTab no data and answerSubmitted has data
           else if (answerSubmitted?.question_answer_id) {
@@ -1213,21 +1215,27 @@ const TestDetail = () => {
   }
 
   const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
-    let newData = [] as any
-    for (let item of tabs) {
+    const newData = (tabs ?? []).map((item: any) => {
       if (tabId === item?.id) {
-        var newItem = {
+        return {
           ...item,
           data: {
             ...item?.data,
             answers: (item?.data?.answers ?? []).map(
               (answer: Answer, index: number) => {
-                const existAnswer = data?.find(
-                  (e: any) => e.idAnswer === answer.id,
-                )
-                return {
-                  ...answer,
-                  dropId: existAnswer?.id,
+                if (typeof data === 'string') {
+                  return {
+                    ...answer,
+                    dropId: data,
+                  }
+                } else {
+                  const existAnswer = (data ?? []).find(
+                    (e: any) => e.idAnswer === answer.id,
+                  )
+                  return {
+                    ...answer,
+                    dropId: existAnswer?.id,
+                  }
                 }
               },
             ),
@@ -1242,12 +1250,9 @@ const TestDetail = () => {
                 : Date.now() - startTime
             : item?.timeSpent,
         }
-
-        newData.push(newItem)
-      } else {
-        newData.push(item)
       }
-    }
+      return item
+    })
     return newData
   }
 
