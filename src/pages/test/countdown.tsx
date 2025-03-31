@@ -17,7 +17,7 @@ const CountDown = forwardRef(
       },
     }))
     useEffect(() => {
-      if (time?.[2] === 0) {
+      if (time?.[2] <= 0) {
         onTimeOut && onTimeOut()
       }
     }, [time[2]])

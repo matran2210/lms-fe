@@ -1541,92 +1541,95 @@ const TestDetail = () => {
   }
 
   const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
-    if (!currentTabContent) return
-    const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let quiz_position_mapping = []
-    let reformTabs: any[] = []
-    setLoading(true)
-
-    for (let e of allQuest) {
-      reformTabs.push({ ...e, done: true })
-      quiz_position_mapping.push({
-        question_id: e.id,
-        answers: e.data?.answers,
-      })
-    }
-
-    // setTabs(async () => {
-    //   // ref.setKey
-    //   // handleChangeTab(tabs[0].id)
-    //   return reformTabs
-    // })
-    dispatch(disableUnsavedChange())
-
-    const res = await CoursesAPI.submitAllQuestion(quizAttempt?.id as string, {
-      quiz_position_mapping: quiz_position_mapping,
-      scratch_pads: scratchPads || [],
-      total_attempt_time:
-        quizDetail.quiz_timed * 60 -
-        (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-    })
-
-    if (res?.success) {
-      setSubmited(true)
-      localStorage.setItem(
-        'quizAttempt',
-        JSON.stringify({
-          ...quizAttempt,
-          is_submitted: true,
-        }),
-      )
-      if (typeSubmit === 'submit') {
-        if (isCompletedCourse.status) {
-          setTimeout(() => {
-            dispatch(showPopupCompletedCourse(isCompletedCourse.content))
-          }, 2000)
-        }
-
-        if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
-          setOpenReportModal(true)
-          return
-        }
-        if (type === 'entrance') {
-          router.replace(`/entrance-test/test-result/${res?.data?.id}`)
-        } else if (type === 'event-test') {
-          router.replace(`/event-test`)
-          setSubmitEventTest(true)
-          localStorage.setItem(
-            'category',
-            JSON.stringify(res?.data?.course_category?.name),
-          )
-        } else {
-          if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
-            router.replace(`/courses/test/test-result/${res?.data?.id}`)
-          } else {
-            if (
-              courseType === 'FOUNDATION_COURSE' &&
-              quizDetail?.quiz_type == 'FINAL_TEST'
-            ) {
-              router.push(localStorage.getItem('courseDetail') || '')
-            } else {
-              router.replace(`/courses/test/test-result/${res?.data?.id}`)
-            }
-          }
-        }
-      } else {
-        if (isCompletedCourse.status) {
-          setTimeout(() => {
-            dispatch(showPopupCompletedCourse(isCompletedCourse.content))
-          }, 2000)
-        }
-        setScoreFinalTest(res?.data?.score)
-        setQuizResultId(() => {
-          setOpenTimeOut(true)
-          return res?.data?.id
+    if (currentTabContent) {
+      const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
+      let quiz_position_mapping = []
+      // let reformTabs: any[] = []
+      setLoading(true)
+      for (let e of allQuest) {
+        // reformTabs.push({ ...e, done: true })
+        quiz_position_mapping.push({
+          question_id: e.id,
+          answers: e.data?.answers,
         })
       }
+      // setTabs(async () => {
+      //   // ref.setKey
+      //   // handleChangeTab(tabs[0].id)
+      //   return reformTabs
+      // })
+      dispatch(disableUnsavedChange())
+
+      const res = await CoursesAPI.submitAllQuestion(
+        quizAttempt?.id as string,
+        {
+          quiz_position_mapping: quiz_position_mapping,
+          scratch_pads: scratchPads || [],
+          total_attempt_time:
+            quizDetail.quiz_timed * 60 -
+            (quizDetail.quiz_timed
+              ? timeRef?.current?.handleGetTime() || 0
+              : 0),
+        },
+      )
+      if (res?.success) {
+        setSubmited(true)
+        localStorage.setItem(
+          'quizAttempt',
+          JSON.stringify({
+            ...quizAttempt,
+            is_submitted: true,
+          }),
+        )
+        if (typeSubmit === 'submit') {
+          if (isCompletedCourse.status) {
+            setTimeout(() => {
+              dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+            }, 2000)
+          }
+
+          if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
+            setOpenReportModal(true)
+            return
+          }
+          if (type === 'entrance') {
+            router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+          } else if (type === 'event-test') {
+            router.replace(`/event-test`)
+            setSubmitEventTest(true)
+            localStorage.setItem(
+              'category',
+              JSON.stringify(res?.data?.course_category?.name),
+            )
+          } else {
+            if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
+              router.replace(`/courses/test/test-result/${res?.data?.id}`)
+            } else {
+              if (
+                courseType === 'FOUNDATION_COURSE' &&
+                quizDetail?.quiz_type == 'FINAL_TEST'
+              ) {
+                router.push(localStorage.getItem('courseDetail') || '')
+              } else {
+                router.replace(`/courses/test/test-result/${res?.data?.id}`)
+              }
+            }
+          }
+        } else {
+          if (isCompletedCourse.status) {
+            setTimeout(() => {
+              dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+            }, 2000)
+          }
+          setScoreFinalTest(res?.data?.score)
+          setQuizResultId(() => {
+            setOpenTimeOut(true)
+            return res?.data?.id
+          })
+        }
+      }
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const handleClearSelection = (currentTabContent: any) => {
@@ -2082,53 +2085,55 @@ const TestDetail = () => {
         >
           {/** Header */}
           <div>
-            <HeaderTest
-              quizDetail={quizDetail}
-              handleSubmitQuestions={handleSubmitQuestions}
-              timeRef={timeRef}
-              quizAttempt={quizAttempt}
-              setUnSubmitAnswer={setUnSubmitAnswer}
-              checkUnSubmitAnswer={checkUnSubmitAnswer}
-              setOpenQuit={setOpenQuit}
-              setSubmitEventTest={setSubmitEventTest}
-              type={type}
-              submited={submited}
-              setOpenSubmit={setOpenSubmit}
-              onSubmitAnswer={handleSubmitAnswer}
-              handleTimeoutSubmit={async () => {
-                if (!openLimit) {
-                  if (!submited && !quizAttempt?.is_submitted) {
-                    const remainingTimeinSeconds = quizDetail?.quiz_timed
-                      ? dayjs(
-                          dayjs(new Date(quizAttempt.created_at ?? '')).add(
-                            quizDetail?.quiz_timed,
-                            'minutes',
-                          ),
-                        ).diff(dayjs(), 'seconds')
-                      : null
-                    // No call when time out > 60s
-                    if ((remainingTimeinSeconds ?? 0) > -60) {
-                      if (listSubmitError.length > 0) {
-                        for (const el of listSubmitError) {
-                          await handleSubmitAnswerError(el)
-                        }
-                      }
-                      await handleSubmitAnswer('timeout')
-                    }
+            {currentTabContent && (
+              <HeaderTest
+                quizDetail={quizDetail}
+                handleSubmitQuestions={handleSubmitQuestions}
+                timeRef={timeRef}
+                quizAttempt={quizAttempt}
+                setUnSubmitAnswer={setUnSubmitAnswer}
+                checkUnSubmitAnswer={checkUnSubmitAnswer}
+                setOpenQuit={setOpenQuit}
+                setSubmitEventTest={setSubmitEventTest}
+                type={type}
+                submited={submited}
+                setOpenSubmit={setOpenSubmit}
+                onSubmitAnswer={handleSubmitAnswer}
+                handleTimeoutSubmit={async () => {
+                  if (!openLimit) {
+                    if (!submited && !quizAttempt?.is_submitted) {
+                      const remainingTimeinSeconds = quizDetail?.quiz_timed
+                        ? dayjs(
+                            dayjs(new Date(quizAttempt.created_at ?? '')).add(
+                              quizDetail?.quiz_timed,
+                              'minutes',
+                            ),
+                          ).diff(dayjs(), 'seconds')
+                        : null
 
-                    handleSubmitQuestions('timeout')
-                    dispatch(disableUnsavedChange())
-                      .unwrap()
-                      .then(() => {
-                        trackGAEvent('Click Button Submit Time Out Test')
-                      })
-                  } else {
-                    setOpenTimeOut(true)
-                    setQuizResultId(quizAttempt?.id)
+                      // No call when time out > 60s
+                      if ((remainingTimeinSeconds ?? 0) > -60) {
+                        if (listSubmitError.length > 0) {
+                          for (const el of listSubmitError) {
+                            await handleSubmitAnswerError(el)
+                          }
+                        }
+                        await handleSubmitAnswer('timeout')
+                      }
+                      handleSubmitQuestions('timeout')
+                      dispatch(disableUnsavedChange())
+                        .unwrap()
+                        .then(() => {
+                          trackGAEvent('Click Button Submit Time Out Test')
+                        })
+                    } else {
+                      setOpenTimeOut(true)
+                      setQuizResultId(quizAttempt?.id)
+                    }
                   }
-                }
-              }}
-            />
+                }}
+              />
+            )}
 
             {/** Tabs */}
             {tabs?.length > 0 && (
