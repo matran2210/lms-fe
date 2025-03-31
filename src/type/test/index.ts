@@ -40,6 +40,15 @@ export interface Requirement {
   answer_text?: string
 }
 
+export interface RequirementItem {
+  question_id: string
+  short_answer: string
+  requirement_id: string
+  time_spent: number
+  active: string
+  answer_file?: FileType | null
+}
+
 export interface DataType {
   requirements: Requirement[]
 }

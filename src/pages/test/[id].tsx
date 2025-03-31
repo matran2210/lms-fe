@@ -67,6 +67,7 @@ import {
   AnswerList,
   DragDropAnswerItem,
   Requirement,
+  RequirementItem,
   ScratchPad,
   ScratchPadValue,
   TabItem,
@@ -245,7 +246,8 @@ const TestDetail = () => {
             setValue={setValue}
             defaultValue={
               getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-              currentTabContent?.answer
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.answer_text
             }
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
@@ -405,218 +407,392 @@ const TestDetail = () => {
   })
 
   const currentTabContent = useMemo(() => {
-    // Early return if no tabs
-    if (!tabs?.length) {
-      return undefined
-    }
+    if (tabs && tabs.length > 0) {
+      const answerSubmitted = answersSubmitted.find(
+        (e: any) => e.questionId === currentPage,
+      )
+      const objTab = tabs.find((e: any) => e.id === currentPage)
 
-    // Find current tab and submitted answer
-    const currentTab = tabs.find((tab: any) => tab.id === currentPage)
-    const answerSubmitted = answersSubmitted.find(
-      (answer: any) => answer.questionId === currentPage,
-    )
-
-    if (!currentTab || !answerSubmitted?.results) {
-      return currentTab
-    }
-
-    // Define question type groups
-    const QUESTION_TYPE_GROUPS = {
-      CHOICE: [
-        QUESTION_TYPES.ONE_CHOICE,
-        QUESTION_TYPES.TRUE_FALSE,
-        QUESTION_TYPES.MULTIPLE_CHOICE,
-      ],
-      TEXT: [QUESTION_TYPES.FILL_WORD, QUESTION_TYPES.SELECT_WORD],
-      COMPLEX: [QUESTION_TYPES.MATCHING, QUESTION_TYPES.DRAG_DROP],
-      SINGLE_CHOICE: [QUESTION_TYPES.ONE_CHOICE, QUESTION_TYPES.TRUE_FALSE],
-    } as const
-
-    // Helper function to get correct answers and solution
-    const getCorrectAndSolution = (
-      currentTabContent: any,
-      answerSubmitted: any,
-    ): {
-      corrects: any
-      solution: any
-      isSelfReflection: boolean
-      requirements: any[]
-    } => {
-      if (!answerSubmitted?.[0]) {
-        return {
-          corrects: {},
-          solution: null,
-          isSelfReflection: false,
-          requirements: [],
-        }
-      }
-
-      const {
-        answers,
-        question_matchings,
-        solution,
-        is_self_reflection,
-        requirements,
-      } = answerSubmitted[0]
-
-      // Handle different question types
-      if (QUESTION_TYPE_GROUPS.CHOICE.includes(currentTabContent.qType)) {
-        return {
-          corrects:
-            answers?.reduce(
-              (acc: { [key: string]: boolean }, curr: any) => ({
-                ...acc,
-                [curr.id]: curr.is_correct,
-              }),
-              {},
-            ) || {},
-          solution,
-          isSelfReflection: is_self_reflection || false,
-          requirements: requirements || [],
-        }
-      }
-
-      if (QUESTION_TYPE_GROUPS.TEXT.includes(currentTabContent.qType)) {
-        return {
-          corrects: { corrects: answers || [] },
-          solution,
-          isSelfReflection: is_self_reflection || false,
-          requirements: requirements || [],
-        }
-      }
-
-      if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-        return {
-          corrects: { corrects: question_matchings || [] },
-          solution,
-          isSelfReflection: is_self_reflection || false,
-          requirements: requirements || [],
-        }
-      }
-
-      if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-        return {
-          corrects: {
-            corrects: (answers || []).sort(
-              (a: any, b: any) => a?.answer_position - b?.answer_position,
-            ),
-          },
-          solution,
-          isSelfReflection: is_self_reflection || false,
-          requirements: requirements || [],
-        }
-      }
-
-      return {
-        corrects: {},
-        solution: null,
-        isSelfReflection: false,
-        requirements: [],
-      }
-    }
-
-    // Helper function to transform answer data
-    const transformAnswerData = (answer: any, questionType: string) => {
-      if (questionType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-        return answer.answer_id
-      }
-
-      if (questionType === QUESTION_TYPES.MATCHING) {
-        return {
-          answer_id: answer.answer_id,
-          question_id: answer.question_id,
-        }
-      }
-
-      if (questionType === QUESTION_TYPES.DRAG_DROP) {
-        const matchingAnswer = currentTab.data.answers?.find(
-          (a: any) => a.id === answer.answer_id,
-        )
-        return matchingAnswer
-          ? {
-              ...answer,
-              idAnswer: answer.answer_id,
-              value: matchingAnswer.answer,
+      if (answerSubmitted) {
+        const getCorrectAndSolution = (
+          currentTabContent: any,
+          answerSubmitted: any,
+        ): {
+          corrects: any
+          solution: any
+          isSelfReflection: boolean
+          requirements: any[]
+        } => {
+          if (!answerSubmitted?.[0]) {
+            return {
+              corrects: {},
+              solution: null,
+              isSelfReflection: false,
+              requirements: [],
             }
-          : null
-      }
-
-      if (questionType === QUESTION_TYPES.SELECT_WORD) {
-        return {
-          ...answerSubmitted,
-          ...currentTab,
-          attempted: true,
-          answer: answerSubmitted.short_answer,
-          solution: answerSubmitted.results[0]?.solution || null,
-        }
-      }
-
-      if (questionType === QUESTION_TYPES.FILL_WORD) {
-        return answer.answer_text
-      }
-
-      return null
-    }
-
-    // Get correct answers and solution data
-    const dataCorrectAndSolution = getCorrectAndSolution(
-      currentTab,
-      answerSubmitted.results,
-    )
-
-    // Build base tab object
-    const baseTabObject = {
-      ...currentTab,
-      data: {
-        ...currentTab.data,
-        answers:
-          answerSubmitted.results?.flatMap(
-            (result: any) => result.answers || [],
-          ) || [],
-      },
-      topicDescription: currentTab.topicDescription,
-      ...dataCorrectAndSolution,
-      timeSpent: answerSubmitted.timeSpent ?? 0,
-      answer:
-        answerSubmitted.answer?.map((e: any) => ({
-          id: e?.id || '',
-          value: e?.value || '',
-        })) || [],
-    }
-
-    // Handle special cases
-    if (currentTab.data.qType === QUESTION_TYPES.ESSAY) {
-      return {
-        ...answerSubmitted,
-        ...baseTabObject,
-        attempted: true,
-        answer: answerSubmitted.short_answer,
-        solution: answerSubmitted.results[0]?.solution || null,
-      }
-    }
-
-    if (QUESTION_TYPE_GROUPS.SINGLE_CHOICE.includes(currentTab.data.qType)) {
-      return answerSubmitted.question_answer_id
-        ? {
-            ...baseTabObject,
-            attempted: true,
-            answer: answerSubmitted.question_answer_id,
           }
-        : baseTabObject
-    }
 
-    // Transform answers for other question types
-    const transformedAnswers = answerSubmitted.answer
-      ?.map((answer: any) => transformAnswerData(answer, currentTab.data.qType))
-      .filter(Boolean)
+          const {
+            answers,
+            question_matchings,
+            solution,
+            is_self_reflection,
+            requirements,
+          } = answerSubmitted[0]
 
-    return transformedAnswers?.length
-      ? {
-          ...baseTabObject,
-          answer: transformedAnswers,
+          // Handle different question types
+          if (
+            [
+              QUESTION_TYPES.ONE_CHOICE,
+              QUESTION_TYPES.TRUE_FALSE,
+              QUESTION_TYPES.MULTIPLE_CHOICE,
+            ].includes(currentTabContent.qType)
+          ) {
+            return {
+              corrects:
+                answers?.reduce(
+                  (acc: { [key: string]: boolean }, curr: any) => ({
+                    ...acc,
+                    [curr.id]: curr.is_correct,
+                  }),
+                  {},
+                ) || {},
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            }
+          }
+
+          if (
+            [QUESTION_TYPES.FILL_WORD, QUESTION_TYPES.SELECT_WORD].includes(
+              currentTabContent.qType,
+            )
+          ) {
+            return {
+              corrects: { corrects: answers || [] },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            }
+          }
+
+          if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+            return {
+              corrects: { corrects: question_matchings || [] },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            }
+          }
+
+          if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+            return {
+              corrects: {
+                corrects: (answers || []).sort(
+                  (a: any, b: any) => a?.answer_position - b?.answer_position,
+                ),
+              },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            }
+          }
+
+          return {
+            corrects: {},
+            solution: null,
+            isSelfReflection: false,
+            requirements: [],
+          }
         }
-      : baseTabObject
-  }, [currentPage, tabs, answersSubmitted])
+
+        const dataCorrectAndSolution = getCorrectAndSolution(
+          objTab,
+          answerSubmitted?.results,
+        )
+
+        if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
+          // Case: if objTab has data
+          if (essayData) {
+            const requirementAmswer = (objTab?.data?.requirements ?? []).find(
+              (req: Requirement) => req?.id === essayData?.req?.id,
+            )
+
+            if (
+              requirementAmswer &&
+              requirementAmswer?.answer_text &&
+              requirementAmswer?.answer_file
+            ) {
+              return {
+                ...objTab,
+                // ...requirementAmswer,
+                // done: true,
+                attempted: true,
+              }
+            } else {
+              return {
+                ...objTab,
+                data: {
+                  ...objTab?.data,
+                  requirements: (objTab?.data?.requirements ?? []).map(
+                    (req: any) => {
+                      const requirementData = (
+                        answerSubmitted?.answer ?? []
+                      ).find(
+                        (r: RequirementItem) => r.requirement_id === req?.id,
+                      )
+                      return {
+                        ...req,
+                        answer_file:
+                          req?.answer_file !== undefined
+                            ? req?.answer_file
+                            : requirementData?.answer_file,
+                        short_answer:
+                          req?.short_answer !== undefined
+                            ? req?.short_answer
+                            : requirementData?.short_answer,
+                        answer_text:
+                          req?.answer_text !== undefined
+                            ? req?.answer_text
+                            : requirementData?.short_answer,
+                      }
+                    },
+                  ),
+                },
+                // done: true,
+                attempted: true,
+                answer: null,
+              }
+            }
+          }
+          // Case: objTab no data
+          else {
+            // & answerSubmitted has data
+            if (answerSubmitted?.answer) {
+              return {
+                ...objTab,
+                data: {
+                  ...objTab?.data,
+                  requirements: (objTab?.data?.requirements ?? []).map(
+                    (req: Requirement) => {
+                      const requirementAmswer = (
+                        answerSubmitted?.answer ?? []
+                      ).find(
+                        (r: RequirementItem) => r.requirement_id === req?.id,
+                      )
+                      return {
+                        ...req,
+                        answer_file: requirementAmswer?.answer_file,
+                        short_answer: requirementAmswer?.short_answer,
+                        answer_text: requirementAmswer?.short_answer,
+                      }
+                    },
+                  ),
+                },
+                // done: true,
+
+                attempted: true,
+                answer: null,
+              }
+            }
+
+            // & answerSubmitted no data
+            else {
+              return {
+                ...objTab,
+                // done: true,
+                attempted: true,
+                answer: null,
+              }
+            }
+          }
+        }
+
+        if (
+          objTab?.data?.qType === QUESTION_TYPES.ONE_CHOICE ||
+          objTab?.data?.qType === QUESTION_TYPES.TRUE_FALSE
+        ) {
+          // Case: if objTab has data
+          if (objTab?.question_answer_id) {
+            return {
+              ...objTab,
+              // done: true,
+              attempted: true,
+              answer: objTab?.question_answer_id,
+            }
+          }
+          // Case: objTab no data and answerSubmitted has data
+          else if (answerSubmitted?.question_answer_id) {
+            return {
+              ...objTab,
+              // done: true,
+              attempted: true,
+              answer: answerSubmitted?.question_answer_id,
+            }
+          } else {
+            return objTab
+          }
+        }
+
+        const listAnswers =
+          objTab?.answer && objTab?.answer.length > 0
+            ? objTab?.answer
+            : answerSubmitted?.answer && answerSubmitted?.answer.length > 0
+              ? answerSubmitted?.answer
+              : []
+        const transformAnswerData = listAnswers.map(
+          (answer: AnswerItem | string, index: number) => {
+            let savedData: AnswerItem | undefined
+            let currentAnswer: string | undefined
+            let currentQuestion: string | undefined
+            if (typeof answer === 'string') {
+              savedData =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.find(
+                      (item: AnswerItem) => item.question_id === objTab.id,
+                    )
+                  : undefined
+
+              currentAnswer = answer
+              currentQuestion = objTab.id
+            } else {
+              savedData =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.find(
+                      (item: AnswerItem) =>
+                        item.question_id === answer.question_id,
+                    )
+                  : undefined
+
+              currentAnswer = answer.answer_id ?? savedData?.answer_id
+              currentQuestion = answer.question_id ?? savedData?.question_id
+            }
+
+            if (objTab?.data?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+              return currentAnswer
+            } else if (objTab?.data?.qType === QUESTION_TYPES.MATCHING) {
+              return {
+                answer_id: currentAnswer,
+                question_id: currentQuestion,
+              }
+            } else if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+              let objAnswer: DragDropAnswerItem | undefined
+              const savedData =
+                answersSubmitted && answersSubmitted.length > 0
+                  ? answersSubmitted.find(
+                      (item: any) => item.questionId === objTab.id,
+                    )
+                  : undefined
+              // Case: Tab has answer
+              if (
+                objTab?.data?.answers &&
+                objTab?.data?.answers.length > 0 &&
+                objTab?.answer &&
+                objTab?.answer.length > 0
+              ) {
+                const currentAnswer = (objTab?.answer ?? []).find((el: any) =>
+                  objTab?.data?.answers.some(
+                    (it: any) => it.id === el.idAnswer,
+                  ),
+                )
+
+                if (currentAnswer) {
+                  objAnswer = currentAnswer
+                }
+              }
+
+              // Case: Tab no answer
+              // & has savedData answer
+              else if (
+                savedData &&
+                savedData.answer &&
+                savedData.answer.length > 0
+              ) {
+                const currentAnswer = (objTab?.data?.answers ?? []).find(
+                  (el: any) => el.id === savedData.answer[0].answer_id,
+                )
+
+                objAnswer = {
+                  id: currentAnswer?.dropId,
+                  idAnswer: savedData.answer[0].answer_id,
+                  value: currentAnswer?.answer,
+                }
+              }
+
+              // Case: Tab no answer
+              // & no savedData answer
+              else {
+                const currentAnswer = (objTab?.data?.answers ?? []).find(
+                  (el: any) => el.id === objTab?.data?.answers[0].id,
+                )
+
+                objAnswer = {
+                  id: currentAnswer?.dropId,
+                  idAnswer: objTab?.data?.answers[0].id,
+                  value: currentAnswer?.answer,
+                }
+              }
+
+              // for (let i = 0; i < objTab?.data?.answers?.length; i++) {
+              //   const answerId = objTab?.data?.answers[i].id
+              //   if (currentAnswer) {
+              //     objAnswer = currentAnswer
+              //   } else {
+              //     if (
+              //       savedData.answer &&
+              //       savedData.answer.length > 0 &&
+              //       savedData.answer.find(
+              //         (el: any) => el.answer_id === answerId,
+              //       )
+              //     ) {
+              //       const currentAnswer = (objTab?.data?.answers ?? []).find(
+              //         (el: any) => el.id === answerId,
+              //       )
+
+              //       objAnswer = {
+              //         id: currentAnswer?.dropId,
+              //         idAnswer: answerId,
+              //         value: currentAnswer?.answer,
+              //       }
+              //     }
+
+              //     break
+              //   }
+              // }
+
+              return objAnswer
+            } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
+              return currentAnswer
+            } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
+              const savedData: AnswerItem =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.at(index)
+                  : undefined
+
+              currentAnswer =
+                typeof answer !== 'string'
+                  ? (answer.answer_text ?? savedData?.answer_text)
+                  : answer
+              return currentAnswer
+            }
+          },
+        )
+
+        if (transformAnswerData?.length > 0) {
+          return {
+            ...objTab,
+            answer: transformAnswerData,
+            ...dataCorrectAndSolution,
+            // done: true,
+          }
+        } else {
+          return { ...objTab, ...dataCorrectAndSolution }
+        }
+      } else {
+        return objTab
+      }
+    } else return undefined
+  }, [currentPage, tabs, answersSubmitted, essayData])
 
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
@@ -1075,24 +1251,25 @@ const TestDetail = () => {
   }
 
   const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
-    let newData = [] as any
-    for (let item of tabs) {
+    const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
-        var newItem = {
+        return {
           ...item,
           data: {
             ...item?.data,
-            requirements: (item?.data?.requirements ?? []).map(
-              (requirement: Requirement, reqIndex: number) => {
-                const editorContent = getValues(
-                  `${currentPage}_${reqIndex}_answer`,
-                )
-                return {
-                  ...requirement,
-                  answer_text: editorContent,
-                }
-              },
-            ),
+            requirements: (
+              tabContent?.data?.requirements ??
+              item?.data?.requirements ??
+              []
+            ).map((requirement: Requirement, reqIndex: number) => {
+              const editorContent = getValues(
+                `${currentPage}_${reqIndex}_answer`,
+              )
+              return {
+                ...requirement,
+                answer_text: editorContent ?? requirement?.answer_text,
+              }
+            }),
           },
 
           attempted: item?.attempted || checkAnswered(item),
@@ -1104,63 +1281,40 @@ const TestDetail = () => {
                 : Date.now() - startTime
             : item?.timeSpent,
         }
-
-        newData.push(newItem)
       } else {
-        newData.push(item)
+        return item
       }
-    }
+    })
     return newData
   }
 
   const handleSaveFileEssay = (file: any, requirementIndex: number | null) => {
-    setTabs((prev: any) => {
-      let _tabs = [...prev]
-      let newData = [] as any
-      for (let item of _tabs) {
-        if (currentPage === item.id) {
-          let newItem = { ...item }
-          if (
-            requirementIndex !== null &&
-            item.data.requirements &&
-            essayData?.req !== undefined
-          ) {
-            newItem = {
-              ...item,
-              data: {
-                ...item.data,
-                requirements: (item?.data?.requirements || [])?.map(
-                  (req: any, idx: number) => {
-                    if (idx === requirementIndex) {
-                      return {
-                        ...req,
-                        answer_file: {
-                          file_key: file?.file_key,
-                          file_name: file?.name,
-                        },
-                      }
-                    }
-                    return req
-                  },
-                ),
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        return {
+          ...tab,
+          data: {
+            ...tab?.data,
+            requirements: currentTabContent?.data?.requirements?.map(
+              (req: any, idx: number) => {
+                if (idx === requirementIndex) {
+                  return {
+                    ...req,
+                    answer_file: {
+                      file_key: file?.file_key,
+                      file_name: file?.name,
+                    },
+                  }
+                }
+                return req
               },
-            }
-          } else {
-            newItem = {
-              ...item,
-              answer_file: {
-                file_key: file?.file_key,
-                file_name: file?.name,
-              },
-            }
-          }
-          newData.push(newItem)
-        } else {
-          newData.push(item)
+            ),
+          },
         }
       }
-      return newData
+      return tab
     })
+    setTabs(newTabs)
   }
 
   const handleChangeTypeEssay = (value: number) => {
@@ -1186,11 +1340,8 @@ const TestDetail = () => {
     if (!currentTabContent) return
 
     // Early return for tab changes if question not answered
-    if (
-      (action === 'change-tab' || action === 'timeout') &&
-      !checkAnswered(currentTabContent)
-    ) {
-      return
+    if (action === 'change-tab' || action === 'timeout') {
+      if (!checkAnswered(currentTabContent)) return
     }
 
     // Get current answers and prepare submission data
@@ -1199,7 +1350,7 @@ const TestDetail = () => {
       (e: any) => e.id === currentTabContent?.id,
     )
 
-    if (!currentQuestion?.answer) return
+    // if (!currentQuestion?.answer) return
 
     // Format answer based on question type
     const answerItem = formatAnswerItem(currentQuestion)
@@ -1530,31 +1681,30 @@ const TestDetail = () => {
   }
 
   const handleClearFile = (requirementIndex: number) => {
-    setTabs((prev: TabItem[]) => {
-      const newData = prev.map((item: TabItem) => {
-        if (currentPage === item.id) {
-          return {
-            ...item,
-            answer_file: undefined,
-            data: {
-              ...item.data,
-              requirements: item.data.requirements.map(
-                (req: Requirement, idx: number) => {
-                  if (idx === requirementIndex) {
-                    return { ...req, answer_file: undefined }
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        return {
+          ...tab,
+          data: {
+            ...tab?.data,
+            requirements: currentTabContent?.data?.requirements?.map(
+              (req: any, idx: number) => {
+                if (idx === requirementIndex) {
+                  return {
+                    ...req,
+                    answer_file: null,
                   }
-                  return req
-                },
-              ),
-            },
-          }
+                }
+                return req
+              },
+            ),
+          },
         }
-        return item
-      })
-      return newData
+      }
+      return tab
     })
+    setTabs(newTabs)
   }
-
   const handleSaveHighLight = (e: any) => {
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
