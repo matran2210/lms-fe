@@ -32,6 +32,7 @@ const TestTimeOutModal = ({
       open={open}
       cancelButtonCaption="Quit"
       okButtonCaption="View Results"
+      showCancelButton={false}
       handleCancel={onCancel}
       onOk={onSubmit}
       fullWidthBtn={true}
