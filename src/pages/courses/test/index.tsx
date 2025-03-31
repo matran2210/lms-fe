@@ -148,6 +148,8 @@ const TestModal = ({
         } else {
           localStorage.removeItem('quizAttempt')
         }
+      } else {
+        localStorage.removeItem('quizAttempt')
       }
     }
   }
