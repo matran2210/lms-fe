@@ -13,6 +13,7 @@ import StudentsTestResultFilter from '@components/teacher/components/StudentsTes
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 import { IStudentTestResult } from 'src/type/classes'
+import { GradingMethod } from '@utils/constants'
 
 const { Title } = Typography
 
@@ -145,7 +146,11 @@ export default function StudentsTestResult() {
       title: 'Đã chấm',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          dataColumn={`${record?.total_grading_attempts}/${record?.total_attempts}`}
+          dataColumn={`${
+            record.quiz?.grading_method === GradingMethod.MANUAL
+              ? `${record?.total_grading_attempts}/${record?.total_attempts}`
+              : '--'
+          }`}
         />
       ),
     },
@@ -154,7 +159,9 @@ export default function StudentsTestResult() {
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
           dataColumn={
-            record?.end_time ? formatDateFromUTC(record?.end_time) : '-'
+            record?.quiz?.due_date_grade
+              ? formatDateFromUTC(record?.quiz?.due_date_grade)
+              : '-'
           }
         />
       ),

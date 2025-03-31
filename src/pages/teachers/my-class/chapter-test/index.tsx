@@ -7,7 +7,7 @@ import ChapterTestFilter from '@components/teacher/components/ChapterTestFilter'
 import { useForm } from 'react-hook-form'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { ITabs } from 'src/type'
-import { PageLink } from 'src/constants'
+import { PageLink, QUIZ_ATTEMPT_STATUS } from 'src/constants'
 import SappTable from '@components/table/SappTable'
 import { TeacherKey } from '@pages/api/queryKey'
 import { TablePaginationConfig } from 'antd'
@@ -128,13 +128,7 @@ const ChapterTest = () => {
       ),
     },
     {
-      title: 'Level',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.user?.detail?.level} />
-      ),
-    },
-    {
-      title: 'Duration',
+      title: 'Submission Time',
       render: (record: IStudentClassDetail) => (
         <StudentCell
           dataColumn={
@@ -146,21 +140,27 @@ const ChapterTest = () => {
       ),
     },
     {
-      title: 'Progress',
+      title: 'Status',
       render: (record: IStudentClassDetail) => (
         <StudentCell
-          dataColumn={`${Math.round(
-            ((record?.learning_progress?.total_course_sections_completed ?? 0) /
-              (record?.learning_progress?.total_course_sections || 1)) *
-              100,
-          )}%`}
+          dataColumn={
+            record?.attempt?.status === QUIZ_ATTEMPT_STATUS.SUBMITTED
+              ? 'Submitted'
+              : 'Unsubmitted'
+          }
         />
       ),
     },
     {
-      title: 'Exam Date',
+      title: 'Final score',
       render: (record: IStudentClassDetail) => (
-        <StudentCell dataColumn={record?.examination_subject} />
+        <StudentCell dataColumn={record?.attempt?.score?.toString()} />
+      ),
+    },
+    {
+      title: 'Người chấm',
+      render: (record: IStudentClassDetail) => (
+        <StudentCell dataColumn={record?.staff?.detail?.full_name} />
       ),
     },
   ]

@@ -40,7 +40,7 @@ export interface IUser {
 
 export interface IStudentClassDetail {
   user?: IUser
-  attempt?: { finished_at?: string }
+  attempt?: { finished_at?: string; status?: string; score?: number }
   start_time?: string
   end_time?: string
   started_at?: string
@@ -50,6 +50,11 @@ export interface IStudentClassDetail {
     total_course_sections_completed?: number
     total_course_sections?: number
   }
+  staff?: {
+    detail: {
+      full_name?: string
+    }
+  }
 }
 
 export interface IStudentTestResult {
@@ -58,6 +63,7 @@ export interface IStudentTestResult {
     name?: string
     quiz_type?: string
     grading_method?: string
+    due_date_grade?: string
   }
   mode?: string
   start_time?: string
