@@ -86,8 +86,10 @@ const NewEventSidebar = ({
     const payload = {
       event_name: formValues.event_name,
       event_type: EVENT_TYPES.BUSY,
-      start_time: formValues.range[0].toISOString(),
-      end_time: formValues.range[1].toISOString(),
+      range: {
+        start_time: formValues.range[0].toISOString(),
+        end_time: formValues.range[1].toISOString(),
+      },
       description: formValues.description,
       repeat: formValues.repeat?.recurring_schedule,
     } as ICreateSchedulePayload
