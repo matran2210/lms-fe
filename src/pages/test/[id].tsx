@@ -29,16 +29,14 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { debounce, get, isEmpty, isUndefined, uniqueId } from 'lodash'
+import { debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,
-  ESSAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
   PageLink,
@@ -70,7 +68,6 @@ import {
   RequirementItem,
   ScratchPad,
   ScratchPadValue,
-  TabItem,
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
@@ -1102,6 +1099,7 @@ const TestDetail = () => {
           attempted: true,
           corrects: corrects,
           solution: solution,
+          is_viewed_answer: true,
           timeSpent: item?.timeSpent
             ? Date.now() - startTime + item?.timeSpent
             : Date.now() - startTime,
@@ -1233,7 +1231,6 @@ const TestDetail = () => {
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
     }
-    handleSubmitAnswer('change-tab')
     setLoading(false)
     setScratchPadValues(null)
   }
@@ -1515,7 +1512,9 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       return {
         ...baseAnswer,
-        answer: question.answer.map((el: string) => ({ answer_id: el })),
+        answer: (question?.answer || [])?.map((el: string) => ({
+          answer_id: el,
+        })),
       }
     }
 
@@ -2051,10 +2050,11 @@ const TestDetail = () => {
       if (questions?.length > 0) {
         const answerMap = new Map(
           answersSubmitted.map(
-            (answer: { questionId: string; flag?: boolean }) => [
-              answer.questionId,
-              answer,
-            ],
+            (answer: {
+              questionId: string
+              flag?: boolean
+              is_viewed_answer?: boolean
+            }) => [answer.questionId, answer],
           ),
         )
 
@@ -2071,6 +2071,9 @@ const TestDetail = () => {
               attempted: hasAnswer,
               index,
               response_type: 0,
+              is_viewed_answer:
+                (answerMap.get(question.id) as { is_viewed_answer?: boolean })
+                  ?.is_viewed_answer || false,
             }
 
             if (index === 0) {
@@ -2083,6 +2086,9 @@ const TestDetail = () => {
                   data: questionDetail,
                   topicDescription: topicDescription?.data,
                 }),
+                is_viewed_answer:
+                  (answerMap.get(question.id) as { is_viewed_answer?: boolean })
+                    ?.is_viewed_answer || false,
               }
             }
             return baseData
@@ -2602,7 +2608,7 @@ const TestDetail = () => {
                 <button
                   className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
-                    handleSubmitAnswer('view-answer')
+                    await handleSubmitAnswer('view-answer')
                     const data = await getResult(currentTabContent)
                     confirmAnswer(
                       data?.corrects,

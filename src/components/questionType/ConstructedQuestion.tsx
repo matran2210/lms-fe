@@ -348,8 +348,11 @@ const EssayQuestionPreview = ({
                   <div
                     className="title-btn-preview"
                     onClick={() =>
-                      !(fullData?.confirmed || fullData?.data?.confirmed) &&
-                      openChooseFile(true)
+                      !(
+                        fullData?.confirmed ||
+                        fullData?.data?.confirmed ||
+                        fullData?.is_viewed_answer
+                      ) && openChooseFile(true)
                     }
                   >
                     Choose file to upload
@@ -383,13 +386,17 @@ const EssayQuestionPreview = ({
               height={500}
               placeholder="Your answer here"
               defaultValue={defaultValue}
-              disabled={fullData?.confirmed || fullData?.data?.confirmed}
+              disabled={
+                fullData?.confirmed ||
+                fullData?.data?.confirmed ||
+                fullData?.is_viewed_answer
+              }
               handleChange={() => handleChange && handleChange(data?.id)}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
                 name={name}
@@ -419,7 +426,10 @@ const EssayQuestionPreview = ({
                       // row={2}
 
                       onChange={(e) => {
-                        if (!fullData?.done && !fullData?.confirmed) {
+                        if (
+                          !fullData?.is_viewed_answer &&
+                          !fullData?.confirmed
+                        ) {
                           const currentSheet = refSheet.current?.getSheet()
                           if (value && String(value).trim() !== '') {
                             let old = [...JSON.parse(value)]
@@ -475,7 +485,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={
-                fullData?.done ||
+                fullData?.is_viewed_answer ||
                 fullData?.confirmed ||
                 fullData?.data?.confirmed
               }
@@ -483,7 +493,7 @@ const EssayQuestionPreview = ({
             />
           ) : (
             <div
-              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
                 name={name}
