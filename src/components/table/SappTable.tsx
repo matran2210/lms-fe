@@ -6,15 +6,11 @@ const { Title } = Typography
 
 interface BaseTableProps {
   columns: Array<any>
-  showCheckbox?: boolean
   data: Array<any>
   pagination: TablePaginationConfig
   setPagination?: Dispatch<SetStateAction<TablePaginationConfig>>
   loading?: boolean
   handleChangeParams?: (currentPage: number, pageSize: number) => void
-  onResolveSelections?: () => void
-  setSelection?: Dispatch<SetStateAction<Map<number, React.Key[]>>>
-  selections?: Map<number, React.Key[]>
   titleTable?: {
     title: string
     isShowTitle: boolean
@@ -23,14 +19,11 @@ interface BaseTableProps {
 
 const SappTable = <T extends { id: React.Key }>({
   columns,
-  showCheckbox,
   data,
   pagination,
   setPagination,
   loading,
   handleChangeParams,
-  setSelection,
-  selections,
   titleTable = { title: '', isShowTitle: false },
 }: BaseTableProps) => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
@@ -42,19 +35,6 @@ const SappTable = <T extends { id: React.Key }>({
     if (handleChangeParams) {
       handleChangeParams(currentPage, pageSize)
     }
-  }
-  // Checkbox selection
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    const currentPage = pagination.current
-    setSelection &&
-      setSelection((prev) =>
-        new Map(prev).set(currentPage ?? 1, newSelectedRowKeys),
-      )
-  }
-
-  const rowSelection: TableProps<T>['rowSelection'] = {
-    selectedRowKeys: selections ? selections.get(pagination?.current ?? 1) : [],
-    onChange: onSelectChange,
   }
 
   return (
@@ -69,7 +49,6 @@ const SappTable = <T extends { id: React.Key }>({
         dataSource={data}
         pagination={pagination}
         onChange={handleTableChange}
-        rowSelection={showCheckbox ? rowSelection : undefined}
         loading={loading}
         rowKey={(record) => record?.id || 'id'}
         scroll={{ x: 'max-content' }}
