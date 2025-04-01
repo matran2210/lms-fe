@@ -1,19 +1,17 @@
 import LayoutFilter from '@components/layout/TeacherFilter/index'
 import SappTable from '@components/table/SappTable'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { TablePaginationConfig } from 'antd'
 import { formatDateFromUTC } from 'src/utils/index'
 import StudentCell from '@components/teacher/components/StudentCell'
 import { TeacherAPI } from '@pages/api/teacher'
-import { useQuery } from 'react-query'
 import StudentFilter from '@components/teacher/components/StudentFilter'
 import { useForm } from 'react-hook-form'
 import { IStudentClassDetail } from 'src/type/classes'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { round } from 'lodash'
 import { FOUNDATION } from '@utils/constants'
-import { DATE_FORMAT } from 'src/constants'
+import useSappPaging from 'src/hooks/useSappPaging'
 
 interface FilterParams {
   text?: string
@@ -27,52 +25,20 @@ export default function Students() {
   const { control, reset, getValues } = useForm()
   const router = useRouter()
   const studentId = router?.query?.id as string
-
   const [params, setParams] = useState<FilterParams>(initialValues)
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || 1,
-    pageSize: Number(router.query.page_size) || 10,
-    total: 10,
-    showSizeChanger: true,
-    showQuickJumper: true,
-  })
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ['student', studentId, pagination, params],
-    queryFn: () =>
-      TeacherAPI.getStudentById(
-        studentId,
-        pagination.current ?? 1,
-        pagination.pageSize ?? 10,
-        params,
-      ),
-    enabled: !!studentId,
-    retry: false,
-  })
-
-  useEffect(() => {
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          page_index: pagination.current,
-          page_size: pagination.pageSize,
-          ...params,
-        },
-      },
-      undefined,
-      { shallow: true },
-    )
-  }, [pagination, params])
-
-  const handleChangeParams = (currentPage: number, pageSize: number) => {
-    setPagination((prev) => ({
-      ...prev,
-      current: currentPage,
-      pageSize: pageSize,
-    }))
-  }
+  const { data, pagination, isLoading, handleChangeParams, setPagination } =
+    useSappPaging({
+      uniqueKey: 'student',
+      queryFn: () =>
+        TeacherAPI.getStudentById(
+          studentId,
+          pagination.current as number,
+          pagination.pageSize as number,
+          params,
+        ),
+      params,
+    })
 
   // Hàm tính toán tiến độ học tập của học viên
   const calculateProgress = (record: IStudentClassDetail): number => {
@@ -98,14 +64,6 @@ export default function Students() {
   const onSubmit = () => {
     setParams({ text: getValues('text') || undefined })
   }
-  useEffect(() => {
-    if (data?.meta?.total_records) {
-      setPagination((prev) => ({
-        ...prev,
-        total: data?.meta?.total_records,
-      }))
-    }
-  }, [data])
 
   const columnsValue = [
     {

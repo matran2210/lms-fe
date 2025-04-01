@@ -53,7 +53,7 @@ const MyClass = () => {
 
   const { control, getValues, reset, setValue, watch } = useForm()
   const courseCategoryId = watch('course_category_id')
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [TeacherKey.MyClass, pageIndex, pageSize, params],
     queryFn: async () => {
       try {

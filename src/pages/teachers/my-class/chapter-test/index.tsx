@@ -57,8 +57,13 @@ const ChapterTest = () => {
     },
     { link: '', title: 'Chapter Test' },
   ]
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [TeacherKey.ChapterTest, pagination, params],
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      TeacherKey.ChapterTest,
+      pagination.current,
+      pagination.pageSize,
+      params,
+    ],
     queryFn: async () => {
       try {
         return await TeacherAPI.getDetailTestQuiz(

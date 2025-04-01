@@ -2,6 +2,7 @@ import TeacherMenu from '@components/layout/MenuItemsList/TeacherMenu'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { Typography } from 'antd'
 import { ITabs } from 'src/type'
+import { memo } from 'react'
 
 const { Title } = Typography
 type LayoutTeacherProps = {
@@ -11,12 +12,12 @@ type LayoutTeacherProps = {
   className?: string
 }
 
-export default function LayoutTeacher({
+const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
   children,
   title = '',
   breadcrumbs = [],
   className = '',
-}: LayoutTeacherProps) {
+}: LayoutTeacherProps) => {
   return (
     <div className="flex flex-nowrap">
       <TeacherMenu />
@@ -36,3 +37,4 @@ export default function LayoutTeacher({
     </div>
   )
 }
+export default memo(LayoutTeacher)

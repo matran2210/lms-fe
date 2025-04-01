@@ -74,7 +74,7 @@ const ClassDetail = () => {
   const classId = router?.query?.id as string
   const [selected, setSelected] = useState<number>(tabs[0].id)
 
-  const { data, isLoading, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['class', classId],
     queryFn: () => TeacherAPI.getClassById(classId),
     enabled: !!classId,

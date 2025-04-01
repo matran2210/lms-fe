@@ -41,7 +41,13 @@ export default function StudentsTestResult() {
   })
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['student', studentId, pagination, params],
+    queryKey: [
+      'student',
+      studentId,
+      pagination.current,
+      pagination.pageSize,
+      params,
+    ],
     queryFn: () =>
       TeacherAPI.getListTestQuiz(
         studentId,
