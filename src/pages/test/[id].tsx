@@ -29,16 +29,14 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { debounce, isArray, isEmpty, isUndefined, uniqueId } from 'lodash'
+import { debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,
-  ESSAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
   PageLink,
@@ -70,7 +68,6 @@ import {
   RequirementItem,
   ScratchPad,
   ScratchPadValue,
-  TabItem,
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
@@ -248,7 +245,8 @@ const TestDetail = () => {
             defaultValue={
               getValues(`${currentTabID}_${essayData?.index}_answer`) ||
               currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text
+                ?.answer_text ||
+              currentTabContent?.answer
             }
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
@@ -515,95 +513,118 @@ const TestDetail = () => {
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           // Case: if objTab has data
           if (essayData) {
-            const requirementAmswer = (objTab?.data?.requirements ?? []).find(
-              (req: Requirement) => req?.id === essayData?.req?.id,
-            )
+            if ((objTab?.data?.requirements ?? []).length > 0) {
+              const requirementAmswer = (objTab?.data?.requirements ?? []).find(
+                (req: Requirement) => req?.id === essayData?.req?.id,
+              )
 
-            if (
-              requirementAmswer &&
-              requirementAmswer?.answer_text &&
-              requirementAmswer?.answer_file
-            ) {
+              if (
+                requirementAmswer &&
+                requirementAmswer?.answer_text &&
+                requirementAmswer?.answer_file
+              ) {
+                return {
+                  ...objTab,
+                  // ...requirementAmswer,
+                  // done: true,
+                  attempted: true,
+                }
+              } else {
+                return {
+                  ...objTab,
+                  data: {
+                    ...objTab?.data,
+                    requirements: (objTab?.data?.requirements ?? []).map(
+                      (req: any) => {
+                        const requirementData = (
+                          answerSubmitted?.answer ?? []
+                        ).find(
+                          (r: RequirementItem) => r.requirement_id === req?.id,
+                        )
+                        return {
+                          ...req,
+                          answer_file:
+                            req?.answer_file !== undefined
+                              ? req?.answer_file
+                              : requirementData?.answer_file,
+                          short_answer:
+                            req?.short_answer !== undefined
+                              ? req?.short_answer
+                              : requirementData?.short_answer,
+                          answer_text:
+                            req?.answer_text !== undefined
+                              ? req?.answer_text
+                              : requirementData?.short_answer,
+                        }
+                      },
+                    ),
+                  },
+                  // done: true,
+                  attempted: true,
+                  answer: null,
+                }
+              }
+            } else {
+              // No requirement
               return {
                 ...objTab,
                 // ...requirementAmswer,
                 // done: true,
+                answer:
+                  objTab?.answer !== undefined
+                    ? objTab?.answer
+                    : answerSubmitted?.short_answer,
                 attempted: true,
-              }
-            } else {
-              return {
-                ...objTab,
-                data: {
-                  ...objTab?.data,
-                  requirements: (objTab?.data?.requirements ?? []).map(
-                    (req: any) => {
-                      const requirementData = (
-                        answerSubmitted?.answer ?? []
-                      ).find(
-                        (r: RequirementItem) => r.requirement_id === req?.id,
-                      )
-                      return {
-                        ...req,
-                        answer_file:
-                          req?.answer_file !== undefined
-                            ? req?.answer_file
-                            : requirementData?.answer_file,
-                        short_answer:
-                          req?.short_answer !== undefined
-                            ? req?.short_answer
-                            : requirementData?.short_answer,
-                        answer_text:
-                          req?.answer_text !== undefined
-                            ? req?.answer_text
-                            : requirementData?.short_answer,
-                      }
-                    },
-                  ),
-                },
-                // done: true,
-                attempted: true,
-                answer: null,
               }
             }
           }
           // Case: objTab no data
           else {
-            // & answerSubmitted has data
-            if (answerSubmitted?.answer) {
-              return {
-                ...objTab,
-                data: {
-                  ...objTab?.data,
-                  requirements: (objTab?.data?.requirements ?? []).map(
-                    (req: Requirement) => {
-                      const requirementAmswer = (
-                        answerSubmitted?.answer ?? []
-                      ).find(
-                        (r: RequirementItem) => r.requirement_id === req?.id,
-                      )
-                      return {
-                        ...req,
-                        answer_file: requirementAmswer?.answer_file,
-                        short_answer: requirementAmswer?.short_answer,
-                        answer_text: requirementAmswer?.short_answer,
-                      }
-                    },
-                  ),
-                },
-                // done: true,
+            if ((objTab?.data?.requirements ?? []).length > 0) {
+              // & answerSubmitted has data
+              if (answerSubmitted?.answer) {
+                return {
+                  ...objTab,
+                  data: {
+                    ...objTab?.data,
+                    requirements: (objTab?.data?.requirements ?? []).map(
+                      (req: Requirement) => {
+                        const requirementAmswer = (
+                          answerSubmitted?.answer ?? []
+                        ).find(
+                          (r: RequirementItem) => r.requirement_id === req?.id,
+                        )
+                        return {
+                          ...req,
+                          answer_file: requirementAmswer?.answer_file,
+                          short_answer: requirementAmswer?.short_answer,
+                          answer_text: requirementAmswer?.short_answer,
+                        }
+                      },
+                    ),
+                  },
+                  // done: true,
 
-                attempted: true,
-                answer: null,
+                  attempted: true,
+                  answer: null,
+                }
               }
-            }
 
-            // & answerSubmitted no data
-            else {
+              // & answerSubmitted no data
+              else {
+                return {
+                  ...objTab,
+                  // done: true,
+                  attempted: true,
+                  answer: null,
+                }
+              }
+            } else {
               return {
                 ...objTab,
                 // done: true,
                 attempted: true,
-                answer: null,
+                answer: answerSubmitted?.short_answer,
               }
             }
           }
@@ -1259,33 +1280,55 @@ const TestDetail = () => {
   const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
-        return {
-          ...item,
-          data: {
-            ...item?.data,
-            requirements: (
-              tabContent?.data?.requirements ??
-              item?.data?.requirements ??
-              []
-            ).map((requirement: Requirement, reqIndex: number) => {
-              const editorContent = getValues(
-                `${currentPage}_${reqIndex}_answer`,
-              )
-              return {
-                ...requirement,
-                answer_text: editorContent ?? requirement?.answer_text,
-              }
-            }),
-          },
+        if (
+          (tabContent?.data?.requirements ?? item?.data?.requirements ?? [])
+            .length > 0
+        ) {
+          return {
+            ...item,
+            data: {
+              ...item?.data,
+              requirements: (
+                tabContent?.data?.requirements ??
+                item?.data?.requirements ??
+                []
+              ).map((requirement: Requirement, reqIndex: number) => {
+                const editorContent = getValues(
+                  `${currentPage}_${reqIndex}_answer`,
+                )
+                return {
+                  ...requirement,
+                  answer_text: editorContent ?? requirement?.answer_text,
+                }
+              }),
+            },
 
-          attempted: item?.attempted || checkAnswered(item),
-          timeSpent: !item?.done
-            ? item?.timeSpent
-              ? Date.now() - startTime + item?.timeSpent
-              : Date.now() - startTime <= 0
-                ? 0
-                : Date.now() - startTime
-            : item?.timeSpent,
+            attempted: item?.attempted || checkAnswered(item),
+            timeSpent: !item?.done
+              ? item?.timeSpent
+                ? Date.now() - startTime + item?.timeSpent
+                : Date.now() - startTime <= 0
+                  ? 0
+                  : Date.now() - startTime
+              : item?.timeSpent,
+          }
+        } else {
+          const answer = getValues(
+            `${currentTabContent?.id}_${essayData?.index}_answer`,
+          )
+          return {
+            ...item,
+            answer: answer,
+
+            attempted: item?.attempted || checkAnswered(item),
+            timeSpent: !item?.done
+              ? item?.timeSpent
+                ? Date.now() - startTime + item?.timeSpent
+                : Date.now() - startTime <= 0
+                  ? 0
+                  : Date.now() - startTime
+              : item?.timeSpent,
+          }
         }
       } else {
         return item
@@ -1357,10 +1400,8 @@ const TestDetail = () => {
     )
 
     // if (!currentQuestion?.answer) return
-
     // Format answer based on question type
     const answerItem = formatAnswerItem(currentQuestion)
-
     // Prepare submission payload
     const payload = {
       question_id: currentTabContent?.id,
