@@ -74,14 +74,21 @@ export default function Students() {
     }))
   }
 
+  // Hàm tính toán tiến độ học tập của học viên
   const calculateProgress = (record: IStudentClassDetail): number => {
+    // Lấy tổng số phần trong khóa học, nếu không có thì gán mặc định là 0
     const totalSections = record?.learning_progress?.total_course_sections ?? 0
+
+    // Lấy số phần đã hoàn thành trong khóa học, nếu không có thì gán mặc định là 0
     const completedSections =
       record?.learning_progress?.total_course_sections_completed ?? 0
 
+    // Nếu tổng số phần lớn hơn 0, tính tiến độ học tập dưới dạng phần trăm
     return totalSections > 0
-      ? round((completedSections / totalSections) * 100, 2)
-      : 0
+      ? // Tính tiến độ (completedSections / totalSections) và nhân với 100 để có phần trăm, sau đó làm tròn kết quả đến 2 chữ số thập phân
+        round((completedSections / totalSections) * 100, 2)
+      : // Nếu không có phần nào trong khóa học (totalSections = 0), trả về tiến độ là 0%
+        0
   }
   const handleResetFilter = () => {
     reset(initialValues)

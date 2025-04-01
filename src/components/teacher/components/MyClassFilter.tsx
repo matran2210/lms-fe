@@ -3,10 +3,12 @@ import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { listStatusMyClass } from 'src/pages/teachers/my-class/index'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useState } from 'react'
-import { debounce, isEmpty } from 'lodash'
+import { Control } from 'react-hook-form'
+import { debounce } from '@utils/helpers'
+import { isEmpty } from 'lodash'
 
 interface MyClassFilterProps {
-  control: any
+  control: Control<any>
   setValue: (name: string, value: string) => void
   courseCategoryId?: { value: string }
 }
@@ -46,13 +48,10 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
   const [subjects, setSubjects] = useState<SubjectResponse>(
     initialSubjectsValues,
   )
-  const [subjectCourse, setSubjectCourse] =
+  const [courseCategory, setCourseCategory] =
     useState<CourseCategoryResponse>(initialCourseValues)
-  const createDebouncedSearch = (
-    fetchFunction: (text: string) => void,
-    delay = 350,
-  ) => debounce((text: string) => fetchFunction(text), delay)
-  const fetchSubjectCourse = async (
+
+  const fetchCourseCategory = async (
     page_index: number,
     page_size: number,
     params?: object,
@@ -64,7 +63,7 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
         page_size,
         params,
       )
-      setSubjectCourse((prev) => ({
+      setCourseCategory((prev) => ({
         course_categories: isSearch
           ? data.course_categories
           : [...prev.course_categories, ...data.course_categories],
@@ -96,14 +95,13 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
 
   const handleScrollCourse = () => {
     if (
-      subjectCourse.metadata.page_size &&
-      subjectCourse.metadata.total_pages > subjectCourse.metadata.page_index
+      courseCategory.metadata.page_size &&
+      courseCategory.metadata.total_pages > courseCategory.metadata.page_index
     ) {
-      fetchSubjectCourse(
-        subjectCourse.metadata.page_index + 1,
-        subjectCourse.metadata.page_size,
+      fetchCourseCategory(
+        courseCategory.metadata.page_index + 1,
+        courseCategory.metadata.page_size,
         {},
-        false,
       )
     }
   }
@@ -121,19 +119,21 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
       )
     }
   }
-  const debouncedSearchCourse = createDebouncedSearch((text) =>
-    fetchSubjectCourse(1, 10, { name: text }, true),
+  const debouncedSearchCourse = debounce(
+    (text) => fetchCourseCategory(1, 10, { name: text }, true),
+    500,
   )
-  const debouncedSearchSubject = createDebouncedSearch((text) =>
-    fetchSubject(1, 10, { name: text }, false),
+  const debouncedSearchSubject = debounce(
+    (text) => fetchSubject(1, 10, { name: text }),
+    500,
   )
   const onChangeCourse = (courseCategoryId: { value: string }) => {
+    setValue('subject_id', '')
     if (courseCategoryId) {
-      fetchSubject(1, 10, { course_category_id: courseCategoryId.value }, false)
+      fetchSubject(1, 10, { course_category_id: courseCategoryId.value })
     } else {
       setSubjects(initialSubjectsValues)
-      setValue('subject_id', '')
-      fetchSubjectCourse(1, 10, {}, true)
+      fetchCourseCategory(1, 10, {}, true)
     }
   }
 
@@ -149,22 +149,18 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
       <SappHookFormSelect
         control={control}
         onFocus={() => {
-          if (isEmpty(subjectCourse.course_categories)) {
-            fetchSubjectCourse(1, 10, {}, true)
+          if (isEmpty(courseCategory.course_categories)) {
+            fetchCourseCategory(1, 10, {}, true)
           }
         }}
         name="course_category_id"
         isSelectCustom
         placeholder="Program"
-        options={subjectCourse.course_categories.map((category) => ({
+        options={courseCategory.course_categories.map((category) => ({
           label: category.name,
           value: category.id,
         }))}
-        onSearch={(text) => {
-          if (text) {
-            debouncedSearchCourse(text)
-          }
-        }}
+        onSearch={(text) => text && debouncedSearchCourse(text)}
         onChange={(courseCategoryId: { value: string }) =>
           onChangeCourse(courseCategoryId)
         }
@@ -180,11 +176,7 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
           label: subject.name,
           value: subject.id,
         }))}
-        onSearch={(text) => {
-          if (text) {
-            debouncedSearchSubject(text)
-          }
-        }}
+        onSearch={(text) => text && debouncedSearchSubject(text)}
         onChange={(subjectId: { value: string }) => {
           setValue('subject_id', subjectId ? subjectId.value : '')
         }}

@@ -100,6 +100,22 @@ export default function StudentsTestResult() {
 
   const columnsValue = [
     {
+      title: '#',
+      render: (
+        _: IStudentTestResult,
+        record: IStudentTestResult,
+        index: number,
+      ) => (
+        <NameNoActionCell
+          dataColumn={
+            index +
+            1 +
+            ((pagination?.current || 1) - 1) * (pagination?.pageSize || 10)
+          }
+        />
+      ),
+    },
+    {
       title: 'Test name',
       render: (record: IStudentTestResult) => (
         <NameActionCell

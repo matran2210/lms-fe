@@ -382,7 +382,7 @@ export const removeHtmlTags = (htmlString?: string) => {
  * @return {string} - Chuỗi ngày địa phương đã được định dạng.
  */
 export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
-  if (dayjs(date, format, true).isValid()) {
+  if (date && dayjs.utc(date).isValid()) {
     return dayjs.utc(date).local().format(format)
   }
   return '-'

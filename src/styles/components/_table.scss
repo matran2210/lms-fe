@@ -65,4 +65,12 @@
   .ant-select-selector:hover {
     @apply border-primary !important;
   }
+  .ant-select-focused .ant-select-selector {
+    border-color: #ffb800 !important;
+    box-shadow: none !important;
+  }
+  .ant-select-selection-search-input:focus {
+    border-color: #ffb800 !important;
+    box-shadow: none !important;
+  }
 }
