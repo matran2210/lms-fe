@@ -31,12 +31,15 @@ const PopupSelectRetakeOrContinueAttempt = ({
   const handleOK = async () => {
     switch (value) {
       case 'continue':
-        await handleContinue()
-        setOpen(false)
+        await handleContinue().then(() => {
+          setOpen(false)
+        })
+
         break
       case 'retake':
-        await handleRetake()
-        setOpen(false)
+        await handleRetake().then(() => {
+          setOpen(false)
+        })
       default:
         setOpen(false)
         break
