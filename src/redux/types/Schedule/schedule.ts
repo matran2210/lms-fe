@@ -20,8 +20,10 @@ export interface ICreateScheduleForm {
 export interface ICreateSchedulePayload {
   event_name: string
   event_type: 'TEACHING' | 'BUSY' | 'TIME_OFF' | 'OTHER'
-  start_time: string
-  end_time: string
+  range: {
+    start_time: string
+    end_time: string
+  }
   description: string
   repeat?: {
     interval: number
