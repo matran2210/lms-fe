@@ -576,6 +576,12 @@ const TestDetail = () => {
                   updatedObjTab?.answer !== undefined
                     ? updatedObjTab?.answer
                     : answerSubmitted?.short_answer,
+
+                answer_file:
+                  updatedObjTab?.answer_file !== undefined
+                    ? updatedObjTab?.answer_file
+                    : answerSubmitted?.answer_file,
+
                 attempted: true,
               }
             }
@@ -627,6 +633,7 @@ const TestDetail = () => {
                 // done: true,
                 attempted: true,
                 answer: answerSubmitted?.short_answer,
+                answer_file: answerSubmitted?.answer_file,
               }
             }
           }
@@ -1343,24 +1350,35 @@ const TestDetail = () => {
   const handleSaveFileEssay = (file: any, requirementIndex: number | null) => {
     const newTabs = tabs.map((tab: any) => {
       if (tab.id === currentPage) {
+        // Case Essay has requirement
+        if (currentTabContent?.data?.requirements?.length > 0) {
+          return {
+            ...tab,
+            data: {
+              ...tab?.data,
+              requirements: currentTabContent?.data?.requirements?.map(
+                (req: any, idx: number) => {
+                  if (idx === requirementIndex) {
+                    return {
+                      ...req,
+                      answer_file: {
+                        file_key: file?.file_key,
+                        file_name: file?.name,
+                      },
+                    }
+                  }
+                  return req
+                },
+              ),
+            },
+          }
+        }
+        // Case Essay has no requirement
         return {
           ...tab,
-          data: {
-            ...tab?.data,
-            requirements: currentTabContent?.data?.requirements?.map(
-              (req: any, idx: number) => {
-                if (idx === requirementIndex) {
-                  return {
-                    ...req,
-                    answer_file: {
-                      file_key: file?.file_key,
-                      file_name: file?.name,
-                    },
-                  }
-                }
-                return req
-              },
-            ),
+          answer_file: {
+            file_key: file?.file_key,
+            file_name: file?.name,
           },
         }
       }
@@ -1754,22 +1772,41 @@ const TestDetail = () => {
   const handleClearFile = (requirementIndex: number) => {
     const newTabs = tabs.map((tab: any) => {
       if (tab.id === currentPage) {
+        // Case Essay has requirement
+        if (currentTabContent?.data?.requirements?.length > 0) {
+          return {
+            ...tab,
+            data: {
+              ...tab?.data,
+              requirements: currentTabContent?.data?.requirements?.map(
+                (req: any, idx: number) => {
+                  if (idx === requirementIndex) {
+                    const editorContent = getValues(
+                      `${currentPage}_${idx}_answer`,
+                    )
+                    return {
+                      ...req,
+                      answer_text:
+                        editorContent !== undefined
+                          ? editorContent
+                          : req?.answer_text,
+                      short_answer:
+                        editorContent !== undefined
+                          ? editorContent
+                          : req?.short_answer,
+                      answer_file: null,
+                    }
+                  }
+                  return req
+                },
+              ),
+            },
+          }
+        }
+        // Case Essay has no requirement
         return {
           ...tab,
-          data: {
-            ...tab?.data,
-            requirements: currentTabContent?.data?.requirements?.map(
-              (req: any, idx: number) => {
-                if (idx === requirementIndex) {
-                  return {
-                    ...req,
-                    answer_file: null,
-                  }
-                }
-                return req
-              },
-            ),
-          },
+          answer_file: null,
         }
       }
       return tab
@@ -2060,7 +2097,8 @@ const TestDetail = () => {
       tabs &&
       tabs.length > 0 &&
       currentTabContent &&
-      currentTabContent?.data?.requirements
+      currentTabContent?.data?.requirements &&
+      !essayData
     ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
