@@ -295,7 +295,10 @@ export enum QUIZ_ATTEMPT_STATUS {
   UN_SUBMITTED = 'UN_SUBMITTED',
   IN_PROGRESS = 'IN_PROGRESS',
 }
-
+export enum DATE_FORMAT {
+  DATE_TIME = 'HH:mm | DD/MM/YYYY',
+  DATE = 'DD/MM/YYYY',
+}
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './form'

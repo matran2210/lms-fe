@@ -10,6 +10,7 @@ import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { DATE_FORMAT } from 'src/constants'
 
 dayjs.extend(utc)
 
@@ -380,8 +381,12 @@ export const removeHtmlTags = (htmlString?: string) => {
  * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày địa phương trả về.
  * @return {string} - Chuỗi ngày địa phương đã được định dạng.
  */
-export const formatDateFromUTC = (date: string, format = 'DD/MM/YYYY') =>
-  dayjs.utc(date).local().format(format)
+export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
+  if (dayjs(date, format, true).isValid()) {
+    return dayjs.utc(date).local().format(format)
+  }
+  return '-'
+}
 
 /**
  * @description Chuyển đổi giá trị enum của loại bài kiểm tra thành chuỗi dễ đọc.
@@ -416,7 +421,7 @@ export const formatNotificationHTML = (input: string): string => {
   return input.replace(
     /<strong\s+data-time\s*=\s*["']([^"']+)["']\s*><\/strong>/g,
     (match, dateTime) => {
-      const formattedDate = dayjs.utc(dateTime).local().format('DD/MM/YYYY')
+      const formattedDate = dayjs.utc(dateTime).local().format(DATE_FORMAT.DATE)
       return `<strong>${formattedDate}</strong>`
     },
   )

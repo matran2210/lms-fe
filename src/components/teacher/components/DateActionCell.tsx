@@ -1,5 +1,6 @@
 import { formatDateFromUTC } from '@utils/index'
 import { FC } from 'react'
+import { DATE_FORMAT } from 'src/constants'
 
 type Props = {
   dataColumn?: {
@@ -8,7 +9,7 @@ type Props = {
   }
 }
 const RenderDateFormat = ({ date }: { date: string }) =>
-  formatDateFromUTC(date, 'HH:mm | DD/MM/YYYY')
+  formatDateFromUTC(date, DATE_FORMAT.DATE_TIME)
 const DateActionCell: FC<Props> = ({ dataColumn }) => {
   return (
     <div className="flex flex-col">

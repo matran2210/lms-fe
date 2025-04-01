@@ -127,6 +127,15 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
   const debouncedSearchSubject = createDebouncedSearch((text) =>
     fetchSubject(1, 10, { name: text }, false),
   )
+  const onChangeCourse = (courseCategoryId: { value: string }) => {
+    if (courseCategoryId) {
+      fetchSubject(1, 10, { course_category_id: courseCategoryId.value }, false)
+    } else {
+      setSubjects(initialSubjectsValues)
+      setValue('subject_id', '')
+      fetchSubjectCourse(1, 10, {}, true)
+    }
+  }
 
   return (
     <div className="grid grid-cols-4 gap-4">
@@ -145,7 +154,7 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
           }
         }}
         name="course_category_id"
-        isCustom
+        isSelectCustom
         placeholder="Program"
         options={subjectCourse.course_categories.map((category) => ({
           label: category.name,
@@ -156,27 +165,16 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
             debouncedSearchCourse(text)
           }
         }}
-        onChange={(courseCategoryId: { value: string }) => {
-          if (courseCategoryId) {
-            fetchSubject(
-              1,
-              10,
-              { course_category_id: courseCategoryId.value },
-              false,
-            )
-          } else {
-            setSubjects(initialSubjectsValues)
-            setValue('subject_id', '')
-            fetchSubjectCourse(1, 10, {}, true)
-          }
-        }}
+        onChange={(courseCategoryId: { value: string }) =>
+          onChangeCourse(courseCategoryId)
+        }
         isClearable
         onMenuScrollToBottom={handleScrollCourse}
       />
       <SappHookFormSelect
         control={control}
         name="subject_id"
-        isCustom
+        isSelectCustom
         placeholder="Subject"
         options={subjects?.subjects?.map((subject) => ({
           label: subject.name,
@@ -196,7 +194,7 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
       <SappHookFormSelect
         control={control}
         name="class_teacher_status"
-        isCustom
+        isSelectCustom
         placeholder="Status"
         options={listStatusMyClass}
       />

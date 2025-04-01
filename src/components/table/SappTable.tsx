@@ -1,6 +1,8 @@
 import type { TablePaginationConfig, TableProps } from 'antd'
-import { Table } from 'antd'
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import { Table, Typography } from 'antd'
+import React, { Dispatch, SetStateAction } from 'react'
+
+const { Title } = Typography
 
 interface BaseTableProps {
   columns: Array<any>
@@ -9,10 +11,14 @@ interface BaseTableProps {
   pagination: TablePaginationConfig
   setPagination?: Dispatch<SetStateAction<TablePaginationConfig>>
   loading?: boolean
-  handleChangeParams?: any
+  handleChangeParams?: (currentPage: number, pageSize: number) => void
   onResolveSelections?: () => void
   setSelection?: Dispatch<SetStateAction<Map<number, React.Key[]>>>
   selections?: Map<number, React.Key[]>
+  titleTable?: {
+    title: string
+    isShowTitle: boolean
+  }
 }
 
 const SappTable = <T extends { id: React.Key }>({
@@ -25,14 +31,18 @@ const SappTable = <T extends { id: React.Key }>({
   handleChangeParams,
   setSelection,
   selections,
+  titleTable = { title: '', isShowTitle: false },
 }: BaseTableProps) => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
     if (setPagination) {
       setPagination(pagination)
     }
-    handleChangeParams(pagination.current, pagination.pageSize)
+    const currentPage = pagination.current ?? 1
+    const pageSize = pagination.pageSize ?? 10
+    if (handleChangeParams) {
+      handleChangeParams(currentPage, pageSize)
+    }
   }
-
   // Checkbox selection
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     const currentPage = pagination.current
@@ -48,17 +58,24 @@ const SappTable = <T extends { id: React.Key }>({
   }
 
   return (
-    <Table<T>
-      columns={columns}
-      dataSource={data}
-      pagination={pagination}
-      onChange={handleTableChange}
-      rowSelection={showCheckbox ? rowSelection : undefined}
-      loading={loading}
-      rowKey={(record) => record?.id || 'id'} // Trả về id làm key
-      scroll={{ x: 'max-content' }}
-      className="sappTable"
-    />
+    <>
+      {titleTable?.isShowTitle && titleTable?.title && (
+        <Title level={5} className="mt-6 text-gray-700">
+          {titleTable.title}
+        </Title>
+      )}
+      <Table<T>
+        columns={columns}
+        dataSource={data}
+        pagination={pagination}
+        onChange={handleTableChange}
+        rowSelection={showCheckbox ? rowSelection : undefined}
+        loading={loading}
+        rowKey={(record) => record?.id || 'id'}
+        scroll={{ x: 'max-content' }}
+        className="sapp-table"
+      />
+    </>
   )
 }
 

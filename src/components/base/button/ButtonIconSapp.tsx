@@ -42,10 +42,12 @@ const ButtonIconSapp = ({
     ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
     ${className}
   `
-  const IconComponent =
-    icon === 'plus' ? null : icon === 'search' ? null : icon === 'arrow' ? (
-      <ArrowIcon color={iconColor} />
-    ) : null
+  const iconMap: Record<string, JSX.Element | null> = {
+    plus: null,
+    search: null,
+    arrow: <ArrowIcon color={iconColor} />,
+  }
+  const IconComponent = iconMap[icon ?? 'plus']
   const Button = () => (
     <button
       type={type}

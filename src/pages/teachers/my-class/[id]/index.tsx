@@ -87,7 +87,7 @@ const ClassDetail = () => {
     }
   }, [data])
 
-  const renderClassDetail = (selected: number) => {
+  const tabClassDetail = (selected: number) => {
     switch (selected) {
       case 1:
         return <Overview certificateData={certificateData} />
@@ -121,7 +121,7 @@ const ClassDetail = () => {
         data-aos={ANIMATION.DATA_AOS}
         className="h-fit w-full rounded-xl bg-white px-8 py-6"
       >
-        {renderClassDetail(selected)}
+        {tabClassDetail(selected)}
       </div>
     </LayoutTeacher>
   )

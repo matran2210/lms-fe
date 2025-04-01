@@ -1,5 +1,4 @@
 import LayoutFilter from '@components/layout/TeacherFilter/index'
-import { Typography } from 'antd'
 import SappTable from '@components/table/SappTable'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -11,11 +10,9 @@ import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
 import StudentsTestResultFilter from '@components/teacher/components/StudentsTestResultFilter'
 import { useForm } from 'react-hook-form'
-import { PageLink } from 'src/constants'
+import { DATE_FORMAT, PageLink } from 'src/constants'
 import { IStudentTestResult } from 'src/type/classes'
 import { GradingMethod } from '@utils/constants'
-
-const { Title } = Typography
 
 interface FilterParams {
   text?: string
@@ -92,6 +89,14 @@ export default function StudentsTestResult() {
       grading_method: getValues('grading_method')?.value || undefined,
     })
   }
+  useEffect(() => {
+    if (data?.metadata?.total_records) {
+      setPagination((prev) => ({
+        ...prev,
+        total: data?.metadata?.total_records,
+      }))
+    }
+  }, [data])
 
   const columnsValue = [
     {
@@ -132,9 +137,10 @@ export default function StudentsTestResult() {
       title: 'Start time',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          dataColumn={
-            record?.start_time ? formatDateFromUTC(record?.start_time) : '-'
-          }
+          dataColumn={formatDateFromUTC(
+            record?.start_time as string,
+            DATE_FORMAT.DATE_TIME,
+          )}
         />
       ),
     },
@@ -160,11 +166,10 @@ export default function StudentsTestResult() {
       title: 'Thời gian chấm',
       render: (record: IStudentTestResult) => (
         <NameNoActionCell
-          dataColumn={
-            record?.quiz?.due_date_grade
-              ? formatDateFromUTC(record?.quiz?.due_date_grade)
-              : '-'
-          }
+          dataColumn={formatDateFromUTC(
+            record?.quiz?.due_date_grade as string,
+            DATE_FORMAT.DATE_TIME,
+          )}
         />
       ),
     },
@@ -178,9 +183,6 @@ export default function StudentsTestResult() {
         onReset={handleResetFilter}
         onSubmit={onSubmit}
       />
-      <Title level={5} className="mt-6 text-gray-700">
-        Test/Quiz List: {data?.metadata?.total_records ?? 0}
-      </Title>
       <SappTable
         handleChangeParams={handleChangeParams}
         columns={columnsValue}
@@ -188,7 +190,10 @@ export default function StudentsTestResult() {
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
-        showCheckbox={false}
+        titleTable={{
+          title: `Test/Quiz List: ${data?.metadata?.total_records ?? 0}`,
+          isShowTitle: true,
+        }}
       />
     </div>
   )

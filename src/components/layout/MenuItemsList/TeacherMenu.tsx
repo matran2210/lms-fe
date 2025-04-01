@@ -33,34 +33,34 @@ interface MenuItem {
 }
 
 export default function TeacherMenu() {
-  const [selectedKey, setSelectedKey] = useState<string>('book')
+  const [selectedKey, setSelectedKey] = useState<string>('Book')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer) // Lấy thông tin user đang đăng nhập
   const menuItems: MenuItem[] = [
     {
-      key: 'home',
-      icon: <HomeMenuIcon selected={selectedKey === 'home'} />,
+      key: 'Home',
+      icon: <HomeMenuIcon selected={selectedKey === 'Home'} />,
       link: PageLink.TEACHER_MY_CLASS,
     },
     {
-      key: 'book',
-      icon: <BookMenuIcon selected={selectedKey === 'book'} />,
+      key: 'Book',
+      icon: <BookMenuIcon selected={selectedKey === 'Book'} />,
       link: PageLink.TEACHER_MY_CLASS,
     },
     {
-      key: 'calender',
-      icon: <CalenderMenuIcon selected={selectedKey === 'calender'} />,
+      key: 'Calender',
+      icon: <CalenderMenuIcon selected={selectedKey === 'Calender'} />,
       link: PageLink.TEACHER_MY_CLASS,
     },
     {
-      key: 'file',
-      icon: <FileMenuIcon selected={selectedKey === 'file'} />,
+      key: 'File',
+      icon: <FileMenuIcon selected={selectedKey === 'File'} />,
       link: PageLink.TEACHER_MY_CLASS,
     },
     {
-      key: 'bell',
-      icon: <BellIcon selected={selectedKey === 'bell'} />,
+      key: 'Bell',
+      icon: <BellIcon selected={selectedKey === 'Bell'} />,
       link: PageLink.TEACHER_MY_CLASS,
     },
   ]
@@ -95,55 +95,60 @@ export default function TeacherMenu() {
       {icon}
     </div>
   )
+  const ItemMenuLink = () => (
+    <div className="flex flex-col items-center">
+      {/* Logo */}
+      <div className="mb-8 mt-6 flex items-center justify-center">
+        <div className="flex h-10 w-10 items-center justify-center">
+          <Image alt="Logo" src={sapp} className="sapp-h-45px" />
+        </div>
+      </div>
+      <div className="mb-7 h-[1.20px] w-8 bg-white"></div>
+      {/* Main Menu */}
+      <Menu
+        defaultSelectedKeys={['home']}
+        theme="dark"
+        mode="inline"
+        selectedKeys={[selectedKey]}
+        onSelect={(item) => handleMenuClick(item)}
+        items={menuItems.map((item) => ({
+          key: item.key,
+          icon: item.icon,
+          title: item.key,
+        }))}
+        className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center [&_.ant-menu-item]:p-3"
+      />
+    </div>
+  )
+  const BottomMenu = () => (
+    <div className="mb-6 flex flex-col items-center gap-6">
+      <Link href={PageLink.MYPROFILE}>
+        <Image
+          alt="avatar"
+          src={
+            user?.detail?.avatar['32x32'] ||
+            user?.detail?.avatar['ORIGIN'] ||
+            blankAvatar
+          }
+          width={32}
+          height={32}
+          className="cursor-pointer rounded-full p-2"
+        />
+      </Link>
+      <ItemMenu icon={<HelpMenuIcon />} />
+      <ItemMenu icon={<LogOutMenuIcon />} action={handleLogout} />
+    </div>
+  )
 
   return (
     <Sider
       width={80}
       collapsed
-      className="sidebar-left fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center overflow-auto bg-blue-2"
+      className="fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center overflow-auto bg-blue-2"
     >
       <div className="flex h-full flex-col items-center justify-between">
-        <div className="flex flex-col items-center">
-          {/* Logo */}
-          <div className="mb-8 mt-6 flex items-center justify-center">
-            <div className="flex h-10 w-10 items-center justify-center">
-              <Image alt="Logo" src={sapp} className="sapp-h-45px" />
-            </div>
-          </div>
-          <div className="mb-7 h-[1.20px] w-8 bg-white"></div>
-          {/* Main Menu */}
-          <Menu
-            defaultSelectedKeys={['home']}
-            theme="dark"
-            mode="inline"
-            selectedKeys={[selectedKey]}
-            onSelect={(item) => handleMenuClick(item)}
-            items={menuItems.map((item) => ({
-              key: item.key,
-              icon: item.icon,
-              title: item.key,
-            }))}
-            className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center [&_.ant-menu-item]:p-3"
-          />
-        </div>
-        {/* Bottom Menu */}
-        <div className="mb-6 flex flex-col items-center gap-6">
-          <Link href={PageLink.MYPROFILE}>
-            <Image
-              alt="avatar"
-              src={
-                user.detail.avatar['32x32'] ||
-                user.detail.avatar['ORIGIN'] ||
-                blankAvatar
-              }
-              width={32}
-              height={32}
-              className="cursor-pointer rounded-full p-2"
-            />
-          </Link>
-          <ItemMenu icon={<HelpMenuIcon />} />
-          <ItemMenu icon={<LogOutMenuIcon />} action={handleLogout} />
-        </div>
+        <ItemMenuLink />
+        <BottomMenu />
       </div>
     </Sider>
   )

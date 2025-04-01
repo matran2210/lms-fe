@@ -24,7 +24,7 @@ const ChapterTestFilter: React.FC<ChapterTestFilterProps> = ({ control }) => {
       <SappHookFormSelect
         control={control}
         name="status"
-        isCustom
+        isSelectCustom
         placeholder="Status"
         options={QUIZ_ATTEMPT_STATUS_AUTO}
       />

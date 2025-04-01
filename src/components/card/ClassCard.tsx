@@ -43,12 +43,8 @@ const ClassCard = ({
           <>
             <CalendarIcon />
             <span className="ml-1  text-sm font-medium text-gray-400">
-              {dataDetail?.started_at && dataDetail?.finished_at && (
-                <>
-                  {formatDateFromUTC(dataDetail?.started_at)}&nbsp;-&nbsp;
-                  {formatDateFromUTC(dataDetail?.finished_at)}
-                </>
-              )}
+              {formatDateFromUTC(dataDetail?.started_at)}&nbsp;-&nbsp;
+              {formatDateFromUTC(dataDetail?.finished_at)}
             </span>
           </>
         )}

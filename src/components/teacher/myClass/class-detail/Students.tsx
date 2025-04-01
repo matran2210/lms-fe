@@ -1,5 +1,4 @@
 import LayoutFilter from '@components/layout/TeacherFilter/index'
-import { Typography } from 'antd'
 import SappTable from '@components/table/SappTable'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -14,15 +13,14 @@ import { IStudentClassDetail } from 'src/type/classes'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { round } from 'lodash'
 import { FOUNDATION } from '@utils/constants'
-
-const { Title } = Typography
+import { DATE_FORMAT } from 'src/constants'
 
 interface FilterParams {
   text?: string
 }
 
 const initialValues: FilterParams = {
-  text: '',
+  text: undefined,
 }
 
 export default function Students() {
@@ -93,6 +91,14 @@ export default function Students() {
   const onSubmit = () => {
     setParams({ text: getValues('text') || undefined })
   }
+  useEffect(() => {
+    if (data?.meta?.total_records) {
+      setPagination((prev) => ({
+        ...prev,
+        total: data?.meta?.total_records,
+      }))
+    }
+  }, [data])
 
   const columnsValue = [
     {
@@ -156,8 +162,8 @@ export default function Students() {
               ? `${record?.flexible_duration} ${
                   record?.flexible_duration > 1 ? 'days' : 'day'
                 }`
-              : `${formatDateFromUTC(record?.started_at ?? '')} - ${formatDateFromUTC(
-                  record?.finished_at ?? '',
+              : `${formatDateFromUTC(record?.started_at as string)} - ${formatDateFromUTC(
+                  record?.finished_at as string,
                 )}`
           }
         />
@@ -176,7 +182,9 @@ export default function Students() {
     {
       title: 'Exam Date',
       render: (record: IStudentClassDetail) => (
-        <NameNoActionCell dataColumn={record?.examination_subject} />
+        <NameNoActionCell
+          dataColumn={record?.examination_subject?.examination?.name}
+        />
       ),
     },
   ]
@@ -189,9 +197,6 @@ export default function Students() {
         onReset={handleResetFilter}
         onSubmit={onSubmit}
       />
-      <Title level={5} className="mt-6 text-gray-700">
-        Student List: {data?.meta?.total_records ?? 0} Students
-      </Title>
       <SappTable
         handleChangeParams={handleChangeParams}
         columns={columnsValue}
@@ -199,7 +204,10 @@ export default function Students() {
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
-        showCheckbox={false}
+        titleTable={{
+          title: `Student List: ${data?.meta?.total_records ?? 0} Students`,
+          isShowTitle: true,
+        }}
       />
     </>
   )

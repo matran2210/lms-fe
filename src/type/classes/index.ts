@@ -53,7 +53,11 @@ export interface IStudentClassDetail {
   end_time?: string
   started_at?: string
   updated_at?: string
-  examination_subject?: string
+  examination_subject?: {
+    examination?: {
+      name?: string
+    }
+  }
   learning_progress?: {
     total_course_sections_completed?: number
     total_course_sections?: number

@@ -1,6 +1,6 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import LayoutFilter from '@components/layout/TeacherFilter/index'
 import ChapterTestFilter from '@components/teacher/components/ChapterTestFilter'
@@ -93,6 +93,14 @@ const ChapterTest = () => {
     }
     setParams(searchParams)
   }
+  useEffect(() => {
+    if (data?.data?.metadata?.total_records) {
+      setPagination((prev) => ({
+        ...prev,
+        total: data?.metadata?.total_records,
+      }))
+    }
+  }, [data])
 
   const columnsValue = [
     {
@@ -111,7 +119,7 @@ const ChapterTest = () => {
       title: 'Email',
       render: (record: IStudentClassDetail) => (
         <NameNoActionCell
-          dataColumn={record?.user?.user_contacts?.[0]?.email ?? '-'}
+          dataColumn={record?.user?.user_contacts?.[0]?.email}
         />
       ),
     },
@@ -172,7 +180,6 @@ const ChapterTest = () => {
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
-        showCheckbox={false}
       />
     </LayoutTeacher>
   )
