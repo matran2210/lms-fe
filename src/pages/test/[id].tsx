@@ -519,7 +519,6 @@ const TestDetail = () => {
               const requirementAmswer = (objTab?.data?.requirements ?? []).find(
                 (req: Requirement) => req?.id === essayData?.req?.id,
               )
-
               if (
                 requirementAmswer &&
                 requirementAmswer?.answer_text &&
@@ -543,6 +542,7 @@ const TestDetail = () => {
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
+
                         return {
                           ...req,
                           answer_file:
@@ -986,6 +986,7 @@ const TestDetail = () => {
       const value = isSubmit
         ? getValues(`${currentContent?.id}_0_answer`)
         : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
+
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
@@ -1297,6 +1298,7 @@ const TestDetail = () => {
                 const editorContent = getValues(
                   `${currentPage}_${reqIndex}_answer`,
                 )
+
                 return {
                   ...requirement,
                   answer_text: editorContent ?? requirement?.answer_text,
@@ -1368,12 +1370,26 @@ const TestDetail = () => {
   }
 
   const handleChangeTypeEssay = (value: number) => {
-    setTabs((prev: any) => {
-      const arr = [...prev]
-      const index = arr.findIndex((e) => e.id === currentPage)
-      arr[index] = { ...arr[index], response_type: value }
-      return arr
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        return {
+          ...tab,
+          data: {
+            ...tab?.data,
+            requirements: currentTabContent?.data?.requirements?.map(
+              (req: any, idx: number) => {
+                return {
+                  ...req,
+                  response_type: value,
+                }
+              },
+            ),
+          },
+        }
+      }
+      return tab
     })
+    setTabs(newTabs)
   }
 
   const answerListRef = useRef<AnswerList>({})
@@ -1447,11 +1463,9 @@ const TestDetail = () => {
       question_id: question.id,
       time_spent: Math.ceil(question.timeSpent / 1000),
     }
-
     // Handle essay questions
     if (question.qType === QUESTION_TYPES.ESSAY) {
       if (!checkAnswered(question, true)) return null
-
       const requirements =
         question?.data?.requirements?.length > 0
           ? question?.data?.requirements
@@ -2042,13 +2056,18 @@ const TestDetail = () => {
   }, [startResize])
 
   useEffect(() => {
-    if (currentTabContent?.data?.requirements) {
+    if (
+      tabs &&
+      tabs.length > 0 &&
+      currentTabContent &&
+      currentTabContent?.data?.requirements
+    ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
         index: 0,
       })
     }
-  }, [currentTabContent?.id])
+  }, [currentTabContent?.id, tabs])
 
   useEffect(() => {
     async function fetchTabs() {

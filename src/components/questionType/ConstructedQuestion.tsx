@@ -109,6 +109,7 @@ const EssayQuestionPreview = ({
 
   useEffect(() => {
     if (
+      refSheet &&
       refSheet.current &&
       Number(index) <= question_data?.requirements?.length
     ) {
