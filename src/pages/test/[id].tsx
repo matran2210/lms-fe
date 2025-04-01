@@ -1683,7 +1683,7 @@ const TestDetail = () => {
   const handleClearSelection = (currentTabContent: any) => {
     const data = currentTabContent.data
 
-    if (data && !currentTabContent.done) {
+    if (data && !currentTabContent.is_viewed_answer) {
       setTabs((prev: any) => {
         const arr = [...prev]
         const currentIndex = arr.findIndex((e) => e.id === data.id)
@@ -2591,9 +2591,9 @@ const TestDetail = () => {
                 </div>
               </button>
               <button
-                disabled={currentTabContent?.done}
+                disabled={currentTabContent?.is_viewed_answer}
                 className={`flex items-center gap-3 border border-solid ${
-                  !currentTabContent?.done
+                  !currentTabContent?.is_viewed_answer
                     ? 'border-gray-1 text-bw-1'
                     : 'border-default text-gray-2'
                 } w-[150px] justify-center p-1 py-2`}
@@ -2608,7 +2608,7 @@ const TestDetail = () => {
               </button>
               {/* )} */}
               {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-              !currentTabContent?.done &&
+              !currentTabContent?.is_viewed_answer &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 <button
                   className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
