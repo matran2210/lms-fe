@@ -77,6 +77,7 @@ import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import { checkTypeAndRenderTitle, getResult } from './functions/helper'
 import CompletingReportModal from './modal/CompletingReportModal'
 import dayjs from 'dayjs'
+import { is } from 'immer/dist/internal'
 
 declare global {
   interface Window {
@@ -425,7 +426,7 @@ const TestDetail = () => {
           if (!answerSubmitted?.[0]) {
             return {
               corrects: {},
-              solution: null,
+              solution: '',
               isSelfReflection: false,
               requirements: [],
             }
@@ -499,9 +500,9 @@ const TestDetail = () => {
 
           return {
             corrects: {},
-            solution: null,
-            isSelfReflection: false,
-            requirements: [],
+            solution: solution,
+            isSelfReflection: is_self_reflection,
+            requirements: requirements,
           }
         }
 
@@ -509,6 +510,7 @@ const TestDetail = () => {
           objTab,
           answerSubmitted?.results,
         )
+        const updatedObjTab = { ...objTab, ...dataCorrectAndSolution }
 
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           // Case: if objTab has data
@@ -567,12 +569,12 @@ const TestDetail = () => {
             } else {
               // No requirement
               return {
-                ...objTab,
+                ...updatedObjTab,
                 // ...requirementAmswer,
                 // done: true,
                 answer:
-                  objTab?.answer !== undefined
-                    ? objTab?.answer
+                  updatedObjTab?.answer !== undefined
+                    ? updatedObjTab?.answer
                     : answerSubmitted?.short_answer,
                 attempted: true,
               }
@@ -580,14 +582,14 @@ const TestDetail = () => {
           }
           // Case: objTab no data
           else {
-            if ((objTab?.data?.requirements ?? []).length > 0) {
+            if ((updatedObjTab?.data?.requirements ?? []).length > 0) {
               // & answerSubmitted has data
               if (answerSubmitted?.answer) {
                 return {
-                  ...objTab,
+                  ...updatedObjTab,
                   data: {
-                    ...objTab?.data,
-                    requirements: (objTab?.data?.requirements ?? []).map(
+                    ...updatedObjTab?.data,
+                    requirements: (updatedObjTab?.data?.requirements ?? []).map(
                       (req: Requirement) => {
                         const requirementAmswer = (
                           answerSubmitted?.answer ?? []
@@ -621,7 +623,7 @@ const TestDetail = () => {
               }
             } else {
               return {
-                ...objTab,
+                ...updatedObjTab,
                 // done: true,
                 attempted: true,
                 answer: answerSubmitted?.short_answer,
@@ -635,26 +637,26 @@ const TestDetail = () => {
           objTab?.data?.qType === QUESTION_TYPES.TRUE_FALSE
         ) {
           // Case: if objTab has data
-          if (objTab?.question_answer_id) {
+          if (updatedObjTab?.question_answer_id) {
             return {
-              ...objTab,
+              ...updatedObjTab,
               // done: true,
               attempted: true,
               answer: objTab?.question_answer_id,
             }
           } else if (objTab?.answer) {
-            return objTab
+            return updatedObjTab
           }
           // Case: objTab no data and answerSubmitted has data
           else if (answerSubmitted?.question_answer_id) {
             return {
-              ...objTab,
+              ...updatedObjTab,
               // done: true,
               attempted: true,
               answer: answerSubmitted?.question_answer_id,
             }
           } else {
-            return objTab
+            return updatedObjTab
           }
         }
 
@@ -804,13 +806,12 @@ const TestDetail = () => {
 
         if (transformAnswerData?.length > 0) {
           return {
-            ...objTab,
+            ...updatedObjTab,
             answer: transformAnswerData,
-            ...dataCorrectAndSolution,
             // done: true,
           }
         } else {
-          return { ...objTab, ...dataCorrectAndSolution }
+          return updatedObjTab
         }
       } else {
         return objTab
@@ -1502,9 +1503,13 @@ const TestDetail = () => {
         question.qType,
       )
     ) {
-      return {
-        ...baseAnswer,
-        question_answer_id: question.answer,
+      if (question?.answer) {
+        return {
+          ...baseAnswer,
+          question_answer_id: question?.answer,
+        }
+      } else {
+        return baseAnswer
       }
     }
 
