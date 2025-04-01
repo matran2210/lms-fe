@@ -247,7 +247,7 @@ const TestDetail = () => {
               getValues(`${currentTabID}_${essayData?.index}_answer`) ||
               currentTabContent?.data?.requirements?.[essayData?.index]
                 ?.answer_text ||
-              currentTabContent?.answer
+              currentTabContent?.answer?.answer_text
             }
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
