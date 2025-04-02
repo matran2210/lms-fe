@@ -541,7 +541,10 @@ const TestDetail = () => {
           objTab,
           answerSubmitted?.results,
         )
-        const updatedObjTab = { ...objTab, ...dataCorrectAndSolution }
+
+        const updatedObjTab = answerSubmitted?.results
+          ? { ...objTab, ...dataCorrectAndSolution }
+          : { ...objTab }
 
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           // Case: if objTab has data
@@ -1421,9 +1424,9 @@ const TestDetail = () => {
     if (!currentTabContent) return
 
     // Early return for tab changes if question not answered
-    if (action === 'change-tab' || action === 'timeout') {
+    if (['change-tab', 'timeout', 'finish'].includes(action ?? '')) {
       if (!checkAnswered(currentTabContent)) return
-      if (action === 'change-tab') {
+      if (action === 'change-tab' || action === 'finish') {
         const isEqualValues = await isValuesEqual(
           currentTabContent,
           oldCurrentTabData,
@@ -2169,9 +2172,6 @@ const TestDetail = () => {
                   data: questionDetail,
                   topicDescription: topicDescription?.data,
                 }),
-                is_viewed_answer:
-                  (answerMap.get(question.id) as { is_viewed_answer?: boolean })
-                    ?.is_viewed_answer || false,
               }
             }
             return baseData
@@ -2691,8 +2691,8 @@ const TestDetail = () => {
                 <button
                   className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
-                    handleSubmitAnswer('view-answer')
                     const data = await getResult(currentTabContent)
+                    handleSubmitAnswer('view-answer')
                     confirmAnswer(
                       data?.corrects,
                       data?.solution,

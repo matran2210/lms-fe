@@ -29,7 +29,7 @@ interface IProps {
   type: string | string[] | undefined
   submited: boolean
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
-  onSubmitAnswer: () => void
+  onSubmitAnswer: (action?: string) => void
   handleTimeoutSubmit: () => void
 }
 
@@ -100,7 +100,7 @@ const HeaderTest = ({
             className: 'border border-bw-1',
             color: 'secondary',
             onClick: () => {
-              onSubmitAnswer()
+              onSubmitAnswer('finish')
               if (checkUnSubmitAnswer()?.length > 0) {
                 setUnSubmitAnswer(true)
               } else {
