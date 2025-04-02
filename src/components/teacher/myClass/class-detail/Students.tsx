@@ -12,6 +12,7 @@ import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { round } from 'lodash'
 import { FOUNDATION } from '@utils/constants'
 import useSappPaging from 'src/hooks/useSappPaging'
+import { StudentKey } from '@pages/api/queryKey'
 
 interface FilterParams {
   text?: string
@@ -29,7 +30,7 @@ export default function Students() {
 
   const { data, pagination, isLoading, handleChangeParams, setPagination } =
     useSappPaging({
-      uniqueKey: 'student',
+      uniqueKey: StudentKey.Student,
       queryFn: () =>
         TeacherAPI.getStudentById(
           studentId,

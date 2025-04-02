@@ -34,8 +34,8 @@ const useSappPaging = ({
   const { data, isLoading } = useQuery({
     queryKey: [uniqueKey, pagination.current, pagination.pageSize, params],
     queryFn,
-    enabled: !!uniqueKey,
-    retry: false,
+    enabled: !!uniqueKey, // Chỉ chạy khi uniqueKey có giá trị hợp lệ
+    retry: false, // Không thử lại nếu request bị lỗi
   })
 
   useEffect(() => {
@@ -63,10 +63,10 @@ const useSappPaging = ({
   }
 
   useEffect(() => {
-    if (data?.meta?.total_records) {
+    if (data?.meta?.total_records || data?.metadata?.total_records) {
       setPagination((prev) => ({
         ...prev,
-        total: data?.meta?.total_records,
+        total: data?.meta?.total_records || data?.metadata?.total_records,
       }))
     }
   }, [data])

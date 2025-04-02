@@ -9,13 +9,14 @@ import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { ITabs } from 'src/type'
 import { PageLink } from 'src/constants'
 import SappTable from '@components/table/SappTable'
-import { TeacherKey } from '@pages/api/queryKey'
+import { StudentKey, TeacherKey } from '@pages/api/queryKey'
 import { TablePaginationConfig } from 'antd'
 import StudentCell from '@components/teacher/components/StudentCell'
 import { IStudentClassDetail } from 'src/type/classes'
 import DateActionCell from '@components/teacher/components/DateActionCell'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import StatusActionCell from '@components/teacher/components/StatusActionCell'
+import useSappPaging from 'src/hooks/useSappPaging'
 
 interface FilterParams {
   status?: string
@@ -31,18 +32,24 @@ const ChapterTest = () => {
   const router = useRouter()
   const studentId = router?.query?.studentId as string
   const chapterTestId = router?.query?.chapterTestId as string
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || 1,
-    pageSize: Number(router.query.page_size) || 10,
-    total: 10,
-    showSizeChanger: true,
-    showQuickJumper: true,
-  })
   const [params, setParams] = useState<FilterParams>(initialValues)
-
   const { control, getValues, reset } = useForm({
     mode: 'onSubmit',
   })
+
+  const { data, pagination, isLoading, handleChangeParams, setPagination } =
+    useSappPaging({
+      uniqueKey: StudentKey.ChapterTest,
+      queryFn: () =>
+        TeacherAPI.getDetailTestQuiz(
+          studentId,
+          chapterTestId,
+          pagination.current ?? 1,
+          pagination.pageSize ?? 10,
+          params,
+        ),
+      params,
+    })
 
   const breadcrumbs: ITabs[] = [
     { link: PageLink.TEACHERS, title: 'LMS' },
@@ -57,35 +64,7 @@ const ChapterTest = () => {
     },
     { link: '', title: 'Chapter Test' },
   ]
-  const { data, isLoading } = useQuery({
-    queryKey: [
-      TeacherKey.ChapterTest,
-      pagination.current,
-      pagination.pageSize,
-      params,
-    ],
-    queryFn: async () => {
-      try {
-        return await TeacherAPI.getDetailTestQuiz(
-          studentId,
-          chapterTestId,
-          pagination.current ?? 1,
-          pagination.pageSize ?? 10,
-          params,
-        )
-      } catch (error) {
-        return null
-      }
-    },
-    retry: false,
-  })
-  const handleChangeParams = (currentPage: number, pageSize: number) => {
-    setPagination((prev) => ({
-      ...prev,
-      current: currentPage,
-      pageSize: pageSize,
-    }))
-  }
+
   const handleResetFilter = () => {
     reset({ search: '', status: '' })
     setParams(initialValues)

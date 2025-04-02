@@ -1,18 +1,18 @@
 import LayoutFilter from '@components/layout/TeacherFilter/index'
 import SappTable from '@components/table/SappTable'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { TablePaginationConfig } from 'antd'
 import { formatDateFromUTC } from 'src/utils/index'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import NameActionCell from '@components/teacher/components/NameActionCell'
 import { TeacherAPI } from '@pages/api/teacher'
-import { useQuery } from 'react-query'
 import StudentsTestResultFilter from '@components/teacher/components/StudentsTestResultFilter'
 import { useForm } from 'react-hook-form'
 import { DATE_FORMAT, PageLink } from 'src/constants'
 import { IStudentTestResult } from 'src/type/classes'
 import { GradingMethod } from '@utils/constants'
+import { StudentKey } from '@pages/api/queryKey'
+import useSappPaging from 'src/hooks/useSappPaging'
 
 interface FilterParams {
   text?: string
@@ -30,58 +30,20 @@ export default function StudentsTestResult() {
   const { control, reset, getValues } = useForm()
   const router = useRouter()
   const studentId = router?.query?.id as string
-
   const [params, setParams] = useState<FilterParams>(initialValues)
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || 1,
-    pageSize: Number(router.query.page_size) || 10,
-    total: 10,
-    showSizeChanger: true,
-    showQuickJumper: true,
-  })
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [
-      'student',
-      studentId,
-      pagination.current,
-      pagination.pageSize,
+  const { data, pagination, isLoading, handleChangeParams, setPagination } =
+    useSappPaging({
+      uniqueKey: StudentKey.StudentsTestResult,
+      queryFn: () =>
+        TeacherAPI.getListTestQuiz(
+          studentId,
+          pagination.current ?? 1,
+          pagination.pageSize ?? 10,
+          params,
+        ),
       params,
-    ],
-    queryFn: () =>
-      TeacherAPI.getListTestQuiz(
-        studentId,
-        pagination.current ?? 1,
-        pagination.pageSize ?? 10,
-        params,
-      ),
-    enabled: !!studentId,
-    retry: false,
-  })
-
-  useEffect(() => {
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          page_index: pagination.current,
-          page_size: pagination.pageSize,
-          ...params,
-        },
-      },
-      undefined,
-      { shallow: true },
-    )
-  }, [pagination, params])
-
-  const handleChangeParams = (currentPage: number, pageSize: number) => {
-    setPagination((prev) => ({
-      ...prev,
-      current: currentPage,
-      pageSize: pageSize,
-    }))
-  }
+    })
 
   const handleResetFilter = () => {
     reset({ text: '', quiz_type: '', grading_method: '' })
@@ -95,14 +57,6 @@ export default function StudentsTestResult() {
       grading_method: getValues('grading_method')?.value || undefined,
     })
   }
-  useEffect(() => {
-    if (data?.metadata?.total_records) {
-      setPagination((prev) => ({
-        ...prev,
-        total: data?.metadata?.total_records,
-      }))
-    }
-  }, [data])
 
   const columnsValue = [
     {
