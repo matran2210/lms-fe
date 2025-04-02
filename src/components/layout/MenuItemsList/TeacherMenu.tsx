@@ -37,6 +37,7 @@ export default function TeacherMenu() {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer) // Lấy thông tin user đang đăng nhập
+
   const menuItems: MenuItem[] = [
     {
       key: 'Home',
@@ -64,6 +65,7 @@ export default function TeacherMenu() {
       link: PageLink.TEACHERS,
     },
   ]
+
   const handleMenuClick = (item: { key: string }) => {
     if (selectedKey !== item.key) {
       const selectedItem = menuItems.find(
@@ -86,14 +88,22 @@ export default function TeacherMenu() {
       await authenticationManager.logout(window.location.origin)
     } catch (error) {}
   }
+
   useEffect(() => {
     if (router?.pathname) {
-      const selectedItem = menuItems.find((menuItem) =>
-        menuItem?.link?.includes(router.pathname),
+      // Kiểm tra nếu router.pathname tồn tại để tránh lỗi
+      const sortedMenuItems = [...menuItems].sort(
+        (a, b) => (b.link?.length || 0) - (a.link?.length || 0), // Sắp xếp menuItems theo độ dài link giảm dần
       )
-      setSelectedKey(selectedItem?.key || 'Home')
+
+      const selectedItem = sortedMenuItems.find(
+        (menuItem) => router.pathname.startsWith(menuItem?.link || ''), // Tìm item có đường dẫn khớp nhất với router.pathname
+      )
+
+      setSelectedKey(selectedItem?.key || 'Home') // Cập nhật selectedKey, nếu không tìm thấy thì mặc định là 'Home'
     }
-  }, [router?.pathname])
+  }, [router?.pathname]) // Chạy lại useEffect mỗi khi router.pathname thay đổi
+
   const ItemMenu = ({
     icon,
     action,
@@ -105,6 +115,7 @@ export default function TeacherMenu() {
       {icon}
     </div>
   )
+
   const ItemMenuLink = () => (
     <div className="flex flex-col items-center">
       {/* Logo */}
@@ -129,6 +140,7 @@ export default function TeacherMenu() {
       />
     </div>
   )
+
   const BottomMenu = () => (
     <div className="mb-6 flex flex-col items-center gap-6">
       <Link href={PageLink.MYPROFILE}>
