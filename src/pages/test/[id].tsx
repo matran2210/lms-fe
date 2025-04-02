@@ -31,7 +31,7 @@ import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
 import { debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
@@ -74,10 +74,17 @@ import { QuestionAPI } from '../api/question'
 import TestScratchPads from './TestScratchPads'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
-import { checkTypeAndRenderTitle, getResult } from './functions/helper'
+import {
+  checkTypeAndRenderTitle,
+  getAnswerDragNDrop,
+  getAnswerMatching,
+  getResult,
+  getValueFillText,
+  getValueSelectText,
+  isValuesEqual,
+} from './functions/helper'
 import CompletingReportModal from './modal/CompletingReportModal'
 import dayjs from 'dayjs'
-import { is } from 'immer/dist/internal'
 
 declare global {
   interface Window {
@@ -381,6 +388,7 @@ const TestDetail = () => {
   )
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openReportModal, setOpenReportModal] = useState(false)
+  const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
@@ -826,6 +834,12 @@ const TestDetail = () => {
     } else return undefined
   }, [currentPage, tabs, answersSubmitted, essayData])
 
+  useEffect(() => {
+    if (currentTabContent?.id) {
+      setOldCurrentTabData(currentTabContent)
+    }
+  }, [currentTabContent?.id])
+
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
       if (openScratchPad[i].type === 'calculator') {
@@ -871,14 +885,6 @@ const TestDetail = () => {
     is_viewed_answer?: boolean
     [key: string]: any
   }
-
-  const handleFlagQuestion = useCallback((tabId: string) => {
-    setTabs((prevTabs: Tab[]) =>
-      prevTabs.map((tab) =>
-        tab.id === tabId ? { ...tab, flag: !tab.flag } : tab,
-      ),
-    )
-  }, [])
 
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
@@ -1043,40 +1049,6 @@ const TestDetail = () => {
   const refEditor = useRef(null) as any
 
   // TODO: Implement this
-  const getValueFillText = () => {}
-
-  const getValueSelectText = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll(
-      'select.sapp-select--selectword-preview',
-    ) as any
-
-    for (let e of inputs) {
-      value.push(e?.value)
-    }
-    return value
-  }
-
-  const getAnswerMatching = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-match-result') as any
-    for (let e of inputs) {
-      const childId = e.querySelector('.sapp-notched-container')
-      value.push({ question_id: e.id, answer_id: childId?.id || undefined })
-    }
-
-    return value
-  }
-
-  const getAnswerDragNDrop = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
-    for (let e of inputs) {
-      const idAnswer = e.querySelector('.answer-box')
-      value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
-    }
-    return value
-  }
 
   const confirmAnswer = async (
     corrects: any,
@@ -1426,6 +1398,15 @@ const TestDetail = () => {
     // Early return for tab changes if question not answered
     if (action === 'change-tab' || action === 'timeout') {
       if (!checkAnswered(currentTabContent)) return
+      if (action === 'change-tab') {
+        const isEqualValues = await isValuesEqual(
+          currentTabContent,
+          oldCurrentTabData,
+          getValues,
+        )
+        // Check if the current tab content is the same as the old tab content
+        if (isEqualValues) return
+      }
     }
 
     // Get current answers and prepare submission data
@@ -1473,6 +1454,21 @@ const TestDetail = () => {
       handleSubmissionError(payload)
       return false
     }
+  }
+
+  const handleFlagQuestion = async (question_id: string) => {
+    try {
+      const payload = {
+        question_id,
+        flag: !currentTabContent?.flag,
+      }
+      await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
+      setTabs((prevTabs: Tab[]) =>
+        prevTabs.map((tab) =>
+          tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
+        ),
+      )
+    } catch (error) {}
   }
 
   // Helper function to format answer based on question type

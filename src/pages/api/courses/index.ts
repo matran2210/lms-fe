@@ -405,6 +405,19 @@ export class CoursesAPI {
   static getQuizAttempt(id: string | string[] | undefined): Promise<any> {
     return fetcher(`/quiz-attempts/answers/${id}`)
   }
+
+  static updateFlagInQuestion(
+    quiz_attempt_id: string,
+    payload: {
+      question_id: string
+      flag: boolean
+    },
+  ) {
+    return fetcher(`quiz/${quiz_attempt_id}/flag`, {
+      data: payload,
+      method: 'PUT',
+    })
+  }
 }
 
 /**
