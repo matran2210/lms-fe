@@ -75,10 +75,9 @@ export default function Sidebar({
           <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
           <MenuItemsList
             options={
-              MENU_ITEMS
-              // Number(localStorage.getItem('countEvent')) <= 0
-              //   ? MENU_ITEMS
-              //   : MENU_ITEMS.concat(MENU_ITEMS_EVENT)
+              Number(localStorage.getItem('countEvent')) <= 0
+                ? MENU_ITEMS
+                : MENU_ITEMS.concat(MENU_ITEMS_EVENT)
             }
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
