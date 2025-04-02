@@ -1,6 +1,7 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
+import ModalResizeable from '@components/base/modal/ModalResizeable'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
@@ -1131,91 +1132,72 @@ const ActivityPage = () => {
           {openScratchPad.map((e, index: number) => {
             if (e.type === 'file') {
               return (
-                <MovableWindow
-                  position={{
-                    width: '595px',
-                    height: '842px',
-                    top: 'calc(50% - 421px)',
-                    left: 'calc(50% - 300px)',
-                  }}
-                  key={e?.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
-                  zIndex={
-                    onFocusingPad === e?.id
-                      ? openScratchPad?.length + 500
-                      : index + 500
-                  }
-                  fixed
-                  // not_resizable
-                  // className='pointer-events-none'
+                <ModalResizeable
+                  title={e.fileName}
+                  width={650}
+                  height={850}
+                  minWidth={200}
+                  minHeight={200}
+                  key={e.id}
+                  dragHandleClassName="modal-header"
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="center"
                 >
-                  <div className="absolute left-0 top-0  h-full w-full border">
-                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                      <div className="truncate text-sm font-normal">
-                        {e?.fileName}
-                      </div>
-                      {/* <CloseIcon */}
-                      <button onClick={() => handleCloseScratchPad(e)}>
-                        <CloseIcon />
-                      </button>
-                    </div>
-                    <div
-                      // className="overflow-auto p-4 bg-white"
-                      style={{ height: 'calc(100% - 40px' }}
-                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
-                    >
-                      {/* <div className='flex flex-'> */}
-                      <PdfViewer file={e?.file} />
-                    </div>
-                    {/* </div> */}
+                  <div
+                    // className="overflow-auto p-4 bg-white"
+                    style={{ height: 'calc(100% - 40px' }}
+                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                  >
+                    {/* <div className='flex flex-'> */}
+                    <PdfViewer file={e?.file} />
                   </div>
-                </MovableWindow>
+                </ModalResizeable>
               )
             } else if (e.type === 'exhibits') {
               return (
-                <MovableWindow
-                  position={{
-                    width: '600px',
-                    height: '400px',
-                    top: exhibitsPopupPosition.top,
-                    left: exhibitsPopupPosition.left,
-                  }}
-                  key={e?.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
-                  zIndex={
-                    onFocusingPad === e?.id
-                      ? openScratchPad?.length + 500
-                      : index + 500
-                  }
-                >
-                  <div className="absolute left-0 top-0  h-full w-full border">
-                    <div className="flex h-10 w-full items-center justify-between bg-white px-5">
-                      <div className="truncate">
-                        <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
-                          e?.index + 1
-                        }: `}</span>
-                        {e?.name}
+                <ModalResizeable
+                  width={600}
+                  height={400}
+                  minWidth={200}
+                  minHeight={200}
+                  key={e.id}
+                  dragHandleClassName="modal-header"
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="bottom left"
+                  header={
+                    <div className="relative">
+                      <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                        <div className="truncate">
+                          <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
+                            e?.index + 1
+                          }: `}</span>
+                          {e?.name}
+                        </div>
                       </div>
-                      <button onClick={() => handleCloseScratchPad(e)}>
+                      <button
+                        className="absolute right-3 top-2"
+                        onClick={() => handleCloseScratchPad(e)}
+                      >
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
-                      <EditorReader
-                        text_editor_content={e?.description}
-                        className=" w-full "
-                      />
-                      {e?.files?.length > 0 &&
-                        e?.files.map((e: any, index: number) => {
-                          return (
-                            <div key={index} className="h-full cursor-pointer">
-                              <PdfViewer file={e?.resource?.url} />
-                            </div>
-                          )
-                        })}
-                    </div>
+                  }
+                >
+                  <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                    <EditorReader
+                      text_editor_content={e?.description}
+                      className=" w-full "
+                    />
+                    {e?.files?.length > 0 &&
+                      e?.files.map((e: any, index: number) => {
+                        return (
+                          <div key={index} className="h-full cursor-pointer">
+                            <PdfViewer file={e?.resource?.url} />
+                          </div>
+                        )
+                      })}
                   </div>
-                </MovableWindow>
+                </ModalResizeable>
               )
             }
           })}

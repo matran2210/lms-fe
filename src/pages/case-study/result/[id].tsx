@@ -32,7 +32,7 @@ import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/Cas
 import { IExhibit } from 'src/type/exhibit'
 import SappButton from '@components/base/button/SappButton'
 import { CoursesAPI } from 'src/pages/api/courses'
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
+import ModalResizeable from '@components/base/modal/ModalResizeable'
 import {
   IAnswerResult,
   ICaseStudyResult,
@@ -796,89 +796,70 @@ const CaseStudyResult = () => {
                   (exhibit) => exhibit?.id === e?.id,
                 )
                 return (
-                  <MovableWindow
-                    position={{
-                      width: '600px',
-                      height: '400px',
-                      top: 'calc(75% - 250px)',
-                      left: 'calc(0%)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id ?? '')}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-6-percent w-full items-center justify-between bg-white px-5">
-                        <div className="truncate">
-                          <span className="text-base font-semibold ">{`${exhibitText} ${
-                            (i ?? 0) + 1
-                          }: `}</span>
-                          {exhibitsDes?.name}
+                  <ModalResizeable
+                    width={600}
+                    height={400}
+                    minWidth={200}
+                    minHeight={200}
+                    key={e.id}
+                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    position="bottom left"
+                    header={
+                      <div className="relative">
+                        <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                          <div className="truncate">
+                            <span className="text-base font-semibold ">{`${exhibitText} ${
+                              (i ?? 0) + 1
+                            }: `}</span>
+                            {exhibitsDes?.name}
+                          </div>
                         </div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
+                        <button
+                          className="absolute right-3 top-2"
+                          onClick={() => handleCloseScratchPad(e)}
+                        >
                           <CloseIcon />
                         </button>
                       </div>
-                      <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
-                        <EditorReader
-                          text_editor_content={exhibitsDes?.description}
-                          className=" w-full"
-                        />
-                        {exhibitsDes &&
-                          exhibitsDes?.files?.length > 0 &&
-                          exhibitsDes?.files?.map((e: IFile, index: number) => {
-                            return (
-                              <div
-                                key={index}
-                                className="overflow-auto bg-white"
-                              >
-                                <PDFViewer file={e?.resource?.url} />
-                              </div>
-                            )
-                          })}
-                      </div>
+                    }
+                  >
+                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                      <EditorReader
+                        text_editor_content={exhibitsDes?.description}
+                        className=" w-full"
+                      />
+                      {exhibitsDes &&
+                        exhibitsDes?.files?.length > 0 &&
+                        exhibitsDes?.files?.map((e: IFile, index: number) => {
+                          return (
+                            <div key={index} className="overflow-auto bg-white">
+                              <PDFViewer file={e?.resource?.url} />
+                            </div>
+                          )
+                        })}
                     </div>
-                  </MovableWindow>
+                  </ModalResizeable>
                 )
               } else if (e.type === 'file') {
                 return (
-                  <MovableWindow
-                    className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
-                    position={{
-                      width: '595px',
-                      height: '650px',
-                      top: 'calc(50%)',
-                      left: 'calc(50%)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id ?? '')}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
+                  <ModalResizeable
+                    title={e?.fileName}
+                    width={650}
+                    height={850}
+                    minWidth={200}
+                    minHeight={200}
+                    key={e.id}
+                    dragHandleClassName="modal-header"
+                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    position="center"
                   >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                        <div className="truncate text-sm font-normal">
-                          {e?.fileName}
-                        </div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                      <div
-                        className="overflow-auto bg-white p-4"
-                        style={{ height: 'calc(100% - 40px' }}
-                      >
-                        <PDFViewer file={e?.file ?? ''} />
-                      </div>
+                    <div
+                      className="overflow-auto bg-white p-4"
+                      style={{ height: 'calc(100% - 40px' }}
+                    >
+                      <PDFViewer file={e?.file ?? ''} />
                     </div>
-                  </MovableWindow>
+                  </ModalResizeable>
                 )
               }
             })}
