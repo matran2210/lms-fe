@@ -64,6 +64,7 @@ import {
   AnswerItem,
   AnswerList,
   DragDropAnswerItem,
+  IDataQuestion,
   Requirement,
   RequirementItem,
   ScratchPad,
@@ -82,7 +83,7 @@ import {
   getValueFillText,
   getValueSelectText,
   isValuesEqual,
-} from './functions/helper'
+} from '../../utils/helpers/quiz-test/helper'
 import CompletingReportModal from './modal/CompletingReportModal'
 import dayjs from 'dayjs'
 
@@ -288,11 +289,22 @@ const TestDetail = () => {
     answers?.map((item: Answer, index: number) => {
       if (!item.attempted) {
         result.push(index + 1)
-      } else if (
-        !item.done &&
-        !validateAnswer({ answer: item.answer, answer_file: item?.answer_file })
-      ) {
-        result.push(index + 1)
+      } else {
+        if (item.data && (item?.data?.requirements ?? [])?.length > 0) {
+          if (!item.done && !validateEssayAnswerWithRequirement(item.data)) {
+            result.push(index + 1)
+          }
+        } else {
+          if (
+            !item.done &&
+            !validateAnswer({
+              answer: item.answer,
+              answer_file: item?.answer_file,
+            })
+          ) {
+            result.push(index + 1)
+          }
+        }
       }
     })
     setUnSubmitAnswerData(result)
@@ -327,6 +339,17 @@ const TestDetail = () => {
     }
     return true
   }
+  // validate essay question with requirement
+  const validateEssayAnswerWithRequirement = (data: IDataQuestion) => {
+    if (data?.requirements?.length > 0) {
+      return data?.requirements?.some(
+        (el: Requirement) => !!el?.answer_text || !!el?.answer_file?.file_key,
+      )
+    } else {
+      return false
+    }
+  }
+
   const router = useRouter()
 
   const { quizDetail } = useGetQuizDetail(router.query.id as string)
@@ -839,6 +862,7 @@ const TestDetail = () => {
       const oldCurrentTabData = cloneDeep(currentTabContent)
       setOldCurrentTabData(oldCurrentTabData)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTabContent?.id])
 
   const checkCalExist = useMemo(() => {
