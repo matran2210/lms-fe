@@ -29,7 +29,7 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
+import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -836,7 +836,8 @@ const TestDetail = () => {
 
   useEffect(() => {
     if (currentTabContent?.id) {
-      setOldCurrentTabData(currentTabContent)
+      const oldCurrentTabData = cloneDeep(currentTabContent)
+      setOldCurrentTabData(oldCurrentTabData)
     }
   }, [currentTabContent?.id])
 
@@ -2666,7 +2667,7 @@ const TestDetail = () => {
                 <button
                   className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
-                    await handleSubmitAnswer('view-answer')
+                    handleSubmitAnswer('view-answer')
                     const data = await getResult(currentTabContent)
                     confirmAnswer(
                       data?.corrects,

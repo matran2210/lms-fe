@@ -227,7 +227,9 @@ const TabSlide = ({
                           handleChangeTab(pageNum.id)
                         }
                       }}
-                      isViewedProp={pageNum.attempted || pageNum.done}
+                      isViewedProp={
+                        pageNum.attempted || pageNum.is_viewed_answer
+                      }
                       isFlagedProp={pageNum.flag}
                       //   type={type}
                     >
