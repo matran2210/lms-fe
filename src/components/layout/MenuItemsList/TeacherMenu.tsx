@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Layout, Menu } from 'antd'
 import Image from 'next/image'
-import sapp from 'src/assets/images/sapp_menu.svg'
 import { userReducer } from 'src/redux/slice/User/User'
 
 import {
@@ -23,6 +22,7 @@ import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { NOTIFICATION_STATUS } from 'src/type'
 import Link from 'next/link'
 import { PageLink } from 'src/constants'
+import ExpandIcon from '../ExpandIcon'
 
 const { Sider } = Layout
 
@@ -100,7 +100,7 @@ export default function TeacherMenu() {
       {/* Logo */}
       <div className="mb-8 mt-6 flex items-center justify-center">
         <div className="flex h-10 w-10 items-center justify-center">
-          <Image alt="Logo" src={sapp} className="sapp-h-45px" />
+          <ExpandIcon type={'teacher-logo-full'} />
         </div>
       </div>
       <div className="mb-7 h-[1.20px] w-8 bg-white"></div>
@@ -132,7 +132,7 @@ export default function TeacherMenu() {
           }
           width={32}
           height={32}
-          className="cursor-pointer rounded-full p-2"
+          className="cursor-pointer rounded-full object-cover"
         />
       </Link>
       <ItemMenu icon={<HelpMenuIcon />} />
