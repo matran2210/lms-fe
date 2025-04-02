@@ -4,7 +4,7 @@ export const PageLink = {
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
   CASE_STUDY: '/casestudy',
-  TEACHERS: '/teacher',
+  TEACHERS: '/teachers',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
   AUTH_LOGIN: '/auth/login',

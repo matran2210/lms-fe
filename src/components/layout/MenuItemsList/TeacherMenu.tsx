@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Layout, Menu } from 'antd'
 import Image from 'next/image'
 import { userReducer } from 'src/redux/slice/User/User'
@@ -33,7 +33,7 @@ interface MenuItem {
 }
 
 export default function TeacherMenu() {
-  const [selectedKey, setSelectedKey] = useState<string>('Book')
+  const [selectedKey, setSelectedKey] = useState<string>('Home')
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer) // Lấy thông tin user đang đăng nhập
@@ -41,7 +41,7 @@ export default function TeacherMenu() {
     {
       key: 'Home',
       icon: <HomeMenuIcon selected={selectedKey === 'Home'} />,
-      link: PageLink.TEACHER_MY_CLASS,
+      link: PageLink.TEACHERS,
     },
     {
       key: 'Book',
@@ -51,24 +51,27 @@ export default function TeacherMenu() {
     {
       key: 'Calender',
       icon: <CalenderMenuIcon selected={selectedKey === 'Calender'} />,
-      link: PageLink.TEACHER_MY_CLASS,
+      link: PageLink.TEACHERS,
     },
     {
       key: 'File',
       icon: <FileMenuIcon selected={selectedKey === 'File'} />,
-      link: PageLink.TEACHER_MY_CLASS,
+      link: PageLink.TEACHERS,
     },
     {
       key: 'Bell',
       icon: <BellIcon selected={selectedKey === 'Bell'} />,
-      link: PageLink.TEACHER_MY_CLASS,
+      link: PageLink.TEACHERS,
     },
   ]
   const handleMenuClick = (item: { key: string }) => {
-    const selectedItem = menuItems.find((menuItem) => menuItem.key === item.key)
-    setSelectedKey(item.key)
-    if (selectedItem?.link) {
-      router.push(selectedItem.link)
+    if (selectedKey !== item.key) {
+      const selectedItem = menuItems.find(
+        (menuItem) => menuItem.key === item.key,
+      )
+      if (selectedItem?.link) {
+        router.push(selectedItem.link)
+      }
     }
   }
   const handleLogout = async () => {
@@ -83,7 +86,14 @@ export default function TeacherMenu() {
       await authenticationManager.logout(window.location.origin)
     } catch (error) {}
   }
-
+  useEffect(() => {
+    if (router?.pathname) {
+      const selectedItem = menuItems.find((menuItem) =>
+        menuItem?.link?.includes(router.pathname),
+      )
+      setSelectedKey(selectedItem?.key || 'Home')
+    }
+  }, [router?.pathname])
   const ItemMenu = ({
     icon,
     action,
@@ -99,14 +109,13 @@ export default function TeacherMenu() {
     <div className="flex flex-col items-center">
       {/* Logo */}
       <div className="mb-8 mt-6 flex items-center justify-center">
-        <div className="flex h-10 w-10 items-center justify-center">
+        <div className="flex h-10 w-10 cursor-pointer items-center justify-center">
           <ExpandIcon type={'teacher-logo-full'} />
         </div>
       </div>
       <div className="mb-7 h-[1.20px] w-8 bg-white"></div>
       {/* Main Menu */}
       <Menu
-        defaultSelectedKeys={['home']}
         theme="dark"
         mode="inline"
         selectedKeys={[selectedKey]}
