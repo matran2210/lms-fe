@@ -165,14 +165,8 @@ export const isValuesEqual = async (
 ) => {
   const { qType } = currentTabContent
 
-  if (
-    [
-      QUESTION_TYPES.TRUE_FALSE,
-      QUESTION_TYPES.ONE_CHOICE,
-      QUESTION_TYPES.MULTIPLE_CHOICE,
-    ].includes(qType)
-  ) {
-    const oldValue = currentTabContent?.answer
+  if ([QUESTION_TYPES.TRUE_FALSE, QUESTION_TYPES.ONE_CHOICE].includes(qType)) {
+    const oldValue = oldCurrentTabData?.answer
     const newValue = getValues(`${currentTabContent?.id}_answer`)
     return oldValue === newValue
   }
@@ -183,12 +177,16 @@ export const isValuesEqual = async (
       QUESTION_TYPES.DRAG_DROP,
       QUESTION_TYPES.SELECT_WORD,
       QUESTION_TYPES.FILL_WORD,
+      QUESTION_TYPES.MULTIPLE_CHOICE,
     ].includes(qType)
   ) {
     const oldValue = oldCurrentTabData?.answer
     let newValue: any
 
     switch (qType) {
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        newValue = getValues(`${currentTabContent?.id}_answer`)
+        break
       case QUESTION_TYPES.MATCHING:
         newValue = getAnswerMatching()
         break
