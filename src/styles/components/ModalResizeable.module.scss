@@ -1,0 +1,24 @@
+.modalResizeable {
+  :global {
+    .ant-modal-content {
+      background-color: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+  }
+}
+
+.modalHeader {
+  background-color: #dcdddd;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+}
+
+.modalContent {
+  padding: 12px;
+  height: calc(100% - 40px);
+  overflow: auto;
+}

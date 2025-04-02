@@ -730,7 +730,7 @@ textarea.is-invalid:focus {
   @apply text-4xl font-semibold text-bw-1;
 }
 
-.ant-modal-root .ant-modal-wrap {
+.ant-modal-root .ant-modal-mask {
   @apply bg-bw-10;
 }
 
@@ -1260,4 +1260,14 @@ fieldset.form-columns-1 .hs-input {
 [type='number']:focus,
 select:focus {
   --tw-ring-color: #ffb800;
+}
+
+.pdf-viewer-container {
+  #proxy-renderer {
+    height: 100%;
+
+    #msdoc-renderer {
+      height: inherit;
+    }
+  }
 }

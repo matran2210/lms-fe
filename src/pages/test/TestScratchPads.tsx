@@ -1,5 +1,6 @@
 import { CloseIcon } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
+import ModalResizeable from '@components/base/modal/ModalResizeable/ModalResizeable'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
@@ -8,7 +9,6 @@ import { useForm } from 'react-hook-form'
 import { ScratchPad, ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
-
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -198,25 +198,28 @@ const TestScratchPads = ({
       )
     } else if (e.type === 'file') {
       return (
-        <MovableWindow
-          className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
-          position={{
-            width: '595px',
-            height: '650px',
-            top: 'calc(50%)',
-            left: 'calc(50%)',
-          }}
+        <ModalResizeable
+          title="Scratch Pad"
+          width={650}
+          height={850}
+          minWidth={200}
+          minHeight={200}
           key={e.id}
-          onClick={() => setOnFocusingPad(e.id)}
-          zIndex={
-            onFocusingPad === e.id ? openScratchPad?.length + 500 : index + 500
-          }
+          dragHandleClassName="modal-header"
+          handleCloseScratchPad={() => handleCloseScratchPad(e)}
         >
           <div className="absolute left-0 top-0  h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-              <div className="truncate text-sm font-normal">{e.fileName}</div>
-              {/* <CloseIcon */}
-              <button onClick={() => handleCloseScratchPad(e)}>
+            <div className="relative">
+              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-gray-2 px-5">
+                <div className="truncate text-sm font-normal">{e.fileName}</div>
+                {/* <CloseIcon */}
+              </div>
+              <button
+                className="absolute right-3 top-2"
+                onClick={() => {
+                  handleCloseScratchPad(e)
+                }}
+              >
                 <CloseIcon />
               </button>
             </div>
@@ -229,7 +232,7 @@ const TestScratchPads = ({
             </div>
             {/* </div> */}
           </div>
-        </MovableWindow>
+        </ModalResizeable>
       )
     }
   })
