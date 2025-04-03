@@ -3,6 +3,7 @@ import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { Typography } from 'antd'
 import { ITabs } from 'src/type'
 import { memo } from 'react'
+import clsx from 'clsx'
 
 const { Title } = Typography
 type LayoutTeacherProps = {
@@ -28,7 +29,7 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
             {title}
           </Title>
           <div
-            className={`rounded-xl ${className ? className : 'bg-white px-8 py-6'}`}
+            className={clsx('rounded-xl', className || 'bg-white px-8 py-6')}
           >
             {children}
           </div>

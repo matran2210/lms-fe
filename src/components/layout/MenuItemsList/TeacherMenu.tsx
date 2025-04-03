@@ -22,7 +22,7 @@ import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { NOTIFICATION_STATUS } from 'src/type'
 import Link from 'next/link'
 import { PageLink } from 'src/constants'
-import ExpandIcon from '../ExpandIcon'
+import ExpandIcon from 'src/components/layout/ExpandIcon/index'
 
 const { Sider } = Layout
 
@@ -69,7 +69,7 @@ export default function TeacherMenu() {
   const handleMenuClick = (item: { key: string }) => {
     if (selectedKey !== item.key) {
       const selectedItem = menuItems.find(
-        (menuItem) => menuItem.key === item.key,
+        (menuItem) => menuItem.key === item.key, // Khi chọn icon trên thanh menu điều hướng đến trang phù hợp
       )
       if (selectedItem?.link) {
         router.push(selectedItem.link)

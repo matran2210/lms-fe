@@ -14,11 +14,7 @@ const DateActionCell: FC<Props> = ({ dataColumn }) => {
   return (
     <div className="flex flex-col">
       <span className="text-sm font-normal text-gray-400">
-        {dataColumn?.firstLine ? (
-          <RenderDateFormat date={dataColumn?.firstLine} />
-        ) : (
-          '-'
-        )}
+        <RenderDateFormat date={dataColumn?.firstLine as string} />
       </span>
       {dataColumn?.secondLine && (
         <span className="text-sm font-normal text-gray-400">

@@ -79,9 +79,12 @@ const SAPPTextFiled = ({
             inputClassName,
             TEXT_SIZES[textSize],
             'form-control h-[50px] w-full border border-solid border-default px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none',
-            isError && '!border-error',
-            disabled ? 'bg-gray-4' : 'bg-transparent',
-            placeholderIcon && 'pl-12',
+            {
+              '!border-error': isError,
+              'bg-gray-4': disabled,
+              'bg-transparent': !disabled,
+              'pl-12': placeholderIcon,
+            },
           )}
           placeholder={placeholder}
           disabled={disabled}
