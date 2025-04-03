@@ -4,6 +4,7 @@ import { IResponse } from 'src/redux/types'
 import {
   ICreateSchedulePayload,
   IResponseSchedule,
+  IWeeklyNorm,
 } from 'src/redux/types/Schedule/schedule'
 
 export class SchedulesAPI {
@@ -18,5 +19,11 @@ export class SchedulesAPI {
       method: 'POST',
       data: data,
     })
+  }
+
+  static getWeeklyNorms(
+    params: Record<string, any>,
+  ): Promise<IResponse<IWeeklyNorm[]>> {
+    return fetcher(`${apiURL}/schedules/weekly-norms`, { params })
   }
 }

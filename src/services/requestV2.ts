@@ -1,4 +1,9 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  Method,
+} from 'axios'
 import { toast } from 'react-hot-toast'
 import exceptions from './en.exceptions.json'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
@@ -130,15 +135,20 @@ request.interceptors.response.use(
 export const fetchFormData = async ({
   url,
   formData,
+  method = 'POST',
 }: {
   url: string
   formData: FormData
+  method?: Method
 }) => {
   if (!formData || [...formData.entries()].length === 0) {
     throw new Error('FormData cannot be empty.')
   }
 
-  return request.post(url, formData, {
+  return request({
+    url,
+    method,
+    data: formData,
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }

@@ -73,7 +73,7 @@ const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
     if (isEmpty(router?.query?.name)) {
       setValue('name', '')
     }
-  }, [router?.query?.name])
+  }, [router?.query?.name, setValue])
 
   return (
     <form className={formStyle} onSubmit={handleSubmit} onChange={handleReset}>
@@ -83,7 +83,7 @@ const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
       <Controller
         control={control}
         name="name"
-        defaultValue={router.query.name}
+        defaultValue={router.query.name ?? ''}
         render={({ field }) => (
           <input
             {...field}

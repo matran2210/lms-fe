@@ -60,7 +60,7 @@ const EventRepeatField = ({
   defaultDate,
   defaultValue,
   onChange,
-  required = false,
+  required,
   field,
   repeatOption,
 }: IProps) => {
@@ -202,6 +202,7 @@ const EventRepeatField = ({
       onChange({
         repeat: value?.repeat_type !== EVENT_REPEAT_TYPES.NO_REPEAT,
         recurring_schedule: cleanObject({
+          type: value?.repeat_type,
           interval: getInterval(),
           frequency: getFrequency(),
           recurrence_end_date: recurrence_end_date.toISOString(),
@@ -249,7 +250,7 @@ const EventRepeatField = ({
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
-                <p className="flex items-center pr-6">Repeat every</p>
+                <p className="required flex items-center pr-6">Repeat every</p>
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
@@ -259,7 +260,7 @@ const EventRepeatField = ({
 
             {repeat_on_visible && (
               <>
-                <p className="flex items-center pr-6">Repeat on</p>
+                <p className="required flex items-center pr-6">Repeat on</p>
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
@@ -267,7 +268,7 @@ const EventRepeatField = ({
               </>
             )}
 
-            <p className="flex items-center pr-6">End on</p>
+            <p className="required flex items-center pr-6">End on</p>
             <Controller
               control={control}
               name="end_on"
@@ -282,6 +283,7 @@ const EventRepeatField = ({
                   color="secondary"
                   suffixIcon={<SappIcon icon="input_calendar" />}
                   allowClear={false}
+                  required
                 />
               )}
             />

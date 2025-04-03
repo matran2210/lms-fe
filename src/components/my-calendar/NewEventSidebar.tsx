@@ -3,8 +3,10 @@ import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { handleDisableDate, handleDisableTime } from '@utils/calendar'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
+import { Dayjs } from 'dayjs'
 import { memo, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -84,10 +86,12 @@ const NewEventSidebar = ({
     const payload = {
       event_name: formValues.event_name,
       event_type: EVENT_TYPES.BUSY,
-      start_time: formValues.range[0].toISOString(),
-      end_time: formValues.range[1].toISOString(),
+      range: {
+        start_time: formValues.range[0].toISOString(),
+        end_time: formValues.range[1].toISOString(),
+      },
       description: formValues.description,
-      repeat: formValues.repeat?.recurring_schedule,
+      ...formValues.repeat,
     } as ICreateSchedulePayload
     const formattedPayload = Object.fromEntries(
       Object.entries(payload).filter(
@@ -95,12 +99,16 @@ const NewEventSidebar = ({
       ),
     ) as ICreateSchedulePayload
 
-    const response = await SchedulesAPI.create(formattedPayload)
-    if (response.success) {
-      toast.success(
-        'Request created successfully. Please wait for CX Admin to approve your request',
-      )
-      handleClose()
+    try {
+      const response = await SchedulesAPI.create(formattedPayload)
+      if (response.success) {
+        toast.success(
+          'Request created successfully. Please wait for CX Admin to approve your request',
+        )
+        handleClose()
+      }
+    } catch (error) {
+      // Handled by axios interceptor
     }
   }
 
@@ -169,6 +177,10 @@ const NewEventSidebar = ({
                     control={control}
                     required
                     inputClassName="h-11.25 w-full rounded-md"
+                    disabledDate={(targetDate: Dayjs) =>
+                      handleDisableDate(new Date(), targetDate)
+                    }
+                    disabledTime={handleDisableTime}
                   />
                 </div>
 
@@ -177,7 +189,7 @@ const NewEventSidebar = ({
                   <HookFormEventRepeat
                     control={control}
                     name="repeat"
-                    required={true}
+                    required
                     defaultDate={currentDate}
                   />
                 </div>

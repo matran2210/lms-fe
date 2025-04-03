@@ -3,10 +3,12 @@ import Layout from '@components/layout'
 import Calendar from '@components/my-calendar/Calendar'
 import EventDetails from '@components/my-calendar/EventDetails'
 import NewEventSidebar from '@components/my-calendar/NewEventSidebar'
+import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 import 'sapp-common-package/dist/index.css'
 import { IEvent } from 'sapp-common-package/dist/types'
-import { TitleSidebar } from 'src/constants'
+import { DATE_TIME_FORMAT, TitleSidebar } from 'src/constants'
 import { IPopupDetails } from 'src/type/my-calendar'
 
 const breadcrumbs = [
@@ -35,6 +37,14 @@ const MyCalendar = () => {
 
   const handleOpenCreate = useCallback(
     (date: Date) => {
+      if (
+        dayjs().format(DATE_TIME_FORMAT) !==
+          dayjs(date).format(DATE_TIME_FORMAT) &&
+        dayjs().isAfter(date)
+      ) {
+        return toast.error('Cannot create event in the past')
+      }
+
       setSelectedDate(date)
       setIsOpenCreate(true)
     },

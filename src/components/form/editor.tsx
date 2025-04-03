@@ -174,12 +174,6 @@ const TinyEditor = ({
   //   }
   //   input.click()
   // }
-
-  // const log = () => {
-  //   if (editorRef.current) {
-  //     console.log(editorRef.current.getContent())
-  //   }
-  // }
   useEffect(() => {
     if (loaded && getContent) {
       const rawContent = editorRef?.current?.getContent({ format: 'text' })

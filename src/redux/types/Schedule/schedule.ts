@@ -1,4 +1,5 @@
 import { FREQUENCY_UNITS, REPEAT_ON } from 'src/constants'
+import { recurringScheduleType } from 'src/type/my-calendar'
 
 export interface ICreateScheduleForm {
   event_name: string
@@ -12,7 +13,7 @@ export interface ICreateScheduleForm {
       day_of_week?: (typeof REPEAT_ON)[number][]
       month_of_year?: number[]
       day_of_month?: number[]
-      type: string
+      type: recurringScheduleType
     }
   }
   description: string
@@ -21,10 +22,14 @@ export interface ICreateScheduleForm {
 export interface ICreateSchedulePayload {
   event_name: string
   event_type: 'TEACHING' | 'BUSY' | 'TIME_OFF' | 'OTHER'
-  start_time: string
-  end_time: string
+  range: {
+    start_time: string
+    end_time: string
+  }
   description: string
-  repeat?: {
+  repeat: boolean
+  recurring_schedule?: {
+    type: recurringScheduleType
     interval: number
     frequency: 'days' | 'weeks' | 'months' | 'years'
     recurrence_end_date: string
@@ -53,4 +58,11 @@ export interface IResponseSchedule {
   classroom_address: string | null
   classroom_name: string | null
   meeting_link: string | null
+}
+
+export interface IWeeklyNorm {
+  id: string
+  start_date: string
+  end_date: string
+  max_shift: number
 }

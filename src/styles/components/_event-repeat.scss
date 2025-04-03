@@ -47,10 +47,6 @@ $bw12Color: #374151;
 }
 
 .select-single {
-  &.h-10 .select__control {
-    height: 40px;
-  }
-
   &.rounded-0 .select__control {
     border-radius: 0px;
   }
