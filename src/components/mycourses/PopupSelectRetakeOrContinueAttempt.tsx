@@ -59,11 +59,12 @@ const PopupSelectRetakeOrContinueAttempt = ({
       title={title}
       icon={undefined}
       header=""
-      content={
-        'Your last attempt was unexpectedly ended. Do you want to continue from where you left off in the previous one?'
-      }
     >
       <div>
+        <div className="mb-11 mt-4 text-center text-medium-sm text-gray-1">
+          Your last attempt was unexpectedly ended. Do you want to continue from
+          where you left off in the previous one?
+        </div>
         <div className={`relative pt-5 md:pt-9`}>
           {/* Select Option */}
           <Radio.Group
