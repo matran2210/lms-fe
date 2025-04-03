@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import useSelectExams from 'src/hooks/useSelectExams'
+import { useMutation } from 'react-query'
 
 interface ISelectExamPopup {
   courseData: any
@@ -24,7 +25,18 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     router.query.courseId as string,
   )
 
-  const confirmExamDate = async () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (formData: FormData) =>
+      ClassAPI.changeExamDate(router.query.courseId as string, formData),
+    onSuccess: (res) => {
+      if (res.data.success) {
+        setExamModal(false)
+        toast.success(res.data.data.message)
+      }
+    },
+  })
+
+  const confirmExamDate = () => {
     const formData = new FormData()
     if (selectedExam) {
       if (selectedExam.value === 'NOT_DECIDED') {
@@ -34,18 +46,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
         formData.append('not_decided', 'false')
       }
     }
-    try {
-      if (router.query.courseId) {
-        const res = await ClassAPI.changeExamDate(
-          router.query.courseId as string,
-          formData,
-        )
-        if (res.data.success) {
-          setExamModal(false)
-          toast.success(res.data.data.message)
-        }
-      }
-    } catch {}
+    mutate(formData)
   }
 
   const options = exams?.data?.map((exam) => ({
@@ -100,6 +101,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
             title="Confirm Exam"
             className="h-12 text-base"
             onClick={confirmExamDate}
+            loading={isLoading}
           />
         </div>
       </div>
