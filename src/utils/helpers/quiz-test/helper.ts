@@ -216,11 +216,14 @@ export const isValuesEqual = async (
         },
         [],
       )
+
       const newValue = currentTabContent?.data?.requirements?.reduce(
         (acc: string[], item: any, indexItem: number) => {
           acc.push(
             (item?.answer_file?.file_key || '') +
-              (getValues(`${currentTabContent?.id}_${indexItem}_answer`) || ''),
+              (getValues(`${currentTabContent?.id}_${indexItem}_answer`) ||
+                item?.answer_text ||
+                ''),
           )
           return acc
         },
@@ -230,10 +233,13 @@ export const isValuesEqual = async (
       return await compareValues(oldValue, newValue)
     } else {
       const oldValue =
-        oldCurrentTabData?.answer_file?.file_key + oldCurrentTabData?.answer
+        (oldCurrentTabData?.answer_file?.file_key || '') +
+        (oldCurrentTabData?.answer || '')
       const newValue =
-        currentTabContent?.answer_file?.file_key +
-        getValues(`${currentTabContent?.id}_0_answer`)
+        (currentTabContent?.answer_file?.file_key || '') +
+        (getValues(`${currentTabContent?.id}_0_answer`) ||
+          currentTabContent?.answer ||
+          '')
       return await compareValues(oldValue, newValue)
     }
   }

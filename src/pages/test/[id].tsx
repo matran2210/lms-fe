@@ -1422,18 +1422,19 @@ const TestDetail = () => {
 
   const handleSubmitAnswer = async (action?: string) => {
     if (!currentTabContent) return
+    if (currentTabContent?.is_viewed_answer) return
 
     // Early return for tab changes if question not answered
     if (['change-tab', 'timeout', 'finish'].includes(action ?? '')) {
       if (!checkAnswered(currentTabContent)) return
       if (action === 'change-tab' || action === 'finish') {
-        const isEqualValues = await isValuesEqual(
+        const isEqualValue = await isValuesEqual(
           currentTabContent,
           oldCurrentTabData,
           getValues,
         )
         // Check if the current tab content is the same as the old tab content
-        if (isEqualValues) return
+        if (isEqualValue) return
       }
     }
 
