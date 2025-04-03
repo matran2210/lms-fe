@@ -1,12 +1,18 @@
 import { Collapse, CollapseProps } from 'antd'
 import React from 'react'
-import { IScheduleRequest } from './TableContainer'
 import dayjs from 'dayjs'
+import {
+  IScheduleRequestItem,
+  ScheduleRequestDetail,
+  ScheduleTimeItem,
+} from 'src/type/teachers/request-schedule.interface'
+import { sappFormatDate } from '@utils/index'
 
 interface IProps {
-  selectedRequest: IScheduleRequest | undefined
+  dataDetail: ScheduleRequestDetail
+  selectedRequest: IScheduleRequestItem
 }
-const PrimaryInformation = ({ selectedRequest }: IProps) => {
+const PrimaryInformation = ({ dataDetail, selectedRequest }: IProps) => {
   const items: CollapseProps['items'] = [
     {
       key: '1',
@@ -23,21 +29,23 @@ const PrimaryInformation = ({ selectedRequest }: IProps) => {
             <div>
               <span className="text-sm text-[#9CA3AF]">Class Code</span>
             </div>
-            <div className="col-span-2">{selectedRequest?.classCode}</div>
+            <div className="col-span-2">{selectedRequest?.class.code}</div>
           </div>
           {/* Program */}
           <div className="grid grid-cols-3 gap-4">
             <div>
               <span className="text-sm text-[#9CA3AF]">Program</span>
             </div>
-            <div className="col-span-2">{selectedRequest?.program}</div>
+            <div className="col-span-2">
+              {selectedRequest?.subject.course_category.name}
+            </div>
           </div>
           {/* Subject */}
           <div className="grid grid-cols-3 gap-4">
             <div>
               <span className="text-sm text-[#9CA3AF]">Subject</span>
             </div>
-            <div className="col-span-2">{selectedRequest?.subject}</div>
+            <div className="col-span-2">{selectedRequest?.subject.code}</div>
           </div>
           {/* Construction Mode */}
           <div className="grid grid-cols-3 gap-4">
@@ -45,9 +53,7 @@ const PrimaryInformation = ({ selectedRequest }: IProps) => {
               <span className="text-sm text-[#9CA3AF]">Construction Mode</span>
             </div>
             <div className="col-span-2">
-              <span className="text-[#025EFF]">
-                {selectedRequest?.constructionMode}
-              </span>
+              <span className="text-[#025EFF]">{selectedRequest?.type}</span>
             </div>
           </div>
           {/* Schedule */}
@@ -57,9 +63,11 @@ const PrimaryInformation = ({ selectedRequest }: IProps) => {
             </div>
             <div className="col-span-2">
               <div className="flex items-center gap-8">
-                {selectedRequest?.schedule.map(
-                  (item: string, index: number) => (
-                    <div key={index}>{item}</div>
+                {(dataDetail.schedules ?? []).map(
+                  (item: ScheduleTimeItem, index: number) => (
+                    <div
+                      key={index}
+                    >{`${item.start_time} - ${item.end_time}`}</div>
                   ),
                 )}
               </div>
@@ -70,7 +78,7 @@ const PrimaryInformation = ({ selectedRequest }: IProps) => {
             <div>
               <span className="text-sm text-[#9CA3AF]">Classroom Address</span>
             </div>
-            <div className="col-span-2">{selectedRequest?.address}</div>
+            <div className="col-span-2">{''}</div>
           </div>
           {/* Start and end date */}
           <div className="grid grid-cols-3 gap-4">
@@ -80,7 +88,7 @@ const PrimaryInformation = ({ selectedRequest }: IProps) => {
               </span>
             </div>
             <div className="col-span-2">
-              {`${dayjs(selectedRequest?.startDate).format('DD/MM/YYYY')} - ${dayjs(selectedRequest?.endDate).format('DD/MM/YYYY')}`}
+              {`${sappFormatDate(selectedRequest?.schedule_time.start_date) ?? '-'} - ${sappFormatDate(selectedRequest?.schedule_time.end_date) ?? '-'}`}
             </div>
           </div>
           {/* Sent Date */}
@@ -89,7 +97,7 @@ const PrimaryInformation = ({ selectedRequest }: IProps) => {
               <span className="text-sm text-[#9CA3AF]">Sent Date</span>
             </div>
             <div className="col-span-2">
-              {dayjs(selectedRequest?.sentDate).format('DD/MM/YYYY')}
+              {sappFormatDate(selectedRequest?.created_at)}
             </div>
           </div>
         </div>

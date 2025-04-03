@@ -34,8 +34,8 @@ const ScheduleRequestTable = () => {
       search: getValues('search') || undefined,
       course_category_id: getValues('course_category_id')?.value || undefined,
       status: getValues('status')?.value || undefined,
-      fromDate: sappFormatDate(fromDate, 'YYYY-MM-DD HH:mm:ss'),
-      toDate: sappFormatDate(toDate, 'YYYY-MM-DD HH:mm:ss'),
+      fromDate: sappFormatDate(fromDate, 'YYYY-MM-DDTHH:mm:ssZ'),
+      toDate: sappFormatDate(toDate, 'YYYY-MM-DDTHH:mm:ssZ'),
     }
     setParams(searchParams)
   }

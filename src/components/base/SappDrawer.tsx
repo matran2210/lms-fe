@@ -64,7 +64,6 @@ const SappDrawer = ({
   }
 
   const handleMaskClick = (e: any) => {
-    handleClickCancelButton()
     if (isOpen && e?.target?.closest('.custom-drawer') === null) {
       handleOnClose()
     }
@@ -138,7 +137,10 @@ const SappDrawer = ({
             <ButtonText
               title={btnCancelTitle}
               className={clsx('ms-[4px]', cancelButtonClassName)}
-              onClick={handleMaskClick}
+              onClick={(e) => {
+                handleMaskClick(e)
+                handleClickCancelButton()
+              }}
               size={sizeTextBtn}
             />
             {showSubmitButton && (

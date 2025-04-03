@@ -43,6 +43,7 @@ export interface IScheduleRequestItem {
 export interface ClassInfo {
   id: string
   code: string
+  instruction_mode: string
 }
 
 export interface SubjectInfo {
@@ -66,4 +67,34 @@ export interface ScheduleTime {
 export interface StaffDetail {
   id: string
   full_name: string
+}
+
+export interface ScheduleRequestDetail {
+  id: string
+  created_at: string
+  updated_at: string
+  type: string
+  status: string
+  description: any
+  due_date: string
+  name: string
+  teacher_schedule_id: string
+  room: any
+  class: ClassInfo
+  subject: SubjectInfo
+  schedules: ScheduleTimeItem[]
+  staff_detail: StaffDetail
+}
+
+export interface CourseCategory {
+  id: string
+  name: string
+}
+
+export interface ScheduleTimeItem {
+  id: string
+  start_date: any
+  end_date: any
+  start_time: string
+  end_time: string
 }

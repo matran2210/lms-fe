@@ -115,7 +115,7 @@ export class TeacherAPI {
    * @returns chi tiết yêu cầu thực hành
    */
   static getRequestScheduleById(id: string): Promise<any> {
-    return fetcher(`${apiURL}/request-schedules/teachings/${id}`)
+    return fetcher(`${apiURL}/request-schedules/teaching/${id}`)
   }
 
   /**
@@ -129,7 +129,7 @@ export class TeacherAPI {
     id: string,
     payload: StatusRequestScheduleParams,
   ): Promise<any> {
-    return fetcher(`${apiURL}/request-schedules/teachings/${id}`, {
+    return fetcher(`${apiURL}/request-schedules/teaching/${id}`, {
       data: payload,
       method: 'PUT',
     })

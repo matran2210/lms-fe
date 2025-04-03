@@ -10,17 +10,31 @@ export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
-import { IScheduleRequest, statusColor } from './TableContainer'
+import {
+  IOpenReasonModal,
+  statusColor,
+  UpdateStatusParams,
+} from './TableContainer'
 import dayjs from 'dayjs'
 import { Collapse, CollapseProps } from 'antd'
 import Panel from 'antd/es/splitter/Panel'
 import PrimaryInformation from './PrimaryInformation'
+import { IScheduleRequestItem } from 'src/type/teachers/request-schedule.interface'
+import { StatusRequestSchedule } from '@utils/constants/Teacher'
+import { useQuery } from 'react-query'
+import { TeacherAPI } from '@pages/api/teacher'
 
 interface IProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
-  selectedRequest?: IScheduleRequest
-  setOpenReasonModal: Dispatch<SetStateAction<boolean>>
+  selectedRequest: IScheduleRequestItem
+  setOpenReasonModal: React.Dispatch<React.SetStateAction<IOpenReasonModal>>
+  handleUpdateStatus: ({
+    requestId,
+    type,
+    reason,
+    callback,
+  }: UpdateStatusParams) => Promise<void>
 }
 
 const DetailRequestModal = ({
@@ -28,27 +42,55 @@ const DetailRequestModal = ({
   setOpen,
   selectedRequest,
   setOpenReasonModal,
+  handleUpdateStatus,
 }: IProps) => {
-  const isPending = selectedRequest?.status === 'Chờ Duyệt'
-  const isOverdue = dayjs(selectedRequest?.processingDeadline).isBefore(dayjs())
+  const requestId = selectedRequest.id
+  const isPending = selectedRequest?.status === StatusRequestSchedule.PENDING
+  const isCancel = selectedRequest?.status === StatusRequestSchedule.CANCEL
+  const isOverdue = dayjs(selectedRequest?.due_date).isBefore(dayjs())
   const onClose = () => {
     setOpen(false)
   }
 
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: [requestId],
+    queryFn: async () => {
+      try {
+        return await TeacherAPI.getRequestScheduleById(requestId)
+      } catch (error) {
+        return null
+      }
+    },
+    retry: false,
+  })
+
   const handleClickCancel = () => {
-    setOpenReasonModal(true)
+    setOpenReasonModal({
+      open: true,
+      requestId: requestId,
+      type: isPending
+        ? StatusRequestSchedule.REJECT
+        : StatusRequestSchedule.CANCEL,
+    })
     setOpen(false)
   }
-  const handleClickApprove = () => {}
+
   return (
     <SappDrawer
       handleClickCancelButton={handleClickCancel}
-      handleSubmit={handleClickApprove}
+      handleSubmit={() =>
+        handleUpdateStatus({
+          requestId: requestId,
+          type: StatusRequestSchedule.APPROVED,
+          reason: StatusRequestSchedule.APPROVED,
+          callback: onClose,
+        })
+      }
       isOpen={open}
       message="Bạn có chắc chán muốn hủy không?"
       onClose={onClose}
       title="View Request"
-      footer
+      footer={!isCancel}
       confirmOnClose={false}
       btnSubmitTile="Đồng ý"
       btnCancelTitle={isPending ? 'Từ chối' : 'Cancel'}
@@ -61,7 +103,7 @@ const DetailRequestModal = ({
     >
       <div className="px-8 py-6">
         <div className="mb-6 flex flex-col gap-4">
-          <div>{selectedRequest?.classCode}</div>
+          <div>{selectedRequest?.class.code}</div>
           <div className="flex items-center gap-[10px]">
             <div className="text-14 text-[#78829D]">Processing deadline:</div>
             <div
@@ -81,9 +123,7 @@ const DetailRequestModal = ({
                 </div>
               )}
               <div>
-                {dayjs(selectedRequest?.processingDeadline).format(
-                  'HH:mm | DD/MM/YYYY',
-                )}
+                {dayjs(selectedRequest?.due_date).format('HH:mm | DD/MM/YYYY')}
               </div>
             </div>
           </div>
@@ -97,9 +137,14 @@ const DetailRequestModal = ({
           </div>
         </div>
 
-        <div>
-          <PrimaryInformation selectedRequest={selectedRequest} />
-        </div>
+        {data && (
+          <div>
+            <PrimaryInformation
+              selectedRequest={selectedRequest}
+              dataDetail={data?.data}
+            />
+          </div>
+        )}
       </div>
     </SappDrawer>
   )

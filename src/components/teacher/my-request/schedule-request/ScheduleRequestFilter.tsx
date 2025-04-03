@@ -47,10 +47,10 @@ const listStatus = [
     label: 'Huỷ',
     value: StatusRequestSchedule.CANCEL,
   },
-  {
-    label: 'Đã xem',
-    value: StatusRequestSchedule.VIEWED,
-  },
+  // {
+  //   label: 'Đã xem',
+  //   value: StatusRequestSchedule.VIEWED,
+  // },
 ]
 const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
   placeholder = 'Search student',

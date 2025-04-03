@@ -15,6 +15,7 @@ import {
   FilterRequestScheduleParams,
   IScheduleRequestItem,
   RequestScheduleParams,
+  StatusRequestScheduleParams,
 } from 'src/type/teachers/request-schedule.interface'
 import { StatusRequestSchedule } from '@utils/constants/Teacher'
 
@@ -31,15 +32,31 @@ export const statusColor = (data: IScheduleRequestItem) => {
       return ''
   }
 }
+export const defaultOpenReasonModal: IOpenReasonModal = {
+  type: undefined,
+  open: false,
+  requestId: '',
+}
+export interface UpdateStatusParams {
+  requestId: string
+  type: StatusRequestSchedule
+  reason?: string
+  callback?: () => void
+}
+export interface IOpenReasonModal {
+  requestId: string | undefined
+  type: StatusRequestSchedule | undefined
+  open: boolean
+}
 interface IProps {
   params: FilterRequestScheduleParams
 }
 export default function TableContainer({ params }: IProps) {
   const router = useRouter()
-  const studentId = router?.query?.id as string
-
   const [openDetail, setOpenDetail] = useState(false)
-  const [openReasonModal, setOpenReasonModal] = useState(false)
+  const [openReasonModal, setOpenReasonModal] = useState<IOpenReasonModal>(
+    defaultOpenReasonModal,
+  )
   const [openSuccessModal, setOpenSuccessModal] = useState(false)
 
   const [selectedRequest, setSelectedRequest] = useState<
@@ -209,56 +226,24 @@ export default function TableContainer({ params }: IProps) {
     },
   ]
 
-  const mockData = [
-    {
-      id: 1,
-      classCode: '123456',
-      program: 'Program 1',
-      subject: 'Subject 1',
-      constructionMode: 'Construction Mode 1',
-      startDate: '2022-01-01',
-      endDate: '2022-01-01',
-      sentDate: '2024-01-01',
-      cxAdmin: 'CX Admin 1',
-      updateDate: 'Update Date 1',
-      status: 'Chờ Duyệt',
-      processingDeadline: '2024-01-04 20:00:00',
-      address: 'Address 1',
-      schedule: ['Thứ 2 | 18:00 - 21:00', 'Thứ 4 | 18:00 - 21:00'],
-    },
-    {
-      id: 2,
-      classCode: '12e456',
-      program: 'Program 2',
-      subject: 'Subject 2',
-      constructionMode: 'Construction Mode 2',
-      startDate: '2022-01-01',
-      endDate: '2022-01-01',
-      sentDate: '2024-01-01',
-      cxAdmin: 'CX Admin 2',
-      updateDate: 'Update Date 2',
-      status: 'Đồng ý',
-      processingDeadline: '2024-01-04 20:00:00',
-      address: 'Address 2',
-      schedule: ['Thứ 2 | 18:00 - 21:00', 'Thứ 4 | 18:00 - 21:00'],
-    },
-    {
-      id: 3,
-      classCode: '1234w6',
-      program: 'Program 1',
-      subject: 'Subject 1',
-      constructionMode: 'Construction Mode 1',
-      startDate: '2022-01-01',
-      endDate: '2022-01-01',
-      sentDate: '2024-01-01',
-      cxAdmin: 'CX Admin 1',
-      updateDate: 'Update Date 1',
-      status: 'Từ chối',
-      processingDeadline: '2024-01-04 20:00:00',
-      address: 'Address 1',
-      schedule: ['Thứ 2 | 18:00 - 21:00', 'Thứ 4 | 18:00 - 21:00'],
-    },
-  ]
+  const handleUpdateStatus = async ({
+    requestId,
+    type,
+    reason = '',
+    callback = () => {},
+  }: UpdateStatusParams) => {
+    try {
+      const payload: StatusRequestScheduleParams = {
+        reason: reason,
+        status: type,
+      }
+      await TeacherAPI.updateStatusRequestSchedule(requestId, payload)
+      callback()
+      setOpenSuccessModal(true)
+    } catch (error) {
+    } finally {
+    }
+  }
   return (
     <>
       <SappTable
@@ -282,14 +267,16 @@ export default function TableContainer({ params }: IProps) {
           setOpen={setOpenDetail}
           selectedRequest={selectedRequest}
           setOpenReasonModal={setOpenReasonModal}
+          handleUpdateStatus={handleUpdateStatus}
         />
       )}
 
-      {openReasonModal && (
+      {openReasonModal && openReasonModal.requestId && openReasonModal.type && (
         <ReasonModal
           open={openReasonModal}
           setOpen={setOpenReasonModal}
           setOpenSuccessModal={setOpenSuccessModal}
+          handleUpdateStatus={handleUpdateStatus}
         />
       )}
 

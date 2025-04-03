@@ -1,6 +1,6 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import SappTabs from '@components/tabs/SappTabs'
-import ScheduleRequestTable from '@components/teacher/my-request/schedule-request/ScheduleRequestTable'
+import ScheduleRequestTable from '@components/teacher/my-request/schedule-request'
 import React, { useState } from 'react'
 import { ANIMATION, PageLink } from 'src/constants'
 import { ITabs } from 'src/type'

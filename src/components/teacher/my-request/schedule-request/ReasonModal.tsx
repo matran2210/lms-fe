@@ -2,6 +2,7 @@ import { AlertIcon, InfoIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { StatusRequestSchedule } from '@utils/constants/Teacher'
 import React, { Dispatch, SetStateAction } from 'react'
 import {
   InternalFieldName,
@@ -21,25 +22,51 @@ import {
   ErrorOption,
   useForm,
 } from 'react-hook-form'
+import {
+  defaultOpenReasonModal,
+  IOpenReasonModal,
+  UpdateStatusParams,
+} from './TableContainer'
 
 interface IProps {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
+  open: IOpenReasonModal
+  setOpen: React.Dispatch<React.SetStateAction<IOpenReasonModal>>
   setOpenSuccessModal: Dispatch<SetStateAction<boolean>>
+  handleUpdateStatus: ({
+    requestId,
+    type,
+    reason,
+    callback,
+  }: UpdateStatusParams) => Promise<void>
 }
-const ReasonModal = ({ open, setOpen, setOpenSuccessModal }: IProps) => {
-  const { control } = useForm()
+const ReasonModal = ({
+  open,
+  setOpen,
+  setOpenSuccessModal,
+  handleUpdateStatus,
+}: IProps) => {
+  const { control, getValues, reset } = useForm()
   const handleCancel = () => {
-    setOpen(false)
+    reset({ request_reject_reason: '' })
+    setOpen(defaultOpenReasonModal)
   }
 
   const handleSubmit = () => {
-    setOpen(false)
-    setOpenSuccessModal(true)
+    if (open.requestId === undefined) return
+    if (open.type === undefined) return
+    handleUpdateStatus({
+      requestId: open.requestId,
+      type: open.type,
+      reason: getValues('request_reject_reason'),
+      callback: () => {
+        setOpen(defaultOpenReasonModal)
+        setOpenSuccessModal(true)
+      },
+    })
   }
   return (
     <SappModalV3
-      open={open}
+      open={open.open}
       handleCancel={handleCancel}
       onOk={handleSubmit}
       icon={<AlertIcon />}
