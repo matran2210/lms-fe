@@ -4,13 +4,15 @@ const SappTabs = ({
   tabs,
   setSelected,
   selected,
+  bordered = false,
 }: {
   tabs: ITabsTeacher[]
   setSelected: React.Dispatch<React.SetStateAction<number>>
   selected: number
+  bordered?: boolean
 }) => {
   return (
-    <ul className="flex">
+    <ul className={`flex ${bordered ? 'border-b border-gray-100' : ''}`}>
       {tabs.map((tab) => {
         const isActive = tab.id === selected
         return (
