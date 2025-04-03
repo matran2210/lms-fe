@@ -396,7 +396,7 @@ export const formatNotificationHTML = (input: string): string => {
   )
 }
 
-export const sanitizeHTML = (htmlContent: string) => {
+export const clearStylesHtml = (htmlContent: string) => {
   if (htmlContent) {
     // Loại bỏ các thẻ <style> và thuộc tính style inline
     return htmlContent
