@@ -4,24 +4,23 @@ import { useForm } from 'react-hook-form'
 import TableContainer from './TableContainer'
 import LayoutFilter from '@components/layout/Filter'
 import SappButtonIcon from '@components/base/button/SappButtonIcon'
+import { FilterRequestScheduleParams } from 'src/type/teachers/request-schedule.interface'
+import dayjs from 'dayjs'
+import { sappFormatDate } from '@utils/index'
 
-interface FilterParams {
-  code?: string
-  program_id?: string
-  status?: string
-  date_range?: string
-}
-
-const initialValues: FilterParams = {
-  code: '',
-  program_id: '',
+const initialValues: FilterRequestScheduleParams = {
+  search: '',
+  course_category_id: '',
   status: '',
-  date_range: '',
+  fromDate: '',
+  toDate: '',
+  dateField: '',
 }
 
 const ScheduleRequestTable = () => {
   const { control, getValues, reset, setValue, watch } = useForm()
-  const [params, setParams] = useState<FilterParams>(initialValues)
+  const [params, setParams] =
+    useState<FilterRequestScheduleParams>(initialValues)
 
   const handleResetFilter = () => {
     reset(initialValues)
@@ -29,11 +28,14 @@ const ScheduleRequestTable = () => {
   }
 
   const onSubmit = () => {
-    const searchParams: FilterParams = {
-      code: getValues('search') || undefined,
-      program_id: getValues('program_id')?.value || undefined,
+    const fromDate = getValues('date_range')?.[0] || undefined
+    const toDate = getValues('date_range')?.[1] || undefined
+    const searchParams: FilterRequestScheduleParams = {
+      search: getValues('search') || undefined,
+      course_category_id: getValues('course_category_id')?.value || undefined,
       status: getValues('status')?.value || undefined,
-      date_range: getValues('date_range') || undefined,
+      fromDate: sappFormatDate(fromDate, 'YYYY-MM-DD HH:mm:ss'),
+      toDate: sappFormatDate(toDate, 'YYYY-MM-DD HH:mm:ss'),
     }
     setParams(searchParams)
   }
@@ -59,7 +61,7 @@ const ScheduleRequestTable = () => {
         }
       />
 
-      <TableContainer />
+      <TableContainer params={params} />
     </div>
   )
 }

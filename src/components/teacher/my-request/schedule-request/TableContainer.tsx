@@ -1,4 +1,3 @@
-import { Typography } from 'antd'
 import SappTable from '@components/table/SappTable'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -12,46 +11,30 @@ import ActionCell from '../../../base/action/SappActionCell'
 import DetailRequestModal from './DetailRequestModal'
 import ReasonModal from './ReasonModal'
 import SuccessModal from './SuccessModal'
+import {
+  FilterRequestScheduleParams,
+  IScheduleRequestItem,
+  RequestScheduleParams,
+} from 'src/type/teachers/request-schedule.interface'
+import { StatusRequestSchedule } from '@utils/constants/Teacher'
 
-const { Title } = Typography
-
-export interface IScheduleRequest {
-  id: string
-  classCode: string
-  program: string
-  subject: string
-  startDate: string
-  endDate: string
-  sentDate: string
-  cxAdmin: string
-  updateDate: string
-  status: string
-  constructionMode: string
-  processingDeadline: string
-  address: string
-  schedule: string[]
-}
-export const statusColor = (data: IScheduleRequest) => {
+export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
-    case 'Chờ Duyệt':
+    case StatusRequestSchedule.PENDING:
       return 'bg-orange-100 text-orange-800'
-    case 'Đồng ý':
+    case StatusRequestSchedule.APPROVED:
       return 'bg-green-100 text-green-800'
-    case 'Từ chối':
+    case StatusRequestSchedule.REJECT:
+    case StatusRequestSchedule.CANCEL:
       return 'bg-red-100 text-red-800'
     default:
       return ''
   }
 }
-interface FilterParams {
-  text?: string
+interface IProps {
+  params: FilterRequestScheduleParams
 }
-
-const initialValues: FilterParams = {
-  text: '',
-}
-
-export default function TableContainer() {
+export default function TableContainer({ params }: IProps) {
   const router = useRouter()
   const studentId = router?.query?.id as string
 
@@ -59,9 +42,8 @@ export default function TableContainer() {
   const [openReasonModal, setOpenReasonModal] = useState(false)
   const [openSuccessModal, setOpenSuccessModal] = useState(false)
 
-  const [params, setParams] = useState<FilterParams>(initialValues)
   const [selectedRequest, setSelectedRequest] = useState<
-    IScheduleRequest | undefined
+    IScheduleRequestItem | undefined
   >()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number(router.query.page_index) || 1,
@@ -72,15 +54,20 @@ export default function TableContainer() {
   })
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['student', studentId, pagination, params],
-    queryFn: () =>
-      TeacherAPI.getStudentById(
-        studentId,
-        pagination.current ?? 1,
-        pagination.pageSize ?? 10,
-        params,
-      ),
-    enabled: !!studentId,
+    queryKey: [pagination, params],
+    queryFn: async () => {
+      try {
+        const payload: RequestScheduleParams = {
+          page_index: pagination.current ?? 1,
+          page_size: pagination.pageSize ?? 10,
+          ...params,
+        }
+        return await TeacherAPI.getListRequestSchedule(payload)
+      } catch (error) {
+        return null
+      }
+    },
+    retry: false,
   })
 
   useEffect(() => {
@@ -106,7 +93,7 @@ export default function TableContainer() {
       pageSize: pageSize,
     }))
   }
-  const Action = (data: IScheduleRequest) => {
+  const Action = (data: IScheduleRequestItem) => {
     setOpenDetail(true)
     setSelectedRequest(data)
   }
@@ -114,8 +101,8 @@ export default function TableContainer() {
     {
       title: '#',
       render: (
-        _: IScheduleRequest,
-        record: IScheduleRequest,
+        _: IScheduleRequestItem,
+        record: IScheduleRequestItem,
         index: number,
       ) => (
         <TableCell
@@ -130,15 +117,15 @@ export default function TableContainer() {
     },
     {
       title: 'Class code',
-      render: (record: IScheduleRequest) => (
-        <TableCell data={record?.classCode ?? ''} className="!text-gray-400" />
+      render: (record: IScheduleRequestItem) => (
+        <TableCell data={record?.class.code ?? ''} className="!text-gray-400" />
       ),
     },
     {
       title: 'Program',
-      render: (record: IScheduleRequest) => (
+      render: (record: IScheduleRequestItem) => (
         <TableCell
-          data={record?.program ?? ''}
+          data={record?.subject.course_category.name ?? ''}
           className="cursor-pointer hover:underline"
           onClick={() => Action(record)}
         />
@@ -146,53 +133,58 @@ export default function TableContainer() {
     },
     {
       title: 'Subject',
-      render: (record: IScheduleRequest) => (
-        <TableCell data={record?.subject ?? ''} />
+      render: (record: IScheduleRequestItem) => (
+        <TableCell data={record?.subject.code ?? ''} />
       ),
     },
     {
       title: 'Construction mode',
-      render: (record: IScheduleRequest) => (
-        <TableCell data={record?.constructionMode ?? ''} />
+      render: (record: IScheduleRequestItem) => (
+        <TableCell data={record?.type ?? ''} />
       ),
     },
     {
       title: 'Start Date - End Date',
-      render: (record: IScheduleRequest) => (
+      render: (record: IScheduleRequestItem) => (
         <TableCell
-          data={`${formatDateFromUTC(record?.startDate ?? '')} - ${formatDateFromUTC(
-            record?.endDate ?? '',
-          )}`}
+          data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : '-'} - ${
+            record?.schedule_time.end_date
+              ? formatDateFromUTC(record?.schedule_time.end_date ?? '')
+              : '-'
+          }`}
         />
       ),
     },
     {
       title: 'Sent Date',
-      render: (record: IScheduleRequest) => (
+      render: (record: IScheduleRequestItem) => (
         <TableCell
-          data={dayjs(record?.sentDate).format('DD/MM/YYYY')}
+          data={dayjs(record?.created_at).format('DD/MM/YYYY')}
           className="!text-gray-400"
         />
       ),
     },
     {
       title: 'CX Admin',
-      render: (record: IScheduleRequest) => (
-        <TableCell data={record?.cxAdmin ?? ''} className="!text-gray-400" />
+      render: (record: IScheduleRequestItem) => (
+        <TableCell
+          data={record?.staff_detail.full_name ?? ''}
+          className="!text-gray-400"
+        />
       ),
     },
     {
       title: 'Update Date',
-      render: (record: IScheduleRequest) => (
+      render: (record: IScheduleRequestItem) => (
         <TableCell
-          data={dayjs(record?.updateDate).format('DD/MM/YYYY')}
+          data={dayjs(record?.updated_at).format('DD/MM/YYYY')}
           className="!text-gray-400"
         />
       ),
     },
     {
       title: 'Status',
-      render: (record: IScheduleRequest) => {
+      render: (record: IScheduleRequestItem) => {
         return (
           <TableCell
             data={
@@ -209,7 +201,7 @@ export default function TableContainer() {
     {
       title: '',
       fixed: 'right',
-      render: (record: IScheduleRequest) => (
+      render: (record: IScheduleRequestItem) => (
         <>
           <ActionCell handleClickView={() => Action(record)} />
         </>
@@ -275,7 +267,7 @@ export default function TableContainer() {
         fetchData={() => {}}
         fetchTableData={() => {}}
         columns={columnsValue}
-        data={mockData ?? []}
+        data={data?.data?.data ?? []}
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}

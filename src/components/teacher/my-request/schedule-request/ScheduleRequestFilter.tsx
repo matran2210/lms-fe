@@ -5,6 +5,7 @@ import { TeacherAPI } from '@pages/api/teacher'
 import { useEffect, useState } from 'react'
 import { isEmpty } from 'lodash'
 import HookFormDateRangePicker from '@components/base/date-range/HookFormDateRangePicker'
+import { StatusRequestSchedule } from '@utils/constants/Teacher'
 
 interface ScheduleRequestFilterProps {
   placeholder?: string
@@ -29,22 +30,26 @@ interface CourseCategoryResponse {
   metadata: Metadata
 }
 
-interface SubjectResponse {
-  subjects: Subject[]
-  metadata: Metadata
-}
 const listStatus = [
   {
     label: 'Chờ Duyệt',
-    value: 'Chờ Duyệt',
+    value: StatusRequestSchedule.PENDING,
   },
   {
     label: 'Đồng ý',
-    value: 'Đồng ý',
+    value: StatusRequestSchedule.APPROVED,
   },
   {
     label: 'Từ chối',
-    value: 'Từ chối',
+    value: StatusRequestSchedule.REJECT,
+  },
+  {
+    label: 'Huỷ',
+    value: StatusRequestSchedule.CANCEL,
+  },
+  {
+    label: 'Đã xem',
+    value: StatusRequestSchedule.VIEWED,
   },
 ]
 const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
@@ -54,10 +59,6 @@ const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
   setValue,
   courseCategoryId,
 }) => {
-  const [subjects, setSubjects] = useState<SubjectResponse>({
-    subjects: [],
-    metadata: { page_index: 0, page_size: 10, total_pages: 0 },
-  })
   const [subjectCourse, setSubjectCourse] = useState<CourseCategoryResponse>({
     course_categories: [],
     metadata: { page_index: 0, page_size: 10, total_pages: 0 },
@@ -80,27 +81,6 @@ const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
           ...data.course_categories,
         ],
         metadata: data.metadata,
-      }))
-    } catch (error) {}
-  }
-
-  const fetchSubject = async (
-    page_index: number,
-    page_size: number,
-    params?: object,
-    isScroll: boolean = false,
-  ) => {
-    try {
-      const { data } = await TeacherAPI.getSubjects(
-        page_index,
-        page_size,
-        params,
-      )
-      setSubjects((prev) => ({
-        subjects: isScroll
-          ? [...prev.subjects, ...data.subjects]
-          : data.subjects,
-        metadata: data.meta,
       }))
     } catch (error) {}
   }
@@ -134,7 +114,7 @@ const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
             fetchSubjectCourse(1, 10, {})
           }
         }}
-        name="program_id"
+        name="course_category_id"
         required
         className="select-single-custom w-full"
         placeholder="Program"
@@ -142,15 +122,6 @@ const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
           label: category.name,
           value: category.id,
         }))}
-        onChange={(courseCategoryId: { value: string }) => {
-          setValue('subject_id', '')
-          fetchSubject(
-            1,
-            10,
-            { course_category_id: courseCategoryId.value },
-            false,
-          )
-        }}
         onMenuScrollToBottom={handleScrollCourse}
       />
       <SappHookFormSelect

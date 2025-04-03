@@ -375,6 +375,8 @@ export const removeHtmlTags = (htmlString?: string) => {
 }
 export const formatDateFromUTC = (date: string) =>
   dayjs.utc(date).local().format('DD/MM/YYYY')
+export const sappFormatDate = (date: string, format = 'DD/MM/YYYY') =>
+  date ? dayjs(date).format(format) : undefined
 export const convertQuizType = (quizType: string) => {
   // Convert the enum value to a readable string
   return quizType
