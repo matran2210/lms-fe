@@ -1,4 +1,5 @@
 import { FREQUENCY_UNITS, REPEAT_ON } from 'src/constants'
+import { recurringScheduleType } from 'src/type/my-calendar'
 
 export interface ICreateScheduleForm {
   event_name: string
@@ -12,6 +13,7 @@ export interface ICreateScheduleForm {
       day_of_week?: (typeof REPEAT_ON)[number][]
       month_of_year?: number[]
       day_of_month?: number[]
+      type: recurringScheduleType
     }
   }
   description: string
@@ -25,7 +27,9 @@ export interface ICreateSchedulePayload {
     end_time: string
   }
   description: string
-  repeat?: {
+  repeat: boolean
+  recurring_schedule?: {
+    type: recurringScheduleType
     interval: number
     frequency: 'days' | 'weeks' | 'months' | 'years'
     recurrence_end_date: string
