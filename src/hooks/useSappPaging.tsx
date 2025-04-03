@@ -10,7 +10,7 @@ interface UsePagingProps {
 }
 
 interface UsePagingResult {
-  data: any[]
+  data: any
   pagination: TablePaginationConfig
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
   isLoading: boolean

@@ -80,7 +80,7 @@ export default function StudentsTestResult() {
       render: (record: IStudentTestResult) => (
         <NameActionCell
           dataColumn={record?.quiz?.name}
-          linkView={`${PageLink.TEACHER_MY_CLASS}/chapter-test?studentId=${studentId}&chapterTestId=${record?.quiz?.id}`}
+          linkView={`${PageLink.TEACHER_CHAPTER_TEST}?studentId=${studentId}&chapterTestId=${record?.quiz?.id}`}
         />
       ),
       onCell: () => ({

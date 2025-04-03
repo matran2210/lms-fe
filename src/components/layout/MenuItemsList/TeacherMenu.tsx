@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Layout, Menu } from 'antd'
 import Image from 'next/image'
 import { userReducer } from 'src/redux/slice/User/User'
@@ -29,7 +29,8 @@ const { Sider } = Layout
 interface MenuItem {
   key: string
   icon: React.ReactNode
-  link?: string
+  link: string
+  active: boolean
 }
 
 export default function TeacherMenu() {
@@ -38,33 +39,45 @@ export default function TeacherMenu() {
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer) // Lấy thông tin user đang đăng nhập
 
-  const menuItems: MenuItem[] = [
-    {
-      key: 'Home',
-      icon: <HomeMenuIcon selected={selectedKey === 'Home'} />,
-      link: PageLink.TEACHERS,
-    },
-    {
-      key: 'Book',
-      icon: <BookMenuIcon selected={selectedKey === 'Book'} />,
-      link: PageLink.TEACHER_MY_CLASS,
-    },
-    {
-      key: 'Calender',
-      icon: <CalenderMenuIcon selected={selectedKey === 'Calender'} />,
-      link: PageLink.TEACHERS,
-    },
-    {
-      key: 'File',
-      icon: <FileMenuIcon selected={selectedKey === 'File'} />,
-      link: PageLink.TEACHERS,
-    },
-    {
-      key: 'Bell',
-      icon: <BellIcon selected={selectedKey === 'Bell'} />,
-      link: PageLink.TEACHERS,
-    },
-  ]
+  const menuItems = useMemo(
+    () => [
+      {
+        key: 'Home',
+        icon: <HomeMenuIcon selected={selectedKey === 'Home'} />,
+        link: PageLink.TEACHERS,
+        active: router.pathname === PageLink.TEACHERS,
+      },
+      {
+        key: 'Book',
+        icon: <BookMenuIcon selected={selectedKey === 'Book'} />,
+        link: PageLink.TEACHER_MY_CLASS,
+        active: [
+          PageLink.TEACHER_MY_CLASS,
+          `${PageLink.TEACHER_MY_CLASS}/[id]`,
+          PageLink.TEACHER_CHAPTER_TEST,
+        ].includes(router.pathname),
+      },
+      {
+        key: 'Calender',
+        icon: <CalenderMenuIcon selected={selectedKey === 'Calender'} />,
+        link: PageLink.TEACHERS,
+        active: router.pathname === PageLink.TEACHERS,
+      },
+      {
+        key: 'File',
+        icon: <FileMenuIcon selected={selectedKey === 'File'} />,
+        link: PageLink.TEACHERS,
+        active: router.pathname === PageLink.TEACHERS,
+      },
+      {
+        key: 'Bell',
+        icon: <BellIcon selected={selectedKey === 'Bell'} />,
+        link: PageLink.TEACHERS,
+        active: router.pathname === PageLink.TEACHERS,
+      },
+    ],
+    [selectedKey, router.pathname],
+  )
 
   const handleMenuClick = (item: { key: string }) => {
     if (selectedKey !== item.key) {
@@ -76,43 +89,32 @@ export default function TeacherMenu() {
       }
     }
   }
+
   const handleLogout = async () => {
+    // Hàm đăng xuất
     try {
       // Gửi action `getLogoutUser()` để đăng xuất người dùng
       await dispatch(getLogoutUser()).then(() => {
-        // Kiểm tra trạng thái `pinnedStatus` trong LocalStorage
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
-
         // Nếu trạng thái thông báo đang hiển thị, xóa `pinnedId` khỏi LocalStorage
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')
         }
       })
-
-      // Khởi tạo đối tượng `AuthenticationManager` để xử lý đăng xuất
       const authenticationManager = new AuthenticationManager()
-
       // Gọi phương thức `logout()` của AuthenticationManager, chuyển hướng về trang gốc sau khi đăng xuất
       await authenticationManager.logout(window.location.origin)
-    } catch (error) {
-      // Bỏ qua lỗi nếu có (có thể log lỗi ra console để debug)
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
-    if (router?.pathname) {
-      // Kiểm tra nếu router.pathname tồn tại để tránh lỗi
-      const sortedMenuItems = [...menuItems].sort(
-        (a, b) => (b.link?.length || 0) - (a.link?.length || 0), // Sắp xếp menuItems theo độ dài link giảm dần
-      )
-
-      const selectedItem = sortedMenuItems.find(
-        (menuItem) => router.pathname.startsWith(menuItem?.link || ''), // Tìm item có đường dẫn khớp nhất với router.pathname
-      )
-
-      setSelectedKey(selectedItem?.key || 'Home') // Cập nhật selectedKey, nếu không tìm thấy thì mặc định là 'Home'
+    const updateSelectedKey = () => {
+      const activeItem = menuItems.find((menuItem) => menuItem.active) // Find the active menu item
+      setSelectedKey(activeItem?.key ?? 'Home') // Update selectedKey, default to 'Home' if not found
     }
-  }, [router?.pathname]) // Chạy lại useEffect mỗi khi router.pathname thay đổi
+
+    updateSelectedKey()
+  }, [menuItems]) // Re-run effect when menuItems changes
 
   const ItemMenu = ({
     icon,
@@ -144,7 +146,7 @@ export default function TeacherMenu() {
         items={menuItems.map((item) => ({
           key: item.key,
           icon: item.icon,
-          title: '',
+          title: '', // Ẩn tooltip khi hover vào icon
         }))}
         className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center [&_.ant-menu-item]:p-3"
       />
