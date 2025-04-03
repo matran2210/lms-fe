@@ -134,7 +134,7 @@ export default function TeacherMenu() {
         items={menuItems.map((item) => ({
           key: item.key,
           icon: item.icon,
-          title: item.key,
+          title: '',
         }))}
         className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center [&_.ant-menu-item]:p-3"
       />

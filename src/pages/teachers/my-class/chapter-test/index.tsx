@@ -112,8 +112,8 @@ const ChapterTest = () => {
       render: (record: IStudentClassDetail) => (
         <DateActionCell
           dataColumn={{
-            firstLine: record?.start_time as string,
-            secondLine: record?.end_time as string,
+            startTime: record?.start_time as string,
+            endTime: record?.end_time as string,
           }}
         />
       ),
@@ -123,7 +123,7 @@ const ChapterTest = () => {
       render: (record: IStudentClassDetail) => (
         <DateActionCell
           dataColumn={{
-            firstLine: record?.attempt?.finished_at as string,
+            startTime: record?.attempt?.finished_at as string,
           }}
         />
       ),

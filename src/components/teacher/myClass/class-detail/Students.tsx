@@ -9,7 +9,7 @@ import StudentFilter from '@components/teacher/components/StudentFilter'
 import { useForm } from 'react-hook-form'
 import { IStudentClassDetail } from 'src/type/classes'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import { round } from 'lodash'
+import _, { round } from 'lodash'
 import { FOUNDATION } from '@utils/constants'
 import useSappPaging from 'src/hooks/useSappPaging'
 import { StudentKey } from '@pages/api/queryKey'
@@ -123,8 +123,8 @@ export default function Students() {
         <NameNoActionCell
           dataColumn={
             record?.flexible_duration &&
-            record?.started_at === null &&
-            record?.finished_at === null
+            _.isNull(record?.started_at) &&
+            _.isNull(record?.finished_at)
               ? `${record?.flexible_duration} ${
                   record?.flexible_duration > 1 ? 'days' : 'day'
                 }`

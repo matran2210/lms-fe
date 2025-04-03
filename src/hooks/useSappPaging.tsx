@@ -38,22 +38,6 @@ const useSappPaging = ({
     retry: false, // Không thử lại nếu request bị lỗi
   })
 
-  useEffect(() => {
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          page_index: pagination.current,
-          page_size: pagination.pageSize,
-          ...params,
-        },
-      },
-      undefined,
-      { shallow: true },
-    )
-  }, [pagination, params])
-
   const handleChangeParams = (currentPage: number, pageSize: number) => {
     setPagination((prev) => ({
       ...prev,

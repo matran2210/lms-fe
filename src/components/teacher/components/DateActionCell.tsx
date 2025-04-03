@@ -4,8 +4,8 @@ import { DATE_FORMAT } from 'src/constants'
 
 type Props = {
   dataColumn?: {
-    firstLine: string
-    secondLine?: string
+    startTime?: string
+    endTime?: string
   }
 }
 const RenderDateFormat = ({ date }: { date: string }) =>
@@ -14,11 +14,11 @@ const DateActionCell: FC<Props> = ({ dataColumn }) => {
   return (
     <div className="flex flex-col">
       <span className="text-sm font-normal text-gray-400">
-        <RenderDateFormat date={dataColumn?.firstLine as string} />
+        <RenderDateFormat date={dataColumn?.startTime as string} />
       </span>
-      {dataColumn?.secondLine && (
+      {dataColumn?.endTime && (
         <span className="text-sm font-normal text-gray-400">
-          <RenderDateFormat date={dataColumn?.secondLine} />
+          <RenderDateFormat date={dataColumn?.endTime} />
         </span>
       )}
     </div>

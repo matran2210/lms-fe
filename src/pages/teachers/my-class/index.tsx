@@ -1,6 +1,6 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import LayoutFilter from '@components/layout/TeacherFilter/index'
 import MyClassFilter from '@components/teacher/components/MyClassFilter'
@@ -86,22 +86,6 @@ const MyClass = () => {
     }
     setParams(searchParams)
   }
-
-  useEffect(() => {
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          page_index: pageIndex,
-          page_size: pageSize,
-          ...params,
-        },
-      },
-      undefined,
-      { shallow: true },
-    )
-  }, [pageIndex, pageSize, params])
 
   return (
     <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
