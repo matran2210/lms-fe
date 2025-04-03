@@ -6,11 +6,11 @@ import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 interface UsePagingProps {
   uniqueKey: string
   queryFn: (...args: any[]) => Promise<any>
-  params: any
+  params: Record<string, any>
 }
 
 interface UsePagingResult {
-  data: any
+  data: any[]
   pagination: TablePaginationConfig
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
   isLoading: boolean
