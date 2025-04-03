@@ -26,7 +26,7 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
         return <SappIcon icon="book_open" className="" />
       case EVENT_TYPES.BUSY:
         return <SappIcon icon="calendar_busy" className="" />
-      case EVENT_TYPES.TIME_OFF:
+      case EVENT_TYPES.HOLIDAY:
         return <SappIcon icon="start_outline" className="" />
       case EVENT_TYPES.OTHER:
         return <SappIcon icon="calendar_check" className="" />
