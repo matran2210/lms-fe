@@ -1,4 +1,4 @@
-import SAPPButton from '@components/base/button/SAPPButton'
+import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
@@ -209,13 +209,13 @@ const NewEventSidebar = ({
             )}
           </div>
           <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
-            <SAPPButton
+            <SAPPButtonV2
               title={CALENDAR_SIDEBAR_CANCEL_BUTTON}
               onClick={handleCancel}
               className="mr-4"
               color="secondary"
             />
-            <SAPPButton
+            <SAPPButtonV2
               title={CALENDAR_SIDEBAR_SAVE_BUTTON}
               onClick={handleSubmit(onSubmit)}
             />
