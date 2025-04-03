@@ -1,6 +1,6 @@
 import { Plus } from '@assets/icons'
 import SAPPInput from '@components/base/Input/SAPPInput'
-import SAPPButton from '@components/base/button/SAPPButton'
+import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import SAPPSelect from '@components/base/select/SAPPSelect'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
 import { useCallback } from 'react'
@@ -68,19 +68,19 @@ const CalendarHead = ({ onSearch, onOpenCreate, loading }: IProps) => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <SAPPButton
+            <SAPPButtonV2
               title="Reset"
               color="secondary"
               onClick={handleReset}
               disabled={loading}
             />
-            <SAPPButton
+            <SAPPButtonV2
               title="Search"
               onClick={handleSubmit(onSubmit)}
               disabled={loading}
             />
           </div>
-          <SAPPButton
+          <SAPPButtonV2
             title="Add Busy Schedule"
             icon={<Plus />}
             onClick={handleOpenCreate}

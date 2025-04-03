@@ -1,9 +1,12 @@
 import { Plus } from '@assets/icons'
 
+import SAPPButtonV2 from '@components/base/button/SappButton'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
 import SAPPSelect from '@components/base/select/SAPPSelect'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
+import FormRequest from '@components/my-request/FormRequest'
+import RequestDetail from '@components/my-request/RequestDetail'
 import { useRequestContext } from '@contexts/RequestContext'
 import { RequestAPI } from '@pages/api/request'
 import { cleanParams } from '@utils/common'
@@ -18,9 +21,6 @@ import {
 } from 'src/constants/request'
 import { IRequest, IRequestFilterForm } from 'src/type'
 import PersonalScheduleTable from '../request-tables/PersonalScheduleTable'
-import SAPPButton from '@components/base/button/SappButton'
-import FormRequest from '@components/my-request/FormRequest'
-import RequestDetail from '@components/my-request/RequestDetail'
 
 const PersonalScheduleTab = () => {
   const [isFirstLoad, setIsFirstLoad] = useState(true)
@@ -152,20 +152,20 @@ const PersonalScheduleTab = () => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <SAPPButton
+            <SAPPButtonV2
               title="Reset"
               color="secondary"
               onClick={handleResetFilter}
               disabled={isLoading}
             />
-            <SAPPButton
+            <SAPPButtonV2
               title="Search"
               onClick={handleFilter}
               disabled={isLoading}
             />
           </div>
           <div>
-            <SAPPButton
+            <SAPPButtonV2
               title="Create Request"
               className="flex"
               icon={<Plus />}
