@@ -9,10 +9,13 @@ import { useQuery } from 'react-query'
 import dayjs from 'dayjs'
 import TableCell from './TableCell'
 import ActionCell from '../../../base/action/SappActionCell'
+import DetailRequestModal from './DetailRequestModal'
+import ReasonModal from './ReasonModal'
+import SuccessModal from './SuccessModal'
 
 const { Title } = Typography
 
-interface IScheduleRequest {
+export interface IScheduleRequest {
   id: string
   classCode: string
   program: string
@@ -24,6 +27,21 @@ interface IScheduleRequest {
   updateDate: string
   status: string
   constructionMode: string
+  processingDeadline: string
+  address: string
+  schedule: string[]
+}
+export const statusColor = (data: IScheduleRequest) => {
+  switch (data?.status) {
+    case 'Chờ Duyệt':
+      return 'bg-orange-100 text-orange-800'
+    case 'Đồng ý':
+      return 'bg-green-100 text-green-800'
+    case 'Từ chối':
+      return 'bg-red-100 text-red-800'
+    default:
+      return ''
+  }
 }
 interface FilterParams {
   text?: string
@@ -37,8 +55,14 @@ export default function TableContainer() {
   const router = useRouter()
   const studentId = router?.query?.id as string
 
-  const [openAction, setOpenAction] = useState(false)
+  const [openDetail, setOpenDetail] = useState(false)
+  const [openReasonModal, setOpenReasonModal] = useState(false)
+  const [openSuccessModal, setOpenSuccessModal] = useState(false)
+
   const [params, setParams] = useState<FilterParams>(initialValues)
+  const [selectedRequest, setSelectedRequest] = useState<
+    IScheduleRequest | undefined
+  >()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number(router.query.page_index) || 1,
     pageSize: Number(router.query.page_size) || 10,
@@ -82,7 +106,10 @@ export default function TableContainer() {
       pageSize: pageSize,
     }))
   }
-  const Action = () => {}
+  const Action = (data: IScheduleRequest) => {
+    setOpenDetail(true)
+    setSelectedRequest(data)
+  }
   const columnsValue = [
     {
       title: '#',
@@ -110,7 +137,11 @@ export default function TableContainer() {
     {
       title: 'Program',
       render: (record: IScheduleRequest) => (
-        <TableCell data={record?.program ?? ''} />
+        <TableCell
+          data={record?.program ?? ''}
+          className="cursor-pointer hover:underline"
+          onClick={() => Action(record)}
+        />
       ),
     },
     {
@@ -162,24 +193,11 @@ export default function TableContainer() {
     {
       title: 'Status',
       render: (record: IScheduleRequest) => {
-        const statusColor = () => {
-          switch (record?.status) {
-            case 'Chờ Duyệt':
-              return 'bg-orange-100 text-orange-800'
-            case 'Đồng ý':
-              return 'bg-green-100 text-green-800'
-            case 'Từ chối':
-              return 'bg-red-100 text-red-800'
-            default:
-              return ''
-          }
-        }
-
         return (
           <TableCell
             data={
               <span
-                className={`text-12 rounded-[4px] px-2 py-1 font-semibold ${statusColor()}`}
+                className={`text-12 rounded-[4px] px-2 py-1 font-semibold ${statusColor(record)}`}
               >
                 {record?.status ?? ''}
               </span>
@@ -191,9 +209,9 @@ export default function TableContainer() {
     {
       title: '',
       fixed: 'right',
-      render: () => (
+      render: (record: IScheduleRequest) => (
         <>
-          <ActionCell handleClickView={Action} />
+          <ActionCell handleClickView={() => Action(record)} />
         </>
       ),
     },
@@ -212,6 +230,9 @@ export default function TableContainer() {
       cxAdmin: 'CX Admin 1',
       updateDate: 'Update Date 1',
       status: 'Chờ Duyệt',
+      processingDeadline: '2024-01-04 20:00:00',
+      address: 'Address 1',
+      schedule: ['Thứ 2 | 18:00 - 21:00', 'Thứ 4 | 18:00 - 21:00'],
     },
     {
       id: 2,
@@ -225,6 +246,9 @@ export default function TableContainer() {
       cxAdmin: 'CX Admin 2',
       updateDate: 'Update Date 2',
       status: 'Đồng ý',
+      processingDeadline: '2024-01-04 20:00:00',
+      address: 'Address 2',
+      schedule: ['Thứ 2 | 18:00 - 21:00', 'Thứ 4 | 18:00 - 21:00'],
     },
     {
       id: 3,
@@ -238,6 +262,9 @@ export default function TableContainer() {
       cxAdmin: 'CX Admin 1',
       updateDate: 'Update Date 1',
       status: 'Từ chối',
+      processingDeadline: '2024-01-04 20:00:00',
+      address: 'Address 1',
+      schedule: ['Thứ 2 | 18:00 - 21:00', 'Thứ 4 | 18:00 - 21:00'],
     },
   ]
   return (
@@ -256,6 +283,27 @@ export default function TableContainer() {
         setSelection={() => {}}
         selections={new Map()}
       />
+
+      {openDetail && selectedRequest && (
+        <DetailRequestModal
+          open={openDetail}
+          setOpen={setOpenDetail}
+          selectedRequest={selectedRequest}
+          setOpenReasonModal={setOpenReasonModal}
+        />
+      )}
+
+      {openReasonModal && (
+        <ReasonModal
+          open={openReasonModal}
+          setOpen={setOpenReasonModal}
+          setOpenSuccessModal={setOpenSuccessModal}
+        />
+      )}
+
+      {openSuccessModal && (
+        <SuccessModal open={openSuccessModal} setOpen={setOpenSuccessModal} />
+      )}
     </>
   )
 }

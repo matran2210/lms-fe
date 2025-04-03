@@ -57,10 +57,7 @@ const MyRequestPage = () => {
           selected={selected}
           bordered
         />
-        <div
-          data-aos={ANIMATION.DATA_AOS}
-          className="h-fit w-full rounded-xl bg-white"
-        >
+        <div className="w-full rounded-xl bg-white">
           {renderClassDetail(selected)}
         </div>
       </div>
