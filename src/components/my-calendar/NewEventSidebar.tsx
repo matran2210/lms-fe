@@ -91,7 +91,7 @@ const NewEventSidebar = ({
         end_time: formValues.range[1].toISOString(),
       },
       description: formValues.description,
-      repeat: formValues.repeat?.recurring_schedule,
+      ...formValues.repeat,
     } as ICreateSchedulePayload
     const formattedPayload = Object.fromEntries(
       Object.entries(payload).filter(

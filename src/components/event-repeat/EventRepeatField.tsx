@@ -190,6 +190,7 @@ const EventRepeatField = ({
       onChange({
         repeat: value?.repeat_type !== EVENT_REPEAT_TYPES.NO_REPEAT,
         recurring_schedule: cleanObject({
+          type: value?.repeat_type,
           interval: getInterval(),
           frequency: getFrequency(),
           recurrence_end_date: recurrence_end_date.toISOString(),
