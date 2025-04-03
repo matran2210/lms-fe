@@ -35,6 +35,7 @@ export interface IRecurringSchedule {
   day_of_week?: number[]
   month_of_year?: number[]
   day_of_month?: number[]
+  type: string
 }
 
 export interface IEventRepeatFieldValues {

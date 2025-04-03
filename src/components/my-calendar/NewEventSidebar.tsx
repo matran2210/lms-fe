@@ -1,4 +1,4 @@
-import SAPPButton from '@components/base/button/SAPPButton'
+import SAPPButton from '@components/base/button/SappButton'
 import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'

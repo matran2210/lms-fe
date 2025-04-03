@@ -74,9 +74,7 @@ const SappHookFormSelect = ({
                 isDisabled={isDisabled}
                 isClearable={isClearable}
                 onChange={(selectedOption) => {
-                  // Gọi hàm onChange của field
                   field.onChange(selectedOption)
-                  // Gọi hàm onChange truyền từ props
                   onSelectChange && onSelectChange?.(selectedOption)
                 }}
                 onMenuOpen={() => onSearch?.()}

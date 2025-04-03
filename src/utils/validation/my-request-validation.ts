@@ -33,72 +33,6 @@ export const requestValidationSchema = z.discriminatedUnion(
         .min(1, VALIDATE_REQUIRED),
       request_type_value: z.literal(REQUEST_TYPE.BUSY_SCHEDULE.value),
       note: z.string().optional(),
-      request_busy_schedule: z
-        .array(
-          z
-            .object({
-              date_range: z
-                .array(z.string())
-                .length(2, 'Date range must have exactly 2 dates'),
-              description: z
-                .string({ required_error: VALIDATE_REQUIRED })
-                .trim()
-                .min(1, VALIDATE_REQUIRED),
-            })
-            .transform((data) => {
-              return {
-                start_time: new Date(data.date_range[0]),
-                end_time: new Date(data.date_range[1]),
-                description: data.description,
-              }
-            })
-            .refine((data) => {
-              return (
-                data.end_time?.getTime() - data.start_time?.getTime() < 0,
-                {
-                  message: 'Start time must be before end time',
-                  path: ['date_range'],
-                }
-              )
-            })
-            .refine(
-              (data) =>
-                (data.end_time?.getTime() - data.start_time?.getTime()) /
-                  (1000 * 60 * 60 * 24) <
-                91,
-              {
-                message: `The duration must be less than 91 days`,
-                path: ['date_range'],
-              },
-            ),
-        )
-        .min(1, 'At least one Busy Schedule is required')
-        .superRefine((schedules, ctx) => {
-          // Check for overlapping schedules
-          const lastOverlapIndex = findLastOverlappingIndex(schedules)
-          if (lastOverlapIndex !== -1) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Duplicated time period. Please check again.',
-              path: [lastOverlapIndex, 'date_range'],
-            })
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Duplicated time period. Please check again.',
-              path: [lastOverlapIndex, 'date_range'],
-            })
-          }
-          // Maximum limit of 5 schedules
-          if (schedules.length > 5) {
-            schedules.forEach((_, index) => {
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: 'Maximum number of Busy Schedules is 5',
-                path: [index, 'description'],
-              })
-            })
-          }
-        }),
     }),
 
     z.object({
@@ -117,7 +51,8 @@ export const requestValidationSchema = z.discriminatedUnion(
                 .length(2, 'Date range must have exactly 2 dates'),
               quantity: z
                 .number({ required_error: VALIDATE_REQUIRED })
-                .min(1, VALIDATE_REQUIRED),
+                .min(1, VALIDATE_REQUIRED)
+                .max(6, 'Maximum quantity per week is 6.'),
             })
             .transform((data) => {
               return {
@@ -139,6 +74,16 @@ export const requestValidationSchema = z.discriminatedUnion(
                 message: `The duration must be less than 91 days`,
                 path: ['date_range'],
               },
+            )
+            .refine(
+              (data) =>
+                (data.end_time?.getTime() - data.start_time?.getTime()) /
+                  (1000 * 60 * 60 * 24) >
+                13,
+              {
+                message: `The duration must be greater than 14 days`,
+                path: ['date_range'],
+              },
             ),
         )
         .min(1, 'At least one Busy Schedule is required')
@@ -157,17 +102,39 @@ export const requestValidationSchema = z.discriminatedUnion(
               path: [lastOverlapIndex, 'date_range'],
             })
           }
-          // Maximum limit of 5 schedules
-          if (schedules.length > 5) {
+          // Maximum limit of 7 schedules
+          if (schedules.length > 7) {
             schedules.forEach((_, index) => {
               ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                message: 'Maximum number of Busy Schedules is 5',
+                message: 'Maximum number of Weekly Norms is 5',
                 path: [index, 'description'],
               })
             })
           }
         }),
+    }),
+    z.object({
+      request_name: z
+        .string({ required_error: VALIDATE_REQUIRED })
+        .trim()
+        .min(1, VALIDATE_REQUIRED),
+      request_type_value:
+        z.literal(REQUEST_TYPE.TIMEOFF.value) ||
+        z.literal(REQUEST_TYPE.TEACHER_MODE.value),
+
+      // class_code: z.string({ required_error: VALIDATE_REQUIRED }).trim().min(1, VALIDATE_REQUIRED),
+      request_time_off: z
+        .array(
+          z.object({
+            lesson: z.object({
+              value: z.string({ required_error: VALIDATE_REQUIRED }),
+            }),
+            reason: z.string({ required_error: VALIDATE_REQUIRED }),
+          }),
+        )
+        .min(1, 'At least one schedule is required')
+        .max(2, 'Maximum number of schedules is 2'),
     }),
   ],
 )

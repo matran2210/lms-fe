@@ -2,6 +2,7 @@ import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import { IEventRepeatFieldValues } from 'src/type/my-calendar'
 import EventRepeatField from './EventRepeatField'
+import { ISelect } from 'src/type/course'
 
 interface IProps {
   name: string
@@ -13,6 +14,7 @@ interface IProps {
   defaultValue?: IEventRepeatFieldValues
   required?: boolean
   skeleton?: boolean
+  repeatOption?: ISelect
 }
 
 const HookFormEventRepeat = ({
@@ -25,6 +27,7 @@ const HookFormEventRepeat = ({
   defaultValue,
   required = false,
   skeleton,
+  repeatOption,
 }: IProps) => {
   return (
     <Controller
@@ -42,6 +45,7 @@ const HookFormEventRepeat = ({
                 defaultDate={defaultDate || new Date()}
                 onChange={(val) => field.onChange(val)}
                 className={className}
+                repeatOption={repeatOption}
               />
 
               <>

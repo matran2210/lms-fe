@@ -21,6 +21,7 @@ import {
 } from 'src/type/my-calendar'
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
+import { ISelect } from 'src/type/course'
 
 dayjs.extend(weekday)
 dayjs.extend(localeData)
@@ -31,10 +32,13 @@ interface IRepeatTypeOption {
 }
 
 interface IEventRepeatFieldForm {
-  repeat_type: (typeof EVENT_REPEAT_TYPES)[keyof typeof EVENT_REPEAT_TYPES]
+  repeat_type:
+    | (typeof EVENT_REPEAT_TYPES)[keyof typeof EVENT_REPEAT_TYPES]
+    | ISelect
   repeat_frequency: IRepeatFrequency
   repeat_on: (typeof REPEAT_ON)[number][]
   end_on: Date
+  type: string
 }
 
 interface IProps {
@@ -46,6 +50,7 @@ interface IProps {
   onChange: (val?: IEventRepeatFieldValues) => void
   required?: boolean
   field?: ControllerRenderProps<any, string>
+  repeatOption?: ISelect
 }
 
 const EventRepeatField = ({
@@ -57,12 +62,18 @@ const EventRepeatField = ({
   onChange,
   required = false,
   field,
+  repeatOption,
 }: IProps) => {
   const initDate = useMemo(() => defaultDate || new Date(), [defaultDate])
 
   const formattedDefaultValue = useMemo(() => {
     // TODO: Add code to add default values
-    return null
+    return {
+      repeat_type: repeatOption,
+      repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
+      repeat_on: [],
+      end_on: initDate,
+    }
   }, [defaultValue])
 
   const repeatTypeOptions = useMemo(() => {
@@ -182,6 +193,7 @@ const EventRepeatField = ({
 
         return undefined
       }
+      const repeat_type = value?.repeat_type ?? EVENT_REPEAT_TYPES.NO_REPEAT
 
       const recurrence_end_date = value?.end_on
         ? dayjs(value?.end_on).endOf('day')
@@ -196,6 +208,7 @@ const EventRepeatField = ({
           day_of_week: getDayOfWeek(),
           day_of_month: getDayOfMonth(),
           month_of_year: getMonthOfYear(),
+          type: repeat_type,
         }) as IRecurringSchedule,
       })
     })
@@ -224,7 +237,11 @@ const EventRepeatField = ({
           name="repeat_type"
           label="Repeat"
           control={control}
-          options={repeatTypeOptions}
+          options={
+            repeatOption
+              ? [repeatOption, ...repeatTypeOptions]
+              : repeatTypeOptions
+          }
           required
           className="h-11.25"
         />
