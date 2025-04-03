@@ -1136,8 +1136,6 @@ const ActivityPage = () => {
                   title={e.fileName}
                   width={650}
                   height={850}
-                  minWidth={200}
-                  minHeight={200}
                   key={e.id}
                   dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
@@ -1156,10 +1154,6 @@ const ActivityPage = () => {
             } else if (e.type === 'exhibits') {
               return (
                 <ModalResizeable
-                  width={600}
-                  height={400}
-                  minWidth={200}
-                  minHeight={200}
                   key={e.id}
                   dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}

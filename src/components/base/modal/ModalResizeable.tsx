@@ -4,7 +4,7 @@ import { Modal } from 'antd'
 import styles from '@styles/components/ModalResizeable.module.scss'
 import { CloseIcon } from '@assets/icons'
 
-interface MoveableResizableModalProps {
+interface ModalResizeableProps {
   title?: string | ReactNode
   children: ReactNode
   width?: number
@@ -26,11 +26,11 @@ interface MoveableResizableModalProps {
     | 'center'
 }
 
-const MoveableResizableModal: React.FC<MoveableResizableModalProps> = ({
+const ModalResizeable: React.FC<ModalResizeableProps> = ({
   title = 'Title',
   children,
-  width = 400,
-  height = 300,
+  width = 600,
+  height = 400,
   minWidth = 200,
   minHeight = 200,
   header,
@@ -156,4 +156,4 @@ const MoveableResizableModal: React.FC<MoveableResizableModalProps> = ({
   )
 }
 
-export default MoveableResizableModal
+export default ModalResizeable

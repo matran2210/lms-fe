@@ -150,10 +150,6 @@ const TestScratchPads = ({
       const exhibitsDes = exhibitData?.find((exhibit) => exhibit?.id === e?.id)
       return (
         <ModalResizeable
-          width={600}
-          height={400}
-          minWidth={200}
-          minHeight={200}
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
           position="bottom left"
@@ -199,8 +195,6 @@ const TestScratchPads = ({
           title={e.fileName}
           width={650}
           height={850}
-          minWidth={200}
-          minHeight={200}
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
           position="center"

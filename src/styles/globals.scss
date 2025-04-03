@@ -1264,10 +1264,10 @@ select:focus {
 
 .pdf-viewer-container {
   #proxy-renderer {
-    height: 100%;
+    @apply h-full;
 
     #msdoc-renderer {
-      height: inherit;
+      @apply h-full;
     }
   }
 }
