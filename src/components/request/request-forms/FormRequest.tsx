@@ -1,26 +1,37 @@
 import { IconMinusSquared, IconPlusSquared } from '@assets/icons'
-import HookFormDateRange from '@components/base/datetime/HookFormDateRange'
-import HookFormDateTime from '@components/base/datetime/HookFormDateTime'
+import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
+import HookFormDateRange from '@components/base/date/HookFormDateRange'
+import SAPPInput from '@components/base/Input/SAPPInput'
 import SappDrawer from '@components/base/SappDrawer'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
+import SAPPSelect from '@components/base/select/SAPPSelect'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { REPEAT_TYPE } from '@utils/constants/repeat'
+import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { capitalizeFirstLetter } from '@utils/index'
 import { formatRecurringSchedule, getRecurringSchedule } from '@utils/request'
 import { requestValidationSchema } from '@utils/validation/my-request-validation'
+import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import SappIcon from 'src/common/SappIcon'
+import {
+  ANT_THEME_CONFIG,
+  CALENDAR_SIDEBAR_TITLE,
+  CONFIRM_CANCEL,
+} from 'src/constants'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants/my-request'
 import useSelectClassCode from 'src/hooks/useSelectClassCode'
 import useLesson from 'src/hooks/useSelectLesson'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { getUserInformation, userReducer } from 'src/redux/slice/User/User'
 import { IResponse } from 'src/redux/types'
 import { ISelect } from 'src/type/course'
@@ -50,7 +61,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     defaultValues: {
       request_name: '',
       request_teacher_id: '',
-      request_weekly_norm: [{ date_range: [], quantity: 0 }],
+      request_weekly_norm: [{ quantity: 0 }],
       request_time_off: [{ lesson: { value: '', label: '' }, reason: '' }],
     },
   })
@@ -93,22 +104,23 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     refetch: refetchLessons,
   } = useLesson(user.id, classCode ?? '')
 
-  // const validateRepeatData = () => {
-  //   if (!getValues('request_busy_schdule.0.description')) {
-  //     return setError('request_busy_schdule.0.description', {
-  //       message: VALIDATE_REQUIRED,
-  //     })
-  //   }
+  const validateRepeatData = () => {
+    if (!getValues('request_busy_schedule.0.description')) {
+      return setError('request_busy_schedule.0.description', {
+        message: VALIDATE_REQUIRED,
+      })
+    }
 
-  //   if (
-  //     getValues('drawer-repeat') !== REPEAT_TYPE.DOES_NOT_REPEAT &&
-  //     !getValues('drawer-repeat-end-on')
-  //   ) {
-  //     return setError('drawer-repeat-end-on', {
-  //       message: VALIDATE_REQUIRED,
-  //     })
-  //   }
-  // }
+    if (
+      getValues('request_busy_schedule.0.repeat-type') !==
+        REPEAT_TYPE.DOES_NOT_REPEAT &&
+      !getValues('request_busy_schedule.0.drawer-repeat-end-on')
+    ) {
+      return setError('request_busy_schedule.0.drawer-repeat-end-on', {
+        message: VALIDATE_REQUIRED,
+      })
+    }
+  }
 
   const onSubmit = async (data: IRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
@@ -121,6 +133,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         getValues,
         requestBusy?.[0]?.date_range?.[0] ?? new Date(),
       )
+      validateRepeatData()
     } else if (
       requestType === REQUEST_TYPE.BUSY_SCHEDULE.value &&
       repeat === REPEAT_TYPE.CHOSEN_PATTERN &&
@@ -148,6 +161,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         month_of_year,
         type,
       }
+      validateRepeatData()
     }
 
     const formattedBusyScheduleData = {
@@ -431,347 +445,381 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         ]
     }
   }
+  const handleClose = () => {
+    setOpen(false)
+    reset()
+  }
+  const handleCancel = () => {
+    dispatch(
+      confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: handleClose }),
+    )
+  }
 
   return (
-    <SappDrawer
-      isOpen={open}
-      message="Bạn có chắc chán muốn hủy không?"
-      onClose={() => setOpen(false)}
-      title={`${router.query.id ? 'Edit' : 'Add More'} Request`}
-      footer={true}
-      btnSubmitTile="Save"
-      confirmOnClose={true}
-      sizeTextBtn="medium"
-      handleSubmit={() => {
-        handleSubmit((data: any) => {
-          // setLoading(true)
-          setTimeout(() => {
-            onSubmit(data)
-          })
-        })()
-      }}
-      heightBody={'h-[calc(100vh-146px)]'}
-    >
-      <div className="mb-6">
-        <HookFormTextField
-          label={'Request Name'}
-          required
-          control={control}
-          name="request_name"
-          placeholder={'Request name'}
-          labelClass="text-sm font-medium"
-          disabled={
-            isEdit &&
-            requestStatus?.toLowerCase() !==
-              REQUEST_STATUS.PENDING.value.toLowerCase()
-          }
-        ></HookFormTextField>
-      </div>
-      <div className="mb-6">
-        <SappHookFormSelect
-          control={control}
-          label="Request Type"
-          name="request_type"
-          placeholder="Type"
-          required
-          className="text-base font-medium"
-          onChange={(e) => setValue('request_type_value', e.value)}
-          options={[
-            REQUEST_TYPE.BUSY_SCHEDULE,
-            REQUEST_TYPE.WEEKLY_NORM,
-            REQUEST_TYPE.TIMEOFF,
-            REQUEST_TYPE.TEACHING_MODE,
-          ]}
-          isDisabled={isEdit}
-          labelClass="text-sm font-medium"
-        />
-      </div>
-      {isEdit ? (
-        <>
-          <div className="mb-6">
-            <SappHookFormSelect
-              control={control}
-              label="Status"
-              name="request_status"
-              options={[
-                REQUEST_STATUS.PENDING,
-                REQUEST_STATUS.APPROVED,
-                REQUEST_STATUS.REJECTED,
-                REQUEST_STATUS.CANCELLED,
-              ]}
-              isDisabled={
-                isEdit &&
-                requestStatus?.toLowerCase() !==
-                  REQUEST_STATUS.APPROVED.value.toLowerCase()
-              }
-              onChange={(e) => setValue('request_status_value', e.value)}
-              labelClass="text-sm font-medium"
-            />
+    <ConfigProvider theme={ANT_THEME_CONFIG}>
+      <Drawer
+        open={open}
+        onClose={() => setOpen(false)}
+        width={'960px'}
+        footer={true}
+        closeIcon={false}
+      >
+        <div className="flex h-full w-full flex-col">
+          <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+            <span className="font-sans text-lg font-semibold">
+              {router.query.id ? 'Edit' : 'Add More'} Request
+            </span>
+            <span className="cursor-pointer" onClick={handleCancel}>
+              <SappIcon icon="closeicon" />
+            </span>
           </div>
-          <div className="mb-6">
-            <HookFormTextField
-              label={'Creator'}
-              control={control}
-              name="request_creator"
-              placeholder={'Creator name'}
-              disabled={isEdit}
-              labelClass="text-sm font-medium"
-            ></HookFormTextField>
-          </div>
-          <div className="mb-6">
-            <HookFormTextField
-              control={control}
-              label="Create Date"
-              name={`request_create_date`}
-              placeholder="Create date"
-              disabled={isEdit}
-              labelClass="text-sm font-medium"
-            />
-          </div>
-          <div className="mb-6">
-            <HookFormTextField
-              label={'Approver'}
-              control={control}
-              name="request_approver"
-              placeholder={'Approver'}
-              disabled={isEdit}
-              labelClass="text-sm font-medium"
-            ></HookFormTextField>
-          </div>
-        </>
-      ) : null}
-      <div className="mb-6">
-        {requestType == REQUEST_TYPE.WEEKLY_NORM.value ? (
-          <HookFormTextField
-            label={'Note'}
-            control={control}
-            name="note"
-            placeholder={'Note'}
-            labelClass="text-sm font-medium"
-            disabled={
-              isEdit &&
-              requestStatus?.toLowerCase() !==
-                REQUEST_STATUS.PENDING.value.toLowerCase()
-            }
-          ></HookFormTextField>
-        ) : (
-          <SappHookFormSelect
-            control={control}
-            label="Class Code"
-            required
-            labelClass="text-sm font-medium"
-            name="class"
-            isSearchable
-            onSearch={() => refetchClasses()}
-            onChange={(e) => setValue('class_code', e.value)}
-            isLoading={isLoadingClasses}
-            onMenuScrollToBottom={() =>
-              hasNextPageClasses && fetchNextPageClasses()
-            }
-            placeholder="Class Code"
-            options={classes.map((item) => ({
-              value: item?.id,
-              label: item?.code,
-            }))}
-          />
-        )}
-      </div>
-      <div className="mb-8">
-        <label className="mb-5 flex items-center text-base font-bold">
-          {capitalizeFirstLetter(
-            Object.values(REQUEST_TYPE)
-              .find((item) => item?.value == requestType)
-              ?.label?.replace('_', ' '),
-          )}
-        </label>
-      </div>
-
-      {requestType == REQUEST_TYPE.BUSY_SCHEDULE.value && (
-        <>
-          <div className="mb-6">
-            <HookFormDateRange
-              control={control}
-              required
-              label="Start Date - End Date"
-              name={`request_busy_schedule.0.date_range`}
-              placeholder
-              format="YYYY-MM-DD"
-              showTime={false}
-              // disabledDate={disabledDate}
-              disabled={
-                isEdit &&
-                requestStatus?.toLowerCase() !==
-                  REQUEST_STATUS.PENDING.value.toLowerCase()
-              }
-              labelClass="text-sm font-medium"
-            />
-          </div>
-          <div className="mb-6">
-            <HookFormEventRepeat
-              control={control}
-              name="request_busy_schedule"
-              defaultDate={dayjs(currentDate?.[1]).toDate()}
-              repeatOption={otherOption}
-            />
-          </div>
-          <div className="mb-6">
-            <HookFormTextField
-              label={'Description'}
-              required
-              control={control}
-              name={`request_busy_schedule.0.description`}
-              placeholder={'Description'}
-              onChange={(e) =>
-                setValue(`request_busy_schedule.0.description`, e.target.value)
-              }
-              labelClass="text-sm font-medium"
-              disabled={
-                isEdit &&
-                requestStatus?.toLowerCase() !==
-                  REQUEST_STATUS.PENDING.value.toLowerCase()
-              }
-            ></HookFormTextField>
-          </div>
-        </>
-      )}
-      {requestType == REQUEST_TYPE.WEEKLY_NORM.value &&
-        weeklyNormFields.map((item, index) => {
-          return (
-            <div key={item.id}>
-              <div className="mb-6">
-                <div className="grid w-full grid-cols-2 gap-x-6">
-                  <div>
-                    <HookFormDateRange
-                      control={control}
-                      required
-                      label="Start Date - End Date"
-                      name={`request_weekly_norm.${index}.date_range`}
-                      placeholder
-                      format="YYYY-MM-DD | HH:mm:ss"
-                      showTime
-                      disabledDate={disabledDate}
-                      labelClass="text-sm font-medium"
-                      disabled={
-                        isEdit &&
-                        requestStatus?.toLowerCase() !==
-                          REQUEST_STATUS.PENDING.value.toLowerCase()
-                      }
-                    />
-                  </div>
-                  <div>
-                    <HookFormTextField
-                      label={'Quantity'}
-                      required
-                      type="number"
-                      control={control}
-                      name={`request_weekly_norm.${index}.quantity`}
-                      placeholder={'Quantity'}
-                      labelClass="text-sm font-medium"
-                      onChange={(e) =>
-                        setValue(
-                          `request_weekly_norm.${index}.quantity`,
-                          Number(e.target.value),
-                        )
-                      }
-                      disabled={
-                        isEdit &&
-                        requestStatus?.toLowerCase() !==
-                          REQUEST_STATUS.PENDING.value.toLowerCase()
-                      }
-                    ></HookFormTextField>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="mb-6 flex cursor-pointer items-center gap-x-3"
-                onClick={() => removeNorm(index)}
-              >
-                <IconMinusSquared />
-                <span className="text-sm font-medium">Delete Weekly Norm</span>
-              </div>
+          <div className="flex-1 overflow-y-auto px-8 py-6">
+            <div className="mb-6">
+              <SAPPInput
+                label={'Request Name'}
+                required
+                control={control}
+                name="request_name"
+                placeholder={'Request name'}
+                labelClass="text-sm font-medium"
+                className="h-11.25"
+                disabled={
+                  isEdit &&
+                  requestStatus?.toLowerCase() !==
+                    REQUEST_STATUS.PENDING.value.toLowerCase()
+                }
+              ></SAPPInput>
             </div>
-          )
-        })}
-      {requestType == REQUEST_TYPE.TIMEOFF.value &&
-        timeOffFields.map((item, index) => {
-          return (
-            <div key={index}>
-              <div className="mb-6">
-                <div className="grid w-full grid-cols-2 gap-x-6">
-                  <div>
+            <div className="mb-6">
+              <SAPPSelect
+                control={control}
+                label="Request Type"
+                name="request_type"
+                placeholder="Type"
+                required
+                onChange={(e) => setValue('request_type_value', e)}
+                className="h-11.25 text-base "
+                options={[
+                  REQUEST_TYPE.BUSY_SCHEDULE,
+                  REQUEST_TYPE.WEEKLY_NORM,
+                  REQUEST_TYPE.TIMEOFF,
+                  REQUEST_TYPE.TEACHING_MODE,
+                ]}
+                disabled={isEdit}
+                labelClass="text-sm font-medium"
+              />
+            </div>
+            {isEdit ? (
+              <>
+                <div className="mb-6">
+                  <SAPPSelect
+                    control={control}
+                    label="Status"
+                    name="request_status"
+                    options={selectStatusOption(initialStatus)}
+                    disabled={
+                      isEdit &&
+                      requestStatus?.toLowerCase() !==
+                        REQUEST_STATUS.APPROVED.value.toLowerCase()
+                    }
+                    className="h-11.25"
+                    labelClass="text-sm font-medium"
+                  />
+                </div>
+                <div className="mb-6">
+                  <SAPPInput
+                    label={'Creator'}
+                    control={control}
+                    name="request_creator"
+                    placeholder={'Creator name'}
+                    disabled={isEdit}
+                    className="h-11.25"
+                    labelClass="text-sm font-medium"
+                  ></SAPPInput>
+                </div>
+                <div className="mb-6">
+                  <SAPPInput
+                    control={control}
+                    label="Create Date"
+                    name={`request_create_date`}
+                    placeholder="Create date"
+                    disabled={isEdit}
+                    className="h-11.25"
+                    labelClass="text-sm font-medium"
+                  />
+                </div>
+                <div className="mb-6">
+                  <SAPPInput
+                    label={'Approver'}
+                    control={control}
+                    name="request_approver"
+                    placeholder={'Approver'}
+                    disabled={isEdit}
+                    labelClass="text-sm font-medium"
+                    className="h-11.25"
+                  ></SAPPInput>
+                </div>
+              </>
+            ) : null}
+            <div className="mb-6">
+              {requestType == REQUEST_TYPE.WEEKLY_NORM.value ? (
+                <SAPPInput
+                  label={'Note'}
+                  control={control}
+                  name="note"
+                  placeholder={'Note'}
+                  labelClass="text-sm font-medium"
+                  disabled={
+                    isEdit &&
+                    requestStatus?.toLowerCase() !==
+                      REQUEST_STATUS.PENDING.value.toLowerCase()
+                  }
+                  className="h-11.25"
+                ></SAPPInput>
+              ) : [
+                  REQUEST_TYPE.TEACHING_MODE.value,
+                  REQUEST_TYPE.TIMEOFF.value,
+                ].includes(requestType) ? (
+                <SAPPSelect
+                  control={control}
+                  label="Class Code"
+                  required
+                  labelClass="text-sm font-medium"
+                  name="class"
+                  isSearchable
+                  onSearch={() => refetchClasses()}
+                  isLoading={isLoadingClasses}
+                  onMenuScrollToBottom={() =>
+                    hasNextPageClasses && fetchNextPageClasses()
+                  }
+                  onDropdownVisibleChange={(open) => {
+                    open && refetchClasses()
+                  }}
+                  onChange={(e) => setValue('class_code', e)}
+                  placeholder="Class Code"
+                  options={classes.map((item) => ({
+                    value: item?.id,
+                    label: item?.code,
+                  }))}
+                  className="h-11.25"
+                />
+              ) : null}
+            </div>
+            <div className="mb-8">
+              <label className="mb-5 flex items-center text-base font-bold">
+                {capitalizeFirstLetter(
+                  Object.values(REQUEST_TYPE)
+                    .find((item) => item?.value == requestType)
+                    ?.label?.replace('_', ' '),
+                )}
+              </label>
+            </div>
+
+            {requestType == REQUEST_TYPE.BUSY_SCHEDULE.value && (
+              <>
+                <div className="mb-6">
+                  <HookFormDateRange
+                    control={control}
+                    required
+                    label="Start Date - End Date"
+                    name={`request_busy_schedule.0.date_range`}
+                    format="YYYY-MM-DD"
+                    showTime={false}
+                    // disabledDate={disabledDate}
+                    inputClassName="h-11.25 w-full rounded-md"
+                    disabled={
+                      isEdit &&
+                      requestStatus?.toLowerCase() !==
+                        REQUEST_STATUS.PENDING.value.toLowerCase()
+                    }
+                    labelClass="text-sm font-medium"
+                  />
+                </div>
+                <div className="mb-6">
+                  <HookFormEventRepeat
+                    control={control}
+                    name="request_busy_schedule"
+                    defaultDate={dayjs(currentDate?.[1]).toDate()}
+                    repeatOption={otherOption}
+                  />
+                </div>
+                <div className="mb-6">
+                  <SAPPInput
+                    label={'Description'}
+                    required
+                    control={control}
+                    name={`request_busy_schedule.0.description`}
+                    placeholder={'Description'}
+                    labelClass="text-sm font-medium"
+                    disabled={
+                      isEdit &&
+                      requestStatus?.toLowerCase() !==
+                        REQUEST_STATUS.PENDING.value.toLowerCase()
+                    }
+                    className="h-11.25"
+                  ></SAPPInput>
+                </div>
+              </>
+            )}
+            {requestType == REQUEST_TYPE.WEEKLY_NORM.value &&
+              weeklyNormFields.map((item, index) => {
+                return (
+                  <div key={item.id}>
                     <div className="mb-6">
-                      <SappHookFormSelect
-                        control={control}
-                        label="Lesson"
-                        required
-                        name={`request_time_off.${index}.lesson`}
-                        isSearchable
-                        onSearch={() => refetchLessons()}
-                        isLoading={isLoadingLessons}
-                        onMenuScrollToBottom={() =>
-                          hasNextPageLessons && fetchNextPageLessons()
-                        }
-                        labelClass="text-sm font-medium"
-                        placeholder="Lesson"
-                        options={lessons.map((item) => ({
-                          value: item?.id,
-                          label: item?.name,
-                        }))}
-                      />
+                      <div className="grid w-full grid-cols-2 gap-x-6">
+                        <div>
+                          <HookFormDateRange
+                            control={control}
+                            required
+                            label="Start Date - End Date"
+                            name={`request_weekly_norm.${index}.date_range`}
+                            format="YYYY-MM-DD | HH:mm:ss"
+                            inputClassName="h-11.25 w-full rounded-md"
+                            disabledDate={disabledDate}
+                            labelClass="text-sm font-medium"
+                            disabled={
+                              isEdit &&
+                              requestStatus?.toLowerCase() !==
+                                REQUEST_STATUS.PENDING.value.toLowerCase()
+                            }
+                            className="h-11.25"
+                          />
+                        </div>
+                        <div>
+                          <SAPPInput
+                            label={'Quantity'}
+                            required
+                            control={control}
+                            name={`request_weekly_norm.${index}.quantity`}
+                            placeholder={'Quantity'}
+                            labelClass="text-sm font-medium"
+                            disabled={
+                              isEdit &&
+                              requestStatus?.toLowerCase() !==
+                                REQUEST_STATUS.PENDING.value.toLowerCase()
+                            }
+                            onChange={(e) =>
+                              setValue(
+                                `request_weekly_norm.${index}.quantity`,
+                                Number(e.target.value),
+                              )
+                            }
+                            className="h-11.25"
+                            // type='number'
+                          ></SAPPInput>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="mb-6 flex cursor-pointer items-center gap-x-3"
+                      onClick={() => removeNorm(index)}
+                    >
+                      <IconMinusSquared />
+                      <span className="text-sm font-medium">
+                        Delete Weekly Norm
+                      </span>
                     </div>
                   </div>
-                  <div>
-                    <HookFormTextField
-                      label={'Reason'}
-                      required
-                      control={control}
-                      name={`request_time_off.${index}.reason`}
-                      placeholder={'Reason'}
-                      labelClass="text-sm font-medium"
-                    ></HookFormTextField>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="mb-6 flex cursor-pointer items-center gap-x-3"
-                onClick={() => removeTimeoff(index)}
-              >
-                <IconMinusSquared />
-
-                <span className="text-sm font-medium">Delete Timeoff</span>
-              </div>
-            </div>
-          )
-        })}
-      {requestType !== REQUEST_TYPE.BUSY_SCHEDULE.value && !isEdit ? (
-        <div
-          className="mb-12 flex cursor-pointer items-center gap-x-3"
-          onClick={() =>
-            requestType == REQUEST_TYPE.BUSY_SCHEDULE.value
-              ? null
-              : requestType == REQUEST_TYPE.WEEKLY_NORM.value
-                ? appendNorm({ date_range: [], quantity: 0 })
-                : appendTimeoff({
-                    lesson: { value: '', label: '' },
-                    reason: '',
-                  })
-          }
-        >
-          <IconPlusSquared />
-
-          <span className="fs-6 fw-medium text-primary">
-            {capitalizeFirstLetter(
-              Object.values(REQUEST_TYPE)
-                .find(
-                  (item) =>
-                    item.value.toLowerCase() == requestType?.toLowerCase(),
                 )
-                ?.label?.replace('_', ' '),
-            )}
-          </span>
+              })}
+            {requestType == REQUEST_TYPE.TIMEOFF.value &&
+              timeOffFields.map((item, index) => {
+                return (
+                  <div key={index}>
+                    <div className="mb-6">
+                      <div className="grid w-full grid-cols-2 gap-x-6">
+                        <div>
+                          <div className="mb-6">
+                            <SappHookFormSelect
+                              control={control}
+                              label="Lesson"
+                              required
+                              name={`request_time_off.${index}.lesson`}
+                              isSearchable
+                              onSearch={() => refetchLessons()}
+                              isLoading={isLoadingLessons}
+                              onMenuScrollToBottom={() =>
+                                hasNextPageLessons && fetchNextPageLessons()
+                              }
+                              labelClass="text-sm font-medium"
+                              placeholder="Lesson"
+                              options={lessons.map((item) => ({
+                                value: item?.id,
+                                label: item?.name,
+                              }))}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <HookFormTextField
+                            label={'Reason'}
+                            required
+                            control={control}
+                            name={`request_time_off.${index}.reason`}
+                            placeholder={'Reason'}
+                            labelClass="text-sm font-medium"
+                          ></HookFormTextField>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="mb-6 flex cursor-pointer items-center gap-x-3"
+                      onClick={() => removeTimeoff(index)}
+                    >
+                      <IconMinusSquared />
+
+                      <span className="text-sm font-medium">
+                        Delete Timeoff
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+
+            {!isEdit &&
+              (requestType &&
+              requestType !== REQUEST_TYPE.BUSY_SCHEDULE.value ? (
+                <div
+                  className="mb-12 flex cursor-pointer items-center gap-x-3"
+                  onClick={() =>
+                    requestType == REQUEST_TYPE.BUSY_SCHEDULE.value
+                      ? null
+                      : requestType == REQUEST_TYPE.WEEKLY_NORM.value
+                        ? appendNorm({ date_range: [], quantity: 0 })
+                        : appendTimeoff({
+                            lesson: { value: '', label: '' },
+                            reason: '',
+                          })
+                  }
+                >
+                  <IconPlusSquared />
+
+                  <span className="fs-6 fw-medium text-primary">
+                    {capitalizeFirstLetter(
+                      Object.values(REQUEST_TYPE)
+                        .find(
+                          (item) =>
+                            item.value.toLowerCase() ==
+                            requestType?.toLowerCase(),
+                        )
+                        ?.label?.replace('_', ' '),
+                    )}
+                  </span>
+                </div>
+              ) : null)}
+          </div>
+          <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
+            <SAPPButtonV2
+              title={'Cancel'}
+              onClick={handleCancel}
+              className="mr-4"
+              color="secondary"
+            />
+            <SAPPButtonV2 title={'Save'} onClick={handleSubmit(onSubmit)} />
+          </div>
         </div>
-      ) : null}
-    </SappDrawer>
+      </Drawer>
+    </ConfigProvider>
   )
 }
 

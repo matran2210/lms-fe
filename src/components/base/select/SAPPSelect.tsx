@@ -19,7 +19,13 @@ interface SAPPSelectProps {
   label?: string
   required?: boolean
   labelClass?: string
-  onChange?: any
+  disabled?: boolean
+  isSearchable?: boolean
+  onSearch?: (value: string) => Promise<void> | any
+  isLoading?: boolean
+  onMenuScrollToBottom?: () => void
+  onChange?: (select: any) => void
+  onDropdownVisibleChange?: ((open: boolean) => void) | undefined
 }
 
 const SAPPSelect = ({
@@ -35,6 +41,13 @@ const SAPPSelect = ({
   required,
   labelClass,
   onChange,
+  disabled,
+  isSearchable,
+  onSearch,
+  isLoading = false,
+  onMenuScrollToBottom,
+  onChange: onSelectChange,
+  onDropdownVisibleChange,
 }: SAPPSelectProps) => {
   return (
     <>
@@ -57,9 +70,26 @@ const SAPPSelect = ({
                 options={options}
                 size={size}
                 suffixIcon={suffixIcon}
-                onChange={(value: string) => {
-                  field.onChange(value)
-                  onChange?.()
+                onChange={(selectedOption) => {
+                  field.onChange(selectedOption)
+                  onSelectChange && onSelectChange?.(selectedOption)
+                }}
+                disabled={disabled}
+                showSearch={isSearchable}
+                onSearch={onSearch}
+                loading={isLoading}
+                onDropdownVisibleChange={onDropdownVisibleChange}
+                onPopupScroll={(e) => {
+                  const { target } = e
+                  if (
+                    Math.ceil((target as HTMLElement).scrollTop) +
+                      Math.ceil((target as HTMLElement).offsetHeight) ===
+                    Math.ceil((target as HTMLElement).scrollHeight)
+                  ) {
+                    if (onMenuScrollToBottom) {
+                      onMenuScrollToBottom
+                    }
+                  }
                 }}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>

@@ -16,6 +16,8 @@ interface SAPPInputProps {
   label?: string
   required?: boolean
   labelClass?: string
+  disabled?: boolean
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
 }
 
 const SAPPInput = ({
@@ -28,6 +30,8 @@ const SAPPInput = ({
   label,
   required,
   labelClass,
+  disabled = false,
+  onChange,
 }: SAPPInputProps) => {
   return (
     <>
@@ -48,6 +52,11 @@ const SAPPInput = ({
                 placeholder={placeholder}
                 value={field?.value}
                 size={size}
+                disabled={disabled}
+                onChange={(value) => {
+                  field.onChange(value)
+                  onChange && onChange(value)
+                }}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </StyleProvider>
