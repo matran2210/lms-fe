@@ -58,7 +58,9 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             title: item.name,
             startDate: new Date(`${item.start_date}T${item.start_time}Z`),
             endDate: new Date(`${item.end_date}T${item.end_time}Z`),
-            type: EVENT_TYPES_RESPONSE[item.teacher_type],
+            type: item.is_holiday
+              ? 'HOLIDAY'
+              : EVENT_TYPES_RESPONSE[item.teacher_type],
             description: item.description,
             classroomAddress: item.classroom_address,
             classroomName: item.classroom_name,

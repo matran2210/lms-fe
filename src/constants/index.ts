@@ -304,7 +304,7 @@ export const CALENDAR_SIDEBAR_EVENT_FORM = {
 export const EVENT_TYPES = {
   TEACHING: 'TEACHING',
   BUSY: 'BUSY',
-  TIME_OFF: 'TIME_OFF',
+  HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
 } as const
 
@@ -315,19 +315,12 @@ export const EVENT_TYPES_RESPONSE = {
   OTHER: 'OTHER',
 } as const
 
-export const EVENT_TYPES_RESPONSE_MAPPED = {
-  TEACHING_MODE: 'TEACHING',
-  TEACHER_SCHEDULE_BUSY: 'BUSY',
-  TEACHER_SCHEDULE_TIME_OFF: 'TIME_OFF',
-  TEACHER_OTHER: 'OTHER',
-} as const
-
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES)
 
 export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.TEACHING]: 'Teaching schedule',
   [EVENT_TYPES.BUSY]: 'Busy schedule',
-  [EVENT_TYPES.TIME_OFF]: 'Holiday schedule',
+  [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
   [EVENT_TYPES.OTHER]: 'Other calendar',
 }
 

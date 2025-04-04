@@ -20,7 +20,7 @@ interface SAPPButtonProps {
   disabled?: boolean
 }
 
-const SAPPButton = ({
+const SAPPButtonV2 = ({
   type = 'primary',
   title,
   children,
@@ -64,4 +64,4 @@ const SAPPButton = ({
   )
 }
 
-export default SAPPButton
+export default SAPPButtonV2

@@ -1,67 +1,114 @@
-// import { StyleProvider } from '@ant-design/cssinjs'
-import { Button } from 'antd'
-import { ButtonSize, ButtonType } from 'antd/es/button'
-import clsx from 'clsx'
-import { ReactNode } from 'react'
+import SappTooltip from 'src/common/SappTooltip'
+import { IButtonProps } from 'src/type'
 
-type ButtonColor = 'primary' | 'secondary'
-
-interface SAPPButtonProps {
-  type?: ButtonType
-  title?: string
-  children?: ReactNode
-  className?: string
-  size?: ButtonSize
-  color?: ButtonColor
-  icon?: ReactNode
-  iconPosition?: 'start' | 'end'
-  onClick?: any
-  loading?: boolean
-  disabled?: boolean
+const SIZES = {
+  small: 'text-[0.875rem] leading-4',
+  medium: 'text-[1rem] leading-6',
+  lager: 'text-lg leading-6.5',
+  extra: 'text-lg leading-6.5',
 }
 
-const SAPPButton = ({
-  type = 'primary',
-  title,
-  children,
-  className,
-  size,
-  color = 'primary',
-  icon,
-  iconPosition = 'start',
-  onClick,
-  loading,
-  disabled,
-}: SAPPButtonProps) => {
-  let colorClass = ''
-  switch (color) {
-    case 'primary':
-      colorClass = 'bg-primary text-white hover:!bg-primary-2 hover:!text-white'
-      break
-    case 'secondary':
-      colorClass = 'bg-gray-4 text-gray-12 hover:!bg-gray-3 hover:!text-gray-12'
-      break
-  }
+const COLORS = {
+  primary: 'primary',
+  info: 'bg-info hover:bg-info-2 disabled:bg-info-2 text-white',
+  success: 'bg-success hover:bg-success-2 disabled:bg-success-2 text-white',
+  secondary: 'bg-gray-3 hover:bg-secondary-4 disabled:bg-secondary-4 text-bw-1',
+  danger: 'bg-danger hover:bg-danger-2 disabled:bg-danger-2 text-white',
+  warning: 'bg-warning hover:bg-warning-2 disabled:bg-warning-2 text-white',
+  light: 'bg-light hover:bg-light-2 disabled:bg-light-2 text-white',
+  dark: 'bg-dark hover:bg-dark-2 disabled:bg-dark-2 text-white',
+  white:
+    'bg-white hover:bg-primary-2 disabled:bg-white text-gray-1 hover:text-white',
+  outline:
+    'bg-white border-bw-1 hover:border-gray-1 hover:text-gray-1 text-bw-1',
+  text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 font-medium',
+  textUnderline:
+    'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
+  quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
+}
 
+const PADDINGS = {
+  small: 'px-7 h-8',
+  medium: 'px-8 py-2',
+  lager: 'px-9 py-2.8',
+  extra: 'px-17.5 py-2.8',
+  none: '',
+}
+
+const COLOR_LOADING = {
+  primary: 'bg-white',
+  info: 'bg-white',
+  success: 'bg-white',
+  secondary: 'bg-bw-1',
+  danger: 'bg-white',
+  warning: 'bg-white',
+  light: 'bg-white',
+  dark: 'bg-white',
+  white: 'bg-gray-1',
+  outline: 'bg-gray-1',
+  text: 'bg-none',
+  textUnderline: 'bg-none',
+  quizActivity: 'bg-white',
+}
+
+const SappButton = ({
+  title,
+  onClick,
+  className = '',
+  link,
+  size = 'small',
+  full = false,
+  disabled = false,
+  loading = false,
+  type,
+  color = 'primary',
+  isUnderLine,
+  isPadding = true,
+  childClass = '',
+  classNameLoading = '',
+  showTooltip = false,
+  toolTipTitle = '',
+}: IButtonProps) => {
+  let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
+  let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
+  let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
+
+  isUnderLine = isUnderLine ?? color === 'text'
+  componentClass += ` ${isUnderLine ? 'hover:underline' : ''}`
+
+  if (link)
+    return (
+      <a href={link} className={componentClass} aria-disabled={disabled}></a>
+    )
   return (
-    <Button
-      type={type}
-      className={clsx(
-        'h-10 px-6 py-3 font-medium shadow-none',
-        colorClass,
-        className,
-      )}
-      size={size}
-      icon={icon}
-      iconPosition={iconPosition}
+    <button
+      className={`${componentClass} ${classNameLoading}`}
+      type={type ?? 'button'}
       onClick={onClick}
-      loading={loading}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
-      {title}
-      {children}
-    </Button>
+      {loading ? (
+        <div className={`flex items-center justify-center ${classNameLoading}`}>
+          <span className="sr-only">Loading...</span>
+          <div
+            className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
+          ></div>
+          <div
+            className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.15s] ${COLOR_LOADING[color]}`}
+          ></div>
+          <div
+            className={`h-2 w-2 animate-bounce rounded-full ${COLOR_LOADING[color]}`}
+          ></div>
+        </div>
+      ) : (
+        <SappTooltip title={toolTipTitle} showTooltip={showTooltip}>
+          <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
+            {title}
+          </span>
+        </SappTooltip>
+      )}
+    </button>
   )
 }
 
-export default SAPPButton
+export default SappButton
