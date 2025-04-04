@@ -3,6 +3,7 @@ import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { SchedulesAPI } from '@pages/api/schedules'
 import { handleDisableDate, handleDisableTime } from '@utils/calendar'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
@@ -20,7 +21,6 @@ import {
   CONFIRM_CANCEL,
   EVENT_TYPES,
 } from 'src/constants'
-import { SchedulesAPI } from 'src/pages/api/schedules'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {

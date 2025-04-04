@@ -1,5 +1,6 @@
 import SAPPLabel from '@components/base/Label/SAPPLabel'
 import SAPPSelect from '@components/base/select/SAPPSelect'
+import { reverseDaysOfWeek } from '@utils/common'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
@@ -111,7 +112,10 @@ const EventRepeatField = ({
     data: ((typeof REPEAT_ON)[number] | undefined)[] | undefined,
   ) => {
     if (!data) return []
-    return data.map((day) => REPEAT_ON_MAPPED_PAYLOAD[day || 'T2'])
+    return reverseDaysOfWeek(
+      initDate,
+      data.map((day) => REPEAT_ON_MAPPED_PAYLOAD[day || 'T2']),
+    )
   }
 
   const cleanObject = useCallback((params: Object) => {
@@ -170,14 +174,21 @@ const EventRepeatField = ({
           value?.repeat_type === EVENT_REPEAT_TYPES.MONTHLY ||
           (value?.repeat_type === EVENT_REPEAT_TYPES.EVERY_WEEKDAY &&
             value?.repeat_frequency?.unit === FREQUENCY_UNITS.MONTH) ||
-          value?.repeat_type === EVENT_REPEAT_TYPES.ANNUALLY
+          value?.repeat_type === EVENT_REPEAT_TYPES.ANNUALLY ||
+          (value?.repeat_type === EVENT_REPEAT_TYPES.CUSTOM &&
+            (value?.repeat_frequency?.unit === FREQUENCY_UNITS.MONTH ||
+              value?.repeat_frequency?.unit === FREQUENCY_UNITS.YEAR))
         )
           return [dayjs(initDate).date()]
 
         return undefined
       }
       const getMonthOfYear = () => {
-        if (value?.repeat_type === EVENT_REPEAT_TYPES.ANNUALLY)
+        if (
+          value?.repeat_type === EVENT_REPEAT_TYPES.ANNUALLY ||
+          (value?.repeat_type === EVENT_REPEAT_TYPES.CUSTOM &&
+            value?.repeat_frequency?.unit === FREQUENCY_UNITS.YEAR)
+        )
           return [dayjs(initDate).month() + 1]
 
         return undefined
