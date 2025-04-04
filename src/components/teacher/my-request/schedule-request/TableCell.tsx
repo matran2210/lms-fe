@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { FC, ReactElement } from 'react'
+import { FC } from 'react'
 
 type Props = {
   data?: React.ReactNode

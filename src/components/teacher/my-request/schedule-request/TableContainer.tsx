@@ -6,11 +6,11 @@ import { formatDateFromUTC } from 'src/utils/index'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
 import dayjs from 'dayjs'
-import TableCell from './TableCell'
-import ActionCell from '../../../base/action/SappActionCell'
-import DetailRequestModal from './DetailRequestModal'
-import ReasonModal from './ReasonModal'
-import SuccessModal from './SuccessModal'
+import TableCell from 'src/components/teacher/my-request/schedule-request/TableCell'
+import ActionCell from 'src/components/base/action/SappActionCell'
+import DetailRequestModal from 'src/components/teacher/my-request/schedule-request/DetailRequestModal'
+import ReasonModal from 'src/components/teacher/my-request/schedule-request/ReasonModal'
+import SuccessModal from 'src/components/teacher/my-request/schedule-request/SuccessModal'
 import {
   FilterRequestScheduleParams,
   IScheduleRequestItem,
@@ -18,6 +18,7 @@ import {
   StatusRequestScheduleParams,
 } from 'src/type/teachers/request-schedule.interface'
 import { StatusRequestSchedule } from '@utils/constants/Teacher'
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
@@ -63,8 +64,8 @@ export default function TableContainer({ params }: IProps) {
     IScheduleRequestItem | undefined
   >()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || 1,
-    pageSize: Number(router.query.page_size) || 10,
+    current: Number(router.query.page_index) || DEFAULT_PAGE_NUMBER,
+    pageSize: Number(router.query.page_size) || DEFAULT_PAGE_SIZE,
     total: 10,
     showSizeChanger: true,
     showQuickJumper: true,
@@ -75,8 +76,8 @@ export default function TableContainer({ params }: IProps) {
     queryFn: async () => {
       try {
         const payload: RequestScheduleParams = {
-          page_index: pagination.current ?? 1,
-          page_size: pagination.pageSize ?? 10,
+          page_index: pagination.current ?? DEFAULT_PAGE_NUMBER,
+          page_size: pagination.pageSize ?? DEFAULT_PAGE_SIZE,
           ...params,
         }
         return await TeacherAPI.getListRequestSchedule(payload)
@@ -240,6 +241,7 @@ export default function TableContainer({ params }: IProps) {
       await TeacherAPI.updateStatusRequestSchedule(requestId, payload)
       callback()
       setOpenSuccessModal(true)
+      refetch()
     } catch (error) {
     } finally {
     }

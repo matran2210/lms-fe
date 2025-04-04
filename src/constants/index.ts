@@ -87,6 +87,8 @@ export enum RESPONSE_OPTION {
 }
 export const MAX_UPLOAD_SIZE = 20 * 1024 * 1024
 export const MAX_UPLOAD_VIDEO_SIZE = 20 * 1024 * 1024 * 1024
+export const DEFAULT_PAGE_SIZE = 10
+export const DEFAULT_PAGE_NUMBER = 1
 export const VALID_UPLOAD_EDITOR = [
   { type: 'image/*', size: MAX_UPLOAD_SIZE },
   { type: 'video/*', size: MAX_UPLOAD_VIDEO_SIZE },

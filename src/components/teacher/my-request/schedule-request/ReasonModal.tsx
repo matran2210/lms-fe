@@ -1,32 +1,13 @@
-import { AlertIcon, InfoIcon } from '@assets/icons'
+import { AlertIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
-import { StatusRequestSchedule } from '@utils/constants/Teacher'
 import React, { Dispatch, SetStateAction } from 'react'
-import {
-  InternalFieldName,
-  FormState,
-  FieldValues,
-  FieldArrayPath,
-  FieldArray,
-  FieldName,
-  Field,
-  FieldRefs,
-  FieldErrors,
-  RegisterOptions,
-  UseFormRegisterReturn,
-  SubmitHandler,
-  SubmitErrorHandler,
-  FieldError,
-  ErrorOption,
-  useForm,
-} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import {
   defaultOpenReasonModal,
   IOpenReasonModal,
   UpdateStatusParams,
-} from './TableContainer'
+} from 'src/components/teacher/my-request/schedule-request/TableContainer'
 
 interface IProps {
   open: IOpenReasonModal

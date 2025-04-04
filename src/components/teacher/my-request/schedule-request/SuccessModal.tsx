@@ -1,26 +1,6 @@
-import { AlertIcon, CheckIcon, IconCongrats, InfoIcon } from '@assets/icons'
+import { CheckIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import React, { Dispatch, SetStateAction } from 'react'
-import {
-  InternalFieldName,
-  FormState,
-  FieldValues,
-  FieldArrayPath,
-  FieldArray,
-  FieldName,
-  Field,
-  FieldRefs,
-  FieldErrors,
-  RegisterOptions,
-  UseFormRegisterReturn,
-  SubmitHandler,
-  SubmitErrorHandler,
-  FieldError,
-  ErrorOption,
-  useForm,
-} from 'react-hook-form'
 
 interface IProps {
   open: boolean

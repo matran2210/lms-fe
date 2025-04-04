@@ -1,18 +1,23 @@
 import { Collapse, CollapseProps } from 'antd'
 import React from 'react'
-import dayjs from 'dayjs'
 import {
   IScheduleRequestItem,
   ScheduleRequestDetail,
   ScheduleTimeItem,
 } from 'src/type/teachers/request-schedule.interface'
 import { sappFormatDate } from '@utils/index'
+import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
 
 interface IProps {
   dataDetail: ScheduleRequestDetail
   selectedRequest: IScheduleRequestItem
+  isLoading: boolean
 }
-const PrimaryInformation = ({ dataDetail, selectedRequest }: IProps) => {
+const PrimaryInformation = ({
+  dataDetail,
+  selectedRequest,
+  isLoading,
+}: IProps) => {
   const items: CollapseProps['items'] = [
     {
       key: '1',
@@ -62,15 +67,19 @@ const PrimaryInformation = ({ dataDetail, selectedRequest }: IProps) => {
               <span className="text-sm text-[#9CA3AF]">Schedule</span>
             </div>
             <div className="col-span-2">
-              <div className="flex items-center gap-8">
-                {(dataDetail.schedules ?? []).map(
-                  (item: ScheduleTimeItem, index: number) => (
-                    <div
-                      key={index}
-                    >{`${item.start_time} - ${item.end_time}`}</div>
-                  ),
-                )}
-              </div>
+              {isLoading ? (
+                <ScheduleSkeleton />
+              ) : (
+                <div className="flex items-center gap-8">
+                  {(dataDetail.schedules ?? []).map(
+                    (item: ScheduleTimeItem, index: number) => (
+                      <div
+                        key={index}
+                      >{`${item.start_time} - ${item.end_time}`}</div>
+                    ),
+                  )}
+                </div>
+              )}
             </div>
           </div>
           {/* Address */}

@@ -1,24 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { DownloadIcon, InfoIcon, NotificationIcon } from '@assets/icons'
+import { InfoIcon } from '@assets/icons'
 import SappDrawer from '@components/base/SappDrawer'
-import HookFormSelect from '@components/base/select/HookFormSelect'
-import { bytesToKilobyte } from '@utils/index'
 import getConfig from 'next/config'
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import { isEmpty } from 'lodash'
-import NoData from 'src/common/NoData'
 import {
   IOpenReasonModal,
   statusColor,
   UpdateStatusParams,
-} from './TableContainer'
+} from 'src/components/teacher/my-request/schedule-request/TableContainer'
 import dayjs from 'dayjs'
-import { Collapse, CollapseProps } from 'antd'
-import Panel from 'antd/es/splitter/Panel'
-import PrimaryInformation from './PrimaryInformation'
+import PrimaryInformation from 'src/components/teacher/my-request/schedule-request/PrimaryInformation'
 import { IScheduleRequestItem } from 'src/type/teachers/request-schedule.interface'
 import { StatusRequestSchedule } from '@utils/constants/Teacher'
 import { useQuery } from 'react-query'
@@ -137,14 +129,13 @@ const DetailRequestModal = ({
           </div>
         </div>
 
-        {data && (
-          <div>
-            <PrimaryInformation
-              selectedRequest={selectedRequest}
-              dataDetail={data?.data}
-            />
-          </div>
-        )}
+        <div>
+          <PrimaryInformation
+            selectedRequest={selectedRequest}
+            dataDetail={data?.data}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
     </SappDrawer>
   )
