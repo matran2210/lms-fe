@@ -103,15 +103,30 @@ const ProfilePage = () => {
       break
 
     case ProfilePages.CFA:
-      selectedContent = <ProgramDetail typeProgram="CFA" />
+      selectedContent = (
+        <ProgramDetail
+          typeProgram="CFA"
+          onOpenTab={() => setSelectPage(true)}
+        />
+      )
       break
 
     case ProfilePages.CMA:
-      selectedContent = <ProgramDetail typeProgram="CMA" />
+      selectedContent = (
+        <ProgramDetail
+          typeProgram="CMA"
+          onOpenTab={() => setSelectPage(true)}
+        />
+      )
       break
 
     case ProfilePages.ACCA:
-      selectedContent = <ProgramDetail typeProgram="ACCA" />
+      selectedContent = (
+        <ProgramDetail
+          typeProgram="ACCA"
+          onOpenTab={() => setSelectPage(true)}
+        />
+      )
       break
 
     case ProfilePages.ExamInformation:
