@@ -11,4 +11,8 @@ export class UserApi {
       `${apiURL}/users/examination?page_index=${page_index}&page_size=${page_size}`,
     )
   }
+
+  static getUserPrograms(course_category_id: string | undefined): Promise<any> {
+    return fetcher(`users/programs?course_category_id=${course_category_id}`)
+  }
 }

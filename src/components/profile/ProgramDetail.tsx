@@ -4,42 +4,58 @@ import { useForm } from 'react-hook-form'
 import MyProfileAPI from 'src/pages/api/profile'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
-import { ISubjectItem } from 'src/redux/types/User/urser'
+import { ISubjectItem, IUser } from 'src/redux/types/User/urser'
 import TabLayout from './TabLayout'
+import { UserApi } from '@pages/api/user'
 
 interface IProps {
   typeProgram: 'CMA' | 'ACCA' | 'CFA'
 }
 
 const ProgramDetail = ({ typeProgram }: IProps) => {
-  const [subjects, setSubjects] = useState<ISubjectItem[]>()
+  const [subjects, setSubjects] = useState<any>()
   const { user } = useAppSelector(userReducer)
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
+  const [userProgram, setUserProgram] = useState<IUser>()
 
-  const { setValue, control, getValues, resetField } = useForm({
+  const { setValue, control, resetField } = useForm({
     mode: 'onSubmit',
   })
 
-  useEffect(() => {
-    const fetchSubjectOfHub = async () => {
-      try {
-        const res = await MyProfileAPI.getSubjectOfhubspot(typeProgram)
-        setSubjects(res.subjects)
-        setValue('course_category_id', res?.course_category_id ?? '')
-      } catch (err) {}
-    }
+  const fetchSubjectOfHub = async () => {
+    try {
+      const res = await MyProfileAPI.getSubjectOfhubspot(typeProgram)
+      setSubjects(res)
+      setValue('course_category_id', res?.course_category_id ?? '')
+    } catch (err) {}
+  }
+  const programData = userProgram?.user_hubspot_program_infos?.find(
+    (item) => item?.course_category_id === subjects?.course_category_id,
+  )
 
+  useEffect(() => {
     if (user) {
       if (typeProgram && typeProgram !== typeOfProgram) {
         setTypeOfProgram(typeProgram)
         fetchSubjectOfHub()
       }
-      const programData = user?.user_hubspot_program_infos?.find(
-        (item) => item?.course_category?.name === typeProgram,
-      )
+
       setValue('hubspot_account_info', programData?.hubspot_account_info ?? '')
     }
   }, [resetField, setValue, typeOfProgram, typeProgram, user])
+
+  async function getUserProgram() {
+    try {
+      const res = await UserApi.getUserPrograms(subjects?.course_category_id)
+      setUserProgram(res)
+    } catch (err) {}
+  }
+
+  useEffect(() => {
+    if (subjects?.course_category_id) {
+      getUserProgram()
+    }
+  }, [subjects?.course_category_id])
 
   return (
     <TabLayout
@@ -54,13 +70,13 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
             ACCOUNT ID:
           </div>
           <div className="col-span-1 max-w-[300px] flex-auto font-medium text-bw-1">
-            {getValues('hubspot_account_info')}
+            {programData?.hubspot_account_info}
           </div>
         </div>
       </div>
       <div className="m-6">
-        {subjects?.map((subject: ISubjectItem, index: number) => {
-          const courseTabData = user.course_tab_groups?.[
+        {subjects?.subjects?.map((subject: ISubjectItem, index: number) => {
+          const courseTabData = userProgram?.course_tab_groups?.[
             typeProgram
           ]?.user_hubspot_examination_subjects?.find(
             (item) => item.examination_subject.subject.id === subject.id,
