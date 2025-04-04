@@ -156,6 +156,7 @@ module.exports = {
         4: '16px',
         6: '24px',
         8: '30px',
+        120: '120px',
         small: '36px',
         default: '40px',
         medium: '48px',
