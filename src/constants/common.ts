@@ -7,3 +7,5 @@ export enum BADGE_TYPES {
 }
 
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm'
+
+export const DAYS_IN_WEEK = 7
