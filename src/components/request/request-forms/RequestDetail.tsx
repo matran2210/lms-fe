@@ -1,21 +1,15 @@
-import { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 import SappDrawer from '../../base/SappDrawer'
 
 import { MyRequestAPI } from '@pages/api/my-request'
-import { useRouter } from 'next/router'
-import { REQUEST_TYPE } from 'src/constants/my-request'
-import {
-  IBusyRequestDetailResponse,
-  IBusySchedule,
-  ITeacherSchedules,
-  ITimeoffRequestDetailResponse,
-  IWeeklyNorm,
-  IWeeklyNorms,
-} from 'src/type/my-request'
-import { RequestStatus } from 'src/type/my-request/enum'
 import { capitalizeFirstLetter } from '@utils/index'
-import toast from 'react-hot-toast'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
+import { EVENT_REPEAT_TYPES } from 'src/constants'
+import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants/my-request'
+import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'
+import { RequestStatus } from 'src/type/my-request/enum'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -30,28 +24,27 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [requestDetail, setRequestDetail] =
     useState<IBusyRequestDetailResponse>()
-
+  const [showPrimaryInfo, setShowPrimaryInfo] = useState(true)
+  const [showOtherInfo, setShowOtherInfo] = useState(true)
   const displayStatus = (status: string) => {
     return `${RequestStatus[status as keyof typeof RequestStatus] || 'Unknown'}`
   }
-
   const handleChangeRequestStatus = async (status: string) => {
+    const schedule = requestDetail?.teacher_schedules?.[0]?.schedule
     const formattedBusyScheduleData = {
-      request_name: requestDetail?.name ?? '',
-      request_type: requestDetail?.type ?? '',
+      event_name: requestDetail?.name ?? '',
       status: status,
-      time: requestDetail?.teacher_schedules?.map((item: ITeacherSchedules) => {
-        return {
-          start_date: dayjs(
-            `${item.schedule.start_date} ${item.schedule.start_time}`,
-          ).format('YYYY-MM-DDTHH:mm:ss'),
-          end_date: dayjs(
-            `${item.schedule.end_date} ${item.schedule.end_time}`,
-          ).format('YYYY-MM-DDTHH:mm:ss'),
-          description: item.schedule.description,
-        }
-      }),
-      note: requestDetail?.description || null,
+      range: {
+        start_time: dayjs(
+          `${schedule?.start_date}${schedule?.start_time}`,
+        ).format('YYYY-MM-DDTHH:mm:ss'),
+        end_time: dayjs(`${schedule?.end_date}${schedule?.end_time}`).format(
+          'YYYY-MM-DDTHH:mm:ss',
+        ),
+      },
+      repeat:
+        schedule?.recurring_pattern_schedule.type !==
+        EVENT_REPEAT_TYPES.NO_REPEAT,
     }
 
     const formattedWeeklyNormData = {
@@ -130,6 +123,22 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   useLayoutEffect(() => {
     loadData()
   }, [params])
+
+  const requestType = useMemo(
+    () =>
+      Object?.values(REQUEST_TYPE)?.find(
+        (item) => item.value == requestDetail?.type,
+      ),
+    [requestDetail?.type],
+  )
+  const hasActionButton = useMemo(
+    () =>
+      [
+        REQUEST_STATUS.APPROVED.value.toLowerCase(),
+        REQUEST_STATUS.PENDING.value.toLocaleLowerCase(),
+      ].includes(requestDetail?.status.toLocaleLowerCase() ?? ''),
+    [requestDetail?.status],
+  )
   return (
     <div>
       <div className="card h-xl-100"></div>
@@ -147,6 +156,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               ? 'Approved'
               : 'Edit'
           }
+          footer={hasActionButton}
           handleSubmit={() => {
             handleChangeRequestStatus(RequestStatus.APPROVED)
           }}
@@ -202,7 +212,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               <tr>
                 <td className="text-sm  text-bw-9">Approver</td>
                 <td className="text-sm">
-                  {requestDetail?.staff_request.detail.full_name}{' '}
+                  {requestDetail?.staff_request?.detail?.full_name}{' '}
                 </td>
               </tr>
               <tr>
@@ -219,6 +229,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               </tr>
             </table>
           </div>
+
           <div className="">
             <div className="mb-3 border-b border-gray-200 pb-3 text-base font-medium">
               {requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value

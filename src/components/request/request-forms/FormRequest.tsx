@@ -224,10 +224,20 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 params as string,
                 formattedBusyScheduleData,
               )
-            : await MyRequestAPI.editWeeklyNorm(
-                params as string,
-                formattedWeeklyNormData,
-              )
+            : requestType == REQUEST_TYPE.WEEKLY_NORM.value
+              ? await MyRequestAPI.editWeeklyNorm(
+                  params as string,
+                  formattedWeeklyNormData,
+                )
+              : requestType == REQUEST_TYPE.TIMEOFF.value
+                ? await MyRequestAPI.editTimeoffRequest(
+                    params as string,
+                    formattedTimeoffData,
+                  )
+                : await MyRequestAPI.editTeachingModeRequest(
+                    params as string,
+                    formattedTimeoffData,
+                  )
       } else {
         if (requestType == REQUEST_TYPE.BUSY_SCHEDULE.value) {
           response = await MyRequestAPI.createBusySchedule(
@@ -404,10 +414,15 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             )
           }
           setValue(
+            'request_creator',
+            data.staff_request.detail.full_name ??
+              data.user_request.detail.full_name,
+          )
+
+          setValue(
             'request_approver',
             data.staff_assignee.detail.full_name ?? '',
           )
-          setValue('request_creator', data.staff_request.detail.full_name ?? '')
         } else {
           toast.error('Something wrong!')
         }
