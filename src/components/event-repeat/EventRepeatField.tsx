@@ -75,6 +75,7 @@ const EventRepeatField = ({
   const [repeatType, setRepeatType] = useState<RecurringScheduleType>(
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
   )
+
   const initDate = useMemo(() => defaultDate || new Date(), [defaultDate])
 
   const formattedDefaultValue = useMemo(() => {
