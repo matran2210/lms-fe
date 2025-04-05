@@ -403,11 +403,11 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               })),
             )
           }
+          setValue('request_creator', data.staff_request.detail.full_name ?? '')
           setValue(
             'request_approver',
             data.staff_assignee.detail.full_name ?? '',
           )
-          setValue('request_creator', data.staff_request.detail.full_name ?? '')
         } else {
           toast.error('Something wrong!')
         }
