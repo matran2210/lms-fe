@@ -152,18 +152,18 @@ export class MyRequestAPI {
   static createChangeTeachingModeRequest({
     request_name,
     teacher_id,
-    scheduleAdjusments,
+    scheduleAdjustments,
   }: {
     request_name: string
     teacher_id: string
-    scheduleAdjusments?: { id: string; reason: string }[]
+    scheduleAdjustments?: { id: string; reason: string }[]
   }): Promise<any> {
     return fetcher('/request-schedules/teaching-mode', {
       method: 'POST',
       data: {
         request_name: request_name,
         teacher_id: teacher_id,
-        scheduleAdjusments: scheduleAdjusments,
+        scheduleAdjustments: scheduleAdjustments,
       },
     })
   }
@@ -172,11 +172,11 @@ export class MyRequestAPI {
     {
       request_name,
       status,
-      scheduleAdjusments,
+      scheduleAdjustments,
     }: {
       request_name: string
       status: string
-      scheduleAdjusments?: { id: string; reason: string }[]
+      scheduleAdjustments?: { id: string; reason: string }[]
     },
   ): Promise<any> {
     return fetcher(`/request-schedules/teaching-mode/${id}`, {
@@ -184,7 +184,7 @@ export class MyRequestAPI {
       data: {
         request_name: request_name,
         status: status,
-        scheduleAdjusments: scheduleAdjusments,
+        scheduleAdjustments: scheduleAdjustments,
       },
     })
   }

@@ -177,7 +177,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               <span className="font-medium text-bw-9 ">
                 Approval Deadline:{' '}
               </span>
-              <span className="">{requestDetail?.due_date}</span>
+              <span className="">
+                {requestDetail?.due_date} |{' '}
+                {dayjs(requestDetail?.created_at).format('hh:mm')}
+              </span>
             </div>
             <div className="mb-4 flex items-center gap-x-3 text-sm">
               <span className="font-medium text-bw-9">Status:</span>

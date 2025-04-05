@@ -5,6 +5,7 @@ import ErrorMessage from 'src/common/ErrorMessage'
 
 import { TimeIcon } from '@components/icons'
 import { IconCalendar } from '@assets/icons'
+import GuidelineField from 'src/common/GuidelineField'
 
 interface IProps {
   control: Control<any>
@@ -83,6 +84,7 @@ const HookFormDateTime = ({
               suffixIcon={<IconCalendar />}
             />
             <div>
+              <GuidelineField guideline={guideline} />
               <ErrorMessage>{fieldState.error?.message}</ErrorMessage>
             </div>
           </>

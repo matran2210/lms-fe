@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
+  DRAWER_REQUEST_TYPE,
   OPTIONS_PERSONAL_SCHEDULE_REQUEST_TYPE,
   OPTIONS_REQUEST_STATUS,
   REQUEST_TYPE,
@@ -188,6 +189,7 @@ const PersonalScheduleTab = () => {
           open={isOpenAddModal}
           setOpen={setOpenAddModal}
           reloadPage={handleFilter}
+          formType={DRAWER_REQUEST_TYPE.PERSONAL_SCHEDULE}
         />
       ) : null}
       {isOpenViewModal ? (

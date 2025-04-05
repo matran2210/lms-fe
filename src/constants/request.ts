@@ -1,5 +1,8 @@
 import { IOption } from 'src/type'
-
+export enum DRAWER_REQUEST_TYPE {
+  PERSONAL_SCHEDULE = 'PERSONAL_SCHEDULE',
+  TIMEOFF = 'TIMEOFF',
+}
 export enum REQUEST_TYPE {
   TEACHING_MODE = 'TEACHING_MODE',
   TEACHER_SCHEDULE_BUSY = 'TEACHER_SCHEDULE_BUSY',
@@ -62,11 +65,11 @@ export const OPTIONS_PERSONAL_SCHEDULE_REQUEST_TYPE: IOption[] = [
 
 export const OPTIONS_TIME_OFF_REQUEST_TYPE: IOption[] = [
   {
-    label: 'Xin nghỉ',
+    label: 'Timeoff',
     value: REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF,
   },
   {
-    label: 'Xin đổi hình thức',
+    label: 'Teaching mode change',
     value: REQUEST_TYPE.TEACHING_MODE,
   },
 ]

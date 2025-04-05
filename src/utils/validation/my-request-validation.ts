@@ -54,8 +54,8 @@ const discriminated = z.discriminatedUnion('request_type_value', [
         z
           .object({
             date_range: z
-              .array(z.date())
-              .length(2, 'Date range must have exactly 2 dates'),
+              .array(z.string())
+              .min(2, 'Date range must have exactly 2 dates'),
             quantity: z
               .number({ required_error: VALIDATE_REQUIRED })
               .min(1, VALIDATE_REQUIRED)
@@ -138,9 +138,8 @@ const discriminated = z.discriminatedUnion('request_type_value', [
     request_time_off: z
       .array(
         z.object({
-          lesson: z.object({
-            value: z.string({ required_error: VALIDATE_REQUIRED }),
-          }),
+          lesson: z.string({ required_error: VALIDATE_REQUIRED }),
+
           reason: z.string({ required_error: VALIDATE_REQUIRED }),
         }),
       )

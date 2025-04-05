@@ -27,6 +27,7 @@ import {
   ANT_THEME_CONFIG,
   CALENDAR_SIDEBAR_TITLE,
   CONFIRM_CANCEL,
+  DRAWER_REQUEST_TYPE,
 } from 'src/constants'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants/my-request'
 import useSelectClassCode from 'src/hooks/useSelectClassCode'
@@ -42,9 +43,10 @@ export interface IProps {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   reloadPage: () => void
+  formType: DRAWER_REQUEST_TYPE
 }
 
-function FormRequest({ open, setOpen, reloadPage }: IProps) {
+function FormRequest({ open, setOpen, reloadPage, formType }: IProps) {
   const router = useRouter()
   const params = router.query?.id
   const isEdit = params && params !== 'new' ? true : false
@@ -62,8 +64,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     defaultValues: {
       request_name: '',
       request_teacher_id: '',
-      request_busy_schedule: [{ repeat: REPEAT_TYPE.DOES_NOT_REPEAT }],
-      request_weekly_norm: [{ quantity: 0 }],
+      request_busy_schedule: [
+        { repeat: REPEAT_TYPE.DOES_NOT_REPEAT, date_range: [] },
+      ],
+      request_weekly_norm: [{ quantity: undefined }],
       request_time_off: [{ lesson: { value: '', label: '' }, reason: '' }],
     },
   })
@@ -264,6 +268,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         reloadPage()
         toast.success('Request saved successfully!')
         setOpen(false)
+        router.replace(router.pathname, undefined, { shallow: true })
       } else {
         toast.error('Something went wrong. Please try again.')
       }
@@ -283,7 +288,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
     return !(isMonday || isSunday)
   }
-
   const loadData = async () => {
     if (params && params !== 'new') {
       try {
@@ -459,6 +463,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
   }
   const handleClose = () => {
+    router.replace(router.pathname, undefined, { shallow: true })
     setOpen(false)
     reset()
   }
@@ -467,12 +472,11 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: handleClose }),
     )
   }
-
   return (
     <ConfigProvider theme={ANT_THEME_CONFIG}>
       <Drawer
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => handleCancel()}
         width={'960px'}
         footer={true}
         closeIcon={false}
@@ -496,6 +500,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 placeholder={'Request name'}
                 labelClass="text-sm font-medium"
                 className="h-11.25"
+                guideline={[
+                  '[Tên người tạo]_[Loại request]_[Tháng năm tạo request]. Ví dụ: Nguyễn Văn A_Busy schedule_0325',
+                ]}
                 disabled={
                   isEdit &&
                   requestStatus?.toLowerCase() !==
@@ -511,13 +518,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 placeholder="Type"
                 required
                 onChange={(e) => setValue('request_type_value', e)}
-                className="h-11.25 text-base "
-                options={[
-                  REQUEST_TYPE.BUSY_SCHEDULE,
-                  REQUEST_TYPE.WEEKLY_NORM,
-                  REQUEST_TYPE.TIMEOFF,
-                  REQUEST_TYPE.TEACHING_MODE,
-                ]}
+                className="h-11.25 text-base font-semibold"
+                options={
+                  formType == DRAWER_REQUEST_TYPE.PERSONAL_SCHEDULE
+                    ? [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
+                    : [REQUEST_TYPE.TIMEOFF, REQUEST_TYPE.TEACHING_MODE]
+                }
                 disabled={isEdit}
                 labelClass="text-sm font-medium"
               />
@@ -574,7 +580,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 </div>
               </>
             ) : null}
-            <div className="mb-6">
+            <div className="mb-8">
               {requestType == REQUEST_TYPE.WEEKLY_NORM.value ? (
                 <SAPPInput
                   label={'Note'}
@@ -618,16 +624,18 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 />
               ) : null}
             </div>
-            <div className="mb-8">
-              <label className="mb-5 flex items-center text-base font-bold">
-                {capitalizeFirstLetter(
-                  Object.values(REQUEST_TYPE)
-                    .find((item) => item?.value == requestType)
-                    ?.label?.replace('_', ' '),
-                )}
-              </label>
-            </div>
-
+            {requestType?.toLowerCase() !==
+              REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() && (
+              <div className="mb-8">
+                <label className="flex items-center text-base font-bold">
+                  {capitalizeFirstLetter(
+                    Object.values(REQUEST_TYPE)
+                      .find((item) => item?.value == requestType)
+                      ?.label?.replace('_', ' '),
+                  )}
+                </label>
+              </div>
+            )}
             {requestType == REQUEST_TYPE.BUSY_SCHEDULE.value && (
               <>
                 <div className="mb-6">
@@ -674,7 +682,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                       requestStatus?.toLowerCase() !==
                         REQUEST_STATUS.PENDING.value.toLowerCase()
                     }
-                    className="h-11.25"
+                    className="h-11.25 "
                   ></SAPPInput>
                 </div>
               </>
@@ -710,7 +718,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                             required
                             control={control}
                             name={`request_weekly_norm.${index}.quantity`}
-                            placeholder={'Quantity'}
+                            placeholder={'Input text'}
                             labelClass="text-sm font-medium"
                             disabled={
                               isEdit &&
@@ -731,7 +739,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     </div>
                     {requestNorm &&
                       requestNorm.length > 1 &&
-                      requestStatus.toLowerCase() !==
+                      requestStatus?.toLowerCase() !==
                         REQUEST_STATUS.PENDING.value.toLowerCase() && (
                         <div
                           className="mb-6 flex cursor-pointer items-center gap-x-3"
@@ -757,7 +765,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                       <div className="grid w-full grid-cols-2 gap-x-6">
                         <div>
                           <div className="mb-6">
-                            <SappHookFormSelect
+                            <SAPPSelect
                               control={control}
                               label="Lesson"
                               required
@@ -768,31 +776,43 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                               onMenuScrollToBottom={() =>
                                 hasNextPageLessons && fetchNextPageLessons()
                               }
+                              onDropdownVisibleChange={(open) => {
+                                open && refetchLessons()
+                              }}
                               labelClass="text-sm font-medium"
                               placeholder="Lesson"
                               options={lessons.map((item) => ({
                                 value: item?.id,
                                 label: item?.name,
                               }))}
+                              className="h-11.25 "
                             />
                           </div>
                         </div>
                         <div>
-                          <HookFormTextField
+                          <SAPPInput
                             label={'Reason'}
                             required
                             control={control}
                             name={`request_time_off.${index}.reason`}
+                            onChange={(e) =>
+                              setValue(
+                                `request_time_off.${index}.reason`,
+                                e.target.value,
+                              )
+                            }
                             placeholder={'Reason'}
                             labelClass="text-sm font-medium"
-                          ></HookFormTextField>
+                            className="h-11.25 "
+                          ></SAPPInput>
                         </div>
                       </div>
                     </div>
                     {requestTimeoff &&
                       requestTimeoff?.length > 1 &&
-                      requestStatus.toLowerCase() !==
-                        REQUEST_STATUS.PENDING.value.toLowerCase() && (
+                      (!!requestStatus ||
+                        requestStatus?.toLowerCase() !==
+                          REQUEST_STATUS.PENDING.value.toLowerCase()) && (
                         <div
                           className="mb-6 flex cursor-pointer items-center gap-x-3"
                           onClick={() => removeTimeoff(index)}
@@ -808,64 +828,64 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 )
               })}
 
-            {!isEdit ||
-              (requestStatus?.toLowerCase() ==
-                REQUEST_STATUS.PENDING.value.toLowerCase() &&
-                (requestType == REQUEST_TYPE.WEEKLY_NORM.value &&
-                requestNorm &&
-                requestNorm?.length <= 7 ? (
-                  <div
-                    className="mb-12 flex cursor-pointer items-center gap-x-3"
-                    onClick={() => appendNorm({ date_range: [], quantity: 0 })}
-                  >
-                    <IconPlusSquared />
+            {(!isEdit ||
+              requestStatus?.toLowerCase() ==
+                REQUEST_STATUS.PENDING.value.toLowerCase()) &&
+              (requestType == REQUEST_TYPE.WEEKLY_NORM.value &&
+              requestNorm &&
+              requestNorm?.length <= 7 ? (
+                <div
+                  className="mb-12 flex cursor-pointer items-center gap-x-3"
+                  onClick={() => appendNorm({ quantity: undefined })}
+                >
+                  <IconPlusSquared />
 
-                    <span className="fs-6 fw-medium text-primary">
-                      {capitalizeFirstLetter(
-                        Object.values(REQUEST_TYPE)
-                          .find(
-                            (item) =>
-                              item.value.toLowerCase() ==
-                              requestType?.toLowerCase(),
-                          )
-                          ?.label?.replace('_', ' '),
-                      )}
-                    </span>
-                  </div>
-                ) : null))}
-            {!isEdit ||
-              (requestStatus?.toLowerCase() ==
-                REQUEST_STATUS.PENDING.value.toLowerCase() &&
-                ([
-                  REQUEST_TYPE.TIMEOFF.value,
-                  REQUEST_TYPE.TEACHING_MODE.value,
-                ].includes(requestType) &&
-                requestTimeoff &&
-                requestTimeoff?.length <= 2 ? (
-                  <div
-                    className="mb-12 flex cursor-pointer items-center gap-x-3"
-                    onClick={() =>
-                      appendTimeoff({
-                        lesson: { value: '', label: '' },
-                        reason: '',
-                      })
-                    }
-                  >
-                    <IconPlusSquared />
+                  <span className="font-medium text-yellow-500 ">
+                    {capitalizeFirstLetter(
+                      Object.values(REQUEST_TYPE)
+                        .find(
+                          (item) =>
+                            item.value.toLowerCase() ==
+                            requestType?.toLowerCase(),
+                        )
+                        ?.label?.replace('_', ' '),
+                    )}
+                  </span>
+                </div>
+              ) : null)}
+            {(!isEdit ||
+              requestStatus?.toLowerCase() ==
+                REQUEST_STATUS.PENDING.value.toLowerCase()) &&
+              ([
+                REQUEST_TYPE.TIMEOFF.value,
+                REQUEST_TYPE.TEACHING_MODE.value,
+              ].includes(requestType) &&
+              requestTimeoff &&
+              requestTimeoff?.length <= 2 ? (
+                <div
+                  className="mb-12 flex cursor-pointer items-center gap-x-3"
+                  onClick={() =>
+                    appendTimeoff({
+                      lesson: { value: '', label: '' },
+                      reason: '',
+                    })
+                  }
+                >
+                  <IconPlusSquared />
 
-                    <span className="fs-6 fw-medium text-primary">
-                      {capitalizeFirstLetter(
-                        Object.values(REQUEST_TYPE)
-                          .find(
-                            (item) =>
-                              item.value.toLowerCase() ==
-                              requestType?.toLowerCase(),
-                          )
-                          ?.label?.replace('_', ' '),
-                      )}
-                    </span>
-                  </div>
-                ) : null))}
+                  <span className="font-medium text-yellow-500">
+                    {capitalizeFirstLetter(
+                      Object.values(REQUEST_TYPE)
+                        .find(
+                          (item) =>
+                            item.value.toLowerCase() ==
+                            requestType?.toLowerCase(),
+                        )
+                        ?.label?.replace('_', ' '),
+                    )}
+                  </span>
+                </div>
+              ) : null)}
           </div>
           <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
             <SAPPButtonV2
