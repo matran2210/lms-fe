@@ -5,10 +5,7 @@ import {
   FREQUENCY_UNITS_OBJECT,
 } from 'src/constants'
 
-export type recurringScheduleType = keyof Omit<
-  typeof EVENT_REPEAT_TYPES,
-  'NO_REPEAT' | 'CUSTOM'
->
+export type RecurringScheduleType = keyof typeof EVENT_REPEAT_TYPES
 
 export interface INewSchedule {
   event_name: string
