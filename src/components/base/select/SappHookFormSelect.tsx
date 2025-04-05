@@ -67,16 +67,14 @@ const SappHookFormSelect = ({
                 {...field}
                 options={options}
                 // styles={customStyles}
-                className={`select-single ${className} `}
+                className={`${className} select-single `}
                 classNamePrefix="select"
                 instanceId="selectInstanceId"
                 placeholder={placeholder}
                 isDisabled={isDisabled}
                 isClearable={isClearable}
                 onChange={(selectedOption) => {
-                  // Gọi hàm onChange của field
                   field.onChange(selectedOption)
-                  // Gọi hàm onChange truyền từ props
                   onSelectChange && onSelectChange?.(selectedOption)
                 }}
                 onMenuOpen={() => onSearch?.()}

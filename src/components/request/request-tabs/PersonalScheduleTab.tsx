@@ -1,12 +1,10 @@
 import { Plus } from '@assets/icons'
 
-import SAPPButtonV2 from '@components/base/button/SappButton'
+import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
 import SAPPSelect from '@components/base/select/SAPPSelect'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
-import FormRequest from '@components/my-request/FormRequest'
-import RequestDetail from '@components/my-request/RequestDetail'
 import { useRequestContext } from '@contexts/RequestContext'
 import { RequestAPI } from '@pages/api/request'
 import { cleanParams } from '@utils/common'
@@ -20,6 +18,8 @@ import {
   REQUEST_TYPE,
 } from 'src/constants/request'
 import { IRequest, IRequestFilterForm } from 'src/type'
+import FormRequest from '../request-forms/FormRequest'
+import RequestDetail from '../request-forms/RequestDetail'
 import PersonalScheduleTable from '../request-tables/PersonalScheduleTable'
 
 const PersonalScheduleTab = () => {

@@ -23,6 +23,7 @@ interface IProps {
   showSubmitButton?: boolean
   heightBody?: string
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
+  handleCancel?: any
 }
 
 const SappDrawer = ({
@@ -40,6 +41,7 @@ const SappDrawer = ({
   showSubmitButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
+  handleCancel,
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -52,8 +54,14 @@ const SappDrawer = ({
   }
 
   const handleMaskClick = (e: any) => {
-    if (isOpen && e?.target?.closest('.custom-drawer') === null) {
+    if (
+      isOpen &&
+      e?.target?.closest('.custom-drawer') === null &&
+      !handleCancel
+    ) {
       handleOnClose()
+    } else {
+      handleCancel()
     }
   }
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -81,12 +89,12 @@ const SappDrawer = ({
     <>
       {isOpen && (
         <div
-          className="fixed left-0 top-0 z-[999999] h-full w-full bg-bw-5 bg-opacity-50"
+          className="fixed left-0 top-0 z-[30] h-full w-full bg-bw-5 bg-opacity-50"
           onClick={handleMaskClick}
         ></div>
       )}
       <div
-        className={`fixed right-0 top-0 z-[999999] h-full transform bg-white ${
+        className={`fixed right-0 top-0 z-[30] h-full transform bg-white ${
           widthDrawer ?? 'w-screen lg:w-1/2'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'

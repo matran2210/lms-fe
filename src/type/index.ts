@@ -101,7 +101,13 @@ export interface ISVG {
   height?: number
   className?: string
 }
-
+export enum EDateTime {
+  dateFormat = 'DD/MM/YYYY',
+  weekFormat = 'MM/DD',
+  monthFormat = 'MM/YYYY',
+  fullDate = 'DD/MM/YYYY HH:mm',
+  backendFormat = 'yyyy-MM-dd',
+}
 export * from './common'
 export * from './courses'
 // export * from './exhibit'

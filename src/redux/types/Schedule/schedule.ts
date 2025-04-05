@@ -36,6 +36,7 @@ export interface ICreateSchedulePayload {
     day_of_week?: number[]
     day_of_month?: number[]
     month_of_year?: number[]
+    type: string
   }
 }
 

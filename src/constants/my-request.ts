@@ -9,29 +9,29 @@ export const REQUEST_TYPE = {
   },
   TIMEOFF: {
     value: 'TEACHER_SCHEDULE_TIME_OFF',
-    label: 'Xin nghỉ',
+    label: 'Timeoff',
   },
-  TEACHER_MODE: {
-    value: 'TEACHER_MODE',
-    label: 'Đổi hình thức dạy',
+  TEACHING_MODE: {
+    value: 'TEACHING_MODE',
+    label: 'Teaching mode change',
   },
 }
 export const REQUEST_STATUS = {
   PENDING: {
     value: 'PENDING',
-    label: 'Chờ duyệt',
+    label: 'Pending',
   },
 
   APPROVED: {
     value: 'APPROVED',
-    label: 'Đồng ý',
+    label: 'Approved',
   },
   REJECTED: {
     value: 'REJECTED',
-    label: 'Từ chối',
+    label: 'Reject',
   },
   CANCELLED: {
     value: 'CANCELLED',
-    label: 'Hủy bỏ',
+    label: 'Cancelled',
   },
 }

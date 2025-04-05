@@ -13,6 +13,7 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
             colorPrimary: '#ffb800',
             colorTextPlaceholder: '#9CA3AF',
             controlOutlineWidth: 0,
+            fontWeightStrong: 500,
           },
           Select: {
             colorPrimaryHover: '#ffb800',
