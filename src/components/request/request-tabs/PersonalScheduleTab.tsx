@@ -45,8 +45,8 @@ const PersonalScheduleTab = () => {
     request_name: getValues('request_name')?.trim(),
     type: getValues('type'),
     status: getValues('status'),
-    from_date: getValues('rangeDate')?.[0]?.toISOString(),
-    to_date: getValues('rangeDate')?.[1]?.toISOString(),
+    from_date: getValues('rangeDate')?.[0]?.startOf('day')?.toISOString(),
+    to_date: getValues('rangeDate')?.[1]?.endOf('day')?.toISOString(),
   })
 
   const getParams = () => ({

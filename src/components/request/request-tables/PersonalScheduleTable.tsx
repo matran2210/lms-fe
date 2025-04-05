@@ -1,6 +1,7 @@
 import SAPPBadge from '@components/base/Badge/SAPPBadge'
-import { formatDate } from '@utils/common'
+import { formatDate, formatTime } from '@utils/common'
 import { Table, TablePaginationConfig } from 'antd'
+import dayjs from 'dayjs'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import {
   DATE_TIME_FORMAT,
@@ -12,6 +13,8 @@ import {
 import { IUser } from 'src/redux/types/User/urser'
 import {
   IRequest,
+  isTeacherSchedule,
+  isTeacherWeeklyNorm,
   ITeacherSchedule,
   ITeacherWeeklyNorm,
   TableColumn,
@@ -54,18 +57,40 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
   {
     title: 'Time',
-    dataIndex: 'teacher_schedules',
-    render: (teacherSchedules: ITeacherSchedule[]) => (
-      <ul className="flex flex-col gap-1">
-        {teacherSchedules.map(({ schedule }, index) => (
-          <li key={index}>
-            {formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z') +
-              ' - ' +
-              formatDate(schedule.end_date + 'T' + schedule.end_time + 'Z')}
-          </li>
-        ))}
-      </ul>
-    ),
+    dataIndex: 'time',
+    render: (data: ITeacherSchedule[] | ITeacherWeeklyNorm[]) => {
+      return (
+        <ul className="flex flex-col gap-1">
+          {data?.map((item, index) => {
+            if (isTeacherSchedule(item)) {
+              const startDate = dayjs(
+                item.schedule.start_date + 'T' + item.schedule.start_time + 'Z',
+              )
+              const endDate = dayjs(
+                item.schedule.end_date + 'T' + item.schedule.end_time + 'Z',
+              )
+              return (
+                <li key={index}>
+                  {startDate.isSame(endDate, 'day')
+                    ? `${formatDate(startDate)} ${formatTime(startDate)} - ${formatTime(endDate)}`
+                    : `${formatDate(startDate)} ${formatTime(startDate)} - ${formatDate(endDate)} ${formatTime(endDate)}`}
+                </li>
+              )
+            }
+
+            if (isTeacherWeeklyNorm(item)) {
+              return (
+                <li key={index}>
+                  {formatDate(item.start_date) +
+                    ' - ' +
+                    formatDate(item.end_date)}
+                </li>
+              )
+            }
+          })}
+        </ul>
+      )
+    },
   },
   {
     title: 'Reason',
@@ -143,6 +168,11 @@ const PersonalScheduleTable = ({
       ...item,
       index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
       creator: item.staff_request || item.user_request,
+      time: item.teacher_schedules?.length
+        ? item.teacher_schedules
+        : item.teacher_weekly_norms?.length
+          ? item.teacher_weekly_norms
+          : [],
       method: item.id,
     }))
   }, [requests, current, pageSize])

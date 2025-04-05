@@ -17,10 +17,9 @@ import {
   REQUEST_TYPE,
 } from 'src/constants/request'
 import { IRequest, IRequestFilterForm } from 'src/type'
-import TimeOffTable from '../request-tables/TimeOffTable'
-import SAPPButton from '@components/base/button/SappButton'
 import FormRequest from '../request-forms/FormRequest'
 import RequestDetail from '../request-forms/RequestDetail'
+import TimeOffTable from '../request-tables/TimeOffTable'
 
 const TimeOffTab = () => {
   const [isFirstLoad, setIsFirstLoad] = useState(true)
@@ -45,8 +44,8 @@ const TimeOffTab = () => {
     request_name: getValues('request_name')?.trim(),
     type: getValues('type'),
     status: getValues('status'),
-    from_date: getValues('rangeDate')?.[0]?.toISOString(),
-    to_date: getValues('rangeDate')?.[1]?.toISOString(),
+    from_date: getValues('rangeDate')?.[0]?.startOf('day')?.toISOString(),
+    to_date: getValues('rangeDate')?.[1]?.endOf('day')?.toISOString(),
   })
 
   const getParams = () => ({

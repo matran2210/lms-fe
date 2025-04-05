@@ -24,6 +24,7 @@ export interface IRequest {
   staff_assignee?: string
   staff_request?: Partial<IUser>
   creator: Partial<IUser> // staff_request || user_request
+  time?: ITeacherSchedule[] | ITeacherWeeklyNorm[]
   created_at: string[]
   updated_at?: string
 }
@@ -56,6 +57,8 @@ export interface IClass {
 
 export interface ITeacherWeeklyNorm {
   id: string
+  start_date: string
+  end_date: string
   max_shift: number
 }
 
@@ -64,4 +67,16 @@ export interface IRequestFilterForm {
   type: IOption
   status: IOption
   rangeDate: [Dayjs, Dayjs]
+}
+
+export function isTeacherSchedule(
+  item: ITeacherSchedule | ITeacherWeeklyNorm,
+): item is ITeacherSchedule {
+  return 'schedule' in item
+}
+
+export function isTeacherWeeklyNorm(
+  item: ITeacherSchedule | ITeacherWeeklyNorm,
+): item is ITeacherWeeklyNorm {
+  return 'max_shift' in item
 }

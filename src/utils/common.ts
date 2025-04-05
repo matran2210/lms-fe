@@ -1,9 +1,16 @@
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { DAYS_IN_WEEK } from 'src/constants'
 
 export const formatDate = (
-  date: Date | string,
+  date: Dayjs | Date | string,
   formatStr: string = 'DD/MM/YYYY',
+) => {
+  return dayjs(date).format(formatStr)
+}
+
+export const formatTime = (
+  date: Dayjs | Date | string,
+  formatStr: string = 'HH:mm',
 ) => {
   return dayjs(date).format(formatStr)
 }
