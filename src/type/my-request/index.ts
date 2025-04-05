@@ -49,15 +49,16 @@ interface ITeacher {
   }
 }
 export interface IRecurringSchedule {
-  interval: number
-  frequency: string
-  recurrence_end_date?: Date
+  interval?: number
+  frequency?: string
+  recurrence_end_date?: Date | string
   day_of_week?: number[]
   day_of_month?: number[]
   month_of_year?: number[]
   end_date?: string
-  type: RecurringScheduleType
+  type?: RecurringScheduleType
 }
+
 export interface ITeacherSchedules {
   id: string
   created_at: string
@@ -118,7 +119,7 @@ export interface IBusySchedule {
   end_time?: Dayjs | string
   recurring_schedule: IRecurringSchedule
   description?: string
-  'repeat-type'?: REPEAT_TYPE
+  repeat?: REPEAT_TYPE
   'drawer-repeat-interval'?: string
   'drawer-repeat-frequency'?: string
   'drawer-repeat-day'?: string[]
