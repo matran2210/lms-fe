@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { REQUEST_TYPE } from 'src/constants/my-request'
+import { isPast } from 'date-fns'
 
 // Function to check for overlapping schedules
 export const findLastOverlappingIndex = (
@@ -27,7 +28,7 @@ const sharedFields = z.object({
     .string({ required_error: VALIDATE_REQUIRED })
     .trim()
     .min(1, VALIDATE_REQUIRED),
-  request_type: z.string({ required_error: VALIDATE_REQUIRED }),
+  request_type_value: z.string({ required_error: VALIDATE_REQUIRED }),
   note: z.string().optional(),
 })
 // Request Validation Schema with overlapping schedule check
@@ -69,6 +70,10 @@ const discriminated = z.discriminatedUnion('request_type_value', [
           })
           .refine((data) => data.start_time < data.end_time, {
             message: 'Start time must be before end time',
+            path: ['date_range'],
+          })
+          .refine((data) => isPast(data.start_time), {
+            message: 'Start time must be greater or equal than today',
             path: ['date_range'],
           })
           .refine(

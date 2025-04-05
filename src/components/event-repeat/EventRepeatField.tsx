@@ -70,7 +70,7 @@ const EventRepeatField = ({
   const formattedDefaultValue = useMemo(() => {
     // TODO: Add code to add default values
     return {
-      repeat_type: repeatOption,
+      repeat_type: repeatOption ?? EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
       end_on: initDate,

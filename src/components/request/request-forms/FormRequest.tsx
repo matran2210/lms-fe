@@ -61,6 +61,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     defaultValues: {
       request_name: '',
       request_teacher_id: '',
+      request_busy_schedule: [{ repeat: REPEAT_TYPE.DOES_NOT_REPEAT }],
       request_weekly_norm: [{ quantity: 0 }],
       request_time_off: [{ lesson: { value: '', label: '' }, reason: '' }],
     },
@@ -74,7 +75,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestStatus = watch('request_status_value')
   const currentDate = watch(`request_busy_schedule.0.date_range`)
   const requestBusy = watch('request_busy_schedule')
-  const repeat = watch('request_busy_schedule.0.repeat-type')
+  const requestNorm = watch('request_weekly_norm')
+  const requestTimeoff = watch('request_time_off')
+  const repeat = watch('request_busy_schedule.0.repeat')
   const {
     fields: weeklyNormFields,
     append: appendNorm,
@@ -112,7 +115,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
 
     if (
-      getValues('request_busy_schedule.0.repeat-type') !==
+      getValues('request_busy_schedule.0.repeat') !==
         REPEAT_TYPE.DOES_NOT_REPEAT &&
       !getValues('request_busy_schedule.0.drawer-repeat-end-on')
     ) {
@@ -124,6 +127,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
   const onSubmit = async (data: IRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
+
     if (
       requestType === REQUEST_TYPE.BUSY_SCHEDULE.value &&
       repeat !== REPEAT_TYPE.DOES_NOT_REPEAT &&
@@ -177,7 +181,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
           ) ?? '',
       },
       repeat:
-        data.request_busy_schedule?.[0]['repeat-type'] !==
+        data.request_busy_schedule?.[0]['repeat'] !==
         REPEAT_TYPE.DOES_NOT_REPEAT,
       recurring_schedule,
       description: getValues('request_busy_schedule.0.description') ?? '',
@@ -210,11 +214,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       let response: IResponse<any> = {
         success: false,
         data: null,
-        error: {
-          code: '',
-          message: '',
-          others: '',
-        },
+        error: { code: '', message: '', others: '' },
       }
       // Sending request based on whether it's an edit or create request
       if (params && params !== 'new') {
@@ -347,7 +347,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 value: REPEAT_TYPE.CHOSEN_PATTERN,
               })
               setValue(
-                'request_busy_schedule.0.repeat-type',
+                'request_busy_schedule.0.repeat',
                 REPEAT_TYPE.CHOSEN_PATTERN,
               )
               setValue(
@@ -359,7 +359,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               )
             } else {
               setValue(
-                'request_busy_schedule.0.repeat-type',
+                'request_busy_schedule.0.repeat',
                 REPEAT_TYPE.DOES_NOT_REPEAT,
               )
             }
@@ -398,10 +398,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             setValue(
               'request_time_off',
               data.teacher_schedules.map((item) => ({
-                lesson: {
-                  value: item.schedule.id,
-                  label: item.schedule.name,
-                },
+                lesson: { value: item.schedule.id, label: item.schedule.name },
                 reason: item.request_reason,
               })),
             )
@@ -623,8 +620,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     required
                     label="Start Date - End Date"
                     name={`request_busy_schedule.0.date_range`}
-                    format="YYYY-MM-DD"
-                    showTime={false}
+                    format="YYYY-MM-DD | HH:mm:ss"
+                    showTime={true}
                     // disabledDate={disabledDate}
                     inputClassName="h-11.25 w-full rounded-md"
                     disabled={
@@ -673,7 +670,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                             required
                             label="Start Date - End Date"
                             name={`request_weekly_norm.${index}.date_range`}
-                            format="YYYY-MM-DD | HH:mm:ss"
+                            format="YYYY-MM-DD"
+                            showTime={false}
                             inputClassName="h-11.25 w-full rounded-md"
                             disabledDate={disabledDate}
                             labelClass="text-sm font-medium"
@@ -710,19 +708,24 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="mb-6 flex cursor-pointer items-center gap-x-3"
-                      onClick={() => removeNorm(index)}
-                    >
-                      <IconMinusSquared />
-                      <span className="text-sm font-medium">
-                        Delete Weekly Norm
-                      </span>
-                    </div>
+                    {requestNorm && requestNorm.length > 1 && (
+                      <div
+                        className="mb-6 flex cursor-pointer items-center gap-x-3"
+                        onClick={() => removeNorm(index)}
+                      >
+                        <IconMinusSquared />
+                        <span className="text-sm font-medium">
+                          Delete Weekly Norm
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )
               })}
-            {requestType == REQUEST_TYPE.TIMEOFF.value &&
+            {[
+              REQUEST_TYPE.TIMEOFF.value,
+              REQUEST_TYPE.TEACHING_MODE.value,
+            ].includes(requestType) &&
               timeOffFields.map((item, index) => {
                 return (
                   <div key={index}>
@@ -762,34 +765,59 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="mb-6 flex cursor-pointer items-center gap-x-3"
-                      onClick={() => removeTimeoff(index)}
-                    >
-                      <IconMinusSquared />
+                    {requestTimeoff && requestTimeoff?.length > 1 && (
+                      <div
+                        className="mb-6 flex cursor-pointer items-center gap-x-3"
+                        onClick={() => removeTimeoff(index)}
+                      >
+                        <IconMinusSquared />
 
-                      <span className="text-sm font-medium">
-                        Delete Timeoff
-                      </span>
-                    </div>
+                        <span className="text-sm font-medium">
+                          Delete Timeoff
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )
               })}
 
             {!isEdit &&
-              (requestType &&
-              requestType !== REQUEST_TYPE.BUSY_SCHEDULE.value ? (
+              (requestType == REQUEST_TYPE.WEEKLY_NORM.value &&
+              requestNorm &&
+              requestNorm?.length <= 7 ? (
+                <div
+                  className="mb-12 flex cursor-pointer items-center gap-x-3"
+                  onClick={() => appendNorm({ date_range: [], quantity: 0 })}
+                >
+                  <IconPlusSquared />
+
+                  <span className="fs-6 fw-medium text-primary">
+                    {capitalizeFirstLetter(
+                      Object.values(REQUEST_TYPE)
+                        .find(
+                          (item) =>
+                            item.value.toLowerCase() ==
+                            requestType?.toLowerCase(),
+                        )
+                        ?.label?.replace('_', ' '),
+                    )}
+                  </span>
+                </div>
+              ) : null)}
+            {!isEdit &&
+              ([
+                REQUEST_TYPE.TIMEOFF.value,
+                REQUEST_TYPE.TEACHING_MODE.value,
+              ].includes(requestType) &&
+              requestTimeoff &&
+              requestTimeoff?.length <= 2 ? (
                 <div
                   className="mb-12 flex cursor-pointer items-center gap-x-3"
                   onClick={() =>
-                    requestType == REQUEST_TYPE.BUSY_SCHEDULE.value
-                      ? null
-                      : requestType == REQUEST_TYPE.WEEKLY_NORM.value
-                        ? appendNorm({ date_range: [], quantity: 0 })
-                        : appendTimeoff({
-                            lesson: { value: '', label: '' },
-                            reason: '',
-                          })
+                    appendTimeoff({
+                      lesson: { value: '', label: '' },
+                      reason: '',
+                    })
                   }
                 >
                   <IconPlusSquared />

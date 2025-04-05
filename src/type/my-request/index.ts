@@ -118,7 +118,7 @@ export interface IBusySchedule {
   end_time?: Dayjs | string
   recurring_schedule: IRecurringSchedule
   description?: string
-  'repeat-type'?: REPEAT_TYPE
+  repeat?: REPEAT_TYPE
   'drawer-repeat-interval'?: string
   'drawer-repeat-frequency'?: string
   'drawer-repeat-day'?: string[]
