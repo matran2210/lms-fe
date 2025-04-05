@@ -16,6 +16,7 @@ import { formatRecurringSchedule, getRecurringSchedule } from '@utils/request'
 import { requestValidationSchema } from '@utils/validation/my-request-validation'
 import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
+import { request } from 'http'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
@@ -364,7 +365,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 'request_busy_schedule.0.drawer-repeat-end-on',
                 dayjs(
                   data.teacher_schedules[0].schedule.recurring_pattern_schedule
-                    .end_date,
+                    .recurrence_end_date,
                 ).toDate(),
               )
             } else {
@@ -653,6 +654,11 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     name="request_busy_schedule"
                     defaultDate={dayjs(currentDate?.[1]).toDate()}
                     repeatOption={otherOption}
+                    disabled={
+                      isEdit &&
+                      requestStatus?.toLowerCase() !==
+                        REQUEST_STATUS.PENDING.value.toLowerCase()
+                    }
                   />
                 </div>
                 <div className="mb-6">
@@ -723,17 +729,20 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                         </div>
                       </div>
                     </div>
-                    {requestNorm && requestNorm.length > 1 && (
-                      <div
-                        className="mb-6 flex cursor-pointer items-center gap-x-3"
-                        onClick={() => removeNorm(index)}
-                      >
-                        <IconMinusSquared />
-                        <span className="text-sm font-medium">
-                          Delete Weekly Norm
-                        </span>
-                      </div>
-                    )}
+                    {requestNorm &&
+                      requestNorm.length > 1 &&
+                      requestStatus.toLowerCase() !==
+                        REQUEST_STATUS.PENDING.value.toLowerCase() && (
+                        <div
+                          className="mb-6 flex cursor-pointer items-center gap-x-3"
+                          onClick={() => removeNorm(index)}
+                        >
+                          <IconMinusSquared />
+                          <span className="text-sm font-medium">
+                            Delete Weekly Norm
+                          </span>
+                        </div>
+                      )}
                   </div>
                 )
               })}
@@ -780,76 +789,83 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                         </div>
                       </div>
                     </div>
-                    {requestTimeoff && requestTimeoff?.length > 1 && (
-                      <div
-                        className="mb-6 flex cursor-pointer items-center gap-x-3"
-                        onClick={() => removeTimeoff(index)}
-                      >
-                        <IconMinusSquared />
+                    {requestTimeoff &&
+                      requestTimeoff?.length > 1 &&
+                      requestStatus.toLowerCase() !==
+                        REQUEST_STATUS.PENDING.value.toLowerCase() && (
+                        <div
+                          className="mb-6 flex cursor-pointer items-center gap-x-3"
+                          onClick={() => removeTimeoff(index)}
+                        >
+                          <IconMinusSquared />
 
-                        <span className="text-sm font-medium">
-                          Delete Timeoff
-                        </span>
-                      </div>
-                    )}
+                          <span className="text-sm font-medium">
+                            Delete Timeoff
+                          </span>
+                        </div>
+                      )}
                   </div>
                 )
               })}
 
-            {!isEdit &&
-              (requestType == REQUEST_TYPE.WEEKLY_NORM.value &&
-              requestNorm &&
-              requestNorm?.length <= 7 ? (
-                <div
-                  className="mb-12 flex cursor-pointer items-center gap-x-3"
-                  onClick={() => appendNorm({ date_range: [], quantity: 0 })}
-                >
-                  <IconPlusSquared />
+            {!isEdit ||
+              (requestStatus?.toLowerCase() ==
+                REQUEST_STATUS.PENDING.value.toLowerCase() &&
+                (requestType == REQUEST_TYPE.WEEKLY_NORM.value &&
+                requestNorm &&
+                requestNorm?.length <= 7 ? (
+                  <div
+                    className="mb-12 flex cursor-pointer items-center gap-x-3"
+                    onClick={() => appendNorm({ date_range: [], quantity: 0 })}
+                  >
+                    <IconPlusSquared />
 
-                  <span className="fs-6 fw-medium text-primary">
-                    {capitalizeFirstLetter(
-                      Object.values(REQUEST_TYPE)
-                        .find(
-                          (item) =>
-                            item.value.toLowerCase() ==
-                            requestType?.toLowerCase(),
-                        )
-                        ?.label?.replace('_', ' '),
-                    )}
-                  </span>
-                </div>
-              ) : null)}
-            {!isEdit &&
-              ([
-                REQUEST_TYPE.TIMEOFF.value,
-                REQUEST_TYPE.TEACHING_MODE.value,
-              ].includes(requestType) &&
-              requestTimeoff &&
-              requestTimeoff?.length <= 2 ? (
-                <div
-                  className="mb-12 flex cursor-pointer items-center gap-x-3"
-                  onClick={() =>
-                    appendTimeoff({
-                      lesson: { value: '', label: '' },
-                      reason: '',
-                    })
-                  }
-                >
-                  <IconPlusSquared />
+                    <span className="fs-6 fw-medium text-primary">
+                      {capitalizeFirstLetter(
+                        Object.values(REQUEST_TYPE)
+                          .find(
+                            (item) =>
+                              item.value.toLowerCase() ==
+                              requestType?.toLowerCase(),
+                          )
+                          ?.label?.replace('_', ' '),
+                      )}
+                    </span>
+                  </div>
+                ) : null))}
+            {!isEdit ||
+              (requestStatus?.toLowerCase() ==
+                REQUEST_STATUS.PENDING.value.toLowerCase() &&
+                ([
+                  REQUEST_TYPE.TIMEOFF.value,
+                  REQUEST_TYPE.TEACHING_MODE.value,
+                ].includes(requestType) &&
+                requestTimeoff &&
+                requestTimeoff?.length <= 2 ? (
+                  <div
+                    className="mb-12 flex cursor-pointer items-center gap-x-3"
+                    onClick={() =>
+                      appendTimeoff({
+                        lesson: { value: '', label: '' },
+                        reason: '',
+                      })
+                    }
+                  >
+                    <IconPlusSquared />
 
-                  <span className="fs-6 fw-medium text-primary">
-                    {capitalizeFirstLetter(
-                      Object.values(REQUEST_TYPE)
-                        .find(
-                          (item) =>
-                            item.value.toLowerCase() ==
-                            requestType?.toLowerCase(),
-                        )
-                        ?.label?.replace('_', ' '),
-                    )}
-                  </span>
-                </div>
-              ) : null)}
+                    <span className="fs-6 fw-medium text-primary">
+                      {capitalizeFirstLetter(
+                        Object.values(REQUEST_TYPE)
+                          .find(
+                            (item) =>
+                              item.value.toLowerCase() ==
+                              requestType?.toLowerCase(),
+                          )
+                          ?.label?.replace('_', ' '),
+                      )}
+                    </span>
+                  </div>
+                ) : null))}
           </div>
           <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
             <SAPPButtonV2

@@ -43,8 +43,13 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
         ),
       },
       repeat:
-        schedule?.recurring_pattern_schedule.type !==
+        schedule?.recurring_pattern_schedule?.type !==
         EVENT_REPEAT_TYPES.NO_REPEAT,
+      recurring_schedule: schedule?.recurring_pattern_schedule && {
+        ...schedule?.recurring_pattern_schedule,
+        recurrence_end_date: schedule?.recurring_pattern_schedule.end_date,
+      },
+      description: schedule?.description ?? '',
     }
 
     const formattedWeeklyNormData = {
@@ -65,10 +70,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       request_name: requestDetail?.name ?? '',
       scheduleAdjustments: requestDetail?.teacher_schedules.map(
         (item: { id: string; request_reason: string }) => {
-          return {
-            id: item.id,
-            reason: item.request_reason,
-          }
+          return { id: item.id, reason: item.request_reason }
         },
       ),
       status: status,
@@ -101,6 +103,9 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       toast.error('An error occurred. Please try again.')
     } finally {
       setLoading(false)
+      setOpen(false)
+      reloadPage()
+      router.replace(router.pathname, undefined, { shallow: true })
     }
   }
 

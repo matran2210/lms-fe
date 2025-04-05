@@ -17,6 +17,7 @@ interface IProps {
   repeatOption?: ISelect
   resetRepeat?: boolean
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
+  disabled?: boolean
 }
 
 const HookFormEventRepeat = ({
@@ -32,6 +33,7 @@ const HookFormEventRepeat = ({
   repeatOption,
   resetRepeat,
   setResetRepeat,
+  disabled,
 }: IProps) => {
   return (
     <Controller
@@ -52,6 +54,7 @@ const HookFormEventRepeat = ({
                 repeatOption={repeatOption}
                 resetRepeat={resetRepeat}
                 setResetRepeat={setResetRepeat}
+                disabled={disabled}
               />
 
               <>

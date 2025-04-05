@@ -14,9 +14,15 @@ interface IProps {
   className?: string | undefined
   defaultValue?: IRepeatFrequency
   onChange: (data: IRepeatFrequency) => void
+  disabled?: boolean
 }
 
-const RepeatFrequency = ({ className, defaultValue, onChange }: IProps) => {
+const RepeatFrequency = ({
+  className,
+  defaultValue,
+  onChange,
+  disabled,
+}: IProps) => {
   const [frequency, setFrequency] = useState<IRepeatFrequency>(
     defaultValue || {
       interval: 1,
@@ -65,6 +71,7 @@ const RepeatFrequency = ({ className, defaultValue, onChange }: IProps) => {
         onChange={onNumberChange}
         className="mr-5 flex h-11.25 min-w-[50px] max-w-[55px]"
         name="repeat_every"
+        disabled={disabled}
       />
       <HookFormSelect
         isSearchable={false}
@@ -72,6 +79,7 @@ const RepeatFrequency = ({ className, defaultValue, onChange }: IProps) => {
         value={unitOptions.find((option) => option.value === frequency.unit)}
         onChange={onUnitChange}
         classParent="repeat-unit"
+        isDisabled={disabled}
       />
     </div>
   )

@@ -49,15 +49,16 @@ interface ITeacher {
   }
 }
 export interface IRecurringSchedule {
-  interval: number
-  frequency: string
-  recurrence_end_date?: Date
+  interval?: number
+  frequency?: string
+  recurrence_end_date?: Date | string
   day_of_week?: number[]
   day_of_month?: number[]
   month_of_year?: number[]
   end_date?: string
-  type: RecurringScheduleType
+  type?: RecurringScheduleType
 }
+
 export interface ITeacherSchedules {
   id: string
   created_at: string

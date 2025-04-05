@@ -55,6 +55,7 @@ interface IProps {
   repeatOption?: ISelect
   resetRepeat?: boolean
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
+  disabled?: boolean
 }
 
 const EventRepeatField = ({
@@ -69,6 +70,7 @@ const EventRepeatField = ({
   repeatOption,
   resetRepeat,
   setResetRepeat,
+  disabled,
 }: IProps) => {
   const [repeatType, setRepeatType] = useState<RecurringScheduleType>(
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
@@ -275,6 +277,7 @@ const EventRepeatField = ({
           required
           className="h-11.25"
           defaultValue={EVENT_REPEAT_TYPES.NO_REPEAT}
+          disabled={disabled}
         />
         {is_repeat && (
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
@@ -284,6 +287,7 @@ const EventRepeatField = ({
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
+                  disabled={disabled}
                 />
               </>
             )}
@@ -294,6 +298,7 @@ const EventRepeatField = ({
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
+                  disabled={disabled}
                 />
               </>
             )}
@@ -314,6 +319,7 @@ const EventRepeatField = ({
                   suffixIcon={<SappIcon icon="input_calendar" />}
                   allowClear={false}
                   required
+                  disabled={disabled}
                 />
               )}
             />

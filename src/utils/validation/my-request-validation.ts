@@ -72,7 +72,7 @@ const discriminated = z.discriminatedUnion('request_type_value', [
             message: 'Start time must be before end time',
             path: ['date_range'],
           })
-          .refine((data) => isPast(data.start_time), {
+          .refine((data) => !isPast(data.start_time), {
             message: 'Start time must be greater or equal than today',
             path: ['date_range'],
           })
