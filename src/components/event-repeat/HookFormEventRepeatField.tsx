@@ -1,8 +1,8 @@
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
+import { ISelect } from 'src/type/course'
 import { IEventRepeatFieldValues } from 'src/type/my-calendar'
 import EventRepeatField from './EventRepeatField'
-import { ISelect } from 'src/type/course'
 
 interface IProps {
   name: string
@@ -15,6 +15,8 @@ interface IProps {
   required?: boolean
   skeleton?: boolean
   repeatOption?: ISelect
+  resetRepeat?: boolean
+  setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const HookFormEventRepeat = ({
@@ -28,6 +30,8 @@ const HookFormEventRepeat = ({
   required,
   skeleton,
   repeatOption,
+  resetRepeat,
+  setResetRepeat,
 }: IProps) => {
   return (
     <Controller
@@ -46,6 +50,8 @@ const HookFormEventRepeat = ({
                 onChange={(val) => field.onChange(val)}
                 className={className}
                 repeatOption={repeatOption}
+                resetRepeat={resetRepeat}
+                setResetRepeat={setResetRepeat}
               />
 
               <>

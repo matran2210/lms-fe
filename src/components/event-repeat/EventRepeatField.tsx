@@ -5,7 +5,7 @@ import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form'
 import SappIcon from 'src/common/SappIcon'
 import {
@@ -15,14 +15,15 @@ import {
   REPEAT_ON,
   REPEAT_ON_MAPPED_PAYLOAD,
 } from 'src/constants'
+import { ISelect } from 'src/type/course'
 import {
   IEventRepeatFieldValues,
   IRecurringSchedule,
   IRepeatFrequency,
+  RecurringScheduleType,
 } from 'src/type/my-calendar'
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
-import { ISelect } from 'src/type/course'
 
 dayjs.extend(weekday)
 dayjs.extend(localeData)
@@ -52,6 +53,8 @@ interface IProps {
   required?: boolean
   field?: ControllerRenderProps<any, string>
   repeatOption?: ISelect
+  resetRepeat?: boolean
+  setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const EventRepeatField = ({
@@ -64,7 +67,12 @@ const EventRepeatField = ({
   required,
   field,
   repeatOption,
+  resetRepeat,
+  setResetRepeat,
 }: IProps) => {
+  const [repeatType, setRepeatType] = useState<RecurringScheduleType>(
+    EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
+  )
   const initDate = useMemo(() => defaultDate || new Date(), [defaultDate])
 
   const formattedDefaultValue = useMemo(() => {
@@ -110,6 +118,7 @@ const EventRepeatField = ({
     control,
     setValue: setFormValue,
     getValues: getFromValues,
+    reset,
   } = useForm<IEventRepeatFieldForm>({
     defaultValues: formattedDefaultValue || {
       repeat_type: EVENT_REPEAT_TYPES.NO_REPEAT,
@@ -227,14 +236,24 @@ const EventRepeatField = ({
     return () => subscription.unsubscribe()
   }, [watch])
 
+  useEffect(() => {
+    if (resetRepeat && setResetRepeat) {
+      reset()
+      setResetRepeat(false)
+    }
+  }, [resetRepeat])
+
+  useEffect(() => {
+    setRepeatType(watch('repeat_type') as RecurringScheduleType)
+  }, [watch('repeat_type')])
+
   // Watch form values
-  const repeat_type = watch('repeat_type')
   const repeat_frequency = watch('repeat_frequency')
 
-  const is_repeat = repeat_type !== EVENT_REPEAT_TYPES.NO_REPEAT
-  const is_custom_repeat = repeat_type === EVENT_REPEAT_TYPES.CUSTOM
+  const is_repeat = repeatType !== EVENT_REPEAT_TYPES.NO_REPEAT
+  const is_custom_repeat = repeatType === EVENT_REPEAT_TYPES.CUSTOM
   const repeat_on_visible =
-    repeat_type === EVENT_REPEAT_TYPES.CUSTOM &&
+    repeatType === EVENT_REPEAT_TYPES.CUSTOM &&
     repeat_frequency.unit === FREQUENCY_UNITS.WEEK
 
   return (
@@ -255,6 +274,7 @@ const EventRepeatField = ({
           }
           required
           className="h-11.25"
+          defaultValue={EVENT_REPEAT_TYPES.NO_REPEAT}
         />
         {is_repeat && (
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
