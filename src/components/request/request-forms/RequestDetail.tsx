@@ -35,12 +35,12 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       event_name: requestDetail?.name ?? '',
       status: status,
       range: {
-        start_time: dayjs(
-          `${schedule?.start_date}${schedule?.start_time}`,
-        ).format('YYYY-MM-DDTHH:mm:ss'),
-        end_time: dayjs(`${schedule?.end_date}${schedule?.end_time}`).format(
-          'YYYY-MM-DDTHH:mm:ss',
-        ),
+        start_time: dayjs
+          .utc(`${schedule?.start_date}${schedule?.start_time}`)
+          .format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs
+          .utc(`${schedule?.end_date}${schedule?.end_time}`)
+          .format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       repeat:
         schedule?.recurring_pattern_schedule?.type !==
@@ -58,8 +58,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       status: status,
       time: requestDetail?.teacher_weekly_norms?.map((item: IWeeklyNorms) => {
         return {
-          start_date: dayjs(`${item.start_date}`).format('YYYY-MM-DDTHH:mm:ss'),
-          end_date: dayjs(`${item.start_date}`).format('YYYY-MM-DDTHH:mm:ss'),
+          start_date: dayjs(`${item.start_date}`).format(
+            'YYYY-MM-DDT16:59:59Z',
+          ),
+          end_date: dayjs(`${item.start_date}`).format('YYYY-MM-DDT16:59:59Z'),
           quantity: item.max_shift,
         }
       }),

@@ -176,13 +176,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       event_name: data.request_name,
       range: {
         start_time:
-          dayjs(getValues('request_busy_schedule.0.date_range.0')).format(
-            'YYYY-MM-DDTHH:mm:ss',
-          ) ?? '',
+          dayjs
+            .utc(getValues('request_busy_schedule.0.date_range.0'))
+            .format('YYYY-MM-DDTHH:mm:ssZ') ?? '',
         end_time:
-          dayjs(getValues('request_busy_schedule.0.date_range.1')).format(
-            'YYYY-MM-DDTHH:mm:ss',
-          ) ?? '',
+          dayjs
+            .utc(getValues('request_busy_schedule.0.date_range.1'))
+            .format('YYYY-MM-DDTHH:mm:ssZ') ?? '',
       },
       repeat:
         data.request_busy_schedule?.[0]['repeat'] !==
@@ -198,8 +198,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       status: data.request_status_value,
       time: data.request_weekly_norm?.map((item: IWeeklyNorm) => {
         return {
-          start_date: dayjs(item.start_time).format('YYYY-MM-DDTHH:mm:ss'),
-          end_date: dayjs(item.end_time).format('YYYY-MM-DDTHH:mm:ss'),
+          start_date: dayjs(item.start_time).format('YYYY-MM-DDT16:59:59Z'),
+          end_date: dayjs(item.end_time).format('YYYY-MM-DDT16:59:59Z'),
           quantity: item.quantity,
         }
       }),
@@ -287,6 +287,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
     return !(isMonday || isSunday)
   }
+
   const loadData = async () => {
     if (params && params !== 'new') {
       try {
@@ -341,20 +342,23 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
           }
 
           setValue('note', data.description ?? '')
-
           if (data.type == REQUEST_TYPE.BUSY_SCHEDULE.value) {
             setDetailSchedule(data.teacher_schedules[0].schedule)
             setValue('request_busy_schedule.0.date_range', [
-              new Date(
-                data.teacher_schedules[0].schedule.start_date +
-                  'T' +
-                  data.teacher_schedules[0].schedule.start_time,
-              ),
-              new Date(
-                data.teacher_schedules[0].schedule.end_date +
-                  'T' +
-                  data.teacher_schedules[0].schedule.end_time,
-              ),
+              dayjs
+                .utc(
+                  data.teacher_schedules[0].schedule.start_date +
+                    data.teacher_schedules[0].schedule.start_time,
+                )
+                .local()
+                .toDate(),
+              dayjs
+                .utc(
+                  data.teacher_schedules[0].schedule.end_date +
+                    data.teacher_schedules[0].schedule.end_time,
+                )
+                .local()
+                .toDate(),
             ])
 
             if (
