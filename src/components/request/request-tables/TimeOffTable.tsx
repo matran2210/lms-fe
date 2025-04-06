@@ -112,8 +112,8 @@ const columnsTitles: TableColumn<IRequest>[] = [
   {
     title: '',
     dataIndex: 'method',
-    render: (value: string) => {
-      return <RequestActionCell id={value} />
+    render: (item: IRequest) => {
+      return <RequestActionCell id={item.id} status={item.status} />
     },
     fixed: 'right',
   },
@@ -137,7 +137,7 @@ const TimeOffTable = ({
       ...item,
       index: index + 1,
       creator: item.staff_request || item.user_request,
-      method: item.id,
+      method: item,
     }))
   }, [requests])
 

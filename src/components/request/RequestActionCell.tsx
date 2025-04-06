@@ -2,13 +2,15 @@ import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
 import { useRequestContext } from '@contexts/RequestContext'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction } from 'react'
+import { REQUEST_STATUS } from 'src/constants'
+import { RequestStatus } from 'src/type'
 
 interface Iprops {
   id: string
+  status: RequestStatus
 }
 
-const RequestActionCell = ({ id }: Iprops) => {
+const RequestActionCell = ({ id, status }: Iprops) => {
   const router = useRouter()
   const { setIsOpenViewModal, setOpenAddModal, isOpenAddModal } =
     useRequestContext()
@@ -17,13 +19,15 @@ const RequestActionCell = ({ id }: Iprops) => {
       <Link href={`${router.pathname}?id=${id}`}>
         <div onClick={() => setIsOpenViewModal(true)}>View</div>
       </Link>
-      <Link
-        href={`${router.pathname}?id=${id}`}
-        onClick={() => setOpenAddModal(true)}
-      >
-        <div onClick={() => setOpenAddModal(true)}>Edit</div>
-      </Link>
-      <div>Delete</div>
+      {status === REQUEST_STATUS.PENDING && (
+        <Link
+          href={`${router.pathname}?id=${id}`}
+          onClick={() => setOpenAddModal(true)}
+        >
+          <div onClick={() => setOpenAddModal(true)}>Edit</div>
+        </Link>
+      )}
+      {status === REQUEST_STATUS.PENDING && <div>Delete</div>}
     </SAPPDropdown>
   )
 }

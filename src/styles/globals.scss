@@ -1292,3 +1292,6 @@ select:focus {
 .ant-tabs-tab.ant-tabs-tab-active > div {
   @apply text-heading !important;
 }
+.ant-select span.ant-select-selection-item {
+  @apply font-medium;
+}
