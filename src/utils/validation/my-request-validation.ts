@@ -54,7 +54,7 @@ const discriminated = z.discriminatedUnion('request_type_value', [
         z
           .object({
             date_range: z
-              .array(z.string())
+              .array(z.union([z.string(), z.date()]))
               .min(2, 'Date range must have exactly 2 dates'),
             quantity: z
               .number({ required_error: VALIDATE_REQUIRED })

@@ -485,6 +485,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
     if (router.query.tab === 'timeoff')
       return [REQUEST_TYPE.TIMEOFF, REQUEST_TYPE.TEACHING_MODE]
+    else {
+      return [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
+    }
   }, [])
 
   return (
