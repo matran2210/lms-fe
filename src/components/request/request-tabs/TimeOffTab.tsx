@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
+  DRAWER_REQUEST_TYPE,
   OPTIONS_REQUEST_STATUS,
   OPTIONS_TIME_OFF_REQUEST_TYPE,
   REQUEST_TYPE,
@@ -181,6 +182,7 @@ const TimeOffTab = () => {
           open={isOpenAddModal}
           setOpen={setOpenAddModal}
           reloadPage={handleFilter}
+          formType={DRAWER_REQUEST_TYPE.TIMEOFF}
         />
       ) : null}
       {isOpenViewModal ? (

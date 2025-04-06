@@ -137,7 +137,7 @@ export interface IWeeklyNorm {
   date_range?: Date[] | string[]
   start_time?: Dayjs | string
   end_time?: Dayjs | string
-  quantity: number
+  quantity: number | undefined
 }
 export interface ITimeoffRequestDetailResponse {
   request_name: string
