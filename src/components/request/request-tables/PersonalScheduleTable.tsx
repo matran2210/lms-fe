@@ -97,9 +97,15 @@ const columnsTitles: TableColumn<IRequest>[] = [
     dataIndex: 'teacher_schedules',
     render: (teacherSchedules: ITeacherSchedule[]) => (
       <ul className="flex flex-col gap-1">
-        {teacherSchedules.map(({ request_reason }, index) => (
-          <li key={index}>{request_reason}</li>
-        ))}
+        {teacherSchedules.map(({ schedule: { description } }, index) =>
+          description ? (
+            <li key={index}>{description}</li>
+          ) : (
+            <li key={index} className="text-accent-default">
+              _ _ _ _ _ _ _ _ _ _ _
+            </li>
+          ),
+        )}
       </ul>
     ),
   },
@@ -108,9 +114,15 @@ const columnsTitles: TableColumn<IRequest>[] = [
     dataIndex: 'teacher_weekly_norms',
     render: (teacher_weekly_norms: ITeacherWeeklyNorm[]) => (
       <ul className="flex flex-col gap-1 text-center">
-        {teacher_weekly_norms.map(({ max_shift }, index) => (
-          <li key={index}>{max_shift}</li>
-        ))}
+        {teacher_weekly_norms.map(({ max_shift }, index) =>
+          max_shift ? (
+            <li key={index}>{max_shift}</li>
+          ) : (
+            <li key={index} className="text-accent-default">
+              _ _ _ _ _ _
+            </li>
+          ),
+        )}
       </ul>
     ),
   },
@@ -138,10 +150,15 @@ const columnsTitles: TableColumn<IRequest>[] = [
     ),
   },
   {
+    title: 'Note',
+    dataIndex: 'description',
+    render: (value: string) => <div className="text-secondary">{value}</div>,
+  },
+  {
     title: '',
     dataIndex: 'method',
-    render: (value: string) => {
-      return <RequestActionCell id={value} />
+    render: (item: IRequest) => {
+      return <RequestActionCell id={item.id} status={item.status} />
     },
     fixed: 'right',
   },
@@ -173,7 +190,7 @@ const PersonalScheduleTable = ({
         : item.teacher_weekly_norms?.length
           ? item.teacher_weekly_norms
           : [],
-      method: item.id,
+      method: item,
     }))
   }, [requests, current, pageSize])
 

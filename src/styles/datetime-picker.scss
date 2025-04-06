@@ -40,9 +40,11 @@
 }
 .ant-picker .ant-picker-input > input {
   font-weight: 500 !important;
-  font-family: Inter, Helvetica, 'sans-serif' !important;
   color: var(--bs-gray-700) !important;
   line-height: 21px !important;
+  font-size: 14px !important;
+}
+.ant-picker div.ant-picker-input > input::placeholder {
   font-size: 14px !important;
 }
 .ant-picker-dropdown

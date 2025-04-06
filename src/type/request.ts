@@ -4,9 +4,9 @@ import { IUser } from 'src/redux/types/User/urser'
 import { IMetaData } from '.'
 import { IOption } from './common'
 
-type RequestType = keyof typeof REQUEST_TYPE
+export type RequestType = keyof typeof REQUEST_TYPE
 
-type RequestStatus = keyof typeof REQUEST_STATUS
+export type RequestStatus = keyof typeof REQUEST_STATUS
 
 export interface IRequestList {
   meta_data: IMetaData
@@ -26,7 +26,8 @@ export interface IRequest {
   creator: Partial<IUser> // staff_request || user_request
   time?: ITeacherSchedule[] | ITeacherWeeklyNorm[]
   created_at: string[]
-  updated_at?: string
+  updated_at: string
+  description: string
 }
 
 export interface ITeacherSchedule {
@@ -43,6 +44,7 @@ export interface ISchedule {
   start_time: string
   end_time: string
   class_schedule: IClassSchedule[]
+  description: string
 }
 
 export interface IClassSchedule {
