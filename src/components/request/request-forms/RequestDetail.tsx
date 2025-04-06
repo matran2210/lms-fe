@@ -157,9 +157,13 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           message="Bạn có chắc chắn muốn hủy không"
           btnSubmitTile={
             requestDetail?.status.toLowerCase() !==
-            RequestStatus.APPROVED.toLowerCase()
-              ? 'Approved'
-              : 'Edit'
+            RequestStatus.PENDING.toLowerCase()
+              ? 'Edit'
+              : ''
+          }
+          showSubmitButton={
+            requestDetail?.status.toLowerCase() !==
+            RequestStatus.PENDING.toLowerCase()
           }
           footer={hasActionButton}
           handleSubmit={() => {

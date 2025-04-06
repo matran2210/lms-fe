@@ -183,7 +183,6 @@ const TimeOffTab = () => {
           open={isOpenAddModal}
           setOpen={setOpenAddModal}
           reloadPage={handleFilter}
-          formType={DRAWER_REQUEST_TYPE.TIMEOFF}
         />
       ) : null}
       {isOpenViewModal ? (

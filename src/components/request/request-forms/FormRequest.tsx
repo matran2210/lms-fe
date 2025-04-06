@@ -19,7 +19,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import { request } from 'http'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
@@ -43,10 +43,9 @@ export interface IProps {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   reloadPage: () => void
-  formType: DRAWER_REQUEST_TYPE
 }
 
-function FormRequest({ open, setOpen, reloadPage, formType }: IProps) {
+function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const router = useRouter()
   const params = router.query?.id
   const isEdit = params && params !== 'new' ? true : false
@@ -346,8 +345,16 @@ function FormRequest({ open, setOpen, reloadPage, formType }: IProps) {
           if (data.type == REQUEST_TYPE.BUSY_SCHEDULE.value) {
             setDetailSchedule(data.teacher_schedules[0].schedule)
             setValue('request_busy_schedule.0.date_range', [
-              new Date(data.teacher_schedules[0].schedule.start_date + 'Z'),
-              new Date(data.teacher_schedules[0].schedule.end_date + 'Z'),
+              new Date(
+                data.teacher_schedules[0].schedule.start_date +
+                  'T' +
+                  data.teacher_schedules[0].schedule.start_time,
+              ),
+              new Date(
+                data.teacher_schedules[0].schedule.end_date +
+                  'T' +
+                  data.teacher_schedules[0].schedule.end_time,
+              ),
             ])
 
             if (
@@ -472,6 +479,14 @@ function FormRequest({ open, setOpen, reloadPage, formType }: IProps) {
       confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: handleClose }),
     )
   }
+  const requestTypeOption = useMemo(() => {
+    if (router.query.tab === 'personal')
+      return [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
+
+    if (router.query.tab === 'timeoff')
+      return [REQUEST_TYPE.TIMEOFF, REQUEST_TYPE.TEACHING_MODE]
+  }, [])
+
   return (
     <ConfigProvider theme={ANT_THEME_CONFIG}>
       <Drawer
@@ -519,11 +534,7 @@ function FormRequest({ open, setOpen, reloadPage, formType }: IProps) {
                 required
                 onChange={(e) => setValue('request_type_value', e)}
                 className="h-11.25 text-base font-semibold"
-                options={
-                  formType == DRAWER_REQUEST_TYPE.PERSONAL_SCHEDULE
-                    ? [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
-                    : [REQUEST_TYPE.TIMEOFF, REQUEST_TYPE.TEACHING_MODE]
-                }
+                options={requestTypeOption ?? []}
                 disabled={isEdit}
                 labelClass="text-sm font-medium"
               />
@@ -861,7 +872,7 @@ function FormRequest({ open, setOpen, reloadPage, formType }: IProps) {
                 REQUEST_TYPE.TEACHING_MODE.value,
               ].includes(requestType) &&
               requestTimeoff &&
-              requestTimeoff?.length <= 2 ? (
+              requestTimeoff?.length <= 1 ? (
                 <div
                   className="mb-12 flex cursor-pointer items-center gap-x-3"
                   onClick={() =>
