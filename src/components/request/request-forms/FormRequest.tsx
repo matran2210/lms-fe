@@ -205,11 +205,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       }),
       note: data.note?.length ? data.note : null,
     }
+
     const formattedTimeoffData = {
       request_name: data.request_name,
       teacher_id: user.id,
       scheduleAdjustments: data.request_time_off?.map((item) => ({
-        id: item.lesson.value,
+        id: item.lesson,
         reason: item.reason,
       })),
       status: data.request_status_value,
