@@ -189,7 +189,6 @@ const PersonalScheduleTab = () => {
           open={isOpenAddModal}
           setOpen={setOpenAddModal}
           reloadPage={handleFilter}
-          formType={DRAWER_REQUEST_TYPE.PERSONAL_SCHEDULE}
         />
       ) : null}
       {isOpenViewModal ? (
