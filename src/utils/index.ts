@@ -10,6 +10,7 @@ import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { DATE_FORMAT } from 'src/constants'
 
 dayjs.extend(utc)
 
@@ -373,23 +374,36 @@ export const removeHtmlTags = (htmlString?: string) => {
   if (!htmlString) return ''
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
-export const formatDateFromUTC = (date: string) =>
-  dayjs.utc(date).local().format('DD/MM/YYYY')
+
+/**
+ * @description Chuyển đổi một chuỗi ngày UTC thành chuỗi ngày địa phương được định dạng.
+ * @param {string} date - Chuỗi ngày UTC cần chuyển đổi.
+ * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày địa phương trả về.
+ * @return {string} - Chuỗi ngày địa phương đã được định dạng.
+ */
+export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
+  if (date && dayjs.utc(date).isValid()) {
+    return dayjs.utc(date).local().format(format)
+  }
+  return '-'
+}
+
+/**
+ * @description Chuyển đổi giá trị enum của loại bài kiểm tra thành chuỗi dễ đọc.
+ * @param {string} quizType - Giá trị enum của loại bài kiểm tra.
+ * @return {string} - Chuỗi mô tả loại bài kiểm tra dễ đọc.
+ */
 export const convertQuizType = (quizType: string) => {
-  // Convert the enum value to a readable string
   return quizType
-    .split('_') // Split the string by underscores
-    .map(
-      (
-        word,
-        index, // Capitalize the first letter of each word
-      ) =>
-        index === 0
-          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-          : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    .split('_')
+    .map((word, index) =>
+      index === 0
+        ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
     )
     .join(' ')
 }
+
 export * from './formatNumber'
 
 export const containsKeyword = (input: unknown, keyword?: string): boolean => {
@@ -402,11 +416,12 @@ export const containsKeyword = (input: unknown, keyword?: string): boolean => {
  * @param {string} input - Chuỗi HTML đầu vào.
  * @return {string} - Chuỗi HTML đã được định dạng lại với ngày tháng hiển thị theo định dạng DD/MM/YYYY.
  */
+
 export const formatNotificationHTML = (input: string): string => {
   return input.replace(
     /<strong\s+data-time\s*=\s*["']([^"']+)["']\s*><\/strong>/g,
     (match, dateTime) => {
-      const formattedDate = dayjs.utc(dateTime).local().format('DD/MM/YYYY')
+      const formattedDate = dayjs.utc(dateTime).local().format(DATE_FORMAT.DATE)
       return `<strong>${formattedDate}</strong>`
     },
   )

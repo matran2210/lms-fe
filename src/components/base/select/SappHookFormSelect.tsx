@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React, { ReactNode } from 'react'
 import { Control, Controller } from 'react-hook-form'
 import Select from 'react-select'
@@ -24,6 +25,8 @@ interface IProps {
   isClearable?: boolean
   onMenuClose?: () => void
   onBlur?: () => void
+  isSelectCustom?: boolean
+  onSearch?: (value: string) => void
 }
 
 const SappHookFormSelect = ({
@@ -44,6 +47,8 @@ const SappHookFormSelect = ({
   isClearable,
   onMenuClose,
   onBlur,
+  isSelectCustom = false,
+  onSearch,
 }: IProps) => {
   return (
     <>
@@ -69,7 +74,11 @@ const SappHookFormSelect = ({
                 {...field}
                 options={options}
                 styles={customStyles}
-                className={`select-single ${className}`}
+                className={clsx(
+                  'select-single',
+                  isSelectCustom && 'select-single-custom',
+                  className,
+                )}
                 classNamePrefix="select"
                 instanceId="selectInstanceId"
                 placeholder={placeholder}
@@ -87,6 +96,7 @@ const SappHookFormSelect = ({
                 onMenuScrollToBottom={onMenuScrollToBottom}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                onInputChange={onSearch}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>

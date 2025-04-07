@@ -257,9 +257,9 @@ const Course = ({
     [CLASS_USER_STATUS.COMPLETED]: 'Completed',
     [CLASS_USER_STATUS.IN_PROGRESS]: 'In progress',
     [CLASS_USER_STATUS.CANCELED]: '',
-  } as any
+  } as const
 
-  const classUserStatus = student?.status
+  const classUserStatus = student?.status as keyof typeof statusMap
   const showStatus = statusMap[classUserStatus]
   const enableCourse =
     determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'

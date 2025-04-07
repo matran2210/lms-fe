@@ -64,7 +64,7 @@
 }
 
 .select-single .select__single-value {
-  @apply text-[#99A1B7];
+  @apply text-gray-11;
 }
 
 // style css for result popup
@@ -148,6 +148,6 @@
     @apply h-10 rounded-md;
   }
   .select__placeholder {
-    @apply text-sm font-medium text-[#99A1B7];
+    @apply text-sm font-medium text-gray-11;
   }
 }

@@ -9,8 +9,6 @@ interface IProps {
   okClick: () => void
   disabled: boolean
   loading?: boolean
-  classNameSubmit?: string
-  classNameCancel?: string
 }
 
 const SappFilterButton = ({
@@ -20,14 +18,12 @@ const SappFilterButton = ({
   titleSubmit,
   disabled,
   loading,
-  classNameSubmit,
-  classNameCancel,
 }: IProps) => {
   return (
     <div className="flex">
       <ButtonSecondary
         title={titleReset}
-        className={`${classNameCancel ?? ''} me-4 h-10 rounded-md`}
+        className="me-4 h-10 rounded-md"
         onClick={resetClick}
         disabled={disabled}
         size="small"
@@ -38,7 +34,7 @@ const SappFilterButton = ({
         disabled={disabled}
         loading={loading}
         size="small"
-        className={`${classNameSubmit ?? ''}rounded-md h-10`}
+        className="h-10 rounded-md"
       />
     </div>
   )

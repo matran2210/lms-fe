@@ -2,7 +2,7 @@ interface IProps {
   title: string
   percent?: number
 }
-const ClassProgress = ({ title, percent }: IProps) => {
+const ClassProgress = ({ title, percent = 0 }: IProps) => {
   return (
     <div className="flex w-48 flex-col items-center sm:w-72">
       <div className="mt-auto flex w-full justify-between">

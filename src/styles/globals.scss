@@ -9,7 +9,7 @@
 @import 'activity.scss';
 @import './components/_calculator.scss';
 @import './components/_select.scss';
-
+@import './components/_table.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -1141,7 +1141,7 @@ td.py-5.px-3.sapp-table-quiz {
   @apply mb-0;
 }
 .ant-menu {
-  background-color: transparent !important;
+  @apply bg-blue-2;
 }
 
 .ant-menu-item-selected {
@@ -1153,9 +1153,7 @@ td.py-5.px-3.sapp-table-quiz {
 }
 
 .ant-layout-sider-children {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  @apply flex h-full flex-col;
 }
 td.sapp-border {
   @apply border-0;
