@@ -5,6 +5,7 @@ import SearchForm from '@components/mycourses/Search'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
@@ -13,7 +14,6 @@ import { ANIMATION } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import { CoursesAPI } from 'src/pages/api/courses'
 import SelectExamPopup from './popups/SelectExamPopup'
-import PopupModalTest from '@components/survey/PopupModalTest'
 
 const DEFAULT_PAGESIZE = 18
 
