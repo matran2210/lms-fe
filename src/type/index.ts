@@ -19,7 +19,7 @@ export interface IButtonProps {
   link?: string
   disabled?: boolean
   loading?: boolean
-  size?: 'small' | 'medium' | 'lager' | 'extra'
+  size?: IButtonSize
   full?: boolean
   name?: string
   type?: 'button' | 'reset' | 'submit'
@@ -33,7 +33,14 @@ export interface IButtonProps {
   toolTipTitle?: string
   icon?: React.ReactNode
 }
-
+export type IButtonSize = 'small' | 'medium' | 'lager' | 'extra'
+export type IButtonVariant = 'primary' | 'secondary' | 'custom'
+export interface IButtonIconProps extends IButtonProps {
+  variant?: IButtonVariant
+  icon?: 'plus' | 'search' | 'arrow'
+  position?: 'start' | 'end'
+  iconColorProps?: string
+}
 export interface ITabs {
   link: string
   title: string
@@ -51,7 +58,7 @@ export type IButtonCancelSubmitProps = {
   colorCancel?: IButtonColors
   showOkButton?: boolean
   showCancelButton?: boolean
-  size?: 'small' | 'medium' | 'lager' | 'extra'
+  size?: IButtonSize
   revertFunction?: boolean
 }
 declare global {

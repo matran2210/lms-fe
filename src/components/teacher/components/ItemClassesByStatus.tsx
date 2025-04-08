@@ -140,6 +140,7 @@ const ItemClassesByStatus = ({
 
   const determineButtonToShow = checkStatusCourse() as any
   const classUserStatus = classes?.status
+  const isProgress = classUserStatus === CLASS_TEACHER_STATUS.IN_PROGRESS
   const showStatus = statusMap[classUserStatus]
   const enableCourse =
     determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'
@@ -253,12 +254,13 @@ const ItemClassesByStatus = ({
               variant="secondary"
               full
               position="end"
-              className="border border-[#1F2937] hover:border-[#FFB800] hover:bg-[#FFB800] hover:text-white"
-              onClick={() => {
-                if (classes?.id) {
-                  router.push(`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`)
-                }
-              }}
+              iconColorProps={isProgress ? '#ffb800' : '#374151'}
+              className={
+                isProgress
+                  ? 'border border-primary text-primary'
+                  : 'border border-gray-800'
+              }
+              link={`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`}
             />
           ) : (
             <div className="action relative flex h-8 items-center justify-end"></div>

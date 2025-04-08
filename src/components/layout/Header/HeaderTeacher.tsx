@@ -3,11 +3,11 @@ import { Typography, Divider } from 'antd'
 
 const { Title } = Typography
 
-interface HeaderProps {
+interface IHeaderProps {
   title: string
 }
 
-export default function HeaderTeacher({ title }: HeaderProps) {
+export default function HeaderTeacher({ title }: IHeaderProps) {
   return (
     <>
       <Title level={4} className="text-gray-700">

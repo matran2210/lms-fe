@@ -15,7 +15,7 @@ const ChapterTestFilter: React.FC<ChapterTestFilterProps> = ({ control }) => {
         name="search"
         placeholder={'Search student'}
         placeholderIcon={<SearchIcon />}
-        inputClassName="placeholder:text-sm placeholder:text-[#99A1B7] placeholder:font-medium"
+        inputClassName="placeholder:text-sm placeholder:text-gray-11 placeholder:font-medium"
         style={{
           borderRadius: '6px',
           height: 40,
@@ -24,8 +24,7 @@ const ChapterTestFilter: React.FC<ChapterTestFilterProps> = ({ control }) => {
       <SappHookFormSelect
         control={control}
         name="status"
-        required
-        className="select-single-custom w-full"
+        isSelectCustom
         placeholder="Status"
         options={QUIZ_ATTEMPT_STATUS_AUTO}
       />

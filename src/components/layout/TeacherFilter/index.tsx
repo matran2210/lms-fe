@@ -19,10 +19,10 @@ const LayoutFilter = ({
   className,
 }: IProps) => {
   return (
-    <div className={`main bg-white ${className}`}>
+    <div className={`bg-white ${className}`}>
       {listFilter}
       <div className="mt-4 flex justify-between">
-        <div className="flex ">
+        <div className="flex">
           <SappFilterButton
             titleReset="Reset"
             titleSubmit="Search"

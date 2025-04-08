@@ -837,11 +837,11 @@ const SAPPVideo = ({
                       <time ref={durationRef}>00:00</time>
                     </div>
                   </div>
-                  <div className="video-progress relative h-1.5 w-full">
+                  <div className="relative h-1.5 w-full text-justify">
                     <progress
                       className="pointer-events-none absolute top-0 h-1.5 w-full"
                       ref={progressBarRef}
-                    ></progress>
+                    />
                     <input
                       className="seek absolute top-0 z-10 m-0 w-full cursor-pointer"
                       min="0"
@@ -923,7 +923,7 @@ const SAPPVideo = ({
                         ></path>
                       </svg>
                       <>
-                        <div className="settings-control-popup absolute -right-8 bottom-5 hidden w-44 rounded bg-overlay-control py-1 text-center text-white text-white">
+                        <div className="settings-control-popup absolute -right-8 bottom-5 hidden w-44 rounded bg-overlay-control py-1 text-center text-white">
                           {!activeQuality && !activeSpeed && !activeCC && (
                             <div className="px-4 py-1">
                               <div

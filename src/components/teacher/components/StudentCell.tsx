@@ -1,13 +1,13 @@
 import { FC } from 'react'
 
 type Props = {
-  data?: string | number
+  dataColumn?: string | number
 }
 
-const StudentCell: FC<Props> = ({ data }) => (
+const StudentCell: FC<Props> = ({ dataColumn }) => (
   <div className="flex items-center">
     <div className="flex flex-col">
-      <span className="text-gray-800">{data ?? '-'}</span>
+      <span className="text-gray-800">{dataColumn ?? '-'}</span>
     </div>
   </div>
 )

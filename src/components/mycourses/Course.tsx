@@ -3,7 +3,7 @@ import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
-import { truncateString } from '@utils/index'
+import { clearStylesHtml, truncateString } from '@utils/index'
 import { Tooltip } from 'antd'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
 import { round } from 'lodash'
@@ -257,9 +257,9 @@ const Course = ({
     [CLASS_USER_STATUS.COMPLETED]: 'Completed',
     [CLASS_USER_STATUS.IN_PROGRESS]: 'In progress',
     [CLASS_USER_STATUS.CANCELED]: '',
-  } as any
+  } as const
 
-  const classUserStatus = student?.status
+  const classUserStatus = student?.status as keyof typeof statusMap
   const showStatus = statusMap[classUserStatus]
   const enableCourse =
     determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'
@@ -356,7 +356,7 @@ const Course = ({
                   title={
                     <p
                       dangerouslySetInnerHTML={{
-                        __html: course?.description,
+                        __html: clearStylesHtml(course?.description),
                       }}
                     />
                   }
@@ -365,7 +365,7 @@ const Course = ({
                 >
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: course?.description,
+                      __html: clearStylesHtml(course?.description),
                     }}
                     className={`text-bas h-24 ${
                       enableCourse ? 'text-bw-1' : 'text-gray-2 '
@@ -375,7 +375,7 @@ const Course = ({
               ) : (
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: course?.description,
+                    __html: clearStylesHtml(course?.description),
                   }}
                   className={`text-bas h-24 ${
                     enableCourse ? 'text-bw-1' : 'text-gray-2 '
