@@ -431,8 +431,7 @@ const TestModal = ({
       title={
         <div className="flex items-center justify-between gap-2">
           <div>{TEST_TYPE[data?.course_section_type]}</div>
-          {data?.quiz?.is_limited &&
-            !!data?.quiz?.quiz_timed &&
+          {!!data?.quiz?.quiz_timed &&
             !!remainingTimeLastAttempt.current &&
             renderShowOkButton() &&
             renderOkButtonCaption() === 'Continue' && (
