@@ -180,11 +180,11 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         start_time:
           dayjs
             .utc(getValues('request_busy_schedule.0.date_range.0'))
-            .format('YYYY-MM-DDTHH:mm:ssZ') ?? '',
+            .format() ?? '',
         end_time:
           dayjs
             .utc(getValues('request_busy_schedule.0.date_range.1'))
-            .format('YYYY-MM-DDTHH:mm:ssZ') ?? '',
+            .format() ?? '',
       },
       repeat:
         data.request_busy_schedule?.[0]['repeat'] !==
@@ -196,12 +196,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
     const formattedWeeklyNormData = {
       request_name: data.request_name,
-      request_type: data.request_type?.value,
+      request_type: data.request_type_value,
       status: getValues('request_status')?.value,
       time: data.request_weekly_norm?.map((item: IWeeklyNorm) => {
         return {
-          start_date: dayjs(item.start_time).format('YYYY-MM-DDT16:59:59Z'),
-          end_date: dayjs(item.end_time).format('YYYY-MM-DDT16:59:59Z'),
+          start_date: dayjs(item.start_time).format('YYYY-MM-DD[T]16:59:59[Z]'),
+          end_date: dayjs(item.end_time).format('YYYY-MM-DD[T]16:59:59[Z]'),
           quantity: item.quantity,
         }
       }),
@@ -793,8 +793,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     </div>
                     {requestNorm &&
                       requestNorm.length > 1 &&
-                      requestStatus?.toLowerCase() !==
-                        REQUEST_STATUS.PENDING.value.toLowerCase() && (
+                      (!requestStatus ||
+                        requestStatus?.toLowerCase() ==
+                          REQUEST_STATUS.PENDING.value.toLowerCase()) && (
                         <div
                           className="mb-6 flex cursor-pointer items-center gap-x-3"
                           onClick={() => removeNorm(index)}
@@ -870,8 +871,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     </div>
                     {requestTimeoff &&
                       requestTimeoff?.length > 1 &&
-                      (!!requestStatus ||
-                        requestStatus?.toLowerCase() !==
+                      (!requestStatus ||
+                        requestStatus?.toLowerCase() ==
                           REQUEST_STATUS.PENDING.value.toLowerCase()) && (
                         <div
                           className="mb-6 flex cursor-pointer items-center gap-x-3"
@@ -880,7 +881,15 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                           <IconMinusSquared />
 
                           <span className="text-sm font-medium">
-                            Delete Timeoff
+                            {capitalizeFirstLetter(
+                              Object.values(REQUEST_TYPE)
+                                .find(
+                                  (item) =>
+                                    item.value.toLowerCase() ==
+                                    requestType?.toLowerCase(),
+                                )
+                                ?.label?.replace('_', ' '),
+                            )}
                           </span>
                         </div>
                       )}
