@@ -158,7 +158,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: '',
     dataIndex: 'method',
     render: (item: IRequest) => {
-      return <RequestActionCell id={item.id} status={item.status} />
+      return <RequestActionCell item={item} />
     },
     fixed: 'right',
   },

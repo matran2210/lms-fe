@@ -2,7 +2,6 @@ import { fetcher } from '@services/requestV2'
 import { IResponse } from 'src/redux/types'
 import {
   IBusyRequestDetailResponse,
-  IBusySchedule,
   IRecurringSchedule,
   IWeeklyNorm,
 } from 'src/type/my-request'
@@ -42,11 +41,11 @@ export class MyRequestAPI {
       description,
       status,
     }: {
-      event_name: string
-      repeat: boolean
-      range: { start_time: string | Date; end_time: string | Date }
+      event_name?: string
+      repeat?: boolean
+      range?: { start_time: string | Date; end_time: string | Date }
       recurring_schedule?: IRecurringSchedule | undefined
-      description: string
+      description?: string
       status: string | undefined
     },
   ): Promise<any> {
@@ -92,8 +91,8 @@ export class MyRequestAPI {
       time,
       note,
     }: {
-      request_name: string
-      request_type: string
+      request_name?: string
+      request_type?: string
       status: string | undefined
       time?: IWeeklyNorm[]
       note?: string | null
@@ -135,7 +134,7 @@ export class MyRequestAPI {
       status,
       scheduleAdjustments,
     }: {
-      request_name: string
+      request_name?: string
       status?: string
       scheduleAdjustments?: { id: string; reason: string }[]
     },

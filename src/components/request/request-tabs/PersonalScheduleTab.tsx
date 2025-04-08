@@ -13,7 +13,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
-  DRAWER_REQUEST_TYPE,
   OPTIONS_PERSONAL_SCHEDULE_REQUEST_TYPE,
   OPTIONS_REQUEST_STATUS,
   REQUEST_TYPE,
@@ -37,6 +36,8 @@ const PersonalScheduleTab = () => {
     isOpenAddModal,
     setIsOpenViewModal,
     isOpenViewModal,
+    isReFetch,
+    setIsReFetch,
   } = useRequestContext()
   const router = useRouter()
 
@@ -102,7 +103,8 @@ const PersonalScheduleTab = () => {
     )
 
     isFirstLoad && setIsFirstLoad(false)
-  }, [pagination.current, pagination.pageSize])
+    isReFetch && setIsReFetch(false)
+  }, [pagination.current, pagination.pageSize, isReFetch])
 
   const handleChangeParams = (params: Record<string, any>) => {
     const queryString = new URLSearchParams(params).toString()

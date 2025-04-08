@@ -28,6 +28,7 @@ export interface IRequest {
   created_at: string[]
   updated_at: string
   description: string
+  repeat: boolean
 }
 
 export interface ITeacherSchedule {
@@ -43,7 +44,7 @@ export interface ISchedule {
   end_date: string
   start_time: string
   end_time: string
-  class_schedule: IClassSchedule[]
+  class_schedule: IClassSchedule
   description: string
 }
 
