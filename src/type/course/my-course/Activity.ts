@@ -60,6 +60,7 @@ export interface IActivity {
     total_course_sections: number
     total_course_sections_completed: number
   }[]
+  is_preview_locked?: boolean
 }
 
 export interface ITab {
