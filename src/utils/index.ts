@@ -426,3 +426,13 @@ export const formatNotificationHTML = (input: string): string => {
     },
   )
 }
+
+export const clearStylesHtml = (htmlContent: string) => {
+  if (htmlContent) {
+    // Loại bỏ các thẻ <style> và thuộc tính style inline
+    return htmlContent
+      .replace(/<style.*?>.*?<\/style>/gi, '') // Xóa các thẻ style
+      .replace(/\sstyle=".*?"/gi, '') // Xóa các thuộc tính inline style
+  }
+  return ''
+}
