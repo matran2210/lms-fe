@@ -881,7 +881,15 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                           <IconMinusSquared />
 
                           <span className="text-sm font-medium">
-                            Delete Timeoff
+                            {capitalizeFirstLetter(
+                              Object.values(REQUEST_TYPE)
+                                .find(
+                                  (item) =>
+                                    item.value.toLowerCase() ==
+                                    requestType?.toLowerCase(),
+                                )
+                                ?.label?.replace('_', ' '),
+                            )}
                           </span>
                         </div>
                       )}
