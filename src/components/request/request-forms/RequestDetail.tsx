@@ -158,21 +158,25 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           }}
           message="Bạn có chắc chắn muốn hủy không"
           btnSubmitTile={
-            requestDetail?.status.toLowerCase() !==
+            requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
               ? 'Edit'
               : ''
           }
           showSubmitButton={
-            requestDetail?.status.toLowerCase() !==
+            requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
           }
+          confirmOnClose
           footer={hasActionButton}
           handleSubmit={() => {
             handleChangeRequestStatus(RequestStatus.APPROVED)
           }}
           handleCancel={() => {
             handleChangeRequestStatus(RequestStatus.CANCEL)
+          }}
+          onClickOutside={() => {
+            setOpen(false)
           }}
         >
           <div className="mb-7">
@@ -226,7 +230,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               <tr>
                 <td className="text-sm  text-bw-9">Approver</td>
                 <td className="text-sm">
-                  {requestDetail?.staff_request?.detail?.full_name}{' '}
+                  {requestDetail?.staff_assignee?.detail?.full_name}{' '}
                 </td>
               </tr>
               <tr>

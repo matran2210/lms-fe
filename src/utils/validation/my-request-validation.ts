@@ -130,15 +130,37 @@ const discriminated = z.discriminatedUnion('request_type_value', [
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
       .min(1, VALIDATE_REQUIRED),
-    request_type_value:
-      z.literal(REQUEST_TYPE.TIMEOFF.value) ||
-      z.literal(REQUEST_TYPE.TEACHING_MODE.value),
+    request_type_value: z.literal(REQUEST_TYPE.TIMEOFF.value),
 
-    // class_code: z.string({ required_error: VALIDATE_REQUIRED }).trim().min(1, VALIDATE_REQUIRED),
+    class_code: z
+      .string({ required_error: VALIDATE_REQUIRED })
+      .trim()
+      .min(1, VALIDATE_REQUIRED),
     request_time_off: z
       .array(
         z.object({
-          lesson: z.string({ required_error: VALIDATE_REQUIRED }),
+          lessonId: z.string({ required_error: VALIDATE_REQUIRED }),
+          reason: z.string({ required_error: VALIDATE_REQUIRED }),
+        }),
+      )
+      .min(1, 'At least one schedule is required')
+      .max(2, 'Maximum number of schedules is 2'),
+  }),
+  z.object({
+    request_name: z
+      .string({ required_error: VALIDATE_REQUIRED })
+      .trim()
+      .min(1, VALIDATE_REQUIRED),
+    request_type_value: z.literal(REQUEST_TYPE.TEACHING_MODE.value),
+
+    class_code: z
+      .string({ required_error: VALIDATE_REQUIRED })
+      .trim()
+      .min(1, VALIDATE_REQUIRED),
+    request_time_off: z
+      .array(
+        z.object({
+          lessonId: z.string({ required_error: VALIDATE_REQUIRED }),
 
           reason: z.string({ required_error: VALIDATE_REQUIRED }),
         }),

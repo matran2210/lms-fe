@@ -23,7 +23,8 @@ export interface IRequest {
   note?: string
 }
 export interface ITimeOff {
-  lesson: { value: string; label?: string }
+  lesson: string | { value: string; label?: string }
+  lessonId: string
   reason: string
 }
 interface ISchedule {
