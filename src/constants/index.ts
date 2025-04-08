@@ -429,6 +429,7 @@ export const REPEAT_ON_MAPPED_PAYLOAD = {
 } as const
 
 export const CONFIRM_CANCEL = 'Are you sure you want to cancel?'
+export const CONFIRM_DELETE = 'Are you sure you want to delete?'
 
 export const CALENDAR_SIDEBAR_SAVE_BUTTON = 'Save'
 export const CALENDAR_SIDEBAR_CANCEL_BUTTON = 'Cancel'
