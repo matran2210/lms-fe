@@ -127,7 +127,8 @@ export default function TableContainer({ params }: IProps) {
           data={
             index +
             1 +
-            ((pagination?.current || 1) - 1) * (pagination?.pageSize || 10)
+            ((pagination?.current || 1) - DEFAULT_PAGE_NUMBER) *
+              (pagination?.pageSize || DEFAULT_PAGE_SIZE)
           }
           className="!text-gray-400"
         />
@@ -136,14 +137,14 @@ export default function TableContainer({ params }: IProps) {
     {
       title: 'Class code',
       render: (record: IScheduleRequestItem) => (
-        <TableCell data={record?.class.code ?? ''} className="!text-gray-400" />
+        <TableCell data={record?.class?.code} className="!text-gray-400" />
       ),
     },
     {
       title: 'Program',
       render: (record: IScheduleRequestItem) => (
         <TableCell
-          data={record?.subject.course_category.name ?? ''}
+          data={record?.subject?.course_category?.name}
           className="cursor-pointer hover:underline"
           onClick={() => Action(record)}
         />
@@ -152,13 +153,13 @@ export default function TableContainer({ params }: IProps) {
     {
       title: 'Subject',
       render: (record: IScheduleRequestItem) => (
-        <TableCell data={record?.subject.code ?? ''} />
+        <TableCell data={record?.subject?.code} />
       ),
     },
     {
       title: 'Construction mode',
       render: (record: IScheduleRequestItem) => (
-        <TableCell data={record?.type ?? ''} />
+        <TableCell data={record?.type} />
       ),
     },
     {
@@ -167,7 +168,7 @@ export default function TableContainer({ params }: IProps) {
         <TableCell
           data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : '-'} - ${
             record?.schedule_time.end_date
-              ? formatDateFromUTC(record?.schedule_time.end_date ?? '')
+              ? formatDateFromUTC(record?.schedule_time.end_date)
               : '-'
           }`}
         />
@@ -177,7 +178,7 @@ export default function TableContainer({ params }: IProps) {
       title: 'Sent Date',
       render: (record: IScheduleRequestItem) => (
         <TableCell
-          data={dayjs(record?.created_at).format('DD/MM/YYYY')}
+          data={formatDateFromUTC(record?.created_at)}
           className="!text-gray-400"
         />
       ),
@@ -186,7 +187,7 @@ export default function TableContainer({ params }: IProps) {
       title: 'CX Admin',
       render: (record: IScheduleRequestItem) => (
         <TableCell
-          data={record?.staff_detail.full_name ?? ''}
+          data={record?.staff_detail?.full_name}
           className="!text-gray-400"
         />
       ),
@@ -195,7 +196,7 @@ export default function TableContainer({ params }: IProps) {
       title: 'Update Date',
       render: (record: IScheduleRequestItem) => (
         <TableCell
-          data={dayjs(record?.updated_at).format('DD/MM/YYYY')}
+          data={formatDateFromUTC(record?.updated_at)}
           className="!text-gray-400"
         />
       ),
@@ -209,7 +210,7 @@ export default function TableContainer({ params }: IProps) {
               <span
                 className={`text-12 rounded-[4px] px-2 py-1 font-semibold ${statusColor(record)}`}
               >
-                {record?.status ?? ''}
+                {record?.status}
               </span>
             }
           />
@@ -220,13 +221,20 @@ export default function TableContainer({ params }: IProps) {
       title: '',
       fixed: 'right',
       render: (record: IScheduleRequestItem) => (
-        <>
-          <ActionCell handleClickView={() => Action(record)} />
-        </>
+        <ActionCell handleClickView={() => Action(record)} />
       ),
     },
   ]
-
+  /**
+   * Hàm cập nhật trạng thái yêu cầu lịch trình.
+   * Gửi yêu cầu lên server để cập nhật trạng thái yêu cầu lịch trình.
+   *
+   * @param {object} params - Thông tin cập nhật trạng thái yêu cầu lịch trình.
+   * @param {string} params.requestId - ID của yêu cầu lịch trình cần cập nhật trạng thái.
+   * @param {string} params.type - Trạng thái yêu cầu lịch trình cần cập nhật.
+   * @param {string} [params.reason] - Lý do cập nhật trạng thái yêu cầu lịch trình (không bắt buộc).
+   * @param {function} [params.callback] - Hàm callback sẽ được gọi sau khi cập nhật trạng thái thành công (không bắt buộc).
+   */
   const handleUpdateStatus = async ({
     requestId,
     type,
@@ -234,14 +242,36 @@ export default function TableContainer({ params }: IProps) {
     callback = () => {},
   }: UpdateStatusParams) => {
     try {
+      /**
+       * Tạo payload để gửi yêu cầu lên server.
+       *
+       * @param {object} payload - Thông tin cập nhật trạng thái yêu cầu lịch trình.
+       * @param {string} payload.reason - Lý do cập nhật trạng thái yêu cầu lịch trình.
+       * @param {string} payload.status - Trạng thái yêu cầu lịch trình cần cập nhật.
+       */
       const payload: StatusRequestScheduleParams = {
         reason: reason,
         status: type,
       }
+      /**
+       * Gửi yêu cầu lên server để cập nhật trạng thái yêu cầu lịch trình.
+       *
+       * @param {string} requestId - ID của yêu cầu lịch trình cần cập nhật trạng thái.
+       * @param {object} payload - Thông tin cập nhật trạng thái yêu cầu lịch trình.
+       */
       await TeacherAPI.updateStatusRequestSchedule(requestId, payload)
+      /**
+       * Gọi hàm callback sau khi cập nhật trạng thái thành công.
+       */
       callback()
+      /**
+       * Mở modal thành công sau khi cập nhật trạng thái thành công.
+       */
       setOpenSuccessModal(true)
-      refetch()
+      /**
+       * Refetch dữ liệu sau khi cập nhật trạng thái thành công.
+       */
+      other?.refetch()
     } catch (error) {
     } finally {
     }

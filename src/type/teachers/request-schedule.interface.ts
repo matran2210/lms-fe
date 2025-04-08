@@ -75,11 +75,10 @@ export interface ScheduleRequestDetail {
   updated_at: string
   type: string
   status: string
-  description: any
+  description: string | null
   due_date: string
   name: string
   teacher_schedule_id: string
-  room: any
   class: ClassInfo
   subject: SubjectInfo
   schedules: ScheduleTimeItem[]
@@ -93,8 +92,28 @@ export interface CourseCategory {
 
 export interface ScheduleTimeItem {
   id: string
-  start_date: any
-  end_date: any
+  start_date: string | null
+  end_date: string | null
   start_time: string
   end_time: string
+}
+
+export interface APIListScheduleRequestResponse {
+  success: boolean
+  data: ResponseData
+}
+export interface ResponseData {
+  data: IScheduleRequestItem[]
+  meta: Meta
+}
+export interface Meta {
+  total_pages: number
+  total_records: number
+  page_index: number
+  page_size: number
+}
+
+export interface APIDetailScheduleRequestResponse {
+  success: boolean
+  data: ScheduleRequestDetail
 }

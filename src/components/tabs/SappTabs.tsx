@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { ITabsTeacher } from 'src/type'
 
 const SappTabs = ({
@@ -11,8 +12,9 @@ const SappTabs = ({
   selected: number
   bordered?: boolean
 }) => {
+  const borderedClass = bordered ? 'border-b border-gray-100' : ''
   return (
-    <ul className={`flex ${bordered ? 'border-b border-gray-100' : ''}`}>
+    <ul className={clsx('flex', borderedClass)}>
       {tabs.map((tab) => {
         const isActive = tab.id === selected
         return (

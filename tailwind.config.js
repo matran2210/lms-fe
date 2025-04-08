@@ -70,6 +70,7 @@ module.exports = {
           info: '#3964EA',
           success: '#397839',
           error: '#B90E0A',
+          cancel: '#D20306',
         },
         bw: {
           1: '#050505',
@@ -94,6 +95,7 @@ module.exports = {
           9: '#374151',
           10: '#F2F4F7',
           11: '#99A1B7',
+          12: '#9CA3AF',
           900: '#181C32',
         },
         green: {

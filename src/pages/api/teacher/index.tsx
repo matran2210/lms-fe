@@ -1,11 +1,8 @@
 import { fetcher } from '@services/requestV2'
 import { buildQueryString } from '@utils/index'
-import url from 'src/redux/services/Course/MyCourse/Test/url'
-import { apiURL } from 'src/redux/services/httpService'
-import { IResponse } from 'src/redux/types'
-import { IScoreDetails } from 'src/type'
-import { ICourseSubjectList } from 'src/type/classes'
 import {
+  APIDetailScheduleRequestResponse,
+  APIListScheduleRequestResponse,
   RequestScheduleParams,
   StatusRequestScheduleParams,
 } from 'src/type/teachers/request-schedule.interface'
@@ -104,9 +101,11 @@ export class TeacherAPI {
    * @returns danh sách yêu cầu thực hành
    */
 
-  static getListRequestSchedule(payload: RequestScheduleParams): Promise<any> {
+  static getListRequestSchedule(
+    payload: RequestScheduleParams,
+  ): Promise<APIListScheduleRequestResponse> {
     const queryString = buildQueryString(payload)
-    return fetcher(`${apiURL}/request-schedules/teachings?${queryString}`)
+    return fetcher(`/request-schedules/teachings?${queryString}`)
   }
 
   /**
@@ -114,8 +113,10 @@ export class TeacherAPI {
    * @param id: string - biến xác định id yêu cầu thực hành
    * @returns chi tiết yêu cầu thực hành
    */
-  static getRequestScheduleById(id: string): Promise<any> {
-    return fetcher(`${apiURL}/request-schedules/teaching/${id}`)
+  static getRequestScheduleById(
+    id: string,
+  ): Promise<APIDetailScheduleRequestResponse> {
+    return fetcher(`/request-schedules/teaching/${id}`)
   }
 
   /**
@@ -128,8 +129,8 @@ export class TeacherAPI {
   static updateStatusRequestSchedule(
     id: string,
     payload: StatusRequestScheduleParams,
-  ): Promise<any> {
-    return fetcher(`${apiURL}/request-schedules/teaching/${id}`, {
+  ): Promise<void> {
+    return fetcher(`/request-schedules/teaching/${id}`, {
       data: payload,
       method: 'PUT',
     })

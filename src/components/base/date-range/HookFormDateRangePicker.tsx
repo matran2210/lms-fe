@@ -1,5 +1,5 @@
 import React from 'react'
-import { DatePicker, Space } from 'antd'
+import { DatePicker, Skeleton } from 'antd'
 const { RangePicker } = DatePicker
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
@@ -52,7 +52,11 @@ const HookFormDateRangePicker = ({
       render={({ field, fieldState: { error } }) => {
         return (
           <div className="h-full w-full">
-            {!skeleton ? (
+            {skeleton ? (
+              <div className="flex items-center">
+                <Skeleton.Button active shape={`default`} block size="large" />
+              </div>
+            ) : (
               <div>
                 <RangePicker
                   {...field}
@@ -62,17 +66,12 @@ const HookFormDateRangePicker = ({
                   allowClear
                   size="large"
                 />
-
-                <>
-                  {error?.message && (
-                    <div>
-                      <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
-                    </div>
-                  )}
-                </>
+                {error?.message && (
+                  <div>
+                    <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="flex items-center">Loading...</div>
             )}
           </div>
         )

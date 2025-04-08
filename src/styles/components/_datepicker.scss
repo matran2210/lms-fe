@@ -1,7 +1,7 @@
 .sapp-daterange-picker {
   .ant-picker-input {
     > input {
-      font-weight: 500;
+      @apply font-semibold;
     }
   }
 }

@@ -7,6 +7,7 @@ import {
 } from 'src/type/teachers/request-schedule.interface'
 import { sappFormatDate } from '@utils/index'
 import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
+import InfoItem from 'src/components/teacher/my-request/schedule-request/InfoItem'
 
 interface IProps {
   dataDetail: ScheduleRequestDetail
@@ -30,41 +31,24 @@ const PrimaryInformation = ({
       children: (
         <div className="flex flex-col gap-5 py-4">
           {/* Class Code */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <span className="text-sm text-[#9CA3AF]">Class Code</span>
-            </div>
-            <div className="col-span-2">{selectedRequest?.class.code}</div>
-          </div>
+          <InfoItem title="Class Code" value={selectedRequest?.class?.code} />
           {/* Program */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <span className="text-sm text-[#9CA3AF]">Program</span>
-            </div>
-            <div className="col-span-2">
-              {selectedRequest?.subject.course_category.name}
-            </div>
-          </div>
+          <InfoItem
+            title="Program"
+            value={selectedRequest?.subject.course_category?.name}
+          />
           {/* Subject */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <span className="text-sm text-[#9CA3AF]">Subject</span>
-            </div>
-            <div className="col-span-2">{selectedRequest?.subject.code}</div>
-          </div>
+          <InfoItem title="Subject" value={selectedRequest?.subject?.code} />
           {/* Construction Mode */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <span className="text-sm text-[#9CA3AF]">Construction Mode</span>
-            </div>
-            <div className="col-span-2">
-              <span className="text-[#025EFF]">{selectedRequest?.type}</span>
-            </div>
-          </div>
+          <InfoItem
+            title="Construction Mode"
+            value={dataDetail?.class?.instruction_mode}
+            isLoading={isLoading}
+          />
           {/* Schedule */}
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <span className="text-sm text-[#9CA3AF]">Schedule</span>
+              <span className="text-sm text-gray-12">Schedule</span>
             </div>
             <div className="col-span-2">
               {isLoading ? (
@@ -83,37 +67,21 @@ const PrimaryInformation = ({
             </div>
           </div>
           {/* Address */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <span className="text-sm text-[#9CA3AF]">Classroom Address</span>
-            </div>
-            <div className="col-span-2">{''}</div>
-          </div>
+          <InfoItem title="Classroom Address" value={''} />
           {/* Start and end date */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <span className="text-sm text-[#9CA3AF]">
-                Start Date - End Date
-              </span>
-            </div>
-            <div className="col-span-2">
-              {`${sappFormatDate(selectedRequest?.schedule_time.start_date) ?? '-'} - ${sappFormatDate(selectedRequest?.schedule_time.end_date) ?? '-'}`}
-            </div>
-          </div>
+          <InfoItem
+            title="Start Date - End Date"
+            value={`${sappFormatDate(selectedRequest?.schedule_time.start_date) ?? '-'} - ${sappFormatDate(selectedRequest?.schedule_time.end_date) ?? '-'}`}
+          />
           {/* Sent Date */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <span className="text-sm text-[#9CA3AF]">Sent Date</span>
-            </div>
-            <div className="col-span-2">
-              {sappFormatDate(selectedRequest?.created_at)}
-            </div>
-          </div>
+          <InfoItem
+            title="Sent Date"
+            value={sappFormatDate(selectedRequest?.created_at) ?? '-'}
+          />
         </div>
       ),
     },
   ]
   return <Collapse defaultActiveKey={['1']} items={items} />
 }
-
 export default PrimaryInformation

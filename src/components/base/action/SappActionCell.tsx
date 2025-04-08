@@ -1,3 +1,4 @@
+import ActionItem from './ActionItem'
 import TableActionCell from './TableActionCell'
 
 interface IProps {
@@ -28,36 +29,21 @@ const SappActionCell = ({
   return (
     <TableActionCell>
       <div className="flex flex-col">
-        {isShowViewButton && (
-          <div
-            className="cursor-pointer px-3 py-2 transition"
-            onClick={handleClickView}
-          >
-            <div className="px-3 text-sm font-medium text-gray-700 hover:text-primary">
-              {labelButtonView}
-            </div>
-          </div>
-        )}
-        {isShowEditButton && (
-          <div
-            className="cursor-pointer px-3 py-2 transition"
-            onClick={handleClickEdit}
-          >
-            <div className="px-3 text-sm font-medium text-gray-700 hover:text-primary">
-              {labelButtonEdit}
-            </div>
-          </div>
-        )}
-        {isShowDeleteButton && (
-          <div
-            className="cursor-pointer px-3 py-2 transition"
-            onClick={handleClickDelete}
-          >
-            <div className="px-3 text-sm font-medium text-gray-700 hover:text-primary">
-              {labelButtonDelete}
-            </div>
-          </div>
-        )}
+        <ActionItem
+          title={labelButtonView}
+          onClick={handleClickView}
+          isShow={isShowViewButton}
+        />
+        <ActionItem
+          title={labelButtonEdit}
+          onClick={handleClickEdit}
+          isShow={isShowEditButton}
+        />
+        <ActionItem
+          title={labelButtonDelete}
+          onClick={handleClickDelete}
+          isShow={isShowDeleteButton}
+        />
       </div>
     </TableActionCell>
   )

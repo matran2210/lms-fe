@@ -375,6 +375,12 @@ export const removeHtmlTags = (htmlString?: string) => {
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
 
+/**
+ * @description Chuyển đổi một chuỗi ngày thành chuỗi ngày được định dạng.
+ * @param {string} date - Chuỗi ngày cần chuyển đổi.
+ * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày trả về.
+ * @return {string} - Chuỗi ngày đã được định dạng.
+ */
 export const sappFormatDate = (date?: string, format = 'DD/MM/YYYY') =>
   date ? dayjs(date).format(format) : undefined
 
