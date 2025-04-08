@@ -6,7 +6,7 @@ import { IButtonIconProps, IButtonSize, IButtonVariant } from 'src/type'
 const sizeStyles: Record<IButtonSize, string> = {
   small: 'px-4 py-2 text-sm',
   medium: 'px-5 py-2.5 text-base',
-  large: 'px-6 py-3 text-lg',
+  lager: 'px-6 py-3 text-lg',
   extra: 'px-6 py-3 text-lg',
 }
 
@@ -38,7 +38,7 @@ const ButtonIconSapp = ({
     ${isPrimary ? variantStyles.primary : ''}
     ${isSecondary ? variantStyles.secondary : ''}
     ${full ? 'w-full' : 'inline-flex'} 
-    ${size === 'small' ? sizeStyles.small : size === 'medium' ? sizeStyles.medium : sizeStyles.large}
+    ${size === 'small' ? sizeStyles.small : size === 'medium' ? sizeStyles.medium : sizeStyles.lager}
     ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
     ${className}
   `

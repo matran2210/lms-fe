@@ -32,7 +32,7 @@ export interface IButtonProps {
   showTooltip?: boolean
   toolTipTitle?: string
 }
-export type IButtonSize = 'small' | 'medium' | 'large' | 'extra'
+export type IButtonSize = 'small' | 'medium' | 'lager' | 'extra'
 export type IButtonVariant = 'primary' | 'secondary' | 'custom'
 export interface IButtonIconProps extends IButtonProps {
   variant?: IButtonVariant
