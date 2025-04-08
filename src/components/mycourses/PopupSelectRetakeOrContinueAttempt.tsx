@@ -1,10 +1,4 @@
-import { AlertIcon, ClockIcon } from '@assets/icons'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import SappButton from '@components/base/button/SappButton'
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
-import { formatTime } from '@components/common/timer'
 import { Radio, RadioChangeEvent } from 'antd'
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 
@@ -48,7 +42,7 @@ const PopupSelectRetakeOrContinueAttempt = ({
   return (
     <SappModalV3
       open={open}
-      okButtonCaption="Start"
+      okButtonCaption="Continue"
       cancelButtonCaption={'Cancel'}
       onOk={handleOK}
       handleCancel={() => {
