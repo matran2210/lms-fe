@@ -4,10 +4,11 @@ export const PageLink = {
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
   CASE_STUDY: '/casestudy',
-  TEACHERS: '/teacher',
+  TEACHERS: '/teachers',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
   TEACHER_MY_REQUEST: '/teachers/my-request',
+  TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -293,6 +294,15 @@ export enum TEST_ATTEMPT_TYPE {
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
 
+export enum QUIZ_ATTEMPT_STATUS {
+  SUBMITTED = 'SUBMITTED',
+  UN_SUBMITTED = 'UN_SUBMITTED',
+  IN_PROGRESS = 'IN_PROGRESS',
+}
+export enum DATE_FORMAT {
+  DATE_TIME = 'HH:mm | DD/MM/YYYY',
+  DATE = 'DD/MM/YYYY',
+}
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './form'

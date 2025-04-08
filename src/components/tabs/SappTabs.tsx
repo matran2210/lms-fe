@@ -23,9 +23,8 @@ const SappTabs = ({
           >
             <span
               className={`relative inline-block w-fit cursor-pointer pb-4 text-base font-medium transition-colors
-                  ${isActive ? 'text-primary' : 'text-gray-400'}
-                  after:absolute after:bottom-[-1px] after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300
-                  ${isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'}`}
+                          ${isActive ? 'text-primary after:w-full' : 'text-gray-400 after:w-0 hover:after:w-full'}
+                          after:absolute after:bottom-[-1px] after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300`}
             >
               {tab.title}
             </span>

@@ -1,24 +1,20 @@
-import {
-  PlusOutlined,
-  SearchOutlined,
-  ArrowRightOutlined,
-} from '@ant-design/icons'
+import { ArrowIcon } from '@assets/icons'
+import Link from 'next/link'
+import { useState } from 'react'
+import { IButtonIconProps, IButtonSize, IButtonVariant } from 'src/type'
 
-interface IButtonProps {
-  title: string
-  onClick?: () => void
-  className?: string
-  link?: string
-  size?: 'small' | 'medium' | 'large'
-  full?: boolean
-  disabled?: boolean
-  loading?: boolean
-  type?: 'button' | 'submit' | 'reset'
-  variant?: 'primary' | 'secondary' | 'custom'
-  icon?: 'plus' | 'search' | 'arrow'
-  position?: 'start' | 'end'
+const sizeStyles: Record<IButtonSize, string> = {
+  small: 'px-4 py-2 text-sm',
+  medium: 'px-5 py-2.5 text-base',
+  lager: 'px-6 py-3 text-lg',
+  extra: 'px-6 py-3 text-lg',
 }
 
+const variantStyles: Record<IButtonVariant, string> = {
+  primary: 'bg-primary text-white hover:bg-primary-2',
+  secondary: 'hover:border-primary bg-white hover:bg-primary hover:text-white',
+  custom: '',
+}
 const ButtonIconSapp = ({
   title,
   onClick,
@@ -32,51 +28,44 @@ const ButtonIconSapp = ({
   variant = 'primary',
   icon,
   position,
-}: IButtonProps) => {
+  iconColorProps = '#374151',
+}: IButtonIconProps) => {
   const isPrimary = variant === 'primary'
   const isSecondary = variant === 'secondary'
-
+  const [iconColor, setIconColor] = useState<string>(iconColorProps)
   const btnClass = `
     relative text-center font-medium rounded-lg transition-all flex items-center justify-center h-10
-    ${isPrimary ? 'bg-[#FFB400] text-white hover:bg-[#E6A200] hover:text-white' : ''}
-    ${isSecondary ? 'bg-white text-[#374151] hover:bg-[#E6A200] hover:text-white' : ''}
+    ${isPrimary ? variantStyles.primary : ''}
+    ${isSecondary ? variantStyles.secondary : ''}
     ${full ? 'w-full' : 'inline-flex'} 
-    ${size === 'small' ? 'px-4 py-2 text-sm' : size === 'medium' ? 'px-5 py-2.5 text-base' : 'px-6 py-3 text-lg'}
+    ${size === 'small' ? sizeStyles.small : size === 'medium' ? sizeStyles.medium : sizeStyles.lager}
     ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
     ${className}
   `
-
-  const IconComponent =
-    icon === 'plus' ? (
-      <PlusOutlined />
-    ) : icon === 'search' ? (
-      <SearchOutlined />
-    ) : icon === 'arrow' ? (
-      <ArrowRightOutlined />
-    ) : null
-
-  if (link) {
-    return (
-      <a href={link} className={btnClass} aria-disabled={disabled}>
-        {position === 'start' && IconComponent}
-        {title}
-        {position === 'end' && IconComponent}
-      </a>
-    )
+  const iconMap: Record<string, JSX.Element | null> = {
+    plus: null,
+    search: null,
+    arrow: <ArrowIcon color={iconColor} />,
   }
-
-  return (
+  const IconComponent = iconMap[icon ?? 'plus']
+  const Button = () => (
     <button
       type={type}
       className={btnClass}
       onClick={onClick}
       disabled={disabled || loading}
+      onMouseEnter={() => setIconColor('#fff')}
+      onMouseLeave={() => setIconColor(iconColorProps)}
     >
       {position === 'start' && IconComponent}
       <span className="mx-2">{title}</span>
       {position === 'end' && IconComponent}
     </button>
   )
+  if (link) {
+    return <Link href={link}>{Button()}</Link>
+  }
+  return Button()
 }
 
 export default ButtonIconSapp

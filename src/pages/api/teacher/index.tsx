@@ -14,26 +14,26 @@ export class TeacherAPI {
   static getListClass(
     page_index: number,
     page_size: number,
-    params: Object,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/classes/teacher?page_index=${page_index}&page_size=${page_size}`,
+      `/classes/teacher?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
     )
   }
   static getClassById(id: string): Promise<any> {
-    return fetcher(`${apiURL}/classes/${id}/teacher`)
+    return fetcher(`/classes/${id}/teacher`)
   }
   static getStudentById(
     id: string,
     page_index: number,
     page_size: number,
-    params: Object,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/classes/${id}/teacher/student?page_index=${page_index}&page_size=${page_size}`,
+      `/classes/${id}/teacher/student?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
@@ -43,10 +43,10 @@ export class TeacherAPI {
     id: string,
     page_index: number,
     page_size: number,
-    params: Object,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/classes/${id}/teacher/class-quiz?page_index=${page_index}&page_size=${page_size}`,
+      `/classes/${id}/teacher/class-quiz?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
@@ -57,10 +57,10 @@ export class TeacherAPI {
     chapter_test_id: string,
     page_index: number,
     page_size: number,
-    params: Object,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/classes/${id}/teacher/class-quiz/${chapter_test_id}?page_index=${page_index}&page_size=${page_size}`,
+      `/classes/${id}/teacher/class-quiz/${chapter_test_id}?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },

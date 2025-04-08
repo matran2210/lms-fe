@@ -1,82 +1,60 @@
 import type { TablePaginationConfig, TableProps } from 'antd'
-import { Table } from 'antd'
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import { Table, Typography } from 'antd'
+import React, { Dispatch, SetStateAction } from 'react'
+
+const { Title } = Typography
 
 interface BaseTableProps {
   columns: Array<any>
-  fetchData: (page: number, pageSize: number, params?: Object) => any
-  extraParams?: Record<string, any>
-  showCheckbox?: boolean
   data: Array<any>
   pagination: TablePaginationConfig
-  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
-  fetchTableData: (current: number, pageSize: number, params?: Object) => void
+  setPagination?: Dispatch<SetStateAction<TablePaginationConfig>>
   loading?: boolean
-  filterParams?: any
-  handleChangeParams?: any
-  onResolveSelections?: () => void
-  setSelection?: Dispatch<SetStateAction<Map<number, React.Key[]>>>
-  selections?: Map<number, React.Key[]>
+  handleChangeParams?: (currentPage: number, pageSize: number) => void
+  titleTable?: {
+    title: string
+    isShowTitle: boolean
+  }
 }
 
 const SappTable = <T extends { id: React.Key }>({
   columns,
-  extraParams,
-  showCheckbox,
   data,
   pagination,
   setPagination,
-  fetchTableData,
   loading,
-  filterParams,
   handleChangeParams,
-  setSelection,
-  selections,
+  titleTable = { title: '', isShowTitle: false },
 }: BaseTableProps) => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination)
-    fetchTableData(
-      pagination.current || 1,
-      pagination.pageSize || 10,
-      filterParams,
-    )
-    handleChangeParams(pagination.current, pagination.pageSize)
+    if (setPagination) {
+      setPagination(pagination)
+    }
+    const currentPage = pagination.current ?? 1
+    const pageSize = pagination.pageSize ?? 10
+    if (handleChangeParams) {
+      handleChangeParams(currentPage, pageSize)
+    }
   }
-
-  // Checkbox selection
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    const currentPage = pagination.current
-    setSelection &&
-      setSelection((prev) =>
-        new Map(prev).set(currentPage ?? 1, newSelectedRowKeys),
-      )
-  }
-
-  const rowSelection: TableProps<T>['rowSelection'] = {
-    selectedRowKeys: selections ? selections.get(pagination?.current ?? 1) : [],
-    onChange: onSelectChange,
-  }
-
-  useEffect(() => {
-    fetchTableData(
-      pagination?.current || 1,
-      pagination?.pageSize || 10,
-      filterParams,
-    )
-  }, [extraParams])
 
   return (
-    <Table<T>
-      columns={columns}
-      dataSource={data}
-      pagination={pagination}
-      onChange={handleTableChange}
-      rowSelection={showCheckbox ? rowSelection : undefined}
-      loading={loading}
-      rowKey={(record) => record?.id || 'id'} // Trả về id làm key
-      scroll={{ x: 'max-content' }}
-      className="sappTable"
-    />
+    <>
+      {titleTable?.isShowTitle && titleTable?.title && (
+        <Title level={5} className="mt-6 text-gray-700">
+          {titleTable.title}
+        </Title>
+      )}
+      <Table<T>
+        columns={columns}
+        dataSource={data}
+        pagination={pagination}
+        onChange={handleTableChange}
+        loading={loading}
+        rowKey={(record) => record?.id || 'id'}
+        scroll={{ x: 'max-content' }}
+        className="sapp-table"
+      />
+    </>
   )
 }
 

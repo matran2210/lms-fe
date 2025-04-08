@@ -1,15 +1,14 @@
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
-import { ISubjectList, IUniversityProgram } from 'src/type/classes'
 import { listStatusMyClass } from 'src/pages/teachers/my-class/index'
 import { TeacherAPI } from '@pages/api/teacher'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { Control } from 'react-hook-form'
+import { debounce } from '@utils/helpers'
 import { isEmpty } from 'lodash'
 
 interface MyClassFilterProps {
-  placeholder?: string
-  width?: string
-  control: any
+  control: Control<any>
   setValue: (name: string, value: string) => void
   courseCategoryId?: { value: string }
 }
@@ -33,39 +32,41 @@ interface SubjectResponse {
   subjects: Subject[]
   metadata: Metadata
 }
-
+const initialSubjectsValues = {
+  subjects: [],
+  metadata: { page_index: 0, page_size: 10, total_pages: 0 },
+}
+const initialCourseValues = {
+  course_categories: [],
+  metadata: { page_index: 0, page_size: 10, total_pages: 0 },
+}
 const MyClassFilter: React.FC<MyClassFilterProps> = ({
-  placeholder = 'Search student',
-  width = 'max-w-sm',
   control,
   setValue,
   courseCategoryId,
 }) => {
-  const [subjects, setSubjects] = useState<SubjectResponse>({
-    subjects: [],
-    metadata: { page_index: 0, page_size: 10, total_pages: 0 },
-  })
-  const [subjectCourse, setSubjectCourse] = useState<CourseCategoryResponse>({
-    course_categories: [],
-    metadata: { page_index: 0, page_size: 10, total_pages: 0 },
-  })
+  const [subjects, setSubjects] = useState<SubjectResponse>(
+    initialSubjectsValues,
+  )
+  const [courseCategory, setCourseCategory] =
+    useState<CourseCategoryResponse>(initialCourseValues)
 
-  const fetchSubjectCourse = async (
+  const fetchCourseCategory = async (
     page_index: number,
     page_size: number,
     params?: object,
-  ) => {
+    isSearch: boolean = false,
+  ): Promise<void> => {
     try {
       const { data } = await TeacherAPI.getCourseCategory(
         page_index,
         page_size,
         params,
       )
-      setSubjectCourse((prev) => ({
-        course_categories: [
-          ...prev.course_categories,
-          ...data.course_categories,
-        ],
+      setCourseCategory((prev) => ({
+        course_categories: isSearch
+          ? data.course_categories
+          : [...prev.course_categories, ...data.course_categories],
         metadata: data.metadata,
       }))
     } catch (error) {}
@@ -94,12 +95,12 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
 
   const handleScrollCourse = () => {
     if (
-      subjectCourse.metadata.page_size &&
-      subjectCourse.metadata.total_pages > subjectCourse.metadata.page_index
+      courseCategory.metadata.page_size &&
+      courseCategory.metadata.total_pages > courseCategory.metadata.page_index
     ) {
-      fetchSubjectCourse(
-        subjectCourse.metadata.page_index + 1,
-        subjectCourse.metadata.page_size,
+      fetchCourseCategory(
+        courseCategory.metadata.page_index + 1,
+        courseCategory.metadata.page_size,
         {},
       )
     }
@@ -118,9 +119,26 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
       )
     }
   }
+  const debouncedSearchCourse = debounce(
+    (text) => fetchCourseCategory(1, 10, { name: text }, true),
+    500,
+  )
+  const debouncedSearchSubject = debounce(
+    (text) => fetchSubject(1, 10, { name: text }),
+    500,
+  )
+  const onChangeCourse = (courseCategoryId: { value: string }) => {
+    setValue('subject_id', '')
+    if (courseCategoryId) {
+      fetchSubject(1, 10, { course_category_id: courseCategoryId.value })
+    } else {
+      setSubjects(initialSubjectsValues)
+      fetchCourseCategory(1, 10, {}, true)
+    }
+  }
 
   return (
-    <div className="flex gap-6">
+    <div className="grid grid-cols-4 gap-4">
       <HookFormTextField
         control={control}
         name="search"
@@ -131,46 +149,44 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
       <SappHookFormSelect
         control={control}
         onFocus={() => {
-          if (isEmpty(subjectCourse.course_categories)) {
-            fetchSubjectCourse(1, 10, {})
+          if (isEmpty(courseCategory.course_categories)) {
+            fetchCourseCategory(1, 10, {}, true)
           }
         }}
         name="course_category_id"
-        required
-        className="select-single-custom w-full"
+        isSelectCustom
         placeholder="Program"
-        options={subjectCourse.course_categories.map((category) => ({
+        options={courseCategory.course_categories.map((category) => ({
           label: category.name,
           value: category.id,
         }))}
-        onChange={(courseCategoryId: { value: string }) => {
-          setValue('subject_id', '')
-          fetchSubject(
-            1,
-            10,
-            { course_category_id: courseCategoryId.value },
-            false,
-          )
-        }}
+        onSearch={(text) => text && debouncedSearchCourse(text)}
+        onChange={(courseCategoryId: { value: string }) =>
+          onChangeCourse(courseCategoryId)
+        }
+        isClearable
         onMenuScrollToBottom={handleScrollCourse}
       />
       <SappHookFormSelect
         control={control}
         name="subject_id"
-        required
-        className="select-single-custom w-full"
+        isSelectCustom
         placeholder="Subject"
-        options={subjects.subjects.map((subject) => ({
+        options={subjects?.subjects?.map((subject) => ({
           label: subject.name,
           value: subject.id,
         }))}
+        onSearch={(text) => text && debouncedSearchSubject(text)}
+        onChange={(subjectId: { value: string }) => {
+          setValue('subject_id', subjectId ? subjectId.value : '')
+        }}
         onMenuScrollToBottom={handleScrollSubject}
+        isClearable
       />
       <SappHookFormSelect
         control={control}
         name="class_teacher_status"
-        required
-        className="select-single-custom w-full"
+        isSelectCustom
         placeholder="Status"
         options={listStatusMyClass}
       />

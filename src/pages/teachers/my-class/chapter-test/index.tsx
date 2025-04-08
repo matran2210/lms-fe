@@ -2,18 +2,21 @@ import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import LayoutFilter from '@components/layout/Filter/index'
-import ChapterTestFilter from 'src/pages/teachers/my-class/[id]/test-quiz-list/chapter-test/components/ChapterTestFilter'
+import LayoutFilter from '@components/layout/TeacherFilter/index'
+import ChapterTestFilter from '@components/teacher/components/ChapterTestFilter'
 import { useForm } from 'react-hook-form'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { ITabs } from 'src/type'
 import { PageLink } from 'src/constants'
 import SappTable from '@components/table/SappTable'
-import { TeacherKey } from '@pages/api/queryKey'
+import { StudentKey, TeacherKey } from '@pages/api/queryKey'
 import { TablePaginationConfig } from 'antd'
-import StudentCell from '@pages/teachers/my-class/components/StudentCell'
-import { formatDateFromUTC } from '@utils/index'
+import StudentCell from '@components/teacher/components/StudentCell'
 import { IStudentClassDetail } from 'src/type/classes'
+import DateActionCell from '@components/teacher/components/DateActionCell'
+import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
+import StatusActionCell from '@components/teacher/components/StatusActionCell'
+import useSappPaging from 'src/hooks/useSappPaging'
 
 interface FilterParams {
   status?: string
@@ -27,55 +30,41 @@ const initialValues: FilterParams = {
 
 const ChapterTest = () => {
   const router = useRouter()
-  const classId = router?.query?.id as string
+  const studentId = router?.query?.studentId as string
   const chapterTestId = router?.query?.chapterTestId as string
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || 1,
-    pageSize: Number(router.query.page_size) || 10,
-    total: 10,
-    showSizeChanger: true,
-    showQuickJumper: true,
-  })
   const [params, setParams] = useState<FilterParams>(initialValues)
-
   const { control, getValues, reset } = useForm({
     mode: 'onSubmit',
   })
 
-  const breadcrumbs: ITabs[] = [
-    { link: PageLink.TEACHERS, title: 'LMS' },
-    { link: PageLink.TEACHER_MY_CLASS, title: 'My Class' },
-    { link: `${PageLink.TEACHER_MY_CLASS}/${classId}`, title: 'Class Detail' },
-    {
-      link: `${PageLink.TEACHER_MY_CLASS}/${classId}`,
-      title: 'Test/Quiz List',
-    },
-    { link: '', title: 'Chapter Test' },
-  ]
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [TeacherKey.ChapterTest, pagination, params],
-    queryFn: async () => {
-      try {
-        return await TeacherAPI.getDetailTestQuiz(
-          classId,
+  const { data, pagination, isLoading, handleChangeParams, setPagination } =
+    useSappPaging({
+      uniqueKey: StudentKey.ChapterTest,
+      queryFn: () =>
+        TeacherAPI.getDetailTestQuiz(
+          studentId,
           chapterTestId,
           pagination.current ?? 1,
           pagination.pageSize ?? 10,
           params,
-        )
-      } catch (error) {
-        return null
-      }
+        ),
+      params,
+    })
+
+  const breadcrumbs: ITabs[] = [
+    { link: PageLink.TEACHERS, title: 'LMS' },
+    { link: PageLink.TEACHER_MY_CLASS, title: 'My Class' },
+    {
+      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}`,
+      title: 'Class Detail',
     },
-    retry: false,
-  })
-  const handleChangeParams = (currentPage: number, pageSize: number) => {
-    setPagination((prev) => ({
-      ...prev,
-      current: currentPage,
-      pageSize: pageSize,
-    }))
-  }
+    {
+      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}`,
+      title: 'Test/Quiz List',
+    },
+    { link: '', title: 'Chapter Test' },
+  ]
+
   const handleResetFilter = () => {
     reset({ search: '', status: '' })
     setParams(initialValues)
@@ -88,74 +77,73 @@ const ChapterTest = () => {
     }
     setParams(searchParams)
   }
+  useEffect(() => {
+    if (data?.data?.metadata?.total_records) {
+      setPagination((prev) => ({
+        ...prev,
+        total: data?.metadata?.total_records,
+      }))
+    }
+  }, [data])
 
   const columnsValue = [
     {
       title: 'Student ID',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.hubspot_contact_id ?? ''} />
+        <NameNoActionCell dataColumn={record?.user?.hubspot_contact_id} />
       ),
     },
     {
       title: 'Name',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.full_name ?? ''} />
+        <StudentCell dataColumn={record?.user?.detail?.full_name} />
       ),
     },
     {
       title: 'Email',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.user_contacts?.[0]?.email ?? '-'} />
+        <NameNoActionCell
+          dataColumn={record?.user?.user_contacts?.[0]?.email}
+        />
       ),
     },
     {
       title: 'Access Period',
       render: (record: IStudentClassDetail) => (
-        <StudentCell
-          data={
-            record?.start_time && record?.end_time
-              ? `${formatDateFromUTC(record?.start_time)} - ${formatDateFromUTC(
-                  record?.end_time,
-                )}`
-              : '-'
-          }
+        <DateActionCell
+          dataColumn={{
+            startTime: record?.start_time as string,
+            endTime: record?.end_time as string,
+          }}
         />
       ),
     },
     {
-      title: 'Level',
+      title: 'Submission Time',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.user?.detail?.level ?? '-'} />
-      ),
-    },
-    {
-      title: 'Duration',
-      render: (record: IStudentClassDetail) => (
-        <StudentCell
-          data={
-            record?.attempt?.finished_at
-              ? formatDateFromUTC(record?.attempt?.finished_at)
-              : '-'
-          }
+        <DateActionCell
+          dataColumn={{
+            startTime: record?.attempt?.finished_at as string,
+          }}
         />
       ),
     },
     {
-      title: 'Progress',
+      title: 'Status',
       render: (record: IStudentClassDetail) => (
-        <StudentCell
-          data={`${Math.round(
-            ((record?.learning_progress?.total_course_sections_completed ?? 0) /
-              (record?.learning_progress?.total_course_sections || 1)) *
-              100,
-          )}%`}
-        />
+        <StatusActionCell dataColumn={record?.attempt?.status} />
       ),
     },
     {
-      title: 'Exam Date',
+      title: 'Final score',
       render: (record: IStudentClassDetail) => (
-        <StudentCell data={record?.examination_subject ?? '-'} />
+        <StudentCell dataColumn={record?.attempt?.score?.toString()} />
+      ),
+    },
+    {
+      title: 'Người chấm',
+      render: (record: IStudentClassDetail) => (
+        <NameNoActionCell dataColumn={record?.staff?.detail?.full_name} />
       ),
     },
   ]
@@ -171,17 +159,11 @@ const ChapterTest = () => {
       />
       <SappTable
         handleChangeParams={handleChangeParams}
-        filterParams={params}
-        fetchData={() => {}}
-        fetchTableData={() => {}}
         columns={columnsValue}
         data={data?.data?.class_user_quizzes ?? []}
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
-        showCheckbox={false}
-        setSelection={() => {}}
-        selections={new Map()}
       />
     </LayoutTeacher>
   )

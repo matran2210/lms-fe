@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React, { useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'
 
@@ -74,11 +75,17 @@ const SAPPTextFiled = ({
           value={value ?? ''}
           defaultValue={value ? defaultValue : undefined}
           onChange={onChange}
-          className={`${inputClassName} ${TEXT_SIZES[textSize]} ${
-            isError ? '!border-error' : ''
-          } form-control h-[50px] w-full border border-solid border-default px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none ${
-            disabled ? 'bg-gray-4' : 'bg-transparent'
-          } ${placeholderIcon ? 'pl-12' : ''}`}
+          className={clsx(
+            inputClassName,
+            TEXT_SIZES[textSize],
+            'form-control h-[50px] w-full border border-solid border-default px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none',
+            {
+              '!border-error': isError,
+              'bg-gray-4': disabled,
+              'bg-transparent': !disabled,
+              'pl-12': placeholderIcon,
+            },
+          )}
           placeholder={placeholder}
           disabled={disabled}
           style={style}
