@@ -17,7 +17,7 @@ import { requestValidationSchema } from '@utils/validation/my-request-validation
 import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { request } from 'http'
-import { isEmpty } from 'lodash'
+import { isEmpty, update } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -47,6 +47,7 @@ export interface IProps {
 
 function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const router = useRouter()
+  const { pathname, query } = router
   const params = router.query?.id
   const isEdit = params && params !== 'new' ? true : false
   const dispatch = useAppDispatch()
@@ -156,6 +157,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         month_of_year,
         type,
       } = detailSchedule?.recurring_pattern_schedule
+
       recurring_schedule = {
         interval,
         frequency,
@@ -189,13 +191,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         REPEAT_TYPE.DOES_NOT_REPEAT,
       recurring_schedule,
       description: getValues('request_busy_schedule.0.description') ?? '',
-      status: data.request_status_value,
+      status: getValues('request_status')?.value,
     }
 
     const formattedWeeklyNormData = {
       request_name: data.request_name,
-      request_type: data.request_type_value,
-      status: data.request_status_value,
+      request_type: data.request_type?.value,
+      status: getValues('request_status')?.value,
       time: data.request_weekly_norm?.map((item: IWeeklyNorm) => {
         return {
           start_date: dayjs(item.start_time).format('YYYY-MM-DDT16:59:59Z'),
@@ -209,11 +211,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     const formattedTimeoffData = {
       request_name: data.request_name,
       teacher_id: user.id,
-      scheduleAdjustments: data.request_time_off?.map((item) => ({
-        id: item.lesson,
-        reason: item.reason,
-      })),
-      status: data.request_status_value,
+      status: getValues('request_status')?.value,
+      scheduleAdjustments: getValues('request_time_off')?.map((item) => {
+        return {
+          id: item.lessonId,
+          reason: item.reason,
+        }
+      }),
     }
     try {
       let response: IResponse<any> = {
@@ -268,7 +272,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         reloadPage()
         toast.success('Request saved successfully!')
         setOpen(false)
-        router.replace(router.pathname, undefined, { shallow: true })
+        router.replace({ pathname, query: { tab: query.tab } }, undefined, {
+          shallow: true,
+        })
       } else {
         toast.error('Something went wrong. Please try again.')
       }
@@ -314,6 +320,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               item.value.toLowerCase().includes(data.status.toLowerCase()),
             ),
           )
+
           setValue(
             'request_create_date',
             dayjs(data.created_at).format('DD-MM-YYYY'),
@@ -426,6 +433,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               'request_time_off',
               data.teacher_schedules.map((item) => ({
                 lesson: { value: item.schedule.id, label: item.schedule.name },
+                lessonId: item.schedule.id,
                 reason: item.request_reason,
               })),
             )
@@ -475,7 +483,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
   }
   const handleClose = () => {
-    router.replace(router.pathname, undefined, { shallow: true })
+    router.replace({ pathname, query: { tab: query.tab ?? null } }, undefined, {
+      shallow: true,
+    })
     setOpen(false)
     reset()
   }
@@ -495,6 +505,25 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
   }, [])
 
+  const handleChangeClassCode = (e: string) => {
+    setValue('class_code', e)
+
+    const currentValues = getValues()
+
+    reset(
+      {
+        ...currentValues,
+        request_time_off: currentValues?.request_time_off?.map(() => ({
+          lesson: { value: '', label: '' },
+          reason: '',
+        })),
+      },
+      {
+        keepDirty: true,
+        keepTouched: true,
+      },
+    )
+  }
   return (
     <ConfigProvider theme={ANT_THEME_CONFIG}>
       <Drawer
@@ -547,6 +576,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 labelClass="text-sm font-medium"
               />
             </div>
+
             {isEdit ? (
               <>
                 <div className="mb-6">
@@ -633,13 +663,18 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   onDropdownVisibleChange={(open) => {
                     open && refetchClasses()
                   }}
-                  onChange={(e) => setValue('class_code', e)}
+                  onChange={(e) => handleChangeClassCode(e)}
                   placeholder="Class Code"
                   options={classes.map((item) => ({
                     value: item?.id,
                     label: item?.code,
                   }))}
                   className="h-11.25"
+                  disabled={
+                    isEdit &&
+                    requestStatus?.toLowerCase() !==
+                      REQUEST_STATUS.PENDING.value.toLowerCase()
+                  }
                 />
               ) : null}
             </div>
@@ -798,6 +833,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                               onDropdownVisibleChange={(open) => {
                                 open && refetchLessons()
                               }}
+                              onChange={(e) => {
+                                setValue(
+                                  `request_time_off.${index}.lessonId`,
+                                  e,
+                                )
+                              }}
                               labelClass="text-sm font-medium"
                               placeholder="Lesson"
                               options={lessons.map((item) => ({
@@ -852,7 +893,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 REQUEST_STATUS.PENDING.value.toLowerCase()) &&
               (requestType == REQUEST_TYPE.WEEKLY_NORM.value &&
               requestNorm &&
-              requestNorm?.length <= 7 ? (
+              requestNorm?.length <= 6 ? (
                 <div
                   className="mb-12 flex cursor-pointer items-center gap-x-3"
                   onClick={() => appendNorm({ quantity: undefined })}
@@ -886,6 +927,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   onClick={() =>
                     appendTimeoff({
                       lesson: { value: '', label: '' },
+                      lessonId: '',
                       reason: '',
                     })
                   }

@@ -136,7 +136,7 @@ export class MyRequestAPI {
       scheduleAdjustments,
     }: {
       request_name: string
-      status: string
+      status?: string
       scheduleAdjustments?: { id: string; reason: string }[]
     },
   ): Promise<any> {
@@ -175,7 +175,7 @@ export class MyRequestAPI {
       scheduleAdjustments,
     }: {
       request_name: string
-      status: string
+      status?: string
       scheduleAdjustments?: { id: string; reason: string }[]
     },
   ): Promise<any> {
