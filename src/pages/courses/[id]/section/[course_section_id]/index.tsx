@@ -53,7 +53,7 @@ interface IProps {
 
 const CoursePartDetail = () => {
   const [chapterDetail, setChapterDetail] = useState<any>(null)
-  const [loadingChapter, setLoadingChapter] = useState(false)
+  const [loadingChapter, setLoadingChapter] = useState(true)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
   const [learningOutcome, setLearningOutcome] = useState<ILearningOutcome>()
   const router = useRouter()
