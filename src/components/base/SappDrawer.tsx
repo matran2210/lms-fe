@@ -24,6 +24,7 @@ interface IProps {
   heightBody?: string
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
   handleCancel?: any
+  onClickOutside?: () => void
 }
 
 const SappDrawer = ({
@@ -42,6 +43,7 @@ const SappDrawer = ({
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
   handleCancel,
+  onClickOutside,
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -54,14 +56,24 @@ const SappDrawer = ({
   }
 
   const handleMaskClick = (e: any) => {
-    if (
-      isOpen &&
-      e?.target?.closest('.custom-drawer') === null &&
-      !handleCancel
-    ) {
-      handleOnClose()
+    if (onClickOutside) {
+      if (confirmOnClose) {
+        dispatch(
+          confirmDialog.open({ message: message, onConfirm: onClickOutside }),
+        )
+      } else {
+        onClickOutside()
+      }
     } else {
-      handleCancel()
+      if (
+        isOpen &&
+        e?.target?.closest('.custom-drawer') === null &&
+        !handleCancel
+      ) {
+        handleOnClose()
+      } else {
+        handleCancel()
+      }
     }
   }
   const drawerRef = useRef<HTMLDivElement>(null)
