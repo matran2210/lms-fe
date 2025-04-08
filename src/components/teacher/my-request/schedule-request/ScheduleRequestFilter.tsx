@@ -122,6 +122,7 @@ const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
           value: category.id,
         }))}
         onMenuScrollToBottom={handleScrollCourse}
+        isClearable
       />
       <SappHookFormSelect
         control={control}
@@ -130,6 +131,7 @@ const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
         className="select-single-custom w-full"
         placeholder="Status"
         options={listStatus}
+        isClearable
       />
       <HookFormDateRangePicker
         control={control}

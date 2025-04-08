@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import ScheduleRequestFilter from 'src/components/teacher/my-request/schedule-request/ScheduleRequestFilter'
 import { useForm } from 'react-hook-form'
 import TableContainer from 'src/components/teacher/my-request/schedule-request/TableContainer'
-import LayoutFilter from '@components/layout/Filter'
 import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import { FilterRequestScheduleParams } from 'src/type/teachers/request-schedule.interface'
 import { sappFormatDate } from '@utils/index'
+import LayoutFilter from '@components/layout/TeacherFilter'
+import ButtonIconSapp from '@components/base/button/ButtonIconSapp'
 
 const initialValues: FilterRequestScheduleParams = {
   search: '',
@@ -49,14 +50,15 @@ const ScheduleRequestTable = () => {
         onReset={handleResetFilter}
         onSubmit={onSubmit}
         layoutAction={
-          <SappButtonIcon
+          <ButtonIconSapp
             className="rounded-md px-5 py-3"
             title="Create Request"
-            isBgPrimary
-            isTextPrimary
-          >
-            +
-          </SappButtonIcon>
+            variant="primary"
+            icon="plus"
+            iconColorProps="#fff"
+            position="start"
+            onClick={() => {}}
+          ></ButtonIconSapp>
         }
       />
 
