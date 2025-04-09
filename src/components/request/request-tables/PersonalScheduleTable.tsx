@@ -94,37 +94,43 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
   {
     title: 'Reason',
-    dataIndex: 'teacher_schedules',
-    render: (teacherSchedules: ITeacherSchedule[]) => (
-      <ul className="flex flex-col gap-1">
-        {teacherSchedules.map(({ schedule: { description } }, index) =>
-          description ? (
-            <li key={index}>{description}</li>
-          ) : (
-            <li key={index} className="text-accent-default">
-              _ _ _ _ _ _ _ _ _ _ _
-            </li>
-          ),
-        )}
-      </ul>
-    ),
+    dataIndex: 'reason',
+    render: (data: ITeacherSchedule[]) =>
+      data?.length > 0 ? (
+        <ul className="flex flex-col gap-1">
+          {data.map(({ schedule: { description } }, index) =>
+            description ? (
+              <li key={index}>{description}</li>
+            ) : (
+              <li key={index} className="text-accent-default">
+                _ _ _ _ _ _ _ _ _ _ _
+              </li>
+            ),
+          )}
+        </ul>
+      ) : (
+        <div className="text-accent-default">_ _ _ _ _ _ _ _ _ _ _</div>
+      ),
   },
   {
     title: 'Quantity',
     dataIndex: 'teacher_weekly_norms',
-    render: (teacher_weekly_norms: ITeacherWeeklyNorm[]) => (
-      <ul className="flex flex-col gap-1 text-center">
-        {teacher_weekly_norms.map(({ max_shift }, index) =>
-          max_shift ? (
-            <li key={index}>{max_shift}</li>
-          ) : (
-            <li key={index} className="text-accent-default">
-              _ _ _ _ _ _
-            </li>
-          ),
-        )}
-      </ul>
-    ),
+    render: (teacher_weekly_norms: ITeacherWeeklyNorm[]) =>
+      teacher_weekly_norms?.length > 0 ? (
+        <ul className="flex flex-col gap-1 text-center">
+          {teacher_weekly_norms.map(({ max_shift }, index) =>
+            max_shift ? (
+              <li key={index}>{max_shift}</li>
+            ) : (
+              <li key={index} className="text-accent-default">
+                _ _ _ _ _ _
+              </li>
+            ),
+          )}
+        </ul>
+      ) : (
+        <div className="text-accent-default">_ _ _ _ _ _ _ _ _ _ _</div>
+      ),
   },
   {
     title: 'Approver',
@@ -151,7 +157,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
   {
     title: 'Note',
-    dataIndex: 'description',
+    dataIndex: 'note',
     render: (value: string) => <div className="text-secondary">{value}</div>,
   },
   {
@@ -190,6 +196,12 @@ const PersonalScheduleTable = ({
         : item.teacher_weekly_norms?.length
           ? item.teacher_weekly_norms
           : [],
+      reason:
+        item.type === REQUEST_TYPE.TEACHER_SCHEDULE_BUSY
+          ? item.teacher_schedules
+          : [],
+      note:
+        item.type === REQUEST_TYPE.TEACHER_WEEKLY_NORMS ? item.description : '',
       method: item,
     }))
   }, [requests, current, pageSize])
