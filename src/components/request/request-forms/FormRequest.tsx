@@ -83,6 +83,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestNorm = watch('request_weekly_norm')
   const requestTimeoff = watch('request_time_off')
   const repeat = watch('request_busy_schedule.0.repeat')
+  const repeatType = watch('request_busy_schedule.0.recurring_schedule.type')
   const {
     fields: weeklyNormFields,
     append: appendNorm,
@@ -134,9 +135,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
 
     if (
-      requestType === REQUEST_TYPE.BUSY_SCHEDULE.value &&
-      repeat !== REPEAT_TYPE.DOES_NOT_REPEAT &&
-      repeat !== REPEAT_TYPE.CHOSEN_PATTERN
+      requestType.toLowerCase() ===
+        REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
+      repeatType !== REPEAT_TYPE.DOES_NOT_REPEAT &&
+      repeatType !== REPEAT_TYPE.CHOSEN_PATTERN
     ) {
       recurring_schedule = getRecurringSchedule(
         getValues,
@@ -144,8 +146,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       )
       validateRepeatData()
     } else if (
-      requestType === REQUEST_TYPE.BUSY_SCHEDULE.value &&
-      repeat === REPEAT_TYPE.CHOSEN_PATTERN &&
+      requestType.toLowerCase() ===
+        REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
+      repeatType === REPEAT_TYPE.CHOSEN_PATTERN &&
       detailSchedule &&
       !isEmpty(detailSchedule?.recurring_pattern_schedule)
     ) {
@@ -157,15 +160,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         month_of_year,
         type,
       } = detailSchedule?.recurring_pattern_schedule
-
       recurring_schedule = {
         interval,
         frequency,
-        recurrence_end_date: dayjs(
-          getValues('request_busy_schedule.0.drawer-repeat-end-on'),
-        )
+        recurrence_end_date: dayjs
+          .utc(getValues('request_busy_schedule.0.drawer-repeat-end-on'))
           .endOf('day')
-          .toDate(),
+          .format('YYYY-MM-DD[T]HH:mm:ss[Z]'),
         day_of_week,
         day_of_month,
         month_of_year,
@@ -173,27 +174,26 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       }
       validateRepeatData()
     }
-
     const formattedBusyScheduleData = {
       event_name: data.request_name,
       range: {
         start_time:
           dayjs
             .utc(getValues('request_busy_schedule.0.date_range.0'))
-            .format() ?? '',
+            .format('YYYY-MM-DD[T]HH:mm:ss[Z]') ?? '',
         end_time:
           dayjs
             .utc(getValues('request_busy_schedule.0.date_range.1'))
-            .format() ?? '',
+            .format('YYYY-MM-DD[T]HH:mm:ss[Z]') ?? '',
       },
       repeat:
-        data.request_busy_schedule?.[0]['repeat'] !==
+        data.request_busy_schedule?.[0].recurring_schedule.type !==
         REPEAT_TYPE.DOES_NOT_REPEAT,
       recurring_schedule,
       description: getValues('request_busy_schedule.0.description') ?? '',
       status: getValues('request_status')?.value,
     }
-
+    //  console.log(formattedBusyScheduleData)
     const formattedWeeklyNormData = {
       request_name: data.request_name,
       request_type: data.request_type_value,
@@ -381,7 +381,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 value: REPEAT_TYPE.CHOSEN_PATTERN,
               })
               setValue(
-                'request_busy_schedule.0.repeat',
+                'request_busy_schedule.0.recurring_schedule.type',
                 REPEAT_TYPE.CHOSEN_PATTERN,
               )
               setValue(
@@ -524,6 +524,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       },
     )
   }
+
   return (
     <ConfigProvider theme={ANT_THEME_CONFIG}>
       <Drawer
@@ -713,7 +714,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 <div className="mb-6">
                   <HookFormEventRepeat
                     control={control}
-                    name="request_busy_schedule"
+                    name="request_busy_schedule.0"
                     defaultDate={dayjs(currentDate?.[1]).toDate()}
                     repeatOption={otherOption}
                     disabled={

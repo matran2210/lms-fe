@@ -177,13 +177,13 @@ export const getRecurringSchedule = (
       result = getRepeatDaily()
   }
   const repeatEndOn = getValues(
-    'request_busy_schedule.recurring_schedule.recurrence_end_date',
+    'request_busy_schedule.0.recurring_schedule.recurrence_end_date',
   )
 
   return {
     ...result,
     recurrence_end_date: repeatEndOn
-      ? dayjs(repeatEndOn).endOf('day').toDate()
+      ? dayjs.utc(repeatEndOn).endOf('day').format('YYYY-MM-DD[T]HH:mm:ss[Z]')
       : null,
   }
 }

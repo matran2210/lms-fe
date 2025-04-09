@@ -57,7 +57,7 @@ export interface IRecurringSchedule {
   day_of_month?: number[]
   month_of_year?: number[]
   end_date?: string
-  type?: RecurringScheduleType
+  type?: REPEAT_TYPE
 }
 
 export interface ITeacherSchedules {

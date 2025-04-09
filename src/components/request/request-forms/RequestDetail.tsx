@@ -1,6 +1,8 @@
 import { useLayoutEffect, useMemo, useState } from 'react'
 import SappDrawer from '../../base/SappDrawer'
 
+import CollapseBox from '@components/layout/CollapseBox'
+import CollapseItem from '@components/layout/CollapseBox/CollapseItem'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { capitalizeFirstLetter } from '@utils/index'
 import dayjs from 'dayjs'
@@ -10,8 +12,6 @@ import { EVENT_REPEAT_TYPES } from 'src/constants'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants/my-request'
 import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'
 import { RequestStatus } from 'src/type/my-request/enum'
-import CollapseBox from '@components/layout/CollapseBox'
-import CollapseItem from '@components/layout/CollapseBox/CollapseItem'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -26,8 +26,6 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [requestDetail, setRequestDetail] =
     useState<IBusyRequestDetailResponse>()
-  const [showPrimaryInfo, setShowPrimaryInfo] = useState(true)
-  const [showOtherInfo, setShowOtherInfo] = useState(true)
   const displayStatus = (status: string) => {
     return `${RequestStatus[status as keyof typeof RequestStatus] || 'Unknown'}`
   }
@@ -167,6 +165,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           }
           showSubmitButton={
             requestDetail?.status.toLowerCase() ==
+            RequestStatus.PENDING.toLowerCase()
+          }
+          showCancelButton={
+            requestDetail?.status.toLowerCase() !==
             RequestStatus.PENDING.toLowerCase()
           }
           confirmOnClose

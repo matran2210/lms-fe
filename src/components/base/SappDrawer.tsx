@@ -25,6 +25,7 @@ interface IProps {
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
   handleCancel?: any
   onClickOutside?: () => void
+  showCancelButton?: boolean
 }
 
 const SappDrawer = ({
@@ -44,6 +45,7 @@ const SappDrawer = ({
   sizeTextBtn = 'lager',
   handleCancel,
   onClickOutside,
+  showCancelButton = true,
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -133,12 +135,14 @@ const SappDrawer = ({
         </div>
         {footer && (
           <div className="absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white">
-            <ButtonSecondary
-              title="Cancel"
-              className="me-[32px] rounded-md"
-              onClick={handleMaskClick}
-              size={sizeTextBtn}
-            />
+            {showCancelButton && (
+              <ButtonSecondary
+                title="Cancel"
+                className="me-[32px] rounded-md"
+                onClick={handleMaskClick}
+                size={sizeTextBtn}
+              />
+            )}
             {showSubmitButton && (
               <ButtonPrimary
                 title={btnSubmitTile}
