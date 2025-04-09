@@ -193,7 +193,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       description: getValues('request_busy_schedule.0.description') ?? '',
       status: getValues('request_status')?.value,
     }
-    //  console.log(formattedBusyScheduleData)
     const formattedWeeklyNormData = {
       request_name: data.request_name,
       request_type: data.request_type_value,
