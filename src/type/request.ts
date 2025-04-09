@@ -29,6 +29,8 @@ export interface IRequest {
   updated_at: string
   description: string
   repeat: boolean
+  reason?: ITeacherSchedule[]
+  note?: string
 }
 
 export interface ITeacherSchedule {
