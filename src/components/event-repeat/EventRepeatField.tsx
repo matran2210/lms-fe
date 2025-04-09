@@ -120,7 +120,7 @@ const EventRepeatField = ({
     watch,
     control,
     setValue: setFormValue,
-    getValues: getFromValues,
+    getValues: getFormValues,
     reset,
   } = useForm<IEventRepeatFieldForm>({
     defaultValues: formattedDefaultValue || {
@@ -216,7 +216,6 @@ const EventRepeatField = ({
 
         return undefined
       }
-      const repeat_type = value?.repeat_type ?? EVENT_REPEAT_TYPES.NO_REPEAT
 
       const recurrence_end_date = value?.end_on
         ? dayjs(value?.end_on).endOf('day')

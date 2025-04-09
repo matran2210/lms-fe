@@ -1,6 +1,8 @@
 import { useLayoutEffect, useMemo, useState } from 'react'
 import SappDrawer from '../../base/SappDrawer'
 
+import CollapseBox from '@components/layout/CollapseBox'
+import CollapseItem from '@components/layout/CollapseBox/CollapseItem'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { capitalizeFirstLetter } from '@utils/index'
 import dayjs from 'dayjs'
@@ -24,8 +26,6 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [requestDetail, setRequestDetail] =
     useState<IBusyRequestDetailResponse>()
-  const [showPrimaryInfo, setShowPrimaryInfo] = useState(true)
-  const [showOtherInfo, setShowOtherInfo] = useState(true)
   const displayStatus = (status: string) => {
     return `${RequestStatus[status as keyof typeof RequestStatus] || 'Unknown'}`
   }
@@ -167,6 +167,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
           }
+          showCancelButton={
+            requestDetail?.status.toLowerCase() !==
+            RequestStatus.PENDING.toLowerCase()
+          }
           confirmOnClose
           footer={hasActionButton}
           handleSubmit={() => {
@@ -201,128 +205,143 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             </div>
           </div>
           <div className="mb-4">
-            <div className="mb-3 border-b border-gray-200 py-3 text-base font-medium text-gray-800">
-              Primary Information
-            </div>
-            <table className="w-full">
-              <tr>
-                <td className="text-sm text-bw-9">Request Name</td>
-                <td className="text-sm">{requestDetail?.name}</td>
-              </tr>
+            <CollapseBox title=" Primary Information">
+              <div className="grid gap-y-4">
+                <CollapseItem
+                  title={'Request Name'}
+                  body={requestDetail?.name}
+                />
 
-              <tr className="">
-                <td className="text-sm text-bw-9">Request Type</td>
-                <td className="text-sm text-danger">
-                  {capitalizeFirstLetter(
-                    Object.values(REQUEST_TYPE).find(
-                      (item) => item.value == requestDetail?.type,
-                    )?.label,
+                <CollapseItem
+                  title="Request Type"
+                  body={
+                    <span className="text-danger">
+                      {capitalizeFirstLetter(
+                        Object.values(REQUEST_TYPE).find(
+                          (item) => item.value == requestDetail?.type,
+                        )?.label,
+                      )}
+                    </span>
+                  }
+                />
+
+                <CollapseItem
+                  title="Creator"
+                  body={requestDetail?.user_request.detail.full_name}
+                />
+
+                <CollapseItem
+                  title="Approver"
+                  body={requestDetail?.staff_assignee?.detail?.full_name}
+                />
+
+                <CollapseItem
+                  title="Create Date"
+                  body={dayjs(requestDetail?.created_at).format(
+                    'DD/MM/YYYY | hh:mm',
                   )}
-                  {/* Busy Schedule */}
-                </td>
-              </tr>
-              <tr>
-                <td className="text-sm  text-bw-9">Creator</td>
-                <td className="text-sm">
-                  {requestDetail?.user_request.detail.full_name}{' '}
-                </td>
-              </tr>
-              <tr>
-                <td className="text-sm  text-bw-9">Approver</td>
-                <td className="text-sm">
-                  {requestDetail?.staff_assignee?.detail?.full_name}{' '}
-                </td>
-              </tr>
-              <tr>
-                <td className="text-sm  text-bw-9">Create Date</td>
-                <td className="text-sm">
-                  {' '}
-                  {dayjs(requestDetail?.created_at).format('DD/MM/YYYY hh:mm')}
-                  {/* 10/02/2025 | 22:00 */}
-                </td>
-              </tr>
-              <tr>
-                <td className="text-sm  text-bw-9">Note</td>
-                <td className="text-sm"> {requestDetail?.description}</td>
-              </tr>
-            </table>
+                />
+                {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
+                  <CollapseItem
+                    title="Note"
+                    body={requestDetail?.description}
+                  />
+                ) : (
+                  <CollapseItem
+                    title="Updated Date"
+                    body={dayjs(requestDetail?.updated_at).format(
+                      'DD/MM/YYYY | hh:mm',
+                    )}
+                  />
+                )}
+              </div>
+            </CollapseBox>
           </div>
 
           <div className="">
-            <div className="mb-3 border-b border-gray-200 pb-3 text-base font-medium">
-              {requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value
-                ? 'Proposal Date & Reason'
-                : requestDetail?.type == REQUEST_TYPE.WEEKLY_NORM.value
-                  ? 'Proposal Date & Quantity'
-                  : 'Proposal Timeoff Date  '}
-            </div>
-
-            {requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value
-              ? requestDetail?.teacher_schedules.map((item, index) => {
-                  let startTime = dayjs(
+            <CollapseBox
+              title={
+                requestDetail?.type === REQUEST_TYPE.BUSY_SCHEDULE.value
+                  ? 'Proposal Date & Reason'
+                  : requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value
+                    ? 'Proposal Date & Quantity'
+                    : 'Proposal Timeoff Date'
+              }
+            >
+              {requestDetail?.type === REQUEST_TYPE.BUSY_SCHEDULE.value &&
+                requestDetail?.teacher_schedules.map((item, index) => {
+                  const startTime = dayjs(
                     `${item.schedule.start_date} ${item.schedule.start_time}`,
                   ).format('DD/MM/YYYY | HH:mm')
-                  let endTime = dayjs(
+                  const endTime = dayjs(
+                    `${item.schedule.end_date} ${item.schedule.end_time}`,
+                  ).format('DD/MM/YYYY | HH:mm')
+                  return (
+                    <div
+                      key={index}
+                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
+                    >
+                      <CollapseItem
+                        title={`Start Date - End Date`}
+                        body={`${startTime} - ${endTime}`}
+                      />
+                      <CollapseItem
+                        title={`Repeat`}
+                        body={`${item.schedule.recurring_pattern_schedule ? item.schedule.recurring_pattern_schedule.type : ''}`}
+                      />
+                      <CollapseItem
+                        title={`Description`}
+                        body={`${item.description}`}
+                      />
+                    </div>
+                  )
+                })}
+
+              {requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value &&
+                requestDetail?.teacher_weekly_norms.map((item, index) => {
+                  const startTime = dayjs(item.start_date).format('DD/MM/YYYY')
+                  const endTime = dayjs(item.end_date).format('DD/MM/YYYY')
+                  return (
+                    <div
+                      key={index}
+                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
+                    >
+                      <CollapseItem
+                        title={`Start Date - End Date`}
+                        body={`${startTime} - ${endTime}`}
+                      />
+                      <CollapseItem title={`Quantity`} body={item.max_shift} />
+                    </div>
+                  )
+                })}
+
+              {(requestDetail?.type === REQUEST_TYPE.TIMEOFF.value ||
+                requestDetail?.type === REQUEST_TYPE.TEACHING_MODE.value) &&
+                requestDetail?.teacher_schedules.map((item, index) => {
+                  const startTime = dayjs(
+                    `${item.schedule.start_date} ${item.schedule.start_time}`,
+                  ).format('DD/MM/YYYY | HH:mm')
+                  const endTime = dayjs(
                     `${item.schedule.end_date} ${item.schedule.end_time}`,
                   ).format('DD/MM/YYYY | HH:mm')
 
                   return (
                     <div
-                      className={`mb-4 text-sm  ${'border-b border-dashed border-gray-200 pb-4'}`}
                       key={index}
+                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
                     >
-                      <div className="py-2 font-medium">
-                        {startTime + ' - ' + endTime}
-                      </div>
-                      <div className="py-2 font-medium">
-                        {item.schedule.description}
-                      </div>
+                      <CollapseItem
+                        title={`Start Date - End Date`}
+                        body={`${startTime} - ${endTime}`}
+                      />
+                      <CollapseItem
+                        title={`Reason`}
+                        body={item.request_reason}
+                      />
                     </div>
                   )
-                })
-              : requestDetail?.type == REQUEST_TYPE.WEEKLY_NORM.value
-                ? requestDetail?.teacher_weekly_norms.map((item, index) => {
-                    let startTime = dayjs(`${item.start_date}`).format(
-                      'DD/MM/YYYY',
-                    )
-                    let endTime = dayjs(`${item.end_date}`).format('DD/MM/YYYY')
-
-                    return (
-                      <div
-                        className={`mb-4 text-sm  ${'border-b border-dashed border-gray-200 pb-4'}`}
-                        key={index}
-                      >
-                        <div className="py-2">
-                          {startTime + ' - ' + endTime}
-                        </div>
-                        <div className="py-2">
-                          {'Số buổi:' + ' ' + item.max_shift}
-                        </div>
-                      </div>
-                    )
-                  })
-                : requestDetail?.teacher_schedules.map((item, index) => {
-                    let startTime = dayjs(
-                      `${item.schedule.start_date} ${item.schedule.start_time}`,
-                    ).format('DD/MM/YYYY | HH:mm')
-                    let endTime = dayjs(
-                      `${item.schedule.end_date} ${item.schedule.end_time}`,
-                    ).format('DD/MM/YYYY | HH:mm')
-                    return (
-                      <div
-                        className={`mb-4 text-sm  ${'border-b border-dashed border-gray-200 pb-4'}`}
-                        key={index}
-                      >
-                        <div className="py-2 ">
-                          {startTime + ' - ' + endTime}
-                          {/* Buổi 09 | 12/12/2024 */}
-                        </div>
-                        <div className="py-2 font-medium">
-                          Reason: {item.request_reason}
-                        </div>
-                      </div>
-                    )
-                  })}
+                })}
+            </CollapseBox>
           </div>
         </SappDrawer>
       </div>

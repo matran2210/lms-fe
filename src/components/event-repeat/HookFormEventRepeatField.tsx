@@ -49,7 +49,13 @@ const HookFormEventRepeat = ({
                 labelClass={labelClass}
                 required={required}
                 defaultDate={defaultDate || new Date()}
-                onChange={(val) => field.onChange(val)}
+                onChange={(val) => {
+                  const current = field.value || {}
+                  field.onChange({
+                    ...current,
+                    ...val, // new or updated values overwrite the existing ones
+                  })
+                }}
                 className={className}
                 repeatOption={repeatOption}
                 resetRepeat={resetRepeat}
