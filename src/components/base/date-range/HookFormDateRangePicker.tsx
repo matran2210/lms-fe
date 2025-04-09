@@ -1,19 +1,9 @@
 import React from 'react'
 import { DatePicker, Skeleton } from 'antd'
 const { RangePicker } = DatePicker
-import { Control, Controller } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import dayjs, { Dayjs } from 'dayjs'
-
-interface IProps {
-  name: string
-  control: Control<any>
-  defaultValue?: [Dayjs, Dayjs]
-  className?: string
-  disabled?: boolean
-  skeleton?: boolean
-  style?: React.CSSProperties
-}
+import { IHookFormDateRangePicker } from 'src/type'
 
 const HookFormDateRangePicker = ({
   name,
@@ -23,7 +13,7 @@ const HookFormDateRangePicker = ({
   disabled,
   skeleton,
   style,
-}: IProps) => {
+}: IHookFormDateRangePicker) => {
   return (
     <Controller
       name={name}

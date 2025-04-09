@@ -10,7 +10,7 @@ import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
 import InfoItem from 'src/components/teacher/my-request/schedule-request/InfoItem'
 
 interface IProps {
-  dataDetail: ScheduleRequestDetail
+  dataDetail: ScheduleRequestDetail | undefined
   selectedRequest: IScheduleRequestItem
   isLoading: boolean
 }
@@ -55,7 +55,7 @@ const PrimaryInformation = ({
                 <ScheduleSkeleton />
               ) : (
                 <div className="flex items-center gap-8">
-                  {(dataDetail.schedules ?? []).map(
+                  {(dataDetail?.schedules ?? []).map(
                     (item: ScheduleTimeItem, index: number) => (
                       <div
                         key={index}

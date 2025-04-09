@@ -192,14 +192,11 @@ const DetailRequestModal = ({
             </div>
           </div>
         </div>
-
-        <div>
-          <PrimaryInformation
-            selectedRequest={selectedRequest}
-            dataDetail={data?.data}
-            isLoading={isLoading}
-          />
-        </div>
+        <PrimaryInformation
+          selectedRequest={selectedRequest}
+          dataDetail={data?.data}
+          isLoading={isLoading}
+        />
       </div>
     </SappDrawer>
   )

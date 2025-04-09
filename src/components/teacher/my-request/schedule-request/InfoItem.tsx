@@ -2,8 +2,8 @@ import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import React from 'react'
 interface IProps {
-  title: string
-  value: string
+  title: string | undefined
+  value: string | undefined
   isLoading?: boolean
 }
 const InfoItem = ({ title, value, isLoading = false }: IProps) => {
