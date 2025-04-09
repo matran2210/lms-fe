@@ -142,16 +142,15 @@ const DetailRequestModal = ({
       confirmOnClose={false}
       btnSubmitTile="Đồng ý"
       btnCancelTitle={isPending ? 'Từ chối' : 'Cancel'}
-      footerClassName={clsx(
-        'flex !justify-end gap-4',
-        `${isPending ? '' : 'px-8'}`,
-      )}
+      footerClassName={clsx('flex !justify-end gap-4', {
+        'px-8': !isPending,
+      })}
       headerClassName="!bg-white !text-black border border-b-solid border-gray-3"
       sizeTextBtn="medium"
-      cancelButtonClassName={clsx(
-        'font-medium rounded-md no-underline',
-        `${isPending ? 'bg-gray-4 hover:bg-gay-6 text-gray-12' : 'bg-state-cancel text-white'}`,
-      )}
+      cancelButtonClassName={clsx('font-medium rounded-md no-underline', {
+        'bg-gray-4 hover:bg-gay-6 text-gray-12': isPending,
+        'bg-state-cancel text-white': !isPending,
+      })}
       submitButtonClassName="rounded-md"
       showSubmitButton={isPending}
     >
@@ -161,10 +160,9 @@ const DetailRequestModal = ({
           <div className="flex items-center gap-[10px]">
             <div className="text-14 text-gray-12">Processing deadline:</div>
             <div
-              className={clsx(
-                'flex items-center gap-[10px]',
-                `${isOverdue ? 'text-state-cancel' : ''}`,
-              )}
+              className={clsx('flex items-center gap-[10px]', {
+                'text-state-cancel': isOverdue,
+              })}
             >
               {isOverdue && (
                 <div className="flex items-center gap-2">
