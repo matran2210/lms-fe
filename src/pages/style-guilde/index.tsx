@@ -316,7 +316,7 @@ const StyleGuide: NextPage = () => {
           <br />
           <br />
           <div>
-            <ButtonText title="ButtonText lager" full={false} size={'lager'} />
+            <ButtonText title="ButtonText large" full={false} size={'lager'} />
             <span className="px-2"></span>
             <ButtonText
               title="ButtonText medium"
