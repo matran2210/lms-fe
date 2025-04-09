@@ -733,7 +733,7 @@ textarea.is-invalid:focus {
   @apply text-4xl font-semibold text-bw-1;
 }
 
-.ant-modal-root .ant-modal-wrap {
+.ant-modal-root .ant-modal-mask {
   @apply bg-bw-10;
 }
 
@@ -1292,4 +1292,14 @@ select:focus {
 }
 .ant-select span.ant-select-selection-item {
   @apply font-medium;
+}
+
+.pdf-viewer-container {
+  #proxy-renderer {
+    @apply h-full;
+
+    #msdoc-renderer {
+      @apply h-full;
+    }
+  }
 }

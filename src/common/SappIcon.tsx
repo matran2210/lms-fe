@@ -22,6 +22,7 @@ type iconType =
   | 'start_outline'
   | 'book_open'
   | 'plus'
+  | 'locksection'
 
 type SAPP_ICONS_TYPE = {
   [key in iconType]: React.ReactNode
@@ -429,6 +430,35 @@ const SappIcon = ({ icon, className }: Props) => {
           stroke="white"
           strokeWidth="2"
           strokeLinecap="round"
+        />
+        ,
+      </svg>
+    ),
+    locksection: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+      >
+        <path
+          d="M12.2857 7.16699H3.71429C2.76751 7.16699 2 7.91317 2 8.83364V13.8336C2 14.754 2.76751 15.5002 3.71429 15.5002H12.2857C13.2325 15.5002 14 14.754 14 13.8336V8.83364C14 7.91317 13.2325 7.16699 12.2857 7.16699Z"
+          stroke="#A1A1A1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M8.00021 12.1666C8.4736 12.1666 8.85735 11.7936 8.85735 11.3333C8.85735 10.8731 8.4736 10.5 8.00021 10.5C7.52682 10.5 7.14307 10.8731 7.14307 11.3333C7.14307 11.7936 7.52682 12.1666 8.00021 12.1666Z"
+          stroke="#A1A1A1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M4.57153 7.16658V3.83329C4.57153 2.94925 4.93276 2.10141 5.57574 1.4763C6.21872 0.851185 7.09079 0.5 8.0001 0.5C8.90942 0.5 9.78149 0.851185 10.4245 1.4763C11.0675 2.10141 11.4287 2.94925 11.4287 3.83329V7.16658"
+          stroke="#A1A1A1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     ),
