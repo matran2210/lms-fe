@@ -26,6 +26,7 @@ interface IProps {
   handleCancel?: any
   onClickOutside?: () => void
   showCancelButton?: boolean
+  btnCancelTitle?: string
 }
 
 const SappDrawer = ({
@@ -46,6 +47,7 @@ const SappDrawer = ({
   handleCancel,
   onClickOutside,
   showCancelButton = true,
+  btnCancelTitle = 'Cancel',
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -137,7 +139,7 @@ const SappDrawer = ({
           <div className="absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white">
             {showCancelButton && (
               <ButtonSecondary
-                title="Cancel"
+                title={btnCancelTitle}
                 className="me-[32px] rounded-md"
                 onClick={handleMaskClick}
                 size={sizeTextBtn}

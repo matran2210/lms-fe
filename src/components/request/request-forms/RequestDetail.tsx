@@ -131,13 +131,6 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
     loadData()
   }, [params])
 
-  const requestType = useMemo(
-    () =>
-      Object?.values(REQUEST_TYPE)?.find(
-        (item) => item.value == requestDetail?.type,
-      ),
-    [requestDetail?.type],
-  )
   const hasActionButton = useMemo(
     () =>
       [
@@ -146,6 +139,11 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       ].includes(requestDetail?.status.toLocaleLowerCase() ?? ''),
     [requestDetail?.status],
   )
+  const handleEdit = () => {
+    setOpenEdit(true)
+    setOpen(false)
+  }
+
   return (
     <div>
       <div className="card h-xl-100"></div>
@@ -163,6 +161,12 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               ? 'Edit'
               : ''
           }
+          btnCancelTitle={
+            requestDetail?.status.toLowerCase() ==
+            RequestStatus.APPROVED.toLowerCase()
+              ? 'Cancel Request'
+              : 'Cancel'
+          }
           showSubmitButton={
             requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
@@ -174,7 +178,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           confirmOnClose
           footer={hasActionButton}
           handleSubmit={() => {
-            handleChangeRequestStatus(RequestStatus.APPROVED)
+            requestDetail?.status.toLowerCase() ==
+            RequestStatus.PENDING.toLowerCase()
+              ? handleEdit()
+              : handleChangeRequestStatus(RequestStatus.APPROVED)
           }}
           handleCancel={() => {
             handleChangeRequestStatus(RequestStatus.CANCEL)
