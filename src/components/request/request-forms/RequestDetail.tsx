@@ -83,31 +83,38 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
 
     try {
       setLoading(true)
-      switch (requestDetail?.type) {
-        case REQUEST_TYPE.BUSY_SCHEDULE.value:
-          await MyRequestAPI.editBusySchedule(
+      const editRequestMap = {
+        [REQUEST_TYPE.BUSY_SCHEDULE.value]: () =>
+          MyRequestAPI.editBusySchedule(
             params as string,
             formattedBusyScheduleData,
-          )
-          break
-
-        case REQUEST_TYPE.WEEKLY_NORM.value:
-          await MyRequestAPI.editWeeklyNorm(
+          ),
+        [REQUEST_TYPE.WEEKLY_NORM.value]: () =>
+          MyRequestAPI.editWeeklyNorm(
             params as string,
             formattedWeeklyNormData,
-          )
-          break
-
-        case REQUEST_TYPE.TIMEOFF.value:
-          await MyRequestAPI.editTimeoffRequest(
+          ),
+        [REQUEST_TYPE.TIMEOFF.value]: () =>
+          MyRequestAPI.editTimeoffRequest(
             params as string,
             formattedTimeoffData,
-          )
-          break
-
-        default:
-          return
+          ),
+        [REQUEST_TYPE.TEACHING_MODE.value]: () =>
+          MyRequestAPI.editTeachingModeRequest(
+            params as string,
+            formattedTimeoffData,
+          ),
       }
+
+      const editFn =
+        editRequestMap[requestDetail?.type ?? ''] ??
+        (() =>
+          MyRequestAPI.editTeachingModeRequest(
+            params as string,
+            formattedTimeoffData,
+          ))
+
+      await editFn()
     } catch (error) {
       toast.error('An error occurred. Please try again.')
     } finally {
