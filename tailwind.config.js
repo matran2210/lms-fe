@@ -53,6 +53,7 @@ module.exports = {
           DEFAULT: '#FFB800',
           2: '#FFC83A',
           3: '#E5A600',
+          4: '#FFAE4C',
           light: 'rgba(255, 187, 0, .071)',
         },
         secondary: {
@@ -77,6 +78,8 @@ module.exports = {
           7: '#EDEFF5',
           9: '#C3C3C3',
           10: 'rgba(0, 0, 0, 0.80)',
+          11: '#252F4A',
+          12: '#374151',
         },
         gray: {
           1: '#A1A1A1',
@@ -87,6 +90,7 @@ module.exports = {
           6: '#D8D8E5',
           7: '#E3E3E3',
           8: '#F3F3F3',
+          9: '#99A1B7',
           900: '#181C32',
         },
         overlay: {
@@ -99,6 +103,7 @@ module.exports = {
         },
         blue: {
           1: '#0000EE',
+          2: '#7086FD',
         },
         pinned: {
           1: '#18355D',
@@ -112,6 +117,12 @@ module.exports = {
         },
         graded: {
           finish: '#4077E0',
+        },
+        green: {
+          1: '#37C78C',
+        },
+        red: {
+          1: '#FF524E',
         },
       },
       borderColor: {

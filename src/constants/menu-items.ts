@@ -42,12 +42,12 @@ const MENU_OPTIONS: MenuOption[] = [
     //   },
     // ],
   },
-  // {
-  //   name: `${TitleSidebar.DASHBOARD}`,
-  //   icon: 'stats-chart-sharp',
-  //   url: PageLink.DASHBOARD,
-  //   type: 'level-1',
-  // },
+  {
+    name: `${TitleSidebar.DASHBOARD}`,
+    icon: 'grid',
+    url: PageLink.DASHBOARD,
+    type: 'level-2',
+  },
   {
     name: `${TitleSidebar.NOTES_LIST}`,
     icon: 'notes-list',
