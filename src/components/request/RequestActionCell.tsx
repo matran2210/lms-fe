@@ -13,7 +13,7 @@ import {
 } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { IRequest } from 'src/type'
+import { IRequest, IResponse } from 'src/type'
 
 interface Iprops {
   item: IRequest
@@ -80,8 +80,10 @@ const RequestActionCell = ({ item }: Iprops) => {
         toast.success('Cancel request successfully')
         setIsReFetch(true)
       }
-    } catch (error) {
-      // Handled by axios interceptor
+    } catch (error: any) {
+      if (error.response.data.error.code == '400|50001') {
+        toast.error('All class schedules have already assigned!')
+      }
     }
   }
 

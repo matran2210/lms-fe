@@ -5,6 +5,7 @@ import TimeOffTab from '@components/request/request-tabs/TimeOffTab'
 import { RequestProvider } from '@contexts/RequestContext'
 import { Tabs } from 'antd'
 import { useRouter } from 'next/router'
+import { useEffect, useMemo, useState } from 'react'
 import { DRAWER_REQUEST_TYPE, TitleSidebar } from 'src/constants'
 
 const breadcrumbs = [
@@ -32,7 +33,7 @@ const tabs = [
     query: 'timeoff',
   },
   {
-    key: '3',
+    key: 'schedule',
     label: 'Schedule Request',
     children: <></>,
   },
@@ -40,13 +41,25 @@ const tabs = [
 
 const RequestPage = () => {
   const router = useRouter()
-  const handleChangeTab = (query: string) => {
-    router.push({
-      pathname: router.pathname,
-      query: { tab: query },
-    })
-  }
+  const [activeTab, setActiveTab] = useState('personal')
+  useEffect(() => {
+    if (router.isReady) {
+      const tabQuery = router.query.tab?.toString()
+      if (tabQuery) setActiveTab(tabQuery)
+    }
+  }, [router.isReady, router.query.tab])
 
+  const handleChangeTab = (key: string) => {
+    setActiveTab(key)
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { tab: key },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
   return (
     <Layout title={TitleSidebar.MY_REQUEST}>
       <PageContainer
@@ -54,7 +67,11 @@ const RequestPage = () => {
         breadcrumbs={breadcrumbs}
       >
         <RequestProvider>
-          <Tabs defaultActiveKey="1" items={tabs} onChange={handleChangeTab} />
+          <Tabs
+            defaultActiveKey={activeTab}
+            items={tabs}
+            onChange={handleChangeTab}
+          />
         </RequestProvider>
       </PageContainer>
     </Layout>

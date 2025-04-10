@@ -71,7 +71,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       request_time_off: [{ lesson: { value: '', label: '' }, reason: '' }],
     },
   })
-
   const { handleSubmit, control, setValue, watch, getValues, reset, setError } =
     useFormProp
 
@@ -137,6 +136,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     if (
       requestType.toLowerCase() ===
         REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
+      typeof repeat !== 'string' &&
       repeatType !== REPEAT_TYPE.DOES_NOT_REPEAT &&
       repeatType !== REPEAT_TYPE.CHOSEN_PATTERN
     ) {
@@ -149,6 +149,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       requestType.toLowerCase() ===
         REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
       repeatType === REPEAT_TYPE.CHOSEN_PATTERN &&
+      typeof repeat !== 'string' &&
       detailSchedule &&
       !isEmpty(detailSchedule?.recurring_pattern_schedule)
     ) {
@@ -218,6 +219,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         }
       }),
     }
+
     try {
       let response: IResponse<any> = {
         success: false,
@@ -387,7 +389,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 'request_busy_schedule.0.drawer-repeat-end-on',
                 dayjs(
                   data.teacher_schedules[0].schedule.recurring_pattern_schedule
-                    .recurrence_end_date,
+                    .end_date,
                 ).toDate(),
               )
             } else {
@@ -714,7 +716,11 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   <HookFormEventRepeat
                     control={control}
                     name="request_busy_schedule.0"
-                    defaultDate={dayjs(currentDate?.[1]).toDate()}
+                    defaultDate={dayjs(
+                      requestBusy?.[0]?.['drawer-repeat-end-on']
+                        ? requestBusy?.[0]?.['drawer-repeat-end-on']
+                        : currentDate?.[1],
+                    ).toDate()}
                     repeatOption={otherOption}
                     disabled={
                       isEdit &&
@@ -813,6 +819,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               REQUEST_TYPE.TIMEOFF.value,
               REQUEST_TYPE.TEACHING_MODE.value,
             ].includes(requestType) &&
+              classCode &&
               timeOffFields.map((item, index) => {
                 return (
                   <div key={index}>
@@ -930,6 +937,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 REQUEST_TYPE.TEACHING_MODE.value,
               ].includes(requestType) &&
               requestTimeoff &&
+              classCode &&
               requestTimeoff?.length <= 1 ? (
                 <div
                   className="mb-12 flex cursor-pointer items-center gap-x-3"
