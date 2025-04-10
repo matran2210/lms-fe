@@ -12,6 +12,8 @@ import { EVENT_REPEAT_TYPES } from 'src/constants'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants/my-request'
 import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'
 import { RequestStatus } from 'src/type/my-request/enum'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import { useAppDispatch } from 'src/redux/hook'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -24,6 +26,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const router = useRouter()
   const params = router.query?.id
   const [loading, setLoading] = useState<boolean>(false)
+  const dispatch = useAppDispatch()
   const [requestDetail, setRequestDetail] =
     useState<IBusyRequestDetailResponse>()
   const displayStatus = (status: string) => {
@@ -61,7 +64,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           start_date: dayjs(`${item.start_date}`).format(
             'YYYY-MM-DDT16:59:59Z',
           ),
-          end_date: dayjs(`${item.start_date}`).format('YYYY-MM-DDT16:59:59Z'),
+          end_date: dayjs(`${item.end_date}`).format('YYYY-MM-DDT16:59:59Z'),
           quantity: item.max_shift,
         }
       }),
@@ -80,30 +83,35 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
 
     try {
       setLoading(true)
-      if (requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value) {
-        await MyRequestAPI.editBusySchedule(
-          params as string,
-          formattedBusyScheduleData,
-        )
-      } else if (requestDetail?.type == REQUEST_TYPE.WEEKLY_NORM.value) {
-        await MyRequestAPI.editWeeklyNorm(
-          params as string,
-          formattedWeeklyNormData,
-        )
-      } else if (requestDetail?.type == REQUEST_TYPE.TIMEOFF.value) {
-        await MyRequestAPI.editTimeoffRequest(
-          params as string,
-          formattedTimeoffData,
-        )
-      } else {
-        await MyRequestAPI.editTeachingModeRequest(
-          params as string,
-          formattedTimeoffData,
-        )
+      switch (requestDetail?.type) {
+        case REQUEST_TYPE.BUSY_SCHEDULE.value:
+          await MyRequestAPI.editBusySchedule(
+            params as string,
+            formattedBusyScheduleData,
+          )
+          break
+
+        case REQUEST_TYPE.WEEKLY_NORM.value:
+          await MyRequestAPI.editWeeklyNorm(
+            params as string,
+            formattedWeeklyNormData,
+          )
+          break
+
+        case REQUEST_TYPE.TIMEOFF.value:
+          await MyRequestAPI.editTimeoffRequest(
+            params as string,
+            formattedTimeoffData,
+          )
+          break
+
+        default:
+          return
       }
     } catch (error) {
       toast.error('An error occurred. Please try again.')
     } finally {
+      toast.success(`${capitalizeFirstLetter(status)} request success!`)
       setLoading(false)
       setOpen(false)
       reloadPage()
@@ -143,7 +151,14 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
     setOpenEdit(true)
     setOpen(false)
   }
-
+  const handleCancel = () => {
+    dispatch(
+      confirmDialog.open({
+        message: 'Do you want to cancel this request?',
+        onConfirm: () => handleChangeRequestStatus(RequestStatus.CANCEL),
+      }),
+    )
+  }
   return (
     <div>
       <div className="card h-xl-100"></div>
@@ -183,9 +198,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               ? handleEdit()
               : handleChangeRequestStatus(RequestStatus.APPROVED)
           }}
-          handleCancel={() => {
-            handleChangeRequestStatus(RequestStatus.CANCEL)
-          }}
+          handleCancel={handleCancel}
           onClickOutside={() => {
             setOpen(false)
           }}

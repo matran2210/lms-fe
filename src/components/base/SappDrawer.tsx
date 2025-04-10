@@ -60,24 +60,14 @@ const SappDrawer = ({
   }
 
   const handleMaskClick = (e: any) => {
-    if (onClickOutside) {
-      if (confirmOnClose) {
-        dispatch(
-          confirmDialog.open({ message: message, onConfirm: onClickOutside }),
-        )
-      } else {
-        onClickOutside()
-      }
+    if (
+      isOpen &&
+      e?.target?.closest('.custom-drawer') === null &&
+      !handleCancel
+    ) {
+      handleOnClose()
     } else {
-      if (
-        isOpen &&
-        e?.target?.closest('.custom-drawer') === null &&
-        !handleCancel
-      ) {
-        handleOnClose()
-      } else {
-        handleCancel()
-      }
+      handleCancel()
     }
   }
   const drawerRef = useRef<HTMLDivElement>(null)
