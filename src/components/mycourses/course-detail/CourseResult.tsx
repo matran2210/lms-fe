@@ -112,19 +112,21 @@ const ResultCourse = ({
     fetchResult(1, 10)
   }, [])
 
+  const isManualGradingAndNotFinishedGrading =
+    coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
+    coursePart?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
   return resultList.data.length <= 1 ? (
     <SappButton
-      title="Result"
+      title={isManualGradingAndNotFinishedGrading ? 'Your Answers' : 'Result'}
       isUnderLine
       color="text"
       className="!p-0 font-medium underline"
       onClick={() => {
-        if (
-          coursePart?.quiz?.attempt?.grading_status !==
-            GRADE_STATUS.FINISHED_GRADING &&
-          coursePart.quiz?.grading_method === GRADING_METHOD.MANUAL
-        ) {
-          setOpenReport(true)
+        if (isManualGradingAndNotFinishedGrading) {
+          // setOpenReport(true)
+          router.push(
+            `/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
+          )
         } else if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
           router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
         }

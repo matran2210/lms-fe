@@ -30,7 +30,7 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
+import { debounce, isEmpty, isUndefined, result, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -76,6 +76,7 @@ import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
 import TestScratchPads from './TestScratchPads'
 import HeaderTest from '@components/test/HeaderTest'
+import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 
 declare global {
   interface Window {
@@ -434,7 +435,10 @@ const TestDetail = () => {
     [],
   )
   const [exhibitText, setExhibitText] = useState<string>('')
-  const [openReportModal, setOpenReportModal] = useState(false)
+  const [openReportModal, setOpenReportModal] = useState({
+    open: false,
+    resultId: '',
+  })
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
@@ -1173,7 +1177,10 @@ const TestDetail = () => {
         }
 
         if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
-          setOpenReportModal(true)
+          setOpenReportModal({
+            open: true,
+            resultId: res?.data?.id,
+          })
           return
         }
         if (type === 'entrance') {
@@ -2254,21 +2261,25 @@ const TestDetail = () => {
               handleSaveFileEssay(e[0], openUpload?.requirementIndex)
             }
           />
-
-          <SappModalV3
-            open={openReportModal}
-            okButtonCaption="Back"
-            handleCancel={() => {}}
-            onOk={() => {
-              setOpenReportModal(false)
-              router.back()
-            }}
-            fullWidthBtn={true}
-            buttonSize="extra"
-            icon={<ConfirmIcon />}
-            header={FINISHED_TEST_TITLE}
-            content={`Congratulations on completing ${quizDetail?.name}. The result will be sent to you via email after the grading is finished.`}
-          />
+          {openReportModal && openReportModal.open && (
+            <SuccessSubmittedConstructorModal
+              open={openReportModal.open}
+              setOpen={setOpenReportModal}
+              quizName={quizDetail?.name}
+              handleCancel={() => {
+                setOpenReportModal({
+                  open: false,
+                  resultId: '',
+                })
+                router.back()
+              }}
+              handleOk={() => {
+                router.replace(
+                  `/courses/test/your-answers-detail/${openReportModal.resultId}`,
+                )
+              }}
+            />
+          )}
         </div>
       </CourseProvider>
     </FullScreenLayout>
