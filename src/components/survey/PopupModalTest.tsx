@@ -175,7 +175,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     middtermCourse: (
       <span>
         Chúc mừng bạn đã hoàn thành{' '}
-        <span className="text-sm font-medium text-bw-1">50%</span> khóa học{' '}
+        <span className="text-sm font-medium text-bw-1">50%</span> lớp học{' '}
         <span className="text-sm font-medium text-bw-1">{class_code}</span>. Tại
         SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập tốt
         nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp quý
@@ -185,7 +185,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     ),
     finalCourse: (
       <span>
-        Bạn đã đi đến chặng đường cuối cùng của khóa học{' '}
+        Bạn đã đi đến chặng đường cuối cùng của lớp học{' '}
         <span className="text-sm font-medium text-bw-1">{class_code}</span>!
         Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm đáng
         nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy thấu

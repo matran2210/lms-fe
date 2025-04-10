@@ -34,12 +34,11 @@ const ExamInfoTab = ({ onBack }: IProp) => {
   const [currentRow, setCurrentRow] = useState<IExamInformation>()
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
-  const queryClient = useQueryClient()
   /**
    * @description sử dụng react-query để lấy data
    */
   const { data, isLoading, isFetching, isSuccess, refetch } = useQuery({
-    queryKey: [UserKey.ExamList],
+    queryKey: [UserKey.ExamList, pageIndex, pageSize],
     queryFn: () => {
       return UserApi.getExamination(pageIndex || 1, pageSize)
     },

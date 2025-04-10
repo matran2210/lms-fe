@@ -9,7 +9,7 @@
 @import 'activity.scss';
 @import './components/_calculator.scss';
 @import './components/_select.scss';
-
+@import './components/_table.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -730,7 +730,7 @@ textarea.is-invalid:focus {
   @apply text-4xl font-semibold text-bw-1;
 }
 
-.ant-modal-root .ant-modal-wrap {
+.ant-modal-root .ant-modal-mask {
   @apply bg-bw-10;
 }
 
@@ -1140,7 +1140,21 @@ td.py-5.px-3.sapp-table-quiz {
 .pined-noti p {
   @apply mb-0;
 }
+.ant-menu {
+  @apply bg-blue-2;
+}
 
+.ant-menu-item-selected {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.ant-layout-sider-children {
+  @apply flex h-full flex-col;
+}
 td.sapp-border {
   @apply border-0;
 }
@@ -1260,4 +1274,14 @@ fieldset.form-columns-1 .hs-input {
 [type='number']:focus,
 select:focus {
   --tw-ring-color: #ffb800;
+}
+
+.pdf-viewer-container {
+  #proxy-renderer {
+    @apply h-full;
+
+    #msdoc-renderer {
+      @apply h-full;
+    }
+  }
 }
