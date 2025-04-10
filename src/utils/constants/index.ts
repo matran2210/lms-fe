@@ -30,7 +30,22 @@ export enum TEST_TYPE_ENUM {
   EVENT_TEST = 'EVENT_TEST',
   ACTIVITY = 'ACTIVITY',
 }
-
+export const QUIZ_GRADING_METHOD = [
+  {
+    label: 'Yes',
+    value: 'MANUAL',
+  },
+  {
+    label: 'No',
+    value: 'AUTO',
+  },
+]
+export const FOUNDATION = 'Foundation'
+export const CLASS_TEACHER_STATUS = {
+  NOT_STARTED: 'NOT_STARTED', // Chưa học
+  IN_PROGRESS: 'IN_PROGRESS', // Đang học
+  COMPLETED: 'COMPLETED', // Đã học xong
+}
 // Danh sách F thấp (< F4)
 export const F_LOW_CODES = ['F1', 'F2', 'F3', 'F4']
 export const F_HIGH_CODES = ['F5', 'F6']

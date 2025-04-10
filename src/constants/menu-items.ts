@@ -13,41 +13,7 @@ const MENU_OPTIONS: MenuOption[] = [
     icon: 'course',
     url: `${PageLink.COURSES}`,
     type: 'level-1',
-    // subItems: [
-    //   {
-    //     name: `${TitleSidebar.COURSE_NEW}`,
-    //     icon: 'document',
-    //     url: `${PageLink.COURSE_NEW}`,
-    //     type: 'level-2',
-    //   },
-    //   {
-    //     name: `${TitleSidebar.COURSE_LIST}`,
-    //     icon: 'document',
-    //     url: `${PageLink.COURSES}`,
-    //     type: 'level-2',
-    //     subItems: [
-    //       {
-    //         name: `${TitleSidebar.TEACHER}`,
-    //         icon: 'dot',
-    //         url: `${PageLink.TEACHER}`,
-    //         type: 'level-3',
-    //       },
-    //       {
-    //         name: `${TitleSidebar.COURSE_LIST}`,
-    //         icon: 'dot',
-    //         url: `${PageLink.COURSES}`,
-    //         type: 'level-3',
-    //       },
-    //     ],
-    //   },
-    // ],
   },
-  // {
-  //   name: `${TitleSidebar.DASHBOARD}`,
-  //   icon: 'stats-chart-sharp',
-  //   url: PageLink.DASHBOARD,
-  //   type: 'level-1',
-  // },
   {
     name: `${TitleSidebar.NOTES_LIST}`,
     icon: 'notes-list',
