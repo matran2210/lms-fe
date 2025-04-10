@@ -286,7 +286,12 @@ function DiscussionElement({
               open={isOpenUserInfo}
               overlayInnerStyle={{ maxWidth: 270 }}
             >
-              <div className="flex-none leading-0">
+              <div
+                className={clsx(
+                  'flex-none leading-0',
+                  !isEmpty(userInfo) && 'cursor-pointer',
+                )}
+              >
                 <Image
                   width={50}
                   height={50}
