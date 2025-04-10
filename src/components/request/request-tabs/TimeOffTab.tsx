@@ -106,7 +106,7 @@ const TimeOffTab = () => {
   const handleChangeParams = (params: Record<string, any>) => {
     const queryString = new URLSearchParams(params).toString()
 
-    router.replace(`?${queryString}`)
+    router.replace(`?tab=timeoff&${queryString}`)
   }
 
   const handleFilter = () => {
@@ -117,7 +117,15 @@ const TimeOffTab = () => {
 
   const handleResetFilter = () => {
     reset()
-    router.push('')
+    const preservedQuery = { tab: router.query.tab } // ✅ preserve only needed query if needed
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: preservedQuery,
+      },
+      undefined,
+      { shallow: true },
+    )
     fetchRequests(1, 10)
   }
 
