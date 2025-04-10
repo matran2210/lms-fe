@@ -12,8 +12,20 @@ interface IProps {
   typeProgram: 'CMA' | 'ACCA' | 'CFA'
 }
 
+interface ISubject {
+  subjects: Array<{
+    id: string
+    created_at: Date
+    updated_at: Date
+    course_category_id: string
+    name: string
+    code: string
+  }>
+  course_category_id: string
+}
+
 const ProgramDetail = ({ typeProgram }: IProps) => {
-  const [subjects, setSubjects] = useState<any>()
+  const [subjects, setSubjects] = useState<ISubject>()
   const { user } = useAppSelector(userReducer)
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
   const [userProgram, setUserProgram] = useState<IUser>()
@@ -22,38 +34,69 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
     mode: 'onSubmit',
   })
 
+  /**
+   * Hàm fetchSubjectOfHub dùng để lấy danh sách môn học từ API dựa trên loại chương trình (typeProgram).
+   * Sau khi lấy dữ liệu thành công, cập nhật danh sách môn học vào state và thiết lập giá trị cho trường 'course_category_id'.
+   */
   const fetchSubjectOfHub = async () => {
     try {
+      // Gọi API để lấy danh sách môn học dựa trên typeProgram
       const res = await MyProfileAPI.getSubjectOfhubspot(typeProgram)
+
+      // Cập nhật danh sách môn học vào state
       setSubjects(res)
+
+      // Thiết lập giá trị cho trường 'course_category_id' trong form
       setValue('course_category_id', res?.course_category_id ?? '')
-    } catch (err) {}
+    } catch (err) {
+      // Xử lý lỗi nếu có
+    }
   }
+
+  /**
+   * Lấy thông tin chương trình học của người dùng dựa trên course_category_id.
+   * @returns Thông tin chương trình học phù hợp với course_category_id của môn học.
+   */
   const programData = userProgram?.user_hubspot_program_infos?.find(
     (item) => item?.course_category_id === subjects?.course_category_id,
   )
 
+  /**
+   * useEffect để xử lý khi thông tin người dùng hoặc loại chương trình thay đổi.
+   * - Nếu typeProgram thay đổi và khác với typeOfProgram hiện tại, cập nhật typeOfProgram và gọi hàm fetchSubjectOfHub.
+   * - Thiết lập giá trị cho trường 'hubspot_account_info' trong form.
+   */
   useEffect(() => {
     if (user) {
       if (typeProgram && typeProgram !== typeOfProgram) {
-        setTypeOfProgram(typeProgram)
-        fetchSubjectOfHub()
+        setTypeOfProgram(typeProgram) // Cập nhật loại chương trình
+        fetchSubjectOfHub() // Lấy danh sách môn học từ API
       }
 
+      // Thiết lập giá trị cho trường 'hubspot_account_info' trong form
       setValue('hubspot_account_info', programData?.hubspot_account_info ?? '')
     }
   }, [resetField, setValue, typeOfProgram, typeProgram, user])
 
+  /**
+   * Hàm getUserProgram dùng để lấy thông tin chương trình học của người dùng từ API.
+   * @returns Cập nhật thông tin chương trình học vào state userProgram.
+   */
   async function getUserProgram() {
     try {
+      // Gọi API để lấy thông tin chương trình học dựa trên course_category_id
       const res = await UserApi.getUserPrograms(subjects?.course_category_id)
-      setUserProgram(res)
+      setUserProgram(res) // Cập nhật thông tin chương trình học vào state
     } catch (err) {}
   }
 
+  /**
+   * useEffect để gọi hàm getUserProgram khi course_category_id của môn học thay đổi.
+   * - Nếu course_category_id tồn tại, gọi hàm getUserProgram để lấy thông tin chương trình học.
+   */
   useEffect(() => {
     if (subjects?.course_category_id) {
-      getUserProgram()
+      getUserProgram() // Lấy thông tin chương trình học
     }
   }, [subjects?.course_category_id])
 
