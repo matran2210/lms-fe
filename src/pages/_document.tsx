@@ -28,17 +28,17 @@ class MyDocument extends Document {
           <meta name="author" content="SAPP Academy" />
           <meta
             property="og:title"
-            content="Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy"
+            content="Hệ thống Quản lý học và thi ACCA, CFA, CMA trực tuyến SAPP Academy"
             key="title"
           />
           <meta
             name="description"
-            content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
+            content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA"
             key="desc"
           />
           <meta
             name="og:description"
-            content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
+            content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA"
             key="description"
           />
           <meta
@@ -49,16 +49,16 @@ class MyDocument extends Document {
           <meta name="og:url" content={'https://lms-pro.sapp.edu.vn'} />
           <meta
             name="keywords"
-            content="sapp, lms, acca, ACCA, CFA, Big4, 3P, SAPP Academy"
+            content="sapp, lms, acca, ACCA, CFA, CMA, Big4, 3P, SAPP Academy"
           />
           <meta name="twitter:card" content="summary_large_image" />
           <meta
             name="twitter:title"
-            content="Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy"
+            content="Hệ thống Quản lý học và thi ACCA, CFA, CMA trực tuyến SAPP Academy"
           />
           <meta
             name="twitter:description"
-            content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
+            content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA"
           />
           <meta
             name="twitter:image"
