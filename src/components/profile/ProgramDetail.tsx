@@ -125,6 +125,15 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
             (item) => item.examination_subject.subject.id === subject.id,
           )
 
+          setValue(
+            `user_hubspot_examination_subjects.[${index}].result`,
+            courseTabData?.result ?? '',
+          )
+          setValue(
+            `user_hubspot_examination_subjects.[${index}].examination_subject_id`,
+            courseTabData?.examination_subject?.examination?.name ?? '',
+          )
+
           return (
             <div key={`${subject.id}-${index}`}>
               <div className="font-ligth mb-3 flex flex-none items-center text-gray-700 lg:max-w-[50%]">
