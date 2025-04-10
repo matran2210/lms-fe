@@ -249,7 +249,7 @@ function DiscussionElement({
         name: data?.student_info?.detail?.full_name,
         email: data?.student_info?.user_contacts?.[0]?.email,
         phone: data?.student_info?.user_contacts?.[0]?.phone,
-        avatar: data.student_info.detail.avatar?.['50x50'] || blankAvatar,
+        avatar: data?.student_info?.detail.avatar?.['50x50'] || blankAvatar,
       })
     } catch (error: any) {}
   }
