@@ -94,12 +94,25 @@ export class AuthenticationManager {
     return this.keyCloak?.token ?? ''
   }
 
-  async refreshToken() {
-    const response = await this.keyCloak?.updateToken(30)
-    if (!response) {
-      await this?.keyCloak?.login()
+  /**
+   * Làm mới token nếu token còn dưới 30s
+   *
+   * @returns {Promise<string | null>} - Token mới, nếu không thể làm mới sẽ trả về null
+   */
+  async refreshToken(): Promise<string | null> {
+    try {
+      // Kiểm tra token còn dưới 30s, nếu có, làm mới token
+      if (this.keyCloak?.token) {
+        const refreshed = await this.keyCloak?.updateToken(30)
+        if (refreshed) {
+          return this.keyCloak.token
+        }
+      }
+    } catch (error) {
+      // Nếu xảy ra lỗi, thử lại bằng cách login
+      await this.keyCloak?.login()
     }
-    return this?.keyCloak?.token
+    return null
   }
 
   async logout(redirectUri: string) {
