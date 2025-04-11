@@ -120,17 +120,16 @@ const OverProgress = () => {
 
   return (
     <div className="flex flex-col bg-white px-3 pb-7 pt-4 shadow-activity lg:col-span-4 3.5xl:px-8">
-      <div className="text-lg-xl font-bold text-bw-11 4xl:text-xl">
+      <div className="mb-5 border-b pb-3 text-lg-xl font-bold text-bw-11 4xl:text-xl">
         Over Progress
       </div>
-      <div className="mb-5 mt-3 h-[1px] bg-gray-2"></div>
       {option && (
         <>
           <div className="flex flex-row justify-between gap-2 4xl:gap-8">
-            <div className="m-auto h-[170px] min-w-[170px] 3xl:h-[180px] 3xl:min-w-[180px]">
+            <div className="m-auto h-42.5 min-w-42.5 3xl:h-45 3xl:min-w-45">
               <EChart option={option} />
             </div>
-            <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
+            <div className="flex min-w-45 flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
               <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
                 <span className="h-3 w-3 rounded-full bg-green-1"></span>
                 <span className="font-medium">Activities completed</span>

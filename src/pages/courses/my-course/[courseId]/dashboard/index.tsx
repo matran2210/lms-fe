@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   return (
     <Layout title="Dashboard">
-      <div className="lg:px-5 3.5xl:px-[55px]" data-aos={ANIMATION.DATA_AOS}>
+      <div className="lg:px-5 3.5xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
           <div className="flex w-full items-center justify-between pb-4 pt-6">
             <BreadcrumbFilter
@@ -26,12 +26,12 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-bw-12 lg:px-5 3.5xl:px-[55px]"
+        className="mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-bw-12 lg:px-5 3.5xl:px-13.75"
         data-aos={ANIMATION.DATA_AOS}
       >
-        <div className="mx-auto flex max-w-[1729px] grow flex-col gap-4 bg-gray-4 xl:flex-row 3xl:gap-6">
+        <div className="mx-auto flex max-w-1729 grow flex-col gap-4 bg-gray-4 xl:flex-row 3xl:gap-6">
           <div className="flex flex-col gap-4 2xl:w-[65%] 3xl:gap-6">
-            <div className="grid min-h-[280px] grid-cols-1 gap-2 lg:grid-cols-9 3xl:gap-6">
+            <div className="grid min-h-80 grid-cols-1 gap-2 lg:grid-cols-9 3xl:gap-6">
               <OverProgress />
               <WeeklyReport />
             </div>

@@ -104,11 +104,10 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex min-h-[525px] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3.5xl:px-8">
-      <div className="text-lg-xl font-bold text-bw-11 4xl:text-xl">
+    <div className="flex min-h-[50vh] grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity xl:h-auto 3.5xl:px-8">
+      <div className="mb-5 border-b pb-3 text-lg-xl font-bold text-bw-11 4xl:text-xl">
         Topic Progress
       </div>
-      <div className="mb-5 mt-3 h-[1px] w-full bg-gray-2"></div>
       {option && (
         <>
           <div className="grow">

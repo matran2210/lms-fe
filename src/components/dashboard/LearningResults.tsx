@@ -85,8 +85,8 @@ const LearningResults = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex h-[584px] max-h-[584px] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3.5xl:px-8">
-      <div className="flex items-center justify-between">
+    <div className="flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3.5xl:px-8">
+      <div className="mb-5 flex items-center justify-between border-b pb-3">
         <Tooltip
           arrow
           title={
@@ -97,7 +97,7 @@ const LearningResults = () => {
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
         >
-          <div className="flex items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
+          <div className="flex min-w-fit items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
             {`Your Learning Results`}
             <Image src={infoIcon} alt="" width={16} height={16} />
           </div>
@@ -106,7 +106,6 @@ const LearningResults = () => {
           {`Last Update: ${dayjs().format('HH:mm - DD/MM/YY')}`}
         </div>
       </div>
-      <div className="mb-5 mt-3 h-[1px] w-full bg-gray-2"></div>
       {option && (
         <>
           <div className="grow">
