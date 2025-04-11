@@ -203,8 +203,11 @@ const QuizDocument = ({
    * @returns Không có giá trị trả về.
    */
 
+  const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(false)
+
   const handleQuizFinish = async () => {
     setActiveQuestionIndex(activeQuestionIndex + 1)
+    setIsFinishQuiz(true)
     handleSaveAnswer()
     // Load the next question if it hasn't been loaded yet
     const nextQuestionId = questions[activeQuestionIndex + 1]?.id
@@ -221,6 +224,16 @@ const QuizDocument = ({
         setStartWorkTime(Date.now())
       } catch (error) {}
     }
+  }
+
+  /**
+   * Hủy bỏ xác nhận nộp bài
+   */
+  const handleCancelConfirmSubmit = () => {
+    // Nếu chưa hoàn thành bài quiz, không thực hiện gì cả
+    if (!isFinishQuiz) return
+    // Trả lại chỉ mục câu hỏi hiện tại về trước 1 để người dùng có thể tiếp tục làm bài
+    setActiveQuestionIndex(activeQuestionIndex - 1)
   }
 
   const handlePrevQuestion = async () => {
@@ -557,7 +570,7 @@ const QuizDocument = ({
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
         handleSubmit={handleFinishQuiz}
-        handleCancel={() => {}}
+        handleCancel={handleCancelConfirmSubmit}
       />
 
       <div
@@ -655,7 +668,6 @@ const QuizDocument = ({
                       // handleSaveAnswer()
                       setRunHandleFinishQuiz((e) => e + 1)
                       trackGAEvent('Click Button Finish Quiz Activity')
-                      return
                     } else {
                       handleNextQuestion()
                       trackGAEvent('Click Button Next Quiz Activity')
