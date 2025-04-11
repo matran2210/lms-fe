@@ -114,15 +114,20 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             formattedTimeoffData,
           ))
 
-      await editFn()
-    } catch (error) {
+      const res = await editFn()
+      if (res.success) {
+        toast.success(`${capitalizeFirstLetter(status)} request success!`)
+        setLoading(false)
+        setOpen(false)
+        reloadPage()
+        router.replace(router.pathname, undefined, { shallow: true })
+      }
+    } catch (error: any) {
       // Handled by axios interceptor
+      if (error.response.data.error.code == '400|50001') {
+        toast.error('All class schedules have already assigned!')
+      }
     } finally {
-      toast.success(`${capitalizeFirstLetter(status)} request success!`)
-      setLoading(false)
-      setOpen(false)
-      reloadPage()
-      router.replace(router.pathname, undefined, { shallow: true })
     }
   }
 
@@ -207,7 +212,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             ![
               RequestStatus.PENDING.toLowerCase(),
               RequestStatus.APPROVED.toLowerCase(),
-            ].includes(requestDetail?.status.toLowerCase() ?? '')
+            ].includes(requestDetail?.status?.toLowerCase() ?? '')
           }
           confirmOnClose
           footer={hasActionButton}

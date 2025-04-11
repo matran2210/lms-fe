@@ -887,6 +887,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                           <IconMinusSquared />
 
                           <span className="text-sm font-medium">
+                            Delete{' '}
                             {capitalizeFirstLetter(
                               Object.values(REQUEST_TYPE)
                                 .find(
